@@ -1,5 +1,6 @@
 export interface TinyMceCommand {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value?: any;
 	ui?: boolean;
 }
@@ -16,6 +17,8 @@ export const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'textItalic': { name: 'mceToggleFormat', value: 'italic' },
 	'textCode': { name: 'mceToggleFormat', value: 'code' },
 	'textLink': { name: 'mceLink' },
+	'textBulletedList': { name: 'InsertUnorderedList' },
+	'textNumberedList': { name: 'InsertOrderedList' },
 	'search': { name: 'SearchReplace' },
 	'attachFile': { name: 'joplinAttach' },
 	'insertDateTime': true,

@@ -1,15 +1,19 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, dialog, shell, MessageBoxSyncOptions } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
+import { ErrorEvent } from '@sentry/types/types';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-import { pathExists, writeFileSync } from 'fs-extra';
-import { normalize } from 'path';
+import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
+import { extname, normalize } from 'path';
+import isSafeToOpen from './utils/isSafeToOpen';
+import { closeSync, openSync, readSync, statSync } from 'fs';
+import { KB } from '@joplin/utils/bytes';
 
 interface LastSelectedPath {
 	file: string;
@@ -20,9 +24,11 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	filters?: any[];
 }
 
+type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
 interface MessageDialogOptions extends Omit<MessageBoxSyncOptions, 'message'> {
 	message?: string;
 }
@@ -35,6 +41,10 @@ export class Bridge {
 	private rootProfileDir_: string;
 	private appName_: string;
 	private appId_: string;
+	private logFilePath_ = '';
+
+	private extraAllowedExtensions_: string[] = [];
+	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
 		this.electronWrapper_ = electronWrapper;
@@ -50,12 +60,53 @@ export class Bridge {
 		this.sentryInit();
 	}
 
+	public setLogFilePath(v: string) {
+		this.logFilePath_ = v;
+	}
+
 	private sentryInit() {
+		const getLogLines = () => {
+			try {
+				if (!this.logFilePath_ || !pathExistsSync(this.logFilePath_)) return '';
+				const { size } = statSync(this.logFilePath_);
+				if (!size) return '';
+
+				const bytesToRead = Math.min(size, 100 * KB);
+				const handle = openSync(this.logFilePath_, 'r');
+				const position = size - bytesToRead;
+				const buffer = Buffer.alloc(bytesToRead);
+				readSync(handle, buffer, 0, bytesToRead, position);
+				closeSync(handle);
+				return buffer.toString('utf-8');
+			} catch (error) {
+				// Can't do anything in this context
+				return '';
+			}
+		};
+
+		const getLogAttachment = () => {
+			const lines = getLogLines();
+			if (!lines) return null;
+			return { filename: 'joplin-log.txt', data: lines };
+		};
+
 		const options: Sentry.ElectronMainOptions = {
-			beforeSend: event => {
+			beforeSend: (event, hint) => {
 				try {
+					const logAttachment = getLogAttachment();
+					if (logAttachment) hint.attachments = [logAttachment];
 					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
-					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(event, null, '\t'), 'utf-8');
+
+					interface ErrorEventWithLog extends ErrorEvent {
+						log: string[];
+					}
+
+					const errorEventWithLog: ErrorEventWithLog = {
+						...event,
+						log: logAttachment ? logAttachment.data.trim().split('\n') : [],
+					};
+
+					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
 				} catch (error) {
 					// Ignore the error since we can't handle it here
 				}
@@ -104,6 +155,24 @@ export class Bridge {
 		this.autoUploadCrashDumps_ = v;
 	}
 
+	public get extraAllowedOpenExtensions() {
+		return this.extraAllowedExtensions_;
+	}
+
+	public set extraAllowedOpenExtensions(newValue: string[]) {
+		const oldValue = this.extraAllowedExtensions_;
+		const changed = newValue.length !== oldValue.length || newValue.some((v, idx) => v !== oldValue[idx]);
+		if (changed) {
+			this.extraAllowedExtensions_ = newValue;
+			this.onAllowedExtensionsChangeListener_?.(this.extraAllowedExtensions_);
+		}
+	}
+
+	public setOnAllowedExtensionsChangeListener(listener: OnAllowedExtensionsChange) {
+		this.onAllowedExtensionsChangeListener_ = listener;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async captureException(error: any) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
@@ -169,6 +238,7 @@ export class Bridge {
 
 			electronApp: this.electronApp(),
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			shouldShowMenu: (_event: any, params: any) => {
 				return params.isEditable;
 			},
@@ -197,6 +267,7 @@ export class Bridge {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
 	}
@@ -226,6 +297,7 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async showSaveDialog(options: any) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
@@ -240,16 +312,20 @@ export class Bridge {
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const { filePaths } = await dialog.showOpenDialog(this.window(), options as any);
 		if (filePaths && filePaths.length) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private showMessageBox_(window: any, options: MessageDialogOptions): number {
 		if (!window) window = this.window();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
@@ -291,6 +367,7 @@ export class Bridge {
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public showInfoMessageBox(message: string, options: any = {}) {
 		const result = this.showMessageBox_(this.window(), { type: 'info',
 			message: message,
@@ -325,11 +402,43 @@ export class Bridge {
 			fullPath = fileUriToPath(urlDecode(fullPath), shim.platformName());
 		}
 		fullPath = normalize(fullPath);
-
 		// Note: pathExists is intended to mitigate a security issue related to network drives
 		//       on Windows.
 		if (await pathExists(fullPath)) {
-			return shell.openPath(fullPath);
+			const fileExtension = extname(fullPath);
+			const userAllowedExtension = this.extraAllowedOpenExtensions.includes(fileExtension);
+			if (userAllowedExtension || await isSafeToOpen(fullPath)) {
+				return shell.openPath(fullPath);
+			} else {
+				const allowOpenId = 2;
+				const learnMoreId = 1;
+				const fileExtensionDescription = JSON.stringify(fileExtension);
+				const result = await dialog.showMessageBox(this.window(), {
+					title: _('Unknown file type'),
+					message:
+						_('Joplin doesn\'t recognise the %s extension. Opening this file could be dangerous. What would you like to do?', fileExtensionDescription),
+					type: 'warning',
+					checkboxLabel: _('Always open %s files without asking.', fileExtensionDescription),
+					buttons: [
+						_('Cancel'),
+						_('Learn more'),
+						_('Open it'),
+					],
+				});
+
+				if (result.response === learnMoreId) {
+					void this.openExternal('https://joplinapp.org/help/apps/attachments#unknown-filetype-warning');
+					return 'Learn more shown';
+				} else if (result.response !== allowOpenId) {
+					return 'Cancelled by user';
+				}
+
+				if (result.checkboxChecked) {
+					this.extraAllowedOpenExtensions = this.extraAllowedOpenExtensions.concat(fileExtension);
+				}
+
+				return shell.openPath(fullPath);
+			}
 		} else {
 			return 'Path does not exist.';
 		}

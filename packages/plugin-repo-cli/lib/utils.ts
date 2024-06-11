@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function readJsonFile(manifestPath: string, defaultValue: any = null): Promise<any> {
 	if (!(await fs.pathExists(manifestPath))) {
 		if (defaultValue === null) throw new Error(`No such file: ${manifestPath}`);
@@ -16,6 +17,7 @@ function stripOffPackageOrg(name: string): string {
 	return n.join('/');
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function isJoplinPluginPackage(pack: any): boolean {
 	if (!pack.keywords || !pack.keywords.includes('joplin-plugin')) return false;
 	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;

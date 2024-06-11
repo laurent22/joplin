@@ -375,6 +375,7 @@ describe('Synchronizer.resources', () => {
 		const resource: ResourceEntity = (await Resource.all())[0];
 		const resourcePath = `.resource/${resource.id}`;
 
+		await synchronizer().api().mkdir('.resource/');
 		await synchronizer().api().put(resourcePath, 'before upload');
 		expect(await synchronizer().api().get(resourcePath)).toBe('before upload');
 		await synchronizerStart();

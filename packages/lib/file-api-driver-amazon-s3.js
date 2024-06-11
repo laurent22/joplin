@@ -252,6 +252,7 @@ class FileApiDriverAmazonS3 {
 				output = await response.text();
 				// we need to make sure that errors get thrown as we are manually fetching above.
 				if (!response.ok) {
+					// eslint-disable-next-line no-throw-literal -- Old code before rule was applied
 					throw { name: response.statusText, output: output };
 				}
 			}

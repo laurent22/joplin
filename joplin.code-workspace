@@ -106,7 +106,6 @@
 			"./packages/renderer/**/node_modules/": true,
 			".eslintignore": true,
 			".gitignore": true,
-			".vscode/*": true,
 			".yarn/cache": true,
 			".yarn/install-state.gz": true,
 			".yarn/plugins": true,

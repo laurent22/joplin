@@ -145,6 +145,14 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg.indexOf('--enable-wayland-ime') === 0) {
+			// Electron-specific flag - ignore it
+			// Enables input method support on Linux/Wayland
+			// See https://github.com/laurent22/joplin/issues/10345
+			argv.splice(0, 1);
+			continue;
+		}
+
 		if (arg.indexOf('--ozone-platform=') === 0) {
 			// Electron-specific flag - ignore it
 			// Allows users to run the app on native wayland

@@ -11,6 +11,7 @@ const logger = Logger.create('app.reducer');
 export interface AppStateRoute {
 	type: string;
 	routeName: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	props: any;
 }
 
@@ -21,29 +22,39 @@ export enum AppStateDialogName {
 
 export interface AppStateDialog {
 	name: AppStateDialogName;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	props: Record<string, any>;
+}
+
+export interface EditorScrollPercents {
+	[noteId: string]: number;
 }
 
 export interface AppState extends State {
 	route: AppStateRoute;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navHistory: any[];
 	noteVisiblePanes: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	windowContentSize: any;
 	watchedNoteFiles: string[];
-	lastEditorScrollPercents: any;
+	lastEditorScrollPercents: EditorScrollPercents;
 	devToolsVisible: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
 
 	// Extra reducer keys go here
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
 	return {
 		...defaultState,
@@ -69,6 +80,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(state: AppState, action: any) {
 	let newState = state;
 
@@ -129,6 +141,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 			{
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const getNextLayout = (currentLayout: any) => {
 					currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
@@ -183,6 +196,7 @@ export default function(state: AppState, action: any) {
 								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
 							} else {
 								if (item.key === action.itemKey) {
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 									(item as any)[action.propName] = action.propValue;
 									return false;
 								}

@@ -8,7 +8,9 @@
 // So we modify the code below to allow highlight() to return an object that tells how to render
 // the code.
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function plugin(markdownIt: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, _env: any, slf: any) {
 		let token = tokens[idx],
 			info = token.info ? markdownIt.utils.unescapeAll(token.info).trim() : '',

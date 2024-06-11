@@ -18,10 +18,10 @@ const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 const Clipboard = require('@react-native-community/clipboard').default;
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
@@ -112,12 +112,14 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async componentDidUpdate(prevProps: any) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async refreshNotes(props: any = null) {
 		if (props === null) props = this.props;
 
@@ -171,6 +173,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		}
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public parentItem(props: any = null) {
 		if (!props) props = this.props;
 
@@ -289,34 +292,19 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		let buttonFolderId = this.props.selectedFolderId !== Folder.conflictFolderId() ? this.props.selectedFolderId : null;
 		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
 
-		const isAllNotes =
-			this.props.notesParentType === 'SmartFilter'
-			&& this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
-
-		// Usually, when showing all notes, activeFolderId/selectedFolderId is set to the last
-		// active folder.
-		// If the app starts showing all notes, activeFolderId/selectedFolderId are
-		// empty or null. As such, we need a special case to show the buttons:
-		const addFolderNoteButtons = !!buttonFolderId || isAllNotes;
+		const addFolderNoteButtons = !!buttonFolderId;
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
 			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
 
-			const getTargetFolderId = async () => {
-				if (!buttonFolderId && isAllNotes) {
-					return (await Folder.defaultFolder()).id;
-				}
-				return buttonFolderId;
-			};
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
 				buttons.push({
 					label: _('New to-do'),
 					onPress: async () => {
-						const folderId = await getTargetFolderId();
 						const isTodo = true;
-						void this.newNoteNavigate(folderId, isTodo);
+						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'checkbox-outline',
@@ -325,9 +313,8 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				buttons.push({
 					label: _('New note'),
 					onPress: async () => {
-						const folderId = await getTargetFolderId();
 						const isTodo = false;
-						void this.newNoteNavigate(folderId, isTodo);
+						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
 					icon: 'document',
@@ -355,6 +342,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
@@ -383,6 +371,8 @@ const NotesScreen = connect((state: AppState) => {
 		notesOrder: stateUtils.notesOrder(state.settings),
 		inboxJopId: state.settings['sync.10.inboxId'],
 	};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 })(NotesScreenComponent as any);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default NotesScreen as any;

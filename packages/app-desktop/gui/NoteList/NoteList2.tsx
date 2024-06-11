@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef, useEffect } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -21,8 +20,8 @@ import useOnKeyDown from './utils/useOnKeyDown';
 import * as focusElementNoteList from './commands/focusElementNoteList';
 import CommandService from '@joplin/lib/services/CommandService';
 import useDragAndDrop from './utils/useDragAndDrop';
-import usePrevious from '../hooks/usePrevious';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
+import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
 const { connect } = require('react-redux');
 
@@ -66,7 +65,7 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 	);
 
-	const focusNote = useFocusNote(itemRefs);
+	const focusNote = useFocusNote(itemRefs, props.notes, makeItemIndexVisible);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
@@ -145,27 +144,38 @@ const NoteList = (props: Props) => {
 		props.selectedFolderInTrash,
 	);
 
-	const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
-	const previousNoteCount = usePrevious(props.notes.length, 0);
-	const previousVisible = usePrevious(props.visible, false);
+	// 2024-04-01: Whatever the below effect is supposed to be doing has been lost in time and even
+	// if it's doing something useful it should be refactored. In my tests, removing it doesn't
+	// affect anything - including scrolling with the keyboard and switching notes so there's a
+	// chance that whatever it's doing is being done more cleanly somewhere else. If a focus
+	// related-bug is found, it should be fixed from scratch, without touching this event, although
+	// it could possibly be used as a reference.
+	//
+	// * * *
 
-	useEffect(() => {
-		if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
-			const id = props.selectedNoteIds[0];
-			const doRefocus = props.notes.length < previousNoteCount && !props.focusedField;
+	// const previousSelectedNoteIds = usePrevious(props.selectedNoteIds, []);
+	// const previousNoteCount = usePrevious(props.notes.length, 0);
+	// const previousVisible = usePrevious(props.visible, false);
 
-			for (let i = 0; i < props.notes.length; i++) {
-				if (props.notes[i].id === id) {
-					makeItemIndexVisible(i);
-					if (doRefocus) {
-						const ref = itemRefs.current[id];
-						if (ref) ref.focus();
-					}
-					break;
-				}
-			}
-		}
-	}, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
+	// useEffect(() => {
+	// 	if (previousSelectedNoteIds !== props.selectedNoteIds && props.selectedNoteIds.length === 1) {
+	// 		const id = props.selectedNoteIds[0];
+	// 		const doRefocus = props.notes.length < previousNoteCount && !props.focusedField;
+
+	// 		for (let i = 0; i < props.notes.length; i++) {
+	// 			if (props.notes[i].id === id) {
+	// 				makeItemIndexVisible(i);
+	// 				if (doRefocus) {
+	// 					const ref = itemRefs.current[id];
+	// 					if (ref) {
+	// 						focus('NoteList::doRefocus', ref);
+	// 					}
+	// 				}
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
 	const highlightedWords = useMemo(() => {
 		if (props.notesParentType === 'Search') {
@@ -177,7 +187,7 @@ const NoteList = (props: Props) => {
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
-		return <div className="emptylist">{props.folders.length ? _('No notes in here. Create one by clicking on "New note".') : _('There is currently no notebook. Create one by clicking on "New notebook".')}</div>;
+		return <div className="emptylist">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
 	};
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {

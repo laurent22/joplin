@@ -1,0 +1,22 @@
+<div class="block">
+	<form method='GET' action="{{getUrl}}">
+		<div class="field">
+			<label class="label">Interval (hours)</label>
+			<div class="control">
+				<input name="intervalHours" id="intervalHours" class="input" type="text" placeholder="hours" value="{{intervalHours}}">
+			</div>
+		</div>
+
+		<div class="field is-grouped">
+			<div class="control">
+				<button class="button is-link">Update</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="block">
+	{{#itemTable}}
+		{{>table}}
+	{{/itemTable}}
+</div>

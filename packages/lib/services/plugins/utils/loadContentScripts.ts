@@ -9,12 +9,14 @@ const logger = Logger.create('loadContentScripts');
 
 export interface ExtraContentScript {
 	id: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	module: any;
 	assetPath: string;
 	pluginId: string;
 }
 
 function postMessageHandler(pluginId: string, scriptType: ContentScriptType, contentScriptId: string): PostMessageHandler {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (message: any) => {
 		if (scriptType === ContentScriptType.MarkdownItPlugin) {
 			logger.error('context.postMessage is not available to renderer content scripts');
@@ -56,6 +58,7 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 
 				const loadedModule = module.default(context) as ContentScriptModule;
 
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if (!loadedModule.plugin && !(loadedModule as any).codeMirrorResources && !(loadedModule as any).codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 				output.push({

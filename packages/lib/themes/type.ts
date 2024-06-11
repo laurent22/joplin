@@ -50,6 +50,7 @@ export interface Theme {
 	searchMarkerColor: string;
 
 	warningBackgroundColor: string;
+	destructiveColor: string;
 
 	tableBackgroundColor: string;
 	codeBackgroundColor: string;
@@ -62,4 +63,8 @@ export interface Theme {
 	codeThemeCss: string;
 
 	highlightedColor?: string;
+
+	headerBackgroundColor: string;
+	textSelectionColor: string;
+	colorBright2: string;
 }

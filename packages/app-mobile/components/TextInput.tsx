@@ -1,6 +1,6 @@
 const React = require('react');
 import { useMemo } from 'react';
-import { themeStyle } from '@joplin/lib/theme';
+import { themeStyle } from './global-style';
 import { TextInput, TextInputProps, StyleSheet } from 'react-native';
 
 interface Props extends TextInputProps {
@@ -9,7 +9,7 @@ interface Props extends TextInputProps {
 
 export default (props: Props) => {
 	const theme = themeStyle(props.themeId);
-	const finalProps = { ...props };
+	const finalProps: Props = { ...props };
 
 	if (!('placeholderTextColor' in finalProps)) finalProps.placeholderTextColor = theme.colorFaded;
 	if (!('underlineColorAndroid' in finalProps)) finalProps.underlineColorAndroid = theme.dividerColor;

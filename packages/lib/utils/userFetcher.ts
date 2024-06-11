@@ -1,5 +1,5 @@
 import SyncTargetRegistry from '../SyncTargetRegistry';
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import Setting from '../models/Setting';
 import { reg } from '../registry';
 import Logger from '@joplin/utils/Logger';
@@ -44,7 +44,7 @@ const userFetcher = async () => {
 
 // Listen to the event only once
 export const initializeUserFetcher = () => {
-	eventManager.once('sessionEstablished', userFetcher);
+	eventManager.once(EventName.SessionEstablished, userFetcher);
 };
 
 export default userFetcher;

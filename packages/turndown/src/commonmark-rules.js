@@ -159,7 +159,12 @@ rules.list = {
 
   replacement: function (content, node) {
     var parent = node.parentNode
-    if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+    if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
+      // Ignore code-block children of type ul with class pre-numbering.
+      // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
+      // test case: packages/app-cli/tests/html_to_md/code_multiline_2.html
+      return '';
+    } else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
     } else {
       return '\n\n' + content + '\n\n'
@@ -185,7 +190,10 @@ rules.listItem = {
         .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
 
     var prefix = options.bulletListMarker + ' '
-    content = content.replace(/\n/gm, '\n    ') // indent
+    if (node.isCode === false) {
+      content = content.replace(/\n/gm, '\n    ') // indent
+    }
+    
 
     const joplinCheckbox = joplinCheckboxInfo(node);
     if (joplinCheckbox) {
@@ -193,26 +201,33 @@ rules.listItem = {
     } else {
       var parent = node.parentNode
       if (isOrderedList(parent)) {
-        var start = parent.getAttribute('start')
-        var index = Array.prototype.indexOf.call(parent.children, node)
-        var indexStr = (start ? Number(start) + index : index + 1) + ''
-        // The content of the line that contains the bullet must align wih the following lines.
-        //
-        // i.e it should be:
-        //
-        // 9.  my content
-        //     second line
-        // 10. next one
-        //     second line
-        //
-        // But not:
-        //
-        // 9.  my content
-        //     second line
-        // 10.  next one
-        //     second line
-        //
-        prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        if (node.isCode) {
+          // Ordered lists in code blocks are often for line numbers. Remove them. 
+          // See https://github.com/laurent22/joplin/pull/10126
+          // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
+          prefix = '';
+        } else {
+          var start = parent.getAttribute('start')
+          var index = Array.prototype.indexOf.call(parent.children, node)
+          var indexStr = (start ? Number(start) + index : index + 1) + ''
+          // The content of the line that contains the bullet must align wih the following lines.
+          //
+          // i.e it should be:
+          //
+          // 9.  my content
+          //     second line
+          // 10. next one
+          //     second line
+          //
+          // But not:
+          //
+          // 9.  my content
+          //     second line
+          // 10.  next one
+          //     second line
+          //
+          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        }
       }
     } 
 
@@ -265,6 +280,9 @@ rules.fencedCodeBlock = {
     }
 
     var fence = repeat(fenceChar, fenceSize)
+
+    // remove code block leading and trailing empty lines
+    code = code.replace(/^([ \t]*\n)+/, '').trimEnd()
 
     return (
       '\n\n' + fence + language + '\n' +
@@ -465,9 +483,23 @@ rules.code = {
     return node.nodeName === 'CODE' && !isCodeBlock
   },
 
-  replacement: function (content) {
-    if (!content) return ''
-    content = content.replace(/\r?\n|\r/g, ' ')
+  replacement: function (content, node, options) {
+    if (!content) {
+      return ''
+    }
+
+    content = content.replace(/\r?\n|\r/g, '\n')
+    // If code is multiline and in codeBlock, just return it, codeBlock will add fence(default is ```).
+    //
+    // This handles the case where a <code> element is nested directly within a <pre> and
+    // should not be turned into an inline code region.
+    //
+    // See https://github.com/laurent22/joplin/pull/10126 .
+    if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
+      return content
+    }
+
+    content = content.replace(/\r?\n|\r/g, '')
 
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'

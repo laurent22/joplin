@@ -47,7 +47,8 @@ describe('synchronizer_LockHandler', () => {
 	it('should not use files that are not locks', (async () => {
 		if (lockHandler().useBuiltInLocks) return; // Doesn't make sense with built-in locks
 
-		await fileApi().put('locks/desktop.ini', 'a');
+		// Note: desktop.ini is blocked by Dropbox
+		await fileApi().put('locks/desktop.test.ini', 'a');
 		await fileApi().put('locks/exclusive.json', 'a');
 		await fileApi().put('locks/garbage.json', 'a');
 		await fileApi().put('locks/1_2_72c4d1b7253a4475bfb2f977117d26ed.json', 'a');
@@ -97,7 +98,9 @@ describe('synchronizer_LockHandler', () => {
 		});
 
 		const lock = await handler.acquireLock(LockType.Sync, LockClientType.Desktop, '111');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let autoLockError: any = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		handler.startAutoLockRefresh(lock, (error: any) => {
 			autoLockError = error;
 		});

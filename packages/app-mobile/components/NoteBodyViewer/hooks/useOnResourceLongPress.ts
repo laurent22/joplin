@@ -14,6 +14,7 @@ interface Callbacks {
 	onRequestEditResource: (message: string)=> void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRef: any) {
 	const { onJoplinLinkClick, onRequestEditResource } = callbacks;
 
@@ -28,7 +29,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				return;
 			}
 
-			const name = resource.title ? resource.title : resource.file_name;
+			const name = resource.title ? resource.title : resource.filename;
 			const mime: string|undefined = resource.mime;
 
 			const actions = [];

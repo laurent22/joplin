@@ -1,5 +1,5 @@
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
@@ -7,8 +7,9 @@ import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
+import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
+import { join } from 'path';
 
 const testPluginDir = `${supportDir}/plugins`;
 
@@ -82,6 +83,7 @@ describe('services_PluginService', () => {
 
 		const allFolders = await Folder.all();
 		expect(allFolders.length).toBe(2);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		expect(allFolders.map((f: any) => f.title).sort().join(', ')).toBe('multi - simple1, multi - simple2');
 	}));
 
@@ -262,6 +264,69 @@ describe('services_PluginService', () => {
 		}
 	}));
 
+	it.each([
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: true,
+			appVersion: '3.0.0',
+			shouldRun: true,
+		},
+		{
+			manifestPlatforms: ['desktop'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: false,
+		},
+		{
+			manifestPlatforms: ['desktop', 'mobile'],
+			isDesktop: false,
+			appVersion: '3.0.6',
+			shouldRun: true,
+		},
+		{
+			// Should default to desktop-only
+			manifestPlatforms: [],
+			isDesktop: false,
+			appVersion: '3.0.8',
+			shouldRun: false,
+		},
+	])('should enable and disable plugins depending on what platform(s) they support (case %#: %j)', async ({ manifestPlatforms, isDesktop, appVersion, shouldRun }) => {
+		const pluginScript = `
+			/* joplin-manifest:
+			{
+				"id": "org.joplinapp.plugins.PluginTest",
+				"manifest_version": 1,
+				"app_min_version": "1.0.0",
+				"platforms": ${JSON.stringify(manifestPlatforms)},
+				"name": "JS Bundle test",
+				"version": "1.0.0"
+			}
+			*/
+
+			joplin.plugins.register({
+				onStart: async function() { },
+			});
+		`;
+
+		let resetPlatformMock = () => {};
+		if (!isDesktop) {
+			resetPlatformMock = mockMobilePlatform('android').reset;
+		}
+
+		try {
+			const service = newPluginService(appVersion);
+			const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+
+			if (shouldRun) {
+				await expect(service.runPlugin(plugin)).resolves.toBeUndefined();
+			} else {
+				await expect(service.runPlugin(plugin)).rejects.toThrow(/disabled/);
+			}
+		} finally {
+			resetPlatformMock();
+		}
+	});
+
 	it('should install a plugin', (async () => {
 		const service = newPluginService();
 		const pluginPath = `${testPluginDir}/jpl_test/org.joplinapp.FirstJplPlugin.jpl`;
@@ -332,5 +397,79 @@ describe('services_PluginService', () => {
 		// Should clear deleted plugins from settings
 		expect(newPluginSettings[pluginId1]).toBe(undefined);
 		expect(newPluginSettings[pluginId2]).toBe(undefined);
+	});
+
+	it('re-running loadAndRunPlugins should reload plugins that have changed but keep unchanged plugins running', async () => {
+		const testDir = await createTempDir();
+		try {
+			const loadCounterNote = await Note.save({ title: 'Log of plugin loads' });
+			const readLoadCounterNote = async () => {
+				return (await Note.load(loadCounterNote.id)).body;
+			};
+			expect(await readLoadCounterNote()).toBe('');
+
+			const writePluginScript = async (version: string, id: string) => {
+				const script = `
+					/* joplin-manifest:
+					{
+						"id": ${JSON.stringify(id)},
+						"manifest_version": 1,
+						"app_min_version": "1.0.0",
+						"name": "JS Bundle test",
+						"version": ${JSON.stringify(version)}
+					}
+					*/
+
+					joplin.plugins.register({
+						onStart: async function() {
+							const noteId = ${JSON.stringify(loadCounterNote.id)};
+							const pluginId = ${JSON.stringify(id)};
+							const note = await joplin.data.get(['notes', noteId], { fields: ['body'] });
+							const newBody = note.body + '\\n' + pluginId;
+							await joplin.data.put(['notes', noteId], null, { body: newBody.trim() });
+						},
+					});
+				`;
+				await fs.writeFile(join(testDir, `${id}.bundle.js`), script);
+			};
+
+			const service = newPluginService();
+			const pluginId1 = 'org.joplinapp.testPlugin1';
+			await writePluginScript('0.0.1', pluginId1);
+			const pluginId2 = 'org.joplinapp.testPlugin2';
+			await writePluginScript('0.0.1', pluginId2);
+
+			let pluginSettings: PluginSettings = {
+				[pluginId1]: defaultPluginSetting(),
+				[pluginId2]: defaultPluginSetting(),
+			};
+			await service.loadAndRunPlugins(testDir, pluginSettings);
+
+			// Plugins should initially load once
+			expect(service.pluginIds).toHaveLength(2);
+			expect(service.pluginById(pluginId1).running).toBe(true);
+			expect(service.pluginById(pluginId2).running).toBe(true);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}`);
+
+			// Updating just plugin 1 reload just plugin 1.
+			await writePluginScript('0.0.2', pluginId1);
+			await service.loadAndRunPlugins(testDir, pluginSettings);
+
+			expect(service.pluginById(pluginId1).running).toBe(true);
+			expect(service.pluginById(pluginId2).running).toBe(true);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}\n${pluginId1}`);
+
+			// Disabling plugin 1 should not reload plugin 2
+			pluginSettings = { ...pluginSettings, [pluginId1]: { ...defaultPluginSetting(), enabled: false } };
+			await service.loadAndRunPlugins(testDir, pluginSettings);
+
+			expect(service.pluginById(pluginId1).running).toBe(false);
+			expect(service.pluginById(pluginId2).running).toBe(true);
+			expect(await readLoadCounterNote()).toBe(`${pluginId1}\n${pluginId2}\n${pluginId1}`);
+
+			await service.destroy();
+		} finally {
+			await fs.remove(testDir);
+		}
 	});
 });

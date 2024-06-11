@@ -4,6 +4,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function newTestMdToHtml(options: any = null) {
 	options = {
 		ResourceModel: {
@@ -37,6 +38,7 @@ describe('MdToHtml', () => {
 
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const mdToHtmlOptions: any = {
 				bodyOnly: true,
 			};
@@ -47,6 +49,8 @@ describe('MdToHtml', () => {
 						checkboxRenderingType: 2,
 					},
 				};
+			} else if (mdFilename.startsWith('sourcemap_')) {
+				mdToHtmlOptions.mapsToLine = true;
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);
@@ -86,6 +90,7 @@ describe('MdToHtml', () => {
 	}));
 
 	it('should return enabled plugin assets', (async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginOptions: any = {};
 		const pluginNames = MdToHtml.pluginNames();
 

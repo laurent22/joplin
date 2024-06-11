@@ -22,10 +22,12 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: stat()');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFile(_path: string, _encoding = 'utf8'): Promise<any> {
 		throw new Error('Not implemented: readFile');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async appendFile(_path: string, _content: string, _encoding = 'base64'): Promise<any> {
 		throw new Error('Not implemented: appendFile');
 	}
@@ -55,14 +57,17 @@ export default class FsDriverBase {
 		return this.move(source, dest);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async readFileChunk(_handle: any, _length: number, _encoding = 'base64'): Promise<string> {
 		throw new Error('Not implemented: readFileChunk');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(_path: string, _mode: any): Promise<any> {
 		throw new Error('Not implemented: open');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async close(_handle: any): Promise<any> {
 		throw new Error('Not implemented: close');
 	}
@@ -77,6 +82,10 @@ export default class FsDriverBase {
 
 	public async remove(_path: string): Promise<void> {
 		throw new Error('Not implemented: remove');
+	}
+
+	public async setTimestamp(_path: string, _timestampDate: Date): Promise<void> {
+		throw new Error('Not implemented: setTimestamp');
 	}
 
 	public async isDirectory(path: string) {
@@ -143,13 +152,21 @@ export default class FsDriverBase {
 		}
 		let counter = 1;
 
+		// On Windows, ./FiLe.md and ./file.md are equivalent file paths.
+		// As such, to avoid overwriting reserved names, comparisons need to be
+		// case-insensitive.
+		reservedNames = reservedNames.map(name => name.toLowerCase());
+		const isReserved = (testName: string) => {
+			return reservedNames.includes(testName.toLowerCase());
+		};
+
 		const nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
 			// Check if the filename does not exist in the filesystem and is not reserved
-			const exists = await this.exists(nameToTry) || reservedNames.includes(nameToTry);
+			const exists = await this.exists(nameToTry) || isReserved(nameToTry);
 			if (!exists) return nameToTry;
 			if (!markdownSafe) {
 				nameToTry = `${nameNoExt} (${counter})${extension}`;
@@ -203,10 +220,12 @@ export default class FsDriverBase {
 		};
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarExtract(_options: any) {
 		throw new Error('Not implemented: tarExtract');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(_options: any, _filePaths: string[]) {
 		throw new Error('Not implemented: tarCreate');
 	}

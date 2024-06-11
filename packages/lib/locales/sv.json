@@ -29,6 +29,9 @@
 	"%d notes match this pattern. Delete them?": [
 		"%d anteckningar matchar det här mönstret. Ta bort dem?"
 	],
+	"%d notes will be permanently deleted. Continue?": [
+		"%d anteckningar kommer att raderas permanent. Fortsätta?"
+	],
 	"%s": [
 		"%s"
 	],
@@ -65,6 +68,9 @@
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s är inte optimerad för att synkronisera många små filer så din första synkronisering kommer att gå långsamt."
 	],
+	"%s tab opened": [
+		"Fliken %s öppnad"
+	],
 	"%s: %d": [
 		"%s: %d"
 	],
@@ -100,6 +106,9 @@
 	],
 	"&View": [
 		"&Visa"
+	],
+	"&Window": [
+		"&Fönster"
 	],
 	"(%s)": [
 		"(%s)"
@@ -141,7 +150,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Om"
 	],
 	"About Joplin": [
 		"Om Joplin"
@@ -212,11 +221,17 @@
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"All data, inklusive anteckningar, anteckningsböcker och taggar kommer att tas bort permanent."
 	],
+	"All item sync failures have been marked as \"ignored\".": [
+		"Alla objektsynkroniseringsfel har markerats som \"ignorerade\"."
+	],
 	"All notes": [
 		"Alla anteckningar"
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Alla potentiella portar används - rapportera problemet på %s"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		"Tillåter felsökning av mobila insticksmoduler. Se %s för detaljer."
 	],
 	"Also displays unset and hidden config variables.": [
 		"Visar även inte inställda och dolda konfigurationsvariabler."
@@ -229,6 +244,9 @@
 	],
 	"Always ask": [
 		"Fråga alltid"
+	],
+	"Always open %s files without asking.": [
+		"Öppna alltid %s-filer utan att fråga."
 	],
 	"Always resize": [
 		"Ändra alltid storlek"
@@ -247,6 +265,9 @@
 	],
 	"An update is available, do you want to download it now?": [
 		"En uppdatering är tillgänglig, vill du hämta den nu?"
+	],
+	"Android API level: %d": [
+		""
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Alla e-postmeddelanden som skickas till den här adressen kommer att omvandlas till en anteckning och läggas till i din samling. Anteckningen kommer att sparas i Inkorgens anteckningsbok"
@@ -311,20 +332,23 @@
 	"Authorisation token:": [
 		"Auktoriseringstoken:"
 	],
+	"Authorise": [
+		"Auktorisera"
+	],
 	"Auto": [
 		"Automatiskt"
 	],
 	"Auto-add disabled accounts for deletion": [
 		"Lägg automatiskt till inaktiverade konton för radering"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Para automatiskt hakparenteser, paranteser, situationstecken, etc."
 	],
 	"Automatically check for updates": [
 		"Sök automatiskt efter uppdateringar"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Radera anteckningar i papperskorgen automatiskt efter ett antal dagar"
 	],
 	"Automatically switch theme to match system theme": [
 		"Växla automatiskt tema för att matcha systemtema"
@@ -352,6 +376,9 @@
 	],
 	"Bulleted List": [
 		"Punktlista"
+	],
+	"by %s": [
+		"av %s"
 	],
 	"Can Share": [
 		"Kan dela"
@@ -500,6 +527,9 @@
 	"Collapse": [
 		"Fäll in"
 	],
+	"Collapse %s": [
+		"Fäll in %s"
+	],
 	"Coming alarms": [
 		"Kommande larm"
 	],
@@ -527,8 +557,14 @@
 	"Completed decryption.": [
 		"Dekryptering färdig."
 	],
+	"Completed with warnings:\n%s": [
+		"Kompletterad med varningar:\n%s"
+	],
 	"Completed: %s (%s)": [
 		"Slutfört: %s (%s)"
+	],
+	"completion date": [
+		"färdigställande datum"
 	],
 	"Compress old changes": [
 		"Komprimera gamla ändringar"
@@ -560,6 +596,9 @@
 	"Content provided by %s": [
 		"Innehåll tillhandahålls av %s"
 	],
+	"Content provided by: %s": [
+		"Innehåll tillhandahållet av: %s"
+	],
 	"Continue": [
 		"Fortsätt"
 	],
@@ -587,6 +626,9 @@
 	"Copy Link Address": [
 		"Kopiera länkadress"
 	],
+	"Copy link to website": [
+		"Kopiera länken till hemsidan"
+	],
 	"Copy Markdown link": [
 		"Kopiera Markdown-länk"
 	],
@@ -602,6 +644,9 @@
 	],
 	"Copy token": [
 		"Kopiera token"
+	],
+	"Copy version info": [
+		"Kopiera versionsinformation"
 	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"Kunde inte auktorisera programmet:\n\n%s\n\nFörsök igen."
@@ -723,9 +768,6 @@
 	"Dashboard": [
 		"Instrumentbräda"
 	],
-	"Database v%s": [
-		"Databas v%s"
-	],
 	"Date": [
 		"Datum"
 	],
@@ -795,11 +837,17 @@
 	"Delete this profile?": [
 		"Ta bort denna profil?"
 	],
+	"Deleted": [
+		"Raderad"
+	],
 	"Deleted local items: %d.": [
 		"Borttagna lokala objekt: %d."
 	],
 	"Deleted remote items: %d.": [
 		"Borttagna fjärrobjekt: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		"Tar bort anteckningar permanent och hoppar över papperskorgen."
 	],
 	"Deletes the given notebook.": [
 		"Tar bort den angivna anteckningsboken."
@@ -937,7 +985,10 @@
 		"Dropbox-inloggning"
 	],
 	"Due": [
-		""
+		"Förfaller"
+	],
+	"due date": [
+		"förfallodatum"
 	],
 	"Duplicate": [
 		"Duplicera"
@@ -1018,7 +1069,7 @@
 		"betonad text"
 	],
 	"Empty trash": [
-		""
+		"Töm papperskorgen"
 	],
 	"Enable": [
 		"Aktivera"
@@ -1074,8 +1125,14 @@
 	"Enable optical character recognition (OCR)": [
 		"Aktivera optisk teckenigenkänning (OCR)"
 	],
+	"Enable or disable plugins": [
+		"Aktivera eller inaktivera insticksmoduler"
+	],
 	"Enable PDF viewer": [
 		"Aktivera PDF-visare"
+	],
+	"Enable plugin support": [
+		"Aktivera insticksmodulsstöd"
 	],
 	"Enable soft breaks": [
 		"Aktivera mjuk radbrytning"
@@ -1179,6 +1236,9 @@
 	"Expand": [
 		"Fäll ut"
 	],
+	"Expand %s": [
+		"Fäll ut %s"
+	],
 	"Export": [
 		"Exportera"
 	],
@@ -1196,9 +1256,6 @@
 	],
 	"Export profile": [
 		"Exportera profil"
-	],
-	"Export your data": [
-		"Exportera dina data"
 	],
 	"Exported successfully!": [
 		"Exporten lyckades!"
@@ -1275,9 +1332,6 @@
 	"Focus title": [
 		"Fokus på titel"
 	],
-	"Folders": [
-		"Mappar"
-	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Endast för felsökning: exportera din profil till ett externt SD-kort."
 	],
@@ -1304,6 +1358,9 @@
 	],
 	"Found: %d.": [
 		"Hittad: %d."
+	],
+	"From a plugin": [
+		"Från en insticksmodul"
 	],
 	"FTS enabled: %d": [
 		"FTS aktiverat: %d"
@@ -1346,7 +1403,7 @@
 		"Bevilja auktorisation"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Har du auktoriserat applikationsinloggningen i ovanstående URL?"
 	],
 	"Header %d": [
 		"Rubrik %d"
@@ -1360,6 +1417,9 @@
 	"Help": [
 		"Hjälp"
 	],
+	"Here's what we do to make plugins safer:": [
+		"Så här gör vi för att göra insticksmoduler säkrare:"
+	],
 	"Hermes enabled: %d": [
 		"Hermes aktiverad: %d"
 	],
@@ -1368,9 +1428,6 @@
 	],
 	"Hide advanced": [
 		"Dölj avancerade"
-	],
-	"Hide Advanced Settings": [
-		"Dölj avancerade inställningar"
 	],
 	"Hide disabled": [
 		"Dölj inaktiverade"
@@ -1418,7 +1475,7 @@
 		"Inaktiv"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Om du redan har auktoriserat, vänta tills applikationen synkroniseras med Joplin Cloud."
 	],
 	"Ignore": [
 		"Ignorera"
@@ -1426,17 +1483,41 @@
 	"Ignore TLS certificate errors": [
 		"Ignorera TLS-certifikatfel"
 	],
+	"Ignored items that cannot be synchronised": [
+		"Ignorerade objekt som inte kan synkroniseras"
+	],
 	"Images": [
 		"Bilder"
 	],
 	"Import": [
 		"Importera"
 	],
+	"Import and Export": [
+		"Import och export"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		"Importen misslyckades. Se till att en JEX-fil har valts.\nDetaljer: %s"
+	],
+	"Import from JEX": [
+		"Importera från JEX"
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		"Importera anteckningar från en JEX (Joplin Export)-fil."
+	],
+	"Import or export your data": [
+		"Importera eller exportera dina data"
+	],
+	"Imported successfully!": [
+		"Importen lyckades!"
+	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Importerar från \"%s\" som \"%s\" format. Vänta..."
 	],
 	"Importing notes...": [
 		"Importerar anteckningar..."
+	],
+	"Importing...": [
+		"Importerar..."
 	],
 	"Imports data into Joplin.": [
 		"Importerar data till Joplin."
@@ -1467,6 +1548,9 @@
 	],
 	"In: %s": [
 		"I: %s"
+	],
+	"Incompatible": [
+		"Inkompatibel"
 	],
 	"Increase indent level": [
 		"Öka indragsnivå"
@@ -1546,6 +1630,15 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud Logga in"
+	],
+	"Joplin Desktop": [
+		"Joplin Desktop"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		"Joplin känner inte igen insticksmodulen %s. Det kan vara farligt att öppna den här filen. Vad skulle du vilja göra?"
+	],
 	"Joplin Export Directory": [
 		"Joplin-exporteringskatalog"
 	],
@@ -1557,6 +1650,9 @@
 	],
 	"Joplin Forum": [
 		"Joplin-forum"
+	],
+	"Joplin Mobile": [
+		"Joplin Mobile"
 	],
 	"Joplin Server": [
 		"Joplin-server"
@@ -1584,6 +1680,9 @@
 	],
 	"Keep note history for": [
 		"Spara anteckningshistorik i"
+	],
+	"Keep notes in the trash for": [
+		"Förvara anteckningar i papperskorgen för"
 	],
 	"Keyboard Mode": [
 		"Tangentbordsläge"
@@ -1616,13 +1715,16 @@
 		"Senare"
 	],
 	"Latitude": [
-		""
+		"Latitud"
 	],
 	"Layout": [
 		"Layout"
 	],
 	"Layout button sequence": [
 		"Knappordning"
+	],
+	"Learn more": [
+		"Läs mer"
 	],
 	"Leave it blank to download the language files from the default website": [
 		"Lämna det tomt för att hämta språkfilerna från standardwebbplatsen"
@@ -1638,6 +1740,9 @@
 	],
 	"Light": [
 		"Ljust"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		"Precis som all programvara du installerar kan insticksmoduler potentiellt orsaka säkerhetsproblem eller dataförlust."
 	],
 	"Lines": [
 		"Rader"
@@ -1692,7 +1797,7 @@
 		"Loggar, profiler, synkroniseringsstatus"
 	],
 	"Longitude": [
-		""
+		"Longitud"
 	],
 	"Make a donation": [
 		"Gör en donation"
@@ -1708,6 +1813,9 @@
 	],
 	"Manage profiles": [
 		"Hantera profiler"
+	],
+	"Manage shared notebooks": [
+		"Hantera delade anteckningsböcker"
 	],
 	"Manage your plugins": [
 		"Hantera dina insticksmoduler"
@@ -1758,7 +1866,7 @@
 		"Mediaspelare, matematik, diagram, innehållsförteckning"
 	],
 	"Minimise": [
-		""
+		"Minimera"
 	],
 	"Missing keys": [
 		"Saknade nycklar"
@@ -1784,8 +1892,14 @@
 	"More than one item match \"%s\". Please narrow down your query.": [
 		"Mer än ett objekt matchar \"%s\". Begränsa din förfråga."
 	],
+	"Most plugins have source code available for review on the plugin website.": [
+		"De flesta insticksmoduler har källkod tillgänglig för granskning på insticksmodulens webbplats."
+	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Flytta %d anteckningar till anteckningsboken \"%s\"?"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Flytta anteckningsboken \"%s\" till papperskorgen?\n\nAlla anteckningar och underanteckningsböcker i den här anteckningsboken kommer också att flyttas till papperskorgen."
 	],
 	"Move to notebook": [
 		"Flytta till anteckningsboken"
@@ -1807,6 +1921,9 @@
 	],
 	"Never resize": [
 		"Ändra aldrig storlek"
+	],
+	"New": [
+		"Ny"
 	],
 	"New note": [
 		"Ny anteckning"
@@ -1859,6 +1976,9 @@
 	"No item with ID %s": [
 		"Inget objekt med ID %s"
 	],
+	"No new invitations": [
+		""
+	],
 	"No notebook has been specified.": [
 		"Ingen anteckningsbok har angivits."
 	],
@@ -1879,6 +1999,9 @@
 	],
 	"No suggestions": [
 		"Inga förslag"
+	],
+	"No tab selected": [
+		"Ingen flik vald"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Ingen textredigerare är definierad. Ange det med `config editor <editor-path>`"
@@ -1964,6 +2087,9 @@
 	"Notebook: %s": [
 		"Anteckningsbok: %s"
 	],
+	"Notebook: %s (%s)": [
+		"Anteckningsbok: %s (%s)"
+	],
 	"Notebooks": [
 		"Anteckningsböcker"
 	],
@@ -2015,11 +2141,17 @@
 	"Open %s": [
 		"Öppna %s"
 	],
+	"Open it": [
+		"Öppna den"
+	],
 	"Open PDF viewer": [
 		"Öppna PDF-visare"
 	],
 	"Open profile directory": [
 		"Öppna profilmapp"
+	],
+	"Open Source": [
+		"Öppna källa"
 	],
 	"Open Sync Wizard...": [
 		"Öppna synkroniseringsguiden..."
@@ -2078,6 +2210,21 @@
 	"Per user. Minimum of %d users.": [
 		"Per användare. Minst %d användare."
 	],
+	"Permanently delete note": [
+		"Ta bort anteckning permanent"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Vill du ta bort anteckningen \"%s\" permanent?"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Vill du ta bort anteckningsboken \"%s\" permanent?\n\nAlla anteckningar och underanteckningsböcker i denna anteckningsbok kommer att raderas permanent."
+	],
+	"Permanently delete these %d notes?": [
+		"Vill du ta bort dessa %d anteckningar permanent?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"Tar bort anteckningsboken permanent och hoppar över papperskorgen."
+	],
 	"Permission needed": [
 		"Tillstånd behövs"
 	],
@@ -2117,8 +2264,8 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Ange anteckningsboken som anteckningarna ska importeras till."
 	],
-	"Please upgrade Joplin to use this plugin": [
-		"Uppgradera Joplin för att använda denna insticksmodul"
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Uppgradera Joplin till version %s eller senare för att använda denna insticksmodul."
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vänta tills alla bilagor hämtas och dekrypteras. Du kan också växla till %s för att redigera anteckningen."
@@ -2126,14 +2273,32 @@
 	"Please wait...": [
 		"Vänta..."
 	],
+	"Plugin message": [
+		"Insticksmodulsmeddelande"
+	],
+	"Plugin panels": [
+		"Insticksmodulspaneler"
+	],
 	"Plugin repository failed to load": [
-		""
+		"Det gick inte att läsa in insticksmodulsförrådet"
+	],
+	"Plugin search": [
+		"Insticksmodulssökning"
+	],
+	"Plugin security": [
+		"Insticksmodulssäkerhet"
 	],
 	"Plugin tools": [
 		"Insticksmodulsverktyg"
 	],
+	"Plugin WebView debugging": [
+		"Plugin WebView-felsökning"
+	],
 	"Plugins": [
 		"Insticksmoduler"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		"Insticksmoduler utökar Joplin med funktioner som inte finns som standard. Insticksmoduler kan utöka Joplins redigerare, visare och mer."
 	],
 	"Portrait": [
 		"Lodrätt(Porträtt)"
@@ -2194,6 +2359,9 @@
 	],
 	"Process user deletions": [
 		"Bearbeta raderingar av användare"
+	],
+	"Processing": [
+		"Bearbetning"
 	],
 	"Profile": [
 		"Profil"
@@ -2264,6 +2432,12 @@
 	"Recipients:": [
 		"Mottagare:"
 	],
+	"Recommended": [
+		"Rekommenderade"
+	],
+	"Recommended plugins": [
+		"Rekommenderade insticksmoduler"
+	],
 	"Redo": [
 		"Gör om"
 	],
@@ -2312,6 +2486,18 @@
 	"Replace: ": [
 		"Ersätt: "
 	],
+	"Report an issue": [
+		"Rapportera ett problem"
+	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
+	"Report fraudulent plugin": [
+		"Rapportera bedräglig insticksmodul"
+	],
+	"Report system": [
+		"Rapportsystem"
+	],
 	"Reset application layout": [
 		"Återställ applikationslayout"
 	],
@@ -2336,8 +2522,23 @@
 	"Restore": [
 		"Återställ"
 	],
+	"Restore note": [
+		"Återställ anteckning"
+	],
+	"Restore notebook": [
+		"Återställ anteckningsboken"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Återställ objekten som matchar <pattern> från papperskorgen."
+	],
+	"Restored items": [
+		"Återställda objekt"
+	],
 	"Restored Notes": [
 		"Återställda anteckningar"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Försök igen"
@@ -2486,6 +2687,9 @@
 	"Share a notebook with others": [
 		"Dela en anteckningsbok med andra"
 	],
+	"Share from %s (%s)": [
+		"Dela från %s (%s)"
+	],
 	"Share Notebook": [
 		"Dela anteckningsbok"
 	],
@@ -2494,6 +2698,9 @@
 	],
 	"Share permissions": [
 		"Dela behörigheter"
+	],
+	"Shares": [
+		"Delningar"
 	],
 	"Sharing notebook...": [
 		"Delar anteckningsboken..."
@@ -2518,6 +2725,9 @@
 	],
 	"Show disabled keys": [
 		"Visa inaktiverade nycklar"
+	],
+	"Show monospace fonts only.": [
+		"Visa endast monospace-teckensnitt."
 	],
 	"Show more actions": [
 		"Visa fler åtgärder"
@@ -2594,11 +2804,17 @@
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
 		"Sorterar objektet efter <field> (t.ex. title, updated_time, created_time)."
 	],
+	"Source": [
+		"Källa"
+	],
 	"Source format: %s": [
 		"Källformat: %s"
 	],
 	"Source: ": [
 		"Källa: "
+	],
+	"Spacer": [
+		"Spacer"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Specificera porten som ska användas av API-servern. Om det inte skrivs kommer standardport att användas."
@@ -2777,6 +2993,9 @@
 	"Take photo": [
 		"Ta ett foto"
 	],
+	"Task \"%s\" failed with error: %s": [
+		"Uppgiften \"%s\" misslyckades med fel: %s"
+	],
 	"Task list": [
 		"Uppgiftslista"
 	],
@@ -2868,6 +3087,13 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Den här anteckningen \"%s\" har framgångsrikt återställts till anteckningsboken \"%s\"."
 	],
+	"The note was successfully moved to the trash.": [
+		"Anteckningen har flyttats till papperskorgen.",
+		"Anteckningarna flyttades till papperskorgen."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Anteckningsboken och dess innehåll har flyttats till papperskorgen."
+	],
 	"The notebook could not be saved: %s": [
 		"Anteckningsboken kunde inte sparas: %s"
 	],
@@ -2919,11 +3145,11 @@
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Det finns för närvarande inga anteckningar. Skapa en genom att klicka på (+)-knappen."
 	],
+	"There are no notes in the trash folder.": [
+		"Det finns inga anteckningar i papperskorgen."
+	],
 	"There are unsaved changes.": [
 		"Det finns ändringar som inte har sparats."
-	],
-	"There is currently no notebook. Create one by clicking on \"New notebook\".": [
-		"Det finns för närvarande ingen anteckningsbok. Skapa en genom att klicka på \"Ny anteckningsbok\"."
 	],
 	"There is no data to export.": [
 		"Det finns inga data att exportera."
@@ -2934,6 +3160,9 @@
 	"There was an error downloading this attachment:": [
 		"Ett fel uppstod vid hämtningen av denna bilaga:"
 	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		"Dessa objekt kunde inte synkroniseras, men har markerats som \"ignorerade\". De gör inte att synkroniseringsvarningen visas, men de synkroniseras fortfarande inte. För att ta bort ignorering, klicka på \"försök igen\"."
+	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Dessa objekt kommer att vara kvar på enheten men kommer inte att skickas till synkroniseringsmålet. För att hitta dessa objekt, sök antingen efter titel eller ID (som visas i parentes ovan)."
 	],
@@ -2942,6 +3171,9 @@
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
 		"Detta gör att en annan användare kan dela en anteckningsbok med dig, och du kan sedan båda samarbeta om den. Det tillåter dig dock inte att dela en anteckningsbok med någon annan, såvida du inte har funktionen \"%s\"."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		"Denna bilaga har inga OCR-data (Status: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Denna bilaga är inte hämtad eller inte dekrypterad ännu"
@@ -2982,11 +3214,17 @@
 	"This note has no history": [
 		"Denna anteckning har ingen historik"
 	],
+	"This plugin doesn't support %s.": [
+		"Denna insticksmodul stöder inte %s."
+	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Denna Rich Text-redigerare har ett antal begränsningar och det rekommenderas att vara medveten om dem innan du använder den."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Denna tjänst tillåter webbläsarens tillägg att kommunicera med Joplin. När du aktiverar den kan din brandvägg be dig ge tillstånd till Joplin att lyssna på en viss port."
+	],
+	"This subfolder of the trash has no notes.": [
+		"Den här undermappen till papperskorgen har inga anteckningar."
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Detta tillåter Joplin att köra i bakgrunden. Det är rekommenderat att tillåta detta så att anteckningarna synkroniseras löpande. På det sättet minskas risken för konflikter."
@@ -2995,7 +3233,10 @@
 		"Det här kommer öppna ett nytt fönster. Vill du spara nurvarande förändringar?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Detta tar permanent bort alla objekt i papperskorgen. Fortsätta?"
+	],
+	"This will permanently delete the note \"%s\". Continue?": [
+		"Detta kommer att permanent radera anteckningen \"%s\". Fortsätta?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Detta tar bort anteckningsboken från din samling och du kommer inte längre ha tillgång till innehållet. Vill du fortsätta?"
@@ -3011,6 +3252,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"För att tillåta Joplin att synkronisera med Dropbox, följ stegen nedan:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"För att tillåta Joplin att synkronisera med Joplin Cloud, vänligen logga in med denna URL:"
 	],
 	"To continue, please enter your master password below.": [
 		"För att fortsätta, ange ditt huvudlösenord nedan."
@@ -3047,6 +3291,9 @@
 	],
 	"to-do": [
 		"att-göra"
+	],
+	"To-do": [
+		"Att-göra"
 	],
 	"to-do: %s": [
 		"att-göra: %s"
@@ -3097,7 +3344,7 @@
 		"Totalt: %d/%d"
 	],
 	"Trash": [
-		""
+		"Papperskorgen"
 	],
 	"Try again": [
 		"Försök igen"
@@ -3123,9 +3370,6 @@
 	"Unable to edit resource of type %s": [
 		"Det går inte att redigera resurs av typen %s"
 	],
-	"Unable to export or share data. Reason: %s": [
-		"Det går inte att exportera eller dela data. Orsak: %s"
-	],
 	"Unable to share log data. Reason: %s": [
 		"Det går inte att dela loggdata. Orsak: %s"
 	],
@@ -3137,6 +3381,9 @@
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"Avinstallera och installera om applikationen. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX från skrivbordsapplikationen."
+	],
+	"Unknown file type": [
+		"Okänd filtyp"
 	],
 	"Unknown flag: %s": [
 		"Okänd flagga: %s"
@@ -3252,6 +3499,9 @@
 	"View": [
 		"Visa"
 	],
+	"View OCR text": [
+		"Visa OCR-text"
+	],
 	"View on map": [
 		"Visa på karta"
 	],
@@ -3270,14 +3520,20 @@
 	"Voice typing...": [
 		"Röstskrivning..."
 	],
+	"Waiting for authorisation...": [
+		"Väntar på auktorisation..."
+	],
 	"Warning": [
 		"Varning"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
 		"Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
 	],
-	"Warnings:\n%s": [
-		"Varningar:\n%s"
+	"We have a system for reporting and removing problematic plugins.": [
+		"Vi har ett system för att rapportera och ta bort problematiska insticksmoduler."
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		"Vi markerar insticksmoduler som utvecklats av betrodda Joplin-gemenskapsmedlemmar som \"rekommenderade\"."
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3297,11 +3553,17 @@
 	"Website and documentation": [
 		"Webbplats och dokumentation"
 	],
+	"WebView package: %s": [
+		""
+	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Välkommen till Joplin!\n\nSkriv `:help shortcuts` för listan över snabbkommandon eller bara`:help` för användningsinformation.\n\nTill exempel, för att skapa en anteckningsbok, tryck på `mb`; För att skapa en anteckning, tryck på `mn`."
 	],
 	"Welcome!": [
 		"Välkommen!"
+	],
+	"What are plugins?": [
+		"Vad är insticksmoduler?"
 	],
 	"When creating a new note:": [
 		"När du skapar en ny anteckning:"
@@ -3334,7 +3596,7 @@
 		"Du håller på att bifoga en stor bild (%dx%d pixlar). Vill du ändra storleken till %d pixlar innan du bifogar den?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Du är inloggad på Joplin Cloud, du kan lämna den här skärmen nu."
 	],
 	"You currently have no notebooks.": [
 		"Du har för närvarande inga anteckningsböcker."
@@ -3347,6 +3609,12 @@
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om du vill veta om vissa av dina anteckningar är krypterade med en gammal krypteringsmetod."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Du kunde inte ansluta till Joplin Cloud. Kontrollera dina uppgifter och försök igen. Fel:"
+	],
+	"Your account doesn't have access to this feature": [
+		"Ditt konto har inte åtkomst till den här funktionen"
 	],
 	"Your choice: ": [
 		"Ditt val: "

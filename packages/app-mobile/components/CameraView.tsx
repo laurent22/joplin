@@ -8,11 +8,6 @@ const { _ } = require('@joplin/lib/locale');
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-// We need this to suppress the useless warning
-// https://github.com/oblador/react-native-vector-icons/issues/1465
-// eslint-disable-next-line no-console
-Icon.loadFont().catch((error: any) => { console.info(error); });
-
 class CameraView extends Component {
 	public constructor() {
 		super();
@@ -34,6 +29,7 @@ class CameraView extends Component {
 		this.onLayout = this.onLayout.bind(this);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onLayout(event: any) {
 		this.setState({
 			screenWidth: event.nativeEvent.layout.width,
@@ -86,7 +82,7 @@ class CameraView extends Component {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public renderButton(onPress: Function, iconNameOrIcon: any, style: any) {
 		let icon = null;
 
@@ -113,10 +109,12 @@ class CameraView extends Component {
 		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public fitRectIntoBounds(rect: any, bounds: any) {
 		const rectRatio = rect.width / rect.height;
 		const boundsRatio = bounds.width / bounds.height;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const newDimensions: any = {};
 
 		// Rect is more landscape than bounds - fit to width
@@ -166,6 +164,7 @@ class CameraView extends Component {
 		const ratioButton = !displayRatios ? <View style={{ flex: 1 }}/> : this.renderButton(this.ratio_onPress, <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{Setting.value('camera.ratio')}</Text>, { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 20 });
 
 		let cameraRatio = '4:3';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const cameraProps: any = {};
 
 		if (displayRatios) {
@@ -182,6 +181,7 @@ class CameraView extends Component {
 				<View style={{ position: 'absolute', backgroundColor: '#000000', width: '100%', height: '100%' }}/>
 				<RNCamera
 					style={({ position: 'absolute', ...cameraRect })}
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(ref: any) => {
 						this.camera = ref;
 					}}
@@ -235,6 +235,7 @@ class CameraView extends Component {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
 	return {
 		cameraRatio: state.settings['camera.ratio'],

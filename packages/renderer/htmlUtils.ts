@@ -223,7 +223,7 @@ class HtmlUtils {
 		// to disable them. SVG graphics are still supported via the IMG tag.
 		const disallowedTags = [
 			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
-			'embed', 'link', 'meta', 'noscript', 'button', 'form',
+			'embed', 'link', 'meta', 'noscript', 'button',
 			'input', 'select', 'textarea', 'option', 'optgroup',
 			'svg',
 
@@ -231,6 +231,14 @@ class HtmlUtils {
 			// sanitized as well as <a ...> links, allowing potential sandbox
 			// escape.
 			'map', 'area',
+		];
+
+		// Certain tags should not be rendered, however unlike for the disallowed tags, we want to
+		// keep their content. For example the FORM tag may sometimes wrap relevant content so we
+		// want to keep that content, but we don't want to keep the FORM tag itself. In that case we
+		// simply replace it with a DIV tag.
+		const replaceWithDivTags = [
+			'form',
 		];
 
 		const parser = new htmlparser2.Parser({
@@ -248,6 +256,11 @@ class HtmlUtils {
 				}
 
 				if (disallowedTagDepth) return;
+
+				if (replaceWithDivTags.includes(currentTag())) {
+					output.push('<div>');
+					return;
+				}
 
 				attrs = { ...attrs };
 
@@ -342,6 +355,11 @@ class HtmlUtils {
 
 				if (disallowedTagDepth) return;
 
+				if (replaceWithDivTags.includes(currentTag())) {
+					output.push('</div>');
+					return;
+				}
+
 				if (isSelfClosingTag(name)) return;
 				output.push(`</${name}>`);
 			},
@@ -411,13 +429,16 @@ export const htmlDocIsImageOnly = (html: string) => {
 	let nonImageFound = false;
 	let textFound = false;
 
+	// Ignore these tags that do not result in any Markdown (or HTML) code being generated.
+	const ignoredTags = ['meta', 'head', 'body', 'html'];
+
 	const parser = new htmlparser2.Parser({
 
 		onopentag: (name: string) => {
 			if (name === 'img') {
 				imageCount++;
-			} else if (['meta'].includes(name)) {
-				// We allow these tags since they don't print anything
+			} else if (ignoredTags.includes(name)) {
+				// Skip
 			} else {
 				nonImageFound = true;
 			}

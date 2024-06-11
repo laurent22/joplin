@@ -43,12 +43,13 @@ export default class Joplin {
 	private window_: JoplinWindow = null;
 	private implementation_: BasePlatformImplementation = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
 		this.implementation_ = implementation;
 		this.data_ = new JoplinData(plugin);
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.imaging_ = new JoplinImaging(implementation.imaging);
-		this.workspace_ = new JoplinWorkspace(store);
+		this.workspace_ = new JoplinWorkspace(plugin, store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
 		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);
@@ -127,6 +128,7 @@ export default class Joplin {
 	 *
 	 * <span class="platform-desktop">desktop</span>
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public require(_path: string): any {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
 	}

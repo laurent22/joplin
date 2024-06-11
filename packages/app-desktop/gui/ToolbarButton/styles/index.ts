@@ -1,8 +1,10 @@
+import { ThemeStyle } from '@joplin/lib/theme';
+
 const styled = require('styled-components').default;
 const { css } = require('styled-components');
 
 interface RootProps {
-	readonly theme: any;
+	readonly theme: ThemeStyle;
 	readonly disabled: boolean;
 	readonly hasTitle: boolean;
 }
@@ -33,7 +35,7 @@ export const StyledRoot = styled.a<RootProps>`
 `;
 
 interface IconProps {
-	readonly theme: any;
+	readonly theme: ThemeStyle;
 	readonly title: string;
 }
 

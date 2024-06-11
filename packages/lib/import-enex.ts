@@ -16,7 +16,7 @@ const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 const md5File = require('md5-file');
-const { mime } = require('./mime-utils');
+import * as mime from './mime-utils';
 
 // const Promise = require('promise');
 const fs = require('fs-extra');
@@ -77,15 +77,19 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 			resolve(null);
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		sourceStream.on('error', (error: any) => reject(error));
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		destStream.on('error', (error: any) => reject(error));
 	});
 }
 
 function removeUndefinedProperties(note: NoteEntity) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const n in note) {
 		if (!note.hasOwnProperty(n)) continue;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const v = (note as any)[n];
 		if (v === undefined || v === null) continue;
 		output[n] = v;
@@ -180,8 +184,11 @@ async function saveNoteResources(note: ExtractedNote) {
 		const resource = note.resources[i];
 
 		const toSave: ResourceEntity = { ...resource };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		delete (toSave as any).dataFilePath;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		delete (toSave as any).dataEncoding;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		delete (toSave as any).hasData;
 		toSave.file_extension = resource.filename ? safeFileExtension(fileExtension(resource.filename)) : '';
 
@@ -228,6 +235,7 @@ export interface ImportOptions {
 }
 
 async function saveNoteToStorage(note: ExtractedNote) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	note = Note.filter(note as any);
 
 	const result = {
@@ -251,6 +259,7 @@ async function saveNoteToStorage(note: ExtractedNote) {
 
 interface Node {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	attributes: Record<string, any>;
 }
 
@@ -341,8 +350,10 @@ interface ParseNotesResult {
 const parseNotes = async (parentFolderId: string, filePath: string, importOptions: ImportOptions = null): Promise<ParseNotesResult> => {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	function handleSaxStreamEvent(fn: Function) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return function(...args: any[]) {
 			// Pass the parser to the wrapped function for debugging purposes
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			if (this._parser) (fn as any)._parser = this._parser;
 
 			try {
@@ -378,9 +389,11 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 		const nodes: Node[] = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note: ExtractedNote = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let noteAttributes: Record<string, any> = null;
 		let noteResource: ExtractedResource = null;
 		let noteTask: ExtractedTask = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let noteResourceAttributes: Record<string, any> = null;
 		let noteResourceRecognition: NoteResourceRecognition = null;
 		const notes: ExtractedNote[] = [];
@@ -389,6 +402,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 		const createdNoteIds: string[] = [];
 		const noteTitlesToIds: Record<string, string[]> = {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const createErrorWithNoteTitle = (fnThis: any, error: any) => {
 			const line = [];
 
@@ -408,6 +422,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return error;
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		stream.on('error', function(error: any) {
 			importOptions.onError(createErrorWithNoteTitle(this, error));
 		});
@@ -502,6 +517,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return true;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		saxStream.on('error', function(error: any) {
 			importOptions.onError(createErrorWithNoteTitle(this, error));
 
@@ -533,7 +549,9 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 					fs.appendFileSync(noteResource.dataFilePath, text);
 				} else {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					if (!(n in noteResource)) (noteResource as any)[n] = '';
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					(noteResource as any)[n] += text;
 				}
 			} else if (noteTask) {
@@ -593,6 +611,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			}
 		}));
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		saxStream.on('cdata', handleSaxStreamEvent((data: any) => {
 			const n = currentNodeName();
 
@@ -635,6 +654,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 				note.longitude = noteAttributes.longitude;
 				note.altitude = noteAttributes.altitude;
 				note.author = noteAttributes.author ? noteAttributes.author.trim() : '';
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'] as any;
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], 0);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], 0);

@@ -6,12 +6,12 @@ import { Context } from '../models/items/storage/StorageDriverBase';
 import { StorageDriverConfig, StorageDriverType } from './types';
 import { uuidgen } from '@joplin/lib/uuid';
 
-export default async function(connection: string | StorageDriverConfig, db: DbConnection, models: Models): Promise<string> {
+export default async function(connection: string | StorageDriverConfig, db: DbConnection, dbSlave: DbConnection, models: Models): Promise<string> {
 	const storageConfig = typeof connection === 'string' ? parseStorageConnectionString(connection) : connection;
 
 	if (storageConfig.type === StorageDriverType.Database) return 'Database storage is special and cannot be checked this way. If the connection to the database was successful then the storage driver should work too.';
 
-	const driver = await loadStorageDriver(storageConfig, db, { assignDriverId: false });
+	const driver = await loadStorageDriver(storageConfig, db, dbSlave, { assignDriverId: false });
 	const itemId = `testingconnection${uuidgen(8)}`;
 	const itemContent = Buffer.from(uuidgen(8));
 	const context: Context = { models };

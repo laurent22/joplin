@@ -18,6 +18,7 @@ const menuUtils = new MenuUtils(CommandService.instance());
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function contextMenuElement(editor: any, x: number, y: number) {
 	if (!editor || !editor.getDoc()) return null;
 
@@ -47,13 +48,14 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function(editor: any, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
 		const contextMenuItems = menuItems(dispatch, htmlToMd, mdToHtml);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onContextMenu(_event: any, params: any) {
 			const element = contextMenuElement(editor, params.x, params.y);
 			if (!element) return;

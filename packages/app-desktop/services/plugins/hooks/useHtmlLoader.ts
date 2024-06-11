@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 const md5 = require('md5');
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function(frameWindow: any, isReady: boolean, postMessage: Function, html: string) {
 	const [loadedHtmlHash, setLoadedHtmlHash] = useState('');
 
@@ -12,6 +12,7 @@ export default function(frameWindow: any, isReady: boolean, postMessage: Functio
 	useEffect(() => {
 		if (!frameWindow) return () => {};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onMessage(event: any) {
 			const data = event.data;
 

@@ -16,6 +16,7 @@ import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryptio
 import { useMemo, useRef, useState } from 'react';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	themeId: any;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
@@ -40,7 +41,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	const nonExistingMasterKeyIds = props.notLoadedMasterKeys.slice();
 
-	const theme: any = useMemo(() => {
+	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
 	}, [props.themeId]);
 
@@ -92,6 +93,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
 		const passwordOk = passwordChecks[mk.id] === true ? '✔' : '❌';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
 		inputStyle.borderBottomWidth = 1;
 		inputStyle.borderBottomColor = theme.dividerColor;
@@ -201,6 +203,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const renderMasterPassword = () => {
 		if (!props.encryptionEnabled && !props.masterKeys.length) return null;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
 		inputStyle.borderBottomWidth = 1;
 		inputStyle.borderBottomColor = theme.dividerColor;

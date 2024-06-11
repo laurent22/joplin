@@ -47,6 +47,42 @@ const registerMakeThumbnailCommand = async () => {
 	await joplin.views.toolbarButtons.create('makeThumbnailButton', 'makeThumbnail', ToolbarButtonLocation.EditorToolbar);
 };
 
+const registerMakeThumbnailFromUrlCommand = async () => {
+	await joplin.commands.register({
+		name: 'makeThumbnailFromUrl',
+		execute: async () => {
+			const urls = [
+				'https://github.com/laurent22/joplin/blob/dev/Assets/ImageSources/RoundedCornersMac_1024x1024.png?raw=true',
+				'https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/ocr_samples/multi_page__embedded_text.pdf?raw=true',
+			]
+
+			for (const url of urls) {
+				// ---------------------------------------------------------------
+				// Create an image from URLs
+				// ---------------------------------------------------------------
+				
+				const imageHandle = await joplin.imaging.createFromPath(url);
+				const resizedImageHandle = await joplin.imaging.resize(imageHandle, { width: 100 });
+			
+				// ---------------------------------------------------------------
+				// Convert the image to a resource and add it to the note
+				// ---------------------------------------------------------------
+
+				const newResource = await joplin.imaging.toJpgResource(resizedImageHandle, { title: "Thumbnail" });
+				await joplin.commands.execute('insertText', '\n![](:/' + newResource.id + ')');
+
+				// ---------------------------------------------------------------
+				// Free up the image objects at the end
+				// ---------------------------------------------------------------
+
+				await joplin.imaging.free(imageHandle);
+				await joplin.imaging.free(resizedImageHandle);
+			}
+		},
+	});
+
+	await joplin.views.toolbarButtons.create('makeThumbnailFromUrlButton', 'makeThumbnailFromUrl', ToolbarButtonLocation.EditorToolbar);
+};
 
 const registerInlinePdfCommand = async () => {
 	await joplin.commands.register({
@@ -106,5 +142,6 @@ joplin.plugins.register({
 	onStart: async function() {
 		await registerMakeThumbnailCommand();
 		await registerInlinePdfCommand();
+		await registerMakeThumbnailFromUrlCommand();
 	},
 });

@@ -1,24 +1,58 @@
 # For development this compose file starts the database only. The app can then
 # be started using `yarn start-dev`, which is useful for development, because
 # it means the app Docker file doesn't have to be rebuilt on each change.
+#
+# Note that log is setup to give as much information as possible, including
+# whether it's the master or slave database that is being used for a query.
+#
+# To setup and test replication, use the following config in Joplin Server. Note
+# in particular the different port, which means we access the slave and not the
+# master. 
+#
+# DB_USE_SLAVE=true
+# SLAVE_POSTGRES_PASSWORD=joplin
+# SLAVE_POSTGRES_DATABASE=joplin
+# SLAVE_POSTGRES_USER=joplin
+# SLAVE_POSTGRES_PORT=5433
+# SLAVE_POSTGRES_HOST=localhost
+# USERS_WITH_REPLICATION=ID1,ID2,...
 
-version: '3'
+version: '2'
 
 services:
-    db:
-        image: postgres:16
-        command: postgres -c work_mem=100000
+
+    postgresql-master:
+        image: 'bitnami/postgresql:16.3.0'
         ports:
-            - "5432:5432"
+            - '5432:5432'
         environment:
-            - POSTGRES_PASSWORD=joplin
-            - POSTGRES_USER=joplin
-            - POSTGRES_DB=joplin
-     
-        # Use this to specify additional Postgres
-        # config parameters:
-        #
-        # command:
-        #     - "postgres"
-        #     - "-c"
-        #     - "log_min_duration_statement=0"
+            - POSTGRESQL_PASSWORD=joplin
+            - POSTGRESQL_USERNAME=joplin
+            - POSTGRESQL_DATABASE=joplin
+
+            - POSTGRESQL_REPLICATION_MODE=master
+            - POSTGRESQL_REPLICATION_USER=repl_user
+            - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+
+            - POSTGRESQL_LOG_HOSTNAME=true
+            - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+            - POSTGRESQL_EXTRA_FLAGS=-c work_mem=100000 -c log_statement=all
+
+    postgresql-slave:
+        image: 'bitnami/postgresql:16.3.0'
+        ports:
+            - '5433:5432'
+        depends_on:
+            - postgresql-master
+        environment:
+            - POSTGRESQL_REPLICATION_MODE=slave
+            - POSTGRESQL_REPLICATION_USER=repl_user
+            - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+            - POSTGRESQL_MASTER_HOST=postgresql-master
+            - POSTGRESQL_PASSWORD=joplin
+            - POSTGRESQL_MASTER_PORT_NUMBER=5432
+
+            - POSTGRESQL_LOG_HOSTNAME=true
+            - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+            - POSTGRESQL_EXTRA_FLAGS=-c work_mem=100000 -c log_statement=all
+      

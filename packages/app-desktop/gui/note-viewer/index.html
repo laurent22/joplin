@@ -207,7 +207,7 @@
 			for (const [assetId, asset] of Object.entries(pluginAssetsAdded_)) {
 				if (!processedAssetIds.includes(assetId)) {
 					try {
-						asset.element.remove();
+						if (asset?.element) asset.element.remove();
 					} catch (error) {
 						// We don't throw an exception but we log it since
 						// it shouldn't happen

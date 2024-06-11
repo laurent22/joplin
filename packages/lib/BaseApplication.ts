@@ -30,7 +30,7 @@ import fs = require('fs-extra');
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
-const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
+import SyncTargetFilesystem from './SyncTargetFilesystem';
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
@@ -80,8 +80,11 @@ export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
 export default class BaseApplication {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleAutoAddResourcesIID_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private database_: any = null;
 	private profileConfig_: ProfileConfig = null;
 
@@ -91,8 +94,10 @@ export default class BaseApplication {
 	// Note: this is basically a cache of state.selectedFolderId. It should *only*
 	// be derived from the state and not set directly since that would make the
 	// state and UI out of sync.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected currentFolder_: any = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected store_: Store<any> = null;
 
 	private rotatingLogs: RotatingLogs;
@@ -155,6 +160,7 @@ export default class BaseApplication {
 		this.switchCurrentFolder(newFolder);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
 			this.currentFolder_ = { ...folder };
@@ -199,6 +205,7 @@ export default class BaseApplication {
 		process.exit(code);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '') {
 		let parentType = state.notesParentType;
 		let parentId = null;
@@ -303,6 +310,7 @@ export default class BaseApplication {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resourceFetcher_downloadComplete(event: any) {
 		if (event.encrypted) {
 			void DecryptionWorker.instance().scheduleStart();
@@ -313,6 +321,7 @@ export default class BaseApplication {
 		ResourceFetcher.instance().scheduleAutoAddResources();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public reducerActionToString(action: any) {
 		const o = [action.type];
 		if ('id' in action) o.push(action.id);
@@ -334,6 +343,7 @@ export default class BaseApplication {
 	}
 
 	public generalMiddlewareFn() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const middleware = (store: any) => (next: any) => (action: any) => {
 			return this.generalMiddleware(store, next, action);
 		};
@@ -341,7 +351,9 @@ export default class BaseApplication {
 		return middleware;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected async applySettingsSideEffects(action: any = null) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const sideEffects: any = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
@@ -416,6 +428,7 @@ export default class BaseApplication {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		// appLogger.debug('Reducer action', this.reducerActionToString(action));
 
@@ -425,6 +438,7 @@ export default class BaseApplication {
 		let refreshNotesUseSelectedNoteId = false;
 		let refreshNotesHash = '';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await reduxSharedMiddleware(store, next, action, ((action: any) => { this.dispatch(action); }) as any);
 		const newState = store.getState() as State;
 
@@ -560,23 +574,28 @@ export default class BaseApplication {
 
 		if (doRefreshFolders) {
 			if (doRefreshFolders === 'now') {
-				await refreshFolders((action: any) => this.dispatch(action));
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				await refreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			} else {
-				await scheduleRefreshFolders((action: any) => this.dispatch(action));
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				await scheduleRefreshFolders((action: any) => this.dispatch(action), newState.selectedFolderId);
 			}
 		}
 		return result;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dispatch(action: any) {
 		if (this.store()) return this.store().dispatch(action);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public reducer(state: any = defaultState, action: any) {
 		return reducer(state, action);
 	}
 
 	public initRedux() {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		setStore(this.store_);
 
@@ -607,6 +626,7 @@ export default class BaseApplication {
 
 		flagContent = flagContent.trim();
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let flags: any = splitCommandString(flagContent);
 		flags.splice(0, 0, 'cmd');
 		flags.splice(0, 0, 'node');
@@ -630,6 +650,7 @@ export default class BaseApplication {
 		shim.setInterval(() => { void processLogs(); }, 24 * 60 * 60 * 1000);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(argv: string[], options: StartOptions = null): Promise<any> {
 		options = {
 			keychainEnabled: true,

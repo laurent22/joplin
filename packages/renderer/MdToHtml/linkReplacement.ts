@@ -8,6 +8,7 @@ const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 export interface Options {
 	title?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resources?: any;
 	ResourceModel?: OptionsResourceModel;
 	linkRenderingType?: number;
@@ -19,6 +20,7 @@ export interface Options {
 
 export interface LinkReplacementResult {
 	html: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resource: any;
 	resourceReady: boolean;
 	resourceFullPath: string;

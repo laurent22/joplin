@@ -1,0 +1,14 @@
+
+.folder-and-tag-list {
+	position: relative;
+	overflow: hidden;
+	flex-grow: 1;
+	height: 100%;
+	width: 100%;
+
+	> .items {
+		position: absolute;
+		left: 0;
+		right: 0;
+	}
+}

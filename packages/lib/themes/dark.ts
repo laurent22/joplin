@@ -48,6 +48,7 @@ const theme: Theme = {
 	searchMarkerColor: 'black',
 
 	warningBackgroundColor: '#013F74',
+	destructiveColor: '#F07777',
 
 	tableBackgroundColor: 'rgb(40, 41, 42)',
 	codeBackgroundColor: 'rgb(47, 48, 49)',
@@ -56,6 +57,9 @@ const theme: Theme = {
 
 	codeMirrorTheme: 'material-darker',
 	codeThemeCss: 'atom-one-dark-reasonable.css',
+
+	headerBackgroundColor: '#2D3136',
+	textSelectionColor: '#00AEFF',
 };
 
 export default theme;

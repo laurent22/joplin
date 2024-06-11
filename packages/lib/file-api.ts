@@ -1,4 +1,4 @@
-import Logger from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
 import BaseItem from './models/BaseItem';
 import time from './time';
@@ -34,12 +34,14 @@ export interface RemoteItem {
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	jopItem?: any;
 }
 
 export interface PaginatedList {
 	items: RemoteItem[];
 	hasMore: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	context: any;
 }
 
@@ -51,6 +53,7 @@ export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
 	return 'jopItem' in deltaResponse.items[0];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
@@ -97,9 +100,41 @@ async function tryAndRepeat(fn: Function, count: number) {
 	}
 }
 
+export interface DeltaOptions {
+	allItemIdsHandler(): Promise<string[]>;
+	logger?: LoggerWrapper;
+	wipeOutFailSafe: boolean;
+}
+
+export enum GetOptionsTarget {
+	String = 'string',
+	File = 'file',
+}
+
+export interface GetOptions {
+	target?: GetOptionsTarget;
+	path?: string;
+	encoding?: string;
+
+	source?: string;
+}
+
+export interface PutOptions {
+	path?: string;
+	source?: string;
+}
+
+export interface ItemStat {
+	path: string;
+	updated_time: number;
+	isDir: boolean;
+}
+
 class FileApi {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private baseDir_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private driver_: any;
 	private logger_: Logger = new Logger();
 	private syncTargetId_: number = null;
@@ -110,7 +145,7 @@ class FileApi {
 	private remoteDateMutex_ = new Mutex();
 	private initialized_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	public constructor(baseDir: string | Function, driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
@@ -266,7 +301,7 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async list(path = '', options: any = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
@@ -287,10 +322,12 @@ class FileApi {
 		}
 
 		if (!options.includeDirs) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			result.items = result.items.filter((f: any) => !f.isDir);
 		}
 
 		if (options.syncItemsOnly) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			result.items = result.items.filter((f: any) => !f.isDir && BaseItem.isSystemPath(f.path));
 		}
 
@@ -309,7 +346,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.mkdir(this.fullPath(path)), this.requestRepeatCount());
 	}
 
-	public async stat(path: string) {
+	public async stat(path: string): Promise<ItemStat> {
 		logger.debug(`stat ${this.fullPath(path)}`);
 
 		const output = await tryAndRepeat(() => this.driver_.stat(this.fullPath(path)), this.requestRepeatCount());
@@ -320,14 +357,15 @@ class FileApi {
 	}
 
 	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
-	public get(path: string, options: any = null) {
+	public get(path: string, options: GetOptions = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
 		logger.debug(`get ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.get(this.fullPath(path), options), this.requestRepeatCount());
 	}
 
-	public async put(path: string, content: any, options: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async put(path: string, content: any, options: PutOptions = null) {
 		logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
@@ -337,6 +375,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async multiPut(items: MultiPutItem[], options: any = null) {
 		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
@@ -362,7 +401,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.clearRoot(this.baseDir()), this.requestRepeatCount());
 	}
 
-	public delta(path: string, options: any = null): Promise<PaginatedList> {
+	public delta(path: string, options: DeltaOptions|null = null): Promise<PaginatedList> {
 		logger.debug(`delta ${this.fullPath(path)}`);
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}
@@ -384,7 +423,9 @@ class FileApi {
 
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function basicDeltaContextFromOptions_(options: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		timestamp: 0,
 		filesAtTimestamp: [],
@@ -409,8 +450,8 @@ function basicDeltaContextFromOptions_(options: any) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function basicDelta(path: string, getDirStatFn: Function, options: any) {
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOptions) {
 	const outputLimit = 50;
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
@@ -435,9 +476,11 @@ async function basicDelta(path: string, getDirStatFn: Function, options: any) {
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
 		newContext.statsCache = await getDirStatFn(path);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		newContext.statsCache.sort((a: any, b: any) => {
 			return a.updated_time - b.updated_time;
 		});
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		newContext.statIdsCache = newContext.statsCache.filter((item: any) => BaseItem.isSystemPath(item.path)).map((item: any) => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}

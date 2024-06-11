@@ -1,0 +1,25 @@
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
+index 8a719ca35af1cc3a4192c5c5f8258fd4f7fea990..5f8831f81cd164a4f627423427ead92fa286b115 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
++++ b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.java
+@@ -37,7 +37,7 @@ import com.facebook.react.uimanager.common.ViewUtil;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Queue;
+-import java.util.concurrent.ConcurrentLinkedQueue;
++import java.util.concurrent.LinkedBlockingQueue;
+ import java.util.concurrent.atomic.AtomicReference;
+ 
+ /**
+@@ -149,7 +149,10 @@ public class NativeAnimatedModule extends NativeAnimatedModuleSpec
+   }
+ 
+   private class ConcurrentOperationQueue {
+-    private final Queue<UIThreadOperation> mQueue = new ConcurrentLinkedQueue<>();
++    // Patch: Use LinkedBlockingQueue instead of ConcurrentLinkedQueue.
++    // In some versions of Android, ConcurrentLinkedQueue is known to drop
++    // items, causing crashing. See https://github.com/laurent22/joplin/issues/8425
++    private final Queue<UIThreadOperation> mQueue = new LinkedBlockingQueue<>();
+     @Nullable private UIThreadOperation mPeekedOperation = null;
+ 
+     @AnyThread

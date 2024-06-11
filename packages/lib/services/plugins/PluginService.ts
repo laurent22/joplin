@@ -9,7 +9,11 @@ import Setting from '../../models/Setting';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
-import { compareVersions } from 'compare-versions';
+import { PluginManifest } from './utils/types';
+import isCompatible from './utils/isCompatible';
+import { AppType } from './api/types';
+import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
+import { _ } from '../../locale';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
@@ -64,6 +68,8 @@ export interface PluginSettings {
 	[pluginId: string]: PluginSetting;
 }
 
+export type SerializedPluginSettings = Record<string, Partial<PluginSetting>>;
+
 interface PluginLoadOptions {
 	devMode: boolean;
 	builtIn: boolean;
@@ -73,6 +79,8 @@ function makePluginId(source: string): string {
 	// https://www.npmjs.com/package/slug#options
 	return uslug(source).substr(0, 32);
 }
+
+type LoadedPluginsChangeListener = ()=> void;
 
 export default class PluginService extends BaseService {
 
@@ -87,13 +95,17 @@ export default class PluginService extends BaseService {
 	}
 
 	private appVersion_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private platformImplementation_: any = null;
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
+	private pluginsChangeListeners_: LoadedPluginsChangeListener[] = [];
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
 		this.store_ = store;
@@ -130,11 +142,28 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
+	public addLoadedPluginsChangeListener(listener: ()=> void) {
+		this.pluginsChangeListeners_.push(listener);
+
+		return {
+			remove: () => {
+				this.pluginsChangeListeners_ = this.pluginsChangeListeners_.filter(l => (l !== listener));
+			},
+		};
+	}
+
+	private dispatchPluginsChangeListeners() {
+		for (const listener of this.pluginsChangeListeners_) {
+			listener();
+		}
+	}
+
 	private setPluginAt(pluginId: string, plugin: Plugin) {
 		this.plugins_ = {
 			...this.plugins_,
 			[pluginId]: plugin,
 		};
+		this.dispatchPluginsChangeListeners();
 	}
 
 	private deletePluginAt(pluginId: string) {
@@ -142,6 +171,8 @@ export default class PluginService extends BaseService {
 
 		this.plugins_ = { ...this.plugins_ };
 		delete this.plugins_[pluginId];
+
+		this.dispatchPluginsChangeListeners();
 	}
 
 	public async unloadPlugin(pluginId: string) {
@@ -151,6 +182,7 @@ export default class PluginService extends BaseService {
 
 			plugin.onUnload();
 			await this.runner_.stop(plugin);
+			plugin.running = false;
 
 			this.deletePluginAt(pluginId);
 			this.startedPlugins_ = { ...this.startedPlugins_ };
@@ -170,7 +202,7 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
-	public unserializePluginSettings(settings: any): PluginSettings {
+	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
 		const output = { ...settings };
 
 		for (const pluginId in output) {
@@ -180,7 +212,7 @@ export default class PluginService extends BaseService {
 			};
 		}
 
-		return output;
+		return output as PluginSettings;
 	}
 
 	public serializePluginSettings(settings: PluginSettings): string {
@@ -248,6 +280,7 @@ export default class PluginService extends BaseService {
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
 
 		if (!manifest || manifest._package_hash !== hash) {
@@ -274,6 +307,7 @@ export default class PluginService extends BaseService {
 
 	// Loads the manifest as a simple object with no validation. Used only
 	// when unpacking a package.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async loadManifestToObject(path: string): Promise<any> {
 		try {
 			const manifestText = await shim.fsDriver().readFile(path, 'utf8');
@@ -343,6 +377,7 @@ export default class PluginService extends BaseService {
 
 		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
 		for (const notice of deprecationNotices) {
@@ -380,12 +415,14 @@ export default class PluginService extends BaseService {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((stat: any) => {
 					if (stat.isDirectory()) return true;
 					if (stat.path.toLowerCase().endsWith('.js')) return true;
 					if (stat.path.toLowerCase().endsWith('.jpl')) return true;
 					return false;
 				})
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.map((stat: any) => `${pluginDirOrPaths}/${stat.path}`);
 		}
 
@@ -397,11 +434,32 @@ export default class PluginService extends BaseService {
 
 			try {
 				const plugin = await this.loadPluginFromPath(pluginPath);
+				const enabled = this.pluginEnabled(settings, plugin.id);
 
-				// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
-				// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
-				// such folders but to keep things sane we disallow it.
-				if (this.plugins_[plugin.id]) throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
+				const existingPlugin = this.plugins_[plugin.id];
+				if (existingPlugin) {
+					const isSamePlugin = existingPlugin.baseDir === plugin.baseDir;
+
+					// On mobile, plugins can reload without restarting the app. If a plugin is currently
+					// running and hasn't changed, it doesn't need to be reloaded.
+					if (isSamePlugin) {
+						const isSameVersion =
+							existingPlugin.manifest.version === plugin.manifest.version
+							&& existingPlugin.manifest._package_hash === plugin.manifest._package_hash;
+						if (isSameVersion && existingPlugin.running === enabled) {
+							logger.debug('Not reloading same-version plugin', plugin.id);
+							continue;
+						} else {
+							logger.info('Reloading plugin with ID', plugin.id);
+							await this.unloadPlugin(plugin.id);
+						}
+					} else {
+						// After transforming the plugin path to an ID, multiple plugins might end up with the same ID. For
+						// example "MyPlugin" and "myplugin" would have the same ID. Technically it's possible to have two
+						// such folders but to keep things sane we disallow it.
+						throw new Error(`There is already a plugin with this ID: ${plugin.id}`);
+					}
+				}
 
 				// We mark the plugin as built-in even if not enabled (being built-in affects
 				// update UI).
@@ -409,7 +467,7 @@ export default class PluginService extends BaseService {
 
 				this.setPluginAt(plugin.id, plugin);
 
-				if (!this.pluginEnabled(settings, plugin.id)) {
+				if (!enabled) {
 					logger.info(`Not running disabled plugin: "${plugin.id}"`);
 					continue;
 				}
@@ -437,8 +495,29 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public isCompatible(pluginVersion: string): boolean {
-		return compareVersions(this.appVersion_, pluginVersion) >= 0;
+	private get appType_() {
+		return shim.mobilePlatform() ? AppType.Mobile : AppType.Desktop;
+	}
+
+	public isCompatible(manifest: PluginManifest): boolean {
+		return isCompatible(this.appVersion_, this.appType_, manifest);
+	}
+
+	public describeIncompatibility(manifest: PluginManifest) {
+		if (this.isCompatible(manifest)) return null;
+
+		const minVersion = minVersionForPlatform(this.appType_, manifest);
+		if (minVersion) {
+			return _('Please upgrade Joplin to version %s or later to use this plugin.', minVersion);
+		} else {
+			let platformDescription = 'Unknown';
+			if (this.appType_ === AppType.Mobile) {
+				platformDescription = _('Joplin Mobile');
+			} else if (this.appType_ === AppType.Desktop) {
+				platformDescription = _('Joplin Desktop');
+			}
+			return _('This plugin doesn\'t support %s.', platformDescription);
+		}
 	}
 
 	public get allPluginsStarted(): boolean {
@@ -451,8 +530,8 @@ export default class PluginService extends BaseService {
 	public async runPlugin(plugin: Plugin) {
 		if (this.isSafeMode) throw new Error(`Plugin was not started due to safe mode: ${plugin.manifest.id}`);
 
-		if (!this.isCompatible(plugin.manifest.app_min_version)) {
-			throw new Error(`Plugin "${plugin.id}" was disabled because it requires Joplin version ${plugin.manifest.app_min_version} and current version is ${this.appVersion_}.`);
+		if (!this.isCompatible(plugin.manifest)) {
+			throw new Error(`Plugin "${plugin.id}" was disabled: ${this.describeIncompatibility(plugin.manifest)}`);
 		} else {
 			this.store_.dispatch({
 				type: 'PLUGIN_ADD',
@@ -473,6 +552,7 @@ export default class PluginService extends BaseService {
 
 		plugin.on('started', onStarted);
 
+		plugin.running = true;
 		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
 		return this.runner_.run(plugin, pluginApi);
 	}

@@ -25,6 +25,7 @@ class Command extends BaseCommand {
 	private syncTargetId_: number = null;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private releaseLockFn_: Function = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private oneDriveApiUtils_: any = null;
 
 	public usage() {
@@ -59,6 +60,7 @@ class Command extends BaseCommand {
 			// OneDrive
 			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				log: (...s: any[]) => {
 					return this.stdout(...s);
 				},
@@ -133,6 +135,7 @@ class Command extends BaseCommand {
 		return !!this.oneDriveApiUtils_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async action(args: any) {
 		this.releaseLockFn_ = null;
 
@@ -181,7 +184,9 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onProgress: (report: any) => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));

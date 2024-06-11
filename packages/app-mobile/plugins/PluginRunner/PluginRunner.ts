@@ -61,6 +61,11 @@ export default class PluginRunner extends BasePluginRunner {
 	public override async stop(plugin: Plugin) {
 		logger.info('Stopping plugin with id', plugin.id);
 
+		if (!this.webviewRef.current) {
+			logger.debug('WebView already unloaded. Plugin already stopped. ID: ', plugin.id);
+			return;
+		}
+
 		this.webviewRef.current.injectJS(`
 			pluginBackgroundPage.stopPlugin(${JSON.stringify(plugin.id)});
 		`);

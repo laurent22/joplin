@@ -10,9 +10,10 @@ export interface MenuItem {
 	id?: string;
 	label?: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	click?: Function;
+	click?: ()=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	role?: any;
-	type?: string;
+	type?: 'normal'|'separator'|'submenu';
 	accelerator?: string;
 	checked?: boolean;
 	enabled?: boolean;
@@ -23,10 +24,12 @@ interface MenuItems {
 }
 
 interface MenuItemProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	[key: string]: any;
 }
 
 interface MenuItemPropsCache {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	[key: string]: any;
 }
 
@@ -36,6 +39,7 @@ interface MenuItemCache {
 
 const createShallowObjectEqualSelector = createSelectorCreator(
 	defaultMemoize,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(prev: any, next: any) => {
 		if (Object.keys(prev).length !== Object.keys(next).length) return false;
 		for (const n in prev) {
@@ -48,9 +52,12 @@ const createShallowObjectEqualSelector = createSelectorCreator(
 // This selector ensures that for the given command names, the same toolbar
 // button array is returned if the underlying toolbar buttons have not changed.
 const selectObjectByCommands = createCachedSelector(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(state: any) => state.array,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(array: any[]) => array,
 )({
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	keySelector: (_state: any, commandNames: string[]) => {
 		return commandNames.join('_');
 	},
@@ -95,6 +102,7 @@ export default class MenuUtils {
 		return item;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
 		const whenClauseContext = this.service.currentWhenClauseContext();
 
@@ -123,6 +131,7 @@ export default class MenuUtils {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public commandsToMenuItemProps(commandNames: string[], whenClauseContext: any): MenuItemProps {
 		const output: MenuItemProps = {};
 
@@ -154,6 +163,7 @@ export default class MenuUtils {
 			output.push(menuItem);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (output.length) output.splice(0, 0, { type: 'separator' } as any);
 
 		return output;

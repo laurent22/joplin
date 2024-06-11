@@ -2,6 +2,9 @@ import * as React from 'react';
 const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
+type StyleProps = any;
+
 export enum ButtonLevel {
 	Primary = 'primary',
 	Secondary = 'secondary',
@@ -19,6 +22,7 @@ interface Props {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
+	iconLabel?: string;
 	className?: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClick?: Function;
@@ -26,6 +30,7 @@ interface Props {
 	iconAnimation?: string;
 	tooltip?: string;
 	disabled?: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
 	style?: any;
 	size?: ButtonSize;
 	isSquare?: boolean;
@@ -71,131 +76,131 @@ const StyledButtonBase = styled.button`
 `;
 
 const StyledIcon = styled(styled.span(space))`
-	font-size: ${(props: any) => props.theme.toolbarIconSize}px;
-	${(props: any) => props.animation ? `animation: ${props.animation}` : ''};
+	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
+	${(props: StyleProps) => props.animation ? `animation: ${props.animation}` : ''};
 `;
 
 const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
-	background-color: ${(props: any) => props.theme.backgroundColor5};
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: any) => props.disabled} {
+	${(props: StyleProps) => props.disabled} {
 		&:hover {
-			background-color: ${(props: any) => props.theme.backgroundColorHover5};
+			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
 		}
 
 		&:active {
-			background-color: ${(props: any) => props.theme.backgroundColorActive5};
+			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive5};
 		}
 	}
 
 	${StyledIcon} {
-		color: ${(props: any) => props.theme.color5};
+		color: ${(props: StyleProps) => props.theme.color5};
 	}
 
 	${StyledTitle} {
-		color: ${(props: any) => props.theme.color5};
+		color: ${(props: StyleProps) => props.theme.color5};
 	}
 `;
 
 const StyledButtonSecondary = styled(StyledButtonBase)`
-	border: 1px solid ${(props: any) => props.theme.borderColor4};
-	background-color: ${(props: any) => props.theme.backgroundColor4};
+	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: any) => props.disabled} {
+	${(props: StyleProps) => props.disabled} {
 		&:hover {
-			background-color: ${(props: any) => props.theme.backgroundColorHover4};
+			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
 		}
 
 		&:active {
-			background-color: ${(props: any) => props.theme.backgroundColorActive4};
+			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive4};
 		}
 	}
 
 	${StyledIcon} {
-		color: ${(props: any) => props.theme.color4};
+		color: ${(props: StyleProps) => props.theme.color4};
 	}
 
 	${StyledTitle} {
-		color: ${(props: any) => props.theme.color4};
+		color: ${(props: StyleProps) => props.theme.color4};
 	}
 `;
 
 const StyledButtonTertiary = styled(StyledButtonBase)`
-	border: 1px solid ${(props: any) => props.theme.color3};
-	background-color: ${(props: any) => props.theme.backgroundColor3};
+	border: 1px solid ${(props: StyleProps) => props.theme.color3};
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor3};
 
 	&:hover {
-		background-color: ${(props: any) => props.theme.backgroundColorHoverDim3};
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorHoverDim3};
 	}
 
 	&:active {
-		background-color: ${(props: any) => props.theme.backgroundColorActive3};
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorActive3};
 	}
 
 	${StyledIcon} {
-		color: ${(props: any) => props.theme.color};
+		color: ${(props: StyleProps) => props.theme.color};
 	}
 
 	${StyledTitle} {
-		color: ${(props: any) => props.theme.color};
+		color: ${(props: StyleProps) => props.theme.color};
 		opacity: 0.9;
 	}
 `;
 
 const StyledButtonRecommended = styled(StyledButtonBase)`
-	border: 1px solid ${(props: any) => props.theme.borderColor4};
-	background-color: ${(props: any) => props.theme.warningBackgroundColor};
+	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
+	background-color: ${(props: StyleProps) => props.theme.warningBackgroundColor};
 
 	${StyledIcon} {
-		color: ${(props: any) => props.theme.color};
+		color: ${(props: StyleProps) => props.theme.color};
 	}
 
 	${StyledTitle} {
-		color: ${(props: any) => props.theme.color};
+		color: ${(props: StyleProps) => props.theme.color};
 		opacity: 0.9;
 	}
 `;
 
 const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 	background: none;
-	border-color: ${(props: any) => props.theme.color2};
-	color: ${(props: any) => props.theme.color2};
+	border-color: ${(props: StyleProps) => props.theme.color2};
+	color: ${(props: StyleProps) => props.theme.color2};
 
 	&:hover {
-		color: ${(props: any) => props.theme.colorHover2};
-		border-color: ${(props: any) => props.theme.colorHover2};
+		color: ${(props: StyleProps) => props.theme.colorHover2};
+		border-color: ${(props: StyleProps) => props.theme.colorHover2};
 		background: none;
 
 		${StyledTitle} {
-			color: ${(props: any) => props.theme.colorHover2};
+			color: ${(props: StyleProps) => props.theme.colorHover2};
 		}
 
 		${StyledIcon} {
-			color: ${(props: any) => props.theme.colorHover2};
+			color: ${(props: StyleProps) => props.theme.colorHover2};
 		}
 	}
 
 	&:active {
-		color: ${(props: any) => props.theme.colorActive2};
-		border-color: ${(props: any) => props.theme.colorActive2};
+		color: ${(props: StyleProps) => props.theme.colorActive2};
+		border-color: ${(props: StyleProps) => props.theme.colorActive2};
 		background: none;
 
 		${StyledTitle} {
-			color: ${(props: any) => props.theme.colorActive2};
+			color: ${(props: StyleProps) => props.theme.colorActive2};
 		}
 
 		${StyledIcon} {
-			color: ${(props: any) => props.theme.colorActive2};
+			color: ${(props: StyleProps) => props.theme.colorActive2};
 		}
 	}
 
 	${StyledTitle} {
-		color: ${(props: any) => props.theme.color2};
+		color: ${(props: StyleProps) => props.theme.color2};
 	}
 
 	${StyledIcon} {
-		color: ${(props: any) => props.theme.color2};
+		color: ${(props: StyleProps) => props.theme.color2};
 	}
 `;
 
@@ -207,6 +212,7 @@ function buttonClass(level: ButtonLevel) {
 	return StyledButtonSecondary;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
 const Button = React.forwardRef((props: Props, ref: any) => {
 	const iconOnly = props.iconName && !props.title;
 
@@ -214,7 +220,7 @@ const Button = React.forwardRef((props: Props, ref: any) => {
 
 	function renderIcon() {
 		if (!props.iconName) return null;
-		return <StyledIcon animation={props.iconAnimation} mr={iconOnly ? '0' : '6px'} color={props.color} className={props.iconName}/>;
+		return <StyledIcon aria-label={props.iconLabel} animation={props.iconAnimation} mr={iconOnly ? '0' : '6px'} color={props.color} className={props.iconName}/>;
 	}
 
 	function renderTitle() {

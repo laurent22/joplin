@@ -7,6 +7,7 @@ import { themeStyle } from '../../global-style';
 const useSource = (tempDirPath: string, themeId: number) => {
 	const injectedJs = useMemo(() => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginOptions: any = {};
 		for (const n in subValues) {
 			pluginOptions[n] = { enabled: subValues[n] };

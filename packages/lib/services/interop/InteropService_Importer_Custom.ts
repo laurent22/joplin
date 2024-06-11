@@ -3,6 +3,7 @@ import { ImportExportResult } from './types';
 
 interface CustomImporter {
 	onExec(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		context: { sourcePath: string; options: any; warnings: string[] }
 	): Promise<void>;
 }
@@ -20,6 +21,7 @@ export default class InteropService_Importer_Custom extends InteropService_Impor
 		// When passing the options to the plugin, we strip off any function
 		// because they won't serialized over ipc.
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const processedOptions: any = {};
 
 		if (this.options_) {

@@ -114,6 +114,9 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 	public async add(userId: Uuid, itemId: Uuid, options: SaveOptions = {}): Promise<void> {
 		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
+		if (!item) {
+			throw new ErrorNotFound(`No such item: ${itemId}`);
+		}
 		await this.addMulti(userId, [item], options);
 	}
 
@@ -174,6 +177,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		} else if (options.byUserItem) {
 			userItems = [options.byUserItem];
 		} else if (options.byUserItemIds) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			userItems = await this.loadByIds(options.byUserItemIds as any);
 		} else {
 			throw new Error('Invalid options');

@@ -10,5 +10,5 @@ document.addEventListener('click', async (event) => {
 })
 
 console.info('webview.js: registering message listener');
-webviewApi.onMessage((message) => console.info('webview.js: got message:', message));
+webviewApi.onMessage((event) => console.info('webview.js: got message:', event.message));
 

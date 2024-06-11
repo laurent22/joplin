@@ -170,6 +170,7 @@ describe('services/rest/Api', () => {
 	}));
 
 	it('should allow setting note properties', (async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let response: any = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
@@ -179,6 +180,7 @@ describe('services/rest/Api', () => {
 			latitude: '48.732071',
 			longitude: '-3.458700',
 			altitude: '21',
+			source: 'testing',
 		}));
 
 		const noteId = response.id;
@@ -188,12 +190,14 @@ describe('services/rest/Api', () => {
 			expect(note.latitude).toBe('48.73207100');
 			expect(note.longitude).toBe('-3.45870000');
 			expect(note.altitude).toBe('21.0000');
+			expect(note.source).toBe('testing');
 		}
 
 		await api.route(RequestMethod.PUT, `notes/${noteId}`, null, JSON.stringify({
 			latitude: '49',
 			longitude: '-3',
 			altitude: '22',
+			source: 'testing 2',
 		}));
 
 		{
@@ -201,6 +205,7 @@ describe('services/rest/Api', () => {
 			expect(note.latitude).toBe('49.00000000');
 			expect(note.longitude).toBe('-3.00000000');
 			expect(note.altitude).toBe('22.0000');
+			expect(note.source).toBe('testing 2');
 		}
 	}));
 
@@ -576,6 +581,7 @@ describe('services/rest/Api', () => {
 		expect(response3.items.length).toBe(2);
 
 		// Also check that it only returns the required fields
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		response3.items.sort((a: any, b: any) => {
 			return a.id < b.id ? -1 : +1;
 		});

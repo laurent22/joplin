@@ -23,6 +23,7 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 	return newBody;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function formNoteToNote(formNote: FormNote): Promise<any> {
 	return {
 		id: formNote.id,

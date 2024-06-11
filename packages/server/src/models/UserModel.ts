@@ -118,8 +118,8 @@ export default class UserModel extends BaseModel<User> {
 
 	private ldapConfig_: LdapConfig[];
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
-		super(db, modelFactory, config);
+	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbSlave, modelFactory, config);
 
 		this.ldapConfig_ = config.ldap;
 	}
@@ -202,6 +202,7 @@ export default class UserModel extends BaseModel<User> {
 			];
 
 			for (const key of Object.keys(resource)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
 					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
 				}
@@ -218,6 +219,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
 		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
@@ -296,8 +298,12 @@ export default class UserModel extends BaseModel<User> {
 		if ('email' in user) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
+			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
+			if (user.email.length > 254) throw new ErrorUnprocessableEntity('Please enter an email address between 0 and 254 characters');
 			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
 		}
+
+		if ('full_name' in user && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
 
 		return super.validate(user, options);
 	}
@@ -633,6 +639,7 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async syncInfo(userId: Uuid): Promise<any> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
 

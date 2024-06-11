@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
-import { View } from 'react-native';
-import { Banner, Button, Text } from 'react-native-paper';
-import { _ } from '@joplin/lib/locale';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import PluginToggle from './PluginToggle';
+import { View, StyleSheet } from 'react-native';
+import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
+import { _, _n } from '@joplin/lib/locale';
+import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import InstalledPluginBox from './InstalledPluginBox';
 import SearchPlugins from './SearchPlugins';
-import { ItemEvent } from '@joplin/lib/components/shared/config/plugins/types';
-import NavService from '@joplin/lib/services/NavService';
+import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import PluginInfoModal from './PluginInfoModal';
+import usePluginCallbacks from './utils/usePluginCallbacks';
 
 interface Props {
 	themeId: number;
 	styles: ConfigScreenStyles;
-	pluginSettings: string;
+	pluginSettings: SerializedPluginSettings;
 	settingsSearchQuery?: string;
 
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -35,11 +36,40 @@ export const getSearchText = () => {
 	return searchText;
 };
 
+// Loaded plugins: All plugins with available manifests.
+const useLoadedPluginIds = () => {
+	const getLoadedPlugins = useCallback(() => {
+		return PluginService.instance().pluginIds;
+	}, []);
+	const [loadedPluginIds, setLoadedPluginIds] = useState(getLoadedPlugins);
+
+	useEffect(() => {
+		const { remove } = PluginService.instance().addLoadedPluginsChangeListener(() => {
+			setLoadedPluginIds(getLoadedPlugins());
+		});
+
+		return () => {
+			remove();
+		};
+	}, [getLoadedPlugins]);
+
+	return loadedPluginIds;
+};
+
+const styles = StyleSheet.create({
+	installedPluginsContainer: {
+		marginLeft: 8,
+		marginRight: 8,
+		marginBottom: 10,
+	},
+});
+
 const PluginStates: React.FC<Props> = props => {
 	const [repoApiError, setRepoApiError] = useState(null);
 	const [repoApiLoaded, setRepoApiLoaded] = useState(false);
 	const [reloadRepoCounter, setRepoReloadCounter] = useState(0);
 	const [updatablePluginIds, setUpdatablePluginIds] = useState<Record<string, boolean>>({});
+	const [shownInDialogItem, setShownInDialogItem] = useState<PluginItem|null>(null);
 
 	const onRepoApiLoaded = useCallback(async (repoApi: RepositoryApi) => {
 		const manifests = Object.values(PluginService.instance().plugins)
@@ -47,7 +77,7 @@ const PluginStates: React.FC<Props> = props => {
 			.map(plugin => {
 				return plugin.manifest;
 			});
-		const updatablePluginIds = await repoApi.canBeUpdatedPlugins(manifests, PluginService.instance().appVersion);
+		const updatablePluginIds = await repoApi.canBeUpdatedPlugins(manifests);
 
 		const conv: Record<string, boolean> = {};
 		for (const id of updatablePluginIds) {
@@ -80,31 +110,45 @@ const PluginStates: React.FC<Props> = props => {
 				<Button onPress={reloadPluginRepo}>{_('Retry')}</Button>
 			</View>;
 		} else {
-			return <Text>{_('Loading plugin repository...')}</Text>;
+			return <ProgressBar accessibilityLabel={_('Loading...')} indeterminate={true} />;
 		}
 	};
 
-	const onShowPluginLog = useCallback((event: ItemEvent) => {
-		const pluginId = event.item.manifest.id;
-		void NavService.go('Log', { defaultFilter: pluginId });
+	const onShowPluginInfo = useCallback((event: ItemEvent) => {
+		setShownInDialogItem(event.item);
 	}, []);
+
+	const onPluginDialogClosed = useCallback(() => {
+		setShownInDialogItem(null);
+	}, []);
+
+	const pluginSettings = useMemo(() => {
+		return PluginService.instance().unserializePluginSettings(props.pluginSettings);
+	}, [props.pluginSettings]);
+
+	const { callbacks: pluginCallbacks, updatingPluginIds, installingPluginIds } = usePluginCallbacks({
+		pluginSettings, updatePluginStates: props.updatePluginStates, repoApi,
+	});
 
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
-	for (const key in pluginService.plugins) {
-		const plugin = pluginService.plugins[key];
+
+	const pluginIds = useLoadedPluginIds();
+	for (const pluginId of pluginIds) {
+		const plugin = pluginService.plugins[pluginId];
 
 		if (!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(plugin.manifest.name)) {
 			installedPluginCards.push(
-				<PluginToggle
-					key={`plugin-${key}`}
-					pluginId={plugin.id}
-					styles={props.styles}
-					pluginSettings={props.pluginSettings}
+				<InstalledPluginBox
+					key={`plugin-${pluginId}`}
+					themeId={props.themeId}
+					pluginId={pluginId}
+					pluginSettings={pluginSettings}
 					updatablePluginIds={updatablePluginIds}
-					updatePluginStates={props.updatePluginStates}
-					onShowPluginLog={onShowPluginLog}
-					repoApi={repoApi}
+					updatingPluginIds={updatingPluginIds}
+					showInstalledChip={false}
+					onShowPluginInfo={onShowPluginInfo}
+					callbacks={pluginCallbacks}
 				/>,
 			);
 		}
@@ -114,21 +158,65 @@ const PluginStates: React.FC<Props> = props => {
 		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
-	const searchComponent = (
-		<SearchPlugins
-			pluginSettings={props.pluginSettings}
-			themeId={props.themeId}
-			onUpdatePluginStates={props.updatePluginStates}
-			repoApiInitialized={repoApiLoaded}
-			repoApi={repoApi}
-		/>
+	const [searchQuery, setSearchQuery] = useState('');
+
+	const searchAccordion = (
+		<List.Accordion
+			title={_('Install new plugins')}
+			description={_('Browse and install community plugins.')}
+			id='search'
+		>
+			<SearchPlugins
+				pluginSettings={pluginSettings}
+				themeId={props.themeId}
+				onUpdatePluginStates={props.updatePluginStates}
+				installingPluginIds={installingPluginIds}
+				callbacks={pluginCallbacks}
+				repoApiInitialized={repoApiLoaded}
+				repoApi={repoApi}
+				updatingPluginIds={updatingPluginIds}
+				updatablePluginIds={updatablePluginIds}
+				onShowPluginInfo={onShowPluginInfo}
+
+				searchQuery={searchQuery}
+				setSearchQuery={setSearchQuery}
+			/>
+		</List.Accordion>
 	);
+
+	const isSearching = !!props.shouldShowBasedOnSearchQuery;
+	// Don't include the number of installed plugins when searching -- only a few of the total
+	// may be shown by the search.
+	const installedAccordionDescription = !isSearching ? _n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length) : null;
 
 	return (
 		<View>
 			{renderRepoApiStatus()}
-			{installedPluginCards}
-			{showSearch ? searchComponent : null}
+			<List.AccordionGroup>
+				<List.Accordion
+					title={_('Installed plugins')}
+					description={installedAccordionDescription}
+					id='installed'
+				>
+					<View style={styles.installedPluginsContainer}>
+						{installedPluginCards}
+					</View>
+				</List.Accordion>
+				<Divider/>
+				{showSearch ? searchAccordion : null}
+				<Divider/>
+			</List.AccordionGroup>
+			<PluginInfoModal
+				themeId={props.themeId}
+				pluginSettings={pluginSettings}
+				updatablePluginIds={updatablePluginIds}
+				updatingPluginIds={updatingPluginIds}
+				installingPluginIds={installingPluginIds}
+				item={shownInDialogItem}
+				visible={!!shownInDialogItem}
+				onModalDismiss={onPluginDialogClosed}
+				pluginCallbacks={pluginCallbacks}
+			/>
 		</View>
 	);
 };
