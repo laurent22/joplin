@@ -3,9 +3,10 @@ import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import { openItemById } from '../../NoteEditor/utils/contextMenu';
-const { parseResourceUrl, urlProtocol } = require('@joplin/lib/urlUtils');
+import { fileUrlToResourceUrl, parseResourceUrl, urlProtocol } from '@joplin/lib/urlUtils';
 import { fileUriToPath } from '@joplin/utils/url';
-const { urlDecode } = require('@joplin/lib/string-utils');
+import { urlDecode } from '@joplin/lib/string-utils';
+import Setting from '@joplin/lib/models/Setting';
 
 export const declaration: CommandDeclaration = {
 	name: 'openItem',
@@ -15,6 +16,11 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, link: string) => {
 			if (!link) throw new Error('Link cannot be empty');
+
+			const fromFileUrl = fileUrlToResourceUrl(link, Setting.value('resourceDir'));
+			if (fromFileUrl) {
+				link = fromFileUrl;
+			}
 
 			if (link.startsWith('joplin://') || link.startsWith(':/')) {
 				const parsedUrl = parseResourceUrl(link);
