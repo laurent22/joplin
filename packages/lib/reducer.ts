@@ -963,13 +963,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
 					if (n.id === modNote.id) {
+						const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
 						if (n.is_conflict && !modNote.is_conflict) {
 							// Note was a conflict but was moved outside of
 							// the conflict folder
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
 							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
+						} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
