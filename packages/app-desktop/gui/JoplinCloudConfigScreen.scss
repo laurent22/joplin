@@ -12,10 +12,10 @@
 }
 
 .joplin-cloud-account-information {
-	margin-bottom: calc(var(--joplin-font-size) * 3);
+	margin-bottom: var(--joplin-margin);
 
 	table {
-		margin-bottom: calc(var(--joplin-font-size) * 1.5);
+		margin-bottom: var(--joplin-margin);
 		border: none;
 
 		td {
