@@ -47,5 +47,5 @@ jobs:
 
       - name: Build Android Release
         run: |
-          cd packages/app-mobile/android && ./gradlew assembleDebug
+          cd packages/app-mobile/android && ./gradlew assembleRelease
           
