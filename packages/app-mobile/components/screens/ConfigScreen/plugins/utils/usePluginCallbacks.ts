@@ -4,7 +4,7 @@ import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/us
 import NavService from '@joplin/lib/services/NavService';
 import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -40,14 +40,17 @@ const usePluginCallbacks = (props: Props) => {
 		updatePluginEnabled(pluginId, !settings.enabled);
 	}, [props.pluginSettings, updatePluginEnabled]);
 
-	const onDelete = useOnDeleteHandler(props.pluginSettings, onPluginSettingsChange, true);
+	const pluginSettingsRef = useRef(props.pluginSettings);
+	pluginSettingsRef.current = props.pluginSettings;
+
+	const onDelete = useOnDeleteHandler(pluginSettingsRef, onPluginSettingsChange, true);
 
 	const [updatingPluginIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
-	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, props.pluginSettings, props.repoApi, onPluginSettingsChange, true);
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettingsRef, props.repoApi, onPluginSettingsChange, true);
 
 	const [installingPluginIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 	const onInstall = useOnInstallHandler(
-		setInstallingPluginIds, props.pluginSettings, props.repoApi, onPluginSettingsChange, false,
+		setInstallingPluginIds, pluginSettingsRef, props.repoApi, onPluginSettingsChange, false,
 	);
 
 	const onShowPluginLog = useCallback((event: ItemEvent) => {
