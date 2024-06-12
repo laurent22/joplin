@@ -34,21 +34,21 @@ type PPK = {
 };
 
 type SyncInfoParsed = {
-	activeMasterKeyId: {
+	activeMasterKeyId?: {
 		updatedTime: number;
 		value: string;
 	};
-	appMinVersion: string;
-	e2ee: {
+	appMinVersion?: string;
+	e2ee?: {
 		updatedTime: number;
 		value: boolean;
 	};
-	masterKeys: MasterKey[];
-	ppk: {
+	masterKeys?: MasterKey[];
+	ppk?: {
 		updatedTime: number;
 		value: PPK;
 	};
-	version: number;
+	version?: number;
 };
 
 export interface SyncInfoValueBoolean {
@@ -306,12 +306,11 @@ export class SyncInfo {
 	}
 
 	public load(serialized: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let s = SyncInfo.defaultValues;
+		let s: SyncInfoParsed = {};
 		try {
 			s = JSON.parse(serialized);
 		} catch (error) {
-			logger.error('Error parsing sync info, using default values.', error);
+			logger.error(`Error parsing sync info, using default values. Sync info: ${JSON.stringify(serialized)}`, error);
 		}
 		this.version = 'version' in s ? s.version : 0;
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
@@ -409,22 +408,6 @@ export class SyncInfo {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this as any)[`${name}_`].updatedTime = timestamp;
 	}
-
-	public static readonly defaultValues: SyncInfoParsed = {
-		activeMasterKeyId: {
-			updatedTime: 0, value: '',
-		},
-		appMinVersion: '0.0.0',
-		e2ee: {
-			updatedTime: 0, value: false,
-		},
-		masterKeys: [],
-		ppk: {
-			updatedTime: 0, value: null,
-		},
-		version: 0,
-	};
-
 }
 
 // ---------------------------------------------------------

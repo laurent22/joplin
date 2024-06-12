@@ -318,11 +318,11 @@ describe('syncInfoUtils', () => {
 		const result = localSyncInfo();
 
 		expect(result.activeMasterKeyId).toEqual('');
-		expect(result.version).toEqual(SyncInfo.defaultValues.version);
-		expect(result.ppk).toEqual(SyncInfo.defaultValues.ppk.value);
-		expect(result.e2ee).toEqual(SyncInfo.defaultValues.e2ee.value);
-		expect(result.appMinVersion).toEqual(SyncInfo.defaultValues.appMinVersion);
-		expect(result.masterKeys).toEqual(SyncInfo.defaultValues.masterKeys);
+		expect(result.version).toEqual(0);
+		expect(result.ppk).toEqual(null);
+		expect(result.e2ee).toEqual(false);
+		expect(result.appMinVersion).toEqual('0.0.0');
+		expect(result.masterKeys).toEqual([]);
 
 		Logger.globalLogger.enabled = true;
 	});
