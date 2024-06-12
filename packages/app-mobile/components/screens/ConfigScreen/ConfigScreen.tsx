@@ -86,6 +86,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		shared.init(reg);
 	}
 
+	private goToJoplinCloudLogin_ = async () => {
+		await NavService.go('JoplinCloudLogin');
+	};
+
 	private checkSyncConfig_ = async () => {
 		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 			const isAuthenticated = await reg.syncTarget().isAuthenticated();
@@ -460,6 +464,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							) : null}
 						</View>
 					);
+
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
+					}
 
 					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });
 				}
