@@ -265,7 +265,7 @@ describe('PluginStates.installed', () => {
 		wrapper.unmount();
 	});
 
-	it('should consider running plugins without settings to be installed', async () => {
+	it('should be possible to disable plugins, even if missing from plugins.states', async () => {
 		await mockRepositoryApiConstructor();
 
 		const defaultPluginSettings: PluginSettings = {};
