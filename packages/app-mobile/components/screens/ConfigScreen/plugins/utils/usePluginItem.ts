@@ -21,12 +21,14 @@ const usePluginItem = (id: string, pluginSettings: PluginSettings, initialItem: 
 		if (!manifest) return null;
 		const settings = pluginSettings[id];
 
+		const installed = !!settings || !!plugin;
+
 		return {
 			id,
 			manifest,
 
-			installed: !!settings,
-			enabled: settings?.enabled ?? false,
+			installed,
+			enabled: settings?.enabled ?? installed,
 			deleted: settings?.deleted ?? false,
 			hasBeenUpdated: settings?.hasBeenUpdated ?? false,
 			devMode: plugin?.devMode ?? false,
