@@ -34,6 +34,7 @@ import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } f
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
+import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -538,33 +539,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'joplinCloud') {
-			const label = _('Email to note');
-			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
-			const isEmailToNoteAvailableInAccount = this.props.settings['sync.10.accountType'] !== 1;
-			const inboxEmailValue = isEmailToNoteAvailableInAccount ? this.props.settings['sync.10.inboxEmail'] : '-';
 			addSettingComponent(
-				<View key="joplinCloud">
-					<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-						<Text style={this.styles().styleSheet.settingText}>{label}</Text>
-						<Text style={this.styles().styleSheet.settingTextEmphasis}>{inboxEmailValue}</Text>
-					</View>
-					{
-						!isEmailToNoteAvailableInAccount && (
-							<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-								<Text style={this.styles().styleSheet.descriptionAlert}>{_('Your account doesn\'t have access to this feature')}</Text>
-							</View>
-						)
-					}
-					{
-						this.renderButton(
-							'sync.10.inboxEmail',
-							_('Copy to clipboard'),
-							() => isEmailToNoteAvailableInAccount && Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description, disabled: !isEmailToNoteAvailableInAccount },
-						)
-					}
-				</View>,
-				[label, description],
+				<JoplinCloudConfig
+					key="joplin-cloud-config"
+					accountType={this.props.settings['sync.10.accountType']}
+					inboxEmail={this.props.settings['sync.10.inboxEmail']}
+					userEmail={this.props.settings['sync.10.userEmail']}
+					website={this.props.settings['sync.10.website']}
+					styles={this.styles()}
+				/>,
+				[emailToNoteDescription(), emailToNoteLabel()],
 			);
 		}
 
