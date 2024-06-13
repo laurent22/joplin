@@ -1049,7 +1049,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 			{
 				if (draft.notesParentType === 'Search') {
-					logger.info('Not sorting the note list -- sorting should be done by search.');
+					logger.debug('Not sorting the note list -- sorting should be done by search.');
 				} else {
 					draft.notes = Note.sortNotes(draft.notes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
 				}
