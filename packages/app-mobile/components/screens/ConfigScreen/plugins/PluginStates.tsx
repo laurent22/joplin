@@ -194,9 +194,9 @@ const PluginStates: React.FC<Props> = props => {
 		<View>
 			{renderRepoApiStatus()}
 			<Banner visible={true} elevation={0} icon={() => <BetaChip size={13}/>}>
-				<Text>Plugin support on mobile is still in beta. For now, many plugins only support Joplin desktop or have only partial support for Joplin mobile.</Text>
+				<Text>Plugin support on mobile is still in beta. Plugins may cause performance issues. Some have only partial support for Joplin mobile.</Text>
 			</Banner>
-			<Divider bold={true}/>
+			<Divider/>
 
 			<List.AccordionGroup>
 				<List.Accordion
