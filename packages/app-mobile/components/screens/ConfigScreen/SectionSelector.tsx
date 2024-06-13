@@ -47,7 +47,8 @@ const SectionSelector: FunctionComponent<Props> = props => {
 			/>
 		) : null;
 
-		const betaChip = item.name === 'plugins' ? <BetaChip size={10}/> : null;
+		const isBeta = item.name === 'plugins';
+		const betaChip = isBeta ? <BetaChip size={10}/> : null;
 
 		return (
 			<TouchableRipple
