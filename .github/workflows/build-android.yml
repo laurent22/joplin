@@ -47,5 +47,7 @@ jobs:
 
       - name: Assemble Android Release
         run: |
-          cd packages/app-mobile/android && ./gradlew assembleRelease
+          cd packages/app-mobile/android
+          sed -i -- 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/' app/build.gradle
+          ./gradlew assembleRelease
           
