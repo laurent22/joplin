@@ -189,11 +189,15 @@ const PluginStates: React.FC<Props> = props => {
 	// may be shown by the search.
 	const installedAccordionDescription = !isSearching ? _n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length) : null;
 
+	// Using a different wrapper prevents the installed item group from being openable when
+	// there are no plugins:
+	const InstalledItemWrapper = pluginIds.length ? List.Accordion : List.Item;
+
 	return (
 		<View>
 			{renderRepoApiStatus()}
 			<List.AccordionGroup>
-				<List.Accordion
+				<InstalledItemWrapper
 					title={_('Installed plugins')}
 					description={installedAccordionDescription}
 					id='installed'
@@ -201,7 +205,7 @@ const PluginStates: React.FC<Props> = props => {
 					<View style={styles.installedPluginsContainer}>
 						{installedPluginCards}
 					</View>
-				</List.Accordion>
+				</InstalledItemWrapper>
 				<Divider/>
 				{showSearch ? searchAccordion : null}
 				<Divider/>
