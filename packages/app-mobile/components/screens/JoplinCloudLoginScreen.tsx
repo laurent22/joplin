@@ -13,7 +13,7 @@ import ScreenHeader from '../ScreenHeader';
 import Clipboard from '@react-native-clipboard/clipboard';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import Logger from '@joplin/utils/Logger';
-import CommandService from '@joplin/lib/services/CommandService';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 
@@ -91,7 +91,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
-					void CommandService.instance().execute('synchronize');
+					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);

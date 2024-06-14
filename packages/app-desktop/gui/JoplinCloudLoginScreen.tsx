@@ -9,7 +9,7 @@ import { Dispatch } from 'redux';
 import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
-import CommandService from '@joplin/lib/services/CommandService';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -39,7 +39,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
-					void CommandService.instance().execute('synchronize');
+					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);
