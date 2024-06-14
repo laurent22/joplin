@@ -148,16 +148,17 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
-		// Initially, no plugins should be visible.
-		expect(screen.queryByText(/^ABC Sheet Music/)).toBeNull();
+		// Initially, no plugins should be installed
+		expect(screen.queryByText(/^You currently have 0 plugins? installed/)).toBeNull();
 
 		const testPluginId1 = 'org.joplinapp.plugins.AbcSheetMusic';
 		const testPluginId2 = 'org.joplinapp.plugins.test.plugin.id';
 		await act(() => loadMockPlugin(testPluginId1, 'ABC Sheet Music', '1.2.3', pluginSettings));
 		await act(() => loadMockPlugin(testPluginId2, 'A test plugin', '1.0.0', pluginSettings));
 		expect(PluginService.instance().plugins[testPluginId1]).toBeTruthy();
+
+		await showInstalledTab();
 
 		// Should update the list of installed plugins even though the plugin settings didn't change.
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
