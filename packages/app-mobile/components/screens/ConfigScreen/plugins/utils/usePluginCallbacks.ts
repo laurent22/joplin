@@ -2,7 +2,7 @@ import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/sh
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import NavService from '@joplin/lib/services/NavService';
-import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -29,14 +29,18 @@ const usePluginCallbacks = (props: Props) => {
 
 	const updatePluginEnabled = useCallback((pluginId: string, enabled: boolean) => {
 		const newSettings = { ...props.pluginSettings };
-		newSettings[pluginId].enabled = enabled;
+		newSettings[pluginId] = {
+			...defaultPluginSetting(),
+			...newSettings[pluginId],
+			enabled,
+		};
 
 		props.updatePluginStates(newSettings);
 	}, [props.pluginSettings, props.updatePluginStates]);
 
 	const onToggle = useCallback((event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
-		const settings = props.pluginSettings[pluginId];
+		const settings = props.pluginSettings[pluginId] ?? defaultPluginSetting();
 		updatePluginEnabled(pluginId, !settings.enabled);
 	}, [props.pluginSettings, updatePluginEnabled]);
 

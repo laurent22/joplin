@@ -52,6 +52,9 @@ const showInstalledTab = async () => {
 	await userEvent.press(installedTab);
 };
 
+const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
+const backlinksPluginId = 'joplin.plugin.ambrt.backlinksToNote';
+
 describe('PluginStates.installed', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
@@ -76,9 +79,6 @@ describe('PluginStates.installed', () => {
 		await mockMobilePlatform(platform);
 		expect(shim.mobilePlatform()).toBe(platform);
 		await mockRepositoryApiConstructor();
-
-		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
-		const backlinksPluginId = 'joplin.plugin.ambrt.backlinksToNote';
 
 		const defaultPluginSettings: PluginSettings = {
 			[abcPluginId]: defaultPluginSetting(),
@@ -117,7 +117,6 @@ describe('PluginStates.installed', () => {
 	});
 
 	it('should show the current plugin version on updatable plugins', async () => {
-		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
 		const defaultPluginSettings: PluginSettings = { [abcPluginId]: defaultPluginSetting() };
 
 		const outdatedVersion = '0.0.1';
@@ -173,7 +172,6 @@ describe('PluginStates.installed', () => {
 	});
 
 	it('should support disabling plugins from the info modal', async () => {
-		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
 		const defaultPluginSettings: PluginSettings = { [abcPluginId]: defaultPluginSetting() };
 
 		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '1.2.3', defaultPluginSettings);
@@ -212,8 +210,6 @@ describe('PluginStates.installed', () => {
 
 	it('should support updating plugins from the info modal', async () => {
 		await mockRepositoryApiConstructor();
-
-		const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
 
 		const defaultPluginSettings: PluginSettings = {
 			[abcPluginId]: defaultPluginSetting(),
@@ -264,6 +260,43 @@ describe('PluginStates.installed', () => {
 		await waitFor(() => {
 			const versionText = screen.getAllByText('v0.0.2');
 			expect(versionText).toHaveLength(2);
+		});
+
+		wrapper.unmount();
+	});
+
+	it('should be possible to disable plugins, even if missing from plugins.states', async () => {
+		await mockRepositoryApiConstructor();
+
+		const defaultPluginSettings: PluginSettings = {};
+		await loadMockPlugin(abcPluginId, 'ABC Sheet Music', '3.4.5', defaultPluginSettings);
+		expect(PluginService.instance().plugins[abcPluginId]).toBeTruthy();
+
+		const wrapper = render(
+			<WrappedPluginStates
+				initialPluginSettings={defaultPluginSettings}
+				store={reduxStore}
+			/>,
+		);
+		await showInstalledTab();
+
+		// Should be shown as installed.
+		const card = await screen.findByText('ABC Sheet Music');
+		expect(card).toBeVisible();
+
+		const user = userEvent.setup();
+		await user.press(card);
+
+		// Should be considered installed -- should be possible to disable:
+		const enabledSwitch = await screen.findByLabelText('Enabled');
+		expect(enabledSwitch).toBeVisible();
+		fireEvent(enabledSwitch, 'valueChange', false);
+
+		// Disabling should add the plugin to plugins.states, if not present before.
+		await waitFor(() => {
+			expect(Setting.value('plugins.states')).toMatchObject({
+				[abcPluginId]: { enabled: false },
+			});
 		});
 
 		wrapper.unmount();
