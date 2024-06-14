@@ -1631,10 +1631,24 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
+		const folderPickerOptions = {
+			enabled: !this.state.readOnly,
+			selectedFolderId: this.state.note.parent_id,
+			onValueChange: async (folderIdSelected: string) => {
+				this.setState({
+					note: { ...this.state.note, parent_id: folderIdSelected },
+				});
+				this.props.dispatch({
+					type: 'NOTE_SELECT',
+					action: { id: note.id },
+				});
+			},
+		};
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
-					folderPickerOptions={this.folderPickerOptions()}
+					folderPickerOptions={folderPickerOptions}
 					menuOptions={this.menuOptions()}
 					showSaveButton={showSaveButton}
 					saveButtonDisabled={saveButtonDisabled}
