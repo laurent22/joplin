@@ -8,7 +8,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import setupVim from '@joplin/editor/CodeMirror/util/setupVim';
+import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
 import useEditorSearch from '../utils/useEditorSearchExtension';

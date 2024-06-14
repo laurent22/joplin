@@ -8,7 +8,8 @@ import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
 import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
 import { CompletionSource } from '@codemirror/autocomplete';
-import { RegionSpec, toggleInlineSelectionFormat } from './util/editorStateUtils';
+import { RegionSpec } from './utils/formatting/RegionSpec';
+import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 
 interface Callbacks {
 	onUndoRedo(): void;
