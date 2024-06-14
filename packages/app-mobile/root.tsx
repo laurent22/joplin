@@ -2,7 +2,7 @@ const React = require('react');
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
-import setupQuickActions from './setupQuickActions';
+import setupQuickActions, { quickActionHandler } from './setupQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, DeviceEventEmitter } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -86,6 +86,7 @@ const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
+import * as QuickActions from 'react-native-quick-actions';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -974,7 +975,9 @@ class AppComponent extends React.Component {
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 
-		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
+		setupQuickActions();
+		this.deviceEventerEmitter_ = DeviceEventEmitter.addListener('quickActionShortcut', this.quickActionsShortcutHandler);
+		void this.quickActionsWrapper();
 
 		await setupNotifications(this.props.dispatch);
 
@@ -1008,6 +1011,11 @@ class AppComponent extends React.Component {
 		if (this.unsubscribeNewShareListener_) {
 			this.unsubscribeNewShareListener_();
 			this.unsubscribeNewShareListener_ = undefined;
+		}
+
+		if (this.deviceEventerEmitter_) {
+			this.deviceEventerEmitter_.remove();
+			this.deviceEventerEmitter_ = undefined;
 		}
 	}
 
@@ -1094,6 +1102,20 @@ class AppComponent extends React.Component {
 		});
 
 		return sideMenuWidth;
+	};
+
+	private quickActionsWrapper = async () => {
+		try {
+			const data = await QuickActions.popInitialAction();
+			await this.quickActionsShortcutHandler(data);
+		} catch (error) {
+			logger.error('Quick action command failed', error);
+		}
+	};
+
+	private quickActionsShortcutHandler = async (data: { type: string }) => {
+		if (!data) return;
+		await quickActionHandler(data, this.props.dispatch, this.props.selectedFolderId);
 	};
 
 	public render() {
