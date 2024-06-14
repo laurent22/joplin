@@ -19,6 +19,8 @@ describe('locale', () => {
 		setLocale('en_GB');
 		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 1)).toBe('Copy Shareable Link');
 		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 2)).toBe('Copy Shareable Links');
+		expect(_n('Copy Shareable Link', 'Copy Shareable Links', -2)).toBe('Copy Shareable Links');
+		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 0)).toBe('Copy Shareable Links');
 	});
 
 	it('should translate plurals - fr_FR', () => {
