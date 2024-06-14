@@ -1,5 +1,5 @@
 const React = require('react');
-import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, Alert } from 'react-native';
+import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import NoteList from '../NoteList';
@@ -8,7 +8,7 @@ import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '../global-style';
-import { ScreenHeader, MenuOptionType } from '../ScreenHeader';
+import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
@@ -18,8 +18,6 @@ const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
-const Clipboard = require('@react-native-community/clipboard').default;
-import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class NotesScreenComponent extends BaseScreenComponent<any> {
@@ -203,67 +201,6 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		return this.folderPickerOptions_;
 	}
 
-	public menuOptions() {
-		const output: MenuOptionType[] = [];
-
-		if (this.props.notesParentType === 'Tag') {
-			output.push({
-				title: _('Copy external link'),
-				onPress: () => {
-					Clipboard.setString(getTagCallbackUrl(this.props.selectedTagId));
-				},
-			});
-		}
-		if (this.props.notesParentType === 'Folder') {
-			output.push({
-				title: _('Copy external link'),
-				onPress: () => {
-					Clipboard.setString(getFolderCallbackUrl(this.props.selectedFolderId));
-				},
-			});
-			// menu items originally in long-pressing Notebook items in side menu
-			// app-mobile/components/side-menu-content.tsx
-			output.push({
-				title: _('Edit notebook'),
-				onPress: () => {
-					this.props.dispatch({
-						type: 'NAV_GO',
-						routeName: 'Folder',
-						folderId: this.props.selectedFolderId,
-					});
-				},
-			});
-			output.push({
-				title: _('Delete notebook'),
-				onPress: () => {
-					const folderDeletion = (message: string) => {
-						Alert.alert('', message, [
-							{
-								text: _('OK'),
-								onPress: () => {
-									void Folder.delete(this.props.selectedFolderId);
-								},
-							},
-							{
-								text: _('Cancel'),
-								onPress: () => { },
-								style: 'cancel',
-							},
-						]);
-					};
-					if (this.props.selectedFolderId === this.props.inboxJopId) {
-						return folderDeletion(
-							_('Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that\'s recently been sent to it may be lost.'),
-						);
-					}
-					return folderDeletion(_('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', this.parentItem().title));
-				},
-			});
-		}
-
-		return output;
-	}
-
 	public render() {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.themeId);
@@ -338,7 +275,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 				accessibilityElementsHidden={accessibilityHidden}
 				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
 			>
-				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} menuOptions={this.menuOptions()} />
+				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
@@ -369,7 +306,6 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
-		inboxJopId: state.settings['sync.10.inboxId'],
 	};
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 })(NotesScreenComponent as any);
