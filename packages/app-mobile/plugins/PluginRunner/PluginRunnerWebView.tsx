@@ -4,7 +4,7 @@ import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebVie
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';
-import loadPlugins from '../loadPlugins';
+import loadPlugins from '@joplin/lib/services/plugins/loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
 import { View } from 'react-native';
@@ -14,6 +14,7 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
+import PlatformImplementation from '../PlatformImplementation';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -42,7 +43,14 @@ const usePlugins = (
 			return;
 		}
 
-		await loadPlugins({ pluginRunner, pluginSettings, store, reloadAll: reloadAllRef.current, cancelEvent: event });
+		await loadPlugins({
+			pluginRunner,
+			pluginSettings,
+			platformImplementation: PlatformImplementation.instance(),
+			store,
+			reloadAll: reloadAllRef.current,
+			cancelEvent: event,
+		});
 
 		// A full reload, if it was necessary, has been completed.
 		if (!event.cancelled) {

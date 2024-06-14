@@ -1,5 +1,5 @@
-import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
-import Plugin from '@joplin/lib/services/plugins/Plugin';
+import BasePluginRunner from '../../../services/plugins/BasePluginRunner';
+import Plugin from '../../../services/plugins/Plugin';
 
 
 export default class MockPluginRunner extends BasePluginRunner {
