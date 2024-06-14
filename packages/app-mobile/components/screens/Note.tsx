@@ -16,7 +16,6 @@ const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
-import Folder from '@joplin/lib/models/Folder';
 const Clipboard = require('@react-native-clipboard/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
@@ -143,8 +142,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	private menuOptionsCache_: Record<string, any>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private focusUpdateIID_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private folderPickerOptions_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
 
@@ -322,7 +319,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
-		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
 		this.saveNoteButton_press = this.saveNoteButton_press.bind(this);
 		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
 		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
@@ -1388,40 +1384,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async folderPickerOptions_valueChanged(itemValue: any) {
-		const note = this.state.note;
-		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
-
-		if (isProvisionalNote) {
-			await this.saveNoteButton_press(itemValue);
-		} else {
-			await Note.moveToFolder(note.id, itemValue);
-		}
-
-		note.parent_id = itemValue;
-
-		const folder = await Folder.load(note.parent_id);
-
-		this.setState({
-			lastSavedNote: { ...note },
-			note: note,
-			folder: folder,
-		});
-	}
-
-	public folderPickerOptions() {
-		const options = {
-			enabled: !this.state.readOnly,
-			selectedFolderId: this.state.folder ? this.state.folder.id : null,
-			onValueChange: this.folderPickerOptions_valueChanged,
-		};
-
-		if (this.folderPickerOptions_ && options.selectedFolderId === this.folderPickerOptions_.selectedFolderId) return this.folderPickerOptions_;
-
-		this.folderPickerOptions_ = options;
-		return this.folderPickerOptions_;
-	}
-
 	public onBodyViewerLoadEnd() {
 		shim.setTimeout(() => {
 			this.setState({ HACK_webviewLoadingState: 1 });
