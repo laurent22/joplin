@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
 	},
 });
 
+
 const PluginSearch: React.FC<Props> = props => {
 	const { searchQuery, setSearchQuery } = props;
 	const [searchResultManifests, setSearchResultManifests] = useState<PluginManifest[]>([]);
@@ -130,12 +131,24 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	}, [onInstall, props.themeId, props.pluginSettings, props.updatingPluginIds, props.updatablePluginIds, props.onShowPluginInfo, props.callbacks]);
 
+	const onClearSearch = useCallback(() => {
+		setSearchQuery('');
+	}, [setSearchQuery]);
+
+	const renderSearchButton = () => {
+		if (searchQuery) {
+			return <TextInput.Icon onPress={onClearSearch} accessibilityLabel={_('Clear search')} icon='close' />;
+		} else {
+			return <TextInput.Icon icon='magnify' aria-hidden={true} importantForAccessibility='no-hide-descendants'/>;
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<TextInput
 				testID='searchbar'
 				mode='outlined'
-				right={searchQuery ? <TextInput.Icon onPress={() => setSearchQuery('')} icon='close' /> : <TextInput.Icon icon='magnify' />}
+				right={renderSearchButton()}
 				placeholder={_('Search for plugins...')}
 				onChangeText={setSearchQuery}
 				value={searchQuery}
