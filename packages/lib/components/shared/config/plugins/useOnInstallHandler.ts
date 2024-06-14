@@ -13,7 +13,7 @@ type GetRepoApiCallback = ()=> RepositoryApi;
 
 const useOnInstallHandler = (
 	setInstallingPluginIds: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
-	pluginSettings: PluginSettings,
+	pluginSettingsRef: React.RefObject<PluginSettings>,
 	getRepoApi: GetRepoApiCallback|RepositoryApi,
 	onPluginSettingsChange: OnPluginSettingChangeHandler,
 	isUpdate: boolean,
@@ -45,6 +45,7 @@ const useOnInstallHandler = (
 		}
 
 		if (!installError) {
+			const pluginSettings = pluginSettingsRef.current;
 			const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
 				draft[pluginId] = defaultPluginSetting();
 				if (isUpdate) {
@@ -71,7 +72,7 @@ const useOnInstallHandler = (
 				{ buttons: [_('OK')] },
 			);
 		}
-	}, [getRepoApi, isUpdate, pluginSettings, onPluginSettingsChange, setInstallingPluginIds]);
+	}, [getRepoApi, isUpdate, pluginSettingsRef, onPluginSettingsChange, setInstallingPluginIds]);
 };
 
 export default useOnInstallHandler;
