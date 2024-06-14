@@ -8,6 +8,7 @@ import { settingsSections } from '@joplin/lib/components/shared/config/config-sh
 import Icon from '../../Icon';
 import { _ } from '@joplin/lib/locale';
 import { TouchableRipple } from 'react-native-paper';
+import BetaChip from '../../BetaChip';
 
 interface Props {
 	styles: ConfigScreenStyles;
@@ -46,6 +47,9 @@ const SectionSelector: FunctionComponent<Props> = props => {
 			/>
 		) : null;
 
+		const isBeta = item.name === 'plugins';
+		const betaChip = isBeta ? <BetaChip size={10}/> : null;
+
 		return (
 			<TouchableRipple
 				key={section.name}
@@ -62,12 +66,16 @@ const SectionSelector: FunctionComponent<Props> = props => {
 						style={styles.sidebarIcon}
 					/>
 					<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-						<Text
-							numberOfLines={1}
-							style={titleStyle}
-						>
-							{label}
-						</Text>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+							<Text
+								numberOfLines={1}
+								style={titleStyle}
+							>
+								{label}
+							</Text>
+
+							{betaChip}
+						</View>
 						<Text
 							style={styles.sidebarButtonDescriptionText}
 							numberOfLines={1}

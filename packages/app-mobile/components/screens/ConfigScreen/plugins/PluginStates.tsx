@@ -12,6 +12,7 @@ import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import PluginInfoModal from './PluginInfoModal';
 import usePluginCallbacks from './utils/usePluginCallbacks';
+import BetaChip from '../../../BetaChip';
 
 interface Props {
 	themeId: number;
@@ -196,6 +197,11 @@ const PluginStates: React.FC<Props> = props => {
 	return (
 		<View>
 			{renderRepoApiStatus()}
+			<Banner visible={true} elevation={0} icon={() => <BetaChip size={13}/>}>
+				<Text>Plugin support on mobile is still in beta. Plugins may cause performance issues. Some have only partial support for Joplin mobile.</Text>
+			</Banner>
+			<Divider/>
+
 			<List.AccordionGroup>
 				<InstalledItemWrapper
 					title={_('Installed plugins')}
