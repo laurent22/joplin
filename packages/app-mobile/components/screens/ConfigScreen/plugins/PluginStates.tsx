@@ -195,7 +195,9 @@ const PluginStates: React.FC<Props> = props => {
 
 			{showSearch ? searchSection : null}
 			<View style={styles.installedPluginsContainer}>
-				<SectionLabel visible={!isSearching}>{_('Installed (%d):', pluginIds.length)}</SectionLabel>
+				<SectionLabel visible={!isSearching}>
+					{pluginIds.length ? _('Installed (%d):', pluginIds.length) : _('No plugins are installed.')}
+				</SectionLabel>
 				{installedPluginCards}
 			</View>
 
