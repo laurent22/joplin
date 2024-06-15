@@ -33,7 +33,7 @@ export interface ConfigScreenStyleSheet {
 	sidebarButtonMainText: TextStyle;
 	sidebarSelectedButtonText: TextStyle;
 	sidebarButtonDescriptionText: TextStyle;
-	sidebarHeader: ViewStyle & { height: number };
+	sidebarHeader: ViewStyle;
 	sidebarHeaderText: TextStyle;
 
 	settingControl: TextStyle;
@@ -208,10 +208,9 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		sidebarButtonDescriptionText,
 		sidebarHeader: {
 			paddingLeft: 12,
-			paddingBottom: 4,
 			height: sidebarButtonHeight / 2,
 			flexDirection: 'column',
-			justifyContent: 'flex-end',
+			justifyContent: 'center',
 			backgroundColor: theme.oddBackgroundColor,
 		},
 		sidebarHeaderText: {
