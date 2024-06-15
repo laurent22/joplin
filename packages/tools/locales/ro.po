@@ -1140,7 +1140,7 @@ msgid "Copy Link Address"
 msgstr "Copiați adresa link-ului"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:170
+#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 #, fuzzy
 msgid "Copy link to website"
 msgstr "Website Joplin"
@@ -3666,10 +3666,6 @@ msgstr "Operațiunea a fost amânată"
 #: packages/app-desktop/gui/Root.tsx:232
 msgid "Options"
 msgstr "Opțiuni"
-
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:165
-msgid "Or"
-msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
 msgid "Ordered list"

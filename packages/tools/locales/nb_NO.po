@@ -1124,7 +1124,7 @@ msgid "Copy Link Address"
 msgstr "Kopier lenkeadresse"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:170
+#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 #, fuzzy
 msgid "Copy link to website"
 msgstr "Joplins nettsted"
@@ -3675,10 +3675,6 @@ msgstr "Operasjon avbrutt"
 #: packages/app-desktop/gui/Root.tsx:232
 msgid "Options"
 msgstr "Generelle innstillinger"
-
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:165
-msgid "Or"
-msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
 #, fuzzy

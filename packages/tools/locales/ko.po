@@ -1123,7 +1123,7 @@ msgid "Copy Link Address"
 msgstr "링크 주소 복사"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:170
+#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 msgid "Copy link to website"
 msgstr "웹사이트 링크 복사"
 
@@ -3604,10 +3604,6 @@ msgstr "작업이 중지되었습니다"
 #: packages/app-desktop/gui/Root.tsx:232
 msgid "Options"
 msgstr "옵션"
-
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:165
-msgid "Or"
-msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
 msgid "Ordered list"

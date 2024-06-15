@@ -1141,7 +1141,7 @@ msgid "Copy Link Address"
 msgstr "Salin Alamat Tautan"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:170
+#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 msgid "Copy link to website"
 msgstr "Salin tautan ke situs web"
 
@@ -3645,10 +3645,6 @@ msgstr "Kegiatan dibatalkan"
 #: packages/app-desktop/gui/Root.tsx:232
 msgid "Options"
 msgstr "Pilihan"
-
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:165
-msgid "Or"
-msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
 msgid "Ordered list"

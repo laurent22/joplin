@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Laurent Cozic\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -445,17 +443,17 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
-"\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
+"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez "
+"\"ti\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:30
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
-"\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
+"\"ti\" to see the short notebook id"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
-"\" pour afficher les identifiants"
+"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez "
+"\"ti\" pour afficher les identifiants"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -1137,7 +1135,7 @@ msgid "Copy Link Address"
 msgstr "Copier l'adresse du lien"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:170
+#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 msgid "Copy link to website"
 msgstr "Copier le lien vers le site Web"
 
@@ -3641,10 +3639,6 @@ msgstr "Opération annulée"
 msgid "Options"
 msgstr "Options"
 
-#: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:165
-msgid "Or"
-msgstr ""
-
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:22
 msgid "Ordered list"
 msgstr "Liste ordonnée"
@@ -5529,8 +5523,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Pour trier les notes manuellement, l'ordre des notes doit être changé en \"%s"
-"\" dans le menu \"%s\" > \"%s\""
+"Pour trier les notes manuellement, l'ordre des notes doit être changé en "
+"\"%s\" dans le menu \"%s\" > \"%s\""
 
 #: packages/app-cli/app/command-help.ts:82
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -6229,8 +6223,8 @@ msgstr "Zoom arrière"
 #~ msgstr "Base de données v%s"
 
 #~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New notebook"
-#~ "\"."
+#~ "There is currently no notebook. Create one by clicking on \"New "
+#~ "notebook\"."
 #~ msgstr ""
 #~ "Il n'y a pour l'instant aucun carnet. Créez‑en un en cliquant sur "
 #~ "\"Nouveau carnet\"."
@@ -6778,8 +6772,8 @@ msgstr "Zoom arrière"
 #~ "Please set the \"sync.2.path\" config value to the desired "
 #~ "synchronisation destination."
 #~ msgstr ""
-#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path"
-#~ "\" pour indiquer le dossier où devra se faire la synchronisation."
+#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2."
+#~ "path\" pour indiquer le dossier où devra se faire la synchronisation."
 
 #~ msgid "Seach:"
 #~ msgstr "Chercher :"
