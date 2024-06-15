@@ -91,7 +91,7 @@ export default class RepositoryApi {
 		return new RepositoryApi('https://github.com/joplin/plugins', tempDirPath, appInfo, installMode);
 	}
 
-	private async initialize() {
+	public async initialize() {
 		// https://github.com/joplin/plugins
 		// https://api.github.com/repos/joplin/plugins/releases
 		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
