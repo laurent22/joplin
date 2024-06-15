@@ -47,11 +47,6 @@ const loadMockPlugin = async (id: string, name: string, version: string, pluginS
 	});
 };
 
-const showInstalledTab = async () => {
-	const installedTab = await screen.findByText('Installed plugins');
-	await userEvent.press(installedTab);
-};
-
 const abcPluginId = 'org.joplinapp.plugins.AbcSheetMusic';
 const backlinksPluginId = 'joplin.plugin.ambrt.backlinksToNote';
 
@@ -99,7 +94,6 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
 		expect(await screen.findByText(/^Backlinks to note/)).toBeVisible();
 
@@ -129,7 +123,6 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
 		const abcSheetMusicCard = await screen.findByText(/^ABC Sheet Music/);
 		expect(abcSheetMusicCard).toBeVisible();
@@ -150,15 +143,13 @@ describe('PluginStates.installed', () => {
 		);
 
 		// Initially, no plugins should be installed
-		expect(screen.queryByText(/^You currently have 0 plugins? installed/)).toBeNull();
+		expect(screen.queryByText('Installed (0):')).toBeNull();
 
 		const testPluginId1 = 'org.joplinapp.plugins.AbcSheetMusic';
 		const testPluginId2 = 'org.joplinapp.plugins.test.plugin.id';
 		await act(() => loadMockPlugin(testPluginId1, 'ABC Sheet Music', '1.2.3', pluginSettings));
 		await act(() => loadMockPlugin(testPluginId2, 'A test plugin', '1.0.0', pluginSettings));
 		expect(PluginService.instance().plugins[testPluginId1]).toBeTruthy();
-
-		await showInstalledTab();
 
 		// Should update the list of installed plugins even though the plugin settings didn't change.
 		expect(await screen.findByText(/^ABC Sheet Music/)).toBeVisible();
@@ -184,7 +175,6 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
 		const card = await screen.findByText('ABC Sheet Music');
 		const user = userEvent.setup();
@@ -226,7 +216,6 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
 		// Open the plugin dialog
 		const card = await screen.findByText('ABC Sheet Music');
@@ -279,7 +268,6 @@ describe('PluginStates.installed', () => {
 				store={reduxStore}
 			/>,
 		);
-		await showInstalledTab();
 
 		// Should be shown as installed.
 		const card = await screen.findByText('ABC Sheet Music');

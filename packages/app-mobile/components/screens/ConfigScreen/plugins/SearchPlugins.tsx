@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { TextInput, Text } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
@@ -13,6 +13,7 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import InstalledPluginBox from './InstalledPluginBox';
+import SectionLabel from './SectionLabel';
 
 interface Props {
 	themeId: number;
@@ -42,13 +43,10 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'column',
 		margin: 12,
-	},
-	resultsCounter: {
-		margin: 12,
-		marginTop: 17,
-		marginBottom: 4,
+		marginBottom: 0,
 	},
 });
+
 
 const PluginSearch: React.FC<Props> = props => {
 	const { searchQuery, setSearchQuery } = props;
@@ -133,12 +131,16 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	}, [onInstall, props.themeId, props.pluginSettings, props.updatingPluginIds, props.updatablePluginIds, props.onShowPluginInfo, props.callbacks]);
 
-	const renderResultsCount = () => {
-		if (!searchQuery.length) return null;
+	const onClearSearch = useCallback(() => {
+		setSearchQuery('');
+	}, [setSearchQuery]);
 
-		return <Text style={styles.resultsCounter} variant='labelLarge'>
-			{_('Results (%d):', searchResults.length)}
-		</Text>;
+	const renderSearchButton = () => {
+		if (searchQuery) {
+			return <TextInput.Icon onPress={onClearSearch} accessibilityLabel={_('Clear search')} icon='close' />;
+		} else {
+			return <TextInput.Icon icon='magnify' aria-hidden={true} importantForAccessibility='no-hide-descendants'/>;
+		}
 	};
 
 	return (
@@ -146,13 +148,13 @@ const PluginSearch: React.FC<Props> = props => {
 			<TextInput
 				testID='searchbar'
 				mode='outlined'
-				left={<TextInput.Icon icon='magnify' />}
-				placeholder={_('Search plugins')}
+				right={renderSearchButton()}
+				placeholder={_('Search for plugins...')}
 				onChangeText={setSearchQuery}
 				value={searchQuery}
 				editable={props.repoApiInitialized}
 			/>
-			{renderResultsCount()}
+			<SectionLabel visible={!!searchQuery.length}>{_('Results (%d):', searchResults.length)}</SectionLabel>
 			<FlatList
 				data={searchResults}
 				renderItem={renderResult}
