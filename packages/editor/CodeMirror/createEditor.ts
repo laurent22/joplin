@@ -241,7 +241,7 @@ const createEditor = (
 
 				// Give the default keymap low precedence so that it is overridden
 				// by extensions with default precedence.
-				Prec.default(keymap.of([
+				Prec.low(keymap.of([
 					// Custom mod-f binding: Toggle the external dialog implementation
 					// (don't show/hide the Panel dialog).
 					keyCommand('Mod-f', (_: EditorView) => {
@@ -269,6 +269,7 @@ const createEditor = (
 						insertLineAfter(_);
 						return true;
 					}, true),
+
 					...standardKeymap, ...historyKeymap, ...searchKeymap,
 				])),
 			],
