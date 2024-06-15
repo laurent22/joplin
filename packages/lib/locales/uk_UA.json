@@ -341,6 +341,9 @@
 	"Basic": [
 		"Основні"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"На пристрої не налаштовано біометричне розблокування. Налаштуйте його, щоб розблокувати Joplin. Якщо пристрій заблоковано, вимкніть і ввімкніть його, щоб скинути біометричне сканування."
 	],
@@ -487,6 +490,12 @@
 	],
 	"Close Window": [
 		"Закрити вікно"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Код"
@@ -690,6 +699,12 @@
 	],
 	"Creating report...": [
 		"Створення звіту…"
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Поточна версія є оновленою."
@@ -1852,6 +1867,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Тут немає нотаток. Створіть його, натиснувши “Нова нотатка”."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Немає ресурсів!"

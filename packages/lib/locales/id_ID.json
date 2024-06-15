@@ -359,6 +359,9 @@
 	"Basic": [
 		"Dasar"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Membuka dengan biometrik tidak diatur pada perangkat ini. Atur buka dengan biometrik untuk dapat membuka Joplin. Jika perangkat terkunci, pertimbangkan untuk mematikan dan menyalakannya kembali untuk mengatur ulang pemindaian biometrik."
 	],
@@ -508,6 +511,12 @@
 	],
 	"Close Window": [
 		"Tutup jendela"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kode"
@@ -736,6 +745,12 @@
 	],
 	"Creating report...": [
 		"Membuat laporan..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Versi saat ini adalah versi terbaru."
@@ -1984,6 +1999,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Tidak ada catatan di sini. Buat catatan dengan menekan tombol \"Catatan baru\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Tidak ada sumber daya!"

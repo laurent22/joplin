@@ -137,6 +137,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Active": [
 		"Activa"
 	],
@@ -272,6 +275,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -279,9 +285,6 @@
 		""
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -384,6 +387,12 @@
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
 		""
 	],
 	"Code": [
@@ -521,6 +530,12 @@
 	],
 	"Creates a new to-do.": [
 		"Crea unha nova tarefa."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"A versión actual está actualizada."
@@ -1407,6 +1422,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Aquí non hai notas. Cree unha premendo en «Nova nota»."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		""

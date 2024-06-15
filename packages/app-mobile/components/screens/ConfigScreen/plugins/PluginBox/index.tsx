@@ -8,9 +8,10 @@ import PluginChips from './PluginChips';
 import { UpdateState } from '../utils/useUpdateState';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import { useCallback, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import InstallButton from '../buttons/InstallButton';
 import PluginTitle from './PluginTitle';
+import RecommendedBadge from './RecommendedBadge';
 
 export enum InstallState {
 	NotInstalled,
@@ -92,8 +93,13 @@ const PluginBox: React.FC<Props> = props => {
 				testID='plugin-card'
 			>
 				<Card.Content style={styles.content}>
-					<PluginTitle manifest={item.manifest} />
-					<Text numberOfLines={2}>{manifest.description}</Text>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+						<View style={{ flexShrink: 1 }}>
+							<PluginTitle manifest={item.manifest} />
+							<Text numberOfLines={2}>{manifest.description}</Text>
+						</View>
+						<RecommendedBadge manifest={item.manifest} isCompatible={props.isCompatible} themeId={props.themeId} />
+					</View>
 					<PluginChips
 						themeId={props.themeId}
 						item={props.item}

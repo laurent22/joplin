@@ -353,6 +353,9 @@
 	"Basic": [
 		"기초"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"장치에 생체 인식 잠금 해제가 설정되어 있지 않습니다. Joplin 잠금해제를 위해 설정해주세요. 장치가 잠겨 있는 경우 장치를 껐다가 켜서 생체 인식 스캔을 재설정하는 것이 좋습니다."
 	],
@@ -502,6 +505,12 @@
 	],
 	"Close Window": [
 		"창 닫기"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"코드"
@@ -724,6 +733,12 @@
 	],
 	"Creating report...": [
 		"보고서 생성하기..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"현재 최신 버전을 사용 중입니다."
@@ -1936,6 +1951,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"노트가 없습니다. \"새 노트\"를 선택해서 노트를 새로 만드세요."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"없는 리소스입니다!"

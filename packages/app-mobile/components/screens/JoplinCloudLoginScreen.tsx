@@ -162,7 +162,6 @@ const JoplinCloudScreenComponent = (props: Props) => {
 									{_('Authorise')}
 								</Button>
 							</View>
-							<Text style={styles.smallTextStyle}>{_('Or')}</Text>
 							<Button
 								onPress={onCopyToClipboardClicked}
 								icon='content-copy'
