@@ -350,6 +350,9 @@
 	"Basic": [
 		"Podstawowy"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Odblokowanie biometryczne nie jest skonfigurowane na urządzeniu. Należy je skonfigurować w celu odblokowania Joplin. Jeśli urządzenie jest zablokowane, należy je wyłączyć i włączyć, aby zresetować skanowanie biometryczne."
 	],
@@ -499,6 +502,12 @@
 	],
 	"Close Window": [
 		"Zamknij okno"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kod"
@@ -717,6 +726,12 @@
 	],
 	"Creating report...": [
 		"Tworzenie raportu..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Obecna wersja jest aktualna."
@@ -1907,6 +1922,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Brak notatek. Utwórz nową, naciskając na \"Nowa notatka\"."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Brak zasobów!"
 	],
@@ -2074,6 +2092,9 @@
 	],
 	"Options": [
 		"Opcje"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"Lista posortowana"

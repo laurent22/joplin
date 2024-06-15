@@ -341,6 +341,9 @@
 	"Basic": [
 		"Osnovno"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Biometrijsko otključavanje nije postavljeno na uređaju. Postavi ga za otključavanje Joplina. Ako je uređaj zaključan, pokušaj ga isključiti i ponovo uključiti za postavljanje biometrijskog skeniranja."
 	],
@@ -490,6 +493,12 @@
 	],
 	"Close Window": [
 		"Zatvori prozor"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kȏd"
@@ -696,6 +705,12 @@
 	],
 	"Creating report...": [
 		"Stvaranje izvještaja …"
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Trenutačna verzija je aktualna."
@@ -1871,6 +1886,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Ovdje nema bilježaka. Stvori bilješku pritiskom na „Nova bilješka”."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Nema resursa!"
 	],
@@ -2035,6 +2053,9 @@
 	],
 	"Options": [
 		"Opcije"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"Poredan popis"

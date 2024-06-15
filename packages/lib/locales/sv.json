@@ -359,6 +359,9 @@
 	"Basic": [
 		"Grundläggande"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Biometrisk upplåsning är inte inställd på enheten. Ställ in det för att låsa upp Joplin. Om enheten är låst, överväg att stänga av och på den för att återställa biometrisk skanning."
 	],
@@ -508,6 +511,12 @@
 	],
 	"Close Window": [
 		"Stäng fönster"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kod"
@@ -737,6 +746,12 @@
 	],
 	"Creating report...": [
 		"Skapar rapport..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Nuvarande version är uppdaterad."
@@ -1988,6 +2003,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Inga anteckningar här. Skapa en genom att klicka på \"Ny anteckning\"."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Inga resurser!"
 	],
@@ -2167,6 +2185,9 @@
 	],
 	"Options": [
 		"Inställningar"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"Ordnad lista"

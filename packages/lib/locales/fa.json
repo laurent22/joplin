@@ -356,6 +356,9 @@
 	"Basic": [
 		"پایه"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل joplin تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را خاموش و روشن کنید."
 	],
@@ -505,6 +508,12 @@
 	],
 	"Close Window": [
 		"بستن صفحه"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"کد"
@@ -728,6 +737,12 @@
 	],
 	"Creating report...": [
 		"در حال ایجاد گزارش..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"ورژن فعلی به‌روز است."
@@ -1943,6 +1958,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یکی ایجاد نمایید."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"بدون منابع!"
 	],
@@ -2110,6 +2128,9 @@
 	],
 	"Options": [
 		"گزینه ها"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"لیست مرتب شده"

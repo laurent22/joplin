@@ -347,6 +347,9 @@
 	"Basic": [
 		"Basic"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"ご使用のデバイスでは生体認証が未設定です。Joplinのロックを解除するには生体認証の設定を行ってください。デバイスがロックされている場合は、電源を入れ直して生体認証の設定をリセットしてみてください。"
 	],
@@ -496,6 +499,12 @@
 	],
 	"Close Window": [
 		"ウィンドウを閉じる"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"コード"
@@ -706,6 +715,12 @@
 	],
 	"Creating report...": [
 		"レポート を作成中..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"現在のバージョンは最新版です。"
@@ -1883,6 +1898,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"ノートがありません。新しいノートを作成して下さい。"
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"リソースがありません!"
 	],
@@ -2047,6 +2065,9 @@
 	],
 	"Options": [
 		"オプション"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"番号付きリスト"

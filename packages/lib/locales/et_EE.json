@@ -149,6 +149,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Active": [
 		"Aktiivne"
 	],
@@ -290,6 +293,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -297,9 +303,6 @@
 		"Paks"
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -394,6 +397,12 @@
 	],
 	"Close Window": [
 		"Sule aken"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kood"
@@ -530,6 +539,12 @@
 	],
 	"Creating report...": [
 		"Aruande loomine..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Praegune versioon on ajakohane."
@@ -1343,6 +1358,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		""
 	],
@@ -1453,6 +1471,9 @@
 	],
 	"Options": [
 		"Valikud"
+	],
+	"Or": [
+		""
 	],
 	"Page orientation for PDF export": [
 		"Lehekülje suund PDF-i eksportimiseks"

@@ -164,6 +164,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Active": [
 		"Aktív"
 	],
@@ -323,6 +326,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -460,6 +466,12 @@
 	],
 	"Close Window": [
 		"Ablak bezárása"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kód"
@@ -653,6 +665,12 @@
 	],
 	"Creating report...": [
 		"Jelentés készítése..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Aktuális verzió a legfrissebb."
@@ -1715,6 +1733,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Itt nincs jegyzet. Hozzon létre újat az \"Új jegyzet\"-re kattintva."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Nincs erőforrás!"
 	],
@@ -1870,6 +1891,9 @@
 	],
 	"Options": [
 		"Beállítások"
+	],
+	"Or": [
+		""
 	],
 	"Other applications...": [
 		"Más applikációk…"

@@ -155,6 +155,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Add body": [
 		"เพิ่มเนื้อความ"
 	],
@@ -275,6 +278,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -282,9 +288,6 @@
 		"ตัวหนา"
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Built-in": [
@@ -379,6 +382,12 @@
 	],
 	"Close Window": [
 		"ปิดหน้าต่าง"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Code"
@@ -526,6 +535,12 @@
 	],
 	"Creating report...": [
 		"กำลังสร้างรายงาน..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"custom order": [
 		""
@@ -1400,6 +1415,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		""
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"ไม่มีทรัพยากร"
 	],
@@ -1516,6 +1534,9 @@
 	],
 	"Options": [
 		"ตัวเลือก"
+	],
+	"Or": [
+		""
 	],
 	"Page size for PDF export": [
 		"ขนาดของหน้า สำหรับการส่งออก PDF"

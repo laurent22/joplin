@@ -359,6 +359,9 @@
 	"Basic": [
 		"Basic"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
 	],
@@ -508,6 +511,12 @@
 	],
 	"Close Window": [
 		"关闭窗口"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"代码"
@@ -736,6 +745,12 @@
 	],
 	"Creating report...": [
 		"新建报告..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"当前版本为最新版。"
@@ -1985,6 +2000,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"此处没有笔记。点击 “新建笔记” 创建。"
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"没有资源！"
 	],
@@ -2164,6 +2182,9 @@
 	],
 	"Options": [
 		"选项"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"有序列表"

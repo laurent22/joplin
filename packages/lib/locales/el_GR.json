@@ -350,6 +350,9 @@
 	"Basic": [
 		"Βασικό"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Το βιομετρικό ξεκλείδωμα δεν έχει ρυθμιστεί στη συσκευή. Παρακαλούμε ρυθμίστε το για να ξεκλειδώσετε το Joplin. Εάν η συσκευή είναι κλειδωμένη, σκεφτείτε να την απενεργοποιήσετε και να την ενεργοποιήσετε για να επαναφέρετε τη βιομετρική σάρωση."
 	],
@@ -499,6 +502,12 @@
 	],
 	"Close Window": [
 		"Κλείσιμο παραθύρου"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Κώδικας"
@@ -716,6 +725,12 @@
 	],
 	"Creating report...": [
 		"Δημιουργία αναφοράς..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Η τρέχουσα έκδοση είναι ενημερωμένη."
@@ -1904,6 +1919,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Δεν υπάρχουν σημειώσεις εδώ μέσα. Δημιουργήστε μία πατώντας στο \"Νέα σημείωση\"."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Χωρίς πόρους!"
 	],
@@ -2071,6 +2089,9 @@
 	],
 	"Options": [
 		"Επιλογές"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"Ταξινομημένη λίστα"

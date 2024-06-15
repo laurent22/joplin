@@ -356,6 +356,9 @@
 	"Basic": [
 		"Temel"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Bu cihazda biyometrik kilit açma etkineltirilmemiş. Lütfen Joplin'i açmak için bunu ayarlayın. Eğer cihazda bunu yapamıyorsanız ayarı açıp kapatarak biyometrik doğrulamayı sıfırlayabilirsiniz."
 	],
@@ -505,6 +508,12 @@
 	],
 	"Close Window": [
 		"Pencereyi Kapat"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kod"
@@ -728,6 +737,12 @@
 	],
 	"Creating report...": [
 		"Rapor oluşturuluyor..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Sürümünüz güncel."
@@ -1943,6 +1958,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Burada not yok. \"Yeni not\" üzerine tıklayarak bir tane oluşturun."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Kaynak yok!"
 	],
@@ -2110,6 +2128,9 @@
 	],
 	"Options": [
 		"Seçenekler"
+	],
+	"Or": [
+		""
 	],
 	"Ordered list": [
 		"Dizilmiş liste"

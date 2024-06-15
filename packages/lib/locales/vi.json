@@ -161,6 +161,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Action": [
 		"Hành động"
 	],
@@ -320,6 +323,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -454,6 +460,12 @@
 	],
 	"Close Window": [
 		"Đóng cửa sổ"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Mã"
@@ -610,6 +622,12 @@
 	],
 	"Creating report...": [
 		"Tạo báo cáo..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Phiên bản hiện tại đã được cập nhật mới nhất."
@@ -1637,6 +1655,9 @@
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Không có ghi chú nào ở đây. Tạo một ghi chú bằng cách ấn “Ghi chú mới\"."
 	],
+	"No plugins are installed.": [
+		""
+	],
 	"No resources!": [
 		"Không có tài nguyên!"
 	],
@@ -1786,6 +1807,9 @@
 	],
 	"Options": [
 		"Lựa chọn"
+	],
+	"Or": [
+		""
 	],
 	"Output format: %s": [
 		"Định dạng đầu ra: %s"
