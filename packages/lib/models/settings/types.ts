@@ -50,7 +50,8 @@ export interface SettingItem {
 	maximum?: number;
 	step?: number;
 	onClick?(): void;
-	unitLabel?: ()=> string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+	unitLabel?: (value: any)=> string;
 	needRestart?: boolean;
 	autoSave?: boolean;
 	storage?: SettingStorage;

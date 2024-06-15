@@ -6,7 +6,7 @@ import time from '../../time';
 import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
-import type { PluginStates } from '../../services/plugins/reducer';
+import type { PluginSettings } from '../../services/plugins/PluginService';
 const ObjectUtils = require('../../ObjectUtils');
 const { toTitleCase } = require('../../string-utils.js');
 
@@ -811,7 +811,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'plugins.states': {
-			value: {} as PluginStates,
+			value: {} as PluginSettings,
 			type: SettingItemType.Object,
 			section: 'plugins',
 			public: true,

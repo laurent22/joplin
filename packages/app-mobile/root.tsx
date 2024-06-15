@@ -615,7 +615,7 @@ async function initialize(dispatch: Function) {
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
 			Setting.skipDefaultMigrations();
-			Setting.setValue('firstStart', 0);
+			Setting.setValue('firstStart', false);
 		} else {
 			Setting.applyDefaultMigrations();
 		}
@@ -784,7 +784,7 @@ async function initialize(dispatch: Function) {
 	const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
 
 	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
-	Setting.setValue('plugins.states', pluginService.serializePluginSettings(updatedSettings));
+	Setting.setValue('plugins.states', updatedSettings);
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native

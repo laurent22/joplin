@@ -637,8 +637,7 @@ class Setting extends BaseModel {
 		this.constants_[key] = value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setValue(key: string, value: any) {
+	public static setValue<T extends string>(key: T, value: SettingValueType<T>) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
@@ -662,8 +661,10 @@ class Setting extends BaseModel {
 				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
 				// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
-				if ('minimum' in md && value < md.minimum) value = md.minimum;
-				if ('maximum' in md && value > md.maximum) value = md.maximum;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+				if ('minimum' in md && value < md.minimum) value = md.minimum as any;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+				if ('maximum' in md && value > md.maximum) value = md.maximum as any;
 
 				c.value = value;
 

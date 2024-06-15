@@ -475,7 +475,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			const relatedText = [md.label?.() ?? '', md.description?.() ?? ''];
+			const relatedText = [md.label?.() ?? '', md.description?.(AppType.Mobile) ?? ''];
 			addSettingComponent(
 				settingComp,
 				relatedText,
