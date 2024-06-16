@@ -691,7 +691,7 @@ function _(s: string, ...args: any[]): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	if (['en_GB', 'en_US'].includes(currentLocale_)) {
-		if (n > 1) return _(plural, ...args);
+		if (n !== 1) return _(plural, ...args);
 		return _(singular, ...args);
 	} else {
 		const pluralFn = getPluralFunction(currentLocale_);

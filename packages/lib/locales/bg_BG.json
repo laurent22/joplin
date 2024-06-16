@@ -140,7 +140,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -150,6 +150,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Active": [
@@ -215,6 +218,9 @@
 	"An update is available, do you want to download it now?": [
 		"Има обновление, искате ли да го свалите сега?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -266,7 +272,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		""
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -279,6 +285,9 @@
 		"Назад"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -394,6 +403,12 @@
 	],
 	"Close Window": [
 		"Затвори прозорец"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Код"
@@ -523,6 +538,12 @@
 	],
 	"Creates a new to-do.": [
 		"Създава нова задача."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Настоящата версия е най-новата."
@@ -896,9 +917,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Фатална грешка:"
 	],
@@ -1262,9 +1280,6 @@
 	"Loaded": [
 		""
 	],
-	"Loading plugin repository...": [
-		""
-	],
 	"Location": [
 		"Местоположение"
 	],
@@ -1403,11 +1418,11 @@
 	"No active notebook.": [
 		"Няма активна тетрадка."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Няма обект с идентификатор %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Няма зададени тетрадки."
@@ -1417,6 +1432,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Тук няма бележки. Може да натиснете \"Нова бележка\" за да създадете първата."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		""
@@ -1781,6 +1799,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1801,6 +1822,9 @@
 	],
 	"Restored Notes": [
 		"Възстановени бележки"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Нов опит"
@@ -2552,6 +2576,9 @@
 	],
 	"Website and documentation": [
 		"Уебсайт и документация"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Добре дошли в Joplin!\n\nВъведете `:help shortcuts` за списък от клавиатурни команди, или само `:help` за информация за ползването на приложението.\n\nНапример, за да създадете тетрадка, натиснете `mb`; за да създадете бележка, натиснете `mn`."

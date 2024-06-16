@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
@@ -9,6 +9,7 @@ import { Dispatch } from 'redux';
 import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -38,6 +39,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
+					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);
@@ -77,22 +79,26 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	return (
 		<div className="login-page">
 			<div className="page-container">
-				<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
-				<div className="buttons-container">
-					<Button
-						onClick={onAuthorizeClicked}
-						title={_('Authorise')}
-						iconName='fa fa-external-link-alt'
-						level={ButtonLevel.Primary}
-					/>
-					<Button
-						onClick={onCopyToClipboardClicked}
-						title={_('Copy link to website')}
-						iconName='fa fa-clone'
-						level={ButtonLevel.Secondary}
-					/>
+				{state.active !== 'COMPLETED' ? (
+					<Fragment>
+						<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
+						<div className="buttons-container">
+							<Button
+								onClick={onAuthorizeClicked}
+								title={_('Authorise')}
+								iconName='fa fa-external-link-alt'
+								level={ButtonLevel.Primary}
+							/>
+							<Button
+								onClick={onCopyToClipboardClicked}
+								title={_('Copy link to website')}
+								iconName='fa fa-clone'
+								level={ButtonLevel.Secondary}
+							/>
 
-				</div>
+						</div>
+					</Fragment>
+				) : null}
 				<p className={state.className}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>

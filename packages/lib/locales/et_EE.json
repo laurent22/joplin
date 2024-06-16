@@ -137,7 +137,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -147,6 +147,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Active": [
@@ -218,6 +221,9 @@
 	"An update is available, do you want to download it now?": [
 		"Saadaval on värskendus, kas soovite selle kohe alla laadida?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -272,7 +278,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaatne sidumine traksid, sulg, noteeringud jne."
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -285,6 +291,9 @@
 		"Tagasi"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -388,6 +397,12 @@
 	],
 	"Close Window": [
 		"Sule aken"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kood"
@@ -524,6 +539,12 @@
 	],
 	"Creating report...": [
 		"Aruande loomine..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Praegune versioon on ajakohane."
@@ -844,9 +865,6 @@
 		"Ekspordib ainult antud märkmiku."
 	],
 	"Fail-safe": [
-		""
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
 		""
 	],
 	"Fatal error:": [
@@ -1196,9 +1214,6 @@
 	"Lists": [
 		""
 	],
-	"Loading plugin repository...": [
-		""
-	],
 	"Location": [
 		"Asukoht"
 	],
@@ -1328,11 +1343,11 @@
 	"No active notebook.": [
 		"Aktiivset märkmikku pole."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Üksust ID-ga %s ei ole"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Ühtegi märkmikku pole määratud."
@@ -1342,6 +1357,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Siin pole märkmeid. Looge üks, klõpsates nupul \"New note\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		""
@@ -1685,6 +1703,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1702,6 +1723,9 @@
 	],
 	"Restored Notes": [
 		"Taastatud märkmed"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Uuesti"
@@ -2387,6 +2411,9 @@
 	],
 	"Website and documentation": [
 		"Veebileht ja dokumentatsioon"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome!": [
 		""

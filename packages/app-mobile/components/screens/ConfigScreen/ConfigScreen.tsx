@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
-import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
@@ -26,15 +26,15 @@ import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSecti
 import SettingComponent from './SettingComponent';
 import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
 import SectionSelector from './SectionSelector';
-import { Button, TextInput } from 'react-native-paper';
+import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
-import getPackageInfo from '../../../utils/getPackageInfo';
-import versionInfo from '@joplin/lib/versionInfo';
+import getVersionInfoText from '../../../utils/getVersionInfoText';
+import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -86,6 +86,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		shared.init(reg);
 	}
+
+	private goToJoplinCloudLogin_ = async () => {
+		await NavService.go('JoplinCloudLogin');
+	};
 
 	private checkSyncConfig_ = async () => {
 		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
@@ -390,7 +394,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const addSettingComponent = (
 			component: ReactElement,
 			relatedText: string|string[],
-			settingMetadata?: SettingItem,
+			settingMetadata?: { advanced?: boolean },
 		) => {
 			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
@@ -462,6 +466,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 						</View>
 					);
 
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
+					}
+
 					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });
 				}
 			}
@@ -504,8 +512,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 							key='plugins-install-from-file'
 							pluginSettings={settings[pluginStatesKey]}
 							updatePluginStates={updatePluginStates}
+							styles={this.styles()}
 						/>,
 						pluginUploadButtonSearchText(),
+						{ advanced: true },
 					);
 				}
 			} else {
@@ -529,33 +539,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'joplinCloud') {
-			const label = _('Email to note');
-			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
-			const isEmailToNoteAvailableInAccount = this.props.settings['sync.10.accountType'] !== 1;
-			const inboxEmailValue = isEmailToNoteAvailableInAccount ? this.props.settings['sync.10.inboxEmail'] : '-';
 			addSettingComponent(
-				<View key="joplinCloud">
-					<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-						<Text style={this.styles().styleSheet.settingText}>{label}</Text>
-						<Text style={this.styles().styleSheet.settingTextEmphasis}>{inboxEmailValue}</Text>
-					</View>
-					{
-						!isEmailToNoteAvailableInAccount && (
-							<View style={this.styles().styleSheet.settingContainerNoBottomBorder}>
-								<Text style={this.styles().styleSheet.descriptionAlert}>{_('Your account doesn\'t have access to this feature')}</Text>
-							</View>
-						)
-					}
-					{
-						this.renderButton(
-							'sync.10.inboxEmail',
-							_('Copy to clipboard'),
-							() => isEmailToNoteAvailableInAccount && Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description, disabled: !isEmailToNoteAvailableInAccount },
-						)
-					}
-				</View>,
-				[label, description],
+				<JoplinCloudConfig
+					key="joplin-cloud-config"
+					accountType={this.props.settings['sync.10.accountType']}
+					inboxEmail={this.props.settings['sync.10.inboxEmail']}
+					userEmail={this.props.settings['sync.10.userEmail']}
+					website={this.props.settings['sync.10.website']}
+					styles={this.styles()}
+				/>,
+				[emailToNoteDescription(), emailToNoteLabel()],
 			);
 		}
 
@@ -619,15 +612,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 
-			const packageInfo = getPackageInfo();
-			const appInfo = versionInfo(packageInfo, PluginService.instance().enabledPlugins(settings['plugins.states']));
-			const versionInfoText = [
-				appInfo.body,
-				'',
-				_('FTS enabled: %d', this.props.settings['db.ftsEnabled']),
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
-			].join('\n');
+			const versionInfoText = getVersionInfoText(settings['plugins.states']);
 
 			addSettingText('version_info', versionInfoText);
 			addSettingButton('copy_app_info', _('Copy version info'), () => {
@@ -672,19 +657,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		const renderAdvancedSettings = () => {
 			if (!advancedSettingComps.length) return null;
 
-			const toggleAdvancedLabel = this.state.showAdvancedSettings ? _('Hide Advanced Settings') : _('Show Advanced Settings');
+			const toggleAdvancedLabel = _('Advanced settings');
 			return (
-				<>
-					<Button
-						style={{ marginBottom: 20 }}
-						icon={this.state.showAdvancedSettings ? 'menu-down' : 'menu-right'}
-						onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
-					>
-						<Text>{toggleAdvancedLabel}</Text>
-					</Button>
-
+				<List.Accordion
+					title={toggleAdvancedLabel}
+					expanded={this.state.showAdvancedSettings}
+					onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
+				>
 					{this.state.showAdvancedSettings ? advancedSettingComps : null}
-				</>
+				</List.Accordion>
 			);
 		};
 

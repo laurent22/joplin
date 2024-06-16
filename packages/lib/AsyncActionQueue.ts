@@ -1,13 +1,13 @@
+import Logger from '@joplin/utils/Logger';
 import shim from './shim';
 
-export interface QueueItemAction {
-	(): void;
+export interface QueueItemAction<Context> {
+	(context: Context): void|Promise<void>;
 }
 
-export interface QueueItem {
-	action: QueueItemAction;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	context: any;
+export interface QueueItem<Context> {
+	action: QueueItemAction<Context>;
+	context: Context;
 }
 
 export enum IntervalType {
@@ -15,17 +15,20 @@ export enum IntervalType {
 	Fixed = 2,
 }
 
+type CanSkipTaskHandler<Context> = (current: QueueItem<Context>, next: QueueItem<Context>)=> boolean;
+
+const logger = Logger.create('AsyncActionQueue');
+
 // The AsyncActionQueue can be used to debounce asynchronous actions, to make sure
 // they run in the right order, and also to ensure that if multiple actions are emitted
 // only the last one is executed. This is particularly useful to save data in the background.
 // Each queue should be associated with a specific entity (a note, resource, etc.)
-export default class AsyncActionQueue {
+export default class AsyncActionQueue<Context = void> {
 
-	private queue_: QueueItem[] = [];
+	private queue_: QueueItem<Context>[] = [];
 	private interval_: number;
 	private intervalType_: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleProcessingIID_: any = null;
+	private scheduleProcessingIID_: ReturnType<typeof shim.setInterval>|null = null;
 	private processing_ = false;
 
 	private processingFinishedPromise_: Promise<void>;
@@ -43,8 +46,14 @@ export default class AsyncActionQueue {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public push(action: QueueItemAction, context: any = null) {
+	// Determines whether an item can be skipped in the queue. Prevents data loss in the case that
+	// tasks that do different things are added to the queue.
+	private canSkipTaskHandler_: CanSkipTaskHandler<Context> = (_current, _next) => true;
+	public setCanSkipTaskHandler(callback: CanSkipTaskHandler<Context>) {
+		this.canSkipTaskHandler_ = callback;
+	}
+
+	public push(action: QueueItemAction<Context>, context: Context = null) {
 		this.queue_.push({
 			action: action,
 			context: context,
@@ -76,17 +85,31 @@ export default class AsyncActionQueue {
 			return;
 		}
 
-		this.processing_ = true;
-
 		const itemCount = this.queue_.length;
 
 		if (itemCount) {
-			const item = this.queue_[itemCount - 1];
-			await item.action();
-			this.queue_.splice(0, itemCount);
-		}
+			this.processing_ = true;
 
-		this.processing_ = false;
+			let i = 0;
+			try {
+				for (i = 0; i < itemCount; i++) {
+					const current = this.queue_[i];
+					const next = i + 1 < itemCount ? this.queue_[i + 1] : null;
+					if (!next || !this.canSkipTaskHandler_(current, next)) {
+						await current.action(current.context);
+					}
+				}
+			} catch (error) {
+				i ++; // Don't repeat the failed task.
+				logger.warn('Unhandled error:', error);
+				throw error;
+			} finally {
+				// Removing processed items in a try {} finally {...} prevents
+				// items from being processed twice, even if one throws an Error.
+				this.queue_.splice(0, i);
+				this.processing_ = false;
+			}
+		}
 
 		if (this.queue_.length === 0) {
 			this.onProcessingFinished_();
@@ -114,4 +137,3 @@ export default class AsyncActionQueue {
 		return this.processingFinishedPromise_;
 	}
 }
-

@@ -137,7 +137,7 @@
 	"Accept": [
 		""
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -147,6 +147,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Active": [
@@ -218,6 +221,9 @@
 	"An update is available, do you want to download it now?": [
 		"Nova je verzija dostupna. Želite li je preuzeti?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -272,7 +278,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatski piši u paru sve zagrade, navodnike itd."
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -285,6 +291,9 @@
 		"Nazad"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -403,6 +412,12 @@
 	],
 	"Close Window": [
 		"Zatvori prozor"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kōd"
@@ -523,6 +538,12 @@
 	],
 	"Creating report...": [
 		"Kreiram izvještaj..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Trenutna je verzija ažurirana."
@@ -901,9 +922,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sigurnosni mehanizam: ne briši lokalne podatke kad je odredište za sinhronizaciju prazno (često usljed pogrešne konfiguracije ili propusta)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Kritična greška:"
@@ -1403,11 +1421,11 @@
 	"No active notebook.": [
 		"Nema aktivne bilježnice."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Nema stavke čiji je ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Nije precizirana bilježnica."
@@ -1417,6 +1435,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Nema bilješki. Kreirajte bilješku pritisnuvši na \"Nova bilješka\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Nema resursa!"
@@ -1766,6 +1787,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1780,6 +1804,9 @@
 	],
 	"Restored Notes": [
 		"Rekonstruisane bilješke"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Ponovi"
@@ -2535,6 +2562,9 @@
 	],
 	"Website and documentation": [
 		"Internet stranica i dokumentacija"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Dobrodošli u Joplin!\n\nKucajte `:help shortcuts` za prikaz kratica, ili samo `:help` za informacije o korištenju.\n\nNaprimjer, da kreirate bilježnicu pritisnite `mb`; za kreiranje bilješke koristite `mn`."

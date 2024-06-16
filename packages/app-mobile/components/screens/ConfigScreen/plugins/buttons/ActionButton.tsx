@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
-import { Button, ButtonProps } from 'react-native-paper';
+import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import TextButton, { TextButtonProps, ButtonType } from '../../../../buttons/TextButton';
+import { PluginCallback } from '../utils/usePluginCallbacks';
 
-export type PluginCallback = (event: ItemEvent)=> void;
 
-interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
+interface Props extends Omit<TextButtonProps, 'type'|'item'|'onPress'|'children'> {
 	item: PluginItem;
+	type?: ButtonType;
 	onPress?: PluginCallback;
 	title: string;
 }
@@ -24,11 +25,12 @@ const ActionButton: React.FC<Props> = props => {
 	// marked as translatable.
 	const accessibilityLabel = `${props.title}  ${props.item.manifest.name}`;
 	return (
-		<Button
+		<TextButton
+			type={ButtonType.Primary}
 			{...props}
 			onPress={onPress}
 			accessibilityLabel={accessibilityLabel}
-		>{props.title}</Button>
+		>{props.title}</TextButton>
 	);
 };
 

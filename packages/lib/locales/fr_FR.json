@@ -167,8 +167,8 @@
 	"Accept": [
 		"Accepter"
 	],
-	"Accepted shares": [
-		"Partages acceptés"
+	"Accepted invitations": [
+		"Invitations acceptées"
 	],
 	"Access denied: Please check your username and password": [
 		"Accès non-autorisé : Veuillez vérifier votre nom et mot de passe"
@@ -178,6 +178,9 @@
 	],
 	"Account": [
 		"Compte"
+	],
+	"Account type": [
+		"Type de compte"
 	],
 	"Action": [
 		"Action"
@@ -216,6 +219,9 @@
 		"Tableau de bord"
 	],
 	"Advanced options": [
+		"Options avancées"
+	],
+	"Advanced settings": [
 		"Options avancées"
 	],
 	"Advanced tools": [
@@ -268,6 +274,9 @@
 	],
 	"An update is available, do you want to download it now?": [
 		"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
+	],
+	"Android API level: %d": [
+		"Niveau d'API Android : %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Un email envoyé à cette adresse sera converti en note et ajouté à votre collection. La note sera sauvé dans votre carnet \"Inbox\""
@@ -341,7 +350,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Supprimer automatiquement les comptes désactivés"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto‑compléter les paires de parenthèses, guillemets, etc."
 	],
 	"Automatically check for updates": [
@@ -358,6 +367,9 @@
 	],
 	"Basic": [
 		"Basique"
+	],
+	"Beta": [
+		"Beta"
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Le déverrouillage biométrique n'est pas activé sur cet appareil. Veuillez le configurer pour déverrouiller Joplin. Si l'appareil est en mode \"lockout\", éteignez-le et rallumez-le pour réinitialiser la vérification de biométrie."
@@ -488,6 +500,9 @@
 	"Clear alarm": [
 		"Enlever l'alarme"
 	],
+	"Clear search": [
+		"Effacer la recherche"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Cliquez sur \"%s\" pour restaurer cette note. Elle sera copiée dans le carnet \"%s\". La version actuelle de la note ne sera pas replacée ou modifiée."
 	],
@@ -508,6 +523,12 @@
 	],
 	"Close Window": [
 		"Fermer la fenêtre"
+	],
+	"Cmd-click to open": [
+		"Cmd-clic pour ouvrir"
+	],
+	"Cmd-click to open: %s": [
+		"Cmd-clic pour ouvrir : %s"
 	],
 	"Code": [
 		"Code"
@@ -589,6 +610,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Conflits (fichiers joints)"
+	],
+	"Connect to Joplin Cloud": [
+		"Se connecter à Joplin Cloud"
 	],
 	"Consolidated billing": [
 		"Facturation consolidée"
@@ -737,6 +761,12 @@
 	],
 	"Creating report...": [
 		"Création du rapport…"
+	],
+	"Ctrl-click to open": [
+		"Ctrl-clic pour ouvrir"
+	],
+	"Ctrl-click to open: %s": [
+		"Ctrl-clic pour ouvrir : %s"
 	],
 	"Current version is up-to-date.": [
 		"La version actuelle est à jour."
@@ -1284,9 +1314,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sécurité : Ne pas supprimer toutes les données lorsque la cible de synchronisation est vide (souvent à cause d'un bug ou d'un problème de config)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		"Impossible de quitter le partage. Veuillez vérifier que Joplin est connecté à Internet et capable de synchroniser.\nErreur : %s"
-	],
 	"Fatal error:": [
 		"Erreur fatale :"
 	],
@@ -1396,6 +1423,9 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas fournie, la valeur de [nom] sera affichée. Si ni le [nom] ni la [valeur] ne sont fournis, la configuration complète sera affichée."
 	],
+	"Go to Joplin Cloud profile": [
+		"Aller au profil Joplin Cloud"
+	],
 	"Go to source URL": [
 		"Aller à l'URL source"
 	],
@@ -1431,9 +1461,6 @@
 	],
 	"Hide advanced": [
 		"Cacher avancé"
-	],
-	"Hide Advanced Settings": [
-		"Cacher options avancées"
 	],
 	"Hide disabled": [
 		"Cacher les désactivés"
@@ -1591,6 +1618,9 @@
 	"Installed": [
 		"Installé"
 	],
+	"Installed (%d):": [
+		"Installé (%d) :"
+	],
 	"Installing...": [
 		"Installation…"
 	],
@@ -1611,6 +1641,9 @@
 	],
 	"Invalid password": [
 		"Mot de passe invalide"
+	],
+	"iOS version: %s": [
+		"Version iOS : %s"
 	],
 	"Italic": [
 		"Italique"
@@ -1735,6 +1768,9 @@
 	"Leave it blank to download the language files from the default website": [
 		"Le laisser blanc pour télécharger les fichiers de langue par défaut"
 	],
+	"Leave notebook": [
+		"Quitter le carnet partagé"
+	],
 	"Leave notebook...": [
 		"Quitter le carnet partagé…"
 	],
@@ -1777,9 +1813,6 @@
 	],
 	"Loaded": [
 		"Chargé"
-	],
-	"Loading plugin repository...": [
-		"Chargement du dépôt de modules..."
 	],
 	"Loading...": [
 		"Chargement…"
@@ -1934,6 +1967,9 @@
 	"New": [
 		"Nouveau"
 	],
+	"New invitations": [
+		"Nouvelles invitations"
+	],
 	"New note": [
 		"Nouvelle note"
 	],
@@ -1982,14 +2018,11 @@
 	"No active notebook.": [
 		"Aucun carnet actif."
 	],
-	"No description": [
-		"Pas de description"
-	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Aucun objet avec identifiant %s"
+	],
+	"No new invitations": [
+		"Pas de nouvelles invitations"
 	],
 	"No notebook has been specified.": [
 		"Aucun carnet n'est spécifié."
@@ -1999,6 +2032,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Pas de notes ici. Créez‑en une en pressant le bouton \"Nouvelle note\"."
+	],
+	"No plugins are installed.": [
+		"Aucun plugins d'installés."
 	],
 	"No resources!": [
 		"Pas de fichiers joints !"
@@ -2501,11 +2537,17 @@
 	"Report an issue": [
 		"Signaler un problème"
 	],
+	"Report any issues concerning the plugin.": [
+		"Signalez tout problème concernant le plugin."
+	],
 	"Report fraudulent plugin": [
 		"Signaler un plugin frauduleux"
 	],
 	"Report system": [
 		"Système de rapport"
+	],
+	"Reports": [
+		"Rapports"
 	],
 	"Reset application layout": [
 		"Restaurer la disposition de l'interface"
@@ -2545,6 +2587,9 @@
 	],
 	"Restored Notes": [
 		"Notes restaurées"
+	],
+	"Results (%d):": [
+		"Résultats (%d) :"
 	],
 	"Retry": [
 		"Réessayer"
@@ -3319,6 +3364,9 @@
 	"Toggle external editing": [
 		"Basculer l'édition externe"
 	],
+	"Toggle menu bar": [
+		"Basculer la barre de menu"
+	],
 	"Toggle note history, keep notes for": [
 		"Activation historique des notes"
 	],
@@ -3420,6 +3468,9 @@
 	],
 	"Update": [
 		"Mettre à jour"
+	],
+	"Update available": [
+		"Mise à jour disponible"
 	],
 	"Update profile": [
 		"Mettre à jour le profil"
@@ -3558,6 +3609,12 @@
 	],
 	"Website and documentation": [
 		"Documentation en ligne"
+	],
+	"WebView package: %s": [
+		"Package WebView : %s"
+	],
+	"WebView version: %s": [
+		"Version WebView : %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Bienvenue dans Joplin!\n\nTapez `:help shortcuts` pour la liste des raccourcis claviers, ou simplement `:help` pour une vue d'ensemble.\n\nPar exemple, pour créer un carnet, pressez `mb` ; pour créer une note pressed `mn`."

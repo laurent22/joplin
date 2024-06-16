@@ -48,4 +48,9 @@ export default class MainScreen {
 			throw new Error('Unable to find settings menu item in application menus.');
 		}
 	}
+
+	public async search(text: string) {
+		const searchBar = this.page.getByPlaceholder('Search...');
+		await searchBar.fill(text);
+	}
 }

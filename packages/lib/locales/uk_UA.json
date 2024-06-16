@@ -158,9 +158,6 @@
 	"Accept": [
 		"Прийняти"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -254,6 +251,9 @@
 	"An update is available, do you want to download it now?": [
 		"Доступне оновлення, ви хочете завантажити його зараз?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -323,7 +323,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Автоматично додавати вимкнені облікові записи для видалення"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Автоматичне закриття дужок, лапок тощо."
 	],
 	"Automatically check for updates": [
@@ -340,6 +340,9 @@
 	],
 	"Basic": [
 		"Основні"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"На пристрої не налаштовано біометричне розблокування. Налаштуйте його, щоб розблокувати Joplin. Якщо пристрій заблоковано, вимкніть і ввімкніть його, щоб скинути біометричне сканування."
@@ -487,6 +490,12 @@
 	],
 	"Close Window": [
 		"Закрити вікно"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Код"
@@ -690,6 +699,12 @@
 	],
 	"Creating report...": [
 		"Створення звіту…"
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Поточна версія є оновленою."
@@ -1188,9 +1203,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Безаварійність: не видаляйти локальні дані, коли ціль синхронізації порожня (часто результат неправильної конфігурації або помилки)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Критична помилка:"
@@ -1841,11 +1853,11 @@
 	"No active notebook.": [
 		"Немає активного блокнота."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Не знайдено елемент з ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Жоден блокнот не вказано."
@@ -1855,6 +1867,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Тут немає нотаток. Створіть його, натиснувши “Нова нотатка”."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Немає ресурсів!"
@@ -2306,6 +2321,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2332,6 +2350,9 @@
 	],
 	"Restored Notes": [
 		"Відновлені нотатки"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Повторити"
@@ -3253,6 +3274,9 @@
 	],
 	"Website and documentation": [
 		"Вебсайт та документація"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Ласкаво просимо до Joplin!\n\nВведіть `:help shortcuts` для списку комбінацій клавіш або просто `:help` для інформації про використання.\n\nНаприклад, для створення блокнота натисніть `mb`; щоб створити нотатку, натисніть “mn”."

@@ -164,9 +164,6 @@
 	"Accept": [
 		"Kabul Et"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Erişim reddedildi: Lütfen kullanıcı adınızı ve parolanızı kontrol edin"
 	],
@@ -266,6 +263,9 @@
 	"An update is available, do you want to download it now?": [
 		"Güncelleme mevcut, şimdi indirmek ister misiniz?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Bu adrese gönderilen her e-posta bir nota dönüştürülecek ve koleksiyonunuza eklenecektir. Not Gelen Kutusu not defterine kaydedilecektir"
 	],
@@ -338,7 +338,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Silmek için devre dışı bırakılmış hesapları otomatik olarak ekle"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle."
 	],
 	"Automatically check for updates": [
@@ -355,6 +355,9 @@
 	],
 	"Basic": [
 		"Temel"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Bu cihazda biyometrik kilit açma etkineltirilmemiş. Lütfen Joplin'i açmak için bunu ayarlayın. Eğer cihazda bunu yapamıyorsanız ayarı açıp kapatarak biyometrik doğrulamayı sıfırlayabilirsiniz."
@@ -505,6 +508,12 @@
 	],
 	"Close Window": [
 		"Pencereyi Kapat"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kod"
@@ -728,6 +737,12 @@
 	],
 	"Creating report...": [
 		"Rapor oluşturuluyor..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Sürümünüz güncel."
@@ -1266,9 +1281,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Tedbir Modu: Senkronize hedefi boş olduğunda yerel verileri silme (bazen yanlış ayar ve hata sonucu olur)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"Büyük hata:"
 	],
@@ -1413,9 +1425,6 @@
 	],
 	"Hide advanced": [
 		"Gelişmiş'leri gizle"
-	],
-	"Hide Advanced Settings": [
-		"Gelişmiş Seçenekleri Gizle"
 	],
 	"Hide disabled": [
 		"İptal edilmişleri gizle"
@@ -1736,9 +1745,6 @@
 	"Loaded": [
 		"Yüklenme"
 	],
-	"Loading plugin repository...": [
-		"Eklenti depo sunucusu yükleniyor..."
-	],
 	"Loading...": [
 		"Yükleniyor..."
 	],
@@ -1937,11 +1943,11 @@
 	"No active notebook.": [
 		"Aktif not defteri yok."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Bu kimlikte öğe yok : %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Hiçbir not defteri belirtilmedi."
@@ -1951,6 +1957,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Burada not yok. \"Yeni not\" üzerine tıklayarak bir tane oluşturun."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Kaynak yok!"
@@ -2423,6 +2432,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2464,6 +2476,9 @@
 	],
 	"Restored Notes": [
 		"Geri Yüklenen Notlar"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Yeniden dene"
@@ -3459,6 +3474,9 @@
 	],
 	"Website and documentation": [
 		"Web sitesi ve dökümanlar"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Joplin'e Hoş Geldiniz!\n\nKlavye kısayollarının listesi için `:help shortcuts` yazın veya kullanım bilgileri için sadece `:help` yazın.\n\nÖrneğin, bir not defteri oluşturmak için `mb`; Bir not oluşturmak için `mn` tuşuna basın."

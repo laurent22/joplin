@@ -52,6 +52,26 @@ describe('urlUtils', () => {
 		}
 	}));
 
+	it.each([
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
+		],
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md5#foo',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: 'foo' },
+		],
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.png?t=12345',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
+		],
+	])('should detect resource file URLs', (url, resourceDir, expected) => {
+		expect(urlUtils.parseResourceUrl(urlUtils.fileUrlToResourceUrl(url, resourceDir))).toMatchObject(expected);
+	});
+
 	it('should extract resource URLs', (async () => {
 		const testCases = [
 			['Bla [](:/11111111111111111111111111111111) bla [](:/22222222222222222222222222222222) bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],

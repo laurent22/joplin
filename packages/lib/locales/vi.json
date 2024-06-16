@@ -152,9 +152,6 @@
 	"Accept": [
 		"Chấp nhận"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -162,6 +159,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Action": [
@@ -239,6 +239,9 @@
 	"An update is available, do you want to download it now?": [
 		"Có bản cập nhật mới, bạn có muốn cập nhật không?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -305,7 +308,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -318,6 +321,9 @@
 		"Quay lại"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -454,6 +460,12 @@
 	],
 	"Close Window": [
 		"Đóng cửa sổ"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Mã"
@@ -610,6 +622,12 @@
 	],
 	"Creating report...": [
 		"Tạo báo cáo..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Phiên bản hiện tại đã được cập nhật mới nhất."
@@ -1060,9 +1078,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống (thường là kết quả của bug hoặc cấu hình sai)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Lỗi nghiêm trọng:"
@@ -1625,11 +1640,11 @@
 	"No active notebook.": [
 		"Không có ghi chú nào đang được sử dụng."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Không có mục nào có ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Chưa có sổ ghi chú nào được chỉ định."
@@ -1639,6 +1654,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Không có ghi chú nào ở đây. Tạo một ghi chú bằng cách ấn “Ghi chú mới\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Không có tài nguyên!"
@@ -2051,6 +2069,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2071,6 +2092,9 @@
 	],
 	"Restored Notes": [
 		"Hồi phục Notes"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Thử lại"
@@ -2893,6 +2917,9 @@
 	],
 	"Website and documentation": [
 		"Trang web và tài liệu"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Xin chào tới Joplin!\n\nẤn `:help shortcuts` để xem danh mục bàn phím tắt, hoặc `:help` để xem thông tin sử dụng.\n\nVí dụ, để tạo một notebook ấn `mb`; để tạo một note ấn `mn`."

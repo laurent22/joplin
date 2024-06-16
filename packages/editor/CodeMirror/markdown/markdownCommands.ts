@@ -7,12 +7,16 @@ import {
 	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec,
 } from '@codemirror/state';
 import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
-import {
-	RegionSpec, growSelectionToNode, renumberSelectedLists,
-	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
-	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
-} from './markdownReformatter';
-import intersectsSyntaxNode from '../util/isInSyntaxNode';
+import intersectsSyntaxNode from '../utils/isInSyntaxNode';
+import toggleRegionFormatGlobally from '../utils/formatting/toggleRegionFormatGlobally';
+import { RegionSpec } from '../utils/formatting/RegionSpec';
+import toggleInlineFormatGlobally from '../utils/formatting/toggleInlineFormatGlobally';
+import stripBlockquote from './utils/stripBlockquote';
+import isIndentationEquivalent from '../utils/formatting/isIndentationEquivalent';
+import growSelectionToNode from '../utils/growSelectionToNode';
+import tabsToSpaces from '../utils/formatting/tabsToSpaces';
+import renumberSelectedLists from './utils/renumberSelectedLists';
+import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
 
 const startingSpaceRegex = /^(\s*)/;
 

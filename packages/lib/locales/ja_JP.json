@@ -158,9 +158,6 @@
 	"Accept": [
 		"承諾"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"アクセスが拒否されました: ユーザー名とパスワードを確認してください"
 	],
@@ -260,6 +257,9 @@
 	"An update is available, do you want to download it now?": [
 		"アップデートがあります。すぐにダウンロードしますか？"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"このアドレスに送ったメールはノートに変換され、Inboxノートブックに保存されます"
 	],
@@ -329,7 +329,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"無効アカウントを削除に自動追加"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 	],
 	"Automatically check for updates": [
@@ -346,6 +346,9 @@
 	],
 	"Basic": [
 		"Basic"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"ご使用のデバイスでは生体認証が未設定です。Joplinのロックを解除するには生体認証の設定を行ってください。デバイスがロックされている場合は、電源を入れ直して生体認証の設定をリセットしてみてください。"
@@ -496,6 +499,12 @@
 	],
 	"Close Window": [
 		"ウィンドウを閉じる"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"コード"
@@ -706,6 +715,12 @@
 	],
 	"Creating report...": [
 		"レポート を作成中..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"現在のバージョンは最新版です。"
@@ -1222,9 +1237,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ローカルデータを消去しないようにする"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"致命的なエラー:"
@@ -1871,11 +1883,11 @@
 	"No active notebook.": [
 		"有効なノートブックがありません。"
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"ID %s のアイテムはありません"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"ノートブックが選択されていません。"
@@ -1885,6 +1897,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"ノートがありません。新しいノートを作成して下さい。"
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"リソースがありません!"
@@ -2336,6 +2351,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2365,6 +2383,9 @@
 	],
 	"Restored Notes": [
 		"復元されたノート"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"再実行"
@@ -3301,6 +3322,9 @@
 	],
 	"Website and documentation": [
 		"Webサイトとドキュメント"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Joplinへようこそ！\n\n`:help shortcuts`と入力することで、キーボードショートカットのリストを見ることができます。また、`:help`で使い方を確認できます。\n\n例えば、ノートブックの作成は`mb`で、ノートの作成は`mn`で行うことができます。"

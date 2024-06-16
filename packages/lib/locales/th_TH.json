@@ -143,7 +143,7 @@
 	"Accept": [
 		"ยอมรับ"
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -153,6 +153,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Add body": [
@@ -210,6 +213,9 @@
 		""
 	],
 	"An error occurred: %s": [
+		""
+	],
+	"Android API level: %d": [
 		""
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
@@ -270,6 +276,9 @@
 		""
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -373,6 +382,12 @@
 	],
 	"Close Window": [
 		"ปิดหน้าต่าง"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Code"
@@ -520,6 +535,12 @@
 	],
 	"Creating report...": [
 		"กำลังสร้างรายงาน..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"custom order": [
 		""
@@ -890,9 +911,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"ผิดพลาดร้ายแรง:"
 	],
@@ -1100,9 +1118,6 @@
 	"In: %s": [
 		"ใน: %s"
 	],
-	"Incoming shares": [
-		""
-	],
 	"Incompatible": [
 		""
 	],
@@ -1250,9 +1265,6 @@
 	"Lists": [
 		""
 	],
-	"Loading plugin repository...": [
-		""
-	],
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
 		""
 	],
@@ -1394,13 +1406,16 @@
 	"No active notebook.": [
 		"ไม่มีสมุดบันทึกที่ถูกใช้งาน"
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"ไม่มีรายการที่มี ID %s"
 	],
+	"No new invitations": [
+		""
+	],
 	"No notes in here. Create one by clicking on \"New note\".": [
+		""
+	],
+	"No plugins are installed.": [
 		""
 	],
 	"No resources!": [
@@ -1757,6 +1772,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -1779,6 +1797,9 @@
 		"กู้คืน"
 	],
 	"Restore the items matching <pattern> from the trash.": [
+		""
+	],
+	"Results (%d):": [
 		""
 	],
 	"Retry": [
@@ -2485,6 +2506,9 @@
 	],
 	"Website and documentation": [
 		"เว็บไซต์และเอกสารต่างๆ"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"ยินดีต้อนรับสู่ Joplin!\n\nพิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n\nตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."

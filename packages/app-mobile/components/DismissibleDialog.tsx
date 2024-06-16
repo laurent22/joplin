@@ -6,19 +6,31 @@ import { themeStyle } from './global-style';
 import Modal from './Modal';
 import { _ } from '@joplin/lib/locale';
 
+export enum DialogSize {
+	Small = 'small',
+
+	// Ideal for panels and dialogs that should be fullscreen even on large devices
+	Large = 'large',
+}
+
 interface Props {
 	themeId: number;
 	visible: boolean;
 	onDismiss: ()=> void;
 	containerStyle?: ViewStyle;
 	children: React.ReactNode;
+
+	size: DialogSize;
 }
 
-const useStyles = (themeId: number, containerStyle: ViewStyle) => {
+const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize) => {
 	const windowSize = useWindowDimensions();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+
+		const maxWidth = size === DialogSize.Large ? windowSize.width : 500;
+		const maxHeight = size === DialogSize.Large ? windowSize.height : 700;
 
 		return StyleSheet.create({
 			webView: {
@@ -33,34 +45,34 @@ const useStyles = (themeId: number, containerStyle: ViewStyle) => {
 				flexDirection: 'row',
 				justifyContent: 'flex-end',
 			},
-			dialog: {
-				backgroundColor: theme.backgroundColor,
-				borderRadius: 12,
-				padding: 10,
-
-				height: windowSize.height * 0.9,
-				width: windowSize.width * 0.97,
+			dialogContainer: {
+				maxHeight,
+				maxWidth,
+				width: '100%',
+				height: '100%',
 				flexShrink: 1,
 
 				// Center
 				marginLeft: 'auto',
 				marginRight: 'auto',
+				paddingLeft: 6,
+				paddingRight: 6,
 
 				...containerStyle,
 			},
-			dialogContainer: {
-				display: 'flex',
-				flexDirection: 'row',
-				justifyContent: 'center',
-				alignItems: 'center',
-				flexGrow: 1,
+			dialogSurface: {
+				borderRadius: 12,
+				backgroundColor: theme.backgroundColor,
+				padding: 10,
+				width: '100%',
+				height: '100%',
 			},
 		});
-	}, [themeId, windowSize.width, windowSize.height, containerStyle]);
+	}, [themeId, windowSize.width, windowSize.height, containerStyle, size]);
 };
 
 const DismissibleDialog: React.FC<Props> = props => {
-	const styles = useStyles(props.themeId, props.containerStyle);
+	const styles = useStyles(props.themeId, props.containerStyle, props.size);
 
 	const closeButton = (
 		<View style={styles.closeButtonContainer}>
@@ -82,7 +94,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			backgroundColor='rgba(0, 0, 0, 0.1)'
 			transparent={true}
 		>
-			<Surface style={styles.dialog} elevation={1}>
+			<Surface style={styles.dialogSurface} elevation={1}>
 				{closeButton}
 				{props.children}
 			</Surface>

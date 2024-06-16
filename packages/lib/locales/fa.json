@@ -164,9 +164,6 @@
 	"Accept": [
 		"قبول"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"دسترسی غیرمجاز: لطفاً نام کاربری و گذرواژه خود را بررسی نمایید"
 	],
@@ -266,6 +263,9 @@
 	"An update is available, do you want to download it now?": [
 		"یک بروزرسانی موجود است، آیا میخواهید الآن دانلود‌ شود؟"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"هر ایمیلی که به این آدرس ارسال شود به یادداشت تبدیل شده و به مجموعه شما اضافه می شود. یادداشت در صندوق دفترچه ذخیره خواهد شد"
 	],
@@ -338,7 +338,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"افزودن خودکار حساب های غیرفعال برای حذف"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
 	],
 	"Automatically check for updates": [
@@ -355,6 +355,9 @@
 	],
 	"Basic": [
 		"پایه"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل joplin تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را خاموش و روشن کنید."
@@ -505,6 +508,12 @@
 	],
 	"Close Window": [
 		"بستن صفحه"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"کد"
@@ -728,6 +737,12 @@
 	],
 	"Creating report...": [
 		"در حال ایجاد گزارش..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"ورژن فعلی به‌روز است."
@@ -1266,9 +1281,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک پیکربندی اشتباه یا اشکال است)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"خطای مهلک:"
 	],
@@ -1413,9 +1425,6 @@
 	],
 	"Hide advanced": [
 		"پنهان‌سازی پیشرفته"
-	],
-	"Hide Advanced Settings": [
-		"پنهان‌سازی تنظیمات پیشرفته"
 	],
 	"Hide disabled": [
 		"پنهان‌سازی غیرفعال است"
@@ -1736,9 +1745,6 @@
 	"Loaded": [
 		"دانلود‌شده"
 	],
-	"Loading plugin repository...": [
-		"در حال بارگذاری مخزن افزونه..."
-	],
 	"Loading...": [
 		"در حال دانلود..."
 	],
@@ -1937,11 +1943,11 @@
 	"No active notebook.": [
 		"دفترچه‌ی فعالی وجود ندارد."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"هیچ موردی با شناسه %s وجود ندارد"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"هیچ دفترچه‌ای مشخص نشده است."
@@ -1951,6 +1957,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یکی ایجاد نمایید."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"بدون منابع!"
@@ -2423,6 +2432,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2464,6 +2476,9 @@
 	],
 	"Restored Notes": [
 		"یادداشت های بازیابی شده"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"تلاش مجدد"
@@ -3459,6 +3474,9 @@
 	],
 	"Website and documentation": [
 		"وب‌سایت و مستندات"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"به joplin خوش آمدید! \n\nبرای فهرست میانبرهای صفحه‌کلید «:help shortcuts» یا برای اطلاعات نحوه استفاده فقط «:help» را تایپ کنید.\n\nبه عنوان مثال ، برای ایجاد یکدفترچه `mb` را بفشارید؛ برای ایجاد یک یادداشت `mn` را فشار دهید."

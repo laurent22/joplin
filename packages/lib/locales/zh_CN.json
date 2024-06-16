@@ -29,6 +29,9 @@
 	"%d notes match this pattern. Delete them?": [
 		"有 %d 条笔记匹配。是否删除？"
 	],
+	"%d notes will be permanently deleted. Continue?": [
+		"%d 笔记将被永久删除。是否继续？"
+	],
 	"%s": [
 		"%s"
 	],
@@ -39,7 +42,7 @@
 		"%s (%s) 无法上传：%s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
-		"%s (%s) 想要分享笔记本给您。"
+		"%s (%s) 想要共享笔记本给您。"
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
@@ -66,7 +69,7 @@
 		"%s 未针对同步许多小文件进行优化，因此您的首次同步将会很慢。"
 	],
 	"%s tab opened": [
-		""
+		"%s 标签已打开"
 	],
 	"%s: %d": [
 		"%s: %d"
@@ -120,7 +123,7 @@
 		"（兼容所见即所得编辑器：%s）"
 	],
 	"(You may disable this prompt in the options)": [
-		"您可以在设置中禁用此提示"
+		"（您可以在选项中禁用此提示）"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- 照相机权限：允许拍照并将照片添加到一条笔记中。"
@@ -163,9 +166,6 @@
 	],
 	"Accept": [
 		"接受"
-	],
-	"Accepted shares": [
-		""
 	],
 	"Access denied: Please check your username and password": [
 		"访问被拒绝：请检查您的用户名和密码"
@@ -222,7 +222,7 @@
 		"包含笔记，笔记本和标签在内的所有数据将会被永久删除。"
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"所有同步失败的条目都被标记为 \"忽略\"。"
 	],
 	"All notes": [
 		"全部笔记"
@@ -231,7 +231,7 @@
 		"所有默认端口都已经被使用中 - 请在 %s 反馈这个问题"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
-		""
+		"允许调试移动插件。详见 %s。"
 	],
 	"Also displays unset and hidden config variables.": [
 		"同时显示未设置的与隐藏的配置变量。"
@@ -246,7 +246,7 @@
 		"每次询问"
 	],
 	"Always open %s files without asking.": [
-		""
+		"始终打开 %s 文件，无需询问。"
 	],
 	"Always resize": [
 		"自动缩放"
@@ -265,6 +265,9 @@
 	],
 	"An update is available, do you want to download it now?": [
 		"有更新可用，是否现在进行下载？"
+	],
+	"Android API level: %d": [
+		""
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"任何发送到此地址的电子邮件都将被转换为笔记并添加到您的收藏中。 该笔记将保存到收件箱笔记本中"
@@ -338,14 +341,14 @@
 	"Auto-add disabled accounts for deletion": [
 		"自动添加已禁用的账户以便删除"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"自动配对花括号、圆括号、引号等。"
 	],
 	"Automatically check for updates": [
 		"自动检查更新"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		"几天后自动删除回收站中的笔记"
+		"一段时间后自动删除回收站中的笔记"
 	],
 	"Automatically switch theme to match system theme": [
 		"根据系统主题自动切换"
@@ -355,6 +358,9 @@
 	],
 	"Basic": [
 		"Basic"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
@@ -375,10 +381,10 @@
 		"无序列表"
 	],
 	"by %s": [
-		""
+		"由 %s"
 	],
 	"Can Share": [
-		"分享"
+		"可以共享"
 	],
 	"Can view": [
 		"可以查看"
@@ -506,6 +512,12 @@
 	"Close Window": [
 		"关闭窗口"
 	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
+	],
 	"Code": [
 		"代码"
 	],
@@ -523,6 +535,9 @@
 	],
 	"Collapse": [
 		"折叠"
+	],
+	"Collapse %s": [
+		"折叠 %s"
 	],
 	"Coming alarms": [
 		"临近提醒"
@@ -552,13 +567,13 @@
 		"已完成解密。"
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"已完成，但存在警告：\n%s"
 	],
 	"Completed: %s (%s)": [
 		"已完成：%s（%s）"
 	],
 	"completion date": [
-		""
+		"完成日期"
 	],
 	"Compress old changes": [
 		"压缩旧的更改"
@@ -630,13 +645,16 @@
 		"复制路径到剪贴板"
 	],
 	"Copy Shareable Link": [
-		"复制分享链接"
+		"复制共享链接"
 	],
 	"Copy to clipboard": [
 		"复制到剪贴板"
 	],
 	"Copy token": [
 		"复制令牌"
+	],
+	"Copy version info": [
+		"复制版本信息"
 	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"无法授权应用：\n\n%s\n\n请重试。"
@@ -663,7 +681,7 @@
 		"无法升级主密钥(master key)：%s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
-		"无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
+		"无法验证此笔记的共享状态 — 正在终止。请在连接到互联网后再次尝试。"
 	],
 	"Could not verify your identity: %s": [
 		"无法验证您的身份: %s"
@@ -727,6 +745,12 @@
 	],
 	"Creating report...": [
 		"新建报告..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"当前版本为最新版。"
@@ -837,7 +861,7 @@
 		"已删除远程条目：%d。"
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"永久删除笔记并跳过回收站。"
 	],
 	"Deletes the given notebook.": [
 		"删除选定的笔记本。"
@@ -975,6 +999,9 @@
 		"登录 Dropbox"
 	],
 	"Due": [
+		"截止日期"
+	],
+	"due date": [
 		"截止日期"
 	],
 	"Duplicate": [
@@ -1118,6 +1145,9 @@
 	"Enable PDF viewer": [
 		"启用 PDF 查看器"
 	],
+	"Enable plugin support": [
+		"启用插件支持"
+	],
 	"Enable soft breaks": [
 		"启用软换行"
 	],
@@ -1220,6 +1250,9 @@
 	"Expand": [
 		"展开"
 	],
+	"Expand %s": [
+		"展开 %s"
+	],
 	"Export": [
 		"导出"
 	],
@@ -1264,9 +1297,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"故障保护(Fail-safe) ：当同步目标为空时（通常是配置错误或Bug），不要删除本地数据"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"严重错误："
@@ -1401,7 +1431,7 @@
 		"帮助"
 	],
 	"Here's what we do to make plugins safer:": [
-		""
+		"以下是我们为使插件更安全而采取的措施："
 	],
 	"Hermes enabled: %d": [
 		"已启用Hermes：%d"
@@ -1411,9 +1441,6 @@
 	],
 	"Hide advanced": [
 		"隐藏高级的"
-	],
-	"Hide Advanced Settings": [
-		"隐藏高级选项"
 	],
 	"Hide disabled": [
 		"隐藏禁用的"
@@ -1469,26 +1496,41 @@
 	"Ignore TLS certificate errors": [
 		"忽略 TLS 证书错误"
 	],
+	"Ignored items that cannot be synchronised": [
+		"无法同步的被忽略的条目"
+	],
 	"Images": [
 		"图片"
 	],
 	"Import": [
 		"导入"
 	],
+	"Import and Export": [
+		"导入和导出"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		""
+		"导入失败。确保选择了 JEX 文件。\n详细信息：%s"
 	],
 	"Import from JEX": [
-		""
+		"从 JEX 导入"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"从 JEX（ Joplin 导出格式）文件导入笔记。"
+	],
+	"Import or export your data": [
+		"导入或导出数据"
+	],
+	"Imported successfully!": [
+		"导入成功!"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"从 “%s” 导入为 “%s” 格式 。请稍等..."
 	],
 	"Importing notes...": [
 		"正在导入笔记..."
+	],
+	"Importing...": [
+		"正在导入..."
 	],
 	"Imports data into Joplin.": [
 		"导入数据到 Joplin。"
@@ -1521,7 +1563,7 @@
 		"已处理：%s"
 	],
 	"Incompatible": [
-		""
+		"不兼容"
 	],
 	"Increase indent level": [
 		"增加缩进级别"
@@ -1604,8 +1646,11 @@
 	"Joplin Cloud Login": [
 		"Joplin Cloud 登录"
 	],
+	"Joplin Desktop": [
+		"Joplin 桌面端"
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"Joplin 无法识别 %s 扩展名。打开这个文件可能会有危险。您想怎么做？"
 	],
 	"Joplin Export Directory": [
 		"Joplin 导出目录"
@@ -1618,6 +1663,9 @@
 	],
 	"Joplin Forum": [
 		"Joplin 论坛"
+	],
+	"Joplin Mobile": [
+		"Joplin 移动端"
 	],
 	"Joplin Server": [
 		"Joplin 服务器"
@@ -1688,6 +1736,9 @@
 	"Layout button sequence": [
 		"布局按钮序列"
 	],
+	"Learn more": [
+		"了解更多"
+	],
 	"Leave it blank to download the language files from the default website": [
 		"留空可从默认网站下载语言文件"
 	],
@@ -1704,7 +1755,7 @@
 		"明亮"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"与您安装的其他任何软件一样，插件也可能导致安全问题或数据丢失。"
 	],
 	"Lines": [
 		"行"
@@ -1732,9 +1783,6 @@
 	],
 	"Loaded": [
 		"已加载"
-	],
-	"Loading plugin repository...": [
-		"正在加载插件库..."
 	],
 	"Loading...": [
 		"正在加载…"
@@ -1777,6 +1825,9 @@
 	],
 	"Manage profiles": [
 		"管理配置文件"
+	],
+	"Manage shared notebooks": [
+		"管理共享笔记本"
 	],
 	"Manage your plugins": [
 		"管理您的插件"
@@ -1854,7 +1905,7 @@
 		"不止一项匹配 “%s”。请缩小您的检索范围。"
 	],
 	"Most plugins have source code available for review on the plugin website.": [
-		""
+		"大多数插件的源代码可在插件网站上查阅。"
 	],
 	"Move %d notes to notebook \"%s\"?": [
 		"是否移动 %d 条笔记到笔记本 “%s”？"
@@ -1884,7 +1935,7 @@
 		"从不缩放"
 	],
 	"New": [
-		""
+		"新建"
 	],
 	"New note": [
 		"新建笔记"
@@ -1934,11 +1985,11 @@
 	"No active notebook.": [
 		"无有效的笔记本。"
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"没有 ID 为 %s 的项"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"未指定笔记本。"
@@ -1948,6 +1999,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"此处没有笔记。点击 “新建笔记” 创建。"
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"没有资源！"
@@ -1960,6 +2014,9 @@
 	],
 	"No suggestions": [
 		"没有建议"
+	],
+	"No tab selected": [
+		"未选择标签"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"未设置指定的文本编辑器。请通过 `config editor <editor-path>` 设置"
@@ -2034,7 +2091,7 @@
 		"注意：在部分桌面环境下无法工作。"
 	],
 	"Note: When a note is shared, it will no longer be encrypted on the server.": [
-		"注意：笔记分享后，便不再在服务器上加密。"
+		"注意：笔记共享后，便不再在服务器上加密。"
 	],
 	"Notebook": [
 		"笔记本"
@@ -2044,6 +2101,9 @@
 	],
 	"Notebook: %s": [
 		"笔记本：%s"
+	],
+	"Notebook: %s (%s)": [
+		"笔记本：%s (%s)"
 	],
 	"Notebooks": [
 		"笔记本"
@@ -2096,11 +2156,17 @@
 	"Open %s": [
 		"打开 %s"
 	],
+	"Open it": [
+		"打开"
+	],
 	"Open PDF viewer": [
 		"打开 PDF 查看器"
 	],
 	"Open profile directory": [
 		"打开配置文件目录"
+	],
+	"Open Source": [
+		"开源"
 	],
 	"Open Sync Wizard...": [
 		"打开同步向导..."
@@ -2165,8 +2231,14 @@
 	"Permanently delete note \"%s\"?": [
 		"是否永久删除笔记 “%s”？"
 	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"是否永久删除笔记本 \"%s\"？\n\n所有在该笔记本内的笔记和子笔记本也将同时被删除。"
+	],
 	"Permanently delete these %d notes?": [
 		"是否永久删除这 %d 条笔记？"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"永久删除笔记本并跳过回收站。"
 	],
 	"Permission needed": [
 		"需要权限"
@@ -2207,6 +2279,9 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"请指定导入笔记的目标笔记本。"
 	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"请升级 Joplin 到 %s 或更新的版本以使用此插件。"
+	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"请等待所有附件均被下载并解密。您可以切换到 %s 编辑笔记。"
 	],
@@ -2216,23 +2291,29 @@
 	"Plugin message": [
 		"插件消息"
 	],
+	"Plugin panels": [
+		"插件面板"
+	],
 	"Plugin repository failed to load": [
 		"插件库加载失败"
 	],
 	"Plugin search": [
 		"插件搜索"
 	],
+	"Plugin security": [
+		"插件安全性"
+	],
 	"Plugin tools": [
 		"插件工具"
 	],
 	"Plugin WebView debugging": [
-		""
+		"插件 WebView 调试"
 	],
 	"Plugins": [
 		"插件"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"插件可扩展 Joplin 默认不具备的功能。插件可以扩展 Joplin 的编辑器、查看器等功能。"
 	],
 	"Portrait": [
 		"竖版"
@@ -2295,7 +2376,7 @@
 		"处理用户删除"
 	],
 	"Processing": [
-		""
+		"正在处理"
 	],
 	"Profile": [
 		"配置文件"
@@ -2328,10 +2409,10 @@
 		"公-私钥对："
 	],
 	"Publish note...": [
-		"分享笔记..."
+		"发布笔记..."
 	],
 	"Publish Notes": [
-		"分享笔记"
+		"发布笔记"
 	],
 	"Publish notes to the internet": [
 		"把笔记发布到互联网"
@@ -2368,6 +2449,9 @@
 	],
 	"Recommended": [
 		"推荐"
+	],
+	"Recommended plugins": [
+		"推荐插件"
 	],
 	"Redo": [
 		"恢复"
@@ -2418,10 +2502,16 @@
 		"替换: "
 	],
 	"Report an issue": [
+		"报告问题"
+	],
+	"Report any issues concerning the plugin.": [
 		""
 	],
 	"Report fraudulent plugin": [
-		""
+		"报告欺诈性插件"
+	],
+	"Report system": [
+		"报告系统"
 	],
 	"Reset application layout": [
 		"重置应用布局"
@@ -2461,6 +2551,9 @@
 	],
 	"Restored Notes": [
 		"已恢复的笔记"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"重试"
@@ -2601,7 +2694,7 @@
 		"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n\n%s"
 	],
 	"Share": [
-		"分享"
+		"共享"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"以 Joplin 可在计算机上导入的文件格式共享所有笔记的副本。"
@@ -2609,17 +2702,23 @@
 	"Share a notebook with others": [
 		"与他人共同协作笔记本"
 	],
+	"Share from %s (%s)": [
+		"从 %s (%s) 共享"
+	],
 	"Share Notebook": [
-		"分享笔记本"
+		"共享笔记本"
 	],
 	"Share notebook...": [
-		"分享笔记本..."
+		"共享笔记本..."
 	],
 	"Share permissions": [
 		"共享权限"
 	],
+	"Shares": [
+		"共享"
+	],
 	"Sharing notebook...": [
-		"分享笔记本中..."
+		"共享笔记本中..."
 	],
 	"Shortcuts are not available in CLI mode.": [
 		"快捷键在 CLI 模式下不可用。"
@@ -2641,6 +2740,9 @@
 	],
 	"Show disabled keys": [
 		"显示禁用的密钥"
+	],
+	"Show monospace fonts only.": [
+		"只显示等宽字体。"
 	],
 	"Show more actions": [
 		"显示更多操作"
@@ -2727,7 +2829,7 @@
 		"来源： "
 	],
 	"Spacer": [
-		""
+		"间隔"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"请指定 API 服务器应使用的端口。如果未设置，将使用默认值。"
@@ -2907,7 +3009,7 @@
 		"拍照"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"任务 \"%s\" 失败，错误: %s"
 	],
 	"Task list": [
 		"任务列表"
@@ -3056,6 +3158,9 @@
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"当前没有任何笔记。点击 (+) 按钮创建。"
 	],
+	"There are no notes in the trash folder.": [
+		"回收站中没有笔记。"
+	],
 	"There are unsaved changes.": [
 		"一些修改尚未保存。"
 	],
@@ -3069,7 +3174,7 @@
 		"下载此附件时出错："
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"这些条目未能同步。但由于已标记为 \"忽略\"，因此它们不会导致同步警告。要取消忽略，请单击 \"重试\"。"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"这些条目将只保留在本设备上，不会上传到同步目标。若需查找这些项，请搜索标题或 ID（显示在上方括号中）。"
@@ -3081,7 +3186,7 @@
 		"这允许其他用户与你共享笔记本，然后你们可以在笔记本上进行协作。但它不允许您与他人共享笔记本，除非您拥有\"%s\"功能。"
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"此附件没有 OCR 数据 (状态：%s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"该附件没有下载或者尚未解密"
@@ -3120,7 +3225,7 @@
 		"此笔记没有历史记录"
 	],
 	"This plugin doesn't support %s.": [
-		""
+		"该插件不支持 %s。"
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"此富文本编辑器有许多限制，建议在使用之前留意。"
@@ -3129,7 +3234,7 @@
 		"该服务允许浏览器扩展插件与 Joplin 通信。当启用它时，您的防火墙可能会请求允许 Joplin 监听一个特定的端口。"
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"这个回收站中的子文件夹没有笔记。"
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"这将允许 Joplin 在后台运行，如果您经常修改和同步笔记，推荐启用该设置来减少可能的冲突。"
@@ -3139,6 +3244,9 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"这将永久删除回收站中的所有条目。是否继续？"
+	],
+	"This will permanently delete the note \"%s\". Continue?": [
+		"这将永久删除笔记 \"%s\"。是否继续？"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"这将从您的收藏中删除该笔记本，您将不再有机会访问其内容。您希望继续吗？"
@@ -3284,6 +3392,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"卸载然后重新安装本程序。 请确保您已事先从桌面应用程序将所有笔记以 JEX 格式导出来创建备份。"
 	],
+	"Unknown file type": [
+		"未知文件类型"
+	],
 	"Unknown flag: %s": [
 		"未知标记：%s"
 	],
@@ -3294,13 +3405,13 @@
 		"无序列表"
 	],
 	"Unpublish note": [
-		"取消分享笔记"
+		"取消共享笔记"
 	],
 	"Unshare": [
-		"取消分享"
+		"取消共享"
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
-		"取消分享这个笔记本？收件人将无法再访问到它的内容。"
+		"取消共享这个笔记本？收件人将无法再访问到它的内容。"
 	],
 	"Unsupported image type: %s": [
 		"不支持的图片类型：%s"
@@ -3399,7 +3510,7 @@
 		"视图"
 	],
 	"View OCR text": [
-		""
+		"查看 OCR 文本"
 	],
 	"View on map": [
 		"在地图上查看"
@@ -3429,10 +3540,10 @@
 		"警告：由于性能原因无法显示所有资源（最多：%s）。"
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"我们有一个报告和移除有问题插件的系统。"
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"我们将值得信赖的 Joplin 社区成员开发的插件标记为 \"推荐\"。"
 	],
 	"Web Clipper": [
 		"网页剪藏器"
@@ -3452,11 +3563,17 @@
 	"Website and documentation": [
 		"网站与文档"
 	],
+	"WebView package: %s": [
+		""
+	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"欢迎使用 Joplin！\n\n输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取用法信息。\n\n例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
 	],
 	"Welcome!": [
 		"欢迎！"
+	],
+	"What are plugins?": [
+		"什么是插件？"
 	],
 	"When creating a new note:": [
 		"当新建笔记时："
@@ -3507,7 +3624,7 @@
 		"无法连接到 Joplin Cloud 。请检查您的凭据，然后重试。错误："
 	],
 	"Your account doesn't have access to this feature": [
-		""
+		"您的账户无法使用此功能"
 	],
 	"Your choice: ": [
 		"您的选择： "

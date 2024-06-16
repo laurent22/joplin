@@ -92,6 +92,15 @@
 				<data android:mimeType="*/*" />
 			</intent-filter>
 			<!-- /SHARE EXTENSION -->
+
+			<!-- EXTERNAL LINK -->
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="joplin" />
+			</intent-filter>
+			<!-- /EXTERNAL LINK -->
 		</activity>
 
 	</application>

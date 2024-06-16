@@ -11,10 +11,13 @@ import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
+import Logger from '@joplin/utils/Logger';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
+
+const logger = Logger.create('lib/reducer');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const additionalReducers: any[] = [];
@@ -963,13 +966,14 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				for (let i = 0; i < newNotes.length; i++) {
 					const n = newNotes[i];
 					if (n.id === modNote.id) {
+						const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
 						if (n.is_conflict && !modNote.is_conflict) {
 							// Note was a conflict but was moved outside of
 							// the conflict folder
 							newNotes.splice(i, 1);
 							noteFolderHasChanged = true;
 							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
+						} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
 							// Note is still in the same folder
 							// Merge the properties that have changed (in modNote) into
 							// the object we already have.
@@ -1044,7 +1048,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_SORT':
 
 			{
-				draft.notes = Note.sortNotes(draft.notes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
+				if (draft.notesParentType === 'Search') {
+					logger.debug('Not sorting the note list -- sorting should be done by search.');
+				} else {
+					draft.notes = Note.sortNotes(draft.notes, stateUtils.notesOrder(draft.settings), draft.settings.uncompletedTodosOnTop);
+				}
 				draft.noteListLastSortTime = Date.now();
 			}
 			break;

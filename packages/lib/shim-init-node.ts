@@ -14,7 +14,7 @@ import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
 
 import FileApiDriverLocal from './file-api-driver-local';
-const mimeUtils = require('./mime-utils.js').mime;
+import * as mimeUtils from './mime-utils';
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');

@@ -426,34 +426,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		);
 	}
 
-	// TODO: Currently copied from useCursorUtils.ts.
-	// TODO: Remove the duplicate code when CodeMirror 5 is eventually removed.
-	public wrapSelections(string1: string, string2: string) {
-		const selectedStrings = this.getSelections();
-
-		// Batches the insert operations, if this wasn't done the inserts
-		// could potentially overwrite one another
-		this.operation(() => {
-			for (let i = 0; i < selectedStrings.length; i++) {
-				const selected = selectedStrings[i];
-
-				// Remove white space on either side of selection
-				const start = selected.search(/[^\s]/);
-				const end = selected.search(/[^\s](?=[\s]*$)/);
-				const core = selected.substring(start, end - start + 1);
-
-				// If selection can be toggled do that
-				if (core.startsWith(string1) && core.endsWith(string2)) {
-					const inside = core.substring(string1.length, core.length - string1.length - string2.length);
-					selectedStrings[i] = selected.substring(0, start) + inside + selected.substring(end + 1);
-				} else {
-					selectedStrings[i] = selected.substring(0, start) + string1 + core + string2 + selected.substring(end + 1);
-				}
-			}
-			this.replaceSelections(selectedStrings);
-		});
-	}
-
 	public static commands = (() => {
 		const commands: Record<string, CodeMirror5Command> = {
 			...BaseCodeMirror5Emulation.commands,

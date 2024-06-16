@@ -13,6 +13,7 @@ import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/r
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
+import usePrevious from '@joplin/lib/hooks/usePrevious';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -28,14 +29,25 @@ const usePlugins = (
 	webviewLoaded: boolean,
 	pluginSettings: PluginSettings,
 ) => {
-	const store = useStore();
+	const store = useStore<AppState>();
+	const lastPluginRunner = usePrevious(pluginRunner);
+
+	// Only set reloadAll to true here -- this ensures that all plugins are reloaded,
+	// even if loadPlugins is cancelled and re-run.
+	const reloadAllRef = useRef(false);
+	reloadAllRef.current ||= pluginRunner !== lastPluginRunner;
 
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
 		}
 
-		void loadPlugins(pluginRunner, pluginSettings, store, event);
+		await loadPlugins({ pluginRunner, pluginSettings, store, reloadAll: reloadAllRef.current, cancelEvent: event });
+
+		// A full reload, if it was necessary, has been completed.
+		if (!event.cancelled) {
+			reloadAllRef.current = false;
+		}
 	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
 };
 
@@ -134,7 +146,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		return (
 			<>
 				<ExtendedWebView
-					webviewInstanceId='PluginRunner'
+					webviewInstanceId='PluginRunner2'
 					html={html}
 					injectedJavaScript={injectedJs}
 					hasPluginScripts={true}

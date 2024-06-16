@@ -8,6 +8,8 @@ import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
 import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
 import { CompletionSource } from '@codemirror/autocomplete';
+import { RegionSpec } from './utils/formatting/RegionSpec';
+import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -93,6 +95,25 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		this.editor.dispatch(this.editor.state.replaceSelection(text), { userEvent });
 	}
 
+	public wrapSelections(start: string, end: string) {
+		const regionSpec = RegionSpec.of({ template: { start, end } });
+
+		this.editor.dispatch(
+			this.editor.state.changeByRange(range => {
+				const update = toggleInlineSelectionFormat(this.editor.state, regionSpec, range);
+				if (!update.range.empty) {
+					// Deselect the start and end characters (roughly preserve the original
+					// selection).
+					update.range = EditorSelection.range(
+						update.range.from + start.length,
+						update.range.to - end.length,
+					);
+				}
+				return update;
+			}),
+		);
+	}
+
 	public updateBody(newBody: string) {
 		// TODO: doc.toString() can be slow for large documents.
 		const currentBody = this.editor.state.doc.toString();
@@ -102,7 +123,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 			// to ensure that the selection stays within the document
 			// (and thus avoids an exception).
 			const mainCursorPosition = this.editor.state.selection.main.anchor;
-			const newCursorPosition = Math.min(mainCursorPosition, newBody.length);
+
+			// The maximum cursor position needs to be calculated using the EditorState,
+			// to correctly account for line endings.
+			const maxCursorPosition = this.editor.state.toText(newBody).length;
+			const newCursorPosition = Math.min(mainCursorPosition, maxCursorPosition);
 
 			this.editor.dispatch(this.editor.state.update({
 				changes: {

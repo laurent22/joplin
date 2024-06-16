@@ -161,9 +161,6 @@
 	"Accept": [
 		"接受"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"存取被拒絕：請檢查您的使用者名稱和密碼"
 	],
@@ -263,6 +260,9 @@
 	"An update is available, do you want to download it now?": [
 		"已有更新，您想立即下載嗎？"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"任何寄送到此地址的電子郵件都將被轉換為筆記，並加入到您的收藏中。該筆記將被保存到收件匣筆記本中"
 	],
@@ -332,7 +332,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"自動於刪除清單中加入已停用帳戶"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"自動配對大括號、括號、引號等。"
 	],
 	"Automatically check for updates": [
@@ -349,6 +349,9 @@
 	],
 	"Basic": [
 		"基本"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"此裝置未設定生物辨識解鎖。請設定生物辨識以解鎖 Joplin。如果裝置處於鎖定狀態，請考慮將其關閉然後再重新開啟以重設生物辨識掃描。"
@@ -499,6 +502,12 @@
 	],
 	"Close Window": [
 		"關閉視窗"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"程式碼"
@@ -712,6 +721,12 @@
 	],
 	"Creating report...": [
 		"正在建立新報告 %s..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"目前是最新版。"
@@ -1234,9 +1249,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"故障保護 (Fail-safe)：當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本機資料"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"嚴重錯誤："
@@ -1883,11 +1895,11 @@
 	"No active notebook.": [
 		"無使用中的記事本。"
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"沒有 ID 為 %s 的項目"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"未指定記事本。"
@@ -1897,6 +1909,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"目前沒有任何記事，請點選「新增記事」即可建立。"
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"沒有任何附件！"
@@ -2351,6 +2366,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2380,6 +2398,9 @@
 	],
 	"Restored Notes": [
 		"恢復的記事"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"重試"
@@ -3328,6 +3349,9 @@
 	],
 	"Website and documentation": [
 		"官方網站及線上說明"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Joplin 歡迎您!\n\n鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或輸入 `:help` 檢視使用說明。\n\n例如，您可輸入: `mb` 新增一本記事本; 輸入 `mn` 新增記事。"

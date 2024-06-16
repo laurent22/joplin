@@ -40,7 +40,10 @@ export default function(props: Props) {
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 	const [searchResultCount, setSearchResultCount] = useState(null);
 
-	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
+	const pluginSettingsRef = useRef(props.pluginSettings);
+	pluginSettingsRef.current = props.pluginSettings;
+
+	const onInstall = useOnInstallHandler(setInstallingPluginIds, pluginSettingsRef, props.repoApi, props.onPluginSettingsChange, false);
 
 	useEffect(() => {
 		setSearchResultCount(null);

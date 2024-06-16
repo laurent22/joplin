@@ -161,9 +161,6 @@
 	"Accept": [
 		"허용"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"접근 거부: 아이디와 비밀번호를 확인해주세요"
 	],
@@ -263,6 +260,9 @@
 	"An update is available, do you want to download it now?": [
 		"업데이트가 있습니다. 지금 다운로드까요?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"이 주소로 전송된 모든 이메일은 노트로 변환되어 당신의 컬렉션에 추가됩니다. 메모는 Inbox 노트북에 저장됩니다"
 	],
@@ -335,7 +335,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"삭제를 위해 비활성화된 계정을 자동으로 추가"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"괄호, 중괄호, 인용 부호 등의 자동 완성."
 	],
 	"Automatically check for updates": [
@@ -352,6 +352,9 @@
 	],
 	"Basic": [
 		"기초"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"장치에 생체 인식 잠금 해제가 설정되어 있지 않습니다. Joplin 잠금해제를 위해 설정해주세요. 장치가 잠겨 있는 경우 장치를 껐다가 켜서 생체 인식 스캔을 재설정하는 것이 좋습니다."
@@ -502,6 +505,12 @@
 	],
 	"Close Window": [
 		"창 닫기"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"코드"
@@ -724,6 +733,12 @@
 	],
 	"Creating report...": [
 		"보고서 생성하기..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"현재 최신 버전을 사용 중입니다."
@@ -1262,9 +1277,6 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
 	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
-	],
 	"Fatal error:": [
 		"치명적인 오류:"
 	],
@@ -1408,9 +1420,6 @@
 	],
 	"Hide advanced": [
 		"고급 숨기기"
-	],
-	"Hide Advanced Settings": [
-		"고급 설정 숨기기"
 	],
 	"Hide disabled": [
 		"비활성화 숨기기"
@@ -1730,9 +1739,6 @@
 	"Loaded": [
 		"로딩됨"
 	],
-	"Loading plugin repository...": [
-		"플러그인 저장소 불러오는 중..."
-	],
 	"Loading...": [
 		"로딩 중..."
 	],
@@ -1896,7 +1902,7 @@
 		"새 \"%s\" 노트북이 생성되고 \"%s\" 파일을 여기에 가져옵니다"
 	],
 	"New sub-notebook": [
-		"새 노트북"
+		"새 하위 노트북"
 	],
 	"New tags:": [
 		"새 태그:"
@@ -1931,11 +1937,11 @@
 	"No active notebook.": [
 		"활성화된 노트북이 없습니다."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"식별자 %s에 해당하는 항목이 없습니다"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"특정된 노트북이 없습니다."
@@ -1945,6 +1951,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"노트가 없습니다. \"새 노트\"를 선택해서 노트를 새로 만드세요."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"없는 리소스입니다!"
@@ -2417,6 +2426,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2458,6 +2470,9 @@
 	],
 	"Restored Notes": [
 		"복구된 노트들"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"재시도"
@@ -3448,6 +3463,9 @@
 	],
 	"Website and documentation": [
 		"웹사이트 및 참고 문서"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Joplin에 오신 것을 환영합니다!\n\n`:help shortcuts`를 입력하면 키보드 단축키 목록을 확인할 수 있습니다. `:help`를 입력하시면 사용 방법을 확인하실 수 있습니다.\n\n예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세요."
