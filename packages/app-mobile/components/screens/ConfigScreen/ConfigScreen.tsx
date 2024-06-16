@@ -838,11 +838,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
 					title={screenHeadingText}
-					showSaveButton={true}
 					showSearchButton={true}
 					showSideMenuButton={false}
-					saveButtonDisabled={!this.hasUnsavedChanges()}
-					onSaveButtonPress={this.saveButton_press}
 					onSearchButtonPress={this.onSearchButtonPress_}
 				/>
 				{mainComponent}
