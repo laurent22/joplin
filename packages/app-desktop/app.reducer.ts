@@ -5,7 +5,6 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
-import { NotyfNotification } from 'notyf';
 
 const logger = Logger.create('app.reducer');
 
@@ -31,13 +30,6 @@ export interface EditorScrollPercents {
 	[noteId: string]: number;
 }
 
-export interface AppStateInterop {
-	id: string;
-	message: string;
-	completed: boolean;
-	notification: NotyfNotification;
-}
-
 export interface AppState extends State {
 	route: AppStateRoute;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -60,7 +52,6 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
-	interopTaskProgress: AppStateInterop[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -85,7 +76,6 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
-		interopTaskProgress: [],
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -96,84 +86,6 @@ export default function(state: AppState, action: any) {
 
 	try {
 		switch (action.type) {
-
-		case 'INTEROP_IMPORT_EXEC':
-
-			{
-				const id = `import:${action.path}`;
-				const interop = newState.interopTaskProgress.slice();
-
-				interop.push({
-					id: id,
-					message: action.message,
-					completed: false,
-					notification: undefined,
-				});
-
-				newState = { ...state, interopTaskProgress: interop };
-			}
-			break;
-
-		case 'INTEROP_EXPORT_EXEC':
-
-			{
-				const id = `export:${action.path}`;
-				const interop = newState.interopTaskProgress.slice();
-
-				interop.push({
-					id: id,
-					message: action.message,
-					completed: false,
-					notification: undefined,
-				});
-
-				newState = { ...state, interopTaskProgress: interop };
-			}
-			break;
-
-		case 'INTEROP_IMPORT_COMPLETE':
-
-			{
-				const id = `import:${action.path}`;
-				const interop = newState.interopTaskProgress.slice();
-				const operation = interop.find(interop => interop.id === id);
-				const newInterop = interop.filter(interop => !(interop.id === id));
-
-				newInterop.push({ ...operation, message: action.message, completed: true });
-
-				newState = { ...state, interopTaskProgress: newInterop };
-			}
-			break;
-
-		case 'INTEROP_EXPORT_COMPLETE':
-
-			{
-				const id = `export:${action.path}`;
-				const interop = newState.interopTaskProgress.slice();
-				const operation = interop.find(interop => interop.id === id);
-				const newInterop = interop.filter(interop => !(interop.id === id));
-
-				newInterop.push({ ...operation, message: action.message, completed: true });
-
-				newState = { ...state, interopTaskProgress: newInterop };
-			}
-			break;
-
-		case 'INTEROP_NOTIFICATION_DONE':
-
-			{
-				const id = action.id;
-				const interop = newState.interopTaskProgress.slice();
-				const operation = interop.find(interop => interop.id === id);
-				const newInterop = interop.filter(interop => !(interop.id === id));
-
-				if (!operation.completed) {
-					newInterop.push({ ...operation, notification: action.notification });
-				}
-
-				newState = { ...state, interopTaskProgress: newInterop };
-			}
-			break;
 
 		case 'NAV_BACK':
 		case 'NAV_GO':

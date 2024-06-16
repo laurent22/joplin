@@ -26,6 +26,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { EventName } from '@joplin/lib/eventManager';
+import TaskProgressUIService from '@joplin/lib/TaskProgressUIService';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -311,17 +312,14 @@ function useMenu(props: Props) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const errors: any[] = [];
 
+		const taskId = `interop-import-${path}}`;
 		const importOptions = {
 			path,
 			format: module.format,
 			outputFormat: module.outputFormat,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (_status: any) => {
-				props.dispatch({
-					type: 'INTEROP_IMPORT_EXEC',
-					path: path,
-					message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
-				});
+				TaskProgressUIService.onTaskProgress(taskId, _status);
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
@@ -331,11 +329,7 @@ function useMenu(props: Props) {
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
 
-		props.dispatch({
-			type: 'INTEROP_IMPORT_EXEC',
-			path: path,
-			message: _('Importing from "%s" as "%s" format. Please wait...', path, module.format),
-		});
+		TaskProgressUIService.onTaskStarted(taskId, _('Importing from "%s" as "%s" format. Please wait...', path, module.outputFormat));
 
 		const service = InteropService.instance();
 		try {
@@ -343,19 +337,11 @@ function useMenu(props: Props) {
 			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);
 
-			props.dispatch({
-				type: 'INTEROP_IMPORT_COMPLETE',
-				path: path,
-				message: _('Successfully imported from %s.', path),
-			});
+			TaskProgressUIService.onTaskCompleted(taskId, _('Successfully imported from %s.', path));
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 
-			props.dispatch({
-				type: 'INTEROP_IMPORT_COMPLETE',
-				path: path,
-				message: _('Could not import notes.'),
-			});
+			TaskProgressUIService.onTaskCompleted(taskId, _('Could not import notes.'));
 		}
 
 		if (errors.length) {

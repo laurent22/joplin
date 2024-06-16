@@ -1,13 +1,12 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useEffect } from 'react';
 import NotyfContext from '../NotyfContext';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
-import { AppStateInterop } from '../../app.reducer';
 import { INotyfIcon, NotyfNotification } from 'notyf';
+import TaskProgressUIService from '@joplin/lib/TaskProgressUIService';
+// import { waitForElement } from '@joplin/lib/dom';
 
 interface Props {
-	interopTaskProgress: AppStateInterop[];
 	themeId: number;
 	dispatch: Dispatch;
 }
@@ -41,33 +40,35 @@ export default (props: Props) => {
 		return output;
 	}, [notyfContext, theme]);
 
-	useAsyncEffect(async (_event) => {
-		for (const task of props.interopTaskProgress) {
-			if (task.notification && !task.completed) return;
+	useEffect(() => {
+		TaskProgressUIService.setListener(task => {
+			if (task.progress === 100) {
+				if (task.data) {
+					notyf.dismiss(task.data as NotyfNotification);
+				}
 
-			let duration = 0;
-			let notyfType = 'loading';
+				notyf.success({
+					message: task.message,
+					dismissible: true,
+				});
+			} else if (task.data) {
+				// TODO: Edit previous notification (if not undefined).
 
-			if (task.completed) {
-				notyf.dismiss(task.notification);
-				duration = 6000;
-				notyfType = 'success';
+				// const element: HTMLElement = await waitForElement(document, task.id);
+			} else {
+				// We need to store so that we can edit/dismiss it later.
+				task.data = notyf.open({
+					type: 'loading',
+					message: task.message,
+					duration: 0,
+					dismissible: true,
+					icon: `<i class="loading" id="${task.id}">⌛</i>`,
+				});
 			}
+		});
 
-			const notification: NotyfNotification = notyf.open({
-				type: notyfType,
-				message: task.message,
-				duration: duration,
-				dismissible: true,
-			});
-
-			props.dispatch({
-				type: 'INTEROP_NOTIFICATION_DONE',
-				id: task.id,
-				notification: notification,
-			});
-		}
-	}, [notyf, props.dispatch, props.interopTaskProgress]);
+		return () => TaskProgressUIService.setListener(undefined);
+	}, [notyf]);
 
 	return <div style={{ display: 'none' }}/>;
 };
