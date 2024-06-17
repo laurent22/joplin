@@ -7179,7 +7179,7 @@ __metadata:
     sharp: 0.33.2
     source-map-support: 0.5.21
     sqlite3: 5.1.6
-    style-to-js: 1.1.10
+    style-to-js: 1.1.11
     typescript: 5.2.2
     uri-template: 2.0.0
     yargs: 17.7.2
@@ -40159,12 +40159,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:1.1.10":
-  version: 1.1.10
-  resolution: "style-to-js@npm:1.1.10"
+"style-to-js@npm:1.1.11":
+  version: 1.1.11
+  resolution: "style-to-js@npm:1.1.11"
   dependencies:
     style-to-object: 1.0.5
-  checksum: 2db181d838b0076161f1ac0959e64841efd91ad9f03d80aabd11769e88f7d979a6b4d73c59810dfb47a2e87543fb02693447a03c385dda86d8750e8cf1802d62
+  checksum: 92a558b6b812cbc2a93911b0a644e17de611eac38c8a44cf2594e088dac82514f1dcbbc4be29d306e6362be31356e4b34cb9fb3d3073576fa4af7ad2f9020d5e
   languageName: node
   linkType: hard
 
