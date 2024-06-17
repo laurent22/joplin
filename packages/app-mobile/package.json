@@ -108,7 +108,7 @@
     "jest-environment-jsdom": "29.7.0",
     "jetifier": "2.0.0",
     "js-draw": "1.20.2",
-    "jsdom": "22.1.0",
+    "jsdom": "23.0.1",
     "nodemon": "3.0.3",
     "punycode": "2.3.1",
     "react-test-renderer": "18.2.0",
