@@ -6576,7 +6576,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
     "@types/node": 18.19.25
-    "@types/react": 18.2.58
+    "@types/react": 18.2.67
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
@@ -6663,7 +6663,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/react": 18.2.58
+    "@types/react": 18.2.67
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
     "@types/tar-stream": 3.1.3
@@ -6797,7 +6797,7 @@ __metadata:
     "@replit/codemirror-vim": 6.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
-    "@types/react": 18.2.58
+    "@types/react": 18.2.67
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     jest: 29.7.0
@@ -6884,7 +6884,7 @@ __metadata:
     "@types/nanoid": 3.0.0
     "@types/node": 18.19.25
     "@types/node-rsa": 1.1.4
-    "@types/react": 18.2.58
+    "@types/react": 18.2.67
     "@types/uuid": 9.0.7
     async-mutex: 0.4.1
     base-64: 1.0.0
@@ -6958,8 +6958,8 @@ __metadata:
     "@joplin/lib": ~3.0
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
-    "@types/react": 18.2.58
-    "@types/react-dom": 18.2.19
+    "@types/react": 18.2.67
+    "@types/react-dom": 18.2.22
     "@types/styled-components": 5.1.32
     async-mutex: 0.4.1
     babel-jest: 29.7.0
@@ -11339,12 +11339,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.19":
-  version: 18.2.19
-  resolution: "@types/react-dom@npm:18.2.19"
+"@types/react-dom@npm:18.2.22":
+  version: 18.2.22
+  resolution: "@types/react-dom@npm:18.2.22"
   dependencies:
     "@types/react": "*"
-  checksum: 087a19d8e4c1c0900ec4ac5ddb749a811a38274b25683d233c11755d2895cc6e475e8bf9bea3dee36519769298e078d4c2feab9ab4bd13b26bc2a6170716437e
+  checksum: 83bb3ddcd7894f20a9a6cbc2befe75d8b76984734020c455b4c50cad625a4025250d8e1d247ef6264e484d47d5a94f2dd11f77c1dcac6a5de998cb447d85b720
   languageName: node
   linkType: hard
 
@@ -11430,14 +11430,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.58":
-  version: 18.2.58
-  resolution: "@types/react@npm:18.2.58"
+"@types/react@npm:18.2.67":
+  version: 18.2.67
+  resolution: "@types/react@npm:18.2.67"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 42551e30c8a54161a11b2ecd11406782ddba4472a4471d45034c551295263d56f06234f283526d0c0420352ce9ce9675b2a6c65db7a287d9613643d3ceaaf1f0
+  checksum: 9e48122b0e8d0ae20601f613aca32289eeb94d55c58ff03a7dc532d80ed289a1ba9715f14b773bd926ccdd63e503717f14264143ef531dc370063abe09dee0b2
   languageName: node
   linkType: hard
 
