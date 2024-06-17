@@ -1,7 +1,6 @@
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
-
 	public async setPassword(/* name:string, password:string*/): Promise<boolean> {
 		return false;
 	}
@@ -14,4 +13,6 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 
 	}
 
+	public async upgradeStorageBackend(_secureKeys: string[], _newDatabaseVersion: number): Promise<void> {
+	}
 }

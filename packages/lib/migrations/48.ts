@@ -1,4 +1,5 @@
 import Setting from '../models/Setting';
+import KeychainService from '../services/keychain/KeychainService';
 import shim from '../shim';
 
 interface Script {
@@ -12,7 +13,7 @@ const script: Script = {
 		// start.
 		if (shim.isLinux() && shim.isElectron()) {
 			Setting.setValue('keychain.supported', -1);
-			Setting.setValue('keychain.needsMigration', true);
+			await KeychainService.instance().runMigration(48);
 		}
 	},
 };

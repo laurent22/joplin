@@ -75,4 +75,27 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		}
 	}
 
+	public async upgradeStorageBackend(secureKeys: string[], newDatabaseVersion: number) {
+		if (newDatabaseVersion !== 48) return;
+
+		if (!canUseSafeStorage() || !shim.keytar()) {
+			logger.info('Unable to migrate keys -- no keytar or safe storage.');
+			return;
+		}
+
+		const migratedKeys = [];
+
+		for (const key of secureKeys) {
+			const password = await this.password(key);
+
+			// Only delete the password from keytar **after** migrating it to safe storage
+			if (password !== null && await this.setPassword(key, password)) {
+				migratedKeys.push(key);
+			}
+		}
+
+		for (const key of migratedKeys) {
+			await shim.keytar().deletePassword(`${this.appId}.${key}`, `${this.clientId}@joplin`);
+		}
+	}
 }

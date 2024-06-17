@@ -76,4 +76,10 @@ export default class KeychainService extends BaseService {
 			Setting.setValue('keychain.supported', result === 'mytest' ? 1 : 0);
 		}
 	}
+
+	public async runMigration(toDatabaseVersion: number) {
+		await this.detectIfKeychainSupported();
+		const keys = Setting.keys(false, null, { secureOnly: true });
+		await this.driver.upgradeStorageBackend(keys, toDatabaseVersion);
+	}
 }
