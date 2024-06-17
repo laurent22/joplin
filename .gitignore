@@ -972,6 +972,7 @@ packages/lib/services/ResourceService.test.js
 packages/lib/services/ResourceService.js
 packages/lib/services/RevisionService.test.js
 packages/lib/services/RevisionService.js
+packages/lib/services/SettingUtils.test.js
 packages/lib/services/SettingUtils.js
 packages/lib/services/UndoRedoService.js
 packages/lib/services/WhenClause.test.js

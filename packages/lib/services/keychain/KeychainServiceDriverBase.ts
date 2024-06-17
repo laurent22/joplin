@@ -19,7 +19,6 @@ abstract class KeychainServiceDriverBase {
 	public abstract setPassword(name: string, password: string): Promise<boolean>;
 	public abstract password(name: string): Promise<string>;
 	public abstract deletePassword(name: string): Promise<void>;
-
 }
 
 export default KeychainServiceDriverBase;

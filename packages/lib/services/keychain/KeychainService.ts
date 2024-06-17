@@ -76,5 +76,4 @@ export default class KeychainService extends BaseService {
 			Setting.setValue('keychain.supported', result === 'mytest' ? 1 : 0);
 		}
 	}
-
 }

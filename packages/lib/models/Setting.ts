@@ -241,7 +241,6 @@ export type SettingMetadataSection = {
 export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
-
 	public static schemaUrl = 'https://joplinapp.org/schema/settings.json';
 
 	// For backward compatibility
@@ -1312,6 +1311,7 @@ class Setting extends BaseModel {
 			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
 
 			'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
+			'keychain.needsMigration': { value: false, type: SettingItemType.Bool, public: false },
 			'db.ftsEnabled': { value: -1, type: SettingItemType.Int, public: false },
 			'db.fuzzySearchEnabled': { value: -1, type: SettingItemType.Int, public: false },
 			'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },
@@ -2923,6 +2923,19 @@ class Setting extends BaseModel {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
 		return name[0].toUpperCase() + name.substr(1).toLowerCase();
+	}
+
+	public static async resaveSecureSettings() {
+		const keys = this.keys(false, null, { secureOnly: true });
+
+		for (const key of keys) {
+			const value = this.value(key);
+			if (value) {
+				await this.keychainService().deletePassword(`setting.${key}`);
+				this.changedKeys_.push(key);
+				await this.saveAll();
+			}
+		}
 	}
 }
 
