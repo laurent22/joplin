@@ -892,7 +892,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'FOLDER_SELECT':
-			changeSelectedFolder(draft, action, { clearSelectedNoteIds: true });
+			changeSelectedFolder(draft, action, { clearSelectedNoteIds: action.clearSelectedNoteIds ?? true });
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
@@ -1005,7 +1005,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 				draft.notes = newNotes;
 
-				if (noteFolderHasChanged) {
+				// Ensure that the selected note is still in the current folder.
+				// For example, if the user drags the current note to a different folder,
+				// a new note should be selected.
+				// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+				if (noteFolderHasChanged && !action.preserveSelection) {
 					let newIndex = movedNotePreviousIndex;
 					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 					if (!newNotes.length) newIndex = -1;
