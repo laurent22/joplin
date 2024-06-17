@@ -892,7 +892,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'FOLDER_SELECT':
-			changeSelectedFolder(draft, action, { clearSelectedNoteIds: action.clearSelectedNoteIds ?? true });
+			changeSelectedFolder(draft, action, { clearSelectedNoteIds: true });
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
