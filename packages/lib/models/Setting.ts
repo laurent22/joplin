@@ -765,6 +765,8 @@ class Setting extends BaseModel {
 
 			'sync.10.accountType': { value: 0, type: SettingItemType.Int, public: false },
 
+			'sync.10.userEmail': { value: '', type: SettingItemType.String, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {

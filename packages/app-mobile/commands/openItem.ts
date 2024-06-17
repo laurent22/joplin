@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
-const { parseResourceUrl, urlProtocol } = require('@joplin/lib/urlUtils');
+import { parseResourceUrl, urlProtocol } from '@joplin/lib/urlUtils';
 import Logger from '@joplin/utils/Logger';
 import goToNote from './util/goToNote';
 

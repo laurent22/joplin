@@ -3,10 +3,12 @@ import * as React from 'react';
 import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '@joplin/lib/models/Setting';
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
-import { FlatList, Text, Pressable, View, ViewStyle } from 'react-native';
+import { FlatList, Text, View, ViewStyle } from 'react-native';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
 import Icon from '../../Icon';
 import { _ } from '@joplin/lib/locale';
+import { TouchableRipple } from 'react-native-paper';
+import BetaChip from '../../BetaChip';
 
 interface Props {
 	styles: ConfigScreenStyles;
@@ -45,36 +47,46 @@ const SectionSelector: FunctionComponent<Props> = props => {
 			/>
 		) : null;
 
+		const isBeta = item.name === 'plugins';
+		const betaChip = isBeta ? <BetaChip size={10}/> : null;
+
 		return (
-			<Pressable
+			<TouchableRipple
 				key={section.name}
 				role='tab'
 				aria-selected={selected}
 				onPress={() => props.openSection(section.name)}
-				style={selected ? styles.selectedSidebarButton : styles.sidebarButton}
 			>
-				<Icon
-					name={icon}
-					accessibilityLabel={null}
-					style={styles.sidebarIcon}
-				/>
-				<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-					<Text
-						numberOfLines={1}
-						style={titleStyle}
-					>
-						{label}
-					</Text>
-					<Text
-						style={styles.sidebarButtonDescriptionText}
-						numberOfLines={1}
-						ellipsizeMode='tail'
-					>
-						{shortDescription ?? ''}
-					</Text>
+				<View
+					style={selected ? styles.selectedSidebarButton : styles.sidebarButton}
+				>
+					<Icon
+						name={icon}
+						accessibilityLabel={null}
+						style={styles.sidebarIcon}
+					/>
+					<View style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+							<Text
+								numberOfLines={1}
+								style={titleStyle}
+							>
+								{label}
+							</Text>
+
+							{betaChip}
+						</View>
+						<Text
+							style={styles.sidebarButtonDescriptionText}
+							numberOfLines={1}
+							ellipsizeMode='tail'
+						>
+							{shortDescription ?? ''}
+						</Text>
+					</View>
+					{sourceIcon}
 				</View>
-				{sourceIcon}
-			</Pressable>
+			</TouchableRipple>
 		);
 	};
 

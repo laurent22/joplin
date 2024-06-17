@@ -29,12 +29,26 @@ jest.mock('react-native-device-info', () => {
 	};
 });
 
+// react-native-version-info doesn't work (returns undefined for .version) when
+// running in a testing environment.
+jest.doMock('react-native-version-info', () => {
+	return {
+		default: {
+			appVersion: require('./package.json').version,
+		},
+	};
+});
+
 // react-native-webview expects native iOS/Android code so needs to be mocked.
 jest.mock('react-native-webview', () => {
 	const { View } = require('react-native');
 	return {
 		WebView: View,
 	};
+});
+
+jest.mock('@react-native-clipboard/clipboard', () => {
+	return { default: { getString: jest.fn(), setString: jest.fn() } };
 });
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.

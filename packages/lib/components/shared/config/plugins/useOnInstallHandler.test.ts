@@ -20,13 +20,13 @@ const itemEvent = ({
 } as ItemEvent);
 const callHook = (isUpdate: boolean, pluginEnabled = true, pluginInstalledViaGUI = true) => () => useOnInstallHandler(
 	setInstallingPluginIds,
-	{
+	{ current: {
 		[pluginId]: pluginInstalledViaGUI ? {
 			enabled: pluginEnabled,
 			deleted: false,
 			hasBeenUpdated: false,
 		} : undefined,
-	},
+	} },
 	repoApi,
 	onPluginSettingsChange,
 	isUpdate,

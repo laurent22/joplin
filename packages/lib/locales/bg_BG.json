@@ -152,6 +152,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Active": [
 		"Активен"
 	],
@@ -284,6 +287,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -291,9 +297,6 @@
 		"Удебелен"
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -400,6 +403,12 @@
 	],
 	"Close Window": [
 		"Затвори прозорец"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Код"
@@ -529,6 +538,12 @@
 	],
 	"Creates a new to-do.": [
 		"Създава нова задача."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Настоящата версия е най-новата."
@@ -1417,6 +1432,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Тук няма бележки. Може да натиснете \"Нова бележка\" за да създадете първата."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		""

@@ -1,5 +1,35 @@
 # Joplin Android Changelog
 
+## [android-v3.0.4](https://github.com/laurent22/joplin/releases/tag/android-v3.0.4) (Pre-release) - 2024-06-12T20:38:44Z
+
+- New: Add Joplin Cloud account information to configuration screen (#10553 by [@pedr](https://github.com/pedr))
+- New: Add button on Synchronization to Joplin Cloud login screen (#10569 by [@pedr](https://github.com/pedr))
+- Improved: Dismiss dialogs on background tap (#10557 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Hide links to login after process is successful (#10571 by [@pedr](https://github.com/pedr))
+- Improved: Implement plugin screen redesign (#10465 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve dialog styling on large and notched screens (#10470 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improves formatting of log statements (aac8d58)
+- Improved: Plugin API: Implement the `newNote` command (#10524 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Make panel opening/closing more consistent with desktop (#10385 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Show information page before enabling plugin support (#10348 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Settings screen: Show touch feedback when pressing a tab (#10544 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Share screen: Update headings and labels for consistency with desktop (#10395 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Show WebView version in settings (#10518 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Simplify Dropbox sync workaround (#10415 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update Mermaid to v10.9.1 (#10475 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update js-draw to version 1.20.2 (#10438 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages react, react-native-device-info (v10.12.1), react-native-document-picker (v9.1.1), react-native-paper (v5.12.3), sass (v1.70.0), tesseract.js (v5.0.5)
+- Improved: Upgrade KaTeX to v0.16.10 (#10570 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to React Native 0.74.1 (#10401 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Automatically set focus on title or body when creating a new note (#10237)
+- Fixed: Fix Dropbox sync (#10400) (#10396 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix accepting encrypted shared notebooks (#10429) (#10409 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix logger tests by adding time (#10433 by [@pedr](https://github.com/pedr))
+- Fixed: Fix nonbreaking spaces and CRLF break search for adjacent words (#10417 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugins aren't visible after switching to a new profile (#10386 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugins not reloaded when the plugin runner reloads (#10540 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Maintain cursor position when changing list indentation (#10441) (#10439 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.3](https://github.com/laurent22/joplin/releases/tag/android-v3.0.3) (Pre-release) - 2024-04-27T11:21:48Z
 
 - Improved: Display a message when Joplin Cloud user don't have access to email to note feature (#10322 by [@pedr](https://github.com/pedr))

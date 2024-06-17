@@ -1,53 +1,52 @@
-const { rtrimSlashes } = require('./path-utils');
-const { urlDecode } = require('./string-utils');
+import { rtrimSlashes, toFileProtocolPath } from './path-utils';
+import { urlDecode } from './string-utils';
 
-const urlUtils = {};
-
-urlUtils.hash = function(url) {
+export const hash = (url: string) => {
 	const s = url.split('#');
 	if (s.length <= 1) return '';
 	return s[s.length - 1];
 };
 
-urlUtils.urlWithoutPath = function(url) {
+export const urlWithoutPath = (url: string) => {
 	const parsed = require('url').parse(url, true);
 	return `${parsed.protocol}//${parsed.host}`;
 };
 
-urlUtils.urlProtocol = function(url) {
+export const urlProtocol = (url: string) => {
 	if (!url) return '';
 	const parsed = require('url').parse(url, true);
 	return parsed.protocol;
 };
 
-urlUtils.prependBaseUrl = function(url, baseUrl) {
+export const prependBaseUrl = (url: string, baseUrl: string) => {
 	baseUrl = rtrimSlashes(baseUrl).trim(); // All the code below assumes that the baseUrl does not end up with a slash
 	url = url.trim();
 
 	if (!url) url = '';
 	if (!baseUrl) return url;
 	if (url.indexOf('#') === 0) return url; // Don't prepend if it's a local anchor
-	if (urlUtils.urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
+	if (urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
 
 	if (url.length >= 2 && url.indexOf('//') === 0) {
 		// If it starts with // it's a protcol-relative URL
-		return urlUtils.urlProtocol(baseUrl) + url;
+		return urlProtocol(baseUrl) + url;
 	} else if (url && url[0] === '/') {
 		// If it starts with a slash, it's an absolute URL so it should be relative to the domain (and not to the full baseUrl)
-		return urlUtils.urlWithoutPath(baseUrl) + url;
+		return urlWithoutPath(baseUrl) + url;
 	} else {
 		return baseUrl + (url ? `/${url}` : '');
 	}
 };
 
+
 const resourceRegex = /^(joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
 
-urlUtils.isResourceUrl = function(url) {
+export const isResourceUrl = (url: string) => {
 	return !!url.match(resourceRegex);
 };
 
-urlUtils.parseResourceUrl = function(url) {
-	if (!urlUtils.isResourceUrl(url)) return null;
+export const parseResourceUrl = (url: string) => {
+	if (!isResourceUrl(url)) return null;
 
 	const match = url.match(resourceRegex);
 
@@ -65,13 +64,35 @@ urlUtils.parseResourceUrl = function(url) {
 	};
 };
 
-urlUtils.extractResourceUrls = function(text) {
+export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
+	let resourceDirUrl = toFileProtocolPath(resourceDir);
+	if (!resourceDirUrl.endsWith('/')) {
+		resourceDirUrl += '/';
+	}
+
+	if (fileUrl.startsWith(resourceDirUrl)) {
+		let result = fileUrl.substring(resourceDirUrl.length);
+		// Remove the timestamp parameter, keep the hash.
+		result = result.replace(/\?t=\d+(#.*)?$/, '$1');
+		// Remove the file extension.
+		result = result.replace(/\.[a-z0-9]+(#.*)?$/, '$1');
+		result = `joplin://${result}`;
+
+		if (isResourceUrl(result)) {
+			return result;
+		}
+	}
+
+	return null;
+};
+
+export const extractResourceUrls = (text: string) => {
 	const markdownLinksRE = /\]\((.*?)\)/g;
 	const output = [];
 	let result = null;
 
 	while ((result = markdownLinksRE.exec(text)) !== null) {
-		const resourceUrlInfo = urlUtils.parseResourceUrl(result[1]);
+		const resourceUrlInfo = parseResourceUrl(result[1]);
 		if (resourceUrlInfo) output.push(resourceUrlInfo);
 	}
 
@@ -91,7 +112,7 @@ urlUtils.extractResourceUrls = function(text) {
 	return output;
 };
 
-urlUtils.objectToQueryString = function(query) {
+export const objectToQueryString = (query: Record<string, string>) => {
 	if (!query) return '';
 
 	let queryString = '';
@@ -105,4 +126,3 @@ urlUtils.objectToQueryString = function(query) {
 	return queryString;
 };
 
-module.exports = urlUtils;
