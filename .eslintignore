@@ -486,6 +486,7 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
+packages/app-desktop/services/plugins/resource-monitor/runner.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js

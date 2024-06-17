@@ -17,6 +17,7 @@ import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/use
 import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
+import { startResourceMonitor, stopResourceMonitor } from '../../../../services/plugins/resource-monitor/runner';
 const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
@@ -174,7 +175,15 @@ export default function(props: Props) {
 		return () => {
 			cancelled = true;
 		};
+
 	}, [manifestsLoaded, pluginItems, pluginService.appVersion]);
+
+	useEffect(() => {
+		startResourceMonitor();
+		return () => {
+			stopResourceMonitor();
+		};
+	}, []);
 
 	const onToggle = useCallback((event: ItemEvent) => {
 		const item = event.item;

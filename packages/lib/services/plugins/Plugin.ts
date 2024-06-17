@@ -16,7 +16,6 @@ export interface ContentScript {
 	id: string;
 	path: string;
 }
-
 interface ContentScripts {
 	[type: string]: ContentScript[];
 }
@@ -25,6 +24,7 @@ type OnUnloadListener = ()=> void;
 
 export default class Plugin {
 
+	private osPid_: number = null;
 	private baseDir_: string;
 	private manifest_: PluginManifest;
 	private scriptText_: string;
@@ -54,6 +54,14 @@ export default class Plugin {
 		this.dispatch_ = dispatch;
 		this.dataDir_ = dataDir;
 		this.eventEmitter_ = new EventEmitter();
+	}
+
+	public get osPid(): number | null {
+		return this.osPid_;
+	}
+
+	public set osPid(osPid: number) {
+		this.osPid_ = osPid;
 	}
 
 	public get id(): string {
@@ -232,5 +240,4 @@ export default class Plugin {
 			pluginId: this.id,
 		});
 	}
-
 }

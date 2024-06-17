@@ -125,6 +125,13 @@ export default class PluginRunner extends BasePluginRunner {
 			},
 		});
 
+		pluginWindow.webContents.once('did-finish-load', () => {
+			const osProcessId = pluginWindow.webContents.getOSProcessId();
+			if (osProcessId) {
+				plugin.osPid = osProcessId;
+			}
+		});
+
 		require('@electron/remote/main').enable(pluginWindow.webContents);
 
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
