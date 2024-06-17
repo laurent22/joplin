@@ -126,7 +126,7 @@
     "@playwright/test": "1.42.1",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.8",
-    "@types/node": "18.19.24",
+    "@types/node": "18.19.25",
     "@types/react": "18.2.58",
     "@types/react-redux": "7.1.33",
     "@types/styled-components": "5.1.32",
