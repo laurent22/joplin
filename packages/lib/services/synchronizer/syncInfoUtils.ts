@@ -13,44 +13,6 @@ const fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
 
-type MasterKey = {
-	created_time: number;
-	encryption_method: number;
-	hasBeenUsed: boolean;
-	id: string;
-	source_application: string;
-	updated_time: number;
-};
-
-type PPK = {
-	createdTime: number;
-	id: string;
-	keySize: number;
-	privateKey: {
-		ciphertext: string;
-		encryptionMethod: number;
-	};
-	publicKey: string;
-};
-
-type SyncInfoParsed = {
-	activeMasterKeyId?: {
-		updatedTime: number;
-		value: string;
-	};
-	appMinVersion?: string;
-	e2ee?: {
-		updatedTime: number;
-		value: boolean;
-	};
-	masterKeys?: MasterKey[];
-	ppk?: {
-		updatedTime: number;
-		value: PPK;
-	};
-	version?: number;
-};
-
 export interface SyncInfoValueBoolean {
 	value: boolean;
 	updatedTime: number;
@@ -306,7 +268,9 @@ export class SyncInfo {
 	}
 
 	public load(serialized: string) {
-		let s: SyncInfoParsed = {};
+		// We probably should add validation after parsing at some point, but for now we are going to keep it simple
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		let s: any = {};
 		try {
 			s = JSON.parse(serialized);
 		} catch (error) {
