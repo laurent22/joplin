@@ -83,6 +83,8 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 			return;
 		}
 
+		logger.info('Migrating keys to Electron safeStorage...');
+
 		const migratedKeys = [];
 
 		for (const key of secureKeys) {
@@ -97,5 +99,7 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		for (const key of migratedKeys) {
 			await shim.keytar().deletePassword(`${this.appId}.${key}`, `${this.clientId}@joplin`);
 		}
+
+		logger.info(`Migrated ${migratedKeys.length} keys.`);
 	}
 }

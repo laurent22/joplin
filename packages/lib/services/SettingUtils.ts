@@ -5,9 +5,6 @@ import Setting from '../models/Setting';
 import uuid from '../uuid';
 import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
 import KeychainServiceDriverBase from './keychain/KeychainServiceDriverBase';
-import Logger from '@joplin/utils/Logger';
-
-const logger = Logger.create('SettingUtils');
 
 type KeychainServiceDriverConstructor = new (appId: string, clientId: string)=> KeychainServiceDriverBase;
 
@@ -35,9 +32,4 @@ export async function loadKeychainServiceAndSettings(KeychainServiceDriver: Keyc
 
 	if (!clientIdSetting) Setting.setValue('clientId', clientId);
 	await KeychainService.instance().detectIfKeychainSupported();
-	if (Setting.value('keychain.needsMigration')) {
-		logger.info('Running keychain migrations');
-		Setting.setValue('keychain.needsMigration', false);
-		await Setting.resaveSecureSettings();
-	}
 }
