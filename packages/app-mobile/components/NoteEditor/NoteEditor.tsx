@@ -101,10 +101,6 @@ function useHtml(initialCss: string): string {
 						scrolling. */
 					.cm-scroller {
 						overflow: none;
-
-						/* Ensure that the editor can be focused by clicking on the lower half of the screen.
-							Don't use 100vh to prevent a scrollbar being present for empty notes. */
-						min-height: 80vh;
 					}
 				</style>
 				<style class=${JSON.stringify(themeStyleSheetClassName)}>
