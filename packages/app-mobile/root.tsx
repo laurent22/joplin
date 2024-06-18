@@ -1169,7 +1169,7 @@ class AppComponent extends React.Component {
 
 	private quickActionsShortcutHandler = async (data: { type: string }) => {
 		if (!data) return;
-		await quickActionHandler(data, this.props.dispatch, this.props.selectedFolderId);
+		await quickActionHandler(data, this.props.dispatch);
 	};
 
 	public render() {

@@ -1,7 +1,7 @@
 import * as QuickActions from 'react-native-quick-actions';
 import { _ } from '@joplin/lib/locale';
-import Note from '@joplin/lib/models/Note';
 import { Dispatch } from 'redux';
+import CommandService from '@joplin/lib/services/CommandService';
 
 type TData = {
 	type: string;
@@ -15,7 +15,7 @@ export default () => {
 	]);
 };
 
-export const quickActionHandler = async (data: TData, dispatch: Dispatch, selectedFolderId: string) => {
+export const quickActionHandler = async (data: TData, dispatch: Dispatch) => {
 	if (!data) return;
 
 	// This dispatch is to momentarily go back to reset state, similar to what
@@ -33,15 +33,5 @@ export const quickActionHandler = async (data: TData, dispatch: Dispatch, select
 
 	const isTodo = data.type === 'New to-do' ? 1 : 0;
 
-	const newNote = await Note.save({
-		parent_id: selectedFolderId,
-		is_todo: isTodo,
-	}, { provisional: true });
-
-	dispatch({
-		type: 'NAV_GO',
-		noteId: newNote.id,
-		folderId: selectedFolderId,
-		routeName: 'Note',
-	});
+	await CommandService.instance().execute('newNote', '', isTodo);
 };
