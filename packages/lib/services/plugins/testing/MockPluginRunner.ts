@@ -2,6 +2,8 @@ import BasePluginRunner from '../../../services/plugins/BasePluginRunner';
 import Plugin from '../../../services/plugins/Plugin';
 
 
+// TODO: Merge this with the plugin runner in app-cli, which, at the time of this writing,
+// was used only for tests.
 export default class MockPluginRunner extends BasePluginRunner {
 	public runningPluginIds: string[] = [];
 	private onRunningPluginsChangedListeners_ = [() => {}];
