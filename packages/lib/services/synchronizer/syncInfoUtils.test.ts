@@ -1,6 +1,8 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
+import Setting from '../../models/Setting';
+import Logger from '@joplin/utils/Logger';
 
 describe('syncInfoUtils', () => {
 
@@ -300,4 +302,28 @@ describe('syncInfoUtils', () => {
 		expect(succeeded).toBe(expected);
 	});
 
+	test('should not throw if the sync info being parsed is invalid', async () => {
+		Logger.globalLogger.enabled = false;
+
+		Setting.setValue('syncInfoCache', 'invalid-json');
+		expect(() => localSyncInfo()).not.toThrow();
+
+		Logger.globalLogger.enabled = true;
+	});
+
+	test('should use default value if the sync info being parsed is invalid', async () => {
+		Logger.globalLogger.enabled = false;
+
+		Setting.setValue('syncInfoCache', 'invalid-json');
+		const result = localSyncInfo();
+
+		expect(result.activeMasterKeyId).toEqual('');
+		expect(result.version).toEqual(0);
+		expect(result.ppk).toEqual(null);
+		expect(result.e2ee).toEqual(false);
+		expect(result.appMinVersion).toEqual('0.0.0');
+		expect(result.masterKeys).toEqual([]);
+
+		Logger.globalLogger.enabled = true;
+	});
 });

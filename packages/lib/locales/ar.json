@@ -338,6 +338,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -484,6 +487,12 @@
 	],
 	"Close Window": [
 		"إغلاق النافذة"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"رمز"
@@ -690,6 +699,12 @@
 	],
 	"Creating report...": [
 		"إنشاء تقرير ..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"النسخة الحالية محدَّثة."
@@ -1816,6 +1831,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"لا توجد ملاحظات هنا. أنشئ واحدةً بالضغط على \"ملاحظة جديدة\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"لا توجد موارد!"

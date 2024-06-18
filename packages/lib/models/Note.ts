@@ -624,7 +624,7 @@ export default class Note extends BaseItem {
 		});
 	}
 
-	public static async moveToFolder(noteId: string, folderId: string) {
+	public static async moveToFolder(noteId: string, folderId: string, saveOptions: SaveOptions|null = null) {
 		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not
@@ -643,7 +643,7 @@ export default class Note extends BaseItem {
 			updated_time: time.unixMs(),
 		};
 
-		return Note.save(modifiedNote, { autoTimestamp: false });
+		return Note.save(modifiedNote, { autoTimestamp: false, ...saveOptions });
 	}
 
 	public static changeNoteType(note: NoteEntity, type: string) {
@@ -841,6 +841,7 @@ export default class Note extends BaseItem {
 				provisional: isProvisional,
 				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
+				...options?.dispatchOptions,
 			});
 		}
 

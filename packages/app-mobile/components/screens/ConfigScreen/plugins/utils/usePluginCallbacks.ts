@@ -2,9 +2,9 @@ import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/sh
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import NavService from '@joplin/lib/services/NavService';
-import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
@@ -29,25 +29,32 @@ const usePluginCallbacks = (props: Props) => {
 
 	const updatePluginEnabled = useCallback((pluginId: string, enabled: boolean) => {
 		const newSettings = { ...props.pluginSettings };
-		newSettings[pluginId].enabled = enabled;
+		newSettings[pluginId] = {
+			...defaultPluginSetting(),
+			...newSettings[pluginId],
+			enabled,
+		};
 
 		props.updatePluginStates(newSettings);
 	}, [props.pluginSettings, props.updatePluginStates]);
 
 	const onToggle = useCallback((event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
-		const settings = props.pluginSettings[pluginId];
+		const settings = props.pluginSettings[pluginId] ?? defaultPluginSetting();
 		updatePluginEnabled(pluginId, !settings.enabled);
 	}, [props.pluginSettings, updatePluginEnabled]);
 
-	const onDelete = useOnDeleteHandler(props.pluginSettings, onPluginSettingsChange, true);
+	const pluginSettingsRef = useRef(props.pluginSettings);
+	pluginSettingsRef.current = props.pluginSettings;
+
+	const onDelete = useOnDeleteHandler(pluginSettingsRef, onPluginSettingsChange, true);
 
 	const [updatingPluginIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
-	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, props.pluginSettings, props.repoApi, onPluginSettingsChange, true);
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettingsRef, props.repoApi, onPluginSettingsChange, true);
 
 	const [installingPluginIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 	const onInstall = useOnInstallHandler(
-		setInstallingPluginIds, props.pluginSettings, props.repoApi, onPluginSettingsChange, false,
+		setInstallingPluginIds, pluginSettingsRef, props.repoApi, onPluginSettingsChange, false,
 	);
 
 	const onShowPluginLog = useCallback((event: ItemEvent) => {

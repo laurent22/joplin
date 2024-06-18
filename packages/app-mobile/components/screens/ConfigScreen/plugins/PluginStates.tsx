@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import { View, StyleSheet } from 'react-native';
-import { Banner, Text, Button, ProgressBar, List, Divider } from 'react-native-paper';
-import { _, _n } from '@joplin/lib/locale';
+import { Banner, Text, Button, ProgressBar, Divider } from 'react-native-paper';
+import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import InstalledPluginBox from './InstalledPluginBox';
 import SearchPlugins from './SearchPlugins';
@@ -12,6 +12,8 @@ import useRepoApi from './utils/useRepoApi';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import PluginInfoModal from './PluginInfoModal';
 import usePluginCallbacks from './utils/usePluginCallbacks';
+import BetaChip from '../../../BetaChip';
+import SectionLabel from './SectionLabel';
 
 interface Props {
 	themeId: number;
@@ -58,8 +60,8 @@ const useLoadedPluginIds = () => {
 
 const styles = StyleSheet.create({
 	installedPluginsContainer: {
-		marginLeft: 8,
-		marginRight: 8,
+		marginLeft: 12,
+		marginRight: 12,
 		marginBottom: 10,
 	},
 });
@@ -133,11 +135,16 @@ const PluginStates: React.FC<Props> = props => {
 	const installedPluginCards = [];
 	const pluginService = PluginService.instance();
 
+	const [searchQuery, setSearchQuery] = useState('');
+	const isPluginSearching = !!searchQuery;
+
 	const pluginIds = useLoadedPluginIds();
 	for (const pluginId of pluginIds) {
 		const plugin = pluginService.plugins[pluginId];
 
-		if (!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(plugin.manifest.name)) {
+		const matchesGlobalSearch = !props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(plugin.manifest.name);
+		const showCard = !isPluginSearching && matchesGlobalSearch;
+		if (showCard) {
 			installedPluginCards.push(
 				<InstalledPluginBox
 					key={`plugin-${pluginId}`}
@@ -158,54 +165,42 @@ const PluginStates: React.FC<Props> = props => {
 		!props.shouldShowBasedOnSearchQuery || props.shouldShowBasedOnSearchQuery(searchInputSearchText())
 	);
 
-	const [searchQuery, setSearchQuery] = useState('');
+	const searchSection = (
+		<SearchPlugins
+			pluginSettings={pluginSettings}
+			themeId={props.themeId}
+			onUpdatePluginStates={props.updatePluginStates}
+			installingPluginIds={installingPluginIds}
+			callbacks={pluginCallbacks}
+			repoApiInitialized={repoApiLoaded}
+			repoApi={repoApi}
+			updatingPluginIds={updatingPluginIds}
+			updatablePluginIds={updatablePluginIds}
+			onShowPluginInfo={onShowPluginInfo}
 
-	const searchAccordion = (
-		<List.Accordion
-			title={_('Install new plugins')}
-			description={_('Browse and install community plugins.')}
-			id='search'
-		>
-			<SearchPlugins
-				pluginSettings={pluginSettings}
-				themeId={props.themeId}
-				onUpdatePluginStates={props.updatePluginStates}
-				installingPluginIds={installingPluginIds}
-				callbacks={pluginCallbacks}
-				repoApiInitialized={repoApiLoaded}
-				repoApi={repoApi}
-				updatingPluginIds={updatingPluginIds}
-				updatablePluginIds={updatablePluginIds}
-				onShowPluginInfo={onShowPluginInfo}
-
-				searchQuery={searchQuery}
-				setSearchQuery={setSearchQuery}
-			/>
-		</List.Accordion>
+			searchQuery={searchQuery}
+			setSearchQuery={setSearchQuery}
+		/>
 	);
 
-	const isSearching = !!props.shouldShowBasedOnSearchQuery;
-	// Don't include the number of installed plugins when searching -- only a few of the total
-	// may be shown by the search.
-	const installedAccordionDescription = !isSearching ? _n('You currently have %d plugin installed.', 'You currently have %d plugins installed.', pluginIds.length, pluginIds.length) : null;
+	const isSearching = !!props.shouldShowBasedOnSearchQuery || isPluginSearching;
 
 	return (
 		<View>
 			{renderRepoApiStatus()}
-			<List.AccordionGroup>
-				<List.Accordion
-					title={_('Installed plugins')}
-					description={installedAccordionDescription}
-					id='installed'
-				>
-					<View style={styles.installedPluginsContainer}>
-						{installedPluginCards}
-					</View>
-				</List.Accordion>
-				<Divider/>
-				{showSearch ? searchAccordion : null}
-				<Divider/>
-			</List.AccordionGroup>
+			<Banner visible={true} elevation={0} icon={() => <BetaChip size={13}/>}>
+				<Text>Plugin support on mobile is still in beta. Plugins may cause performance issues. Some have only partial support for Joplin mobile.</Text>
+			</Banner>
+			<Divider/>
+
+			{showSearch ? searchSection : null}
+			<View style={styles.installedPluginsContainer}>
+				<SectionLabel visible={!isSearching}>
+					{pluginIds.length ? _('Installed (%d):', pluginIds.length) : _('No plugins are installed.')}
+				</SectionLabel>
+				{installedPluginCards}
+			</View>
+
 			<PluginInfoModal
 				themeId={props.themeId}
 				pluginSettings={pluginSettings}
@@ -217,6 +212,7 @@ const PluginStates: React.FC<Props> = props => {
 				onModalDismiss={onPluginDialogClosed}
 				pluginCallbacks={pluginCallbacks}
 			/>
+			<Divider/>
 		</View>
 	);
 };

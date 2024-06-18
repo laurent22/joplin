@@ -18,14 +18,9 @@ const expectSearchResultCountToBe = async (count: number) => {
 	});
 };
 
-const showSearchTab = async () => {
-	const searchAccordion = await screen.findByText('Install new plugins');
-	await userEvent.press(searchAccordion);
-};
-
 // The search box is initially read-only -- waits for it to be editable.
 const getEditableSearchBox = async () => {
-	const searchBox = await screen.findByPlaceholderText('Search plugins');
+	const searchBox = await screen.findByPlaceholderText('Search for plugins...');
 	expect(searchBox).toBeVisible();
 
 	await waitFor(() => {
@@ -53,7 +48,6 @@ describe('PluginStates.search', () => {
 		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const user = userEvent.setup();
-		await showSearchTab();
 		const searchBox = await getEditableSearchBox();
 		await user.type(searchBox, 'backlinks');
 
@@ -81,8 +75,6 @@ describe('PluginStates.search', () => {
 		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const user = userEvent.setup();
-		await showSearchTab();
-
 		const searchBox = await getEditableSearchBox();
 
 		await user.press(searchBox);
@@ -111,8 +103,6 @@ describe('PluginStates.search', () => {
 		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
 
 		const user = userEvent.setup();
-		await showSearchTab();
-
 		const searchBox = await getEditableSearchBox();
 		await user.press(searchBox);
 		await user.type(searchBox, 'abc');
