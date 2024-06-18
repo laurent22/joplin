@@ -424,6 +424,50 @@ export const extractHtmlBody = (html: string) => {
 	return bodyFound ? output.join('') : html;
 };
 
+export const removeWrappingParagraphAndEmptyElements = (html: string) => {
+	if (!html.startsWith('<p>')) return html;
+
+	const stack: string[] = [];
+	const output: string[] = [];
+	let isFirstParagraph = true;
+	let canSimplify = true;
+
+	const parser = new htmlparser2.Parser({
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			if (isFirstParagraph && stack.length > 0) {
+				output.push(makeHtmlTag(name, attrs));
+			} else if (!isFirstParagraph && attrs.style) {
+				canSimplify = false;
+			}
+
+			stack.push(name);
+		},
+		ontext: (encodedText: string) => {
+			if (encodedText.trim() && !isFirstParagraph) {
+				canSimplify = false;
+			} else {
+				output.push(encodedText);
+			}
+		},
+		onclosetag: (name: string) => {
+			stack.pop();
+			if (stack.length === 0 && name === 'p') {
+				isFirstParagraph = false;
+			} else if (isFirstParagraph) {
+				if (isSelfClosingTag(name)) return;
+				output.push(`</${name}>`);
+			} else if (!['div', 'style', 'span'].includes(name)) {
+				canSimplify = false;
+			}
+		},
+	});
+
+	parser.write(html);
+	parser.end();
+
+	return canSimplify ? output.join('') : html;
+};
+
 export const htmlDocIsImageOnly = (html: string) => {
 	let imageCount = 0;
 	let nonImageFound = false;
