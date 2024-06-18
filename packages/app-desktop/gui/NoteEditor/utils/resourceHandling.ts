@@ -220,6 +220,10 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	if (htmlToMd && mdToHtml) {
 		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
 		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
+
+		// When plugins that add to the end of rendered content are installed, bodyOnly can
+		// fail to remove the wrapping paragraph. This works around that issue by removing
+		// the wrapping paragraph in more cases. See issue #10061.
 		if (!md.trim().includes('\n')) {
 			html = removeWrappingParagraphAndTrailingEmptyElements(html);
 		}

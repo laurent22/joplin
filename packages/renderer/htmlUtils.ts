@@ -429,21 +429,21 @@ export const removeWrappingParagraphAndTrailingEmptyElements = (html: string) =>
 
 	const stack: string[] = [];
 	const output: string[] = [];
-	let isFirstParagraph = true;
+	let inFirstParagraph = true;
 	let canSimplify = true;
 
 	const parser = new htmlparser2.Parser({
 		onopentag: (name: string, attrs: Record<string, string>) => {
-			if (isFirstParagraph && stack.length > 0) {
+			if (inFirstParagraph && stack.length > 0) {
 				output.push(makeHtmlTag(name, attrs));
-			} else if (!isFirstParagraph && attrs.style) {
+			} else if (!inFirstParagraph && attrs.style) {
 				canSimplify = false;
 			}
 
 			stack.push(name);
 		},
 		ontext: (encodedText: string) => {
-			if (encodedText.trim() && !isFirstParagraph) {
+			if (encodedText.trim() && !inFirstParagraph) {
 				canSimplify = false;
 			} else {
 				output.push(encodedText);
@@ -452,10 +452,14 @@ export const removeWrappingParagraphAndTrailingEmptyElements = (html: string) =>
 		onclosetag: (name: string) => {
 			stack.pop();
 			if (stack.length === 0 && name === 'p') {
-				isFirstParagraph = false;
-			} else if (isFirstParagraph) {
+				inFirstParagraph = false;
+			} else if (inFirstParagraph) {
 				if (isSelfClosingTag(name)) return;
 				output.push(`</${name}>`);
+
+				// Many elements, even if empty, can still be visible.
+				// For example, an <hr/>. Don't simplify if these elements
+				// are present.
 			} else if (!['div', 'style', 'span'].includes(name)) {
 				canSimplify = false;
 			}
