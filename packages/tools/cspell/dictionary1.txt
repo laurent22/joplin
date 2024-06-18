@@ -330,6 +330,7 @@ folderkey
 foldertest
 foldl
 fontawesome
+Fonticons
 fontface
 foobar
 Foobar
