@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -14,7 +13,7 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-import PlatformImplementation from '../PlatformImplementation';
+import PlatformImplementation from '../../services/plugins/PlatformImplementation';
 
 const logger = Logger.create('PluginRunnerWebView');
 

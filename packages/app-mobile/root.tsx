@@ -121,12 +121,12 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
-import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
+import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
-import PlatformImplementation from './plugins/PlatformImplementation';
+import PlatformImplementation from './services/plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 
