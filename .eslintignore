@@ -611,7 +611,8 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/expo
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/makeImportExportCacheDirectory.js
 packages/app-mobile/components/screens/ConfigScreen/SectionDescription.js
 packages/app-mobile/components/screens/ConfigScreen/SectionHeader.js
-packages/app-mobile/components/screens/ConfigScreen/SectionSelector.js
+packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.js
+packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
 packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
