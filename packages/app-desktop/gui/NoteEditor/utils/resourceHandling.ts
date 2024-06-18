@@ -6,7 +6,7 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
+import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
 import { fileUriToPath } from '@joplin/utils/url';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -220,9 +220,6 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	if (htmlToMd && mdToHtml) {
 		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
 		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
-		if (!md.trim().includes('\n')) {
-			html = removeWrappingParagraphAndTrailingEmptyElements(html);
-		}
 	}
 
 	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(html, {
