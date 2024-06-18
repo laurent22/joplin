@@ -109,7 +109,7 @@ export default class RepositoryApi {
 
 	public async reinitialize() {
 		// Refresh at most once per minute
-		if (Date.now() - this.lastInitializedTime_ > 60000) {
+		if (Date.now() - this.lastInitializedTime_ > 5 * 60000) {
 			await this.initialize();
 		}
 	}
