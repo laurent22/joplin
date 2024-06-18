@@ -350,6 +350,9 @@
 	"Basic": [
 		"Basic"
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Deblocarea biometrică nu este configurată pe dispozitiv. Vă rugăm să îl configurați pentru a debloca Joplin. Dacă dispozitivul este blocat, luați în considerare oprirea și pornirea acestuia pentru a reseta scanarea biometrică."
 	],
@@ -496,6 +499,12 @@
 	],
 	"Close Window": [
 		"Închide fereastra"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Cod"
@@ -714,6 +723,12 @@
 	],
 	"Creating report...": [
 		"Se creează raport..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Versiunea curentă este actualizată."
@@ -1903,6 +1918,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Nu aveți niciun caiet de notițe creat. Creați unul făcând click pe “Notiță nouă”."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Fără resurse!"

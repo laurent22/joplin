@@ -61,6 +61,33 @@ describe('CodeMirrorControl', () => {
 		expect(command).toHaveBeenCalledTimes(1);
 	});
 
+	it.each([
+		{
+			before: 'Test',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'i', code: 'KeyI', ctrlKey: true },
+			expected: '*Test*',
+		},
+		{
+			before: 'Test',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'b', code: 'KeyB', ctrlKey: true },
+			expected: '**Test**',
+		},
+		{
+			before: 'Testing',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'b', code: 'KeyB', ctrlKey: true },
+			expected: '**Test**ing',
+		},
+	])('markdown keyboard shortcuts should work (case %#)', ({ before, selection, shortcut, expected }) => {
+		const control = createEditorControl(before);
+		control.select(selection.anchor, selection.head);
+
+		pressReleaseKey(control.editor, shortcut);
+		expect(control.getValue()).toBe(expected);
+	});
+
 	it('should support overriding default keybindings', () => {
 		const control = createEditorControl('test');
 		control.execCommand(EditorCommandType.SelectAll);

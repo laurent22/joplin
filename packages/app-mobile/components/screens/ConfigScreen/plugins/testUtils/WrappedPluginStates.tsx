@@ -8,6 +8,7 @@ import { PaperProvider } from 'react-native-paper';
 import PluginStates from '../PluginStates';
 import { AppState } from '../../../../../utils/types';
 import { useCallback, useState } from 'react';
+import { MenuProvider } from 'react-native-popup-menu';
 
 interface WrapperProps {
 	initialPluginSettings: PluginSettings;
@@ -29,15 +30,17 @@ const PluginStatesWrapper = (props: WrapperProps) => {
 
 	return (
 		<Provider store={props.store}>
-			<PaperProvider>
-				<PluginStates
-					styles={styles}
-					themeId={Setting.THEME_LIGHT}
-					updatePluginStates={updatePluginStates}
-					pluginSettings={pluginSettings}
-					shouldShowBasedOnSearchQuery={shouldShowBasedOnSettingSearchQuery}
-				/>
-			</PaperProvider>
+			<MenuProvider>
+				<PaperProvider>
+					<PluginStates
+						styles={styles}
+						themeId={Setting.THEME_LIGHT}
+						updatePluginStates={updatePluginStates}
+						pluginSettings={pluginSettings}
+						shouldShowBasedOnSearchQuery={shouldShowBasedOnSettingSearchQuery}
+					/>
+				</PaperProvider>
+			</MenuProvider>
 		</Provider>
 	);
 };

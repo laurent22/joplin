@@ -1,9 +1,11 @@
-const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./testing/test-utils.js');
-const reducer = require('./reducer').default;
-const { defaultState, MAX_HISTORY } = require('./reducer');
+import { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } from './testing/test-utils';
+import reducer, { defaultState, MAX_HISTORY, State } from './reducer';
+import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
+import Note from './models/Note';
+import BaseModel from './BaseModel';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
-function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
+function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
 	let state = defaultState;
 
 	if (selectedFolderIndex !== null) {
@@ -32,7 +34,7 @@ function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes,
 	return state;
 }
 
-function goToNote(notes, selectedNoteIndexes, state) {
+function goToNote(notes: NoteEntity[], selectedNoteIndexes: number[], state: State) {
 	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
@@ -43,7 +45,7 @@ function goToNote(notes, selectedNoteIndexes, state) {
 	return state;
 }
 
-function goBackWard(state) {
+function goBackWard(state: State) {
 	if (!state.backwardHistoryNotes.length)	return state;
 	state = reducer(state, {
 		type: 'HISTORY_BACKWARD',
@@ -51,7 +53,7 @@ function goBackWard(state) {
 	return state;
 }
 
-function goForward(state) {
+function goForward(state: State) {
 	if (!state.forwardHistoryNotes.length)	return state;
 	state = reducer(state, {
 		type: 'HISTORY_FORWARD',
@@ -59,8 +61,8 @@ function goForward(state) {
 	return state;
 }
 
-function createExpectedState(items, keepIndexes, selectedIndexes) {
-	const expected = { items: [], selectedIds: [] };
+function createExpectedState(items: BaseItemEntity[], keepIndexes: number[], selectedIndexes: number[]) {
+	const expected = { items: [] as BaseItemEntity[], selectedIds: [] as string[] };
 
 	for (let i = 0; i < selectedIndexes.length; i++) {
 		expected.selectedIds.push(items[selectedIndexes[i]].id);
@@ -71,7 +73,7 @@ function createExpectedState(items, keepIndexes, selectedIndexes) {
 	return expected;
 }
 
-function getIds(items, indexes = null) {
+function getIds(items: BaseItemEntity[], indexes: number[]|null = null) {
 	const ids = [];
 	for (let i = 0; i < items.length; i++) {
 		if (!indexes || i in indexes) {
@@ -86,7 +88,6 @@ describe('reducer', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-
 	});
 
 	// tests for NOTE_DELETE
@@ -301,7 +302,7 @@ describe('reducer', () => {
 	// tests for TAG_DELETE
 	it('should delete selected tag', (async () => {
 		const tags = await createNTestTags(5);
-		let state = initTestState(null, null, null, null, tags, [2]);
+		let state = initTestState(null, null, null, null, tags, 2);
 
 		// test action
 		state = reducer(state, { type: 'TAG_DELETE', id: tags[2].id });
@@ -314,7 +315,7 @@ describe('reducer', () => {
 
 	it('should delete tag when a tag above is selected', (async () => {
 		const tags = await createNTestTags(5);
-		let state = initTestState(null, null, null, null, tags, [2]);
+		let state = initTestState(null, null, null, null, tags, 2);
 
 		// test action
 		state = reducer(state, { type: 'TAG_DELETE', id: tags[4].id });
@@ -327,7 +328,7 @@ describe('reducer', () => {
 
 	it('should delete tag when a tag below is selected', (async () => {
 		const tags = await createNTestTags(5);
-		let state = initTestState(null, null, null, null, tags, [2]);
+		let state = initTestState(null, null, null, null, tags, 2);
 
 		// test action
 		state = reducer(state, { type: 'TAG_DELETE', id: tags[0].id });
@@ -616,7 +617,7 @@ describe('reducer', () => {
 		const oldTags = tags.slice(0, 5);
 		{
 			// Case 1. The input which is deep equal to the current state.tags doesn't change state.tags.
-			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const oldState = initTestState(null, null, null, null, oldTags, 2);
 			const newTags = oldTags.slice();
 			// test action
 			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
@@ -624,11 +625,47 @@ describe('reducer', () => {
 		}
 		{
 			// Case 2. A different input changes state.tags.
-			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const oldState = initTestState(null, null, null, null, oldTags, 2);
 			const newTags = oldTags.slice().splice(3, 1, tags[5]);
 			// test action
 			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
 			expect(newState.tags).not.toBe(oldState.tags);
 		}
+	});
+
+	// Regression test for #10589.
+	it.each([
+		true, false,
+	])('should preserve note selection if specified while moving a note (preserveSelection: %j)', async (preserveSelection) => {
+		const folders = await createNTestFolders(3);
+		const notes = await createNTestNotes(5, folders[0]);
+
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		expect(state.selectedNoteIds).toHaveLength(1);
+
+		BaseModel.dispatch = jest.fn((action: unknown) => {
+			state = reducer(state, action);
+		});
+
+		// Dispatching with preserveSelection should preserve the selected note (as is done on
+		// mobile).
+		await Note.moveToFolder(
+			state.selectedNoteIds[0],
+			folders[1].id,
+			preserveSelection ? { dispatchOptions: { preserveSelection: true } } : undefined,
+		);
+
+		expect(BaseModel.dispatch).toHaveBeenCalled();
+		if (preserveSelection) {
+			expect(state.selectedNoteIds).toMatchObject([notes[0].id]);
+		} else {
+			expect(state.selectedNoteIds).toMatchObject([notes[1].id]);
+		}
+		// Original note should no longer be present in the sidebar
+		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
+		expect(state.selectedFolderId).toBe(folders[0].id);
 	});
 });
