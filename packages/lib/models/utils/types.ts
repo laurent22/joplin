@@ -49,6 +49,7 @@ export interface SaveOptions {
 	provisional?: boolean;
 	ignoreProvisionalFlag?: boolean;
 	dispatchUpdateAction?: boolean;
+	dispatchOptions?: { preserveSelection: boolean };
 	changeSource?: number;
 	disableReadOnlyCheck?: boolean;
 }

@@ -6,7 +6,7 @@ import { createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
 const newRepoApi = async (installMode: InstallMode, appVersion = '3.0.0'): Promise<RepositoryApi> => {
 	const appInfo = { type: AppType.Mobile, version: appVersion };
 	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir(), appInfo, installMode);
-	await repo.initialize();
+	await repo.reinitialize();
 	return repo;
 };
 
