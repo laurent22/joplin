@@ -424,7 +424,7 @@ export const extractHtmlBody = (html: string) => {
 	return bodyFound ? output.join('') : html;
 };
 
-export const removeWrappingParagraphAndEmptyElements = (html: string) => {
+export const removeWrappingParagraphAndTrailingEmptyElements = (html: string) => {
 	if (!html.startsWith('<p>')) return html;
 
 	const stack: string[] = [];

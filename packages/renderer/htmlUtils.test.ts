@@ -1,4 +1,4 @@
-import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndEmptyElements } from './htmlUtils';
+import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
 describe('htmlUtils', () => {
 
@@ -94,6 +94,6 @@ describe('htmlUtils', () => {
 		['<p>Testing</p><style onload=""></style>', 'Testing'],
 		['<p>is</p>\n<style onload="console.log(\'test\')"></style>', 'is\n'],
 	])('should remove empty elements (case %#)', (before, expected) => {
-		expect(removeWrappingParagraphAndEmptyElements(before)).toBe(expected);
+		expect(removeWrappingParagraphAndTrailingEmptyElements(before)).toBe(expected);
 	});
 });
