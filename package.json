@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "workspaces": [
+    "packages/onenote-converter/pkg",
     "packages/*"
   ],
   "repository": {

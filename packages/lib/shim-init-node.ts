@@ -871,6 +871,12 @@ function shimInit(options: ShimInitOptions = null) {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
 	};
+
+	shim.getParentFolderName = (path: string) => {
+		return require('path').basename(
+			require('path').dirname(path),
+		);
+	};
 }
 
 module.exports = { shimInit, setupProxySettings };

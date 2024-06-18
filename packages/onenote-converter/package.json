@@ -1,0 +1,20 @@
+{
+  "name": "onenote-builder",
+  "collaborators": [
+    "Pedro Luiz <pedrlz.frn@gmail.com>"
+  ],
+  "description": "This package file only exists to build the @joplin/onenote-converter",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laurent22/joplin"
+  },
+  "scripts": {
+    "buildProduction": "wasm-pack build --release --target nodejs --scope joplin",
+    "buildDev": "wasm-pack build --dev --target nodejs --scope joplin"
+  },
+  "devDependencies": {
+    "wasm-pack": "0.12.1"
+  }
+}

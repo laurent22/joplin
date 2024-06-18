@@ -12,7 +12,7 @@ import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
-import { isDataUrl } from '@joplin/utils/url';
+import { isDataUrl, isMailTo, isFilenameTooLong } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
@@ -108,11 +108,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
-		const fileLinks = unique(markdownLinks.concat(htmlLinks));
+		const pdfLinks = htmlUtils.extractPdfUrls(md);
+		const fileLinks = unique(markdownLinks.concat(htmlLinks).concat(pdfLinks));
 		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 
-			if (isDataUrl(link)) {
+			if (isDataUrl(link) || isMailTo(link) || isFilenameTooLong(link)) {
 				// Just leave it as it is. We could potentially import
 				// it as a resource but for now that's good enough.
 			} else {

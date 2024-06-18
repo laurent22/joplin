@@ -1,0 +1,41 @@
+[package]
+name = "onenote-converter"
+version = "0.0.1"
+authors = ["Pedro Luiz <pedrlz.frn@gmail.com>"]
+edition = "2018"
+description = "Convert Microsoft OneNote® notebooks to HTML"
+license = "MIT"
+repository = "https://github.com/laurent22/joplin"
+keywords = ["onenote"]
+
+[dependencies]
+askama = "0.10"
+color-eyre = "0.5"
+log = "0.4.11"
+mime_guess = "2.0.3"
+once_cell = "1.4.1"
+palette = "0.5.0"
+percent-encoding = "2.1.0"
+regex = "1"
+sanitize-filename = "0.3.0"
+structopt = "0.3"
+console_error_panic_hook = "0.1.7"
+bytes = "1.2.0"
+encoding_rs = "0.8.31"
+enum-primitive-derive = "0.2.2"
+itertools = "0.10.3"
+num-traits = "0.2"
+paste = "1.0"
+thiserror = "1.0"
+uuid = "1.1.2"
+widestring = "1.0.2"
+wasm-bindgen = "0.2"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console"
+]
+
+[lib]
+crate-type = ["cdylib"]

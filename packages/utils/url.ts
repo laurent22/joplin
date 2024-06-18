@@ -101,6 +101,20 @@ export const isDataUrl = (path: string) => {
 	return path.startsWith('data:');
 };
 
+export const isMailTo = (path: string) => {
+	return path.startsWith('mailto:');
+};
+
+export const isFilenameTooLong = (filename: string) => {
+	return filename.length > 255;
+};
+
+export const isLink = (text: string) => {
+	if (!text) return false;
+	const linkRegex = /^(https?|file|joplin):\/\/[^)\s]+$/;
+	return !!text.match(linkRegex);
+};
+
 export const hasProtocol = (url: string, protocol: string | string[]) => {
 	if (!url) return false;
 
