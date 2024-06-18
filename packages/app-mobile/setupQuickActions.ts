@@ -2,20 +2,31 @@ import * as QuickActions from 'react-native-quick-actions';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('setupQuickActions');
 
 type TData = {
 	type: string;
 };
 
-export default () => {
+export default async (dispatch: Dispatch) => {
 	const userInfo = { url: '' };
 	QuickActions.setShortcutItems([
 		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },
 	]);
+
+	try {
+		const data = await QuickActions.popInitialAction();
+		const handler = quickActionHandler(dispatch);
+		await handler(data);
+	} catch (error) {
+		logger.error('Quick action command failed', error);
+	}
 };
 
-export const quickActionHandler = async (data: TData, dispatch: Dispatch) => {
+export const quickActionHandler = (dispatch: Dispatch) => async (data: TData) => {
 	if (!data) return;
 
 	// This dispatch is to momentarily go back to reset state, similar to what
@@ -32,6 +43,5 @@ export const quickActionHandler = async (data: TData, dispatch: Dispatch) => {
 	dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 	const isTodo = data.type === 'New to-do' ? 1 : 0;
-
 	await CommandService.instance().execute('newNote', '', isTodo);
 };

@@ -87,7 +87,6 @@ import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
-import * as QuickActions from 'react-native-quick-actions';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -983,9 +982,8 @@ class AppComponent extends React.Component {
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 
-		setupQuickActions();
-		this.deviceEventerEmitter_ = DeviceEventEmitter.addListener('quickActionShortcut', this.quickActionsShortcutHandler);
-		void this.quickActionsWrapper();
+		await setupQuickActions(this.props.dispatch);
+		this.deviceEventerEmitter_ = DeviceEventEmitter.addListener('quickActionShortcut', quickActionHandler(this.props.dispatch));
 
 		await setupNotifications(this.props.dispatch);
 
@@ -1156,20 +1154,6 @@ class AppComponent extends React.Component {
 		});
 
 		return sideMenuWidth;
-	};
-
-	private quickActionsWrapper = async () => {
-		try {
-			const data = await QuickActions.popInitialAction();
-			await this.quickActionsShortcutHandler(data);
-		} catch (error) {
-			logger.error('Quick action command failed', error);
-		}
-	};
-
-	private quickActionsShortcutHandler = async (data: { type: string }) => {
-		if (!data) return;
-		await quickActionHandler(data, this.props.dispatch);
 	};
 
 	public render() {
