@@ -102,6 +102,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 	const saveOptions = {
 		userSideValidation: true,
 		fields: BaseModel.diffObjectsFields(comp.state.lastSavedNote, note),
+		dispatchOptions: { preserveSelection: true },
 	};
 
 	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);

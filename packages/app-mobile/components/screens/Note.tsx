@@ -1399,15 +1399,18 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}, 50);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async folderPickerOptions_valueChanged(itemValue: any) {
+	private async folderPickerOptions_valueChanged(itemValue: string) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
 		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
-			await Note.moveToFolder(note.id, itemValue);
+			await Note.moveToFolder(
+				note.id,
+				itemValue,
+				{ dispatchOptions: { preserveSelection: true } },
+			);
 		}
 
 		note.parent_id = itemValue;
@@ -1428,7 +1431,13 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			onValueChange: this.folderPickerOptions_valueChanged,
 		};
 
-		if (this.folderPickerOptions_ && options.selectedFolderId === this.folderPickerOptions_.selectedFolderId) return this.folderPickerOptions_;
+		if (
+			this.folderPickerOptions_
+			&& options.selectedFolderId === this.folderPickerOptions_.selectedFolderId
+			&& options.enabled === this.folderPickerOptions_.enabled
+		) {
+			return this.folderPickerOptions_;
+		}
 
 		this.folderPickerOptions_ = options;
 		return this.folderPickerOptions_;
@@ -1683,7 +1692,6 @@ const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
-		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		searchQuery: state.searchQuery,
