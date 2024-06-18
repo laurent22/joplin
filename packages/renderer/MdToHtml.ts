@@ -7,7 +7,6 @@ import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
 import hljs from './highlight';
 import * as MarkdownIt from 'markdown-it';
-import { removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -421,6 +420,19 @@ export default class MdToHtml implements MarkupRenderer {
 		return output;
 	}
 
+	// The string we are looking for is: <p></p>\n
+	private removeMarkdownItWrappingParagraph_(html: string) {
+		if (html.length < 8) return html;
+
+		// If there are multiple <p> tags, we keep them because it's multiple lines
+		// and removing the first and last tag will result in invalid HTML.
+		if ((html.match(/<\/p>/g) || []).length > 1) return html;
+
+		if (html.substr(0, 3) !== '<p>') return html;
+		if (html.slice(-5) !== '</p>\n') return html;
+		return html.substring(3, html.length - 5);
+	}
+
 	public clearCache() {
 		this.cachedOutputs_ = {};
 	}
@@ -646,10 +658,7 @@ export default class MdToHtml implements MarkupRenderer {
 			// however when using it, it seems the loaded plugins are not used. In my tests, just changing
 			// render() to renderInline() means the checkboxes would not longer be rendered. So instead
 			// of using this function, we manually remove the <p></p> tags.
-			//
-			// Some plugins also add empty elements to the end of rendered content. To prevent issues like #10061,
-			// this content also needs to be removed.
-			output.html = removeWrappingParagraphAndTrailingEmptyElements(renderedBody);
+			output.html = this.removeMarkdownItWrappingParagraph_(renderedBody);
 			output.cssStrings = cssStrings;
 		} else {
 			const styleHtml = `<style>${cssStrings.join('\n')}</style>`;

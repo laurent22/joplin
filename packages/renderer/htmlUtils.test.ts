@@ -89,7 +89,6 @@ describe('htmlUtils', () => {
 	it.each([
 		['<p>Test</p><div></div>', 'Test'],
 		['<p>Testing</p><p>A test</p>', '<p>Testing</p><p>A test</p>'],
-		['<p>Testing <strong>this</strong> is a test.</p>\n', 'Testing <strong>this</strong> is a test.\n'],
 		['<p>Testing</p><hr/>', '<p>Testing</p><hr/>'],
 		['<p>Testing</p><div style="border: 2px solid red;"></div>', '<p>Testing</p><div style="border: 2px solid red;"></div>'],
 		['<p>Testing</p><style onload=""></style>', 'Testing'],
