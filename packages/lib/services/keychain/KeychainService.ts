@@ -80,6 +80,6 @@ export default class KeychainService extends BaseService {
 	public async runMigration(toDatabaseVersion: number) {
 		await this.detectIfKeychainSupported();
 		const keys = Setting.keys(false, null, { secureOnly: true });
-		await this.driver.upgradeStorageBackend(keys, toDatabaseVersion);
+		await this.driver.upgradeStorageBackend(keys.map(key => `setting.${key}`), toDatabaseVersion);
 	}
 }

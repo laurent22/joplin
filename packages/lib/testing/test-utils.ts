@@ -280,6 +280,7 @@ async function switchClient(id: number, options: any = null) {
 
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
+	KvStore.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];

@@ -86,15 +86,16 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		logger.info('Migrating keys to Electron safeStorage...');
 
 		const migratedKeys = [];
-
 		for (const key of secureKeys) {
 			const password = await this.password(key);
 
 			// Only delete the password from keytar **after** migrating it to safe storage
-			if (password !== null && await this.setPassword(key, password)) {
+			if ((password ?? null) !== null && await this.setPassword(key, password)) {
 				migratedKeys.push(key);
 			}
 		}
+
+		// TODO: Migration logic from the database to secure storage.
 
 		for (const key of migratedKeys) {
 			await shim.keytar().deletePassword(`${this.appId}.${key}`, `${this.clientId}@joplin`);
