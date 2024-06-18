@@ -107,9 +107,9 @@ const pluginAssets = function() {
 function renderFountainScript(markdownIt: any, content: string) {
 	const result = fountain.parse(content);
 
-	let optionalTitlePage = '';
+	let titlePageHtml = '';
 	if (result.html.title_page) {
-		optionalTitlePage = `
+		titlePageHtml = `
 			<div class="title-page">
 				${result.html.title_page}
 			</div>
@@ -119,7 +119,7 @@ function renderFountainScript(markdownIt: any, content: string) {
 	return `
 		<div class="fountain joplin-editable">
 			<pre class="joplin-source" data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
-			${optionalTitlePage}
+			${titlePageHtml} 
 			<div class="page">
 				${result.html.script}
 			</div>
