@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
 import Logger from '@joplin/utils/Logger';
+import { DeviceEventEmitter } from 'react-native';
 
 const logger = Logger.create('setupQuickActions');
 
@@ -24,9 +25,10 @@ export default async (dispatch: Dispatch) => {
 	} catch (error) {
 		logger.error('Quick action command failed', error);
 	}
+	return DeviceEventEmitter.addListener('quickActionShortcut', quickActionHandler(dispatch));
 };
 
-export const quickActionHandler = (dispatch: Dispatch) => async (data: TData) => {
+const quickActionHandler = (dispatch: Dispatch) => async (data: TData) => {
 	if (!data) return;
 
 	// This dispatch is to momentarily go back to reset state, similar to what

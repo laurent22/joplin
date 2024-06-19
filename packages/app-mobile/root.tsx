@@ -2,7 +2,7 @@ const React = require('react');
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
-import setupQuickActions, { quickActionHandler } from './setupQuickActions';
+import setupQuickActions from './setupQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, DeviceEventEmitter } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -982,8 +982,7 @@ class AppComponent extends React.Component {
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 
-		await setupQuickActions(this.props.dispatch);
-		this.deviceEventerEmitter_ = DeviceEventEmitter.addListener('quickActionShortcut', quickActionHandler(this.props.dispatch));
+		this.quickActionShortcutListener_ = await setupQuickActions(this.props.dispatch);
 
 		await setupNotifications(this.props.dispatch);
 
@@ -1019,9 +1018,9 @@ class AppComponent extends React.Component {
 			this.unsubscribeNewShareListener_ = undefined;
 		}
 
-		if (this.deviceEventerEmitter_) {
-			this.deviceEventerEmitter_.remove();
-			this.deviceEventerEmitter_ = undefined;
+		if (this.quickActionShortcutListener_) {
+			this.quickActionShortcutListener_.remove();
+			this.quickActionShortcutListener_ = undefined;
 		}
 	}
 
