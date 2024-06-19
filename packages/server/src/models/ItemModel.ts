@@ -102,7 +102,7 @@ export default class ItemModel extends BaseModel<Item> {
 		let driver = ItemModel.storageDrivers_.get(config);
 
 		if (!driver) {
-			driver = await loadStorageDriver(config, this.db, this.dbSlave());
+			driver = await loadStorageDriver(config, this.db, this.dbSlave);
 			ItemModel.storageDrivers_.set(config, driver);
 		}
 
@@ -331,7 +331,7 @@ export default class ItemModel extends BaseModel<Item> {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
 			if (!fromDriver) {
-				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbSlave());
+				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbSlave);
 				drivers[item.content_storage_id] = fromDriver;
 			}
 
