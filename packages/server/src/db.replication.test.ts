@@ -100,7 +100,6 @@ describe('db.replication', () => {
 
 		const { session, user } = await createUserAndSession(1, true);
 		const changeModel = models().change();
-		changeModel.usersWithReplication_ = [user.id];
 
 		const folder = {
 			id: '000000000000000000000000000000F1',

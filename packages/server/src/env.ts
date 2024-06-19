@@ -22,7 +22,6 @@ const defaultEnvValues: EnvVariables = {
 	ERROR_STACK_TRACES: false,
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
-	USERS_WITH_REPLICATION: '', // Temporary
 	HEARTBEAT_MESSAGE_SCHEDULE: '* * * * *',
 
 	// The admin panel is accessible only if this is an admin instance.
@@ -152,7 +151,6 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES: boolean;
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
-	USERS_WITH_REPLICATION: string;
 	HEARTBEAT_MESSAGE_SCHEDULE: string;
 
 	MAX_TIME_DRIFT: number;

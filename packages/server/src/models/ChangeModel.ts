@@ -199,8 +199,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		if (!doCountQuery) {
 			finalParams.push(limit);
 
-			if (isPostgres(this.dbSlave(userId))) {
-				query = this.dbSlave(userId).raw(`
+			if (isPostgres(this.dbSlave)) {
+				query = this.dbSlave.raw(`
 					WITH cte1 AS MATERIALIZED (
 						${subQuery1}
 					)
@@ -214,7 +214,7 @@ export default class ChangeModel extends BaseModel<Change> {
 					LIMIT ?
 				`, finalParams);
 			} else {
-				query = this.dbSlave(userId).raw(`
+				query = this.dbSlave.raw(`
 					SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
 					UNION ALL				
 					SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
@@ -223,7 +223,7 @@ export default class ChangeModel extends BaseModel<Change> {
 				`, finalParams);
 			}
 		} else {
-			query = this.dbSlave(userId).raw(`
+			query = this.dbSlave.raw(`
 				SELECT count(*) as total
 				FROM (
 					(${subQuery1})

@@ -336,7 +336,6 @@ async function main() {
 
 		if (slaveConnectionCheck) {
 			printConnectionCheckInfo(slaveConnectionCheck);
-			appLogger().info(`Users with replication: ${config().USERS_WITH_REPLICATION}`);
 		} else {
 			appLogger().info('Not using database replication...');
 		}
