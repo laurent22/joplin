@@ -348,7 +348,7 @@ msgstr "Aktiv"
 msgid "Actual Size"
 msgstr "Aktuelle Größe"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Text hinzufügen"
 
@@ -364,7 +364,7 @@ msgstr "Schlagwörter hinzufügen oder entfernen:"
 msgid "Add recipient:"
 msgstr "Füge Empfänger hinzu:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Titel hinzufügen"
 
@@ -1789,7 +1789,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -2340,11 +2340,6 @@ msgstr "Weiter"
 msgid "Found: %d."
 msgstr "Gefunden: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-#, fuzzy
-msgid "From a plugin"
-msgstr "Alle Erweiterungen durchsuchen"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS aktiviert: %d"
@@ -2661,7 +2656,7 @@ msgstr ""
 "\n"
 "Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 "Um zu synchronisieren, aktualisiere die Anwendung bitte auf Version %s+"
@@ -3763,7 +3758,7 @@ msgstr "Pro Nutzer. Minimum von %d Nutzern."
 msgid "Permanently delete note"
 msgstr "Ausgewählte Notizen löschen"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Notiz „%s“ löschen?"
@@ -3778,7 +3773,7 @@ msgstr ""
 "Notizbuch löschen? Alle Notizen und Unter-Notizbücher in diesem Notizbuch "
 "werden ebenfalls gelöscht."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "Sollen diese %d Notizen gelöscht werden?"
@@ -3922,6 +3917,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Erweiterungen"
@@ -6288,6 +6284,10 @@ msgstr "Hineinzoomen"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Herauszoomen"
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "Alle Erweiterungen durchsuchen"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

@@ -179,6 +179,9 @@
 	"Account": [
 		"Compte"
 	],
+	"Account information": [
+		"Information de compte"
+	],
 	"Account type": [
 		"Type de compte"
 	],
@@ -1388,9 +1391,6 @@
 	],
 	"Found: %d.": [
 		"Trouvés : %d."
-	],
-	"From a plugin": [
-		"Depuis un module"
 	],
 	"FTS enabled: %d": [
 		"FTS activé : %d"

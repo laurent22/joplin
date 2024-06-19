@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -344,7 +342,7 @@ msgstr "Aktiv"
 msgid "Actual Size"
 msgstr "Faktisk størrelse"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Tilføj brødtekst"
 
@@ -360,7 +358,7 @@ msgstr "Tilføj eller fjern etiketter:"
 msgid "Add recipient:"
 msgstr "Tilføj modtager:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Tilføj titel"
 
@@ -1748,7 +1746,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Redigér"
@@ -2291,10 +2289,6 @@ msgstr "Videresend"
 msgid "Found: %d."
 msgstr "Fundet: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr "Fra en udvidelse"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "Fuld-tekst søgning slået til: %d"
@@ -2608,7 +2602,7 @@ msgstr ""
 "\n"
 "Vigtigt: Du behøver kun at gøre dette EN gang på en enhed."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr "For at synkronisere skal du opgradere din applikation til version %s+"
 
@@ -3683,7 +3677,7 @@ msgstr "Pr. bruger. Minimum %d brugere."
 msgid "Permanently delete note"
 msgstr "Slet note permanent"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 msgid "Permanently delete note \"%s\"?"
 msgstr "Slet noten \"%s\" permanent?"
 
@@ -3697,7 +3691,7 @@ msgstr ""
 "\n"
 "Alle noter og undernotesbøger i denne notesbog vil blive slettet permanent."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 msgid "Permanently delete these %d notes?"
 msgstr "Slet disse %d noter permanent?"
 
@@ -3827,6 +3821,7 @@ msgstr "Plugin WebView-fejlfinding"
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Udvidelser"
@@ -6111,6 +6106,9 @@ msgstr "Zoom ind"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Zoom ud"
+
+#~ msgid "From a plugin"
+#~ msgstr "Fra en udvidelse"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

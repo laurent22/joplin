@@ -167,6 +167,9 @@
 	"Accept": [
 		"Acceptér"
 	],
+	"Accepted invitations": [
+		"Accepterede invitationer"
+	],
 	"Access denied: Please check your username and password": [
 		"Adgang nægtet: Tjek venligst dit brugernavn og din adgangskode"
 	],
@@ -175,6 +178,12 @@
 	],
 	"Account": [
 		"Konto"
+	],
+	"Account information": [
+		"Konto-information"
+	],
+	"Account type": [
+		"Kontotype"
 	],
 	"Action": [
 		"Handling"
@@ -213,6 +222,9 @@
 		"Kontrolpanel til administration"
 	],
 	"Advanced options": [
+		"Avancerede indstillinger"
+	],
+	"Advanced settings": [
 		"Avancerede indstillinger"
 	],
 	"Advanced tools": [
@@ -267,7 +279,7 @@
 		"Opdatering er tilgængelig, vil du hente den nu?"
 	],
 	"Android API level: %d": [
-		""
+		"Android API-niveau: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Enhver e-mail, der sendes til denne adresse, bliver konverteret til en note og føjet til din samling. Noten gemmes i indbakkens notesbog"
@@ -360,7 +372,7 @@
 		"Grundlæggende"
 	],
 	"Beta": [
-		""
+		"Beta"
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Biometrisk oplåsning er ikke konfigureret på enheden. Du skal sætte det op for at låse Joplin op. Hvis enheden er nedlåst, kan du overveje at slukke og tænde den for at nulstille biometrisk scanning."
@@ -491,6 +503,9 @@
 	"Clear alarm": [
 		"Nulstil alarm"
 	],
+	"Clear search": [
+		"Ryd søgning"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik på \"%s\" for at gendanne noten. Den vil blive kopieret til notesbogen \"%s\". Den nuværende version af noten vil ikke blive erstattet eller ændret."
 	],
@@ -513,10 +528,10 @@
 		"Luk vindue"
 	],
 	"Cmd-click to open": [
-		""
+		"Cmd-klik for at åbne"
 	],
 	"Cmd-click to open: %s": [
-		""
+		"Cmd-klik for at åbne: %s"
 	],
 	"Code": [
 		"Kode"
@@ -598,6 +613,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Konflikter (vedhæftninger)"
+	],
+	"Connect to Joplin Cloud": [
+		"Forbind til Joplin Cloud"
 	],
 	"Consolidated billing": [
 		"Konsolideret fakturering"
@@ -748,10 +766,10 @@
 		"Opretter rapport..."
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl-klik for at åbne"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl-klik for at åbne: %s"
 	],
 	"Current version is up-to-date.": [
 		"Aktuel version er den nyeste."
@@ -1374,9 +1392,6 @@
 	"Found: %d.": [
 		"Fundet: %d."
 	],
-	"From a plugin": [
-		"Fra en udvidelse"
-	],
 	"FTS enabled: %d": [
 		"Fuld-tekst søgning slået til: %d"
 	],
@@ -1407,6 +1422,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Henter eller tilføjer konfigurationsværdi. Hvis [value] er tilføjet, vises værdien af [name]. Hvis hverken [name] eller [value] er tilføjet, vises aktuel konfiguration."
+	],
+	"Go to Joplin Cloud profile": [
+		"Gå til Joplin Cloud-profil"
 	],
 	"Go to source URL": [
 		"Gå til kilde-URL"
@@ -1600,6 +1618,9 @@
 	"Installed": [
 		"Installeret"
 	],
+	"Installed (%d):": [
+		"Installeret (%d):"
+	],
 	"Installing...": [
 		"Installerer..."
 	],
@@ -1620,6 +1641,9 @@
 	],
 	"Invalid password": [
 		"Ugyldig adgangskode"
+	],
+	"iOS version: %s": [
+		"iOS-version: %s"
 	],
 	"Italic": [
 		"Kursiv"
@@ -1743,6 +1767,9 @@
 	],
 	"Leave it blank to download the language files from the default website": [
 		"Lad den være tom for at downloade sprogfilerne fra standardwebstedet"
+	],
+	"Leave notebook": [
+		"Forlad notesbog"
 	],
 	"Leave notebook...": [
 		"Forlad notesbog..."
@@ -1940,6 +1967,9 @@
 	"New": [
 		"Ny"
 	],
+	"New invitations": [
+		"Nye versioner"
+	],
 	"New note": [
 		"Ny note"
 	],
@@ -1992,7 +2022,7 @@
 		"Intet emne med ID'en %s"
 	],
 	"No new invitations": [
-		""
+		"Ingen nye invitationer"
 	],
 	"No notebook has been specified.": [
 		"Ingen notesbog er specificeret."
@@ -2004,7 +2034,7 @@
 		"Der er ingen noter her. Opret en ved at klikke på \"Ny note\"."
 	],
 	"No plugins are installed.": [
-		""
+		"Der er ikke installeret nogen plugins."
 	],
 	"No resources!": [
 		"Ingen ressourcer!"
@@ -2508,13 +2538,16 @@
 		"Rapportér et problem"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Rapporter eventuelle problemer vedrørende dette plugin."
 	],
 	"Report fraudulent plugin": [
 		"Rapporter bedragerisk plugin"
 	],
 	"Report system": [
 		"Rapporteringssystem"
+	],
+	"Reports": [
+		"Rapporter"
 	],
 	"Reset application layout": [
 		"Nulstil applikationslayout"
@@ -2556,7 +2589,7 @@
 		"Gendannede noter"
 	],
 	"Results (%d):": [
-		""
+		"Resultater (%d):"
 	],
 	"Retry": [
 		"Prøv igen"
@@ -3331,6 +3364,9 @@
 	"Toggle external editing": [
 		"Slå ekstern redigering til eller fra"
 	],
+	"Toggle menu bar": [
+		"Slå menubjælke til/fra"
+	],
 	"Toggle note history, keep notes for": [
 		"Skift notehistorik, gem noter til"
 	],
@@ -3432,6 +3468,9 @@
 	],
 	"Update": [
 		"Opdater"
+	],
+	"Update available": [
+		"Opdatering tilgængelig"
 	],
 	"Update profile": [
 		"Opdater profil"
@@ -3572,7 +3611,10 @@
 		"Hjemmeside og dokumentation"
 	],
 	"WebView package: %s": [
-		""
+		"WebView-pakke: %s"
+	],
+	"WebView version: %s": [
+		"WebView-version: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Velkommen til Joplin!\n\nTast `:help shortcuts` for listen over tastaturgenveje, eller bare `:help` for alm. hjælp.\n\nFor eksempel, for at oprette en notesbog; tryk `mb` eller tryk `mn` for at oprette en note."
