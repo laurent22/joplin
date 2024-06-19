@@ -957,7 +957,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.10.0):
     - React-Core
-  - react-native-image-picker (7.1.0):
+  - react-native-image-picker (7.1.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -980,7 +980,7 @@ PODS:
     - Yoga
   - react-native-image-resizer (3.0.9):
     - React-Core
-  - react-native-netinfo (11.2.1):
+  - react-native-netinfo (11.3.1):
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
@@ -1013,7 +1013,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.6.4):
+  - react-native-webview (13.8.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1628,16 +1628,16 @@ SPEC CHECKSUMS:
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
-  react-native-image-picker: f2b8c6c74ad4fc4d7ddb646391be7df47c63e46c
+  react-native-image-picker: d3a65af2538ac5407e5329e50f057fb2456f15f8
   react-native-image-resizer: 669454edae94399b11e49c840e4da14482302293
-  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
+  react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: 672d22e9912d34e6a2c0ebcf7da2af67b2c177dc
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-slider: 03f213d3ffbf919b16298c7896c1b60101d8e137
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 4995cb054dd9360ca4121cdf94f2ab01e644f49e
+  react-native-webview: 06f0b1eaa8f7d7984e46b657d646db5d1f00a5aa
   React-nativeconfig: b0073a590774e8b35192fead188a36d1dca23dec
   React-NativeModulesApple: df46ff3e3de5b842b30b4ca8a6caae6d7c8ab09f
   React-perflogger: 3d31e0d1e8ad891e43a09ac70b7b17a79773003a

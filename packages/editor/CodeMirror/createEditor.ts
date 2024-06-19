@@ -181,11 +181,47 @@ const createEditor = (
 	const historyCompartment = new Compartment();
 	const dynamicConfig = new Compartment();
 
+	// Give the default keymap low precedence so that it is overridden
+	// by extensions with default precedence.
+	const keymapConfig = Prec.low(keymap.of([
+		// Custom mod-f binding: Toggle the external dialog implementation
+		// (don't show/hide the Panel dialog).
+		keyCommand('Mod-f', (_: EditorView) => {
+			if (searchVisible) {
+				hideSearchDialog();
+			} else {
+				showSearchDialog();
+			}
+			return true;
+		}),
+		// Markdown formatting keyboard shortcuts
+		keyCommand('Mod-b', toggleBolded),
+		keyCommand('Mod-i', toggleItalicized),
+		keyCommand('Mod-$', toggleMath),
+		keyCommand('Mod-`', toggleCode),
+		keyCommand('Mod-[', decreaseIndent),
+		keyCommand('Mod-]', increaseIndent),
+		keyCommand('Mod-k', (_: EditorView) => {
+			notifyLinkEditRequest();
+			return true;
+		}),
+		keyCommand('Tab', insertOrIncreaseIndent, true),
+		keyCommand('Shift-Tab', decreaseIndent, true),
+		keyCommand('Mod-Enter', (_: EditorView) => {
+			insertLineAfter(_);
+			return true;
+		}, true),
+
+		...standardKeymap, ...historyKeymap, ...searchKeymap,
+	]));
+
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
+				keymapConfig,
+
 				dynamicConfig.of(configFromSettings(props.settings)),
 				historyCompartment.of(history()),
 
@@ -238,40 +274,6 @@ const createEditor = (
 					notifySelectionChange(viewUpdate);
 					notifySelectionFormattingChange(viewUpdate);
 				}),
-
-				// Give the default keymap low precedence so that it is overridden
-				// by extensions with default precedence.
-				Prec.low(keymap.of([
-					// Custom mod-f binding: Toggle the external dialog implementation
-					// (don't show/hide the Panel dialog).
-					keyCommand('Mod-f', (_: EditorView) => {
-						if (searchVisible) {
-							hideSearchDialog();
-						} else {
-							showSearchDialog();
-						}
-						return true;
-					}),
-					// Markdown formatting keyboard shortcuts
-					keyCommand('Mod-b', toggleBolded),
-					keyCommand('Mod-i', toggleItalicized),
-					keyCommand('Mod-$', toggleMath),
-					keyCommand('Mod-`', toggleCode),
-					keyCommand('Mod-[', decreaseIndent),
-					keyCommand('Mod-]', increaseIndent),
-					keyCommand('Mod-k', (_: EditorView) => {
-						notifyLinkEditRequest();
-						return true;
-					}),
-					keyCommand('Tab', insertOrIncreaseIndent, true),
-					keyCommand('Shift-Tab', decreaseIndent, true),
-					keyCommand('Mod-Enter', (_: EditorView) => {
-						insertLineAfter(_);
-						return true;
-					}, true),
-
-					...standardKeymap, ...historyKeymap, ...searchKeymap,
-				])),
 			],
 			doc: initialText,
 		}),

@@ -424,6 +424,54 @@ export const extractHtmlBody = (html: string) => {
 	return bodyFound ? output.join('') : html;
 };
 
+export const removeWrappingParagraphAndTrailingEmptyElements = (html: string) => {
+	if (!html.startsWith('<p>')) return html;
+
+	const stack: string[] = [];
+	const output: string[] = [];
+	let inFirstParagraph = true;
+	let canSimplify = true;
+
+	const parser = new htmlparser2.Parser({
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			if (inFirstParagraph && stack.length > 0) {
+				output.push(makeHtmlTag(name, attrs));
+			} else if (!inFirstParagraph && attrs.style) {
+				canSimplify = false;
+			}
+
+			stack.push(name);
+		},
+		ontext: (encodedText: string) => {
+			if (encodedText.trim() && !inFirstParagraph) {
+				canSimplify = false;
+			} else {
+				output.push(encodedText);
+			}
+		},
+		onclosetag: (name: string) => {
+			stack.pop();
+			if (stack.length === 0 && name === 'p') {
+				inFirstParagraph = false;
+			} else if (inFirstParagraph) {
+				if (isSelfClosingTag(name)) return;
+				output.push(`</${name}>`);
+
+				// Many elements, even if empty, can still be visible.
+				// For example, an <hr/>. Don't simplify if these elements
+				// are present.
+			} else if (!['div', 'style', 'span'].includes(name)) {
+				canSimplify = false;
+			}
+		},
+	});
+
+	parser.write(html);
+	parser.end();
+
+	return canSimplify ? output.join('') : html;
+};
+
 export const htmlDocIsImageOnly = (html: string) => {
 	let imageCount = 0;
 	let nonImageFound = false;

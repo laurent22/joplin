@@ -139,11 +139,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr ""
-"با این کار همه موارد موجود در سطل زباله برای همیشه حذف می شوند. آیا ادامه "
-"هید؟"
+msgstr "%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -202,7 +199,7 @@ msgstr ""
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "برگه %s باز شد"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -299,9 +296,8 @@ msgid "Accept"
 msgstr "قبول"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
-#, fuzzy
 msgid "Accepted invitations"
-msgstr "گیرنده دعوت را پذیرفته است"
+msgstr "دعوت نامه های پذیرفته شده"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
@@ -317,15 +313,13 @@ msgstr "حساب کاربری"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
-#, fuzzy
 msgid "Account information"
-msgstr "اطلاعات بیشتر"
+msgstr "اطلاعات حساب"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
-#, fuzzy
 msgid "Account type"
-msgstr "حساب کاربری"
+msgstr "نوع حساب"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:106
 msgid "Action"
@@ -346,7 +340,7 @@ msgstr "فعال"
 msgid "Actual Size"
 msgstr "اندازه واقعی"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "افزودن بدنه"
 
@@ -362,7 +356,7 @@ msgstr "افزودن  یا حذف برچسب‌ها:"
 msgid "Add recipient:"
 msgstr "افزودن دریافت کننده:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "افزودن عنوان"
 
@@ -384,9 +378,8 @@ msgid "Advanced options"
 msgstr "گزینه‌های پیشرفته"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:660
-#, fuzzy
 msgid "Advanced settings"
-msgstr "پنهان‌سازی تنظیمات پیشرفته"
+msgstr "تنظیمات پیشرفته"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
@@ -401,6 +394,7 @@ msgstr ""
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
+"همه خطاهای همگام سازی به عنوان \"نادیده گرفته شده\" علامت گذاری شده اند."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:184
@@ -416,6 +410,8 @@ msgstr ""
 #: packages/lib/models/Setting.ts:1230
 msgid "Allows debugging mobile plugins. See %s for details."
 msgstr ""
+"اجازه اشکال زدایی به افزونه های موبایل را می دهد. برای جزئیات بیشتر به %s "
+"مراجعه کنید."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -435,7 +431,7 @@ msgstr "همیشه سوال کن"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "همیشه فایل %s را بدون درخواست باز کنید."
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Always resize"
@@ -474,7 +470,7 @@ msgstr "یک بروزرسانی موجود است، آیا میخواهید ال
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:21
 msgid "Android API level: %d"
-msgstr ""
+msgstr "سطح api اندروید : %d"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -625,7 +621,7 @@ msgstr "پایه"
 
 #: packages/app-mobile/components/BetaChip.tsx:37
 msgid "Beta"
-msgstr ""
+msgstr "بتا"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -662,7 +658,7 @@ msgstr "لیست گلوله‌ای"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:129
 msgid "by %s"
-msgstr ""
+msgstr "توسط %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -882,9 +878,8 @@ msgid "Clear alarm"
 msgstr "پاکسازی هشدار"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
-#, fuzzy
 msgid "Clear search"
-msgstr "پاکسازی هشدار"
+msgstr "پاکسازی جستجو"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
@@ -938,11 +933,11 @@ msgstr "بستن صفحه"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
-msgstr ""
+msgstr "کلیک خط فرمان برای باز کردن"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:45
 msgid "Cmd-click to open: %s"
-msgstr ""
+msgstr "کلیک خط فرمان برای باز کردن: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:34
@@ -970,9 +965,8 @@ msgid "Collapse"
 msgstr "بستن"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "بستن"
+msgstr "کوچک کردن %s"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -1024,6 +1018,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"تکمیل شده با هشدارها:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -1031,7 +1027,7 @@ msgstr "کامل شد: %s (%s)"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "تاریخ تکمیل"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1071,9 +1067,8 @@ msgstr "تداخل (پیوست‌ها)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:256
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:470
-#, fuzzy
 msgid "Connect to Joplin Cloud"
-msgstr "سرویس ابری joplin"
+msgstr "اتصال به سرویس ابری joplin"
 
 #: packages/lib/utils/joplinCloud/index.ts:208
 msgid "Consolidated billing"
@@ -1159,9 +1154,8 @@ msgid "Copy token"
 msgstr "کپی کردن توکن"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
-#, fuzzy
 msgid "Copy version info"
-msgstr "اطلاعات نسخه را نمایش می‌دهد"
+msgstr "کپی اطلاعات نسخه"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1319,11 +1313,11 @@ msgstr "در حال ایجاد گزارش..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:41
 msgid "Ctrl-click to open"
-msgstr ""
+msgstr "کلیک کنترل برای باز کردن"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:47
 msgid "Ctrl-click to open: %s"
-msgstr ""
+msgstr "کلیک کنترل برای باز کردن: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
@@ -1498,6 +1492,7 @@ msgstr "موارد ریموت حذف شده: %d."
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
 msgstr ""
+"یادداشت ها را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1720,9 +1715,8 @@ msgid "Due"
 msgstr "به واسطه"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "تاریخ به‌روزرسانی"
+msgstr "سررسید"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:502
@@ -1751,7 +1745,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "ویرایش"
@@ -1945,9 +1939,8 @@ msgstr "فعال‌سازی نمایشگر PDF"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/Setting.ts:1241
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "فعال‌سازی پشتیبانی از تایپوگرافی"
+msgstr "پشتیبانی از افزونه را فعال کنید"
 
 #: packages/lib/models/Setting.ts:1263
 msgid "Enable soft breaks"
@@ -2106,9 +2099,8 @@ msgid "Expand"
 msgstr "منبسط"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "منبسط"
+msgstr "گسترش %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2298,10 +2290,6 @@ msgstr "رو به جلو"
 msgid "Found: %d."
 msgstr "پیدا شده: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr "از یک افزونه"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS فعال شده: %d"
@@ -2354,9 +2342,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
-#, fuzzy
 msgid "Go to Joplin Cloud profile"
-msgstr "ورود سرویس ابری joplin"
+msgstr "ورود به حساب سرویس ابری joplin"
 
 #: packages/app-mobile/components/screens/Note.tsx:1113
 msgid "Go to source URL"
@@ -2395,7 +2382,7 @@ msgstr "کمک"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:113
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "کاری که ما برای ایمن‌تر کردن افزونه‌ها انجام می‌دهیم در اینجا آمده است:"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:44
 msgid "Hermes enabled: %d"
@@ -2494,9 +2481,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "نادیده‌گرفتن خطاهای گواهی‌نامه TLS"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "مواردی که نمی‌توانند همگام‌سازی شوند"
+msgstr "موارد نادیده گرفته شده که نمی توانند همگام شوند"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2510,33 +2496,32 @@ msgid "Import"
 msgstr "وارد کردن"
 
 #: packages/lib/models/Setting.ts:2814
-#, fuzzy
 msgid "Import and Export"
-msgstr "صدور گزارش اشکال‌زدایی"
+msgstr "واردات و صادرات"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"واردات انجام نشد. مطمئن شوید که یک فایل JEX انتخاب شده است.\n"
+"جزئیات: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "واردات از JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "یادداشت ها را از یک فایل JEX (صادرات Joplin) وارد کنید."
 
 #: packages/lib/models/Setting.ts:2846
-#, fuzzy
 msgid "Import or export your data"
-msgstr "صدور داده‌های شما"
+msgstr "داده های خود را وارد یا صادر کنید"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "صدور با موفقیت انجام شد!"
+msgstr "با موفقیت وارد شد!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:311
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2547,9 +2532,8 @@ msgid "Importing notes..."
 msgstr "در حال وارد کردن یادداشت‌ها..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "در حال ضدور..."
+msgstr "در حال صدور..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2618,7 +2602,7 @@ msgstr ""
 "نکته‌ی مهم: شما فقط باید این عملیات را یک مرتبه و تنها روی یک دستگاه اجرا "
 "کنید."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr "برای همگام سازی، لطفاً برنامه خود را به نسخه %s+ ارتقا دهید"
 
@@ -2645,7 +2629,7 @@ msgstr "در: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
-msgstr ""
+msgstr "ناسازگار"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2699,9 +2683,8 @@ msgid "Installed"
 msgstr "نصب‌شده"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
-#, fuzzy
 msgid "Installed (%d):"
-msgstr "نصب‌شده"
+msgstr "نصب شده (%d):"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:17
@@ -2733,9 +2716,8 @@ msgid "Invalid password"
 msgstr "گذرواژه نامعتبر"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:23
-#, fuzzy
 msgid "iOS version: %s"
-msgstr "نسخه جدید: %s"
+msgstr "نسخه iOS: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:60
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:24
@@ -2781,15 +2763,16 @@ msgid "Joplin Cloud Login"
 msgstr "ورود سرویس ابری joplin"
 
 #: packages/lib/services/plugins/PluginService.ts:517
-#, fuzzy
 msgid "Joplin Desktop"
-msgstr "سایت joplin"
+msgstr "joplin نسخه دسکتاپ"
 
 #: packages/app-desktop/bridge.ts:419
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
 msgstr ""
+"joplin پسوند %s را نمی شناسد. باز کردن این فایل ممکن است خطرناک باشد. دوست "
+"دارید چه کار کنید؟"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2816,9 +2799,8 @@ msgid "Joplin Forum"
 msgstr "انجمن joplin"
 
 #: packages/lib/services/plugins/PluginService.ts:515
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "سایت joplin"
+msgstr "joplin نسخه موبایل"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2924,18 +2906,16 @@ msgstr "دنباله دکمه چیدمان"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:15
-#, fuzzy
 msgid "Learn more"
-msgstr "تورفتگی بیشتر"
+msgstr "بیشتر بدانید"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Leave it blank to download the language files from the default website"
 msgstr "برای دانلود فایل‌های زبان از سایت پیشفرض، آن را خالی بگذارید"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave notebook"
-msgstr "ترک دفترچه..."
+msgstr "ترک دفترچه"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2958,6 +2938,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"مانند هر نرم افزاری که نصب می کنید، افزونه ها به طور بالقوه می توانند باعث "
+"مشکلات امنیتی یا از دست دادن داده ها شوند."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -3066,9 +3048,8 @@ msgid "Manage profiles"
 msgstr "مدیریت حساب‌کاربری"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "مدیریت حساب‌کاربری"
+msgstr "مدیریت دفترچه‌های مشترک"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:336
 msgid "Manage your plugins"
@@ -3185,7 +3166,7 @@ msgstr "بیش از یک مورد مطابق «%s» وجود دارد. لطفا�
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid ""
 "Most plugins have source code available for review on the plugin website."
-msgstr ""
+msgstr "اکثر افزونه ها دارای کد منبع برای بررسی در وب سایت افزونه هستند."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:591
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3235,12 +3216,11 @@ msgstr "هرگز بدون تغییر اندازه"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "جدید"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "New invitations"
-msgstr "نسخه جدید: %s"
+msgstr "دعوت نامه های جدید"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3323,7 +3303,7 @@ msgstr "هیچ موردی با شناسه %s وجود ندارد"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No new invitations"
-msgstr ""
+msgstr "دعوتنامه جدیدی وجود ندارد"
 
 #: packages/app-cli/app/app.ts:104
 msgid "No notebook has been specified."
@@ -3339,7 +3319,7 @@ msgstr "یادداشتی وجود ندارد. با کلیک بر روی «یاد
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
 msgid "No plugins are installed."
-msgstr ""
+msgstr "هیچ افزونه‌ای نصب نشده است."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid "No resources!"
@@ -3358,9 +3338,8 @@ msgid "No suggestions"
 msgstr "هیچ پیشنهادی وجود ندارد"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "هیچ دفترچه‌ای انتخاب نشده است."
+msgstr "هیچ برگه ای انتخاب نشده است"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3487,9 +3466,8 @@ msgid "Notebook: %s"
 msgstr "دفترچه: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "دفترچه: %s"
+msgstr "دفترچه: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
 #: packages/app-mobile/components/side-menu-content.tsx:561
@@ -3589,9 +3567,8 @@ msgid "Open %s"
 msgstr "بازکردن %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
-msgstr "بازکردن"
+msgstr "باز کن"
 
 #: packages/app-desktop/gui/MainScreen/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -3602,9 +3579,8 @@ msgid "Open profile directory"
 msgstr "بازکردن مسیر حساب کاربری"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
-#, fuzzy
 msgid "Open Source"
-msgstr "منبع"
+msgstr "متن باز"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3697,28 +3673,28 @@ msgstr "به ازای هر کاربر. حداقل %d کاربر."
 msgid "Permanently delete note"
 msgstr "حذف دائمی یادداشت‌"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 msgid "Permanently delete note \"%s\"?"
 msgstr "آیا یادداشت «%s» به طور دائم حذف شود؟"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"دفترچه حذف شود؟ تمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند "
-"شد."
+"دفترچه \"%s\" برای همیشه حذف شود؟\n"
+"\n"
+"همه یادداشت‌ها و زیر دفترچه‌های این دفترچه برای همیشه حذف خواهند شد."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 msgid "Permanently delete these %d notes?"
 msgstr "آیا یادداشت‌های پوشه %d به طور دائم حذف شود؟"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "آیا یادداشت‌های پوشه %d به طور دائم حذف شود؟"
+msgstr ""
+"دفترچه را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
 
 #: packages/app-mobile/components/screens/Note.tsx:499
 msgid "Permission needed"
@@ -3797,9 +3773,9 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "لطفا دفترچه‌ای که یادداشت‌ها باید به آن وارد شوند را مشخص کنید."
 
 #: packages/lib/services/plugins/PluginService.ts:511
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "لطفاً برای استفاده از این افزونه، joplin را ارتقا دهید"
+msgstr ""
+"لطفاً برای استفاده از این افزونه، Joplin را به نسخه %s یا جدیدتر ارتقا دهید."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1378
 msgid ""
@@ -3819,9 +3795,8 @@ msgid "Plugin message"
 msgstr "پیغام افزونه"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:444
-#, fuzzy
 msgid "Plugin panels"
-msgstr "ابزارهای افزونه"
+msgstr "پنل افزونه"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:111
 msgid "Plugin repository failed to load"
@@ -3832,9 +3807,8 @@ msgid "Plugin search"
 msgstr "جستجوی پلاگین"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
-#, fuzzy
 msgid "Plugin security"
-msgstr "جستجوی پلاگین"
+msgstr "امنیت افزونه"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:334
 msgid "Plugin tools"
@@ -3842,11 +3816,12 @@ msgstr "ابزارهای افزونه"
 
 #: packages/lib/models/Setting.ts:1229
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "افزونه اشکال زدایی WebView"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "پلاگین‌ها"
@@ -3856,6 +3831,9 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"افزونه ها Joplin را با ویژگی هایی گسترش می دهند که به طور پیش فرض وجود "
+"ندارند. پلاگین ها می توانند ویرایشگر، بیننده و موارد دیگر Joplin را گسترش "
+"دهند."
 
 #: packages/lib/models/Setting.ts:1543
 msgid "Portrait"
@@ -3943,7 +3921,7 @@ msgstr "پردازش حذف کاربران"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "در حال پردازش"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4046,9 +4024,8 @@ msgid "Recommended"
 msgstr "پیشنهاد شده"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "پیشنهاد شده"
+msgstr "افزونه های پیشنهادی"
 
 #: packages/app-desktop/gui/MenuBar.tsx:742
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4124,25 +4101,23 @@ msgstr "جایگزین کردن: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
-msgstr ""
+msgstr "گزارش مشکل"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr ""
+msgstr "هر گونه مشکل در مورد افزونه را گزارش دهید."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "گزارش افزونه تقلبی"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
-#, fuzzy
 msgid "Report system"
-msgstr "فایل سیستم"
+msgstr "سیستم گزارش"
 
 #: packages/server/src/services/MustacheService.ts:137
-#, fuzzy
 msgid "Reports"
-msgstr "فایل سیستم"
+msgstr "گزارش ها"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4205,7 +4180,7 @@ msgstr "یادداشت های بازیابی شده"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:157
 msgid "Results (%d):"
-msgstr ""
+msgstr "نتایج (%d):"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
@@ -4458,9 +4433,8 @@ msgstr "یک دفترچه را با دیگران به اشتراک بگذاری�
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "اشتراک‌گذاری از %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
@@ -4475,9 +4449,8 @@ msgid "Share permissions"
 msgstr "مجوزهای اشتراک‌گذاری"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "اشتراک گذاری"
+msgstr "اشتراک‌ها"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:357
 msgid "Sharing notebook..."
@@ -4512,9 +4485,8 @@ msgid "Show disabled keys"
 msgstr "نمایش کلیدهای غیرفعال"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "خانواده فونت هم‌فضا ویرایشگر"
+msgstr "فقط فونت های monospace نمایش داده شود."
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4648,7 +4620,7 @@ msgstr "منبع "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:398
 msgid "Spacer"
-msgstr ""
+msgstr "فاصله‌ساز"
 
 #: packages/lib/models/Setting.ts:1720
 msgid ""
@@ -4924,7 +4896,7 @@ msgstr "عکس گرفتن"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "کار \"%s\" با خطا: %s ناموفق بود"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -5225,9 +5197,8 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "در حال حاضر یادداشتی وجود ندارد. با کلیک بر روی دکمه (+) یکی بسازید."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "یادداشت ها را در سطل زباله نگه دار برای"
+msgstr "هیچ یادداشتی در پوشه سطل زباله وجود ندارد."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:266
 msgid "There are unsaved changes."
@@ -5257,6 +5228,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"این موارد همگام‌سازی نشدند، اما به‌عنوان «نادیده‌گرفته» علامت‌گذاری شدند. آنها "
+"باعث نمی شوند که هشدار همگام سازی ظاهر شود، اما همچنان همگام سازی نمی شوند. "
+"برای لغو نادیده گرفتن، روی «تلاش مجدد» کلیک کنید."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5299,7 +5273,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "این پیوست داده OCR ندارد (وضعیت: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5373,7 +5347,7 @@ msgstr "این یادداشت هیچ تاریخچه ای ندارد"
 
 #: packages/lib/services/plugins/PluginService.ts:519
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "این افزونه %s را پشتیبانی نمی کند."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:455
 msgid ""
@@ -5395,7 +5369,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "این زیرپوشه سطل زباله هیچ یادداشتی ندارد."
 
 #: packages/lib/models/Setting.ts:1297
 msgid ""
@@ -5419,11 +5393,8 @@ msgstr ""
 "هید؟"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr ""
-"با این کار همه موارد موجود در سطل زباله برای همیشه حذف می شوند. آیا ادامه "
-"هید؟"
+msgstr "با این کار یادداشت \"%s\" برای همیشه حذف می شود. ادامه می‌دهید؟"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5560,9 +5531,8 @@ msgid "Toggle external editing"
 msgstr "تغییر وضعیت ویرایش خارجی"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "تغییر وضعیت نوار کناری"
+msgstr "تغییر وضعیت نوار منو"
 
 #: packages/lib/models/Setting.ts:2844
 msgid "Toggle note history, keep notes for"
@@ -5678,9 +5648,8 @@ msgstr ""
 "کرده اید."
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "پرچم ناشناخته: %s"
+msgstr "نوع فایل نامشخص"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5733,9 +5702,8 @@ msgid "Update"
 msgstr "بروزرسانی"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:77
-#, fuzzy
 msgid "Update available"
-msgstr "بروز رسانی حساب‌ کاربری"
+msgstr "به روز رسانی موجود است"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -5893,7 +5861,7 @@ msgstr "نما"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "مشاهده متن OCR"
 
 #: packages/app-mobile/components/screens/Note.tsx:1106
 msgid "View on map"
@@ -5939,13 +5907,15 @@ msgstr "هشدار: همه منابع به دلایل عملکرد نشان دا
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
-msgstr ""
+msgstr "ما سیستمی برای گزارش دهی و حذف افزونه های مشکل دار داریم."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"ما افزونه‌های توسعه‌یافته توسط اعضای مورد اعتماد جامعه Joplin را به‌عنوان "
+"«توصیه‌شده» علامت‌گذاری می‌کنیم."
 
 #: packages/lib/models/Setting.ts:2810
 #: packages/lib/utils/joplinCloud/index.ts:166
@@ -5975,12 +5945,11 @@ msgstr "وب‌سایت و مستندات"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 msgid "WebView package: %s"
-msgstr ""
+msgstr "بسته WebView: %s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:12
-#, fuzzy
 msgid "WebView version: %s"
-msgstr "نسخه جدید: %s"
+msgstr "نسخه WebView: %s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
@@ -6004,9 +5973,8 @@ msgid "Welcome!"
 msgstr "خوش آمدید!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
-#, fuzzy
 msgid "What are plugins?"
-msgstr "افزونه «%s» حذف شود؟"
+msgstr "افزونه‌ها چه کار می‌کنند؟"
 
 #: packages/lib/models/Setting.ts:1166
 msgid "When creating a new note:"
@@ -6096,7 +6064,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:55
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:70
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "حساب شما به این ویژگی دسترسی ندارد"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -6134,6 +6102,9 @@ msgstr "بزرگنمایی"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "کوچک نمایی"
+
+#~ msgid "From a plugin"
+#~ msgstr "از یک افزونه"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."
