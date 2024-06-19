@@ -4,7 +4,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
 import { INotyfIcon, NotyfNotification } from 'notyf';
 import TaskProgressUIService from '@joplin/lib/TaskProgressUIService';
-// import { waitForElement } from '@joplin/lib/dom';
+import { waitForElement } from '@joplin/lib/dom';
 
 interface Props {
 	themeId: number;
@@ -41,7 +41,7 @@ export default (props: Props) => {
 	}, [notyfContext, theme]);
 
 	useEffect(() => {
-		TaskProgressUIService.setListener(task => {
+		TaskProgressUIService.setListener(async task => {
 			if (task.progress === 100) {
 				if (task.data) {
 					notyf.dismiss(task.data as NotyfNotification);
@@ -51,21 +51,29 @@ export default (props: Props) => {
 					message: task.message,
 					dismissible: true,
 				});
-			} else if (task.data) {
-				// TODO: Edit previous notification (if not undefined).
+			} else if (task.data && !task.started) {
+				const spinner: HTMLElement = await waitForElement(document, task.id);
+				if (spinner) {
+					spinner.classList.remove('-indeterminate');
+					spinner.classList.add('-progress');
+					task.started = true;
+				}
 
-				// const element: HTMLElement = await waitForElement(document, task.id);
+			} else if (task.data && task.started) {
+				const spinner: HTMLElement = await waitForElement(document, task.id);
+				spinner.style.background = `conic-gradient(var(--joplin-background-color, white) ${task.progress * 3.6}deg, var(--joplin-color, black) 0deg)`;
+
 			} else {
-				// We need to store so that we can edit/dismiss it later.
 				task.data = notyf.open({
 					type: 'loading',
 					message: task.message,
 					duration: 0,
 					dismissible: true,
-					icon: `<i class="loading" id="${task.id}">⌛</i>`,
+					icon: `<i class='loading-spinner -indeterminate' id="${task.id}"></i>`,
 				});
 			}
 		});
+
 
 		return () => TaskProgressUIService.setListener(undefined);
 	}, [notyf]);

@@ -331,8 +331,11 @@ function useMenu(props: Props) {
 
 		TaskProgressUIService.onTaskStarted(taskId, _('Importing from "%s" as "%s" format. Please wait...', path, module.outputFormat));
 
+		setTimeout(() => TaskProgressUIService.onTaskProgress(taskId, 15), 2000);
+
 		const service = InteropService.instance();
 		try {
+
 			const result = await service.import(importOptions);
 			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);

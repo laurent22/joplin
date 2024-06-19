@@ -5,6 +5,7 @@ interface Task {
 	message: string;
 	progress: number;
 	data: object;
+	started: boolean;
 }
 
 class TaskProgressUIService {
@@ -45,6 +46,7 @@ class TaskProgressUIService {
 			message,
 			progress: 0,
 			data: undefined,
+			started: false,
 		};
 
 		if (this.listener) {

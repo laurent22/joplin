@@ -141,6 +141,46 @@ a {
 	to {transform: rotate(360deg);}
 }
 
+.loading-spinner {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+	position: relative;
+	
+    border: 3px solid var(--joplin-background-color, white);
+    border-top-color: var(--joplin-color, black);
+    border-radius: 10px;
+}
+
+.loading-spinner.-progress {
+	width: 20px;
+    height: 20px;
+
+	border: none;
+	background: conic-gradient(var(--joplin-background-color, white) 3.6deg, var(--joplin-color, black) 0deg);
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading-spinner.-progress::before {
+	content: "";
+	position: absolute;
+	width: 13px;
+	height: 13px;
+	border-radius: 10px;
+	background-color: var(--joplin-color4, #2D6BDC);
+	
+}
+
+.loading-spinner.-indeterminate {
+    animation: 4s linear infinite rotate;
+}
+
+@media (prefers-reduced-motion) {
+    .loading-spinner.-indeterminate { animation: none; }
+}
 
 *:focus-visible {
 	outline: 1px solid var(--joplin-color-warn);
