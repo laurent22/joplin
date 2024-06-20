@@ -91,7 +91,14 @@ export function timerPop() {
 
 export const formatMsToRelative = (ms: number) => {
 	if (Date.now() - ms > 2 * Day) return formatMsToLocal(ms);
-	return dayjs(ms).fromNow(false);
+	const d = dayjs(ms);
+
+	// The expected pattern for invalid date formatting in JS is to return the string "Invalid
+	// Date", so we do that here. If we don't, dayjs will process the invalid date and return "a
+	// month ago", somehow...
+	if (!d.isValid()) return 'Invalid Date';
+
+	return d.fromNow(false);
 };
 
 const joplinLocaleToDayJsLocale = (locale: string) => {
