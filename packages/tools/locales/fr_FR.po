@@ -314,9 +314,8 @@ msgstr "Compte"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
-#, fuzzy
 msgid "Account information"
-msgstr "Plus d'information"
+msgstr "Information de compte"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
@@ -342,7 +341,7 @@ msgstr "Actif"
 msgid "Actual Size"
 msgstr "Taille actuelle"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Ajoutez le contenu"
 
@@ -358,7 +357,7 @@ msgstr "Modifier les étiquettes :"
 msgid "Add recipient:"
 msgstr "Ajouter destinataire :"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Ajoutez le titre"
 
@@ -443,17 +442,17 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez "
-"\"ti\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
+"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
+"\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:30
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
+"\" to see the short notebook id"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez "
-"\"ti\" pour afficher les identifiants"
+"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
+"\" pour afficher les identifiants"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -1758,7 +1757,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Édition"
@@ -2302,10 +2301,6 @@ msgstr "Vers l'avant"
 msgid "Found: %d."
 msgstr "Trouvés : %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr "Depuis un module"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS activé : %d"
@@ -2623,7 +2618,7 @@ msgstr ""
 "Important : vous n'avez besoin de cliquer sur le bouton que sur un seul "
 "appareil."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 "Afin de synchroniser, veuillez mettre à niveau votre application vers la "
@@ -3706,7 +3701,7 @@ msgstr "Par utilisateur. Minimum %d utilisateurs."
 msgid "Permanently delete note"
 msgstr "Supprimer définitivement la note"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 msgid "Permanently delete note \"%s\"?"
 msgstr "Supprimer définitivement la note \"%s\" ?"
 
@@ -3721,7 +3716,7 @@ msgstr ""
 "Toutes les notes et sous-carnets de ce carnet seront définitivement "
 "supprimés."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 msgid "Permanently delete these %d notes?"
 msgstr "Supprimer définitivement ces %d notes ?"
 
@@ -3859,6 +3854,7 @@ msgstr "Débogage de la WebView des plugins"
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Modules"
@@ -5523,8 +5519,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Pour trier les notes manuellement, l'ordre des notes doit être changé en "
-"\"%s\" dans le menu \"%s\" > \"%s\""
+"Pour trier les notes manuellement, l'ordre des notes doit être changé en \"%s"
+"\" dans le menu \"%s\" > \"%s\""
 
 #: packages/app-cli/app/command-help.ts:82
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -6168,6 +6164,9 @@ msgstr "Zoom avant"
 msgid "Zoom Out"
 msgstr "Zoom arrière"
 
+#~ msgid "From a plugin"
+#~ msgstr "Depuis un module"
+
 #, fuzzy
 #~ msgid "Browse and install community plugins."
 #~ msgstr "Parcourir les plugins"
@@ -6223,8 +6222,8 @@ msgstr "Zoom arrière"
 #~ msgstr "Base de données v%s"
 
 #~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New "
-#~ "notebook\"."
+#~ "There is currently no notebook. Create one by clicking on \"New notebook"
+#~ "\"."
 #~ msgstr ""
 #~ "Il n'y a pour l'instant aucun carnet. Créez‑en un en cliquant sur "
 #~ "\"Nouveau carnet\"."
@@ -6772,8 +6771,8 @@ msgstr "Zoom arrière"
 #~ "Please set the \"sync.2.path\" config value to the desired "
 #~ "synchronisation destination."
 #~ msgstr ""
-#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2."
-#~ "path\" pour indiquer le dossier où devra se faire la synchronisation."
+#~ "Veuillez attribuer une valeur au paramètre de configuration \"sync.2.path"
+#~ "\" pour indiquer le dossier où devra se faire la synchronisation."
 
 #~ msgid "Seach:"
 #~ msgstr "Chercher :"

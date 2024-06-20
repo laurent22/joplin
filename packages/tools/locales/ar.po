@@ -344,7 +344,7 @@ msgstr "نشط"
 msgid "Actual Size"
 msgstr "الحجم الفعلي"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "أضف الجسم"
 
@@ -360,7 +360,7 @@ msgstr "إضافة أو حذف وسوم:"
 msgid "Add recipient:"
 msgstr "أضِف المستلم:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "أضف العنوان"
 
@@ -1738,7 +1738,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "تحرير"
@@ -2293,11 +2293,6 @@ msgstr "إلى الأمام"
 msgid "Found: %d."
 msgstr "تم العثور عليها: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-#, fuzzy
-msgid "From a plugin"
-msgstr "تصفح جميع المكونات الإضافية"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS مفعَّلة: %d"
@@ -2620,7 +2615,7 @@ msgstr ""
 "\n"
 "هام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
@@ -3713,7 +3708,7 @@ msgstr ""
 msgid "Permanently delete note"
 msgstr "حدف الملاحظات المحددة"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "حذف الملاحظة \"%s\" ؟"
@@ -3728,7 +3723,7 @@ msgstr ""
 "حذف دفتر الملاحظات؟ سيتم حذف كل الملاحظات و دفاتر الملاحظات الفرعية ضمن هذا "
 "الدفتر أيضاً."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "حذف ملاحظات %d هذه ؟"
@@ -3861,6 +3856,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "المكونات الإضافية"
@@ -6171,6 +6167,10 @@ msgstr "تكبير"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "تصغير"
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "تصفح جميع المكونات الإضافية"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

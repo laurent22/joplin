@@ -349,7 +349,7 @@ msgstr "Активен"
 msgid "Actual Size"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr ""
 
@@ -366,7 +366,7 @@ msgstr "Добавяне и махане на тагове:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 #, fuzzy
 msgid "Add title"
 msgstr "заглавие"
@@ -1799,7 +1799,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Редактиране"
@@ -2380,10 +2380,6 @@ msgstr ""
 msgid "Found: %d."
 msgstr "Намерени: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr ""
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS пуснат: %d"
@@ -2691,7 +2687,7 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
@@ -3827,7 +3823,7 @@ msgstr ""
 msgid "Permanently delete note"
 msgstr "Да изтрия ли тези бележки?"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Да изтрия ли бележка \"%s\"?"
@@ -3842,7 +3838,7 @@ msgstr ""
 "Да изтрия ли тетрадката? Всички бележки и под-тетрадки в нея също ще бъдат "
 "изтрити."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "Да изтрия ли тези %d бележки?"
@@ -3975,6 +3971,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Разширения"

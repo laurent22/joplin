@@ -345,7 +345,7 @@ msgstr "Aktif"
 msgid "Actual Size"
 msgstr "Ukuran sebenarnya"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Tambahkan isi"
 
@@ -361,7 +361,7 @@ msgstr "Tambah atau hapus label:"
 msgid "Add recipient:"
 msgstr "Tambah penerima:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Tambahkan judul"
 
@@ -1761,7 +1761,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Sunting"
@@ -2308,10 +2308,6 @@ msgstr "Teruskan"
 msgid "Found: %d."
 msgstr "Ditemukan: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr "Dari sebuah plugin"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS dinyalakan: %d"
@@ -2626,7 +2622,7 @@ msgstr ""
 "\n"
 "Penting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr "Untuk dapat menyelaraskan, tingkatkan aplikasi ke versi %s+"
 
@@ -3713,7 +3709,7 @@ msgstr "Tiap pengguna. Minimal %d pengguna."
 msgid "Permanently delete note"
 msgstr "Hapus catatan selamanya"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 msgid "Permanently delete note \"%s\"?"
 msgstr "Hapus catatan \"%s\" selamanya?"
 
@@ -3728,7 +3724,7 @@ msgstr ""
 "Semua catatan dan sub-buku catatan dalam buku catatan ini akan dihapus "
 "selamanya."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 msgid "Permanently delete these %d notes?"
 msgstr "Hapus %d catatan tersebut selamanya?"
 
@@ -3863,6 +3859,7 @@ msgstr "Plugin WebView untuk debug"
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Plugin"
@@ -6164,6 +6161,9 @@ msgstr "Perbesar"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Perkecil"
+
+#~ msgid "From a plugin"
+#~ msgstr "Dari sebuah plugin"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

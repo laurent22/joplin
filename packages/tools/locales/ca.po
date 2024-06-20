@@ -350,7 +350,7 @@ msgstr "Activa"
 msgid "Actual Size"
 msgstr "Mida real"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Afegeix contingut"
 
@@ -366,7 +366,7 @@ msgstr "Afegeix o suprimeix etiquetes:"
 msgid "Add recipient:"
 msgstr "Afegeix un destinatari:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Afegeix títol"
 
@@ -1751,7 +1751,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Edita"
@@ -2306,11 +2306,6 @@ msgstr "Endavant"
 msgid "Found: %d."
 msgstr "Trobades: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-#, fuzzy
-msgid "From a plugin"
-msgstr "Navega per totes les extensions"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS activat: %d"
@@ -2624,7 +2619,7 @@ msgstr ""
 "\n"
 "Important: només cal executar això UNA SOLA VEGADA en un dispositiu."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
@@ -3710,7 +3705,7 @@ msgstr ""
 msgid "Permanently delete note"
 msgstr "Suprimeix les notes seleccionades"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Voleu suprimir la nota \"%s\"?"
@@ -3725,7 +3720,7 @@ msgstr ""
 "Voleu suprimir el bloc de notes? També se suprimiran totes les notes i els "
 "subblocs d'aquest bloc de notes."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "Voleu suprimir aquestes %d notes?"
@@ -3863,6 +3858,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Extensions"
@@ -6165,6 +6161,10 @@ msgstr "Ampliar"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Allunyar"
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "Navega per totes les extensions"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

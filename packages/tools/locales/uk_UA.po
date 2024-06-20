@@ -348,7 +348,7 @@ msgstr "Активний"
 msgid "Actual Size"
 msgstr "Фактичний розмір"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Додати тіло"
 
@@ -364,7 +364,7 @@ msgstr "Додати або видалити теги:"
 msgid "Add recipient:"
 msgstr "Додати одержувача:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Додати заголовок"
 
@@ -1762,7 +1762,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Редагувати"
@@ -2319,11 +2319,6 @@ msgstr "Вперед"
 msgid "Found: %d."
 msgstr "Знайдено: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-#, fuzzy
-msgid "From a plugin"
-msgstr "Переглянути всі розширення"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS увімкнено: %d"
@@ -2638,7 +2633,7 @@ msgstr ""
 "\n"
 "Важливо: вам потрібно запустити ЦЕ ОДНАЗ на одному пристрої."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
@@ -3729,7 +3724,7 @@ msgstr "На користувача. Мінімум %d користувачів.
 msgid "Permanently delete note"
 msgstr "Видалити вибрані нотатки"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Видалити нотатку “%s”?"
@@ -3744,7 +3739,7 @@ msgstr ""
 "Видалити блокнот? Усі нотатки та блокноти в цьому блокноті також будуть "
 "видалені."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "Видалити ці %d нотаток?"
@@ -3883,6 +3878,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Розширення"
@@ -6199,6 +6195,10 @@ msgstr "Збільшити"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Зменшити"
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "Переглянути всі розширення"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

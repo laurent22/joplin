@@ -1,5 +1,24 @@
 # Joplin Android Changelog
 
+## [android-v3.0.5](https://github.com/laurent22/joplin/releases/tag/android-v3.0.5) (Pre-release) - 2024-06-19T12:02:12Z
+
+- Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))
+- Improved: Don't show an "expand" arrow by "Installed plugins" when no plugins are installed (#10583 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement callback url (#9803) (#8639 by [@tiberiusteng](https://github.com/tiberiusteng))
+- Improved: Make mobile plugin settings screen UI closer to desktop (#10598) (#10592 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Mark plugin support as in beta (#10585 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move mobile plugin setting tabs under a separate section (#10600) (#10594 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Start synchronisation just after login is complete (#10574 by [@pedr](https://github.com/pedr))
+- Improved: Update farsi/persian translation fa.po (#10634 by [@mimeyn](https://github.com/mimeyn))
+- Improved: Updated packages @react-native-community/netinfo (v11.3.1), chokidar (v3.6.0), follow-redirects (v1.15.6), jsdom (v23), react-native-image-picker (v7.1.1), react-native-webview (v13.8.1), sass (v1.71.0), style-to-js (v1.1.11), turndown (v7.1.3)
+- Fixed: English: Use the plural form of a localization for negative and zero items (#10582) (#10581 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix cmd-i no longer italicizes text (#10604 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix plugin list not cached in config screen (#10599) (#10593 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix selected note changes on moving to a different folder (#10630) (#10589 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Not able to change notebook when using 'New Note' quick action (#10252) (#10588 by [@pedr](https://github.com/pedr))
+- Fixed: Plugin settings screen: Fix plugin states not set correctly when installing multiple plugins at once (#10580 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin settings: Fix plugins without settings can't be disabled without reinstall (#10579 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.4](https://github.com/laurent22/joplin/releases/tag/android-v3.0.4) (Pre-release) - 2024-06-12T20:38:44Z
 
 - New: Add Joplin Cloud account information to configuration screen (#10553 by [@pedr](https://github.com/pedr))
