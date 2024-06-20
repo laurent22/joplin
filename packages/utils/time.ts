@@ -3,8 +3,8 @@
 // added here, and should be based on dayjs (not moment)
 // -----------------------------------------------------------------------------------------------
 
-import dayjs = require('dayjs');
-import dayJsRelativeTime = require('dayjs/plugin/relativeTime');
+import * as dayjs from 'dayjs';
+import * as dayJsRelativeTime from 'dayjs/plugin/relativeTime';
 
 const supportedLocales: Record<string, unknown> = {
 	'ar': require('dayjs/locale/ar'),
@@ -96,7 +96,7 @@ export const formatMsToRelative = (ms: number) => {
 	// The expected pattern for invalid date formatting in JS is to return the string "Invalid
 	// Date", so we do that here. If we don't, dayjs will process the invalid date and return "a
 	// month ago", somehow...
-	if (!d.isValid()) return 'Invalid Date';
+	if (!d.isValid()) return 'Invalid date';
 
 	return d.fromNow(false);
 };
