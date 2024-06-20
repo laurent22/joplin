@@ -95,11 +95,12 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 			}
 		}
 
-		// TODO: Migration logic from the database to secure storage.
-
 		for (const key of migratedKeys) {
 			await shim.keytar().deletePassword(`${this.appId}.${key}`, `${this.clientId}@joplin`);
 		}
+
+		// Migration logic from the database to secure storage should be handled
+		// by Setting.saveAll.
 
 		logger.info(`Migrated ${migratedKeys.length} keys.`);
 	}
