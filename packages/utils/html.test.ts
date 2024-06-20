@@ -1,5 +1,6 @@
-import { extractUrls } from './html';
+import { replaceSvgWithImg, extractUrls } from './html';
 import { Link } from './types';
+import { readFile } from 'fs-extra';
 
 describe('htmlUtils', () => {
 
@@ -57,4 +58,19 @@ describe('htmlUtils', () => {
 		expect(actual).toEqual(expected);
 	});
 
+
+	test.each([
+		'extractSvgSimple.html',
+		'extractSvgMultipleSvgs.html',
+		'extractSvgWithStyleAndText.html',
+		'extractSvgHtmlWithoutSvg.html',
+	])('should replace svg nodes with img tags with links to resources', async (filename: string) => {
+
+		const generateId = () => {
+			let i = 0;
+			return () => `id${i++}`;
+		};
+		const html = await readFile(`./tests/${filename}`, 'utf8');
+		expect(replaceSvgWithImg(html, './resources', generateId())).toMatchSnapshot();
+	});
 });

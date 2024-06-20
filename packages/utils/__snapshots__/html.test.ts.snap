@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`htmlUtils should replace svg nodes with img tags with links to resources 1`] = `
+{
+  "html": "<html>
+&Tab;<title> test-2 </title>
+&Tab;<body>
+
+&Tab;&Tab;<img style="" src="./resources/id0.svg" />
+
+&Tab;&Tab;<p> a paragraph</p>
+&Tab;</body>
+</html>;
+",
+  "svgs": [
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none">
+			<path d="M7 12H17M8 8.5C8 8.5 9 9 10 9C11.5 9 12.5 8 14 8C15 8 16 8.5 16 8.5M8 15.5C8 15.5 9 16 10 16C11.5 16 12.5 15 14 15C15 15 16 15.5 16 15.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+		</svg>",
+      "filename": "id0.svg",
+    },
+  ],
+}
+`;
+
+exports[`htmlUtils should replace svg nodes with img tags with links to resources 2`] = `
+{
+  "html": "<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+    <title>text</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    @font-face {
+      font-family: Calibri Light;
+      src: url(Carlito-Regular.ttf);
+    }
+
+     @font-face {
+      font-family: Calibri;
+      src: url(Carlito-Regular.ttf);
+    }
+    
+    </style>
+</head>
+<body>
+
+<div class="container-outline" style="left: 48px;position: absolute;top: 107px;width: 624px;">
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri;font-size: 12pt;/* padding-bottom: 7px; */margin-top: 7px;line-height: 20px;">Nam sit amet massa vehicula, elementum nisl feugiat, fermentum quam. Donec eros urna, ultrices vel fringilla suscipit, pretium non ligula. Sed sit amet pellentesque lorem, quis pharetra augue. Integer vitae sodales ex, luctus imperdiet arcu. Integer luctus urna eu urna ultricies ultricies. Aliquam sit amet maximus orci. Sed molestie vehicula vehicula. Morbi lacinia, dolor eu consectetur commodo, ipsum ante suscipit sem, eget facilisis nibh nisi venenatis magna. Donec ac risus ligula. In sit amet dapibus ante, sit amet pellentesque dolor. Nulla facilisi. Sed a nibh viverra, placerat purus at, rutrum justo. Fusce finibus consequat mattis. Sed felis tellus, consequat id nunc non, cursus tempus ligula. In hac habitasse platea dictumst. Praesent eget consectetur elit, ac mollis est.</p></div>
+
+
+
+</div><img style="height: 7px; left: 49px; overflow: visible; position: absolute; top: 301px; width: 53px;" src="./resources/id0.svg" /><img style="height: 21px; left: 210px; overflow: visible; position: absolute; top: 386px; width: 34px;" src="./resources/id1.svg" /><img style="height: 18px; left: 45px; overflow: visible; position: absolute; top: 225px; width: 21px;" src="./resources/id2.svg" /><img style="height: 28px; left: 44px; overflow: visible; position: absolute; top: 413px; width: 26px;" src="./resources/id3.svg" />
+
+
+
+
+</body></html>",
+  "svgs": [
+    {
+      "content": "<svg viewBox="1284 7972 1402 194" xmlns="http://www.w3.org/2000/svg"><path d="M 1349 8042 l 5 0 10 0 16 0 26 0 30 0 31 0 32 0 31 0 30 0 28 5 28 6 27 6 26 4 31 3 32 2 32 2 36 0 35 0 34 0 37 -1 36 0 34 0 32 0 30 0 28 0 27 0 27 0 26 0 26 0 26 0 26 0 26 0 27 0 26 0 27 0 26 0 26 0 27 0 26 0 27 0 26 0 27 0 26 0 27 0 22 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"></path></svg>",
+      "filename": "id0.svg",
+    },
+    {
+      "content": "<svg viewBox="5569 10225 910 559" xmlns="http://www.w3.org/2000/svg"><path d="M 5635 10688 l 4 0 11 0 16 0 25 0 30 0 32 0 32 0 35 0 36 0 34 0 37 0 36 0 34 0 32 0 35 0 34 0 33 0 31 0 34 0 34 0 33 0 35 0 31 -5 24 -10 15 -16 9 -21 5 -24 1 -26 -1 -32 -1 -33 -2 -34 -1 -32 -1 -35 -1 -35 0 -33 -1 -32 0 -25" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"></path></svg>",
+      "filename": "id1.svg",
+    },
+    {
+      "content": "<svg viewBox="1200 5942 550 468" xmlns="http://www.w3.org/2000/svg"><path d="M 1270 6323 l 0 -9 0 -17 0 -22 0 -25 0 -32 4 -34 6 -34 6 -37 5 -37 7 -30 17 -22 24 -10 27 -2 37 7 41 10 41 10 46 13 47 12 42 9 34 7" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"></path></svg>",
+      "filename": "id2.svg",
+    },
+    {
+      "content": "<svg viewBox="1166 10934 698 749" xmlns="http://www.w3.org/2000/svg"><path d="M 1772 11058 l -4 -4 -15 -6 -22 -6 -27 -5 -28 -7 -34 -8 -35 -7 -35 -5 -32 -3 -31 -2 -29 -1 -28 0 -27 0 -26 0 -31 5 -36 11 -34 16 -26 21 -18 33 -10 43 -6 49 -2 53 1 50 1 50 1 45 6 40 8 35 11 26 11 23 9 20 7 22 4 22 2 19" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"></path></svg>",
+      "filename": "id3.svg",
+    },
+  ],
+}
+`;
+
+exports[`htmlUtils should replace svg nodes with img tags with links to resources 3`] = `
+{
+  "html": "<html lang="en">
+<body>
+
+<div class="container-outline" style="left: 48px;position: absolute;top: 107px;width: 624px;">
+    <img style="" src="./resources/id0.svg" />
+
+
+
+
+</div>
+
+
+
+
+</body></html>",
+  "svgs": [
+    {
+      "content": "<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .small {
+      font: italic 13px sans-serif;
+    }
+    .heavy {
+      font: bold 30px sans-serif;
+    }
+    /* Note that the color of the text is set with the    *
+     * fill property, the color property is for HTML only */
+    .Rrrrr {
+      font: italic 40px serif;
+      fill: red;
+    }
+  </style>
+  <text x="20" y="35" class="small">My</text>
+  <text x="40" y="35" class="heavy">cat</text>
+  <text x="55" y="55" class="small">is</text>
+  <text x="65" y="55" class="Rrrrr">Grumpy!</text>
+</svg>",
+      "filename": "id0.svg",
+    },
+  ],
+}
+`;
+
+exports[`htmlUtils should replace svg nodes with img tags with links to resources 4`] = `
+{
+  "html": "<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+    <title>Created on OneNote App</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    .list-0 li { padding-left: 10px; }
+    .list-0 li::marker { content: '•'; font-family: Calibri; font-size: 12pt; }
+    .list-1 li { padding-left: 10px; }
+    .list-1 li::marker { content: '○'; font-family: Courier New; font-size: 12pt; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="max-width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Created on OneNote App</span></div>
+</div><div class="container-outline" style="max-width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">quarta-feira, 13 de mar&ccedil;o de 2024</span></div>
+</div></div><div class="container-outline" style="left: 72px; max-width: 624px; position: absolute; top: 139px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-weight: bold; line-height: 17px;">Bold text</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-weight: bold; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-style: italic; line-height: 17px;">Italic text</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-style: italic; font-weight: bold; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-style: italic; font-weight: bold; line-height: 17px;">Bold and italic</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-style: italic; font-weight: bold; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Text with <span style="font-size: 20pt;">bigger font </span><span style="font-size: 12pt;">in between</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 17px;">&nbsp;</p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 12pt; line-height: 17px;">A</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 12pt; line-height: 17px;">unordered&nbsp;</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 12pt; line-height: 17px;">List</span><ul class="list-1" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 12pt; line-height: 17px;">Indented</span></li>
+</ul></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, &apos;*&apos;);
+    }
+</script>
+
+</body></html>",
+  "svgs": [],
+}
+`;

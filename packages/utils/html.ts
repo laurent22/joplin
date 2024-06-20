@@ -1,4 +1,4 @@
-import { Link } from './types';
+import { Link, SvgXml } from './types';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
@@ -81,4 +81,114 @@ export const extractUrls = (html: string) => {
 	parser.end();
 
 	return output;
+};
+
+export const replaceSvgWithImg = (html: string, resourcesFolder: string, generateSvgFilename: ()=> string) => {
+	if (!html || !html.trim()) return [];
+	if (!resourcesFolder) return [];
+
+	const svgs: SvgXml[] = [];
+	const output: string[] = [];
+	let svgStack: string[] = [];
+
+	const tagStack: string[] = [];
+
+	const currentTag = () => {
+		if (!tagStack.length) return '';
+		return tagStack[tagStack.length - 1];
+	};
+
+	let svgTagDepth = 0;
+	let svgStyle = '';
+
+	const parser = new htmlparser2.Parser({
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			tagStack.push(name);
+
+			attrs = { ...attrs };
+
+			if (currentTag() === 'svg') {
+				svgTagDepth++;
+				svgStyle = attrs.style || '';
+				delete attrs.style;
+				attrs.xmlns = 'http://www.w3.org/2000/svg';
+			}
+
+			let attrHtml = attributesHtml(attrs);
+			if (attrHtml) attrHtml = ` ${attrHtml}`;
+			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+			if (svgTagDepth > 0) {
+				svgStack.push(`<${name}${attrHtml}${closingSign}`);
+			} else {
+				output.push(`<${name}${attrHtml}${closingSign}`);
+			}
+		},
+
+		ontext: (decodedText: string) => {
+			if (svgTagDepth > 0) {
+				svgStack.push(decodedText);
+				return;
+			}
+			if (currentTag() === 'style') {
+				// For CSS, we have to put the style as-is inside the tag
+				// because if we html-entities encode it, it's not going to
+				// work. But it's ok because JavaScript won't run within the
+				// style tag. Ideally CSS should be loaded from an external
+				// file.
+
+				// We however have to encode at least the `<` characters to
+				// prevent certain XSS injections that would rely on the
+				// content not being encoded (see sanitize_13.md)
+				output.push(decodedText.replace(/</g, '&lt;'));
+			} else {
+				output.push(htmlentities(decodedText));
+			}
+		},
+
+		onclosetag: (name: string) => {
+			const current = currentTag();
+
+			if (current === name.toLowerCase()) tagStack.pop();
+
+			if (name === 'svg') {
+				svgTagDepth--;
+				if (svgTagDepth === 0) {
+					svgStack.push('</svg>');
+					tagStack.pop();
+					const filename = `${generateSvgFilename()}.svg`;
+					svgs.push({
+						filename,
+						content: svgStack.join(''),
+					});
+					output.push(`<img style="${svgStyle}" src="${resourcesFolder}/${filename}" />`);
+					svgStack = [];
+					svgStyle = '';
+					return;
+				}
+			}
+
+			if (svgTagDepth > 0) {
+				svgStack.push(`</${name}>`);
+				return;
+			}
+
+			if (isSelfClosingTag(name)) return;
+
+			output.push(`</${name}>`);
+		},
+
+	},
+	{
+		decodeEntities: true,
+		lowerCaseAttributeNames: false,
+	});
+
+	parser.write(html);
+	parser.end();
+
+	return {
+		html: output.join(''),
+		svgs,
+	};
 };
