@@ -130,6 +130,7 @@ import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
+import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -186,10 +187,13 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key === 'dateFormat' || action.key === 'timeFormat')) || (action.type === 'SETTING_UPDATE_ALL')) {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
+		setDateFormat(Setting.value('dateFormat'));
+		setTimeFormat(Setting.value('timeFormat'));
 	}
 
 	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 		setLocale(Setting.value('locale'));
+		setTimeLocale(Setting.value('locale'));
 	}
 
 	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type === 'SETTING_UPDATE_ALL')) {

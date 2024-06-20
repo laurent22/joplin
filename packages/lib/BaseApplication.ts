@@ -21,6 +21,7 @@ import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import { splitCommandString } from '@joplin/utils';
+import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
@@ -357,6 +358,9 @@ export default class BaseApplication {
 		const sideEffects: any = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
+				setTimeLocale(Setting.value('locale'));
+				setDateFormat(Setting.value('dateFormat'));
+				setTimeFormat(Setting.value('timeFormat'));
 				time.setDateFormat(Setting.value('dateFormat'));
 				time.setTimeFormat(Setting.value('timeFormat'));
 			},
