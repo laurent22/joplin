@@ -1265,11 +1265,10 @@ packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.test.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializableArray.js
-packages/lib/utils/joplinCloud.js
-packages/lib/utils/pathRecord/createFilesFromPathRecord.js
-packages/lib/utils/pathRecord/verifyDirectoryMatches.js
 packages/lib/utils/joplinCloud/index.js
 packages/lib/utils/joplinCloud/types.js
+packages/lib/utils/pathRecord/createFilesFromPathRecord.js
+packages/lib/utils/pathRecord/verifyDirectoryMatches.js
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
