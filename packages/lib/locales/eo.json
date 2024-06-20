@@ -152,6 +152,9 @@
 	"Account": [
 		""
 	],
+	"Account type": [
+		""
+	],
 	"Active": [
 		"Aktiva"
 	],
@@ -299,6 +302,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -306,9 +312,6 @@
 		"Grasa"
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -421,6 +424,12 @@
 	],
 	"Close Window": [
 		"Fermi Fenestron"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kodo"
@@ -567,6 +576,12 @@
 		"Kreas novan taskon."
 	],
 	"Creating report...": [
+		""
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
 		""
 	],
 	"Current version is up-to-date.": [
@@ -1057,9 +1072,6 @@
 	],
 	"Found: %d.": [
 		"Trovita: %d."
-	],
-	"From a plugin": [
-		""
 	],
 	"FTS enabled: %d": [
 		"FTS ebligita: %d"
@@ -1553,6 +1565,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Neniu noto ĉi tie. Por krei noton, alklaku \"Nova noto\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		""
@@ -2801,10 +2816,6 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
-	],
-	"You currently have %d plugin installed.": [
-		"",
 		""
 	],
 	"You currently have no notebooks.": [

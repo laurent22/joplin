@@ -35,7 +35,7 @@ const useRepoApi = ({ reloadRepoCounter, setRepoApiError, onRepoApiLoaded }: Pro
 
 		setRepoApiError(null);
 		try {
-			await repoApi.initialize();
+			await repoApi.reinitialize();
 		} catch (error) {
 			logger.error(error);
 			setRepoApiError(error);

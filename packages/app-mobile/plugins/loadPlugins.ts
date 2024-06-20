@@ -1,4 +1,3 @@
-
 import Setting from '@joplin/lib/models/Setting';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
@@ -6,15 +5,21 @@ import PlatformImplementation from './PlatformImplementation';
 import { Store } from 'redux';
 import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
+import { AppState } from '../utils/types';
 
 const logger = Logger.create('loadPlugins');
 
 type CancelEvent = { cancelled: boolean };
 
-const loadPlugins = async (
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginRunner: BasePluginRunner, pluginSettings: PluginSettings, store: Store<any>, cancel: CancelEvent,
-) => {
+export interface Props {
+	pluginRunner: BasePluginRunner;
+	pluginSettings: PluginSettings;
+	store: Store<AppState>;
+	reloadAll: boolean;
+	cancelEvent: CancelEvent;
+}
+
+const loadPlugins = async ({ pluginRunner, pluginSettings, store, reloadAll, cancelEvent }: Props) => {
 	try {
 		const pluginService = PluginService.instance();
 		const platformImplementation = PlatformImplementation.instance();
@@ -23,13 +28,18 @@ const loadPlugins = async (
 		);
 		pluginService.isSafeMode = Setting.value('isSafeMode');
 
-		for (const pluginId of Object.keys(pluginService.plugins)) {
-			if (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled) {
-				logger.info('Unloading disabled plugin', pluginId);
+		if (reloadAll) {
+			logger.info('Reloading all plugins.');
+		}
+
+		for (const pluginId of pluginService.pluginIds) {
+			if (reloadAll || (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)) {
+				logger.info('Unloading plugin', pluginId);
 				await pluginService.unloadPlugin(pluginId);
 			}
 
-			if (cancel.cancelled) {
+			if (cancelEvent.cancelled) {
+				logger.info('Cancelled.');
 				return;
 			}
 		}
@@ -39,7 +49,8 @@ const loadPlugins = async (
 			await pluginService.loadAndRunDevPlugins(pluginSettings);
 		}
 
-		if (cancel.cancelled) {
+		if (cancelEvent.cancelled) {
+			logger.info('Cancelled.');
 			return;
 		}
 

@@ -179,6 +179,12 @@
 	"Account": [
 		""
 	],
+	"Account information": [
+		""
+	],
+	"Account type": [
+		""
+	],
 	"Action": [
 		""
 	],
@@ -365,6 +371,9 @@
 	"Basic": [
 		""
 	],
+	"Beta": [
+		""
+	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
@@ -372,9 +381,6 @@
 		""
 	],
 	"Browse all plugins": [
-		""
-	],
-	"Browse and install community plugins.": [
 		""
 	],
 	"Browse...": [
@@ -497,6 +503,9 @@
 	"Clear alarm": [
 		""
 	],
+	"Clear search": [
+		""
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
@@ -516,6 +525,12 @@
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
 		""
 	],
 	"Code": [
@@ -597,6 +612,9 @@
 		""
 	],
 	"Conflicts (attachments)": [
+		""
+	],
+	"Connect to Joplin Cloud": [
 		""
 	],
 	"Consolidated billing": [
@@ -745,6 +763,12 @@
 		""
 	],
 	"Creating report...": [
+		""
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
 		""
 	],
 	"Current version is up-to-date.": [
@@ -1368,9 +1392,6 @@
 	"Found: %d.": [
 		""
 	],
-	"From a plugin": [
-		""
-	],
 	"FTS enabled: %d": [
 		""
 	],
@@ -1400,6 +1421,9 @@
 		""
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		""
+	],
+	"Go to Joplin Cloud profile": [
 		""
 	],
 	"Go to source URL": [
@@ -1591,13 +1615,10 @@
 	"Install from file": [
 		""
 	],
-	"Install new plugins": [
-		""
-	],
 	"Installed": [
 		""
 	],
-	"Installed plugins": [
+	"Installed (%d):": [
 		""
 	],
 	"Installing...": [
@@ -2010,6 +2031,9 @@
 		""
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
+		""
+	],
+	"No plugins are installed.": [
 		""
 	],
 	"No resources!": [
@@ -2646,9 +2670,6 @@
 		""
 	],
 	"Search in current note": [
-		""
-	],
-	"Search plugins": [
 		""
 	],
 	"Search shown": [
@@ -3635,10 +3656,6 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
-	],
-	"You currently have %d plugin installed.": [
-		"",
 		""
 	],
 	"You currently have no notebooks.": [

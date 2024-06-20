@@ -957,7 +957,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.10.0):
     - React-Core
-  - react-native-image-picker (7.1.0):
+  - react-native-image-picker (7.1.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -980,7 +980,7 @@ PODS:
     - Yoga
   - react-native-image-resizer (3.0.9):
     - React-Core
-  - react-native-netinfo (11.2.1):
+  - react-native-netinfo (11.3.1):
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
@@ -1013,7 +1013,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.6.4):
+  - react-native-webview (13.8.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1287,7 +1287,7 @@ PODS:
     - React
   - RNShare (10.0.2):
     - React-Core
-  - RNVectorIcons (10.0.3):
+  - RNVectorIcons (10.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1591,10 +1591,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 16b8530de1b383cdada1476cf52d1b52f0692cbc
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
@@ -1628,16 +1628,16 @@ SPEC CHECKSUMS:
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
-  react-native-image-picker: f2b8c6c74ad4fc4d7ddb646391be7df47c63e46c
+  react-native-image-picker: d3a65af2538ac5407e5329e50f057fb2456f15f8
   react-native-image-resizer: 669454edae94399b11e49c840e4da14482302293
-  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
+  react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-saf-x: 672d22e9912d34e6a2c0ebcf7da2af67b2c177dc
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-slider: 03f213d3ffbf919b16298c7896c1b60101d8e137
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
-  react-native-webview: 4995cb054dd9360ca4121cdf94f2ab01e644f49e
+  react-native-webview: 06f0b1eaa8f7d7984e46b657d646db5d1f00a5aa
   React-nativeconfig: b0073a590774e8b35192fead188a36d1dca23dec
   React-NativeModulesApple: df46ff3e3de5b842b30b4ca8a6caae6d7c8ab09f
   React-perflogger: 3d31e0d1e8ad891e43a09ac70b7b17a79773003a
@@ -1673,7 +1673,7 @@ SPEC CHECKSUMS:
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 07efbdf2cd99efe13497433668e54acd7df49fef
   RNShare: 859ff710211285676b0bcedd156c12437ea1d564
-  RNVectorIcons: 50ea777efffdd991a22e968aa312d75da7ff46c3
+  RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90
   RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef

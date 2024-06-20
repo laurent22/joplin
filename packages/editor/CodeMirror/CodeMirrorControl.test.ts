@@ -2,6 +2,7 @@ import { ViewPlugin } from '@codemirror/view';
 import createEditorControl from './testUtil/createEditorControl';
 import { EditorCommandType } from '../types';
 import pressReleaseKey from './testUtil/pressReleaseKey';
+import { EditorSelection } from '@codemirror/state';
 
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
@@ -60,6 +61,33 @@ describe('CodeMirrorControl', () => {
 		expect(command).toHaveBeenCalledTimes(1);
 	});
 
+	it.each([
+		{
+			before: 'Test',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'i', code: 'KeyI', ctrlKey: true },
+			expected: '*Test*',
+		},
+		{
+			before: 'Test',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'b', code: 'KeyB', ctrlKey: true },
+			expected: '**Test**',
+		},
+		{
+			before: 'Testing',
+			selection: EditorSelection.range(0, 4),
+			shortcut: { key: 'b', code: 'KeyB', ctrlKey: true },
+			expected: '**Test**ing',
+		},
+	])('markdown keyboard shortcuts should work (case %#)', ({ before, selection, shortcut, expected }) => {
+		const control = createEditorControl(before);
+		control.select(selection.anchor, selection.head);
+
+		pressReleaseKey(control.editor, shortcut);
+		expect(control.getValue()).toBe(expected);
+	});
+
 	it('should support overriding default keybindings', () => {
 		const control = createEditorControl('test');
 		control.execCommand(EditorCommandType.SelectAll);
@@ -112,5 +140,72 @@ describe('CodeMirrorControl', () => {
 		control.updateBody('Hello\r\nWorld\r\n');
 		control.updateBody('Hello\r\nWorld\r\ntest');
 		control.updateBody('Hello\r\n');
+	});
+
+	it.each([
+		{
+			initialText: 'Hello\nWorld',
+			selection: EditorSelection.cursor(5),
+			left: '[[',
+			right: ']].',
+			typeText: null,
+			expected: 'Hello[[]].\nWorld',
+		},
+		{
+			initialText: 'Hello\nWorld',
+			selection: EditorSelection.cursor(0),
+			left: 'before',
+			right: 'after.',
+			typeText: ' cursor ',
+			expected: 'before cursor after.Hello\nWorld',
+		},
+		{
+			initialText: 'Hello\nWorld',
+			selection: EditorSelection.range(0, 5),
+			left: '[',
+			right: '](test)',
+			typeText: null,
+			expected: '[Hello](test)\nWorld',
+		},
+		{
+			initialText: 'Hello\nWorld',
+			selection: EditorSelection.range(0, 5),
+			left: '[',
+			right: '](test)',
+			typeText: 'replaced',
+			expected: '[replaced](test)\nWorld',
+		},
+		{
+			initialText: 'Hello\nWorld',
+			selection: EditorSelection.create([
+				EditorSelection.cursor(0), EditorSelection.cursor(5),
+			]),
+			left: '[',
+			right: '](test)',
+			typeText: 'cursor',
+			expected: '[cursor](test)Hello[cursor](test)\nWorld',
+		},
+		{
+			initialText: 'This is a\ntest',
+			selection: EditorSelection.create([
+				EditorSelection.range(5, 9), EditorSelection.cursor(14),
+			]),
+			left: '[',
+			right: ']',
+			typeText: 'cursor',
+			expected: 'This [cursor]\ntest[cursor]',
+		},
+	])('wrapSelections should surround all selections with the given text (case %#)', ({ initialText, selection, typeText, left, right, expected }) => {
+		const control = createEditorControl(initialText);
+		control.editor.dispatch({
+			selection,
+		});
+		control.wrapSelections(left, right);
+
+		if (typeText) {
+			control.insertText(typeText);
+		}
+
+		expect(control.editor.state.doc.toString()).toBe(expected);
 	});
 });

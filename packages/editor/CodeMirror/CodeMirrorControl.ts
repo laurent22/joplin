@@ -8,6 +8,8 @@ import { SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
 import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
 import { CompletionSource } from '@codemirror/autocomplete';
+import { RegionSpec } from './utils/formatting/RegionSpec';
+import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -91,6 +93,25 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 
 	public insertText(text: string, userEvent?: UserEventSource) {
 		this.editor.dispatch(this.editor.state.replaceSelection(text), { userEvent });
+	}
+
+	public wrapSelections(start: string, end: string) {
+		const regionSpec = RegionSpec.of({ template: { start, end } });
+
+		this.editor.dispatch(
+			this.editor.state.changeByRange(range => {
+				const update = toggleInlineSelectionFormat(this.editor.state, regionSpec, range);
+				if (!update.range.empty) {
+					// Deselect the start and end characters (roughly preserve the original
+					// selection).
+					update.range = EditorSelection.range(
+						update.range.from + start.length,
+						update.range.to - end.length,
+					);
+				}
+				return update;
+			}),
+		);
 	}
 
 	public updateBody(newBody: string) {

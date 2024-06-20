@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
@@ -214,8 +214,11 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
 	}, [pluginService, props.onChange]);
 
-	const onDelete = useOnDeleteHandler(pluginSettings, onPluginSettingsChange, false);
-	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
+	const pluginSettingsRef = useRef(pluginSettings);
+	pluginSettingsRef.current = pluginSettings;
+
+	const onDelete = useOnDeleteHandler(pluginSettingsRef, onPluginSettingsChange, false);
+	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettingsRef, repoApi, onPluginSettingsChange, true);
 
 	const onToolsClick = useCallback(async () => {
 		const template = [

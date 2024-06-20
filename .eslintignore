@@ -292,6 +292,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/shouldPasteResources.
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/shouldPasteResources.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
@@ -456,6 +457,7 @@ packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
@@ -514,6 +516,7 @@ packages/app-mobile/commands/scrollToHash.js
 packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/components/ActionButton.js
 packages/app-mobile/components/BackButtonDialogBox.js
+packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
@@ -596,6 +599,7 @@ packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/global-style.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
+packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js
@@ -608,7 +612,8 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/expo
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/makeImportExportCacheDirectory.js
 packages/app-mobile/components/screens/ConfigScreen/SectionDescription.js
 packages/app-mobile/components/screens/ConfigScreen/SectionHeader.js
-packages/app-mobile/components/screens/ConfigScreen/SectionSelector.js
+packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.js
+packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
 packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
@@ -616,9 +621,10 @@ packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/InstalledPluginBox.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChip.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginTitle.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/StyledChip.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.installed.test.js
@@ -626,6 +632,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.search.
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.js
+packages/app-mobile/components/screens/ConfigScreen/plugins/SectionLabel.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/ActionButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/WrappedPluginStates.js
@@ -677,7 +684,9 @@ packages/app-mobile/plugins/PluginRunner/dialogs/hooks/useWebViewSetup.js
 packages/app-mobile/plugins/PluginRunner/types.js
 packages/app-mobile/plugins/PluginRunner/utils/createOnLogHandler.js
 packages/app-mobile/plugins/hooks/usePlugin.js
+packages/app-mobile/plugins/loadPlugins.test.js
 packages/app-mobile/plugins/loadPlugins.js
+packages/app-mobile/plugins/testing/MockPluginRunner.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
@@ -759,8 +768,9 @@ packages/editor/CodeMirror/markdown/markdownCommands.toggleList.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.js
 packages/editor/CodeMirror/markdown/markdownMathParser.test.js
 packages/editor/CodeMirror/markdown/markdownMathParser.js
-packages/editor/CodeMirror/markdown/markdownReformatter.test.js
-packages/editor/CodeMirror/markdown/markdownReformatter.js
+packages/editor/CodeMirror/markdown/utils/renumberSelectedLists.test.js
+packages/editor/CodeMirror/markdown/utils/renumberSelectedLists.js
+packages/editor/CodeMirror/markdown/utils/stripBlockquote.js
 packages/editor/CodeMirror/pluginApi/PluginLoader.js
 packages/editor/CodeMirror/pluginApi/codeMirrorRequire.js
 packages/editor/CodeMirror/pluginApi/customEditorCompletion.test.js
@@ -773,8 +783,22 @@ packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/testUtil/pressReleaseKey.js
 packages/editor/CodeMirror/testUtil/typeText.js
 packages/editor/CodeMirror/theme.js
-packages/editor/CodeMirror/util/isInSyntaxNode.js
-packages/editor/CodeMirror/util/setupVim.js
+packages/editor/CodeMirror/utils/formatting/RegionSpec.js
+packages/editor/CodeMirror/utils/formatting/findInlineMatch.test.js
+packages/editor/CodeMirror/utils/formatting/findInlineMatch.js
+packages/editor/CodeMirror/utils/formatting/isIndentationEquivalent.js
+packages/editor/CodeMirror/utils/formatting/tabsToSpaces.test.js
+packages/editor/CodeMirror/utils/formatting/tabsToSpaces.js
+packages/editor/CodeMirror/utils/formatting/toggleInlineFormatGlobally.js
+packages/editor/CodeMirror/utils/formatting/toggleInlineRegionSurrounded.js
+packages/editor/CodeMirror/utils/formatting/toggleInlineSelectionFormat.js
+packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.test.js
+packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.js
+packages/editor/CodeMirror/utils/formatting/toggleSelectedLinesStartWith.js
+packages/editor/CodeMirror/utils/formatting/types.js
+packages/editor/CodeMirror/utils/growSelectionToNode.js
+packages/editor/CodeMirror/utils/isInSyntaxNode.js
+packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
 packages/editor/types.js
@@ -941,6 +965,7 @@ packages/lib/ntp.js
 packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
 packages/lib/path-utils.js
+packages/lib/reducer.test.js
 packages/lib/reducer.js
 packages/lib/registry.test.js
 packages/lib/registry.js
@@ -1261,9 +1286,14 @@ packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.test.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializableArray.js
+<<<<<<< HEAD
 packages/lib/utils/joplinCloud.js
 packages/lib/utils/pathRecord/createFilesFromPathRecord.js
 packages/lib/utils/pathRecord/verifyDirectoryMatches.js
+=======
+packages/lib/utils/joplinCloud/index.js
+packages/lib/utils/joplinCloud/types.js
+>>>>>>> upstream/dev
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js

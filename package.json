@@ -40,7 +40,7 @@
     "postinstall": "gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
+    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@17/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",

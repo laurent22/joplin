@@ -85,6 +85,7 @@ const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
+import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
@@ -129,6 +130,7 @@ import initializeCommandService from './utils/initializeCommandService';
 import PlatformImplementation from './plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
+import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -185,10 +187,13 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key === 'dateFormat' || action.key === 'timeFormat')) || (action.type === 'SETTING_UPDATE_ALL')) {
 		time.setDateFormat(Setting.value('dateFormat'));
 		time.setTimeFormat(Setting.value('timeFormat'));
+		setDateFormat(Setting.value('dateFormat'));
+		setTimeFormat(Setting.value('timeFormat'));
 	}
 
 	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 		setLocale(Setting.value('locale'));
+		setTimeLocale(Setting.value('locale'));
 	}
 
 	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type === 'SETTING_UPDATE_ALL')) {
@@ -826,6 +831,7 @@ class AppComponent extends React.Component {
 	private themeChangeListener_: NativeEventSubscription|null = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
+	private callbackUrl: string|null = null;
 
 	public constructor() {
 		super();
@@ -856,6 +862,12 @@ class AppComponent extends React.Component {
 			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
+			} else if (isCallbackUrl(event.url)) {
+				logger.info('received callback url: ', event.url);
+				this.callbackUrl = event.url;
+				if (this.props.biometricsDone) {
+					void this.handleCallbackUrl();
+				}
 			}
 		};
 
@@ -974,7 +986,7 @@ class AppComponent extends React.Component {
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 
-		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
+		this.quickActionShortcutListener_ = await setupQuickActions(this.props.dispatch);
 
 		await setupNotifications(this.props.dispatch);
 
@@ -1009,6 +1021,11 @@ class AppComponent extends React.Component {
 			this.unsubscribeNewShareListener_();
 			this.unsubscribeNewShareListener_ = undefined;
 		}
+
+		if (this.quickActionShortcutListener_) {
+			this.quickActionShortcutListener_.remove();
+			this.quickActionShortcutListener_ = undefined;
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1016,6 +1033,7 @@ class AppComponent extends React.Component {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
+			void this.handleCallbackUrl();
 		}
 	}
 
@@ -1057,6 +1075,51 @@ class AppComponent extends React.Component {
 			}
 		} else {
 			logger.info('Sharing: received empty share data.');
+		}
+	}
+
+	private async handleCallbackUrl() {
+		const url = this.callbackUrl;
+		this.callbackUrl = null;
+		if (url === null) {
+			return;
+		}
+
+		const { command, params } = parseCallbackUrl(url);
+
+		// adopted from app-mobile/utils/shareHandler.ts
+		// We go back one screen in case there's already a note open -
+		// if we don't do this, the dispatch below will do nothing
+		// (because routeName wouldn't change)
+		this.props.dispatch({ type: 'NAV_BACK' });
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		switch (command) {
+
+		case CallbackUrlCommand.OpenNote:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: params.id,
+			});
+			break;
+
+		case CallbackUrlCommand.OpenTag:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: params.id,
+			});
+			break;
+
+		case CallbackUrlCommand.OpenFolder:
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				folderId: params.id,
+			});
+			break;
+
 		}
 	}
 

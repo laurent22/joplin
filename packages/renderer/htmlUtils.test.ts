@@ -1,4 +1,4 @@
-import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly } from './htmlUtils';
+import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
 describe('htmlUtils', () => {
 
@@ -86,4 +86,14 @@ describe('htmlUtils', () => {
 		}
 	});
 
+	it.each([
+		['<p>Test</p><div></div>', 'Test'],
+		['<p>Testing</p><p>A test</p>', '<p>Testing</p><p>A test</p>'],
+		['<p>Testing</p><hr/>', '<p>Testing</p><hr/>'],
+		['<p>Testing</p><div style="border: 2px solid red;"></div>', '<p>Testing</p><div style="border: 2px solid red;"></div>'],
+		['<p>Testing</p><style onload=""></style>', 'Testing'],
+		['<p>is</p>\n<style onload="console.log(\'test\')"></style>', 'is\n'],
+	])('should remove empty elements (case %#)', (before, expected) => {
+		expect(removeWrappingParagraphAndTrailingEmptyElements(before)).toBe(expected);
+	});
 });

@@ -126,6 +126,7 @@
 		"org.robolectric:robolectric",
 		"react-native",
 		"activesupport",
+		"cocoapods",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to

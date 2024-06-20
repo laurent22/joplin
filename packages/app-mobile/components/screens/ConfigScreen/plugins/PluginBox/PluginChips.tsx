@@ -2,10 +2,10 @@ import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
 import * as React from 'react';
-import { Alert, Linking, View, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { PluginCallback } from '../utils/usePluginCallbacks';
-import StyledChip from './StyledChip';
+import PluginChip from './PluginChip';
 import { themeStyle } from '../../../../global-style';
 
 interface Props {
@@ -18,23 +18,6 @@ interface Props {
 
 	onShowPluginLog?: PluginCallback;
 }
-
-const onRecommendedPress = () => {
-	Alert.alert(
-		'',
-		_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
-		[
-			{
-				text: _('Learn more'),
-				onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
-			},
-			{
-				text: _('OK'),
-			},
-		],
-		{ cancelable: true },
-	);
-};
 
 const containerStyle: ViewStyle = {
 	flexDirection: 'row',
@@ -54,43 +37,28 @@ const PluginChips: React.FC<Props> = props => {
 		if (!props.hasErrors) return null;
 
 		return (
-			<StyledChip
-				background={theme.backgroundColor2}
-				foreground={theme.colorError2}
+			<PluginChip
+				color={theme.colorError2}
 				icon='alert'
-				mode='flat'
 				onPress={() => props.onShowPluginLog({ item })}
 			>
 				{_('Error')}
-			</StyledChip>
+			</PluginChip>
 		);
-	};
-
-	const renderRecommendedChip = () => {
-		if (!props.item.manifest._recommended || !props.isCompatible) {
-			return null;
-		}
-		return <StyledChip
-			background={theme.searchMarkerBackgroundColor}
-			foreground={theme.searchMarkerColor}
-			icon='crown'
-			onPress={onRecommendedPress}
-		>{_('Recommended')}</StyledChip>;
 	};
 
 	const renderBuiltInChip = () => {
 		if (!props.item.builtIn) {
 			return null;
 		}
-		return <StyledChip icon='code-tags-check'>{_('Built-in')}</StyledChip>;
+		return <PluginChip icon='code-tags-check'>{_('Built-in')}</PluginChip>;
 	};
 
 	const renderIncompatibleChip = () => {
 		if (props.isCompatible) return null;
 		return (
-			<StyledChip
-				background={theme.backgroundColor3}
-				foreground={theme.color3}
+			<PluginChip
+				color={theme.color3}
 				icon='alert'
 				onPress={() => {
 					void shim.showMessageBox(
@@ -98,7 +66,7 @@ const PluginChips: React.FC<Props> = props => {
 						{ buttons: [_('OK')] },
 					);
 				}}
-			>{_('Incompatible')}</StyledChip>
+			>{_('Incompatible')}</PluginChip>
 		);
 	};
 
@@ -106,7 +74,7 @@ const PluginChips: React.FC<Props> = props => {
 		if (!props.isCompatible || !props.canUpdate) return null;
 
 		return (
-			<StyledChip>{_('Update available')}</StyledChip>
+			<PluginChip>{_('Update available')}</PluginChip>
 		);
 	};
 
@@ -114,21 +82,20 @@ const PluginChips: React.FC<Props> = props => {
 		if (props.item.enabled || !props.item.installed) {
 			return null;
 		}
-		return <StyledChip>{_('Disabled')}</StyledChip>;
+		return <PluginChip faded={true}>{_('Disabled')}</PluginChip>;
 	};
 
 	const renderInstalledChip = () => {
 		if (!props.showInstalledChip) {
 			return null;
 		}
-		return <StyledChip>{_('Installed')}</StyledChip>;
+		return <PluginChip faded={true}>{_('Installed')}</PluginChip>;
 	};
 
 	return <View style={containerStyle}>
 		{renderIncompatibleChip()}
 		{renderInstalledChip()}
 		{renderErrorsChip()}
-		{renderRecommendedChip()}
 		{renderBuiltInChip()}
 		{renderUpdatableChip()}
 		{renderDisabledChip()}
