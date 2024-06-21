@@ -4,10 +4,7 @@
 // See also https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l
 
 const path = require('path');
-const webpack = require('webpack');
-
 const appDirectory = path.resolve(__dirname, '../');
-
 const babelConfig = require('../babel.config');
 
 // This is needed for webpack to compile JavaScript.
@@ -16,17 +13,14 @@ const babelConfig = require('../babel.config');
 // errors. To fix this webpack can be configured to compile to the necessary
 // `node_module`.
 const babelLoaderConfiguration = {
-	test: /\.(tsx|jsx|ts|js)$/,
+	test: /\.(tsx|jsx|ts|js|mjs)$/,
 	// Add every directory that needs to be compiled by Babel during the build.
 	exclude: [
-		{
-			and: [
-				path.resolve(appDirectory, 'ios'),
-				path.resolve(appDirectory, 'android'),
-			],
+		path.resolve(appDirectory, 'ios'),
+		path.resolve(appDirectory, 'android'),
 
-			not: []
-		}
+		/.*node_modules\/@babel.*/,
+		/.*node_modules\/@sqlite\.org\/.*/,
 		//path.resolve(appDirectory, 'node_modules/react-native-uncompiled')
 	],
 
@@ -38,7 +32,7 @@ const babelLoaderConfiguration = {
 			plugins: [
 				'react-native-web',
 				'@babel/plugin-transform-export-namespace-from',
-				...babelConfig.plugins
+				...(babelConfig.plugins ?? []),
 			]
 		}
 	}
@@ -46,7 +40,7 @@ const babelLoaderConfiguration = {
 
 // This is needed for webpack to import static images in JavaScript files.
 const imageLoaderConfiguration = {
-	test: /\.(gif|jpe?g|png|svg)$/,
+	test: /\.(gif|jpe?g|png|svg|ttf)$/,
 	use: {
 		loader: 'url-loader',
 		options: {
@@ -56,8 +50,12 @@ const imageLoaderConfiguration = {
 	}
 };
 
+const emptyLibraryMock = path.resolve(__dirname, 'mocks/empty.js');
+
 module.exports = {
 	mode: 'development',
+	//devtool: 'inline-cheap-source-map',
+	target: 'web',
 
 	entry: [
 		// load any web API polyfills
@@ -77,8 +75,8 @@ module.exports = {
 	module: {
 		rules: [
 			babelLoaderConfiguration,
-			imageLoaderConfiguration
-		]
+			imageLoaderConfiguration,
+		],
 	},
 
 	resolve: {
@@ -87,9 +85,15 @@ module.exports = {
 			'react-native$': 'react-native-web',
 
 			// Map some modules that don't work on web to the empty dictionary.
-			'react-native-fingerprint-scanner': path.resolve(__dirname, 'mocks/empty.js'),
-			'@joplin/react-native-saf-x': path.resolve(__dirname, 'mocks/empty.js'),
-			'react-native-quick-actions': path.resolve(__dirname, 'mocks/empty.js'),
+			'react-native-fingerprint-scanner': emptyLibraryMock,
+			'@joplin/react-native-saf-x': emptyLibraryMock,
+			'react-native-quick-actions': emptyLibraryMock,
+			'uglifycss': emptyLibraryMock,
+			'react-native-share': emptyLibraryMock,
+			'react-native-camera': emptyLibraryMock,
+			'react-native-zip-archive': emptyLibraryMock,
+			'react-native-document-picker': emptyLibraryMock,
+			'react-native-exit-app': emptyLibraryMock,
 		},
 		// If you're working on a multi-platform React Native app, web-specific
 		// module implementations should be written in files using the extension
@@ -97,12 +101,15 @@ module.exports = {
 		extensions: [
 			'.web.js',
 			'.js',
+			'.web.mjs',
+			'.mjs',
 			'.web.ts',
 			'.ts',
 			'.web.jsx',
 			'.jsx',
 			'.web.tsx',
 			'.tsx',
+			'.wasm',
 		],
 
 		fallback: {
@@ -112,5 +119,14 @@ module.exports = {
 			"path": require.resolve("path-browserify"),
 			"stream": require.resolve("stream-browserify"),
 		}
-	}
+	},
+
+	devServer: {
+		// Required by @sqlite.org/sqlite-wasm
+		// See https://www.npmjs.com/package/@sqlite.org/sqlite-wasm#user-content-in-a-wrapped-worker-with-opfs-if-available
+		headers: {
+			'Cross-Origin-Opener-Policy': 'same-origin',
+			'Cross-Origin-Embedder-Policy': 'require-corp',
+		},
+	},
 }

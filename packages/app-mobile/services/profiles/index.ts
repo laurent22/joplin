@@ -4,7 +4,7 @@
 const RNExitApp = require('react-native-exit-app').default;
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
-import RNFetchBlob from 'rn-fetch-blob';
+import shim from '@joplin/lib/shim';
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 let dispatch_: Function = null;
@@ -14,7 +14,7 @@ export const setDispatch = (dispatch: Function) => {
 };
 
 export const getProfilesRootDir = () => {
-	return RNFetchBlob.fs.dirs.DocumentDir;
+	return shim.fsDriver().getAppDirectoryPath();
 };
 
 export const getProfilesConfigPath = () => {

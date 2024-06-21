@@ -687,9 +687,12 @@ packages/app-mobile/utils/appDefaultState.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/createRootStyle.js
+packages/app-mobile/utils/database-driver-react-native.js
+packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
 packages/app-mobile/utils/fs-driver/tarExtract.test.js
@@ -706,6 +709,10 @@ packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
+packages/app-mobile/utils/shim-init-react/index.js
+packages/app-mobile/utils/shim-init-react/index.web.js
+packages/app-mobile/utils/shim-init-react/injectedJs.js
+packages/app-mobile/utils/shim-init-react/shimInitShared.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js

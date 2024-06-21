@@ -41,7 +41,7 @@ const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
-const { shimInit } = require('./utils/shim-init-react.js');
+import { shimInit } from './utils/shim-init-react';
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -69,7 +69,6 @@ import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
-const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
@@ -87,6 +86,8 @@ import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
+
+import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -107,7 +108,6 @@ import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
-import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
@@ -131,6 +131,7 @@ import PlatformImplementation from './plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
+import DatabaseDriverReactNative from './utils/database-driver-react-native';
 
 type SideMenuPosition = 'left' | 'right';
 

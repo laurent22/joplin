@@ -433,7 +433,7 @@ export default class Folder extends BaseItem {
 
 		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != ""'];
 		if (sharedFolderIds.length) {
-			sql.push(` AND id NOT IN ("${sharedFolderIds.join('","')}")`);
+			sql.push(` AND id NOT IN ('${sharedFolderIds.join('\',\'')}')`);
 		}
 
 		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
@@ -650,7 +650,7 @@ export default class Folder extends BaseItem {
 
 			const query = activeShareIds.length ? `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
-				WHERE share_id != "" AND share_id NOT IN ("${activeShareIds.join('","')}")
+				WHERE share_id != '' AND share_id NOT IN ('${activeShareIds.join('\',\'')}')
 			` : `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != ''

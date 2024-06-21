@@ -119,6 +119,14 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: getExternalDirectoryPath');
 	}
 
+	public getCacheDirectoryPath(): string {
+		throw new Error('Not implemented: getCacheDirectoryPath');
+	}
+
+	public getAppDirectoryPath(): string {
+		throw new Error('Not implemented: getCacheDirectoryPath');
+	}
+
 	public isUsingAndroidSAF() {
 		return false;
 	}

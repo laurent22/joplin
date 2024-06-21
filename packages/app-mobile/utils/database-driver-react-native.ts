@@ -1,46 +1,49 @@
 const SQLite = require('react-native-sqlite-storage');
 
-class DatabaseDriverReactNative {
-	constructor() {
+
+export default class DatabaseDriverReactNative {
+	private lastInsertId_: string;
+	private db_: any;
+	public constructor() {
 		this.lastInsertId_ = null;
 	}
 
-	open(options) {
+	public open(options: { name: string }) {
 		// SQLite.DEBUG(true);
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },
-				db => {
+				(db: any) => {
 					this.db_ = db;
 					resolve();
 				},
-				error => {
+				(error: Error) => {
 					reject(error);
 				},
 			);
 		});
 	}
 
-	sqliteErrorToJsError(error) {
+	public sqliteErrorToJsError(error: Error) {
 		return error;
 	}
 
-	selectOne(sql, params = null) {
-		return new Promise((resolve, reject) => {
+	public selectOne(sql: string, params: any = null) {
+		return new Promise<unknown>((resolve, reject) => {
 			this.db_.executeSql(
 				sql,
 				params,
-				r => {
+				(r: any) => {
 					resolve(r.rows.length ? r.rows.item(0) : null);
 				},
-				error => {
+				(error: Error) => {
 					reject(error);
 				},
 			);
 		});
 	}
 
-	selectAll(sql, params = null) {
+	public selectAll(sql: string, params: any = null) {
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return this.exec(sql, params).then(r => {
 			const output = [];
@@ -51,29 +54,27 @@ class DatabaseDriverReactNative {
 		});
 	}
 
-	loadExtension(path) {
+	public loadExtension(path: string) {
 		throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
 	}
 
-	exec(sql, params = null) {
-		return new Promise((resolve, reject) => {
+	public exec(sql: string, params: any = null) {
+		return new Promise<any>((resolve, reject) => {
 			this.db_.executeSql(
 				sql,
 				params,
-				r => {
+				(r: { insertId: string }) => {
 					if ('insertId' in r) this.lastInsertId_ = r.insertId;
 					resolve(r);
 				},
-				error => {
+				(error: Error) => {
 					reject(error);
 				},
 			);
 		});
 	}
 
-	lastInsertId() {
+	public lastInsertId() {
 		return this.lastInsertId_;
 	}
 }
-
-module.exports = { DatabaseDriverReactNative };

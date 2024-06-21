@@ -16,7 +16,7 @@ export default async (dispatch: Dispatch) => {
 
 	if (!QuickActions.setShortcutItems) {
 		console.warn('QuickActions unsupported');
-		return;
+		return null;
 	}
 
 	QuickActions.setShortcutItems([

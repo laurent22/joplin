@@ -3,7 +3,7 @@ import { resolve, dirname } from 'path';
 import shim from '@joplin/lib/shim';
 import { chunkSize } from './constants';
 
-interface TarExtractOptions {
+export interface TarExtractOptions {
 	cwd: string;
 	file: string;
 }

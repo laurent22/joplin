@@ -1,12 +1,11 @@
-const shim = require('@joplin/lib/shim').default;
+import type ShimType from '@joplin/lib/shim';
+import shimInitShared from './shimInitShared';
+
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
 const { GeolocationReact } = require('./geolocation-react.js');
-const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
-const FsDriverRN = require('./fs-driver/fs-driver-rn').default;
-const { Buffer } = require('buffer');
-const { Linking, Platform } = require('react-native');
-const showMessageBox = require('./showMessageBox.js').default;
+import FsDriverRN from '../fs-driver/fs-driver-rn';
 const mimeUtils = require('@joplin/lib/mime-utils.js');
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
@@ -14,17 +13,9 @@ const Resource = require('@joplin/lib/models/Resource').default;
 const { getLocales } = require('react-native-localize');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
 
-const injectedJs = {
-	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
-	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
-	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
-	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
-};
 
-function shimInit() {
+export function shimInit() {
 	shim.Geolocation = GeolocationReact;
-	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) {
@@ -49,7 +40,7 @@ function shimInit() {
 
 	/* eslint-disable no-console */
 
-	shim.debugFetch = async (url, options = null) => {
+	(shim as any).debugFetch = async (url: string, options: any = null) => {
 		options = {
 			method: 'GET',
 			headers: {},
@@ -60,7 +51,7 @@ function shimInit() {
 			const xhr = new XMLHttpRequest();
 			xhr.open(options.method, url, true);
 
-			for (const [key, value] of Object.entries(options.headers)) {
+			for (const [key, value] of Object.entries(options.headers as Record<string, string>)) {
 				xhr.setRequestHeader(key, value);
 			}
 
@@ -91,7 +82,7 @@ function shimInit() {
 
 	/* eslint-enable */
 
-	shim.detectAndSetLocale = (Setting) => {
+	shim.detectAndSetLocale = (Setting: any) => {
 		// [
 		// 	{
 		// 		"countryCode": "US",
@@ -179,7 +170,7 @@ function shimInit() {
 		try {
 			const response = await shim.fetchWithRetry(doFetchBlob, options);
 
-			// Returns an object that's roughtly compatible with a standard Response object
+			// Returns an object that's roughly compatible with a standard Response object
 			const output = {
 				ok: response.respInfo.status < 400,
 				path: response.data,
@@ -212,7 +203,7 @@ function shimInit() {
 				trusty: options.ignoreTlsErrors,
 			}).fetch(method, url, headers, RNFetchBlob.wrap(options.path));
 
-			// Returns an object that's roughtly compatible with a standard Response object
+			// Returns an object that's roughly compatible with a standard Response object
 			return {
 				ok: response.respInfo.status < 400,
 				data: response.data,
@@ -230,32 +221,8 @@ function shimInit() {
 		return RNFetchBlob.fs.readFile(path, 'base64');
 	};
 
-	shim.stringByteLength = function(string) {
-		return Buffer.byteLength(string, 'utf-8');
-	};
-
-	shim.Buffer = Buffer;
-
-	shim.showMessageBox = showMessageBox;
-
-	shim.openUrl = url => {
-		Linking.openURL(url);
-	};
-
 	shim.httpAgent = () => {
 		return null;
-	};
-
-	shim.waitForFrame = () => {
-		return new Promise((resolve) => {
-			requestAnimationFrame(() => {
-				resolve();
-			});
-		});
-	};
-
-	shim.mobilePlatform = () => {
-		return Platform.OS;
 	};
 
 	shim.appVersion = () => {
@@ -297,27 +264,6 @@ function shimInit() {
 		return resource;
 	};
 
-	shim.injectedJs = function(name) {
-		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
-		return injectedJs[name];
-	};
-
-	shim.setTimeout = (fn, interval) => {
-		return PoorManIntervals.setTimeout(fn, interval);
-	};
-
-	shim.setInterval = (fn, interval) => {
-		return PoorManIntervals.setInterval(fn, interval);
-	};
-
-	shim.clearTimeout = (id) => {
-		return PoorManIntervals.clearTimeout(id);
-	};
-
-	shim.clearInterval = (id) => {
-		return PoorManIntervals.clearInterval(id);
-	};
-
+	shimInitShared();
 }
 
-module.exports = { shimInit };

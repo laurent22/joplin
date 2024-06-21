@@ -49,7 +49,7 @@ import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosa
 import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
-import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk';
 import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
 import { Dispatch } from 'redux';
@@ -493,6 +493,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 	public async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
+		if (Platform.OS === 'web') return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
 			message: _('In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.'),
@@ -1033,6 +1034,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
+		if (Platform.OS === 'web') {
+			alert('Not supported.');
+			return;
+		}
+
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.

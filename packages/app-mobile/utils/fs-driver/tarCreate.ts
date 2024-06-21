@@ -1,6 +1,5 @@
 import { pack as tarStreamPack } from 'tar-stream';
 import { resolve } from 'path';
-import * as RNFS from 'react-native-fs';
 
 import Logger from '@joplin/utils/Logger';
 import { chunkSize } from './constants';
@@ -8,7 +7,7 @@ import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('fs-driver-rn');
 
-interface TarCreateOptions {
+export interface TarCreateOptions {
 	cwd: string;
 	file: string;
 }
@@ -18,7 +17,7 @@ interface TarCreateOptions {
 
 const tarCreate = async (options: TarCreateOptions, filePaths: string[]) => {
 	// Choose a default cwd if not given
-	const cwd = options.cwd ?? RNFS.DocumentDirectoryPath;
+	const cwd = options.cwd ?? shim.fsDriver().getAppDirectoryPath();
 	const file = resolve(cwd, options.file);
 
 	const fsDriver = shim.fsDriver();
@@ -39,9 +38,10 @@ const tarCreate = async (options: TarCreateOptions, filePaths: string[]) => {
 			}
 		});
 
+		const handle = await shim.fsDriver().open(absPath, 'rw');
+
 		for (let offset = 0; offset < sizeBytes; offset += chunkSize) {
-			// The RNFS documentation suggests using base64 for binary files.
-			const part = await RNFS.read(absPath, chunkSize, offset, 'base64');
+			const part = await shim.fsDriver().readFileChunk(handle, chunkSize, 'base64');
 			entry.write(Buffer.from(part, 'base64'));
 		}
 		entry.end();

@@ -110,3 +110,5 @@ ENOTFOUND
 Scaleway
 Inkscape
 Ionicon
+onready
+opfs
