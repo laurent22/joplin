@@ -11,7 +11,6 @@ type OnToggleOverflowCallback = ()=> void;
 interface OverflowPopupProps {
 	buttonGroups: ButtonGroup[];
 	styleSheet: StyleSheetData;
-	visible: boolean;
 
 	// Should be created using useCallback
 	onToggleOverflow: OnToggleOverflowCallback;
@@ -117,16 +116,13 @@ const ToolbarOverflowRows: React.FC<OverflowPopupProps> = (props: OverflowPopupP
 		/>
 	);
 
-	if (!props.visible) {
-		return null;
-	}
 	return (
 		<View
 			style={{
 				height: props.buttonGroups.length * buttonSize,
 				flexDirection: 'column',
 				flexGrow: 1,
-				display: !props.visible ? 'none' : 'flex',
+				display: 'flex',
 			}}
 			onLayout={onContainerLayout}
 		>

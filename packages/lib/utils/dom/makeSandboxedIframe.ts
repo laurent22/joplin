@@ -33,7 +33,7 @@ const makeSandboxedIframe = (
 						return;
 					}
 
-					console.log('Adding plugin scripts...');
+					console.log('Adding scripts...');
 					window.onmessage = undefined;
 					for (const scriptText of event.data.scripts) {
 						const scriptElem = document.createElement('script');

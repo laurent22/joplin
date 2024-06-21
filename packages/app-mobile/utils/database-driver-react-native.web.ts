@@ -22,7 +22,6 @@ export default class DatabaseDriverReactNative {
 		});
 		const filename = `file:${safeFilename(options.name)}.sqlite3?vfs=opfs`;
 		const { dbId } = await db('open', { filename });
-		console.log('initialized db with ID ', dbId, 'at', filename);
 		this.dbId_ = dbId;
 		this.db_ = db;
 	}
@@ -32,7 +31,6 @@ export default class DatabaseDriverReactNative {
 	}
 
 	public selectOne(sql: string, params: string[] = []) {
-		console.log('selectOne', sql);
 		return new Promise<unknown>(async (resolve, reject) => {
 			let resolved = false;
 			await this.db_('exec', {
@@ -41,7 +39,6 @@ export default class DatabaseDriverReactNative {
 				bind: params,
 				rowMode: 'object',
 				callback: ((result: RowResult) => {
-					console.log('got', result)
 					if (result.rowNumber !== 1) return;
 					resolved = true;
 					resolve(result.row);
@@ -79,14 +76,11 @@ export default class DatabaseDriverReactNative {
 	}
 
 	public async exec(sql: string, params: string[]|null = null) {
-		console.log('preExec', sql);
-
 		const result = await this.db_('exec', {
 			dbId: this.dbId_,
 			sql,
 			bind: params,
 		});
-		console.log('exec', sql, result);
 		return result;
 	}
 

@@ -521,6 +521,7 @@ packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/ExtendedWebView.web.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
@@ -669,7 +670,6 @@ packages/app-mobile/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPa
 packages/app-mobile/plugins/PluginRunner/backgroundPage/startStopPlugin.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.test.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/getFormData.js
-packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/plugins/PluginRunner/backgroundPage/utils/wrapConsoleLog.js
 packages/app-mobile/plugins/PluginRunner/dialogs/PluginDialogManager.js
@@ -1261,6 +1261,7 @@ packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/dom/makeSandboxedIframe.js
 packages/lib/utils/focusHandler.js
 packages/lib/utils/frontMatter.js
 packages/lib/utils/ipc/RemoteMessenger.test.js

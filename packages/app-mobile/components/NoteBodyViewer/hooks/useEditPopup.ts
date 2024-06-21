@@ -5,11 +5,14 @@ import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
 import { extname } from 'path';
 import shim from '@joplin/lib/shim';
+import { Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 export const editPopupClass = 'joplin-editPopup';
 
 const getEditIconSrc = (theme: Theme) => {
+	if (Platform.OS === 'web') return '';
+
 	const iconUri = Icon.getImageSourceSync('pencil', 20, theme.color2).uri;
 
 	// Copy to a location that can be read within a WebView

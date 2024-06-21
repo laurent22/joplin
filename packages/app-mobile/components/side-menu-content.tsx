@@ -71,6 +71,7 @@ const SideMenuContentComponent = (props: Props) => {
 			button: {
 				flex: 1,
 				flexDirection: 'row',
+				flexBasis: 'auto',
 				height: 36,
 				alignItems: 'center',
 				paddingLeft: theme.marginLeft,
@@ -400,6 +401,7 @@ const SideMenuContentComponent = (props: Props) => {
 		const folderButtonStyle: any = {
 			flex: 1,
 			flexDirection: 'row',
+			flexBasis: 'auto',
 			height: 36,
 			alignItems: 'center',
 			paddingRight: theme.marginRight,
@@ -439,7 +441,7 @@ const SideMenuContentComponent = (props: Props) => {
 		return (
 			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
 				<TouchableOpacity
-					style={{ flex: 1 }}
+					style={{ flex: 1, flexBasis: 'auto' }}
 					onPress={() => {
 						folder_press(folder);
 					}}
@@ -543,7 +545,7 @@ const SideMenuContentComponent = (props: Props) => {
 			);
 		}
 
-		return <View style={{ flex: 0, flexDirection: 'column', paddingBottom: theme.marginBottom }}>{items}</View>;
+		return <View style={{ flex: 0, flexDirection: 'column', flexBasis: 'auto', paddingBottom: theme.marginBottom }}>{items}</View>;
 	};
 
 	let items = [];

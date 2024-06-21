@@ -460,6 +460,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		styles.titleContainer = {
 			flex: 0,
 			flexDirection: 'row',
+			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
 			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,

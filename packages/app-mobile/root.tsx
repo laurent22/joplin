@@ -544,11 +544,16 @@ async function initialize(dispatch: Function) {
 	reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
-	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
-	if (Setting.value('env') === 'dev') {
-		dbLogger.addTarget(TargetType.Console);
-		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
+	if (Platform.OS !== 'web') {
+		dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
+		if (Setting.value('env') === 'dev') {
+			dbLogger.addTarget(TargetType.Console);
+			dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
+		} else {
+			dbLogger.setLevel(Logger.LEVEL_INFO);
+		}
 	} else {
+		dbLogger.addTarget(TargetType.Console);
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 

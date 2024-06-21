@@ -184,6 +184,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			...settingControlStyle,
 			color: undefined,
 			flex: 0,
+			flexBasis: 'auto',
 		},
 
 

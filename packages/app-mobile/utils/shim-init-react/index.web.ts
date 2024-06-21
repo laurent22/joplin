@@ -118,8 +118,7 @@ export const shimInit = () => {
 	};
 
 	shim.appVersion = () => {
-		const p = require('react-native-version-info').default;
-		return p.appVersion;
+		return require('../../package.json').version;
 	};
 
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it

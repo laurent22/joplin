@@ -18,7 +18,7 @@ const removeReservedWords = (path: string) => {
 
 declare global {
 	interface FileSystemDirectoryHandle {
-		keys(): AsyncIterable<FileSystemFileHandle>;
+		keys(): AsyncIterable<string>;
 	}
 }
 
@@ -59,7 +59,7 @@ export default class FsDriverWeb extends FsDriverBase {
 				console.log('handle', handle);
 			} catch (error) {
 				// TODO: Handle this better
-				console.warn(error);
+				console.warn(error, 'for', path);
 				handle = null;
 			}
 
@@ -76,15 +76,19 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.initPromise_;
 
 		const parent = await this.pathToDirectoryHandle_(dirname(path));
-		console.log('GETname', basename(path))
+		console.error('Get name', basename(path), path, create)
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
-			if (!await this.exists(path)) {
-				return null;
-			} else {
+			if (create) {
 				throw error;
 			}
+
+			console.warn(error);
+
+			// TODO: This should return null when a file doesn't exist, but should
+			// also report errors in other cases.
+			return null;
 		}
 	}
 
@@ -223,7 +227,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		if (!parentDir) return false;
 
 		const target = basename(path);
-		for await (const key of (parentDir as any).keys()) {
+		for await (const key of parentDir.keys()) {
 			if (key === target) return true;
 		}
 		return false;
