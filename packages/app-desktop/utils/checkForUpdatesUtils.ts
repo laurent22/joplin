@@ -86,18 +86,18 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 		});
 	}
 
+	const arm64DMGPattern = /arm64\.(dmg|DMG)$/;
 	if (platform === 'darwin' && arch === 'arm64') {
 		foundAsset = release.assets.find(asset => {
-			return asset.name.endsWith('arm64.dmg');
+			return asset.name.match(arm64DMGPattern);
 		});
 	}
 
 	if (!foundAsset && platform === 'darwin') {
 		foundAsset = release.assets.find(asset => {
-			return fileExtension(asset.name) === 'dmg' && !asset.name.endsWith('arm64.dmg');
+			return fileExtension(asset.name) === 'dmg' && !asset.name.match(arm64DMGPattern);
 		});
 	}
-
 	if (platform === 'linux') {
 		foundAsset = release.assets.find(asset => {
 			return fileExtension(asset.name) === 'AppImage';

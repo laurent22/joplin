@@ -8,7 +8,8 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
-import versionInfo from '@joplin/lib/versionInfo';
+import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
+import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
@@ -22,7 +23,10 @@ const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-const packageInfo = require('../packageInfo.js');
+import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { EventName } from '@joplin/lib/eventManager';
+const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 
@@ -56,6 +60,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		label: label,
 		submenu: [],
@@ -72,13 +77,16 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: any) => {
 	return useMemo(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const switchProfileMenuItems: any[] = [];
 
 		for (let i = 0; i < profileConfig.profiles.length; i++) {
 			const profile = profileConfig.profiles[i];
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let menuItem: any = {};
 			const profileNum = i + 1;
 
@@ -108,9 +116,38 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 	}, [profileConfig, menuItemDic]);
 };
 
+const useNoteListMenuItems = (noteListRendererIds: string[]) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	const [menuItems, setMenuItems] = useState<any[]>([]);
+
+	useAsyncEffect(async (event) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const output: any[] = [];
+		for (const id of noteListRendererIds) {
+			const renderer = getListRendererById(id);
+
+			output.push({
+				id: `noteListRenderer_${id}`,
+				label: await renderer.label(),
+				type: 'checkbox',
+				click: () => {
+					Setting.setValue('notes.listRendererId', id);
+				},
+			});
+
+			if (event.cancelled) return;
+		}
+
+		setMenuItems(output);
+	}, [noteListRendererIds]);
+
+	return menuItems;
+};
+
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	menuItemProps: any;
 	routeName: string;
 	selectedFolderId: string;
@@ -122,7 +159,9 @@ interface Props {
 	showNoteCounts: boolean;
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginMenuItems: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.languages']: string[];
@@ -131,6 +170,9 @@ interface Props {
 	locale: string;
 	profileConfig: ProfileConfig;
 	pluginSettings: PluginSettings;
+	noteListRendererIds: string[];
+	noteListRendererId: string;
+	showMenuBar: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -149,8 +191,19 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	menuItem.enabled = enabled;
 }
 
+const applyMenuBarVisibility = (showMenuBar: boolean) => {
+	// The menu bar cannot be hidden on macOS
+	if (shim.isMac()) return;
+
+	const window = bridge().window();
+	window.setAutoHideMenuBar(!showMenuBar);
+	window.setMenuBarVisibility(showMenuBar);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function useMenuStates(menu: any, props: Props) {
 	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let timeoutId: any = null;
 
 		function scheduleUpdate() {
@@ -171,14 +224,21 @@ function useMenuStates(menu: any, props: Props) {
 				menuItemSetChecked(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
 			}
 
+			const listRendererIds = getListRendererIds();
+			for (const id of listRendererIds) {
+				menuItemSetChecked(`noteListRenderer_${id}`, props.noteListRendererId === id);
+			}
+
 			function applySortItemCheckState(type: string) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
 					if (!sortOptions.hasOwnProperty(field)) continue;
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
 				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -208,6 +268,7 @@ function useMenuStates(menu: any, props: Props) {
 		props['notes.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
+		props.noteListRendererId,
 		props.showNoteCounts,
 		props.uncompletedTodosOnTop,
 		props.showCompletedTodos,
@@ -251,12 +312,14 @@ function useMenu(props: Props) {
 
 		void CommandService.instance().execute('showModalMessage', modalMessage);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const errors: any[] = [];
 
 		const importOptions = {
 			path,
 			format: module.format,
 			outputFormat: module.outputFormat,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (status: any) => {
 				const statusStrings: string[] = Object.keys(status).map((key: string) => {
 					return `${key}: ${status[key]}`;
@@ -264,6 +327,7 @@ function useMenu(props: Props) {
 
 				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
 				errors.push(error);
 				console.warn(error);
@@ -280,14 +344,30 @@ function useMenu(props: Props) {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		if (errors.length) {
-			bridge().showErrorMessageBox('There was some errors importing the notes. Please check the console for more details.');
-			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
-		}
-
 		void CommandService.instance().execute('hideModalMessage');
+
+		if (errors.length) {
+			const response = bridge().showErrorMessageBox('There was some errors importing the notes - check the console for more details.\n\nPlease consider sending a bug report to the forum!', {
+				buttons: [_('Close'), _('Send bug report')],
+			});
+
+			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
+
+			if (response === 1) {
+				const url = makeDiscourseDebugUrl(
+					`Error importing notes from format: ${module.format}`,
+					`- Input format: ${module.format}\n- Output format: ${module.outputFormat}`,
+					errors,
+					packageInfo,
+					PluginService.instance(),
+					props.pluginSettings,
+				);
+
+				void bridge().openExternal(url);
+			}
+		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.selectedFolderId]);
+	}, [props.selectedFolderId, props.pluginSettings]);
 
 	const onMenuItemClickRef = useRef(null);
 	onMenuItemClickRef.current = onMenuItemClick;
@@ -295,20 +375,25 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const pluginCommandNames = useMemo(() => props.pluginMenuItems.map((view: any) => view.commandName), [props.pluginMenuItems]);
 
 	const menuItemDic = useMemo(() => {
 		return menuUtils.commandsToMenuItems(
 			commandNames.concat(pluginCommandNames),
 			(commandName: string) => onMenuItemClickRef.current(commandName),
-			props.locale
+			props.locale,
 		);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
 
+	const noteListMenuItems = useNoteListMenuItems(props.noteListRendererIds);
+
 	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let timeoutId: any = null;
 
 		function updateMenu() {
@@ -347,7 +432,7 @@ function useMenu(props: Props) {
 				if (type === 'notes') {
 					sortItems.push(
 						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
-						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
+						{ ...menuItemDic.toggleNotesSortOrderField, visible: false },
 					);
 				} else {
 					sortItems.push({
@@ -386,12 +471,13 @@ function useMenu(props: Props) {
 							label: module.fullLabel(),
 							click: async () => {
 								await InteropServiceHelper.export(
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 									(action: any) => props.dispatch(action),
 									module,
 									{
 										plugins: pluginsRef.current,
 										customCss: props.customCss,
-									}
+									},
 								);
 							},
 						});
@@ -403,6 +489,7 @@ function useMenu(props: Props) {
 							label: module.fullLabel(moduleSource),
 							click: () => onImportModuleClickRef.current(module, moduleSource),
 						});
+						if (module.separatorAfter) importItems.push({ type: 'separator' });
 					}
 				}
 			}
@@ -414,7 +501,7 @@ function useMenu(props: Props) {
 			});
 
 			exportItems.push(
-				menuItemDic.exportPdf
+				menuItemDic.exportPdf,
 			);
 
 			// We need a dummy entry, otherwise the ternary operator to show a
@@ -450,9 +537,11 @@ function useMenu(props: Props) {
 				submenu: switchProfileMenuItems,
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let toolsItems: any[] = [];
 
 			// we need this workaround, because on macOS the menu is different
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const toolsItemsWindowsLinux: any[] = [
 				{
 					label: _('Options'),
@@ -506,10 +595,10 @@ function useMenu(props: Props) {
 
 			const rootMenuFile = {
 				// Using a dummy entry for macOS here, because first menu
-				// becomes 'Joplin' and we need a nenu called 'File' later.
+				// becomes 'Joplin' and we need a menu called 'File' later.
 				label: shim.isMac() ? '&JoplinMainMenu' : _('&File'),
 				// `&` before one of the char in the label name mean, that
-				// <Alt + F> will open this menu. It's needed becase electron
+				// <Alt + F> will open this menu. It's needed because electron
 				// opens the first menu on Alt press if no hotkey assigned.
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{
@@ -629,6 +718,7 @@ function useMenu(props: Props) {
 				});
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const rootMenus: any = {
 				edit: {
 					id: 'edit',
@@ -680,11 +770,17 @@ function useMenu(props: Props) {
 						menuItemDic.resetLayout,
 						separator(),
 						menuItemDic.toggleSideBar,
+						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
+						},
+						{
+							label: _('Note list style'),
+							submenu: noteListMenuItems,
+							visible: noteListMenuItems.length > 1,
 						},
 						separator(),
 						{
@@ -773,12 +869,33 @@ function useMenu(props: Props) {
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						separator(),
+						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
+						separator(),
+						menuItemDic.permanentlyDeleteNote,
 					],
 				},
 				tools: {
 					label: _('&Tools'),
 					submenu: toolsItems,
+				},
+				window: {
+					id: 'window',
+
+					// Adds the default MacOS actions (e.g. "tile left") to the menu.
+					//
+					// Note: If the dev tools are shown on startup, this adds additional tab-related
+					// actions to the menu that are not otherwise shown. See https://stackoverflow.com/a/77458809
+					role: 'windowMenu',
+
+					label: _('&Window'),
+					visible: !!shim.isMac(),
+					submenu: [
+						{
+							role: 'minimize',
+							accelerator: shim.isMac() && keymapService.getAccelerator('minimizeWindow'),
+						},
+					],
 				},
 				help: {
 					label: _('&Help'),
@@ -839,6 +956,7 @@ function useMenu(props: Props) {
 			// It seems the "visible" property of separators is ignored by Electron, making
 			// it display separators that we want hidden. So this function iterates through
 			// them and remove them completely.
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const cleanUpSeparators = (items: any[]) => {
 				const output = [];
 				for (const item of items) {
@@ -883,6 +1001,7 @@ function useMenu(props: Props) {
 			}
 
 			const template = [
+				shim.isMac() ? rootMenus.macOsApp : null,
 				rootMenus.file,
 				rootMenus.edit,
 				rootMenus.view,
@@ -890,10 +1009,9 @@ function useMenu(props: Props) {
 				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
+				shim.isMac() ? rootMenus.window : null,
 				rootMenus.help,
-			];
-
-			if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
+			].filter(item => item !== null);
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([
@@ -908,6 +1026,7 @@ function useMenu(props: Props) {
 							menuItemDic.textCut,
 							menuItemDic.textPaste,
 							menuItemDic.textSelectAll,
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 						] as any,
 					},
 				]));
@@ -933,6 +1052,7 @@ function useMenu(props: Props) {
 		props['spellChecker.languages'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['spellChecker.enabled'],
+		noteListMenuItems,
 		props.pluginSettings,
 		props.customCss,
 		props.locale,
@@ -948,10 +1068,10 @@ function useMenu(props: Props) {
 			setKeymapLastChangeTime(Date.now());
 		}
 
-		KeymapService.instance().on('keymapChange', onKeymapChange);
+		KeymapService.instance().on(EventName.KeymapChange, onKeymapChange);
 
 		return () => {
-			KeymapService.instance().off('keymapChange', onKeymapChange);
+			KeymapService.instance().off(EventName.KeymapChange, onKeymapChange);
 		};
 	}, []);
 
@@ -970,9 +1090,11 @@ function useMenu(props: Props) {
 	return menu;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
 	if (menu) Menu.setApplicationMenu(menu);
+	applyMenuBarVisibility(props.showMenuBar);
 	return null;
 }
 
@@ -1000,6 +1122,9 @@ const mapStateToProps = (state: AppState) => {
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
 		profileConfig: state.profileConfig,
+		noteListRendererIds: state.noteListRendererIds,
+		noteListRendererId: state.settings['notes.listRendererId'],
+		showMenuBar: state.settings.showMenuBar,
 	};
 };
 

@@ -6,6 +6,8 @@ import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
 import Button, { ButtonLevel } from '../../../Button/Button';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
+import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -18,10 +20,6 @@ export enum UpdateState {
 	CanUpdate = 2,
 	Updating = 3,
 	HasBeenUpdated = 4,
-}
-
-export interface ItemEvent {
-	item: PluginItem;
 }
 
 interface Props {
@@ -40,19 +38,13 @@ interface Props {
 function manifestToItem(manifest: PluginManifest): PluginItem {
 	return {
 		manifest: manifest,
+		installed: true,
 		enabled: true,
 		deleted: false,
 		devMode: false,
+		builtIn: false,
 		hasBeenUpdated: false,
 	};
-}
-
-export interface PluginItem {
-	manifest: PluginManifest;
-	enabled: boolean;
-	deleted: boolean;
-	devMode: boolean;
-	hasBeenUpdated: boolean;
 }
 
 const CellRoot = styled.div<{ isCompatible: boolean }>`
@@ -60,7 +52,7 @@ const CellRoot = styled.div<{ isCompatible: boolean }>`
 	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
 	padding: 15px;
 	border: 1px solid ${props => props.theme.dividerColor};
 	border-radius: 6px;
@@ -96,14 +88,18 @@ const NeedUpgradeMessage = styled.span`
 	font-size: ${props => props.theme.fontSize}px;
 `;
 
-const DevModeLabel = styled.div`
+const BoxedLabel = styled.div`
 	border: 1px solid ${props => props.theme.color};
 	border-radius: 4px;
 	padding: 4px 6px;
 	font-size: ${props => props.theme.fontSize * 0.75}px;
 	color: ${props => props.theme.color};
+	flex-grow: 0;
+	height: min-content;
+	margin-top: auto;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const StyledNameAndVersion = styled.div<{ mb: any }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
@@ -170,7 +166,7 @@ export default function(props: Props) {
 		if (!props.onToggle) return null;
 
 		if (item.devMode) {
-			return <DevModeLabel>DEV</DevModeLabel>;
+			return <BoxedLabel>DEV</BoxedLabel>;
 		}
 
 		return <ToggleButton
@@ -181,7 +177,10 @@ export default function(props: Props) {
 	}
 
 	function renderDeleteButton() {
+		// Built-in plugins can only be disabled
+		if (item.builtIn) return null;
 		if (!props.onDelete) return null;
+
 		return <Button level={ButtonLevel.Secondary} onClick={() => props.onDelete({ item })} title={_('Delete')}/>;
 	}
 
@@ -217,6 +216,16 @@ export default function(props: Props) {
 		/>;
 	}
 
+	const renderDefaultPluginLabel = () => {
+		if (item.builtIn) {
+			return (
+				<BoxedLabel>{_('Built-in')}</BoxedLabel>
+			);
+		}
+
+		return null;
+	};
+
 	function renderFooter() {
 		if (item.devMode) return null;
 
@@ -224,7 +233,7 @@ export default function(props: Props) {
 			return (
 				<CellFooter>
 					<NeedUpgradeMessage>
-						{_('Please upgrade Joplin to use this plugin')}
+						{PluginService.instance().describeIncompatibility(props.manifest)}
 					</NeedUpgradeMessage>
 				</CellFooter>
 			);
@@ -236,6 +245,7 @@ export default function(props: Props) {
 				{renderInstallButton()}
 				{renderUpdateButton()}
 				<div style={{ display: 'flex', flex: 1 }}/>
+				{renderDefaultPluginLabel()}
 			</CellFooter>
 		);
 	}

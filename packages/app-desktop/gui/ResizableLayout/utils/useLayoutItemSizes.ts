@@ -11,7 +11,7 @@ export interface LayoutItemSizes {
 }
 
 // Container always take the full space while the items within it need to
-// accomodate for the resize handle.
+// accommodate for the resize handle.
 export function itemSize(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isContainer: boolean): Size {
 	const parentResizableRight = !!parent && parent.resizableRight;
 	const parentResizableBottom = !!parent && parent.resizableBottom;
@@ -38,7 +38,9 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		height: parentSize.height,
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const noWidthChildren: any[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const noHeightChildren: any[] = [];
 
 	// The minimum space required for items with no defined size

@@ -3,17 +3,26 @@
 	"extends": [
 		"config:base"
 	],
+
+	// We don't update too frequently so that if something is broken in a new package
+	// release it will have time to be fixed by the time we update. The npm ecosystem
+	// being what it is even patch releases can have serious breaking changes.
 	"major": {
-		"stabilityDays": 80,
+		"stabilityDays": 200,
 	},
 	"minor": {
-		"stabilityDays": 40,
+		"stabilityDays": 120,
 	},
 	"patch": {
-		"stabilityDays": 20,
+		"stabilityDays": 90,
 	},
-	"prConcurrentLimit": 5,
+
+	"prConcurrentLimit": 20,
 	"prHourlyLimit": 0,
+
+	// Tell Renovate to rebase only when there's a conflict, otherwise pull
+	// requests never get auto-merged because there are always new changes.
+	"rebaseWhen": "conflicted",
 
 	// It seems we need to delete the branches after merge or else it causes this problem:
 	// https://github.com/renovatebot/renovate/discussions/21256#discussioncomment-5898418
@@ -28,9 +37,11 @@
 		"packages/app-mobile/android/app/build.gradle",
 		"packages/generate-plugin-doc/**",
 		"packages/plugins/**",
+		"packages/doc-builder/**",
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		"@codemirror/autocomplete",
 		"@codemirror/commands",
 		"@codemirror/lang-cpp",
 		"@codemirror/lang-html",
@@ -40,11 +51,16 @@
 		"@codemirror/lang-php",
 		"@codemirror/lang-rust",
 		"@codemirror/language",
+		"@codemirror/language-data",
 		"@codemirror/legacy-modes",
+		"@codemirror/lint",
 		"@codemirror/search",
 		"@codemirror/state",
 		"@codemirror/view",
+		"@replit/codemirror-vim",
+		"@lezer/common",
 		"@lezer/highlight",
+		"@lezer/markdown",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
@@ -70,10 +86,7 @@
 		"typedoc",
 		"webpack-cli",
 		"webpack",
-
-		// Electron and dependencies should be updated manually.
-		"electron",
-		"electron-builder",
+		"yeoman-generator",
 
 		// pdfjs-dist requires the canvas package, which cannot be built in
 		// Windows.
@@ -99,6 +112,7 @@
 		"@babel/runtime",
 		"@tsconfig/react-native",
 		"@types/react-native",
+		"@testing-library/react-native",
 		"androidx.appcompat:appcompat",
 		"babel-plugin-module-resolver",
 		"com.android.tools.build:gradle",
@@ -111,17 +125,15 @@
 		"jsc-android",
 		"org.robolectric:robolectric",
 		"react-native",
+		"activesupport",
+		"cocoapods",
 
 		// We currently don't have automated tests that verify that the
-		// sidemenus work correctly in the mobile app.
-		// Because an update to react-native-reanimated has previously broken
-		// the sidemenu (https://github.com/laurent22/joplin/issues/8456), we
-		// disable auto updates for it:
+		// sidemenus work correctly in the mobile app. Because an update to
+		// react-native-reanimated has previously broken the sidemenu
+		// (https://github.com/laurent22/joplin/issues/8456), we disable auto
+		// updates for it:
 		"react-native-reanimated",
-
-		// Need special processing when upgrading
-		"katex",
-		"mermaid",
 
 		// Cannot upgrade further due to ESM support
 		"node-fetch",
@@ -129,16 +141,21 @@
 		"open",
 		"pretty-bytes",
 		"strip-ansi",
-		"formidable",
 		"node-emoji",
+		"debounce",
+
+		// Formidable v3 is broken:
+		// https://github.com/node-formidable/formidable/issues/958
+		"formidable",
+		"@types/formidable",
 
 		// @koa/cors has undocumented breaking changes, and the package is not
 		// well supported so we're stuck with latest v3 for now
 		"@koa/cors",
 
-		// Can't upgrade beyond 2.x because it doesn't work with Electron. If trying to
-		// upgrade again, check that adding a link from the CodeMirror editor works.
-		// See /packages/app-desktop/gui/dialogs.ts
+		// Can't upgrade beyond 2.x because it doesn't work with Electron. If
+		// trying to upgrade again, check that adding a link from the CodeMirror
+		// editor works. See /packages/app-desktop/gui/dialogs.ts
 		"smalltalk",
 
 		// Don't think we can trust this lib because they don't release a
@@ -179,6 +196,19 @@
 
 		// We are too many versions behind so it needs to be manually upgraded.
 		"immer",
+
+		// We don't really use styled-components anymore and v6 introduces
+		// breaking changes. Ideally we should just update existing components
+		// to rscss.
+		"styled-components",
+		"@types/styled-components",
+
+		// For now we are stuck with v5.1.6 due to this bug:
+		// https://github.com/TryGhost/node-sqlite3/issues/1747
+		"sqlite3",
+
+		// They refactored it with undocumented breaking changes.
+		"react-native-vosk",
 	],
 	"packageRules": [
 		{
@@ -186,10 +216,32 @@
 			"automerge": true,
 			"labels": ["automerge"],
 		},
+
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"labels": ["automerge"],
+			"matchPackagePatterns": [
+				"@types/*",
+			],
+		},
+
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": true,
+			"groupName": "types",
+			"extends": ["schedule:monthly"],
+			"labels": ["automerge"],
+			"matchPackagePatterns": [
+				"electron",
+				"electron-*",
+			],
+		},
+		
 		{
 			"matchUpdateTypes": ["major", "minor", "patch"],
 			"automerge": true,
-			"groupName": "buildTools",
+			"groupName": "eslint",
 			"labels": ["automerge"],
 			"extends": ["schedule:monthly"],
 			"matchPackagePatterns": [
@@ -204,11 +256,9 @@
 				"yarn",
 				"typescript",
 				"prettier",
-				
-				// If it builds, it should be safe to merge @types/* packages
-				"@types/*",
 			],
 		},
+
 		// {
 		// 	"matchUpdateTypes": ["minor", "patch"],
 		// 	"automerge": true,

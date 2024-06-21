@@ -1,8 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
-import { sleep } from './time';
+import { msleep } from './time';
 import fetch from 'node-fetch';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const fetchWithRetry = async (url: string, opts: any = null) => {
 	if (!opts) opts = {};
 	let retry = opts && opts.retry || 3;
@@ -20,7 +21,7 @@ export const fetchWithRetry = async (url: string, opts: any = null) => {
 			}
 
 			if (opts && opts.pause) {
-				await sleep(opts.pause);
+				await msleep(opts.pause);
 			}
 		}
 	}

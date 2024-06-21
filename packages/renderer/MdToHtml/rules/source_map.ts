@@ -1,4 +1,5 @@
 export default {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: (markdownIt: any, params: any) => {
 
 		if (!params.mapsToLine) return;
@@ -6,7 +7,7 @@ export default {
 		const allowedLevels = {
 			paragraph_open: 0,
 			heading_open: 0,
-			// fence: 0, // fence uses custom rendering that doesn't propogate attr so it can't be used for now
+			// fence: 0, // fence uses custom rendering that doesn't propagate attr so it can't be used for now
 			blockquote_open: 0,
 			table_open: 0,
 			code_block: 0,
@@ -19,6 +20,7 @@ export default {
 		for (const [key, allowedLevel] of Object.entries(allowedLevels)) {
 			const precedentRule = markdownIt.renderer.rules[key];
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			markdownIt.renderer.rules[key] = (tokens: any[], idx: number, options: any, env: any, self: any) => {
 				if (!!tokens[idx].map && tokens[idx].level <= allowedLevel) {
 					const line = tokens[idx].map[0];

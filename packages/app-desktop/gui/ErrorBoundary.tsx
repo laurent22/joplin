@@ -1,9 +1,9 @@
 import * as React from 'react';
-import versionInfo from '@joplin/lib/versionInfo';
+import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
-const packageInfo = require('../packageInfo.js');
+const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
 interface ErrorInfo {
@@ -26,6 +26,7 @@ interface State {
 
 interface Props {
 	message?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	children: any;
 }
 
@@ -33,6 +34,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public state: State = { error: null, errorInfo: null, pluginInfos: [], plugins: {} };
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public componentDidCatch(error: any, errorInfo: ErrorInfo) {
 		if (typeof error === 'string') error = { message: error };
 
@@ -89,14 +91,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 					<section key="message">
 						<h2>Message</h2>
 						<p>{this.state.error.message}</p>
-					</section>
+					</section>,
 				);
 
 				output.push(
 					<section key="versionInfo">
 						<h2>Version info</h2>
 						<pre>{versionInfo(packageInfo, this.state.plugins).message}</pre>
-					</section>
+					</section>,
 				);
 
 				if (this.state.pluginInfos.length) {
@@ -104,7 +106,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 						<section key="pluginSettings">
 							<h2>Plugins</h2>
 							<pre>{JSON.stringify(this.state.pluginInfos, null, 4)}</pre>
-						</section>
+						</section>,
 					);
 				}
 
@@ -113,7 +115,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 						<section key="stacktrace">
 							<h2>Stack trace</h2>
 							<pre>{this.state.error.stack}</pre>
-						</section>
+						</section>,
 					);
 				}
 
@@ -123,7 +125,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 							<section key="componentStack">
 								<h2>Component stack</h2>
 								<pre>{this.state.errorInfo.componentStack}</pre>
-							</section>
+							</section>,
 						);
 					}
 				}

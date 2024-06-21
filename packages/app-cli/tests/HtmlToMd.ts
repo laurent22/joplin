@@ -1,5 +1,6 @@
 import shim from '@joplin/lib/shim';
 const os = require('os');
+import { readFile } from 'fs/promises';
 const { filename } = require('@joplin/lib/path-utils');
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 
@@ -21,6 +22,7 @@ describe('HtmlToMd', () => {
 
 			// if (htmlFilename.indexOf('image_preserve_size') !== 0) continue;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const htmlToMdOptions: any = {};
 
 			if (htmlFilename === 'anchor_local.html') {
@@ -35,8 +37,16 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
-			const html = await shim.fsDriver().readFile(htmlPath);
-			let expectedMd = await shim.fsDriver().readFile(mdPath);
+			if (htmlFilename.indexOf('preserve_nested_tables') === 0) {
+				htmlToMdOptions.preserveNestedTables = true;
+			}
+
+			if (htmlFilename.indexOf('text_color') === 0) {
+				htmlToMdOptions.preserveColorStyles = true;
+			}
+
+			const html = await readFile(htmlPath, 'utf8');
+			let expectedMd = await readFile(mdPath, 'utf8');
 
 			let actualMd = await htmlToMd.parse(`<div>${html}</div>`, htmlToMdOptions);
 
@@ -47,11 +57,12 @@ describe('HtmlToMd', () => {
 
 			if (actualMd !== expectedMd) {
 				const result = [];
-
 				result.push('');
 				result.push(`Error converting file: ${htmlFilename}`);
 				result.push('--------------------------------- Got:');
 				result.push(actualMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
+				// result.push('--------------------------------- Raw:');
+				// result.push(actualMd.split('\n'));
 				result.push('--------------------------------- Expected:');
 				result.push(expectedMd.split('\n').map((l: string) => `"${l}"`).join('\n'));
 				result.push('--------------------------------------------');
@@ -81,8 +92,8 @@ describe('HtmlToMd', () => {
 
 	it('should allow disabling escape', async () => {
 		const htmlToMd = new HtmlToMd();
-		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: true })).toBe('https://test.com/1_2_3.pdf');
-		expect(htmlToMd.parse('https://test.com/1_2_3.pdf', { disableEscapeContent: false })).toBe('https://test.com/1\\_2\\_3.pdf');
+		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: true })).toBe('> 1 _2_ 3.pdf');
+		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: false })).toBe('\\> 1 \\_2_ 3.pdf');
 	});
 
 });

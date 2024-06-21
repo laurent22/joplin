@@ -1,58 +1,3685 @@
 {
- "- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": "- Storage: to allow attaching files to notes and to enable filesystem synchronization.",
- "Are you sure you want to renew the authorisation token?": "Are you sure you want to renew the authorization token?",
- "Attachment download behaviour": "Attachment download behavior",
- "Authorisation token:": "Authorization token:",
- "Cancelling background synchronisation... Please wait.": "Cancelling background synchronization... Please wait.",
- "Cannot initialise synchroniser.": "Cannot initialize synchronizer.",
- "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": "Cannot refresh token: authentication data is missing. Starting the synchronization again may fix the problem.",
- "Check synchronisation configuration": "Check synchronization configuration",
- "Coming alarms": "Scheduled alarms",
- "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronization configuration\".",
- "Could not authorise application:\n\n%s\n\nPlease try again.": "Could not authorize application:\n\n%s\n\nPlease try again.",
- "Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": "Could not connect to Joplin Server. Please check the Synchronization options in the config screen. Full error was:\n\n%s",
- "Directory to synchronise with (absolute path)": "Directory to synchronize with (absolute path)",
- "Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": "Disabling encryption means *all* your notes and attachments are going to be re-synchronized and sent unencrypted to the sync target. Do you wish to continue?",
- "Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": "Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.",
- "emphasised text": "emphasized text",
- "Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": "Enabling encryption means *all* your notes and attachments are going to be re-synchronized and sent encrypted to the sync target.",
- "For information on how to customise the shortcuts please visit %s": "For information on how to customize the shortcuts please visit %s",
- "Grant authorisation": "Grant authorization",
- "In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": "In order to do so, your entire data set will have to be encrypted and synchronized, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronize all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.",
- "In order to use file system synchronisation your permission to write to external storage is required.": "In order to use file system synchronization your permission to write to external storage is required.",
- "Items that cannot be synchronised": "Items that cannot be synchronized",
- "Joplin can synchronise your notes using various providers. Select one from the list below.": "Joplin can synchronize your notes using various providers. Select one from the list below.",
- "Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": "Lock file is already being held. If you know that no synchronization is taking place, you may delete the lock file at \"%s\" and resume the operation.",
- "Not authentified with %s. Please provide any missing credentials.": "Not authenticated with %s. Please provide any missing credentials.",
- "Search in all the notes": "Search in all notes",
- "Solarised Dark": "Solarized Dark",
- "Solarised Light": "Solarized Light",
- "Some items cannot be decrypted.": "Some items cannot be synchronized.",
- "Some items cannot be synchronised.": "Some items cannot be synchronized.",
- "Some items cannot be synchronised. Press for more info.": "Some items cannot be synchronized. Press for more info.",
- "Start application minimised in the tray icon": "Start application minimized in the tray icon",
- "Starting synchronisation...": "Starting synchronization...",
- "Step 1: Open this URL in your browser to authorise the application:": "Step 1: Open this URL in your browser to authorize the application:",
- "Success! Synchronisation configuration appears to be correct.": "Success! Synchronization configuration appears to be correct.",
- "Synchronisation": "Synchronization",
- "Synchronisation interval": "Synchronization interval",
- "Synchronisation is already in progress.": "Synchronization is already in progress.",
- "Synchronisation Status": "Synchronization Status",
- "Synchronisation target": "Synchronization target",
- "Synchronisation target: %s (%s)": "Synchronization target: %s (%s)",
- "Synchronise": "Synchronize",
- "Synchronise only over WiFi connection": "Synchronize only over WiFi connection",
- "Synchronises with remote storage.": "Synchronizes with remote storage.",
- "Synchronising...": "Synchronizing...",
- "The application has been authorised - you may now close this browser tab.": "The application has been authorized - you may now close this browser tab.",
- "The application has been authorised!": "The application has been authorized!",
- "The application has been successfully authorised.": "The application has been successfully authorized.",
- "The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": "The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronization.",
- "The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": "The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronization.",
- "The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": "The target to synchronize to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).",
- "The Web Clipper needs your authorisation to access your data.": "The Web Clipper needs your authorization to access your data.",
- "This authorisation token is only needed to allow third-party applications to access Joplin.": "This authorization token is only needed to allow third-party applications to access Joplin.",
- "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronized, thus reducing the number of conflicts.",
- "To allow Joplin to synchronise with Dropbox, please follow the steps below:": "To allow Joplin to synchronize with Dropbox, please follow the steps below:",
- "To maximise/minimise the console, press \"tc\".": "To maximize/minimize the console, press \"tc\"."
+	"\"%s\" is missing the required \"%s\" property.": [
+		""
+	],
+	"%d days": [
+		""
+	],
+	"%d GB": [
+		""
+	],
+	"%d GB storage space": [
+		""
+	],
+	"%d hour": [
+		""
+	],
+	"%d hours": [
+		""
+	],
+	"%d MB": [
+		""
+	],
+	"%d MB per note or attachment": [
+		""
+	],
+	"%d minutes": [
+		""
+	],
+	"%d notes match this pattern. Delete them?": [
+		""
+	],
+	"%d notes will be permanently deleted. Continue?": [
+		""
+	],
+	"%s": [
+		""
+	],
+	"%s %s (%s, %s)": [
+		""
+	],
+	"%s (%s) could not be uploaded: %s": [
+		""
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (%s): %s": [
+		""
+	],
+	"%s (pre-release)": [
+		""
+	],
+	"%s - Copy": [
+		""
+	],
+	"%s / %s": [
+		""
+	],
+	"%s / %s / %s": [
+		""
+	],
+	"%s = %s": [
+		""
+	],
+	"%s = %s (%s)": [
+		""
+	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s tab opened": [
+		""
+	],
+	"%s: %d": [
+		""
+	],
+	"%s: %d notes": [
+		""
+	],
+	"%s: %d/%d": [
+		""
+	],
+	"%s: %s": [
+		""
+	],
+	"%s: Missing password.": [
+		""
+	],
+	"&Edit": [
+		""
+	],
+	"&File": [
+		""
+	],
+	"&Go": [
+		""
+	],
+	"&Help": [
+		""
+	],
+	"&Note": [
+		""
+	],
+	"&Tools": [
+		""
+	],
+	"&View": [
+		""
+	],
+	"&Window": [
+		""
+	],
+	"(%s)": [
+		""
+	],
+	"(In plugin: %s)": [
+		""
+	],
+	"(None)": [
+		""
+	],
+	"(wysiwyg: %s)": [
+		""
+	],
+	"(You may disable this prompt in the options)": [
+		""
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		""
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		""
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		"- Storage: to allow attaching files to notes and to enable filesystem synchronization."
+	],
+	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
+		""
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		""
+	],
+	"A3": [
+		""
+	],
+	"A4": [
+		""
+	],
+	"A5": [
+		""
+	],
+	"About": [
+		""
+	],
+	"About Joplin": [
+		""
+	],
+	"accelerator": [
+		""
+	],
+	"Accelerator \"%s\" is not valid.": [
+		""
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		""
+	],
+	"Accept": [
+		""
+	],
+	"Accepted invitations": [
+		""
+	],
+	"Access denied: Please check your username and password": [
+		""
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		""
+	],
+	"Account": [
+		""
+	],
+	"Account information": [
+		""
+	],
+	"Account type": [
+		""
+	],
+	"Action": [
+		""
+	],
+	"Actions": [
+		""
+	],
+	"Active": [
+		""
+	],
+	"Actual Size": [
+		""
+	],
+	"Add body": [
+		""
+	],
+	"Add new": [
+		""
+	],
+	"Add or remove tags:": [
+		""
+	],
+	"Add recipient:": [
+		""
+	],
+	"Add title": [
+		""
+	],
+	"Add to dictionary": [
+		""
+	],
+	"Admin": [
+		""
+	],
+	"Admin dashboard": [
+		""
+	],
+	"Advanced options": [
+		""
+	],
+	"Advanced settings": [
+		""
+	],
+	"Advanced tools": [
+		""
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
+	"All notes": [
+		""
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Also displays unset and hidden config variables.": [
+		""
+	],
+	"Also publish linked notes": [
+		""
+	],
+	"Always": [
+		""
+	],
+	"Always ask": [
+		""
+	],
+	"Always open %s files without asking.": [
+		""
+	],
+	"Always resize": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		""
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
+		""
+	],
+	"An update is available, do you want to download it now?": [
+		""
+	],
+	"Android API level: %d": [
+		""
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"Appearance": [
+		""
+	],
+	"Application": [
+		""
+	],
+	"Apply": [
+		""
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		"Are you sure you want to renew the authorization token?"
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		""
+	],
+	"Arguments:": [
+		""
+	],
+	"Aritim Dark": [
+		""
+	],
+	"Attach": [
+		""
+	],
+	"Attach file": [
+		""
+	],
+	"Attach photo": [
+		""
+	],
+	"Attach...": [
+		""
+	],
+	"Attaches the given file to the note.": [
+		""
+	],
+	"attachment": [
+		""
+	],
+	"Attachment conflict: \"%s\"": [
+		""
+	],
+	"Attachment download behaviour": [
+		"Attachment download behavior"
+	],
+	"Attachments": [
+		""
+	],
+	"Attachments that could not be downloaded": [
+		""
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		""
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		""
+	],
+	"Authorisation token:": [
+		"Authorization token:"
+	],
+	"Auto": [
+		""
+	],
+	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Auto-pair braces, parentheses, quotations, etc.": [
+		""
+	],
+	"Automatically check for updates": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
+	"Automatically switch theme to match system theme": [
+		""
+	],
+	"Back": [
+		""
+	],
+	"Basic": [
+		""
+	],
+	"Beta": [
+		""
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		""
+	],
+	"Bold": [
+		""
+	],
+	"Browse all plugins": [
+		""
+	],
+	"Browse...": [
+		""
+	],
+	"Built-in": [
+		""
+	],
+	"Bulleted List": [
+		""
+	],
+	"by %s": [
+		""
+	],
+	"Can Share": [
+		""
+	],
+	"Can view": [
+		""
+	],
+	"Can view and edit": [
+		""
+	],
+	"Cancel": [
+		""
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"Cancelling background synchronization... Please wait."
+	],
+	"Cancelling...": [
+		""
+	],
+	"Cancelling... Please wait.": [
+		""
+	],
+	"Cannot access %s": [
+		""
+	],
+	"Cannot change encrypted item": [
+		""
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		""
+	],
+	"Cannot create a new note: %s": [
+		""
+	],
+	"Cannot find \"%s\".": [
+		""
+	],
+	"Cannot find: \"%s\"": [
+		""
+	],
+	"Cannot initialise synchroniser.": [
+		"Cannot initialize synchronizer."
+	],
+	"Cannot load \"%s\" module for format \"%s\" and output \"%s\"": [
+		""
+	],
+	"Cannot load \"%s\" module for format \"%s\" and target \"%s\"": [
+		""
+	],
+	"Cannot move note to \"%s\" notebook": [
+		""
+	],
+	"Cannot move notebook to this location": [
+		""
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		"Cannot refresh token: authentication data is missing. Starting the synchronization again may fix the problem."
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		""
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		""
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		""
+	],
+	"Case sensitive": [
+		""
+	],
+	"Change application layout": [
+		""
+	],
+	"Change language": [
+		""
+	],
+	"Characters": [
+		""
+	],
+	"Characters excluding spaces": [
+		""
+	],
+	"Check for updates...": [
+		""
+	],
+	"Check synchronisation configuration": [
+		"Check synchronization configuration"
+	],
+	"Checkbox": [
+		""
+	],
+	"Checkbox list": [
+		""
+	],
+	"Checking... Please wait.": [
+		""
+	],
+	"Choose an option": [
+		""
+	],
+	"Chrome Web Store": [
+		""
+	],
+	"Clear": [
+		""
+	],
+	"Clear alarm": [
+		""
+	],
+	"Clear search": [
+		""
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		""
+	],
+	"Click to add tags...": [
+		""
+	],
+	"Client ID: %s": [
+		""
+	],
+	"Close": [
+		""
+	],
+	"Close dropdown": [
+		""
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
+	"Close Window": [
+		""
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
+	],
+	"Code": [
+		""
+	],
+	"Code Block": [
+		""
+	],
+	"Code View": [
+		""
+	],
+	"Collaborate on a notebook with others": [
+		""
+	],
+	"Collaborate on notebooks with others": [
+		""
+	],
+	"Collapse": [
+		""
+	],
+	"Collapse %s": [
+		""
+	],
+	"Coming alarms": [
+		"Scheduled alarms"
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronization configuration\"."
+	],
+	"command": [
+		""
+	],
+	"Command": [
+		""
+	],
+	"Command palette": [
+		""
+	],
+	"Command palette...": [
+		""
+	],
+	"Compact": [
+		""
+	],
+	"Completed": [
+		""
+	],
+	"Completed decryption.": [
+		""
+	],
+	"Completed with warnings:\n%s": [
+		""
+	],
+	"Completed: %s (%s)": [
+		""
+	],
+	"completion date": [
+		""
+	],
+	"Compress old changes": [
+		""
+	],
+	"Configuration": [
+		""
+	],
+	"Confirm password cannot be empty": [
+		""
+	],
+	"Confirm password:": [
+		""
+	],
+	"Confirmation": [
+		""
+	],
+	"Conflicted: %d": [
+		""
+	],
+	"Conflicts": [
+		""
+	],
+	"Conflicts (attachments)": [
+		""
+	],
+	"Connect to Joplin Cloud": [
+		""
+	],
+	"Consolidated billing": [
+		""
+	],
+	"Content provided by %s": [
+		""
+	],
+	"Content provided by: %s": [
+		""
+	],
+	"Continue": [
+		""
+	],
+	"Convert to note": [
+		""
+	],
+	"Convert to todo": [
+		""
+	],
+	"Converting speech to text...": [
+		""
+	],
+	"Copy": [
+		""
+	],
+	"Copy dev mode command to clipboard": [
+		""
+	],
+	"Copy external link": [
+		""
+	],
+	"Copy image": [
+		""
+	],
+	"Copy Link Address": [
+		""
+	],
+	"Copy link to website": [
+		""
+	],
+	"Copy Markdown link": [
+		""
+	],
+	"Copy path to clipboard": [
+		""
+	],
+	"Copy Shareable Link": [
+		"",
+		""
+	],
+	"Copy to clipboard": [
+		""
+	],
+	"Copy token": [
+		""
+	],
+	"Copy version info": [
+		""
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"Could not authorize application:\n\n%s\n\nPlease try again."
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		"Could not connect to Joplin Server. Please check the Synchronization options in the config screen. Full error was:\n\n%s"
+	],
+	"Could not connect to plugin repository.": [
+		""
+	],
+	"Could not export notes: %s": [
+		""
+	],
+	"Could not install plugin: %s": [
+		""
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"Could not switch profile: %s": [
+		""
+	],
+	"Could not upgrade master key: %s": [
+		""
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		""
+	],
+	"Could not verify your identity: %s": [
+		""
+	],
+	"Create": [
+		""
+	],
+	"Create a new notebook under a parent notebook.": [
+		""
+	],
+	"Create a notebook": [
+		""
+	],
+	"Create new profile...": [
+		""
+	],
+	"Create notebook": [
+		""
+	],
+	"Create user": [
+		""
+	],
+	"Created": [
+		""
+	],
+	"created date": [
+		""
+	],
+	"Created local items: %d.": [
+		""
+	],
+	"Created locally": [
+		""
+	],
+	"Created remote items: %d.": [
+		""
+	],
+	"Created: ": [
+		""
+	],
+	"Created: %d.": [
+		""
+	],
+	"Created: %s": [
+		""
+	],
+	"Creates a new note.": [
+		""
+	],
+	"Creates a new notebook.": [
+		""
+	],
+	"Creates a new to-do.": [
+		""
+	],
+	"Creating new note...": [
+		""
+	],
+	"Creating new to-do...": [
+		""
+	],
+	"Creating report...": [
+		""
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
+	],
+	"Current version is up-to-date.": [
+		""
+	],
+	"custom order": [
+		""
+	],
+	"Custom order": [
+		""
+	],
+	"Custom stylesheet for Joplin-wide app styles": [
+		""
+	],
+	"Custom stylesheet for rendered Markdown": [
+		""
+	],
+	"Custom TLS certificates": [
+		""
+	],
+	"Customise the note publishing banner": [
+		""
+	],
+	"Cut": [
+		""
+	],
+	"Dark": [
+		""
+	],
+	"Dashboard": [
+		""
+	],
+	"Date": [
+		""
+	],
+	"Date format": [
+		""
+	],
+	"days": [
+		""
+	],
+	"Decrease indent level": [
+		""
+	],
+	"Decrypted items: %d": [
+		""
+	],
+	"Decrypted items: %s / %s": [
+		""
+	],
+	"Decrypting items: %d/%d": [
+		""
+	],
+	"Default": [
+		""
+	],
+	"Default: %s": [
+		""
+	],
+	"Delete": [
+		""
+	],
+	"Delete attachment \"%s\"?": [
+		""
+	],
+	"Delete expired sessions": [
+		""
+	],
+	"Delete expired tokens": [
+		""
+	],
+	"Delete line": [
+		""
+	],
+	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete note": [
+		""
+	],
+	"Delete notebook": [
+		""
+	],
+	"Delete plugin \"%s\"?": [
+		""
+	],
+	"Delete profile \"%s\"": [
+		""
+	],
+	"Delete selected notes": [
+		""
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		""
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		""
+	],
+	"Delete this profile?": [
+		""
+	],
+	"Deleted": [
+		""
+	],
+	"Deleted local items: %d.": [
+		""
+	],
+	"Deleted remote items: %d.": [
+		""
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
+	],
+	"Deletes the given notebook.": [
+		""
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		""
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		""
+	],
+	"Deletes the notes without asking for confirmation.": [
+		""
+	],
+	"Destination format: %s": [
+		""
+	],
+	"Detailed": [
+		""
+	],
+	"Directory": [
+		""
+	],
+	"Directory to synchronise with (absolute path)": [
+		"Directory to synchronize with (absolute path)"
+	],
+	"Disable": [
+		""
+	],
+	"Disable encryption": [
+		""
+	],
+	"Disable safe mode and restart": [
+		""
+	],
+	"Disable Web Clipper Service": [
+		""
+	],
+	"Disabled": [
+		""
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		"Disabling encryption means *all* your notes and attachments are going to be re-synchronized and sent unencrypted to the sync target. Do you wish to continue?"
+	],
+	"Discard": [
+		""
+	],
+	"Discard changes": [
+		""
+	],
+	"Dismiss": [
+		""
+	],
+	"Displays a geolocation URL for the note.": [
+		""
+	],
+	"Displays only the first top <num> notes.": [
+		""
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		""
+	],
+	"Displays summary about the notes and notebooks.": [
+		""
+	],
+	"Displays the complete information about note.": [
+		""
+	],
+	"Displays the given note.": [
+		""
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		""
+	],
+	"Displays usage information.": [
+		""
+	],
+	"Displays version information": [
+		""
+	],
+	"Do it now": [
+		""
+	],
+	"Do not ask for confirmation.": [
+		""
+	],
+	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below."
+	],
+	"Donate, website": [
+		""
+	],
+	"Done": [
+		""
+	],
+	"Download": [
+		""
+	],
+	"Download and install the relevant extension for your browser:": [
+		""
+	],
+	"Downloaded": [
+		""
+	],
+	"Downloaded and decrypted": [
+		""
+	],
+	"Downloaded and encrypted": [
+		""
+	],
+	"Downloading": [
+		""
+	],
+	"Downloading %s language files...": [
+		""
+	],
+	"Downloading resources...": [
+		""
+	],
+	"Dracula": [
+		""
+	],
+	"Draw picture": [
+		""
+	],
+	"Drawing": [
+		""
+	],
+	"Drop notes or files here": [
+		""
+	],
+	"Dropbox": [
+		""
+	],
+	"Dropbox Login": [
+		""
+	],
+	"Due": [
+		""
+	],
+	"due date": [
+		""
+	],
+	"Duplicate": [
+		""
+	],
+	"Duplicate line": [
+		""
+	],
+	"Duplicate selected notes": [
+		""
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		""
+	],
+	"Edit": [
+		""
+	],
+	"Edit in external editor": [
+		""
+	],
+	"Edit link": [
+		""
+	],
+	"Edit note.": [
+		""
+	],
+	"Edit notebook": [
+		""
+	],
+	"Edit profile": [
+		""
+	],
+	"Edit profile configuration...": [
+		""
+	],
+	"Editor": [
+		""
+	],
+	"Editor font": [
+		""
+	],
+	"Editor font family": [
+		""
+	],
+	"Editor font size": [
+		""
+	],
+	"Editor maximum width": [
+		""
+	],
+	"Editor monospace font family": [
+		""
+	],
+	"Editor: %s": [
+		""
+	],
+	"Either \"text\" or \"json\"": [
+		""
+	],
+	"Emacs": [
+		""
+	],
+	"Email": [
+		""
+	],
+	"Email to note": [
+		""
+	],
+	"Email to Note": [
+		""
+	],
+	"Email To Note, login information": [
+		""
+	],
+	"Emails": [
+		""
+	],
+	"emphasised text": [
+		"emphasized text"
+	],
+	"Empty trash": [
+		""
+	],
+	"Enable": [
+		""
+	],
+	"Enable ++insert++ syntax": [
+		""
+	],
+	"Enable ==mark== syntax": [
+		""
+	],
+	"Enable ^sup^ syntax": [
+		""
+	],
+	"Enable abbreviation syntax": [
+		""
+	],
+	"Enable audio player": [
+		""
+	],
+	"Enable biometrics authentication?": [
+		""
+	],
+	"Enable deflist syntax": [
+		""
+	],
+	"Enable encryption": [
+		""
+	],
+	"Enable footnotes": [
+		""
+	],
+	"Enable Fountain syntax support": [
+		""
+	],
+	"Enable Linkify": [
+		""
+	],
+	"Enable markdown emoji": [
+		""
+	],
+	"Enable math expressions": [
+		""
+	],
+	"Enable Mermaid diagrams support": [
+		""
+	],
+	"Enable multimarkdown table extension": [
+		""
+	],
+	"Enable note history": [
+		""
+	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
+		""
+	],
+	"Enable PDF viewer": [
+		""
+	],
+	"Enable plugin support": [
+		""
+	],
+	"Enable soft breaks": [
+		""
+	],
+	"Enable spellcheck in the text editor": [
+		""
+	],
+	"Enable table of contents extension": [
+		""
+	],
+	"Enable the Markdown toolbar": [
+		""
+	],
+	"Enable typographer support": [
+		""
+	],
+	"Enable video player": [
+		""
+	],
+	"Enable Web Clipper Service": [
+		""
+	],
+	"Enable ~sub~ syntax": [
+		""
+	],
+	"Enabled": [
+		""
+	],
+	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
+		"Enabling encryption means *all* your notes and attachments are going to be re-synchronized and sent encrypted to the sync target."
+	],
+	"Encrypted": [
+		""
+	],
+	"Encrypted items cannot be modified": [
+		""
+	],
+	"Encryption": [
+		""
+	],
+	"Encryption Config": [
+		""
+	],
+	"Encryption is: %s": [
+		""
+	],
+	"Encryption keys": [
+		""
+	],
+	"Encryption:": [
+		""
+	],
+	"End-to-end encryption": [
+		""
+	],
+	"Enter code here": [
+		""
+	],
+	"Enter master password:": [
+		""
+	],
+	"Enter notebook title": [
+		""
+	],
+	"Enter password": [
+		""
+	],
+	"Enum": [
+		""
+	],
+	"Error": [
+		""
+	],
+	"Error opening note in editor: %s": [
+		""
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		""
+	],
+	"Error: %s": [
+		""
+	],
+	"Errors only": [
+		""
+	],
+	"Evernote Export File (as HTML)": [
+		""
+	],
+	"Evernote Export File (as Markdown)": [
+		""
+	],
+	"Evernote Export Files (Directory, as HTML)": [
+		""
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		""
+	],
+	"Exits the application.": [
+		""
+	],
+	"Expand": [
+		""
+	],
+	"Expand %s": [
+		""
+	],
+	"Export": [
+		""
+	],
+	"Export all": [
+		""
+	],
+	"Export all notes as JEX": [
+		""
+	],
+	"Export debug report": [
+		""
+	],
+	"Export Debug Report": [
+		""
+	],
+	"Export profile": [
+		""
+	],
+	"Exported successfully!": [
+		""
+	],
+	"Exporting profile...": [
+		""
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Exporting...": [
+		""
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		""
+	],
+	"Exports only the given note.": [
+		""
+	],
+	"Exports only the given notebook.": [
+		""
+	],
+	"Fail-safe": [
+		""
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		""
+	],
+	"Fatal error:": [
+		""
+	],
+	"Feature flags": [
+		""
+	],
+	"Fetched items: %d/%d.": [
+		""
+	],
+	"Fetching resources: %d/%d": [
+		""
+	],
+	"File": [
+		""
+	],
+	"File system": [
+		""
+	],
+	"Filter": [
+		""
+	],
+	"Filter tags": [
+		""
+	],
+	"Find and replace": [
+		""
+	],
+	"Find: ": [
+		""
+	],
+	"Firefox Extension": [
+		""
+	],
+	"Fix search index": [
+		""
+	],
+	"Fixing search index...": [
+		""
+	],
+	"Focus": [
+		""
+	],
+	"Focus body": [
+		""
+	],
+	"Focus title": [
+		""
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		""
+	],
+	"For example \"%s\"": [
+		""
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		"For information on how to customize the shortcuts please visit %s"
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		""
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		""
+	],
+	"Force path style": [
+		""
+	],
+	"Formatting": [
+		""
+	],
+	"Forward": [
+		""
+	],
+	"Found: %d.": [
+		""
+	],
+	"FTS enabled: %d": [
+		""
+	],
+	"Full changelog": [
+		""
+	],
+	"Full name": [
+		""
+	],
+	"General": [
+		""
+	],
+	"Generated": [
+		""
+	],
+	"Generating link...": [
+		"",
+		""
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
+	"Get it now:": [
+		""
+	],
+	"Get pre-releases when checking for updates": [
+		""
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		""
+	],
+	"Go to Joplin Cloud profile": [
+		""
+	],
+	"Go to source URL": [
+		""
+	],
+	"Goto Anything...": [
+		""
+	],
+	"Grant authorisation": [
+		"Grant authorization"
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
+	"Header %d": [
+		""
+	],
+	"Headers": [
+		""
+	],
+	"Heading": [
+		""
+	],
+	"Help": [
+		""
+	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
+	"Hermes enabled: %d": [
+		""
+	],
+	"Hide %s": [
+		""
+	],
+	"Hide advanced": [
+		""
+	],
+	"Hide disabled": [
+		""
+	],
+	"Hide disabled keys": [
+		""
+	],
+	"Hide Joplin": [
+		""
+	],
+	"Hide keyboard": [
+		""
+	],
+	"Hide more actions": [
+		""
+	],
+	"Highlight": [
+		""
+	],
+	"Home": [
+		""
+	],
+	"Horizontal Rule": [
+		""
+	],
+	"HTML Directory": [
+		""
+	],
+	"HTML document": [
+		""
+	],
+	"HTML File": [
+		""
+	],
+	"Hyperlink": [
+		""
+	],
+	"Icon": [
+		""
+	],
+	"ID": [
+		""
+	],
+	"Idle": [
+		""
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
+	"Ignore": [
+		""
+	],
+	"Ignore TLS certificate errors": [
+		""
+	],
+	"Images": [
+		""
+	],
+	"Import": [
+		""
+	],
+	"Import and Export": [
+		""
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Import or export your data": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		""
+	],
+	"Importing notes...": [
+		""
+	],
+	"Importing...": [
+		""
+	],
+	"Imports data into Joplin.": [
+		""
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		""
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		""
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		""
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		"In order to do so, your entire data set will have to be encrypted and synchronized, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronize all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		"In order to use file system synchronization your permission to write to external storage is required."
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		""
+	],
+	"In progress": [
+		""
+	],
+	"In: %s": [
+		""
+	],
+	"Incompatible": [
+		""
+	],
+	"Increase indent level": [
+		""
+	],
+	"Indent less": [
+		""
+	],
+	"Indent more": [
+		""
+	],
+	"Information": [
+		""
+	],
+	"Inline Code": [
+		""
+	],
+	"Insert": [
+		""
+	],
+	"Insert Hyperlink": [
+		""
+	],
+	"Insert time": [
+		""
+	],
+	"Install": [
+		""
+	],
+	"Install from file": [
+		""
+	],
+	"Installed": [
+		""
+	],
+	"Installed (%d):": [
+		""
+	],
+	"Installing...": [
+		""
+	],
+	"Invalid": [
+		""
+	],
+	"Invalid %s: %s.": [
+		""
+	],
+	"Invalid answer: %s": [
+		""
+	],
+	"Invalid command: \"%s\"": [
+		""
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		""
+	],
+	"Invalid password": [
+		""
+	],
+	"iOS version: %s": [
+		""
+	],
+	"Italic": [
+		""
+	],
+	"Item \"%s\" could not be downloaded: %s": [
+		""
+	],
+	"Items": [
+		""
+	],
+	"Items that cannot be decrypted": [
+		""
+	],
+	"Items that cannot be synchronised": [
+		"Items that cannot be synchronized"
+	],
+	"Join us on Twitter": [
+		""
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		"Joplin can synchronize your notes using various providers. Select one from the list below."
+	],
+	"Joplin Cloud": [
+		""
+	],
+	"Joplin Cloud Login": [
+		""
+	],
+	"Joplin Desktop": [
+		""
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
+	"Joplin Export Directory": [
+		""
+	],
+	"Joplin Export File": [
+		""
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		""
+	],
+	"Joplin Forum": [
+		""
+	],
+	"Joplin Mobile": [
+		""
+	],
+	"Joplin Server": [
+		""
+	],
+	"Joplin Server email": [
+		""
+	],
+	"Joplin Server password": [
+		""
+	],
+	"Joplin Server URL": [
+		""
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		""
+	],
+	"Joplin website": [
+		""
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
+	"KaTeX": [
+		""
+	],
+	"Keep note history for": [
+		""
+	],
+	"Keep notes in the trash for": [
+		""
+	],
+	"Keyboard Mode": [
+		""
+	],
+	"Keyboard Shortcut": [
+		""
+	],
+	"Keyboard Shortcuts": [
+		""
+	],
+	"Keychain Supported: %s": [
+		""
+	],
+	"Keys that need upgrading": [
+		""
+	],
+	"Landscape": [
+		""
+	],
+	"Language": [
+		""
+	],
+	"Language, date format": [
+		""
+	],
+	"Last error: %s": [
+		""
+	],
+	"Later": [
+		""
+	],
+	"Latitude": [
+		""
+	],
+	"Layout": [
+		""
+	],
+	"Layout button sequence": [
+		""
+	],
+	"Learn more": [
+		""
+	],
+	"Leave it blank to download the language files from the default website": [
+		""
+	],
+	"Leave notebook": [
+		""
+	],
+	"Leave notebook...": [
+		""
+	],
+	"Legal": [
+		""
+	],
+	"Letter": [
+		""
+	],
+	"Light": [
+		""
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
+	],
+	"Lines": [
+		""
+	],
+	"Link": [
+		""
+	],
+	"Link description": [
+		""
+	],
+	"Link has been copied to clipboard!": [
+		"",
+		""
+	],
+	"Link text": [
+		""
+	],
+	"Links with protocol \"%s\" are not supported": [
+		""
+	],
+	"List item": [
+		""
+	],
+	"Lists": [
+		""
+	],
+	"Loaded": [
+		""
+	],
+	"Loading...": [
+		""
+	],
+	"Location": [
+		""
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		"Lock file is already being held. If you know that no synchronization is taking place, you may delete the lock file at \"%s\" and resume the operation."
+	],
+	"Log": [
+		""
+	],
+	"Login with Dropbox": [
+		""
+	],
+	"Login with OneDrive": [
+		""
+	],
+	"Logout": [
+		""
+	],
+	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
+		""
+	],
+	"Make a donation": [
+		""
+	],
+	"Manage master password": [
+		""
+	],
+	"Manage master password...": [
+		""
+	],
+	"Manage multiple users": [
+		""
+	],
+	"Manage profiles": [
+		""
+	],
+	"Manage shared notebooks": [
+		""
+	],
+	"Manage your plugins": [
+		""
+	],
+	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
+		""
+	],
+	"Manual": [
+		""
+	],
+	"Markdown": [
+		""
+	],
+	"Markdown + Front Matter": [
+		""
+	],
+	"Marks a to-do as done.": [
+		""
+	],
+	"Marks a to-do as non-completed.": [
+		""
+	],
+	"Markup": [
+		""
+	],
+	"Master Key %s": [
+		""
+	],
+	"Master password": [
+		""
+	],
+	"Master password:": [
+		""
+	],
+	"Max concurrent connections": [
+		""
+	],
+	"Max Item Size": [
+		""
+	],
+	"Max note or attachment size": [
+		""
+	],
+	"Max Total Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
+		""
+	],
+	"Missing keys": [
+		""
+	],
+	"Missing Master Keys": [
+		""
+	],
+	"Missing required argument: %s": [
+		""
+	],
+	"Missing required flag value: %s": [
+		""
+	],
+	"Mobile data - auto-sync disabled": [
+		""
+	],
+	"More info": [
+		""
+	],
+	"More information": [
+		""
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		""
+	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		""
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		""
+	],
+	"Move to notebook": [
+		""
+	],
+	"Move to notebook...": [
+		""
+	],
+	"Move to notebook:": [
+		""
+	],
+	"Moves the given <item> to [notebook]": [
+		""
+	],
+	"n": [
+		""
+	],
+	"N": [
+		""
+	],
+	"Never resize": [
+		""
+	],
+	"New": [
+		""
+	],
+	"New invitations": [
+		""
+	],
+	"New note": [
+		""
+	],
+	"New notebook": [
+		""
+	],
+	"New Notebook": [
+		""
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		""
+	],
+	"New sub-notebook": [
+		""
+	],
+	"New tags:": [
+		""
+	],
+	"New to-do": [
+		""
+	],
+	"New version: %s": [
+		""
+	],
+	"Next match": [
+		""
+	],
+	"Nextcloud": [
+		""
+	],
+	"Nextcloud password": [
+		""
+	],
+	"Nextcloud username": [
+		""
+	],
+	"Nextcloud WebDAV URL": [
+		""
+	],
+	"no": [
+		""
+	],
+	"No": [
+		""
+	],
+	"No active notebook.": [
+		""
+	],
+	"No item with ID %s": [
+		""
+	],
+	"No new invitations": [
+		""
+	],
+	"No notebook has been specified.": [
+		""
+	],
+	"No notebook selected.": [
+		""
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		""
+	],
+	"No plugins are installed.": [
+		""
+	],
+	"No resources!": [
+		""
+	],
+	"No results": [
+		""
+	],
+	"No such command: %s": [
+		""
+	],
+	"No suggestions": [
+		""
+	],
+	"No tab selected": [
+		""
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		""
+	],
+	"Nord": [
+		""
+	],
+	"Not authenticated with %s. Please provide any missing credentials.": [
+		"Not authenticated with %s. Please provide any missing credentials."
+	],
+	"Not downloaded": [
+		""
+	],
+	"Not generated": [
+		""
+	],
+	"Not now": [
+		""
+	],
+	"note": [
+		""
+	],
+	"Note": [
+		""
+	],
+	"Note area growth factor": [
+		""
+	],
+	"Note attachments": [
+		""
+	],
+	"Note attachments...": [
+		""
+	],
+	"Note body": [
+		""
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		""
+	],
+	"Note editor": [
+		""
+	],
+	"Note has been saved.": [
+		""
+	],
+	"Note History": [
+		""
+	],
+	"Note is not a to-do: \"%s\"": [
+		""
+	],
+	"Note list": [
+		""
+	],
+	"Note list growth factor": [
+		""
+	],
+	"Note list style": [
+		""
+	],
+	"Note properties": [
+		""
+	],
+	"Note title": [
+		""
+	],
+	"Note&book": [
+		""
+	],
+	"Note: Does not work in all desktop environments.": [
+		""
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		""
+	],
+	"Notebook": [
+		""
+	],
+	"Notebook list growth factor": [
+		""
+	],
+	"Notebook: %s": [
+		""
+	],
+	"Notebook: %s (%s)": [
+		""
+	],
+	"Notebooks": [
+		""
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		""
+	],
+	"Notes": [
+		""
+	],
+	"Notes and settings are stored in: %s": [
+		""
+	],
+	"Notes can only be created within a notebook.": [
+		""
+	],
+	"Numbered List": [
+		""
+	],
+	"OK": [
+		""
+	],
+	"OLED Dark": [
+		""
+	],
+	"On %s: %s": [
+		""
+	],
+	"One of your master keys use an obsolete encryption method.": [
+		""
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		""
+	],
+	"One or more master keys need a password.": [
+		""
+	],
+	"OneDrive": [
+		""
+	],
+	"OneDrive Login": [
+		""
+	],
+	"Only one note can be printed at a time.": [
+		""
+	],
+	"Open": [
+		""
+	],
+	"Open %s": [
+		""
+	],
+	"Open it": [
+		""
+	],
+	"Open PDF viewer": [
+		""
+	],
+	"Open profile directory": [
+		""
+	],
+	"Open Source": [
+		""
+	],
+	"Open Sync Wizard...": [
+		""
+	],
+	"Open...": [
+		""
+	],
+	"Opening section %s": [
+		""
+	],
+	"Operation cancelled": [
+		""
+	],
+	"Options": [
+		""
+	],
+	"Ordered list": [
+		""
+	],
+	"Other applications...": [
+		""
+	],
+	"Output format: %s": [
+		""
+	],
+	"Page orientation for PDF export": [
+		""
+	],
+	"Page size for PDF export": [
+		""
+	],
+	"Password": [
+		""
+	],
+	"Password cannot be empty": [
+		""
+	],
+	"Password:": [
+		""
+	],
+	"Passwords do not match!": [
+		""
+	],
+	"Paste": [
+		""
+	],
+	"Paste as text": [
+		""
+	],
+	"Path:": [
+		""
+	],
+	"PDF File": [
+		""
+	],
+	"Per user. Minimum of %d users.": [
+		""
+	],
+	"Permanently delete note": [
+		""
+	],
+	"Permanently delete note \"%s\"?": [
+		""
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		""
+	],
+	"Permanently delete these %d notes?": [
+		""
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		""
+	],
+	"Permission needed": [
+		""
+	],
+	"Permission to use camera": [
+		""
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		""
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		""
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		""
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please record your voice...": [
+		""
+	],
+	"Please select a notebook first.": [
+		""
+	],
+	"Please select the note or notebook to be deleted first.": [
+		""
+	],
+	"Please select where the sync status should be exported to": [
+		""
+	],
+	"Please specify import format for %s": [
+		""
+	],
+	"Please specify the notebook where the notes should be imported to.": [
+		""
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		""
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Please wait...": [
+		""
+	],
+	"Plugin message": [
+		""
+	],
+	"Plugin panels": [
+		""
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugin search": [
+		""
+	],
+	"Plugin security": [
+		""
+	],
+	"Plugin tools": [
+		""
+	],
+	"Plugin WebView debugging": [
+		""
+	],
+	"Plugins": [
+		""
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
+	],
+	"Portrait": [
+		""
+	],
+	"Possible keys/values:": [
+		""
+	],
+	"Possible values: %s.": [
+		""
+	],
+	"Preferences": [
+		""
+	],
+	"Preferences...": [
+		""
+	],
+	"Preferred dark theme": [
+		""
+	],
+	"Preferred light theme": [
+		""
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		""
+	],
+	"Press the shortcut": [
+		""
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		""
+	],
+	"Press to set the decryption password.": [
+		""
+	],
+	"Previous match": [
+		""
+	],
+	"Previous versions of this note": [
+		""
+	],
+	"Print": [
+		""
+	],
+	"Priority support": [
+		""
+	],
+	"Privacy Policy": [
+		""
+	],
+	"Pro": [
+		""
+	],
+	"Process failed payment subscriptions": [
+		""
+	],
+	"Process oversized accounts": [
+		""
+	],
+	"Process user deletions": [
+		""
+	],
+	"Processing": [
+		""
+	],
+	"Profile": [
+		""
+	],
+	"Profile name": [
+		""
+	],
+	"Profile name:": [
+		""
+	],
+	"Profile Version: %s": [
+		""
+	],
+	"Profiles": [
+		""
+	],
+	"Properties": [
+		""
+	],
+	"Proxy enabled": [
+		""
+	],
+	"Proxy timeout (seconds)": [
+		""
+	],
+	"Proxy URL": [
+		""
+	],
+	"Public-private key pair:": [
+		""
+	],
+	"Publish note...": [
+		""
+	],
+	"Publish Notes": [
+		""
+	],
+	"Publish notes to the internet": [
+		""
+	],
+	"Quit": [
+		""
+	],
+	"Re-encrypt data": [
+		""
+	],
+	"Re-encryption": [
+		""
+	],
+	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more about it": [
+		""
+	],
+	"Read time: %s min": [
+		""
+	],
+	"Recipient has accepted the invitation": [
+		""
+	],
+	"Recipient has not yet accepted the invitation": [
+		""
+	],
+	"Recipient has rejected the invitation": [
+		""
+	],
+	"Recipients:": [
+		""
+	],
+	"Recommended": [
+		""
+	],
+	"Recommended plugins": [
+		""
+	],
+	"Redo": [
+		""
+	],
+	"Refresh": [
+		""
+	],
+	"Regular expression": [
+		""
+	],
+	"Reject": [
+		""
+	],
+	"Remove": [
+		""
+	],
+	"Remove tag \"%s\" from all notes?": [
+		""
+	],
+	"Remove this search from the sidebar?": [
+		""
+	],
+	"Rename": [
+		""
+	],
+	"Rename notebook:": [
+		""
+	],
+	"Rename tag:": [
+		""
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		""
+	],
+	"Renew token": [
+		""
+	],
+	"Replace": [
+		""
+	],
+	"Replace all": [
+		""
+	],
+	"Replace with...": [
+		""
+	],
+	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
+	"Report system": [
+		""
+	],
+	"Reports": [
+		""
+	],
+	"Reset application layout": [
+		""
+	],
+	"Reset master password": [
+		""
+	],
+	"Resize large images:": [
+		""
+	],
+	"Resources: %d.": [
+		""
+	],
+	"Restart and upgrade": [
+		""
+	],
+	"Restart in safe mode": [
+		""
+	],
+	"Restart now": [
+		""
+	],
+	"Restore": [
+		""
+	],
+	"Restore note": [
+		""
+	],
+	"Restore notebook": [
+		""
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		""
+	],
+	"Restored items": [
+		""
+	],
+	"Restored Notes": [
+		""
+	],
+	"Results (%d):": [
+		""
+	],
+	"Retry": [
+		""
+	],
+	"Retry All": [
+		""
+	],
+	"Reveal file in folder": [
+		""
+	],
+	"Reverse sort order": [
+		""
+	],
+	"Reverses the sorting order.": [
+		""
+	],
+	"Revision: %s (%s)": [
+		""
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		""
+	],
+	"S3": [
+		""
+	],
+	"S3 access key": [
+		""
+	],
+	"S3 bucket": [
+		""
+	],
+	"S3 region": [
+		""
+	],
+	"S3 secret key": [
+		""
+	],
+	"S3 URL": [
+		""
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		""
+	],
+	"Save": [
+		""
+	],
+	"Save alarm": [
+		""
+	],
+	"Save as %s": [
+		""
+	],
+	"Save as...": [
+		""
+	],
+	"Save changes": [
+		""
+	],
+	"Save changes?": [
+		""
+	],
+	"Save geo-location with notes": [
+		""
+	],
+	"Search": [
+		""
+	],
+	"Search for plugins...": [
+		""
+	],
+	"Search for...": [
+		""
+	],
+	"Search hidden": [
+		""
+	],
+	"Search in all the notes": [
+		"Search in all notes"
+	],
+	"Search in current note": [
+		""
+	],
+	"Search shown": [
+		""
+	],
+	"Search...": [
+		""
+	],
+	"Search:": [
+		""
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		""
+	],
+	"See the pre-release page for more details: %s": [
+		""
+	],
+	"Select": [
+		""
+	],
+	"Select all": [
+		""
+	],
+	"Select emoji...": [
+		""
+	],
+	"Select file...": [
+		""
+	],
+	"Select parent notebook": [
+		""
+	],
+	"Send bug report": [
+		""
+	],
+	"Server is already running on port %d": [
+		""
+	],
+	"Server is not running.": [
+		""
+	],
+	"Server is running on port %d": [
+		""
+	],
+	"Set alarm": [
+		""
+	],
+	"Set alarm:": [
+		""
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		""
+	],
+	"Set the password": [
+		""
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		""
+	],
+	"Share": [
+		""
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		""
+	],
+	"Share a notebook with others": [
+		""
+	],
+	"Share from %s (%s)": [
+		""
+	],
+	"Share Notebook": [
+		""
+	],
+	"Share notebook...": [
+		""
+	],
+	"Share permissions": [
+		""
+	],
+	"Shares": [
+		""
+	],
+	"Sharing notebook...": [
+		""
+	],
+	"Shortcuts are not available in CLI mode.": [
+		""
+	],
+	"Show advanced": [
+		""
+	],
+	"Show Advanced Settings": [
+		""
+	],
+	"Show all": [
+		""
+	],
+	"Show completed to-dos": [
+		""
+	],
+	"Show disabled": [
+		""
+	],
+	"Show disabled keys": [
+		""
+	],
+	"Show monospace fonts only.": [
+		""
+	],
+	"Show more actions": [
+		""
+	],
+	"Show note counts": [
+		""
+	],
+	"Show sort order buttons": [
+		""
+	],
+	"Show tray icon": [
+		""
+	],
+	"Show/hide the sidebar": [
+		""
+	],
+	"Shrink large images before adding them to notes.": [
+		""
+	],
+	"Side menu closed": [
+		""
+	],
+	"Side menu opened": [
+		""
+	],
+	"Sidebar": [
+		""
+	],
+	"Size": [
+		""
+	],
+	"Skip this version": [
+		""
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		""
+	],
+	"Skipped: %d.": [
+		""
+	],
+	"Solarised Dark": [
+		"Solarized Dark"
+	],
+	"Solarised Light": [
+		"Solarized Light"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
+	"Some items cannot be decrypted.": [
+		"Some items cannot be synchronized."
+	],
+	"Some items cannot be synchronised.": [
+		"Some items cannot be synchronized."
+	],
+	"Some items cannot be synchronised. Press for more info.": [
+		"Some items cannot be synchronized. Press for more info."
+	],
+	"Sort notebooks by": [
+		""
+	],
+	"Sort notes by": [
+		""
+	],
+	"Sort selected lines": [
+		""
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		""
+	],
+	"Source": [
+		""
+	],
+	"Source format: %s": [
+		""
+	],
+	"Source: ": [
+		""
+	],
+	"Spacer": [
+		""
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		""
+	],
+	"Spell checker": [
+		""
+	],
+	"Split View": [
+		""
+	],
+	"Start application minimised in the tray icon": [
+		"Start application minimized in the tray icon"
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		""
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		""
+	],
+	"Starting synchronisation...": [
+		"Starting synchronization..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		""
+	],
+	"Statistics": [
+		""
+	],
+	"Statistics...": [
+		""
+	],
+	"Status": [
+		""
+	],
+	"Status: %s": [
+		""
+	],
+	"Status: Started on port %d": [
+		""
+	],
+	"Step 1: Enable the clipper service": [
+		""
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		"Step 1: Open this URL in your browser to authorize the application:"
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		""
+	],
+	"Step 2: Install the extension": [
+		""
+	],
+	"Stop": [
+		""
+	],
+	"Stop external editing": [
+		""
+	],
+	"Storage space": [
+		""
+	],
+	"Strikethrough": [
+		""
+	],
+	"strong text": [
+		""
+	],
+	"Submit": [
+		""
+	],
+	"Subscript": [
+		""
+	],
+	"Success! Synchronisation configuration appears to be correct.": [
+		"Success! Synchronization configuration appears to be correct."
+	],
+	"Superscript": [
+		""
+	],
+	"Swap line down": [
+		""
+	],
+	"Swap line up": [
+		""
+	],
+	"Switch between note and to-do type": [
+		""
+	],
+	"Switch profile": [
+		""
+	],
+	"Switch to note type": [
+		""
+	],
+	"Switch to profile %d": [
+		""
+	],
+	"Switch to to-do type": [
+		""
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		""
+	],
+	"Sync as many devices as you want": [
+		""
+	],
+	"Sync Status": [
+		""
+	],
+	"Sync status (synced items / total items)": [
+		""
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		""
+	],
+	"Sync Target Upgrade": [
+		""
+	],
+	"Sync to provided target (defaults to sync.target config value)": [
+		""
+	],
+	"Sync Version: %s": [
+		""
+	],
+	"Sync your notes": [
+		""
+	],
+	"Sync, encryption, proxy": [
+		""
+	],
+	"Synchronisation": [
+		"Synchronization"
+	],
+	"Synchronisation interval": [
+		"Synchronization interval"
+	],
+	"Synchronisation is already in progress.": [
+		"Synchronization is already in progress."
+	],
+	"Synchronisation Status": [
+		"Synchronization Status"
+	],
+	"Synchronisation target": [
+		"Synchronization target"
+	],
+	"Synchronisation target: %s (%s)": [
+		"Synchronization target: %s (%s)"
+	],
+	"Synchronise": [
+		"Synchronize"
+	],
+	"Synchronise only over WiFi connection": [
+		"Synchronize only over WiFi connection"
+	],
+	"Synchronises with remote storage.": [
+		"Synchronizes with remote storage."
+	],
+	"Synchronising...": [
+		"Synchronizing..."
+	],
+	"Synchronizing...": [
+		""
+	],
+	"Tabloid": [
+		""
+	],
+	"tag1, tag2, ...": [
+		""
+	],
+	"Tagged: %d.": [
+		""
+	],
+	"Tags": [
+		""
+	],
+	"Take photo": [
+		""
+	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
+	"Task list": [
+		""
+	],
+	"Tasks": [
+		""
+	],
+	"Teams": [
+		""
+	],
+	"Text document": [
+		""
+	],
+	"Text editor command": [
+		""
+	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		""
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		""
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		""
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		""
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"The application has been authorized - you may now close this browser tab."
+	],
+	"The application has been authorised!": [
+		"The application has been authorized!"
+	],
+	"The application has been successfully authorised.": [
+		"The application has been successfully authorized."
+	],
+	"The application must be restarted for these changes to take effect.": [
+		""
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		""
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		""
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		""
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		""
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		""
+	],
+	"The default profile cannot be deleted": [
+		""
+	],
+	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
+		""
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachment matches your search query:": [
+		"",
+		""
+	],
+	"The following attachments are being watched for changes:": [
+		""
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		""
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		""
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronization."
+	],
+	"The master key has been upgraded successfully!": [
+		""
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronization."
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note was successfully moved to the trash.": [
+		"",
+		""
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		""
+	],
+	"The notebook could not be saved: %s": [
+		""
+	],
+	"The notes have been imported: %s": [
+		""
+	],
+	"The possible commands are:": [
+		""
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		""
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		""
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		"The target to synchronize to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below)."
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		"The Web Clipper needs your authorization to access your data."
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		""
+	],
+	"The web clipper service is not enabled.": [
+		""
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		""
+	],
+	"Theme": [
+		""
+	],
+	"Themes, editor font": [
+		""
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		""
+	],
+	"There are no notes in the trash folder.": [
+		""
+	],
+	"There are unsaved changes.": [
+		""
+	],
+	"There is no data to export.": [
+		""
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		""
+	],
+	"There was an error downloading this attachment:": [
+		""
+	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		""
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		""
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		""
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"This authorization token is only needed to allow third-party applications to access Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		""
+	],
+	"This note could not be deleted: %s": [
+		"",
+		""
+	],
+	"This note could not be duplicated: %s": [
+		"",
+		""
+	],
+	"This note could not be moved: %s": [
+		"",
+		""
+	],
+	"This note does not have geolocation information.": [
+		""
+	],
+	"This note has been modified:": [
+		""
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		""
+	],
+	"This note has no history": [
+		""
+	],
+	"This plugin doesn't support %s.": [
+		""
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		""
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		""
+	],
+	"This subfolder of the trash has no notes.": [
+		""
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronized, thus reducing the number of conflicts."
+	],
+	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
+	"This will permanently delete the note \"%s\". Continue?": [
+		""
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		""
+	],
+	"Time format": [
+		""
+	],
+	"title": [
+		""
+	],
+	"Title": [
+		""
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		"To allow Joplin to synchronize with Dropbox, please follow the steps below:"
+	],
+	"To continue, please enter your master password below.": [
+		""
+	],
+	"To delete a tag, untag the associated notes.": [
+		""
+	],
+	"To delete: %d": [
+		""
+	],
+	"To enter command line mode, press \":\"": [
+		""
+	],
+	"To exit command line mode, press ESCAPE": [
+		""
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		""
+	],
+	"To maximise/minimise the console, press \"tc\".": [
+		"To maximize/minimize the console, press \"tc\"."
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		""
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		""
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		""
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		""
+	],
+	"to-do": [
+		""
+	],
+	"To-do": [
+		""
+	],
+	"to-do: %s": [
+		""
+	],
+	"Toggle comment": [
+		""
+	],
+	"Toggle development tools": [
+		""
+	],
+	"Toggle editor layout": [
+		""
+	],
+	"Toggle editors": [
+		""
+	],
+	"Toggle external editing": [
+		""
+	],
+	"Toggle menu bar": [
+		""
+	],
+	"Toggle note history, keep notes for": [
+		""
+	],
+	"Toggle note list": [
+		""
+	],
+	"Toggle own sort order": [
+		""
+	],
+	"Toggle safe mode": [
+		""
+	],
+	"Toggle sidebar": [
+		""
+	],
+	"Toggle sort order field": [
+		""
+	],
+	"Token has been copied to the clipboard!": [
+		""
+	],
+	"Tools": [
+		""
+	],
+	"Total Size": [
+		""
+	],
+	"Total: %d/%d": [
+		""
+	],
+	"Trash": [
+		""
+	],
+	"Try again": [
+		""
+	],
+	"Try it now": [
+		""
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		""
+	],
+	"Type `joplin help` for usage information.": [
+		""
+	],
+	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
+		""
+	],
+	"Type new tags or select from list": [
+		""
+	],
+	"Type: %s.": [
+		""
+	],
+	"Unable to edit resource of type %s": [
+		""
+	],
+	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Uncompleted to-dos on top": [
+		""
+	],
+	"Undo": [
+		""
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
+	"Unknown file type": [
+		""
+	],
+	"Unknown flag: %s": [
+		""
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		""
+	],
+	"Unordered list": [
+		""
+	],
+	"Unpublish note": [
+		""
+	],
+	"Unshare": [
+		""
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		""
+	],
+	"Unsupported image type: %s": [
+		""
+	],
+	"Unsupported link or message: %s": [
+		""
+	],
+	"Untitled": [
+		""
+	],
+	"Update": [
+		""
+	],
+	"Update available": [
+		""
+	],
+	"Update profile": [
+		""
+	],
+	"Update total sizes": [
+		""
+	],
+	"Updated": [
+		""
+	],
+	"updated date": [
+		""
+	],
+	"Updated local items: %d.": [
+		""
+	],
+	"Updated remote items: %d.": [
+		""
+	],
+	"Updated: ": [
+		""
+	],
+	"Updated: %d.": [
+		""
+	],
+	"Updated: %s": [
+		""
+	],
+	"Updating...": [
+		""
+	],
+	"Upgrade": [
+		""
+	],
+	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"URL": [
+		""
+	],
+	"Usage: %s": [
+		""
+	],
+	"Use biometrics to secure access to the app": [
+		""
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		""
+	],
+	"Use spell checker": [
+		""
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		""
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		""
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		""
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		""
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		""
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"User deletions": [
+		""
+	],
+	"Users": [
+		""
+	],
+	"Valid": [
+		""
+	],
+	"Verify your identity": [
+		""
+	],
+	"View": [
+		""
+	],
+	"View OCR text": [
+		""
+	],
+	"View on map": [
+		""
+	],
+	"View them now": [
+		""
+	],
+	"Viewer": [
+		""
+	],
+	"Vim": [
+		""
+	],
+	"Voice typing language files (URL)": [
+		""
+	],
+	"Voice typing...": [
+		""
+	],
+	"Warning": [
+		""
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		""
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
+	],
+	"Web Clipper": [
+		""
+	],
+	"WebDAV": [
+		""
+	],
+	"WebDAV password": [
+		""
+	],
+	"WebDAV URL": [
+		""
+	],
+	"WebDAV username": [
+		""
+	],
+	"Website and documentation": [
+		""
+	],
+	"WebView package: %s": [
+		""
+	],
+	"WebView version: %s": [
+		""
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		""
+	],
+	"Welcome!": [
+		""
+	],
+	"What are plugins?": [
+		""
+	],
+	"When creating a new note:": [
+		""
+	],
+	"When creating a new to-do:": [
+		""
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Window unresponsive.": [
+		""
+	],
+	"Words": [
+		""
+	],
+	"y": [
+		""
+	],
+	"Y": [
+		""
+	],
+	"yes": [
+		""
+	],
+	"Yes": [
+		""
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		""
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You currently have no notebooks.": [
+		""
+	],
+	"You do not have any installed plugin.": [
+		""
+	],
+	"You may also type `status` for more information.": [
+		""
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
+	],
+	"Your account doesn't have access to this feature": [
+		""
+	],
+	"Your choice: ": [
+		""
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		""
+	],
+	"Your permission to use your camera is required.": [
+		""
+	],
+	"Your version: %s": [
+		""
+	],
+	"Zoom In": [
+		""
+	],
+	"Zoom Out": [
+		""
+	]
 }

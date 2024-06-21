@@ -1,470 +1,2649 @@
 {
- "%d days": "%d дни",
- "%d hour": "%d час",
- "%d hours": "%d часа",
- "%d minutes": "%d минути",
- "%d notes match this pattern. Delete them?": "%d бележки съответстват на този шаблон. Да ги изтрия ли?",
- "%s %s (%s, %s)": "%s %s (%s, %s)",
- "%s (%s) could not be uploaded: %s": "%s (%s) не можа да бъде качен: %s",
- "%s (pre-release)": "%s (експериментална)",
- "%s - Copy": "%s - Копие",
- "%s = %s": "%s = %s",
- "%s = %s (%s)": "%s = %s (%s)",
- "%s: %d notes": "%s: %d бележки",
- "%s: %d/%d": "%s: %d/%d",
- "%s: %s": "%s: %s",
- "&Edit": "Редактиране(&E)",
- "&File": "Файл(&F)",
- "&Help": "Помощ (&H)",
- "&Tools": "Инструменти (&T)",
- "&View": "Изглед(&V)",
- "- Camera: to allow taking a picture and attaching it to a note.": "- Камера: за да може директно да бъдат снимани снимки и прикачвани към бележки.",
- "- Location: to allow attaching geo-location information to a note.": "- Местоположение: за прикачване на геолокации към бележки.",
- "- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": "- Място за съхранение: за да могат да се прикачват файлове към бележките и за синхронизация с файловата система.",
- "<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": "<задача-команда> може да е \"toggle\" или \"clear\". Използвайте \"toggle\" за да сменяте състоянието на задачата между изпълнена и неизпълнена (ако целевия обект е обикновена бележка, тя ще бъде конвертирана в задача). Използвайте \"clear\" за да конвертирате задача обратно в обикновена бележка.",
- "About Joplin": "Относно Joplin",
- "Active": "Активен",
- "Add or remove tags:": "Добавяне и махане на тагове:",
- "Advanced options": "Настройки за напреднали",
- "Also displays unset and hidden config variables.": "Показва също и конфигурации, които нямат стойност, или са скрити.",
- "Always": "Винаги",
- "An update is available, do you want to download it now?": "Има обновление, искате ли да го свалите сега?",
- "Appearance": "Външен вид",
- "Application": "Приложение",
- "Apply": "Приложи",
- "Attach file": "Прикачи файл",
- "Attach photo": "Прикачи снимка",
- "Attaches the given file to the note.": "Прикачва зададения файл към бележката.",
- "Attachment download behaviour": "Режим на сваляне на прикачени файлове",
- "Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": "Внимание: Ако смените това местоположение, трябва да копирате цялото съдържание там преди да синхронизирате, иначе всички файлове ще бъдат премахнати! Вижчте ЧЗВ за повече подробности: %s",
- "Authentication was not completed (did not receive an authentication token).": "Оторизирането не беше завършено (не получих оторизационен жетон).",
- "Authorisation token:": "Оторизационен жетон:",
- "Auto": "Автоматичен",
- "Back": "Назад",
- "Bold": "Удебелен",
- "Browse...": "Търсене...",
- "Bulleted List": "Неномериран списък",
- "Cancel": "Отмени",
- "Cancelling background synchronisation... Please wait.": "Отменя се синхронизацията течаща на заден план... Моля изчакайте.",
- "Cancelling...": "Отменям...",
- "Cancelling... Please wait.": "Отменям... Моля изчакайте.",
- "Cannot access %s": "Няма достъп до %s",
- "Cannot change encrypted item": "Криптираният обект не може да бъде променен",
- "Cannot copy note to \"%s\" notebook": "Не можах да копира бележката в тетрадка \"%s\"",
- "Cannot find \"%s\".": "Не успях да намеря \"%s\".",
- "Cannot move note to \"%s\" notebook": "Не можах да преместя бележката в тетрадка \"%s\"",
- "Cannot move notebook to this location": "Тетрадката не може да бъде преместена на това място",
- "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": "Неуспешно обновление на жетон: данните за оторизация липсват. Възможно е пускането на синхронизацията наново да оправи проблема.",
- "Check for updates...": "Провери за обновления...",
- "Check synchronisation configuration": "Провери настройките за синхронизация",
- "Checkbox": "Поле за отметка",
- "Checking... Please wait.": "Проверявам... Моля изчакайте.",
- "Clear": "Изчисти",
- "Clear alarm": "Премахни алармата",
- "Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": "Натиснете \"%s\" за да възстановите бележката. Тя ще бъде копирана в тетрадка с име \"%s\". Настоящата версия на бележката няма да бъде подменена или променена.",
- "Close Window": "Затвори прозорец",
- "Code": "Код",
- "Coming alarms": "Идни аларми",
- "Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": "Разделен със запетайки списък от пътища до директории, откъдето да бъдат заредени сертификати, или пътища до отделни файлове със сертификати. Например: /my/cert_dir, /other/custom.pem. Имайте предвид, че ако направите промени в настройките за TLS, трябва да запазите промените преди да натиснете \"Провери настройките за синхронизация\".",
- "Completed decryption.": "Завърших декриптирането.",
- "Configuration": "Настройки",
- "Conflicted: %d": "Конфликти: %d",
- "Conflicts": "Конфликти",
- "Convert to note": "Конвертиране към бележка",
- "Convert to todo": "Конвертиране към задача",
- "Copy": "Копирай",
- "Copy Link Address": "Копирай адреса на линка",
- "Copy Markdown link": "Копирай Markdown линк",
- "Copy path to clipboard": "Копирай пътя в клипборда",
- "Copy token": "Копирай жетона",
- "Could not authorise application:\n\n%s\n\nPlease try again.": "Неуспешно оторизиране на приложението:\n\n%s\n\nМоля опитайте пак.",
- "Created": "Създаден",
- "created date": "дата на създаване",
- "Created local items: %d.": "Създадени локални обекти: %d.",
- "Created remote items: %d.": "Създадени отдалечени обекти: %d.",
- "Created: %d.": "Създадени: %d.",
- "Created: %s": "Създаден: %s",
- "Creates a new note.": "Създава нова бележка.",
- "Creates a new notebook.": "Създава нова тетрадка.",
- "Creates a new to-do.": "Създава нова задача.",
- "Creating new %s...": "Създаване на нова %s...",
- "Current version is up-to-date.": "Настоящата версия е най-новата.",
- "Custom TLS certificates": "Допълнителни TLS сертификати",
- "Cut": "Изрежи",
- "Dark": "Тъмна",
- "Database v%s": "Версия на базата данни: %s",
- "Date format": "Формат за дати",
- "days": "дни",
- "Decrypted items: %s / %s": "Декриптирани обекти: %s / %s",
- "Decrypting items: %d/%d": "Декриптиране на обекти: %d/%d",
- "Default: %s": "Стойност по подразбиране: %s",
- "Delete": "Изтрий",
- "Delete note \"%s\"?": "Да изтрия ли бележка \"%s\"?",
- "Delete note?": "Да изтрия ли бележката?",
- "Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": "Да изтрия ли тетрадка \"%s\"?\n\nВсички бележки и под-тетрадки също ще бъдат изтрити.",
- "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": "Да изтрия ли тетрадката? Всички бележки и под-тетрадки в нея също ще бъдат изтрити.",
- "Delete these %d notes?": "Да изтрия ли тези %d бележки?",
- "Deleted local items: %d.": "Изтрити локални обекти: %d.",
- "Deleted remote items: %d.": "Изтрити отдалечени обекти: %d.",
- "Deletes the given notebook.": "Изтрива дадената тетрадка.",
- "Deletes the notebook without asking for confirmation.": "Изтрива тетрадката без да пита за потвърждение.",
- "Deletes the notes matching <note-pattern>.": "Изтрива бележките съответстващи на <шаблон-бележки>.",
- "Deletes the notes without asking for confirmation.": "Изтрива бележките без да пита за потвърждение.",
- "Destination format: %s": "Целеви формат: %s",
- "Directory": "Директория",
- "Directory to synchronise with (absolute path)": "Директория с която да се синхронизира (абсолютен път)",
- "Disable encryption": "Изключване на криптирането",
- "Disable Web Clipper Service": "Спри услугата за уеб-клипера",
- "Disabled": "Изключено",
- "Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": "Изключването на криптирането означава че *всички* бележки и прикачени файлове ще бъдат синхронизирани наново и изпратени некриптирани на целта за синхронизация. Искате ли да продължите?",
- "Discard changes": "Отхвърли промените",
- "Displays a geolocation URL for the note.": "Показва URL на геолокацията на бележката.",
- "Displays only the first top <num> notes.": "Показва първите <брой> бележки.",
- "Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": "Показва само обекти от даден тип или типове. Може да е `n` за бележки, `t` за задачи, или `nt` за бележки и задачи (напр. `-tt` би показало само задачи, а `-tnt` би показало бележки и задачи.",
- "Displays summary about the notes and notebooks.": "Показва обобщение относно бележките и тетрадките.",
- "Displays the complete information about note.": "Показва пълната информация за бележката.",
- "Displays the given note.": "Показва зададената бележка.",
- "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": "Показва бележките в настоящата тетрадка. Използвайте `ls /` за да покажете списъка от тетрадки.",
- "Displays usage information.": "Показва информация за употребата.",
- "Displays version information": "Показва информация за версията",
- "Do not ask for confirmation.": "Не питай за потвърждение.",
- "Download and install the relevant extension for your browser:": "Свалете и инсталирате разширението за вашия браузър:",
- "Downloading resources...": "Свалям ресурси...",
- "Dropbox": "Dropbox",
- "Dropbox Login": "Вписване в Dropbox",
- "Duplicate": "Дуплицирай",
- "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": "Дуплицира бележките съответстващи на <бележка> в [тетрадка]. Ако тетрадка не е зададена, бележките ще бъдат дуплицирани в настоящата тетрадка.",
- "Edit": "Редактиране",
- "Edit in external editor": "Редактирай във външен редактор",
- "Edit note.": "Редактиране на бележка.",
- "Edit notebook": "Редактиране на тетрадка",
- "Editor font family": "Шрифт на редактора",
- "Editor font size": "Размер на шрифта на редактора",
- "Either \"text\" or \"json\"": "Или \"text\" или \"json\"",
- "Enable": "Включи",
- "Enable ++insert++ syntax": "Пусни синтаксис ++вметка++",
- "Enable ==mark== syntax": "Пусни синтаксис ==маркиране==",
- "Enable ^sup^ syntax": "Пусни синтаксис ^високо^",
- "Enable abbreviation syntax": "Пусни синтаксис за съкращения",
- "Enable deflist syntax": "Пусни синтаксис за списък от дефиниции",
- "Enable encryption": "Включване на криптирането",
- "Enable footnotes": "Пусни бележки под линията",
- "Enable markdown emoji": "Пусни markdown емоджи",
- "Enable math expressions": "Пусни математическите изрази",
- "Enable multimarkdown table extension": "Пусни разширението за multimarkdown таблици",
- "Enable note history": "Пусни история за бележките",
- "Enable soft breaks": "Пусни меките краища (soft breaks)",
- "Enable table of contents extension": "Пусни разширението за генерирано съдържание",
- "Enable Web Clipper Service": "Пусни услугата за уеб-клипера",
- "Enable ~sub~ syntax": "Пусни синтаксис ~ниско~",
- "Enabled": "Включено",
- "Encrypted": "Криптирана",
- "Encrypted items cannot be modified": "Криптирани обекти не могат да бъдат променяни",
- "Encryption Config": "Настройки за криптиране",
- "Encryption is: %s": "Криптирането е: %s",
- "Enter code here": "Въведете кода тук",
- "Enter master password:": "Въведете главната парола:",
- "Enum": "Изброим",
- "Error opening note in editor: %s": "Грешка при отварянето на бележката в редактор: %s",
- "Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": "Грешка. Моля проверете дали уеб адреса(URL), потребителското име, паролата и т.н. са правили и че целта за синхронизация е достъпна. Получената грешка беше:",
- "Errors only": "Само грешки",
- "Exits the application.": "Напуска приложението.",
- "Export": "Експортиране",
- "Export Debug Report": "Експортиране на доклад за откриване на грешки",
- "Exporting to \"%s\" as \"%s\" format. Please wait...": "Експортирам към \"%s\" във формат \"%s\". Моля изчакайте...",
- "Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": "Експортира данните от Joplin в зададения път. По подразбиране ще експортира пълната база данни, включително тетрадки, бележки, тагове и ресурси.",
- "Exports only the given note.": "Експортира само зададената бележка.",
- "Exports only the given notebook.": "Експортира само зададената тетрадка.",
- "Fatal error:": "Фатална грешка:",
- "Fetched items: %d/%d.": "Взети обекти: %d/%d.",
- "Fetching resources: %d/%d": "Взимане на ресурси: %d/%d",
- "File": "Файл",
- "File system": "Файловата система",
- "Focus": "Фокусирай",
- "Focus body": "Фокусирай съдържанието",
- "Focus title": "Фокусирай заглавието",
- "Folders": "Папки",
- "For information on how to customise the shortcuts please visit %s": "За информация как да промените кратките команди, моля посетете %s",
- "For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": "За повече информация относно криптирането от край до край (E2EE) и за съвети относно как да го пуснете, вижте документацията:",
- "For the list of keyboard shortcuts and config options, type `help keymap`": "За списък от клавиатурните команди и конфигурации, въведете `help keymap`",
- "Found: %d.": "Намерени: %d.",
- "FTS enabled: %d": "FTS пуснат: %d",
- "General": "Общи",
- "Get pre-releases when checking for updates": "Взимане на експериментални версии при проверка за обновления",
- "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "Показва или променя конфигурационна стойност. Ако [стойност] не е дадена, ще покаже стойността на [име]. Ако нито [име] нито [стойност] са дадени, изрежда цялата настояща конфигурация.",
- "Go to source URL": "Иди на уеб адреса (URL)",
- "Goto Anything...": "Отиди на нещо...",
- "Heading": "Заглавие",
- "Hide %s": "Скрий %s",
- "Horizontal Rule": "Хоризонтална черта",
- "Hyperlink": "Линк",
- "ID": "Идентификатор",
- "Idle": "В момента не прави нищо",
- "Ignore TLS certificate errors": "Игнорирай грешки в TLS сертификати",
- "Import": "Импортиране",
- "Importing from \"%s\" as \"%s\" format. Please wait...": "Импортирам от \"%s\" във формат \"%s\". Моля изчакайте...",
- "Importing notes...": "Импортирам на бележки...",
- "Imports data into Joplin.": "Импортира данни в Joplin.",
- "In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": "В режим \"Ръчен\" прикачените файлове се свалят само ако натиснете на тях. В режим \"Автоматичен\" се свалят, когато отворите бележката. В режим \"Винаги\" се свалят независимо дали отворите бележката или не.",
- "In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": "Във всяка команда може да реферирате бележка или тетрадка по заглавие или по идентификатор, или използвайки някоя от кратките команди `$n` и `$b`, представляващи съответно настоящата бележка и настоящата тетрадка. `$c` може да се ползва за рефериране на избрания обект.",
- "In order to use the web clipper, you need to do the following:": "За да използвате уеб-клипера, трябва да направите следното:",
- "In progress": "В момента върви",
- "In: %s": "В: %s",
- "Insert Hyperlink": "Вкарай линк",
- "Invalid answer: %s": "Невалиден отговор: %s",
- "Invalid command: \"%s\"": "Невалидна команда: \"%s\"",
- "Invalid option value: \"%s\". Possible values are: %s.": "Невалидна стойност на настройката: \"%s\". Възможните стойности са: %s.",
- "Italic": "Курсив",
- "Item \"%s\" could not be downloaded: %s": "Обект \"%s\" не можа да бъде свален: %s",
- "Items that cannot be decrypted": "Обекти, които не могат да бъдат декриптирани",
- "Items that cannot be synchronised": "Някои обекти не можаха да бъдат синхронизирани",
- "Joplin Export Directory": "Joplin експорт директория",
- "Joplin Export File": "Joplin експорт файл",
- "Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": "Joplin не успя да декриптира тези обекти след няколко опита. Възможните причини са че са данните са развалени или че обектите са прекалено големи. Тези обекти ще останат на устройството, но Joplin вече няма да се опитва да ги декриптира.",
- "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": "Уеб-клиперът на Joplin позволява за да запазвате уеб-страници и снимки на екрана от браузъра директно в Joplin.",
- "Joplin website": "Уебсайта на Joplin",
- "Keep note history for": "Пази историята на бележките",
- "Language": "Език",
- "Last error: %s": "Последна грешка: %s",
- "Layout": "Разположеня",
- "Light": "Светла",
- "List item": "Елемент на списък",
- "Location": "Местоположение",
- "Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": "Файла за заключване е зает. Ако знаете че друга синхронизация не се извършва в момента, може да изтриете файла за заключване намиращ се на \"%s\" и да продължите с процеса.",
- "Log": "Лог",
- "Login with Dropbox": "Вписване с Dropbox",
- "Login with OneDrive": "Вписване в OneDrive",
- "Make a donation": "Искам да направя дарение",
- "Manual": "Ръчен",
- "Markdown": "Markdown",
- "Marks a to-do as done.": "Маркира задача като изпълнена.",
- "Marks a to-do as non-completed.": "Маркира задача като неизпълнена.",
- "Master Key %s": "Главен ключ %s",
- "Max concurrent connections": "Максимален брой едновременни връзки",
- "Missing Master Keys": "Липсващи главни ключове",
- "Missing required argument: %s": "Липсващ задължителен параметър: %s",
- "More information": "Още информация",
- "More than one item match \"%s\". Please narrow down your query.": "Повече от едно нещо съответства на \"%s\". Моля рафинирайте търсенето си.",
- "Move %d notes to notebook \"%s\"?": "Да преместя ли %d бележки в тетрадка \"%s\"?",
- "Move to notebook...": "Премести в тетрадка...",
- "n": "н",
- "N": "Н",
- "New note": "Нова бележка",
- "New notebook": "Нова тетрадка",
- "New notebook \"%s\" will be created and file \"%s\" will be imported into it": "Нова тетрадка \"%s\" ще бъде създадена и файл \"%s\" ще бъде импортиран в нея",
- "New tags:": "Нови тагове:",
- "New to-do": "Нова задача",
- "New version: %s": "Нова версия: %s",
- "Nextcloud": "Nextcloud",
- "Nextcloud password": "Парола за Nextcloud",
- "Nextcloud username": "Потребителско име за Nextcloud",
- "Nextcloud WebDAV URL": "Уеб адрес (URL) за Nextcloud WebDAV",
- "No": "Не",
- "No active notebook.": "Няма активна тетрадка.",
- "No item with ID %s": "Няма обект с идентификатор %s",
- "No notebook has been specified.": "Няма зададени тетрадки.",
- "No notebook selected.": "Няма избрани тетрадки.",
- "No notes in here. Create one by clicking on \"New note\".": "Тук няма бележки. Може да натиснете \"Нова бележка\" за да създадете първата.",
- "No such command: %s": "Няма такава команда: %s",
- "No text editor is defined. Please set it using `config editor <editor-path>`": "Няма зададен текстови редактор. Моля задайте го с командата: `config editor <път-до-редактора>`",
- "Not authentified with %s. Please provide any missing credentials.": "Не сме оторизирани за %s. Моля въведете липсващите оторизационни данни.",
- "note": "бележка",
- "Note": "Бележки",
- "Note body": "Съдържание на бележката",
- "Note does not exist: \"%s\". Create it?": "Бележката не съществува:\"%s\". Да я създам ли?",
- "Note has been saved.": "Бележката бе запазена.",
- "Note History": "История на бележката",
- "Note is not a to-do: \"%s\"": "Бележката не е задача: \"%s\"",
- "Note properties": "Атрибути на бележката",
- "Note title": "Заглавие на бележката",
- "Note: Does not work in all desktop environments.": "Внимание: Не работи с всички десктоп среди.",
- "Notebooks": "Тетрадки",
- "Notebooks cannot be named \"%s\", which is a reserved title.": "Тетрадки не могат да имат име \"%s\", защото това е запазено заглавие.",
- "Notes and settings are stored in: %s": "Бележките и настройките са запазени в: %s",
- "Notes can only be created within a notebook.": "Бележки могат да бъдат създавани само в тетрадка.",
- "Numbered List": "Номериран списък",
- "OK": "Добре",
- "On %s: %s": "На %s: %s",
- "One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": "Един или повече обекти са криптирани в момента и може да е необходимо да въведете главната парола. За да го направите, напишете `e2ee decrypt`. Ако вече сте задали паролата, то криптираните обекти вече се декриптират на заден план и скоро ще са на разположение.",
- "One or more master keys need a password.": "Поне един главен ключ се нуждае от парола.",
- "OneDrive": "OneDrive",
- "OneDrive Login": "Вписване в OneDrive",
- "Open %s": "Отвори %s",
- "Open...": "Отвори...",
- "Operation cancelled": "Действието бе отменено",
- "Options": "Конфигурация",
- "Password": "Парола",
- "Password cannot be empty": "Паролата не може да е празна",
- "Password:": "Парола:",
- "Paste": "Постави",
- "PDF File": "PDF файл",
- "Permission to use camera": "Разрешение за употреба на камерата",
- "Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": "Моля отворете следния адрес в браузър и оторизирайте приложението. Приложението ще създаде директория \"Apps/Joplin\" и ще чете и пише файлове в тази директория. Приложението няма да има достъп до файлове извън тази директория, нито до друга лична информация. Никакви данни няма да бъдат споделени с трети страни.",
- "Please select a notebook first.": "Моля първо изберете тетрадка.",
- "Please select the note or notebook to be deleted first.": "Моля първо изберете бележката или тетрадката, която искате да изтриете.",
- "Please select where the sync status should be exported to": "Моля изберете къде да бъде експортиран статуса на синхронизацията",
- "Please specify import format for %s": "Моля задайте формата за импортиране от %s",
- "Please specify the notebook where the notes should be imported to.": "Моля задайте тетрадка, в която да бъдат импортирани бележките.",
- "Plugins": "Разширения",
- "Possible keys/values:": "Възможни ключове/стойности:",
- "Possible values: %s.": "Възможни стойности: %s.",
- "Preferences...": "Настройки...",
- "Press Ctrl+D or type \"exit\" to exit the application": "Натиснете Ctrl+D или напишете \"exit\" за да напуснете приложението",
- "Press to set the decryption password.": "Натиснете за да зададете паролата за декриптиране.",
- "Previous versions of this note": "Предишни версии на бележката",
- "Print": "Принтиране",
- "Quit": "Изход",
- "Refresh": "Обнови",
- "Remove tag \"%s\" from all notes?": "Да премахна ли таг \"%s\" от всички бележки?",
- "Remove this search from the sidebar?": "Да премахна ли това търсене от страничния панел?",
- "Rename": "Преименувай",
- "Rename notebook:": "Преименуване на тетрадка:",
- "Rename tag:": "Преименуване на таг:",
- "Renames the given <item> (note or notebook) to <name>.": "Преименува дадения <обект> (бележка или тетрадка) на <име>.",
- "Resources: %d.": "Ресурси: %d.",
- "Restore": "Възстанови",
- "Restored Notes": "Възстановени бележки",
- "Retry": "Нов опит",
- "Reverse sort order": "Обратен ред на сортиране",
- "Reverses the sorting order.": "Обръща реда на сортиране.",
- "Save": "Запази",
- "Save alarm": "Запази алармата",
- "Save as...": "Запазаи като...",
- "Save changes": "Запази промените",
- "Save geo-location with notes": "Запазвай геолокация в бележките",
- "Search": "Търсене",
- "Search in all the notes": "Търсене във всички бележки",
- "Search in current note": "Търсене в настоящата бележка",
- "Search...": "Търсене...",
- "Search:": "Търсене:",
- "Searches for the given <pattern> in all the notes.": "Търси всред всички бележки за зададения <шаблон>.",
- "See the pre-release page for more details: %s": "Вижте страницата за експерименталните версии за повече подробности: %s",
- "Select all": "Избери всичко",
- "Set alarm": "Задай аларма",
- "Set alarm:": "Задаване на аларма:",
- "Set the password": "Задаване на паролата",
- "Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": "Задава зададената [стойност] за атрибут <име> на дадената <бележка>. Възможните атрибути са:\n\n%s",
- "Share": "Сподели",
- "Shortcuts are not available in CLI mode.": "Кратките команди са приложими само в режим на команден ред.",
- "Show all": "Покажи всички",
- "Show completed to-dos": "Покажи изпълнените задачи",
- "Show tray icon": "Покажи иконка до часовника",
- "Sidebar": "Страничен панел",
- "Skipped: %d.": "Пропуснати: %d.",
- "Some items cannot be synchronised.": "Някои обекти не можаха да бъдат синхронизирани.",
- "Sort notebooks by": "Сортирай тетрадките по",
- "Sort notes by": "Сортирай бележките по",
- "Sorts the item by <field> (eg. title, updated_time, created_time).": "Сортира обектите по <поле>. Напр. title (заглавие), updated_time (последна промяна), created_time (създадена).",
- "Source format: %s": "Формат на източника: %s",
- "Start application minimised in the tray icon": "Пускай приложението минимизирано до иконката",
- "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": "Започвам да декриптирам... Моля изчакайте, защото това може да отнеме няколко минути, в зависимост от колко има за декриптиране.",
- "Starting synchronisation...": "Започвам синхронизация...",
- "Starting to edit note. Close the editor to get back to the prompt.": "Започваме редакция на бележката. Затворете редактора за да се върнете към командния ред.",
- "Status": "Статус",
- "Status: %s": "Статус: %s",
- "Status: Started on port %d": "Статус: Стартирано на порт %d",
- "Step 1: Enable the clipper service": "1ва стъпка: Пуснете услугата на клипера",
- "Step 1: Open this URL in your browser to authorise the application:": "1ва стъпка: Отворете този адрес в браузър и оторизирайте приложението:",
- "Step 2: Enter the code provided by Dropbox:": "2ра стъпка: Въведете кода предоставен от Dropbox:",
- "Step 2: Install the extension": "2ра стъпка: Инсталирайте браузърско разширение",
- "strong text": "силно наблегнат текст",
- "Submit": "Предай",
- "Success! Synchronisation configuration appears to be correct.": "Успех! Изглежда че настройките за синхронизация са правили.",
- "Switch between note and to-do type": "Конвертирай между бележка и задача",
- "Switch to note type": "Конвертирай към бележка",
- "Switch to to-do type": "Конвертирай към задача",
- "Switches to [notebook] - all further operations will happen within this notebook.": "Превключва на [тетрадка] - всички нататъчни команди ще се извършват в тази тетрадка.",
- "Sync status (synced items / total items)": "Статус на синхронизацията (синхронизирани / всички)",
- "Sync to provided target (defaults to sync.target config value)": "Синхронизира със зададената цел (по подразбиране със стойността от конфигурационната стойност sync.target)",
- "Synchronisation": "Синхронизация",
- "Synchronisation interval": "Интервал на синхронизация",
- "Synchronisation is already in progress.": "Вече се извършва синхронизация.",
- "Synchronisation Status": "Статус на синхронизацията",
- "Synchronisation target": "Цел за синхронизация",
- "Synchronisation target: %s (%s)": "Цел за синхронизация: %s (%s)",
- "Synchronise": "Синхронизация",
- "Synchronises with remote storage.": "Синхронизира с отдалеченото хранилище.",
- "Tagged: %d.": "Тагнати: %d.",
- "Tags": "Тагове",
- "Take photo": "Снимане",
- "Text editor command": "Команда за стартиране на текстов редактор",
- "The application has been authorised - you may now close this browser tab.": "Приложението бе оторизирано - може да затворите таба в браузъра.",
- "The application has been authorised!": "Приложението бе оторизирано!",
- "The application has been successfully authorised.": "Приложението бе успешно оторизирано.",
- "The command \"%s\" is only available in GUI mode": "Командата \"%s\" е приложима само в графичен режим",
- "The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": "Команда за стартиране на текстов редактор (може да включва параметри), която ще бъде използвана за отваряне на бележка. Ако е празно, приложението ще се опитва автоматично да засече кой е текстовия редактор по подразбиране на системата ви.",
- "The Joplin mobile app does not currently support this type of link: %s": "Мобилното приложение на Joplin в момента не поддържа този вид линкове: %s",
- "The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": "Главните ключове с тези идентификатори са били използвани за криптиране на някои от обектите ви, но приложението в момент няма достъп до тях. Вероятно ще бъдат свалени тепърва чрез синхронизация.",
- "The note \"%s\" has been successfully restored to the notebook \"%s\".": "Бележка \"%s\" бе успешно създадена и сложена в тетрадка \"%s\".",
- "The notebook could not be saved: %s": "Тетрадката не може да бъде запазена: %s",
- "The notes have been imported: %s": "Бележките бяха импортирани: %s",
- "The possible commands are:": "Възможните команди са:",
- "The tag \"%s\" already exists. Please choose a different name.": "Тагът \"%s\" вече съществува. Моля изберете друго име.",
- "The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": "Целта за синхронизация. Всяка цел за синхронизация може да има допълнителни параметри с имена `sync.NUM.NAME` (всички такива са документирани по долу).",
- "The web clipper service is enabled and set to auto-start.": "Услугата за уеб-клипера бе включена и конфигурирана да се стартира автоматично.",
- "The web clipper service is not enabled.": "Услугата за уеб-клипера не е пусната.",
- "Theme": "Визуална тема",
- "There are currently no notes. Create one by clicking on the (+) button.": "В момента няма бележки. Натиснете бутон (+) за да създадете бележка.",
- "There is currently no notebook. Create one by clicking on \"New notebook\".": "В момента нямата тетрадки. Може да натиснете \"Нова тетрадка\" за да създадете първата.",
- "There is no data to export.": "Няма какво да се експортира.",
- "These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": "Тези обекти ще останат на устройството, но няма да бъдат качени на целта за синхронизация. За да намерите тези обекти, потърсете за заглавията или идентификаторите им (може да ги видите в скобите по горе).",
- "This attachment is not downloaded or not decrypted yet.": "Прикаченият файл не е свален или все още не е декриптиран.",
- "This authorisation token is only needed to allow third-party applications to access Joplin.": "Оторизационният жетон е необходим само ако искате да дадете достъп до Joplin на приложения от трети страни.",
- "This note does not have geolocation information.": "Тази бележка няма информация за геолокация.",
- "This note has been modified:": "Тази бележка беше променена:",
- "This note has no content. Click on \"%s\" to toggle the editor and edit the note.": "Тази бележка няма съдържание. Натиснете \"%s\" за да покажете редакторя и да редактирате бележката.",
- "This note has no history": "Тази бележка няма история",
- "This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": "Услугата позволява на браузърски разширения да комуникират с Joplin. Когато я включите, защитната ви стена може да ви попита да дадете разрешение на Joplin да слуша на определен порт.",
- "This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": "Това позволява на Joplin да върви на заден план. Препоръчва се да пуснете тази настройка, за да се синхронизират бележките ви постоянно, и така да намалите вероятността да се появят конфликти.",
- "Time format": "Формат за време",
- "title": "заглавие",
- "To allow Joplin to synchronise with Dropbox, please follow the steps below:": "За да позволите на Joplin да синхронизира с Dropbox, моля изпълнете следните стъпки:",
- "To delete a tag, untag the associated notes.": "За да изтриете таг, премахнете го от всички бележки.",
- "To delete: %d": "За изтриване: %d",
- "To enter command line mode, press \":\"": "За да влезете в режим на команден ред, натиснете \":\"",
- "To exit command line mode, press ESCAPE": "За да излезете от режим на команден ред, натисне ESCAPE",
- "To maximise/minimise the console, press \"tc\".": "За да максимизирате или минимизирате конзолата, натиснете \"tc\".",
- "To move from one pane to another, press Tab or Shift+Tab.": "За да се преместите от един панел в друг, настинете Tab или Shift+Tab.",
- "To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": "Приложението има нужда от следните разрешения за да работи правилно. Моля дайте ги от настройките на телефона в Приложения > Joplin > Разрешения",
- "to-do": "задача",
- "Toggle development tools": "Инструменти за разработка",
- "Toggle editor layout": "Промени изгледа на редактора",
- "Toggle sidebar": "Страничен панел",
- "Token has been copied to the clipboard!": "Жетона бе копиран в клипборда!",
- "Total: %d/%d": "Общо: %d/%d",
- "Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": "Въведете `help [команда]` за повече информация относно командата, или въведете `help all` за пълната информация за ползването на командния ред.",
- "Type `joplin help` for usage information.": "Въведете `joplin help` за информация за употребата.",
- "Type new tags or select from list": "Напишете нови тагове или изберете от списъка",
- "Type: %s.": "Тип: %s.",
- "Uncompleted to-dos on top": "Неизпълнените задачи най-отгоре",
- "Unknown flag: %s": "Неизвестен флаг: %s",
- "Unknown item type downloaded - please upgrade Joplin to the latest version": "Неизвестен тип на свален обект - моля обновете Joplin до най-новата версия",
- "Unsupported image type: %s": "Този тип изображения не се поддържа: %s",
- "Unsupported link or message: %s": "Неподдържан линк или съобщение: %s",
- "Untitled": "Без заглавие",
- "Updated": "Обновен",
- "updated date": "дата на промяна",
- "Updated local items: %d.": "Обновени локални обекти: %d.",
- "Updated remote items: %d.": "Обновени отдалечени обекти: %d.",
- "Updated: %d.": "Обновени: %d.",
- "URL": "Уеб адрес (URL)",
- "Usage: %s": "Употреба: %s",
- "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": "Използване на дългия формат на списъци. Форматът е ID, NOTE_COUNT (брой бележки, за тетрадки), DATE (дата), TODO_CHECKED (брой завършени, за задачи), TITLE (заглавие)",
- "Use the arrows and page up/down to scroll the lists and text areas (including this console).": "Използвайте стрелките и page up/down to за да прелистите списъци и текстови полета (включително тази конзола).",
- "View on map": "Покажи на карта",
- "View them now": "Покажи ги сега",
- "WebDAV": "WebDAV",
- "WebDAV password": "Парола за WebDAV",
- "WebDAV URL": "Уеб адрес (URL) за WebDAV",
- "WebDAV username": "Потребителско име за WebDAV",
- "Website and documentation": "Уебсайт и документация",
- "Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": "Добре дошли в Joplin!\n\nВъведете `:help shortcuts` за списък от клавиатурни команди, или само `:help` за информация за ползването на приложението.\n\nНапример, за да създадете тетрадка, натиснете `mb`; за да създадете бележка, натиснете `mn`.",
- "When creating a new note:": "Когато се създава нова бележка:",
- "When creating a new to-do:": "Когато се създава нова задача:",
- "y": "д",
- "Y": "Д",
- "Yes": "Да",
- "Your choice: ": "Вашият избор: ",
- "Your permission to use your camera is required.": "Трябва да разрешените употребата на камерата.",
- "Your version: %s": "Вашата версия: %s"
+	"\"%s\" is missing the required \"%s\" property.": [
+		""
+	],
+	"%d days": [
+		"%d дни"
+	],
+	"%d GB": [
+		""
+	],
+	"%d GB storage space": [
+		""
+	],
+	"%d hour": [
+		"%d час"
+	],
+	"%d hours": [
+		"%d часа"
+	],
+	"%d MB": [
+		""
+	],
+	"%d minutes": [
+		"%d минути"
+	],
+	"%d notes match this pattern. Delete them?": [
+		"%d бележки съответстват на този шаблон. Да ги изтрия ли?"
+	],
+	"%s": [
+		""
+	],
+	"%s %s (%s, %s)": [
+		"%s %s (%s, %s)"
+	],
+	"%s (%s) could not be uploaded: %s": [
+		"%s (%s) не можа да бъде качен: %s"
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		""
+	],
+	"%s (pre-release)": [
+		"%s (експериментална)"
+	],
+	"%s - Copy": [
+		"%s - Копие"
+	],
+	"%s / %s": [
+		""
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s (%s)"
+	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s tab opened": [
+		""
+	],
+	"%s: %d notes": [
+		"%s: %d бележки"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"&Edit": [
+		"Редактиране(&E)"
+	],
+	"&File": [
+		"Файл(&F)"
+	],
+	"&Go": [
+		""
+	],
+	"&Help": [
+		"Помощ (&H)"
+	],
+	"&Tools": [
+		"Инструменти (&T)"
+	],
+	"&View": [
+		"Изглед(&V)"
+	],
+	"(%s)": [
+		""
+	],
+	"(In plugin: %s)": [
+		""
+	],
+	"(None)": [
+		""
+	],
+	"(wysiwyg: %s)": [
+		""
+	],
+	"(You may disable this prompt in the options)": [
+		""
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		"- Камера: за да може директно да бъдат снимани снимки и прикачвани към бележки."
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		"- Местоположение: за прикачване на геолокации към бележки."
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		"- Място за съхранение: за да могат да се прикачват файлове към бележките и за синхронизация с файловата система."
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		"<задача-команда> може да е \"toggle\" или \"clear\". Използвайте \"toggle\" за да сменяте състоянието на задачата между изпълнена и неизпълнена (ако целевия обект е обикновена бележка, тя ще бъде конвертирана в задача). Използвайте \"clear\" за да конвертирате задача обратно в обикновена бележка."
+	],
+	"A3": [
+		""
+	],
+	"A4": [
+		""
+	],
+	"A5": [
+		""
+	],
+	"About": [
+		""
+	],
+	"About Joplin": [
+		"Относно Joplin"
+	],
+	"accelerator": [
+		""
+	],
+	"Accelerator \"%s\" is not valid.": [
+		""
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		""
+	],
+	"Accept": [
+		""
+	],
+	"Accepted invitations": [
+		""
+	],
+	"Access denied: Please check your username and password": [
+		""
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		""
+	],
+	"Account": [
+		""
+	],
+	"Account type": [
+		""
+	],
+	"Active": [
+		"Активен"
+	],
+	"Actual Size": [
+		""
+	],
+	"Add body": [
+		""
+	],
+	"Add or remove tags:": [
+		"Добавяне и махане на тагове:"
+	],
+	"Add recipient:": [
+		""
+	],
+	"Add to dictionary": [
+		""
+	],
+	"Admin": [
+		""
+	],
+	"Admin dashboard": [
+		""
+	],
+	"Advanced options": [
+		"Настройки за напреднали"
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"All item sync failures have been marked as \"ignored\".": [
+		""
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		""
+	],
+	"Also displays unset and hidden config variables.": [
+		"Показва също и конфигурации, които нямат стойност, или са скрити."
+	],
+	"Always": [
+		"Винаги"
+	],
+	"Always open %s files without asking.": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		""
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		""
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred: %s": [
+		""
+	],
+	"An update is available, do you want to download it now?": [
+		"Има обновление, искате ли да го свалите сега?"
+	],
+	"Android API level: %d": [
+		""
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		""
+	],
+	"Appearance": [
+		"Външен вид"
+	],
+	"Application": [
+		"Приложение"
+	],
+	"Apply": [
+		"Приложи"
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		""
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		""
+	],
+	"Arguments:": [
+		""
+	],
+	"Aritim Dark": [
+		""
+	],
+	"Attach file": [
+		"Прикачи файл"
+	],
+	"Attach photo": [
+		"Прикачи снимка"
+	],
+	"Attaches the given file to the note.": [
+		"Прикачва зададения файл към бележката."
+	],
+	"Attachment download behaviour": [
+		"Режим на сваляне на прикачени файлове"
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		"Внимание: Ако смените това местоположение, трябва да копирате цялото съдържание там преди да синхронизирате, иначе всички файлове ще бъдат премахнати! Вижчте ЧЗВ за повече подробности: %s"
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		"Оторизирането не беше завършено (не получих оторизационен жетон)."
+	],
+	"Authorisation token:": [
+		"Оторизационен жетон:"
+	],
+	"Auto": [
+		"Автоматичен"
+	],
+	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Auto-pair braces, parentheses, quotations, etc.": [
+		""
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		""
+	],
+	"Automatically switch theme to match system theme": [
+		""
+	],
+	"Back": [
+		"Назад"
+	],
+	"Basic": [
+		""
+	],
+	"Beta": [
+		""
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		""
+	],
+	"Bold": [
+		"Удебелен"
+	],
+	"Browse all plugins": [
+		""
+	],
+	"Browse...": [
+		"Търсене..."
+	],
+	"Built-in": [
+		""
+	],
+	"Bulleted List": [
+		"Неномериран списък"
+	],
+	"by %s": [
+		""
+	],
+	"Can view": [
+		""
+	],
+	"Can view and edit": [
+		""
+	],
+	"Cancel": [
+		"Отмени"
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"Отменя се синхронизацията течаща на заден план... Моля изчакайте."
+	],
+	"Cancelling...": [
+		"Отменям..."
+	],
+	"Cancelling... Please wait.": [
+		"Отменям... Моля изчакайте."
+	],
+	"Cannot access %s": [
+		"Няма достъп до %s"
+	],
+	"Cannot change encrypted item": [
+		"Криптираният обект не може да бъде променен"
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		"Не можах да копира бележката в тетрадка \"%s\""
+	],
+	"Cannot find \"%s\".": [
+		"Не успях да намеря \"%s\"."
+	],
+	"Cannot move note to \"%s\" notebook": [
+		"Не можах да преместя бележката в тетрадка \"%s\""
+	],
+	"Cannot move notebook to this location": [
+		"Тетрадката не може да бъде преместена на това място"
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		"Неуспешно обновление на жетон: данните за оторизация липсват. Възможно е пускането на синхронизацията наново да оправи проблема."
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		""
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		""
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		""
+	],
+	"Case sensitive": [
+		""
+	],
+	"Change application layout": [
+		""
+	],
+	"Characters": [
+		""
+	],
+	"Characters excluding spaces": [
+		""
+	],
+	"Check for updates...": [
+		"Провери за обновления..."
+	],
+	"Check synchronisation configuration": [
+		"Провери настройките за синхронизация"
+	],
+	"Checkbox": [
+		"Поле за отметка"
+	],
+	"Checking... Please wait.": [
+		"Проверявам... Моля изчакайте."
+	],
+	"Chrome Web Store": [
+		""
+	],
+	"Clear": [
+		"Изчисти"
+	],
+	"Clear alarm": [
+		"Премахни алармата"
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		"Натиснете \"%s\" за да възстановите бележката. Тя ще бъде копирана в тетрадка с име \"%s\". Настоящата версия на бележката няма да бъде подменена или променена."
+	],
+	"Close": [
+		""
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		""
+	],
+	"Close Window": [
+		"Затвори прозорец"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
+	],
+	"Code": [
+		"Код"
+	],
+	"Code Block": [
+		""
+	],
+	"Collapse": [
+		""
+	],
+	"Collapse %s": [
+		""
+	],
+	"Coming alarms": [
+		"Идни аларми"
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		"Разделен със запетайки списък от пътища до директории, откъдето да бъдат заредени сертификати, или пътища до отделни файлове със сертификати. Например: /my/cert_dir, /other/custom.pem. Имайте предвид, че ако направите промени в настройките за TLS, трябва да запазите промените преди да натиснете \"Провери настройките за синхронизация\"."
+	],
+	"command": [
+		""
+	],
+	"Command": [
+		""
+	],
+	"Command palette": [
+		""
+	],
+	"Command palette...": [
+		""
+	],
+	"Completed decryption.": [
+		"Завърших декриптирането."
+	],
+	"Completed with warnings:\n%s": [
+		""
+	],
+	"completion date": [
+		""
+	],
+	"Compress old changes": [
+		""
+	],
+	"Configuration": [
+		"Настройки"
+	],
+	"Conflicted: %d": [
+		"Конфликти: %d"
+	],
+	"Conflicts": [
+		"Конфликти"
+	],
+	"Consolidated billing": [
+		""
+	],
+	"Continue": [
+		""
+	],
+	"Convert to note": [
+		"Конвертиране към бележка"
+	],
+	"Convert to todo": [
+		"Конвертиране към задача"
+	],
+	"Copy": [
+		"Копирай"
+	],
+	"Copy Link Address": [
+		"Копирай адреса на линка"
+	],
+	"Copy Markdown link": [
+		"Копирай Markdown линк"
+	],
+	"Copy path to clipboard": [
+		"Копирай пътя в клипборда"
+	],
+	"Copy token": [
+		"Копирай жетона"
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"Неуспешно оторизиране на приложението:\n\n%s\n\nМоля опитайте пак."
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		""
+	],
+	"Could not connect to plugin repository.": [
+		""
+	],
+	"Could not export notes: %s": [
+		""
+	],
+	"Could not install plugin: %s": [
+		""
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"Could not upgrade master key: %s": [
+		""
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		""
+	],
+	"Created": [
+		"Създаден"
+	],
+	"created date": [
+		"дата на създаване"
+	],
+	"Created local items: %d.": [
+		"Създадени локални обекти: %d."
+	],
+	"Created remote items: %d.": [
+		"Създадени отдалечени обекти: %d."
+	],
+	"Created: %d.": [
+		"Създадени: %d."
+	],
+	"Created: %s": [
+		"Създаден: %s"
+	],
+	"Creates a new note.": [
+		"Създава нова бележка."
+	],
+	"Creates a new notebook.": [
+		"Създава нова тетрадка."
+	],
+	"Creates a new to-do.": [
+		"Създава нова задача."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
+	],
+	"Current version is up-to-date.": [
+		"Настоящата версия е най-новата."
+	],
+	"custom order": [
+		""
+	],
+	"Custom order": [
+		""
+	],
+	"Custom stylesheet for Joplin-wide app styles": [
+		""
+	],
+	"Custom stylesheet for rendered Markdown": [
+		""
+	],
+	"Custom TLS certificates": [
+		"Допълнителни TLS сертификати"
+	],
+	"Customise the note publishing banner": [
+		""
+	],
+	"Cut": [
+		"Изрежи"
+	],
+	"Dark": [
+		"Тъмна"
+	],
+	"Dashboard": [
+		""
+	],
+	"Date": [
+		""
+	],
+	"Date format": [
+		"Формат за дати"
+	],
+	"days": [
+		"дни"
+	],
+	"Decrease indent level": [
+		""
+	],
+	"Decrypted items: %s / %s": [
+		"Декриптирани обекти: %s / %s"
+	],
+	"Decrypting items: %d/%d": [
+		"Декриптиране на обекти: %d/%d"
+	],
+	"Default: %s": [
+		"Стойност по подразбиране: %s"
+	],
+	"Delete": [
+		"Изтрий"
+	],
+	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		""
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		""
+	],
+	"Deleted local items: %d.": [
+		"Изтрити локални обекти: %d."
+	],
+	"Deleted remote items: %d.": [
+		"Изтрити отдалечени обекти: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		""
+	],
+	"Deletes the given notebook.": [
+		"Изтрива дадената тетрадка."
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		"Изтрива тетрадката без да пита за потвърждение."
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		"Изтрива бележките съответстващи на <шаблон-бележки>."
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"Изтрива бележките без да пита за потвърждение."
+	],
+	"Destination format: %s": [
+		"Целеви формат: %s"
+	],
+	"Detailed": [
+		""
+	],
+	"Directory": [
+		"Директория"
+	],
+	"Directory to synchronise with (absolute path)": [
+		"Директория с която да се синхронизира (абсолютен път)"
+	],
+	"Disable encryption": [
+		"Изключване на криптирането"
+	],
+	"Disable safe mode and restart": [
+		""
+	],
+	"Disable Web Clipper Service": [
+		"Спри услугата за уеб-клипера"
+	],
+	"Disabled": [
+		"Изключено"
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		"Изключването на криптирането означава че *всички* бележки и прикачени файлове ще бъдат синхронизирани наново и изпратени некриптирани на целта за синхронизация. Искате ли да продължите?"
+	],
+	"Discard changes": [
+		"Отхвърли промените"
+	],
+	"Dismiss": [
+		""
+	],
+	"Displays a geolocation URL for the note.": [
+		"Показва URL на геолокацията на бележката."
+	],
+	"Displays only the first top <num> notes.": [
+		"Показва първите <брой> бележки."
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		"Показва само обекти от даден тип или типове. Може да е `n` за бележки, `t` за задачи, или `nt` за бележки и задачи (напр. `-tt` би показало само задачи, а `-tnt` би показало бележки и задачи."
+	],
+	"Displays summary about the notes and notebooks.": [
+		"Показва обобщение относно бележките и тетрадките."
+	],
+	"Displays the complete information about note.": [
+		"Показва пълната информация за бележката."
+	],
+	"Displays the given note.": [
+		"Показва зададената бележка."
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		"Показва бележките в настоящата тетрадка. Използвайте `ls /` за да покажете списъка от тетрадки."
+	],
+	"Displays usage information.": [
+		"Показва информация за употребата."
+	],
+	"Displays version information": [
+		"Показва информация за версията"
+	],
+	"Do it now": [
+		""
+	],
+	"Do not ask for confirmation.": [
+		"Не питай за потвърждение."
+	],
+	"Done": [
+		""
+	],
+	"Download and install the relevant extension for your browser:": [
+		"Свалете и инсталирате разширението за вашия браузър:"
+	],
+	"Downloaded": [
+		""
+	],
+	"Downloaded and decrypted": [
+		""
+	],
+	"Downloaded and encrypted": [
+		""
+	],
+	"Downloading resources...": [
+		"Свалям ресурси..."
+	],
+	"Dracula": [
+		""
+	],
+	"Draw picture": [
+		""
+	],
+	"Drawing": [
+		""
+	],
+	"Drop notes or files here": [
+		""
+	],
+	"Dropbox": [
+		"Dropbox"
+	],
+	"Dropbox Login": [
+		"Вписване в Dropbox"
+	],
+	"Due": [
+		""
+	],
+	"Duplicate": [
+		"Дуплицирай"
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		"Дуплицира бележките съответстващи на <бележка> в [тетрадка]. Ако тетрадка не е зададена, бележките ще бъдат дуплицирани в настоящата тетрадка."
+	],
+	"Edit": [
+		"Редактиране"
+	],
+	"Edit in external editor": [
+		"Редактирай във външен редактор"
+	],
+	"Edit note.": [
+		"Редактиране на бележка."
+	],
+	"Edit notebook": [
+		"Редактиране на тетрадка"
+	],
+	"Edit profile configuration...": [
+		""
+	],
+	"Editor font family": [
+		"Шрифт на редактора"
+	],
+	"Editor font size": [
+		"Размер на шрифта на редактора"
+	],
+	"Editor maximum width": [
+		""
+	],
+	"Either \"text\" or \"json\"": [
+		"Или \"text\" или \"json\""
+	],
+	"Emacs": [
+		""
+	],
+	"Email": [
+		""
+	],
+	"Email to Note": [
+		""
+	],
+	"Emails": [
+		""
+	],
+	"Empty trash": [
+		""
+	],
+	"Enable": [
+		"Включи"
+	],
+	"Enable ++insert++ syntax": [
+		"Пусни синтаксис ++вметка++"
+	],
+	"Enable ==mark== syntax": [
+		"Пусни синтаксис ==маркиране=="
+	],
+	"Enable ^sup^ syntax": [
+		"Пусни синтаксис ^високо^"
+	],
+	"Enable abbreviation syntax": [
+		"Пусни синтаксис за съкращения"
+	],
+	"Enable biometrics authentication?": [
+		""
+	],
+	"Enable deflist syntax": [
+		"Пусни синтаксис за списък от дефиниции"
+	],
+	"Enable encryption": [
+		"Включване на криптирането"
+	],
+	"Enable footnotes": [
+		"Пусни бележки под линията"
+	],
+	"Enable markdown emoji": [
+		"Пусни markdown емоджи"
+	],
+	"Enable math expressions": [
+		"Пусни математическите изрази"
+	],
+	"Enable multimarkdown table extension": [
+		"Пусни разширението за multimarkdown таблици"
+	],
+	"Enable note history": [
+		"Пусни история за бележките"
+	],
+	"Enable optical character recognition (OCR)": [
+		""
+	],
+	"Enable or disable plugins": [
+		""
+	],
+	"Enable PDF viewer": [
+		""
+	],
+	"Enable soft breaks": [
+		"Пусни меките краища (soft breaks)"
+	],
+	"Enable spellcheck in the text editor": [
+		""
+	],
+	"Enable table of contents extension": [
+		"Пусни разширението за генерирано съдържание"
+	],
+	"Enable video player": [
+		""
+	],
+	"Enable Web Clipper Service": [
+		"Пусни услугата за уеб-клипера"
+	],
+	"Enable ~sub~ syntax": [
+		"Пусни синтаксис ~ниско~"
+	],
+	"Enabled": [
+		"Включено"
+	],
+	"Encrypted": [
+		"Криптирана"
+	],
+	"Encrypted items cannot be modified": [
+		"Криптирани обекти не могат да бъдат променяни"
+	],
+	"Encryption Config": [
+		"Настройки за криптиране"
+	],
+	"Encryption is: %s": [
+		"Криптирането е: %s"
+	],
+	"Enter code here": [
+		"Въведете кода тук"
+	],
+	"Enter master password:": [
+		"Въведете главната парола:"
+	],
+	"Enum": [
+		"Изброим"
+	],
+	"Error opening note in editor: %s": [
+		"Грешка при отварянето на бележката в редактор: %s"
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		"Грешка. Моля проверете дали уеб адреса(URL), потребителското име, паролата и т.н. са правили и че целта за синхронизация е достъпна. Получената грешка беше:"
+	],
+	"Errors only": [
+		"Само грешки"
+	],
+	"Exits the application.": [
+		"Напуска приложението."
+	],
+	"Expand": [
+		""
+	],
+	"Expand %s": [
+		""
+	],
+	"Export": [
+		"Експортиране"
+	],
+	"Export Debug Report": [
+		"Експортиране на доклад за откриване на грешки"
+	],
+	"Exported successfully!": [
+		""
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		"Експортирам към \"%s\" във формат \"%s\". Моля изчакайте..."
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		"Експортира данните от Joplin в зададения път. По подразбиране ще експортира пълната база данни, включително тетрадки, бележки, тагове и ресурси."
+	],
+	"Exports only the given note.": [
+		"Експортира само зададената бележка."
+	],
+	"Exports only the given notebook.": [
+		"Експортира само зададената тетрадка."
+	],
+	"Fail-safe": [
+		""
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		""
+	],
+	"Fatal error:": [
+		"Фатална грешка:"
+	],
+	"Feature flags": [
+		""
+	],
+	"Fetched items: %d/%d.": [
+		"Взети обекти: %d/%d."
+	],
+	"Fetching resources: %d/%d": [
+		"Взимане на ресурси: %d/%d"
+	],
+	"File": [
+		"Файл"
+	],
+	"File system": [
+		"Файловата система"
+	],
+	"Find and replace": [
+		""
+	],
+	"Firefox Extension": [
+		""
+	],
+	"Fix search index": [
+		""
+	],
+	"Fixing search index...": [
+		""
+	],
+	"Focus": [
+		"Фокусирай"
+	],
+	"Focus body": [
+		"Фокусирай съдържанието"
+	],
+	"Focus title": [
+		"Фокусирай заглавието"
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		""
+	],
+	"For example \"%s\"": [
+		""
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		"За информация как да промените кратките команди, моля посетете %s"
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		"За повече информация относно криптирането от край до край (E2EE) и за съвети относно как да го пуснете, вижте документацията:"
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		"За списък от клавиатурните команди и конфигурации, въведете `help keymap`"
+	],
+	"Force path style": [
+		""
+	],
+	"Forward": [
+		""
+	],
+	"Found: %d.": [
+		"Намерени: %d."
+	],
+	"FTS enabled: %d": [
+		"FTS пуснат: %d"
+	],
+	"Full changelog": [
+		""
+	],
+	"Full name": [
+		""
+	],
+	"General": [
+		"Общи"
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		""
+	],
+	"Get it now:": [
+		""
+	],
+	"Get pre-releases when checking for updates": [
+		"Взимане на експериментални версии при проверка за обновления"
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		"Показва или променя конфигурационна стойност. Ако [стойност] не е дадена, ще покаже стойността на [име]. Ако нито [име] нито [стойност] са дадени, изрежда цялата настояща конфигурация."
+	],
+	"Go to source URL": [
+		"Иди на уеб адреса (URL)"
+	],
+	"Goto Anything...": [
+		"Отиди на нещо..."
+	],
+	"Have you authorised the application login in the above URL?": [
+		""
+	],
+	"Header %d": [
+		""
+	],
+	"Headers": [
+		""
+	],
+	"Heading": [
+		"Заглавие"
+	],
+	"Here's what we do to make plugins safer:": [
+		""
+	],
+	"Hide %s": [
+		"Скрий %s"
+	],
+	"Hide disabled keys": [
+		""
+	],
+	"Highlight": [
+		""
+	],
+	"Home": [
+		""
+	],
+	"Horizontal Rule": [
+		"Хоризонтална черта"
+	],
+	"HTML document": [
+		""
+	],
+	"Hyperlink": [
+		"Линк"
+	],
+	"Icon": [
+		""
+	],
+	"ID": [
+		"Идентификатор"
+	],
+	"Idle": [
+		"В момента не прави нищо"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		""
+	],
+	"Ignore": [
+		""
+	],
+	"Ignore TLS certificate errors": [
+		"Игнорирай грешки в TLS сертификати"
+	],
+	"Images": [
+		""
+	],
+	"Import": [
+		"Импортиране"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		""
+	],
+	"Import from JEX": [
+		""
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		""
+	],
+	"Imported successfully!": [
+		""
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		"Импортирам от \"%s\" във формат \"%s\". Моля изчакайте..."
+	],
+	"Importing notes...": [
+		"Импортирам на бележки..."
+	],
+	"Imports data into Joplin.": [
+		"Импортира данни в Joplin."
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		"В режим \"Ръчен\" прикачените файлове се свалят само ако натиснете на тях. В режим \"Автоматичен\" се свалят, когато отворите бележката. В режим \"Винаги\" се свалят независимо дали отворите бележката или не."
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		"Във всяка команда може да реферирате бележка или тетрадка по заглавие или по идентификатор, или използвайки някоя от кратките команди `$n` и `$b`, представляващи съответно настоящата бележка и настоящата тетрадка. `$c` може да се ползва за рефериране на избрания обект."
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		""
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		""
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		""
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		""
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		"За да използвате уеб-клипера, трябва да направите следното:"
+	],
+	"In progress": [
+		"В момента върви"
+	],
+	"In: %s": [
+		"В: %s"
+	],
+	"Incompatible": [
+		""
+	],
+	"Increase indent level": [
+		""
+	],
+	"Indent less": [
+		""
+	],
+	"Indent more": [
+		""
+	],
+	"Inline Code": [
+		""
+	],
+	"Insert": [
+		""
+	],
+	"Insert Hyperlink": [
+		"Вкарай линк"
+	],
+	"Install": [
+		""
+	],
+	"Install from file": [
+		""
+	],
+	"Installed": [
+		""
+	],
+	"Invalid answer: %s": [
+		"Невалиден отговор: %s"
+	],
+	"Invalid command: \"%s\"": [
+		"Невалидна команда: \"%s\""
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		"Невалидна стойност на настройката: \"%s\". Възможните стойности са: %s."
+	],
+	"Italic": [
+		"Курсив"
+	],
+	"Item \"%s\" could not be downloaded: %s": [
+		"Обект \"%s\" не можа да бъде свален: %s"
+	],
+	"Items": [
+		""
+	],
+	"Items that cannot be decrypted": [
+		"Обекти, които не могат да бъдат декриптирани"
+	],
+	"Items that cannot be synchronised": [
+		"Някои обекти не можаха да бъдат синхронизирани"
+	],
+	"Join us on Twitter": [
+		""
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		""
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		""
+	],
+	"Joplin Export Directory": [
+		"Joplin експорт директория"
+	],
+	"Joplin Export File": [
+		"Joplin експорт файл"
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		"Joplin не успя да декриптира тези обекти след няколко опита. Възможните причини са че са данните са развалени или че обектите са прекалено големи. Тези обекти ще останат на устройството, но Joplin вече няма да се опитва да ги декриптира."
+	],
+	"Joplin Server URL": [
+		""
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		"Уеб-клиперът на Joplin позволява за да запазвате уеб-страници и снимки на екрана от браузъра директно в Joplin."
+	],
+	"Joplin website": [
+		"Уебсайта на Joplin"
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		""
+	],
+	"KaTeX": [
+		""
+	],
+	"Keep note history for": [
+		"Пази историята на бележките"
+	],
+	"Keyboard Mode": [
+		""
+	],
+	"Keyboard Shortcut": [
+		""
+	],
+	"Keyboard Shortcuts": [
+		""
+	],
+	"Keychain Supported: %s": [
+		""
+	],
+	"Keys that need upgrading": [
+		""
+	],
+	"Landscape": [
+		""
+	],
+	"Language": [
+		"Език"
+	],
+	"Last error: %s": [
+		"Последна грешка: %s"
+	],
+	"Later": [
+		""
+	],
+	"Latitude": [
+		""
+	],
+	"Layout": [
+		"Разположеня"
+	],
+	"Layout button sequence": [
+		""
+	],
+	"Learn more": [
+		""
+	],
+	"Leave it blank to download the language files from the default website": [
+		""
+	],
+	"Legal": [
+		""
+	],
+	"Letter": [
+		""
+	],
+	"Light": [
+		"Светла"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		""
+	],
+	"Lines": [
+		""
+	],
+	"Links with protocol \"%s\" are not supported": [
+		""
+	],
+	"List item": [
+		"Елемент на списък"
+	],
+	"Lists": [
+		""
+	],
+	"Loaded": [
+		""
+	],
+	"Location": [
+		"Местоположение"
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		"Файла за заключване е зает. Ако знаете че друга синхронизация не се извършва в момента, може да изтриете файла за заключване намиращ се на \"%s\" и да продължите с процеса."
+	],
+	"Log": [
+		"Лог"
+	],
+	"Login with Dropbox": [
+		"Вписване с Dropbox"
+	],
+	"Login with OneDrive": [
+		"Вписване в OneDrive"
+	],
+	"Logout": [
+		""
+	],
+	"Logs, profiles, sync status": [
+		""
+	],
+	"Longitude": [
+		""
+	],
+	"Make a donation": [
+		"Искам да направя дарение"
+	],
+	"Manage your plugins": [
+		""
+	],
+	"Manual": [
+		"Ръчен"
+	],
+	"Markdown": [
+		"Markdown"
+	],
+	"Markdown + Front Matter": [
+		""
+	],
+	"Marks a to-do as done.": [
+		"Маркира задача като изпълнена."
+	],
+	"Marks a to-do as non-completed.": [
+		"Маркира задача като неизпълнена."
+	],
+	"Markup": [
+		""
+	],
+	"Master Key %s": [
+		"Главен ключ %s"
+	],
+	"Max concurrent connections": [
+		"Максимален брой едновременни връзки"
+	],
+	"Max Item Size": [
+		""
+	],
+	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Minimise": [
+		""
+	],
+	"Missing Master Keys": [
+		"Липсващи главни ключове"
+	],
+	"Missing required argument: %s": [
+		"Липсващ задължителен параметър: %s"
+	],
+	"Mobile data - auto-sync disabled": [
+		""
+	],
+	"More information": [
+		"Още информация"
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		"Повече от едно нещо съответства на \"%s\". Моля рафинирайте търсенето си."
+	],
+	"Most plugins have source code available for review on the plugin website.": [
+		""
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		"Да преместя ли %d бележки в тетрадка \"%s\"?"
+	],
+	"Move to notebook...": [
+		"Премести в тетрадка..."
+	],
+	"n": [
+		"н"
+	],
+	"N": [
+		"Н"
+	],
+	"Never resize": [
+		""
+	],
+	"New": [
+		""
+	],
+	"New note": [
+		"Нова бележка"
+	],
+	"New notebook": [
+		"Нова тетрадка"
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		"Нова тетрадка \"%s\" ще бъде създадена и файл \"%s\" ще бъде импортиран в нея"
+	],
+	"New tags:": [
+		"Нови тагове:"
+	],
+	"New to-do": [
+		"Нова задача"
+	],
+	"New version: %s": [
+		"Нова версия: %s"
+	],
+	"Next match": [
+		""
+	],
+	"Nextcloud": [
+		"Nextcloud"
+	],
+	"Nextcloud password": [
+		"Парола за Nextcloud"
+	],
+	"Nextcloud username": [
+		"Потребителско име за Nextcloud"
+	],
+	"Nextcloud WebDAV URL": [
+		"Уеб адрес (URL) за Nextcloud WebDAV"
+	],
+	"No": [
+		"Не"
+	],
+	"No active notebook.": [
+		"Няма активна тетрадка."
+	],
+	"No item with ID %s": [
+		"Няма обект с идентификатор %s"
+	],
+	"No new invitations": [
+		""
+	],
+	"No notebook has been specified.": [
+		"Няма зададени тетрадки."
+	],
+	"No notebook selected.": [
+		"Няма избрани тетрадки."
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		"Тук няма бележки. Може да натиснете \"Нова бележка\" за да създадете първата."
+	],
+	"No plugins are installed.": [
+		""
+	],
+	"No resources!": [
+		""
+	],
+	"No results": [
+		""
+	],
+	"No such command: %s": [
+		"Няма такава команда: %s"
+	],
+	"No suggestions": [
+		""
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		"Няма зададен текстови редактор. Моля задайте го с командата: `config editor <път-до-редактора>`"
+	],
+	"Nord": [
+		""
+	],
+	"Not authenticated with %s. Please provide any missing credentials.": [
+		"Не сме оторизирани за %s. Моля въведете липсващите оторизационни данни."
+	],
+	"Not downloaded": [
+		""
+	],
+	"Not generated": [
+		""
+	],
+	"Not now": [
+		""
+	],
+	"note": [
+		"бележка"
+	],
+	"Note": [
+		"Бележки"
+	],
+	"Note area growth factor": [
+		""
+	],
+	"Note body": [
+		"Съдържание на бележката"
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		"Бележката не съществува:\"%s\". Да я създам ли?"
+	],
+	"Note has been saved.": [
+		"Бележката бе запазена."
+	],
+	"Note History": [
+		"История на бележката"
+	],
+	"Note is not a to-do: \"%s\"": [
+		"Бележката не е задача: \"%s\""
+	],
+	"Note list growth factor": [
+		""
+	],
+	"Note properties": [
+		"Атрибути на бележката"
+	],
+	"Note title": [
+		"Заглавие на бележката"
+	],
+	"Note: Does not work in all desktop environments.": [
+		"Внимание: Не работи с всички десктоп среди."
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		""
+	],
+	"Notebook list growth factor": [
+		""
+	],
+	"Notebooks": [
+		"Тетрадки"
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		"Тетрадки не могат да имат име \"%s\", защото това е запазено заглавие."
+	],
+	"Notes and settings are stored in: %s": [
+		"Бележките и настройките са запазени в: %s"
+	],
+	"Notes can only be created within a notebook.": [
+		"Бележки могат да бъдат създавани само в тетрадка."
+	],
+	"Numbered List": [
+		"Номериран списък"
+	],
+	"OK": [
+		"Добре"
+	],
+	"On %s: %s": [
+		"На %s: %s"
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		"Един или повече обекти са криптирани в момента и може да е необходимо да въведете главната парола. За да го направите, напишете `e2ee decrypt`. Ако вече сте задали паролата, то криптираните обекти вече се декриптират на заден план и скоро ще са на разположение."
+	],
+	"One or more master keys need a password.": [
+		"Поне един главен ключ се нуждае от парола."
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"Вписване в OneDrive"
+	],
+	"Open %s": [
+		"Отвори %s"
+	],
+	"Open PDF viewer": [
+		""
+	],
+	"Open Sync Wizard...": [
+		""
+	],
+	"Open...": [
+		"Отвори..."
+	],
+	"Opening section %s": [
+		""
+	],
+	"Operation cancelled": [
+		"Действието бе отменено"
+	],
+	"Options": [
+		"Конфигурация"
+	],
+	"Page orientation for PDF export": [
+		""
+	],
+	"Page size for PDF export": [
+		""
+	],
+	"Password": [
+		"Парола"
+	],
+	"Password cannot be empty": [
+		"Паролата не може да е празна"
+	],
+	"Password:": [
+		"Парола:"
+	],
+	"Paste": [
+		"Постави"
+	],
+	"Paste as text": [
+		""
+	],
+	"Path:": [
+		""
+	],
+	"PDF File": [
+		"PDF файл"
+	],
+	"Per user. Minimum of %d users.": [
+		""
+	],
+	"Permission to use camera": [
+		"Разрешение за употреба на камерата"
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		""
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		""
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		""
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		"Моля отворете следния адрес в браузър и оторизирайте приложението. Приложението ще създаде директория \"Apps/Joplin\" и ще чете и пише файлове в тази директория. Приложението няма да има достъп до файлове извън тази директория, нито до друга лична информация. Никакви данни няма да бъдат споделени с трети страни."
+	],
+	"Please record your voice...": [
+		""
+	],
+	"Please select a notebook first.": [
+		"Моля първо изберете тетрадка."
+	],
+	"Please select the note or notebook to be deleted first.": [
+		"Моля първо изберете бележката или тетрадката, която искате да изтриете."
+	],
+	"Please select where the sync status should be exported to": [
+		"Моля изберете къде да бъде експортиран статуса на синхронизацията"
+	],
+	"Please specify import format for %s": [
+		"Моля задайте формата за импортиране от %s"
+	],
+	"Please specify the notebook where the notes should be imported to.": [
+		"Моля задайте тетрадка, в която да бъдат импортирани бележките."
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		""
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Plugin repository failed to load": [
+		""
+	],
+	"Plugin WebView debugging": [
+		""
+	],
+	"Plugins": [
+		"Разширения"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		""
+	],
+	"Portrait": [
+		""
+	],
+	"Possible keys/values:": [
+		"Възможни ключове/стойности:"
+	],
+	"Possible values: %s.": [
+		"Възможни стойности: %s."
+	],
+	"Preferences...": [
+		"Настройки..."
+	],
+	"Preferred dark theme": [
+		""
+	],
+	"Preferred light theme": [
+		""
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"Натиснете Ctrl+D или напишете \"exit\" за да напуснете приложението"
+	],
+	"Press the shortcut": [
+		""
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		""
+	],
+	"Press to set the decryption password.": [
+		"Натиснете за да зададете паролата за декриптиране."
+	],
+	"Previous match": [
+		""
+	],
+	"Previous versions of this note": [
+		"Предишни версии на бележката"
+	],
+	"Print": [
+		"Принтиране"
+	],
+	"Priority support": [
+		""
+	],
+	"Privacy Policy": [
+		""
+	],
+	"Pro": [
+		""
+	],
+	"Process failed payment subscriptions": [
+		""
+	],
+	"Process oversized accounts": [
+		""
+	],
+	"Process user deletions": [
+		""
+	],
+	"Processing": [
+		""
+	],
+	"Profile": [
+		""
+	],
+	"Proxy timeout (seconds)": [
+		""
+	],
+	"Proxy URL": [
+		""
+	],
+	"Public-private key pair:": [
+		""
+	],
+	"Publish Notes": [
+		""
+	],
+	"Publish notes to the internet": [
+		""
+	],
+	"Quit": [
+		"Изход"
+	],
+	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more about it": [
+		""
+	],
+	"Read time: %s min": [
+		""
+	],
+	"Recipient has accepted the invitation": [
+		""
+	],
+	"Recipient has not yet accepted the invitation": [
+		""
+	],
+	"Recipient has rejected the invitation": [
+		""
+	],
+	"Recipients:": [
+		""
+	],
+	"Recommended": [
+		""
+	],
+	"Recommended plugins": [
+		""
+	],
+	"Redo": [
+		""
+	],
+	"Refresh": [
+		"Обнови"
+	],
+	"Reject": [
+		""
+	],
+	"Remove": [
+		""
+	],
+	"Remove tag \"%s\" from all notes?": [
+		"Да премахна ли таг \"%s\" от всички бележки?"
+	],
+	"Remove this search from the sidebar?": [
+		"Да премахна ли това търсене от страничния панел?"
+	],
+	"Rename": [
+		"Преименувай"
+	],
+	"Rename notebook:": [
+		"Преименуване на тетрадка:"
+	],
+	"Rename tag:": [
+		"Преименуване на таг:"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		"Преименува дадения <обект> (бележка или тетрадка) на <име>."
+	],
+	"Renew token": [
+		""
+	],
+	"Replace": [
+		""
+	],
+	"Replace with...": [
+		""
+	],
+	"Replace: ": [
+		""
+	],
+	"Report an issue": [
+		""
+	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
+	"Report fraudulent plugin": [
+		""
+	],
+	"Resize large images:": [
+		""
+	],
+	"Resources: %d.": [
+		"Ресурси: %d."
+	],
+	"Restart and upgrade": [
+		""
+	],
+	"Restart now": [
+		""
+	],
+	"Restore": [
+		"Възстанови"
+	],
+	"Restored Notes": [
+		"Възстановени бележки"
+	],
+	"Results (%d):": [
+		""
+	],
+	"Retry": [
+		"Нов опит"
+	],
+	"Reveal file in folder": [
+		""
+	],
+	"Reverse sort order": [
+		"Обратен ред на сортиране"
+	],
+	"Reverses the sorting order.": [
+		"Обръща реда на сортиране."
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		""
+	],
+	"S3": [
+		""
+	],
+	"S3 access key": [
+		""
+	],
+	"S3 bucket": [
+		""
+	],
+	"S3 region": [
+		""
+	],
+	"S3 secret key": [
+		""
+	],
+	"S3 URL": [
+		""
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		""
+	],
+	"Save": [
+		"Запази"
+	],
+	"Save alarm": [
+		"Запази алармата"
+	],
+	"Save as...": [
+		"Запазаи като..."
+	],
+	"Save changes": [
+		"Запази промените"
+	],
+	"Save geo-location with notes": [
+		"Запазвай геолокация в бележките"
+	],
+	"Search": [
+		"Търсене"
+	],
+	"Search in all the notes": [
+		"Търсене във всички бележки"
+	],
+	"Search in current note": [
+		"Търсене в настоящата бележка"
+	],
+	"Search...": [
+		"Търсене..."
+	],
+	"Search:": [
+		"Търсене:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		"Търси всред всички бележки за зададения <шаблон>."
+	],
+	"See the pre-release page for more details: %s": [
+		"Вижте страницата за експерименталните версии за повече подробности: %s"
+	],
+	"Select all": [
+		"Избери всичко"
+	],
+	"Server is already running on port %d": [
+		""
+	],
+	"Server is not running.": [
+		""
+	],
+	"Server is running on port %d": [
+		""
+	],
+	"Set alarm": [
+		"Задай аларма"
+	],
+	"Set alarm:": [
+		"Задаване на аларма:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		""
+	],
+	"Set the password": [
+		"Задаване на паролата"
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		"Задава зададената [стойност] за атрибут <име> на дадената <бележка>. Възможните атрибути са:\n\n%s"
+	],
+	"Share": [
+		"Сподели"
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		""
+	],
+	"Share permissions": [
+		""
+	],
+	"Shortcuts are not available in CLI mode.": [
+		"Кратките команди са приложими само в режим на команден ред."
+	],
+	"Show all": [
+		"Покажи всички"
+	],
+	"Show completed to-dos": [
+		"Покажи изпълнените задачи"
+	],
+	"Show tray icon": [
+		"Покажи иконка до часовника"
+	],
+	"Show/hide the sidebar": [
+		""
+	],
+	"Shrink large images before adding them to notes.": [
+		""
+	],
+	"Side menu opened": [
+		""
+	],
+	"Sidebar": [
+		"Страничен панел"
+	],
+	"Size": [
+		""
+	],
+	"Skip this version": [
+		""
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		""
+	],
+	"Skipped: %d.": [
+		"Пропуснати: %d."
+	],
+	"Solarised Dark": [
+		""
+	],
+	"Solarised Light": [
+		""
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		""
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		""
+	],
+	"Some items cannot be synchronised.": [
+		"Някои обекти не можаха да бъдат синхронизирани."
+	],
+	"Sort notebooks by": [
+		"Сортирай тетрадките по"
+	],
+	"Sort notes by": [
+		"Сортирай бележките по"
+	],
+	"Sort selected lines": [
+		""
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		"Сортира обектите по <поле>. Напр. title (заглавие), updated_time (последна промяна), created_time (създадена)."
+	],
+	"Source": [
+		"Източник"
+	],
+	"Source format: %s": [
+		"Формат на източника: %s"
+	],
+	"Spacer": [
+		""
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		""
+	],
+	"Spell checker": [
+		""
+	],
+	"Split View": [
+		""
+	],
+	"Start application minimised in the tray icon": [
+		"Пускай приложението минимизирано до иконката"
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		""
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		"Започвам да декриптирам... Моля изчакайте, защото това може да отнеме няколко минути, в зависимост от колко има за декриптиране."
+	],
+	"Starting synchronisation...": [
+		"Започвам синхронизация..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		"Започваме редакция на бележката. Затворете редактора за да се върнете към командния ред."
+	],
+	"Statistics...": [
+		""
+	],
+	"Status": [
+		"Статус"
+	],
+	"Status: %s": [
+		"Статус: %s"
+	],
+	"Status: Started on port %d": [
+		"Статус: Стартирано на порт %d"
+	],
+	"Step 1: Enable the clipper service": [
+		"1ва стъпка: Пуснете услугата на клипера"
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		"1ва стъпка: Отворете този адрес в браузър и оторизирайте приложението:"
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		"2ра стъпка: Въведете кода предоставен от Dropbox:"
+	],
+	"Step 2: Install the extension": [
+		"2ра стъпка: Инсталирайте браузърско разширение"
+	],
+	"Stop": [
+		""
+	],
+	"Storage space": [
+		""
+	],
+	"Strikethrough": [
+		""
+	],
+	"strong text": [
+		"силно наблегнат текст"
+	],
+	"Submit": [
+		"Предай"
+	],
+	"Subscript": [
+		""
+	],
+	"Success! Synchronisation configuration appears to be correct.": [
+		"Успех! Изглежда че настройките за синхронизация са правили."
+	],
+	"Superscript": [
+		""
+	],
+	"Swap line down": [
+		""
+	],
+	"Swap line up": [
+		""
+	],
+	"Switch between note and to-do type": [
+		"Конвертирай между бележка и задача"
+	],
+	"Switch to note type": [
+		"Конвертирай към бележка"
+	],
+	"Switch to to-do type": [
+		"Конвертирай към задача"
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		"Превключва на [тетрадка] - всички нататъчни команди ще се извършват в тази тетрадка."
+	],
+	"Sync as many devices as you want": [
+		""
+	],
+	"Sync status (synced items / total items)": [
+		"Статус на синхронизацията (синхронизирани / всички)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		""
+	],
+	"Sync Target Upgrade": [
+		""
+	],
+	"Sync to provided target (defaults to sync.target config value)": [
+		"Синхронизира със зададената цел (по подразбиране със стойността от конфигурационната стойност sync.target)"
+	],
+	"Synchronisation": [
+		"Синхронизация"
+	],
+	"Synchronisation interval": [
+		"Интервал на синхронизация"
+	],
+	"Synchronisation is already in progress.": [
+		"Вече се извършва синхронизация."
+	],
+	"Synchronisation Status": [
+		"Статус на синхронизацията"
+	],
+	"Synchronisation target": [
+		"Цел за синхронизация"
+	],
+	"Synchronisation target: %s (%s)": [
+		"Цел за синхронизация: %s (%s)"
+	],
+	"Synchronise": [
+		"Синхронизация"
+	],
+	"Synchronise only over WiFi connection": [
+		""
+	],
+	"Synchronises with remote storage.": [
+		"Синхронизира с отдалеченото хранилище."
+	],
+	"Tabloid": [
+		""
+	],
+	"tag1, tag2, ...": [
+		""
+	],
+	"Tagged: %d.": [
+		"Тагнати: %d."
+	],
+	"Tags": [
+		"Тагове"
+	],
+	"Take photo": [
+		"Снимане"
+	],
+	"Task \"%s\" failed with error: %s": [
+		""
+	],
+	"Tasks": [
+		""
+	],
+	"Teams": [
+		""
+	],
+	"Text editor command": [
+		"Команда за стартиране на текстов редактор"
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		""
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		""
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		""
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"Приложението бе оторизирано - може да затворите таба в браузъра."
+	],
+	"The application has been authorised!": [
+		"Приложението бе оторизирано!"
+	],
+	"The application has been successfully authorised.": [
+		"Приложението бе успешно оторизирано."
+	],
+	"The application must be restarted for these changes to take effect.": [
+		""
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		""
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"Командата \"%s\" е приложима само в графичен режим"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		""
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		""
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		""
+	],
+	"The default profile cannot be deleted": [
+		""
+	],
+	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
+		"Команда за стартиране на текстов редактор (може да включва параметри), която ще бъде използвана за отваряне на бележка. Ако е празно, приложението ще се опитва автоматично да засече кой е текстовия редактор по подразбиране на системата ви."
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		""
+	],
+	"The following attachment matches your search query:": [
+		"",
+		""
+	],
+	"The following attachments are being watched for changes:": [
+		""
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		""
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		"Мобилното приложение на Joplin в момента не поддържа този вид линкове: %s"
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The master key has been upgraded successfully!": [
+		""
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"Главните ключове с тези идентификатори са били използвани за криптиране на някои от обектите ви, но приложението в момент няма достъп до тях. Вероятно ще бъдат свалени тепърва чрез синхронизация."
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		"Бележка \"%s\" бе успешно създадена и сложена в тетрадка \"%s\"."
+	],
+	"The notebook could not be saved: %s": [
+		"Тетрадката не може да бъде запазена: %s"
+	],
+	"The notes have been imported: %s": [
+		"Бележките бяха импортирани: %s"
+	],
+	"The possible commands are:": [
+		"Възможните команди са:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		""
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		""
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		""
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		"Тагът \"%s\" вече съществува. Моля изберете друго име."
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		"Целта за синхронизация. Всяка цел за синхронизация може да има допълнителни параметри с имена `sync.NUM.NAME` (всички такива са документирани по долу)."
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		"Услугата за уеб-клипера бе включена и конфигурирана да се стартира автоматично."
+	],
+	"The web clipper service is not enabled.": [
+		"Услугата за уеб-клипера не е пусната."
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		""
+	],
+	"Theme": [
+		"Визуална тема"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"В момента няма бележки. Натиснете бутон (+) за да създадете бележка."
+	],
+	"There are unsaved changes.": [
+		""
+	],
+	"There is no data to export.": [
+		"Няма какво да се експортира."
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		""
+	],
+	"There was an error downloading this attachment:": [
+		""
+	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		""
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		"Тези обекти ще останат на устройството, но няма да бъдат качени на целта за синхронизация. За да намерите тези обекти, потърсете за заглавията или идентификаторите им (може да ги видите в скобите по горе)."
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		""
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		""
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		""
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		"Прикаченият файл не е свален или все още не е декриптиран."
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"Оторизационният жетон е необходим само ако искате да дадете достъп до Joplin на приложения от трети страни."
+	],
+	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		""
+	],
+	"This note does not have geolocation information.": [
+		"Тази бележка няма информация за геолокация."
+	],
+	"This note has been modified:": [
+		"Тази бележка беше променена:"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		"Тази бележка няма съдържание. Натиснете \"%s\" за да покажете редакторя и да редактирате бележката."
+	],
+	"This note has no history": [
+		"Тази бележка няма история"
+	],
+	"This plugin doesn't support %s.": [
+		""
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		""
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		"Услугата позволява на браузърски разширения да комуникират с Joplin. Когато я включите, защитната ви стена може да ви попита да дадете разрешение на Joplin да слуша на определен порт."
+	],
+	"This subfolder of the trash has no notes.": [
+		""
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		"Това позволява на Joplin да върви на заден план. Препоръчва се да пуснете тази настройка, за да се синхронизират бележките ви постоянно, и така да намалите вероятността да се появят конфликти."
+	],
+	"This will open a new screen. Save your current changes?": [
+		""
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		""
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		""
+	],
+	"Time format": [
+		"Формат за време"
+	],
+	"title": [
+		"заглавие"
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		"За да позволите на Joplin да синхронизира с Dropbox, моля изпълнете следните стъпки:"
+	],
+	"To delete a tag, untag the associated notes.": [
+		"За да изтриете таг, премахнете го от всички бележки."
+	],
+	"To delete: %d": [
+		"За изтриване: %d"
+	],
+	"To enter command line mode, press \":\"": [
+		"За да влезете в режим на команден ред, натиснете \":\""
+	],
+	"To exit command line mode, press ESCAPE": [
+		"За да излезете от режим на команден ред, натисне ESCAPE"
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		""
+	],
+	"To maximise/minimise the console, press \"tc\".": [
+		"За да максимизирате или минимизирате конзолата, натиснете \"tc\"."
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		"За да се преместите от един панел в друг, настинете Tab или Shift+Tab."
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		""
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		""
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		"Приложението има нужда от следните разрешения за да работи правилно. Моля дайте ги от настройките на телефона в Приложения > Joplin > Разрешения"
+	],
+	"to-do": [
+		"задача"
+	],
+	"Toggle development tools": [
+		"Инструменти за разработка"
+	],
+	"Toggle editor layout": [
+		"Промени изгледа на редактора"
+	],
+	"Toggle sidebar": [
+		"Страничен панел"
+	],
+	"Token has been copied to the clipboard!": [
+		"Жетона бе копиран в клипборда!"
+	],
+	"Total Size": [
+		""
+	],
+	"Total: %d/%d": [
+		"Общо: %d/%d"
+	],
+	"Trash": [
+		""
+	],
+	"Try again": [
+		""
+	],
+	"Try it now": [
+		""
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"Въведете `help [команда]` за повече информация относно командата, или въведете `help all` за пълната информация за ползването на командния ред."
+	],
+	"Type `joplin help` for usage information.": [
+		"Въведете `joplin help` за информация за употребата."
+	],
+	"Type new tags or select from list": [
+		"Напишете нови тагове или изберете от списъка"
+	],
+	"Type: %s.": [
+		"Тип: %s."
+	],
+	"Unable to edit resource of type %s": [
+		""
+	],
+	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Uncompleted to-dos on top": [
+		"Неизпълнените задачи най-отгоре"
+	],
+	"Undo": [
+		""
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
+	"Unknown flag: %s": [
+		"Неизвестен флаг: %s"
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		"Неизвестен тип на свален обект - моля обновете Joplin до най-новата версия"
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		""
+	],
+	"Unsupported image type: %s": [
+		"Този тип изображения не се поддържа: %s"
+	],
+	"Unsupported link or message: %s": [
+		"Неподдържан линк или съобщение: %s"
+	],
+	"Untitled": [
+		"Без заглавие"
+	],
+	"Updated": [
+		"Обновен"
+	],
+	"updated date": [
+		"дата на промяна"
+	],
+	"Updated local items: %d.": [
+		"Обновени локални обекти: %d."
+	],
+	"Updated remote items: %d.": [
+		"Обновени отдалечени обекти: %d."
+	],
+	"Updated: %d.": [
+		"Обновени: %d."
+	],
+	"Upgrade": [
+		""
+	],
+	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"URL": [
+		"Уеб адрес (URL)"
+	],
+	"Usage: %s": [
+		"Употреба: %s"
+	],
+	"Use biometrics to secure access to the app": [
+		""
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		"Използване на дългия формат на списъци. Форматът е ID, NOTE_COUNT (брой бележки, за тетрадки), DATE (дата), TODO_CHECKED (брой завършени, за задачи), TITLE (заглавие)"
+	],
+	"Use spell checker": [
+		""
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		"Използвайте стрелките и page up/down to за да прелистите списъци и текстови полета (включително тази конзола)."
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		""
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		""
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		""
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		""
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"User deletions": [
+		""
+	],
+	"Users": [
+		""
+	],
+	"Verify your identity": [
+		""
+	],
+	"View OCR text": [
+		""
+	],
+	"View on map": [
+		"Покажи на карта"
+	],
+	"View them now": [
+		"Покажи ги сега"
+	],
+	"Vim": [
+		""
+	],
+	"Voice typing language files (URL)": [
+		""
+	],
+	"Voice typing...": [
+		""
+	],
+	"Warning": [
+		""
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		""
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		""
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		""
+	],
+	"WebDAV": [
+		"WebDAV"
+	],
+	"WebDAV password": [
+		"Парола за WebDAV"
+	],
+	"WebDAV URL": [
+		"Уеб адрес (URL) за WebDAV"
+	],
+	"WebDAV username": [
+		"Потребителско име за WebDAV"
+	],
+	"Website and documentation": [
+		"Уебсайт и документация"
+	],
+	"WebView package: %s": [
+		""
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		"Добре дошли в Joplin!\n\nВъведете `:help shortcuts` за списък от клавиатурни команди, или само `:help` за информация за ползването на приложението.\n\nНапример, за да създадете тетрадка, натиснете `mb`; за да създадете бележка, натиснете `mn`."
+	],
+	"When creating a new note:": [
+		"Когато се създава нова бележка:"
+	],
+	"When creating a new to-do:": [
+		"Когато се създава нова задача:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Window unresponsive.": [
+		""
+	],
+	"Words": [
+		""
+	],
+	"y": [
+		"д"
+	],
+	"Y": [
+		"Д"
+	],
+	"Yes": [
+		"Да"
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		""
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You do not have any installed plugin.": [
+		""
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		""
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		""
+	],
+	"Your account doesn't have access to this feature": [
+		""
+	],
+	"Your choice: ": [
+		"Вашият избор: "
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data.": [
+		""
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		""
+	],
+	"Your permission to use your camera is required.": [
+		"Трябва да разрешените употребата на камерата."
+	],
+	"Your version: %s": [
+		"Вашата версия: %s"
+	],
+	"Zoom In": [
+		""
+	],
+	"Zoom Out": [
+		""
+	]
 }

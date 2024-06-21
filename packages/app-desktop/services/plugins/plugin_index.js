@@ -14,6 +14,7 @@
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const pluginId = urlParams.get('pluginId');
+	const libraryData = JSON.parse(decodeURIComponent(urlParams.get('libraryData')));
 
 	let eventId_ = 1;
 	const eventHandlers_ = {};
@@ -56,7 +57,14 @@
 				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/lib/sqlite3.js');
 			}
 
-			if (['fs-extra'].includes(modulePath)) return require(modulePath);
+			if (modulePath === 'fs-extra') {
+				return require('fs-extra');
+			}
+
+			// 7zip-bin is required by one of the default plugins (simple-backup)
+			if (modulePath === '7zip-bin') {
+				return { path7za: libraryData.pathTo7za };
+			}
 
 			throw new Error(`Module not found: ${modulePath}`);
 		}

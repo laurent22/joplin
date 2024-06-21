@@ -7,18 +7,17 @@ require('source-map-support').install();
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
-import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
-import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import { resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
-import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
 import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
-import { applyManifestOverrides, getObsoleteManifests, readManifestOverrides } from './lib/overrideUtils';
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, readManifestOverrides } from './lib/overrideUtils';
 import { execCommand } from '@joplin/utils';
+import validateUntrustedManifest from './lib/validateUntrustedManifest';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
 
@@ -47,6 +46,7 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	chdir(previousDir);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
@@ -57,23 +57,20 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	if (!(await fs.pathExists(pluginDir))) throw new Error(`Could not find publish directory at ${pluginDir}`);
 
 	const files = await fs.readdir(pluginDir);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const manifestFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.json'));
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const pluginFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.jpl'));
 
 	if (!(await fs.pathExists(manifestFilePath))) throw new Error(`Could not find manifest file at ${manifestFilePath}`);
 	if (!(await fs.pathExists(pluginFilePath))) throw new Error(`Could not find plugin file at ${pluginFilePath}`);
 
-	// At this point, we need to check the manifest ID as it's used in various
-	// places including as directory name and object key in manifests.json, so
-	// it needs to be correct. It's mostly for security reasons. The other
-	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
-	validatePluginId(manifest.id);
-	validatePluginVersion(manifest.version);
-
 	manifest._npm_package_name = packageName;
 
-	checkIfPluginCanBeAdded(existingManifests, manifest);
+	// We need to validate the manifest to make sure the plugin author isn't
+	// trying to override an existing plugin, use an invalid ID, etc..
+	validateUntrustedManifest(manifest, existingManifests);
 
 	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);
@@ -96,6 +93,7 @@ enum ProcessingActionType {
 	Update = 2,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function commitMessage(actionType: ProcessingActionType, manifest: any, previousManifest: any, npmPackage: NpmPackage, error: any): string {
 	const output: string[] = [];
 
@@ -120,10 +118,12 @@ function pluginManifestsPath(repoDir: string): string {
 	return path.resolve(repoDir, 'manifests.json');
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function readManifests(repoDir: string): Promise<any> {
 	return readJsonFile(pluginManifestsPath(repoDir), {});
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function writeManifests(repoDir: string, manifests: any) {
 	await fs.writeFile(pluginManifestsPath(repoDir), JSON.stringify(manifests, null, '\t'), 'utf8');
 }
@@ -139,17 +139,23 @@ function chdir(path: string): string {
 }
 
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun: boolean) {
-	const tempDir = `${repoDir}/temp`;
-
-	await fs.mkdirp(tempDir);
-
 	const originalPluginManifests = await readManifests(repoDir);
 	const manifestOverrides = await readManifestOverrides(repoDir);
+	const supersededPackages = getSupersededPackages(manifestOverrides);
+
+	if (supersededPackages.includes(npmPackage.name)) {
+		console.log('Skipping superseded package', npmPackage.name);
+		return;
+	}
+
 	const obsoleteManifests = getObsoleteManifests(manifestOverrides);
 	const existingManifests = {
 		...originalPluginManifests,
 		...obsoleteManifests,
 	};
+
+	const tempDir = `${repoDir}/temp`;
+	await fs.mkdirp(tempDir);
 
 	const packageTempDir = `${tempDir}/packages`;
 
@@ -158,9 +164,13 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 	await execCommand('npm init --yes --loglevel silent', { quiet: true });
 
 	let actionType: ProcessingActionType = ProcessingActionType.Update;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let manifests: any = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let manifest: any = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let error: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	let previousManifest: any = null;
 
 	try {
@@ -286,6 +296,7 @@ async function main() {
 	let selectedCommand = '';
 	let selectedCommandArgs = '';
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function setSelectedCommand(name: string, args: any) {
 		selectedCommand = name;
 		selectedCommandArgs = args;
@@ -295,15 +306,19 @@ async function main() {
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		.command('build <plugin-repo-dir> [dry-run]', 'Build the plugin repository', (yargs: any) => {
 			yargs.positional('plugin-repo-dir', {
 				type: 'string',
 				describe: 'Directory where the plugin repository is located',
 			});
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		}, (args: any) => setSelectedCommand('build', args))
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		.command('version', 'Gives version info', () => {}, (args: any) => setSelectedCommand('version', args))
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => {}, (args: any) => setSelectedCommand('updateRelease', args))
 
 		.help()

@@ -52,6 +52,26 @@ describe('urlUtils', () => {
 		}
 	}));
 
+	it.each([
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
+		],
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md5#foo',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: 'foo' },
+		],
+		[
+			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.png?t=12345',
+			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
+		],
+	])('should detect resource file URLs', (url, resourceDir, expected) => {
+		expect(urlUtils.parseResourceUrl(urlUtils.fileUrlToResourceUrl(url, resourceDir))).toMatchObject(expected);
+	});
+
 	it('should extract resource URLs', (async () => {
 		const testCases = [
 			['Bla [](:/11111111111111111111111111111111) bla [](:/22222222222222222222222222222222) bla', ['11111111111111111111111111111111', '22222222222222222222222222222222']],
@@ -69,32 +89,6 @@ describe('urlUtils', () => {
 			const itemIds = result.map(r => r.itemId);
 			expect(itemIds.sort().join(',')).toBe(expected.sort().join(','));
 		}
-	}));
-
-	it('should convert a file URI to a file path', (async () => {
-		// Tests imported from https://github.com/TooTallNate/file-uri-to-path/tree/master/test
-		const testCases = {
-			'file://host/path': '//host/path',
-			'file://localhost/etc/fstab': '/etc/fstab',
-			'file:///etc/fstab': '/etc/fstab',
-			'file:///c:/WINDOWS/clock.avi': 'c:/WINDOWS/clock.avi',
-			'file://localhost/c|/WINDOWS/clock.avi': 'c:/WINDOWS/clock.avi',
-			'file:///c|/WINDOWS/clock.avi': 'c:/WINDOWS/clock.avi',
-			'file://localhost/c:/WINDOWS/clock.avi': 'c:/WINDOWS/clock.avi',
-			'file://hostname/path/to/the%20file.txt': '//hostname/path/to/the file.txt',
-			'file:///c:/path/to/the%20file.txt': 'c:/path/to/the file.txt',
-			'file:///C:/Documents%20and%20Settings/davris/FileSchemeURIs.doc': 'C:/Documents and Settings/davris/FileSchemeURIs.doc',
-			'file:///C:/caf%C3%A9/%C3%A5r/d%C3%BCnn/%E7%89%9B%E9%93%83/Ph%E1%BB%9F/%F0%9F%98%B5.exe': 'C:/café/år/dünn/牛铃/Phở/😵.exe',
-		};
-
-		for (const [input, expected] of Object.entries(testCases)) {
-			const actual = urlUtils.fileUriToPath(input);
-			expect(actual).toBe(expected);
-		}
-
-		expect(urlUtils.fileUriToPath('file://c:/not/quite/right')).toBe('c:/not/quite/right');
-		expect(urlUtils.fileUriToPath('file:///d:/better')).toBe('d:/better');
-		expect(urlUtils.fileUriToPath('file:///c:/AUTOEXEC.BAT', 'win32')).toBe('c:\\AUTOEXEC.BAT');
 	}));
 
 });

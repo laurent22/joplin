@@ -58,7 +58,7 @@ describe('getPluginLists', () => {
 				app_min_version: '1' },
 			'',
 			() => {},
-			''
+			'',
 		);
 
 		const plugins: Plugins = {};
@@ -82,7 +82,7 @@ describe('getPluginLists', () => {
 					app_min_version: '1' },
 				'',
 				() => {},
-				''
+				'',
 			);
 			plugins[plugin.manifest.id] = plugin;
 		}
@@ -106,7 +106,7 @@ describe('getPluginLists', () => {
 					app_min_version: '1' },
 				'',
 				() => {},
-				''
+				'',
 			);
 
 			plugins[plugin.manifest.id] = plugin;

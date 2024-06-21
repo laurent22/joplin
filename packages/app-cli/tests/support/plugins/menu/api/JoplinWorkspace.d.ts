@@ -3,7 +3,7 @@ import { Disposable, MenuItem } from './types';
 export interface EditContextMenuFilterObject {
     items: MenuItem[];
 }
-declare type FilterHandler<T> = (object: T) => Promise<void>;
+type FilterHandler<T> = (object: T) => Promise<void>;
 declare enum ItemChangeEventType {
     Create = 1,
     Update = 2,
@@ -19,9 +19,9 @@ interface SyncStartEvent {
 interface ResourceChangeEvent {
     id: string;
 }
-declare type ItemChangeHandler = (event: ItemChangeEvent) => void;
-declare type SyncStartHandler = (event: SyncStartEvent) => void;
-declare type ResourceChangeHandler = (event: ResourceChangeEvent) => void;
+type ItemChangeHandler = (event: ItemChangeEvent) => void;
+type SyncStartHandler = (event: SyncStartEvent) => void;
+type ResourceChangeHandler = (event: ResourceChangeEvent) => void;
 /**
  * The workspace service provides access to all the parts of Joplin that
  * are being worked on - i.e. the currently selected notes or notebooks as

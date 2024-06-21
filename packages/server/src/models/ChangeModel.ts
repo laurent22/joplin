@@ -1,12 +1,14 @@
 import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
-import { SqliteMaxVariableNum } from '../db';
+import { DbConnection, SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
-import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
+import { PaginatedResults } from './utils/pagination';
+import { NewModelFactoryHandler } from './factory';
+import { Config } from '../utils/types';
 
 const logger = Logger.create('ChangeModel');
 
@@ -14,6 +16,8 @@ export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	jopItem?: any;
 }
 
 export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
@@ -34,11 +38,12 @@ export interface ChangePreviousItem {
 
 export function defaultDeltaPagination(): ChangePagination {
 	return {
-		limit: 100,
+		limit: 200,
 		cursor: '',
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function requestDeltaPagination(query: any): ChangePagination {
 	if (!query) return defaultDeltaPagination();
 
@@ -49,6 +54,13 @@ export function requestDeltaPagination(query: any): ChangePagination {
 }
 
 export default class ChangeModel extends BaseModel<Change> {
+
+	public deltaIncludesItems_: boolean;
+
+	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbSlave, modelFactory, config);
+		this.deltaIncludesItems_ = config.DELTA_INCLUDES_ITEMS;
+	}
 
 	public get tableName(): string {
 		return 'changes';
@@ -88,7 +100,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
+	public async changesForUserQuery(userId: Uuid, fromCounter: number, limit: number, doCountQuery: boolean): Promise<Change[]> {
 		// When need to get:
 		//
 		// - All the CREATE and DELETE changes associated with the user
@@ -98,60 +110,141 @@ export default class ChangeModel extends BaseModel<Change> {
 		// UPDATE changes do not have the user_id set because they are specific
 		// to the item, not to a particular user.
 
-		const query = this
-			.db('changes')
-			.where(function() {
-				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
-					// Need to use a RAW query here because Knex has a "not a
-					// bug" bug that makes it go into infinite loop in some
-					// contexts, possibly only when running inside Jest (didn't
-					// test outside).
-					// https://github.com/knex/knex/issues/1851
-					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
-			});
+		// The extra complexity is due to the fact that items can be shared between users.
+		//
+		// - CREATE: When a user creates an item, a corresponding user_item is added to their
+		//   collection. When that item is shared with another user, a user_item is also added to
+		//   that user's collection, via ShareModel::updateSharedItems(). Each user has their own
+		//   `change` object for the creation operations. For example if a user shares a note with
+		//   two users, there will be a total of three `change` objects for that item, each
+		//   associated with on of these users. See UserItemModel::addMulti()
+		//
+		// - DELETE: When an item is deleted, all corresponding user_items are deleted. Likewise,
+		//   there's a `change` object per user. See UserItemModel::deleteBy()
+		//
+		// - UPDATE: Updates are different because only one `change` object will be created per
+		//   change, even if the item is shared multiple times. This is why we need a different
+		//   query for it. See ItemModel::save()
 
-		if (count) {
-			void query.countDistinct('id', { as: 'total' });
+		// This used to be just one query but it kept getting slower and slower
+		// as the `changes` table grew. So it is now split into two queries
+		// merged by a UNION ALL.
+
+		const fields = [
+			'id',
+			'item_id',
+			'item_name',
+			'type',
+			'updated_time',
+			'counter',
+		];
+
+		const fieldsSql = `"${fields.join('", "')}"`;
+
+		const subQuery1 = `
+			SELECT ${fieldsSql}
+			FROM "changes"
+			WHERE counter > ?
+			AND (type = ? OR type = ?)
+			AND user_id = ?
+			ORDER BY "counter" ASC
+			${doCountQuery ? '' : 'LIMIT ?'}
+		`;
+
+		const subParams1 = [
+			fromCounter,
+			ChangeType.Create,
+			ChangeType.Delete,
+			userId,
+		];
+
+		if (!doCountQuery) subParams1.push(limit);
+
+		// The "+ 0" was added to prevent Postgres from scanning the `changes` table in `counter`
+		// order, which is an extremely slow query plan. With "+ 0" it went from 2 minutes to 6
+		// seconds for a particular query. https://dba.stackexchange.com/a/338597/37012
+
+		const subQuery2 = `
+			SELECT ${fieldsSql}
+			FROM "changes"
+			WHERE counter > ?
+			AND type = ?
+			AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)
+			ORDER BY "counter" + 0 ASC
+			${doCountQuery ? '' : 'LIMIT ?'}
+		`;
+
+		const subParams2 = [
+			fromCounter,
+			ChangeType.Update,
+			userId,
+		];
+
+		if (!doCountQuery) subParams2.push(limit);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		let query: Knex.Raw<any> = null;
+
+		const finalParams = subParams1.concat(subParams2);
+
+		// For Postgres, we need to use materialized tables because, even
+		// though each independent query is fast, the query planner end up going
+		// for a very slow plan when they are combined with UNION ALL.
+		// https://dba.stackexchange.com/a/333147/37012
+		//
+		// Normally we could use the same query for SQLite since it supports
+		// materialized views too, but it doesn't work for some reason so we
+		// keep the non-optimised query.
+
+		if (!doCountQuery) {
+			finalParams.push(limit);
+
+			if (isPostgres(this.dbSlave)) {
+				query = this.dbSlave.raw(`
+					WITH cte1 AS MATERIALIZED (
+						${subQuery1}
+					)
+					, cte2 AS MATERIALIZED (
+						${subQuery2}
+					)
+					TABLE cte1
+					UNION ALL
+					TABLE cte2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			} else {
+				query = this.dbSlave.raw(`
+					SELECT ${fieldsSql} FROM (${subQuery1}) as sub1
+					UNION ALL				
+					SELECT ${fieldsSql} FROM (${subQuery2}) as sub2
+					ORDER BY counter ASC
+					LIMIT ?
+				`, finalParams);
+			}
 		} else {
-			void query.select([
-				'id',
-				'item_id',
-				'item_name',
-				'type',
-				'updated_time',
-			]);
+			query = this.dbSlave.raw(`
+				SELECT count(*) as total
+				FROM (
+					(${subQuery1})
+					UNION ALL				
+					(${subQuery2})
+				) AS merged
+			`, finalParams);
 		}
 
-		return query;
-	}
+		const results = await query;
 
-	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
-		pagination = {
-			page: 1,
-			limit: 100,
-			order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
-			...pagination,
-		};
+		// Because it's a raw query, we need to handle the results manually:
+		// Postgres returns an object with a "rows" property, while SQLite
+		// returns the rows directly;
+		const output: Change[] = results.rows ? results.rows : results;
 
-		const query = this.changesForUserQuery(userId, false);
-		const countQuery = this.changesForUserQuery(userId, true);
-		const itemCount = (await countQuery.first()).total;
+		// This property is present only for the purpose of ordering the results
+		// and can be removed afterwards.
+		for (const change of output) delete change.counter;
 
-		void query
-			.orderBy(pagination.order[0].by, pagination.order[0].dir)
-			.offset((pagination.page - 1) * pagination.limit)
-			.limit(pagination.limit) as any[];
-
-		const changes = await query;
-
-		return {
-			items: changes,
-			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
-			// If there's no change, we return the previous cursor.
-			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
-			has_more: changes.length >= pagination.limit,
-			page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
-		};
+		return output;
 	}
 
 	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
@@ -167,31 +260,44 @@ export default class ChangeModel extends BaseModel<Change> {
 			if (!changeAtCursor) throw new ErrorResyncRequired();
 		}
 
-		const query = this.changesForUserQuery(userId, false);
+		const changes = await this.changesForUserQuery(
+			userId,
+			changeAtCursor ? changeAtCursor.counter : -1,
+			pagination.limit,
+			false,
+		);
 
-		// If a cursor was provided, apply it to the query.
-		if (changeAtCursor) {
-			void query.where('counter', '>', changeAtCursor.counter);
-		}
-
-		void query
-			.orderBy('counter', 'asc')
-			.limit(pagination.limit) as any[];
-
-		const changes: Change[] = await query;
-
-		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
 		let processedChanges = this.compressChanges(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
-		const finalChanges: DeltaChange[] = processedChanges.map(c => {
-			const item = items.find(item => item.id === c.item_id);
-			if (!item) return c;
-			return {
-				...c,
+		if (this.deltaIncludesItems_) {
+			items = await this.models().item().loadWithContentMulti(processedChanges.map(c => c.item_id), {
+				fields: [
+					'content',
+					'id',
+					'jop_encryption_applied',
+					'jop_id',
+					'jop_parent_id',
+					'jop_share_id',
+					'jop_type',
+					'jop_updated_time',
+				],
+			});
+		}
+
+		const finalChanges = processedChanges.map(change => {
+			const item = items.find(item => item.id === change.item_id);
+			if (!item) return this.deltaIncludesItems_ ? { ...change, jopItem: null } : { ...change };
+			const deltaChange: DeltaChange = {
+				...change,
 				jop_updated_time: item.jop_updated_time,
 			};
+			if (this.deltaIncludesItems_) {
+				deltaChange.jopItem = item.jop_type ? this.models().item().itemToJoplinItem(item) : null;
+			}
+			return deltaChange;
 		});
 
 		return {

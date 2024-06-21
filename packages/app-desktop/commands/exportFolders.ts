@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import { ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import shim from '@joplin/lib/shim';
 
 export const declaration: CommandDeclaration = {
@@ -11,7 +11,8 @@ export const runtime = (): CommandRuntime => {
 	return {
 		// "targetPath" should be a file for JEX export (because the format can
 		// contain multiple folders) or a directory otherwise.
-		execute: async (_context: any, folderIds: string[], format: string, targetPath: string) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		execute: async (_context: any, folderIds: string[], format: ExportModuleOutputFormat, targetPath: string) => {
 			const exportOptions: ExportOptions = {
 				sourceFolderIds: folderIds,
 				path: targetPath,

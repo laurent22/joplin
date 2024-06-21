@@ -6,12 +6,16 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import rendererHtmlUtils from '@joplin/renderer/htmlUtils';
+import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
-const { fileUriToPath } = require('@joplin/lib/urlUtils');
+import { fileUriToPath } from '@joplin/utils/url';
+import { MarkupLanguage } from '@joplin/renderer';
+import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import markupRenderOptions from './markupRenderOptions';
+import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 const md5 = require('md5');
 const path = require('path');
 
@@ -24,16 +28,19 @@ export async function handleResourceDownloadMode(noteBody: string) {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let resourceCache_: any = {};
 
 export function clearResourceCache() {
 	resourceCache_ = {};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function attachedResources(noteBody: string): Promise<any> {
 	if (!noteBody) return {};
 	const resourceIds = await Note.linkedItemIdsByType(BaseModel.TYPE_RESOURCE, noteBody);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (let i = 0; i < resourceIds.length; i++) {
 		const id = resourceIds[i];
@@ -58,10 +65,12 @@ export async function attachedResources(noteBody: string): Promise<any> {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: any = null) {
 	options = {
 		createFileURL: false,
 		position: 0,
+		markupLanguage: MarkupLanguage.Markdown,
 		...options,
 	};
 
@@ -79,6 +88,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
 				createFileURL: options.createFileURL,
 				resizeLargeImages: Setting.value('imageResizing'),
+				markupLanguage: options.markupLanguage,
 			});
 
 			if (!newBody) {
@@ -97,6 +107,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	return body;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function resourcesStatus(resourceInfos: any) {
 	let lowestIndex = joplinRendererUtils.resourceStatusIndex('ready');
 	for (const id in resourceInfos) {
@@ -107,7 +118,8 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-export async function handlePasteEvent(event: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {
@@ -132,23 +144,37 @@ export async function handlePasteEvent(event: any) {
 	return output;
 }
 
-export async function processPastedHtml(html: string) {
+
+const processImagesInPastedHtml = async (html: string) => {
 	const allImageUrls: string[] = [];
 	const mappedResources: Record<string, string> = {};
-
-	// When copying text from eg. GitHub, the HTML might contain non-breaking
-	// spaces instead of regular spaces. If these non-breaking spaces are
-	// inserted into the TinyMCE editor (using insertContent), they will be
-	// dropped. So here we convert them to regular spaces.
-	// https://stackoverflow.com/a/31790544/561309
-	html = html.replace(/[\u202F\u00A0]/g, ' ');
 
 	htmlUtils.replaceImageUrls(html, (src: string) => {
 		allImageUrls.push(src);
 	});
 
+	const downloadImage = async (imageSrc: string) => {
+		try {
+			const fileExt = safeFileExtension(fileExtension(imageSrc));
+			const name = safeFilename(filename(imageSrc));
+			const pieces = [name ? name : md5(Date.now() + Math.random())];
+			if (fileExt) pieces.push(fileExt);
+			const filePath = `${Setting.value('tempDir')}/${pieces.join('.')}`;
+			await shim.fetchBlob(imageSrc, { path: filePath });
+			const createdResource = await shim.createResourceFromPath(filePath);
+			await shim.fsDriver().remove(filePath);
+			mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+		} catch (error) {
+			logger.warn(`Error creating a resource for ${imageSrc}.`, error);
+			mappedResources[imageSrc] = imageSrc;
+		}
+	};
+
+	const downloadImages: Promise<void>[] = [];
+
 	for (const imageSrc of allImageUrls) {
 		if (!mappedResources[imageSrc]) {
+			logger.info(`processPastedHtml: Processing image ${imageSrc}`);
 			try {
 				if (imageSrc.startsWith('file')) {
 					const imageFilePath = path.normalize(fileUriToPath(imageSrc));
@@ -160,25 +186,50 @@ export async function processPastedHtml(html: string) {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 					}
-				} else if (imageSrc.startsWith('data:')) { // Data URIs
+				} else if (imageSrc.startsWith('data:')) {
 					mappedResources[imageSrc] = imageSrc;
 				} else {
-					const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}`;
-					await shim.fetchBlob(imageSrc, { path: filePath });
-					const createdResource = await shim.createResourceFromPath(filePath);
-					await shim.fsDriver().remove(filePath);
-					mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+					downloadImages.push(downloadImage(imageSrc));
 				}
 			} catch (error) {
-				logger.warn(`Error creating a resource for ${imageSrc}.`, error);
+				logger.warn(`processPastedHtml: Error creating a resource for ${imageSrc}.`, error);
 				mappedResources[imageSrc] = imageSrc;
 			}
 		}
 	}
 
-	return rendererHtmlUtils.sanitizeHtml(
-		htmlUtils.replaceImageUrls(html, (src: string) => {
-			return mappedResources[src];
-		})
-	);
+	await Promise.all(downloadImages);
+
+	return htmlUtils.replaceImageUrls(html, (src: string) => mappedResources[src]);
+};
+
+export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHandler | null, mdToHtml: MarkupToHtmlHandler | null) {
+	// When copying text from eg. GitHub, the HTML might contain non-breaking
+	// spaces instead of regular spaces. If these non-breaking spaces are
+	// inserted into the TinyMCE editor (using insertContent), they will be
+	// dropped. So here we convert them to regular spaces.
+	// https://stackoverflow.com/a/31790544/561309
+	html = html.replace(/[\u202F\u00A0]/g, ' ');
+
+	html = await processImagesInPastedHtml(html);
+
+	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
+	// Markdown. For example the content may have a dark background which would be supported by
+	// TinyMCE, but lost once the note is saved. So here we convert the HTML to Markdown then back
+	// to HTML to ensure that the content we paste will be handled correctly by the app.
+	if (htmlToMd && mdToHtml) {
+		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
+		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
+
+		// When plugins that add to the end of rendered content are installed, bodyOnly can
+		// fail to remove the wrapping paragraph. This works around that issue by removing
+		// the wrapping paragraph in more cases. See issue #10061.
+		if (!md.trim().includes('\n')) {
+			html = removeWrappingParagraphAndTrailingEmptyElements(html);
+		}
+	}
+
+	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(html, {
+		allowedFilePrefixes: [Setting.value('resourceDir')],
+	}));
 }

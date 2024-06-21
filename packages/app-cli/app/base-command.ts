@@ -3,14 +3,18 @@ import { reg } from '@joplin/lib/registry.js';
 
 export default class BaseCommand {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected stdout_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected prompt_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected dispatcher_: any;
 
 	public usage(): string {
 		throw new Error('Usage not defined');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public encryptionCheck(item: any) {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
@@ -19,6 +23,7 @@ export default class BaseCommand {
 		throw new Error('Description not defined');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async action(_args: any) {
 		throw new Error('Action not defined');
 	}
@@ -31,6 +36,7 @@ export default class BaseCommand {
 		return this.compatibleUis().indexOf(ui) >= 0;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public options(): any[] {
 		return [];
 	}
@@ -59,6 +65,7 @@ export default class BaseCommand {
 		this.dispatcher_ = fn;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dispatch(action: any) {
 		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
 		return this.dispatcher_(action);
@@ -78,6 +85,7 @@ export default class BaseCommand {
 		this.prompt_ = fn;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prompt(message: string, options: any = null) {
 		if (!this.prompt_) throw new Error('Prompt is undefined');
 		return await this.prompt_(message, options);

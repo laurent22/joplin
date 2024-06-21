@@ -1,8 +1,8 @@
-import React = require('react');
-import { useCallback } from 'react';
-import { Text, TextStyle } from 'react-native';
+import * as React from 'react';
+import { useCallback, useMemo } from 'react';
+import { TextStyle, StyleSheet } from 'react-native';
 import { ButtonSpec, StyleSheetData } from './types';
-import CustomButton from '../../CustomButton';
+import IconButton from '../../IconButton';
 
 export const buttonSize = 54;
 
@@ -13,28 +13,40 @@ interface ToolbarButtonProps {
 	onActionComplete?: ()=> void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const useStyles = (baseStyleSheet: any, baseButtonStyle: any, buttonSpec: ButtonSpec, visible: boolean, disabled: boolean) => {
+	return useMemo(() => {
+		const activatedStyle = buttonSpec.active ? baseStyleSheet.buttonActive : {};
+		const disabledStyle = disabled ? baseStyleSheet.buttonDisabled : {};
+
+		const activatedTextStyle = buttonSpec.active ? baseStyleSheet.buttonActiveContent : {};
+		const disabledTextStyle = disabled ? baseStyleSheet.buttonDisabledContent : {};
+
+		return StyleSheet.create({
+			iconStyle: {
+				...activatedTextStyle,
+				...disabledTextStyle,
+				...baseStyleSheet.text,
+			},
+			buttonStyle: {
+				...baseStyleSheet.button,
+				...activatedStyle,
+				...disabledStyle,
+				...baseButtonStyle,
+				...(!visible ? { opacity: 0 } : null),
+			},
+		});
+	}, [
+		baseStyleSheet.button, baseStyleSheet.text, baseButtonStyle, baseStyleSheet.buttonActive,
+		baseStyleSheet.buttonDisabled, baseStyleSheet.buttonActiveContent, baseStyleSheet.buttonDisabledContent,
+		buttonSpec.active, visible, disabled,
+	]);
+};
+
 const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarButtonProps) => {
 	const visible = spec.visible ?? true;
 	const disabled = (spec.disabled ?? false) && visible;
-	const styles = styleSheet.styles;
-
-	// Additional styles if activated
-	const activatedStyle = spec.active ? styles.buttonActive : {};
-	const activatedTextStyle = spec.active ? styles.buttonActiveContent : {};
-	const disabledStyle = disabled ? styles.buttonDisabled : {};
-	const disabledTextStyle = disabled ? styles.buttonDisabledContent : {};
-
-	let content;
-
-	if (typeof spec.icon === 'string') {
-		content = (
-			<Text style={{ ...styles.text, ...activatedTextStyle, ...disabledTextStyle }}>
-				{spec.icon}
-			</Text>
-		);
-	} else {
-		content = spec.icon;
-	}
+	const styles = useStyles(styleSheet.styles, style, spec, visible, disabled);
 
 	const sourceOnPress = spec.onPress;
 	const onPress = useCallback(() => {
@@ -45,19 +57,16 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 	}, [disabled, sourceOnPress, onActionComplete]);
 
 	return (
-		<CustomButton
-			style={{
-				...styles.button, ...activatedStyle, ...disabledStyle, ...style,
-				...(!visible ? { opacity: 0 } : null),
-			}}
+		<IconButton
+			containerStyle={styles.buttonStyle}
 			themeId={styleSheet.themeId}
 			onPress={onPress}
 			description={ spec.description }
-			accessibilityRole="button"
 			disabled={ disabled }
-		>
-			{ content }
-		</CustomButton>
+
+			iconName={spec.icon}
+			iconStyle={styles.iconStyle}
+		/>
 	);
 };
 

@@ -101,6 +101,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
 		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
@@ -130,7 +131,7 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('id', this
 				.db('share_users')
 				.select('share_id')
-				.where('user_id', '=', userId)
+				.where('user_id', '=', userId),
 			);
 
 		const query2 = this
@@ -165,7 +166,7 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('id', this.db('share_users')
 				.select('share_id')
 				.where('user_id', '=', userId)
-				.andWhere('status', '=', ShareUserStatus.Accepted
+				.andWhere('status', '=', ShareUserStatus.Accepted,
 				));
 
 		if (type) void query.andWhere('type', '=', type);
@@ -463,7 +464,8 @@ export default class ShareModel extends BaseModel<Share> {
 			.whereIn('item_id',
 				this.db('items')
 					.select('id')
-					.where('jop_share_id', '=', shareId)
+					.where('jop_share_id', '=', shareId),
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			).groupBy('user_id') as any;
 	}
 

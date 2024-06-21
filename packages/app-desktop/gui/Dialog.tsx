@@ -11,7 +11,12 @@ const DialogModalLayer = styled.div`
 	background-color: rgba(0,0,0,0.6);
 	align-items: flex-start;
 	justify-content: center;
-	overflow: hidden;
+
+	overflow: auto;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
 `;
 
 const DialogRoot = styled.div`

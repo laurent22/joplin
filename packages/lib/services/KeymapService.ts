@@ -1,4 +1,4 @@
-import eventManager from '../eventManager';
+import eventManager, { EventListenerCallback, EventName } from '../eventManager';
 import shim from '../shim';
 import { _ } from '../locale';
 import keysRegExp from './KeymapService_keysRegExp';
@@ -20,6 +20,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+Q', command: 'quit' },
 		{ accelerator: 'Cmd+,', command: 'config' },
 		{ accelerator: 'Cmd+W', command: 'closeWindow' },
+		{ accelerator: 'Cmd+M', command: 'minimizeWindow' },
 		{ accelerator: 'Cmd+C', command: 'textCopy' },
 		{ accelerator: 'Cmd+X', command: 'textCut' },
 		{ accelerator: 'Cmd+V', command: 'textPaste' },
@@ -59,6 +60,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+1', command: 'switchProfile1' },
 		{ accelerator: 'Option+Cmd+2', command: 'switchProfile2' },
 		{ accelerator: 'Option+Cmd+3', command: 'switchProfile3' },
+		{ accelerator: 'Option+Cmd+Backspace', command: 'permanentlyDeleteNote' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -83,6 +85,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
 		{ accelerator: 'F10', command: 'toggleSideBar' },
+		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
@@ -105,6 +108,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+1', command: 'switchProfile1' },
 		{ accelerator: 'Ctrl+Alt+2', command: 'switchProfile2' },
 		{ accelerator: 'Ctrl+Alt+3', command: 'switchProfile3' },
+		{ accelerator: 'Shift+Delete', command: 'permanentlyDeleteNote' },
 	],
 };
 
@@ -124,6 +128,7 @@ export default class KeymapService extends BaseService {
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
 	private lastSaveTime_: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private modifiersRegExp: any;
 
 	public constructor() {
@@ -199,7 +204,7 @@ export default class KeymapService extends BaseService {
 			this.lastSaveTime_ = Date.now();
 
 			// Refresh the menu items so that the changes are reflected
-			eventManager.emit('keymapChange');
+			eventManager.emit(EventName.KeymapChange);
 		} catch (error) {
 			const message = error.message || '';
 			throw new Error(_('Error: %s', message));
@@ -266,7 +271,7 @@ export default class KeymapService extends BaseService {
 		this.defaultKeymapItems.forEach(({ command, accelerator }) => {
 			const currentAccelerator = this.getAccelerator(command);
 
-			// Only the customized/changed keymap items are neccessary for the custom keymap
+			// Only the customized/changed keymap items are necessary for the custom keymap
 			// Customizations can be merged with the original keymap at the runtime
 			if (this.getAccelerator(command) !== accelerator) {
 				customkeymapItems.push({ command, accelerator: currentAccelerator });
@@ -350,7 +355,7 @@ export default class KeymapService extends BaseService {
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
 					itemAccelerator,
 					originalItem.command,
-					itemCommand
+					itemCommand,
 				));
 			} else if (itemAccelerator) {
 				usedAccelerators.add(itemAccelerator);
@@ -380,6 +385,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public domToElectronAccelerator(event: any) {
 		const parts = [];
 
@@ -410,13 +416,11 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.off(eventName, callback);
 	}
 

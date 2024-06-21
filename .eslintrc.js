@@ -70,6 +70,10 @@ module.exports = {
 		'no-var': ['error'],
 		'no-new-func': ['error'],
 		'import/prefer-default-export': ['error'],
+		'prefer-promise-reject-errors': ['error', {
+			allowEmptyReject: true,
+		}],
+		'no-throw-literal': ['error'],
 
 		// This rule should not be enabled since it matters in what order
 		// imports are done, in particular in relation to the shim.setReact
@@ -101,6 +105,19 @@ module.exports = {
 		'no-unneeded-ternary': 'error',
 		'github/array-foreach': ['error'],
 
+		'no-restricted-properties': ['error',
+			{
+				'property': 'focus',
+				'message': 'Please use focusHandler::focus() instead',
+			},
+			{
+				'property': 'blur',
+				'message': 'Please use focusHandler::blur() instead',
+			},
+		],
+
+		'@typescript-eslint/no-explicit-any': ['error'],
+
 		// -------------------------------
 		// Formatting
 		// -------------------------------
@@ -119,7 +136,7 @@ module.exports = {
 			'objects': 'always-multiline',
 			'imports': 'always-multiline',
 			'exports': 'always-multiline',
-			'functions': 'never',
+			'functions': 'always-multiline',
 		}],
 		'comma-spacing': ['error', { 'before': false, 'after': true }],
 		'no-trailing-spaces': 'error',
@@ -157,6 +174,8 @@ module.exports = {
 		//   In user-facing text, it should be "notebook".
 		'id-denylist': ['error', 'err', 'notebook', 'notebooks'],
 		'prefer-arrow-callback': ['error'],
+
+		'no-constant-binary-expression': ['error'],
 	},
 	'plugins': [
 		'react',
@@ -209,7 +228,7 @@ module.exports = {
 					'enums': 'always-multiline',
 					'generics': 'always-multiline',
 					'tuples': 'always-multiline',
-					'functions': 'never',
+					'functions': 'always-multiline',
 				}],
 				'@typescript-eslint/object-curly-spacing': ['error', 'always'],
 				'@typescript-eslint/semi': ['error', 'always'],
@@ -251,7 +270,7 @@ module.exports = {
 						selector: 'enumMember',
 						format: null,
 						'filter': {
-							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*)$',
+							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*|iOS)$',
 							'match': true,
 						},
 					},

@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
@@ -20,15 +20,17 @@ export function runningInDocker(): boolean {
 	return runningInDocker_;
 }
 
-function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): string {
-	if (env.POSTGRES_HOST) {
+function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables, slave: boolean): string {
+	const postgresHost = slave ? env.SLAVE_POSTGRES_HOST : env.POSTGRES_HOST;
+
+	if (postgresHost) {
 		// When running within Docker, the app localhost is different from the
 		// host's localhost. To access the latter, Docker defines a special host
 		// called "host.docker.internal", so here we swap the values if necessary.
-		if (runningInDocker && ['localhost', '127.0.0.1'].includes(env.POSTGRES_HOST)) {
+		if (runningInDocker && ['localhost', '127.0.0.1'].includes(postgresHost)) {
 			return 'host.docker.internal';
 		} else {
-			return env.POSTGRES_HOST;
+			return postgresHost;
 		}
 	}
 
@@ -42,7 +44,7 @@ export const fullVersionString = (config: Config) => {
 	return output.join(' ');
 };
 
-function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
+function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, slave: boolean): DatabaseConfig {
 	const baseConfig: DatabaseConfig = {
 		client: DatabaseConfigClient.Null,
 		name: '',
@@ -59,16 +61,16 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 		if (env.POSTGRES_CONNECTION_STRING) {
 			return {
 				...databaseConfig,
-				connectionString: env.POSTGRES_CONNECTION_STRING,
+				connectionString: slave ? env.SLAVE_POSTGRES_CONNECTION_STRING : env.POSTGRES_CONNECTION_STRING,
 			};
 		} else {
 			return {
 				...databaseConfig,
-				name: env.POSTGRES_DATABASE,
-				user: env.POSTGRES_USER,
-				password: env.POSTGRES_PASSWORD,
-				port: env.POSTGRES_PORT,
-				host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
+				name: slave ? env.SLAVE_POSTGRES_DATABASE : env.POSTGRES_DATABASE,
+				user: slave ? env.SLAVE_POSTGRES_USER : env.POSTGRES_USER,
+				password: slave ? env.SLAVE_POSTGRES_PASSWORD : env.POSTGRES_PASSWORD,
+				port: slave ? env.SLAVE_POSTGRES_PORT : env.POSTGRES_PORT,
+				host: databaseHostFromEnv(runningInDocker, env, slave) || 'localhost',
 			};
 		}
 	}
@@ -76,7 +78,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	return {
 		...baseConfig,
 		client: DatabaseConfigClient.SQLite,
-		name: env.SQLITE_DATABASE,
+		name: slave ? env.SLAVE_SQLITE_DATABASE : env.SQLITE_DATABASE,
 		asyncStackTraces: true,
 	};
 }
@@ -111,8 +113,39 @@ function baseUrlFromEnv(env: EnvVariables, appPort: number): string {
 	}
 }
 
+function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
+	const ldapConfig = [];
+	if (env.LDAP_1_ENABLED) {
+		ldapConfig.push({
+			enabled: env.LDAP_1_ENABLED,
+			userCreation: env.LDAP_1_USER_AUTO_CREATION,
+			host: env.LDAP_1_HOST,
+			mailAttribute: env.LDAP_1_MAIL_ATTRIBUTE,
+			fullNameAttribute: env.LDAP_1_FULLNAME_ATTRIBUTE,
+			baseDN: env.LDAP_1_BASE_DN,
+			bindDN: env.LDAP_1_BIND_DN,
+			bindPW: env.LDAP_1_BIND_PW,
+		});
+	}
+
+	if (env.LDAP_2_ENABLED) {
+		ldapConfig.push({
+			enabled: env.LDAP_2_ENABLED,
+			userCreation: env.LDAP_2_USER_AUTO_CREATION,
+			host: env.LDAP_2_HOST,
+			mailAttribute: env.LDAP_2_MAIL_ATTRIBUTE,
+			fullNameAttribute: env.LDAP_2_FULLNAME_ATTRIBUTE,
+			baseDN: env.LDAP_2_BASE_DN,
+			bindDN: env.LDAP_2_BIND_DN,
+			bindPW: env.LDAP_2_BIND_PW,
+		});
+	}
+	return ldapConfig;
+}
+
 let config_: Config = null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
@@ -125,6 +158,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL;
 	const forkVersion = packageJson.joplinServer?.forkVersion;
+	const dbConfig = databaseConfigFromEnv(runningInDocker_, env, false);
 
 	config_ = {
 		...env,
@@ -138,7 +172,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		layoutDir: `${viewDir}/layouts`,
 		tempDir: `${rootDir}/temp`,
 		logDir: `${rootDir}/logs`,
-		database: databaseConfigFromEnv(runningInDocker_, env),
+		database: dbConfig,
+		databaseSlave: env.DB_USE_SLAVE ? databaseConfigFromEnv(runningInDocker_, env, true) : dbConfig,
 		mailer: mailerConfigFromEnv(env),
 		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
@@ -159,6 +194,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
+		ldap: ldapConfigFromEnv(env),
 		...overrides,
 	};
 }

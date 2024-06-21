@@ -9,6 +9,7 @@ interface HookDependencies {
 	themeId: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function themeToCssVariables(theme: any) {
 	const lines = [];
 	lines.push(':root {');
@@ -36,16 +37,18 @@ export default function useThemeCss(dep: HookDependencies) {
 	const [cssFilePath, setCssFilePath] = useState('');
 
 	useEffect(() => {
-		if (cssFilePath) return () => {};
-
 		let cancelled = false;
 
 		async function createThemeStyleSheet() {
 			const theme = themeStyle(themeId);
 			const css = themeToCssVariables(theme);
 			const filePath = `${Setting.value('tempDir')}/plugin_${pluginId}_theme_${themeId}.css`;
-			await shim.fsDriver().writeFile(filePath, css, 'utf8');
-			if (cancelled) return;
+
+			if (!(await shim.fsDriver().exists(filePath))) {
+				await shim.fsDriver().writeFile(filePath, css, 'utf8');
+				if (cancelled) return;
+			}
+
 			setCssFilePath(filePath);
 		}
 
@@ -54,7 +57,7 @@ export default function useThemeCss(dep: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-	}, [pluginId, themeId, cssFilePath]);
+	}, [pluginId, themeId]);
 
 	return cssFilePath;
 }

@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote, deleteNote } from '../utils/testing/testUtils';
 import { ChangeType } from '../services/database/types';
 import { Day, msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
@@ -130,6 +130,7 @@ describe('ChangeModel', () => {
 
 		const changeCount = 10;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToCreate: any[] = [];
 		for (let i = 0; i < changeCount / 2; i++) {
 			itemsToCreate.push({
@@ -176,6 +177,14 @@ describe('ChangeModel', () => {
 		});
 
 		expect(changeCount).toBe(SqliteMaxVariableNum);
+	});
+
+	test('should tell if there are more changes', async () => {
+		const { user } = await createUserAndSession(1, true);
+		await models().item().makeTestItems(user.id, 500);
+
+		const result = await models().change().delta(user.id, { limit: 100 });
+		expect(result.has_more).toBe(true);
 	});
 
 	test('should delete old changes', async () => {
@@ -261,6 +270,77 @@ describe('ChangeModel', () => {
 		}
 
 		jest.useRealTimers();
+	});
+
+	test('should return whole item when doing a delta call', async () => {
+		const { user, session } = await createUserAndSession(1, true);
+
+		await createItemTree3(user.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				title: 'Folder 1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'Note 1',
+					},
+					{
+						id: '00000000000000000000000000000002',
+						title: 'Note 2',
+					},
+				],
+			},
+		]);
+
+		let cursor = '';
+
+		{
+			const result = await models().change().delta(user.id);
+			cursor = result.cursor;
+			const titles = result.items.map(it => it.jopItem.title).sort();
+			expect(titles).toEqual(['Folder 1', 'Note 1', 'Note 2']);
+		}
+
+		await msleep(1);
+
+		await updateNote(session.id, {
+			id: '00000000000000000000000000000001',
+			title: 'new title',
+		});
+
+		{
+			const result = await models().change().delta(user.id, { cursor });
+			cursor = result.cursor;
+			expect(result.items.length).toBe(1);
+			expect(result.items[0].jopItem.title).toBe('new title');
+		}
+
+		await msleep(1);
+
+		await deleteNote(user.id, '00000000000000000000000000000002');
+
+		{
+			const result = await models().change().delta(user.id, { cursor });
+			expect(result.items.length).toBe(1);
+			expect(result.items[0].jopItem).toBe(null);
+		}
+	});
+
+	test('should not return the whole item if the option is disabled', async () => {
+		const { user } = await createUserAndSession(1, true);
+
+		const changeModel = await models().change();
+		changeModel.deltaIncludesItems_ = false;
+
+		await createItemTree3(user.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				title: 'Folder 1',
+			},
+		]);
+
+		const result = await changeModel.delta(user.id);
+		expect('jopItem' in result.items[0]).toBe(false);
 	});
 
 });

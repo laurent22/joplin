@@ -4,10 +4,8 @@
 	<title>{{pageTitle}}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	{{> favicons}}
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma.min.css" crossorigin="anonymous">
-	{{#global.prefersDarkEnabled}}
-		<!-- <link rel="stylesheet" href="{{{global.baseUrl}}}/css/bulma-prefers-dark.min.css" crossorigin="anonymous"> -->
-	{{/global.prefersDarkEnabled}}
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/main.css" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{{global.baseUrl}}}/css/fontawesome/css/all.min.css" crossorigin="anonymous">
 	<script src="{{{global.baseUrl}}}/js/jquery.min.js"></script>

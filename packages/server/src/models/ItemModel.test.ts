@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, createResource, createNote, createItemTree3, db, tempDir, expectNotThrow, expectHttpError } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, createResource, createNote, createItemTree3, db, tempDir, expectNotThrow, expectHttpError, dbSlave } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
 import newModelFactory from './factory';
@@ -275,7 +275,7 @@ describe('ItemModel', () => {
 	test('should respect the hard item size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
-		let models = newModelFactory(db(), config());
+		let models = newModelFactory(db(), dbSlave(), config());
 
 		let result = await models.item().saveFromRawContent(user1, {
 			body: Buffer.from('1234'),
@@ -285,7 +285,7 @@ describe('ItemModel', () => {
 		const item = result['test1.txt'].item;
 
 		config().itemSizeHardLimit = 3;
-		models = newModelFactory(db(), config());
+		models = newModelFactory(db(), dbSlave(), config());
 
 		result = await models.item().saveFromRawContent(user1, {
 			body: Buffer.from('1234'),
@@ -297,7 +297,7 @@ describe('ItemModel', () => {
 		await expectHttpError(async () => models.item().loadWithContent(item.id), ErrorPayloadTooLarge.httpCode);
 
 		config().itemSizeHardLimit = 1000;
-		models = newModelFactory(db(), config());
+		models = newModelFactory(db(), dbSlave(), config());
 
 		await expectNotThrow(async () => models.item().loadWithContent(item.id));
 	});
@@ -316,18 +316,18 @@ describe('ItemModel', () => {
 			path: tempDir2,
 		};
 
-		const fromModels = newModelFactory(db(), {
+		const fromModels = newModelFactory(db(), dbSlave(), {
 			...config(),
 			storageDriver: fromStorageConfig,
 		});
 
-		const toModels = newModelFactory(db(), {
+		const toModels = newModelFactory(db(), dbSlave(), {
 			...config(),
 			storageDriver: toStorageConfig,
 		});
 
-		const fromDriver = await loadStorageDriver(fromStorageConfig, db());
-		const toDriver = await loadStorageDriver(toStorageConfig, db());
+		const fromDriver = await loadStorageDriver(fromStorageConfig, db(), dbSlave());
+		const toDriver = await loadStorageDriver(toStorageConfig, db(), dbSlave());
 
 		return {
 			fromStorageConfig,
@@ -364,7 +364,7 @@ describe('ItemModel', () => {
 
 		await msleep(2);
 
-		const toModels = newModelFactory(db(), {
+		const toModels = newModelFactory(db(), dbSlave(), {
 			...config(),
 			storageDriver: toStorageConfig,
 		});
@@ -528,7 +528,7 @@ describe('ItemModel', () => {
 		expect(item[0].name).toBe('000000000000000000000000000000F2.md');
 	});
 
-	// Case where an item is orphaned and the associated user is still prsent.
+	// Case where an item is orphaned and the associated user is still present.
 	test('should process orphaned items - 2', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
@@ -556,6 +556,33 @@ describe('ItemModel', () => {
 
 		expect((await models().userItem().byUserId(user1.id)).length).toBe(1);
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
+	});
+
+	test('should return multiple item contents', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				title: 'Folder 1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+						title: 'Note 1',
+					},
+					{
+						id: '00000000000000000000000000000002',
+						title: 'Note 2',
+					},
+				],
+			},
+		]);
+
+		const itemIds = (await models().item().all()).map(i => i.id);
+		const items = await models().item().loadWithContentMulti(itemIds);
+
+		const jopItems = items.map(it => models().item().itemToJoplinItem(it));
+		expect(jopItems.map(it => it.title).sort()).toEqual(['Folder 1', 'Note 1', 'Note 2']);
 	});
 
 });

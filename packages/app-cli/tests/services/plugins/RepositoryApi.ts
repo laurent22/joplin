@@ -1,9 +1,14 @@
-import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
+import { AppType } from '@joplin/lib/models/Setting';
+import RepositoryApi, { AppInfo, InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import shim from '@joplin/lib/shim';
 import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '@joplin/lib/testing/test-utils';
+import { remove } from 'fs-extra';
 
-async function newRepoApi(): Promise<RepositoryApi> {
-	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, await createTempDir());
+let tempDirs: string[] = [];
+async function newRepoApi(appInfo: AppInfo = { type: AppType.Desktop, version: '3.0.0' }): Promise<RepositoryApi> {
+	const tempDir = await createTempDir();
+	tempDirs.push(tempDir);
+	const repo = new RepositoryApi(`${supportDir}/pluginRepo`, tempDir, appInfo, InstallMode.Default);
 	await repo.initialize();
 	return repo;
 }
@@ -13,6 +18,12 @@ describe('services_plugins_RepositoryApi', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+	});
+	afterEach(async () => {
+		for (const tempDir of tempDirs) {
+			await remove(tempDir);
+		}
+		tempDirs = [];
 	});
 
 	it('should get the manifests', (async () => {
@@ -27,9 +38,10 @@ describe('services_plugins_RepositoryApi', () => {
 
 		{
 			const results = await api.search('to');
-			expect(results.length).toBe(2);
+			expect(results.length).toBe(3);
 			expect(!!results.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')).toBe(true);
 			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
+			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.AbcSheetMusic')).toBe(true);
 		}
 
 		{
@@ -45,13 +57,14 @@ describe('services_plugins_RepositoryApi', () => {
 		expect(await shim.fsDriver().exists(pluginPath)).toBe(true);
 	}));
 
-	it('should tell if a plugin can be updated', (async () => {
-		const api = await newRepoApi();
-
-		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0', '3.0.0')).toBe(true);
-		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.0', '1.0.0')).toBe(false);
-		expect(await api.pluginCanBeUpdated('org.joplinapp.plugins.ToggleSidebars', '1.0.2', '3.0.0')).toBe(false);
-		expect(await api.pluginCanBeUpdated('does.not.exist', '1.0.0', '3.0.0')).toBe(false);
+	it.each([
+		{ id: 'org.joplinapp.plugins.ToggleSidebars', installedVersion: '1.0.0', appVersion: '3.0.0', shouldBeUpdatable: true },
+		{ id: 'org.joplinapp.plugins.ToggleSidebars', installedVersion: '1.0.0', appVersion: '1.0.0', shouldBeUpdatable: false },
+		{ id: 'org.joplinapp.plugins.ToggleSidebars', installedVersion: '1.0.2', appVersion: '3.0.0', shouldBeUpdatable: false },
+		{ id: 'does.not.exist', installedVersion: '1.0.0', appVersion: '3.0.0', shouldBeUpdatable: false },
+	])('should tell if a plugin can be updated (case %#)', (async ({ id, installedVersion, appVersion, shouldBeUpdatable }) => {
+		const api = await newRepoApi({ version: appVersion, type: AppType.Desktop });
+		expect(await api.pluginCanBeUpdated(id, installedVersion)).toBe(shouldBeUpdatable);
 	}));
 
 });

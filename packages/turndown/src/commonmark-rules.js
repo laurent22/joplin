@@ -45,11 +45,18 @@ rules.paragraph = {
 rules.lineBreak = {
   filter: 'br',
 
-  replacement: function (content, node, options) {
+  replacement: function (_content, node, options, previousNode) {
+    let brReplacement = options.br + '\n';
+
     // Code blocks may include <br/>s -- replacing them should not be necessary
     // in code blocks.
-    const brReplacement = node.isCode ? '' : options.br;
-    return brReplacement + '\n'
+    if (node.isCode) {
+      brReplacement = '\n';
+    } else if (previousNode && previousNode.nodeName === 'BR') {
+      brReplacement = '<br/>';
+    }
+
+    return brReplacement;
   }
 }
 
@@ -120,6 +127,19 @@ rules.subscript = {
   }
 }
 
+// Handles foreground color changes as created by the rich text editor.
+// We intentionally don't handle the general style="color: colorhere" case as
+// this may leave unwanted formatting when saving websites as markdown.
+rules.foregroundColor = {
+  filter: function (node, options) {
+    return options.preserveColorStyles && node.nodeName === 'SPAN' && getStyleProp(node, 'color');
+  },
+
+  replacement: function (content, node, options) {
+    return `<span style="color: ${htmlentities(getStyleProp(node, 'color'))};">${content}</span>`;
+  },
+}
+
 // ==============================
 // END Joplin format support
 // ==============================
@@ -139,7 +159,12 @@ rules.list = {
 
   replacement: function (content, node) {
     var parent = node.parentNode
-    if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+    if (parent && isCodeBlock(parent) && node.classList && node.classList.contains('pre-numbering')){
+      // Ignore code-block children of type ul with class pre-numbering.
+      // See https://github.com/laurent22/joplin/pull/10126#discussion_r1532204251 .
+      // test case: packages/app-cli/tests/html_to_md/code_multiline_2.html
+      return '';
+    } else if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
       return '\n' + content
     } else {
       return '\n\n' + content + '\n\n'
@@ -165,7 +190,10 @@ rules.listItem = {
         .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
 
     var prefix = options.bulletListMarker + ' '
-    content = content.replace(/\n/gm, '\n    ') // indent
+    if (node.isCode === false) {
+      content = content.replace(/\n/gm, '\n    ') // indent
+    }
+    
 
     const joplinCheckbox = joplinCheckboxInfo(node);
     if (joplinCheckbox) {
@@ -173,26 +201,33 @@ rules.listItem = {
     } else {
       var parent = node.parentNode
       if (isOrderedList(parent)) {
-        var start = parent.getAttribute('start')
-        var index = Array.prototype.indexOf.call(parent.children, node)
-        var indexStr = (start ? Number(start) + index : index + 1) + ''
-        // The content of the line that contains the bullet must align wih the following lines.
-        //
-        // i.e it should be:
-        //
-        // 9.  my content
-        //     second line
-        // 10. next one
-        //     second line
-        //
-        // But not:
-        //
-        // 9.  my content
-        //     second line
-        // 10.  next one
-        //     second line
-        //
-        prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        if (node.isCode) {
+          // Ordered lists in code blocks are often for line numbers. Remove them. 
+          // See https://github.com/laurent22/joplin/pull/10126
+          // test case: packages/app-cli/tests/html_to_md/code_multiline_4.html
+          prefix = '';
+        } else {
+          var start = parent.getAttribute('start')
+          var index = Array.prototype.indexOf.call(parent.children, node)
+          var indexStr = (start ? Number(start) + index : index + 1) + ''
+          // The content of the line that contains the bullet must align wih the following lines.
+          //
+          // i.e it should be:
+          //
+          // 9.  my content
+          //     second line
+          // 10. next one
+          //     second line
+          //
+          // But not:
+          //
+          // 9.  my content
+          //     second line
+          // 10.  next one
+          //     second line
+          //
+          prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
+        }
       }
     } 
 
@@ -246,6 +281,9 @@ rules.fencedCodeBlock = {
 
     var fence = repeat(fenceChar, fenceSize)
 
+    // remove code block leading and trailing empty lines
+    code = code.replace(/^([ \t]*\n)+/, '').trimEnd()
+
     return (
       '\n\n' + fence + language + '\n' +
       code.replace(/\n$/, '') +
@@ -273,6 +311,9 @@ function filterLinkHref (href) {
   // Replace the spaces with %20 because otherwise they can cause problems for some
   // renderer and space is not a valid URL character anyway.
   href = href.replace(/ /g, '%20');
+  // Newlines and tabs also break renderers
+  href = href.replace(/\n/g, '%0A');
+  href = href.replace(/\t/g, '%09');
   // Brackets also should be escaped
   href = href.replace(/\(/g, '%28');
   href = href.replace(/\)/g, '%29');
@@ -311,6 +352,12 @@ rules.inlineLink = {
       node.nodeName === 'A' &&
       (node.getAttribute('href') || node.getAttribute('name') || node.getAttribute('id'))
     )
+  },
+
+  escapeContent: function (node, _options) {
+    // Disable escaping content (including '_'s) when the link has the same URL and href.
+    // This prevents links from being broken by added escapes.
+    return node.getAttribute('href') !== node.textContent;
   },
 
   replacement: function (content, node, options) {
@@ -436,9 +483,23 @@ rules.code = {
     return node.nodeName === 'CODE' && !isCodeBlock
   },
 
-  replacement: function (content) {
-    if (!content) return ''
-    content = content.replace(/\r?\n|\r/g, ' ')
+  replacement: function (content, node, options) {
+    if (!content) {
+      return ''
+    }
+
+    content = content.replace(/\r?\n|\r/g, '\n')
+    // If code is multiline and in codeBlock, just return it, codeBlock will add fence(default is ```).
+    //
+    // This handles the case where a <code> element is nested directly within a <pre> and
+    // should not be turned into an inline code region.
+    //
+    // See https://github.com/laurent22/joplin/pull/10126 .
+    if (content.indexOf('\n') !== -1 && node.parentNode && isCodeBlock(node.parentNode)){
+      return content
+    }
+
+    content = content.replace(/\r?\n|\r/g, '')
 
     var extraSpace = /^`|^ .*?[^ ].* $|`$/.test(content) ? ' ' : ''
     var delimiter = '`'
@@ -617,7 +678,9 @@ rules.mathjaxScriptBlock = {
 
 rules.joplinHtmlInMarkdown = {
   filter: function (node) {
-    return node && node.classList && node.classList.contains('jop-noMdConv');
+    // Tables are special because they may be entirely kept as HTML depending on
+    // the logic in table.js, for example if they contain code.
+    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
   },
 
   replacement: function (content, node) {

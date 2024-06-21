@@ -2,10 +2,14 @@
 	"extends": "../../tsconfig.json",
     "include": [
         "**/*.ts",
-        "**/*.tsx",
+        "**/*.tsx", "../lib/utils/focusHandler.ts",
 	],
 	"exclude": [
 		"**/node_modules",
 		"**/dist",
+
+		// Exclude gulpfile.ts to prevent Gulp from trying to build from
+		// gulpfile.js.
+		"gulpfile.ts"
 	],
 }

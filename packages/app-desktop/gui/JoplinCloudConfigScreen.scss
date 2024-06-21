@@ -1,3 +1,33 @@
 .inbox-email-value {
 	font-weight: bold;
 }
+
+.alert-warn {
+	background-color: var(--joplin-background-color);
+	width: fit-content;
+
+	p {
+		padding: calc(var(--joplin-font-size) * 0.8);
+	}
+}
+
+.joplin-cloud-account-information {
+	margin-bottom: var(--joplin-margin);
+
+	table {
+		margin-bottom: var(--joplin-margin);
+		border: none;
+
+		td {
+			border: none;
+			border-bottom: 1px solid var(--joplin-border-color4);
+			padding: var(--joplin-font-size);
+		}
+
+		tr:last-child {
+			td {
+				border: none;
+			}
+		}
+	}
+}

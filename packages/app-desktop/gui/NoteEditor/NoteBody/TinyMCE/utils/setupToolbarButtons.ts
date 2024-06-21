@@ -40,6 +40,7 @@ function buttonDefinitions(): ButtonDefinition[] {
 	];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(editor: any) {
 	const definitions = buttonDefinitions();
 
@@ -50,6 +51,7 @@ export default function(editor: any) {
 			onAction: async function() {
 				editor.execCommand('mceToggleFormat', false, def.name);
 			},
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onSetup: function(api: any) {
 				editor.formatter.formatChanged(def.name, (state: boolean) => {
 					api.setActive(state);
@@ -59,6 +61,9 @@ export default function(editor: any) {
 	}
 
 	const items: string[] = definitions.filter(d => !!d.grouped).map(d => d.name);
+
+	// Additional built-in buttons to show in the formatting sub-menu:
+	items.push('forecolor');
 
 	editor.ui.registry.addGroupToolbarButton('formattingExtras', {
 		icon: 'image-options',

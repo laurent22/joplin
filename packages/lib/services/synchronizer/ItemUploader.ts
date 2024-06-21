@@ -16,6 +16,7 @@ export default class ItemUploader {
 
 	private api_: FileApi;
 	private apiCall_: ApiCallFunction;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private preUploadedItems_: Record<string, any> = {};
 	private preUploadedItemUpdatedTimes_: Record<string, number> = {};
 	private maxBatchSize_ = 1 * 1024 * 1024; // 1MB;
@@ -33,7 +34,7 @@ export default class ItemUploader {
 		this.maxBatchSize_ = v;
 	}
 
-	public async serializeAndUploadItem(ItemClass: any, path: string, local: BaseItemEntity) {
+	public async serializeAndUploadItem(ItemClass: typeof BaseItem, path: string, local: BaseItemEntity) {
 		const preUploadItem = this.preUploadedItems_[path];
 		if (preUploadItem) {
 			if (this.preUploadedItemUpdatedTimes_[path] !== local.updated_time) {

@@ -3,7 +3,9 @@ on: [push, pull_request]
 jobs:
   pre_job:
     if: github.repository == 'laurent22/joplin'
-    runs-on: ubuntu-latest
+    # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+    # https://github.com/actions/runner-images/issues/6709
+    runs-on: ubuntu-20.04
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
@@ -19,7 +21,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-2019]
+        # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+        # https://github.com/actions/runner-images/issues/6709
+        os: [macos-12, ubuntu-20.04, windows-2019]
     steps:
 
       # Trying to fix random networking issues on Windows
@@ -51,6 +55,15 @@ jobs:
           sudo apt-get install -y libsecret-1-dev
           sudo apt-get install -y translate-toolkit
           sudo apt-get install -y rsync
+          # Provides a virtual display on Linux. Used for Playwright integration
+          # testing.
+          sudo apt-get install -y xvfb
+
+      - name: Install macOs dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Required for building the canvas package
+          brew install pango
 
       - name: Install Docker Engine
         # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
@@ -68,9 +81,9 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-      - uses: actions/checkout@v2
-      - uses: olegtarasov/get-tag@v2.1
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: olegtarasov/get-tag@v2.1.3
+      - uses: actions/setup-node@v4
         with:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:
           # https://github.com/facebook/react-native/issues/36440
@@ -85,11 +98,20 @@ jobs:
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
       # secrets
-      - uses: docker/login-action@v2
+      - uses: docker/login-action@v3
         if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # macos-latest ships with Python 3.12 by default, but this removes a
+      # utility that's used by electron-builder (distutils) so we need to pin
+      # Python to an earlier version.
+      # Fixes error `ModuleNotFoundError: No module named 'distutils'`
+      # Ref: https://github.com/nodejs/node-gyp/issues/2869
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Run tests, build and publish Linux and macOS apps
         if: runner.os == 'Linux' || runner.os == 'macOs'
@@ -105,6 +127,7 @@ jobs:
           BUILD_SEQUENCIAL: 1
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
@@ -119,7 +142,7 @@ jobs:
         # To ensure that the operations stop on failure, all commands
         # should be on one line with "&&" in between.
         run: |
-          yarn install && cd packages/app-desktop && yarn run dist
+          yarn install && cd packages/app-desktop && yarn dist
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -131,7 +154,7 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && cd packages/app-desktop && yarn run dist --publish=never
+          yarn install && cd packages/app-desktop && yarn dist --publish=never
 
   ServerDockerImage:
     needs: pre_job
@@ -139,7 +162,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
+        # https://github.com/actions/runner-images/issues/6709
+        os: [ubuntu-20.04]
     steps:
 
       - name: Install Docker Engine
@@ -156,9 +181,9 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'yarn'
@@ -173,7 +198,7 @@ jobs:
           BUILD_SEQUENCIAL: 1
         run: |
           yarn install
-          yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.

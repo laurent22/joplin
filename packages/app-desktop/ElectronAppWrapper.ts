@@ -4,36 +4,45 @@ import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import { BrowserWindow, Tray, screen } from 'electron';
+import bridge from './bridge';
 const url = require('url');
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
-const { ipcMain } = require('electron');
+
+import { dialog, ipcMain } from 'electron';
+import { _ } from '@joplin/lib/locale';
+import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
+import { clearTimeout, setTimeout } from 'timers';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
 }
 
 interface PluginWindows {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	[key: string]: any;
 }
 
 export default class ElectronAppWrapper {
 
 	private logger_: Logger = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private electronApp_: any;
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
 	private win_: BrowserWindow = null;
 	private willQuitApp_ = false;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private tray_: any = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
 
-	public constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
@@ -65,6 +74,44 @@ export default class ElectronAppWrapper {
 		return this.initialCallbackUrl_;
 	}
 
+	// Call when the app fails in a significant way.
+	//
+	// Assumes that the renderer process may be in an invalid state and so cannot
+	// be accessed.
+	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
+		await bridge().captureException(new Error(errorMessage));
+
+		const buttons = [];
+		buttons.push(_('Quit'));
+		const exitIndex = 0;
+
+		if (canIgnore) {
+			buttons.push(_('Ignore'));
+		}
+		const restartIndex = buttons.length;
+		buttons.push(_('Restart in safe mode'));
+
+		const { response } = await dialog.showMessageBox({
+			message: _('An error occurred: %s', errorMessage),
+			buttons,
+		});
+
+		if (response === restartIndex) {
+			await restartInSafeModeFromMain();
+
+			// A hung renderer seems to prevent the process from exiting completely.
+			// In this case, crashing the renderer allows the window to close.
+			//
+			// Also only run this if not testing (crashing the renderer breaks automated
+			// tests).
+			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
+				this.win_.webContents.forcefullyCrashRenderer();
+			}
+		} else if (response === exitIndex) {
+			process.exit(1);
+		}
+	}
+
 	public createWindow() {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
@@ -72,6 +119,7 @@ export default class ElectronAppWrapper {
 		const windowStateKeeper = require('electron-window-state');
 
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const stateOptions: any = {
 			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
 			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
@@ -83,6 +131,7 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const windowOptions: any = {
 			x: windowState.x,
 			y: windowState.y,
@@ -120,6 +169,41 @@ export default class ElectronAppWrapper {
 			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
 		}
 
+		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
+
+		this.win_.webContents.on('unresponsive', () => {
+			// Don't show the "unresponsive" dialog immediately -- the "unresponsive" event
+			// can be fired when showing a dialog or modal (e.g. the update dialog).
+			//
+			// This gives us an opportunity to cancel it.
+			if (unresponsiveTimeout === null) {
+				const delayMs = 1000;
+
+				unresponsiveTimeout = setTimeout(() => {
+					unresponsiveTimeout = null;
+					void this.handleAppFailure(_('Window unresponsive.'), true);
+				}, delayMs);
+			}
+		});
+
+		this.win_.webContents.on('responsive', () => {
+			if (unresponsiveTimeout !== null) {
+				clearTimeout(unresponsiveTimeout);
+				unresponsiveTimeout = null;
+			}
+		});
+
+		this.win_.webContents.on('render-process-gone', async _event => {
+			await this.handleAppFailure('Renderer process gone.', false);
+		});
+
+		this.win_.webContents.on('did-fail-load', async event => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			if ((event as any).isMainFrame) {
+				await this.handleAppFailure('Renderer process failed to load', false);
+			}
+		});
+
 		void this.win_.loadURL(url.format({
 			pathname: path.join(__dirname, 'index.html'),
 			protocol: 'file:',
@@ -142,6 +226,16 @@ export default class ElectronAppWrapper {
 			}, 3000);
 		}
 
+		// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
+		this.win_.webContents.on('will-frame-navigate', event => {
+			// If the link changes the URL of the browser window,
+			if (event.isMainFrame) {
+				event.preventDefault();
+				void bridge().openExternal(event.url);
+			}
+		});
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
@@ -190,6 +284,7 @@ export default class ElectronAppWrapper {
 			}
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ipcMain.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'appCloseReply') {
 				// We got the response from the renderer process:
@@ -201,6 +296,7 @@ export default class ElectronAppWrapper {
 
 		// This handler receives IPC messages from a plugin or from the main window,
 		// and forwards it to the main window or the plugin window.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		ipcMain.on('pluginMessage', (_event: any, message: PluginMessage) => {
 			try {
 				if (message.target === 'mainWindow') {
@@ -239,6 +335,7 @@ export default class ElectronAppWrapper {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public registerPluginWindow(pluginId: string, window: any) {
 		this.pluginWindows_[pluginId] = window;
 	}
@@ -301,6 +398,7 @@ export default class ElectronAppWrapper {
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public createTray(contextMenu: any) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
@@ -308,6 +406,10 @@ export default class ElectronAppWrapper {
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
+				if (!this.window()) {
+					console.warn('The window object was not available during the click event from tray icon');
+					return;
+				}
 				this.window().show();
 			});
 		} catch (error) {
@@ -333,11 +435,13 @@ export default class ElectronAppWrapper {
 		}
 
 		// Someone tried to open a second instance - focus our window instead
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.electronApp_.on('second-instance', (_e: any, argv: string[]) => {
 			const win = this.window();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();
+			// eslint-disable-next-line no-restricted-properties
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => isCallbackUrl(arg));
@@ -372,6 +476,7 @@ export default class ElectronAppWrapper {
 			this.win_.show();
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.electronApp_.on('open-url', (event: any, url: string) => {
 			event.preventDefault();
 			void this.openCallbackUrl(url);

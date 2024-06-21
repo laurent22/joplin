@@ -4,10 +4,13 @@ import htmlUtils from '../../htmlUtils';
 const md5 = require('md5');
 
 export default {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		markdownIt.core.ruler.push('sanitize_html', (state: any) => {
 			const tokens = state.tokens;
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const walkHtmlTokens = (tokens: any[]) => {
 				if (!tokens || !tokens.length) return;
 
@@ -34,7 +37,13 @@ export default {
 					// So the sanitizeHtml function must handle this kind of non-valid HTML.
 
 					if (!sanitizedContent) {
-						sanitizedContent = htmlUtils.sanitizeHtml(token.content, { addNoMdConvClass: true });
+						sanitizedContent = htmlUtils.sanitizeHtml(
+							token.content,
+							{
+								addNoMdConvClass: true,
+								allowedFilePrefixes: ruleOptions.allowedFilePrefixes,
+							},
+						);
 					}
 
 					token.content = sanitizedContent;

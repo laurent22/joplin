@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -13,6 +13,7 @@ import Button from '../Button/Button';
 import bridge from '../../services/bridge';
 import shim from '@joplin/lib/shim';
 import FolderIconBox from '../FolderIconBox';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
@@ -46,7 +47,7 @@ export default function(props: Props) {
 	}, [props.dispatch]);
 
 	useEffect(() => {
-		titleInputRef.current.focus();
+		focus('Dialog::titleInputRef', titleInputRef.current);
 
 		setTimeout(() => {
 			titleInputRef.current.select();
@@ -63,8 +64,6 @@ export default function(props: Props) {
 			const folder: FolderEntity = {
 				title: folderTitle,
 				icon: Folder.serializeIcon(folderIcon),
-				is_shared: 0,
-				share_id: '',
 			};
 
 			if (!isNew) folder.id = props.folderId;
@@ -87,6 +86,7 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [onClose, folderTitle, folderIcon, props.folderId, props.parentId]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFolderTitleChange = useCallback((event: any) => {
 		setFolderTitle(event.target.value);
 	}, []);
@@ -127,13 +127,14 @@ export default function(props: Props) {
 		}
 	}, []);
 
+	const formTitleInputId = useId();
 	function renderForm() {
 		return (
 			<div>
 				<div className="form">
 					<div className="form-input-group">
-						<label>{_('Title')}</label>
-						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
+						<label htmlFor={formTitleInputId}>{_('Title')}</label>
+						<StyledInput id={formTitleInputId} type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
 					</div>
 
 					<div className="form-input-group">

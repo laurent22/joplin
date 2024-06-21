@@ -40,10 +40,12 @@ describe('NoteExportButton', () => {
 		await act(() => fireEvent.press(exportButton));
 
 		await waitFor(() =>
-			expect(view.queryByText(_('Exported successfully!'))).not.toBeNull()
+			expect(view.queryByText(_('Exported successfully!'))).not.toBeNull(),
 		);
 
 		// With the default folder setup, there should be no warnings
 		expect(view.queryByText(/Warnings/g)).toBeNull();
+
+		view.unmount();
 	});
 });

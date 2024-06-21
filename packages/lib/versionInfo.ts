@@ -2,6 +2,20 @@ import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
+import shim from './shim';
+
+export interface PackageInfo {
+	name: string;
+	version: string;
+	description: string;
+	build: {
+		appId: string;
+	};
+	git?: {
+		branch: string;
+		hash: string;
+	};
+}
 
 interface PluginList {
 	completeList: string;
@@ -40,7 +54,7 @@ function getPluginLists(plugins: Plugins): PluginList {
 	};
 }
 
-export default function versionInfo(packageInfo: any, plugins: Plugins) {
+export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) {
 	const p = packageInfo;
 	let gitInfo = '';
 	if ('git' in p) {
@@ -57,7 +71,7 @@ export default function versionInfo(packageInfo: any, plugins: Plugins) {
 	];
 
 	const body = [
-		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), process.platform),
+		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), shim.platformName()),
 		'',
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),

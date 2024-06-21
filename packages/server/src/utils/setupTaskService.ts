@@ -2,6 +2,7 @@ import { Models } from '../models/factory';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
+import { logHeartbeat as logHeartbeatMessage } from './metrics';
 import { Config, Env } from './types';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
@@ -74,6 +75,13 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: '* * * * *',
 			run: (_models: Models, services: Services) => services.email.runMaintenance(),
 		},
+
+		{
+			id: TaskId.LogHeartbeatMessage,
+			description: taskIdToLabel(TaskId.LogHeartbeatMessage),
+			schedule: config.HEARTBEAT_MESSAGE_SCHEDULE,
+			run: (_models: Models, _services: Services) => logHeartbeatMessage(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
@@ -103,6 +111,8 @@ export default async function(env: Env, models: Models, config: Config, services
 	}
 
 	await taskService.registerTasks(tasks);
+
+	await taskService.resetInterruptedTasks();
 
 	return taskService;
 }

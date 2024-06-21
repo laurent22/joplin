@@ -85,6 +85,7 @@ const languageModelUrl = (locale: string) => {
 		if (!url.includes('{lang}')) url += '/{lang}.zip';
 		return url.replace(/\{lang\}/g, lang);
 	} else {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return (defaultSupportedLanguages as any)[lang];
 	}
 };
@@ -159,6 +160,7 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 	state_ = State.Recording;
 
 	const result: string[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const eventHandlers: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	let finalResultPromiseResolve: Function = null;

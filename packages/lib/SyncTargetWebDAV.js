@@ -32,6 +32,10 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 		return true;
 	}
 
+	static requiresPassword() {
+		return true;
+	}
+
 	static async newFileApi_(syncTargetId, options) {
 		const apiOptions = {
 			baseUrl: () => options.path(),

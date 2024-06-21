@@ -6,6 +6,7 @@ import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
+import { getApplicationInformation } from './services/joplinCloudUtils';
 const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
@@ -28,7 +29,7 @@ enum ExecOptionsTarget {
 	File = 'file',
 }
 
-interface ExecOptions {
+export interface ExecOptions {
 	responseFormat?: ExecOptionsResponseFormat;
 	target?: ExecOptionsTarget;
 	path?: string;
@@ -63,13 +64,31 @@ export default class JoplinServerApi {
 		return personalizedUserContentBaseUrl(userId, this.baseUrl(), this.options_.userContentBaseUrl());
 	}
 
+	private async getClientInfo() {
+		const { platform, type } = await getApplicationInformation();
+		const clientInfo = {
+			platform,
+			type,
+			version: shim.appVersion(),
+		};
+
+		return clientInfo;
+	}
+
 	private async session() {
 		if (this.session_) return this.session_;
+
+		const clientInfo = await this.getClientInfo();
+
+		if (!this.options_.username() || !this.options_.password()) {
+			return null;
+		}
 
 		try {
 			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
+				...clientInfo,
 			});
 
 			return this.session_;
@@ -88,11 +107,13 @@ export default class JoplinServerApi {
 		return this.session_ ? this.session_.user_id : '';
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static connectionErrorMessage(error: any) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private hidePasswords(o: any): any {
 		if (typeof o === 'string') {
 			try {
@@ -111,6 +132,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private requestToCurl_(url: string, options: any) {
 		const output = [];
 		output.push('curl');
@@ -132,6 +154,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
@@ -146,6 +169,7 @@ export default class JoplinServerApi {
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
@@ -176,6 +200,7 @@ export default class JoplinServerApi {
 				logger.debug(this.requestToCurl_(url, fetchOptions));
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let response: any = null;
 
 			if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
@@ -210,6 +235,7 @@ export default class JoplinServerApi {
 				return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText()}`);
 			};
 
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let responseJson_: any = null;
 			const loadResponseJson = async () => {
 				if (!responseText) return null;
@@ -268,6 +294,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async exec(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		for (let i = 0; i < 2; i++) {
 			try {
@@ -284,4 +311,7 @@ export default class JoplinServerApi {
 		}
 	}
 
+	public async loadSession() {
+		await this.session();
+	}
 }

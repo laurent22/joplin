@@ -4,7 +4,7 @@ import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
-import uuidgen from '../../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
 
 interface StripeOptions {
@@ -33,6 +33,7 @@ function mockStripe(options: StripeOptions = null) {
 }
 
 interface WebhookOptions {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	stripe?: any;
 	eventId?: string;
 	subscriptionId?: string;
@@ -41,6 +42,7 @@ interface WebhookOptions {
 	userEmail?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
 	options = {
 		stripe: mockStripe({ userEmail: options.userEmail }),
@@ -65,7 +67,7 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 	};
 
 	const stripeSessionId = 'sess_123';
-	const stripePrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+	const stripePrice = findPrice(stripeConfig(), { accountType: 2, period: PricePeriod.Monthly });
 	await models().keyValue().setValue(`stripeSessionToPriceId::${stripeSessionId}`, stripePrice.id);
 
 	await simulateWebhook(ctx, 'customer.subscription.created', {
@@ -254,7 +256,7 @@ describe('index/stripe', () => {
 		});
 		await simulateWebhook(ctx, 'customer.subscription.deleted', { id: 'sub_1' });
 
-		const stripePrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+		const stripePrice = findPrice(stripeConfig(), { accountType: 1, period: PricePeriod.Monthly });
 
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_new',
@@ -295,7 +297,7 @@ describe('index/stripe', () => {
 			userEmail: 'toto@example.com',
 		});
 
-		const stripePrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+		const stripePrice = findPrice(stripeConfig(), { accountType: 1, period: PricePeriod.Monthly });
 
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_1',

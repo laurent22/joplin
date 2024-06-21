@@ -1,5 +1,5 @@
 const BaseCommand = require('./base-command').default;
-const { app } = require('./app.js');
+import app from './app';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
@@ -43,6 +43,7 @@ class Command extends BaseCommand {
 
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async action(args: any) {
 		const targetFolder = args.options.parent;
 

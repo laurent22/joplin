@@ -1,7 +1,7 @@
 import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
-const MarkdownIt = require('markdown-it');
+import * as MarkdownIt from 'markdown-it';
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -16,14 +16,19 @@ export enum MarkdownTableJustify {
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	filter?: Function;
+	filter?: (content: string)=> string;
 	disableEscape?: boolean;
+	disableHtmlEscape?: boolean;
 	justify?: MarkdownTableJustify;
 }
 
 export interface MarkdownTableRow {
 	[key: string]: string;
+}
+
+export interface MarkdownTable {
+	header: MarkdownTableHeader[];
+	rows: MarkdownTableRow[];
 }
 
 const markdownUtils = {
@@ -39,10 +44,12 @@ const markdownUtils = {
 		return url;
 	},
 
-	escapeTableCell(text: string) {
+	escapeTableCell(text: string, escapeHtml = true) {
 		// Disable HTML code
-		text = text.replace(/</g, '&lt;');
-		text = text.replace(/>/g, '&gt;');
+		if (escapeHtml) {
+			text = text.replace(/</g, '&lt;');
+			text = text.replace(/>/g, '&gt;');
+		}
 		// Table cells can't contain new lines so replace with <br/>
 		text = text.replace(/\n/g, '<br/>');
 		// "|" is a reserved characters that should be escaped
@@ -63,7 +70,7 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md: string, baseUrl: string) {
-		// eslint-disable-next-line no-useless-escape
+		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
@@ -81,6 +88,7 @@ const markdownUtils = {
 		let linkType = onlyType;
 		if (linkType === 'pdf') linkType = 'link_open';
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
@@ -173,7 +181,7 @@ const markdownUtils = {
 			for (let j = 0; j < headers.length; j++) {
 				const h = headers[j];
 				const value = (h.filter ? h.filter(row[h.name]) : row[h.name]) || '';
-				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value);
+				const valueMd = h.disableEscape ? value : markdownUtils.escapeTableCell(value, !h.disableHtmlEscape);
 				rowMd.push(stringPadding(valueMd, minCellWidth, ' ', stringPadding.RIGHT));
 			}
 			output.push(`| ${rowMd.join(' | ')} |`);

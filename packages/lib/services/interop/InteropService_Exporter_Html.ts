@@ -6,13 +6,14 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
-import { ResourceEntity } from '../database/types';
+import { NoteEntity, ResourceEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 import htmlpack from '@joplin/htmlpack';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
-const { assetsToHeaders } = require('@joplin/renderer');
+import { assetsToHeaders } from '@joplin/renderer';
+import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -23,9 +24,11 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private resourceDir_: string;
 	private markupToHtml_: MarkupToHtml;
 	private resources_: ResourceEntity[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private style_: any;
 	private packIntoSingleFile_ = false;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
@@ -48,7 +51,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.style_ = themeStyle(Setting.THEME_LIGHT);
 	}
 
-	private async makeDirPath_(item: any, pathPart: string = null) {
+	private async makeDirPath_(item: NoteEntity, pathPart: string = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
@@ -64,7 +67,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
-	private async processNoteResources_(item: any) {
+	private async processNoteResources_(item: NoteEntity) {
 		const target = this.metadata().target;
 		const linkedResourceIds = await Note.linkedResourceIds(item.body);
 		const relativePath = target === 'directory' ? rtrimSlashes(await this.makeDirPath_(item, '..')) : '';
@@ -85,6 +88,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processItem(_itemType: number, item: any) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
@@ -112,6 +116,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
 				resources: this.resources_,
 				plainResourceRendering: true,
+				settingValue: getPluginSettingValue,
 			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
@@ -150,6 +155,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async processResource(resource: any, filePath: string) {
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);

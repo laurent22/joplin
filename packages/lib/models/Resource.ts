@@ -1,20 +1,41 @@
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import ItemChange from './ItemChange';
 import NoteResource from './NoteResource';
 import Setting from './Setting';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-import { ResourceEntity, ResourceLocalStateEntity } from '../services/database/types';
+import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, SqlQuery } from '../services/database/types';
 import ResourceLocalState from './ResourceLocalState';
-const pathUtils = require('../path-utils');
-const { mime } = require('../mime-utils.js');
-const { filename, safeFilename } = require('../path-utils');
+import * as pathUtils from '../path-utils';
+import { safeFilename } from '../path-utils';
+import * as mime from '../mime-utils';
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import ShareService from '../services/share/ShareService';
+import { LoadOptions } from './utils/types';
+import { SaveOptions } from './utils/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import { htmlentities } from '@joplin/utils/html';
+import { RecognizeResultLine } from '../services/ocr/utils/types';
+import eventManager, { EventName } from '../eventManager';
+import { unique } from '../array';
+import ActionLogger from '../utils/ActionLogger';
+import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
+import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
+
+export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
+	const s = {
+		[ResourceOcrStatus.Todo]: _('Idle'),
+		[ResourceOcrStatus.Processing]: _('Processing'),
+		[ResourceOcrStatus.Error]: _('Error'),
+		[ResourceOcrStatus.Done]: _('Done'),
+	};
+
+	return s[status];
+};
 
 export default class Resource extends BaseItem {
 
@@ -27,6 +48,7 @@ export default class Resource extends BaseItem {
 
 	public static shareService_: ShareService = null;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fsDriver_: any;
 
 	public static tableName() {
@@ -48,10 +70,10 @@ export default class Resource extends BaseItem {
 	}
 
 	public static isSupportedImageMimeType(type: string) {
-		const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp', 'image/avif'];
-		return imageMimeTypes.indexOf(type.toLowerCase()) >= 0;
+		return isSupportedImageMimeType(type);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fetchStatuses(resourceIds: string[]): Promise<any[]> {
 		if (!resourceIds.length) return Promise.resolve([]);
 		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ("${resourceIds.join('","')}")`);
@@ -84,8 +106,9 @@ export default class Resource extends BaseItem {
 		return await this.db().exec('UPDATE resource_local_states SET fetch_status = ? WHERE fetch_status = ?', [Resource.FETCH_STATUS_IDLE, Resource.FETCH_STATUS_STARTED]);
 	}
 
-	public static resetErrorStatus(resourceId: string) {
-		return this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+	public static async resetFetchErrorStatus(resourceId: string) {
+		await this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+		await this.resetOcrStatus(resourceId);
 	}
 
 	public static fsDriver() {
@@ -112,10 +135,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static filename(resource: ResourceEntity, encryptedBlob = false) {
-		let extension = encryptedBlob ? 'crypted' : resource.file_extension;
-		if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-		extension = extension ? `.${extension}` : '';
-		return resource.id + extension;
+		return resourceFilename(resource, encryptedBlob);
 	}
 
 	public static friendlySafeFilename(resource: ResourceEntity) {
@@ -128,11 +148,11 @@ export default class Resource extends BaseItem {
 	}
 
 	public static relativePath(resource: ResourceEntity, encryptedBlob = false) {
-		return `${Setting.value('resourceDirName')}/${this.filename(resource, encryptedBlob)}`;
+		return resourceRelativePath(resource, this.baseRelativeDirectoryPath(), encryptedBlob);
 	}
 
 	public static fullPath(resource: ResourceEntity, encryptedBlob = false) {
-		return `${Setting.value('resourceDir')}/${this.filename(resource, encryptedBlob)}`;
+		return resourceFullPath(resource, this.baseDirectoryPath(), encryptedBlob);
 	}
 
 	public static async isReady(resource: ResourceEntity) {
@@ -207,6 +227,7 @@ export default class Resource extends BaseItem {
 
 		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
@@ -221,7 +242,11 @@ export default class Resource extends BaseItem {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
-			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
+			if (error.code === 'ENOENT') {
+				throw new JoplinError(
+					`Trying to encrypt resource but only metadata is present: ${error.toString()}`, 'fileNotFound',
+				);
+			}
 			throw error;
 		}
 
@@ -230,28 +255,39 @@ export default class Resource extends BaseItem {
 		return { path: encryptedPath, resource: resourceCopy };
 	}
 
-	public static markdownTag(resource: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static markupTag(resource: any, markupLanguage: MarkupLanguage = MarkupLanguage.Markdown) {
 		let tagAlt = resource.alt ? resource.alt : resource.title;
 		if (!tagAlt) tagAlt = '';
 		const lines = [];
 		if (Resource.isSupportedImageMimeType(resource.mime)) {
-			lines.push('![');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('![');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<img src=":/${resource.id}" ${altHtml}/>`);
+			}
 		} else {
-			lines.push('[');
-			lines.push(markdownUtils.escapeTitleText(tagAlt));
-			lines.push(`](:/${resource.id})`);
+			if (markupLanguage === MarkupLanguage.Markdown) {
+				lines.push('[');
+				lines.push(markdownUtils.escapeTitleText(tagAlt));
+				lines.push(`](:/${resource.id})`);
+			} else {
+				const altHtml = tagAlt ? `alt="${htmlentities(tagAlt)}"` : '';
+				lines.push(`<a href=":/${resource.id}" ${altHtml}>${htmlentities(tagAlt ? tagAlt : resource.id)}</a>`);
+			}
 		}
 		return lines.join('');
 	}
 
 	public static internalUrl(resource: ResourceEntity) {
-		return `:/${resource.id}`;
+		return internalUrl(resource);
 	}
 
 	public static pathToId(path: string) {
-		return filename(path);
+		return resourcePathToId(path);
 	}
 
 	public static async content(resource: ResourceEntity) {
@@ -259,23 +295,25 @@ export default class Resource extends BaseItem {
 	}
 
 	public static isResourceUrl(url: string) {
-		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
+		return isResourceUrl(url);
 	}
 
 	public static urlToId(url: string) {
-		if (!this.isResourceUrl(url)) throw new Error(`Not a valid resource URL: ${url}`);
-		return url.substr(2);
+		return resourceUrlToId(url);
 	}
 
-	public static async localState(resourceOrId: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static async localState(resourceOrId: any): Promise<ResourceLocalStateEntity> {
 		return ResourceLocalState.byResourceId(typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setLocalStateQueries(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		return ResourceLocalState.saveQueries({ ...state, resource_id: id });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async setLocalState(resourceOrId: any, state: ResourceLocalStateEntity) {
 		const id = typeof resourceOrId === 'object' ? resourceOrId.id : resourceOrId;
 		await ResourceLocalState.save({ ...state, resource_id: id });
@@ -292,7 +330,9 @@ export default class Resource extends BaseItem {
 		return this.db().exec('UPDATE resources set `size` = ? WHERE id = ?', [fileSize, resourceId]);
 	}
 
-	public static async batchDelete(ids: string[], options: any = null) {
+	public static async batchDelete(ids: string[], options: DeleteOptions = {}) {
+		const actionLogger = ActionLogger.from(options.sourceDescription);
+
 		// For resources, there's not really batch deletion since there's the
 		// file data to delete too, so each is processed one by one with the
 		// file data being deleted last since the metadata deletion call may
@@ -302,13 +342,21 @@ export default class Resource extends BaseItem {
 			const resource = await Resource.load(id);
 			if (!resource) continue;
 
+			// Log just for the current item.
+			const logger = actionLogger.clone();
+			logger.addDescription(`title: ${resource.title}`);
+
 			const path = Resource.fullPath(resource);
-			await super.batchDelete([id], options);
+			await super.batchDelete([id], {
+				...options,
+				sourceDescription: logger,
+			});
 			await this.fsDriver().remove(path);
 			await NoteResource.deleteByResource(id); // Clean up note/resource relationships
+			await this.db().exec('DELETE FROM items_normalized WHERE item_id = ?', [id]);
 		}
 
-		await ResourceLocalState.batchDelete(ids);
+		await ResourceLocalState.batchDelete(ids, { sourceDescription: actionLogger });
 	}
 
 	public static async markForDownload(resourceId: string) {
@@ -372,9 +420,15 @@ export default class Resource extends BaseItem {
 		// We first save the resource metadata because this can throw, for
 		// example if modifying a resource that is read-only
 
+		const now = Date.now();
+
 		const result = await Resource.save({
 			id: resource.id,
 			size: fileStat.size,
+			updated_time: now,
+			blob_updated_time: now,
+		}, {
+			autoTimestamp: false,
 		});
 
 		// If the above call has succeeded, we save the data blob
@@ -419,6 +473,7 @@ export default class Resource extends BaseItem {
 		return folder.id;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static async resourceConflictFolder(): Promise<any> {
 		const conflictFolderTitle = _('Conflicts (attachments)');
 		const Folder = this.getClass('Folder');
@@ -431,15 +486,163 @@ export default class Resource extends BaseItem {
 		return folder;
 	}
 
+	public static mustHandleConflict(local: ResourceEntity, remote: ResourceEntity) {
+		// That shouldn't happen so throw an exception
+		if (local.id !== remote.id) throw new Error('Cannot handle conflict for two different resources');
+
+		// If the content has changed, we need to handle the conflict
+		if (local.blob_updated_time !== remote.blob_updated_time) return true;
+
+		// If nothing has been changed, or if only the metadata has been
+		// changed, we just keep the remote version. Most of the resource
+		// metadata is not user-editable so there won't be any data loss. Such a
+		// conflict might happen for example if a resource is OCRed by two
+		// different clients.
+		return false;
+	}
+
 	public static async createConflictResourceNote(resource: ResourceEntity) {
 		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
-			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
+			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/help/apps/conflict', Resource.markupTag(conflictResource)),
 			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
+	}
+
+	private static baseNeedOcrQuery(selectSql: string, supportedMimeTypes: string[]): SqlQuery {
+		return {
+			sql: `
+				SELECT ${selectSql}
+				FROM resources
+				WHERE
+					ocr_status = ? AND
+					encryption_applied = 0 AND
+					mime IN ("${supportedMimeTypes.join('","')}")
+			`,
+			params: [
+				ResourceOcrStatus.Todo,
+			],
+		};
+	}
+
+	public static async needOcrCount(supportedMimeTypes: string[]): Promise<number> {
+		const query = this.baseNeedOcrQuery('count(*) as total', supportedMimeTypes);
+		const r = await this.db().selectOne(query.sql, query.params);
+		return r ? r['total'] : 0;
+	}
+
+	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], limit: number, options: LoadOptions): Promise<ResourceEntity[]> {
+		const query = this.baseNeedOcrQuery(this.selectFields(options), supportedMimeTypes);
+		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN  ("${skippedResourceIds.join('","')}")` : '';
+
+		return await this.db().selectAll(`
+			${query.sql}
+			${skippedResourcesSql}			
+			ORDER BY updated_time DESC
+			LIMIT ${limit}
+		`, query.params);
+	}
+
+	private static async resetOcrStatus(resourceId: string) {
+		await Resource.save({
+			id: resourceId,
+			ocr_error: '',
+			ocr_text: '',
+			ocr_status: ResourceOcrStatus.Todo,
+		});
+	}
+
+	public static serializeOcrDetails(details: RecognizeResultLine[]) {
+		if (!details || !details.length) return '';
+		return JSON.stringify(details);
+	}
+
+	public static unserializeOcrDetails(s: string): RecognizeResultLine[] | null {
+		if (!s) return null;
+		try {
+			const r = JSON.parse(s);
+			if (!r) return null;
+			if (!Array.isArray(r)) throw new Error('OCR details are not valid (not an array');
+			return r;
+		} catch (error) {
+			error.message = `Could not unserialized OCR data: ${error.message}`;
+			throw error;
+		}
+	}
+
+	public static async resourceOcrTextsByIds(ids: string[]): Promise<ResourceEntity[]> {
+		if (!ids.length) return [];
+		ids = unique(ids);
+		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN ("${ids.join('","')}")`);
+	}
+
+	public static async allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {
+		const makeQuery = (useRowValue: boolean): SqlQuery => {
+			const whereSql = useRowValue ? '(updated_time, id) > (?, ?)' : 'updated_time > ?';
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			const params: any[] = [updatedTime];
+			if (useRowValue) {
+				params.push(id);
+			}
+			params.push(ResourceOcrStatus.Done);
+			params.push(limit);
+
+			return {
+				sql: `
+					SELECT ${this.selectFields(options)} FROM resources
+					WHERE ${whereSql}
+					AND ocr_text != ""
+					AND ocr_status = ?
+					ORDER BY updated_time ASC, id ASC
+					LIMIT ?
+				`,
+				params,
+			};
+		};
+
+		// We use a row value in this query, and that's not supported on certain
+		// Android devices (API level <= 24). So if the query fails, we fallback
+		// to a non-row value query. Although it may be inaccurate in some cases
+		// it wouldn't be a critical issue (some OCRed resources may not be part
+		// of the search engine results) and it means we can keep supporting old
+		// Android devices.
+		try {
+			const r = await this.modelSelectAll(makeQuery(true));
+			return r;
+		} catch (error) {
+			if (isSqliteSyntaxError(error)) {
+				const r = await this.modelSelectAll(makeQuery(false));
+				return r;
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {
+		const resource = { ...o };
+
+		const isNew = this.isNew(o, options);
+
+		if (isNew) {
+			const now = Date.now();
+			options = { ...options, autoTimestamp: false };
+			if (!resource.created_time) resource.created_time = now;
+			if (!resource.updated_time) resource.updated_time = now;
+			if (!resource.blob_updated_time) resource.blob_updated_time = now;
+		}
+
+		const output = await super.save(resource, options);
+		eventManager.emit(isNew ? EventName.ResourceCreate : EventName.ResourceChange, { id: output.id });
+		return output;
+	}
+
+	public static load(id: string, options: LoadOptions = null): Promise<ResourceEntity> {
+		return super.load(id, options);
 	}
 
 }

@@ -1,0 +1,6 @@
+.cm-editor .cm-line.cm-activeLine, .CodeMirror .CodeMirror-activeline {
+	/* See https://joplinapp.org/help/api/references/plugin_theming
+	   for more information about styling with plugins */
+	color: var(--joplin-color);
+	background-color: rgba(200, 200, 0, 0.4);
+}

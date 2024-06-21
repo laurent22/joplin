@@ -16,7 +16,7 @@ import Tag from '../../../models/Tag';
 import Resource from '../../../models/Resource';
 import htmlUtils from '../../../htmlUtils';
 import markupLanguageUtils from '../../../markupLanguageUtils';
-const mimeUtils = require('../../../mime-utils.js').mime;
+import * as mimeUtils from '../../../mime-utils';
 const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
@@ -24,12 +24,16 @@ import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
+import { fileUriToPath } from '@joplin/utils/url';
+import { NoteEntity, ResourceEntity } from '../../database/types';
+import { DownloadController } from '../../../downloadController';
+import { FetchBlobOptions } from '../../../types';
 
 const logger = Logger.create('routes/notes');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let htmlToMdParser_: any = null;
 
 function htmlToMdParser() {
@@ -38,7 +42,53 @@ function htmlToMdParser() {
 	return htmlToMdParser_;
 }
 
-async function requestNoteToNote(requestNote: any) {
+type RequestNote = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	id?: any;
+	parent_id?: string;
+	title: string;
+	body?: string;
+	latitude?: number;
+	longitude?: number;
+	altitude?: number;
+	author?: string;
+	source_url?: string;
+	is_todo?: number;
+	todo_due?: number;
+	todo_completed?: number;
+	user_updated_time?: number;
+	user_created_time?: number;
+	markup_language?: number;
+	body_html: string;
+	base_url?: string;
+	convert_to: string;
+	source?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	anchor_names?: any[];
+	image_sizes?: object;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	stylesheets: any;
+};
+
+interface FetchOptions extends FetchBlobOptions {
+	timeout?: number;
+	maxRedirects?: number;
+	downloadController?: DownloadController;
+}
+
+
+type DownloadedMediaFile = {
+	originalUrl: string;
+	path: string;
+};
+
+export interface ResourceFromPath extends DownloadedMediaFile {
+	resource: ResourceEntity;
+}
+
+
+async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
@@ -51,7 +101,6 @@ async function requestNoteToNote(requestNote: any) {
 	if (requestNote.body_html) {
 		if (requestNote.convert_to === 'html') {
 			const style = await buildNoteStyleSheet(requestNote.stylesheets);
-			const minify = require('html-minifier').minify;
 
 			const minifyOptions = {
 				// Remove all spaces and, especially, newlines from tag attributes, as that would
@@ -74,6 +123,9 @@ async function requestNoteToNote(requestNote: any) {
 			const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
 			let minifiedHtml = '';
 			try {
+				// We use requireDynamic here -- html-minifier seems to not work in environments
+				// that lack `fs`.
+				const minify = shim.requireDynamic('html-minifier').minify;
 				minifiedHtml = minify(requestNote.body_html, minifyOptions);
 			} catch (error) {
 				console.warn('Could not minify HTML - using non-minified HTML instead', error);
@@ -115,12 +167,14 @@ async function requestNoteToNote(requestNote: any) {
 	if ('longitude' in requestNote) output.longitude = requestNote.longitude;
 	if ('latitude' in requestNote) output.latitude = requestNote.latitude;
 	if ('altitude' in requestNote) output.altitude = requestNote.altitude;
+	if ('source' in requestNote) output.source = requestNote.source;
 
 	if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function buildNoteStyleSheet(stylesheets: any[]) {
 	if (!stylesheets) return [];
 
@@ -147,6 +201,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return mediaPath;
@@ -159,96 +214,125 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
-	logger.info('Downloading media file', url);
 
-	const tempDir = Setting.value('tempDir');
-
-	// The URL we get to download have been extracted from the Markdown document
-	url = markdownUtils.unescapeLinkUrl(url);
-
-	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
-
-	// PDFs and other heavy resoucres are often served as seperate files insted of data urls, its very unlikely to encounter a pdf as a data url
-	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
-		logger.warn(`Resources in data URL format is only supported for images ${url}`);
-		return '';
-	}
-
-	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
+const getFileExtension = (url: string, isDataUrl: boolean) => {
 	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 	if (fileExt) fileExt = `.${fileExt}`;
 
+	return fileExt;
+};
+
+const generateMediaPath = (url: string, isDataUrl: boolean, fileExt: string) => {
+	const tempDir = Setting.value('tempDir');
+	const name = isDataUrl ? md5(`${Math.random()}_${Date.now()}`) : filename(url);
 	// Append a UUID because simply checking if the file exists is not enough since
 	// multiple resources can be downloaded at the same time (race condition).
-	let mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	const mediaPath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
+	return mediaPath;
+};
+
+const isValidUrl = (url: string, isDataUrl: boolean, urlProtocol?: string, allowedProtocols?: string[]) => {
+	if (!urlProtocol) return false;
+
+	// PDFs and other heavy resources are often served as separate files instead of data urls, its very unlikely to encounter a pdf as a data url
+	if (isDataUrl && !url.toLowerCase().startsWith('data:image/')) {
+		logger.warn(`Resources in data URL format is only supported for images ${url}`);
+		return false;
+	}
+
+	const defaultAllowedProtocols = ['http:', 'https:', 'data:'];
+	const allowed = allowedProtocols ?? defaultAllowedProtocols;
+	const isAllowedProtocol = allowed.includes(urlProtocol);
+
+	return isAllowedProtocol;
+};
+
+export async function downloadMediaFile(url: string, fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+	// The URL we get to download have been extracted from the Markdown document
+	url = markdownUtils.unescapeLinkUrl(url);
+
+	const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
+	const urlProtocol = urlUtils.urlProtocol(url)?.toLowerCase();
+
+	if (!isValidUrl(url, isDataUrl, urlProtocol, allowedProtocols)) {
+		return '';
+	}
+
+	const fileExt = getFileExtension(url, isDataUrl);
+	const mediaPath = generateMediaPath(url, isDataUrl, fileExt);
+	let newMediaPath = undefined;
 
 	try {
 		if (isDataUrl) {
 			await shim.imageFromDataUrl(url, mediaPath);
-		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
-			// Can't think of any reason to disallow this at this point
-			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
+		} else if (urlProtocol === 'file:') {
 			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, mediaPath);
 		} else {
-			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1 });
+			const response = await shim.fetchBlob(url, { path: mediaPath, maxRetry: 1, ...fetchOptions });
 
-			// If we could not find the file extension from the URL, try to get it
-			// now based on the Content-Type header.
-			if (!fileExt) mediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			if (!fileExt) {
+				// If we could not find the file extension from the URL, try to get it
+				// now based on the Content-Type header.
+				newMediaPath = await tryToGuessExtFromMimeType(response, mediaPath);
+			}
 		}
-		return mediaPath;
+		return newMediaPath ?? mediaPath;
 	} catch (error) {
 		logger.warn(`Cannot download image at ${url}`, error);
 		return '';
 	}
 }
 
-async function downloadMediaFiles(urls: string[] /* , allowFileProtocolImages:boolean */) {
-	const PromisePool = require('es6-promise-pool');
+async function downloadMediaFiles(urls: string[], fetchOptions?: FetchOptions, allowedProtocols?: string[]) {
+	const output: DownloadedMediaFile[] = [];
 
-	const output: any = {};
+	const downloadController = fetchOptions?.downloadController ?? null;
 
 	const downloadOne = async (url: string) => {
-		const mediaPath = await downloadMediaFile(url); // , allowFileProtocolImages);
-		if (mediaPath) output[url] = { path: mediaPath, originalUrl: url };
+		if (downloadController) downloadController.imagesCount += 1;
+		const mediaPath = await downloadMediaFile(url, fetchOptions, allowedProtocols);
+		if (mediaPath) output.push({ path: mediaPath, originalUrl: url });
 	};
 
-	let urlIndex = 0;
-	const promiseProducer = () => {
-		if (urlIndex >= urls.length) return null;
+	const maximumImageDownloadsAllowed = downloadController ? downloadController.maxImagesCount : Number.POSITIVE_INFINITY;
+	const urlsAllowedByController = urls.slice(0, maximumImageDownloadsAllowed);
+	logger.info(`Media files allowed to be downloaded: ${maximumImageDownloadsAllowed}`);
 
-		const url = urls[urlIndex++];
-		return downloadOne(url);
-	};
+	const promises = [];
+	for (const url of urlsAllowedByController) {
+		promises.push(downloadOne(url));
+	}
 
-	const concurrency = 10;
-	const pool = new PromisePool(promiseProducer, concurrency);
-	await pool.start();
+	await Promise.all(promises);
+
+	if (downloadController) {
+		downloadController.imageCountExpected = urls.length;
+		downloadController.printStats(urls.length);
+	}
 
 	return output;
 }
 
-async function createResourcesFromPaths(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]) {
+	const processFile = async (mediaFile: DownloadedMediaFile) => {
 		try {
-			const resource = await shim.createResourceFromPath(urlInfo.path);
-			urlInfo.resource = resource;
+			const resource = await shim.createResourceFromPath(mediaFile.path);
+			return { ...mediaFile, resource };
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${url}`, error);
+			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
+			return { ...mediaFile, resource: null };
 		}
-	}
-	return urls;
+	};
+
+	const resources = mediaFiles.map(processFile);
+	return Promise.all(resources);
 }
 
-async function removeTempFiles(urls: string[]) {
-	for (const url in urls) {
-		if (!urls.hasOwnProperty(url)) continue;
-		const urlInfo: any = urls[url];
+
+async function removeTempFiles(urls: ResourceFromPath[]) {
+	for (const urlInfo of urls) {
 		try {
 			await shim.fsDriver().remove(urlInfo.path);
 		} catch (error) {
@@ -257,12 +341,14 @@ async function removeTempFiles(urls: string[]) {
 	}
 }
 
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, imageSizes: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageSizesIndexes: any = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
-			const urlInfo: any = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (!urlInfo || !urlInfo.resource) return url;
 			return Resource.internalUrl(urlInfo.resource);
 		});
@@ -277,7 +363,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 		//
 		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
 		//
-		// eslint-disable-next-line no-useless-escape
+		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
@@ -286,7 +372,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 				type = 'image';
 			}
 
-			const urlInfo = urls[url];
+			const urlInfo = urls.find(u => u.originalUrl === url);
 			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
@@ -325,17 +411,57 @@ export function extractMediaUrls(markupLanguage: number, text: string): string[]
 }
 
 // Note must have been saved first
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const imageConvOptions: any = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
 	return await shim.attachFileToNote(note, tempFilePath);
 }
+
+export const extractNoteFromHTML = async (
+	requestNote: RequestNote,
+	requestId: string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	imageSizes: any,
+	fetchOptions?: FetchOptions,
+	allowedProtocols?: string[],
+) => {
+	const note = await requestNoteToNote(requestNote);
+
+	const mediaUrls = extractMediaUrls(note.markup_language, note.body);
+
+	logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
+
+	const mediaFiles = await downloadMediaFiles(mediaUrls, fetchOptions, allowedProtocols);
+
+	logger.info(`Request (${requestId}): Creating resources from paths (resizing images): ${mediaFiles.length}`);
+	const resources = await createResourcesFromPaths(mediaFiles);
+
+	logger.info(`Request (${requestId}): Deleting temporary files`);
+	await removeTempFiles(resources);
+
+	logger.info(`Request (${requestId}): Replacing urls by resources`);
+	note.body = replaceUrlsByResources(note.markup_language, note.body, resources, imageSizes);
+
+	logger.info(`Request (${requestId}): Saving note...`);
+
+	const saveOptions = defaultSaveOptions('POST', note.id);
+	saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
+	const timestamp = Date.now();
+	note.updated_time = timestamp;
+	note.created_time = timestamp;
+	if (!('user_updated_time' in note)) note.user_updated_time = timestamp;
+	if (!('user_created_time' in note)) note.user_created_time = timestamp;
+
+	return { note, saveOptions, resources };
+};
 
 export default async function(request: Request, id: string = null, link: string = null) {
 	if (request.method === 'GET') {
@@ -355,7 +481,10 @@ export default async function(request: Request, id: string = null, link: string 
 			throw new ErrorNotFound();
 		}
 
-		return defaultAction(BaseModel.TYPE_NOTE, request, id, link);
+		const sql: string[] = [];
+		if (request.query.include_deleted !== '1') sql.push('deleted_time = 0');
+		if (request.query.include_conflicts !== '1') sql.push('is_conflict = 0');
+		return defaultAction(BaseModel.TYPE_NOTE, request, id, link, null, { sql: sql.join(' AND ') });
 	}
 
 	if (request.method === RequestMethod.POST) {
@@ -368,31 +497,16 @@ export default async function(request: Request, id: string = null, link: string 
 
 		logger.info('Images:', imageSizes);
 
-		let note: any = await requestNoteToNote(requestNote);
+		const allowedProtocolsForDownloadMediaFiles = ['http:', 'https:', 'file:', 'data:'];
+		const extracted = await extractNoteFromHTML(
+			requestNote,
+			String(requestId),
+			imageSizes,
+			undefined,
+			allowedProtocolsForDownloadMediaFiles,
+		);
 
-		const mediaUrls = extractMediaUrls(note.markup_language, note.body);
-
-		logger.info(`Request (${requestId}): Downloading media files: ${mediaUrls.length}`);
-
-		let result = await downloadMediaFiles(mediaUrls); // , allowFileProtocolImages);
-
-		logger.info(`Request (${requestId}): Creating resources from paths: ${Object.getOwnPropertyNames(result).length}`);
-
-		result = await createResourcesFromPaths(result);
-		await removeTempFiles(result);
-		note.body = replaceUrlsByResources(note.markup_language, note.body, result, imageSizes);
-
-		logger.info(`Request (${requestId}): Saving note...`);
-
-		const saveOptions = defaultSaveOptions('POST', note.id);
-		saveOptions.autoTimestamp = false; // No auto-timestamp because user may have provided them
-		const timestamp = Date.now();
-		note.updated_time = timestamp;
-		note.created_time = timestamp;
-		if (!('user_updated_time' in note)) note.user_updated_time = timestamp;
-		if (!('user_created_time' in note)) note.user_created_time = timestamp;
-
-		note = await Note.save(note, saveOptions);
+		let note = await Note.save(extracted.note, extracted.saveOptions);
 
 		if (requestNote.tags) {
 			const tagTitles = requestNote.tags.split(',');
@@ -439,6 +553,11 @@ export default async function(request: Request, id: string = null, link: string 
 		}
 
 		return newNote;
+	}
+
+	if (request.method === RequestMethod.DELETE) {
+		await Note.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/notes DELETE' });
+		return;
 	}
 
 	return defaultAction(BaseModel.TYPE_NOTE, request, id, link);

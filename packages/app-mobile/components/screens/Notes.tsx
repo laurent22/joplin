@@ -7,16 +7,19 @@ import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { themeStyle } = require('../global-style.js');
+import { themeStyle } from '../global-style';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../ActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const { BaseScreenComponent } = require('../base-screen.js');
+const { BaseScreenComponent } = require('../base-screen');
 const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class NotesScreenComponent extends BaseScreenComponent<any> {
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
@@ -107,12 +110,14 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async componentDidUpdate(prevProps: any) {
-		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType) {
+		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async refreshNotes(props: any = null) {
 		if (props === null) props = this.props;
 
@@ -133,7 +138,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 		if (source === props.notesSource) return;
 
-		let notes = [];
+		let notes: NoteEntity[] = [];
 		if (props.notesParentType === 'Folder') {
 			notes = await Note.previews(props.selectedFolderId, options);
 		} else if (props.notesParentType === 'Tag') {
@@ -166,6 +171,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		}
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public parentItem(props: any = null) {
 		if (!props) props = this.props;
 
@@ -227,40 +233,53 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const thisComp = this;
 
 		const makeActionButtonComp = () => {
+			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
+
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
 				const buttons = [];
 				buttons.push({
 					label: _('New to-do'),
-					onPress: () => {
+					onPress: async () => {
 						const isTodo = true;
 						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
-					icon: 'md-checkbox-outline',
+					icon: 'checkbox-outline',
 				});
 
 				buttons.push({
 					label: _('New note'),
-					onPress: () => {
+					onPress: async () => {
 						const isTodo = false;
 						void this.newNoteNavigate(buttonFolderId, isTodo);
 					},
 					color: '#9b59b6',
-					icon: 'md-document',
+					icon: 'document',
 				});
-				return <ActionButton buttons={buttons}/>;
+				return <ActionButton buttons={buttons} dispatch={this.props.dispatch}/>;
 			}
 			return null;
 		};
 
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
+		// Ensure that screen readers can't focus the notes list when it isn't visible.
+		// accessibilityElementsHidden is used on iOS and importantForAccessibility is used
+		// on Android.
+		const accessibilityHidden = !this.props.visible;
+
 		return (
-			<View style={rootStyle}>
+			<View
+				style={rootStyle}
+
+				accessibilityElementsHidden={accessibilityHidden}
+				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+			>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					ref={(dialogbox: any) => {
 						this.dialogbox = dialogbox;
 					}}
@@ -288,6 +307,8 @@ const NotesScreen = connect((state: AppState) => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 })(NotesScreenComponent as any);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default NotesScreen as any;

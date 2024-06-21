@@ -20,6 +20,7 @@ export default function() {
 		'setTags',
 		'showLocalSearch',
 		'showNoteContentProperties',
+		'permanentlyDeleteNote',
 		'synchronize',
 		'textBold',
 		'textCode',
@@ -33,6 +34,7 @@ export default function() {
 		'toggleExternalEditing',
 		'toggleLayoutMoveMode',
 		'resetLayout',
+		'toggleMenuBar',
 		'toggleNoteList',
 		'toggleNotesSortOrderField',
 		'toggleNotesSortOrderReverse',
@@ -67,5 +69,6 @@ export default function() {
 		'switchProfile2',
 		'switchProfile3',
 		'pasteAsText',
+		'showNoteProperties',
 	];
 }

@@ -1,11 +1,13 @@
 import { RuleOptions } from '../../MdToHtml';
-import htmlUtils from '../../htmlUtils';
-import utils from '../../utils';
+import { attributesHtml } from '../../htmlUtils';
+import * as utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	markdownIt.renderer.rules.image = (tokens: any[], idx: number, options: any, env: any, self: any) => {
 		const Resource = ruleOptions.ResourceModel;
 
@@ -20,12 +22,20 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		if (r) {
 			const id = r['data-resource-id'];
 
+			// Show the edit popup if any MIME type matches that in editPopupFiletypes
+			const mimeType = ruleOptions.resources[id]?.item?.mime?.toLowerCase();
+			const enableEditPopup = ruleOptions.editPopupFiletypes?.some(showForMime => mimeType === showForMime);
+
 			const js = createEventHandlingAttrs(id, {
 				enableLongPress: ruleOptions.enableLongPress ?? false,
 				postMessageSyntax: ruleOptions.postMessageSyntax ?? 'void',
+
+				enableEditPopup,
+				createEditPopupSyntax: ruleOptions.createEditPopupSyntax,
+				destroyEditPopupSyntax: ruleOptions.destroyEditPopupSyntax,
 			}, null);
 
-			return `<img data-from-md ${htmlUtils.attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
+			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

@@ -10,12 +10,16 @@ import createViewHandle from '../utils/createViewHandle';
  * Allows creating menus.
  *
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/menu)
+ *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinViewsMenus {
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store: any;
 	private plugin: Plugin;
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(plugin: Plugin, store: any) {
 		this.store = store;
 		this.plugin = plugin;
@@ -40,8 +44,11 @@ export default class JoplinViewsMenus {
 	public async create(id: string, label: string, menuItems: MenuItem[], location: MenuItemLocation = MenuItemLocation.Tools) {
 		if (!Array.isArray(menuItems)) {
 			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.menus.create("my-unique-id", ...)`', true);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			location = menuItems as any || MenuItemLocation.Tools;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			menuItems = label as any;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			label = id as any;
 			id = `${this.plugin.viewCount}`;
 		}

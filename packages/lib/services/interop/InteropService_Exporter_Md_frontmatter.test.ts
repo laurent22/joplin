@@ -4,8 +4,9 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import time from '../../time';
-import { fieldOrder } from './InteropService_Exporter_Md_frontmatter';
 import * as fs from 'fs-extra';
+import { ExportModuleOutputFormat } from './types';
+import { fieldOrder } from '../../utils/frontMatter';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -19,7 +20,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md_frontmatter',
+			format: ExportModuleOutputFormat.MarkdownFrontMatter,
 		});
 
 		return await fs.readFile(path, 'utf8');
@@ -141,5 +142,13 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		await Tag.delete(tag.id);
 		const content = await exportAndLoad(`${exportDir()}/folder1/NoTag.md`);
 		expect(content).not.toContain('tag');
+	}));
+
+	test('should export a valid file when the title starts with a dash', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: '- title with dash', body: '**ma note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/- title with dash.md`);
+		expect(content).toContain('title: \'- title with dash\'');
 	}));
 });

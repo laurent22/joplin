@@ -33,6 +33,10 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 		return true;
 	}
 
+	static requiresPassword() {
+		return true;
+	}
+
 	static async checkConfig(options) {
 		return SyncTargetWebDAV.checkConfig(options);
 	}

@@ -108,6 +108,7 @@ function iosVersionHack(majorMinorVersion: string) {
 }
 
 async function main() {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const argv: any = yargs.parserConfiguration({
 		'parse-numbers': false,
 		'parse-positional-numbers': false,
@@ -140,6 +141,8 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/utils/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/default-plugins/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/editor/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);

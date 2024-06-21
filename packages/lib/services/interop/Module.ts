@@ -2,14 +2,14 @@ import { _ } from '../../locale';
 import shim from '../../shim';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
-import { ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
+import { ExportModuleOutputFormat, ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
 
 // Metadata shared between importers and exporters.
 interface BaseMetadata {
-	format: string;
 	fileExtensions: string[];
 	description: string;
 	isDefault: boolean;
+	separatorAfter: boolean; // this isn't a property of the importer, but of how it should be displayed in the GUI
 
 	supportsMobile: boolean;
 
@@ -23,8 +23,9 @@ interface BaseMetadata {
 	isNoteArchive: boolean;
 }
 
-interface ImportMetadata extends BaseMetadata {
+export interface ImportMetadata extends BaseMetadata {
 	type: ModuleType.Importer;
+	format: string;
 
 	sources: FileSystemItem[];
 	outputFormat: ImportModuleOutputFormat;
@@ -34,8 +35,9 @@ export interface ImportModule extends ImportMetadata {
 	factory(options?: ImportOptions): InteropService_Importer_Base;
 }
 
-interface ExportMetadata extends BaseMetadata {
+export interface ExportMetadata extends BaseMetadata {
 	type: ModuleType.Exporter;
+	format: ExportModuleOutputFormat;
 
 	target: FileSystemItem;
 }
@@ -45,12 +47,12 @@ export interface ExportModule extends ExportMetadata {
 }
 
 const defaultBaseMetadata = {
-	format: '',
 	fileExtensions: [] as string[],
 	description: '',
 	isNoteArchive: true,
 	supportsMobile: true,
 	isDefault: false,
+	separatorAfter: false,
 };
 
 const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: FileSystemItem = null) => {
@@ -63,10 +65,11 @@ const moduleFullLabel = (metadata: ImportMetadata|ExportMetadata, moduleSource: 
 };
 
 export const makeImportModule = (
-	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base
+	metadata: Partial<ImportMetadata>, factory: ()=> InteropService_Importer_Base,
 ): ImportModule => {
 	const importerDefaults: ImportMetadata = {
 		...defaultBaseMetadata,
+		format: '',
 		type: ModuleType.Importer,
 		sources: [],
 		outputFormat: ImportModuleOutputFormat.Markdown,
@@ -93,10 +96,12 @@ export const makeImportModule = (
 };
 
 export const makeExportModule = (
-	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base
+	metadata: Partial<ExportMetadata>, factory: ()=> InteropService_Exporter_Base,
 ): ExportModule => {
 	const exporterDefaults: ExportMetadata = {
 		...defaultBaseMetadata,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		format: '' as any,
 		type: ModuleType.Exporter,
 		target: FileSystemItem.File,
 

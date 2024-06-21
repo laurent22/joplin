@@ -3,7 +3,7 @@
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
 import { execCommand, githubUsername } from './tool-utils';
-import * as compareVersions from 'compare-versions';
+import { compareVersions } from 'compare-versions';
 
 interface LogEntry {
 	message: string;
@@ -159,22 +159,26 @@ export const summarizeRenovateMessages = (messages: RenovateMessage[]): string =
 	// Exclude some dev dependencies
 	messages = messages.filter(m => {
 		if ([
-			'yeoman-generator',
-			'madge',
+			'@electron/notarize',
+			'eslint',
+			'gettext-extractor',
+			'gettext-parser',
+			'jest',
 			'lint-staged',
-			'gettext-extractor',
-			'gettext-extractor',
+			'madge',
 			'ts-jest',
+			'ts-loader',
 			'ts-node',
 			'typescript',
-			'eslint',
-			'jest',
+			'yeoman-generator',
+			'nodemon',
 		].includes(m.package)) {
 			return false;
 		}
 
 		if (m.package.startsWith('@types/')) return false;
 		if (m.package.startsWith('typescript-')) return false;
+		if (m.package.startsWith('@testing-')) return false;
 
 		return true;
 	});

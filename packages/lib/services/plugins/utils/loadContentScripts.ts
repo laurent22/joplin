@@ -1,6 +1,6 @@
 import { PluginStates } from '../reducer';
-import { ContentScriptType, ContentScriptContext, PostMessageHandler } from '../api/types';
-import { dirname } from '@joplin/renderer/pathUtils';
+import { ContentScriptType, ContentScriptContext, PostMessageHandler, ContentScriptModule } from '../api/types';
+import { dirname } from '@joplin/utils/path';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
 import PluginService from '../PluginService';
@@ -9,11 +9,14 @@ const logger = Logger.create('loadContentScripts');
 
 export interface ExtraContentScript {
 	id: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	module: any;
 	assetPath: string;
+	pluginId: string;
 }
 
 function postMessageHandler(pluginId: string, scriptType: ContentScriptType, contentScriptId: string): PostMessageHandler {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return (message: any) => {
 		if (scriptType === ContentScriptType.MarkdownItPlugin) {
 			logger.error('context.postMessage is not available to renderer content scripts');
@@ -53,14 +56,16 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 					postMessage: postMessageHandler(pluginId, scriptType, contentScript.id),
 				};
 
-				const loadedModule = module.default(context);
+				const loadedModule = module.default(context) as ContentScriptModule;
 
-				if (!loadedModule.plugin && !loadedModule.codeMirrorResources && !loadedModule.codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				if (!loadedModule.plugin && !(loadedModule as any).codeMirrorResources && !(loadedModule as any).codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 				output.push({
 					id: contentScript.id,
 					module: loadedModule,
 					assetPath: dirname(contentScript.path),
+					pluginId,
 				});
 			} catch (error) {
 				// This function must not throw as doing so would crash the

@@ -10,6 +10,8 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { NoteEntity, ResourceEntity } from '../database/types.js';
 import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
+import { readdir } from 'fs/promises';
+import { ExportModuleOutputFormat } from './types.js';
 
 describe('interop/InteropService_Exporter_Md', () => {
 
@@ -32,7 +34,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -74,7 +78,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -120,7 +126,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -147,7 +155,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -174,7 +184,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -211,7 +223,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -242,7 +256,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -279,7 +295,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -324,6 +342,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 		await exporter.processResource(resource3, Resource.fullPath(resource3));
 		await exporter.processResource(resource4, Resource.fullPath(resource3));
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const context: any = {
 			resourcePaths: {},
 		};
@@ -352,7 +371,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -404,7 +425,9 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
@@ -439,12 +462,13 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
 		expect(fileExtension(resourceFilename)).toBe('jpg');
 	}));
+
 	it('should url encode resource links', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
@@ -457,11 +481,30 @@ describe('interop/InteropService_Exporter_Md', () => {
 
 		await service.export({
 			path: exportDir(),
-			format: 'md',
+			format: ExportModuleOutputFormat.Markdown,
 		});
 
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
+	}));
+
+	it('should handle filenames that contain slashes', (async () => {
+		const folder = await Folder.save({ title: 'testing' });
+		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		const resource: ResourceEntity = (await Resource.all())[0];
+		await Resource.save({ id: resource.id, filename: 'a/b/c/test.jpg', title: 'name with spaces.jpg' });
+
+		const service = InteropService.instance();
+
+		await service.export({
+			path: exportDir(),
+			format: ExportModuleOutputFormat.Markdown,
+		});
+
+		const files = await readdir(`${exportDir()}/_resources`);
+		expect(files).toEqual(['a_b_c_test.jpg']);
 	}));
 
 });

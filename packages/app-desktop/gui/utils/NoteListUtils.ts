@@ -1,25 +1,25 @@
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
-import eventManager from '@joplin/lib/eventManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-
+import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
-const bridge = require('@electron/remote').require('./bridge').default;
-const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
+import { Dispatch } from 'redux';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 
 interface ContextMenuProps {
-	notes: any[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	notes: NoteEntity[];
+	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;
@@ -32,40 +32,43 @@ export default class NoteListUtils {
 
 		const menuUtils = new MenuUtils(cmdService);
 
-		const notes = noteIds.map(id => BaseModel.byId(props.notes, id));
+		const notes: NoteEntity[] = noteIds.map(id => BaseModel.byId(props.notes, id));
 
 		const singleNoteId = noteIds.length === 1 ? noteIds[0] : null;
 
-		let hasEncrypted = false;
-		for (let i = 0; i < notes.length; i++) {
-			if (notes[i].encryption_applied) hasEncrypted = true;
-		}
+		const includeDeletedNotes = notes.find(n => !!n.deleted_time);
+		const includeEncryptedNotes = notes.find(n => !!n.encryption_applied);
 
 		const menu = new Menu();
 
-		if (!hasEncrypted) {
+		if (!includeEncryptedNotes && !includeDeletedNotes) {
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds))
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds))
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
 			);
 
 			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds))
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
 			);
 
 			if (singleNoteId) {
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId)));
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
 			}
 
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds)
-					)
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds) as any,
+					),
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
@@ -74,7 +77,6 @@ export default class NoteListUtils {
 						const newNote = Note.changeNoteType(note, type);
 						if (newNote === note) continue;
 						await Note.save(newNote, { userSideValidation: true });
-						eventManager.emit('noteTypeToggle', { noteId: note.id });
 					}
 				};
 
@@ -84,7 +86,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'note');
 						},
-					})
+					}),
 				);
 
 				menu.append(
@@ -93,7 +95,7 @@ export default class NoteListUtils {
 						click: async () => {
 							await switchNoteType(noteIds, 'todo');
 						},
-					})
+					}),
 				);
 			}
 
@@ -108,7 +110,7 @@ export default class NoteListUtils {
 						}
 						clipboard.writeText(links.join(' '));
 					},
-				})
+				}),
 			);
 
 			if (noteIds.length === 1) {
@@ -118,15 +120,16 @@ export default class NoteListUtils {
 						click: () => {
 							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
 						},
-					})
+					}),
 				);
 			}
 
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
-						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
-					)
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()) as any,
+					),
 				);
 			}
 
@@ -150,14 +153,15 @@ export default class NoteListUtils {
 								customCss: props.customCss,
 							});
 						},
-					})
+					}),
 				);
 			}
 
 			exportMenu.append(
 				new MenuItem(
-					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds)
-				)
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds) as any,
+				),
 			);
 
 			const exportMenuItem = new MenuItem({ label: _('Export'), submenu: exportMenu });
@@ -165,11 +169,28 @@ export default class NoteListUtils {
 			menu.append(exportMenuItem);
 		}
 
-		menu.append(
-			new MenuItem(
-				menuUtils.commandToStatefulMenuItem('deleteNote', noteIds)
-			)
-		);
+		if (includeDeletedNotes) {
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
+				),
+			);
+
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
+				),
+			);
+		} else {
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+				),
+			);
+		}
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 
@@ -179,7 +200,8 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds) as any),
 				);
 			}
 		}

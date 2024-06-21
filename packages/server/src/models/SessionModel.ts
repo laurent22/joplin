@@ -1,6 +1,6 @@
 import BaseModel from './BaseModel';
 import { User, Session, Uuid } from '../services/database/types';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../utils/errors';
 import { Hour } from '../utils/time';
 

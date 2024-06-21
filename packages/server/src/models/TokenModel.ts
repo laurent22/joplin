@@ -1,6 +1,6 @@
 import { Token, User, Uuid } from '../services/database/types';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '@joplin/lib/uuid';
 import BaseModel from './BaseModel';
 
 export default class TokenModel extends BaseModel<Token> {

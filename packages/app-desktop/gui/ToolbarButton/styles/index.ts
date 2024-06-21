@@ -1,8 +1,10 @@
+import { ThemeStyle } from '@joplin/lib/theme';
+
 const styled = require('styled-components').default;
 const { css } = require('styled-components');
 
 interface RootProps {
-	readonly theme: any;
+	readonly theme: ThemeStyle;
 	readonly disabled: boolean;
 	readonly hasTitle: boolean;
 }
@@ -23,6 +25,9 @@ export const StyledRoot = styled.a<RootProps>`
 	font-size: ${(props: RootProps) => props.theme.toolbarIconSize * 0.8}px;
 	padding-left: 5px;
 	padding-right: 5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 	&:hover {
 		background-color: ${(props: RootProps) => props.disabled ? 'none' : props.theme.backgroundColorHover3};
@@ -30,7 +35,7 @@ export const StyledRoot = styled.a<RootProps>`
 `;
 
 interface IconProps {
-	readonly theme: any;
+	readonly theme: ThemeStyle;
 	readonly title: string;
 }
 

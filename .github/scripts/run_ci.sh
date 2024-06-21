@@ -8,16 +8,23 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../.."
 
 IS_PULL_REQUEST=0
-IS_DEV_BRANCH=0
+IS_DESKTOP_RELEASE=0
+IS_SERVER_RELEASE=0
 IS_LINUX=0
 IS_MACOS=0
 
+# If pull requests are coming from a branch of the main repository,
+# IS_PULL_REQUEST will be zero.
 if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
 	IS_PULL_REQUEST=1
 fi
 
-if [ "$GITHUB_REF" == "refs/heads/dev" ]; then
-	IS_DEV_BRANCH=1
+if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
+	IS_SERVER_RELEASE=1
+fi
+
+if [[ $GIT_TAG_NAME = v* ]]; then
+	IS_DESKTOP_RELEASE=1
 fi
 
 if [ "$RUNNER_OS" == "Linux" ]; then
@@ -26,6 +33,14 @@ if [ "$RUNNER_OS" == "Linux" ]; then
 else
 	IS_LINUX=0
 	IS_MACOS=1
+fi
+
+# Tests can randomly fail in some cases, so only run them when not publishing
+# a release
+RUN_TESTS=0
+
+if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
+	RUN_TESTS=1
 fi
 
 # =============================================================================
@@ -43,7 +58,9 @@ echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
-echo "IS_DEV_BRANCH=$IS_DEV_BRANCH"
+echo "IS_DESKTOP_RELEASE=$IS_DESKTOP_RELEASE"
+echo "IS_SERVER_RELEASE=$IS_SERVER_RELEASE"
+echo "RUN_TESTS=$RUN_TESTS"
 echo "IS_LINUX=$IS_LINUX"
 echo "IS_MACOS=$IS_MACOS"
 
@@ -64,17 +81,20 @@ if [ $testResult -ne 0 ]; then
 fi
 
 # =============================================================================
-# Run test units. Only do it for pull requests and dev branch because we don't
-# want it to randomly fail when trying to create a desktop release.
+# Run test units
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Running tests..."
 
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker-compose --file docker-compose.db-dev.yml up -d
+		sudo docker compose --file docker-compose.db-dev.yml up -d
+		cmdResult=$?
+		if [ $cmdResult -ne 0 ]; then
+			exit $cmdResult
+		fi
 		export JOPLIN_TESTS_SERVER_DB=pg
 	else
 		echo "Running Joplin Server tests using SQLite..."
@@ -86,8 +106,8 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	# Allocation failed - JavaScript heap out of memory
 	#
 	# https://stackoverflow.com/questions/38558989
-	export NODE_OPTIONS="--max-old-space-size=4096"
-	yarn run test-ci
+	export NODE_OPTIONS="--max-old-space-size=32768"
+	yarn test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -99,16 +119,16 @@ fi
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	echo "Step: Running linter..."
 
-	yarn run linter-ci ./
+	yarn linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
 	fi
 
-	yarn run packageJsonLint
+	yarn packageJsonLint
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -121,15 +141,13 @@ fi
 # for Linux only is sufficient.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Validating translations..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Validating translations..."
 
-		node packages/tools/validate-translation.js
-		testResult=$?
-		if [ $testResult -ne 0 ]; then
-			exit $testResult
-		fi
+	node packages/tools/validate-translation.js
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
 	fi
 fi
 
@@ -139,7 +157,7 @@ fi
 # what commit may have broken translation building.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+if [ "$RUN_TESTS" == "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Checking for lost translation strings..."
 
@@ -155,15 +173,31 @@ fi
 
 # =============================================================================
 # Check .gitignore and .eslintignore files - they should be updated when
-# new TypeScript files are added by running `yarn run updateIgnored`.
+# new TypeScript files are added by running `yarn updateIgnored`.
 # See coding_style.md
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
-	if [ "$IS_LINUX" == "1" ]; then
-		echo "Step: Checking for files that should have been ignored..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Checking for files that should have been ignored..."
 
-		node packages/tools/checkIgnoredFiles.js 
+	node packages/tools/checkIgnoredFiles.js 
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
+fi
+
+# =============================================================================
+# Check that the website still builds
+# =============================================================================
+
+if [ "$RUN_TESTS" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Check that the website still builds..."
+
+		mkdir -p ../joplin-website/docs
+		CROWDIN_PERSONAL_TOKEN="$CROWDIN_PERSONAL_TOKEN" yarn crowdinDownload
+		SKIP_SPONSOR_PROCESSING=1 yarn buildWebsite
 		testResult=$?
 		if [ $testResult -ne 0 ]; then
 			exit $testResult
@@ -172,14 +206,13 @@ if [ "$IS_PULL_REQUEST" == "1" ]; then
 fi
 
 # =============================================================================
-# Check that the website still builds
+# Spellchecking
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
-	echo "Step: Check that the website still builds..."
+if [ "$IS_LINUX" == "1" ]; then
+	echo "Step: Spellchecking..."
 
-	mkdir -p ../joplin-website/docs
-	SKIP_SPONSOR_PROCESSING=1 yarn run buildWebsite
+	yarn spellcheck --all
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -211,7 +244,7 @@ fi
 
 cd "$ROOT_DIR/packages/app-desktop"
 
-if [[ $GIT_TAG_NAME = v* ]]; then
+if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 	echo "Step: Building and publishing desktop application..."
 	# cd "$ROOT_DIR/packages/tools"
 	# node bundleDefaultPlugins.js
@@ -232,14 +265,14 @@ if [[ $GIT_TAG_NAME = v* ]]; then
 		# "python" and seems to no longer respect the PYTHON_PATH environment variable.
 		# We work around this by aliasing python.
 		alias python=$(which python3)
-		USE_HARD_LINKS=false yarn run dist
+		USE_HARD_LINKS=false yarn dist
 	else
-		USE_HARD_LINKS=false yarn run dist
+		USE_HARD_LINKS=false yarn dist
 	fi	
-elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
+elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
-	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+	yarn buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	
@@ -253,8 +286,8 @@ else
 		export CSC_IDENTITY_AUTO_DISCOVERY=false
 		npm pkg set 'build.mac.identity'=null --json
 		
-		USE_HARD_LINKS=false yarn run dist --publish=never
+		USE_HARD_LINKS=false yarn dist --publish=never
 	else
-		USE_HARD_LINKS=false yarn run dist --publish=never
+		USE_HARD_LINKS=false yarn dist --publish=never
 	fi
 fi

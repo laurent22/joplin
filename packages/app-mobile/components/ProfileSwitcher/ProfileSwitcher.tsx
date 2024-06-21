@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { deleteProfileById } from '@joplin/lib/services/profileConfig';
 import { saveProfileConfig, switchProfile } from '../../services/profiles';
-const { themeStyle } = require('../global-style');
+import { themeStyle } from '../global-style';
 
 interface Props {
 	themeId: number;
@@ -71,7 +71,7 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, []);
 
@@ -108,10 +108,11 @@ export default (props: Props) => {
 					onPress: () => {},
 					style: 'cancel',
 				},
-			]
+			],
 		);
 	}, [profileConfig]);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const renderProfileItem = (event: any) => {
 		const profile = event.item as Profile;
 		const titleStyle = { fontWeight: profile.id === profileConfig.currentProfileId ? 'bold' : 'normal' };
@@ -144,7 +145,7 @@ export default (props: Props) => {
 								onPress: () => {},
 								style: 'cancel',
 							},
-						]
+						],
 					);
 				}}
 			/>

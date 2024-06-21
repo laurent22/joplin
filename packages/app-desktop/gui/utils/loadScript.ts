@@ -5,6 +5,7 @@ const logger = Logger.create('loadScript');
 export interface Script {
 	id: string;
 	src: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	attrs?: Record<string, any>;
 }
 
@@ -13,6 +14,7 @@ export const loadScript = async (script: Script) => {
 		// eslint-disable-next-line no-console
 		console.info('Loading script:', script);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let element: any = document.getElementById(script.id);
 
 		if (element) {

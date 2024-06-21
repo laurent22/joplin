@@ -1,573 +1,3703 @@
 {
- "%d days": "%d روز",
- "%d hour": "%d ساعت",
- "%d hours": "%d ساعت",
- "%d minutes": "%d دقیقه",
- "%d notes match this pattern. Delete them?": "%d یادداشت مطابق این الگو هستند. حذف شوند؟",
- "%s %s (%s, %s)": "%s %s (%s، %s)",
- "%s (%s) could not be uploaded: %s": "%s (%s) نمی‌تواند بارگذاری شود: %s",
- "%s (%s): %s": "%s (%s): %s",
- "%s - Copy": "%s - کپی",
- "%s / %s": "%s / %s",
- "%s / %s / %s": "%s / %s / %s",
- "%s = %s": "%s = %s",
- "%s = %s (%s)": "%s = %s (%s)",
- "%s: %d": "%s: %d",
- "%s: %d notes": "%s: %d یادداشت",
- "%s: %d/%d": "%s: %d/%d",
- "%s: %s": "%s: %s",
- "&Edit": "&ویرایش",
- "&File": "&فایل",
- "&Help": "&کمک",
- "&Note": "&یادداشت",
- "&Tools": "&ابزارها",
- "&View": "&نما",
- "- Camera: to allow taking a picture and attaching it to a note.": "- دوربین: برای عکس گرفتن به پیوست کردن آن به یک یادداشت.",
- "- Location: to allow attaching geo-location information to a note.": "- موقعیت: برای پیوست کردن اطلاعات ژئولوکیشن به یک یادداشت.",
- "- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": "- فضای ذخیره‌سازی: برای پیوست کردن فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی filesystem.",
- "About Joplin": "درباره جاپلین",
- "Action": "عمل",
- "Active": "فعال",
- "Actual Size": "اندازه واقعی",
- "Add body": "افزودن بدنه",
- "Add or remove tags:": "اضافه یا حذف کردن برچسب‌ها:",
- "Add title": "افزودن عنوان",
- "Advanced options": "گزینه های پیشرفته",
- "All notes": "همه یادداشت‌ها",
- "Also displays unset and hidden config variables.": "همچنین متغیر‌های تنظیماتی که تنظیم نشده یا مخفی هستند را نمایش می‌دهد.",
- "Always": "همیشه",
- "An update is available, do you want to download it now?": "یک بروزرسانی موجود است، آیا میخواهید هم اکنون بارگیری‌اش کنید؟",
- "Appearance": "ظاهر",
- "Application": "نرم‌افزار",
- "Apply": "اعمال",
- "Attach file": "پیوست فایل",
- "Attach photo": "ضمیمه‌ی تصویر",
- "Attach...": "پیوست...",
- "Attaches the given file to the note.": "فایل مشخص شده را به یادداشت پیوست کن.",
- "Attachment conflict: \"%s\"": "تداخل پیوست: «%s»",
- "Attachment download behaviour": "رفتار بارگیری پیوست",
- "Attachments": "پیوست ها",
- "Attachments that could not be downloaded": "پیوست هایی که بارگیری نشده",
- "Authentication was not completed (did not receive an authentication token).": "احراز هویت انجام نشد (توکن احراز هویت دریافت نشد).",
- "Authorisation token:": "توکن مجوز:",
- "Auto": "خودکار",
- "Automatically switch theme to match system theme": "به طور خودکار پوسته هماهنگ با پوسته سیستم تغییر کند",
- "Back": "بازگشت",
- "Bold": "پررنگ",
- "Browse...": "مرور...",
- "Bulleted List": "لیست گلوله ای بدون ترتیب",
- "Cancel": "لغو",
- "Cancelling background synchronisation... Please wait.": "در حال لغو همگام سازی در پس‌زمینه... لطفا صبر کنید.",
- "Cancelling...": "در حال لغو...",
- "Cancelling... Please wait.": "در حال لغو... لطفا منتظر بمانید.",
- "Cannot access %s": "نمی‌توان به %s دسترسی یافت",
- "Cannot change encrypted item": "نمی‌توان مورد رمزگذاری شده را تغییر داد",
- "Cannot copy note to \"%s\" notebook": "نمیتوان یادداشت را به دفترچه ی «%s» کپی کرد",
- "Cannot find \"%s\".": "«%s» یافت نشد.",
- "Cannot initialise synchroniser.": "نمی‌توان همگام‌ساز را شروع کرد.",
- "Cannot load \"%s\" module for format \"%s\" and output \"%s\"": "ماژول «%s» برای فرمت «%s» و خروجی «%s» بارگزاری نشد.",
- "Cannot move note to \"%s\" notebook": "نمیتوان یادداشت را به دفترچه ی «%s» انتقال داد",
- "Cannot move notebook to this location": "دفترچه را نمیتوان به این مکان انتقال داد",
- "Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": "نمی‌توان توکن را تازه‌سازی کرد: داده های احراز هویت پیدا نشدند. شروع دوباره همگام‌سازی ممکن است این مشکل را حل کند.",
- "Characters": "حروف",
- "Characters excluding spaces": "حروف به غیر از فاصله‌ها",
- "Check for updates...": "بررسی برای ارتقا...",
- "Check synchronisation configuration": "بررسی تنظیمات همگام‌سازی",
- "Checkbox": "چک‌باکس",
- "Checkbox list": "لیست چک‌باکس",
- "Checking... Please wait.": "در حال بررسی... لطفا صبر کنید.",
- "Choose an option": "یک گزینه را انتخاب کنید",
- "Clear": "پاک",
- "Clear alarm": "پاک کردن هشدار",
- "Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": "برای بازیابی یادداشت بر روی «%s» کلیک کنید. یادداشت در دفترچه‌ای به نام «%s» کپی می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود.",
- "Client ID: %s": "شناسه کاربر: %s",
- "Close": "بستن",
- "Close Window": "بستن پنجره",
- "Code": "کد",
- "Code Block": "بلوک کد",
- "Code View": "نمای کد",
- "Coming alarms": "هشدار‌های آینده",
- "Command": "فرمان",
- "Completed": "کامل شده",
- "Completed decryption.": "رمزگشایی کامل شد.",
- "Configuration": "تنظیمات",
- "Confirm password cannot be empty": "گذرواژه تایید نمی‌تواند خالی باشد",
- "Confirm password:": "تایید گذرواژه:",
- "Conflicted: %d": "تداخل پیدا کرده: %d",
- "Conflicts": "تداخل ها",
- "Convert to note": "تبدیل به یادداشت",
- "Convert to todo": "تبدیل به فهرست کارها",
- "Copy": "کپی",
- "Copy Link Address": "کپی کردن آدرس پیوند",
- "Copy Markdown link": "کپی کردن پیوند Markdown",
- "Copy path to clipboard": "کپی کردن مسیر در کلیپ بورد",
- "Copy Shareable Link": "کپی کردن پیوند قابل به اشتراک گذاری",
- "Copy token": "کپی کردن توکن",
- "Could not authorise application:\n\n%s\n\nPlease try again.": "برنامه احراز هویت نشد:\n\n%s\n\nلطفا دوباره تلاش کنید.",
- "Could not export notes: %s": "یادداشت‌ها استخراج نشدند: %s",
- "Could not upgrade master key: %s": "کلید اصلی ارتقا نیافت: %s",
- "Create a notebook": "ایجاد یک دفترچه",
- "Created": "ایجاد شده",
- "created date": "تاریخ ایجاد",
- "Created local items: %d.": "موارد محلی ایجاد شده: %d.",
- "Created remote items: %d.": "موارد ریموت ایجاد شده: %d.",
- "Created: %d.": "ایجاد شده: %d.",
- "Created: %s": "ایجاد شده: %s",
- "Creates a new note.": "ایجاد یادداشت جدید.",
- "Creates a new notebook.": "ایجاد دفترچه جدید.",
- "Creates a new to-do.": "یک فهرست کار جدید می‌سازد.",
- "Creating new %s...": "ایجاد یک %s جدید...",
- "Creating report...": "در حال ایجاد گزارش...",
- "Current version is up-to-date.": "ورژن فعلی به‌روز است.",
- "custom order": "ترتیب سفارشی",
- "Custom order": "ترتیب سفارشی",
- "Cut": "بریدن",
- "Dark": "تیره",
- "Database v%s": "پایگاه داده ورژن %s",
- "Date format": "فرمت تاریخ",
- "days": "روز",
- "Decrypted items: %d": "موارد رمزگشایی شده: %d",
- "Decrypted items: %s / %s": "موارد رمزگشایی شده: %s از %s",
- "Decrypting items: %d/%d": "در حال رمزگشایی موارد: %d/%d",
- "Default": "پیش فرض",
- "Default: %s": "پیشفرض: %s",
- "Delete": "حذف",
- "Delete attachment \"%s\"?": "پیوست «%s» حذف شود؟",
- "Delete note \"%s\"?": "یادداشت «%s» حذف شود؟",
- "Delete note?": "یادداشت حذف شود؟",
- "Delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.": "دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و زیر-دفترچه‌های درون این دفترچه نیز حذف می‌شوند.",
- "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted.": "دفترچه حذف شود؟ تمامی یادداشت‌ها و زیر-دفترچه‌های درون این دفترچه نیز حذف می‌شوند.",
- "Delete these %d notes?": "تعداد %d یادداشت حذف شود؟",
- "Deleted local items: %d.": "موارد محلی حذف شده: %d.",
- "Deleted remote items: %d.": "موارد ریموت حذف شده: %d.",
- "Deletes the given notebook.": "دفترچه مشخص شده را حذف می‌کند.",
- "Deletes the notebook without asking for confirmation.": "دفترچه را بدون پرسش برای تایید حذف می‌کند.",
- "Deletes the notes matching <note-pattern>.": "یادداشت‌هایی که مطابق <note-pattern> باشند را حذف می‌کند.",
- "Deletes the notes without asking for confirmation.": "یادداشت‌ها را بدون پرسش برای تایید حذف می‌کند.",
- "Destination format: %s": "فرمت مقصد: %s",
- "Directory": "پوشه",
- "Disable encryption": "غیرفعال کردن رمزنگاری",
- "Disabled": "غیر‌فعال",
- "Discard changes": "لغو تغییرات",
- "Displays a geolocation URL for the note.": "آدرس ژئولوکیشن یادداشت را نمایش بده.",
- "Displays only the first top <num> notes.": "فقط <num> یادداشت اول را نمایش می‌دهد.",
- "Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": "تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، برای فهرست کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها و فهرست کار‌ها را نمایش خواهد داد.)",
- "Displays summary about the notes and notebooks.": "خلاصه‌ای درباره یادداشت‌ها و دفترچه‌ها نمایش می‌دهد.",
- "Displays the complete information about note.": "مشخصات کامل یادداشت را نمایش بده.",
- "Displays the given note.": "یادداشت مشخص شده را نمایش بده.",
- "Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": "یادداشت های موجود در دفترچه کنونی را نمایش می‌دهد. برای نمایش لیست دفترچه ها از `ls /` استفاده کنید.",
- "Displays usage information.": "نمایش اطلاعات مربوط به استفاده.",
- "Displays version information": "اطلاعات نسخه را نمایش می‌دهد",
- "Do it now": "هم‌اکنون انجام بده",
- "Do not ask for confirmation.": "برای تایید سوال نکن.",
- "Download and install the relevant extension for your browser:": "افزونه های مرتبط را برای مرورگر خود بارگیری و نصب کنید:",
- "Downloaded": "بارگیری شده",
- "Downloaded and decrypted": "بارگیری شده و رمزگشایی شده",
- "Downloaded and encrypted": "بارگیری شده و رمزنگاری شده",
- "Downloading": "در حال بارگیری",
- "Downloading resources...": "در حال بارگیری منابع...",
- "Drop notes or files here": "یادداشت‌ها یا فایل‌ها را اینجا رها کنید",
- "Dropbox": "Dropbox",
- "Dropbox Login": "ورود به Dropbox",
- "Duplicate": "تکراری",
- "Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": "یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص نشده باشد یادداشت در دفترچه کنونی کپی می‌شود.",
- "Edit": "ویرایش",
- "Edit in external editor": "ویرایش در ویرایشگر خارجی",
- "Edit note.": "ویرایش یادداشت.",
- "Edit notebook": "ویرایش دفترچه",
- "Editor": "ویرایشگر",
- "Editor font": "فونت ویرایشگر",
- "Editor font family": "خانواده فونت ویرایشگر",
- "Editor font size": "سایز فونت ویرایشگر",
- "Either \"text\" or \"json\"": "یا «text» و یا «json»",
- "emphasised text": "متن تأکید شده",
- "Enable": "فعال سازی",
- "Enable encryption": "فعال کردن رمزنگاری",
- "Enable footnotes": "فعال سازی پاورقی",
- "Enable markdown emoji": "فعال‌سازی شکلک markdown",
- "Enable math expressions": "فعال‌سازی عبارت‌های ریاضی",
- "Enable note history": "فعال سایز ثبت تاریخچه ی یادداشت",
- "Enable table of contents extension": "فعال کردن افزونه ی لیست مطالب",
- "Enabled": "فعال",
- "Encrypted": "رمزنگاری شده",
- "Encrypted items cannot be modified": "موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند",
- "Encryption": "رمزنگاری",
- "Encryption Config": "تنظیمات رمزنگاری",
- "Encryption is: %s": "رمزنگاری: %s",
- "Enter code here": "کد را اینجا وارد کنید",
- "Enter master password:": "گذرواژه اصلی را وارد کنید:",
- "Enter notebook title": "عنوان دفترچه را وارد کنید",
- "Error": "خطا",
- "Error opening note in editor: %s": "خطا در بازکردن یادداشت در ویرایشگر: %s",
- "Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": "خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:",
- "Errors only": "فقط خطا ها",
- "Evernote Export File (as HTML)": "فایل استخراجی Evernote (به صورت HTML)",
- "Evernote Export File (as Markdown)": "فایل استخراجی Evernote (به صورت Markdown)",
- "Exits the application.": "خروح از نرم‌افزار.",
- "Export": "استخراج",
- "Export all": "استخراج همه",
- "Export Debug Report": "استخراج گزارش دیباگ",
- "Export profile": "استخراج نمایه",
- "Exporting profile...": "در حال استخراج نمایه...",
- "Exporting to \"%s\" as \"%s\" format. Please wait...": "در حال استخراج به «%s» با فرمت «%s». لطفا صبر کنید...",
- "Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": "داده Joplin را در محل مورد نظر استخراج می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده شامل دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را استخراج می‌کند.",
- "Exports only the given note.": "تنها یادداشت مشخص شده را استخراج می‌کند.",
- "Exports only the given notebook.": "تنها دفترچه مشخص شده را استخراج می‌کند.",
- "Fatal error:": "خطای مهلک:",
- "Fetched items: %d/%d.": "آیتم های دریافت شده: %d از %d.",
- "Fetching resources: %d/%d": "در حال دریافت منابع: %d/%d",
- "File": "فایل",
- "Firefox Extension": "افزونه Firefox",
- "Fix search index": "فهرست جستجو را درست کنید",
- "Focus": "تمرکز",
- "Folders": "پوشه‌ها",
- "For debugging purpose only: export your profile to an external SD card.": "تنها برای دیباگ: استخراج نمایه شما به یک حافظه خارجی SD.",
- "For information on how to customise the shortcuts please visit %s": "برای اطلاع راجع به اینکه چگونه میانبر‌ها را شخصی سازی کنید لطفا به %s مراجعه کنید",
- "Found: %d.": "پیدا شده: %d.",
- "FTS enabled: %d": "FTS فعال شده: %d",
- "General": "کلی",
- "Generating link...": "در حال بوجود آوردن پیوند‌ها...",
- "Get it now:": "هم‌اکنون دریافت کنید:",
- "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود.",
- "Go to source URL": "رفتن به آدرس منبع",
- "Goto Anything...": "رفنت به هر چیزی...",
- "Heading": "عنوان",
- "Help": "کمک",
- "Hide %s": "پنهان کردن %s",
- "Hide Joplin": "Joplin را مخفی کنید",
- "Horizontal Rule": "خط افقی",
- "HTML Directory": "پوشه HTML",
- "HTML File": "فایل HTML",
- "Hyperlink": "پیوند برجسته",
- "Icon": "آیکون",
- "ID": "شناسه",
- "Idle": "بیکار",
- "Import": "وارد کردن",
- "Importing from \"%s\" as \"%s\" format. Please wait...": "در حال وارد کردن از «%s» با فرمت «%s». لطفا صبر کنید...",
- "Importing notes...": "در حال وارد کردن یادداشت‌ها...",
- "Imports data into Joplin.": "داده را در Joplin وارد می‌کند.",
- "In progress": "درحال انجام",
- "In: %s": "در: %s",
- "Inline Code": "کد درون خطی",
- "Insert Hyperlink": "درج پیوند برجسته",
- "Invalid answer: %s": "پاسخ نامعتبر: %s",
- "Invalid command: \"%s\"": "دستور نامعتبر: «%s»",
- "Invalid option value: \"%s\". Possible values are: %s.": "مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s.",
- "Italic": "مورب",
- "Item \"%s\" could not be downloaded: %s": "مورد «%s» بارگیری نشد: %s",
- "Items that cannot be decrypted": "مواردی که نمی‌توانند رمزگشایی شوند",
- "Items that cannot be synchronised": "مواردی که نمی‌توانند همگام‌سازی شوند",
- "Joplin Export Directory": "پوشه استخراجی Joplin",
- "Joplin Export File": "فایل استخراجی Joplin",
- "Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": "Joplin چندین بار نتوانست این موارد را رمزگشایی کند، احتمالا به این خاطر که خراب یا بسیار بزرگ هستند. این موارد بر روی دستگاه باقی می‌مانند اما Joplin دیگر تلاشی برای رمزگشایی آن‌ها نمی‌کند.",
- "Joplin Forum": "انجمن Joplin",
- "Joplin website": "سایت Joplin",
- "Keep note history for": "تاریخچه ی یادداشت را نگه دار به مدت",
- "Keyboard Mode": "حالت صفحه کلید",
- "Keyboard Shortcut": "کلید های میانبر",
- "Keyboard Shortcuts": "کلید های میانبر",
- "Language": "زبان",
- "Last error: %s": "آخرین خطا: %s",
- "Layout": "قالب",
- "Layout button sequence": "توالی دکمه قالب",
- "Light": "روشن",
- "Lines": "خطوط",
- "Link has been copied to clipboard!": "پیوند‌ها در کلیپ بورد کپی شدند!",
- "Links with protocol \"%s\" are not supported": "پیوند‌های دارای پروتکل «%s» پشتیبانی نمی‌شوند",
- "List item": "لیست مورد",
- "Location": "مکان",
- "Log": "لاگ",
- "Login with Dropbox": "ورود با Dropbox",
- "Login with OneDrive": "ورود با OneDrive",
- "Make a donation": "کمک کردن",
- "Manual": "دستی",
- "Marks a to-do as done.": "یک فهرست کار را به عنوان انجام شده علامت می‌زند.",
- "Marks a to-do as non-completed.": "یک فهرست کار را به عنوان کامل نشده علامت می‌زند.",
- "Markup": "نشانه گذاری",
- "Master Key %s": "کلید اصلی %s",
- "Max concurrent connections": "حداکثر اتصالات همزمان",
- "Missing Master Keys": "کلید‌های اصلی یافت نشدند",
- "Missing required argument: %s": "کمبود آرگمان در دستور: %s",
- "More info": "اطلاعات بیشتر",
- "More information": "اطلاعات بیشتر",
- "More than one item match \"%s\". Please narrow down your query.": "بیش از یک مورد مطابق «%s» وجود دارد. لطفاعبارت جستجو را محدودتر کنید.",
- "Move %d notes to notebook \"%s\"?": "انتقال %d یادداشت به دفترچه «%s»؟",
- "Move to notebook": "انتقال به دفترچه",
- "Move to notebook...": "انتقال به دفترچه...",
- "Move to notebook:": "انتقال به دفترچه:",
- "n": "n",
- "N": "N",
- "New note": "یادداشت جدید",
- "New notebook": "دفترچه جدید",
- "New Notebook": "دفترچه جدید",
- "New notebook \"%s\" will be created and file \"%s\" will be imported into it": "دفترچه جدید «%s» ساخته خواهد شد و فایل «%s» به آن وارد خواهد شد",
- "New sub-notebook": "زیر-دفترچه جدید",
- "New tags:": "برچسب جدید:",
- "New to-do": "فهرست کار جدید",
- "New version: %s": "ورژن جدید: %s",
- "Nextcloud": "Nextcloud",
- "Nextcloud password": "گذرواژه Nextcloud",
- "Nextcloud username": "نام کاربری Nextcloud",
- "Nextcloud WebDAV URL": "آدرس Nextcloud WebDAV",
- "no": "خیر",
- "No": "خیر",
- "No active notebook.": "دفترچه‌ی فعالی وجود ندارد.",
- "No item with ID %s": "هیچ موردی با شناسه %s وجود ندارد",
- "No notebook has been specified.": "هیچ دفترچه‌ای مشخص نشده.",
- "No notebook selected.": "هیچ دفترچه‌ای انتخاب نشده.",
- "No notes in here. Create one by clicking on \"New note\".": "یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یکی ایجاد کنید.",
- "No resources!": "منبعی یافت نشد!",
- "No such command: %s": "این دستور وجود ندارد: %s",
- "No text editor is defined. Please set it using `config editor <editor-path>`": "هیچ ویرایشگر متنی مشخص نشده. لطفا با استفاده از `config editor <editor-path>` آن را مشخص کنید",
- "Not authentified with %s. Please provide any missing credentials.": "با %s تایید نشد. لطفا هر گواهی‌نامه‌‌ای که وجود ندارد را ارائه کنید.",
- "Not downloaded": "بارگیری نشده",
- "note": "یادداشت",
- "Note": "یادداشت",
- "Note area growth factor": "فاکتور رشد منطقه یادداشت",
- "Note attachments": "پیوست‌های یادداشت",
- "Note attachments...": "پیوست‌های فایل...",
- "Note body": "بدنه ی یادداشت",
- "Note does not exist: \"%s\". Create it?": "یادداشت وجود ندارد: «%s». ایجاد شود؟",
- "Note has been saved.": "یادداشت ذخیره شد.",
- "Note History": "تاریخچه ی یادداشت",
- "Note is not a to-do: \"%s\"": "یادداشت یک فهرست کار نیست: «%s»",
- "Note list": "لیست یادداشت",
- "Note list growth factor": "فاکتور رشد لیست یادداشت",
- "Note properties": "جزییات یادداشت",
- "Note title": "عنوان یادداشت",
- "Notebook list growth factor": "فاکتور رشد لیست دفترچه",
- "Notebook: %s": "دفترچه: %s",
- "Notebooks": "دفترچه ها",
- "Notebooks cannot be named \"%s\", which is a reserved title.": "دفترچه نمی‌تواند «%s» نام داشته باشد، این نام رزرو شده.",
- "Notes and settings are stored in: %s": "یادداشت‌ها و تنظیمات در این محل ذخیره شده‌اند: %s",
- "Notes can only be created within a notebook.": "یادداشت‌ها میتوانند در دفترچه ایجاد شوند.",
- "Numbered List": "لیست شماره گذاری شده",
- "OK": "باشه",
- "OLED Dark": "OLED تیره",
- "On %s: %s": "در %s: %s",
- "One of your master keys use an obsolete encryption method.": "یکی از کلید‌های اصلی شما از یک روش رمزنگاری منسوخ استفاده می‌کند.",
- "One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": "در حال حاضر یک یا چند مورد رمزنگاری شده‌اند و ممکن است شما به ارائه یک گذرواژه اصلی نیاز داشته باشید. برای اینکار لطفا «e2ee decrypt» را تایپ کنید. اگر در حال حاضر گذرواژه را ارائه کرده‌اید، موارد رمزنگاری شده در پس‌زمینه در حال رمزگشایی هستند و به زودی در دسترس خواهند بود.",
- "One or more master keys need a password.": "یک یا چند کلید اصلی به یک گذرواژه نیاز دارند.",
- "OneDrive": "OneDrive",
- "OneDrive Login": "ورود به OneDrive",
- "Only one note can be printed at a time.": "هر دفعه فقط یک یادداشت می‌تواند پرینت گرفته شود.",
- "Open %s": "باز کردن %s",
- "Open...": "باز کردن...",
- "Operation cancelled": "عملیات لغو شد",
- "Options": "گزینه ها",
- "Output format: %s": "فرمت خروجی: %s",
- "Page orientation for PDF export": "جهت صفحه برای استخراج PDF",
- "Page size for PDF export": "اندازه صفحه برای استخراج PDF",
- "Password": "رمز",
- "Password cannot be empty": "گذرواژه نمیتواند خالی باشد",
- "Password:": "گذرواژه:",
- "Passwords do not match!": "گذرواژه‌ها با یکدیگر مطابق نیستند!",
- "Paste": "چسباندن",
- "PDF File": "فایل PDF",
- "Permission to use camera": "اجازه برای استفاده از دوربین",
- "Please confirm that you would like to re-encrypt your complete database.": "لطفا تایید کنید که شما می‌خواهید دوباره تمام پایگاه داده خود را رمزگذاری نمایید.",
- "Please enter your password in the master key list below before upgrading the key.": "لطفا قبل از ارتقای کلید گذرواژه خود را در لیست کلید اصلی زیر وارد کنید.",
- "Please select a notebook first.": "لطفا ابتدا یه دفترچه مشخص کنید.",
- "Please select the note or notebook to be deleted first.": "لطفا ابتدا یادداشت یا دفترچه‌ای که قرار است حذف شود را انتخاب کنید.",
- "Please select where the sync status should be exported to": "لطفا محلی که وضعیت همگام‌سازی باید استخراج شود را مشخص کنید",
- "Please specify import format for %s": "لطفا فرمت وارد کردن را برای «%s» مشخص کنید",
- "Please specify the notebook where the notes should be imported to.": "لطفا دفترچه‌ای که یادداشت‌ها باید به آن وارد شوند را مشخص کنید.",
- "Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": "لطفا صبر کنید تا همه پیوست ها بارگیری و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش یادداشت بروید.",
- "Please wait...": "لطفا صبر کنید...",
- "Plugins": "پلاگین ها",
- "Possible keys/values:": "کلید ها یا مقادیر ممکن:",
- "Possible values: %s.": "مقادیر احتمالی: %s.",
- "Preferences": "تنظیمات",
- "Preferences...": "تنظیمات...",
- "Preferred dark theme": "تم ترجیحی تاریک",
- "Preferred light theme": "تم ترجیحی روشن",
- "Press Ctrl+D or type \"exit\" to exit the application": "برای خروج Ctrl+D را فشار دهید یا exit را تایپ کنید",
- "Press the shortcut": "میانبر را فشار دهید",
- "Press to set the decryption password.": "برای تنظیم گذرواژه رمزگشایی بفشارید.",
- "Previous versions of this note": "نسخه‌های قبلی این یادداشت",
- "Print": "پرینت",
- "Profile Version: %s": "نسخه نمایه: %s",
- "Properties": "جزییات",
- "Quit": "بستن",
- "Re-encrypt data": "رمزنگاری دوباره داده",
- "Read time: %s min": "زمان خواندن: %s دقیقه",
- "Refresh": "تازه‌‌سازی",
- "Remove": "برداشتن",
- "Remove tag \"%s\" from all notes?": "حذف برچسب «%s» از همه‌ی یادداشت‌ها؟",
- "Remove this search from the sidebar?": "این جستجو از نوار کناری حذف شود؟",
- "Rename": "تغییر نام",
- "Rename notebook:": "تغییر نام دفترچه:",
- "Rename tag:": "تغییر نام برچسب:",
- "Renames the given <item> (note or notebook) to <name>.": "تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>.",
- "Resources: %d.": "منابع: %d.",
- "Restore": "بازگرداندن",
- "Restored Notes": "یادداشت های بازیابی شده",
- "Retry": "تلاش مجدد",
- "Retry All": "تلاش مجدد همه",
- "Reveal file in folder": "نمایش فایل در پوشه",
- "Reverse sort order": "معکوس کردن ترتیب مرتب سازی",
- "Reverses the sorting order.": "معکوس کردن ترتیب مرتب‌سازی.",
- "Save": "ذخیره",
- "Save alarm": "ذخیره هشدار",
- "Save as...": "ذخیره به عنوان...",
- "Save changes": "ذخیره ی تغییرات",
- "Save geo-location with notes": "ذخیره ژئولوکیشن با یادداشت‌ها",
- "Search": "جستجو",
- "Search in all the notes": "جستجو در تمام یادداشت ها",
- "Search in current note": "جستجو در همین یادداشت",
- "Search...": "جستجو...",
- "Search:": "جستجو:",
- "Searches for the given <pattern> in all the notes.": "برای <pattern> داده شده در همه یادداشت‌ها جستجو می‌کند.",
- "Select all": "انتخاب همه",
- "Server is already running on port %d": "سرور در حال حاضر بر روی پورت %d در حال اجراست",
- "Server is not running.": "سرور در حال اجرا نیست.",
- "Server is running on port %d": "سرور بر روی پورت %d در حال اجراست",
- "Set alarm": "تنظیم هشدار",
- "Set alarm:": "تنظیم هشدار:",
- "Set the password": "گذرواژه را تعیین کنید",
- "Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": "ویژگی <name> از <note> داده شده را به [value] (مقدار) داده شده تغییر می‌دهد. ویژگی‌های احتمالی شامل:\n\n%s",
- "Share": "اشتراک گذاری",
- "Shortcuts are not available in CLI mode.": "میانبر‌ها در حالت خط فرمان (CLI) کار نمی‌کنند.",
- "Show Advanced Settings": "نمایش تنظیمات پیشرفته",
- "Show all": "نمایش همه",
- "Show completed to-dos": "نمایش فهرست کار‌های کامل شده",
- "Show note counts": "نمایش تعداد یادداشت",
- "Sidebar": "نوار کناری",
- "Size": "اندازه",
- "Skipped items: %d (use --retry-failed-items to retry decrypting them)": "موارد رد شده: %d (از --retry-failed-items برای تلاش مجدد رمزگشایی آن‌ها استفاده کنید)",
- "Skipped: %d.": "رد شده: %d.",
- "Some items cannot be decrypted.": "بعضی از موارد نمی‌توانند رمزگشایی شوند.",
- "Some items cannot be synchronised.": "بعضی از موارد نمی‌توانند همگام‌سازی شوند.",
- "Some items cannot be synchronised. Press for more info.": "بعضی از موارد نمی‌توانند همگام‌سازی شوند. برای اطلاعات بیشتر بفشارید.",
- "Sort notebooks by": "مرتب سازی دفترچه ها با",
- "Sort notes by": "مرتب سازی یادداشت ها با",
- "Sorts the item by <field> (eg. title, updated_time, created_time).": "مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، زمان ایجاد).",
- "Source format: %s": "فرمت مبدا: %s",
- "Split View": "تقسیم نما",
- "Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": "شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند.",
- "Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": "شروع رمزگشایی... این کار ممکن است چند دقیقه طول بکشد، لطفا صبر کنید.",
- "Starting synchronisation...": "در حال شروع همگام سازی...",
- "Statistics": "آمار",
- "Statistics...": "آمار...",
- "Status": "وضعیت",
- "Status: %s": "وضعیت: %s",
- "Status: Started on port %d": "وضعیت: آغاز شده بر روی پورت %d",
- "Step 1: Open this URL in your browser to authorise the application:": "مرحله ۱: برای اجازه دادن به برنامه این آدرس اینترنتی را در مرورگر خود باز کنید:",
- "Step 2: Enter the code provided by Dropbox:": "مرحله ۲: کدی که توسط Dropbox داده شده را وارد کنید:",
- "Stop external editing": "توقف ویرایش خارجی",
- "Submit": "ثبت",
- "Success! Synchronisation configuration appears to be correct.": "موفقیت! تنظیمات همگام‌سازی به نظر صحیح است.",
- "Switch between note and to-do type": "تغییر نوع میان یادداشت و فهرست کار",
- "Switch to note type": "تغییر نوع به یادداشت",
- "Switch to to-do type": "تغییر نوع به فهرست کار",
- "Switches to [notebook] - all further operations will happen within this notebook.": "به [notebook] تغییر می‌کند - تمامی فعالیت های آتی در این دفترچه انجام می‌گیرد.",
- "Sync Status": "وضعیت همگام‌سازی",
- "Sync status (synced items / total items)": "وضعیت همگام‌سازی (موارد همگام‌سازی شده / کل موارد)",
- "Sync to provided target (defaults to sync.target config value)": "همگام‌سازی با هدف داده شده (به طور پیش فرض مقدار تنظیمات sync.target)",
- "Sync Version: %s": "نسخه همگام‌سازی: %s",
- "Synchronisation": "همگام‌سازی",
- "Synchronisation interval": "بازه همگام‌سازی",
- "Synchronisation is already in progress.": "همگام سازی در حال حاضر در حال انجام است.",
- "Synchronisation Status": "وضعیت همگام‌سازی",
- "Synchronisation target": "هدف همگام‌سازی",
- "Synchronisation target: %s (%s)": "همگام‌سازی هدف: %s (%s)",
- "Synchronise": "همگام سازی",
- "Synchronises with remote storage.": "با فضای ذخیره‌سازی ریموت همگام‌سازی می‌کند.",
- "Synchronising...": "در حال همگام سازی...",
- "Tagged: %d.": "برچسب گذاری شده: %d.",
- "Tags": "برچسب‌ها",
- "Take photo": "گرفتن عکس",
- "Text editor command": "دستور ویرایشگر متن",
- "The app is now going to close. Please relaunch it to complete the process.": "برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید.",
- "The application has been authorised!": "برنامه احراز هویت شد!",
- "The command \"%s\" is only available in GUI mode": "دستور «%s» فقط در حالت گرافیکی (GUI) کاربرد دارد",
- "The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": "روش پیش فرض رمزگذاری به یک روش امن‌تر تغییر پیدا کرده و پیشنهاد می‌شود که آن را بر داده خود اعمال کنید.",
- "The default encryption method has been changed, you should re-encrypt your data.": "روش رمزگذاری پیش فرض تغییر یافته است،‌ شما باید داده خود را دوباره رمزگذاری کنید.",
- "The Joplin mobile app does not currently support this type of link: %s": "برنامه موبایل Joplin در حال حاضر از این پیوند پشتیبانی نمی‌کند: %s",
- "The master key has been upgraded successfully!": "کلید اصلی با موفقیت ارتقا یافت!",
- "The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": "کلید‌های اصلی با این شناسه‌ها برای رمزنگاری بعضی از موارد شما استفاده شده‌اند، به هر حال برنامه در حال حاضر به آن‌ها دسترسی ندارد. احتمال دارد در نهایت با یک همگام‌سازی بارگیری شوند.",
- "The note \"%s\" has been successfully restored to the notebook \"%s\".": "یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد.",
- "The notebook could not be saved: %s": "دفترچه نتوانست ذخیره شود: %s",
- "The notes have been imported: %s": "یادداشت‌ها وارد شدند: %s",
- "The possible commands are:": "دستور های ممکن عبارتند از:",
- "The tag \"%s\" already exists. Please choose a different name.": "برچسب «%s» وجود دارد. لطفا نام دیگری انتخاب کنید.",
- "Theme": "پوسته",
- "There are currently no notes. Create one by clicking on the (+) button.": "در حال حاضر یادداشتی وجود ندارد. با کلیک بر روی دکمه (+) یکی بسازید.",
- "There is currently no notebook. Create one by clicking on \"New notebook\".": "در حال حاظر هیچ یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یک یادداشت جدید ایجاد کنید.",
- "There is no data to export.": "داده‌ای برای استخراج وجود ندارد.",
- "There was a [conflict](%s) on the attachment below.\n\n%s": "یک [conflict] (%s) در پیوست زیر وجود داشت.\n\n%s",
- "There was an error downloading this attachment:": "یک خطا در بارگیری این پیوست بود:",
- "These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": "این موارد بر روی دستگاه باقی می‌مانند اما به هدف همگام‌سازی بارگذاری نمی‌شوند. این پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش داده شده‌اند) را جستجو کنید.",
- "This attachment is not downloaded or not decrypted yet": "این پیوست هنوز بارگیری یا رمزگشایی نشده",
- "This attachment is not downloaded or not decrypted yet.": "این پیوست هنوز بارگیری یا رمزگشایی نشده.",
- "This authorisation token is only needed to allow third-party applications to access Joplin.": "این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به Joplin نیاز است.",
- "This note does not have geolocation information.": "این یادداشت اطلاعات ژئولوکیشن ندارد.",
- "This note has been modified:": "این یادداشت تغییر یافته است:",
- "This note has no content. Click on \"%s\" to toggle the editor and edit the note.": "این یادداشت هیچ محتوایی ندارد. برای تغییر وضعیت ویرایشگر و ویرایش یادداشت ، روی \"%s\" کلیک کنید.",
- "This note has no history": "این یادداشت هیچ تاریخچه ای ندارد",
- "This will open a new screen. Save your current changes?": "این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟",
- "Time format": "فرمت ساعت",
- "title": "عنوان",
- "Title": "عنوان",
- "To allow Joplin to synchronise with Dropbox, please follow the steps below:": "برای اینکه به Joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال کنید:",
- "To delete a tag, untag the associated notes.": "برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید.",
- "To delete: %d": "برای حذف: %d",
- "To enter command line mode, press \":\"": "برای ورود به حالت خط فرمان، : را فشار دهید",
- "To exit command line mode, press ESCAPE": "برای خروج از حالت خط فرمان، دکمه ی Esc را فشار دهید",
- "To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": "برای مرتب‌سازی دستی یادداشت‌ها، ترتیب مرتب‌سازی باید به «%s» از منوی «%s» > «%s» تغییر پیدا کند",
- "To maximise/minimise the console, press \"tc\".": "برای به حداکثر رساندن / به حداقل رساندن کنسول ، \"tc\" را فشار دهید.",
- "To move from one pane to another, press Tab or Shift+Tab.": "برای انتقال از یک پنجره به پنجره دیگر ، Tab یا Shift Tab را فشار دهید.",
- "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": "برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا کنید",
- "To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": "برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات گوشی خود در برنامه‌ها > Joplin > دسترسی‌ها فعال کنید",
- "to-do": "فهرست کار",
- "Toggle development tools": "تغییر وضعیت ابزار توسعه",
- "Toggle editor layout": "تغییر وضعیت قالب ویرایشگر",
- "Toggle note list": "تغییر وضعیت لیست یادداشت",
- "Toggle sidebar": "تغییر وضعیت نوار کناری",
- "Token has been copied to the clipboard!": "توکن در کلیپ بورد کپی شد!",
- "Tools": "&ابزار‌ها",
- "Total: %d/%d": "مجموع: %d از %d",
- "Type `joplin help` for usage information.": "`joplin help` را برای راهنمای استفاده تایپ کنید.",
- "Type new tags or select from list": "برچسب‌های جدید را تایپ کنید یا از لیست انتخاب کنید",
- "Type: %s.": "نوع: %s.",
- "Uncompleted to-dos on top": "فهرست کار‌های کامل نشده در بالا",
- "Unknown flag: %s": "پرچم ناشناخته: %s",
- "Unsupported image type: %s": "نوع تصویر پشتیبانی نشده: %s",
- "Unsupported link or message: %s": "پیوند یا پیام پشتیبانی نشده: %s",
- "Untitled": "بدون عنوان",
- "Updated": "به‌روز شده",
- "updated date": "تاریخ به‌روزرسانی",
- "Updated local items: %d.": "موارد محلی به‌روز شده: %d.",
- "Updated remote items: %d.": "موارد ریموت به‌روز شده: %d.",
- "Updated: %d.": "به‌روز شده: %d.",
- "Updated: %s": "به‌روز شده: %s",
- "Upgrade": "ارتقا",
- "URL": "آدرس اینترنتی",
- "Usage: %s": "کارکرد: %s",
- "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": "استفاده از فرمت لیست طولانی. فرمت به صورت ID (شناسه)، NOTE_COUNT (تعداد یادداشت (برای دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده (برای فهرست کار‌ها))، TITLE (عنوان) می‌باشد",
- "View": "نما",
- "View on map": "نمایش بر روی نقشه",
- "View them now": "هم‌اکنون ببینید",
- "Viewer": "بیننده",
- "Warning": "اخطار ها",
- "WebDAV": "WebDAV",
- "WebDAV password": "گذرواژه WebDAV",
- "WebDAV URL": "آدرس WebDAV",
- "WebDAV username": "نام کاربری WebDAV",
- "Website and documentation": "وب‌سایت و مستندات",
- "When creating a new note:": "در زمان ایجاد یادداشت جدید:",
- "When creating a new to-do:": "زمان ساخت یک فهرست کار جدید:",
- "Words": "کلمات",
- "y": "y",
- "Y": "Y",
- "yes": "بله",
- "Yes": "بله",
- "You currently have no notebooks.": "شما در حال حاضر دفترچه‌ای ندارید.",
- "You may also type `status` for more information.": "شما همچنین می‌توانید `status` را برای اطلاعات بیشتر تایپ کنید.",
- "Your choice: ": "انتخاب شما: ",
- "Your data is going to be re-encrypted and synced again.": "داده شما دوباره رمزگذاری و همگام‌سازی خواهد شد.",
- "Your permission to use your camera is required.": "اجازه ی شما برای استفاده از دوربین شما نیاز است.",
- "Your version: %s": "ورژن شما: %s",
- "Zoom In": "بزرگنمایی",
- "Zoom Out": "کوچک نمایی"
+	"\"%s\" is missing the required \"%s\" property.": [
+		"«%s» ویژگی ضروری «%s» را ندارد."
+	],
+	"%d days": [
+		"%d روز"
+	],
+	"%d GB": [
+		"%d گیگابایت"
+	],
+	"%d GB storage space": [
+		"%d گیگابایت فضای ذخیره‌سازی"
+	],
+	"%d hour": [
+		"%d ساعت"
+	],
+	"%d hours": [
+		"%d ساعت"
+	],
+	"%d MB": [
+		"%d مگابایت"
+	],
+	"%d MB per note or attachment": [
+		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
+	],
+	"%d minutes": [
+		"%d دقیقه"
+	],
+	"%d notes match this pattern. Delete them?": [
+		"%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟"
+	],
+	"%d notes will be permanently deleted. Continue?": [
+		"%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟"
+	],
+	"%s": [
+		"%s"
+	],
+	"%s %s (%s, %s)": [
+		"%s %s (%s، %s)"
+	],
+	"%s (%s) could not be uploaded: %s": [
+		"%s (%s) نمی‌تواند بارگذاری شود: %s"
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		"%s (%s) می خواهم یک دفترچه یادداشت را با شما به اشتراک بگذارم."
+	],
+	"%s (%s): %s": [
+		"%s (%s): %s"
+	],
+	"%s (pre-release)": [
+		"%s (قبل از انتشار)"
+	],
+	"%s - Copy": [
+		"%s - کپی"
+	],
+	"%s / %s": [
+		"%s / %s"
+	],
+	"%s / %s / %s": [
+		"%s / %s / %s"
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s (%s)"
+	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		"%s برای همگام سازی بسیاری از فایل های کوچک بهینه نشده است، بنابراین همگام سازی اولیه شما کند خواهد بود."
+	],
+	"%s tab opened": [
+		"برگه %s باز شد"
+	],
+	"%s: %d": [
+		"%s: %d"
+	],
+	"%s: %d notes": [
+		"%s: %d یادداشت"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: گذرواژه وجود ندارد."
+	],
+	"&Edit": [
+		"&ویرایش"
+	],
+	"&File": [
+		"&فایل"
+	],
+	"&Go": [
+		"&برو"
+	],
+	"&Help": [
+		"&کمک"
+	],
+	"&Note": [
+		"&یادداشت"
+	],
+	"&Tools": [
+		"&ابزارها"
+	],
+	"&View": [
+		"&نما"
+	],
+	"&Window": [
+		"&صفحه"
+	],
+	"(%s)": [
+		"(%s)"
+	],
+	"(In plugin: %s)": [
+		"(در افزونه: %s )"
+	],
+	"(None)": [
+		"(هیچ کدام)"
+	],
+	"(wysiwyg: %s)": [
+		"(چیزی که بدست خواهی آورد: %s)"
+	],
+	"(You may disable this prompt in the options)": [
+		"(شما می توانید این درخواست را در گزینه ها غیرفعال کنید)"
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		"- دوربین: دسترسی برای گرفتن عکس و پیوست آن به یک یادداشت."
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		"- موقعیت: دسترسی برای پیوست اطلاعات موقعیت جغرافیایی به یک یادداشت."
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		"- فضای ذخیره‌سازی: برای پیوست فایل‌ها به یادداشت‌ها و فعال کردن همگام‌سازی فایل‌های سیستمی ."
+	],
+	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
+		"<tag-command> می‌تواند \"افزودن\"، \"حذف\"، \"فهرست\" یا \"برچسب یادداشت\" برای تخصیص یا حذف [tag] از [note]، برای فهرست کردن یادداشت های مرتبط با [tag] و یا برای فهرست کردن برچسب های مرتبط با [note] باشد. دستور `tag list` می تواند برای فهرست کردن تمام برچسب‌ها باشد (از -l برای جزئیات بیشتر استفاده نمایید)."
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای تغییر وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت معمولی باشد، تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت معمولی استفاده نمایید."
+	],
+	"A3": [
+		"A3"
+	],
+	"A4": [
+		"A4"
+	],
+	"A5": [
+		"A5"
+	],
+	"About": [
+		"درباره"
+	],
+	"About Joplin": [
+		"درباره joplin"
+	],
+	"accelerator": [
+		"شتابدهنده"
+	],
+	"Accelerator \"%s\" is not valid.": [
+		"شتابدهنده «%s» نامعتبر است."
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		"شتابدهنده «%s» برای دستورات «%s» و «%s» استفاده شده است. این ممکن است منجر به رفتار غیرمنتظره‌ای شود."
+	],
+	"Accept": [
+		"قبول"
+	],
+	"Accepted invitations": [
+		"دعوت نامه های پذیرفته شده"
+	],
+	"Access denied: Please check your username and password": [
+		"دسترسی غیرمجاز: لطفاً نام کاربری و گذرواژه خود را بررسی نمایید"
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		"دسترسی غیرمجاز: لطفاً نام کاربری و یا گذرواژه خود را مجدد وارد نمایید"
+	],
+	"Account": [
+		"حساب کاربری"
+	],
+	"Account information": [
+		"اطلاعات حساب"
+	],
+	"Account type": [
+		"نوع حساب"
+	],
+	"Action": [
+		"عمل"
+	],
+	"Actions": [
+		"اقدامات"
+	],
+	"Active": [
+		"فعال"
+	],
+	"Actual Size": [
+		"اندازه واقعی"
+	],
+	"Add body": [
+		"افزودن بدنه"
+	],
+	"Add new": [
+		"افزودن جدید"
+	],
+	"Add or remove tags:": [
+		"افزودن  یا حذف برچسب‌ها:"
+	],
+	"Add recipient:": [
+		"افزودن دریافت کننده:"
+	],
+	"Add title": [
+		"افزودن عنوان"
+	],
+	"Add to dictionary": [
+		"افزودن به لغت‌نامه"
+	],
+	"Admin": [
+		"مدیر"
+	],
+	"Admin dashboard": [
+		"داشبورد مدیر"
+	],
+	"Advanced options": [
+		"گزینه‌های پیشرفته"
+	],
+	"Advanced settings": [
+		"تنظیمات پیشرفته"
+	],
+	"Advanced tools": [
+		"ابزارهای پیشرفته"
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		"تمام داده ها اعم از یادداشت‌ها، دفترچه‌ها و برچسب‌ها به طور دائمی حذف خواهند شد."
+	],
+	"All item sync failures have been marked as \"ignored\".": [
+		"همه خطاهای همگام سازی به عنوان \"نادیده گرفته شده\" علامت گذاری شده اند."
+	],
+	"All notes": [
+		"همه یادداشت‌ها"
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		"تمام پورت‌های بالقوه در حال استفاده هستند- لطفا این مشکل را در %s گزارش نمایید"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		"اجازه اشکال زدایی به افزونه های موبایل را می دهد. برای جزئیات بیشتر به %s مراجعه کنید."
+	],
+	"Also displays unset and hidden config variables.": [
+		"همچنین متغیر‌های پیکربندی تنظیم نشده و مخفی را نمایش می‌دهد."
+	],
+	"Also publish linked notes": [
+		"همچنین یادداشت‌های مرتبط را منتشر کن"
+	],
+	"Always": [
+		"همیشه"
+	],
+	"Always ask": [
+		"همیشه سوال کن"
+	],
+	"Always open %s files without asking.": [
+		"همیشه فایل %s را بدون درخواست باز کنید."
+	],
+	"Always resize": [
+		"همیشه اندازه را تغییر بده"
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		"دفترچه «%s» دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه کوتاه دفترچه از \"ti\" و یا برای دفترچه انتخاب شده از $b استفاده نمایید"
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		"دفترچه «%s» دارای ابهام است. لطفا از شناسه دفترچه استفاده نمایید - برای دیدن شناسه کوتاه دفترچه از \"ti\" استفاده کنید"
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		"یک طراحی ذخیره شده خودکار پیدا شد. آیا می‌خواهید یک کپی از آن را به یادداشت پیوست کنید؟"
+	],
+	"An error occurred: %s": [
+		"خطایی روی داده است: %s"
+	],
+	"An update is available, do you want to download it now?": [
+		"یک بروزرسانی موجود است، آیا میخواهید الآن دانلود‌ شود؟"
+	],
+	"Android API level: %d": [
+		"سطح api اندروید : %d"
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		"هر ایمیلی که به این آدرس ارسال شود به یادداشت تبدیل شده و به مجموعه شما اضافه می شود. یادداشت در صندوق دفترچه ذخیره خواهد شد"
+	],
+	"Appearance": [
+		"ظاهر"
+	],
+	"Application": [
+		"برنامه"
+	],
+	"Apply": [
+		"اعمال"
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		"آیا مطمئن هستید که می خواهید توکن مجوز را تمدید کنید؟"
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		"آیا مطمئن هستید که می خواهید به چیدمان پیش فرض بازگردید؟ در صورت تایید، نحوه  چیدمان فعلی از بین خواهد رفت."
+	],
+	"Arguments:": [
+		"آرگومان‌ها:"
+	],
+	"Aritim Dark": [
+		"Aritim Dark"
+	],
+	"Attach": [
+		"پیوست"
+	],
+	"Attach file": [
+		"پیوست فایل"
+	],
+	"Attach photo": [
+		"پیوست تصویر"
+	],
+	"Attach...": [
+		"پیوست..."
+	],
+	"Attaches the given file to the note.": [
+		"فایل مشخص شده را به یادداشت پیوست کن."
+	],
+	"attachment": [
+		"پیوست"
+	],
+	"Attachment conflict: \"%s\"": [
+		"تداخل پیوست: «%s»"
+	],
+	"Attachment download behaviour": [
+		"رفتار دانلود پیوست"
+	],
+	"Attachments": [
+		"پیوست‌ها"
+	],
+	"Attachments that could not be downloaded": [
+		"پیوست‌هایی که دانلود نشده‌اند"
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		"هشدار: اگر این مکان را تغییر دادید، قبل از همگام‌سازی مطمئن شوید که تمام محتوای خود را در آن کپی کنید، در غیر این صورت تمام فایل ها حذف خواهند شد! برای جزئیات بیشتر به سوالات متداول مراجعه کنید:  %s"
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		"احراز هویت انجام نشد (توکن احراز هویت دریافت نشد)."
+	],
+	"Authorisation token:": [
+		"توکن مجوز:"
+	],
+	"Authorise": [
+		"ایجاد مجوز"
+	],
+	"Auto": [
+		"خودکار"
+	],
+	"Auto-add disabled accounts for deletion": [
+		"افزودن خودکار حساب های غیرفعال برای حذف"
+	],
+	"Auto-pair braces, parentheses, quotations, etc.": [
+		"جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
+	],
+	"Automatically check for updates": [
+		"بررسی خودکار برای بروزرسانی"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		"حذف خودکار یادداشت‌ها در سطل زباله پس از چند روز"
+	],
+	"Automatically switch theme to match system theme": [
+		"پوسته برنامه خودکار با پوسته سیستم تغییر کند"
+	],
+	"Back": [
+		"بازگشت"
+	],
+	"Basic": [
+		"پایه"
+	],
+	"Beta": [
+		"بتا"
+	],
+	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+		"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل joplin تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را خاموش و روشن کنید."
+	],
+	"Bold": [
+		"پررنگ"
+	],
+	"Browse all plugins": [
+		"مشاهده تمام افزونه‌ها"
+	],
+	"Browse...": [
+		"مرور..."
+	],
+	"Built-in": [
+		"پیش ساخته"
+	],
+	"Bulleted List": [
+		"لیست گلوله‌ای"
+	],
+	"by %s": [
+		"توسط %s"
+	],
+	"Can Share": [
+		"می‌توانید به اشتراک بگذارید"
+	],
+	"Can view": [
+		"می‌توانید مشاهده کنید"
+	],
+	"Can view and edit": [
+		"امکان مشاهده و ویرایش"
+	],
+	"Cancel": [
+		"لغو"
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"در حال لغو همگام سازی در پس‌زمینه... لطفا صبور باشید."
+	],
+	"Cancelling...": [
+		"در حال لغو..."
+	],
+	"Cancelling... Please wait.": [
+		"در حال لغو... لطفا صبور باشید."
+	],
+	"Cannot access %s": [
+		"عدم دسترسی به %s"
+	],
+	"Cannot change encrypted item": [
+		"آیتم رمزنگاری شده را نمی‌توان تغییر داد"
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		"یادداشت نمیتوان را به دفترچه‌ی «%s» کپی کرد"
+	],
+	"Cannot create a new note: %s": [
+		"نمی‌توان یادداشت جدید ایجاد نمود: %s"
+	],
+	"Cannot find \"%s\".": [
+		"«%s» یافت نشد."
+	],
+	"Cannot find: \"%s\"": [
+		"«%s» یافت نشد"
+	],
+	"Cannot initialise synchroniser.": [
+		"نمی توان همگام‌سازی را راه‌اندازی کرد."
+	],
+	"Cannot load \"%s\" module for format \"%s\" and output \"%s\"": [
+		"نمی‌توان ماژول «%s» برای فرمت «%s» و خروجی «%s» بارگذاری کرد."
+	],
+	"Cannot load \"%s\" module for format \"%s\" and target \"%s\"": [
+		"نمی‌توان ماژول «%s» برای فرمت «%s» و هدف  «%s» بارگذاری کرد."
+	],
+	"Cannot move note to \"%s\" notebook": [
+		"یادداشت را نمی‌توان به دفترچه ی «%s» انتقال داد"
+	],
+	"Cannot move notebook to this location": [
+		"دفترچه را نمی‌توان به این مکان انتقال داد"
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		"توکن را نمی‌توان تازه‌سازی کرد: داده های احراز هویت یافت نشد. با همگام‌سازی مجدد، ممکن است این مشکل را حل کند."
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		"«%s» «%s» را نمی‌توان  به علت بزرگ بودن بیش از حد ذخیره نمود (%s)"
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		"«%s» «%s» را نمی‌توان به علت عبور از مقدار اندازه مجاز برای این حساب (%s) ذخیره نمود"
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		"نمی توان دفترچه رمزنگاری شده را با گیرنده %s به اشتراک گذاشت؛ زیرا آنها رمزنگاری انتها به انتها (end-to-end) را فعال نکرده‌اند. آنها می‌توانند از طریق صفحه تنظیمات > رمزنگاری، این کار را انجام دهند."
+	],
+	"Case sensitive": [
+		"حساس به حروف کوچک و بزرگ لاتین"
+	],
+	"Change application layout": [
+		"ویرایش چیدمان برنامه"
+	],
+	"Change language": [
+		"ویرایش زبان"
+	],
+	"Characters": [
+		"کاراکترها"
+	],
+	"Characters excluding spaces": [
+		"کاراکترها به غیر از فاصله‌ها"
+	],
+	"Check for updates...": [
+		"بررسی برای بروزرسانی..."
+	],
+	"Check synchronisation configuration": [
+		"بررسی تنظیمات همگام‌سازی"
+	],
+	"Checkbox": [
+		"چک‌باکس"
+	],
+	"Checkbox list": [
+		"لیست چک‌باکس"
+	],
+	"Checking... Please wait.": [
+		"در حال بررسی... لطفا صبور باشید."
+	],
+	"Choose an option": [
+		"یک گزینه را انتخاب کنید"
+	],
+	"Chrome Web Store": [
+		"صفحه افزونه‌های مروگر کروم"
+	],
+	"Clear": [
+		"پاکسازی"
+	],
+	"Clear alarm": [
+		"پاکسازی هشدار"
+	],
+	"Clear search": [
+		"پاکسازی جستجو"
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		"برای بازیابی یادداشت بر روی «%s» کلیک نمایید. یادداشت در دفترچه‌ای به نام «%s» کپی می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
+	],
+	"Click to add tags...": [
+		"کلیک برای افزودن برچسب..."
+	],
+	"Client ID: %s": [
+		"شناسه کاربر: %s"
+	],
+	"Close": [
+		"بستن"
+	],
+	"Close dropdown": [
+		"بستن حالت کشویی"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"برنامه را ببندید، سپس نمایه خود را در \"%s\" حذف کنید و برنامه را دوباره شروع کنید. اطمینان حاصل کنید که ابتدا با صادرات تمام یادداشت های خود به عنوان JEX یک نسخه پشتیبان ایجاد کرده اید."
+	],
+	"Close Window": [
+		"بستن صفحه"
+	],
+	"Cmd-click to open": [
+		"کلیک خط فرمان برای باز کردن"
+	],
+	"Cmd-click to open: %s": [
+		"کلیک خط فرمان برای باز کردن: %s"
+	],
+	"Code": [
+		"کد"
+	],
+	"Code Block": [
+		"بلوک کد"
+	],
+	"Code View": [
+		"نمای کد"
+	],
+	"Collaborate on a notebook with others": [
+		"همکاری با دیگران در یک دفترچه"
+	],
+	"Collaborate on notebooks with others": [
+		"همکاری با دیگران در دفترچه‌ها"
+	],
+	"Collapse": [
+		"بستن"
+	],
+	"Collapse %s": [
+		"کوچک کردن %s"
+	],
+	"Coming alarms": [
+		"هشدار‌های آینده"
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		"لیست مسیرهای دایرکتوری های جدا شده با کاما برای دانلود گواهی‌نامه‌ها، یا مسیری به فایل‌های گواهی‌نامه شخصی. برای مثال: /my/cert_dir, /other/custom.pem . توجه داشته باشید که اگر تغییراتی در تنظیمات TLS ایجاد کنید، باید تغییرات خود را قبل از کلیک بر روی گزینه \"بررسی پیکربندی همگام سازی\" ذخیره نمایید."
+	],
+	"command": [
+		"فرمان"
+	],
+	"Command": [
+		"فرمان"
+	],
+	"Command palette": [
+		"پالت فرمان"
+	],
+	"Command palette...": [
+		"پالت فرمان ..."
+	],
+	"Compact": [
+		"فشرده"
+	],
+	"Completed": [
+		"کامل شده"
+	],
+	"Completed decryption.": [
+		"رمزگشایی کامل شد."
+	],
+	"Completed with warnings:\n%s": [
+		"تکمیل شده با هشدارها:\n%s"
+	],
+	"Completed: %s (%s)": [
+		"کامل شد: %s (%s)"
+	],
+	"completion date": [
+		"تاریخ تکمیل"
+	],
+	"Compress old changes": [
+		"فشرده سازی تغییرات قدیمی"
+	],
+	"Configuration": [
+		"تنظیمات"
+	],
+	"Confirm password cannot be empty": [
+		"تایید گذرواژه نمی‌تواند خالی باشد"
+	],
+	"Confirm password:": [
+		"تایید گذرواژه:"
+	],
+	"Confirmation": [
+		"تائیدیه"
+	],
+	"Conflicted: %d": [
+		"تداخل دارد با: %d"
+	],
+	"Conflicts": [
+		"تداخل‌ها"
+	],
+	"Conflicts (attachments)": [
+		"تداخل (پیوست‌ها)"
+	],
+	"Connect to Joplin Cloud": [
+		"اتصال به سرویس ابری joplin"
+	],
+	"Consolidated billing": [
+		"صورتحساب تلفیقی"
+	],
+	"Content provided by %s": [
+		"محتوای ارائه شده توسط %s"
+	],
+	"Content provided by: %s": [
+		"محتوای ارائه شده توسط: %s"
+	],
+	"Continue": [
+		"ادامه"
+	],
+	"Convert to note": [
+		"تبدیل به یادداشت"
+	],
+	"Convert to todo": [
+		"تبدیل به کار"
+	],
+	"Converting speech to text...": [
+		"تبدیل صوت به متن..."
+	],
+	"Copy": [
+		"کپی"
+	],
+	"Copy dev mode command to clipboard": [
+		"کپی کردن دستور حالت توسعه در کلیپ‌بورد"
+	],
+	"Copy external link": [
+		"کپی کردن لینک خارجی"
+	],
+	"Copy image": [
+		"کپی تصویر"
+	],
+	"Copy Link Address": [
+		"کپی کردن آدرس پیوند"
+	],
+	"Copy link to website": [
+		"کپی کردن لینک برای وبسایت"
+	],
+	"Copy Markdown link": [
+		"کپی کردن پیوند نشانه‌گذاری"
+	],
+	"Copy path to clipboard": [
+		"کپی کردن مسیر در کلیپ‌بورد"
+	],
+	"Copy Shareable Link": [
+		"کپی کردن لینک اشتراک‌گذاری",
+		"اشتراک گذاری"
+	],
+	"Copy to clipboard": [
+		"کپی در کلیپ‌بورد"
+	],
+	"Copy token": [
+		"کپی کردن توکن"
+	],
+	"Copy version info": [
+		"کپی اطلاعات نسخه"
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"عدم احراز هویت برنامه:\n\n %s\n\nلطفا دوباره تلاش نمایید."
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		"اتصال به سرور joplin برقرار نشد. لطفاً گزینه‌های همگام‌سازی را در صفحه تنظیمات بررسی نمایید. جزئیات کامل خطا:\n\n%s"
+	],
+	"Could not connect to plugin repository.": [
+		"نمی توان به مخزن افزونه متصل شد."
+	],
+	"Could not export notes: %s": [
+		"یادداشت‌ها صادر نشدند: %s"
+	],
+	"Could not install plugin: %s": [
+		"افزونه نصب نصب نشد: %s"
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		"به دعوت نمی‌توان پاسخ داد. لطفاً دوباره امتحان کنید و یا با صاحب دفترچه بررسی کنید که آیا کماکان آن را به اشتراک گذاشته است.\n\nخطا: %s"
+	],
+	"Could not switch profile: %s": [
+		"امکان تغییر حساب‌کاربری وجود ندارد: %s"
+	],
+	"Could not upgrade master key: %s": [
+		"کلید اصلی ارتقا نیافت: %s"
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		"وضعیت اشتراک‌گذاری این دفترچه تأیید نشد و بی‌نتیحه ماند. لطفاً زمانی که به اینترنت وصل شدید، دوباره امتحان نمایید."
+	],
+	"Could not verify your identity: %s": [
+		"هویت شما تأیید نشد: %s"
+	],
+	"Create": [
+		"ایجاد"
+	],
+	"Create a new notebook under a parent notebook.": [
+		"یک دفترچه‌ جدید در زیر دفترچه والد ایجاد نمایید."
+	],
+	"Create a notebook": [
+		"ایجاد دفترچه"
+	],
+	"Create new profile...": [
+		"ایجاد حساب‌کاربری جدید..."
+	],
+	"Create notebook": [
+		"ایجاد دفترچه"
+	],
+	"Create user": [
+		"ایجاد کاربر"
+	],
+	"Created": [
+		"ایجاد شده"
+	],
+	"created date": [
+		"تاریخ ایجاد"
+	],
+	"Created local items: %d.": [
+		"موارد محلی ایجاد شده: %d."
+	],
+	"Created locally": [
+		"ایجاد شده به صورت محلی"
+	],
+	"Created remote items: %d.": [
+		"موارد ریموت ایجاد شده: %d."
+	],
+	"Created: ": [
+		"ایجاد شده: "
+	],
+	"Created: %d.": [
+		"ایجاد شده: %d."
+	],
+	"Created: %s": [
+		"ایجاد شده: %s"
+	],
+	"Creates a new note.": [
+		"ایجاد یادداشت جدید."
+	],
+	"Creates a new notebook.": [
+		"ایجاد دفترچه جدید."
+	],
+	"Creates a new to-do.": [
+		"یک فهرست کار جدید می‌سازد."
+	],
+	"Creating new note...": [
+		"ایجاد یادداشت جدید..."
+	],
+	"Creating new to-do...": [
+		"ایجاد فهرست کار جدید..."
+	],
+	"Creating report...": [
+		"در حال ایجاد گزارش..."
+	],
+	"Ctrl-click to open": [
+		"کلیک کنترل برای باز کردن"
+	],
+	"Ctrl-click to open: %s": [
+		"کلیک کنترل برای باز کردن: %s"
+	],
+	"Current version is up-to-date.": [
+		"ورژن فعلی به‌روز است."
+	],
+	"custom order": [
+		"ترتیب سفارشی"
+	],
+	"Custom order": [
+		"ترتیب سفارشی"
+	],
+	"Custom stylesheet for Joplin-wide app styles": [
+		"استایل سفارشی برای joplin در سراسر برنامه"
+	],
+	"Custom stylesheet for rendered Markdown": [
+		"استایل سفارشی برای نشانه‌گذاری ارائه شده"
+	],
+	"Custom TLS certificates": [
+		"گواهی‌نامه TLS سفارشی"
+	],
+	"Customise the note publishing banner": [
+		"بنر انتشار یادداشت را سفارشی نمایید"
+	],
+	"Cut": [
+		"بریدن"
+	],
+	"Dark": [
+		"تیره"
+	],
+	"Dashboard": [
+		"داشبورد"
+	],
+	"Date": [
+		"تاریخ"
+	],
+	"Date format": [
+		"فرمت تاریخ"
+	],
+	"days": [
+		"روز"
+	],
+	"Decrease indent level": [
+		"کاهش سطح تورفتگی"
+	],
+	"Decrypted items: %d": [
+		"موارد رمزگشایی شده: %d"
+	],
+	"Decrypted items: %s / %s": [
+		"موارد رمزگشایی شده: %s از %s"
+	],
+	"Decrypting items: %d/%d": [
+		"در حال رمزگشایی موارد: %d از %d"
+	],
+	"Default": [
+		"پیش‌فرض"
+	],
+	"Default: %s": [
+		"پیش‌فرض: %s"
+	],
+	"Delete": [
+		"حذف"
+	],
+	"Delete attachment \"%s\"?": [
+		"پیوست «%s» حذف شود؟"
+	],
+	"Delete expired sessions": [
+		"حذف جلسات منقضی"
+	],
+	"Delete expired tokens": [
+		"حذف توکن‌های منقضی شده"
+	],
+	"Delete line": [
+		"حذف خط"
+	],
+	"Delete local data and re-download from sync target": [
+		"حذف داده‌های محلی و دانلود مجدد از هدف همگام‌سازی"
+	],
+	"Delete note": [
+		"حذف یادداشت"
+	],
+	"Delete notebook": [
+		"حذف دفترچه"
+	],
+	"Delete plugin \"%s\"?": [
+		"افزونه «%s» حذف شود؟"
+	],
+	"Delete profile \"%s\"": [
+		"حساب‌کاربری «%s» حذف شود؟"
+	],
+	"Delete selected notes": [
+		"حذف یادداشت‌های انتخاب شده"
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		"دفترچه‌ی صندوق ورودی حذف شود؟\n\nاگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از بین برود."
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		"این دعوتنامه حذف شود؟ گیرنده دیگر به این دفترچه‌ی مشترک دسترسی نخواهد داشت."
+	],
+	"Delete this profile?": [
+		"حساب‌ کاربری حذف شود؟"
+	],
+	"Deleted": [
+		"حذف شده"
+	],
+	"Deleted local items: %d.": [
+		"موارد محلی حذف شده: %d."
+	],
+	"Deleted remote items: %d.": [
+		"موارد ریموت حذف شده: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		"یادداشت ها را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
+	],
+	"Deletes the given notebook.": [
+		"دفترچه مشخص شده را حذف می‌کند."
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		"دفترچه را بدون پرسش برای تایید حذف می‌کند."
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		"یادداشت‌هایی که مطابق با <note-pattern> باشند را حذف می‌کند."
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"یادداشت‌ها را بدون پرسش برای تایید حذف می‌کند."
+	],
+	"Destination format: %s": [
+		"فرمت مقصد: %s"
+	],
+	"Detailed": [
+		"اطلاعات دقیق"
+	],
+	"Directory": [
+		"دایرکتوری"
+	],
+	"Directory to synchronise with (absolute path)": [
+		"دایرکتوری برای همگام سازی با (مسیر مطلق)"
+	],
+	"Disable": [
+		"غیر‌فعال کردن"
+	],
+	"Disable encryption": [
+		"غیرفعال کردن رمزنگاری"
+	],
+	"Disable safe mode and restart": [
+		"غیرفعال کردن حالت امن و راه‌اندازی مجدد"
+	],
+	"Disable Web Clipper Service": [
+		"غیرفعال کردن Web Clipper"
+	],
+	"Disabled": [
+		"غیر‌فعال شده"
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		"غیرفعال کردن رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی شده و بدون رمزنگاری به هدف همگام‌سازی ارسال ‌شوند. آیا مایل هستید ادامه دهید؟"
+	],
+	"Discard": [
+		"لغو تغییرات"
+	],
+	"Discard changes": [
+		"لغو تغییرات"
+	],
+	"Dismiss": [
+		"رد کردن"
+	],
+	"Displays a geolocation URL for the note.": [
+		"آدرس موقعیت جغرافیایی یادداشت را نشان بده."
+	],
+	"Displays only the first top <num> notes.": [
+		"فقط <num> یادداشت اول را نمایش می‌دهد."
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		"تنها موارد نوع/انواع مشخص شده را نمایش می‌دهد. می‌تواند برای یادداشت‌ها `n`، برای فهرست کار‌ها `t` یا برای یادداشت‌ها و فهرست کار‌ها `nt` باشد. (به عنوان مثال: `-tt` تنها فهرست کار‌ها را نمایش خواهد داد در حالی که `-tnt` یادداشت‌ها و فهرست کار‌ها را نمایش خواهد داد.)"
+	],
+	"Displays summary about the notes and notebooks.": [
+		"خلاصه‌ای درباره یادداشت‌ها و دفترچه‌ها نمایش می‌دهد."
+	],
+	"Displays the complete information about note.": [
+		"مشخصات کامل یادداشت را نمایش می‌دهد."
+	],
+	"Displays the given note.": [
+		"یادداشت مشخص شده را نمایش بده."
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		"یادداشت های موجود در دفترچه کنونی را نمایش می‌دهد. برای نمایش لیست دفترچه ها از `ls /` استفاده کنید."
+	],
+	"Displays usage information.": [
+		"اطلاعات مربوط به استفاده را نشان می‌دهد."
+	],
+	"Displays version information": [
+		"اطلاعات نسخه را نمایش می‌دهد"
+	],
+	"Do it now": [
+		"هم‌اکنون انجام بده"
+	],
+	"Do not ask for confirmation.": [
+		"برای تایید سوال نکن."
+	],
+	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
+	],
+	"Donate, website": [
+		"کمک مالی، وبسایت"
+	],
+	"Done": [
+		"انجام‌شده"
+	],
+	"Download": [
+		"دانلود"
+	],
+	"Download and install the relevant extension for your browser:": [
+		"افزونه های مرتبط را برای مرورگر خود دانلود و نصب نمایید:"
+	],
+	"Downloaded": [
+		"دانلود شده"
+	],
+	"Downloaded and decrypted": [
+		"دانلود و رمزگشایی شده"
+	],
+	"Downloaded and encrypted": [
+		"دانلود و رمزنگاری شده"
+	],
+	"Downloading": [
+		"در حال دانلود"
+	],
+	"Downloading %s language files...": [
+		"در حال دانلود فایل‌های زبان %s..."
+	],
+	"Downloading resources...": [
+		"در حال دانلود منابع..."
+	],
+	"Dracula": [
+		"Dracula"
+	],
+	"Draw picture": [
+		"رسم تصویر"
+	],
+	"Drawing": [
+		"طراحی"
+	],
+	"Drop notes or files here": [
+		"یادداشت‌ها یا فایل‌ها را در اینجا رها نمایید"
+	],
+	"Dropbox": [
+		"Dropbox"
+	],
+	"Dropbox Login": [
+		"ورود به Dropbox"
+	],
+	"Due": [
+		"به واسطه"
+	],
+	"due date": [
+		"سررسید"
+	],
+	"Duplicate": [
+		"تکراری"
+	],
+	"Duplicate line": [
+		"خط تکراری"
+	],
+	"Duplicate selected notes": [
+		"یادداشت‌های انتخاب‌شده تکراری"
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		"یادداشت های مطابق با <note> را در [notebook] کپی می‌کند. اگر هیچ دفترچه‌ای مشخص نشده باشد، یادداشت در دفترچه کنونی کپی می‌شود."
+	],
+	"Edit": [
+		"ویرایش"
+	],
+	"Edit in external editor": [
+		"ویرایش در ویرایشگر خارجی"
+	],
+	"Edit link": [
+		"ویرایش لینک"
+	],
+	"Edit note.": [
+		"ویرایش یادداشت."
+	],
+	"Edit notebook": [
+		"ویرایش دفترچه"
+	],
+	"Edit profile": [
+		"ویرایش حساب‌کاربری"
+	],
+	"Edit profile configuration...": [
+		"ویرایش تنظیمات حساب کاربری..."
+	],
+	"Editor": [
+		"ویرایشگر"
+	],
+	"Editor font": [
+		"فونت ویرایشگر"
+	],
+	"Editor font family": [
+		"خانواده فونت ویرایشگر"
+	],
+	"Editor font size": [
+		"اندازه فونت ویرایشگر"
+	],
+	"Editor maximum width": [
+		"حداکثر عرض ویرایشگر"
+	],
+	"Editor monospace font family": [
+		"خانواده فونت هم‌فضا ویرایشگر"
+	],
+	"Editor: %s": [
+		"ویرایشگر: %s"
+	],
+	"Either \"text\" or \"json\"": [
+		"یا «متن» و یا «json»"
+	],
+	"Emacs": [
+		"Emacs"
+	],
+	"Email": [
+		"ایمیل"
+	],
+	"Email to note": [
+		"تبدیل ایمیل به یادداشت"
+	],
+	"Email to Note": [
+		"تبدیل ایمیل به یادداشت"
+	],
+	"Email To Note, login information": [
+		"ایمیل به یادداشت، اطلاعات ورود به سیستم"
+	],
+	"Emails": [
+		"ایمیل‌ها"
+	],
+	"emphasised text": [
+		"متن تأکید شده"
+	],
+	"Empty trash": [
+		"خالی کردن سطل زباله"
+	],
+	"Enable": [
+		"فعال سازی"
+	],
+	"Enable ++insert++ syntax": [
+		"فعال‌سازی نحوه نوشتار ++insert++"
+	],
+	"Enable ==mark== syntax": [
+		"فعال‌سازی نحوه نوشتار ==mark=="
+	],
+	"Enable ^sup^ syntax": [
+		"فعال‌سازی نحوه نوشتار ^sup^"
+	],
+	"Enable abbreviation syntax": [
+		"فعال‌سازی نحوه نوشتار مختصر"
+	],
+	"Enable audio player": [
+		"فعال‌سازی پخش‌کننده صدا"
+	],
+	"Enable biometrics authentication?": [
+		"احراز هویت بیومتریک فعال شود؟"
+	],
+	"Enable deflist syntax": [
+		"فعال سازی نحوه نوشتار دور زدن"
+	],
+	"Enable encryption": [
+		"فعال‌سازی رمزنگاری"
+	],
+	"Enable footnotes": [
+		"فعال‌سازی پاورقی"
+	],
+	"Enable Fountain syntax support": [
+		"فعال‌سازی پشتیبانی از نحوه نوشتار فواره‌ای"
+	],
+	"Enable Linkify": [
+		"فعال‌سازی تبدیل به لینک"
+	],
+	"Enable markdown emoji": [
+		"فعال‌سازی شکلک نشانه‌گذاری"
+	],
+	"Enable math expressions": [
+		"فعال‌سازی عبارت‌های ریاضی"
+	],
+	"Enable Mermaid diagrams support": [
+		"فعال‌سازی پشتیبانی از نمودارهای روندنما"
+	],
+	"Enable multimarkdown table extension": [
+		"فعال‌سازی افزونه جدول نشانه‌گذاری چندگانه"
+	],
+	"Enable note history": [
+		"فعال‌سازی تاریخچه‌ یادداشت"
+	],
+	"Enable optical character recognition (OCR)": [
+		"فعال سازی تشخیص نوری کاراکتر (OCR)"
+	],
+	"Enable or disable plugins": [
+		"فعال یا غیر فعال سازی افزونه ها"
+	],
+	"Enable PDF viewer": [
+		"فعال‌سازی نمایشگر PDF"
+	],
+	"Enable plugin support": [
+		"پشتیبانی از افزونه را فعال کنید"
+	],
+	"Enable soft breaks": [
+		"فعال‌سازی شکستن نرم خطوط"
+	],
+	"Enable spellcheck in the text editor": [
+		"فعال‌سازی بررسی صحت املاء در ویرایشگر متن"
+	],
+	"Enable table of contents extension": [
+		"فعال‌سازی افزونه جدول مطالب"
+	],
+	"Enable the Markdown toolbar": [
+		"فعال‌سازی نوار ابزار نشانه‌گذاری"
+	],
+	"Enable typographer support": [
+		"فعال‌سازی پشتیبانی از تایپوگرافی"
+	],
+	"Enable video player": [
+		"فعال‌سازی پخش‌کننده ویدئو"
+	],
+	"Enable Web Clipper Service": [
+		"فعال‌سازی سرویس Web Clipper"
+	],
+	"Enable ~sub~ syntax": [
+		"فعال‌سازی نحوه نوشتار ~sup~"
+	],
+	"Enabled": [
+		"فعال‌شده"
+	],
+	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
+		"فعال‌سازی رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی می‌شوند و به صورت رمزنگاری شده به هدف همگام‌سازی ارسال می‌شوند."
+	],
+	"Encrypted": [
+		"رمزنگاری شده"
+	],
+	"Encrypted items cannot be modified": [
+		"موارد رمزنگاری شده نمی‌توانند تغییر پیدا کنند"
+	],
+	"Encryption": [
+		"رمزنگاری"
+	],
+	"Encryption Config": [
+		"تنظیمات رمزنگاری"
+	],
+	"Encryption is: %s": [
+		"رمزنگاری: %s"
+	],
+	"Encryption keys": [
+		"کلیدهای رمزنگاری"
+	],
+	"Encryption:": [
+		"رمزنگاری:"
+	],
+	"End-to-end encryption": [
+		"رمز نگاری انتها به انتها یا end-to -end"
+	],
+	"Enter code here": [
+		"کد را وارد نمایید"
+	],
+	"Enter master password:": [
+		"گذرواژه اصلی را وارد کنید:"
+	],
+	"Enter notebook title": [
+		"عنوان دفترچه را وارد کنید"
+	],
+	"Enter password": [
+		"گذرواژه"
+	],
+	"Enum": [
+		"قابل شمارش"
+	],
+	"Error": [
+		"خطا"
+	],
+	"Error opening note in editor: %s": [
+		"خطای بازکردن یادداشت در ویرایشگر: %s"
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:"
+	],
+	"Error: %s": [
+		"خطا: %s"
+	],
+	"Errors only": [
+		"فقط خطاها"
+	],
+	"Evernote Export File (as HTML)": [
+		"فایل صادر شده Evernote (به صورت HTML)"
+	],
+	"Evernote Export File (as Markdown)": [
+		"فایل صادر شده Evernote (به صورت نشانه‌گذاری)"
+	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"فایلهای صادر شده Evernote (به صورت HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"فایلهای صادر شده Evernote (به صورت نشانه‌گذاری)"
+	],
+	"Exits the application.": [
+		"خروح از نرم‌افزار."
+	],
+	"Expand": [
+		"منبسط"
+	],
+	"Expand %s": [
+		"گسترش %s"
+	],
+	"Export": [
+		"صدور"
+	],
+	"Export all": [
+		"صدور همه"
+	],
+	"Export all notes as JEX": [
+		"صدور تمام یادداشت ها با فرمت JEX"
+	],
+	"Export debug report": [
+		"صدور گزارش اشکال‌زدایی"
+	],
+	"Export Debug Report": [
+		"صدور گزارش اشکال‌زدایی"
+	],
+	"Export profile": [
+		"صدور حساب‌کاربری"
+	],
+	"Exported successfully!": [
+		"صدور با موفقیت انجام شد!"
+	],
+	"Exporting profile...": [
+		"در حال صدور حساب‌کاربری..."
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		"در حال صدور «%s» با فرمت «%s». لطفاً صبور باشید..."
+	],
+	"Exporting...": [
+		"در حال ضدور..."
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		"داده‌های joplin را در محل مورد نظر صدور می‌کند. به طور پیش‌فرض، تمام پایگاه‌داده شامل دفترچه‌ها، یادداشت‌ها، برچسب‌ها و منابع را صدور می‌کند."
+	],
+	"Exports only the given note.": [
+		"تنها یادداشت مشخص شده را صدور می‌کند."
+	],
+	"Exports only the given notebook.": [
+		"تنها دفترچه مشخص شده را صادر می‌کند."
+	],
+	"Fail-safe": [
+		"شکست ایمن"
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک پیکربندی اشتباه یا اشکال است)"
+	],
+	"Fatal error:": [
+		"خطای مهلک:"
+	],
+	"Feature flags": [
+		"پرچم‌های ویژه"
+	],
+	"Fetched items: %d/%d.": [
+		"آیتم های دریافت‌شده: %d از %d."
+	],
+	"Fetching resources: %d/%d": [
+		"در حال دریافت منابع: %d/%d"
+	],
+	"File": [
+		"فایل"
+	],
+	"File system": [
+		"فایل سیستم"
+	],
+	"Filter": [
+		"فیلتر"
+	],
+	"Filter tags": [
+		"فیلتر برچسب‌ها"
+	],
+	"Find and replace": [
+		"جستجو و جایگزینی"
+	],
+	"Find: ": [
+		"یافت‌شده: "
+	],
+	"Firefox Extension": [
+		"افزونه Firefox"
+	],
+	"Fix search index": [
+		"اصلاح فهرست جستجو"
+	],
+	"Fixing search index...": [
+		"در حال اصلاح فهرست جستجو..."
+	],
+	"Focus": [
+		"تمرکز"
+	],
+	"Focus body": [
+		"بدنه‌ی تمرکز"
+	],
+	"Focus title": [
+		"عنوان تمرکز"
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		"تنها به منظور اشکال‌زدایی: صدور حساب‌کاربری شما به یک حافظه خارجی SD."
+	],
+	"For example \"%s\"": [
+		"برای مثال «%s»"
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		"برای اطلاع از اینکه چگونه میانبر‌ها را شخصی‌سازی نمایید، لطفاً به %s مراجعه نمایید"
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		"برای اطلاعات بیشتر در مورد رمزنگاری انتها به انتها (E2EE یا End-To-Encryption) و آگاهی از نحوه‌ی فعال‌سازی آن، لطفا به مستندات مراجعه نمایید:"
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		"برای فهرست میانبرهای صفحه‌کلید و گزینه‌های تنظیمات، `help keymap` را تایپ نمایید"
+	],
+	"Force path style": [
+		"استایل مسیر اجباری"
+	],
+	"Formatting": [
+		"قالب بندی"
+	],
+	"Forward": [
+		"رو به جلو"
+	],
+	"Found: %d.": [
+		"پیدا شده: %d."
+	],
+	"FTS enabled: %d": [
+		"FTS فعال شده: %d"
+	],
+	"Full changelog": [
+		"تغییرات کامل"
+	],
+	"Full name": [
+		"نام کامل"
+	],
+	"General": [
+		"عمومی"
+	],
+	"Generated": [
+		"تولید شده"
+	],
+	"Generating link...": [
+		"در حال تولید لینک...",
+		"در حال بوجود آوردن پیوند..."
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		"موقعیت جغرافیایی، بررسی املایی، نوار ابزار ویرایشگر، تغییر اندازه تصویر"
+	],
+	"Get it now:": [
+		"هم‌اکنون دریافت نمایید:"
+	],
+	"Get pre-releases when checking for updates": [
+		"دریافت نسخه پیش از انتشار در زمان بررسی برای بروزرسانی"
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
+	],
+	"Go to Joplin Cloud profile": [
+		"ورود به حساب سرویس ابری joplin"
+	],
+	"Go to source URL": [
+		"رفتن به آدرس منبع"
+	],
+	"Goto Anything...": [
+		"به هر چیزی بروید..."
+	],
+	"Grant authorisation": [
+		"اعطای مجوز"
+	],
+	"Have you authorised the application login in the above URL?": [
+		"آیا ورود برنامه را در URL بالا مجاز کرده اید؟"
+	],
+	"Header %d": [
+		"سرصفحه %d"
+	],
+	"Headers": [
+		"سرصفحه ها"
+	],
+	"Heading": [
+		"سرفصل"
+	],
+	"Help": [
+		"کمک"
+	],
+	"Here's what we do to make plugins safer:": [
+		"کاری که ما برای ایمن‌تر کردن افزونه‌ها انجام می‌دهیم در اینجا آمده است:"
+	],
+	"Hermes enabled: %d": [
+		"Hermes فعال شده: %d"
+	],
+	"Hide %s": [
+		"پنهان‌سازی %s"
+	],
+	"Hide advanced": [
+		"پنهان‌سازی پیشرفته"
+	],
+	"Hide disabled": [
+		"پنهان‌سازی غیرفعال است"
+	],
+	"Hide disabled keys": [
+		"پنهان‌سازی کلیدها غیرفعال است"
+	],
+	"Hide Joplin": [
+		"پنهان‌سازی joplin"
+	],
+	"Hide keyboard": [
+		"پنهان‌سازی صفحه‌کلید"
+	],
+	"Hide more actions": [
+		"پنهان‌سازی اقدامات بیشتر"
+	],
+	"Highlight": [
+		"برجسته"
+	],
+	"Home": [
+		"خانه"
+	],
+	"Horizontal Rule": [
+		"خط افقی"
+	],
+	"HTML Directory": [
+		"مسیر پوشه HTML"
+	],
+	"HTML document": [
+		"سند HTML"
+	],
+	"HTML File": [
+		"فایل HTML"
+	],
+	"Hyperlink": [
+		"پیوند برجسته"
+	],
+	"Icon": [
+		"آیکون"
+	],
+	"ID": [
+		"شناسه"
+	],
+	"Idle": [
+		"بیکار"
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		"اگر قبلاً احراز هویت شده‌اید، لطفاً منتظر بمانید تا برنامه با سرویس ابری Joplin همگام شود."
+	],
+	"Ignore": [
+		"نادیده‌گرفتن"
+	],
+	"Ignore TLS certificate errors": [
+		"نادیده‌گرفتن خطاهای گواهی‌نامه TLS"
+	],
+	"Ignored items that cannot be synchronised": [
+		"موارد نادیده گرفته شده که نمی توانند همگام شوند"
+	],
+	"Images": [
+		"تصاویر"
+	],
+	"Import": [
+		"وارد کردن"
+	],
+	"Import and Export": [
+		"واردات و صادرات"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		"واردات انجام نشد. مطمئن شوید که یک فایل JEX انتخاب شده است.\nجزئیات: %s"
+	],
+	"Import from JEX": [
+		"واردات از JEX"
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		"یادداشت ها را از یک فایل JEX (صادرات Joplin) وارد کنید."
+	],
+	"Import or export your data": [
+		"داده های خود را وارد یا صادر کنید"
+	],
+	"Imported successfully!": [
+		"با موفقیت وارد شد!"
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		"در حال وارد کردن از «%s» با فرمت «%s». لطفا صبور باشید..."
+	],
+	"Importing notes...": [
+		"در حال وارد کردن یادداشت‌ها..."
+	],
+	"Importing...": [
+		"در حال صدور..."
+	],
+	"Imports data into Joplin.": [
+		"داده را در joplin وارد می‌کند."
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		"در حالت «دستی»، پیوست‌ها تنها زمانی دانلود می‌شوند که روی آن‌ها کلیک کنید. در حالت «خودکار»، وقتی یادداشت را باز می‌کنید، دانلود می‌شوند. در حالت«همیشه»، چه یادداشت را باز کنید یا نه، همه پیوست‌ها دانلود می‌شوند."
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		"در هر دستوری، یک یادداشت یا دفترچه را می توان با عنوان یا شناسه یا با استفاده از میانبرهای `$n` یا `$b` به ترتیب برای یادداشت یا دفترچه انتخاب شده در حال حاضر ارجاع داد. میانبر `$c` را می توان برای اشاره به مورد انتخاب شده فعلی استفاده نمود."
+	],
+	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
+		"برای مرتبط نمودن یک موقعیت جغرافیایی با یادداشت، برنامه برای دسترسی به موقعیت مکانی، به اجازه شما نیاز دارد.\n\nشما می‌توانید این گزینه را در هر زمانی در صفحه تنظیمات غیرفعال نمایید."
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		"برای انجام این کار، کل مجموعه داده شما باید رمزنگاری و همگام شود، بنابراین بهتر است آن را به یکباره اجرا نماید.\n\nبرای شروع، لطفا این دستورالعمل‌ها را دنبال کنید:\n1. همه دستگاه های خود را همگام سازی کنید.\n2. بر روی «%s» کلیک نمایید.\n3. اجازه دهید تا کامل شود. در حین اجرا، از تغییر هر یادداشتی در دستگاه‌های دیگر خود اجتناب نمایید  تا از بروز تداخل جلوگیری شود.\n4.پس از انجام همگام‌سازی در این دستگاه، همه دستگاه‌های دیگر خود را همگام‌سازی کنید و اجازه دهید تا کامل شود.\n\nنکته‌ی مهم: شما فقط باید این عملیات را یک مرتبه و تنها روی یک دستگاه اجرا کنید."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		"برای همگام سازی، لطفاً برنامه خود را به نسخه %s+ ارتقا دهید"
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		"برای استفاده از همگام‌سازی سیستم فایل، اجازه نوشتن روی حافظه خارجی مورد نیاز است."
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		"برای استفاده از Web Clipper باید موارد زیر را انجام دهید:"
+	],
+	"In progress": [
+		"درحال انجام"
+	],
+	"In: %s": [
+		"در: %s"
+	],
+	"Incompatible": [
+		"ناسازگار"
+	],
+	"Increase indent level": [
+		"افزایش سطح تورفتگی"
+	],
+	"Indent less": [
+		"تورفتگی کمتر"
+	],
+	"Indent more": [
+		"تورفتگی بیشتر"
+	],
+	"Information": [
+		"اطلاعات"
+	],
+	"Inline Code": [
+		"کد درون خطی"
+	],
+	"Insert": [
+		"درج"
+	],
+	"Insert Hyperlink": [
+		"درج پیوند برجسته"
+	],
+	"Insert time": [
+		"درج زمان"
+	],
+	"Install": [
+		"نصب"
+	],
+	"Install from file": [
+		"نصب از قایل"
+	],
+	"Installed": [
+		"نصب‌شده"
+	],
+	"Installed (%d):": [
+		"نصب شده (%d):"
+	],
+	"Installing...": [
+		"در حال نصب..."
+	],
+	"Invalid": [
+		"نامعتبر"
+	],
+	"Invalid %s: %s.": [
+		"نامعتبر %s: %s."
+	],
+	"Invalid answer: %s": [
+		"پاسخ نامعتبر: %s"
+	],
+	"Invalid command: \"%s\"": [
+		"دستور نامعتبر: «%s»"
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		"مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
+	],
+	"Invalid password": [
+		"گذرواژه نامعتبر"
+	],
+	"iOS version: %s": [
+		"نسخه iOS: %s"
+	],
+	"Italic": [
+		"مورب"
+	],
+	"Item \"%s\" could not be downloaded: %s": [
+		"مورد «%s» دانلود نشد: %s"
+	],
+	"Items": [
+		"موارد"
+	],
+	"Items that cannot be decrypted": [
+		"مواردی که نمی‌توانند رمزگشایی شوند"
+	],
+	"Items that cannot be synchronised": [
+		"مواردی که نمی‌توانند همگام‌سازی شوند"
+	],
+	"Join us on Twitter": [
+		"به توئیتر ما بپیوندید"
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		"جاپلین می تواند یادداشت های شما را با استفاده از ارائه دهندگان مختلف همگام سازی کند. از لیست زیر یکی را انتخاب کنید."
+	],
+	"Joplin Cloud": [
+		"سرویس ابری joplin"
+	],
+	"Joplin Cloud Login": [
+		"ورود سرویس ابری joplin"
+	],
+	"Joplin Desktop": [
+		"joplin نسخه دسکتاپ"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		"joplin پسوند %s را نمی شناسد. باز کردن این فایل ممکن است خطرناک باشد. دوست دارید چه کار کنید؟"
+	],
+	"Joplin Export Directory": [
+		"پوشه صادرات joplin"
+	],
+	"Joplin Export File": [
+		"فایل صدور joplin"
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		"جاپلین چندین بار نتوانست این موارد را رمزگشایی کند، احتمالا به این خاطر که خراب یا بسیار بزرگ هستند. این موارد بر روی دستگاه باقی می‌مانند اما joplin دیگر تلاشی برای رمزگشایی آن‌ها نخواهد کرد."
+	],
+	"Joplin Forum": [
+		"انجمن joplin"
+	],
+	"Joplin Mobile": [
+		"joplin نسخه موبایل"
+	],
+	"Joplin Server": [
+		"سرور joplin"
+	],
+	"Joplin Server email": [
+		"سرور ایمیل joplin"
+	],
+	"Joplin Server password": [
+		"گذرواژه سرور joplin"
+	],
+	"Joplin Server URL": [
+		"آدرس سرور joplin"
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin ذخیره کنید."
+	],
+	"Joplin website": [
+		"سایت joplin"
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		"سرویس همگام‌سازی اختصاصی joplin. همچنین به ویژگی‌های خاص joplin مانند انتشار یادداشت‌ها یا همکاری در دفترچه‌ها با دیگران دسترسی می‌دهد."
+	],
+	"KaTeX": [
+		"KaTeX"
+	],
+	"Keep note history for": [
+		"تاریخچه ی یادداشت را نگه دار به مدت"
+	],
+	"Keep notes in the trash for": [
+		"یادداشت ها را در سطل زباله نگه دار برای"
+	],
+	"Keyboard Mode": [
+		"حالت صفحه‌کلید"
+	],
+	"Keyboard Shortcut": [
+		"میانبر صفحه‌کلید"
+	],
+	"Keyboard Shortcuts": [
+		"میانبرهای صفحه‌کلید"
+	],
+	"Keychain Supported: %s": [
+		"Keychain پشتیبانی می‌شود: %s"
+	],
+	"Keys that need upgrading": [
+		"کلید‌ها نیازمند ارتقاء می‌باشند"
+	],
+	"Landscape": [
+		"افقی"
+	],
+	"Language": [
+		"زبان"
+	],
+	"Language, date format": [
+		"زبان، فرمت تاریخ"
+	],
+	"Last error: %s": [
+		"آخرین خطا: %s"
+	],
+	"Later": [
+		"بعداً"
+	],
+	"Latitude": [
+		"عرض جغرافیایی"
+	],
+	"Layout": [
+		"چیدمان"
+	],
+	"Layout button sequence": [
+		"دنباله دکمه چیدمان"
+	],
+	"Learn more": [
+		"بیشتر بدانید"
+	],
+	"Leave it blank to download the language files from the default website": [
+		"برای دانلود فایل‌های زبان از سایت پیشفرض، آن را خالی بگذارید"
+	],
+	"Leave notebook": [
+		"ترک دفترچه"
+	],
+	"Leave notebook...": [
+		"ترک دفترچه..."
+	],
+	"Legal": [
+		"مجاز"
+	],
+	"Letter": [
+		"نامه"
+	],
+	"Light": [
+		"روشن"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		"مانند هر نرم افزاری که نصب می کنید، افزونه ها به طور بالقوه می توانند باعث مشکلات امنیتی یا از دست دادن داده ها شوند."
+	],
+	"Lines": [
+		"خطوط"
+	],
+	"Link": [
+		"لینک"
+	],
+	"Link description": [
+		"توضیحات لینک"
+	],
+	"Link has been copied to clipboard!": [
+		"لینک در کلیپ‌بورد کپی شد!",
+		"پیوند در کلیپ بورد کپی شد!"
+	],
+	"Link text": [
+		"متن لینک"
+	],
+	"Links with protocol \"%s\" are not supported": [
+		"پیوند‌های دارای پروتکل «%s» پشتیبانی نمی‌شوند"
+	],
+	"List item": [
+		"آیتم فهرست"
+	],
+	"Lists": [
+		"فهرست‌ها"
+	],
+	"Loaded": [
+		"دانلود‌شده"
+	],
+	"Loading...": [
+		"در حال دانلود..."
+	],
+	"Location": [
+		"موقعیت"
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		"فایل قفل در حال حاضر نگه داشته شده است. اگر می‌دانید که هیچ همگام‌سازی صورت نمی‌گیرد، می‌توانید فایل قفل را در «%s» حذف کرده و عملیات را ادامه دهید."
+	],
+	"Log": [
+		"لاگ"
+	],
+	"Login with Dropbox": [
+		"ورود با Dropbox"
+	],
+	"Login with OneDrive": [
+		"ورود با OneDrive"
+	],
+	"Logout": [
+		"خروج"
+	],
+	"Logs, profiles, sync status": [
+		"لاگ‌ها، نمایه‌ها، وضعیت همسان سازی"
+	],
+	"Longitude": [
+		"طول جغرافیایی"
+	],
+	"Make a donation": [
+		"کمک مالی"
+	],
+	"Manage master password": [
+		"مدیریت گذرواژه اصلی"
+	],
+	"Manage master password...": [
+		"مدیریت گذرواژه اصلی..."
+	],
+	"Manage multiple users": [
+		"مدیریت چندین کاربر"
+	],
+	"Manage profiles": [
+		"مدیریت حساب‌کاربری"
+	],
+	"Manage shared notebooks": [
+		"مدیریت دفترچه‌های مشترک"
+	],
+	"Manage your plugins": [
+		"مدیریت افزونه‌های شما"
+	],
+	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
+		"تنظیمات رمزنگاری انتها به انتها (E2EE) را مدیریت می‌کند. دستورات شامل `enable`، `disable`، `decrypt`، `status`، `decrypt-file` و `target-status` هستند."
+	],
+	"Manual": [
+		"دستی"
+	],
+	"Markdown": [
+		"نشانه‌گذاری"
+	],
+	"Markdown + Front Matter": [
+		"نشانه گذاری + موضوع روبه‌رو"
+	],
+	"Marks a to-do as done.": [
+		"یک فهرست کار را به عنوان انجام شده علامت می‌زند."
+	],
+	"Marks a to-do as non-completed.": [
+		"یک فهرست کار را به عنوان کامل نشده علامت می‌زند."
+	],
+	"Markup": [
+		"نشانه گذاری"
+	],
+	"Master Key %s": [
+		"کلید اصلی %s"
+	],
+	"Master password": [
+		"گذرواژه اصلی"
+	],
+	"Master password:": [
+		"گذرواژه اصلی:"
+	],
+	"Max concurrent connections": [
+		"حداکثر اتصالات همزمان"
+	],
+	"Max Item Size": [
+		"حداکثر اندازه آیتم"
+	],
+	"Max note or attachment size": [
+		"حداکثر اندازه یادداشت یا پیوست"
+	],
+	"Max Total Size": [
+		"حداکثر اندازه مجموع"
+	],
+	"Media player, math, diagrams, table of contents": [
+		"پخش کننده رسانه، ریاضی، نمودارها، فهرست مطالب"
+	],
+	"Minimise": [
+		"کوچک کردن"
+	],
+	"Missing keys": [
+		"کلیدها‌ یافت نشدند"
+	],
+	"Missing Master Keys": [
+		"کلید‌های اصلی یافت نشدند"
+	],
+	"Missing required argument: %s": [
+		"کمبود آرگومان در دستور: %s"
+	],
+	"Missing required flag value: %s": [
+		"کمبود آرگومان در دستور: %s"
+	],
+	"Mobile data - auto-sync disabled": [
+		"داده همراه - غیرفعال شدن همگام‌سازی خودکار"
+	],
+	"More info": [
+		"اطلاعات بیشتر"
+	],
+	"More information": [
+		"اطلاعات بیشتر"
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		"بیش از یک مورد مطابق «%s» وجود دارد. لطفاً عبارت جستجو را محدودتر کنید."
+	],
+	"Most plugins have source code available for review on the plugin website.": [
+		"اکثر افزونه ها دارای کد منبع برای بررسی در وب سایت افزونه هستند."
+	],
+	"Move %d notes to notebook \"%s\"?": [
+		"انتقال یادداشت‌های  %d به دفترچه «%s»؟"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
+	],
+	"Move to notebook": [
+		"انتقال به دفترچه"
+	],
+	"Move to notebook...": [
+		"انتقال به دفترچه..."
+	],
+	"Move to notebook:": [
+		"انتقال به دفترچه:"
+	],
+	"Moves the given <item> to [notebook]": [
+		"یادداشت‌هایی که مطابق <note> هستند را به [notebook] منتقل می‌کند."
+	],
+	"n": [
+		"n"
+	],
+	"N": [
+		"N"
+	],
+	"Never resize": [
+		"هرگز بدون تغییر اندازه"
+	],
+	"New": [
+		"جدید"
+	],
+	"New invitations": [
+		"دعوت نامه های جدید"
+	],
+	"New note": [
+		"یادداشت جدید"
+	],
+	"New notebook": [
+		"دفترچه جدید"
+	],
+	"New Notebook": [
+		"دفترچه جدید"
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		"دفترچه جدید «%s» ساخته می‌شود و فایل «%s» به آن افزوده خواهد شد"
+	],
+	"New sub-notebook": [
+		"دفترچه فرزند جدید"
+	],
+	"New tags:": [
+		"برچسب جدید:"
+	],
+	"New to-do": [
+		"فهرست کار جدید"
+	],
+	"New version: %s": [
+		"نسخه جدید: %s"
+	],
+	"Next match": [
+		"تطابق بعدی"
+	],
+	"Nextcloud": [
+		"Nextcloud"
+	],
+	"Nextcloud password": [
+		"گذرواژه Nextcloud"
+	],
+	"Nextcloud username": [
+		"نام کاربری Nextcloud"
+	],
+	"Nextcloud WebDAV URL": [
+		"آدرس Nextcloud WebDAV"
+	],
+	"no": [
+		"خیر"
+	],
+	"No": [
+		"خیر"
+	],
+	"No active notebook.": [
+		"دفترچه‌ی فعالی وجود ندارد."
+	],
+	"No item with ID %s": [
+		"هیچ موردی با شناسه %s وجود ندارد"
+	],
+	"No new invitations": [
+		"دعوتنامه جدیدی وجود ندارد"
+	],
+	"No notebook has been specified.": [
+		"هیچ دفترچه‌ای مشخص نشده است."
+	],
+	"No notebook selected.": [
+		"هیچ دفترچه‌ای انتخاب نشده است."
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		"یادداشتی وجود ندارد. با کلیک بر روی «یادداشت جدید» یکی ایجاد نمایید."
+	],
+	"No plugins are installed.": [
+		"هیچ افزونه‌ای نصب نشده است."
+	],
+	"No resources!": [
+		"بدون منابع!"
+	],
+	"No results": [
+		"بدون نتیجه"
+	],
+	"No such command: %s": [
+		"این دستور وجود ندارد: %s"
+	],
+	"No suggestions": [
+		"هیچ پیشنهادی وجود ندارد"
+	],
+	"No tab selected": [
+		"هیچ برگه ای انتخاب نشده است"
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		"هیچ ویرایشگر متنی مشخص نشده است. لطفا با استفاده از `<editor-path> تنظیمات ویرایشگر` آن را مشخص کنید"
+	],
+	"Nord": [
+		"Nord"
+	],
+	"Not authenticated with %s. Please provide any missing credentials.": [
+		"با %s تایید نشد. لطفا هر گواهی‌نامه‌ی ناموجود را ارائه نمایید."
+	],
+	"Not downloaded": [
+		"دانلود نشده"
+	],
+	"Not generated": [
+		"تولید نشده"
+	],
+	"Not now": [
+		"فعلاً نه"
+	],
+	"note": [
+		"یادداشت"
+	],
+	"Note": [
+		"یادداشت"
+	],
+	"Note area growth factor": [
+		"فاکتور رشد فضای یادداشت"
+	],
+	"Note attachments": [
+		"پیوست‌های یادداشت"
+	],
+	"Note attachments...": [
+		"پیوست‌های یادداشت..."
+	],
+	"Note body": [
+		"بدنه‌ی یادداشت"
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		"یادداشت «%s» وجود ندارد. آیا ایجاد شود؟"
+	],
+	"Note editor": [
+		"ویرایشگر یادداشت"
+	],
+	"Note has been saved.": [
+		"یادداشت ذخیره شد."
+	],
+	"Note History": [
+		"تاریخچه‌ی یادداشت"
+	],
+	"Note is not a to-do: \"%s\"": [
+		"یادداشت یک فهرست کار نیست: «%s»"
+	],
+	"Note list": [
+		"فهرست  یادداشت"
+	],
+	"Note list growth factor": [
+		"فاکتور رشد فهرست  یادداشت"
+	],
+	"Note list style": [
+		"استایل فهرست یادداشت"
+	],
+	"Note properties": [
+		"ویژگی‌های یادداشت"
+	],
+	"Note title": [
+		"عنوان یادداشت"
+	],
+	"Note&book": [
+		"دفترچه"
+	],
+	"Note: Does not work in all desktop environments.": [
+		"توجه: در همه محیط‌های دسکتاپ کار نمی کند."
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		"توجه: زمانی که یادداشتی به اشتراک گذاشته می شود، دیگر روی سرور رمزنگاری نمی شود."
+	],
+	"Notebook": [
+		"دفترچه"
+	],
+	"Notebook list growth factor": [
+		"فاکتور رشد فهرست دفترچه"
+	],
+	"Notebook: %s": [
+		"دفترچه: %s"
+	],
+	"Notebook: %s (%s)": [
+		"دفترچه: %s (%s)"
+	],
+	"Notebooks": [
+		"دفترچه‌ها"
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		"دفترچه نمی‌تواند نام «%s» را داشته باشد، این نام رزرو شده است."
+	],
+	"Notes": [
+		"یادداشت‌ها"
+	],
+	"Notes and settings are stored in: %s": [
+		"یادداشت‌ها و تنظیمات در این محل ذخیره شده‌اند: %s"
+	],
+	"Notes can only be created within a notebook.": [
+		"یادداشت‌ها فقط می‌توانند در دفترچه ایجاد شوند."
+	],
+	"Numbered List": [
+		"لیست شماره گذاری شده"
+	],
+	"OK": [
+		"باشه"
+	],
+	"OLED Dark": [
+		"OLED Dark"
+	],
+	"On %s: %s": [
+		"در %s: %s"
+	],
+	"One of your master keys use an obsolete encryption method.": [
+		"یکی از کلید‌های اصلی شما از یک روش رمزنگاری منسوخ شده استفاده می‌کند."
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		"در حال حاضر یک یا چند مورد رمزنگاری شده‌اند و ممکن است شما به ارائه یک گذرواژه اصلی نیاز داشته باشید. برای اینکار لطفا «e2ee decrypt» را تایپ کنید. اگر در حال حاضر گذرواژه را ارائه کرده‌اید، موارد رمزنگاری شده در پس‌زمینه در حال رمزگشایی هستند و به زودی در دسترس خواهند بود."
+	],
+	"One or more master keys need a password.": [
+		"یک یا چند کلید اصلی به یک گذرواژه نیاز دارند."
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"ورود به OneDrive"
+	],
+	"Only one note can be printed at a time.": [
+		"هر بار فقط یک یادداشت می‌تواند چاپ شود."
+	],
+	"Open": [
+		"بازکردن"
+	],
+	"Open %s": [
+		"بازکردن %s"
+	],
+	"Open it": [
+		"باز کن"
+	],
+	"Open PDF viewer": [
+		"بازکردن مشاهده‌کننده PDF"
+	],
+	"Open profile directory": [
+		"بازکردن مسیر حساب کاربری"
+	],
+	"Open Source": [
+		"متن باز"
+	],
+	"Open Sync Wizard...": [
+		"بازکردن راهنمای همگام‌سازی..."
+	],
+	"Open...": [
+		"باز کردن..."
+	],
+	"Opening section %s": [
+		"بازکردن بخش در %s"
+	],
+	"Operation cancelled": [
+		"عملیات لغو شد"
+	],
+	"Options": [
+		"گزینه ها"
+	],
+	"Ordered list": [
+		"لیست مرتب شده"
+	],
+	"Other applications...": [
+		"دیگر برنامه‌ها..."
+	],
+	"Output format: %s": [
+		"فرمت خروجی: %s"
+	],
+	"Page orientation for PDF export": [
+		"جهت صفحه برای صدور PDF"
+	],
+	"Page size for PDF export": [
+		"اندازه صفحه برای صدور PDF"
+	],
+	"Password": [
+		"گذرواژه"
+	],
+	"Password cannot be empty": [
+		"گذرواژه نمی‌تواند خالی باشد"
+	],
+	"Password:": [
+		"گذرواژه:"
+	],
+	"Passwords do not match!": [
+		"گذرواژه‌ها با هم مطابقت ندارند!"
+	],
+	"Paste": [
+		"چسباندن"
+	],
+	"Paste as text": [
+		"چسباندن به عنوان متن"
+	],
+	"Path:": [
+		"مسیر:"
+	],
+	"PDF File": [
+		"فایل PDF"
+	],
+	"Per user. Minimum of %d users.": [
+		"به ازای هر کاربر. حداقل %d کاربر."
+	],
+	"Permanently delete note": [
+		"حذف دائمی یادداشت‌"
+	],
+	"Permanently delete note \"%s\"?": [
+		"آیا یادداشت «%s» به طور دائم حذف شود؟"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"دفترچه \"%s\" برای همیشه حذف شود؟\n\nهمه یادداشت‌ها و زیر دفترچه‌های این دفترچه برای همیشه حذف خواهند شد."
+	],
+	"Permanently delete these %d notes?": [
+		"آیا یادداشت‌های پوشه %d به طور دائم حذف شود؟"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"دفترچه را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
+	],
+	"Permission needed": [
+		"مجوز استفاده مورد نیاز است"
+	],
+	"Permission to use camera": [
+		"اجازه برای استفاده از دوربین"
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		"لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		"لطفا تایید کنید که شما می‌خواهید تمام پایگاه داده خود را دوباره رمزنگاری نمایید."
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		"لطفا قبل از ارتقای کلید، گذرواژه خود را در لیست کلید اصلی زیر وارد کنید."
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		"لطفاً توجه داشته باشید که اگر یک دفترچه حجیم باشد، ممکن است چند دقیقه طول بکشد تا همه یادداشت‌ها در دستگاه گیرنده نمایش داده شوند."
+	],
+	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		"لطفاً آدرس زیر را در مرورگر خود باز کنید تا برنامه تأیید اعتبار شود. برنامه یک دایرکتوری در \"Apps/Joplin\" ایجاد می کند و فقط فایل ها را در این فهرست می خواند و می نویسد. به هیچ فایلی خارج از این فهرست دسترسی نخواهد داشت و به هیچ اطلاعات شخصی دیگری دسترسی نخواهد داشت. هیچ داده ای با هیچ شخص ثالثی به اشتراک گذاشته نخواهد شد."
+	],
+	"Please record your voice...": [
+		"لطفا صدای خود را ضبط نمایید..."
+	],
+	"Please select a notebook first.": [
+		"لطفا ابتدا یه دفترچه مشخص کنید."
+	],
+	"Please select the note or notebook to be deleted first.": [
+		"لطفا ابتدا یادداشت یا دفترچه‌ای که قرار است حذف شود را انتخاب نمایید."
+	],
+	"Please select where the sync status should be exported to": [
+		"لطفا محلی که وضعیت همگام‌سازی باید صادر شود را مشخص نمایید"
+	],
+	"Please specify import format for %s": [
+		"لطفا فرمت وارد کردن را برای «%s» مشخص کنید"
+	],
+	"Please specify the notebook where the notes should be imported to.": [
+		"لطفا دفترچه‌ای که یادداشت‌ها باید به آن وارد شوند را مشخص کنید."
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"لطفاً برای استفاده از این افزونه، Joplin را به نسخه %s یا جدیدتر ارتقا دهید."
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش یادداشت بروید."
+	],
+	"Please wait...": [
+		"لطفاً صبور باشید..."
+	],
+	"Plugin message": [
+		"پیغام افزونه"
+	],
+	"Plugin panels": [
+		"پنل افزونه"
+	],
+	"Plugin repository failed to load": [
+		"خطا در بارگذاری مخزن افزونه"
+	],
+	"Plugin search": [
+		"جستجوی پلاگین"
+	],
+	"Plugin security": [
+		"امنیت افزونه"
+	],
+	"Plugin tools": [
+		"ابزارهای افزونه"
+	],
+	"Plugin WebView debugging": [
+		"افزونه اشکال زدایی WebView"
+	],
+	"Plugins": [
+		"پلاگین‌ها"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		"افزونه ها Joplin را با ویژگی هایی گسترش می دهند که به طور پیش فرض وجود ندارند. پلاگین ها می توانند ویرایشگر، بیننده و موارد دیگر Joplin را گسترش دهند."
+	],
+	"Portrait": [
+		"عمودی"
+	],
+	"Possible keys/values:": [
+		"کلیدها یا مقادیر ممکن:"
+	],
+	"Possible values: %s.": [
+		"مقادیر احتمالی: %s."
+	],
+	"Preferences": [
+		"تنظیمات"
+	],
+	"Preferences...": [
+		"تنظیمات..."
+	],
+	"Preferred dark theme": [
+		"تم تیره ترجیحی"
+	],
+	"Preferred light theme": [
+		"تم روشن ترجیحی"
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"برای خروج Ctrl+D را فشار دهید یا «exit» را تایپ نمایید"
+	],
+	"Press the shortcut": [
+		"میانبر را فشار دهید"
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		"میانبر را فشار دهید و سپس ENTER را فشار دهید. یا BACKSPACE برای پاکسازی میانبر، فشار دهید."
+	],
+	"Press to set the decryption password.": [
+		"برای تنظیم گذرواژه رمزگشایی بفشارید."
+	],
+	"Previous match": [
+		"تطابق قبلی"
+	],
+	"Previous versions of this note": [
+		"نسخه‌های قبلی این یادداشت"
+	],
+	"Print": [
+		"چاپ"
+	],
+	"Priority support": [
+		"اولویت پشتیبانی"
+	],
+	"Privacy Policy": [
+		"سیاست حریم خصوصی"
+	],
+	"Pro": [
+		"پیشرفته"
+	],
+	"Process failed payment subscriptions": [
+		"پردازش پرداخت ناموفق اشتراک‌ها"
+	],
+	"Process oversized accounts": [
+		"پردازش حساب‌های کاربری بزرگ"
+	],
+	"Process user deletions": [
+		"پردازش حذف کاربران"
+	],
+	"Processing": [
+		"در حال پردازش"
+	],
+	"Profile": [
+		"حساب کاربری"
+	],
+	"Profile name": [
+		"نام حساب‌ کاربری"
+	],
+	"Profile name:": [
+		"نام حساب‌ کاربری:"
+	],
+	"Profile Version: %s": [
+		"نسخه حساب‌ کاربری: %s"
+	],
+	"Profiles": [
+		"حساب‌های کاربری"
+	],
+	"Properties": [
+		"جزییات"
+	],
+	"Proxy enabled": [
+		"پروکسی فعال شد"
+	],
+	"Proxy timeout (seconds)": [
+		"پایان زمان پروکسی (ثانیه)"
+	],
+	"Proxy URL": [
+		"آدرس پروکسی"
+	],
+	"Public-private key pair:": [
+		"جفت کلید عمومی-خصوصی:"
+	],
+	"Publish note...": [
+		"اشتراک‌گذاری یادداشت..."
+	],
+	"Publish Notes": [
+		"اشتراک‌گذاری یادداشت‌ها"
+	],
+	"Publish notes to the internet": [
+		"اشتراک‌گذاری یادداشت‌ها در اینترنت"
+	],
+	"Quit": [
+		"خروج"
+	],
+	"Re-encrypt data": [
+		"رمزنگاری دوباره داده"
+	],
+	"Re-encryption": [
+		"رمزنگاری مجدد"
+	],
+	"Re-upload local data to sync target": [
+		"بارگذاری مجدد داده مجلی در هدف همگام‌سازی"
+	],
+	"Read more about it": [
+		"در مورد آن بیشتر بخوانید"
+	],
+	"Read time: %s min": [
+		"زمان تقریبی خواندن: %s دقیقه"
+	],
+	"Recipient has accepted the invitation": [
+		"گیرنده دعوت را پذیرفته است"
+	],
+	"Recipient has not yet accepted the invitation": [
+		"گیرنده هنوز دعوت را نپذیرفته است"
+	],
+	"Recipient has rejected the invitation": [
+		"گیرنده دعوت را رد کرده است"
+	],
+	"Recipients:": [
+		"گیرندگان:"
+	],
+	"Recommended": [
+		"پیشنهاد شده"
+	],
+	"Recommended plugins": [
+		"افزونه های پیشنهادی"
+	],
+	"Redo": [
+		"باز انجام"
+	],
+	"Refresh": [
+		"تازه‌‌سازی"
+	],
+	"Regular expression": [
+		"عبارت با قاعده (RegEx)"
+	],
+	"Reject": [
+		"رد کردن"
+	],
+	"Remove": [
+		"حذف"
+	],
+	"Remove tag \"%s\" from all notes?": [
+		"آیا برچسب «%s» از همه‌ی یادداشت‌ها حذف شود؟"
+	],
+	"Remove this search from the sidebar?": [
+		"این جستجو از نوار کناری حذف شود؟"
+	],
+	"Rename": [
+		"تغییر نام"
+	],
+	"Rename notebook:": [
+		"تغییر نام دفترچه:"
+	],
+	"Rename tag:": [
+		"تغییر نام برچسب:"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		"تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>."
+	],
+	"Renew token": [
+		"تمدید توکن"
+	],
+	"Replace": [
+		"جایگزین کردن"
+	],
+	"Replace all": [
+		"جایگزین کردن همه"
+	],
+	"Replace with...": [
+		"جایگزینی با..."
+	],
+	"Replace: ": [
+		"جایگزین کردن: "
+	],
+	"Report an issue": [
+		"گزارش مشکل"
+	],
+	"Report any issues concerning the plugin.": [
+		"هر گونه مشکل در مورد افزونه را گزارش دهید."
+	],
+	"Report fraudulent plugin": [
+		"گزارش افزونه تقلبی"
+	],
+	"Report system": [
+		"سیستم گزارش"
+	],
+	"Reports": [
+		"گزارش ها"
+	],
+	"Reset application layout": [
+		"بازیابی چیدمان برنامه"
+	],
+	"Reset master password": [
+		"ویرایش گذرواژه اصلی"
+	],
+	"Resize large images:": [
+		"تغییر اندازه تصاویر بزرگ:"
+	],
+	"Resources: %d.": [
+		"منابع: %d."
+	],
+	"Restart and upgrade": [
+		"راه اندازی مجدد و ارتقا"
+	],
+	"Restart in safe mode": [
+		"راه اندازی مجدد در حالت امن"
+	],
+	"Restart now": [
+		"راه اندازی مجدد هم‌اکنون"
+	],
+	"Restore": [
+		"بازگرداندن"
+	],
+	"Restore note": [
+		"بازیابی یادداشت"
+	],
+	"Restore notebook": [
+		"بازیابی دفترچه دفترچه"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"مواردی که مطابق با <pattern> باشند را از سطل زباله بازیابی کن."
+	],
+	"Restored items": [
+		"موارد بازیابی شده"
+	],
+	"Restored Notes": [
+		"یادداشت های بازیابی شده"
+	],
+	"Results (%d):": [
+		"نتایج (%d):"
+	],
+	"Retry": [
+		"تلاش مجدد"
+	],
+	"Retry All": [
+		"تلاش مجدد برای همه"
+	],
+	"Reveal file in folder": [
+		"نمایش فایل در پوشه"
+	],
+	"Reverse sort order": [
+		"ترتیب مرتب سازی معکوس"
+	],
+	"Reverses the sorting order.": [
+		"معکوس کردن ترتیب مرتب‌سازی."
+	],
+	"Revision: %s (%s)": [
+		"تجدید نظر: %s (%s)"
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		"دستورات موجود در فایل متنی را اجرا می کند. در هر خط باید یک دستور وجود داشته باشد."
+	],
+	"S3": [
+		"S3"
+	],
+	"S3 access key": [
+		"کلید دسترسی S3"
+	],
+	"S3 bucket": [
+		"مخزن S3"
+	],
+	"S3 region": [
+		"ناحیه S3"
+	],
+	"S3 secret key": [
+		"کلید محرمانه S3"
+	],
+	"S3 URL": [
+		"آدرس S3"
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		"حالت ایمن در حال حاضر فعال است. ارائه یادداشت و همه افزونه ها به طور موقت غیرفعال هستند."
+	],
+	"Save": [
+		"ذخیره"
+	],
+	"Save alarm": [
+		"ذخیره هشدار"
+	],
+	"Save as %s": [
+		"ذخیره به عنوان $s"
+	],
+	"Save as...": [
+		"ذخیره به عنوان..."
+	],
+	"Save changes": [
+		"ذخیره ی تغییرات"
+	],
+	"Save changes?": [
+		"ذخیره‌ی تغییرات؟"
+	],
+	"Save geo-location with notes": [
+		"ذخیره موقعیت مکانی با یادداشت‌ها"
+	],
+	"Search": [
+		"جستجو"
+	],
+	"Search for plugins...": [
+		"جستجوی در افزونه‌ها..."
+	],
+	"Search for...": [
+		"جستجو در..."
+	],
+	"Search hidden": [
+		"جستجوی مخفی"
+	],
+	"Search in all the notes": [
+		"جستجو در تمام یادداشت‌ها"
+	],
+	"Search in current note": [
+		"جستجو در یادداشت جاری"
+	],
+	"Search shown": [
+		"جستجوی نمایش داده شده"
+	],
+	"Search...": [
+		"جستجو..."
+	],
+	"Search:": [
+		"جستجو:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		"برای <pattern> داده شده، بین تمام یادداشت‌ها جستجو می‌کند."
+	],
+	"See the pre-release page for more details: %s": [
+		"برای جزئیات بیشتر به صفحه پیش از انتشار مراجعه کنید: %s"
+	],
+	"Select": [
+		"انتخاب"
+	],
+	"Select all": [
+		"انتخاب همه"
+	],
+	"Select emoji...": [
+		"انتخاب شکلک..."
+	],
+	"Select file...": [
+		"انتخاب فایل..."
+	],
+	"Select parent notebook": [
+		"انتخاب دفترچه والد"
+	],
+	"Send bug report": [
+		"ارسال گزارش خطا"
+	],
+	"Server is already running on port %d": [
+		"سرور در حال حاضر بر روی پورت %d در حال اجراست"
+	],
+	"Server is not running.": [
+		"سرور در حال اجرا نیست."
+	],
+	"Server is running on port %d": [
+		"سرور بر روی پورت %d در حال اجراست"
+	],
+	"Set alarm": [
+		"تنظیم هشدار"
+	],
+	"Set alarm:": [
+		"تنظیم هشدار:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		"آن را روی 0 تنظیم کنید تا فضای کامل موجود را اشغال کند. عرض پیشنهادی 600 است."
+	],
+	"Set the password": [
+		"گذرواژه را تعیین کنید"
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		"ویژگی <name> از <note> داده شده را به [value] (مقدار) داده شده تغییر می‌دهد. ویژگی‌های احتمالی شامل:\n\n%s"
+	],
+	"Share": [
+		"اشتراک گذاری"
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		"یک کپی از همه یادداشت ها را در قالب فایلی که می تواند توسط joplin در رایانه وارد شود، به اشتراک بگذارید."
+	],
+	"Share a notebook with others": [
+		"یک دفترچه را با دیگران به اشتراک بگذارید"
+	],
+	"Share from %s (%s)": [
+		"اشتراک‌گذاری از %s (%s)"
+	],
+	"Share Notebook": [
+		"به اشتراک گذاری دفترچه"
+	],
+	"Share notebook...": [
+		"به اشتراک گذاری دفترچه..."
+	],
+	"Share permissions": [
+		"مجوزهای اشتراک‌گذاری"
+	],
+	"Shares": [
+		"اشتراک‌ها"
+	],
+	"Sharing notebook...": [
+		"در حال اشتراک‌گذاری دفترچه..."
+	],
+	"Shortcuts are not available in CLI mode.": [
+		"میانبر‌ها در حالت خط فرمان (CLI) کار نمی‌کنند."
+	],
+	"Show advanced": [
+		"نمایش پیشرفته"
+	],
+	"Show Advanced Settings": [
+		"نمایش تنظیمات پیشرفته"
+	],
+	"Show all": [
+		"نمایش همه"
+	],
+	"Show completed to-dos": [
+		"نمایش فهرست کار‌های کامل شده"
+	],
+	"Show disabled": [
+		"نمایش غیرفعال‌ها"
+	],
+	"Show disabled keys": [
+		"نمایش کلیدهای غیرفعال"
+	],
+	"Show monospace fonts only.": [
+		"فقط فونت های monospace نمایش داده شود."
+	],
+	"Show more actions": [
+		"نمایش اقدامات بیشتر"
+	],
+	"Show note counts": [
+		"نمایش تعداد یادداشت‌ها"
+	],
+	"Show sort order buttons": [
+		"نمایش دکمه های نحوه مرتب سازی"
+	],
+	"Show tray icon": [
+		"نمایش آیکن trry در تسک‌بار"
+	],
+	"Show/hide the sidebar": [
+		"نماش/پنهان نوار کناری"
+	],
+	"Shrink large images before adding them to notes.": [
+		"تصاویر بزرگ را قبل از افزودن به یادداشت ها کوچک کنید."
+	],
+	"Side menu closed": [
+		"منوی کناری بسته شد"
+	],
+	"Side menu opened": [
+		"منوی کناری باز  شد"
+	],
+	"Sidebar": [
+		"نوار کناری"
+	],
+	"Size": [
+		"اندازه"
+	],
+	"Skip this version": [
+		"از این نسخه بگذرید"
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		"موارد رد شده: %d (از retry-failed-items-- برای تلاش مجدد رمزگشایی آن‌ها استفاده کنید)"
+	],
+	"Skipped: %d.": [
+		"رد شده: %d."
+	],
+	"Solarised Dark": [
+		"Solarised Dark"
+	],
+	"Solarised Light": [
+		"Solarised Light"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		"برخی از پیوست ها دانلود نشدند. لطفا سعی کنید دوباره آنها را دانلود کنید."
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		"برخی از پیوست ها باید دانلود شوند. حالت دانلود پیوست را روی «همیشه» تنظیم کنید و دوباره امتحان کنید."
+	],
+	"Some items cannot be decrypted.": [
+		"بعضی از موارد نمی‌توانند رمزگشایی شوند."
+	],
+	"Some items cannot be synchronised.": [
+		"بعضی از موارد نمی‌توانند همگام‌سازی شوند."
+	],
+	"Some items cannot be synchronised. Press for more info.": [
+		"بعضی از موارد نمی‌توانند همگام‌سازی شوند. برای اطلاعات بیشتر بفشارید."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"برخی از موارد را نمی توان همگام سازی کرد. لطفا ابتدا سعی کنید آنها را همگام سازی کنید."
+	],
+	"Sort notebooks by": [
+		"مرتب‌سازی دفترچه‌ها بر اساس"
+	],
+	"Sort notes by": [
+		"مرتب‌سازی یادداشت‌ها بر اساس"
+	],
+	"Sort selected lines": [
+		"مرتب‌سازی خطوط انتخاب شده"
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		"مورد را بر‌ اساس <field> مرتب می‌کند (به عنوان مثال: عنوان، زمان به‌روزرسانی، زمان ایجاد)."
+	],
+	"Source": [
+		"منبع"
+	],
+	"Source format: %s": [
+		"فرمت مبدا: %s"
+	],
+	"Source: ": [
+		"منبع "
+	],
+	"Spacer": [
+		"فاصله‌ساز"
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		"پورتی که باید توسط سرور API استفاده شود را مشخص نمایید. در غیر اینصورت، یک پورت پیشفرض استفاده خواهد شد."
+	],
+	"Spell checker": [
+		"بررسی کننده غلط املایی"
+	],
+	"Split View": [
+		"تقسیم نما"
+	],
+	"Start application minimised in the tray icon": [
+		"شروع برنامه و کوچک‌شده در آیکن تسک‌بار"
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		"شروع رمزگشایی... این کار ممکن است چند دقیقه طول بکشد، لطفا صبور باشید."
+	],
+	"Starting synchronisation...": [
+		"شروع همگام سازی..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		"شروع به ویرایش یادداشت. ویرایشگر را ببندید تا به درخواست بازگردید."
+	],
+	"Statistics": [
+		"آمار"
+	],
+	"Statistics...": [
+		"آمار..."
+	],
+	"Status": [
+		"وضعیت"
+	],
+	"Status: %s": [
+		"وضعیت: %s"
+	],
+	"Status: Started on port %d": [
+		"وضعیت: آغاز شده بر روی پورت %d"
+	],
+	"Step 1: Enable the clipper service": [
+		"مرحله 1: سرویس Clipper را فعال نمایید"
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		"مرحله ۱: برای اجازه دادن به برنامه این آدرس اینترنتی را در مرورگر خود باز نمایید:"
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		"مرحله ۲: کدی که توسط Dropbox داده شده را وارد نمایید:"
+	],
+	"Step 2: Install the extension": [
+		"مرحله 2: افزونه را نصب نمایید"
+	],
+	"Stop": [
+		"توقف"
+	],
+	"Stop external editing": [
+		"توقف ویرایش خارجی"
+	],
+	"Storage space": [
+		"فضای ذخیره سازی"
+	],
+	"Strikethrough": [
+		"ضربه زدن"
+	],
+	"strong text": [
+		"متن توپر"
+	],
+	"Submit": [
+		"ثبت"
+	],
+	"Subscript": [
+		"اشتراک"
+	],
+	"Success! Synchronisation configuration appears to be correct.": [
+		"موفق! تنظیمات همگام‌سازی به نظر صحیح است."
+	],
+	"Superscript": [
+		"بالانویس"
+	],
+	"Swap line down": [
+		"تعویض خط به پایین"
+	],
+	"Swap line up": [
+		"تعویض خط به بالا"
+	],
+	"Switch between note and to-do type": [
+		"جابجایی میان نوع  یادداشت و فهرست کار"
+	],
+	"Switch profile": [
+		"تغییر حساب کاربری"
+	],
+	"Switch to note type": [
+		"تغییر به نوع یادداشت"
+	],
+	"Switch to profile %d": [
+		"به حساب‌کاربری‌ %d بروید"
+	],
+	"Switch to to-do type": [
+		"تغییر به نوع فهرست کار"
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		"به [notebook] تغییر می‌کند - تمامی فعالیت های آینده  در این دفترچه انجام می‌گیرد."
+	],
+	"Sync as many devices as you want": [
+		"هر تعداد دستگاهی را که می‌خواهید همگام‌سازی کنید"
+	],
+	"Sync Status": [
+		"وضعیت همگام‌سازی"
+	],
+	"Sync status (synced items / total items)": [
+		"وضعیت همگام‌سازی (موارد همگام‌سازی شده / کل موارد)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		"هدف همگام سازی باید ارتقا یابد! برای ادامه، «%s» را اجرا نمایید."
+	],
+	"Sync Target Upgrade": [
+		"ارتقا هدف همگام‌سازی"
+	],
+	"Sync to provided target (defaults to sync.target config value)": [
+		"همگام‌سازی با هدف داده شده (به طور پیش فرض مقدار تنظیمات sync.target)"
+	],
+	"Sync Version: %s": [
+		"نسخه همگام‌سازی: %s"
+	],
+	"Sync your notes": [
+		"یادداشت‌های خود را همگام‌سازی کنید"
+	],
+	"Sync, encryption, proxy": [
+		"همگام سازی، رمزگذاری، پروکسی"
+	],
+	"Synchronisation": [
+		"همگام‌سازی"
+	],
+	"Synchronisation interval": [
+		"بازه همگام‌سازی"
+	],
+	"Synchronisation is already in progress.": [
+		"همگام سازی در حال حاضر در حال انجام است."
+	],
+	"Synchronisation Status": [
+		"وضعیت همگام‌سازی"
+	],
+	"Synchronisation target": [
+		"هدف همگام‌سازی"
+	],
+	"Synchronisation target: %s (%s)": [
+		"هدف همگام‌سازی: %s (%s)"
+	],
+	"Synchronise": [
+		"همگام سازی"
+	],
+	"Synchronise only over WiFi connection": [
+		"همگام‌سازی تنها از طریق اتصال WiFi"
+	],
+	"Synchronises with remote storage.": [
+		"با فضای ذخیره‌سازی ریموت همگام‌سازی می‌کند."
+	],
+	"Synchronising...": [
+		"در حال همگام سازی..."
+	],
+	"Synchronizing...": [
+		"در حال همگام سازی..."
+	],
+	"Tabloid": [
+		"چکیده"
+	],
+	"tag1, tag2, ...": [
+		"برچسب 1، برچسب 2، ..."
+	],
+	"Tagged: %d.": [
+		"برچسب گذاری شده: %d."
+	],
+	"Tags": [
+		"برچسب‌ها"
+	],
+	"Take photo": [
+		"عکس گرفتن"
+	],
+	"Task \"%s\" failed with error: %s": [
+		"کار \"%s\" با خطا: %s ناموفق بود"
+	],
+	"Task list": [
+		"فهرست کار"
+	],
+	"Tasks": [
+		"کارها"
+	],
+	"Teams": [
+		"تیم‌ها"
+	],
+	"Text document": [
+		"سند متنی"
+	],
+	"Text editor command": [
+		"دستور ویرایشگر متن"
+	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"[Web Clipper](%s) یک افزونه مرورگر است که به شما امکان می دهد صفحات وب و اسکرین شات ها را از مرورگر خود ذخیره کنید."
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		"برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
+	],
+	"The application did not close properly. Would you like to start in safe mode?": [
+		"برنامه به درستی بسته نشد. آیا می خواهید در حالت ایمن شروع به کار کنید؟"
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"برنامه احراز هویت شده است - اکنون می توانید این برگه مرورگر را ببندید."
+	],
+	"The application has been authorised!": [
+		"برنامه احراز هویت شد!"
+	],
+	"The application has been successfully authorised.": [
+		"برنامه با موفقیت تأیید شد."
+	],
+	"The application must be restarted for these changes to take effect.": [
+		"برای اعمال این تغییرات، برنامه باید دوباره راه اندازی شود."
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		"وقتی به یادداشت دیگری بروید، پیوست‌ها دیگر مشاهده نخواهند شد."
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"دستور «%s» فقط در حالت گرافیکی (GUI) کاربرد دارد"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		"رمز عبور پیشفرض مدیر امن نیست و تا کنون تغییر نکرده است! [اکنون آن را تغییر دهید] (%s)"
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		"روش پیش فرض رمزنگاری به یک روش امن‌تر تغییر پیدا کرده و پیشنهاد می‌شود که آن را بر داده خود اعمال کنید."
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		"روش رمزنگاری پیش فرض تغییر یافته است،‌ شما باید داده‌های خود را دوباره رمزنگاری کنید."
+	],
+	"The default profile cannot be deleted": [
+		"حساب‌کاربری پیش فرض را نمی توان حذف نمود"
+	],
+	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
+		"دستور ویرایشگر (ممکن است شامل آرگومان‌هایی نیز باشد) که برای باز کردن یادداشت استفاده می‌شود. اگر هیچ کدام ارائه نشده باشد، سعی می‌کند ویرایشگر پیش فرض را به طور خودکار شناسایی کند."
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		"ویژگی فاکتور نحوه رشد یا کوچک شدن آیتم را تعیین می‌کند تا فضای موجود در ظرف خود را با توجه به سایر موارد متناسب کند. بنابراین یک مورد با ضریب 2، دو برابر فضای بیشتری نسبت به یک مورد با ضریب 1 اشغال می‌کند. برای مشاهده تغییرات، برنامه را مجدد راه‌اندازی کنید."
+	],
+	"The following attachment matches your search query:": [
+		"پیوست زیر با عبارت جستجوی شما مطابقت دارد:",
+		"پیوست های زیر برای تغییرات در حال مشاهده هستند:"
+	],
+	"The following attachments are being watched for changes:": [
+		"پیوست های زیر برای تغییرات در حال مشاهده هستند:"
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		"کلیدهای زیر از یک الگوریتم رمزنگاری قدیمی استفاده می کنند و توصیه می شود آنها را ارتقا دهید. کلید ارتقا یافته همچنان می‌تواند مانند همیشه داده‌های شما را رمزگشایی و رمزنگاری کند."
+	],
+	"The Joplin mobile app does not currently support this type of link: %s": [
+		"برنامه موبایل joplin در حال حاضر از این نوع لینک پشتیبانی نمی‌کند: %s"
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		"تیم joplin این افزونه را بررسی کرده است و استانداردهای ما را برای امنیت و عملکرد مطابقت دارد."
+	],
+	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+	],
+	"The master key has been upgraded successfully!": [
+		"کلید اصلی با موفقیت ارتقا یافت!"
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"کلیدهای اصلی با این شناسه ها برای رمزگذاری برخی از موارد شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		"یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد."
+	],
+	"The note was successfully moved to the trash.": [
+		"یادداشت با موفقیت به سطل زباله منتقل شد.",
+		"یادداشت «%s» با موفقیت به دفترچه «%s» بازگردانده شد."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"پوشه یادداشتها و محتوای آن با موفقیت به سطل زباله منتقل شد."
+	],
+	"The notebook could not be saved: %s": [
+		"دفترچه نتوانست ذخیره شود: %s"
+	],
+	"The notes have been imported: %s": [
+		"یادداشت‌ها وارد شدند: %s"
+	],
+	"The possible commands are:": [
+		"دستورات ممکن عبارتند از:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		"گیرنده را نمی توان از لیست حذف کرد. لطفا دوباره تلاش کنید.\n\nجزئیات خطا: «%s»"
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		"هدف همگام سازی به دلایل زیر قابل تغییر نیست:%s\n\nاگر مشکل حل نشد، ممکن است لازم باشد ابتدا اطلاعات خود را با دنبال کردن این دستورالعمل ها پاک کنید:\n\n%s"
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		"قبل از اینکه joplin بتواند همگام‌سازی کند، هدف همگام‌سازی باید ارتقا یابد. ممکن است عملیات چند دقیقه طول بکشد و برنامه باید دوباره راه‌اندازی شود. برای ادامه لطفا روی لینک کلیک کنید."
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		"هدف همگام سازی باید ارتقا یابد. برای ادامه این بنر را فشار دهید."
+	],
+	"The synchronisation password is missing.": [
+		"گذرواژه همگام‌سازی یافت نشد."
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		"برچسب «%s» وجود دارد. لطفا نام دیگری انتخاب کنید."
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		"هدف برای همگام سازی. هر هدف همگام‌سازی ممکن است پارامترهای دیگری داشته باشد که به‌عنوان «sync.NUM.NAME» نام‌گذاری شده‌اند (همه در زیر مستند شده‌اند)."
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		"Web Clipper برای دسترسی به داده های شما به مجوز شما نیاز دارد."
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		"سرویس Web Clipper فعال شده و روی شروع خودکار تنظیم شده است."
+	],
+	"The web clipper service is not enabled.": [
+		"سرویس Web Clipper فعال نیست."
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		"نمونه‌سازی WebDAV با %s با joplin ناسازگار است و به همین دلیل دیگر پشتیبانی نمی‌شود. لطفاً از روش همگام‌سازی دیگری استفاده کنید."
+	],
+	"Theme": [
+		"پوسته"
+	],
+	"Themes, editor font": [
+		"پوسته، فونت ویرایشگر"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"در حال حاضر یادداشتی وجود ندارد. با کلیک بر روی دکمه (+) یکی بسازید."
+	],
+	"There are no notes in the trash folder.": [
+		"هیچ یادداشتی در پوشه سطل زباله وجود ندارد."
+	],
+	"There are unsaved changes.": [
+		"تغییرات ذخیره نشده‌ای وجود دارد."
+	],
+	"There is no data to export.": [
+		"داده‌ای برای صدور وجود ندارد."
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		"یک [conflict] (%s) در پیوست زیر وجود داشت.\n\n%s"
+	],
+	"There was an error downloading this attachment:": [
+		"یک خطا در دانلود این پیوست بود:"
+	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		"این موارد همگام‌سازی نشدند، اما به‌عنوان «نادیده‌گرفته» علامت‌گذاری شدند. آنها باعث نمی شوند که هشدار همگام سازی ظاهر شود، اما همچنان همگام سازی نمی شوند. برای لغو نادیده گرفتن، روی «تلاش مجدد» کلیک کنید."
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		"این موارد در دستگاه باقی می‌مانند اما در هدف همگام‌سازی آپلود نمی‌شوند. برای یافتن این موارد، عنوان یا شناسه (که در پرانتز بالا نمایش داده شده است) را جستجو نمایید."
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		"این افزونه ها رندر نشانه‌گذاری را با ویژگی های اضافی تقویت می کنند. لطفاً توجه داشته باشید که اگرچه این ویژگی‌ها ممکن است مفید باشند، اما نشانه‌گذاری استاندارد نیستند و بنابراین اکثر آنها فقط در joplin کار می‌کنند. علاوه بر این، برخی از آنها با ویرایشگر WYSIWYG *ناسازگار* هستند. اگر یادداشتی را باز کنید که از یکی از این افزونه ها در آن ویرایشگر استفاده می کند، قالب بندی افزونه را از دست خواهید داد. در زیر مشخص شده است که کدام افزونه ها با ویرایشگر WYSIWYG سازگار هستند یا خیر."
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		"این به کاربر دیگری اجازه می دهد تا یک دفترچه‌ را با شما به اشتراک بگذارد و سپس می توانید هر دو در آن همکاری کنید. با این حال به شما اجازه نمی‌دهد یک دفترچه را با شخص دیگری به اشتراک بگذارید، مگر اینکه ویژگی «%s» را داشته باشید."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		"این پیوست داده OCR ندارد (وضعیت: %s)"
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		"این پیوست هنوز دانلود یا رمزگشایی نشده"
+	],
+	"This attachment is not downloaded or not decrypted yet.": [
+		"این پیوست هنوز دانلود یا رمزگشایی نشده."
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به joplin مورد نیاز است."
+	],
+	"This drawing may have unsaved changes.": [
+		"این طراحی ممکن است دارای تغییرات ذخیره نشده باشد."
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده شده‌اند. لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
+	],
+	"This note could not be deleted: %s": [
+		"این یادداشت حذف نشد: %s",
+		"این فایل نمی‌تواند باز شود: %s"
+	],
+	"This note could not be duplicated: %s": [
+		"این یادداشت قابل تکرار نیست: %s",
+		"دفترچه نتوانست ذخیره شود: %s"
+	],
+	"This note could not be moved: %s": [
+		"این یادداشت قابل انتقال نیست: %s",
+		"دفترچه نتوانست ذخیره شود: %s"
+	],
+	"This note does not have geolocation information.": [
+		"این یادداشت اطلاعات موقعیت جغرافیایی ندارد."
+	],
+	"This note has been modified:": [
+		"این یادداشت تغییر یافته است:"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		"این یادداشت هیچ محتوایی ندارد. برای تغییر وضعیت ویرایشگر و ویرایش یادداشت ، روی «%s» کلیک کنید."
+	],
+	"This note has no history": [
+		"این یادداشت هیچ تاریخچه ای ندارد"
+	],
+	"This plugin doesn't support %s.": [
+		"این افزونه %s را پشتیبانی نمی کند."
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		"ویرایشگر Rich Text دارای تعدادی محدودیت است و توصیه می شود قبل از استفاده از آن ها آگاه باشید."
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		"این سرویس به افزونه مرورگر اجازه می دهد تا با joplin  ارتباط برقرار کند. هنگام فعال کردن آن، فایروال شما ممکن است از شما بخواهد که به joplin  اجازه دهید تا به یک پورت خاص در ارتباط باشد."
+	],
+	"This subfolder of the trash has no notes.": [
+		"این زیرپوشه سطل زباله هیچ یادداشتی ندارد."
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		"این به joplin اجازه می‌دهد تا در پس زمینه اجرا شود. توصیه می‌شود این تنظیم را فعال کنید تا یادداشت های شما دائماً همگام شوند و در نتیجه تعداد تداخل‌ها کاهش یابند."
+	],
+	"This will open a new screen. Save your current changes?": [
+		"این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		"با این کار همه موارد موجود در سطل زباله برای همیشه حذف می شوند. آیا ادامه هید؟"
+	],
+	"This will permanently delete the note \"%s\". Continue?": [
+		"با این کار یادداشت \"%s\" برای همیشه حذف می شود. ادامه می‌دهید؟"
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا مایل هستید ادامه دهید؟"
+	],
+	"Time format": [
+		"فرمت ساعت"
+	],
+	"title": [
+		"عنوان"
+	],
+	"Title": [
+		"عنوان"
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		"برای اینکه به joplin اجازه همگام‌سازی با Dropbox را بدهید، مراحل زیر را دنبال نمایید:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"برای اینکه به Joplin اجازه دهید با سرویس ابری Joplin همگام شود، لطفاً با استفاده از این URL وارد شوید:"
+	],
+	"To continue, please enter your master password below.": [
+		"برای ادامه، لطفاً گذرواژه اصلی خود را در زیر وارد نمایید."
+	],
+	"To delete a tag, untag the associated notes.": [
+		"برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید."
+	],
+	"To delete: %d": [
+		"برای حذف: %d"
+	],
+	"To enter command line mode, press \":\"": [
+		"برای ورود به حالت خط فرمان، «:» را فشار دهید"
+	],
+	"To exit command line mode, press ESCAPE": [
+		"برای خروج از حالت خط فرمان، دکمه ی Esc را فشار دهید"
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		"برای مرتب‌سازی دستی یادداشت‌ها، ترتیب مرتب‌سازی باید به «%s» از منوی «%s» > «%s» تغییر پیدا کند"
+	],
+	"To maximise/minimise the console, press \"tc\".": [
+		"برای به حداکثر رساندن / به حداقل رساندن کنسول ، \"tc\" را فشار دهید."
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		"برای انتقال از یک پنجره به پنجره دیگر ، Tab یا Shift Tab را فشار دهید."
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		"برای تلاش مجدد رمزگشایی این موارد «e2ee decrypt --retry-failed-items» را اجرا کنید"
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		"برای تغییر حساب‌کاربری، برنامه بسته می‌شود و باید آن را دوباره راه‌اندازی نماید."
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		"برای کارکرد صحیح، برنامه به این دسترسی‌ها نیاز دارد. لطفا آن‌ها را در تنظیمات گوشی خود در برنامه‌ها > joplin > دسترسی‌ها فعال کنید"
+	],
+	"to-do": [
+		"فهرست کار"
+	],
+	"To-do": [
+		"فهرست کار"
+	],
+	"to-do: %s": [
+		"فهرست کار: %s"
+	],
+	"Toggle comment": [
+		"تغییر وضعیت نظر"
+	],
+	"Toggle development tools": [
+		"تغییر وضعیت ابزار توسعه"
+	],
+	"Toggle editor layout": [
+		"تغییر وضعیت چیدمان ویرایشگر"
+	],
+	"Toggle editors": [
+		"تغییر وضعیت ویرایشگر"
+	],
+	"Toggle external editing": [
+		"تغییر وضعیت ویرایش خارجی"
+	],
+	"Toggle menu bar": [
+		"تغییر وضعیت نوار منو"
+	],
+	"Toggle note history, keep notes for": [
+		"تغییر تاریخچه‌ی یادداشت، یادداشت را نگه دار به مدت"
+	],
+	"Toggle note list": [
+		"تغییر وضعیت فهرست یادداشت"
+	],
+	"Toggle own sort order": [
+		"تغییر ترتیب مرتب‌سازی شخصی"
+	],
+	"Toggle safe mode": [
+		"تغییر وضعیت حالت امن"
+	],
+	"Toggle sidebar": [
+		"تغییر وضعیت نوار کناری"
+	],
+	"Toggle sort order field": [
+		"تغییر وضعیت فیلد ترتیب مرتب‌سازی"
+	],
+	"Token has been copied to the clipboard!": [
+		"توکن در کلیپ‌بورد کپی شد!"
+	],
+	"Tools": [
+		"&ابزار‌ها"
+	],
+	"Total Size": [
+		"اندازه مچموع"
+	],
+	"Total: %d/%d": [
+		"مجموع: %d از %d"
+	],
+	"Trash": [
+		"سطل زباله"
+	],
+	"Try again": [
+		"تلاش دوباره"
+	],
+	"Try it now": [
+		"هم‌اکنون تلاش کن"
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"برای اطلاعات بیشتر درباره یک فرمان، 'help [command]' را تایپ کنید. یا برای اطلاعات کامل استفاده، «help all» را تایپ کنید."
+	],
+	"Type `joplin help` for usage information.": [
+		"`joplin help` را برای راهنمای استفاده تایپ کنید."
+	],
+	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
+		"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام برچسب یا @ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» تایپ نمایید."
+	],
+	"Type new tags or select from list": [
+		"برچسب‌های جدید را تایپ کنید یا از لیست انتخاب کنید"
+	],
+	"Type: %s.": [
+		"نوع: %s."
+	],
+	"Unable to edit resource of type %s": [
+		"امکان ویرایش منبع از نوع %s وجود ندارد"
+	],
+	"Unable to share log data. Reason: %s": [
+		"امکان اشتراک‌گذاری داده های لاگ وجود ندارد. دلیل: %s"
+	],
+	"Uncompleted to-dos on top": [
+		"فهرست کار‌های کامل نشده در بالا"
+	],
+	"Undo": [
+		"بازگرد"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		"برنامه را حذف و دوباره نصب کنید. اطمینان حاصل کنید که ابتدا با صادر کردن تمام یادداشت های خود به عنوان JEX از برنامه دسکتاپ، یک نسخه پشتیبان ایجاد کرده اید."
+	],
+	"Unknown file type": [
+		"نوع فایل نامشخص"
+	],
+	"Unknown flag: %s": [
+		"پرچم ناشناخته: %s"
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		"نوع آیتم ناشناس دانلود شد - لطفاً joplin را به آخرین نسخه ارتقا دهید"
+	],
+	"Unordered list": [
+		"لیست نامرتب"
+	],
+	"Unpublish note": [
+		"لغو انتشار یادداشت"
+	],
+	"Unshare": [
+		"لغو اشتراک‌گذاری"
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		"اشتراک‌گذاری این دفترچه لغو شود؟ گیرندگان دیگر به محتوای آن دسترسی نخواهند داشت."
+	],
+	"Unsupported image type: %s": [
+		"نوع تصویر پشتیبانی نشده: %s"
+	],
+	"Unsupported link or message: %s": [
+		"پیوند یا پیام پشتیبانی نشده: %s"
+	],
+	"Untitled": [
+		"بدون عنوان"
+	],
+	"Update": [
+		"بروزرسانی"
+	],
+	"Update available": [
+		"به روز رسانی موجود است"
+	],
+	"Update profile": [
+		"بروز رسانی حساب‌ کاربری"
+	],
+	"Update total sizes": [
+		"بروز رسانی مجموع اندازه‌ها"
+	],
+	"Updated": [
+		"به‌روز شده"
+	],
+	"updated date": [
+		"تاریخ به‌روزرسانی"
+	],
+	"Updated local items: %d.": [
+		"موارد محلی به‌روز شده: %d."
+	],
+	"Updated remote items: %d.": [
+		"موارد ریموت به‌روز شده: %d."
+	],
+	"Updated: ": [
+		"بروز شده "
+	],
+	"Updated: %d.": [
+		"به‌روز شده: %d."
+	],
+	"Updated: %s": [
+		"به‌روز شده: %s"
+	],
+	"Updating...": [
+		"در حال بروز رسانی..."
+	],
+	"Upgrade": [
+		"ارتقا"
+	],
+	"Upgrade the sync target to the latest version.": [
+		"هدف همگام‌سازی را به آخرین نسخه ارتقا دهید."
+	],
+	"URL": [
+		"آدرس اینترنتی"
+	],
+	"Usage: %s": [
+		"کارکرد: %s"
+	],
+	"Use biometrics to secure access to the app": [
+		"از بیومتریک برای ایمن کردن دسترسی به برنامه استفاده کنید"
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		"استفاده از فرمت لیست طولانی. فرمت به صورت ID (شناسه)، NOTE_COUNT (تعداد یادداشت (برای دفترچه))، DATE (تاریخ)، TODO_CHECKED (فهرست کار بررسی شده (برای فهرست کار‌ها))، TITLE (عنوان) می‌باشد"
+	],
+	"Use spell checker": [
+		"استفاده از بررسی کننده غلط املایی"
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		"از فلش ها و صفحه به بالا/پایین برای پیمایش لیست ها و نواحی متن (از جمله این کنسول) استفاده کنید."
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		"از فلش ها برای جابجایی آیتم های چیدمان استفاده کنید. برای خروج، \"Esc\" را فشار دهید."
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		"اگر مشکلی در جستجو وجود دارد از این برای بازسازی فهرست جستجو استفاده کنید. بسته به تعداد یادداشت ها ممکن است زمان زیادی طول بکشد."
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		"از بیومتریک خود برای دسترسی ایمن به برنامه خود استفاده کنید. همواره می‌توانید بعداً آن را در تنظیمات، تنظیم کنید."
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		"برای اکثر متن ها در ویرایشگر نشانه گذاری استفاده می شود. اگر یافت نشد، از یک فونت متناسب (یا عرض متغیر) عمومی استفاده می شود."
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		"در جاهایی استفاده می شود که برای چیدمان متن به صورت خوانا به یک فونت با عرض ثابت نیاز است (مانند جداول، چک باکس ها، کد). اگر پیدا نشد، از فونت تک فضایی (یا عرض ثابت) عمومی استفاده می شود."
+	],
+	"User deletions": [
+		"حذف کاربران"
+	],
+	"Users": [
+		"کاربران"
+	],
+	"Valid": [
+		"معتبر"
+	],
+	"Verify your identity": [
+		"هویت خود را تأیید نمایید"
+	],
+	"View": [
+		"نما"
+	],
+	"View OCR text": [
+		"مشاهده متن OCR"
+	],
+	"View on map": [
+		"نمایش بر روی نقشه"
+	],
+	"View them now": [
+		"آنها را هم‌اکنون ببینید"
+	],
+	"Viewer": [
+		"بیننده"
+	],
+	"Vim": [
+		"Vim"
+	],
+	"Voice typing language files (URL)": [
+		"فایل های زبان تایپ صوتی (URL)"
+	],
+	"Voice typing...": [
+		"تایپ صوتی..."
+	],
+	"Waiting for authorisation...": [
+		"در انتظار احراز هویت..."
+	],
+	"Warning": [
+		"هشدار"
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		"هشدار: همه منابع به دلایل عملکرد نشان داده نمی شوند (محدود: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		"ما سیستمی برای گزارش دهی و حذف افزونه های مشکل دار داریم."
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		"ما افزونه‌های توسعه‌یافته توسط اعضای مورد اعتماد جامعه Joplin را به‌عنوان «توصیه‌شده» علامت‌گذاری می‌کنیم."
+	],
+	"Web Clipper": [
+		"Web Clipper"
+	],
+	"WebDAV": [
+		"WebDAV"
+	],
+	"WebDAV password": [
+		"گذرواژه WebDAV"
+	],
+	"WebDAV URL": [
+		"آدرس WebDAV"
+	],
+	"WebDAV username": [
+		"نام کاربری WebDAV"
+	],
+	"Website and documentation": [
+		"وب‌سایت و مستندات"
+	],
+	"WebView package: %s": [
+		"بسته WebView: %s"
+	],
+	"WebView version: %s": [
+		"نسخه WebView: %s"
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		"به joplin خوش آمدید! \n\nبرای فهرست میانبرهای صفحه‌کلید «:help shortcuts» یا برای اطلاعات نحوه استفاده فقط «:help» را تایپ کنید.\n\nبه عنوان مثال ، برای ایجاد یکدفترچه `mb` را بفشارید؛ برای ایجاد یک یادداشت `mn` را فشار دهید."
+	],
+	"Welcome!": [
+		"خوش آمدید!"
+	],
+	"What are plugins?": [
+		"افزونه‌ها چه کار می‌کنند؟"
+	],
+	"When creating a new note:": [
+		"در زمان ایجاد یادداشت جدید:"
+	],
+	"When creating a new to-do:": [
+		"زمان ساخت یک فهرست کار جدید:"
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		"وقتی فعال باشد، برنامه پیوست های شما را اسکن کرده و متن را از آن استخراج می کند. این به شما امکان می دهد متن را در این پیوست ها جستجو کنید."
+	],
+	"Window unresponsive.": [
+		"صفحه پاسخگو نیست."
+	],
+	"Words": [
+		"کلمات"
+	],
+	"y": [
+		"y"
+	],
+	"Y": [
+		"Y"
+	],
+	"yes": [
+		"بله"
+	],
+	"Yes": [
+		"بله"
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		"شما در شرف پیوست کردن یک تصویر بزرگ هستید (%dx%d پیکسل). آیا می خواهید اندازه آن را قبل از پیوست کردن به %d پیکسل تغییر دهید؟"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		"شما به سرویس ابری Joplin وارد شده اید، اکنون می توانید این صفحه را ترک کنید."
+	],
+	"You currently have no notebooks.": [
+		"شما در حال حاضر دفترچه‌ای ندارید."
+	],
+	"You do not have any installed plugin.": [
+		"شما هیچ افزونه ای نصب نکرده اید."
+	],
+	"You may also type `status` for more information.": [
+		"شما همچنین می‌توانید `status` را برای اطلاعات بیشتر تایپ کنید."
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		"می‌توانید از ابزار زیر برای رمزگذاری مجدد داده‌های خود استفاده کنید، برای مثال اگر می‌دانید برخی از یادداشت‌های شما با روش رمزگذاری منسوخ رمزگذاری شده‌اند."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"شما نتوانستید به سرویس ابری Joplin متصل شوید. لطفا اعتبارات خود را بررسی نمایید و دوباره امتحان کنید. خطا:"
+	],
+	"Your account doesn't have access to this feature": [
+		"حساب شما به این ویژگی دسترسی ندارد"
+	],
+	"Your choice: ": [
+		"انتخاب شما: "
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		"داده‌های شما دوباره رمزنگاری و همگام‌سازی خواهند شد."
+	],
+	"Your password is needed to decrypt some of your data.": [
+		"گذرواژه شما برای رمزگشایی برخی از داده های شما مورد نیاز است."
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		"گذرواژه شما برای رمزگشایی برخی از داده‌های شما مورد نیاز است. «:e2ee decrypt» را تایپ کنید تا آن را تنظیم کنید."
+	],
+	"Your permission to use your camera is required.": [
+		"اجازه ی شما برای استفاده از دوربین دستگاه شما مورد نیاز است."
+	],
+	"Your version: %s": [
+		"نسخه شما: %s"
+	],
+	"Zoom In": [
+		"بزرگنمایی"
+	],
+	"Zoom Out": [
+		"کوچک نمایی"
+	]
 }

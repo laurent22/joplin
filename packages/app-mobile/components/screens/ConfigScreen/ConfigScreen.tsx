@@ -1,213 +1,212 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-import Slider from '@react-native-community/slider';
-const React = require('react');
-import { Platform, Linking, View, Switch, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } from 'react-native';
-import Setting, { AppType } from '@joplin/lib/models/Setting';
+import * as React from 'react';
+import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
+import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
-import ReportService from '@joplin/lib/services/ReportService';
-import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import checkPermissions from '../../../utils/checkPermissions';
-import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
 import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 const { BackButtonService } = require('../../../services/back-button.js');
-const VersionInfo = require('react-native-version-info').default;
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
-const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../../base-screen.js');
-const { Dropdown } = require('../../Dropdown');
-const { themeStyle } = require('../../global-style.js');
-const shared = require('@joplin/lib/components/shared/config-shared.js');
+import { _ } from '@joplin/lib/locale';
+import BaseScreenComponent from '../../base-screen';
+import { themeStyle } from '../../global-style';
+import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-import { openDocumentTree } from '@joplin/react-native-saf-x';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
-import configScreenStyles from './configScreenStyles';
-import NoteExportButton from './NoteExportSection/NoteExportButton';
-import ConfigScreenButton from './ConfigScreenButton';
-import Clipboard from '@react-native-community/clipboard';
+import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
+import NoteExportButton, { exportButtonDescription, exportButtonDefaultTitle } from './NoteExportSection/NoteExportButton';
+import SettingsButton from './SettingsButton';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { ReactElement, ReactNode } from 'react';
+import SectionHeader from './SectionHeader';
+import ExportProfileButton, { exportProfileButtonTitle } from './NoteExportSection/ExportProfileButton';
+import SettingComponent from './SettingComponent';
+import ExportDebugReportButton, { exportDebugReportTitle } from './NoteExportSection/ExportDebugReportButton';
+import SectionSelector from './SectionSelector';
+import { TextInput, List } from 'react-native-paper';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
+import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
+import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import SectionDescription from './SectionDescription';
+import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
+import getVersionInfoText from '../../../utils/getVersionInfoText';
+import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
 
-class ConfigScreenComponent extends BaseScreenComponent {
+interface ConfigScreenState {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	settings: any;
+	changedSettingKeys: string[];
+
+	searchQuery: string;
+	searching: boolean;
+
+	fixingSearchIndex: boolean;
+	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	showAdvancedSettings: boolean;
+
+	selectedSectionName: string|null;
+	sidebarWidth: number;
+}
+
+interface ConfigScreenProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	settings: any;
+	themeId: number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	navigation: any;
+}
+
+class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
 		return { header: null };
 	}
 
 	private componentsY_: Record<string, number> = {};
+	private styles_: Record<number, ConfigScreenStyles> = {};
+	private scrollViewRef_: React.RefObject<ScrollView>;
 
-	public constructor() {
-		super();
-		this.styles_ = {};
+	public constructor(props: ConfigScreenProps) {
+		super(props);
 
 		this.state = {
-			creatingReport: false,
-			profileExportStatus: 'idle',
-			profileExportPath: '',
-			fileSystemSyncPath: Setting.value('sync.2.path'),
+			...shared.defaultScreenState,
+			selectedSectionName: null,
+			fixingSearchIndex: false,
+			sidebarWidth: 100,
+			searchQuery: '',
+			searching: false,
 		};
 
-		this.scrollViewRef_ = React.createRef();
+		this.scrollViewRef_ = React.createRef<ScrollView>();
 
-		shared.init(this, reg);
-
-		this.selectDirectoryButtonPress = async () => {
-			try {
-				const doc = await openDocumentTree(true);
-				if (doc?.uri) {
-					this.setState({ fileSystemSyncPath: doc.uri });
-					shared.updateSettingValue(this, 'sync.2.path', doc.uri);
-				} else {
-					throw new Error('User cancelled operation');
-				}
-			} catch (e) {
-				reg.logger().info('Didn\'t pick sync dir: ', e);
-			}
-		};
-
-		this.checkSyncConfig_ = async () => {
-			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
-			// this call sets the new value and returns the previous one which we can use later to revert the change
-			const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
-			const result = await shared.checkSyncConfig(this, this.state.settings);
-			if (!result || !result.ok) {
-				await setIgnoreTlsErrors(prevIgnoreTlsErrors);
-			}
-		};
-
-		this.e2eeConfig_ = () => {
-			void NavService.go('EncryptionConfig');
-		};
-
-		this.saveButton_press = async () => {
-			if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
-				if (Platform.OS === 'android') {
-					if (Platform.Version < 29) {
-						if (!(await this.checkFilesystemPermission())) {
-							Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
-						}
-					}
-				}
-
-				// Save settings anyway, even if permission has not been granted
-			}
-
-			// changedSettingKeys is cleared in shared.saveSettings so reading it now
-			const setIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
-
-			await shared.saveSettings(this);
-
-			if (setIgnoreTlsErrors) {
-				await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
-			}
-		};
-
-		this.saveButton_press = this.saveButton_press.bind(this);
-
-		this.syncStatusButtonPress_ = () => {
-			void NavService.go('Status');
-		};
-
-		this.manageProfilesButtonPress_ = () => {
-			this.props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'ProfileSwitcher',
-			});
-		};
-
-		this.exportDebugButtonPress_ = async () => {
-			this.setState({ creatingReport: true });
-			const service = new ReportService();
-
-			const logItems = await reg.logger().lastEntries(null);
-			const logItemRows = [['Date', 'Level', 'Message']];
-			for (let i = 0; i < logItems.length; i++) {
-				const item = logItems[i];
-				logItemRows.push([time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'), item.level, item.message]);
-			}
-			const logItemCsv = service.csvCreate(logItemRows);
-
-			const itemListCsv = await service.basicItemList({ format: 'csv' });
-
-			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
-
-			if (!externalDir) {
-				this.setState({ creatingReport: false });
-				return;
-			}
-
-			const filePath = `${externalDir}/syncReport-${new Date().getTime()}.txt`;
-
-			const finalText = [logItemCsv, itemListCsv].join('\n================================================================================\n');
-			await shim.fsDriver().writeFile(filePath, finalText, 'utf8');
-			alert(`Debug report exported to ${filePath}`);
-			this.setState({ creatingReport: false });
-		};
-
-		this.fixSearchEngineIndexButtonPress_ = async () => {
-			this.setState({ fixingSearchIndex: true });
-			await SearchEngine.instance().rebuildIndex();
-			this.setState({ fixingSearchIndex: false });
-		};
-
-		this.exportProfileButtonPress_ = async () => {
-			const externalDir = await shim.fsDriver().getExternalDirectoryPath();
-			if (!externalDir) {
-				return;
-			}
-			const p = this.state.profileExportPath ? this.state.profileExportPath : `${externalDir}/JoplinProfileExport`;
-
-			this.setState({
-				profileExportStatus: 'prompt',
-				profileExportPath: p,
-			});
-		};
-
-		this.exportProfileButtonPress2_ = async () => {
-			this.setState({ profileExportStatus: 'exporting' });
-
-			const dbPath = '/data/data/net.cozic.joplin/databases';
-			const exportPath = this.state.profileExportPath;
-			const resourcePath = `${exportPath}/resources`;
-			try {
-				const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-				if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-					throw new Error('Permission denied');
-				}
-
-				const copyFiles = async (source: string, dest: string) => {
-					await shim.fsDriver().mkdir(dest);
-
-					const files = await shim.fsDriver().readDirStats(source);
-
-					for (const file of files) {
-						const source_ = `${source}/${file.path}`;
-						const dest_ = `${dest}/${file.path}`;
-						if (!file.isDirectory()) {
-							reg.logger().info(`Copying profile: ${source_} => ${dest_}`);
-							await shim.fsDriver().copy(source_, dest_);
-						} else {
-							await copyFiles(source_, dest_);
-						}
-					}
-				};
-				await copyFiles(dbPath, exportPath);
-				await copyFiles(Setting.value('resourceDir'), resourcePath);
-
-				alert('Profile has been exported!');
-			} catch (error) {
-				alert(`Could not export files: ${error.message}`);
-			} finally {
-				this.setState({ profileExportStatus: 'idle' });
-			}
-		};
-
-		this.logButtonPress_ = () => {
-			void NavService.go('Log');
-		};
-
-		this.handleSetting = this.handleSetting.bind(this);
+		shared.init(reg);
 	}
+
+	private goToJoplinCloudLogin_ = async () => {
+		await NavService.go('JoplinCloudLogin');
+	};
+
+	private checkSyncConfig_ = async () => {
+		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			if (!isAuthenticated) {
+				void NavService.go('JoplinCloudLogin');
+				return;
+			}
+		}
+		// to ignore TLS errors we need to change the global state of the app, if the check fails we need to restore the original state
+		// this call sets the new value and returns the previous one which we can use later to revert the change
+		const prevIgnoreTlsErrors = await setIgnoreTlsErrors(this.state.settings['net.ignoreTlsErrors']);
+		const result = await shared.checkSyncConfig(this, this.state.settings);
+		if (!result || !result.ok) {
+			await setIgnoreTlsErrors(prevIgnoreTlsErrors);
+		}
+	};
+
+	private e2eeConfig_ = () => {
+		void NavService.go('EncryptionConfig');
+	};
+
+	private saveButton_press = async () => {
+		if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
+			if (Platform.OS === 'android') {
+				if (Platform.Version < 29) {
+					if (!(await this.checkFilesystemPermission())) {
+						Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
+					}
+				}
+			}
+
+			// Save settings anyway, even if permission has not been granted
+		}
+
+		// changedSettingKeys is cleared in shared.saveSettings so reading it now
+		const shouldSetIgnoreTlsErrors = this.state.changedSettingKeys.includes('net.ignoreTlsErrors');
+
+		const done = await shared.saveSettings(this);
+		if (!done) return;
+
+		if (shouldSetIgnoreTlsErrors) {
+			await setIgnoreTlsErrors(Setting.value('net.ignoreTlsErrors'));
+		}
+	};
+
+	private syncStatusButtonPress_ = () => {
+		void NavService.go('Status');
+	};
+
+	private manageProfilesButtonPress_ = () => {
+		void NavService.go('ProfileSwitcher');
+	};
+
+	private fixSearchEngineIndexButtonPress_ = async () => {
+		this.setState({ fixingSearchIndex: true });
+		await SearchEngine.instance().rebuildIndex();
+		this.setState({ fixingSearchIndex: false });
+	};
+
+	private logButtonPress_ = () => {
+		void NavService.go('Log');
+	};
+
+	private manageSharesPress_ = () => {
+		void NavService.go('ShareManager');
+	};
+
+	private setShowSearch_(searching: boolean) {
+		if (searching !== this.state.searching) {
+			this.setState({ searching });
+			AccessibilityInfo.announceForAccessibility(searching ? _('Search shown') : _('Search hidden'));
+		}
+	}
+
+	private onSearchButtonPress_ = () => {
+		this.setShowSearch_(!this.state.searching);
+	};
+
+	private onSearchUpdate_ = (newQuery: string) => {
+		this.setState({ searchQuery: newQuery });
+	};
+
+	private updateSidebarWidth = () => {
+		const windowWidth = Dimensions.get('window').width;
+
+		let sidebarNewWidth = windowWidth;
+
+		const sidebarValidWidths = [280, 230];
+		const maxFractionOfWindowSize = 1 / 3;
+		for (const width of sidebarValidWidths) {
+			if (width < windowWidth * maxFractionOfWindowSize) {
+				sidebarNewWidth = width;
+				break;
+			}
+		}
+
+		this.setState({ sidebarWidth: sidebarNewWidth });
+	};
+
+	private navigationFillsScreen() {
+		const windowWidth = Dimensions.get('window').width;
+		return this.state.sidebarWidth > windowWidth / 2;
+	}
+
+	private onJumpToSection_ = (section: string) => {
+		const label = Setting.sectionNameToLabel(section);
+		AccessibilityInfo.announceForAccessibility(_('Opening section %s', label));
+		this.setState({
+			selectedSectionName: section,
+			searching: false,
+		});
+	};
+
+	private showSectionNavigation_ = () => {
+		this.setState({ selectedSectionName: null });
+	};
 
 	public async checkFilesystemPermission() {
 		if (Platform.OS !== 'android') {
@@ -225,7 +224,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		this.setState({ settings: this.props.settings });
 	}
 
-	public styles() {
+	public styles(): ConfigScreenStyles {
 		const themeId = this.props.themeId;
 
 		if (this.styles_[themeId]) return this.styles_[themeId];
@@ -235,11 +234,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return this.styles_[themeId];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onHeaderLayout(key: string, event: any) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`header_${key}`] = layout.y;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private onSectionLayout(key: string, event: any) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`section_${key}`] = layout.y;
@@ -252,30 +253,65 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return 0;
 	}
 
+	private hasUnsavedChanges() {
+		return this.state.changedSettingKeys.length > 0;
+	}
+
+	private promptSaveChanges(): Promise<void> {
+		return new Promise(resolve => {
+			if (this.hasUnsavedChanges()) {
+				const dialogTitle: string|null = null;
+				Alert.alert(
+					dialogTitle,
+					_('There are unsaved changes.'),
+					[{
+						text: _('Save changes'),
+						onPress: async () => {
+							await this.saveButton_press();
+							resolve();
+						},
+					},
+					{
+						text: _('Discard changes'),
+						onPress: () => resolve(),
+					}],
+				);
+			} else {
+				resolve();
+			}
+		});
+	}
+
+	private handleNavigateToNewScreen = async (): Promise<boolean> => {
+		await this.promptSaveChanges();
+
+		// Continue navigation
+		return false;
+	};
+
 	private handleBackButtonPress = (): boolean => {
 		const goBack = async () => {
 			BackButtonService.removeHandler(this.handleBackButtonPress);
 			await BackButtonService.back();
 		};
 
-		if (this.state.changedSettingKeys.length > 0) {
-			const dialogTitle: string|null = null;
-			Alert.alert(
-				dialogTitle,
-				_('There are unsaved changes.'),
-				[{
-					text: _('Save changes'),
-					onPress: async () => {
-						await this.saveButton_press();
-						await goBack();
-					},
-				},
-				{
-					text: _('Discard changes'),
-					onPress: goBack,
-				}]
-			);
+		// Cancel search on back
+		if (this.state.searching) {
+			this.setShowSearch_(false);
+			return true;
+		}
 
+		// Show navigation when pressing "back" (unless always visible).
+		if (this.state.selectedSectionName && this.navigationFillsScreen()) {
+			this.showSectionNavigation_();
+			return true;
+		}
+
+		if (this.hasUnsavedChanges()) {
+			void (async () => {
+				await this.promptSaveChanges();
+				await goBack();
+			})();
 			return true;
 		}
 
@@ -284,6 +320,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 	public componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
+			this.setState({ selectedSectionName: this.props.navigation.state.sectionName });
 			setTimeout(() => {
 				this.scrollViewRef_.current.scrollTo({
 					x: 0,
@@ -294,39 +331,124 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		BackButtonService.addHandler(this.handleBackButtonPress);
+		NavService.addHandler(this.handleNavigateToNewScreen);
+		Dimensions.addEventListener('change', this.updateSidebarWidth);
+		this.updateSidebarWidth();
 	}
 
 	public componentWillUnmount() {
 		BackButtonService.removeHandler(this.handleBackButtonPress);
+		NavService.removeHandler(this.handleNavigateToNewScreen);
 	}
 
-	public renderHeader(key: string, title: string) {
-		const theme = themeStyle(this.props.themeId);
-		return (
-			<View key={key} style={this.styles().headerWrapperStyle} onLayout={(event: any) => this.onHeaderLayout(key, event)}>
-				<Text style={theme.headerStyle}>{title}</Text>
-			</View>
-		);
-	}
-
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
 		return (
-			<ConfigScreenButton
+			<SettingsButton
 				key={key}
 				title={title}
 				clickHandler={clickHandler}
 				description={options?.description}
 				statusComponent={options?.statusComp}
 				styles={this.styles()}
+				disabled={options?.disabled}
 			/>
 		);
 	}
 
-	public sectionToComponent(key: string, section: any, settings: any) {
-		const settingComps = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
+		const settingComps: ReactElement[] = [];
+		const advancedSettingComps: ReactElement[] = [];
+
+		const headerTitle = Setting.sectionNameToLabel(section.name);
+		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
+		if (sectionDescription && !this.state.searching) {
+			settingComps.push(
+				<SectionDescription
+					key='section-description'
+					content={sectionDescription}
+				/>,
+			);
+		}
+
+		const matchesSearchQuery = (relatedText: string|string[]) => {
+			let searchThrough;
+			if (Array.isArray(relatedText)) {
+				searchThrough = relatedText.join('\n');
+			} else {
+				searchThrough = relatedText;
+			}
+			searchThrough = searchThrough.toLocaleLowerCase();
+
+			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
+
+			const hasSearchMatches =
+				headerTitle.toLocaleLowerCase() === searchQuery
+				|| searchThrough.includes(searchQuery);
+
+			// Don't show results when the search input is empty
+			return this.state.searchQuery.length > 0 && hasSearchMatches;
+		};
+
+		const addSettingComponent = (
+			component: ReactElement,
+			relatedText: string|string[],
+			settingMetadata?: { advanced?: boolean },
+		) => {
+			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
+			if (component && !hiddenBySearch) {
+				if (settingMetadata?.advanced) {
+					advancedSettingComps.push(component);
+				} else {
+					settingComps.push(component);
+				}
+			}
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: any = null) => {
+			const relatedText = [title];
+			if (typeof options === 'object' && options?.description) {
+				relatedText.push(options.description);
+			}
+			addSettingComponent(this.renderButton(key, title, clickHandler, options), relatedText);
+		};
+
+		const styleSheet = this.styles().styleSheet;
+		const addSettingLink = (key: string, title: string, target: string) => {
+			const component = (
+				<View key={key} style={styleSheet.settingContainer}>
+					<TouchableOpacity
+						onPress={() => {
+							void Linking.openURL(target);
+						}}
+						accessibilityRole='link'
+					>
+						<Text key="label" style={styleSheet.linkText}>
+							{title}
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
+
+			addSettingComponent(component, title);
+		};
+
+		const addSettingText = (key: string, text: string) => {
+			addSettingComponent(
+				<View key={key} style={styleSheet.settingContainer}>
+					<Text style={styleSheet.settingText}>{text}</Text>
+				</View>,
+				text,
+			);
+		};
 
 		for (let i = 0; i < section.metadatas.length; i++) {
 			const md = section.metadatas[i];
+
+			// Handled below
+			if (md.key === 'plugins.states') continue;
 
 			if (section.name === 'sync' && md.key === 'sync.resourceDownloadMode') {
 				const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
@@ -335,79 +457,250 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					const messages = shared.checkSyncConfigMessages(this);
 					const statusComp = !messages.length ? null : (
 						<View style={{ flex: 1, marginTop: 10 }}>
-							<Text style={this.styles().descriptionText}>{messages[0]}</Text>
+							<Text style={this.styles().styleSheet.descriptionText}>{messages[0]}</Text>
 							{messages.length >= 1 ? (
 								<View style={{ marginTop: 10 }}>
-									<Text style={this.styles().descriptionText}>{messages[1]}</Text>
+									<Text style={this.styles().styleSheet.descriptionText}>{messages[1]}</Text>
 								</View>
 							) : null}
 						</View>
 					);
 
-					settingComps.push(this.renderButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp }));
+					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
+					}
+
+					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });
 				}
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			settingComps.push(settingComp);
-		}
-
-		if (section.name === 'sync') {
-			settingComps.push(this.renderButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_));
-		}
-
-		if (section.name === 'joplinCloud') {
-			const description = _('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook');
-			settingComps.push(
-				<View key="joplinCloud">
-					<View style={this.styles().settingContainerNoBottomBorder}>
-						<Text style={this.styles().settingText}>{_('Email to note')}</Text>
-						<Text style={{ fontWeight: 'bold' }}>{this.props.settings['sync.10.inboxEmail']}</Text>
-					</View>
-					{
-						this.renderButton(
-							'sync.10.inboxEmail',
-							_('Copy to clipboard'),
-							() => Clipboard.setString(this.props.settings['sync.10.inboxEmail']),
-							{ description }
-						)
-					}
-				</View>
+			const relatedText = [md.label?.() ?? '', md.description?.() ?? ''];
+			addSettingComponent(
+				settingComp,
+				relatedText,
+				md,
 			);
 		}
 
-		if (!settingComps.length) return null;
+		if (section.name === 'plugins') {
+			const pluginStatesKey = 'plugins.states';
+			const pluginService = PluginService.instance();
+
+			const updatePluginStates = (newSettingValue: PluginSettings) => {
+				const value = pluginService.serializePluginSettings(newSettingValue);
+				shared.updateSettingValue(this, pluginStatesKey, value);
+			};
+
+			if (settings['plugins.pluginSupportEnabled']) {
+				addSettingComponent(
+					<PluginStates
+						key={'plugin-states'}
+						styles={this.styles()}
+						themeId={this.props.themeId}
+						pluginSettings={settings[pluginStatesKey]}
+
+						updatePluginStates={updatePluginStates}
+						shouldShowBasedOnSearchQuery={this.state.searching ? matchesSearchQuery : null}
+					/>,
+					getPluginStatesSearchText(),
+				);
+
+				if (canInstallPluginsFromFile()) {
+					addSettingComponent(
+						<PluginUploadButton
+							key='plugins-install-from-file'
+							pluginSettings={settings[pluginStatesKey]}
+							updatePluginStates={updatePluginStates}
+							styles={this.styles()}
+						/>,
+						pluginUploadButtonSearchText(),
+						{ advanced: true },
+					);
+				}
+			} else {
+				const enablePluginSupport = () => {
+					shared.updateSettingValue(this, 'plugins.pluginSupportEnabled', true);
+				};
+				addSettingComponent(
+					<EnablePluginSupportPage
+						key='plugin-support-disabled-screen'
+						themeId={this.props.themeId}
+						onEnablePluginSupport={enablePluginSupport}
+					/>,
+					['plugins', _('Plugins')],
+				);
+			}
+
+		}
+
+		if (section.name === 'sync') {
+			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+		}
+
+		if (section.name === 'joplinCloud') {
+			addSettingComponent(
+				<JoplinCloudConfig
+					key="joplin-cloud-config"
+					accountType={this.props.settings['sync.10.accountType']}
+					inboxEmail={this.props.settings['sync.10.inboxEmail']}
+					userEmail={this.props.settings['sync.10.userEmail']}
+					website={this.props.settings['sync.10.website']}
+					styles={this.styles()}
+				/>,
+				[emailToNoteDescription(), emailToNoteLabel()],
+			);
+		}
+
+		if (section.name === 'tools') {
+			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
+			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
+			addSettingButton('log_button', _('Log'), this.logButtonPress_);
+			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
+			const syncTargetInfo = SyncTargetRegistry.infoById(this.state.settings['sync.target']);
+			if (syncTargetInfo.supportsShare) {
+				addSettingButton('manage_shares_button', _('Manage shared notebooks'), this.manageSharesPress_);
+			}
+		}
+
+		if (section.name === 'importOrExport') {
+			addSettingComponent(
+				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
+				[exportButtonDefaultTitle(), exportButtonDescription()],
+			);
+			addSettingComponent(
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
+				[importButtonDefaultTitle(), importButtonDescription()],
+			);
+			addSettingComponent(
+				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
+				exportDebugReportTitle(),
+			);
+			addSettingComponent(
+				<ExportProfileButton key='export_data' styles={this.styles()}/>,
+				exportProfileButtonTitle(),
+			);
+		}
+
+		if (section.name === 'moreInfo') {
+			if (Platform.OS === 'android' && Platform.Version >= 23) {
+				// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
+				// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
+
+				addSettingComponent(
+					<View key="permission_info" style={styleSheet.settingContainer}>
+						<View key="permission_info_wrapper">
+							<Text key="perm1a" style={styleSheet.settingText}>
+								{_('To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions')}
+							</Text>
+							<Text key="perm2" style={styleSheet.permissionText}>
+								{_('- Storage: to allow attaching files to notes and to enable filesystem synchronisation.')}
+							</Text>
+							<Text key="perm3" style={styleSheet.permissionText}>
+								{_('- Camera: to allow taking a picture and attaching it to a note.')}
+							</Text>
+							<Text key="perm4" style={styleSheet.permissionText}>
+								{_('- Location: to allow attaching geo-location information to a note.')}
+							</Text>
+						</View>
+					</View>,
+					'',
+				);
+			}
+
+			addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
+			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
+			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
+
+			const versionInfoText = getVersionInfoText(settings['plugins.states']);
+
+			addSettingText('version_info', versionInfoText);
+			addSettingButton('copy_app_info', _('Copy version info'), () => {
+				Clipboard.setString(versionInfoText);
+			});
+
+			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
+			if (featureFlagKeys.length) {
+				const headerKey = 'featureFlags';
+				const featureFlagsTitle = _('Feature flags');
+				addSettingComponent(
+					<SectionHeader
+						key={headerKey}
+						styles={this.styles().styleSheet}
+						title={featureFlagsTitle}
+						onLayout={event => this.onHeaderLayout(headerKey, event)}
+					/>,
+					_('Feature flags'),
+				);
+
+				addSettingComponent(
+					<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>,
+					featureFlagsTitle,
+				);
+			}
+		}
+
+		if (!settingComps.length && !advancedSettingComps.length) return null;
+		if (!isSelected && !this.state.searching) return null;
+
+		const headerComponent = (
+			<TouchableOpacity onPress={() => {
+				this.onJumpToSection_(section.name);
+			}}>
+				<SectionHeader
+					styles={styleSheet}
+					title={headerTitle}
+				/>
+			</TouchableOpacity>
+		);
+
+		const renderAdvancedSettings = () => {
+			if (!advancedSettingComps.length) return null;
+
+			const toggleAdvancedLabel = _('Advanced settings');
+			return (
+				<List.Accordion
+					title={toggleAdvancedLabel}
+					expanded={this.state.showAdvancedSettings}
+					onPress={() => this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings })}
+				>
+					{this.state.showAdvancedSettings ? advancedSettingComps : null}
+				</List.Accordion>
+			);
+		};
 
 		return (
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
-				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}
-				<View>{settingComps}</View>
+				<View>
+					{this.state.searching ? headerComponent : null}
+					{settingComps}
+					{renderAdvancedSettings()}
+				</View>
 			</View>
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
 		const theme = themeStyle(this.props.themeId);
 
 		return (
 			<View key={key}>
-				<View style={this.containerStyle(false)}>
-					<Text key="label" style={this.styles().switchSettingText}>
+				<View style={this.styles().getContainerStyle(false)}>
+					<Text key="label" style={this.styles().styleSheet.switchSettingText}>
 						{label}
 					</Text>
-					<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => void updateSettingValue(key, value)} />
+					{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
+					<Switch key="control" style={this.styles().styleSheet.switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => void updateSettingValue(key, value)} />
 				</View>
 				{descriptionComp}
 			</View>
 		);
 	}
 
-	private containerStyle(hasDescription: boolean): any {
-		return !hasDescription ? this.styles().settingContainer : this.styles().settingContainerNoBottomBorder;
-	}
-
-	private async handleSetting(key: string, value: any): Promise<boolean> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private handleSetting = async (key: string, value: any): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
 		// it's not, we don't turn on the setting.
@@ -428,130 +721,36 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		}
 
 		return false;
-	}
+	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public settingToComponent(key: string, value: any) {
-		const themeId = this.props.themeId;
-		const theme = themeStyle(themeId);
-		const output: any = null;
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const updateSettingValue = async (key: string, value: any) => {
 			const handled = await this.handleSetting(key, value);
 			if (!handled) shared.updateSettingValue(this, key, value);
 		};
 
-		const md = Setting.settingMetadata(key);
-		const settingDescription = md.description ? md.description() : '';
-
-		const descriptionComp = !settingDescription ? null : <Text style={this.styles().settingDescriptionText}>{settingDescription}</Text>;
-		const containerStyle = this.containerStyle(!!settingDescription);
-
-		if (md.isEnum) {
-			value = value.toString();
-
-			const items = Setting.enumOptionsToValueLabels(md.options(), md.optionsOrder ? md.optionsOrder() : []);
-
-			return (
-				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-					<View style={containerStyle}>
-						<Text key="label" style={this.styles().settingText}>
-							{md.label()}
-						</Text>
-						<Dropdown
-							key="control"
-							style={this.styles().settingControl}
-							items={items}
-							selectedValue={value}
-							itemListStyle={{
-								backgroundColor: theme.backgroundColor,
-							}}
-							headerStyle={{
-								color: theme.color,
-								fontSize: theme.fontSize,
-							}}
-							itemStyle={{
-								color: theme.color,
-								fontSize: theme.fontSize,
-							}}
-							onValueChange={(itemValue: string) => {
-								void updateSettingValue(key, itemValue);
-							}}
-						/>
-					</View>
-					{descriptionComp}
-				</View>
-			);
-		} else if (md.type === Setting.TYPE_BOOL) {
-			return this.renderToggle(key, md.label(), value, updateSettingValue, descriptionComp);
-			// return (
-			// 	<View key={key}>
-			// 		<View style={containerStyle}>
-			// 			<Text key="label" style={this.styles().switchSettingText}>
-			// 				{md.label()}
-			// 			</Text>
-			// 			<Switch key="control" style={this.styles().switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value:any) => updateSettingValue(key, value)} />
-			// 		</View>
-			// 		{descriptionComp}
-			// 	</View>
-			// );
-		} else if (md.type === Setting.TYPE_INT) {
-			const unitLabel = md.unitLabel ? md.unitLabel(value) : value;
-			const minimum = 'minimum' in md ? md.minimum : 0;
-			const maximum = 'maximum' in md ? md.maximum : 10;
-
-			// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
-			// on the Slider as they are buggy and can crash the app on certain devices.
-			// https://github.com/laurent22/joplin/issues/2733
-			// https://github.com/react-native-community/react-native-slider/issues/161
-			return (
-				<View key={key} style={this.styles().settingContainer}>
-					<Text key="label" style={this.styles().settingText}>
-						{md.label()}
-					</Text>
-					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-						<Text style={this.styles().sliderUnits}>{unitLabel}</Text>
-						<Slider key="control" style={{ flex: 1 }} step={md.step} minimumValue={minimum} maximumValue={maximum} value={value} onValueChange={value => void updateSettingValue(key, value)} />
-					</View>
-				</View>
-			);
-		} else if (md.type === Setting.TYPE_STRING) {
-			if (md.key === 'sync.2.path' && shim.fsDriver().isUsingAndroidSAF()) {
-				return (
-					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>
-						<View style={this.styles().settingContainer}>
-							<Text key="label" style={this.styles().settingText}>
-								{md.label()}
-							</Text>
-							<Text style={this.styles().settingControl}>
-								{this.state.fileSystemSyncPath}
-							</Text>
-						</View>
-					</TouchableNativeFeedback>
-				);
-			}
-			return (
-				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-					<View key={key} style={containerStyle}>
-						<Text key="label" style={this.styles().settingText}>
-							{md.label()}
-						</Text>
-						<TextInput autoCorrect={false} autoComplete="off" selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} autoCapitalize="none" key="control" style={this.styles().settingControl} value={value} onChangeText={(value: any) => void updateSettingValue(key, value)} secureTextEntry={!!md.secure} />
-					</View>
-					{descriptionComp}
-				</View>
-			);
-		} else {
-			// throw new Error('Unsupported setting type: ' + md.type);
-		}
-
-		return output;
+		return (
+			<SettingComponent
+				key={key}
+				settingId={key}
+				value={value}
+				themeId={this.props.themeId}
+				updateSettingValue={updateSettingValue}
+				styles={this.styles()}
+			/>
+		);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private renderFeatureFlags(settings: any, featureFlagKeys: string[]): any[] {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const updateSettingValue = (key: string, value: any) => {
 			return shared.updateSettingValue(this, key, value);
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any[] = [];
 		for (const key of featureFlagKeys) {
 			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
@@ -562,139 +761,91 @@ class ConfigScreenComponent extends BaseScreenComponent {
 	public render() {
 		const settings = this.state.settings;
 
-		const theme = themeStyle(this.props.themeId);
+		const showAsSidebar = !this.navigationFillsScreen();
 
-		const settingComps = shared.settingsToComponents2(this, 'mobile', settings);
-
-		settingComps.push(this.renderHeader('tools', _('Tools')));
-
-		settingComps.push(this.renderButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_));
-		settingComps.push(this.renderButton('status_button', _('Sync Status'), this.syncStatusButtonPress_));
-		settingComps.push(this.renderButton('log_button', _('Log'), this.logButtonPress_));
-		settingComps.push(this.renderButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') }));
-
-		settingComps.push(this.renderHeader('export', _('Export')));
-		settingComps.push(<NoteExportButton key={'export_as_jex_button'} styles={this.styles()} />);
-
-		if (shim.mobilePlatform() === 'android') {
-			settingComps.push(this.renderButton('export_report_button', this.state.creatingReport ? _('Creating report...') : _('Export Debug Report'), this.exportDebugButtonPress_, { disabled: this.state.creatingReport }));
-			settingComps.push(this.renderButton('export_data', this.state.profileExportStatus === 'exporting' ? _('Exporting profile...') : _('Export profile'), this.exportProfileButtonPress_, { disabled: this.state.profileExportStatus === 'exporting', description: _('For debugging purpose only: export your profile to an external SD card.') }));
-
-			if (this.state.profileExportStatus === 'prompt') {
-				const profileExportPrompt = (
-					<View style={this.styles().settingContainer} key="profileExport">
-						<Text style={{ ...this.styles().settingText, flex: 0 }}>Path:</Text>
-						<TextInput style={{ ...this.styles().textInput, paddingRight: 20, width: '75%', marginRight: 'auto' }} onChange={(event: any) => this.setState({ profileExportPath: event.nativeEvent.text })} value={this.state.profileExportPath} placeholder="/path/to/sdcard" keyboardAppearance={theme.keyboardAppearance} />
-						<Button title="OK" onPress={this.exportProfileButtonPress2_} />
-					</View>
-				);
-
-				settingComps.push(profileExportPrompt);
-			}
+		// If the navigation is a sidebar, always show a section.
+		let currentSectionName = this.state.selectedSectionName;
+		if (showAsSidebar && !currentSectionName) {
+			currentSectionName = 'general';
 		}
 
-		const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
-		if (featureFlagKeys.length) {
-			settingComps.push(this.renderHeader('featureFlags', _('Feature flags')));
-			settingComps.push(<View key="featureFlagsContainer">{this.renderFeatureFlags(settings, featureFlagKeys)}</View>);
+		if (this.state.searching) {
+			currentSectionName = null;
 		}
 
-		settingComps.push(this.renderHeader('moreInfo', _('More information')));
+		const sectionSelector = (
+			<SectionSelector
+				selectedSectionName={currentSectionName}
+				styles={this.styles()}
+				settings={settings}
+				openSection={this.onJumpToSection_}
+				width={this.state.sidebarWidth}
+			/>
+		);
 
-		if (Platform.OS === 'android' && Platform.Version >= 23) {
-			// Note: `PermissionsAndroid` doesn't work so we have to ask the user to manually
-			// set these permissions. https://stackoverflow.com/questions/49771084/permission-always-returns-never-ask-again
+		let currentSection: ReactNode;
+		if (currentSectionName || this.state.searching) {
+			const settingComps = shared.settingsToComponents2(
+				this, AppType.Mobile, settings, currentSectionName,
 
-			settingComps.push(
-				<View key="permission_info" style={this.styles().settingContainer}>
-					<View key="permission_info_wrapper">
-						<Text key="perm1a" style={this.styles().settingText}>
-							{_('To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions')}
-						</Text>
-						<Text key="perm2" style={this.styles().permissionText}>
-							{_('- Storage: to allow attaching files to notes and to enable filesystem synchronisation.')}
-						</Text>
-						<Text key="perm3" style={this.styles().permissionText}>
-							{_('- Camera: to allow taking a picture and attaching it to a note.')}
-						</Text>
-						<Text key="perm4" style={this.styles().permissionText}>
-							{_('- Location: to allow attaching geo-location information to a note.')}
-						</Text>
-					</View>
+			// TODO: Remove this cast. Currently necessary because of different versions
+			// of React in lib/ and app-mobile/
+			) as ReactNode[];
+
+			const searchInput = <TextInput
+				value={this.state.searchQuery}
+				label={_('Search')}
+				placeholder={_('Search...')}
+				onChangeText={this.onSearchUpdate_}
+				autoFocus={true}
+			/>;
+
+			currentSection = (
+				<ScrollView
+					ref={this.scrollViewRef_}
+					style={{ flexGrow: 1 }}
+				>
+					{this.state.searching ? searchInput : null}
+					{settingComps}
+				</ScrollView>
+			);
+		} else {
+			currentSection = sectionSelector;
+		}
+
+		let mainComponent;
+		if (showAsSidebar && currentSectionName) {
+			mainComponent = (
+				<View style={{
+					flex: 1,
+					flexDirection: 'row',
+				}}>
+					{sectionSelector}
+					<View style={{ width: 10 }}/>
+					{currentSection}
 				</View>
 			);
+		} else {
+			mainComponent = currentSection;
 		}
 
-		settingComps.push(
-			<View key="donate_link" style={this.styles().settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/donate/');
-					}}
-				>
-					<Text key="label" style={this.styles().linkText}>
-						{_('Make a donation')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="website_link" style={this.styles().settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/');
-					}}
-				>
-					<Text key="label" style={this.styles().linkText}>
-						{_('Joplin website')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="privacy_link" style={this.styles().settingContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						void Linking.openURL('https://joplinapp.org/privacy/');
-					}}
-				>
-					<Text key="label" style={this.styles().linkText}>
-						{_('Privacy Policy')}
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_app" style={this.styles().settingContainer}>
-				<Text style={this.styles().settingText}>{`Joplin ${VersionInfo.appVersion}`}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_db" style={this.styles().settingContainer}>
-				<Text style={this.styles().settingText}>{_('Database v%s', reg.db().version())}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_fts" style={this.styles().settingContainer}>
-				<Text style={this.styles().settingText}>{_('FTS enabled: %d', this.props.settings['db.ftsEnabled'])}</Text>
-			</View>
-		);
-
-		settingComps.push(
-			<View key="version_info_hermes" style={this.styles().settingContainer}>
-				<Text style={this.styles().settingText}>{_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0)}</Text>
-			</View>
-		);
+		let screenHeadingText = _('Configuration');
+		if (currentSectionName) {
+			screenHeadingText = Setting.sectionNameToLabel(currentSectionName);
+		}
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
-				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />
-				<ScrollView ref={this.scrollViewRef_}>{settingComps}</ScrollView>
+				<ScreenHeader
+					title={screenHeadingText}
+					showSaveButton={true}
+					showSearchButton={true}
+					showSideMenuButton={false}
+					saveButtonDisabled={!this.hasUnsavedChanges()}
+					onSaveButtonPress={this.saveButton_press}
+					onSearchButtonPress={this.onSearchButtonPress_}
+				/>
+				{mainComponent}
 			</View>
 		);
 	}

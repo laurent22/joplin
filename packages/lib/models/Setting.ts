@@ -1,6 +1,6 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import eventManager from '../eventManager';
+import eventManager, { EventName } from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
 import SyncTargetRegistry from '../SyncTargetRegistry';
@@ -10,6 +10,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import { defaultListColumns } from '../services/plugins/api/noteListType';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -35,6 +36,8 @@ export enum SettingItemSubType {
 	FilePathAndArgs = 'file_path_and_args',
 	FilePath = 'file_path', // Not supported on mobile!
 	DirectoryPath = 'directory_path', // Not supported on mobile!
+	FontFamily = 'font_family',
+	MonospaceFontFamily = 'monospace_font_family',
 }
 
 interface KeysOptions {
@@ -48,6 +51,7 @@ export enum SettingStorage {
 
 // This is the definition of a setting item
 export interface SettingItem {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	type: SettingItemType;
 	public: boolean;
@@ -59,10 +63,13 @@ export interface SettingItem {
 	label?(): string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	description?: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	options?(): any;
 	optionsOrder?(): string[];
 	appTypes?: AppType[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	show?(settings: any): boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	filter?(value: any): any;
 	secure?: boolean;
 	advanced?: boolean;
@@ -90,7 +97,7 @@ export interface SettingItem {
 	isGlobal?: boolean;
 }
 
-interface SettingItems {
+export interface SettingItems {
 	[key: string]: SettingItem;
 }
 
@@ -98,6 +105,7 @@ interface SettingItems {
 // They are saved to database at regular intervals.
 interface CacheItem {
 	key: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 }
 
@@ -146,6 +154,7 @@ export interface Constants {
 	pluginDataDir: string;
 	cacheDir: string;
 	pluginDir: string;
+	homeDir: string;
 	flagOpenDevTools: boolean;
 	syncVersion: number;
 	startupDevPlugins: string[];
@@ -181,6 +190,7 @@ interface SettingSections {
 
 interface DefaultMigration {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	previousDefault: any;
 }
 
@@ -220,6 +230,15 @@ const userSettingMigration: UserSettingMigration[] = [
 		transformValue: (value: string) => { return [value]; },
 	},
 ];
+
+export type SettingMetadataSection = {
+	name: string;
+	isScreen?: boolean;
+	metadatas: SettingItem[];
+
+	source?: SettingSectionSource;
+};
+export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
 
@@ -287,6 +306,7 @@ class Setting extends BaseModel {
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		appType: 'SET_ME' as any, // 'cli' or 'mobile'
 		resourceDirName: '',
 		resourceDir: '',
@@ -296,6 +316,7 @@ class Setting extends BaseModel {
 		pluginDataDir: '',
 		cacheDir: '',
 		pluginDir: '',
+		homeDir: '',
 		flagOpenDevTools: false,
 		syncVersion: 3,
 		startupDevPlugins: [],
@@ -303,12 +324,16 @@ class Setting extends BaseModel {
 	};
 
 	public static autoSaveEnabled = true;
+	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static keychainService_: any = null;
 	private static keys_: string[] = null;
 	private static cache_: CacheItem[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static saveTimeoutId_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static changeEventTimeoutId_: any = null;
 	private static customMetadata_: SettingItems = {};
 	private static customSections_: SettingSections = {};
@@ -375,6 +400,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setKeychainService(s: any) {
 		this.keychainService_ = s;
 	}
@@ -392,13 +418,14 @@ class Setting extends BaseModel {
 			wysiwygNo = ` ${_('(wysiwyg: %s)', _('no'))}`;
 		}
 
-		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/faq/');
+		const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/help/faq');
 
 		// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 		// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
 		// public for the mobile and desktop apps because they are handled separately in menus.
 
 		const themeOptions = () => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const output: any = {};
 			output[Setting.THEME_LIGHT] = _('Light');
 			output[Setting.THEME_DARK] = _('Dark');
@@ -471,6 +498,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					try {
 						return settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem');
@@ -478,6 +506,7 @@ class Setting extends BaseModel {
 						return false;
 					}
 				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				filter: (value: any) => {
 					return value ? rtrimSlashes(value) : '';
 				},
@@ -491,6 +520,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -503,6 +533,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -514,6 +545,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 				},
@@ -526,6 +558,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -538,6 +571,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -549,6 +583,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 				},
@@ -561,6 +596,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					try {
 						return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
@@ -580,6 +616,7 @@ class Setting extends BaseModel {
 				value: 'https://s3.amazonaws.com/',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -594,6 +631,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -608,6 +646,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -619,6 +658,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -630,6 +670,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				},
@@ -641,6 +682,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -659,6 +701,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -670,6 +713,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 				},
@@ -694,26 +738,22 @@ class Setting extends BaseModel {
 				public: false,
 				storage: SettingStorage.Database,
 			},
+			'sync.10.website': {
+				value: 'https://joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
 			'sync.10.username': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud email'),
+				public: false,
 				storage: SettingStorage.File,
 			},
 			'sync.10.password': {
 				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud');
-				},
-				public: true,
-				label: () => _('Joplin Cloud password'),
+				public: false,
 				secure: true,
 			},
 
@@ -722,6 +762,10 @@ class Setting extends BaseModel {
 			'sync.10.inboxId': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.10.canUseSharePermissions': { value: false, type: SettingItemType.Bool, public: false },
+
+			'sync.10.accountType': { value: 0, type: SettingItemType.Int, public: false },
+
+			'sync.10.userEmail': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
@@ -769,6 +813,7 @@ class Setting extends BaseModel {
 			// selected folder. It corresponds in general to the currently selected folder or
 			// to the last folder that was selected.
 			activeFolderId: { value: '', type: SettingItemType.String, public: false },
+			notesParent: { value: '', type: SettingItemType.String, public: false },
 
 			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 
@@ -792,6 +837,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Date format'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					const now = new Date('2017-01-30T12:00:00').getTime();
 					options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
@@ -815,6 +861,7 @@ class Setting extends BaseModel {
 				public: true,
 				label: () => _('Time format'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
@@ -822,6 +869,17 @@ class Setting extends BaseModel {
 					options[Setting.TIME_FORMAT_3] = time.formatMsToLocal(now, Setting.TIME_FORMAT_3);
 					return options;
 				},
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			'ocr.enabled': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Enable optical character recognition (OCR)'),
+				description: () => _('When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
@@ -920,7 +978,8 @@ class Setting extends BaseModel {
 				label: () => _('Sort notes by'),
 				options: () => {
 					const Note = require('./Note').default;
-					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order'];
+					const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order', 'todo_due', 'todo_completed'];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					for (let i = 0; i < noteSortFields.length; i++) {
 						options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
@@ -936,10 +995,18 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'note',
 				appTypes: [AppType.Desktop],
-				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
+				label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+			'notes.columns': {
+				value: defaultListColumns(),
+				public: false,
+				type: SettingItemType.Array,
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
+
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 			// which implies changing the setting automatically triggers the refresh of notes.
@@ -1009,6 +1076,7 @@ class Setting extends BaseModel {
 				options: () => {
 					const Folder = require('./Folder').default;
 					const folderSortFields = ['title', 'last_note_user_updated_time'];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const options: any = {};
 					for (let i = 0; i < folderSortFields.length; i++) {
 						options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));
@@ -1019,23 +1087,6 @@ class Setting extends BaseModel {
 			},
 			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
-
-			// 2020-10-29: For now disable the beta editor due to
-			// underlying bugs in the TextInput component which we cannot
-			// fix. Also the editor crashes in Android and in some cases in
-			// iOS.
-			// https://discourse.joplinapp.org/t/anyone-using-the-beta-editor-on-ios/11658/9
-			'editor.beta': {
-				value: false,
-				type: SettingItemType.Bool,
-				section: 'note',
-				public: false,
-				appTypes: [AppType.Mobile],
-				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
-				storage: SettingStorage.File,
-				isGlobal: true,
-			},
 
 			'editor.usePlainText': {
 				value: false,
@@ -1080,6 +1131,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: [AppType.Mobile],
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => settings['editor.mobile.removeSpaceBelowToolbar'],
 				label: () => 'Remove extra space below the markdown toolbar',
 				description: () => 'Works around bug on some devices where the markdown toolbar does not touch the bottom of the screen.',
@@ -1129,7 +1181,7 @@ class Setting extends BaseModel {
 				public: true,
 				appTypes: [AppType.Mobile, AppType.Desktop],
 				label: () => _('Resize large images:'),
-				description: () => _('Shrink large images before adding them to notes to save storage space.'),
+				description: () => _('Shrink large images before adding them to notes.'),
 				options: () => {
 					return {
 						alwaysAsk: _('Always ask'),
@@ -1140,14 +1192,55 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				isGlobal: true,
 			},
+
+			'notes.listRendererId': {
+				value: 'compact',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
 			'plugins.states': {
 				value: '',
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: [AppType.Desktop],
+				appTypes: [AppType.Desktop, AppType.Mobile],
 				needRestart: true,
 				autoSave: true,
+			},
+
+			'plugins.enableWebviewDebugging': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'plugins',
+				public: true,
+				appTypes: [AppType.Mobile],
+				show: (settings) => {
+					// Hide on iOS due to App Store guidelines. See
+					// https://github.com/laurent22/joplin/pull/10086 for details.
+					return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
+				},
+				needRestart: true,
+				advanced: true,
+
+				label: () => _('Plugin WebView debugging'),
+				description: () => _('Allows debugging mobile plugins. See %s for details.', 'https://https://joplinapp.org/help/api/references/mobile_plugin_debugging/'),
+			},
+
+			'plugins.pluginSupportEnabled': {
+				value: false,
+				public: true,
+				autoSave: true,
+				section: 'plugins',
+				advanced: true,
+				type: SettingItemType.Bool,
+				appTypes: [AppType.Mobile],
+				label: () => _('Enable plugin support'),
+				// On mobile, we have a screen that manages this setting when it's disabled.
+				show: (settings) => settings['plugins.pluginSupportEnabled'],
 			},
 
 			'plugins.devPluginPaths': {
@@ -1205,6 +1298,13 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 				isGlobal: true,
+			},
+
+			showMenuBar: {
+				value: true, // Show the menu bar by default
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
 			},
 
 			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },
@@ -1284,6 +1384,7 @@ class Setting extends BaseModel {
 							_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
 						storage: SettingStorage.File,
 						isGlobal: true,
+						subType: SettingItemSubType.FontFamily,
 					},
 			'style.editor.monospaceFontFamily': {
 				value: '',
@@ -1296,11 +1397,21 @@ class Setting extends BaseModel {
 					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
 				storage: SettingStorage.File,
 				isGlobal: true,
+				subType: SettingItemSubType.MonospaceFontFamily,
 			},
 
 			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+
+			'ui.lastSelectedPluginPanel': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				description: () => 'The last selected plugin panel ID in pop-up mode (mobile).',
+				storage: SettingStorage.Database,
+				appTypes: [AppType.Mobile],
+			},
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -1312,7 +1423,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
-						'/* For styling the rendered Markdown */'
+						'/* For styling the rendered Markdown */',
 					);
 				},
 				type: SettingItemType.Button,
@@ -1329,7 +1440,7 @@ class Setting extends BaseModel {
 				onClick: () => {
 					shim.openOrCreateFile(
 						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
-						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`,
 					);
 				},
 				type: SettingItemType.Button,
@@ -1367,7 +1478,20 @@ class Setting extends BaseModel {
 
 
 			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: platform !== 'linux', appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
-			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
+			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
+
+			'autoUploadCrashDumps': {
+				value: false,
+				section: 'application',
+				type: SettingItemType.Bool,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Automatically upload crash reports',
+				description: () => 'If you experience a crash, please enable this option to automatically send crash reports. You will need to restart the application for this change to take effect.',
+				isGlobal: true,
+				storage: SettingStorage.File,
+			},
+
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 			'sync.interval': {
 				value: 300,
@@ -1442,6 +1566,7 @@ class Setting extends BaseModel {
 				advanced: true,
 				label: () => _('Keyboard Mode'),
 				options: () => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const output: any = {};
 					output[''] = _('Default');
 					output['emacs'] = _('Emacs');
@@ -1463,13 +1588,56 @@ class Setting extends BaseModel {
 				isGlobal: true,
 			},
 
+			'imageeditor.jsdrawToolbar': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => '',
+				storage: SettingStorage.File,
+			},
+
+			'imageeditor.imageTemplate': {
+				value: '{ }',
+				type: SettingItemType.String,
+				public: false,
+				appTypes: [AppType.Mobile],
+				label: () => 'Template for the image editor',
+				storage: SettingStorage.File,
+			},
+
+			// 2023-09-07: This setting is now used to track the desktop beta editor. It
+			// was used to track the mobile beta editor previously.
+			'editor.beta': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'general',
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => 'Opt-in to the editor beta',
+				description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
+				storage: SettingStorage.File,
+				isGlobal: true,
+			},
+
+			'linking.extraAllowedExtensions': {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				appTypes: [AppType.Desktop],
+				label: () => 'Additional file types that can be opened without confirmation.',
+				storage: SettingStorage.File,
+			},
+
 			'net.customCertificates': {
 				value: '',
 				type: SettingItemType.String,
 				section: 'sync',
 				advanced: true,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return [
+						SyncTargetRegistry.nameToId('amazon_s3'),
 						SyncTargetRegistry.nameToId('nextcloud'),
 						SyncTargetRegistry.nameToId('webdav'),
 						SyncTargetRegistry.nameToId('joplinServer'),
@@ -1486,9 +1654,11 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				advanced: true,
 				section: 'sync',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				show: (settings: any) => {
 					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 						[
+							SyncTargetRegistry.nameToId('amazon_s3'),
 							SyncTargetRegistry.nameToId('nextcloud'),
 							SyncTargetRegistry.nameToId('webdav'),
 							SyncTargetRegistry.nameToId('joplinServer'),
@@ -1554,6 +1724,7 @@ class Setting extends BaseModel {
 			'revisionService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 
 			'searchEngine.initialIndexingDone': { value: false, type: SettingItemType.Bool, public: false },
+			'searchEngine.lastProcessedResource': { value: '', type: SettingItemType.String, public: false },
 
 			'revisionService.enabled': { section: 'revisionService', storage: SettingStorage.File, value: true, type: SettingItemType.Bool, public: true, label: () => _('Enable note history') },
 			'revisionService.ttlDays': {
@@ -1738,6 +1909,32 @@ class Setting extends BaseModel {
 				label: () => _('Voice typing language files (URL)'),
 				section: 'note',
 			},
+
+			'trash.autoDeletionEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				public: true,
+				label: () => _('Automatically delete notes in the trash after a number of days'),
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
+
+			'trash.ttlDays': {
+				value: 90,
+				type: SettingItemType.Int,
+				public: true,
+				minimum: 1,
+				maximum: 300,
+				step: 1,
+				unitLabel: (value: number = null) => {
+					return value === null ? _('days') : _('%d days', value);
+				},
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				show: (settings: any) => settings['trash.autoDeletionEnabled'],
+				label: () => _('Keep notes in the trash for'),
+				storage: SettingStorage.File,
+				isGlobal: false,
+			},
 		};
 
 		this.metadata_ = { ...this.buildInMetadata_ };
@@ -1838,6 +2035,11 @@ class Setting extends BaseModel {
 			// Reload the value from the database, if it was already present
 			const valueRow = await this.loadOne(key);
 			if (valueRow) {
+				// Remove any duplicate copies of the setting -- if multiple items in cache_
+				// have the same key, we may encounter unique key errors while saving to the
+				// database.
+				this.cache_ = this.cache_.filter(setting => setting.key !== key);
+
 				this.cache_.push({
 					key: key,
 					value: this.formatValue(key, valueRow.value),
@@ -1923,6 +2125,7 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
+	// Does not apply setting default values.
 	public static async loadOne(key: string): Promise<CacheItem | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
@@ -1933,10 +2136,14 @@ class Setting extends BaseModel {
 				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
-			return {
-				key,
-				value: fileSettings[key],
-			};
+			if (key in fileSettings) {
+				return {
+					key,
+					value: fileSettings[key],
+				};
+			} else {
+				return null;
+			}
 		}
 
 		// Always check in the database first, including for secure settings,
@@ -1984,6 +2191,7 @@ class Setting extends BaseModel {
 		// saving to database shouldn't). When the keychain works, the secure keys
 		// are deleted from the database and transferred to the keychain in saveAll().
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const rowKeys = rows.map((r: any) => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
 		const secureItems: CacheItem[] = [];
@@ -2025,7 +2233,7 @@ class Setting extends BaseModel {
 	}
 
 	private static canUseFileStorage(): boolean {
-		return !shim.mobilePlatform();
+		return this.allowFileStorage && !shim.mobilePlatform();
 	}
 
 	private static keyStorage(key: string): SettingStorage {
@@ -2036,6 +2244,7 @@ class Setting extends BaseModel {
 
 	public static toPlainObject() {
 		const keys = this.keys();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const keyToValues: any = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
@@ -2050,11 +2259,14 @@ class Setting extends BaseModel {
 		});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		(this.constants_ as any)[key] = value;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setValue(key: string, value: any) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
@@ -2113,6 +2325,7 @@ class Setting extends BaseModel {
 		this.scheduleChangeEvent();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static incValue(key: string, inc: any) {
 		return this.setValue(key, this.value(key) + inc);
 	}
@@ -2125,6 +2338,7 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const settingValue: any[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
@@ -2132,12 +2346,14 @@ class Setting extends BaseModel {
 		return false;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static setObjectValue(settingKey: string, objectKey: string, value: any) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
@@ -2176,7 +2392,7 @@ class Setting extends BaseModel {
 		}
 
 		for (const k in enumOptions) {
-			if (!enumOptions.hasOwnProperty(k)) continue;
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, k)) continue;
 			if (order.includes(k)) continue;
 
 			output.push({
@@ -2188,6 +2404,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
@@ -2200,11 +2417,13 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static filterValue(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static formatValue(key: string | SettingItemType, value: any) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
@@ -2245,8 +2464,9 @@ class Setting extends BaseModel {
 	public static value(key: string) {
 		// Need to copy arrays and objects since in setValue(), the old value and new one is compared
 		// with strict equality and the value is updated only if changed. However if the caller acquire
-		// and object and change a key, the objects will be detected as equal. By returning a copy
+		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function copyIfNeeded(value: any) {
 			if (value === null || value === undefined) return value;
 			if (Array.isArray(value)) return value.slice();
@@ -2255,6 +2475,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
@@ -2274,6 +2495,7 @@ class Setting extends BaseModel {
 	}
 
 	// This function returns the default value if the setting key does not exist.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static valueNoThrow(key: string, defaultValue: any) {
 		if (!this.keyExists(key)) return defaultValue;
 		return this.value(key);
@@ -2294,6 +2516,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static enumOptionLabel(key: string, value: any) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
@@ -2320,6 +2543,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static isAllowedEnumOption(key: string, value: any) {
 		const options = this.enumOptions(key);
 		return !!options[value];
@@ -2329,9 +2553,11 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static subValues(baseKey: string, settings: any, options: any = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
@@ -2353,6 +2579,10 @@ class Setting extends BaseModel {
 		const keys = this.keys();
 
 		const valuesForFile: SettingValues = {};
+		for (const key of keys) {
+			// undefined => Delete from settings JSON file.
+			valuesForFile[key] = undefined;
+		}
 
 		const queries = [];
 		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
@@ -2452,7 +2682,7 @@ class Setting extends BaseModel {
 
 		const keys = this.changedKeys_.slice();
 		this.changedKeys_ = [];
-		eventManager.emit('settingsChange', { keys });
+		eventManager.emit(EventName.SettingsChange, { keys });
 	}
 
 	public static scheduleSave() {
@@ -2479,6 +2709,7 @@ class Setting extends BaseModel {
 
 		const metadata = this.metadata();
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
 		for (const key in metadata) {
 			if (!metadata.hasOwnProperty(key)) continue;
@@ -2500,14 +2731,40 @@ class Setting extends BaseModel {
 		throw new Error(`Invalid type ID: ${typeId}`);
 	}
 
+	public static sectionOrder() {
+		return [
+			'general',
+			'application',
+			'appearance',
+			'sync',
+			'encryption',
+			'joplinCloud',
+			'plugins',
+			'markdownPlugins',
+			'note',
+			'revisionService',
+			'server',
+			'keymap',
+			'tools',
+			'importOrExport',
+			'moreInfo',
+		];
+	}
+
 	private static sectionSource(sectionName: string): SettingSectionSource {
 		if (this.customSections_[sectionName]) return this.customSections_[sectionName].source || SettingSectionSource.Default;
 		return SettingSectionSource.Default;
 	}
 
-	public static groupMetadatasBySections(metadatas: SettingItem[]) {
+	public static isSubSection(sectionName: string) {
+		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
+	}
+
+	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
 		const sections = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const generalSection: any = { name: 'general', metadatas: [] };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const nameToSections: any = {};
 		nameToSections['general'] = generalSection;
 		sections.push(generalSection);
@@ -2553,35 +2810,109 @@ class Setting extends BaseModel {
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
+		if (name === 'tools') return _('Tools');
+		if (name === 'importOrExport') return _('Import and Export');
+		if (name === 'moreInfo') return _('More information');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
 		return name;
 	}
 
-	public static sectionDescription(name: string) {
-		if (name === 'markdownPlugins') return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
-		if (name === 'general') return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+	public static sectionDescription(name: string, appType: AppType) {
+		if (name === 'markdownPlugins' && appType === AppType.Desktop) {
+			return _('These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.');
+		}
+		if (name === 'general' && appType === AppType.Desktop) {
+			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
 		return '';
 	}
 
-	public static sectionNameToIcon(name: string) {
-		if (name === 'general') return 'icon-general';
-		if (name === 'sync') return 'icon-sync';
-		if (name === 'appearance') return 'icon-appearance';
-		if (name === 'note') return 'icon-note';
-		if (name === 'folder') return 'icon-notebooks';
-		if (name === 'plugins') return 'icon-plugins';
-		if (name === 'markdownPlugins') return 'fab fa-markdown';
-		if (name === 'application') return 'icon-application';
-		if (name === 'revisionService') return 'icon-note-history';
-		if (name === 'encryption') return 'icon-encryption';
-		if (name === 'server') return 'far fa-hand-scissors';
-		if (name === 'keymap') return 'fa fa-keyboard';
-		if (name === 'joplinCloud') return 'fa fa-cloud';
+	public static sectionMetadataToSummary(metadata: SettingMetadataSection): string {
+		// TODO: This is currently specific to the mobile app
+		const sectionNameToSummary: Record<string, string> = {
+			'general': _('Language, date format'),
+			'appearance': _('Themes, editor font'),
+			'sync': _('Sync, encryption, proxy'),
+			'joplinCloud': _('Email To Note, login information'),
+			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
+			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
+			'revisionService': _('Toggle note history, keep notes for'),
+			'tools': _('Logs, profiles, sync status'),
+			'importOrExport': _('Import or export your data'),
+			'plugins': _('Enable or disable plugins'),
+			'moreInfo': _('Donate, website'),
+		};
+
+		// In some cases (e.g. plugin settings pages) there is no preset summary.
+		// In those cases, we generate the summary:
+		const generateSummary = () => {
+			const summary = [];
+			for (const item of metadata.metadatas) {
+				if (!item.public || item.advanced) {
+					continue;
+				}
+
+				if (item.label) {
+					const label = item.label?.();
+					summary.push(label);
+				}
+			}
+
+			return summary.join(', ');
+		};
+
+		return sectionNameToSummary[metadata.name] ?? generateSummary();
+	}
+
+	public static sectionNameToIcon(name: string, appType: AppType) {
+		const nameToIconMap: Record<string, string> = {
+			'general': 'icon-general',
+			'sync': 'icon-sync',
+			'appearance': 'icon-appearance',
+			'note': 'icon-note',
+			'folder': 'icon-notebooks',
+			'plugins': 'icon-plugins',
+			'markdownPlugins': 'fab fa-markdown',
+			'application': 'icon-application',
+			'revisionService': 'icon-note-history',
+			'encryption': 'icon-encryption',
+			'server': 'far fa-hand-scissors',
+			'keymap': 'fa fa-keyboard',
+			'joplinCloud': 'fa fa-cloud',
+			'tools': 'fa fa-toolbox',
+			'importOrExport': 'fa fa-file-export',
+			'moreInfo': 'fa fa-info-circle',
+		};
+
+		// Icomoon icons are currently not present in the mobile app -- we override these
+		// below.
+		//
+		// These icons come from react-native-vector-icons.
+		// See https://oblador.github.io/react-native-vector-icons/
+		const mobileNameToIconMap: Record<string, string> = {
+			'general': 'fa fa-sliders-h',
+			'sync': 'fa fa-sync',
+			'appearance': 'fa fa-ruler',
+			'note': 'fa fa-sticky-note',
+			'revisionService': 'far fa-history',
+			'plugins': 'fa fa-puzzle-piece',
+			'application': 'fa fa-cog',
+			'encryption': 'fa fa-key',
+		};
+
+		// Overridden?
+		if (appType === AppType.Mobile && name in mobileNameToIconMap) {
+			return mobileNameToIconMap[name];
+		}
+
+		if (name in nameToIconMap) {
+			return nameToIconMap[name];
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].iconName) return this.customSections_[name].iconName;
 

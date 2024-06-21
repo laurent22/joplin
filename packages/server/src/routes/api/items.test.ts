@@ -83,6 +83,7 @@ describe('api/items', () => {
 	test('should delete an item', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const tree: any = {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
@@ -154,6 +155,7 @@ describe('api/items', () => {
 	test('should batch upload items', async () => {
 		const { session: session1 } = await createUserAndSession(1, false);
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
@@ -177,6 +179,7 @@ describe('api/items', () => {
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
 		await models().user().save({ id: user1.id, max_item_size: note1.length });
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
@@ -190,6 +193,7 @@ describe('api/items', () => {
 			],
 		});
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const items: SaveFromRawContentResult = result.items as any;
 
 		expect(Object.keys(items).length).toBe(2);
@@ -300,7 +304,7 @@ describe('api/items', () => {
 
 		await expectHttpError(
 			async () => putApi(session3.id, 'items/root:/.resource/000000000000000000000000000000E1:/content', {}, { query: { share_id: share.id } }),
-			ErrorForbidden.httpCode
+			ErrorForbidden.httpCode,
 		);
 	});
 
@@ -325,7 +329,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000002',
 					body: '12345',
-				})
+				}),
 			);
 		}
 
@@ -336,7 +340,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000003',
 					body: '12345',
-				})
+				}),
 			);
 		}
 	});
@@ -352,7 +356,7 @@ describe('api/items', () => {
 					id: '00000000000000000000000000000001',
 					body: '12345',
 				}),
-				ErrorPayloadTooLarge.httpCode
+				ErrorPayloadTooLarge.httpCode,
 			);
 		}
 
@@ -363,7 +367,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000002',
 					body: '12345',
-				})
+				}),
 			);
 		}
 
@@ -374,7 +378,7 @@ describe('api/items', () => {
 				async () => createNote(session1.id, {
 					id: '00000000000000000000000000000003',
 					body: '12345',
-				})
+				}),
 			);
 		}
 	});
@@ -389,7 +393,7 @@ describe('api/items', () => {
 				id: '00000000000000000000000000000001',
 				body: '12345',
 			}),
-			ErrorForbidden.httpCode
+			ErrorForbidden.httpCode,
 		);
 	});
 

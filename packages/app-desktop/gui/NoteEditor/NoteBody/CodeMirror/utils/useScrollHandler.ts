@@ -1,8 +1,9 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const scrollTimeoutId_ = useRef<any>(null);
 	const scrollPercent_ = useRef(0);
 	const ignoreNextEditorScrollTime_ = useRef(Date.now());
@@ -11,6 +12,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	const scrollTopIsUncertain_ = useRef(true);
 	const lastResizeHeight_ = useRef(NaN);
 	const lastLinesHeight_ = useRef(NaN);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const restoreEditorPercentScrollTimeoutId_ = useRef<any>(null);
 
 	// Ignores one next scroll event for a short time.
@@ -35,6 +37,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		return false;
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const scheduleOnScroll = useCallback((event: any) => {
 		if (scrollTimeoutId_.current) {
 			shim.clearTimeout(scrollTimeoutId_.current);
@@ -115,7 +118,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			if (!isNaN(editorPercent)) {
 				// when switching to another note, the percent can sometimes be NaN
 				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
-				// when CodeMirror returns scroll info with heigth == clientHeigth
+				// when CodeMirror returns scroll info with height == clientHeight
 				// https://github.com/laurent22/joplin/issues/4797
 				if (!ignored) {
 					// calculates GUI-independent line-based percent
@@ -141,6 +144,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_resize = useCallback((cm: any) => {
 		if (isCodeMirrorReady(cm)) {
 			// This handler is called when resized and refreshed.
@@ -163,6 +167,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	// When heights of lines are updated in CodeMirror, 'update' events are raised.
 	// If such an update event is raised, scroll position should be restored.
 	// See https://github.com/laurent22/joplin/issues/5981
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const editor_update = useCallback((cm: any, edited: boolean) => {
 		if (isCodeMirrorReady(cm)) {
 			if (edited) return;
@@ -198,6 +203,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	};
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 	// If the input is out of (0,1) or not number, it is not translated.
 	if (!(0 < percent && percent < 1)) return percent;
@@ -226,14 +232,17 @@ const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 // percent. They are used for synchronous scrolling between Editor and Viewer.
 // To see the detail of synchronous scrolling, refer the following design document.
 // https://github.com/laurent22/joplin/pull/5826#issuecomment-986032165
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const translateScrollPercentL2E = (cm: any, lPercent: number) => {
 	return translateLE_(cm, lPercent, true);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const translateScrollPercentE2L = (cm: any, ePercent: number) => {
 	return translateLE_(cm, ePercent, false);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function isCodeMirrorReady(cm: any) {
 	const info = cm?.getScrollInfo();
 	return info && info.height - info.clientHeight > 0;
