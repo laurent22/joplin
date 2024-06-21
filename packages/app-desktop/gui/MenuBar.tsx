@@ -312,7 +312,7 @@ function useMenu(props: Props) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const errors: any[] = [];
 
-		const taskId = `interop-import-${path}}`;
+		const taskId = `interop-import-${path}`;
 		TaskUIService.onTaskStarted(taskId, _('Importing from "%s" as "%s" format. Please wait...', path, module.outputFormat));
 
 		const importOptions = {
