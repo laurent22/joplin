@@ -71,10 +71,19 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	};
 
 	useEffect(() => {
+		const removePreviousSyncReportMessage = () => {
+			if (state.active !== 'COMPLETED') {
+				props.dispatch({
+					type: 'SYNC_REPORT_UPDATE',
+					report: {},
+				});
+			}
+		};
 		return () => {
 			clearInterval(intervalIdentifier);
+			removePreviousSyncReportMessage();
 		};
-	}, [intervalIdentifier]);
+	}, [intervalIdentifier, state, props.dispatch]);
 
 	return (
 		<div className="login-page">
