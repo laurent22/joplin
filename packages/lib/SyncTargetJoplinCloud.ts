@@ -74,9 +74,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			}
 			return result.ok;
 		} catch (error) {
-			if ([403].includes(error.code)) {
-				return false;
-			}
+			if (error.code === 403) return false;
 			throw error;
 		}
 	}
