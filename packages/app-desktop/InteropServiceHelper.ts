@@ -2,7 +2,7 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
-import TaskProgressUIService from '@joplin/lib/TaskProgressUIService';
+import TaskUIService from '@joplin/lib/services/TaskUIService';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -197,7 +197,7 @@ export default class InteropServiceHelper {
 		if (Array.isArray(path)) path = path[0];
 
 		const taskId = `interop-export-${path}`;
-		TaskProgressUIService.onTaskStarted(taskId, _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
+		TaskUIService.onTaskStarted(taskId, _('Exporting to "%s" as "%s" format. Please wait...', path, module.format));
 
 		const exportOptions: ExportOptions = {};
 		exportOptions.path = path;
@@ -217,12 +217,12 @@ export default class InteropServiceHelper {
 			// eslint-disable-next-line no-console
 			console.info('Export result: ', result);
 
-			TaskProgressUIService.onTaskCompleted(taskId, _('Successfully exported from %s.', path));
+			TaskUIService.onTaskCompleted(taskId, _('Successfully exported from %s.', path));
 		} catch (error) {
 			console.error(error);
 			bridge().showErrorMessageBox(_('Could not export notes: %s', error.message));
 
-			TaskProgressUIService.onTaskCompleted(taskId, _('Could not export notes.'));
+			TaskUIService.onTaskCompleted(taskId, _('Could not export notes.'));
 		}
 	}
 

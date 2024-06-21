@@ -1,14 +1,13 @@
-type Listener = (task: Task)=> void;
+export type TaskListener = (task: Task)=> void;
 
 interface Task {
 	id: string;
 	message: string;
 	progress: number;
-	data: object;
-	started: boolean;
+	data?: object;
 }
 
-class TaskProgressUIService {
+class TaskUIService {
 
 	// Tasks that are being tracked.
 	private tasks = new Map<string, Task>();
@@ -16,9 +15,9 @@ class TaskProgressUIService {
 	// Tasks that were not yet updated (waiting to be sent to the listener).
 	private queue = new Set<string>();
 
-	private listener: Listener;
+	private listener: TaskListener;
 
-	public setListener(listener: Listener): void {
+	public setListener(listener: TaskListener): void {
 		this.listener = listener;
 
 		if (listener) {
@@ -41,13 +40,7 @@ class TaskProgressUIService {
 	}
 
 	public onTaskStarted(id: string, message: string): void {
-		const task: Task = {
-			id,
-			message,
-			progress: 0,
-			data: undefined,
-			started: false,
-		};
+		const task: Task = { id, message, progress: 0 };
 
 		if (this.listener) {
 			this.listener(task);
@@ -61,7 +54,9 @@ class TaskProgressUIService {
 	public onTaskProgress(id: string, progress: number): void {
 		const task = this.tasks.get(id);
 
-		task.progress = progress % 100;
+		if (progress <= task.progress || progress > 100) return;
+
+		task.progress = progress;
 
 		if (this.listener) {
 			this.listener(task);
@@ -85,4 +80,4 @@ class TaskProgressUIService {
 	}
 }
 
-export default new TaskProgressUIService();
+export default new TaskUIService();

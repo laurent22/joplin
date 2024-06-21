@@ -26,7 +26,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { EventName } from '@joplin/lib/eventManager';
-import TaskProgressUIService from '@joplin/lib/TaskProgressUIService';
+import TaskUIService from '@joplin/lib/services/TaskUIService';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -313,13 +313,15 @@ function useMenu(props: Props) {
 		const errors: any[] = [];
 
 		const taskId = `interop-import-${path}}`;
+		TaskUIService.onTaskStarted(taskId, _('Importing from "%s" as "%s" format. Please wait...', path, module.outputFormat));
+
 		const importOptions = {
 			path,
 			format: module.format,
 			outputFormat: module.outputFormat,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onProgress: (_status: any) => {
-				TaskProgressUIService.onTaskProgress(taskId, _status);
+				// Nothing to be done.
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onError: (error: any) => {
@@ -329,10 +331,6 @@ function useMenu(props: Props) {
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
 		};
 
-		TaskProgressUIService.onTaskStarted(taskId, _('Importing from "%s" as "%s" format. Please wait...', path, module.outputFormat));
-
-		setTimeout(() => TaskProgressUIService.onTaskProgress(taskId, 15), 2000);
-
 		const service = InteropService.instance();
 		try {
 
@@ -340,11 +338,11 @@ function useMenu(props: Props) {
 			// eslint-disable-next-line no-console
 			console.info('Import result: ', result);
 
-			TaskProgressUIService.onTaskCompleted(taskId, _('Successfully imported from %s.', path));
+			TaskUIService.onTaskCompleted(taskId, _('Successfully imported from %s.', path));
 		} catch (error) {
 			bridge().showErrorMessageBox(error.message);
 
-			TaskProgressUIService.onTaskCompleted(taskId, _('Could not import notes.'));
+			TaskUIService.onTaskCompleted(taskId, _('Could not import notes.'));
 		}
 
 		if (errors.length) {

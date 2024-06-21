@@ -10,7 +10,8 @@ export default React.createContext(
 		types: [
 			{
 				type: 'loading',
-				icon: '⌛',
+				dismissible: true,
+				duration: 0,
 			},
 		],
 	}),
