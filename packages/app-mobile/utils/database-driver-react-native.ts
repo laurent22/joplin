@@ -3,6 +3,7 @@ const SQLite = require('react-native-sqlite-storage');
 
 export default class DatabaseDriverReactNative {
 	private lastInsertId_: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private db_: any;
 	public constructor() {
 		this.lastInsertId_ = null;
@@ -13,6 +14,7 @@ export default class DatabaseDriverReactNative {
 		return new Promise<void>((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(db: any) => {
 					this.db_ = db;
 					resolve();
@@ -28,11 +30,12 @@ export default class DatabaseDriverReactNative {
 		return error;
 	}
 
-	public selectOne(sql: string, params: any = null) {
+	public selectOne(sql: string, params: unknown = null) {
 		return new Promise<unknown>((resolve, reject) => {
 			this.db_.executeSql(
 				sql,
 				params,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(r: any) => {
 					resolve(r.rows.length ? r.rows.item(0) : null);
 				},
@@ -43,7 +46,7 @@ export default class DatabaseDriverReactNative {
 		});
 	}
 
-	public selectAll(sql: string, params: any = null) {
+	public selectAll(sql: string, params: unknown = null) {
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return this.exec(sql, params).then(r => {
 			const output = [];
@@ -58,7 +61,8 @@ export default class DatabaseDriverReactNative {
 		throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
 	}
 
-	public exec(sql: string, params: any = null) {
+	public exec(sql: string, params: unknown = null) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
 		return new Promise<any>((resolve, reject) => {
 			this.db_.executeSql(
 				sql,

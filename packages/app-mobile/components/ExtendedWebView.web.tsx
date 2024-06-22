@@ -19,7 +19,10 @@ export interface WebViewControl {
 	postMessage(message: unknown): void;
 }
 
-export type OnMessageCallback = (event: { nativeEvent: { data: any } })=> void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needs to interface with old code from before rule was applied.
+type OnMessageEvent = { nativeEvent: { data: any } };
+
+export type OnMessageCallback = (event: OnMessageEvent)=> void;
 export type OnErrorCallback = (event: WebViewErrorEvent)=> void;
 export type OnLoadCallback = ()=> void;
 
@@ -54,7 +57,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			injectJS(js: string) {
 				if (!iframeRef.current) {
 					console.error(`ExtendedWebView(${props.webviewInstanceId}): WebView not loaded?`);
-					console.error('tried', js)
+					console.error('tried', js);
 					return;
 				}
 
@@ -78,6 +81,10 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	onLoadEndRef.current = props.onLoadEnd;
 	const onLoadStartRef = useRef(props.onLoadStart);
 	onLoadStartRef.current = props.onLoadStart;
+
+	// Don't re-load when injected JS changes. This should match the behavior of the native webview.
+	const injectedJavaScriptRef = useRef(props.injectedJavaScript);
+	injectedJavaScriptRef.current = props.injectedJavaScript;
 
 	useEffect(() => {
 		if (!containerRef) return () => {};
@@ -112,7 +119,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 					},
 				};
 			`,
-			props.injectedJavaScript,
+			injectedJavaScriptRef.current,
 		]);
 		containerRef.replaceChildren(iframe);
 		iframeRef.current = iframe;
@@ -125,7 +132,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			if (event.source !== iframe.contentWindow) {
 				return;
 			}
-	
+
 			onMessageRef.current?.({ nativeEvent: { data: event.data } });
 		};
 		window.addEventListener('message', messageListener);
@@ -140,7 +147,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			window.removeEventListener('message', messageListener);
 		};
-	}, [containerRef]);
+	}, [containerRef, props.html]);
 
 	return (
 		<View style={[{ width: '100%', height: '100%', flex: 1 }, props.style]}>

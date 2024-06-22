@@ -1,5 +1,6 @@
 // Currently disabled on web
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type Vosk = any;
 
 export { Vosk };
@@ -22,6 +23,7 @@ export const modelIsDownloaded = async (_locale: string) => {
 };
 
 export const getVosk = async (_locale: string) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return {} as any;
 };
 

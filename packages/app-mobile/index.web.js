@@ -36,7 +36,6 @@ const Root = require('./root').default;
 AppRegistry.registerComponent('Joplin', () => Root);
 
 addEventListener('DOMContentLoaded', () => {
-	console.log('DOMContentLoaded ☺');
 	AppRegistry.runApplication('Joplin', {
 		rootTag: document.querySelector('#root'),
 	});

@@ -3,6 +3,7 @@ import FsDriverBase, { ReadDirStatsOptions, Stat } from '@joplin/lib/fs-driver-b
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
 import { Buffer } from 'buffer';
+import Logger from '@joplin/utils/Logger';
 const md5 = require('md5');
 
 type FileHandle = {
@@ -22,6 +23,8 @@ declare global {
 	}
 }
 
+const logger = Logger.create('FsDriverWeb');
+
 export default class FsDriverWeb extends FsDriverBase {
 	private fsRoot_: FileSystemDirectoryHandle;
 	private directoryHandleCache_: Map<string, FileSystemDirectoryHandle> = new Map();
@@ -30,17 +33,16 @@ export default class FsDriverWeb extends FsDriverBase {
 	public constructor() {
 		super();
 		this.initPromise_ = (async () => {
-			console.log('Get root');
 			try {
 				this.fsRoot_ = await (await navigator.storage.getDirectory()).getDirectoryHandle('joplin-web', { create: true });
 			} catch (error) {
-				console.error('Failed to create fsDriver:', error);
+				logger.warn('Failed to create fs-driver:', error);
 				throw error;
 			}
 		})();
 	}
 
-	private async pathToDirectoryHandle_(path: string, create: boolean = false): Promise<FileSystemDirectoryHandle> {
+	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle> {
 		await this.initPromise_;
 
 		if (this.directoryHandleCache_.has(path)) {
@@ -50,16 +52,14 @@ export default class FsDriverWeb extends FsDriverBase {
 		const parentDirs = dirname(path);
 		if (parentDirs && !['/', '.'].includes(parentDirs)) {
 			const parent = await this.pathToDirectoryHandle_(parentDirs, create);
-			console.log('get dir handle', basename(path));
 			const folderName = removeReservedWords(basename(path));
 
 			let handle: FileSystemDirectoryHandle;
 			try {
 				handle = await parent.getDirectoryHandle(folderName, { create });
-				console.log('handle', handle);
 			} catch (error) {
 				// TODO: Handle this better
-				console.warn(error, 'for', path);
+				logger.warn('Error getting directory handle', error, 'for', path);
 				handle = null;
 			}
 
@@ -76,7 +76,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.initPromise_;
 
 		const parent = await this.pathToDirectoryHandle_(dirname(path));
-		console.error('Get name', basename(path), path, create)
+		logger.debug('Get name', basename(path), path, create);
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
@@ -84,7 +84,7 @@ export default class FsDriverWeb extends FsDriverBase {
 				throw error;
 			}
 
-			console.warn(error);
+			logger.warn(error);
 
 			// TODO: This should return null when a file doesn't exist, but should
 			// also report errors in other cases.
@@ -140,7 +140,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		}
 	}
 
-	public override async open(path: string, _mode: string = 'r'): Promise<FileHandle> {
+	public override async open(path: string, _mode = 'r'): Promise<FileHandle> {
 		const handle = await this.pathToFileHandle_(path);
 		return {
 			handle,
@@ -181,8 +181,8 @@ export default class FsDriverWeb extends FsDriverBase {
 
 		const fromFile = await fromHandle.getFile();
 		const writer = (await toHandle.createWritable()).getWriter();
-		writer.write(fromFile);
-		writer.close();
+		await writer.write(fromFile);
+		await writer.close();
 	}
 
 	public override async stat(path: string): Promise<Stat> {
@@ -193,7 +193,7 @@ export default class FsDriverWeb extends FsDriverBase {
 
 		const size = await (async () => {
 			if (dirHandle) return 0;
-			return (await fileHandle.getFile()).size
+			return (await fileHandle.getFile()).size;
 		})();
 
 		return {
@@ -223,7 +223,6 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override async exists(path: string) {
 		const parentDir = await this.pathToDirectoryHandle_(dirname(path));
-		console.log('exists', path);
 		if (!parentDir) return false;
 
 		const target = basename(path);
@@ -257,7 +256,7 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override getCacheDirectoryPath(): string {
-		return '/cache/';	
+		return '/cache/';
 	}
 
 	public override getAppDirectoryPath(): string {

@@ -112,7 +112,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			container: {
 				flexDirection: 'column',
 				backgroundColor: theme.backgroundColor2,
-				//alignItems: 'center',
+				// alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
 			},

@@ -1,9 +1,9 @@
 const { sqlite3Worker1Promiser } = require('@sqlite.org/sqlite-wasm');
-import { safeFilename } from "@joplin/utils/path";
+import { safeFilename } from '@joplin/utils/path';
 
-type DbPromiser = (command: string, options: Record<string, unknown>)=>Promise<any>;
+type DbPromiser = (command: string, options: Record<string, unknown>)=> Promise<unknown>;
 type DbId = unknown;
-type RowResult = { rowNumber: number|null; row: unknown; };
+type RowResult = { rowNumber: number|null; row: unknown };
 
 export default class DatabaseDriverReactNative {
 	private lastInsertId_: string;
@@ -21,7 +21,9 @@ export default class DatabaseDriverReactNative {
 			});
 		});
 		const filename = `file:${safeFilename(options.name)}.sqlite3?vfs=opfs`;
-		const { dbId } = await db('open', { filename });
+
+		type OpenResult = { dbId: number };
+		const { dbId } = await db('open', { filename }) as OpenResult;
 		this.dbId_ = dbId;
 		this.db_ = db;
 	}
@@ -31,8 +33,10 @@ export default class DatabaseDriverReactNative {
 	}
 
 	public selectOne(sql: string, params: string[] = []) {
+		// eslint-disable-next-line no-async-promise-executor -- Wraps an API that mixes callbacks and promises.
 		return new Promise<unknown>(async (resolve, reject) => {
 			let resolved = false;
+
 			await this.db_('exec', {
 				dbId: this.dbId_,
 				sql,
@@ -51,7 +55,7 @@ export default class DatabaseDriverReactNative {
 		});
 	}
 
-	public async selectAll(sql: string, params: any = null) {
+	public async selectAll(sql: string, params: string[] = null) {
 		const results: unknown[] = [];
 		await this.db_('exec', {
 			dbId: this.dbId_,

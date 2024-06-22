@@ -13,10 +13,10 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	public setInAppNotificationHandler(_v: any) {
+	public setInAppNotificationHandler(_v: unknown) {
 	}
 
-	public async hasPermissions(_perm: any = null) {
+	public async hasPermissions(_perm: unknown = null) {
 		return false;
 	}
 
@@ -28,6 +28,6 @@ export default class AlarmServiceDriver {
 	}
 
 	public async scheduleNotification(_notification: Notification) {
-		
+
 	}
 }

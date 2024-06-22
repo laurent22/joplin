@@ -15,6 +15,12 @@ module.exports = {
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly',
+		'BufferEncoding': 'readonly',
+		'AsyncIterable': 'readonly',
+		'FileSystemFileHandle': 'readonly',
+		'FileSystemDirectoryHandle': 'readonly',
+		'ReadableStreamDefaultReader': 'readonly',
+		'FileSystemCreateWritableOptions': 'readonly',
 
 		// Jest variables
 		'test': 'readonly',

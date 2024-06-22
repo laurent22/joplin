@@ -13,7 +13,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shimInitShared from './shimInitShared';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 
-export const shimInit = () => {
+const shimInit = () => {
 	let fsDriver_: FsDriverBase|null = null;
 
 	shim.fsDriver = () => {
@@ -156,5 +156,6 @@ export const shimInit = () => {
 	};
 
 	shimInitShared();
-}
+};
 
+export default shimInit;

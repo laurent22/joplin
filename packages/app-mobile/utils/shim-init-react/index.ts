@@ -6,6 +6,7 @@ const { GeolocationReact } = require('./geolocation-react.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 import FsDriverRN from '../fs-driver/fs-driver-rn';
+import type SettingType from '@joplin/lib/models/Setting';
 const mimeUtils = require('@joplin/lib/mime-utils.js');
 const { basename, fileExtension } = require('@joplin/lib/path-utils');
 const uuid = require('@joplin/lib/uuid').default;
@@ -14,7 +15,7 @@ const { getLocales } = require('react-native-localize');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
 
 
-export function shimInit() {
+export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
 
 	shim.fsDriver = () => {
@@ -40,6 +41,7 @@ export function shimInit() {
 
 	/* eslint-disable no-console */
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	(shim as any).debugFetch = async (url: string, options: any = null) => {
 		options = {
 			method: 'GET',
@@ -82,7 +84,7 @@ export function shimInit() {
 
 	/* eslint-enable */
 
-	shim.detectAndSetLocale = (Setting: any) => {
+	shim.detectAndSetLocale = (Setting: typeof SettingType) => {
 		// [
 		// 	{
 		// 		"countryCode": "US",

@@ -21,7 +21,7 @@ const babelLoaderConfiguration = {
 
 		/.*node_modules\/@babel.*/,
 		/.*node_modules\/@sqlite\.org\/.*/,
-		//path.resolve(appDirectory, 'node_modules/react-native-uncompiled')
+		// path.resolve(appDirectory, 'node_modules/react-native-uncompiled')
 	],
 
 	use: {
@@ -33,9 +33,9 @@ const babelLoaderConfiguration = {
 				'react-native-web',
 				'@babel/plugin-transform-export-namespace-from',
 				...(babelConfig.plugins ?? []),
-			]
-		}
-	}
+			],
+		},
+	},
 };
 
 // This is needed for webpack to import static images in JavaScript files.
@@ -46,22 +46,22 @@ const imageLoaderConfiguration = {
 		options: {
 			name: '[name].[ext]',
 			esModule: false,
-		}
-	}
+		},
+	},
 };
 
 const emptyLibraryMock = path.resolve(__dirname, 'mocks/empty.js');
 
 module.exports = {
 	mode: 'development',
-	//devtool: 'inline-cheap-source-map',
+	// devtool: 'inline-cheap-source-map',
 	target: 'web',
 
 	entry: [
 		// load any web API polyfills
 		// path.resolve(appDirectory, 'polyfills-web.js'),
 		// your web-specific entry file
-		path.resolve(appDirectory, 'index.web.js')
+		path.resolve(appDirectory, 'index.web.js'),
 	],
 
 	// configures where the build ends up
@@ -113,12 +113,12 @@ module.exports = {
 		],
 
 		fallback: {
-			"url": require.resolve("url/"),
-			"events": require.resolve("events/"),
-			"timers": require.resolve("timers-browserify"),
-			"path": require.resolve("path-browserify"),
-			"stream": require.resolve("stream-browserify"),
-		}
+			'url': require.resolve('url/'),
+			'events': require.resolve('events/'),
+			'timers': require.resolve('timers-browserify'),
+			'path': require.resolve('path-browserify'),
+			'stream': require.resolve('stream-browserify'),
+		},
 	},
 
 	devServer: {
@@ -129,4 +129,4 @@ module.exports = {
 			'Cross-Origin-Embedder-Policy': 'require-corp',
 		},
 	},
-}
+};
