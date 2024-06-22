@@ -106,7 +106,7 @@ const shimInit = () => {
 
 	shim.uploadBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
-		const content = await fsDriver().readToFile(options.path);
+		const content = await fsDriver().fileAtPath(options.path);
 		return fetch(url, { ...options, body: content });
 	};
 

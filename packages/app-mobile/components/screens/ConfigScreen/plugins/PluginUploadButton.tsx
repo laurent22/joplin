@@ -43,8 +43,8 @@ const PluginUploadButton: React.FC<Props> = props => {
 		const selectedFile = pluginFiles[0];
 
 		const localFilePath = Platform.select({
-			android: selectedFile.uri,
 			ios: decodeURI(selectedFile.uri),
+			default: selectedFile.uri,
 		});
 		logger.info('Installing plugin from file', localFilePath);
 
@@ -73,6 +73,8 @@ const PluginUploadButton: React.FC<Props> = props => {
 			logger.info('Copying to', targetFile);
 
 			await fsDriver.copy(localFilePath, targetFile);
+			logger.debug('Copied. Now installing.');
+
 			const plugin = await pluginService.installPlugin(targetFile);
 
 			const pluginSettings = pluginService.unserializePluginSettings(props.pluginSettings);

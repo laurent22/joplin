@@ -1,4 +1,4 @@
-import { dirname, basename, resolve } from 'path';
+import { dirname, basename, resolve, normalize } from 'path';
 import FsDriverBase, { ReadDirStatsOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
@@ -8,7 +8,6 @@ const md5 = require('md5');
 
 type FileHandle = {
 	reader: ReadableStreamDefaultReader;
-	handle: FileSystemFileHandle;
 	buffered: Buffer;
 	done: boolean;
 };
@@ -30,6 +29,7 @@ logger.setLevel(LogLevel.Debug);
 export default class FsDriverWeb extends FsDriverBase {
 	private fsRoot_: FileSystemDirectoryHandle;
 	private directoryHandleCache_: Map<string, FileSystemDirectoryHandle> = new Map();
+	private virtualFiles_: Map<string, File> = new Map();
 	private initPromise_: Promise<void>;
 
 	public constructor() {
@@ -48,7 +48,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.initPromise_;
 
 		if (this.directoryHandleCache_.has(path)) {
-			logger.debug('pathToDirectoryHandle_ from cache');
+			logger.debug('pathToDirectoryHandle_ from cache for', path);
 			return this.directoryHandleCache_.get(path);
 		}
 		logger.debug('pathToDirectoryHandle_', 'path:', path, 'create:', create);
@@ -61,13 +61,13 @@ export default class FsDriverWeb extends FsDriverBase {
 			let handle: FileSystemDirectoryHandle;
 			try {
 				handle = await parent.getDirectoryHandle(folderName, { create });
+				this.directoryHandleCache_.set(path, handle);
 			} catch (error) {
 				// TODO: Handle this better
 				logger.warn('Error getting directory handle', error, 'for', path);
 				handle = null;
 			}
 
-			this.directoryHandleCache_.set(path, handle);
 			return handle;
 		}
 		return this.fsRoot_;
@@ -81,11 +81,10 @@ export default class FsDriverWeb extends FsDriverBase {
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
+			logger.warn(error, 'getting file handle at path', path);
 			if (create) {
 				throw error;
 			}
-
-			logger.warn(error);
 
 			// TODO: This should return null when a file doesn't exist, but should
 			// also report errors in other cases.
@@ -127,20 +126,35 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async remove(path: string) {
+		path = normalize(path);
+
 		this.directoryHandleCache_.clear();
 		const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
 		if (dirHandle) {
 			await dirHandle.removeEntry(basename(path), { recursive: true });
 		} else {
-			throw new Error(`ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
+			console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
 		}
 	}
 
-	public async readFile(path: string, encoding: BufferEncoding = 'utf-8') {
-		logger.debug('readFile', path);
+	public async fileAtPath(path: string) {
+		path = normalize(path);
 
-		const handle = await this.pathToFileHandle_(path);
-		const file = await handle.getFile();
+		let file: File;
+		if (this.virtualFiles_.has(path)) {
+			file = this.virtualFiles_.get(path);
+		} else {
+			const handle = await this.pathToFileHandle_(path);
+			file = await handle.getFile();
+		}
+		return file;
+	}
+
+	public async readFile(path: string, encoding: BufferEncoding = 'utf-8') {
+		path = normalize(path);
+		logger.debug('readFile', path);
+		const file = await this.fileAtPath(path);
+
 		if (encoding === 'utf-8' || encoding === 'utf8') {
 			return await file.text();
 		} else {
@@ -149,36 +163,38 @@ export default class FsDriverWeb extends FsDriverBase {
 		}
 	}
 
-	public async readToFile(path: string) {
-		const handle = await this.pathToFileHandle_(path);
-		return await handle.getFile();
-	}
-
 	public override async open(path: string, _mode = 'r'): Promise<FileHandle> {
-		const handle = await this.pathToFileHandle_(path);
+		const file = await this.fileAtPath(path);
 		return {
-			handle,
 			// TODO: Extra casting required by NodeJS types conflicting with DOM types.
-			reader: ((await handle.getFile()).stream() as unknown as ReadableStream).getReader(),
+			reader: (file.stream() as unknown as ReadableStream).getReader(),
 			buffered: Buffer.from([]),
 			done: false,
 		};
 	}
 
 	public override async readFileChunk(handle: FileHandle, length: number, encoding: BufferEncoding = 'base64') {
-		let read: Buffer;
+		let read: Buffer = handle.buffered;
 
 		if (handle.buffered.byteLength < length && !handle.done) {
 			const { done, value } = await handle.reader.read();
 			handle.done = done;
-			read = Buffer.concat([handle.buffered, Buffer.from(value)]);
-		} else {
-			read = handle.buffered;
+			if (value) {
+				if (read.byteLength > 0) {
+					read = Buffer.concat([read, value]);
+				} else {
+					read = Buffer.from(value);
+				}
+			}
 		}
 
 		const result = read.subarray(0, length);
-		handle.buffered = result.subarray(length);
-		return result.toString(encoding);
+		handle.buffered = read.subarray(length, result.length);
+		if (result.length === 0 && handle.done) {
+			return null;
+		} else {
+			return result.toString(encoding);
+		}
 	}
 
 	public override async close(handle: FileHandle) {
@@ -186,14 +202,14 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async mkdir(path: string) {
+		logger.debug('mkdir', path);
 		await this.pathToDirectoryHandle_(path, true);
 	}
 
 	public override async copy(from: string, to: string) {
-		const fromHandle = await this.pathToFileHandle_(from);
+		const fromFile = await this.fileAtPath(from);
 		const toHandle = await this.pathToFileHandle_(to, true);
 
-		const fromFile = await fromHandle.getFile();
 		const writer = (await toHandle.createWritable()).getWriter();
 		await writer.write(fromFile);
 		await writer.close();
@@ -202,12 +218,12 @@ export default class FsDriverWeb extends FsDriverBase {
 	public override async stat(path: string): Promise<Stat> {
 		const dirHandle = await this.pathToDirectoryHandle_(path);
 		const fileHandle = await this.pathToFileHandle_(path);
-		if (!dirHandle && !fileHandle) return null;
-
+		const virtualFile = this.virtualFiles_.get(normalize(path));
+		if (!dirHandle && !fileHandle && !virtualFile) return null;
 
 		const size = await (async () => {
 			if (dirHandle) return 0;
-			return (await fileHandle.getFile()).size;
+			return (virtualFile ?? await fileHandle.getFile()).size;
 		})();
 
 		return {
@@ -227,7 +243,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		for await (const child of dirHandle.keys()) {
 			const childPath = `${path}/${child}`;
 			const stat = await this.stat(childPath);
-			result.push(stat);
+			result.push({ ...stat, path: child });
 			if (options.recursive) {
 				result.push(...await this.readDirStats(childPath));
 			}
@@ -237,6 +253,10 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override async exists(path: string) {
 		logger.debug('exists?', path);
+
+		if (this.virtualFiles_.has(normalize(path))) {
+			return true;
+		}
 
 		const parentDir = await this.pathToDirectoryHandle_(dirname(path));
 		if (!parentDir) return false;
@@ -253,7 +273,7 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async md5File(path: string): Promise<string> {
-		const fileData = Buffer.from(await this.readFile(path, 'base64'), 'base64');
+		const fileData = Buffer.from(await (await this.fileAtPath(path)).arrayBuffer());
 		return md5(fileData);
 	}
 
@@ -277,6 +297,10 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override getAppDirectoryPath(): string {
 		return '/app/';
+	}
+
+	public createReadOnlyVirtualFile(path: string, content: File) {
+		this.virtualFiles_.set(normalize(path), content);
 	}
 }
 

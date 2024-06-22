@@ -23,7 +23,6 @@ const makeSandboxedIframe = (
 			<script>
 				"use strict";
 				window.onmessage = (event) => {
-					console.log('got message', event);
 					if (event.source !== parent) {
 						console.log('Ignoring message: wrong source');
 						return;

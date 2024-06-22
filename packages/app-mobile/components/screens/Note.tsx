@@ -767,8 +767,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 
 		const localFilePath = Platform.select({
-			android: pickerResponse.uri,
 			ios: decodeURI(pickerResponse.uri),
+			default: pickerResponse.uri,
 		});
 
 		let mimeType = pickerResponse.type;

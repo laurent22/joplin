@@ -46,6 +46,7 @@ const PluginUserWebView = (props: Props) => {
 			setThemeCss: messenger.remoteApi.setThemeCss,
 			getFormData: messenger.remoteApi.getFormData,
 			getContentSize: messenger.remoteApi.getContentSize,
+			runScript: messenger.remoteApi.runScript,
 		});
 	}, [messenger, props.setDialogControl]);
 

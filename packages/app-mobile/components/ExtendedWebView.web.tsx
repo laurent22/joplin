@@ -92,9 +92,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		const { iframe } = makeSandboxedIframe(props.html, [
 			`
 				window.addEventListener('message', (event) => {
-					console.log('got message', event);
 					if (event.source !== parent || event.origin === 'react-native') {
-						console.log('Ignoring message: wrong source');
 						return;
 					}
 
