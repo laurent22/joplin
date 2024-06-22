@@ -19,8 +19,12 @@ const getWebViewVersionText = () => {
 const getOSVersion = (): string => {
 	if (Platform.OS === 'android') {
 		return _('Android API level: %d', Platform.Version);
-	} else {
+	} else if (Platform.OS === 'ios') {
 		return _('iOS version: %s', Platform.Version);
+	} else if (Platform.OS === 'web') {
+		return `User agent: ${navigator.userAgent}`;
+	} else {
+		return _('Unknown platform');
 	}
 };
 

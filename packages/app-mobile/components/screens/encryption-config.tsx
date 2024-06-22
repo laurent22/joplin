@@ -153,7 +153,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		});
 
 		return (
-			<View style={{ flex: 1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
+			<View style={{ flex: 1, flexBasis: 'auto', borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
 				<View>{messageComps}</View>
 				<Text style={styles.normalText}>{_('Password:')}</Text>
 				<TextInput
