@@ -526,7 +526,7 @@ async function initialize(dispatch: Function) {
 	mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
 
-	if (Setting.value('env') === 'dev') {
+	if (Setting.value('env') === 'dev' || Platform.OS === 'web') {
 		mainLogger.addTarget(TargetType.Console);
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}

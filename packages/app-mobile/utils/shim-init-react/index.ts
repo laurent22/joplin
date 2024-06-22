@@ -7,10 +7,6 @@ const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 import FsDriverRN from '../fs-driver/fs-driver-rn';
 import type SettingType from '@joplin/lib/models/Setting';
-const mimeUtils = require('@joplin/lib/mime-utils.js');
-const { basename, fileExtension } = require('@joplin/lib/path-utils');
-const uuid = require('@joplin/lib/uuid').default;
-const Resource = require('@joplin/lib/models/Resource').default;
 const { getLocales } = require('react-native-localize');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
 
@@ -230,40 +226,6 @@ export default function shimInit() {
 	shim.appVersion = () => {
 		const p = require('react-native-version-info').default;
 		return p.appVersion;
-	};
-
-	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
-	// only really works with images. It does not resize the image either.
-	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
-		defaultProps = defaultProps ? defaultProps : {};
-		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
-
-		const ext = fileExtension(filePath);
-		let mimeType = mimeUtils.fromFileExtension(ext);
-		if (!mimeType) mimeType = 'image/jpeg';
-
-		let resource = Resource.new();
-		resource.id = resourceId;
-		resource.mime = mimeType;
-		resource.title = basename(filePath);
-		resource.file_extension = ext;
-
-		const targetPath = Resource.fullPath(resource);
-		await shim.fsDriver().copy(filePath, targetPath);
-
-		if (defaultProps) {
-			resource = { ...resource, ...defaultProps };
-		}
-
-		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
-		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
-
-		const fileStat = await shim.fsDriver().stat(targetPath);
-		resource.size = fileStat.size;
-
-		resource = await Resource.save(resource, { isNew: true });
-
-		return resource;
 	};
 
 	shimInitShared();

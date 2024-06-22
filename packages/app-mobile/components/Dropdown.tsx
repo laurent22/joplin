@@ -115,6 +115,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const itemWrapperStyle: ViewStyle = {
 			...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}),
 			flex: 1,
+			flexBasis: 'auto',
 			justifyContent: 'center',
 			height: itemHeight,
 			paddingLeft: 20,

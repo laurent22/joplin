@@ -2,26 +2,24 @@ import type ShimType from '@joplin/lib/shim';
 
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { generateSecureRandom } from 'react-native-securerandom';
-import * as mimeUtils from '@joplin/lib/mime-utils';
-import { basename, fileExtension } from '@joplin/lib/path-utils';
-import uuid from '@joplin/lib/uuid';
-import Resource from '@joplin/lib/models/Resource';
 import { getLocales } from 'react-native-localize';
 import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
-import FsDriverBase from '@joplin/lib/fs-driver-base';
 import Setting from '@joplin/lib/models/Setting';
 import shimInitShared from './shimInitShared';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
+import { FetchBlobOptions } from '@joplin/lib/types';
+import JoplinError from '@joplin/lib/JoplinError';
 
 const shimInit = () => {
-	let fsDriver_: FsDriverBase|null = null;
+	let fsDriver_: FsDriverWeb|null = null;
 
-	shim.fsDriver = () => {
+	const fsDriver = () => {
 		if (!fsDriver_) {
 			fsDriver_ = new FsDriverWeb();
 		}
 		return fsDriver_;
 	};
+	shim.fsDriver = fsDriver;
 
 	shim.randomBytes = async (count: number) => {
 		const randomBytes = await generateSecureRandom(count);
@@ -93,12 +91,23 @@ const shimInit = () => {
 		}, options);
 	};
 
-	shim.fetchBlob = async function(_url, _options) {
-		throw new Error('fetchBlob: Not implemented');
+	shim.fetchBlob = async function(url, options: FetchBlobOptions) {
+		const outputPath = options.path;
+		if (!outputPath) throw new Error('fetchBlob: Missing outputPath');
+
+		const result = await fetch(url, { method: options.method, headers: options.headers });
+		if (!result.ok) {
+			throw new JoplinError(`fetch failed: ${result.statusText}`, result.status);
+		}
+
+		const blob = await result.blob();
+		await fsDriver().writeFile(outputPath, await blob.arrayBuffer(), 'buffer');
 	};
 
-	shim.uploadBlob = async function(_url, _options) {
-		throw new Error('uploadBlob: Not implemented');
+	shim.uploadBlob = async function(url, options) {
+		if (!options || !options.path) throw new Error('uploadBlob: source file path is missing');
+		const content = await fsDriver().readToFile(options.path);
+		return fetch(url, { ...options, body: content });
 	};
 
 	shim.readLocalFileBase64 = async function(path) {
@@ -119,40 +128,6 @@ const shimInit = () => {
 
 	shim.appVersion = () => {
 		return require('../../package.json').version;
-	};
-
-	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
-	// only really works with images. It does not resize the image either.
-	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
-		defaultProps = defaultProps ? defaultProps : {};
-		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
-
-		const ext = fileExtension(filePath);
-		let mimeType = mimeUtils.fromFileExtension(ext);
-		if (!mimeType) mimeType = 'image/jpeg';
-
-		let resource = Resource.new();
-		resource.id = resourceId;
-		resource.mime = mimeType;
-		resource.title = basename(filePath);
-		resource.file_extension = ext;
-
-		const targetPath = Resource.fullPath(resource);
-		await shim.fsDriver().copy(filePath, targetPath);
-
-		if (defaultProps) {
-			resource = { ...resource, ...defaultProps };
-		}
-
-		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
-		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
-
-		const fileStat = await shim.fsDriver().stat(targetPath);
-		resource.size = fileStat.size;
-
-		resource = await Resource.save(resource, { isNew: true });
-
-		return resource;
 	};
 
 	shimInitShared();

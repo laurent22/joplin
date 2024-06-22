@@ -107,7 +107,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static async resetFetchErrorStatus(resourceId: string) {
-		await this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = "" WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
+		await this.db().exec('UPDATE resource_local_states SET fetch_status = ?, fetch_error = \'\' WHERE resource_id = ?', [Resource.FETCH_STATUS_IDLE, resourceId]);
 		await this.resetOcrStatus(resourceId);
 	}
 

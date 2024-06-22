@@ -102,17 +102,21 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override async writeFile(
 		path: string,
-		string: string,
-		encoding: BufferEncoding = 'base64',
+		data: string|ArrayBuffer,
+		encoding: BufferEncoding|'buffer' = 'base64',
 		options?: FileSystemCreateWritableOptions,
 	) {
 		logger.debug('writeFile', path);
 		const { writer } = await this.openWriteStream_(path, options);
-		if (encoding === 'utf-8' || encoding === 'utf8') {
+		if (encoding === 'buffer') {
+			await writer.write(data);
+		} else if (data instanceof ArrayBuffer) {
+			throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');
+		} else if (encoding === 'utf-8' || encoding === 'utf8') {
 			const encoder = new TextEncoder();
-			await writer.write(encoder.encode(string));
+			await writer.write(encoder.encode(data));
 		} else {
-			await writer.write(Buffer.from(string, encoding).buffer);
+			await writer.write(Buffer.from(data, encoding).buffer);
 		}
 		await writer.close();
 		logger.debug('writeFile done', path);
@@ -143,6 +147,11 @@ export default class FsDriverWeb extends FsDriverBase {
 			const buffer = Buffer.from(await file.arrayBuffer());
 			return buffer.toString(encoding);
 		}
+	}
+
+	public async readToFile(path: string) {
+		const handle = await this.pathToFileHandle_(path);
+		return await handle.getFile();
 	}
 
 	public override async open(path: string, _mode = 'r'): Promise<FileHandle> {

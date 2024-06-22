@@ -4,6 +4,10 @@ import type ShimType from '@joplin/lib/shim';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import showMessageBox from '../showMessageBox';
 import { Buffer } from 'buffer';
+import { basename, fileExtension } from '@joplin/utils/path';
+import uuid from '@joplin/lib/uuid';
+import * as mimeUtils from '@joplin/lib/mime-utils';
+import Resource from '@joplin/lib/models/Resource';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 
 const shimInitShared = () => {
@@ -57,6 +61,40 @@ const shimInitShared = () => {
 
 	shim.clearInterval = (id) => {
 		return PoorManIntervals.clearInterval(id);
+	};
+
+	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
+	// only really works with images. It does not resize the image either.
+	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
+		defaultProps = defaultProps ? defaultProps : {};
+		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+
+		const ext = fileExtension(filePath);
+		let mimeType = mimeUtils.fromFileExtension(ext);
+		if (!mimeType) mimeType = 'image/jpeg';
+
+		let resource = Resource.new();
+		resource.id = resourceId;
+		resource.mime = mimeType;
+		resource.title = basename(filePath);
+		resource.file_extension = ext;
+
+		const targetPath = Resource.fullPath(resource);
+		await shim.fsDriver().copy(filePath, targetPath);
+
+		if (defaultProps) {
+			resource = { ...resource, ...defaultProps };
+		}
+
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
+
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
+		resource = await Resource.save(resource, { isNew: true });
+
+		return resource;
 	};
 };
 
