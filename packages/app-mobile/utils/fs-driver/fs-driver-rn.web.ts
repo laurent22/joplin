@@ -180,7 +180,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		};
 	}
 
-	public override async readFileChunk(handle: FileHandle, length: number, encoding: BufferEncoding = 'base64') {
+	public override async readFileChunkAsBuffer(handle: FileHandle, length: number): Promise<Buffer> {
 		let read: Buffer = handle.buffered;
 
 		if (handle.buffered.byteLength < length && !handle.done) {
@@ -200,8 +200,12 @@ export default class FsDriverWeb extends FsDriverBase {
 		if (result.length === 0 && handle.done) {
 			return null;
 		} else {
-			return result.toString(encoding);
+			return result;
 		}
+	}
+
+	public override async readFileChunk(handle: FileHandle, length: number, encoding: BufferEncoding = 'base64') {
+		return (await this.readFileChunkAsBuffer(handle, length))?.toString(encoding);
 	}
 
 	public override async close(handle: FileHandle) {

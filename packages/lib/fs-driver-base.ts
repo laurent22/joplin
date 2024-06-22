@@ -63,6 +63,16 @@ export default class FsDriverBase {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async readFileChunkAsBuffer(handle: any, length: number): Promise<Buffer> {
+		const chunk = await this.readFileChunk(handle, length, 'base64');
+		if (chunk) {
+			return Buffer.from(chunk, 'base64');
+		} else {
+			return null;
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async open(_path: string, _mode: any): Promise<any> {
 		throw new Error('Not implemented: open');
 	}
