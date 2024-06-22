@@ -48,7 +48,7 @@ const runImportTask = async (
 
 	const sourceFileUri = importFiles[0].uri;
 	const sourceFilePath = Platform.select({
-		android: sourceFileUri,
+		default: sourceFileUri,
 		ios: decodeURI(sourceFileUri),
 	});
 	await shim.fsDriver().copy(sourceFilePath, importTargetPath);
