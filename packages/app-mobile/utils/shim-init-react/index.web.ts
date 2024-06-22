@@ -102,6 +102,19 @@ const shimInit = () => {
 
 		const blob = await result.blob();
 		await fsDriver().writeFile(outputPath, await blob.arrayBuffer(), 'buffer');
+
+		return {
+			ok: result.ok,
+			path: outputPath,
+			text: () => {
+				return result.statusText;
+			},
+			json: () => {
+				return { message: `${result.status}: ${result.statusText}` };
+			},
+			status: result.status,
+			headers: result.headers,
+		};
 	};
 
 	shim.uploadBlob = async function(url, options) {
