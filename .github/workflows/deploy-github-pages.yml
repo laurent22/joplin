@@ -33,6 +33,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: work/mobile-web
       - name: Prepare yarn
         run: corepack enable
       - name: Install dependencies
