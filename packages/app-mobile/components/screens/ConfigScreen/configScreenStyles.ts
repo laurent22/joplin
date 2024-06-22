@@ -80,6 +80,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 	const sidebarButton: SidebarButtonStyle = {
 		height: sidebarButtonHeight,
 		flex: 1,
+		flexBasis: 'auto',
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingEnd: theme.marginRight,

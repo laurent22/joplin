@@ -80,6 +80,36 @@ function useCss(themeId: number): string {
 
 				font-size: 13pt;
 			}
+
+			* {
+				scrollbar-width: thin;
+			}
+
+			*::-webkit-scrollbar {
+				width: 7px;
+				height: 7px;
+			}
+
+			*::-webkit-scrollbar-corner {
+				background: none;
+			}
+
+			*::-webkit-scrollbar-track {
+				border: none;
+			}
+
+			*::-webkit-scrollbar-thumb {
+				background: rgba(100, 100, 100, 0.3);
+				border-radius: 5px;
+			}
+
+			*::-webkit-scrollbar-track:hover {
+				background: rgba(0, 0, 0, 0.1);
+			}
+
+			*::-webkit-scrollbar-thumb:hover {
+				background: rgba(100, 100, 100, 0.7);
+			}
 		`;
 	}, [themeId]);
 }
