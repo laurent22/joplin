@@ -1,12 +1,12 @@
 
 // Data that can be sent/received by a RemoteMessenger
 export type SerializableData =
-	number|boolean|string|undefined|null|SerializableData[]|{ readonly [key: string]: SerializableData };
+	number|boolean|string|File|undefined|null|SerializableData[]|{ readonly [key: string]: SerializableData };
 
 export type TransferableCallback = (...args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks|void>;
 
 export type SerializableDataAndCallbacks =
-	number|boolean|string|undefined|null|TransferableCallback|SerializableDataAndCallbacks[]|{ readonly [key: string]: SerializableDataAndCallbacks };
+	number|boolean|string|File|undefined|null|TransferableCallback|SerializableDataAndCallbacks[]|{ readonly [key: string]: SerializableDataAndCallbacks };
 
 export type CallbackIds = null|string|CallbackIds[]|Readonly<{
 	[propertyName: string]: CallbackIds;

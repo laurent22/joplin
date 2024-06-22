@@ -65,6 +65,7 @@ import debounce from '../../utils/debounce';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import CommandService from '@joplin/lib/services/CommandService';
 import * as urlUtils from '@joplin/lib/urlUtils';
+import { ResourceInfo } from '../NoteBodyViewer/hooks/useRerenderHandler';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -105,7 +106,7 @@ interface State {
 	showImageEditor: boolean;
 	imageEditorResource: ResourceEntity;
 	imageEditorResourceFilepath: string;
-	noteResources: Record<string, ResourceEntity>;
+	noteResources: Record<string, ResourceInfo>;
 	newAndNoTitleChangeNoteId: boolean|null;
 
 	HACK_webviewLoadingState: number;

@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { RendererWebViewOptions } from '../bundledJs/types';
 import { themeStyle } from '../../global-style';
+import { Platform } from 'react-native';
 
 const useSource = (tempDirPath: string, themeId: number) => {
 	const injectedJs = useMemo(() => {
@@ -20,6 +21,9 @@ const useSource = (tempDirPath: string, themeId: number) => {
 				resourceDir: Setting.value('resourceDir'),
 				resourceDownloadMode: Setting.value('sync.resourceDownloadMode'),
 			},
+			// Web needs files to be transferred manually, since image SRCs can't reference
+			// the Origin Private File System.
+			useTransferredFiles: Platform.OS === 'web',
 			pluginOptions,
 		};
 

@@ -43,6 +43,8 @@ const separateCallbacksFromSerializable = (data: SerializableDataAndCallbacks): 
 				}
 
 				return { serializableData, callbacks };
+			} else if (object instanceof Blob) {
+				return { serializableData: object, callbacks: [] };
 			} else {
 				const argsWithoutCallbacks = Object.create(null);
 				const callbackArgs = Object.create(null);

@@ -8,6 +8,16 @@ import { useEffect, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { ExtraContentScriptSource } from '../bundledJs/types';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
+import FsDriverWeb from '../../../utils/fs-driver/fs-driver-rn.web';
+import Resource from '@joplin/lib/models/Resource';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
+
+
+export interface ResourceInfo {
+	localState: unknown;
+	item: ResourceEntity;
+}
 
 interface Props {
 	renderer: Renderer;
@@ -17,7 +27,7 @@ interface Props {
 	themeId: number;
 
 	highlightedKeywords: string[];
-	noteResources: string[];
+	noteResources: Record<string, ResourceInfo>;
 	noteHash: string;
 	initialScroll: number|undefined;
 
@@ -112,6 +122,24 @@ const useRerenderHandler = (props: Props) => {
 			pluginSettings[key] = Setting.value(`plugin-${key}`);
 		}
 		let newPluginSettingKeys = pluginSettingKeys;
+
+		if (shim.mobilePlatform() === 'web') {
+			for (const [resourceId, resource] of Object.entries(props.noteResources)) {
+				// if (!(await props.renderer.getResourcePathOverride(resourceId))) {
+				try {
+					await props.renderer.setResourceFile(
+						resourceId,
+						await (shim.fsDriver() as FsDriverWeb).fileAtPath(Resource.fullPath(resource.item)),
+					);
+				} catch (error) {
+					if (error.name !== 'NotFoundError') {
+						throw error;
+					}
+					console.warn('ENOTFOUND', Resource.fullPath(resource.item), 'for', resource);
+				}
+				// }
+			}
+		}
 
 		const theme = themeStyle(props.themeId);
 		const config = {

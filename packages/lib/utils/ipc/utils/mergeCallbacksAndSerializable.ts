@@ -68,6 +68,8 @@ function mergeCallbacksAndSerializable(
 					result.push(mergeCallbackAndSerializable(serializableObj[i], callbackObj[i]));
 				}
 				return result;
+			} else if (serializableObj instanceof Blob) {
+				return serializableObj;
 			} else {
 				if (Array.isArray(callbackObj)) {
 					throw new Error('callbackArgs should not be an array');

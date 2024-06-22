@@ -91,6 +91,13 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 		const { iframe } = makeSandboxedIframe(props.html, [
 			`
+				window.ReactNativeWebView = {
+					postMessage: (message) => {
+						parent.postMessage(message, '*');
+					},
+					supportsNonStringMessages: true,
+				};
+
 				window.addEventListener('message', (event) => {
 					if (event.source !== parent || event.origin === 'react-native') {
 						return;
@@ -110,12 +117,6 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 						eval('(() => { ' + event.data.injectJs + ' })()');
 					}
 				});
-
-				window.ReactNativeWebView = {
-					postMessage: (message) => {
-						parent.postMessage(message, '*');
-					},
-				};
 			`,
 			injectedJavaScriptRef.current,
 		]);

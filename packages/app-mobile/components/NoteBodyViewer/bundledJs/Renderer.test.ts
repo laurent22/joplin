@@ -27,6 +27,7 @@ const makeRenderer = (options: Partial<RendererSetupOptions>) => {
 			resourceDir: Setting.value('resourceDir'),
 			resourceDownloadMode: 'auto',
 		},
+		useTransferredFiles: false,
 		fsDriver: shim.fsDriver(),
 		pluginOptions: {},
 	};

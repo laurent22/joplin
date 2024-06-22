@@ -12,6 +12,7 @@ export interface RendererSetupOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	useTransferredFiles: boolean;
 	fsDriver: RendererFsDriver;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
@@ -45,6 +46,7 @@ export default class Renderer {
 	private lastSettings: RendererSettings|null = null;
 	private extraContentScripts: ExtraContentScript[] = [];
 	private lastRenderMarkup: MarkupRecord|null = null;
+	private resourcePathOverrides: Record<string, string> = Object.create(null);
 
 	public constructor(private setupOptions: RendererSetupOptions) {
 		this.recreateMarkupToHtml();
@@ -59,6 +61,18 @@ export default class Renderer {
 			ResourceModel: makeResourceModel(this.setupOptions.settings.resourceDir),
 			pluginOptions: this.setupOptions.pluginOptions,
 		});
+	}
+
+	// Intended for web, where resources can't be linked to normally.
+	public async setResourceFile(id: string, file: Blob) {
+		this.resourcePathOverrides[id] = URL.createObjectURL(file);
+	}
+
+	public getResourcePathOverride(resourceId: string) {
+		if (Object.prototype.hasOwnProperty.call(this.resourcePathOverrides, resourceId)) {
+			return this.resourcePathOverrides[resourceId];
+		}
+		return null;
 	}
 
 	public async setExtraContentScriptsAndRerender(
@@ -108,6 +122,7 @@ export default class Renderer {
 			editPopupFiletypes: ['image/svg+xml'],
 			createEditPopupSyntax: settings.createEditPopupSyntax,
 			destroyEditPopupSyntax: settings.destroyEditPopupSyntax,
+			itemIdToUrl: this.setupOptions.useTransferredFiles ? (id: string) => this.getResourcePathOverride(id) : undefined,
 
 			settingValue: (pluginId: string, settingName: string) => {
 				const settingKey = `${pluginId}.${settingName}`;
