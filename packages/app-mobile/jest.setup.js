@@ -18,6 +18,7 @@ window.setImmediate = setImmediate;
 
 shimInit({
 	nodeSqlite: sqlite3,
+	appVersion: () => require('./package.json').version,
 	React,
 });
 
