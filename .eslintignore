@@ -58,6 +58,7 @@ packages/app-mobile/lib/rnInjectedJs/
 packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
+packages/app-mobile/web/serviceWorker.js
 packages/fork-*
 packages/default-plugins/plugin-base-repo/
 packages/default-plugins/plugin-sources/

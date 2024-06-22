@@ -8,7 +8,7 @@
     "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
     "android": "react-native run-android",
     "build": "NO_FLIPPER=1 gulp build",
-    "web": "webpack --config ./web/webpack.config.js && cp ./web/index.html ./web/dist/",
+    "web": "webpack --config ./web/webpack.config.js && cp ./web/index.html ./web/dist/ && cp ./web/serviceWorker.js ./web/dist/",
     "serve-web": "webpack serve --static ./web/ --config ./web/webpack.config.js --progress",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
