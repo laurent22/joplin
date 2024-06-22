@@ -3,7 +3,7 @@ import FsDriverBase, { ReadDirStatsOptions, Stat } from '@joplin/lib/fs-driver-b
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
 import { Buffer } from 'buffer';
-import Logger from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 const md5 = require('md5');
 
 type FileHandle = {
@@ -14,7 +14,7 @@ type FileHandle = {
 };
 
 const removeReservedWords = (path: string) => {
-	return path.replace(/(tmp)/g, '_$1');
+	return path.replace(/\/(tmp)/g, '_$1');
 };
 
 declare global {
@@ -23,7 +23,9 @@ declare global {
 	}
 }
 
-const logger = Logger.create('FsDriverWeb');
+const logger = new Logger();
+logger.addTarget(TargetType.Console);
+logger.setLevel(LogLevel.Debug);
 
 export default class FsDriverWeb extends FsDriverBase {
 	private fsRoot_: FileSystemDirectoryHandle;
@@ -46,8 +48,10 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.initPromise_;
 
 		if (this.directoryHandleCache_.has(path)) {
+			logger.debug('pathToDirectoryHandle_ from cache');
 			return this.directoryHandleCache_.get(path);
 		}
+		logger.debug('pathToDirectoryHandle_', 'path:', path, 'create:', create);
 
 		const parentDirs = dirname(path);
 		if (parentDirs && !['/', '.'].includes(parentDirs)) {
@@ -63,10 +67,7 @@ export default class FsDriverWeb extends FsDriverBase {
 				handle = null;
 			}
 
-			if (handle) {
-				this.directoryHandleCache_.set(path, handle);
-			}
-
+			this.directoryHandleCache_.set(path, handle);
 			return handle;
 		}
 		return this.fsRoot_;
@@ -74,9 +75,9 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	private async pathToFileHandle_(path: string, create = false): Promise<FileSystemFileHandle> {
 		await this.initPromise_;
-
+		logger.debug('pathToFileHandle_', 'path:', path, 'create:', create);
 		const parent = await this.pathToDirectoryHandle_(dirname(path));
-		logger.debug('Get name', basename(path), path, create);
+
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
@@ -105,6 +106,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		encoding: BufferEncoding = 'base64',
 		options?: FileSystemCreateWritableOptions,
 	) {
+		logger.debug('writeFile', path);
 		const { writer } = await this.openWriteStream_(path, options);
 		if (encoding === 'utf-8' || encoding === 'utf8') {
 			const encoder = new TextEncoder();
@@ -113,6 +115,7 @@ export default class FsDriverWeb extends FsDriverBase {
 			await writer.write(Buffer.from(string, encoding).buffer);
 		}
 		await writer.close();
+		logger.debug('writeFile done', path);
 	}
 
 	public override async appendFile(path: string, content: string, encoding?: BufferEncoding) {
@@ -130,6 +133,8 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public async readFile(path: string, encoding: BufferEncoding = 'utf-8') {
+		logger.debug('readFile', path);
+
 		const handle = await this.pathToFileHandle_(path);
 		const file = await handle.getFile();
 		if (encoding === 'utf-8' || encoding === 'utf8') {
@@ -222,6 +227,8 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async exists(path: string) {
+		logger.debug('exists?', path);
+
 		const parentDir = await this.pathToDirectoryHandle_(dirname(path));
 		if (!parentDir) return false;
 
