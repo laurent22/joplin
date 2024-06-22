@@ -355,6 +355,10 @@ export default class FsDriverRN extends FsDriverBase {
 		return RNFS.CachesDirectoryPath;
 	}
 
+	public getAppDirectoryPath() {
+		return RNFetchBlob.fs.dirs.DocumentDir;
+	}
+
 	public isUsingAndroidSAF() {
 		return Platform.OS === 'android' && Platform.Version > 28;
 	}

@@ -2,7 +2,7 @@ import type ShimType from '@joplin/lib/shim';
 import shimInitShared from './shimInitShared';
 
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
-const { GeolocationReact } = require('./geolocation-react.js');
+const { GeolocationReact } = require('../geolocation-react.js');
 const RNFetchBlob = require('rn-fetch-blob').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 import FsDriverRN from '../fs-driver/fs-driver-rn';

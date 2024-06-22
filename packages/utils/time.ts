@@ -4,7 +4,11 @@
 // -----------------------------------------------------------------------------------------------
 
 import * as dayjs from 'dayjs';
-import * as dayJsRelativeTime from 'dayjs/plugin/relativeTime';
+
+// Separating this into a type import and a require seems to be necessary to support mobile
+// (import = require syntax doesn't work there).
+import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
+const dayJsRelativeTime: typeof dayJsRelativeTimeType = require('dayjs/plugin/relativeTime');
 
 const supportedLocales: Record<string, unknown> = {
 	'ar': require('dayjs/locale/ar'),
