@@ -495,7 +495,7 @@ function NoteEditor(props: Props, ref: any) {
 	const onMessage = useCallback((event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
 
-		if (data.indexOf('error:') === 0) {
+		if (typeof data === 'string' && data.indexOf('error:') === 0) {
 			logger.error('CodeMirror error', data);
 			return;
 		}
