@@ -1,7 +1,6 @@
 import type ShimType from '@joplin/lib/shim';
 
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
-import { generateSecureRandom } from 'react-native-securerandom';
 import { getLocales } from 'react-native-localize';
 import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
@@ -22,13 +21,10 @@ const shimInit = () => {
 	shim.fsDriver = fsDriver;
 
 	shim.randomBytes = async (count: number) => {
-		const randomBytes = await generateSecureRandom(count);
-		const temp = [];
-		for (const n in randomBytes) {
-			if (!randomBytes.hasOwnProperty(n)) continue;
-			temp.push(randomBytes[n]);
-		}
-		return temp;
+		const buffer = new Uint8Array(count);
+		crypto.getRandomValues(buffer);
+
+		return [...buffer];
 	};
 
 	/* eslint-enable */
