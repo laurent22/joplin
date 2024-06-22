@@ -47,8 +47,6 @@ const imageLoaderConfiguration = {
 const emptyLibraryMock = path.resolve(__dirname, 'mocks/empty.js');
 
 module.exports = {
-	mode: 'development',
-	// devtool: 'inline-cheap-source-map',
 	target: 'web',
 
 	entry: [
