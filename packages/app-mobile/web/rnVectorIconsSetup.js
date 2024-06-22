@@ -1,5 +1,3 @@
-import { AppRegistry } from 'react-native';
-
 import fontAwesomeFont from 'react-native-vector-icons/Fonts/FontAwesome.ttf';
 import fontAwesomeSolidFont from 'react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf';
 import fontAwesomeRegularFont from 'react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf';
@@ -47,14 +45,3 @@ const setUpRnVectorIcons = () => {
 };
 
 setUpRnVectorIcons();
-
-
-const Root = require('./root').default;
-
-AppRegistry.registerComponent('Joplin', () => Root);
-
-addEventListener('DOMContentLoaded', () => {
-	AppRegistry.runApplication('Joplin', {
-		rootTag: document.querySelector('#root'),
-	});
-});

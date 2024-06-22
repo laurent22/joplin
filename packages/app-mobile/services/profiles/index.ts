@@ -1,7 +1,6 @@
 // Helper functions to reduce the boiler plate of loading and saving profiles on
 // mobile
 
-const RNExitApp = require('react-native-exit-app').default;
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
 import shim from '@joplin/lib/shim';
@@ -55,5 +54,5 @@ export const switchProfile = async (profileId: string) => {
 
 	config.currentProfileId = profileId;
 	await saveProfileConfig(config);
-	RNExitApp.exitApp();
+	shim.restartApp();
 };

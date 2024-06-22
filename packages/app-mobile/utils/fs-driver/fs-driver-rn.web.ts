@@ -1,4 +1,4 @@
-import { dirname, basename, resolve, normalize } from 'path';
+import { dirname, basename, resolve, normalize, join } from 'path';
 import FsDriverBase, { ReadDirStatsOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
@@ -12,12 +12,17 @@ type FileHandle = {
 	done: boolean;
 };
 
-const removeReservedWords = (path: string) => {
-	return path.replace(/\/(tmp)/g, '_$1');
+const removeReservedWords = (fileName: string) => {
+	return fileName.replace(/(tmp)$/g, '_$1');
+};
+
+const restoreReservedWords = (fileName: string) => {
+	return fileName.replace(/_tmp$/g, 'tmp');
 };
 
 declare global {
 	interface FileSystemDirectoryHandle {
+		entries(): AsyncIterable<[string, FileSystemFileHandle|FileSystemDirectoryHandle]>;
 		keys(): AsyncIterable<string>;
 	}
 }
@@ -26,7 +31,7 @@ type RemoveOptions = { recursive?: boolean };
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(LogLevel.Debug);
+logger.setLevel(LogLevel.Warn);
 
 export default class FsDriverWeb extends FsDriverBase {
 	private fsRoot_: FileSystemDirectoryHandle;
@@ -48,6 +53,11 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle> {
 		await this.initPromise_;
+		path = resolve('/', path);
+
+		if (path === '/') {
+			return this.fsRoot_;
+		}
 
 		if (this.directoryHandleCache_.has(path)) {
 			logger.debug('pathToDirectoryHandle_ from cache for', path);
@@ -56,34 +66,34 @@ export default class FsDriverWeb extends FsDriverBase {
 		logger.debug('pathToDirectoryHandle_', 'path:', path, 'create:', create);
 
 		const parentDirs = dirname(path);
-		if (parentDirs && !['/', '.'].includes(parentDirs)) {
-			const parent = await this.pathToDirectoryHandle_(parentDirs, create);
-			const folderName = removeReservedWords(basename(path));
+		const parent = await this.pathToDirectoryHandle_(parentDirs, create);
+		const folderName = removeReservedWords(basename(path));
 
-			let handle: FileSystemDirectoryHandle;
-			try {
-				handle = await parent.getDirectoryHandle(folderName, { create });
-				this.directoryHandleCache_.set(path, handle);
-			} catch (error) {
-				// TODO: Handle this better
-				logger.warn('Error getting directory handle', error, 'for', path);
-				handle = null;
-			}
-
-			return handle;
+		let handle: FileSystemDirectoryHandle;
+		try {
+			handle = await parent.getDirectoryHandle(folderName, { create });
+			this.directoryHandleCache_.set(path, handle);
+		} catch (error) {
+			// TODO: Handle this better
+			logger.warn('Error getting directory handle', error, 'for', path, 'create:', create);
+			handle = null;
 		}
-		return this.fsRoot_;
+
+		return handle;
 	}
 
 	private async pathToFileHandle_(path: string, create = false): Promise<FileSystemFileHandle> {
 		await this.initPromise_;
 		logger.debug('pathToFileHandle_', 'path:', path, 'create:', create);
 		const parent = await this.pathToDirectoryHandle_(dirname(path));
+		if (!parent) {
+			throw new Error(`Can't get file handle for path ${path} -- parent doesn't exist (create: ${create}).`);
+		}
 
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
-			logger.warn(error, 'getting file handle at path', path);
+			logger.warn(error, 'getting file handle at path', path, create);
 			if (create) {
 				throw new Error(`${error} while getting file at path ${path}.`);
 			}
@@ -226,41 +236,50 @@ export default class FsDriverWeb extends FsDriverBase {
 		await writer.close();
 	}
 
-	public override async stat(path: string): Promise<Stat> {
-		const dirHandle = await this.pathToDirectoryHandle_(path);
-		// pathToFileHandle_ only works if path is not a directory.
-		const fileHandle = dirHandle ? undefined : await this.pathToFileHandle_(path);
+	public override async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<Stat> {
+		handle ??= await this.pathToDirectoryHandle_(path) || await this.pathToFileHandle_(path);
 		const virtualFile = this.virtualFiles_.get(normalize(path));
-		if (!dirHandle && !fileHandle && !virtualFile) return null;
+		if (!handle && !virtualFile) return null;
 
 		const size = await (async () => {
-			if (dirHandle) return 0;
-			return (virtualFile ?? await fileHandle.getFile()).size;
+			if (handle.kind === 'directory') return 0;
+			return (virtualFile ?? await handle.getFile()).size;
 		})();
 
 		return {
 			birthtime: new Date(0),
 			mtime: new Date(0),
-			path: path,
+			path: normalize(path),
 			size,
-			isDirectory: () => !!dirHandle,
+			isDirectory: () => handle.kind === 'directory',
 		};
 	}
 
 	public override async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {
-		const dirHandle = await this.pathToDirectoryHandle_(path);
-		if (!dirHandle) return null;
+		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
+			dirHandle ??= await this.pathToDirectoryHandle_(path);
+			if (!dirHandle) return null;
 
-		const result: Stat[] = [];
-		for await (const child of dirHandle.keys()) {
-			const childPath = `${path}/${child}`;
-			const stat = await this.stat(childPath);
-			result.push({ ...stat, path: child });
-			if (options.recursive) {
-				result.push(...await this.readDirStats(childPath));
+			const result: Stat[] = [];
+			try {
+				for await (const [childInternalName, childHandle] of dirHandle.entries()) {
+					const childFileName = restoreReservedWords(childInternalName);
+					const childPath = join(path, childFileName);
+
+					const stat = await this.stat(childPath, childHandle);
+					result.push({ ...stat, path: join(basePath, childFileName) });
+
+					if (options.recursive && childHandle.kind === 'directory') {
+						const childBasePath = join(basePath, childFileName);
+						result.push(...await readDirStats(childBasePath, childPath, childHandle));
+					}
+				}
+			} catch (error) {
+				throw new Error(`readDirStats error: ${error}, path: ${basePath},${path}`);
 			}
-		}
-		return result;
+			return result;
+		};
+		return readDirStats('', path);
 	}
 
 	public override async exists(path: string) {
@@ -291,14 +310,14 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override async tarExtract(options: TarExtractOptions) {
 		await tarExtract({
-			cwd: '.',
+			cwd: '/cache/',
 			...options,
 		});
 	}
 
 	public override async tarCreate(options: TarCreateOptions, filePaths: string[]) {
 		await tarCreate({
-			cwd: '.',
+			cwd: '/cache/',
 			...options,
 		}, filePaths);
 	}

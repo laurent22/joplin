@@ -11,6 +11,7 @@ import { _ } from '@joplin/lib/locale';
 import { deleteProfileById } from '@joplin/lib/services/profileConfig';
 import { saveProfileConfig, switchProfile } from '../../services/profiles';
 import { themeStyle } from '../global-style';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	themeId: number;
@@ -57,22 +58,29 @@ export default (props: Props) => {
 			}
 		};
 
-		Alert.alert(
-			_('Confirmation'),
-			_('To switch the profile, the app is going to close and you will need to restart it.'),
-			[
-				{
-					text: _('Continue'),
-					onPress: () => doIt(),
-					style: 'default',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
-		);
+		const switchProfileMessage = _('To switch the profile, the app is going to close and you will need to restart it.');
+		if (shim.mobilePlatform() === 'web') {
+			if (confirm(switchProfileMessage)) {
+				void doIt();
+			}
+		} else {
+			Alert.alert(
+				_('Confirmation'),
+				switchProfileMessage,
+				[
+					{
+						text: _('Continue'),
+						onPress: () => doIt(),
+						style: 'default',
+					},
+					{
+						text: _('Cancel'),
+						onPress: () => {},
+						style: 'cancel',
+					},
+				],
+			);
+		}
 	}, []);
 
 	const onEditProfile = useCallback(async (profileId: string) => {

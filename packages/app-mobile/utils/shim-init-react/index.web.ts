@@ -130,6 +130,10 @@ const shimInit = () => {
 		return require('../../package.json').version;
 	};
 
+	shim.restartApp = () => {
+		location.reload();
+	};
+
 	shimInitShared();
 };
 

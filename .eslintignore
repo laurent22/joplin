@@ -661,6 +661,7 @@ packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
+packages/app-mobile/index.web.js
 packages/app-mobile/plugins/PlatformImplementation.js
 packages/app-mobile/plugins/PluginRunner/PluginRunner.js
 packages/app-mobile/plugins/PluginRunner/PluginRunnerWebView.js
@@ -735,6 +736,7 @@ packages/app-mobile/utils/shim-init-react/index.web.js
 packages/app-mobile/utils/shim-init-react/injectedJs.js
 packages/app-mobile/utils/shim-init-react/shimInitShared.js
 packages/app-mobile/utils/showMessageBox.js
+packages/app-mobile/utils/showMessageBox.web.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js

@@ -9,7 +9,7 @@ import FsDriverRN from '../fs-driver/fs-driver-rn';
 import type SettingType from '@joplin/lib/models/Setting';
 const { getLocales } = require('react-native-localize');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
-
+const RNExitApp = require('react-native-exit-app').default;
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -226,6 +226,10 @@ export default function shimInit() {
 	shim.appVersion = () => {
 		const p = require('react-native-version-info').default;
 		return p.appVersion;
+	};
+
+	shim.restartApp = () => {
+		RNExitApp.exitApp();
 	};
 
 	shimInitShared();

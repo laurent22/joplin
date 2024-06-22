@@ -386,6 +386,10 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	restartApp: (): void => {
+		throw new Error('Not implemented');
+	},
+
 	// setTimeout/setInterval are in the shim so that in Electron renderer process
 	// we can force the use of the Node timers from the "timers" package. This is to go around
 	// a bug that happened while testing plugins (on WSL2 / X-Server, so same as Linux):
