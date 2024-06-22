@@ -7,6 +7,7 @@ const path = require('path');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
+const shim = require('@joplin/lib/shim').default;
 const React = require('react');
 require('../../jest.base-setup.js')();
 
@@ -61,6 +62,10 @@ jest.doMock('react-native-fs', () => {
 		CachesDirectoryPath: tempDirectoryPath,
 	};
 });
+
+shim.fsDriver().getCacheDirectoryPath = () => {
+	return tempDirectoryPath;
+};
 
 beforeAll(async () => {
 	await mkdir(tempDirectoryPath);
