@@ -5,13 +5,18 @@ type PluginAssetRecord = {
 };
 const pluginAssetsAdded_: Record<string, PluginAssetRecord> = {};
 
+interface Options {
+	inlineAssets: boolean;
+	readAssetFile?(path: string): Promise<string>;
+}
+
 // Note that this function keeps track of what's been added so as not to
 // add the same CSS files multiple times.
 //
 // Shared with app-desktop/gui-note-viewer.
 //
 // TODO: If possible, refactor such that this function is not duplicated.
-const addPluginAssets = (assets: RenderResultPluginAsset[]) => {
+const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Options) => {
 	if (!assets) return;
 
 	const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
@@ -34,14 +39,28 @@ const addPluginAssets = (assets: RenderResultPluginAsset[]) => {
 
 		let element = null;
 
-		if (asset.mime === 'application/javascript') {
-			element = document.createElement('script');
-			element.src = encodedPath;
-			pluginAssetsContainer.appendChild(element);
-		} else if (asset.mime === 'text/css') {
-			element = document.createElement('link');
-			element.rel = 'stylesheet';
-			element.href = encodedPath;
+		if (options.inlineAssets) {
+			if (asset.mime === 'application/javascript') {
+				element = document.createElement('script');
+			} else if (asset.mime === 'text/css') {
+				element = document.createElement('style');
+			}
+
+			if (element) {
+				const assetContent = await options.readAssetFile(asset.name ?? asset.path);
+				element.appendChild(document.createTextNode(assetContent));
+			}
+		} else {
+			if (asset.mime === 'application/javascript') {
+				element = document.createElement('script');
+				element.src = encodedPath;
+			} else if (asset.mime === 'text/css') {
+				element = document.createElement('link');
+				element.rel = 'stylesheet';
+				element.href = encodedPath;
+			}
+		}
+		if (element) {
 			pluginAssetsContainer.appendChild(element);
 		}
 

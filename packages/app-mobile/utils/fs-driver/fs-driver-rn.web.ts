@@ -151,7 +151,14 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async unlink(path: string) {
-		return this.remove(path, { recursive: false });
+		try {
+			return this.remove(path, { recursive: false });
+		} catch (error) {
+			// unlink should pass even if the item doesn't exist.
+			if (error.name !== 'NotFoundError') {
+				throw error;
+			}
+		}
 	}
 
 	public async fileAtPath(path: string) {

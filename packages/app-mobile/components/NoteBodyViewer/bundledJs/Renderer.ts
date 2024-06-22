@@ -13,6 +13,7 @@ export interface RendererSetupOptions {
 		resourceDownloadMode: string;
 	};
 	useTransferredFiles: boolean;
+
 	fsDriver: RendererFsDriver;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
@@ -34,6 +35,7 @@ export interface RendererSettings {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginSettings: Record<string, any>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
+	readAssetFile: (assetPath: string)=> Promise<string>;
 }
 
 export interface MarkupRecord {
@@ -166,7 +168,10 @@ export default class Renderer {
 		}
 
 		contentContainer.innerHTML = html;
-		addPluginAssets(pluginAssets);
+		void addPluginAssets(pluginAssets, {
+			inlineAssets: this.setupOptions.useTransferredFiles,
+			readAssetFile: settings.readAssetFile,
+		});
 
 		this.afterRender(settings);
 	}

@@ -178,6 +178,13 @@ const useRerenderHandler = (props: Props) => {
 					setPluginSettingKeys(newPluginSettingKeys);
 				}
 			},
+			readAssetFile: (assetPath: string) => {
+				if (event.cancelled) return null;
+
+				const assetsDir = `${Setting.value('resourceDir')}/pluginAssets`;
+				const path = shim.fsDriver().resolveRelativePathWithinDir(assetsDir, assetPath);
+				return shim.fsDriver().readFile(path, 'utf-8');
+			},
 
 			createEditPopupSyntax,
 			destroyEditPopupSyntax,
