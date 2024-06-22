@@ -1,5 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import time from '../../time';
+import { formatMsToRelative } from '@joplin/utils/time';
 import { TagEntity } from '../database/types';
 import { ListRendererDependency, RenderNoteView } from '../plugins/api/noteListType';
 
@@ -15,10 +16,10 @@ export interface RenderViewPropsOptions {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions): string => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
-		'note.user_updated_time': () => time.formatMsToLocal(value),
-		'note.user_created_time': () => time.formatMsToLocal(value),
-		'note.updated_time': () => time.formatMsToLocal(value),
-		'note.created_time': () => time.formatMsToLocal(value),
+		'note.user_updated_time': () => formatMsToRelative(value),
+		'note.user_created_time': () => formatMsToRelative(value),
+		'note.updated_time': () => formatMsToRelative(value),
+		'note.created_time': () => formatMsToRelative(value),
 		'note.todo_completed': () => value ? time.formatMsToLocal(value) : '',
 		'note.todo_due': () => value ? time.formatMsToLocal(value) : '',
 		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',

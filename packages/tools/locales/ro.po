@@ -351,7 +351,7 @@ msgstr "Activ"
 msgid "Actual Size"
 msgstr "Dimensiunea actuală"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "Adăugați body"
 
@@ -367,7 +367,7 @@ msgstr "Adăugați ori eliminați etichete:"
 msgid "Add recipient:"
 msgstr "Adăugați destinatar:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "Adăugați titlu"
 
@@ -1767,7 +1767,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "Editați"
@@ -2318,11 +2318,6 @@ msgstr "Forward"
 msgid "Found: %d."
 msgstr "Găsit: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-#, fuzzy
-msgid "From a plugin"
-msgstr "Navigați toate plugin-urile"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS activat: %d"
@@ -2642,7 +2637,7 @@ msgstr ""
 "Important: nu trebuie să executați acest lucru decât O SINGURĂ dată pe un "
 "singur dispozitiv."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr ""
 
@@ -3735,7 +3730,7 @@ msgstr "Pe utilizator. Minim %d utilizatori."
 msgid "Permanently delete note"
 msgstr "Ștergeți aceste notițe"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Ștergeți notițele \"%s\"?"
@@ -3750,7 +3745,7 @@ msgstr ""
 "Ștergeți agenda? Toate notițele și sub-notițele din această agendă vor fi "
 "șterse."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 #, fuzzy
 msgid "Permanently delete these %d notes?"
 msgstr "Ștergeți aceste %d notițe?"
@@ -3891,6 +3886,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "Plugin"
@@ -6213,6 +6209,10 @@ msgstr "Măriți"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "Micșorați"
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "Navigați toate plugin-urile"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."

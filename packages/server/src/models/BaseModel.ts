@@ -69,14 +69,12 @@ export default abstract class BaseModel<T> {
 	private modelFactory_: NewModelFactoryHandler;
 	private config_: Config;
 	private savePoints_: SavePoint[] = [];
-	public usersWithReplication_: string[] = [];
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		this.db_ = db;
 		this.dbSlave_ = dbSlave;
 		this.modelFactory_ = modelFactory;
 		this.config_ = config;
-		this.usersWithReplication_ = config.USERS_WITH_REPLICATION ? config.USERS_WITH_REPLICATION.split(',') : [];
 
 		this.transactionHandler_ = new TransactionHandler(db);
 	}
@@ -117,24 +115,8 @@ export default abstract class BaseModel<T> {
 		return this.db_;
 	}
 
-	public isUserWithReplication(userId: Uuid) {
-		if (!userId) return false;
-
-		for (const id of this.usersWithReplication_) {
-			if (id === userId) return true;
-			if (id.length < 22 && userId.startsWith(id)) return true;
-		}
-
-		return false;
-	}
-
-	public dbSlave(userId: Uuid = ''): DbConnection {
-		if (this.isUserWithReplication(userId)) {
-			logger.info(`Using slave database for user: ${userId}`);
-			return this.dbSlave_;
-		}
-
-		return this.db_;
+	public get dbSlave(): DbConnection {
+		return this.dbSlave_;
 	}
 
 	protected get defaultFields(): string[] {

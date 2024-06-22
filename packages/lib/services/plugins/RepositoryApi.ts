@@ -77,6 +77,7 @@ export default class RepositoryApi {
 	private githubApiUrl_: string;
 	private contentBaseUrl_: string;
 	private isUsingDefaultContentUrl_ = true;
+	private lastInitializedTime_ = 0;
 
 	public constructor(baseUrl: string, tempDir: string, appInfo: AppInfo, installMode: InstallMode) {
 		this.installMode_ = installMode;
@@ -102,6 +103,15 @@ export default class RepositoryApi {
 
 		await this.loadManifests();
 		await this.loadRelease();
+
+		this.lastInitializedTime_ = Date.now();
+	}
+
+	public async reinitialize() {
+		// Refresh at most once per minute
+		if (Date.now() - this.lastInitializedTime_ > 5 * 60000) {
+			await this.initialize();
+		}
 	}
 
 	private async loadManifests() {

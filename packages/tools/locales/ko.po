@@ -347,7 +347,7 @@ msgstr "활성"
 msgid "Actual Size"
 msgstr "실제 크기"
 
-#: packages/app-mobile/components/screens/Note.tsx:1559
+#: packages/app-mobile/components/screens/Note.tsx:1568
 msgid "Add body"
 msgstr "내용 추가"
 
@@ -363,7 +363,7 @@ msgstr "태그 추가 및 제거:"
 msgid "Add recipient:"
 msgstr "받는 사람 추가:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1632
+#: packages/app-mobile/components/screens/Note.tsx:1641
 msgid "Add title"
 msgstr "제목 추가"
 
@@ -1740,7 +1740,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useEditPopup.ts:119
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:39
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:134
-#: packages/app-mobile/components/screens/Note.tsx:1598
+#: packages/app-mobile/components/screens/Note.tsx:1607
 #: packages/app-mobile/components/side-menu-content.tsx:233
 msgid "Edit"
 msgstr "편집"
@@ -2282,10 +2282,6 @@ msgstr "앞으로 가기"
 msgid "Found: %d."
 msgstr "발견됨: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector.tsx:45
-msgid "From a plugin"
-msgstr "모든 플러그인 보기"
-
 #: packages/app-mobile/utils/getVersionInfoText.ts:42
 msgid "FTS enabled: %d"
 msgstr "FTS 활성됨: %d"
@@ -2598,7 +2594,7 @@ msgstr ""
 "\n"
 "중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 
-#: packages/lib/services/synchronizer/syncInfoUtils.ts:461
+#: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
 msgstr "동기화하려면 애플리케이션을 %s+ 버전으로 업그레이드하세요"
 
@@ -3672,7 +3668,7 @@ msgstr "사용자당 최소 %d명의 사용자 수입니다."
 msgid "Permanently delete note"
 msgstr "선택된 노트를 영구적으로 삭제"
 
-#: packages/lib/models/Note.ts:928
+#: packages/lib/models/Note.ts:929
 msgid "Permanently delete note \"%s\"?"
 msgstr "\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
 
@@ -3686,7 +3682,7 @@ msgstr ""
 "이 노트북을 삭제할까요? 이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들"
 "도 함께 삭제됩니다."
 
-#: packages/lib/models/Note.ts:930
+#: packages/lib/models/Note.ts:931
 msgid "Permanently delete these %d notes?"
 msgstr "\"%d\"개의 노트 영구적으로 삭제하시겠습니까?"
 
@@ -3817,6 +3813,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
+#: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
 #: packages/lib/models/Setting.ts:2806
 msgid "Plugins"
 msgstr "플러그인"
@@ -6061,6 +6058,9 @@ msgstr "확대"
 #: packages/app-desktop/gui/MenuBar.tsx:840
 msgid "Zoom Out"
 msgstr "축소"
+
+#~ msgid "From a plugin"
+#~ msgstr "모든 플러그인 보기"
 
 #, fuzzy
 #~ msgid "Browse and install community plugins."
