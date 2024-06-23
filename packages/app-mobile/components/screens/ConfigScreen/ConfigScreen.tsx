@@ -834,7 +834,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (currentSectionName) {
 			screenHeadingText = Setting.sectionNameToLabel(currentSectionName);
-			showSearchButton = screenHeadingText !== _('Plugins');
+			showSearchButton = currentSectionName !== 'plugins';
 		}
 
 		return (
