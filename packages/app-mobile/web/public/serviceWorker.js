@@ -1,4 +1,6 @@
-// From https://github.com/gzuidhof/coi-serviceworker. Allows use of SQLite.
+// From https://github.com/gzuidhof/coi-serviceworker. This script enables the necessary
+// headers on GitHub pages to allow the use of SQLite. It has been modified to add support
+// for using the app while offline.
 //
 // MIT License
 //
@@ -21,6 +23,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
 
 /*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
 let coepCredentialless = false;
@@ -47,22 +50,21 @@ if (typeof window === 'undefined') {
 
     self.addEventListener("fetch", function (event) {
         const r = event.request;
-        if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
-            return;
-        }
+        const needsExtraHeaders = r.cache !== "only-if-cached" || r.mode === "same-origin";
 
-        const request = (coepCredentialless && r.mode === "no-cors")
+        const request = (coepCredentialless && r.mode === "no-cors" && !needsExtraHeaders)
             ? new Request(r, {
                 credentials: "omit",
             })
             : r;
-        event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    if (response.status === 0) {
-                        return response;
-                    }
+        
+        // Joplin modification: Always call event.respondWith to allow caching.
+        event.respondWith((async () => {
+            const cache = await caches.open('v1');
+            try {
+                let response = await fetch(request);
 
+                if (response.status !== 0 && needsExtraHeaders) {
                     const newHeaders = new Headers(response.headers);
                     newHeaders.set("Cross-Origin-Embedder-Policy",
                         coepCredentialless ? "credentialless" : "require-corp"
@@ -72,14 +74,23 @@ if (typeof window === 'undefined') {
                     }
                     newHeaders.set("Cross-Origin-Opener-Policy", "same-origin");
 
-                    return new Response(response.body, {
+                    response = new Response(response.body, {
                         status: response.status,
                         statusText: response.statusText,
                         headers: newHeaders,
                     });
-                })
-                .catch((e) => console.error(e))
-        );
+                }
+
+                // Joplin modification: Store the response in the cache to support offline mode
+                cache.put(request, response.clone());
+
+                return response;
+            } catch (error) {
+                console.error('ERROR', error);
+                // Joplin modification: Restore from the cache to support offline mode.
+                return cache.match(request);
+            }
+        })());
     });
 
 } else {
@@ -132,7 +143,9 @@ if (typeof window === 'undefined') {
 
         // If we're already coi: do nothing. Perhaps it's due to this script doing its job, or COOP/COEP are
         // already set from the origin server. Also if the browser has no notion of crossOriginIsolated, just give up here.
-        if (window.crossOriginIsolated !== false || !coi.shouldRegister()) return;
+        //
+        // Joplin modification: Always register the service worker.
+        // if (window.crossOriginIsolated !== false || !coi.shouldRegister()) return;
 
         if (!window.isSecureContext) {
             !coi.quiet && console.log("COOP/COEP Service Worker not registered, a secure context is required.");
