@@ -29,7 +29,7 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 						if (input.files.length > 0) {
 							for (const file of input.files) {
 								const path = `/tmp/${uuid.create()}`;
-								fsDriver.createReadOnlyVirtualFile(path, file);
+								await fsDriver.createReadOnlyVirtualFile(path, file);
 
 								result.push({
 									type: file.type,
@@ -39,10 +39,11 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 								});
 							}
 						}
-						input.remove();
 						resolve();
 					} catch (error) {
 						reject(error);
+					} finally {
+						input.remove();
 					}
 				};
 
