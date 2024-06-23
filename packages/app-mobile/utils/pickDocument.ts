@@ -21,6 +21,7 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 			await new Promise<void>((resolve, reject) => {
 				const input = document.createElement('input');
 				input.type = 'file';
+				input.style.display = 'none';
 				document.body.appendChild(input);
 
 				input.onchange = async () => {
@@ -45,6 +46,11 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 					} finally {
 						input.remove();
 					}
+				};
+
+				input.oncancel = () => {
+					input.remove();
+					resolve();
 				};
 
 				input.click();
