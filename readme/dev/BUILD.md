@@ -92,21 +92,6 @@ You can specify additional parameters when running the desktop or CLI applicatio
 
 The application was originally written in JavaScript, however it has slowly been migrated to [TypeScript](https://www.typescriptlang.org/). New classes and files should be written in TypeScript. All compiled files are generated next to the .ts or .tsx file. So for example, if there's a file "lib/MyClass.ts", there will be a generated "lib/MyClass.js" next to it. It is implemented that way as it requires minimal changes to integrate TypeScript in the existing JavaScript code base.
 
-## Hot reload
-
-If you'd like to auto-reload the desktop app on changes rather than having to quit and restart it manually each time, you can use [watchman-make](https://facebook.github.io/watchman/docs/watchman-make.html):
-
-```sh
-cd packages/app-desktop
-watchman-make -p '**/*.js' '**/*.jsx' --run "yarn start"
-```
-
-It still requires you to quit the application each time you want it to rebuild, but at least you don't have to re-run `"yarn start"` each time. Here's what the workflow loop looks like in practice:
-
-1. Edit and save files in your text editor.
-2. Switch to the Electron app and <kbd>cmd</kbd>+<kbd>Q</kbd> to quit it.
-3. `watchman` immediately restarts the app for you (whereas usually you'd have to switch back to the terminal, type `"yarn start"`, and hit enter).
-
 ## Troubleshooting
 
 Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.
