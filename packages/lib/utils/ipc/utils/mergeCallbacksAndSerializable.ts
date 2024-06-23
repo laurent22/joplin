@@ -68,7 +68,7 @@ function mergeCallbacksAndSerializable(
 					result.push(mergeCallbackAndSerializable(serializableObj[i], callbackObj[i]));
 				}
 				return result;
-			} else if (serializableObj instanceof Blob) {
+			} else if (serializableObj instanceof Blob || serializableObj instanceof ArrayBuffer) {
 				return serializableObj;
 			} else {
 				if (Array.isArray(callbackObj)) {

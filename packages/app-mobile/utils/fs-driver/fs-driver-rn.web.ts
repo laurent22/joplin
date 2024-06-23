@@ -1,23 +1,17 @@
-import { dirname, basename, resolve, normalize, join } from 'path';
-import FsDriverBase, { ReadDirStatsOptions, Stat } from '@joplin/lib/fs-driver-base';
+import { resolve, normalize } from 'path';
+import FsDriverBase, { ReadDirStatsOptions, RemoveOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
 import { Buffer } from 'buffer';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
-const md5 = require('md5');
+import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
+import type { WorkerApi } from './fs-driver-rn.web.worker';
+import WorkerMessenger from '@joplin/lib/utils/ipc/WorkerMessenger';
 
 type FileHandle = {
 	reader: ReadableStreamDefaultReader<Uint8Array>;
 	buffered: Buffer;
 	done: boolean;
-};
-
-const removeReservedWords = (fileName: string) => {
-	return fileName.replace(/(tmp)$/g, '_$1');
-};
-
-const restoreReservedWords = (fileName: string) => {
-	return fileName.replace(/_tmp$/g, 'tmp');
 };
 
 declare global {
@@ -27,88 +21,32 @@ declare global {
 	}
 }
 
-type RemoveOptions = { recursive?: boolean };
-
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Warn);
 
+interface LocalWorkerApi { }
+
 export default class FsDriverWeb extends FsDriverBase {
-	private fsRoot_: FileSystemDirectoryHandle;
-	private directoryHandleCache_: Map<string, FileSystemDirectoryHandle> = new Map();
-	private virtualFiles_: Map<string, File> = new Map();
-	private initPromise_: Promise<void>;
+	private messenger_: RemoteMessenger<LocalWorkerApi, WorkerApi>;
 
 	public constructor() {
 		super();
-		this.initPromise_ = (async () => {
-			try {
-				this.fsRoot_ = await (await navigator.storage.getDirectory()).getDirectoryHandle('joplin-web', { create: true });
-			} catch (error) {
-				logger.warn('Failed to create fs-driver:', error);
-				throw error;
-			}
-		})();
-	}
 
-	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle> {
-		await this.initPromise_;
-		path = resolve('/', path);
-
-		if (path === '/') {
-			return this.fsRoot_;
-		}
-
-		if (this.directoryHandleCache_.has(path)) {
-			logger.debug('pathToDirectoryHandle_ from cache for', path);
-			return this.directoryHandleCache_.get(path);
-		}
-		logger.debug('pathToDirectoryHandle_', 'path:', path, 'create:', create);
-
-		const parentDirs = dirname(path);
-		const parent = await this.pathToDirectoryHandle_(parentDirs, create);
-		const folderName = removeReservedWords(basename(path));
-
-		let handle: FileSystemDirectoryHandle;
-		try {
-			handle = await parent.getDirectoryHandle(folderName, { create });
-			this.directoryHandleCache_.set(path, handle);
-		} catch (error) {
-			// TODO: Handle this better
-			logger.warn('Error getting directory handle', error, 'for', path, 'create:', create);
-			handle = null;
-		}
-
-		return handle;
-	}
-
-	private async pathToFileHandle_(path: string, create = false): Promise<FileSystemFileHandle> {
-		await this.initPromise_;
-		logger.debug('pathToFileHandle_', 'path:', path, 'create:', create);
-		const parent = await this.pathToDirectoryHandle_(dirname(path));
-		if (!parent) {
-			throw new Error(`Can't get file handle for path ${path} -- parent doesn't exist (create: ${create}).`);
-		}
-
-		try {
-			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
-		} catch (error) {
-			logger.warn(error, 'getting file handle at path', path, create);
-			if (create) {
-				throw new Error(`${error} while getting file at path ${path}.`);
-			}
-
-			// TODO: This should return null when a file doesn't exist, but should
-			// also report errors in other cases.
-			return null;
-		}
-	}
-
-	private async openWriteStream_(path: string, options?: FileSystemCreateWritableOptions) {
-		const handle = await this.pathToFileHandle_(path, true);
-		const writer = (await handle.createWritable(options)).getWriter();
-		await writer.ready;
-		return { writer, handle };
+		const worker = new Worker(
+			// Webpack has special syntax for creating a worker. It requires use
+			// of import.meta.url, which is prohibited by TypeScript in CommonJS
+			// modules.
+			//
+			// See also https://github.com/webpack/webpack/discussions/13655#discussioncomment-8382152
+			//
+			// TODO: Remove this after migrating to ESM.
+			//
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Required for webpack build (see above)
+			// @ts-ignore
+			new URL('./fs-driver-rn.web.worker.ts', import.meta.url),
+		);
+		this.messenger_ = new WorkerMessenger('fs-worker', worker, {});
 	}
 
 	public override async writeFile(
@@ -117,20 +55,7 @@ export default class FsDriverWeb extends FsDriverBase {
 		encoding: BufferEncoding|'buffer' = 'base64',
 		options?: FileSystemCreateWritableOptions,
 	) {
-		logger.debug('writeFile', path);
-		const { writer } = await this.openWriteStream_(path, options);
-		if (encoding === 'buffer') {
-			await writer.write(data);
-		} else if (data instanceof ArrayBuffer) {
-			throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');
-		} else if (encoding === 'utf-8' || encoding === 'utf8') {
-			const encoder = new TextEncoder();
-			await writer.write(encoder.encode(data));
-		} else {
-			await writer.write(Buffer.from(data, encoding).buffer);
-		}
-		await writer.close();
-		logger.debug('writeFile done', path);
+		await this.messenger_.remoteApi.writeFile(path, data, encoding, options);
 	}
 
 	public override async appendFile(path: string, content: string, encoding?: BufferEncoding) {
@@ -138,40 +63,17 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async remove(path: string, { recursive = true }: RemoveOptions = {}) {
-		path = normalize(path);
-
-		this.directoryHandleCache_.clear();
-		const dirHandle = await this.pathToDirectoryHandle_(dirname(path));
-
-		if (dirHandle) {
-			await dirHandle.removeEntry(basename(path), { recursive });
-		} else {
-			console.warn(`remove: ENOENT: Parent directory of path ${JSON.stringify(path)} does not exist.`);
-		}
+		await this.messenger_.remoteApi.remove(path, { recursive });
 	}
 
 	public override async unlink(path: string) {
-		try {
-			return this.remove(path, { recursive: false });
-		} catch (error) {
-			// unlink should pass even if the item doesn't exist.
-			if (error.name !== 'NotFoundError') {
-				throw error;
-			}
-		}
+		return this.messenger_.remoteApi.unlink(path);
 	}
 
 	public async fileAtPath(path: string) {
 		path = normalize(path);
 
-		let file: File;
-		if (this.virtualFiles_.has(path)) {
-			file = this.virtualFiles_.get(path);
-		} else {
-			const handle = await this.pathToFileHandle_(path);
-			file = await handle.getFile();
-		}
-		return file;
+		return await this.messenger_.remoteApi.fileAtPath(path);
 	}
 
 	public async readFile(path: string, encoding: BufferEncoding = 'utf-8') {
@@ -231,79 +133,23 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public override async mkdir(path: string) {
 		logger.debug('mkdir', path);
-		await this.pathToDirectoryHandle_(path, true);
+		await this.messenger_.remoteApi.mkdir(path);
 	}
 
 	public override async copy(from: string, to: string) {
-		const fromFile = await this.fileAtPath(from);
-		const toHandle = await this.pathToFileHandle_(to, true);
-
-		const writer = (await toHandle.createWritable()).getWriter();
-		await writer.write(fromFile);
-		await writer.close();
+		await this.messenger_.remoteApi.copy(from, to);
 	}
 
-	public override async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<Stat> {
-		handle ??= await this.pathToDirectoryHandle_(path) || await this.pathToFileHandle_(path);
-		const virtualFile = this.virtualFiles_.get(normalize(path));
-		if (!handle && !virtualFile) return null;
-
-		const size = await (async () => {
-			if (handle.kind === 'directory') return 0;
-			return (virtualFile ?? await handle.getFile()).size;
-		})();
-
-		return {
-			birthtime: new Date(0),
-			mtime: new Date(0),
-			path: normalize(path),
-			size,
-			isDirectory: () => handle.kind === 'directory',
-		};
+	public override async stat(path: string): Promise<Stat> {
+		return await this.messenger_.remoteApi.stat(path);
 	}
 
 	public override async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {
-		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
-			dirHandle ??= await this.pathToDirectoryHandle_(path);
-			if (!dirHandle) return null;
-
-			const result: Stat[] = [];
-			try {
-				for await (const [childInternalName, childHandle] of dirHandle.entries()) {
-					const childFileName = restoreReservedWords(childInternalName);
-					const childPath = join(path, childFileName);
-
-					const stat = await this.stat(childPath, childHandle);
-					result.push({ ...stat, path: join(basePath, childFileName) });
-
-					if (options.recursive && childHandle.kind === 'directory') {
-						const childBasePath = join(basePath, childFileName);
-						result.push(...await readDirStats(childBasePath, childPath, childHandle));
-					}
-				}
-			} catch (error) {
-				throw new Error(`readDirStats error: ${error}, path: ${basePath},${path}`);
-			}
-			return result;
-		};
-		return readDirStats('', path);
+		return await this.messenger_.remoteApi.readDirStats(path, options);
 	}
 
 	public override async exists(path: string) {
-		logger.debug('exists?', path);
-
-		if (this.virtualFiles_.has(normalize(path))) {
-			return true;
-		}
-
-		const parentDir = await this.pathToDirectoryHandle_(dirname(path));
-		if (!parentDir) return false;
-
-		const target = basename(path);
-		for await (const key of parentDir.keys()) {
-			if (key === target) return true;
-		}
-		return false;
+		return await this.messenger_.remoteApi.exists(path);
 	}
 
 	public resolve(...paths: string[]): string {
@@ -311,8 +157,7 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async md5File(path: string): Promise<string> {
-		const fileData = Buffer.from(await (await this.fileAtPath(path)).arrayBuffer());
-		return md5(fileData);
+		return await this.messenger_.remoteApi.md5File(path);
 	}
 
 	public override async tarExtract(options: TarExtractOptions) {
@@ -337,8 +182,8 @@ export default class FsDriverWeb extends FsDriverBase {
 		return '/app/';
 	}
 
-	public createReadOnlyVirtualFile(path: string, content: File) {
-		this.virtualFiles_.set(normalize(path), content);
+	public async createReadOnlyVirtualFile(path: string, content: File) {
+		return this.messenger_.remoteApi.createReadOnlyVirtualFile(path, content);
 	}
 }
 

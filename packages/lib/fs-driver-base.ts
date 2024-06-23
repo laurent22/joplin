@@ -16,6 +16,11 @@ export interface ReadDirStatsOptions {
 	recursive: boolean;
 }
 
+export interface RemoveOptions {
+	recursive?: boolean;
+}
+
+
 export default class FsDriverBase {
 
 	public async stat(_path: string): Promise<Stat> {
@@ -90,7 +95,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: exists');
 	}
 
-	public async remove(_path: string): Promise<void> {
+	public async remove(_path: string, _options: RemoveOptions = null): Promise<void> {
 		throw new Error('Not implemented: remove');
 	}
 

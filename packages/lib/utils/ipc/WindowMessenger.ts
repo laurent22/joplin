@@ -1,11 +1,16 @@
 import RemoteMessenger from './RemoteMessenger';
 import { SerializableData } from './types';
 
+// This allows using a WindowMessenger in a web worker, with window-like objects.
+const getLocalWindow = () => {
+	return typeof window !== 'undefined' ? window : self;
+};
+
 export default class WindowMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, private remoteWindow: Window, localApi: LocalInterface|null) {
 		super(channelId, localApi);
 
-		window.addEventListener('message', this.handleMessageEvent);
+		getLocalWindow().addEventListener('message', this.handleMessageEvent);
 
 		this.onReadyToReceive();
 	}
@@ -23,6 +28,6 @@ export default class WindowMessenger<LocalInterface, RemoteInterface> extends Re
 	}
 
 	protected override onClose(): void {
-		window.removeEventListener('message', this.handleMessageEvent);
+		getLocalWindow().removeEventListener('message', this.handleMessageEvent);
 	}
 }

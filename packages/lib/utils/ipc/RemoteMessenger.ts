@@ -470,7 +470,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			throw new Error('Message must be an object (is an array).');
 		}
 
-		if (message instanceof Blob) {
+		if (message instanceof Blob || message instanceof ArrayBuffer) {
 			throw new Error('Message must be a key-value pair object.');
 		}
 

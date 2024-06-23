@@ -694,6 +694,7 @@ packages/app-mobile/utils/debounce.js
 packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
+packages/app-mobile/utils/fs-driver/fs-driver-rn.web.worker.js
 packages/app-mobile/utils/fs-driver/runOnDeviceTests.js
 packages/app-mobile/utils/fs-driver/tarCreate.js
 packages/app-mobile/utils/fs-driver/tarExtract.test.js
@@ -1249,6 +1250,8 @@ packages/lib/utils/ipc/RemoteMessenger.test.js
 packages/lib/utils/ipc/RemoteMessenger.js
 packages/lib/utils/ipc/TestMessenger.js
 packages/lib/utils/ipc/WindowMessenger.js
+packages/lib/utils/ipc/WorkerMessenger.js
+packages/lib/utils/ipc/WorkerToWindowMessenger.js
 packages/lib/utils/ipc/types.js
 packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.test.js
 packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.js
