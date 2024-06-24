@@ -83,18 +83,22 @@ if (typeof window === 'undefined') {
 
 
                 // Joplin modification: Store the response in the cache to support offline mode
-                if (
-                    request.method === 'GET' &&
-                    response.ok &&
-                    (
-                        event.request.url?.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
-                        // Also cache HTML responses (e.g. for index.html, when requested with a directory
-                        // URL).
-                        (response.headers?.get('Content-Type') ?? '').startsWith('text/html')
-                    )
-                ) {
-                    console.log('Service worker: cached', event.request.url);
-                    cache.put(request, response.clone());
+                try {
+                    if (
+                        request.method === 'GET' &&
+                        response.ok &&
+                        (
+                            event.request.url?.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
+                            // Also cache HTML responses (e.g. for index.html, when requested with a directory
+                            // URL).
+                            (response.headers?.get('Content-Type') ?? '').startsWith('text/html')
+                        )
+                    ) {
+                        console.log('Service worker: cached', event.request.url);
+                        cache.put(request, response.clone());
+                    }
+                } catch (error) {
+                    console.warn('Failed to save ', event.request?.url, 'to the cache. Error: ', error);
                 }
 
                 return response;
