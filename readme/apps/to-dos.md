@@ -33,7 +33,7 @@ Joplin can be configured to show a notification for an incomplete to-dos. This i
 
 **On desktop:** Click the alarm button in the note toolbar, enter a new date, then click "OK".
 
-![](/images/to-dos/desktop-set-alarm.png)
+![](/images/desktop-set-alarm.png)
 
 **On mobile:** Open the note actions menu, then click "set alarm".
 
