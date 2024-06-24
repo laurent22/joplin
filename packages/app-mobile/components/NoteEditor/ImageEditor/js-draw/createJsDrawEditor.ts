@@ -149,11 +149,13 @@ export const createJsDrawEditor = (
 
 	const editorControl = {
 		editor,
-		loadImageOrTemplate: async (resourceUrl: string, templateData: string) => {
+		loadImageOrTemplate: async (resourceUrl: string, templateData: string, svgData: string|undefined) => {
 			// loadFromSVG shows its own loading message. Hide the original.
 			editor.hideLoadingWarning();
 
-			const svgData = await fetchInitialSvgData(resourceUrl);
+			// On mobile, fetching the SVG data is much faster than transferring it via IPC. However, fetch
+			// doesn't work when running in a web browser (virtual file system).
+			svgData ??= await fetchInitialSvgData(resourceUrl);
 
 			// Load from a template if no initial data
 			if (svgData === '') {

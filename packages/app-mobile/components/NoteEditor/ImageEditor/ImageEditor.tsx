@@ -6,7 +6,7 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, BackHandler } from 'react-native';
+import { Alert, BackHandler, Platform } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
@@ -274,8 +274,13 @@ const ImageEditor = (props: Props) => {
 			if (window.editorControl) {
 				const initialSVGPath = ${JSON.stringify(props.resourceFilename)};
 				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
+				const initialData = ${
+	// On mobile, it's faster to load the image within the WebView with an XMLHttpRequest.
+	// On web, however, this doesn't work, so the image needs to be loaded here.
+	(Platform.OS === 'web' || !props.resourceFilename) ? JSON.stringify(await shim.fsDriver().readFile(props.resourceFilename, 'utf-8')) : 'undefined'
+};
 
-				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData);
+				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData, initialData);
 			}
 		})();`);
 	}, [webviewRef, props.resourceFilename]);
