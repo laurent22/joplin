@@ -30,7 +30,7 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 					new MessageEvent(
 						'message',
 						{
-							data: JSON.parse(${JSON.stringify(message)}),
+							data: ${JSON.stringify(message)},
 							origin: 'react-native'
 						},
 					),
