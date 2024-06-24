@@ -520,7 +520,7 @@ export default class Resource extends BaseItem {
 				WHERE
 					ocr_status = ? AND
 					encryption_applied = 0 AND
-					mime IN ("${supportedMimeTypes.join('","')}")
+					mime IN ('${supportedMimeTypes.join('\',\'')}')
 			`,
 			params: [
 				ResourceOcrStatus.Todo,

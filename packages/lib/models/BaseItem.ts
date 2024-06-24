@@ -654,7 +654,7 @@ export default class BaseItem extends BaseModel {
 				whereSql = [`(encryption_applied = 1 OR (${blobDownloadedButEncryptedSql})`];
 			}
 
-			if (exclusions.length) whereSql.push(`id NOT IN ("${exclusions.join('","')}")`);
+			if (exclusions.length) whereSql.push(`id NOT IN ('${exclusions.join('\',\'')}')`);
 
 			const sql = sprintf(
 				`
