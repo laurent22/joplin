@@ -23,6 +23,11 @@
 				height: 100%;
 			}
 
+			body {
+				/* Align the bottom of the app's content with the top of any virtual keyboards. */
+				padding-bottom: env(keyboard-inset-height, 0px);
+			}
+
 			#root {
 				height: 100%;
 				display: flex;
