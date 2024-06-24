@@ -349,7 +349,12 @@ export default class Synchronizer {
 		const password = getMasterPassword(false);
 		if (!password) return localInfo;
 
-		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		try {
+			localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		} catch (error) {
+			// TODO: Remove after RSA encryption is supported on all platforms.
+			logger.error('Failed to generate RSA key pair', error);
+		}
 		return localInfo;
 	}
 
