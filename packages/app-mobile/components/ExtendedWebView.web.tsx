@@ -1,5 +1,3 @@
-// Wraps react-native-webview. Allows loading HTML directly.
-
 import * as React from 'react';
 
 import {
@@ -9,6 +7,9 @@ import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 
 import { StyleProp, View, ViewStyle } from 'react-native';
 import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
+
+// At present, react-native-webview doesn't support web. As such, ExtendedWebView.web.tsx
+// uses an iframe when running on web.
 
 export interface WebViewControl {
 	// Evaluate the given [script] in the context of the page.
