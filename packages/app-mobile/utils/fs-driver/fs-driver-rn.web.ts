@@ -52,7 +52,7 @@ export default class FsDriverWeb extends FsDriverBase {
 	public override async writeFile(
 		path: string,
 		data: string|ArrayBuffer,
-		encoding: BufferEncoding|'buffer' = 'base64',
+		encoding: BufferEncoding|'Buffer' = 'base64',
 		options?: FileSystemCreateWritableOptions,
 	) {
 		await this.messenger_.remoteApi.writeFile(path, data, encoding, options);
@@ -76,13 +76,15 @@ export default class FsDriverWeb extends FsDriverBase {
 		return await this.messenger_.remoteApi.fileAtPath(path);
 	}
 
-	public async readFile(path: string, encoding: BufferEncoding = 'utf-8') {
+	public async readFile(path: string, encoding: BufferEncoding|'Buffer' = 'utf-8') {
 		path = normalize(path);
 		logger.debug('readFile', path);
 		const file = await this.fileAtPath(path);
 
 		if (encoding === 'utf-8' || encoding === 'utf8') {
 			return await file.text();
+		} else if (encoding === 'Buffer') {
+			return Buffer.from(await file.arrayBuffer());
 		} else {
 			const buffer = Buffer.from(await file.arrayBuffer());
 			return buffer.toString(encoding);

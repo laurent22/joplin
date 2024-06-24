@@ -113,7 +113,7 @@ export class WorkerApi {
 	public async writeFile(
 		path: string,
 		data: string|ArrayBuffer,
-		encoding: BufferEncoding|'buffer' = 'base64',
+		encoding: BufferEncoding|'Buffer' = 'base64',
 		options?: WriteFileOptions,
 	) {
 		logger.debug('writeFile', path);
@@ -127,7 +127,7 @@ export class WorkerApi {
 			at = writer.getSize();
 		}
 
-		if (encoding === 'buffer') {
+		if (encoding === 'Buffer') {
 			writer.write(data as ArrayBuffer, { at });
 		} else if (data instanceof ArrayBuffer) {
 			throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');

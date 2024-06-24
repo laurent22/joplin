@@ -87,6 +87,11 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: close');
 	}
 
+	// Like .readFile, but returns a File object.
+	public async fileAtPath(_path: string): Promise<File> {
+		throw new Error('Not implemented: fileAtPath');
+	}
+
 	public async readDirStats(_path: string, _options: ReadDirStatsOptions = null): Promise<Stat[]> {
 		throw new Error('Not implemented: readDirStats');
 	}

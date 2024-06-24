@@ -97,7 +97,7 @@ const shimInit = () => {
 		}
 
 		const blob = await result.blob();
-		await fsDriver().writeFile(outputPath, await blob.arrayBuffer(), 'buffer');
+		await fsDriver().writeFile(outputPath, await blob.arrayBuffer(), 'Buffer');
 
 		return {
 			ok: result.ok,

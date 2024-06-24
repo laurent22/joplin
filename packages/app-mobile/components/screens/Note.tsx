@@ -6,10 +6,9 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-import { Size } from '@joplin/utils/types';
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
-import { Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, NativeSyntheticEvent } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
@@ -36,7 +35,6 @@ import { BaseScreenComponent } from '../base-screen';
 import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import shared, { BaseNoteScreenComponent } from '@joplin/lib/components/shared/note-screen-shared';
 import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
@@ -66,6 +64,8 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import CommandService from '@joplin/lib/services/CommandService';
 import * as urlUtils from '@joplin/lib/urlUtils';
 import { ResourceInfo } from '../NoteBodyViewer/hooks/useRerenderHandler';
+import getImageDimensions from '../../utils/image/getImageDimensions';
+import resizeImage from '../../utils/image/resizeImage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -685,24 +685,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		return result;
 	}
 
-	public async imageDimensions(uri: string): Promise<Size> {
-		return new Promise((resolve, reject) => {
-			Image.getSize(
-				uri,
-				(width: number, height: number) => {
-					resolve({ width: width, height: height });
-				},
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(error: any) => {
-					reject(error);
-				},
-			);
-		});
-	}
-
 	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
 		const maxSize = Resource.IMAGE_MAX_DIMENSION;
-		const dimensions = await this.imageDimensions(localFilePath);
+		const dimensions = await getImageDimensions(localFilePath);
 		reg.logger().info('Original dimensions ', dimensions);
 
 		const saveOriginalImage = async () => {
@@ -714,30 +699,14 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			dimensions.height = maxSize;
 			reg.logger().info('New dimensions ', dimensions);
 
-			const format = mimeType === 'image/png' ? 'PNG' : 'JPEG';
-			reg.logger().info(`Resizing image ${localFilePath}`);
-			const resizedImage = await ImageResizer.createResizedImage(
-				localFilePath,
-				dimensions.width,
-				dimensions.height,
-				format,
-				85, // quality
-				undefined, // rotation
-				undefined, // outputPath
-				true, // keep metadata
-			);
-
-			const resizedImagePath = resizedImage.uri;
-			reg.logger().info('Resized image ', resizedImagePath);
-			reg.logger().info(`Moving ${resizedImagePath} => ${targetPath}`);
-
-			await shim.fsDriver().copy(resizedImagePath, targetPath);
-
-			try {
-				await shim.fsDriver().unlink(resizedImagePath);
-			} catch (error) {
-				reg.logger().warn('Error when unlinking cached file: ', error);
-			}
+			await resizeImage({
+				inputPath: localFilePath,
+				outputPath: targetPath,
+				maxWidth: dimensions.width,
+				maxHeight: dimensions.height,
+				quality: 85,
+				format: mimeType === 'image/png' ? 'PNG' : 'JPEG',
+			});
 			return true;
 		};
 
