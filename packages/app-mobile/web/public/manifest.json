@@ -29,6 +29,20 @@
             "sizes": "64x64"
         }
     ],
+    "screenshots": [
+        {
+            "src": "./screenshots/tall.png",
+            "sizes": "1442x3090",
+            "form_factor": "narrow",
+            "label": "Welcome to Joplin note open in Joplin on a small-screened device"
+        },
+        {
+            "src": "./screenshots/wide.png",
+            "sizes": "2476x2022",
+            "form_factor": "wide",
+            "label": "Welcome to Joplin note open in Joplin on a wide-screened device"
+        }
+    ],
     "start_url": "./",
     "background_color": "#3333a5",
     "display": "standalone"
