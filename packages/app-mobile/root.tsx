@@ -28,8 +28,8 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
+const { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } = require('react-native');
+import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -939,7 +939,16 @@ class AppComponent extends React.Component {
 				reg.logger().info(error);
 			}
 
-			await initialize(this.props.dispatch);
+			try {
+				await initialize(this.props.dispatch);
+			} catch (error) {
+				alert(`Something went wrong while starting the application: ${error}`);
+				this.props.dispatch({
+					type: 'APP_STATE_SET',
+					state: 'error',
+				});
+				throw error;
+			}
 
 			const loadedSensorInfo = await sensorInfo();
 			this.setState({ sensorInfo: loadedSensorInfo });
@@ -1166,7 +1175,21 @@ class AppComponent extends React.Component {
 	};
 
 	public render() {
-		if (this.props.appState !== 'ready') return null;
+		if (this.props.appState !== 'ready') {
+			if (this.props.appState === 'error') {
+				return <Text>Startup error.</Text>;
+			}
+
+			// Loading can take a particularly long time for the first time on web -- show progress.
+			if (Platform.OS === 'web') {
+				return <View>
+					<Text>{_('Loading...')}</Text>
+					<ActivityIndicator />
+				</View>;
+			} else {
+				return null;
+			}
+		}
 		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent: ReactNode = null;
