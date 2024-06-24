@@ -25,6 +25,7 @@ class SideMenuContentNoteComponent extends Component {
 			},
 			button: {
 				flex: 1,
+				flexBasis: 'auto',
 				flexDirection: 'row',
 				height: 36,
 				alignItems: 'center',
