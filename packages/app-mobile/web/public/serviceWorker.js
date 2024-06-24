@@ -81,12 +81,25 @@ if (typeof window === 'undefined') {
                     });
                 }
 
+
                 // Joplin modification: Store the response in the cache to support offline mode
-                cache.put(request, response.clone());
+                if (
+                    request.method === 'GET' &&
+                    response.ok &&
+                    (
+                        event.request.url?.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
+                        // Also cache HTML responses (e.g. for index.html, when requested with a directory
+                        // URL).
+                        (response.headers?.get('Content-Type') ?? '').startsWith('text/html')
+                    )
+                ) {
+                    console.log('Service worker: cached', event.request.url);
+                    cache.put(request, response.clone());
+                }
 
                 return response;
             } catch (error) {
-                console.error('ERROR', error);
+                console.error('ERROR requesting', event.request.url, ':', error);
                 // Joplin modification: Restore from the cache to support offline mode.
                 return cache.match(request);
             }
