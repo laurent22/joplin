@@ -14,7 +14,7 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
-import Setting, { Env } from '@joplin/lib/models/Setting';
+import Setting, { AppType, Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
@@ -505,9 +505,9 @@ async function initialize(dispatch: Function) {
 		value: profileConfig,
 	});
 
-	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+	Setting.setConstant('env', __DEV__ ? Env.Dev : Env.Prod);
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
-	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('appType', AppType.Mobile);
 	Setting.setConstant('tempDir', await initializeTempDir());
 	Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
@@ -619,7 +619,7 @@ async function initialize(dispatch: Function) {
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
 			Setting.skipDefaultMigrations();
-			Setting.setValue('firstStart', 0);
+			Setting.setValue('firstStart', false);
 		} else {
 			Setting.applyDefaultMigrations();
 		}
@@ -788,7 +788,7 @@ async function initialize(dispatch: Function) {
 	const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
 
 	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
-	Setting.setValue('plugins.states', pluginService.serializePluginSettings(updatedSettings));
+	Setting.setValue('plugins.states', updatedSettings);
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
