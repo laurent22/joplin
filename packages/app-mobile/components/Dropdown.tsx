@@ -216,6 +216,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
 						importantForAccessibility='no-hide-descendants'
+						aria-hidden={true}
 						onPress={this.onCloseList}
 						style={backgroundCloseButtonStyle}
 					>

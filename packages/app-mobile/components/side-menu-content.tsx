@@ -590,6 +590,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 			accessibilityElementsHidden={isHidden}
 			importantForAccessibility={isHidden ? 'no-hide-descendants' : undefined}
+			aria-hidden={isHidden}
 		>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>

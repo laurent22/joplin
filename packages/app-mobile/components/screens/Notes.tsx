@@ -274,6 +274,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 
 				accessibilityElementsHidden={accessibilityHidden}
 				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+				aria-hidden={accessibilityHidden}
 			>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />

@@ -130,6 +130,8 @@ const IconButton = (props: ButtonProps) => {
 				importantForAccessibility='no-hide-descendants'
 				// On iOS:
 				accessibilityElementsHidden={true}
+				// Web
+				aria-hidden={true}
 
 				// Position the menu beneath the button so the tooltip appears in the
 				// correct location.
