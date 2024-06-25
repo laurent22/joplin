@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useMemo, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, Platform, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
 
 interface PromptButton {
@@ -46,31 +46,39 @@ const DialogManager: React.FC<Props> = props => {
 	const dialogControl: DialogControl = useMemo(() => {
 		return {
 			prompt: (title: string, message: string, buttons: PromptButton[], options?: PromptOptions) => {
-				const onDismiss = () => {
-					setPromptDialogs(dialogs => dialogs.filter(d => d !== dialog));
-				};
+				if (Platform.OS === 'ios') {
+					// Alert.alert provides a more native style on iOS.
+					Alert.alert(title, message, buttons, options);
 
-				const cancelable = options?.cancelable ?? true;
-				const dialog: PromptDialogData = {
-					key: `dialog-${nextDialogIdRef.current++}`,
-					title,
-					message,
-					buttons: buttons.map(button => ({
-						...button,
-						onPress: () => {
-							onDismiss();
-							button.onPress?.();
-						},
-					})),
-					onDismiss: cancelable ? onDismiss : null,
-				};
+					// Alert.alert doesn't work on web, and provides a more native dialog style
+					// on Android.
+				} else {
+					const onDismiss = () => {
+						setPromptDialogs(dialogs => dialogs.filter(d => d !== dialog));
+					};
 
-				setPromptDialogs(dialogs => {
-					return [
-						...dialogs,
-						dialog,
-					];
-				});
+					const cancelable = options?.cancelable ?? true;
+					const dialog: PromptDialogData = {
+						key: `dialog-${nextDialogIdRef.current++}`,
+						title,
+						message,
+						buttons: buttons.map(button => ({
+							...button,
+							onPress: () => {
+								onDismiss();
+								button.onPress?.();
+							},
+						})),
+						onDismiss: cancelable ? onDismiss : null,
+					};
+
+					setPromptDialogs(dialogs => {
+						return [
+							...dialogs,
+							dialog,
+						];
+					});
+				}
 			},
 		};
 	}, []);
