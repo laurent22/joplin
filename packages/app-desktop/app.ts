@@ -72,6 +72,7 @@ import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesser
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
+import { PluginResourceMonitor } from './services/plugins/PluginResourceMonitor';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -87,6 +88,7 @@ class Application extends BaseApplication {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
+	private initPluginResourceMonitorDone_ = false;
 	private ocrService_: OcrService;
 
 	public constructor() {
@@ -339,6 +341,16 @@ class Application extends BaseApplication {
 				void afterDefaultPluginsLoaded(service.plugins, getDefaultPluginsInfo(), pluginSettings);
 			}
 		}, 500);
+	}
+
+	public async initPluginResourceMonitor() {
+		if (this.initPluginResourceMonitorDone_) return;
+		this.initPluginResourceMonitorDone_ = true;
+		try {
+			await PluginResourceMonitor.instance().start();
+		} catch (error) {
+			this.logger().error('There was an error starting the plugin manager', error);
+		}
 	}
 
 	public crashDetectionHandler() {
@@ -632,6 +644,8 @@ class Application extends BaseApplication {
 		});
 
 		await this.initPluginService();
+
+		await this.initPluginResourceMonitor();
 
 		this.setupContextMenu();
 

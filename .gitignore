@@ -453,6 +453,7 @@ packages/app-desktop/services/commands/stateToWhenClauseContext.js
 packages/app-desktop/services/commands/types.js
 packages/app-desktop/services/plugins/BackOffHandler.js
 packages/app-desktop/services/plugins/PlatformImplementation.js
+packages/app-desktop/services/plugins/PluginResourceMonitor.js
 packages/app-desktop/services/plugins/PluginRunner.js
 packages/app-desktop/services/plugins/UserWebview.js
 packages/app-desktop/services/plugins/UserWebviewDialog.js
@@ -465,7 +466,6 @@ packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
-packages/app-desktop/services/plugins/resource-monitor/runner.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
