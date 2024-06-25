@@ -112,7 +112,10 @@ const PluginStates: React.FC<Props> = props => {
 				<Button onPress={reloadPluginRepo}>{_('Retry')}</Button>
 			</View>;
 		} else {
-			return <ProgressBar accessibilityLabel={_('Loading...')} indeterminate={true} />;
+			// The progress bar needs to be wrapped in a View to have the correct height on web.
+			return <View>
+				<ProgressBar accessibilityLabel={_('Loading...')} indeterminate={true} />
+			</View>;
 		}
 	};
 
