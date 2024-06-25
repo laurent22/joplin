@@ -1,4 +1,4 @@
-import type { ReadDirStatsOptions, RemoveOptions, Stat } from '@joplin/lib/fs-driver-base';
+import type { ReadDirStatsOptions, RemoveOptions } from '@joplin/lib/fs-driver-base';
 import WorkerToWindowMessenger from '@joplin/lib/utils/ipc/WorkerToWindowMessenger';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { resolve, dirname, basename, normalize, join } from 'path';
@@ -38,6 +38,14 @@ type WriteFileOptions = { keepExistingData?: boolean };
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Info);
+
+export interface TransferableStat {
+	birthtime: number;
+	mtime: number;
+	path: string;
+	size: number;
+	isDirectory: boolean;
+}
 
 // eslint-disable-next-line import/prefer-default-export -- This file is an entrypoint -- WorkerApi should only be used as a type.
 export class WorkerApi {
@@ -208,7 +216,7 @@ export class WorkerApi {
 		writer.close();
 	}
 
-	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<Stat> {
+	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat> {
 		handle ??= await this.pathToDirectoryHandle_(path) || await this.pathToFileHandle_(path);
 		const virtualFile = this.virtualFiles_.get(normalize(path));
 		if (!handle && !virtualFile) return null;
@@ -219,20 +227,20 @@ export class WorkerApi {
 		})();
 
 		return {
-			birthtime: new Date(0),
-			mtime: new Date(0),
+			birthtime: 0,
+			mtime: 0,
 			path: normalize(path),
 			size,
-			isDirectory: () => handle.kind === 'directory',
+			isDirectory: handle.kind === 'directory',
 		};
 	}
 
-	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {
+	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<TransferableStat[]> {
 		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
 			dirHandle ??= await this.pathToDirectoryHandle_(path);
 			if (!dirHandle) return null;
 
-			const result: Stat[] = [];
+			const result: TransferableStat[] = [];
 			try {
 				for await (const [childInternalName, childHandle] of dirHandle.entries()) {
 					const childFileName = restoreReservedWords(childInternalName);

@@ -5,7 +5,7 @@ import tarCreate, { TarCreateOptions } from './tarCreate';
 import { Buffer } from 'buffer';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
-import type { WorkerApi } from './fs-driver-rn.web.worker';
+import type { TransferableStat, WorkerApi } from './fs-driver-rn.web.worker';
 import WorkerMessenger from '@joplin/lib/utils/ipc/WorkerMessenger';
 
 type FileHandle = {
@@ -26,6 +26,16 @@ logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Warn);
 
 interface LocalWorkerApi { }
+
+const transferableStatToStat = (stat: TransferableStat): Stat => {
+	return {
+		mtime: new Date(stat.mtime),
+		birthtime: new Date(stat.birthtime),
+		size: stat.size,
+		path: stat.path,
+		isDirectory: () => stat.isDirectory,
+	};
+};
 
 export default class FsDriverWeb extends FsDriverBase {
 	private messenger_: RemoteMessenger<LocalWorkerApi, WorkerApi>;
@@ -143,11 +153,11 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async stat(path: string): Promise<Stat> {
-		return await this.messenger_.remoteApi.stat(path);
+		return transferableStatToStat(await this.messenger_.remoteApi.stat(path));
 	}
 
 	public override async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {
-		return await this.messenger_.remoteApi.readDirStats(path, options);
+		return (await this.messenger_.remoteApi.readDirStats(path, options)).map(transferableStatToStat);
 	}
 
 	public override async exists(path: string) {
