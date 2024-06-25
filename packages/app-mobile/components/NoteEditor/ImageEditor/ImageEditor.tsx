@@ -268,17 +268,26 @@ const ImageEditor = (props: Props) => {
 	}, [css]);
 
 	const onReadyToLoadData = useCallback(async () => {
+		const getInitialInjectedData = async () => {
+			// On mobile, it's faster to load the image within the WebView with an XMLHttpRequest.
+			// In this case, the image is loaded elsewhere.
+			if (Platform.OS !== 'web') {
+				return undefined;
+			}
+
+			// On web, however, this doesn't work, so the image needs to be loaded here.
+			if (!props.resourceFilename) {
+				return '';
+			}
+			return await shim.fsDriver().readFile(props.resourceFilename, 'utf-8');
+		};
 		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
 		webviewRef.current.injectJS(`(async () => {
 			if (window.editorControl) {
 				const initialSVGPath = ${JSON.stringify(props.resourceFilename)};
 				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
-				const initialData = ${
-	// On mobile, it's faster to load the image within the WebView with an XMLHttpRequest.
-	// On web, however, this doesn't work, so the image needs to be loaded here.
-	(Platform.OS === 'web' || !props.resourceFilename) ? JSON.stringify(await shim.fsDriver().readFile(props.resourceFilename, 'utf-8')) : 'undefined'
-};
+				const initialData = ${JSON.stringify(await getInitialInjectedData())};
 
 				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData, initialData);
 			}
