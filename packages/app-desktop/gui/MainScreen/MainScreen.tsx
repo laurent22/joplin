@@ -97,6 +97,8 @@ interface Props {
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
+	showInvalidJoplinCloudCredential: boolean;
+	showJoplinCloudIsOffline: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -592,6 +594,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewJoplinCloudLoginScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'JoplinCloudLogin',
+			});
+		};
+
 		const onViewSyncSettingsScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -684,6 +693,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+		} else if (this.props.showJoplinCloudIsOffline) {
+			msg = this.renderNotificationMessage(_('Joplin Cloud is offline at the moment, try again later.'));
+		} else if (this.props.showInvalidJoplinCloudCredential) {
+			msg = this.renderNotificationMessage(
+				_('Your Joplin Cloud credentials are invalid., please re-authenticate.'),
+				_('Go to Joplin Cloud Login'),
+				onViewJoplinCloudLoginScreen,
+			);
 		}
 
 		return (
@@ -705,7 +722,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			props.isSafeMode ||
 			this.showShareInvitationNotification(props) ||
 			this.props.needApiAuth ||
-			!!this.props.mustUpgradeAppMessage;
+			!!this.props.mustUpgradeAppMessage ||
+			props.showJoplinCloudIsOffline ||
+			props.showInvalidJoplinCloudCredential;
 	}
 
 	public registerCommands() {
@@ -965,6 +984,8 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !state.settings['sync.10.isAuthenticated'],
+		showJoplinCloudIsOffline: state.settings['sync.target'] === 10 && state.settings['sync.10.isServerOffline'],
 	};
 };
 

@@ -61,6 +61,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			if (!sessionId) {
 				return false;
 			}
+			Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isServerOffline`, false);
 
 			const settings = Setting.toPlainObject();
 			const options = {
@@ -77,6 +78,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			return result.ok;
 		} catch (error) {
 			if (error.code === 403) return false;
+			if (error.code === 'ECONNREFUSED') {
+				Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isServerOffline`, true);
+				return false;
+			}
 			throw error;
 		}
 	}
