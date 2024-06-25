@@ -16,6 +16,8 @@ interface WrapperProps {
 	mustUpgradeAppMessage?: string;
 	shareInvitations?: ShareInvitation[];
 	processingShareInvitationResponse?: boolean;
+	showJoplinCloudIsOffline?: boolean;
+	showInvalidJoplinCloudCredential?: boolean;
 }
 
 const WarningBannerWrapper: React.FC<WrapperProps> = props => {
@@ -29,6 +31,8 @@ const WarningBannerWrapper: React.FC<WrapperProps> = props => {
 		mustUpgradeAppMessage={props.mustUpgradeAppMessage ?? ''}
 		shareInvitations={props.shareInvitations ?? []}
 		processingShareInvitationResponse={props.processingShareInvitationResponse ?? false}
+		showInvalidJoplinCloudCredential={props.showInvalidJoplinCloudCredential ?? false}
+		showJoplinCloudIsOffline={props.showJoplinCloudIsOffline ?? false}
 	/>;
 };
 

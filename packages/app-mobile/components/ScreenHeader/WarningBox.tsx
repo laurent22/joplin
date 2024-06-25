@@ -6,7 +6,7 @@ import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
 	themeId: number;
-	targetScreen: string;
+	targetScreen?: string;
 	message: string;
 	testID?: string;
 }
@@ -32,6 +32,7 @@ const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
 	const onPress = useCallback(() => {
+		if (!props.targetScreen) return;
 		void NavService.go(props.targetScreen);
 	}, [props.targetScreen]);
 

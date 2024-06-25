@@ -19,6 +19,7 @@ interface Props {
 	mustUpgradeAppMessage: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
+	showJoplinCloudIsOffline: boolean;
 	showInvalidJoplinCloudCredential: boolean;
 }
 
@@ -51,7 +52,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
-	if (props.showInvalidJoplinCloudCredential) {
+	if (props.showJoplinCloudIsOffline) {
+		warningComps.push(renderWarningBox(null, _('Joplin Cloud is offline at the moment, try again later.')));
+	} else if (props.showInvalidJoplinCloudCredential) {
 		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please re-authenticate.')));
 	}
 
@@ -89,6 +92,7 @@ export default connect((state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
+		showJoplinCloudIsOffline: state.settings['sync.target'] === 10 && state.settings['sync.10.isServerOffline'],
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !state.settings['sync.10.isAuthenticated'],
 	};
 })(WarningBannerComponent);
