@@ -6,10 +6,23 @@ require('./web/rnVectorIconsSetup.js');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Necessary until Root doesn't extend `any`
 AppRegistry.registerComponent('Joplin', () => Root as any);
 
+// Fill properties not yet available in the TypeScript DOM types.
+interface ExtendedNavigator extends Navigator {
+	virtualKeyboard?: { overlaysContent: boolean };
+}
+declare const navigator: ExtendedNavigator;
+
 // Should prevent the browser from auto-deleting background data.
 const requestPersistentStorage = async () => {
 	if (!(await navigator.storage.persisted())) {
 		await navigator.storage.persist();
+	}
+};
+
+const enableKeyboardPositioningApi = () => {
+	// This is needed to allow use of the env(keyboard-inset-height) CSS variable.
+	if ('virtualKeyboard' in navigator) {
+		navigator.virtualKeyboard.overlaysContent = true;
 	}
 };
 
@@ -23,6 +36,7 @@ addEventListener('DOMContentLoaded', () => {
 		);
 	}
 
+	enableKeyboardPositioningApi();
 	void requestPersistentStorage();
 
 	AppRegistry.runApplication('Joplin', {

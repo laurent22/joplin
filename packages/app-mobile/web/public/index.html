@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<!-- resizes-content: Decreases the size of Joplin's visible UI when the virtual keyboard is shown.. -->
-		<meta name="viewport" content="width=device-width,initial-scale=1.0,interactive-widget=resizes-content"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 		<link rel="manifest" href="./manifest.json"/>
 		<link rel="icon" href="./icons/icon-vector-large.svg"/>
 		<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
@@ -28,6 +27,10 @@
 			#root {
 				height: 100%;
 				display: flex;
+
+				/* Don't let the virtual keyboard cover content (e.g. the toolbar). */
+				box-sizing: border-box;
+				padding-bottom: env(keyboard-inset-height);
 			}
 
 			* {
