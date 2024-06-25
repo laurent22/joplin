@@ -19,10 +19,31 @@ const requestPersistentStorage = async () => {
 	}
 };
 
-const enableKeyboardPositioningApi = () => {
-	// This is needed to allow use of the env(keyboard-inset-height) CSS variable.
-	if ('virtualKeyboard' in navigator) {
-		navigator.virtualKeyboard.overlaysContent = true;
+const keepAppAboveKeyboard = () => {
+	let updateQueued = false;
+
+	// This prevents the virtual keyboard from covering content near the bottom of the screen
+	// (e.g. the markdown toolbar) on both iOS and Android. As of June 2024, this can't be
+	// done with the Virtual Keyboard API on iOS.
+	const handleViewportChange = () => {
+		if (updateQueued) return;
+
+		updateQueued = true;
+		requestAnimationFrame(() => {
+			updateQueued = false;
+
+			// The visual viewport changes as the user zooms in and out. Only adjust the body's height
+			// when the user's zoom level is 100%.
+			if (window.visualViewport.scale === 1) {
+				document.body.style.height = `${window.visualViewport.height}px`;
+			} else {
+				document.body.style.height = '';
+			}
+		});
+	};
+
+	if (window.visualViewport) {
+		window.visualViewport.addEventListener('resize', handleViewportChange);
 	}
 };
 
@@ -36,7 +57,7 @@ addEventListener('DOMContentLoaded', () => {
 		);
 	}
 
-	enableKeyboardPositioningApi();
+	keepAppAboveKeyboard();
 	void requestPersistentStorage();
 
 	AppRegistry.runApplication('Joplin', {
