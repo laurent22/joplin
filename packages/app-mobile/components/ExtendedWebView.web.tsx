@@ -90,7 +90,14 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		if (!containerRef) return () => {};
 
-		const { iframe } = makeSandboxedIframe(props.html, [
+		const headHtml = `
+			<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+			<meta charset="utf-8"/>
+			<!-- Open links in a new window by default -->
+			<base target="_blank"/>
+		`;
+
+		const scripts = [
 			`
 				window.ReactNativeWebView = {
 					postMessage: (message) => {
@@ -120,7 +127,17 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				});
 			`,
 			injectedJavaScriptRef.current,
-		]);
+		];
+
+		const { iframe } = makeSandboxedIframe({
+			bodyHtml: props.html,
+			headHtml: headHtml,
+			scripts,
+
+			// allow-popups-to-escape-sandbox: Allows PDF previews to work on target="_blank" links.
+			// allow-popups: Allows links to open in a new tab.
+			permissions: 'allow-scripts allow-modals allow-popups allow-popups-to-escape-sandbox',
+		});
 		containerRef.replaceChildren(iframe);
 		iframeRef.current = iframe;
 

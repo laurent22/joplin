@@ -1,12 +1,16 @@
 
-const makeSandboxedIframe = (
-	bodyHtml: string,
-	scripts: string[],
-) => {
+interface Options {
+	bodyHtml: string;
+	headHtml: string;
+	scripts: string[];
+	permissions?: string;
+}
+
+const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow-scripts allow-modals' }: Options) => {
 	const iframe = document.createElement('iframe');
 
 	// allow-modals: Allows confirm/alert dialogs.
-	iframe.setAttribute('sandbox', 'allow-scripts allow-modals');
+	iframe.setAttribute('sandbox', permissions);
 
 	iframe.addEventListener('load', async () => {
 		iframe.contentWindow.postMessage({
@@ -18,7 +22,7 @@ const makeSandboxedIframe = (
 	iframe.srcdoc = `
 		<!DOCTYPE html>
 		<html>
-		<head></head>
+		<head>${headHtml}</head>
 		<body>
 			<script>
 				"use strict";

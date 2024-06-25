@@ -50,7 +50,7 @@ export const runPlugin = (
 			${pluginScript}
 		})();
 	`;
-	const backgroundIframe = makeSandboxedIframe(bodyHtml, [initialJavaScript]).iframe;
+	const backgroundIframe = makeSandboxedIframe({ bodyHtml, headHtml: '', scripts: [initialJavaScript] }).iframe;
 
 	loadedPlugins[pluginId] = {
 		iframe: backgroundIframe,

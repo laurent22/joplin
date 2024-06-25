@@ -112,3 +112,4 @@ Inkscape
 Ionicon
 onready
 opfs
+popups
