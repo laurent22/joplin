@@ -5,8 +5,9 @@
 
 import * as dayjs from 'dayjs';
 
-// Separating this into a type import and a require seems to be necessary to support mobile
-// (import = require syntax doesn't work there).
+// Separating this into a type import and a require seems to be necessary to support mobile:
+// - import = require syntax doesn't work when bundling
+// - import * as dayJsRelativeTimeType causes a runtime error.
 import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
 const dayJsRelativeTime: typeof dayJsRelativeTimeType = require('dayjs/plugin/relativeTime');
 

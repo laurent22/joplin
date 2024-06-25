@@ -462,7 +462,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			}
 
 			const settingComp = this.settingToComponent(md.key, settings[md.key]);
-			const relatedText = [md.label?.() ?? '', md.description?.() ?? ''];
+			const relatedText = [md.label?.() ?? '', md.description?.(AppType.Mobile) ?? ''];
 			addSettingComponent(
 				settingComp,
 				relatedText,
@@ -817,8 +817,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		let screenHeadingText = _('Configuration');
+		let showSearchButton = true;
+
 		if (currentSectionName) {
 			screenHeadingText = Setting.sectionNameToLabel(currentSectionName);
+			showSearchButton = currentSectionName !== 'plugins';
 		}
 
 		return (
@@ -826,7 +829,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<ScreenHeader
 					title={screenHeadingText}
 					showSaveButton={true}
-					showSearchButton={true}
+					showSearchButton={showSearchButton}
 					showSideMenuButton={false}
 					saveButtonDisabled={!this.hasUnsavedChanges()}
 					onSaveButtonPress={this.saveButton_press}

@@ -687,7 +687,7 @@ export default class BaseApplication {
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
-		Setting.setConstant('env', initArgs.env);
+		Setting.setConstant('env', initArgs.env as Env);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -789,12 +789,12 @@ export default class BaseApplication {
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
-				Setting.setValue('showTrayIcon', 0);
-				Setting.setValue('autoUpdateEnabled', 0);
+				Setting.setValue('showTrayIcon', false);
+				Setting.setValue('autoUpdateEnabled', false);
 				Setting.setValue('sync.interval', 3600);
 			}
 
-			Setting.setValue('firstStart', 0);
+			Setting.setValue('firstStart', false);
 		} else {
 			Setting.applyDefaultMigrations();
 			Setting.applyUserSettingMigration();

@@ -1,11 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -286,13 +288,12 @@ msgid "Accept"
 msgstr "接受"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
-#, fuzzy
 msgid "Accepted invitations"
-msgstr "收件人接受了邀请"
+msgstr "已接受邀请"
 
 #: packages/lib/WebDavApi.js:451
 msgid "Access denied: Please check your username and password"
-msgstr "访问被拒绝：请检查您的用户名和密码"
+msgstr "拒绝访问：请检查您的用户名和密码"
 
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
@@ -304,15 +305,13 @@ msgstr "账号"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
-#, fuzzy
 msgid "Account information"
-msgstr "更多信息"
+msgstr "帐号信息"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
-#, fuzzy
 msgid "Account type"
-msgstr "账号"
+msgstr "帐号类型"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:106
 msgid "Action"
@@ -371,9 +370,8 @@ msgid "Advanced options"
 msgstr "高级选项"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:660
-#, fuzzy
 msgid "Advanced settings"
-msgstr "隐藏高级选项"
+msgstr "高级设置"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
@@ -455,7 +453,7 @@ msgstr "有更新可用，是否现在进行下载？"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:21
 msgid "Android API level: %d"
-msgstr ""
+msgstr "安卓应用程序接口（API）级别： %d"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -513,7 +511,7 @@ msgstr "添加照片"
 
 #: packages/app-mobile/components/screens/Note.tsx:1238
 msgid "Attach..."
-msgstr "添加附件..."
+msgstr "添加..."
 
 #: packages/app-cli/app/command-attach.ts:13
 msgid "Attaches the given file to the note."
@@ -603,7 +601,7 @@ msgstr "Basic"
 
 #: packages/app-mobile/components/BetaChip.tsx:37
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -782,7 +780,7 @@ msgstr "无法保存 %s “%s”，因为超过了允许的限制大小 (%s)。"
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr "无法保存 %s “%s”，因为超过了允许的限制大小 (%s)"
+msgstr "无法保存 %s “%s”，因为超过了此帐户允许的总上限 (%s)"
 
 #: packages/lib/services/share/ShareService.ts:337
 msgid ""
@@ -854,9 +852,8 @@ msgid "Clear alarm"
 msgstr "清除提醒"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
-#, fuzzy
 msgid "Clear search"
-msgstr "清除提醒"
+msgstr "清除搜索"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
@@ -899,8 +896,8 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
-"关闭应用程序，然后删除“%s”中的个人资料，然后再次启动应用程序。 请确保您已事先"
-"将所有笔记以 JEX 格式导出来创建备份。"
+"关闭应用程序，然后删除“%s”中您的配置文件，然后再次启动应用程序。 请确保您已事"
+"先将所有笔记以 JEX 格式导出来创建备份。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:687
@@ -909,11 +906,11 @@ msgstr "关闭窗口"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
-msgstr ""
+msgstr "单击 Cmd 打开"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:45
 msgid "Cmd-click to open: %s"
-msgstr ""
+msgstr "单击 Cmd 以打开：%s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:34
@@ -1042,9 +1039,8 @@ msgstr "冲突（附件）"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:256
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:470
-#, fuzzy
 msgid "Connect to Joplin Cloud"
-msgstr "Joplin Cloud"
+msgstr "连接至 Joplin Cloud"
 
 #: packages/lib/utils/joplinCloud/index.ts:208
 msgid "Consolidated billing"
@@ -1284,11 +1280,11 @@ msgstr "新建报告..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:41
 msgid "Ctrl-click to open"
-msgstr ""
+msgstr "按住 Ctrl 键打开"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:47
 msgid "Ctrl-click to open: %s"
-msgstr ""
+msgstr "按住 Ctrl 键打开：%s"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
@@ -1533,7 +1529,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
 msgid "Discard"
-msgstr "放弃更改"
+msgstr "放弃"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:102
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:275
@@ -2212,7 +2208,7 @@ msgstr "仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 
 #: packages/lib/models/Setting.ts:1694
 msgid "For example \"%s\""
-msgstr "例如\"%s\""
+msgstr "例如 \"%s\""
 
 #: packages/app-cli/app/command-help.ts:37
 msgid "For information on how to customise the shortcuts please visit %s"
@@ -2296,9 +2292,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
-#, fuzzy
 msgid "Go to Joplin Cloud profile"
-msgstr "Joplin Cloud 登录"
+msgstr "转到 Joplin Cloud 简介"
 
 #: packages/app-mobile/components/screens/Note.tsx:1113
 msgid "Go to source URL"
@@ -2627,9 +2622,8 @@ msgid "Installed"
 msgstr "已安装"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
-#, fuzzy
 msgid "Installed (%d):"
-msgstr "已安装"
+msgstr "已安装 (%d):"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:17
@@ -2661,9 +2655,8 @@ msgid "Invalid password"
 msgstr "无效密码"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:23
-#, fuzzy
 msgid "iOS version: %s"
-msgstr "新版本：%s"
+msgstr "iOS 版本：%s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:60
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:24
@@ -2853,9 +2846,8 @@ msgid "Leave it blank to download the language files from the default website"
 msgstr "留空可从默认网站下载语言文件"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave notebook"
-msgstr "离开笔记本..."
+msgstr "离开笔记本"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3155,9 +3147,8 @@ msgid "New"
 msgstr "新建"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "New invitations"
-msgstr "新版本：%s"
+msgstr "新邀请"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3240,7 +3231,7 @@ msgstr "没有 ID 为 %s 的项"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No new invitations"
-msgstr ""
+msgstr "没有新的邀请"
 
 #: packages/app-cli/app/app.ts:104
 msgid "No notebook has been specified."
@@ -3256,7 +3247,7 @@ msgstr "此处没有笔记。点击 “新建笔记” 创建。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
 msgid "No plugins are installed."
-msgstr ""
+msgstr "没有任何已安装的插件。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid "No resources!"
@@ -4023,7 +4014,7 @@ msgstr "报告问题"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr ""
+msgstr "报告任何有关插件的问题。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
@@ -4034,9 +4025,8 @@ msgid "Report system"
 msgstr "报告系统"
 
 #: packages/server/src/services/MustacheService.ts:137
-#, fuzzy
 msgid "Reports"
-msgstr "报告系统"
+msgstr "报告"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4099,7 +4089,7 @@ msgstr "已恢复的笔记"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:157
 msgid "Results (%d):"
-msgstr ""
+msgstr "结果（%d）："
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
@@ -4634,7 +4624,7 @@ msgstr "提交"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:36
 msgid "Subscript"
-msgstr "订阅"
+msgstr "下标"
 
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -5369,9 +5359,8 @@ msgid "Toggle external editing"
 msgstr "切换外部编辑"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "切换边栏"
+msgstr "切换菜单栏"
 
 #: packages/lib/models/Setting.ts:2844
 msgid "Toggle note history, keep notes for"
@@ -5537,9 +5526,8 @@ msgid "Update"
 msgstr "更新"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:77
-#, fuzzy
 msgid "Update available"
-msgstr "更新配置文件"
+msgstr "有更新可用"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -5770,12 +5758,11 @@ msgstr "网站与文档"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 msgid "WebView package: %s"
-msgstr ""
+msgstr "WebView 包：%s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:12
-#, fuzzy
 msgid "WebView version: %s"
-msgstr "新版本：%s"
+msgstr "WebView 版本：%s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
