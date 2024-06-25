@@ -1,6 +1,6 @@
 const React = require('react');
-import { useMemo, useEffect, useCallback } from 'react';
-const { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Alert, Image } = require('react-native');
+import { useMemo, useEffect, useCallback, useContext } from 'react';
+const { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import Folder from '@joplin/lib/models/Folder';
@@ -18,6 +18,7 @@ import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { DialogContext } from './DialogManager';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
@@ -145,6 +146,8 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
+	const dialogs = useContext(DialogContext);
+
 	const folder_longPress = async (folderOrAll: FolderEntity | string) => {
 		if (folderOrAll === 'all') return;
 
@@ -157,7 +160,7 @@ const SideMenuContentComponent = (props: Props) => {
 			menuItems.push({
 				text: _('Empty trash'),
 				onPress: async () => {
-					Alert.alert('', _('This will permanently delete all items in the trash. Continue?'), [
+					dialogs.prompt('', _('This will permanently delete all items in the trash. Continue?'), [
 						{
 							text: _('Empty trash'),
 							onPress: async () => {
@@ -207,7 +210,7 @@ const SideMenuContentComponent = (props: Props) => {
 		} else {
 			const generateFolderDeletion = () => {
 				const folderDeletion = (message: string) => {
-					Alert.alert('', message, [
+					dialogs.prompt('', message, [
 						{
 							text: _('OK'),
 							onPress: () => {
@@ -256,13 +259,10 @@ const SideMenuContentComponent = (props: Props) => {
 			style: 'cancel',
 		});
 
-		Alert.alert(
+		dialogs.prompt(
 			'',
 			_('Notebook: %s', folder.title),
 			menuItems,
-			{
-				cancelable: false,
-			},
 		);
 	};
 

@@ -163,7 +163,7 @@ export class WorkerApi {
 
 		const permission = { mode: 'readwrite' };
 		if (await saved.queryPermission(permission) !== 'granted' && await saved.requestPermission(permission) !== 'granted') {
-			throw new Error('Write access is needed.');
+			throw new Error('Missing read-write access. It might be necessary to share the folder with the application again.');
 		}
 
 		this.externalHandles_.set(path, saved);

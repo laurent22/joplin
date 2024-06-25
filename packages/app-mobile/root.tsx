@@ -132,6 +132,7 @@ import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 import DatabaseDriverReactNative from './utils/database-driver-react-native';
+import DialogManager from './components/DialogManager';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -1320,7 +1321,9 @@ class AppComponent extends React.Component {
 					},
 				},
 			}}>
-				{mainContent}
+				<DialogManager>
+					{mainContent}
+				</DialogManager>
 			</PaperProvider>
 		);
 	}

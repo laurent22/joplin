@@ -5,13 +5,14 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, BackHandler, Platform } from 'react-native';
+import { MutableRefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { BackHandler, Platform } from 'react-native';
 import { WebViewMessageEvent } from 'react-native-webview';
 import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
 import { clearAutosave, writeAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
 import VersionInfo from 'react-native-version-info';
+import { DialogContext } from '../../DialogManager';
 
 
 const logger = Logger.create('ImageEditor');
@@ -85,6 +86,8 @@ const ImageEditor = (props: Props) => {
 	const webviewRef: MutableRefObject<WebViewControl>|null = useRef(null);
 	const [imageChanged, setImageChanged] = useState(false);
 
+	const dialogs = useContext(DialogContext);
+
 	const onRequestCloseEditor = useCallback((promptIfUnsaved: boolean) => {
 		const discardChangesAndClose = async () => {
 			await clearAutosave();
@@ -96,7 +99,7 @@ const ImageEditor = (props: Props) => {
 			return true;
 		}
 
-		Alert.alert(
+		dialogs.prompt(
 			_('Save changes?'), _('This drawing may have unsaved changes.'), [
 				{
 					text: _('Discard changes'),
@@ -114,7 +117,7 @@ const ImageEditor = (props: Props) => {
 			],
 		);
 		return true;
-	}, [webviewRef, props.onExit, imageChanged]);
+	}, [webviewRef, dialogs, props.onExit, imageChanged]);
 
 	useEffect(() => {
 		const hardwareBackPressListener = () => {
