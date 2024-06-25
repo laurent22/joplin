@@ -1483,6 +1483,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			label: () => `${_('Use biometrics to secure access to the app')} (Beta)`,
 			description: () => 'Important: This is a beta feature and it is not compatible with certain devices. If the app no longer starts after enabling this or is very slow to start, please uninstall and reinstall the app.',
+			show: () => shim.mobilePlatform() !== 'web',
 			public: true,
 			appTypes: [AppType.Mobile],
 		},
@@ -1534,6 +1535,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			description: () => _('Leave it blank to download the language files from the default website'),
 			label: () => _('Voice typing language files (URL)'),
+			show: () => shim.mobilePlatform() === 'android',
 			section: 'note',
 		},
 
