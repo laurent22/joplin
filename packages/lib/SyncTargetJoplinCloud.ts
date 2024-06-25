@@ -16,6 +16,10 @@ interface FileApiOptions {
 	password(): string;
 }
 
+interface NetworkError extends Error {
+	code: string;
+}
+
 export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 
 	public static id() {
@@ -79,12 +83,20 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			return result.ok;
 		} catch (error) {
 			if (error.code === 403) return false;
-			if (error.code === 'ECONNREFUSED' || error.message === 'Network request failed') {
+			if (this.isServerOffline(error)) {
 				Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isServerOffline`, true);
 				return false;
 			}
 			throw error;
 		}
+	}
+
+	private isServerOffline(error: NetworkError) {
+		// Node.js/Electron
+		if (error.code === 'ECONNREFUSED') return true;
+		// React Native error does not have a code
+		if (error.message === 'Network request failed') return true;
+		return false;
 	}
 
 	public authRouteName() {
