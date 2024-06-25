@@ -271,17 +271,18 @@ export class WorkerApi {
 		if (!handle && !virtualFile) return null;
 		logger.debug('has handle');
 
-		const size = await (async () => {
-			if (handle.kind === 'directory') return 0;
-			return (virtualFile ?? await handle.getFile()).size;
+		const file = await (async () => {
+			if (handle.kind === 'directory') return null;
+			return virtualFile ?? await handle.getFile();
 		})();
+		const lastModifiedTime = file?.lastModified ?? 0;
 
 		return {
-			birthtime: 0,
-			mtime: 0,
+			birthtime: lastModifiedTime,
+			mtime: lastModifiedTime,
 			// Can't normalize protocol URIs (e.g. external:///foo)
 			path: path.match(/^[a-z]+:/) ? path : normalize(path),
-			size,
+			size: file?.size ?? 0,
 			isDirectory: handle.kind === 'directory',
 		};
 	}
