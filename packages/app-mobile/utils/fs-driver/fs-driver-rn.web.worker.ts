@@ -23,6 +23,11 @@ declare global {
 		flush(): void;
 	}
 
+	interface FileSystemHandle {
+		requestPermission(permission: { mode: string }): Promise<'granted'|string>;
+		queryPermission(permission: { mode: string }): Promise<'granted'|string>;
+	}
+
 	interface FileSystemFileHandle {
 		createSyncAccessHandle(): Promise<FileSystemSyncAccessHandle>;
 	}
@@ -30,7 +35,6 @@ declare global {
 	interface FileSystemDirectoryHandle {
 		entries(): AsyncIterable<[string, FileSystemFileHandle|FileSystemDirectoryHandle]>;
 		keys(): AsyncIterable<string>;
-		requestPermission(permission: { mode: string }): Promise<'granted'|string>;
 	}
 }
 
@@ -49,11 +53,81 @@ export interface TransferableStat {
 }
 
 const isNotFoundError = (error: DOMException) => error.name === 'NotFoundError';
-const externalDirectoryPrefix = '/mount/';
+const externalDirectoryPrefix = '/external/';
+
+type AccessHandleDatabaseControl = {
+	clearExternalHandle(id: string): Promise<void>;
+	addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<void>;
+	queryExternalHandle(path: string): Promise<FileSystemDirectoryHandle|FileSystemFileHandle|null>;
+};
+
+// Allows saving and restoring file system access handles. These handles are browser-serializable, so can
+// be written to indexedDB. Here, indexedDB is used, rather than localStorage or SQLite because:
+// - localStorage only accepts string values (see https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem)
+// - SQLite stores objects in a custom database, and so almost certainly can't store file system handles.
+const createAccessHandleDatabase = async (): Promise<AccessHandleDatabaseControl> => {
+	const db = await new Promise<IDBDatabase>((resolve, reject) => {
+		const request = indexedDB.open('fs-storage', 1);
+		request.onsuccess = () => {
+			resolve(request.result as IDBDatabase);
+		};
+
+		request.onerror = (event) => {
+			reject(new Error(`Failed to open database: ${event}`));
+		};
+
+		request.onupgradeneeded = (event) => {
+			if (!('result' in event.target)) {
+				reject(new Error('Invalid upgrade event type'));
+				return;
+			}
+			const db = event.target.result as IDBDatabase;
+			const store = db.createObjectStore('external-handles', { keyPath: 'id' });
+			store.createIndex('id', 'id', { unique: true });
+			store.createIndex('path', 'path');
+		};
+	});
+
+	return {
+		clearExternalHandle(id: string) {
+			return new Promise<void>((resolve, reject) => {
+				const request = db.transaction(['external-handles'], 'readwrite')
+					.objectStore('external-handles')
+					.delete(`id:${id}`);
+
+				request.onsuccess = () => resolve();
+				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
+			});
+		},
+		addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle) {
+			return new Promise<void>((resolve, reject) => {
+				const request = db.transaction(['external-handles'], 'readwrite')
+					.objectStore('external-handles')
+					.put({ path, id: `id:${id}`, handle });
+
+				request.onsuccess = () => resolve();
+				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
+			});
+		},
+		queryExternalHandle(path: string) {
+			return new Promise<FileSystemDirectoryHandle|FileSystemFileHandle>((resolve, reject) => {
+				const request = db.transaction(['external-handles'], 'readonly')
+					.objectStore('external-handles')
+					.index('path')
+					.get(path);
+
+				request.onsuccess = () => resolve(request.result?.handle ?? null);
+				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
+			});
+		},
+	};
+};
 
 // eslint-disable-next-line import/prefer-default-export -- This file is an entrypoint -- WorkerApi should only be used as a type.
 export class WorkerApi {
 	private fsRoot_: FileSystemDirectoryHandle;
+	private accessHandleDatabase_: AccessHandleDatabaseControl;
+
 	private directoryHandleCache_: Map<string, FileSystemDirectoryHandle> = new Map();
 	private virtualFiles_: Map<string, File> = new Map();
 	private externalHandles_: Map<string, FileSystemFileHandle|FileSystemDirectoryHandle> = new Map();
@@ -63,11 +137,37 @@ export class WorkerApi {
 		this.initPromise_ = (async () => {
 			try {
 				this.fsRoot_ = await (await navigator.storage.getDirectory()).getDirectoryHandle('joplin-web', { create: true });
+				this.accessHandleDatabase_ = await createAccessHandleDatabase();
 			} catch (error) {
 				logger.warn('Failed to create fs-driver:', error);
 				throw error;
 			}
 		})();
+	}
+
+	private async getExternalHandle_(path: string) {
+		if (!path.startsWith(externalDirectoryPrefix)) {
+			return null;
+		}
+
+		if (this.externalHandles_.has(path)) {
+			return this.externalHandles_.get(path);
+		}
+
+		const saved = await this.accessHandleDatabase_.queryExternalHandle(path);
+		// At present, not all browsers support .queryPermission and .requestPermission on
+		// saved file handles.
+		if (!saved || !('queryPermission' in saved)) {
+			return null;
+		}
+
+		const permission = { mode: 'readwrite' };
+		if (await saved.queryPermission(permission) !== 'granted' && await saved.requestPermission(permission) !== 'granted') {
+			throw new Error('Write access is needed.');
+		}
+
+		this.externalHandles_.set(path, saved);
+		return saved;
 	}
 
 	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle|null> {
@@ -78,11 +178,11 @@ export class WorkerApi {
 			return this.fsRoot_;
 		} else if (path.startsWith(externalDirectoryPrefix)) {
 			if (path === externalDirectoryPrefix) {
-				// /mount/ is virtual, it doesn't exist.
+				// /external/ is virtual, it doesn't exist.
 				return null;
 			}
 
-			const handle = this.externalHandles_.get(path);
+			const handle = await this.getExternalHandle_(path);
 			if (handle?.kind === 'directory') {
 				return handle;
 			}
@@ -116,7 +216,7 @@ export class WorkerApi {
 		path = resolve('/', path);
 
 		if (this.externalHandles_.has(path)) {
-			const handle = this.externalHandles_.get(path);
+			const handle = await this.externalHandles_.get(path);
 			if (handle.kind !== 'file') {
 				throw new Error(`Not a file: ${path}`);
 			}
@@ -341,13 +441,17 @@ export class WorkerApi {
 		this.virtualFiles_.set(normalize(path), content);
 	}
 
-	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, _id: string) {
+	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string) {
 		if (await handle.requestPermission({ mode: 'readwrite' }) !== 'granted') {
 			throw new Error('Write access is needed.');
 		}
 
-		const mountPath = resolve('/mount/', crypto.randomUUID().replace(/-/g, ''));
+		const mountPath = resolve(externalDirectoryPrefix, crypto.randomUUID().replace(/-/g, ''));
 		this.externalHandles_.set(mountPath, handle);
+
+		await this.accessHandleDatabase_.clearExternalHandle(id);
+		await this.accessHandleDatabase_.addExternalHandle(mountPath, id, handle);
+
 		return mountPath;
 	}
 }
