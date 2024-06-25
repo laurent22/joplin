@@ -767,6 +767,8 @@ class Setting extends BaseModel {
 
 			'sync.10.userEmail': { value: '', type: SettingItemType.String, public: false },
 
+			'sync.10.isAuthenticated': { value: 0, type: SettingItemType.Bool, public: false },
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -1503,6 +1505,7 @@ class Setting extends BaseModel {
 				options: () => {
 					return {
 						0: _('Disabled'),
+						30: _('%d seconds', 30),
 						300: _('%d minutes', 5),
 						600: _('%d minutes', 10),
 						1800: _('%d minutes', 30),
