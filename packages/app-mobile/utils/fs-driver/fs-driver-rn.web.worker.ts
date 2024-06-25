@@ -30,6 +30,7 @@ declare global {
 	interface FileSystemDirectoryHandle {
 		entries(): AsyncIterable<[string, FileSystemFileHandle|FileSystemDirectoryHandle]>;
 		keys(): AsyncIterable<string>;
+		requestPermission(permission: { mode: string }): Promise<'granted'|string>;
 	}
 }
 
@@ -48,12 +49,14 @@ export interface TransferableStat {
 }
 
 const isNotFoundError = (error: DOMException) => error.name === 'NotFoundError';
+const externalDirectoryPrefix = '/mount/';
 
 // eslint-disable-next-line import/prefer-default-export -- This file is an entrypoint -- WorkerApi should only be used as a type.
 export class WorkerApi {
 	private fsRoot_: FileSystemDirectoryHandle;
 	private directoryHandleCache_: Map<string, FileSystemDirectoryHandle> = new Map();
 	private virtualFiles_: Map<string, File> = new Map();
+	private externalHandles_: Map<string, FileSystemFileHandle|FileSystemDirectoryHandle> = new Map();
 	private initPromise_: Promise<void>;
 
 	public constructor() {
@@ -67,12 +70,22 @@ export class WorkerApi {
 		})();
 	}
 
-	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle> {
+	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle|null> {
 		await this.initPromise_;
 		path = resolve('/', path);
 
 		if (path === '/') {
 			return this.fsRoot_;
+		} else if (path.startsWith(externalDirectoryPrefix)) {
+			if (path === externalDirectoryPrefix) {
+				// /mount/ is virtual, it doesn't exist.
+				return null;
+			}
+
+			const handle = this.externalHandles_.get(path);
+			if (handle?.kind === 'directory') {
+				return handle;
+			}
 		}
 
 		if (this.directoryHandleCache_.has(path)) {
@@ -100,6 +113,16 @@ export class WorkerApi {
 
 	private async pathToFileHandle_(path: string, create = false): Promise<FileSystemFileHandle> {
 		await this.initPromise_;
+		path = resolve('/', path);
+
+		if (this.externalHandles_.has(path)) {
+			const handle = this.externalHandles_.get(path);
+			if (handle.kind !== 'file') {
+				throw new Error(`Not a file: ${path}`);
+			}
+			return handle;
+		}
+
 		logger.debug('pathToFileHandle_', 'path:', path, 'create:', create);
 		const parent = await this.pathToDirectoryHandle_(dirname(path));
 		if (!parent) {
@@ -128,26 +151,40 @@ export class WorkerApi {
 	) {
 		logger.debug('writeFile', path);
 		const handle = await this.pathToFileHandle_(path, true);
-		const writer = await handle.createSyncAccessHandle();
+		let write, close;
+		try {
+			const writer = await handle.createSyncAccessHandle();
 
-		let at = 0;
-		if (!options?.keepExistingData) {
-			writer.truncate(0);
-		} else {
-			at = writer.getSize();
+			let at = 0;
+			if (!options?.keepExistingData) {
+				writer.truncate(0);
+			} else {
+				at = writer.getSize();
+			}
+
+			write = (data: ArrayBufferLike) => writer.write(data, { at });
+			close = () => writer.close();
+		} catch (error) {
+			// In some cases, createSyncAccessHandle isn't available. In other cases,
+			// createWritable isn't available.
+
+			logger.warn('Failed to createSyncAccessHandle', error);
+			const writer = await handle.createWritable({ keepExistingData: options?.keepExistingData });
+			write = (data: ArrayBufferLike) => writer.write(data);
+			close = () => writer.close();
 		}
 
 		if (encoding === 'Buffer') {
-			writer.write(data as ArrayBuffer, { at });
+			write(data as ArrayBuffer);
 		} else if (data instanceof ArrayBuffer) {
 			throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');
 		} else if (encoding === 'utf-8' || encoding === 'utf8') {
 			const encoder = new TextEncoder();
-			writer.write(encoder.encode(data), { at });
+			write(encoder.encode(data));
 		} else {
-			writer.write(Buffer.from(data, encoding).buffer, { at });
+			write(Buffer.from(data, encoding).buffer);
 		}
-		writer.close();
+		close();
 		logger.debug('writeFile done', path);
 	}
 
@@ -204,18 +241,18 @@ export class WorkerApi {
 	}
 
 	public async mkdir(path: string) {
+		if (path === externalDirectoryPrefix) {
+			return;
+		}
+
 		logger.debug('mkdir', path);
 		await this.pathToDirectoryHandle_(path, true);
 	}
 
 	public async copy(from: string, to: string) {
 		logger.debug('copy', from, to);
-		const toHandle = await this.pathToFileHandle_(to, true);
 		const fromFile = await this.fileAtPath(from);
-
-		const writer = await toHandle.createSyncAccessHandle();
-		writer.write(await fromFile.arrayBuffer());
-		writer.close();
+		await this.writeFile(to, await fromFile.arrayBuffer(), 'Buffer');
 	}
 
 	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
@@ -242,7 +279,8 @@ export class WorkerApi {
 		return {
 			birthtime: 0,
 			mtime: 0,
-			path: normalize(path),
+			// Can't normalize protocol URIs (e.g. external:///foo)
+			path: path.match(/^[a-z]+:/) ? path : normalize(path),
 			size,
 			isDirectory: handle.kind === 'directory',
 		};
@@ -277,8 +315,9 @@ export class WorkerApi {
 
 	public async exists(path: string) {
 		logger.debug('exists?', path);
+		path = resolve('/', path);
 
-		if (this.virtualFiles_.has(normalize(path))) {
+		if (this.virtualFiles_.has(path) || this.externalHandles_.has(path)) {
 			return true;
 		}
 
@@ -292,10 +331,6 @@ export class WorkerApi {
 		return false;
 	}
 
-	public resolve(...paths: string[]): string {
-		return resolve(...paths);
-	}
-
 	public async md5File(path: string): Promise<string> {
 		const fileData = Buffer.from(await (await this.fileAtPath(path)).arrayBuffer());
 		return md5(fileData);
@@ -303,6 +338,16 @@ export class WorkerApi {
 
 	public async createReadOnlyVirtualFile(path: string, content: File) {
 		this.virtualFiles_.set(normalize(path), content);
+	}
+
+	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, _id: string) {
+		if (await handle.requestPermission({ mode: 'readwrite' }) !== 'granted') {
+			throw new Error('Write access is needed.');
+		}
+
+		const mountPath = resolve('/mount/', crypto.randomUUID().replace(/-/g, ''));
+		this.externalHandles_.set(mountPath, handle);
+		return mountPath;
 	}
 }
 

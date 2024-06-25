@@ -1,4 +1,5 @@
 import { CallbackIds, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from '../types';
+import isTransferableObject from './isTransferableObject';
 
 interface SeparatedCallbacksAndSerializable {
 	serializableData: SerializableData;
@@ -43,7 +44,7 @@ const separateCallbacksFromSerializable = (data: SerializableDataAndCallbacks): 
 				}
 
 				return { serializableData, callbacks };
-			} else if (object instanceof Blob || object instanceof ArrayBuffer) {
+			} else if (isTransferableObject(object)) {
 				return { serializableData: object, callbacks: [] };
 			} else {
 				const argsWithoutCallbacks = Object.create(null);

@@ -1257,6 +1257,7 @@ packages/lib/utils/ipc/WindowMessenger.js
 packages/lib/utils/ipc/WorkerMessenger.js
 packages/lib/utils/ipc/WorkerToWindowMessenger.js
 packages/lib/utils/ipc/types.js
+packages/lib/utils/ipc/utils/isTransferableObject.js
 packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.test.js
 packages/lib/utils/ipc/utils/mergeCallbacksAndSerializable.js
 packages/lib/utils/ipc/utils/separateCallbacksFromSerializable.test.js

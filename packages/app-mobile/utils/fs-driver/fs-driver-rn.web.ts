@@ -1,4 +1,4 @@
-import { resolve, normalize } from 'path';
+import { resolve } from 'path';
 import FsDriverBase, { ReadDirStatsOptions, RemoveOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
 import tarCreate, { TarCreateOptions } from './tarCreate';
@@ -7,6 +7,7 @@ import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import type { TransferableStat, WorkerApi } from './fs-driver-rn.web.worker';
 import WorkerMessenger from '@joplin/lib/utils/ipc/WorkerMessenger';
+import JoplinError from '@joplin/lib/JoplinError';
 
 type FileHandle = {
 	reader: ReadableStreamDefaultReader<Uint8Array>;
@@ -25,8 +26,6 @@ const logger = new Logger();
 logger.addTarget(TargetType.Console);
 logger.setLevel(LogLevel.Warn);
 
-interface LocalWorkerApi { }
-
 const transferableStatToStat = (stat: TransferableStat): Stat => {
 	return {
 		mtime: new Date(stat.mtime),
@@ -37,26 +36,40 @@ const transferableStatToStat = (stat: TransferableStat): Stat => {
 	};
 };
 
+interface LocalWorkerApi { }
+type MessengerType = RemoteMessenger<LocalWorkerApi, WorkerApi>;
+let messenger: MessengerType|null = null;
+
+// Ensures that all instances of FsDriverWeb share the same worker. This is important
+// for virtual files to be correctly handled.
+const getWorkerMessenger = () => {
+	if (messenger) {
+		return messenger;
+	}
+	const worker = new Worker(
+		// Webpack has special syntax for creating a worker. It requires use
+		// of import.meta.url, which is prohibited by TypeScript in CommonJS
+		// modules.
+		//
+		// See also https://github.com/webpack/webpack/discussions/13655#discussioncomment-8382152
+		//
+		// TODO: Remove this after migrating to ESM.
+		//
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Required for webpack build (see above)
+		// @ts-ignore
+		new URL('./fs-driver-rn.web.worker.ts', import.meta.url),
+	);
+	messenger = new WorkerMessenger('fs-worker', worker, {});
+	return messenger;
+};
+
 export default class FsDriverWeb extends FsDriverBase {
 	private messenger_: RemoteMessenger<LocalWorkerApi, WorkerApi>;
 
 	public constructor() {
 		super();
 
-		const worker = new Worker(
-			// Webpack has special syntax for creating a worker. It requires use
-			// of import.meta.url, which is prohibited by TypeScript in CommonJS
-			// modules.
-			//
-			// See also https://github.com/webpack/webpack/discussions/13655#discussioncomment-8382152
-			//
-			// TODO: Remove this after migrating to ESM.
-			//
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Required for webpack build (see above)
-			// @ts-ignore
-			new URL('./fs-driver-rn.web.worker.ts', import.meta.url),
-		);
-		this.messenger_ = new WorkerMessenger('fs-worker', worker, {});
+		this.messenger_ = getWorkerMessenger();
 	}
 
 	public override async writeFile(
@@ -81,13 +94,10 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public async fileAtPath(path: string) {
-		path = normalize(path);
-
 		return await this.messenger_.remoteApi.fileAtPath(path);
 	}
 
 	public async readFile(path: string, encoding: BufferEncoding|'Buffer' = 'utf-8') {
-		path = normalize(path);
 		logger.debug('readFile', path);
 		const file = await this.fileAtPath(path);
 
@@ -159,7 +169,11 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {
-		return (await this.messenger_.remoteApi.readDirStats(path, options)).map(transferableStatToStat);
+		const stats = (await this.messenger_.remoteApi.readDirStats(path, options))?.map(transferableStatToStat);
+		if (!stats) {
+			throw new JoplinError(`Path ${path} does not exist (readDirStats)`, 'ENOENT');
+		}
+		return stats;
 	}
 
 	public override async exists(path: string) {
@@ -198,6 +212,12 @@ export default class FsDriverWeb extends FsDriverBase {
 
 	public async createReadOnlyVirtualFile(path: string, content: File) {
 		return this.messenger_.remoteApi.createReadOnlyVirtualFile(path, content);
+	}
+
+	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string) {
+		const externalUri = await this.messenger_.remoteApi.mountExternalDirectory(handle, id);
+		logger.info('Mounted handle with ID', id, 'at', externalUri);
+		return externalUri;
 	}
 }
 

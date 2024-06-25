@@ -21,6 +21,7 @@ module.exports = {
 		'FileSystemDirectoryHandle': 'readonly',
 		'ReadableStreamDefaultReader': 'readonly',
 		'FileSystemCreateWritableOptions': 'readonly',
+		'FileSystemHandle': 'readonly',
 
 		// Jest variables
 		'test': 'readonly',

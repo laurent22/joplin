@@ -115,7 +115,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			</View>
 		);
 	} else if (md.type === Setting.TYPE_STRING) {
-		if (md.key === 'sync.2.path' && shim.fsDriver().isUsingAndroidSAF()) {
+		if (md.key === 'sync.2.path' && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
 			return (
 				<FileSystemPathSelector
 					styles={props.styles}

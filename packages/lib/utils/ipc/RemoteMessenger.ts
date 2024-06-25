@@ -1,4 +1,5 @@
 import { CallbackIds as CallbackIds, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from './types';
+import isTransferableObject from './utils/isTransferableObject';
 import mergeCallbacksAndSerializable from './utils/mergeCallbacksAndSerializable';
 import separateCallbacksFromSerializable from './utils/separateCallbacksFromSerializable';
 import separateCallbacksFromSerializableArray from './utils/separateCallbacksFromSerializableArray';
@@ -470,7 +471,8 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			throw new Error('Message must be an object (is an array).');
 		}
 
-		if (message instanceof Blob || message instanceof ArrayBuffer) {
+		// Web transferable objects (note: will not be properly transferred with all messengers).
+		if (isTransferableObject(message)) {
 			throw new Error('Message must be a key-value pair object.');
 		}
 
