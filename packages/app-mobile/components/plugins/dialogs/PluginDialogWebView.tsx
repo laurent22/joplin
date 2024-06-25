@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
-import usePlugin from '../../hooks/usePlugin';
+import usePlugin from '@joplin/lib/hooks/usePlugin';
 import { DialogContentSize, DialogWebViewApi } from '../types';
 import { Button } from 'react-native-paper';
 import { themeStyle } from '@joplin/lib/theme';

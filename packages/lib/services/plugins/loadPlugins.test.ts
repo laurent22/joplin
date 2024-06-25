@@ -1,12 +1,20 @@
-import Setting from '@joplin/lib/models/Setting';
-import PluginService, { defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
-import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import Setting from '../../models/Setting';
+import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
+import { PluginManifest } from '../../services/plugins/utils/types';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
-import createMockReduxStore from '../utils/testing/createMockReduxStore';
 import MockPluginRunner from './testing/MockPluginRunner';
+import reducer, { State, defaultState } from '../../reducer';
+import { Action, createStore } from 'redux';
+import MockPlatformImplementation from './testing/MockPlatformImplementation';
+
+const createMockReduxStore = () => {
+	return createStore((state: State = defaultState, action: Action<unknown>) => {
+		return reducer(state, action);
+	});
+};
 
 const setPluginEnabled = (id: string, enabled: boolean) => {
 	const newPluginStates = {
@@ -42,6 +50,8 @@ const defaultManifestProperties = {
 	platforms: ['desktop', 'mobile'],
 };
 
+const platformImplementation = new MockPlatformImplementation();
+
 describe('loadPlugins', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -75,6 +85,7 @@ describe('loadPlugins', () => {
 		const loadPluginsOptions: LoadPluginsProps = {
 			pluginRunner,
 			pluginSettings: Setting.value('plugins.states'),
+			platformImplementation,
 			store,
 			reloadAll: false,
 			cancelEvent: { cancelled: false },
@@ -120,6 +131,7 @@ describe('loadPlugins', () => {
 		const loadPluginsOptions: LoadPluginsProps = {
 			pluginRunner,
 			pluginSettings: Setting.value('plugins.states'),
+			platformImplementation,
 			store,
 			reloadAll: true,
 			cancelEvent: { cancelled: false },

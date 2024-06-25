@@ -16,7 +16,7 @@ const jsDrawBundle = new BundledFile(
 
 const pluginBackgroundPageBundle = new BundledFile(
 	'pluginBackgroundPage',
-	`${mobileDir}/plugins/PluginRunner/backgroundPage/pluginRunnerBackgroundPage.ts`,
+	`${mobileDir}/components/plugins/backgroundPage/pluginRunnerBackgroundPage.ts`,
 );
 
 const noteViewerBundle = new BundledFile(

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PluginHtmlContents, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import ExtendedWebView, { WebViewControl } from '../../../components/ExtendedWebView';
 import { ViewStyle } from 'react-native';
-import usePlugin from '../../hooks/usePlugin';
+import usePlugin from '@joplin/lib/hooks/usePlugin';
 import shim from '@joplin/lib/shim';
 import useDialogMessenger from './hooks/useDialogMessenger';
 import useWebViewSetup from './hooks/useWebViewSetup';

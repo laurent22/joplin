@@ -66,14 +66,10 @@ yarn-error.log
 lib/csstojs/
 lib/rnInjectedJs/
 dist/
-plugins/sources/*
-plugins/PluginRunner/**/*.bundle.js
-components/NoteBodyViewer/**/*.bundle.js
-components/NoteBodyViewer/**/*.bundle.js.LICENSE.txt
-components/NoteEditor/**/*.bundle.js
-components/NoteEditor/**/*.bundle.js.md5
-components/NoteEditor/**/*.bundle.min.js
-components/NoteEditor/**/*.bundle.js.LICENSE.txt
+components/**/*.bundle.js
+components/**/*.bundle.js.LICENSE.txt
+components/**/*.bundle.js.md5
+components/**/*.bundle.min.js
 
 utils/fs-driver-android.js
 android/app/build-*
