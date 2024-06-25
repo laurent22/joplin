@@ -6,7 +6,7 @@ import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useState, useMemo, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle } from 'react-native';
+import { View, Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
 
@@ -21,6 +21,10 @@ interface ButtonProps {
 	iconStyle: TextStyle;
 
 	themeId: number;
+
+	// (web only) On web, touching buttons can cause the on-screen keyboard to be dismissed.
+	// Setting preventKeyboardDismiss overrides this behavior.
+	preventKeyboardDismiss?: boolean;
 
 	containerStyle?: ViewStyle;
 	contentWrapperStyle?: ViewStyle;
@@ -74,12 +78,22 @@ const IconButton = (props: ButtonProps) => {
 		setButtonLayout({ ...layoutEvt });
 	}, []);
 
+	const onTouchEnd = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && props.preventKeyboardDismiss) {
+			event.preventDefault();
+			if (!props.disabled) {
+				props.onPress();
+			}
+		}
+	}, [props.onPress, props.disabled, props.preventKeyboardDismiss]);
+
 	const button = (
 		<Pressable
 			onPress={props.onPress}
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
 			onPressOut={onPressOut}
+			onTouchEnd={onTouchEnd}
 
 			style={ props.containerStyle }
 
