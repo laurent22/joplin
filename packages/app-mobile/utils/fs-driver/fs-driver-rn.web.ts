@@ -114,7 +114,7 @@ export default class FsDriverWeb extends FsDriverBase {
 	public override async readFileChunkAsBuffer(handle: FileHandle, length: number): Promise<Buffer> {
 		let read: Buffer = handle.buffered;
 
-		if (handle.buffered.byteLength < length && !handle.done) {
+		while (read.byteLength < length && !handle.done) {
 			const { done, value } = await handle.reader.read();
 			handle.done = done;
 			if (value) {
@@ -152,8 +152,10 @@ export default class FsDriverWeb extends FsDriverBase {
 		await this.messenger_.remoteApi.copy(from, to);
 	}
 
-	public override async stat(path: string): Promise<Stat> {
-		return transferableStatToStat(await this.messenger_.remoteApi.stat(path));
+	public override async stat(path: string): Promise<Stat|null> {
+		const stat = await this.messenger_.remoteApi.stat(path);
+		if (!stat) return null;
+		return transferableStatToStat(stat);
 	}
 
 	public override async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<Stat[]> {

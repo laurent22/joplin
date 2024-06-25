@@ -37,7 +37,7 @@ type WriteFileOptions = { keepExistingData?: boolean };
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(LogLevel.Info);
+logger.setLevel(LogLevel.Debug);
 
 export interface TransferableStat {
 	birthtime: number;
@@ -46,6 +46,8 @@ export interface TransferableStat {
 	size: number;
 	isDirectory: boolean;
 }
+
+const isNotFoundError = (error: DOMException) => error.name === 'NotFoundError';
 
 // eslint-disable-next-line import/prefer-default-export -- This file is an entrypoint -- WorkerApi should only be used as a type.
 export class WorkerApi {
@@ -165,7 +167,7 @@ export class WorkerApi {
 		} catch (error) {
 			// remove should pass even if the item doesn't exist.
 			// This matches the behavior of fs-extra's remove.
-			if (error.name !== 'NotFoundError') {
+			if (!isNotFoundError(error)) {
 				throw error;
 			}
 		}
@@ -216,10 +218,21 @@ export class WorkerApi {
 		writer.close();
 	}
 
-	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat> {
-		handle ??= await this.pathToDirectoryHandle_(path) || await this.pathToFileHandle_(path);
+	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
+		logger.debug('stat', path, handle ? 'with handle' : '');
+		handle ??= await this.pathToDirectoryHandle_(path);
+		try {
+			handle ??= await this.pathToFileHandle_(path);
+		} catch (error) {
+			// Should return null when a file isn't found.
+			if (!isNotFoundError(error)) {
+				throw error;
+			}
+		}
 		const virtualFile = this.virtualFiles_.get(normalize(path));
+
 		if (!handle && !virtualFile) return null;
+		logger.debug('has handle');
 
 		const size = await (async () => {
 			if (handle.kind === 'directory') return 0;
