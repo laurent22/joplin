@@ -22,6 +22,7 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 				const input = document.createElement('input');
 				input.type = 'file';
 				input.style.display = 'none';
+				input.multiple = multiple;
 				document.body.appendChild(input);
 
 				input.onchange = async () => {
