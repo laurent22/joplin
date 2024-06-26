@@ -1182,9 +1182,8 @@ class AppComponent extends React.Component {
 
 			// Loading can take a particularly long time for the first time on web -- show progress.
 			if (Platform.OS === 'web') {
-				return <View>
-					<Text>{_('Loading...')}</Text>
-					<ActivityIndicator />
+				return <View style={{ marginLeft: 'auto', marginRight: 'auto', paddingTop: 20 }}>
+					<ActivityIndicator accessibilityLabel={_('Loading...')} />
 				</View>;
 			} else {
 				return null;
