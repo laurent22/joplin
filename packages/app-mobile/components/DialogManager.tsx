@@ -34,12 +34,11 @@ interface PromptDialogData {
 
 const styles = StyleSheet.create({
 	dialogContainer: {
-
-	},
-	modalContainer: {
 		maxWidth: 400,
 		minWidth: '50%',
 		alignSelf: 'center',
+	},
+	modalContainer: {
 		marginTop: 'auto',
 		marginBottom: 'auto',
 	},
@@ -97,7 +96,13 @@ const DialogManager: React.FC<Props> = props => {
 			);
 		});
 		dialogComponents.push(
-			<Dialog style={styles.dialogContainer} key={dialog.key} visible={true} onDismiss={dialog.onDismiss}>
+			<Dialog
+				testID={'prompt-dialog'}
+				style={styles.dialogContainer}
+				key={dialog.key}
+				visible={true}
+				onDismiss={dialog.onDismiss}
+			>
 				<Dialog.Title>{dialog.title}</Dialog.Title>
 				<Dialog.Content>
 					<Text variant='bodyMedium'>{dialog.message}</Text>
@@ -118,7 +123,7 @@ const DialogManager: React.FC<Props> = props => {
 			<Modal
 				visible={!!dialogComponents.length}
 				containerStyle={styles.modalContainer}
-				animationType='fade'
+				animationType='none'
 				backgroundColor='rgba(0, 0, 0, 0.1)'
 				transparent={true}
 				onRequestClose={dialogModels[dialogComponents.length - 1]?.onDismiss}
