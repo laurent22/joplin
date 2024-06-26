@@ -35,7 +35,7 @@ export interface RendererSettings {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginSettings: Record<string, any>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
-	readAssetFile: (assetPath: string)=> Promise<string>;
+	readAssetBlob: (assetPath: string)=> Promise<Blob>;
 }
 
 export interface MarkupRecord {
@@ -170,7 +170,7 @@ export default class Renderer {
 		contentContainer.innerHTML = html;
 		void addPluginAssets(pluginAssets, {
 			inlineAssets: this.setupOptions.useTransferredFiles,
-			readAssetFile: settings.readAssetFile,
+			readAssetBlob: settings.readAssetBlob,
 		});
 
 		this.afterRender(settings);

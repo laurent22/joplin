@@ -11,7 +11,7 @@ const defaultRendererSettings: RendererSettings = {
 	codeTheme: 'atom-one-light.css',
 	noteHash: '',
 	initialScroll: 0,
-	readAssetFile: async (_path: string)=>'',
+	readAssetBlob: async (_path: string)=>new Blob(),
 
 	createEditPopupSyntax: '',
 	destroyEditPopupSyntax: '',
