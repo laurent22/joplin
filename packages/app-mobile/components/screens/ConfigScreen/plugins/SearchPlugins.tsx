@@ -4,7 +4,7 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useCallback, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
@@ -143,6 +143,11 @@ const PluginSearch: React.FC<Props> = props => {
 		}
 	};
 
+	// scrollEnabled seems to have a different effect on web, when compared with native:
+	// https://github.com/necolas/react-native-web/issues/1042#issuecomment-407157580
+	// When not provided on web, scrolling the parent element doesn't work.
+	const scrollEnabled = Platform.OS === 'web';
+
 	return (
 		<View style={styles.container}>
 			<TextInput
@@ -159,7 +164,7 @@ const PluginSearch: React.FC<Props> = props => {
 				data={searchResults}
 				renderItem={renderResult}
 				keyExtractor={item => item.id}
-				scrollEnabled={false}
+				scrollEnabled={scrollEnabled}
 			/>
 		</View>
 	);
