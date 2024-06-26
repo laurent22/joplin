@@ -134,7 +134,11 @@ async function main() {
 	];
 
 	if (env === Env.Dev) {
+		// Stripe (dev)
 		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
 	}
 
 	function acceptOrigin(origin: string): boolean {
