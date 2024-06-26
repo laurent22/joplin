@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createContext, useMemo, useRef, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
+import Modal from './Modal';
 
 interface PromptButton {
 	text: string;
@@ -33,14 +34,19 @@ interface PromptDialogData {
 
 const styles = StyleSheet.create({
 	dialogContainer: {
+
+	},
+	modalContainer: {
 		maxWidth: 400,
 		minWidth: '50%',
 		alignSelf: 'center',
+		marginTop: 'auto',
+		marginBottom: 'auto',
 	},
 });
 
 const DialogManager: React.FC<Props> = props => {
-	const [promptDialogs, setPromptDialogs] = useState<PromptDialogData[]>([]);
+	const [dialogModels, setPromptDialogs] = useState<PromptDialogData[]>([]);
 	const nextDialogIdRef = useRef(0);
 
 	const dialogControl: DialogControl = useMemo(() => {
@@ -84,10 +90,10 @@ const DialogManager: React.FC<Props> = props => {
 	}, []);
 
 	const dialogComponents: React.ReactNode[] = [];
-	for (const dialog of promptDialogs) {
-		const buttons = dialog.buttons.map(button => {
+	for (const dialog of dialogModels) {
+		const buttons = dialog.buttons.map((button, index) => {
 			return (
-				<Button onPress={button.onPress}>{button.text}</Button>
+				<Button key={`${index}-${button.text}`} onPress={button.onPress}>{button.text}</Button>
 			);
 		});
 		dialogComponents.push(
@@ -103,12 +109,22 @@ const DialogManager: React.FC<Props> = props => {
 		);
 	}
 
+	// Web: Use a <Modal> wrapper for better keyboard focus handling.
 	return <>
 		<DialogContext.Provider value={dialogControl}>
 			{props.children}
 		</DialogContext.Provider>
 		<Portal>
-			{dialogComponents}
+			<Modal
+				visible={!!dialogComponents.length}
+				containerStyle={styles.modalContainer}
+				animationType='fade'
+				backgroundColor='rgba(0, 0, 0, 0.1)'
+				transparent={true}
+				onRequestClose={dialogModels[dialogComponents.length - 1]?.onDismiss}
+			>
+				{dialogComponents}
+			</Modal>
 		</Portal>
 	</>;
 };
