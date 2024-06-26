@@ -19,6 +19,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
+const { TouchableRipple } = require('react-native-paper');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
@@ -440,12 +441,16 @@ const SideMenuContentComponent = (props: Props) => {
 
 		return (
 			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
-				<TouchableOpacity
+				<TouchableRipple
 					style={{ flex: 1, flexBasis: 'auto' }}
 					onPress={() => {
 						folder_press(folder);
 					}}
 					onLongPress={() => {
+						void folder_longPress(folder);
+					}}
+					onContextMenu={(event: Event) => { // web only
+						event.preventDefault();
 						void folder_longPress(folder);
 					}}
 				>
@@ -455,7 +460,7 @@ const SideMenuContentComponent = (props: Props) => {
 							{Folder.displayTitle(folder)}
 						</Text>
 					</View>
-				</TouchableOpacity>
+				</TouchableRipple>
 				{iconWrapper}
 			</View>
 		);
