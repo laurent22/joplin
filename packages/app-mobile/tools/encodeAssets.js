@@ -72,7 +72,7 @@ async function main() {
 			await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\nhash:"${hash}", files: {\n${indexJs.join('\n')}\n}\n};`);
 			await fs.writeFile(`${outputDir}/index.web.js`, `module.exports = ${JSON.stringify({
 				hash,
-				files: files.map(file => path.relative(sourceAssetDir, file))
+				files: files.map(file => path.relative(sourceAssetDir, file)),
 			})}`);
 
 			return;

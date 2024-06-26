@@ -46,7 +46,7 @@ export default class PluginAssetsLoader {
 			await shim.fsDriver().mkdir(dirname(destPath));
 
 			await shim.fsDriver().unlink(destPath);
-			await fsDriver.writeFile(destPath,  await response.arrayBuffer(), 'Buffer');
+			await fsDriver.writeFile(destPath, await response.arrayBuffer(), 'Buffer');
 		}));
 	}
 
@@ -64,9 +64,9 @@ export default class PluginAssetsLoader {
 
 		try {
 			if (shim.mobilePlatform() === 'web') {
-				this.importAssetsWeb_();
+				await this.importAssetsWeb_();
 			} else {
-				this.importAssetsMobile_();
+				await this.importAssetsMobile_();
 			}
 		} catch (error) {
 			logger.error(error);
