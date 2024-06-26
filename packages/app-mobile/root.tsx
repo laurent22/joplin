@@ -653,7 +653,6 @@ async function initialize(dispatch: Function) {
 			Setting.setValue('welcome.enabled', false);
 		}
 
-		PluginAssetsLoader.instance().setLogger(mainLogger);
 		await PluginAssetsLoader.instance().importAssets();
 
 		// eslint-disable-next-line require-atomic-updates

@@ -6,10 +6,10 @@ interface Options {
 	permissions?: string;
 }
 
+// allow-modals: Allows confirm/alert dialogs.
 const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow-scripts allow-modals' }: Options) => {
 	const iframe = document.createElement('iframe');
 
-	// allow-modals: Allows confirm/alert dialogs.
 	iframe.setAttribute('sandbox', permissions);
 
 	iframe.addEventListener('load', async () => {

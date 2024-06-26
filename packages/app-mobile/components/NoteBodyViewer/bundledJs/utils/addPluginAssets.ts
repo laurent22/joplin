@@ -8,6 +8,7 @@ const pluginAssetsAdded_: Record<string, PluginAssetRecord> = {};
 interface Options {
 	inlineAssets: boolean;
 	readAssetFile?(path: string): Promise<string>;
+	getAssetBlob?(path: string): Promise<Blob>;
 }
 
 // Note that this function keeps track of what's been added so as not to

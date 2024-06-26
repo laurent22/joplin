@@ -1,5 +1,6 @@
 const utils = require('@joplin/tools/gulp/utils');
 const fs = require('fs-extra');
+const path = require('path');
 const md5 = require('md5');
 
 const rootDir = `${__dirname}/..`;
@@ -69,6 +70,10 @@ async function main() {
 			const hash = md5(hashes.join(''));
 
 			await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\nhash:"${hash}", files: {\n${indexJs.join('\n')}\n}\n};`);
+			await fs.writeFile(`${outputDir}/index.web.js`, `module.exports = ${JSON.stringify({
+				hash,
+				files: files.map(file => path.relative(sourceAssetDir, file))
+			})}`);
 
 			return;
 		} catch (error) {
