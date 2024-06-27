@@ -5,6 +5,7 @@ import Logger from '@joplin/utils/Logger';
 import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
+import { defaultPluginSetting } from '../services/plugins/PluginService';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function loadSettingsFromFile(): Promise<any> {
@@ -206,7 +207,7 @@ describe('models/Setting', () => {
 	it('should save and load settings from file', (async () => {
 		Setting.setValue('sync.target', 9); // Saved to file
 		Setting.setValue('encryption.passwordCache', {}); // Saved to keychain or db
-		Setting.setValue('plugins.states', { test: true }); // Always saved to db
+		Setting.setValue('plugins.states', { test: defaultPluginSetting() }); // Always saved to db
 		await Setting.saveAll();
 
 		{

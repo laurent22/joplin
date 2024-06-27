@@ -1,4 +1,4 @@
-import Setting, { SettingStorage } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingStorage } from '@joplin/lib/models/Setting';
 import { SettingItemType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
 
@@ -61,7 +61,7 @@ class Command extends BaseCommand {
 
 			const description: string[] = [];
 			if (md.label && md.label()) description.push(md.label());
-			if (md.description && md.description('desktop')) description.push(md.description('desktop'));
+			if (md.description && md.description(AppType.Desktop)) description.push(md.description(AppType.Desktop));
 
 			if (description.length) props.description = description.join('. ');
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

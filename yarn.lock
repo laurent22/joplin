@@ -7240,6 +7240,7 @@ __metadata:
     "@types/markdown-it": 13.0.7
     "@types/node-fetch": 2.6.11
     async-mutex: 0.4.1
+    dayjs: 1.11.11
     execa: 5.1.1
     fs-extra: 11.2.0
     glob: 10.3.10
@@ -18324,6 +18325,13 @@ __metadata:
   version: 1.11.10
   resolution: "dayjs@npm:1.11.10"
   checksum: a6b5a3813b8884f5cd557e2e6b7fa569f4c5d0c97aca9558e38534af4f2d60daafd3ff8c2000fed3435cfcec9e805bcebd99f90130c6d1c5ef524084ced588c4
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:1.11.11":
+  version: 1.11.11
+  resolution: "dayjs@npm:1.11.11"
+  checksum: 84788275aad8a87fee4f1ce4be08861df29687aae6b7b43dd65350118a37dda56772a3902f802cb2dc651dfed447a5a8df62d88f0fb900dba8333e411190a5d5
   languageName: node
   linkType: hard
 

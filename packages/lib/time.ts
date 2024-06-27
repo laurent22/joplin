@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------------------------------
+// !!IMPORTANT!! New time-related code should be added to @joplin/util/time and should be based on
+// `dayjs` (which is part of `@joplin/util`). Eventually we'll migrate all code here to
+// `@joplin/utils/time`.
+// -----------------------------------------------------------------------------------------------
+
 import shim from './shim';
 const moment = require('moment');
 
