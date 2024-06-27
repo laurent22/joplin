@@ -219,7 +219,6 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 				{this.state.filter !== undefined ? filterInput : null}
 				<FlatList
 					data={this.state.logEntries}
-					extraData={this.state.logEntries.length}
 					initialNumToRender={100}
 					renderItem={this.onRenderLogRow}
 					keyExtractor={item => { return `${item.id}`; }}
