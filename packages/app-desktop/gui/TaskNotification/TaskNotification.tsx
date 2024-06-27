@@ -1,14 +1,13 @@
 import { useContext, useMemo, useEffect } from 'react';
-import { Dispatch } from 'redux';
 import { INotyfIcon, NotyfNotification } from 'notyf';
 import { themeStyle } from '@joplin/lib/theme';
 import { waitForElement } from '@joplin/lib/dom';
 import TaskUIService from '@joplin/lib/services/TaskUIService';
 import NotyfContext from '../NotyfContext';
+import { htmlentities } from '@joplin/utils/html';
 
 interface Props {
 	themeId: number;
-	dispatch: Dispatch;
 }
 
 export default (props: Props) => {
@@ -21,12 +20,8 @@ export default (props: Props) => {
 	const notyf = useMemo(() => {
 		const output = notyfContext;
 		output.options.types = notyfContext.options.types.map(type => {
-			if (type.type === 'success') {
-				// When type === 'success', type.icon is always of type object (INotyfIcon):
-				// https://github.com/caroso1222/notyf/blob/master/src/notyf.options.ts
-				(type.icon as INotyfIcon).color = theme.backgroundColor5;
-			} else if (type.type === 'error') {
-				// When type === 'error', type.icon is always of type object (INotyfIcon):
+			if (type.type === 'success' || type.type === 'error') {
+				// When type is 'success' or 'error', type.icon is always of type object (INotyfIcon):
 				// https://github.com/caroso1222/notyf/blob/master/src/notyf.options.ts
 				(type.icon as INotyfIcon).color = theme.backgroundColor5;
 			}
@@ -74,7 +69,7 @@ export default (props: Props) => {
 					message: task.message,
 					duration: 0,
 					dismissible: true,
-					icon: `<i class="${className}" id="${task.id}" style="${cssStyle}"></i>`,
+					icon: `<i class="${className}" id="${htmlentities(task.id)}" style="${htmlentities(cssStyle)}"></i>`,
 				});
 			}
 		});

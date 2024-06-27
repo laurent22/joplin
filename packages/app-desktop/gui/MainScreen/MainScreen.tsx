@@ -916,8 +916,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 				<TaskNotification
 					themeId={this.props.themeId}
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					dispatch={this.props.dispatch as any}
 				/>
 
 				<TrashNotification
