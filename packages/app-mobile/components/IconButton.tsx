@@ -78,14 +78,9 @@ const IconButton = (props: ButtonProps) => {
 		setButtonLayout({ ...layoutEvt });
 	}, []);
 
-	const onTouchEnd = useCallback((event: GestureResponderEvent) => {
-		if (Platform.OS === 'web' && props.preventKeyboardDismiss) {
-			event.preventDefault();
-			if (!props.disabled) {
-				props.onPress();
-			}
-		}
-	}, [props.onPress, props.disabled, props.preventKeyboardDismiss]);
+	const { onTouchStart, onTouchEnd } = usePreventKeyboardDismissTouchListeners(
+		props.preventKeyboardDismiss, props.onPress, props.disabled,
+	);
 
 	const button = (
 		<Pressable
@@ -93,6 +88,8 @@ const IconButton = (props: ButtonProps) => {
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
 			onPressOut={onPressOut}
+
+			onTouchStart={onTouchStart}
 			onTouchEnd={onTouchEnd}
 
 			style={ props.containerStyle }
@@ -195,6 +192,32 @@ const useTooltipStyles = (themeId: number) => {
 			},
 		});
 	}, [themeId]);
+};
+
+// On web, by default, pressing buttons defocuses the active edit control, dismissing the
+// virtual keyboard. This hook creates listeners that optionally prevent the keyboard from dismissing.
+const usePreventKeyboardDismissTouchListeners = (preventKeyboardDismiss: boolean, onPress: ()=> void, disabled: boolean) => {
+	const touchStartPointRef = useRef<[number, number]>();
+	const onTouchStart = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss) {
+			touchStartPointRef.current = [event.nativeEvent.pageX, event.nativeEvent.pageY];
+		}
+	}, [preventKeyboardDismiss]);
+
+	const onTouchEnd = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss) {
+			const dx = event.nativeEvent.pageX - touchStartPointRef.current[0];
+			const dy = event.nativeEvent.pageY - touchStartPointRef.current[1];
+
+			const isTap = Math.hypot(dx, dy) < 15;
+			if (isTap && !disabled) {
+				event.preventDefault();
+				onPress();
+			}
+		}
+	}, [onPress, disabled, preventKeyboardDismiss]);
+
+	return { onTouchStart, onTouchEnd };
 };
 
 export default IconButton;
