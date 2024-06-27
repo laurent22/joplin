@@ -11,10 +11,10 @@ import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
-import Share from 'react-native-share';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
 import { TextInput } from 'react-native-paper';
+import shareFile from '../../utils/shareFile';
 
 const logger = Logger.create('LogScreen');
 
@@ -100,13 +100,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			// Using a .txt file extension causes a "No valid provider found from URL" error
 			// and blank share sheet on iOS for larger log files (around 200 KiB).
 			fileToShare = await writeTextToCacheFile(logData, 'mobile-log.log');
-
-			await Share.open({
-				type: 'text/plain',
-				filename: 'log.txt',
-				url: `file://${fileToShare}`,
-				failOnCancel: false,
-			});
+			await shareFile(fileToShare, 'text/plain');
 		} catch (e) {
 			logger.error('Unable to share log data:', e);
 
