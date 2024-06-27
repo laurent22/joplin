@@ -14,7 +14,12 @@ interface SelectedDocument {
 
 const logger = Logger.create('pickDocument');
 
-const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
+interface Options {
+	multiple?: boolean;
+	preferCamera?: boolean;
+}
+
+const pickDocument = async ({ multiple = false, preferCamera = false }: Options = {}): Promise<SelectedDocument[]> => {
 	let result: SelectedDocument[] = [];
 	try {
 		if (shim.mobilePlatform() === 'web') {
@@ -23,6 +28,10 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 				input.type = 'file';
 				input.style.display = 'none';
 				input.multiple = multiple;
+				if (preferCamera) {
+					input.capture = 'environment';
+					input.accept = 'image/*';
+				}
 				document.body.appendChild(input);
 
 				input.onchange = async () => {

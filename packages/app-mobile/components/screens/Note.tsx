@@ -681,7 +681,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	private async pickDocuments() {
-		const result = await pickDocument(true);
+		const result = await pickDocument({ multiple: true });
 		return result;
 	}
 
@@ -860,8 +860,15 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 	}
 
-	private takePhoto_onPress() {
-		this.setState({ showCamera: true });
+	private async takePhoto_onPress() {
+		if (Platform.OS === 'web') {
+			const response = await pickDocument({ multiple: true, preferCamera: true });
+			for (const asset of response) {
+				await this.attachFile(asset, 'image');
+			}
+		} else {
+			this.setState({ showCamera: true });
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1117,7 +1124,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
-		if (buttonId === 'takePhoto') this.takePhoto_onPress();
+		if (buttonId === 'takePhoto') void this.takePhoto_onPress();
 		if (buttonId === 'attachFile') void this.attachFile_onPress();
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
 	}

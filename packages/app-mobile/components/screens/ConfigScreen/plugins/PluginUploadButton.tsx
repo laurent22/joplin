@@ -36,7 +36,7 @@ const PluginUploadButton: React.FC<Props> = props => {
 	const onInstallFromFile = useCallback(async () => {
 		const pluginService = PluginService.instance();
 
-		const pluginFiles = await pickDocument(false);
+		const pluginFiles = await pickDocument({ multiple: false });
 		if (pluginFiles.length === 0) {
 			return;
 		}
