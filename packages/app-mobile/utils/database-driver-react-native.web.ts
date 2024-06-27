@@ -14,7 +14,6 @@ export default class DatabaseDriverReactNative {
 	}
 
 	public async open(options: { name: string }) {
-		// SQLite.DEBUG(true);
 		const db = await new Promise<DbPromiser>((resolve) => {
 			const db = sqlite3Worker1Promiser({
 				onready: () => resolve(db),
