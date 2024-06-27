@@ -98,7 +98,6 @@ interface Props {
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
 	showInvalidJoplinCloudCredential: boolean;
-	showJoplinCloudIsOffline: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -693,8 +692,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
-		} else if (this.props.showJoplinCloudIsOffline) {
-			msg = this.renderNotificationMessage(_('Joplin Cloud is offline at the moment, try again later.'));
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
 				_('Your Joplin Cloud credentials are invalid., please re-authenticate.'),
@@ -723,7 +720,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.showShareInvitationNotification(props) ||
 			this.props.needApiAuth ||
 			!!this.props.mustUpgradeAppMessage ||
-			props.showJoplinCloudIsOffline ||
 			props.showInvalidJoplinCloudCredential;
 	}
 
@@ -985,7 +981,6 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !state.settings['sync.10.isAuthenticated'],
-		showJoplinCloudIsOffline: state.settings['sync.target'] === 10 && state.settings['sync.10.isServerOffline'],
 	};
 };
 
