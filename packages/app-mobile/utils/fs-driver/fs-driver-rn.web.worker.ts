@@ -53,6 +53,7 @@ export interface TransferableStat {
 }
 
 const isNotFoundError = (error: DOMException) => error.name === 'NotFoundError';
+const isTypeMismatchError = (error: DOMException) => error.name === 'TypeMismatchError';
 const externalDirectoryPrefix = '/external/';
 
 type AccessHandleDatabaseControl = {
@@ -422,14 +423,23 @@ export class WorkerApi {
 			return true;
 		}
 
-		const parentDir = await this.pathToDirectoryHandle_(dirname(path));
-		if (!parentDir) return false;
+		const parentDirectory = await this.pathToDirectoryHandle_(dirname(path));
+		if (!parentDirectory) return false;
 
-		const target = basename(path);
-		for await (const key of parentDir.keys()) {
-			if (key === target) return true;
+		const fileName = removeReservedWords(basename(path));
+		try {
+			const childHandle = await parentDirectory.getFileHandle(fileName);
+			return !!childHandle;
+		} catch (error) {
+			if (isNotFoundError(error)) {
+				return false;
+			} else if (isTypeMismatchError(error)) {
+				// A file was requested, so the path is a directory.
+				return true;
+			}
+
+			throw error;
 		}
-		return false;
 	}
 
 	public async md5File(path: string): Promise<string> {
