@@ -77,9 +77,8 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isAuthenticated`, result.ok);
 			return result.ok;
 		} catch (error) {
-			if (error.code === 403) return false;
-			if (this.isServerOffline(error)) {
-				Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isServerOffline`, true);
+			if (error.code < 500) {
+				Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isAuthenticated`, false);
 				return false;
 			}
 			throw error;
