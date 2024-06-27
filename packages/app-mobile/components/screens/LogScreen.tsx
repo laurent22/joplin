@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { FlatList, View, Text, Button, StyleSheet, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { reg } from '@joplin/lib/registry.js';
+import { reg } from '@joplin/lib/registry';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 import { themeStyle } from '../global-style';
@@ -225,6 +225,8 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 				{this.state.filter !== undefined ? filterInput : null}
 				<FlatList
 					data={this.state.logEntries}
+					extraData={this.state.logEntries.length}
+					initialNumToRender={100}
 					renderItem={this.onRenderLogRow}
 					keyExtractor={item => { return `${item.id}`; }}
 				/>
