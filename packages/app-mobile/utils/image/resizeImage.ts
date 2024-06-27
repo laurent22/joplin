@@ -26,8 +26,8 @@ const resizeImage = async (options: Options) => {
 			// Choose a scale factor such that the resized image fits within a
 			// maxWidth x maxHeight box.
 			const scale = Math.min(
-				image.image.width / options.maxWidth,
-				image.image.height / options.maxHeight,
+				options.maxWidth / image.image.width,
+				options.maxHeight / image.image.height,
 			);
 			canvas.width = image.image.width * scale;
 			canvas.height = image.image.height * scale;
