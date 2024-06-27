@@ -625,6 +625,11 @@ async function initialize(dispatch: Function) {
 			const detectedLocale = shim.detectAndSetLocale(Setting);
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
+			if (shim.mobilePlatform() === 'web') {
+				Setting.setValue('sync.resourceDownloadMode', 'auto');
+				logger.info('First start on web: Set resource download mode to auto.');
+			}
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', false);
 		} else {
