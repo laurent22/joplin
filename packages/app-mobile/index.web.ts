@@ -47,7 +47,7 @@ const keepAppAboveKeyboard = () => {
 	}
 };
 
-addEventListener('DOMContentLoaded', () => {
+addEventListener('DOMContentLoaded', async () => {
 	if (window.crossOriginIsolated === false) {
 		// Currently, reloading might help because a service worker loaded by index.html
 		// tries to enable crossOriginIsolated.

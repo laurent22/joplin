@@ -133,6 +133,7 @@ import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 import DatabaseDriverReactNative from './utils/database-driver-react-native';
 import DialogManager from './components/DialogManager';
+import lockToSingleInstance from './utils/lockToSingleInstance';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -494,6 +495,8 @@ const getInitialActiveFolder = async () => {
 	return await Folder.load(folderId);
 };
 
+const singleInstanceLock = lockToSingleInstance();
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Function) {
 	shimInit();
@@ -518,6 +521,10 @@ async function initialize(dispatch: Function) {
 	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
 	await shim.fsDriver().mkdir(resourceDir);
+
+	// Do as much setup as possible before checking the lock -- the lock intentionally waits for
+	// messages from other clients for several hundred ms.
+	await singleInstanceLock;
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());
 	await logDatabase.open({ name: 'log.sqlite' });
