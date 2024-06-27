@@ -57,6 +57,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				onRequestEditResource(`edit:${resourceId}`);
 			}
 		} catch (e) {
+			console.error(e);
 			reg.logger().error('Could not handle link long press', e);
 			ToastAndroid.show('An error occurred, check log for details', ToastAndroid.SHORT);
 		}

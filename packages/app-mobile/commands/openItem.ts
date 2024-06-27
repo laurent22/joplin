@@ -4,6 +4,10 @@ import { _ } from '@joplin/lib/locale';
 import { parseResourceUrl, urlProtocol } from '@joplin/lib/urlUtils';
 import Logger from '@joplin/utils/Logger';
 import goToNote from './util/goToNote';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { BaseItemEntity } from '@joplin/lib/services/database/types';
+import { ModelType } from '@joplin/lib/BaseModel';
+import showResource from './util/showResource';
 
 const logger = Logger.create('openItemCommand');
 
@@ -22,7 +26,14 @@ export const runtime = (): CommandRuntime => {
 					const { itemId, hash } = parsedUrl;
 
 					logger.info(`Navigating to item ${itemId}`);
-					await goToNote(itemId, hash);
+					const item: BaseItemEntity = await BaseItem.loadItemById(itemId);
+					if (item.type_ === ModelType.Note) {
+						await goToNote(itemId, hash);
+					} else if (item.type_ === ModelType.Resource) {
+						await showResource(item);
+					} else {
+						logger.error('Unsupported item type for links:', item.type_);
+					}
 				} else {
 					logger.error(`Invalid Joplin link: ${link}`);
 				}

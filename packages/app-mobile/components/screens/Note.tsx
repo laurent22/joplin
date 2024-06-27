@@ -6,7 +6,6 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor from '../NoteEditor/NoteEditor';
-const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
@@ -20,7 +19,7 @@ const Clipboard = require('@react-native-clipboard/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
-import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 import * as mimeUtils from '@joplin/lib/mime-utils';
@@ -62,7 +61,6 @@ import pickDocument from '../../utils/pickDocument';
 import debounce from '../../utils/debounce';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import CommandService from '@joplin/lib/services/CommandService';
-import * as urlUtils from '@joplin/lib/urlUtils';
 import { ResourceInfo } from '../NoteBodyViewer/hooks/useRerenderHandler';
 import getImageDimensions from '../../utils/image/getImageDimensions';
 import resizeImage from '../../utils/image/resizeImage';
@@ -270,35 +268,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		this.onJoplinLinkClick_ = async (msg: string) => {
 			try {
-				const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
-				if (resourceUrlInfo) {
-					const itemId = resourceUrlInfo.itemId;
-					const item = await BaseItem.loadItemById(itemId);
-					if (!item) throw new Error(_('No item with ID %s', itemId));
-
-					if (item.type_ === BaseModel.TYPE_NOTE) {
-						this.props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'Note',
-							noteId: item.id,
-							noteHash: resourceUrlInfo.hash,
-						});
-					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
-						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
-
-						const resourcePath = Resource.fullPath(item);
-						logger.info(`Opening resource: ${resourcePath}`);
-						await FileViewer.open(resourcePath);
-					} else {
-						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
-					}
-				} else {
-					if (msg.indexOf('file://') === 0) {
-						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
-					} else {
-						await Linking.openURL(msg);
-					}
-				}
+				await CommandService.instance().execute('openItem', msg);
 			} catch (error) {
 				dialogs.error(this, error.message);
 			}
