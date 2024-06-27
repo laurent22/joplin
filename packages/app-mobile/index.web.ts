@@ -35,9 +35,9 @@ const keepAppAboveKeyboard = () => {
 			// The visual viewport changes as the user zooms in and out. Only adjust the body's height
 			// when the user's zoom level is 100%.
 			if (window.visualViewport.scale === 1) {
-				document.body.style.height = `${window.visualViewport.height}px`;
+				document.documentElement.style.height = `${window.visualViewport.height}px`;
 			} else {
-				document.body.style.height = '';
+				document.documentElement.style.height = '';
 			}
 		});
 	};
