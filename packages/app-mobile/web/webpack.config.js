@@ -49,16 +49,14 @@ const emptyLibraryMock = path.resolve(__dirname, 'mocks/empty.js');
 module.exports = {
 	target: 'web',
 
-	entry: [
-		// load any web API polyfills
-		// path.resolve(appDirectory, 'polyfills-web.js'),
-		// your web-specific entry file
-		path.resolve(appDirectory, 'index.web.ts'),
-	],
+	entry: {
+		app: path.resolve(appDirectory, 'index.web.ts'),
+		serviceWorker: path.resolve(appDirectory, 'web/serviceWorker.ts'),
+	},
 
 	// configures where the build ends up
 	output: {
-		filename: 'bundle.web.js',
+		filename: '[name].bundle.js',
 		path: path.resolve(appDirectory, 'web/dist'),
 	},
 
@@ -86,6 +84,11 @@ module.exports = {
 			'react-native-zip-archive': emptyLibraryMock,
 			'react-native-document-picker': emptyLibraryMock,
 			'react-native-exit-app': emptyLibraryMock,
+
+			// Workaround for applying serviceworker types to a single file.
+			// See https://joshuatz.com/posts/2021/strongly-typed-service-workers/.
+			// See https://github.com/microsoft/TypeScript/issues/37053
+			'serviceworker': emptyLibraryMock,
 		},
 		// If you're working on a multi-platform React Native app, web-specific
 		// module implementations should be written in files using the extension

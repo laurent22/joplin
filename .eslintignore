@@ -59,7 +59,6 @@ packages/app-mobile/lib/rnInjectedJs/
 packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
-packages/app-mobile/web/public/serviceWorker.js
 packages/fork-*
 packages/default-plugins/plugin-base-repo/
 packages/default-plugins/plugin-sources/
@@ -746,6 +745,7 @@ packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/showMessageBox.web.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
+packages/app-mobile/web/serviceWorker.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js

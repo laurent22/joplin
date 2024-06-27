@@ -23,6 +23,11 @@ module.exports = {
 		'FileSystemCreateWritableOptions': 'readonly',
 		'FileSystemHandle': 'readonly',
 
+		// ServiceWorker
+		'ExtendableEvent': 'readonly',
+		'WindowClient': 'readonly',
+		'FetchEvent': 'readonly',
+
 		// Jest variables
 		'test': 'readonly',
 		'expect': 'readonly',

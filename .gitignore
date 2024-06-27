@@ -723,6 +723,7 @@ packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/showMessageBox.web.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
+packages/app-mobile/web/serviceWorker.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
