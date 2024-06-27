@@ -91,10 +91,10 @@ module.exports = {
 		// module implementations should be written in files using the extension
 		// `.web.js`.
 		extensions: [
-			'.web.ts',
-			'.ts',
 			'.web.js',
 			'.js',
+			'.web.ts',
+			'.ts',
 			'.web.mjs',
 			'.mjs',
 			'.web.tsx',
