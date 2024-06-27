@@ -136,12 +136,23 @@ export class WorkerApi {
 
 	public constructor() {
 		this.initPromise_ = (async () => {
-			try {
-				this.fsRoot_ = await (await navigator.storage.getDirectory()).getDirectoryHandle('joplin-web', { create: true });
-				this.accessHandleDatabase_ = await createAccessHandleDatabase();
-			} catch (error) {
-				logger.warn('Failed to create fs-driver:', error);
-				throw error;
+			let lastError: Error|null = null;
+			for (let retry = 0; retry < 2; retry++) {
+				try {
+					this.fsRoot_ ??= await (await navigator.storage.getDirectory()).getDirectoryHandle('joplin-web', { create: true });
+					this.accessHandleDatabase_ ??= await createAccessHandleDatabase();
+					lastError = null;
+					break;
+				} catch (error) {
+					logger.warn('Failed to create fs-driver:', error, `(retry: ${retry})`);
+					lastError = error;
+
+					await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
+				}
+			}
+
+			if (lastError) {
+				throw lastError;
 			}
 		})();
 	}
