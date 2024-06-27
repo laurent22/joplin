@@ -142,17 +142,20 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
-	public waitForLoadedPluginsChange() {
-		return new Promise<void>(resolve => {
-			this.pluginsChangeListeners_.push(() => resolve());
-		});
+	public addLoadedPluginsChangeListener(listener: ()=> void) {
+		this.pluginsChangeListeners_.push(listener);
+
+		return {
+			remove: () => {
+				this.pluginsChangeListeners_ = this.pluginsChangeListeners_.filter(l => (l !== listener));
+			},
+		};
 	}
 
 	private dispatchPluginsChangeListeners() {
 		for (const listener of this.pluginsChangeListeners_) {
 			listener();
 		}
-		this.pluginsChangeListeners_ = [];
 	}
 
 	private setPluginAt(pluginId: string, plugin: Plugin) {
@@ -212,8 +215,8 @@ export default class PluginService extends BaseService {
 		return output as PluginSettings;
 	}
 
-	public serializePluginSettings(settings: PluginSettings): string {
-		return JSON.stringify(settings);
+	public serializePluginSettings(settings: PluginSettings) {
+		return settings;
 	}
 
 	public pluginIdByContentScriptId(contentScriptId: string): string {

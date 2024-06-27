@@ -107,3 +107,6 @@ libgtk
 libasound
 libatk
 ENOTFOUND
+Scaleway
+Inkscape
+Ionicon

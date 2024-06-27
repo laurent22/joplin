@@ -17,6 +17,7 @@ import adminEmails from './admin/emails';
 import adminTasks from './admin/tasks';
 import adminUserDeletions from './admin/user_deletions';
 import adminUsers from './admin/users';
+import adminReports from './admin/reports';
 
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
@@ -54,6 +55,7 @@ const routes: Routers = {
 	'admin/tasks': adminTasks,
 	'admin/user_deletions': adminUserDeletions,
 	'admin/users': adminUsers,
+	'admin/reports': adminReports,
 
 	'changes': indexChanges,
 	'help': indexHelp,

@@ -5,6 +5,7 @@ import Logger from '@joplin/utils/Logger';
 import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
+import { defaultPluginSetting } from '../services/plugins/PluginService';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function loadSettingsFromFile(): Promise<any> {
@@ -84,7 +85,7 @@ describe('models/Setting', () => {
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
 
-	it('should not clear old custom settings', (async () => {
+	it.each([SettingStorage.Database, SettingStorage.File])('should not clear old custom settings if not registered immediately', (async (storage) => {
 		// In general the following should work:
 		//
 		// - Plugin register a new setting
@@ -105,6 +106,7 @@ describe('models/Setting', () => {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
+			storage,
 		});
 
 		Setting.setValue('myCustom', '123');
@@ -119,12 +121,41 @@ describe('models/Setting', () => {
 			public: true,
 			value: 'default',
 			type: Setting.TYPE_STRING,
+			storage,
 		});
 
 		await Setting.saveAll();
 
 		expect(Setting.value('myCustom')).toBe('123');
 	}));
+
+	it.each([SettingStorage.Database, SettingStorage.File])('should not clear old custom settings if not registered until restart', async (storage) => {
+		const registerCustom = async () => {
+			await Setting.registerSetting('myCustom', {
+				public: true,
+				value: 'test',
+				type: Setting.TYPE_STRING,
+				storage,
+			});
+		};
+
+		await registerCustom();
+		Setting.setValue('myCustom', 'test2');
+		await Setting.saveAll();
+
+		await Setting.reset();
+		await Setting.load();
+
+		// Change a file setting
+		Setting.setValue('sync.target', 9);
+
+		await Setting.saveAll();
+		await Setting.reset();
+		await Setting.load();
+
+		await registerCustom();
+		expect(Setting.value('myCustom')).toBe('test2');
+	});
 
 	it('should return values with correct type for custom settings', (async () => {
 		await Setting.registerSetting('myCustom', {
@@ -176,7 +207,7 @@ describe('models/Setting', () => {
 	it('should save and load settings from file', (async () => {
 		Setting.setValue('sync.target', 9); // Saved to file
 		Setting.setValue('encryption.passwordCache', {}); // Saved to keychain or db
-		Setting.setValue('plugins.states', { test: true }); // Always saved to db
+		Setting.setValue('plugins.states', { test: defaultPluginSetting() }); // Always saved to db
 		await Setting.saveAll();
 
 		{
@@ -425,5 +456,4 @@ describe('models/Setting', () => {
 			await Setting.saveAll();
 		}
 	});
-
 });

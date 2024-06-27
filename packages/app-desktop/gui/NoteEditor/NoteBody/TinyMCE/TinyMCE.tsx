@@ -32,6 +32,7 @@ import markupRenderOptions from '../../utils/markupRenderOptions';
 import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
+import useLinkTooltips from './utils/useLinkTooltips';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
@@ -363,6 +364,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	}, []);
 
 	useWebViewApi(editor);
+	const { resetModifiedTitles: resetLinkTooltips } = useLinkTooltips(editor);
 
 	useEffect(() => {
 		const theme = themeStyle(props.themeId);
@@ -1048,6 +1050,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		nextOnChangeEventInfo.current = null;
 
+		resetLinkTooltips();
 		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
 
 		lastOnChangeEventInfo.current.content = contentMd;

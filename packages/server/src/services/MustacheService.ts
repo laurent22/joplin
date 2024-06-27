@@ -9,8 +9,9 @@ import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
+import { ReportType } from './reports/types';
 
 export interface RenderOptions {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -131,6 +132,10 @@ export default class MustacheService {
 					{
 						title: _('Emails'),
 						url: adminEmailsUrl(),
+					},
+					{
+						title: _('Reports'),
+						url: adminReportUrl(ReportType.UserActivity),
 					},
 				],
 			},

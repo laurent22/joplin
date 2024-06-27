@@ -16,7 +16,7 @@ import { msleep } from '../utils/time';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import prettyBytes = require('pretty-bytes');
 
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
@@ -75,8 +75,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 	private static storageDrivers_: Map<StorageDriverConfig, StorageDriverBase> = new Map();
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
-		super(db, modelFactory, config);
+	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
+		super(db, dbSlave, modelFactory, config);
 
 		this.storageDriverConfig_ = config.storageDriver;
 		this.storageDriverConfigFallback_ = config.storageDriverFallback;
@@ -102,7 +102,7 @@ export default class ItemModel extends BaseModel<Item> {
 		let driver = ItemModel.storageDrivers_.get(config);
 
 		if (!driver) {
-			driver = await loadStorageDriver(config, this.db);
+			driver = await loadStorageDriver(config, this.db, this.dbSlave);
 			ItemModel.storageDrivers_.set(config, driver);
 		}
 
@@ -331,7 +331,7 @@ export default class ItemModel extends BaseModel<Item> {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
 			if (!fromDriver) {
-				fromDriver = await loadStorageDriver(item.content_storage_id, this.db);
+				fromDriver = await loadStorageDriver(item.content_storage_id, this.db, this.dbSlave);
 				drivers[item.content_storage_id] = fromDriver;
 			}
 

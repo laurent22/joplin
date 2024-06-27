@@ -83,7 +83,8 @@ const useRerenderHandler = (props: Props) => {
 		return accum;
 	}, {});
 	const onlyNoteBodyHasChanged = Object.keys(changedDeps).length === 1 && changedDeps[0];
-	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousDeps[0], props.noteBody);
+	const previousBody = previousDeps[0] as string;
+	const onlyCheckboxesHaveChanged = previousDeps[0] && changedDeps[0] && onlyCheckboxHasChangedHack(previousBody, props.noteBody);
 	const previousHash = usePrevious(props.noteHash, '');
 	const hashChanged = previousHash !== props.noteHash;
 

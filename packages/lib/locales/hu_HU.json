@@ -152,7 +152,7 @@
 	"Accept": [
 		"Elfogadás"
 	],
-	"Accepted shares": [
+	"Accepted invitations": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -162,6 +162,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Active": [
@@ -236,6 +239,9 @@
 	"An update is available, do you want to download it now?": [
 		"Egy frissítés elérhető, le szeretné tölteni most?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -302,7 +308,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
 	],
 	"Automatically check for updates": [
@@ -318,6 +324,9 @@
 		"Vissza"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -457,6 +466,12 @@
 	],
 	"Close Window": [
 		"Ablak bezárása"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kód"
@@ -650,6 +665,12 @@
 	],
 	"Creating report...": [
 		"Jelentés készítése..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Aktuális verzió a legfrissebb."
@@ -1118,9 +1139,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Hibatűrő: Ne törölje a helyi adatot, ha a távoli adat üres (gyakran rossz beállítás vagy hiba eredménye)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Végzetes hiba:"
@@ -1700,11 +1718,11 @@
 	"No active notebook.": [
 		"Nincs aktív jegyzetfüzet."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Nincs ID %s azonosítójú elem"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Nincs jegyzetfüzet megadva."
@@ -1714,6 +1732,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Itt nincs jegyzet. Hozzon létre újat az \"Új jegyzet\"-re kattintva."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Nincs erőforrás!"
@@ -2135,6 +2156,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2158,6 +2182,9 @@
 	],
 	"Restored Notes": [
 		"Visszaállított jegyzetek"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Ismét"
@@ -3022,6 +3049,9 @@
 	],
 	"Website and documentation": [
 		"Web oldal és dokumentáció"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		""

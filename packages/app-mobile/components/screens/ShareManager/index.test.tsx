@@ -110,6 +110,6 @@ describe('ShareManager', () => {
 		render(<ShareManagerWrapper shareInvitations={shares} store={store}/>);
 
 		// Should now allow leaving
-		expect(await screen.findByRole('button', { name: 'Leave share' })).toBeVisible();
+		expect(await screen.findByRole('button', { name: 'Leave notebook' })).toBeVisible();
 	});
 });

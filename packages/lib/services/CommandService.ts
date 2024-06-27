@@ -124,11 +124,11 @@ export default class CommandService extends BaseService {
 		this.stateToWhenClauseContext_ = stateToWhenClauseContext;
 	}
 
-	public on(eventName: EventName, callback: EventListenerCallback) {
+	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.on(eventName, callback);
 	}
 
-	public off(eventName: EventName, callback: EventListenerCallback) {
+	public off<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.off(eventName, callback);
 	}
 

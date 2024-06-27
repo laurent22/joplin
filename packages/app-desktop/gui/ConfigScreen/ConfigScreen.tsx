@@ -243,6 +243,24 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+					const goToJoplinCloudLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinCloudLogin',
+						});
+					};
+					settingComps.push(
+						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
+							<Button
+								title={_('Connect to Joplin Cloud')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinCloudLogin}
+							/>
+						</div>,
+					);
+				}
+
 				settingComps.push(
 					<div key="check_sync_config_button" style={this.rowStyle_}>
 						<Button
@@ -387,7 +405,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			return (
 				<div key={key} style={rowStyle}>
 					{label}
-					{this.renderDescription(this.props.themeId, md.description ? md.description() : null)}
+					{this.renderDescription(this.props.themeId, md.description ? md.description(AppType.Desktop) : null)}
 					<SettingComponent
 						metadata={md}
 						value={value}
@@ -596,6 +614,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											size={ButtonSize.Small}
 										/>
 									</div>
+									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
+										{descriptionComp}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -646,7 +667,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			};
 
 			const label = [md.label()];
-			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
+			if (md.unitLabel) label.push(`(${md.unitLabel(md.value)})`);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const inputStyle: any = { ...textInputBaseStyle };

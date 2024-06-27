@@ -161,9 +161,6 @@
 	"Accept": [
 		"Akceptuj"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Odmowa dostępu: Sprawdź nazwę użytkownika i hasło"
 	],
@@ -263,6 +260,9 @@
 	"An update is available, do you want to download it now?": [
 		"Aktualizacja jest dostępna, czy chcesz ją pobrać?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Każda wiadomość e-mail wysłana na ten adres zostanie przekształcona w notatkę i dodana do kolekcji. Notatka zostanie zapisana w notatniku Skrzynka odbiorcza"
 	],
@@ -332,7 +332,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatycznie dodaj wyłączone konta do usunięcia"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatycznie zamykaj klamry, nawiasy, cudzysłowy itd."
 	],
 	"Automatically check for updates": [
@@ -349,6 +349,9 @@
 	],
 	"Basic": [
 		"Podstawowy"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Odblokowanie biometryczne nie jest skonfigurowane na urządzeniu. Należy je skonfigurować w celu odblokowania Joplin. Jeśli urządzenie jest zablokowane, należy je wyłączyć i włączyć, aby zresetować skanowanie biometryczne."
@@ -499,6 +502,12 @@
 	],
 	"Close Window": [
 		"Zamknij okno"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kod"
@@ -717,6 +726,12 @@
 	],
 	"Creating report...": [
 		"Tworzenie raportu..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Obecna wersja jest aktualna."
@@ -1242,9 +1257,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty (często w wyniku nieprawidłowej konfiguracji lub błędu)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Błąd krytyczny:"
@@ -1895,11 +1907,11 @@
 	"No active notebook.": [
 		"Brak aktywnego notatnika."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Brak przedmiotu z ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Notatnik nie został określony."
@@ -1909,6 +1921,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Brak notatek. Utwórz nową, naciskając na \"Nowa notatka\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Brak zasobów!"
@@ -2363,6 +2378,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2392,6 +2410,9 @@
 	],
 	"Restored Notes": [
 		"Przywrócone notatki"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Ponów"
@@ -3358,6 +3379,9 @@
 	],
 	"Website and documentation": [
 		"Strona internetowa i dokumentacja"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Witaj w Joplin!\n\nWpisz: `:help shortcuts` aby uzyskać listę skrótów klawiaturowych lub `help` aby uzyskać informacje o użytkowaniu.\n\nNa przykład, aby utworzyć notatnik, naciśnij `mb`; aby utworzyć notatkę, naciśnij `mn`."

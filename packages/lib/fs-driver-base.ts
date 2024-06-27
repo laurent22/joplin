@@ -152,13 +152,21 @@ export default class FsDriverBase {
 		}
 		let counter = 1;
 
+		// On Windows, ./FiLe.md and ./file.md are equivalent file paths.
+		// As such, to avoid overwriting reserved names, comparisons need to be
+		// case-insensitive.
+		reservedNames = reservedNames.map(name => name.toLowerCase());
+		const isReserved = (testName: string) => {
+			return reservedNames.includes(testName.toLowerCase());
+		};
+
 		const nameNoExt = filename(name, true);
 		let extension = fileExtension(name);
 		if (extension) extension = `.${extension}`;
 		let nameToTry = nameNoExt + extension;
 		while (true) {
 			// Check if the filename does not exist in the filesystem and is not reserved
-			const exists = await this.exists(nameToTry) || reservedNames.includes(nameToTry);
+			const exists = await this.exists(nameToTry) || isReserved(nameToTry);
 			if (!exists) return nameToTry;
 			if (!markdownSafe) {
 				nameToTry = `${nameNoExt} (${counter})${extension}`;

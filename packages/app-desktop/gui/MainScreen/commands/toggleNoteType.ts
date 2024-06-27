@@ -1,7 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleNoteType',
@@ -15,14 +14,7 @@ export const runtime = (): CommandRuntime => {
 
 			for (let i = 0; i < noteIds.length; i++) {
 				const note = await Note.load(noteIds[i]);
-				const newNote = await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
-				const eventNote = {
-					id: newNote.id,
-					is_todo: newNote.is_todo,
-					todo_due: newNote.todo_due,
-					todo_completed: newNote.todo_completed,
-				};
-				eventManager.emit(EventName.NoteTypeToggle, { noteId: note.id, note: eventNote });
+				await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
 			}
 		},
 		enabledCondition: '!noteIsReadOnly',

@@ -41,7 +41,7 @@
     "postinstall": "gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
+    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@17/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
@@ -87,7 +87,7 @@
     "gulp": "4.0.2",
     "husky": "3.1.0",
     "lerna": "3.22.1",
-    "lint-staged": "15.2.0",
+    "lint-staged": "15.2.2",
     "madge": "6.1.0",
     "npm-package-json-lint": "7.1.0",
     "typescript": "5.2.2"
@@ -105,11 +105,11 @@
     "react-native-vosk@0.1.12": "patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch",
     "eslint": "patch:eslint@8.52.0#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
-    "react-native@0.71.10": "patch:react-native@npm%3A0.71.10#./.yarn/patches/react-native-animation-fix/react-native-npm-0.71.10-f9c32562d8.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "@react-native-community/slider": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch",
     "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch",
-    "chokidar@^2.0.0": "3.5.3"
+    "chokidar@^2.0.0": "3.5.3",
+    "react-native@0.74.1": "patch:react-native@npm%3A0.74.1#./.yarn/patches/react-native-npm-0.74.1-754c02ae9e.patch"
   }
 }

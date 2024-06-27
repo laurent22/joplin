@@ -85,6 +85,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
 		{ accelerator: 'F10', command: 'toggleSideBar' },
+		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
@@ -415,11 +416,11 @@ export default class KeymapService extends BaseService {
 		return parts.join('+');
 	}
 
-	public on(eventName: EventName, callback: EventListenerCallback) {
+	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.on(eventName, callback);
 	}
 
-	public off(eventName: EventName, callback: EventListenerCallback) {
+	public off<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
 		eventManager.off(eventName, callback);
 	}
 

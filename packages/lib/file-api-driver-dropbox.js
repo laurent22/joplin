@@ -130,16 +130,31 @@ class FileApiDriverDropbox {
 			// support POST requests with an empty body:
 			//
 			// https://www.dropboxforum.com/t5/Dropbox-API-Support-Feedback/Error-1017-quot-cannot-parse-response-quot/td-p/589595
+			const needsFetchWorkaround = shim.mobilePlatform() === 'ios';
 
-			const response = await this.api().exec(
-				'GET',
-				'files/download',
-				null,
-				{
-					'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }),
-				},
-				options,
-			);
+			const fetchPath = (method, path, extraHeaders) => {
+				return this.api().exec(
+					method,
+					'files/download',
+					null,
+					{ 'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }), ...extraHeaders },
+					options,
+				);
+			};
+
+			let response;
+			if (!needsFetchWorkaround) {
+				response = await fetchPath('POST', path);
+			} else {
+				// Use a random If-None-Match value to prevent React Native from using the cache.
+				// Passing "cache: no-store" doesn't seem to be sufficient, so If-None-Match is set to a value
+				// that will never match the ETag.
+				//
+				// Something similar is done for WebDAV.
+				//
+				// See https://github.com/laurent22/joplin/issues/10396
+				response = await fetchPath('GET', path, { 'If-None-Match': `JoplinIgnore-${Math.floor(Math.random() * 100000)}` });
+			}
 			return response;
 		} catch (error) {
 			if (this.hasErrorCode_(error, 'not_found')) {

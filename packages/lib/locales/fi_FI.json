@@ -158,9 +158,6 @@
 	"Accept": [
 		"Hyväksy"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -254,6 +251,9 @@
 	"An update is available, do you want to download it now?": [
 		"Päivitys on saatavilla. Haluatko ladata sen nyt?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -323,7 +323,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Lisää käytöstä poistetut tilit automaattisesti poistettavaksi"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Yhdistä sulut, sulkeet, lainaukset jne."
 	],
 	"Automatically check for updates": [
@@ -340,6 +340,9 @@
 	],
 	"Basic": [
 		"Perus"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
@@ -487,6 +490,12 @@
 	],
 	"Close Window": [
 		"Sulje ikkuna"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Koodi"
@@ -683,6 +692,12 @@
 	],
 	"Creating report...": [
 		"Luodaan raporttia..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Nykyinen versio on ajan tasalla."
@@ -1175,9 +1190,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Vikaturvallinen: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä (usein virheellisen määritysvirheen tai virheen seurauksena)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Vakava virhe:"
@@ -1820,11 +1832,11 @@
 	"No active notebook.": [
 		"Ei aktiivista muistikirjaa."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Ei kohdetta tunnuksella %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Muistikirjaa ei ole luokiteltu."
@@ -1834,6 +1846,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Ei muistiinpanoja. Luo uusi napsauttamalla \"Uusi muistiinpano\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Ei resursseja!"
@@ -2285,6 +2300,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2308,6 +2326,9 @@
 	],
 	"Restored Notes": [
 		"Palautetut muistiinpanot"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Yritä uudelleen"
@@ -3226,6 +3247,9 @@
 	],
 	"Website and documentation": [
 		"Verkkosivusto ja asiakirjat"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Tervetuloa Jopliniin!\n\nValitse `:help shortcuts` pikanäppäinten luetteloa varten, tai `:help` saadaksesi käytöstä lisätietoja."

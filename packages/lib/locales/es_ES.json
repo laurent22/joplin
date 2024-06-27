@@ -155,9 +155,6 @@
 	"Accept": [
 		"Aceptar"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -251,6 +248,9 @@
 	"An update is available, do you want to download it now?": [
 		"Está disponible una actualización. ¿Quiere descargarla ahora?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -320,7 +320,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Añadir automáticamente las cuentas deshabilitadas para su eliminación"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Autoemparejar llaves, paréntesis, comillas, etc."
 	],
 	"Automatically check for updates": [
@@ -337,6 +337,9 @@
 	],
 	"Basic": [
 		"Básico"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
@@ -481,6 +484,12 @@
 	],
 	"Close Window": [
 		"Cerrar Ventana"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Código"
@@ -674,6 +683,12 @@
 	],
 	"Creating report...": [
 		"Creando reporte..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"La versión actual está actualizada."
@@ -1166,9 +1181,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"A prueba de fallos: No borre los datos locales cuando el objetivo de sincronización esté vacío (a menudo como resultado de una configuración errónea o de una falla)."
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Error fatal:"
@@ -1808,11 +1820,11 @@
 	"No active notebook.": [
 		"No hay libreta activa."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"No hay elementos con el ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Ninguna libreta ha sido especificada."
@@ -1822,6 +1834,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"No hay ninguna nota. Cree una haciendo clic en «Nota nueva»."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"¡No hay recursos!"
@@ -2273,6 +2288,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2296,6 +2314,9 @@
 	],
 	"Restored Notes": [
 		"Notas Restauradas"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Reintentar"
@@ -3214,6 +3235,9 @@
 	],
 	"Website and documentation": [
 		"Sitio web y documentación"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Bienvenido a Joplin.\n\nEscriba `:help shortcuts` para obtener la lista de los atajos de teclado; o simplemente, `:help` para información general.\n\nPor ejemplo, para crear una libreta pulse `mb`, para crear una nota pulse `mn`."

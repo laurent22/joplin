@@ -2,7 +2,7 @@
 import BaseApplication from '../BaseApplication';
 import BaseModel from '../BaseModel';
 import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
-import Setting from '../models/Setting';
+import Setting, { AppType, Env } from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
 import time from '../time';
@@ -190,14 +190,14 @@ BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
 Setting.setConstant('appId', 'net.cozic.joplintest-cli');
-Setting.setConstant('appType', 'cli');
+Setting.setConstant('appType', AppType.Cli);
 Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
-Setting.setConstant('env', 'dev');
+Setting.setConstant('env', Env.Dev);
 
 BaseService.logger_ = logger;
 
@@ -640,7 +640,7 @@ async function initFileApi() {
 		mustRunInBand();
 
 		const { parameters, setEnvOverride } = require('../parameters.js');
-		Setting.setConstant('env', 'dev');
+		Setting.setConstant('env', Env.Dev);
 		setEnvOverride('test');
 		const config = parameters().oneDriveTest;
 		const api = new OneDriveApi(config.id, config.secret, false);

@@ -2,8 +2,8 @@ import Plugin from '../Plugin';
 import { EventListenerCallback, EventManager, EventName } from '../../../eventManager';
 import { Disposable } from '../api/types';
 
-export default function(
-	plugin: Plugin, eventManager: EventManager, eventName: EventName, callback: EventListenerCallback,
+export default function<Name extends EventName>(
+	plugin: Plugin, eventManager: EventManager, eventName: Name, callback: EventListenerCallback<Name>,
 ): Disposable {
 	eventManager.on(eventName, callback);
 	const dispose = () => {

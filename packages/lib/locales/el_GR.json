@@ -161,9 +161,6 @@
 	"Accept": [
 		"Αποδοχή"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Απαγορεύεται η πρόσβαση: παρακαλώ ελέγξτε το όνομα χρήστη και τον κωδικό σας"
 	],
@@ -263,6 +260,9 @@
 	"An update is available, do you want to download it now?": [
 		"Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Κάθε e-mail σε αυτή τη διεύθυνση θα μετατρέπεται σε σημείωση και θα προστίθεται στη συλλογή σας. Η σημείωση θα αποθηκεύεται στο Σημειωματάριο εισερχομένων"
 	],
@@ -332,7 +332,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Αυτόματη προσθήκη απενεργοποιημένων λογαριασμών για διαγραφή"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 	],
 	"Automatically check for updates": [
@@ -349,6 +349,9 @@
 	],
 	"Basic": [
 		"Βασικό"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Το βιομετρικό ξεκλείδωμα δεν έχει ρυθμιστεί στη συσκευή. Παρακαλούμε ρυθμίστε το για να ξεκλειδώσετε το Joplin. Εάν η συσκευή είναι κλειδωμένη, σκεφτείτε να την απενεργοποιήσετε και να την ενεργοποιήσετε για να επαναφέρετε τη βιομετρική σάρωση."
@@ -499,6 +502,12 @@
 	],
 	"Close Window": [
 		"Κλείσιμο παραθύρου"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Κώδικας"
@@ -716,6 +725,12 @@
 	],
 	"Creating report...": [
 		"Δημιουργία αναφοράς..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Η τρέχουσα έκδοση είναι ενημερωμένη."
@@ -1241,9 +1256,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Δικλείδα ασφαλείας: Να μη διαγράφονται τα τοπικά δεδομένα όταν ο προορισμός συγχρονισμού είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός σφάλματος)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Ανεπανόρθωτο σφάλμα:"
@@ -1892,11 +1904,11 @@
 	"No active notebook.": [
 		"Δεν υπάρχει ενεργό σημειωματάριο."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Δεν υπάρχει στοιχείο με αναγνωριστικό %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Κανένα σημειωματάριο δεν έχει καθοριστεί."
@@ -1906,6 +1918,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Δεν υπάρχουν σημειώσεις εδώ μέσα. Δημιουργήστε μία πατώντας στο \"Νέα σημείωση\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Χωρίς πόρους!"
@@ -2360,6 +2375,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2389,6 +2407,9 @@
 	],
 	"Restored Notes": [
 		"Ανακτημένες σημειώσεις"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Δοκιμή ξανά"
@@ -3352,6 +3373,9 @@
 	],
 	"Website and documentation": [
 		"Ιστοσελίδα και εγχειρίδια"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Καλώς ήλθατε στο Joplin!\n\nΠληκτρολογίστε `:help shortcuts` για τη λίστα συντομεύσεων πληκτρολογίου ή απλά `:help` για πληροφορίες χρήσης.\n\nΓια παράδειγμα, για να δημιουργήσετε ένα σημειωματάριο πατήστε `mb` ενώ για να δημιουργήσετε μια σημείωση πατήστε `mn`."

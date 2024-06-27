@@ -5,6 +5,7 @@ import shim from '../shim';
 import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
+import SyncTargetRegistry from '../SyncTargetRegistry';
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
@@ -110,6 +111,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		Setting.setValue('sync.10.username', jsonBody.id);
 		Setting.setValue('sync.10.password', jsonBody.password);
+		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('joplinCloud'));
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();

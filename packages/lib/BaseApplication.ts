@@ -21,6 +21,7 @@ import BaseItem from './models/BaseItem';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import { splitCommandString } from '@joplin/utils';
+import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
@@ -357,6 +358,9 @@ export default class BaseApplication {
 		const sideEffects: any = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
+				setTimeLocale(Setting.value('locale'));
+				setDateFormat(Setting.value('dateFormat'));
+				setTimeFormat(Setting.value('timeFormat'));
 				time.setDateFormat(Setting.value('dateFormat'));
 				time.setTimeFormat(Setting.value('timeFormat'));
 			},
@@ -683,7 +687,7 @@ export default class BaseApplication {
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
-		Setting.setConstant('env', initArgs.env);
+		Setting.setConstant('env', initArgs.env as Env);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -785,12 +789,12 @@ export default class BaseApplication {
 			Setting.skipDefaultMigrations();
 
 			if (Setting.value('env') === 'dev') {
-				Setting.setValue('showTrayIcon', 0);
-				Setting.setValue('autoUpdateEnabled', 0);
+				Setting.setValue('showTrayIcon', false);
+				Setting.setValue('autoUpdateEnabled', false);
 				Setting.setValue('sync.interval', 3600);
 			}
 
-			Setting.setValue('firstStart', 0);
+			Setting.setValue('firstStart', false);
 		} else {
 			Setting.applyDefaultMigrations();
 			Setting.applyUserSettingMigration();

@@ -9,7 +9,7 @@ import { ResourceEntity, ResourceLocalStateEntity, ResourceOcrStatus, SqlQuery }
 import ResourceLocalState from './ResourceLocalState';
 import * as pathUtils from '../path-utils';
 import { safeFilename } from '../path-utils';
-const { mime } = require('../mime-utils.js');
+import * as mime from '../mime-utils';
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
@@ -637,7 +637,7 @@ export default class Resource extends BaseItem {
 		}
 
 		const output = await super.save(resource, options);
-		if (isNew) eventManager.emit(EventName.ResourceCreate);
+		eventManager.emit(isNew ? EventName.ResourceCreate : EventName.ResourceChange, { id: output.id });
 		return output;
 	}
 

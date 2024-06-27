@@ -63,7 +63,7 @@ const configFromSettings = (settings: EditorSettings) => {
 	}
 
 	if (!settings.ignoreModifiers) {
-		extensions.push(keymap.of(defaultKeymap));
+		extensions.push(Prec.low(keymap.of(defaultKeymap)));
 	}
 
 	return extensions;

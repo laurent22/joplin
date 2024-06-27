@@ -161,9 +161,6 @@
 	"Accept": [
 		"Accetta"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		"Accesso negato: controlla nome utente e password"
 	],
@@ -263,6 +260,9 @@
 	"An update is available, do you want to download it now?": [
 		"È disponibile un aggiornamento, vuoi scaricarlo ora?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Qualsiasi email inviata a questo indirizzo verrà convertita in una nota e aggiunta alla tua raccolta. La nota verrà salvata nel taccuino della Posta in arrivo"
 	],
@@ -332,7 +332,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Aggiungi automaticamente gli account disabilitati per la cancellazione"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto- accoppia parentesi graffe, parentesi, citazione, ecc."
 	],
 	"Automatically check for updates": [
@@ -349,6 +349,9 @@
 	],
 	"Basic": [
 		"Base"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"Lo sblocco biometrico non è configurato sul dispositivo. Configuralo per sbloccare Joplin. Se il dispositivo è in blocco, valuta la possibilità di spegnerlo e riaccenderlo per ripristinare la scansione biometrica."
@@ -496,6 +499,12 @@
 	],
 	"Close Window": [
 		"Chiudi finestra"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Codice"
@@ -710,6 +719,12 @@
 	],
 	"Creating report...": [
 		"Creazione report..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"La versione attuale è aggiornata."
@@ -1229,9 +1244,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Fail-safe: Non rimuovere i dati locale quando la destinazione di sinc è vuota (spesso il risultato di una mal configurazione o di un bug)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Errore fatale:"
@@ -1859,11 +1871,11 @@
 	"No active notebook.": [
 		"Nessun Taccuino attivo."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Nessun elemento con ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Nessun taccuino è stato specificato."
@@ -1873,6 +1885,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Non è presente nessuna nota. Creane una cliccando \"Nuova nota\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Nessuna risorsa!"
@@ -2321,6 +2336,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2347,6 +2365,9 @@
 	],
 	"Restored Notes": [
 		"Ripristina note"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Riprova"
@@ -3271,6 +3292,9 @@
 	],
 	"Website and documentation": [
 		"Sito web e documentazione"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Benvenuto in Joplin!\n\nDigita `:help shortcuts` per la lista delle scorciatoie da tastiera, oppure solo `:help` per le informazioni di utilizzo.\n\nPer esempio, per creare un taccuino digita `mb`; per creare una nota digita `mn`."

@@ -35,12 +35,6 @@ interface ItemChangeEvent {
 	event: ItemChangeEventType;
 }
 
-interface SyncStartEvent {
-	// Tells whether there were errors during sync or not. The log will
-	// have the complete information about any error.
-	withErrors: boolean;
-}
-
 interface ResourceChangeEvent {
 	id: string;
 }
@@ -59,13 +53,15 @@ interface NoteAlarmTriggerEvent {
 }
 
 interface SyncCompleteEvent {
+	// Tells whether there were errors during sync or not. The log will
+	// have the complete information about any error.
 	withErrors: boolean;
 }
 
 type WorkspaceEventHandler<EventType> = (event: EventType)=> void;
 
 type ItemChangeHandler = WorkspaceEventHandler<ItemChangeEvent>;
-type SyncStartHandler = WorkspaceEventHandler<SyncStartEvent>;
+type SyncStartHandler = ()=> void;
 type ResourceChangeHandler = WorkspaceEventHandler<ResourceChangeEvent>;
 
 /**

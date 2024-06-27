@@ -33,6 +33,8 @@ export interface ConfigScreenStyleSheet {
 	sidebarButtonMainText: TextStyle;
 	sidebarSelectedButtonText: TextStyle;
 	sidebarButtonDescriptionText: TextStyle;
+	sidebarHeader: ViewStyle;
+	sidebarHeaderText: TextStyle;
 
 	settingControl: TextStyle;
 }
@@ -97,8 +99,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		paddingTop: 3,
 	};
 
-
-	const styles: ConfigScreenStyleSheet = {
+	const styleSheet = StyleSheet.create<ConfigScreenStyleSheet>({
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
@@ -205,9 +206,19 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			fontWeight: 'bold',
 		},
 		sidebarButtonDescriptionText,
-	};
-
-	const styleSheet = StyleSheet.create(styles);
+		sidebarHeader: {
+			paddingLeft: 12,
+			height: sidebarButtonHeight / 2,
+			flexDirection: 'column',
+			justifyContent: 'center',
+			backgroundColor: theme.oddBackgroundColor,
+		},
+		sidebarHeaderText: {
+			color: theme.color,
+			fontWeight: 'bold',
+			fontSize: theme.fontSize,
+		},
+	});
 
 	return {
 		styleSheet,

@@ -14,7 +14,7 @@ import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
 
 import FileApiDriverLocal from './file-api-driver-local';
-const mimeUtils = require('./mime-utils.js').mime;
+import * as mimeUtils from './mime-utils';
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
@@ -775,6 +775,8 @@ function shimInit(options: ShimInitOptions = null) {
 			url: path,
 			// https://github.com/mozilla/pdf.js/issues/4244#issuecomment-1479534301
 			useSystemFonts: true,
+			// IMPORTANT: Set to false to mitigate CVE-2024-4367.
+			isEvalSupported: false,
 		});
 		return await loadingTask.promise;
 	};

@@ -152,9 +152,6 @@
 	"Accept": [
 		"Sprejmi"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -162,6 +159,9 @@
 		""
 	],
 	"Account": [
+		""
+	],
+	"Account type": [
 		""
 	],
 	"Action": [
@@ -242,6 +242,9 @@
 	"An update is available, do you want to download it now?": [
 		"Posodobitev je na voljo, jo želite prenesti sedaj?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -308,7 +311,7 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Avtomatsko zapri oglate oklepaje, oklepaje, narekovaje, itd."
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -321,6 +324,9 @@
 		"Nazaj"
 	],
 	"Basic": [
+		""
+	],
+	"Beta": [
 		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
@@ -460,6 +466,12 @@
 	],
 	"Close Window": [
 		"Zapri okno"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Koda"
@@ -634,6 +646,12 @@
 	],
 	"Creating report...": [
 		"Ustvarjanje novega poročila %s..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Sedanja verzija je najnovejša."
@@ -1087,9 +1105,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Varovalka: Ne izbrišite lokalne podatke ko je sinhronizacijski cilj prazen (velikokrat je rezultat tega napačna nastavitev ali napaka)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Usodna napaka:"
@@ -1652,11 +1667,11 @@
 	"No active notebook.": [
 		"Ni aktivnih zvezkov."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Ni predmeta z ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Noben zvezek ni bil naveden."
@@ -1666,6 +1681,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Trenutno ni tukaj nobene beležke. Ustvarite jo s klikom na \"Nova beležka\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Ni virov!"
@@ -2078,6 +2096,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2098,6 +2119,9 @@
 	],
 	"Restored Notes": [
 		"Obnovljene beležke"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Poskusi ponovno"
@@ -2926,6 +2950,9 @@
 	],
 	"Website and documentation": [
 		"Spletna stran in dokumentacija"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Dobrodošli v Joplin!\n\nVtipkajte `:help shortcuts` za seznam bližnjic na tipkovnici ali vtipkajte samo`:help` za informacije o uporabi.\n\nNa primer, če želite ustvariti zvezek pritisnite `mb`; če želite ustvariti beležko pritisnite`mn`."

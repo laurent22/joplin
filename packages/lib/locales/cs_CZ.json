@@ -158,9 +158,6 @@
 	"Accept": [
 		"Přijmout"
 	],
-	"Accepted shares": [
-		""
-	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -254,6 +251,9 @@
 	"An update is available, do you want to download it now?": [
 		"Je k dispozici aktualizace, chcete ji stáhnout?"
 	],
+	"Android API level: %d": [
+		""
+	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		""
 	],
@@ -323,7 +323,7 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatické přidání zakázaných účtů k odstranění"
 	],
-	"Auto-pair braces, parenthesis, quotations, etc.": [
+	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaticky zdvojit uvozovky, závorky, apod."
 	],
 	"Automatically check for updates": [
@@ -340,6 +340,9 @@
 	],
 	"Basic": [
 		"Základní"
+	],
+	"Beta": [
+		""
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
@@ -487,6 +490,12 @@
 	],
 	"Close Window": [
 		"Zavřít okno"
+	],
+	"Cmd-click to open": [
+		""
+	],
+	"Cmd-click to open: %s": [
+		""
 	],
 	"Code": [
 		"Kód"
@@ -684,6 +693,12 @@
 	],
 	"Creating report...": [
 		"Vytváření hlášení..."
+	],
+	"Ctrl-click to open": [
+		""
+	],
+	"Ctrl-click to open: %s": [
+		""
 	],
 	"Current version is up-to-date.": [
 		"Současná verze je aktuální."
@@ -1176,9 +1191,6 @@
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Zabezpečení proti selhání: Nemazat místní data, pokud je cíl synchronizace prázdný (často v důsledku nesprávné konfigurace nebo chyby)"
-	],
-	"Failed to leave share. Please verify that Joplin is connected to the internet and able to sync.\nError: %s": [
-		""
 	],
 	"Fatal error:": [
 		"Fatální chyba:"
@@ -1823,11 +1835,11 @@
 	"No active notebook.": [
 		"Není vybrán žádný zápisník."
 	],
-	"No incoming shares": [
-		""
-	],
 	"No item with ID %s": [
 		"Nenalezena položka s ID %s"
+	],
+	"No new invitations": [
+		""
 	],
 	"No notebook has been specified.": [
 		"Nebyl vybrán žádný zápisník."
@@ -1837,6 +1849,9 @@
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Žádné poznámky. Novou vytvoříte klepnutím na \"Nová poznámka\"."
+	],
+	"No plugins are installed.": [
+		""
 	],
 	"No resources!": [
 		"Žádné zdroje!"
@@ -2288,6 +2303,9 @@
 	"Report an issue": [
 		""
 	],
+	"Report any issues concerning the plugin.": [
+		""
+	],
 	"Report fraudulent plugin": [
 		""
 	],
@@ -2314,6 +2332,9 @@
 	],
 	"Restored Notes": [
 		"Obnovené Poznámky"
+	],
+	"Results (%d):": [
+		""
 	],
 	"Retry": [
 		"Znovu"
@@ -3232,6 +3253,9 @@
 	],
 	"Website and documentation": [
 		"Web a dokumentace"
+	],
+	"WebView package: %s": [
+		""
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Vítejte v Joplin!\n\nZadejte `:help shortcuts` pro seznam klávesových zkratek, nebo `:help` pro nápovědu k použítí.\n\nNapř. pro vytvoření zápisníku zadejte `mb`; pro vytvoření nové poznámky `mn`."

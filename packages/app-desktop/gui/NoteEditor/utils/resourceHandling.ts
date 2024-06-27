@@ -6,7 +6,7 @@ import Resource from '@joplin/lib/models/Resource';
 const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
-import rendererHtmlUtils, { extractHtmlBody } from '@joplin/renderer/htmlUtils';
+import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
 import { fileUriToPath } from '@joplin/utils/url';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -15,7 +15,7 @@ import markupRenderOptions from './markupRenderOptions';
 import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 const md5 = require('md5');
 const path = require('path');
 
@@ -220,6 +220,13 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	if (htmlToMd && mdToHtml) {
 		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
 		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
+
+		// When plugins that add to the end of rendered content are installed, bodyOnly can
+		// fail to remove the wrapping paragraph. This works around that issue by removing
+		// the wrapping paragraph in more cases. See issue #10061.
+		if (!md.trim().includes('\n')) {
+			html = removeWrappingParagraphAndTrailingEmptyElements(html);
+		}
 	}
 
 	return extractHtmlBody(rendererHtmlUtils.sanitizeHtml(html, {

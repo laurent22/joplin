@@ -17,14 +17,14 @@ import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-community/clipboard').default;
+const Clipboard = require('@react-native-clipboard/clipboard').default;
 const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import ActionButton from '../ActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
-const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
+import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import NoteTagsDialog from './NoteTagsDialog';
 import time from '@joplin/lib/time';
@@ -55,6 +55,7 @@ import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject } from 'react';
 import { SelectionRange } from '../NoteEditor/types';
+import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
@@ -63,7 +64,7 @@ import pickDocument from '../../utils/pickDocument';
 import debounce from '../../utils/debounce';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import CommandService from '@joplin/lib/services/CommandService';
-const urlUtils = require('@joplin/lib/urlUtils');
+import * as urlUtils from '@joplin/lib/urlUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -122,8 +123,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// a re-render.
 	private lastBodyScroll: number|undefined = undefined;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private saveActionQueues_: any;
+	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
@@ -192,6 +192,8 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 			voiceTypingDialogShown: false,
 		};
+
+		this.titleTextFieldRef = React.createRef();
 
 		this.saveActionQueues_ = {};
 
@@ -538,7 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	public componentDidUpdate(prevProps: any, prevState: any) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
-			this.focusUpdate();
+			this.scheduleFocusUpdate();
 		}
 
 		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
@@ -593,7 +595,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		shared.uninstallResourceHandling(this.refreshResource);
 
-		this.saveActionQueue(this.state.note.id).processAllNow();
+		void this.saveActionQueue(this.state.note.id).processAllNow();
 
 		// It cannot theoretically be undefined, since componentDidMount should always be called before
 		// componentWillUnmount, but with React Native the impossible often becomes possible.
@@ -1082,6 +1084,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		Clipboard.setString(Note.markdownTag(note));
 	}
 
+	private copyExternalLink_onPress() {
+		const note = this.state.note;
+		Clipboard.setString(getNoteCallbackUrl(note.id));
+	}
+
 	public sideMenuOptions() {
 		const note = this.state.note;
 		if (!note) return [];
@@ -1294,6 +1301,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					this.copyMarkdownLink_onPress();
 				},
 			});
+			output.push({
+				title: _('Copy external link'),
+				onPress: () => {
+					this.copyExternalLink_onPress();
+				},
+			});
 		}
 
 		output.push({
@@ -1354,38 +1367,50 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	public scheduleFocusUpdate() {
-		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
+		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 
-		this.focusUpdateIID_ = shim.setTimeout(() => {
-			this.focusUpdateIID_ = null;
-			this.focusUpdate();
-		}, 100);
+		const startTime = Date.now();
+
+		this.focusUpdateIID_ = shim.setInterval(() => {
+			if (!this.state.note) return;
+
+			let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
+			if (this.state.mode === 'view') fieldToFocus = '';
+
+			let done = false;
+
+			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::body', this.editorRef.current);
+			}
+
+			if (Date.now() - startTime > 5000) {
+				logger.warn(`Timeout while trying to set focus on ${fieldToFocus}`);
+				done = true;
+			}
+
+			if (done) {
+				shim.clearInterval(this.focusUpdateIID_);
+				this.focusUpdateIID_ = null;
+			}
+		}, 50);
 	}
 
-	public focusUpdate() {
-		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
-		this.focusUpdateIID_ = null;
-
-		if (!this.state.note) return;
-		let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
-		if (this.state.mode === 'view') fieldToFocus = '';
-
-		// Avoid writing `this.titleTextFieldRef.current` -- titleTextFieldRef may
-		// be undefined.
-		if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-			focus('Note::focusUpdate', this.titleTextFieldRef.current);
-		}
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async folderPickerOptions_valueChanged(itemValue: any) {
+	private async folderPickerOptions_valueChanged(itemValue: string) {
 		const note = this.state.note;
 		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
 
 		if (isProvisionalNote) {
 			await this.saveNoteButton_press(itemValue);
 		} else {
-			await Note.moveToFolder(note.id, itemValue);
+			await Note.moveToFolder(
+				note.id,
+				itemValue,
+				{ dispatchOptions: { preserveSelection: true } },
+			);
 		}
 
 		note.parent_id = itemValue;
@@ -1406,7 +1431,13 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			onValueChange: this.folderPickerOptions_valueChanged,
 		};
 
-		if (this.folderPickerOptions_ && options.selectedFolderId === this.folderPickerOptions_.selectedFolderId) return this.folderPickerOptions_;
+		if (
+			this.folderPickerOptions_
+			&& options.selectedFolderId === this.folderPickerOptions_.selectedFolderId
+			&& options.enabled === this.folderPickerOptions_.enabled
+		) {
+			return this.folderPickerOptions_;
+		}
 
 		this.folderPickerOptions_ = options;
 		return this.folderPickerOptions_;
@@ -1661,7 +1692,6 @@ const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
-		folderId: state.selectedFolderId,
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		searchQuery: state.searchQuery,

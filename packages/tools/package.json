@@ -50,7 +50,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.7",
     "@types/mustache": "4.2.5",
-    "@types/node": "18.19.14",
+    "@types/node": "18.19.26",
     "@types/node-fetch": "2.6.11",
     "@types/yargs": "17.0.32",
     "gettext-extractor": "3.8.0",
@@ -59,9 +59,9 @@
     "jest": "29.7.0",
     "js-yaml": "4.1.0",
     "rss": "1.2.2",
-    "sass": "1.69.7",
+    "sass": "1.71.0",
     "sqlite3": "5.1.6",
-    "style-to-js": "1.1.10",
+    "style-to-js": "1.1.11",
     "typescript": "5.2.2"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"

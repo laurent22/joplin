@@ -10,9 +10,10 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import Logger from '@joplin/utils/Logger';
+import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 
@@ -90,6 +91,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
+					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);
@@ -145,28 +147,31 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<View style={styles.root}>
 			<ScreenHeader title={_('Joplin Cloud Login')} />
 			<View style={styles.containerStyle}>
-				<Text style={styles.text}>
-					{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
-				</Text>
-				<View style={styles.buttonsContainer}>
-					<View style={{ marginBottom: 20 }}>
-						<Button
-							onPress={onAuthoriseClicked}
-							icon='open-in-new'
-							mode='contained'
-						>
-							{_('Authorise')}
-						</Button>
-					</View>
-					<Text style={styles.smallTextStyle}>Or</Text>
-					<Button
-						onPress={onCopyToClipboardClicked}
-						icon='content-copy'
-						mode='outlined'
-					>{_('Copy link to website')}
-					</Button>
-
-				</View>
+				{ state.active !== 'COMPLETED' ?
+					<React.Fragment>
+						<Text style={styles.text}>
+							{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
+						</Text>
+						<View style={styles.buttonsContainer}>
+							<View style={{ marginBottom: 20 }}>
+								<Button
+									onPress={onAuthoriseClicked}
+									icon='open-in-new'
+									mode='contained'
+								>
+									{_('Authorise')}
+								</Button>
+							</View>
+							<Button
+								onPress={onCopyToClipboardClicked}
+								icon='content-copy'
+								mode='outlined'
+							>{_('Copy link to website')}
+							</Button>
+						</View>
+					</React.Fragment>
+					: null
+				}
 				<Text style={styles[state.className]}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<Text style={styles[state.className]}>{state.errorMessage}</Text>
