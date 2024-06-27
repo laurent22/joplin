@@ -8,10 +8,11 @@ If you can't generate your authentication code because you have lost access to y
 
 When you enable MFA, Joplin Cloud will show you a list of codes, that you should save in somewhere safe. Each code can only be used once, but you can generate new codes, if necessary, from your profile page.
 
-## How to enable MFA
+## What do I need?
 
-To enable MFA, you should have an app that will be able to store your MFA secret.
-There are many alternatives, and any app that is also a password manager should do it.
+To be able to enable MFA you will need a smartphone with an app that can store your MFA credential. Some third-party alternatives are: [Authy](https://authy.com/download/), [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en), [Microsoft Authenticator App](https://play.google.com/store/apps/details?id=com.azure.authenticator&hl=en), or any password manager like [Bitwarden](https://bitwarden.com/) or [1Password](https://1password.com/).
+
+## How to enable MFA
 
 - [Access your profile](https://joplincloud.com/users/me)
 - Find the *Multi-factor authentication* section
