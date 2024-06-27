@@ -7,47 +7,9 @@
 		<meta property="og:description" content="Only one copy of Joplin Mobile (Web) can be open at a time."/>
 		<meta property="og:image" content="./icons/icon-192.png"/>
 
-		<title>Joplin</title>
+		<title>Error - Joplin</title>
 		<script src="./serviceWorker.bundle.js"></script>
-
-		<script>
-			// Change to enable or disable React Native dev mode.
-			window.__DEV__ = false;
-
-			// Silences errors related to generated code.
-			window.exports = {};
-		</script>
-		<style>
-			:root {
-				--bg-secondary: white;
-				--bg-primary: #f7f7f8;
-				--fg-primary: black;
-				background-color: var(--bg-secondary);
-			}
-
-			main {
-				max-width: 500px;
-				background-color: var(--bg-primary);
-				color: var(--fg-primary);
-				font-family: sans-serif;
-
-				padding: 14px;
-				padding-left: 32px;
-				padding-right: 32px;
-
-				border-radius: 14px;
-				margin-left: auto;
-				margin-right: auto;
-			}
-
-			@media screen and (prefers-color-scheme: dark) {
-				:root {
-					--bg-secondary: black;
-					--bg-primary: #111;
-					--fg-primary: #fafaff;
-				}
-			}
-		</style>
+		<link rel="stylesheet" href="./info-page.css"/>
 	</head>
 	<body>
 		<main>
@@ -56,7 +18,7 @@
 				At present, the Joplin web client only supports one open copy at a time in the same browser. This restriction is present to keep your data safe.
 			</p>
 			<p>
-				To use Joplin in this tab, please <button id="close-all-other-web-clients">close all other Joplin web client</button> tabs,
+				To use Joplin in this tab, please <button id="close-all-other-web-clients">close all other Joplin web client tabs</button>,
 				then <button id="refresh-this-page">refresh</button> this page.
 			</p>
 		</main>

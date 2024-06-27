@@ -1,0 +1,32 @@
+/* Styles secondary pages (e.g. 404, just-one-client). Not intended for the primary
+   web client page. */
+
+:root {
+	--bg-secondary: white;
+	--bg-primary: #f7f7f8;
+	--fg-primary: black;
+	background-color: var(--bg-secondary);
+}
+
+main {
+	max-width: 500px;
+	background-color: var(--bg-primary);
+	color: var(--fg-primary);
+	font-family: sans-serif;
+
+	padding: 14px;
+	padding-left: 32px;
+	padding-right: 32px;
+
+	border-radius: 14px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	:root {
+		--bg-secondary: black;
+		--bg-primary: #111;
+		--fg-primary: #fafaff;
+	}
+}
