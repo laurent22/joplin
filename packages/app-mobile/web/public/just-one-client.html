@@ -31,7 +31,7 @@
 		for (const closeLink of document.querySelectorAll('#close-all-other-web-clients')) {
 			if (navigator.serviceWorker) {
 				closeLink.onclick = () => {
-					window.navigator.serviceWorker.controller.postMessage({ type: 'close-all-web-client-tabs' });
+					window.navigator.serviceWorker.controller.postMessage({ type: 'closeAllJoplinWebTabs' });
 				};
 			} else {
 				closeLink.replaceWith(document.createTextNode(closeLink.textContent));

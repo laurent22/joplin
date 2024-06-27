@@ -43,7 +43,8 @@ if (typeof window === 'undefined') {
 	self.addEventListener('install', () => self.skipWaiting());
 	self.addEventListener('activate', (event: ExtendableEvent) => event.waitUntil(self.clients.claim()));
 
-	const mainPageBasePath = new URL(self.location.href ?? '').pathname.replace(/\/.*\.js$/, '/');
+	const serviceWorkerPath = new URL(self.location.href ?? '').pathname;
+	const mainPageBasePath = serviceWorkerPath.replace(/\/[^/]+$/, '/');
 	const waitingForClientPath = `${mainPageBasePath}just-one-client.html`;
 	const mainPagePaths = [mainPageBasePath, `${mainPageBasePath}index.html`];
 
