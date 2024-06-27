@@ -82,3 +82,108 @@ export const extractUrls = (html: string) => {
 
 	return output;
 };
+
+type SvgXml = {
+	title: string;
+	content: string;
+};
+
+export const extractSvgs = (html: string, titleGenerator: ()=> string): { svgs: SvgXml[]; html: string } => {
+	if (!html || !html.trim()) return { svgs: [], html };
+
+	const tagStack: string[] = [];
+	const body: string[] = [];
+	const svgs: SvgXml[] = [];
+	let svgStack: string[] = [];
+
+	let svgTagDepth = 0;
+	let svgStyle = '';
+
+	const currentTag = () => {
+		if (!tagStack.length) return '';
+		return tagStack[tagStack.length - 1];
+	};
+
+	const parser = new htmlparser2.Parser({
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			tagStack.push(name);
+			attrs = { ...attrs };
+
+			if (name === 'svg') {
+				svgStyle = attrs.style || '';
+				svgTagDepth++;
+			}
+
+			let attrHtml = attributesHtml(attrs);
+			if (attrHtml) attrHtml = ` ${attrHtml}`;
+			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+			if (svgTagDepth > 0) {
+				svgStack.push(`<${name}${attrHtml}${closingSign}`);
+			} else {
+				body.push(`<${name}${attrHtml}${closingSign}`);
+			}
+		},
+
+		ontext: (decodedText: string) => {
+			if (currentTag() === 'style') {
+				// For CSS, we have to put the style as-is inside the tag
+				// because if we html-entities encode it, it's not going to
+				// work. But it's ok because JavaScript won't run within the
+				// style tag. Ideally CSS should be loaded from an external
+				// file.
+
+				// We however have to encode at least the `<` characters to
+				// prevent certain XSS injections that would rely on the
+				// content not being encoded (see sanitize_13.md)
+				if (svgTagDepth > 0) {
+					svgStack.push(decodedText.replace(/</g, '&lt;'));
+				} else {
+					body.push(decodedText.replace(/</g, '&lt;'));
+				}
+			} else {
+				if (svgTagDepth > 0) {
+					svgStack.push(decodedText.replace(/</g, '&lt;'));
+				} else {
+					body.push(htmlentities(decodedText));
+				}
+			}
+		},
+
+		onclosetag: (name: string) => {
+			if (name === 'svg') {
+				svgTagDepth--;
+				if (svgTagDepth === 0) {
+					svgStack.push('</svg>');
+					const title = titleGenerator();
+					svgs.push({
+						title,
+						content: svgStack.join(''),
+					});
+					body.push(`<img style="${svgStyle}" src="${title}" />`);
+					svgStack = [];
+					svgStyle = '';
+					return;
+				}
+			}
+
+			if (svgTagDepth > 0) {
+				svgStack.push(`</${name}>`);
+			} else {
+
+				body.push(`</${name}>`);
+			}
+		},
+
+	},
+	{
+		decodeEntities: true,
+		lowerCaseAttributeNames: false,
+	});
+
+	parser.write(html);
+	parser.end();
+
+	return { svgs, html: body.join('') };
+};
+

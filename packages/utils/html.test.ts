@@ -1,4 +1,5 @@
-import { extractUrls } from './html';
+import { readFile } from 'fs-extra';
+import { extractSvgs, extractUrls } from './html';
 import { Link } from './types';
 
 describe('htmlUtils', () => {
@@ -57,4 +58,19 @@ describe('htmlUtils', () => {
 		expect(actual).toEqual(expected);
 	});
 
+	it.only.each([
+		'svg_with_text_and_style.html',
+	])('should extract svgs', async (filename: string) => {
+		const titleGenerator = () => {
+			let id = 0;
+			return () => {
+				id += 1;
+				return `id${id}.svg`;
+			};
+		};
+		const filepath = `${__dirname}/__fixtures__/${filename}`;
+		const content = await readFile(filepath, 'utf-8');
+
+		expect(extractSvgs(content, titleGenerator())).toMatchSnapshot();
+	});
 });
