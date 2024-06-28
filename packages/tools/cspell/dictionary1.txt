@@ -57,7 +57,6 @@ attribname
 attribs
 attribvalue
 authcode
-Authy
 autocompleteitem
 autocompleter
 Autocompleter
@@ -92,7 +91,6 @@ bibtex
 Bihari
 Bishoy
 Bislama
-Bitwarden
 blabla
 blablablabla
 blerg
