@@ -343,8 +343,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
 			const s = this.rootLayoutSize();
-			draft.width = s.width;
-			draft.height = s.height;
+			if (s) {
+				draft.width = s.width;
+				draft.height = s.height;
+			} else {
+				console.error('rootLayoutSize() returned null');
+			}
 		}));
 	}
 
