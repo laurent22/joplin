@@ -89,6 +89,6 @@ export default connect((state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !state.settings['sync.10.isAuthenticated'],
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 	};
 })(WarningBannerComponent);

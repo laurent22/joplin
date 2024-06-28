@@ -39,7 +39,7 @@ const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
@@ -493,7 +493,7 @@ const getInitialActiveFolder = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function initialize(dispatch: Function) {
+async function initialize(dispatch: Dispatch) {
 	shimInit();
 
 	setDispatch(dispatch);
@@ -535,6 +535,7 @@ async function initialize(dispatch: Function) {
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
+	reg.setDispatch(dispatch);
 
 	BaseService.logger_ = mainLogger;
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
@@ -789,6 +790,9 @@ async function initialize(dispatch: Function) {
 
 	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
 	Setting.setValue('plugins.states', updatedSettings);
+
+	Setting.setValue('sync.10.username', 'pedrlz.frn@gmail.com');
+	Setting.setValue('sync.10.password', 'admin');
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
