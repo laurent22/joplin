@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FlatList, View, Text, Button, StyleSheet, Platform, Alert } from 'react-native';
+import { FlatList, View, Text, Button, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
 import { ScreenHeader } from '../ScreenHeader';
@@ -105,7 +105,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			logger.error('Unable to share log data:', e);
 
 			// Display a message to the user (e.g. in the case where the user is out of disk space).
-			Alert.alert(_('Error'), _('Unable to share log data. Reason: %s', e.toString()));
+			void shim.showMessageBox(_('Error'), _('Unable to share log data. Reason: %s', e.toString()));
 		} finally {
 			if (fileToShare) {
 				await shim.fsDriver().remove(fileToShare);

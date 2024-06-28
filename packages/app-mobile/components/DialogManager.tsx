@@ -3,11 +3,12 @@ import { createContext, useMemo, useRef, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
 import Modal from './Modal';
+import { _ } from '@joplin/lib/locale';
 
 interface PromptButton {
 	text: string;
 	onPress?: ()=> void;
-	style?: 'cancel'|'destructive';
+	style?: 'cancel'|'default'|'destructive';
 }
 
 interface PromptOptions {
@@ -15,7 +16,7 @@ interface PromptOptions {
 }
 
 export interface DialogControl {
-	prompt(title: string, message: string, buttons: PromptButton[], options?: PromptOptions): void;
+	prompt(title: string, message: string, buttons?: PromptButton[], options?: PromptOptions): void;
 }
 
 export const DialogContext = createContext<DialogControl>(null);
@@ -49,8 +50,9 @@ const DialogManager: React.FC<Props> = props => {
 	const nextDialogIdRef = useRef(0);
 
 	const dialogControl: DialogControl = useMemo(() => {
+		const defaultButtons = [{ text: _('OK') }];
 		return {
-			prompt: (title: string, message: string, buttons: PromptButton[], options?: PromptOptions) => {
+			prompt: (title: string, message: string, buttons: PromptButton[] = defaultButtons, options?: PromptOptions) => {
 				if (Platform.OS === 'ios') {
 					// Alert.alert provides a more native style on iOS.
 					Alert.alert(title, message, buttons, options);
