@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import Setting, { Env } from './models/Setting';
 import { reg } from './registry';
 
@@ -16,8 +15,6 @@ describe('Registry', () => {
 			isAuthenticated: () => true,
 			synchronizer: () => sync,
 		});
-		const mockDispatch = () => {};
-		reg.setDispatch(mockDispatch as Dispatch);
 	});
 
 	afterAll(() => {

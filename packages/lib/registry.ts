@@ -22,7 +22,7 @@ class Registry {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private db_: any;
 	private isOnMobileData_ = false;
-	private dispatch_: Dispatch = null;
+	private dispatch_: Dispatch = (() => {}) as Dispatch;
 
 	public logger() {
 		if (!this.logger_) {
@@ -51,9 +51,8 @@ class Registry {
 		this.dispatch_ = dispatch;
 	}
 
-	private sendDispatch(event: AnyAction) {
-		if (!this.dispatch_) throw new Error('Dispatch not set!');
-		return this.dispatch_(event);
+	private dispatch(action: AnyAction) {
+		return this.dispatch_(action);
 	}
 
 	// If isOnMobileData is true, the doWifiConnectionCheck is not set
@@ -150,7 +149,7 @@ class Registry {
 					}
 
 					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
-						this.sendDispatch({
+						this.dispatch({
 							type: 'MUST_AUTHENTICATE',
 							value: true,
 						});
@@ -158,7 +157,7 @@ class Registry {
 						promiseResolve();
 						return;
 					}
-					this.sendDispatch({
+					this.dispatch({
 						type: 'MUST_AUTHENTICATE',
 						value: false,
 					});
@@ -236,10 +235,10 @@ class Registry {
 			} else {
 				this.logger().debug(`Setting up recurrent sync with interval ${Setting.value('sync.interval')}`);
 
-				if (Setting.value('env') === 'dev') {
-					this.logger().info('Recurrent sync operation DISABLED!!!');
-					return;
-				}
+				// if (Setting.value('env') === 'dev') {
+				// 	this.logger().info('Recurrent sync operation DISABLED!!!');
+				// 	return;
+				// }
 
 				this.recurrentSyncId_ = shim.setInterval(() => {
 					this.logger().info('Running background sync on timer...');
