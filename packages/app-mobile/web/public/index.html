@@ -3,6 +3,22 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0,interactive-widget=resizes-content"/>
+		<!-- This content security policy also applies to content in the sandboxed
+			 note viewer iframe. As such, it needs to allow inline JavaScript and
+			 blob: URLs. -->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+				default-src 'self' ;
+				connect-src 'self' * http://* https://* ;
+				img-src 'self' blob: http://* https://* ;
+				style-src 'unsafe-inline' 'self' blob: ;
+				child-src 'self' ;
+				script-src 'self' 'unsafe-eval' 'unsafe-inline' ;
+				font-src 'self' https://* blob: ;
+			"
+		/>
+
 		<link rel="manifest" href="./manifest.json"/>
 		<link rel="icon" href="./icons/icon-vector-large.svg"/>
 		<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
@@ -10,14 +26,10 @@
 		<meta property="og:image" content="./icons/icon-192.png"/>
 
 		<title>Joplin</title>
+		<script src="./environment.js"></script>
 		<script src="./serviceWorker.bundle.js"></script>
 
 		<script>
-			// Change to enable or disable React Native dev mode.
-			window.__DEV__ = false;
-
-			// Silences errors related to generated code.
-			window.exports = {};
 		</script>
 		<style>
 			body, :root {
