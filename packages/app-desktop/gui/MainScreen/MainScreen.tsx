@@ -97,7 +97,7 @@ interface Props {
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
-	showInvalidJoplinCloudCredential: string;
+	showInvalidJoplinCloudCredential: boolean;
 }
 
 interface ShareFolderDialogOptions {
