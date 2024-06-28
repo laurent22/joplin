@@ -694,8 +694,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
-				_('Your Joplin Cloud credentials are invalid., please re-authenticate.'),
-				_('Go to Joplin Cloud Login'),
+				_('Your Joplin Cloud credentials are invalid, please login.'),
+				_('Login to Joplin Cloud.'),
 				onViewJoplinCloudLoginScreen,
 			);
 		}

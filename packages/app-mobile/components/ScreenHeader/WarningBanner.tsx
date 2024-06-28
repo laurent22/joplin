@@ -52,7 +52,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
 	}
 	if (props.showInvalidJoplinCloudCredential) {
-		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please re-authenticate.')));
+		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
