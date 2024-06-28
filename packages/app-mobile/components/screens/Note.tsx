@@ -1211,13 +1211,16 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		output.push({
-			title: _('Share'),
-			onPress: () => {
-				void this.share_onPress();
-			},
-			disabled: readOnly,
-		});
+		const shareSupported = Platform.OS !== 'web' || !!navigator.share;
+		if (shareSupported) {
+			output.push({
+				title: _('Share'),
+				onPress: () => {
+					void this.share_onPress();
+				},
+				disabled: readOnly,
+			});
+		}
 
 		// Voice typing is enabled only for French language and on Android for now
 		if (voskEnabled && shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
