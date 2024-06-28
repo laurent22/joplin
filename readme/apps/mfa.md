@@ -1,10 +1,10 @@
 # Multi-factor authentication
 
-You can now enable Multi-Factor Authentication (MFA) to your Joplin Account. MFA enhances your account security by requiring more than just a password to log in. 
+Multi-Factor Authentication (MFA), also known as Two Factor Authentication (2FA),  enhances your account security by requiring more than just a password to log in. 
 
 If you can't generate your authentication code because you have lost access to your smartphone, for example, you will need to use one of the recovery codes to log in.
 
-## Recovery Codes
+## Recovery codes
 
 When you enable MFA, Joplin Cloud will show you a list of codes, that you should save in somewhere safe. Each code can only be used once, but you can generate new codes, if necessary, from your profile page.
 
@@ -21,8 +21,7 @@ If successful you should see a notification and a new page with your recovery co
 
 - [Access your profile](https://joplincloud.com/users/me)
 - Find the *Multi-factor authentication* section
-- Click the link to *I want to disable it*
-- Finish by entering your password
+- Click the link to *I want to disable it* and follow the instructions
 
 ## I forgot to copy my recovery codes, how do I find them?
 
