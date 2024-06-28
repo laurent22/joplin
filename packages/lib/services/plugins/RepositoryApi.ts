@@ -168,7 +168,8 @@ export default class RepositoryApi {
 	}
 
 	private assetFileUrl(pluginId: string): string {
-		if (this.release_) {
+		// On web, downloading from a release is blocked by CORS.
+		if (this.release_ && shim.mobilePlatform() !== 'web') {
 			const asset = this.release_.assets.find(asset => {
 				const s = asset.name.split('@');
 				s.pop();
