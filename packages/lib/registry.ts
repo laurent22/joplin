@@ -2,6 +2,7 @@ import Logger from '@joplin/utils/Logger';
 import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
+import { AnyAction, Dispatch } from 'redux';
 
 class Registry {
 
@@ -21,6 +22,7 @@ class Registry {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private db_: any;
 	private isOnMobileData_ = false;
+	private dispatch_: Dispatch = null;
 
 	public logger() {
 		if (!this.logger_) {
@@ -43,6 +45,15 @@ class Registry {
 	public showErrorMessageBox(message: string) {
 		if (!this.showErrorMessageBoxHandler_) return;
 		this.showErrorMessageBoxHandler_(message);
+	}
+
+	public setDispatch(dispatch: Dispatch) {
+		this.dispatch_ = dispatch;
+	}
+
+	private sendDispatch(event: AnyAction) {
+		if (!this.dispatch_) throw new Error('Dispatch not set!');
+		return this.dispatch_(event);
 	}
 
 	// If isOnMobileData is true, the doWifiConnectionCheck is not set
@@ -139,10 +150,18 @@ class Registry {
 					}
 
 					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
+						this.sendDispatch({
+							type: 'MUST_AUTHENTICATE',
+							value: true,
+						});
 						this.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
 						promiseResolve();
 						return;
 					}
+					this.sendDispatch({
+						type: 'MUST_AUTHENTICATE',
+						value: false,
+					});
 
 					try {
 						const sync = await this.syncTarget(syncTargetId).synchronizer();

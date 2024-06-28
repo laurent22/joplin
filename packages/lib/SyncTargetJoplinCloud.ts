@@ -4,10 +4,6 @@ import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
-import { convertValuesToFunctions } from './ObjectUtils';
-import Logger from '@joplin/utils/Logger';
-
-const logger = Logger.create('SyncTargetJoplinCloud');
 
 interface FileApiOptions {
 	path(): string;
@@ -58,27 +54,9 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			const fileApi = await this.fileApi();
 			const api = fileApi.driver().api();
 			const sessionId = await api.sessionId();
-			if (!sessionId) {
-				return false;
-			}
-
-			const settings = Setting.toPlainObject();
-			const options = {
-				...Setting.subValues(`sync.${SyncTargetJoplinCloud.id()}`, settings),
-				...Setting.subValues('net', settings),
-			};
-
-			const result = await SyncTargetJoplinCloud.checkConfig(convertValuesToFunctions(options));
-
-			if (result.errorMessage) {
-				logger.error(result.errorMessage);
-			}
-
-			Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isAuthenticated`, result.ok);
-			return result.ok;
+			return !!sessionId;
 		} catch (error) {
 			if (error.code < 500) {
-				Setting.setValue(`sync.${SyncTargetJoplinCloud.id()}.isAuthenticated`, false);
 				return false;
 			}
 			throw error;

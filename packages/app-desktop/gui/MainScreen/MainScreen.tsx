@@ -97,7 +97,7 @@ interface Props {
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
-	showInvalidJoplinCloudCredential: boolean;
+	showInvalidJoplinCloudCredential: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -980,7 +980,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
-		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && !state.settings['sync.10.isAuthenticated'],
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 	};
 };
 
