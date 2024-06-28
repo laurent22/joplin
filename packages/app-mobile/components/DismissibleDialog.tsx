@@ -33,14 +33,6 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 		const maxHeight = size === DialogSize.Large ? windowSize.height : 700;
 
 		return StyleSheet.create({
-			webView: {
-				backgroundColor: 'transparent',
-				display: 'flex',
-			},
-			webViewContainer: {
-				flexGrow: 1,
-				flexShrink: 1,
-			},
 			closeButtonContainer: {
 				flexDirection: 'row',
 				justifyContent: 'flex-end',
@@ -94,7 +86,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			backgroundColor='rgba(0, 0, 0, 0.1)'
 			transparent={true}
 		>
-			<Surface style={styles.dialogSurface} elevation={1}>
+			<Surface style={styles.dialogSurface} elevation={1} testID='surface'>
 				{closeButton}
 				{props.children}
 			</Surface>
