@@ -791,9 +791,6 @@ async function initialize(dispatch: Dispatch) {
 	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
 	Setting.setValue('plugins.states', updatedSettings);
 
-	Setting.setValue('sync.10.username', 'pedrlz.frn@gmail.com');
-	Setting.setValue('sync.10.password', 'admin');
-
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native
 	// ----------------------------------------------------------------------------
