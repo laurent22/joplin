@@ -140,11 +140,13 @@ if (typeof window === 'undefined') {
 
 		const cacheResponse = (cache: Cache, response: Response) => {
 			try {
+				const url = new URL(event.request.url);
 				if (
 					request.method === 'GET' &&
 					response.ok &&
+					url.origin === self.location.origin &&
 					(
-						event.request.url?.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
+						url.pathname.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
 						// Also cache HTML responses (e.g. for index.html, when requested with a directory
 						// URL).
 						(response.headers?.get('Content-Type') ?? '').startsWith('text/html')
