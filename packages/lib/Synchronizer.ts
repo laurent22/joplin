@@ -524,6 +524,9 @@ export default class Synchronizer {
 					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
 			} catch (error) {
+				if (error.message === 'Invalid authentication code') {
+					this.dispatch({ type: 'MUST_AUTHENTICATE', value: true });
+				}
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);
 				}
