@@ -982,19 +982,20 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 
 	public async onAlarmDialogAccept(date: Date) {
-		if (Platform.OS === 'web') {
-			alert('Not supported.');
-			return;
+		if (Platform.OS === 'android') {
+			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+			// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+			// (If unsupported, returns NEVER_ASK_AGAIN).
+			// On earlier releases, notifications should work without this permission.
+			if (response === PermissionsAndroid.RESULTS.DENIED) {
+				logger.warn('POST_NOTIFICATIONS permission was not granted');
+				return;
+			}
 		}
 
-		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-
-		// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
-		// (If unsupported, returns NEVER_ASK_AGAIN).
-		// On earlier releases, notifications should work without this permission.
-		if (response === PermissionsAndroid.RESULTS.DENIED) {
-			logger.warn('POST_NOTIFICATIONS permission was not granted');
-			return;
+		if (Platform.OS === 'web') {
+			alert('Warning: The due-date has been saved, but showing notifications is not supported by Joplin Web.');
 		}
 
 		const newNote = { ...this.state.note };
