@@ -374,8 +374,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		'sync.10.userEmail': { value: '', type: SettingItemType.String, public: false },
 
-		'sync.10.isAuthenticated': { value: false, type: SettingItemType.Bool, public: false },
-
 		'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 		'sync.resourceDownloadMode': {
