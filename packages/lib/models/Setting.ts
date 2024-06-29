@@ -757,6 +757,8 @@ class Setting extends BaseModel {
 		const output = [];
 
 		for (const value of order) {
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
+
 			output.push({
 				[options.valueKey]: value,
 				[options.labelKey]: enumOptions[value],
