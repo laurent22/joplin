@@ -148,9 +148,6 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 			pluginAssetsAdded_[assetId] = null;
 		}
 	}
-
-	// Some plugins require this event to be fired **just after** they start.
-	document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 };
 
 export default addPluginAssets;

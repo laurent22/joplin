@@ -176,8 +176,9 @@ export default class Renderer {
 				readAssetBlob: settings.readAssetBlob,
 			});
 
+			// Some plugins require this event to be dispatched just after being added.
 			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
-		});
+		})();
 
 		this.afterRender(settings);
 	}
