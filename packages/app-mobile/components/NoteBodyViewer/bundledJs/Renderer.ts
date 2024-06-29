@@ -168,9 +168,15 @@ export default class Renderer {
 		}
 
 		contentContainer.innerHTML = html;
-		await addPluginAssets(pluginAssets, {
-			inlineAssets: this.setupOptions.useTransferredFiles,
-			readAssetBlob: settings.readAssetBlob,
+
+		// Adding plugin assets can be slow -- run it asynchronously.
+		void (async () => {
+			await addPluginAssets(pluginAssets, {
+				inlineAssets: this.setupOptions.useTransferredFiles,
+				readAssetBlob: settings.readAssetBlob,
+			});
+
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 		});
 
 		this.afterRender(settings);
@@ -207,9 +213,6 @@ export default class Renderer {
 				}
 			}
 		}, 10);
-
-		// Used by some parts of the renderer (e.g. to rerender mermaid.js diagrams).
-		document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 	}
 
 	public clearCache(markupLanguage: MarkupLanguage) {
