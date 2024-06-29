@@ -1259,12 +1259,16 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					this.copyMarkdownLink_onPress();
 				},
 			});
-			output.push({
-				title: _('Copy external link'),
-				onPress: () => {
-					this.copyExternalLink_onPress();
-				},
-			});
+
+			// External links are not supported on web.
+			if (Platform.OS !== 'web') {
+				output.push({
+					title: _('Copy external link'),
+					onPress: () => {
+						this.copyExternalLink_onPress();
+					},
+				});
+			}
 		}
 
 		output.push({
