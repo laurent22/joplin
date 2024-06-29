@@ -33,6 +33,7 @@ const FileSystemPathSelector: FunctionComponent<Props> = props => {
 
 	const selectDirectoryButtonPress = useCallback(async () => {
 		if (shim.mobilePlatform() === 'web') {
+			// Directory picker IDs can't include certain characters.
 			const pickerId = `setting-${settingId}`.replace(/[^a-zA-Z]/g, '_');
 			const handle = await self.showDirectoryPicker({ id: pickerId, mode: 'readwrite' });
 			const fsDriver = shim.fsDriver() as FsDriverWeb;

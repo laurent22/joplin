@@ -125,7 +125,6 @@ const useRerenderHandler = (props: Props) => {
 
 		if (shim.mobilePlatform() === 'web') {
 			for (const [resourceId, resource] of Object.entries(props.noteResources)) {
-				// if (!(await props.renderer.getResourcePathOverride(resourceId))) {
 				try {
 					await props.renderer.setResourceFile(
 						resourceId,
@@ -137,7 +136,6 @@ const useRerenderHandler = (props: Props) => {
 					}
 					console.warn('ENOTFOUND', Resource.fullPath(resource.item), 'for', resource);
 				}
-				// }
 			}
 		}
 
