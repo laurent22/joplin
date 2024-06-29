@@ -168,7 +168,7 @@ export default class Renderer {
 		}
 
 		contentContainer.innerHTML = html;
-		void addPluginAssets(pluginAssets, {
+		await addPluginAssets(pluginAssets, {
 			inlineAssets: this.setupOptions.useTransferredFiles,
 			readAssetBlob: settings.readAssetBlob,
 		});
