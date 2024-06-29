@@ -11,10 +11,11 @@
 			content="
 				default-src 'self' ;
 				connect-src 'self' * http://* https://* ;
-				img-src 'self' blob: http://* https://* data: ;
 				style-src 'unsafe-inline' 'self' blob: ;
 				child-src 'self' ;
 				script-src 'self' 'unsafe-eval' 'unsafe-inline' ;
+				media-src 'self' blob: data: https://* http://* ;
+				img-src 'self' blob: data: http://* https://* ;
 				font-src 'self' https://* blob: data: ;
 			"
 		/>
