@@ -235,10 +235,10 @@ class Registry {
 			} else {
 				this.logger().debug(`Setting up recurrent sync with interval ${Setting.value('sync.interval')}`);
 
-				// if (Setting.value('env') === 'dev') {
-				// 	this.logger().info('Recurrent sync operation DISABLED!!!');
-				// 	return;
-				// }
+				if (Setting.value('env') === 'dev') {
+					this.logger().info('Recurrent sync operation DISABLED!!!');
+					return;
+				}
 
 				this.recurrentSyncId_ = shim.setInterval(() => {
 					this.logger().info('Running background sync on timer...');
