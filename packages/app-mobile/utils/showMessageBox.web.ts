@@ -7,7 +7,7 @@ interface Options {
 
 const showMessageBox = (message: string, options: Options = null) => {
 	return new Promise<number>(resolve => {
-		if (!options?.buttons || options?.buttons?.length === 1) {
+		if (options?.buttons?.length === 1) {
 			alert(message);
 			resolve(0);
 		} else {
