@@ -1535,6 +1535,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			description: () => _('Leave it blank to download the language files from the default website'),
 			label: () => _('Voice typing language files (URL)'),
+			// For now, iOS and web don't support voice typing.
 			show: () => shim.mobilePlatform() === 'android',
 			section: 'note',
 		},

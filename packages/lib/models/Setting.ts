@@ -310,6 +310,7 @@ class Setting extends BaseModel {
 		if (this.metadata_) return this.metadata_;
 
 		this.buildInMetadata_ = builtInMetadata(this);
+
 		this.metadata_ = { ...this.buildInMetadata_ };
 
 		this.metadata_ = { ...this.metadata_, ...this.customMetadata_ };
