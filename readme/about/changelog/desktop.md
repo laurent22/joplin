@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.0.11](https://github.com/laurent22/joplin/releases/tag/v3.0.11) (Pre-release) - 2024-06-29T10:20:02Z
+
+- Updated Chinese and German translation
+
 ## [v3.0.10](https://github.com/laurent22/joplin/releases/tag/v3.0.10) (Pre-release) - 2024-06-19T15:24:07Z
 
 - Improved: Don't render empty title page for Fountain ([#10631](https://github.com/laurent22/joplin/issues/10631) by [@XPhyro](https://github.com/XPhyro))
