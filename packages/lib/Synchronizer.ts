@@ -524,7 +524,7 @@ export default class Synchronizer {
 					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
 			} catch (error) {
-				if (error.code === 403) {
+				if ([403, 404].includes(error.code)) {
 					this.dispatch({ type: 'MUST_AUTHENTICATE', value: true });
 				}
 				if (error.code === 'outdatedSyncTarget') {
