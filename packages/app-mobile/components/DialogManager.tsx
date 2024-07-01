@@ -53,7 +53,7 @@ const DialogManager: React.FC<Props> = props => {
 		const defaultButtons = [{ text: _('OK') }];
 		return {
 			prompt: (title: string, message: string, buttons: PromptButton[] = defaultButtons, options?: PromptOptions) => {
-				if (Platform.OS !== 'android') {
+				if (Platform.OS !== 'web') {
 					// Alert.alert provides a more native style on iOS.
 					Alert.alert(title, message, buttons, options);
 
