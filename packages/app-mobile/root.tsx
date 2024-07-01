@@ -39,7 +39,7 @@ const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
 import shimInit from './utils/shim-init-react';
 const { AppNav } = require('./components/app-nav.js');
@@ -498,7 +498,7 @@ const getInitialActiveFolder = async () => {
 const singleInstanceLock = lockToSingleInstance();
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function initialize(dispatch: Function) {
+async function initialize(dispatch: Dispatch) {
 	shimInit();
 
 	setDispatch(dispatch);
@@ -544,6 +544,7 @@ async function initialize(dispatch: Function) {
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
+	reg.setDispatch(dispatch);
 
 	BaseService.logger_ = mainLogger;
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
