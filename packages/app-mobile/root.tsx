@@ -534,7 +534,7 @@ async function initialize(dispatch: Dispatch) {
 	mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 	mainLogger.setLevel(Logger.LEVEL_INFO);
 
-	if (Setting.value('env') === 'dev' || Platform.OS === 'web') {
+	if (Setting.value('env') === 'dev') {
 		mainLogger.addTarget(TargetType.Console);
 		mainLogger.setLevel(Logger.LEVEL_DEBUG);
 	}
@@ -553,16 +553,11 @@ async function initialize(dispatch: Dispatch) {
 	reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
-	if (Platform.OS !== 'web') {
-		dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
-		if (Setting.value('env') === 'dev') {
-			dbLogger.addTarget(TargetType.Console);
-			dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
-		} else {
-			dbLogger.setLevel(Logger.LEVEL_INFO);
-		}
-	} else {
+	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
+	if (Setting.value('env') === 'dev') {
 		dbLogger.addTarget(TargetType.Console);
+		dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
+	} else {
 		dbLogger.setLevel(Logger.LEVEL_INFO);
 	}
 
