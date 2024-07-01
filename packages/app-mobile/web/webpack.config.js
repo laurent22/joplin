@@ -1,27 +1,20 @@
 // web/webpack.config.js
-// TODO: Copied from https://necolas.github.io/react-native-web/docs/multi-platform/
-//			 This file should be customised to only include parts we need
+// Based on https://necolas.github.io/react-native-web/docs/multi-platform/
 // See also https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l
 
 const path = require('path');
 const appDirectory = path.resolve(__dirname, '../');
 const babelConfig = require('../babel.config');
 
-// This is needed for webpack to compile JavaScript.
-// Many OSS React Native packages are not compiled to ES5 before being
-// published. If you depend on uncompiled packages they may cause webpack build
-// errors. To fix this webpack can be configured to compile to the necessary
-// `node_module`.
 const babelLoaderConfiguration = {
 	test: /\.(tsx|jsx|ts|js|mjs)$/,
-	// Add every directory that needs to be compiled by Babel during the build.
 	exclude: [
 		path.resolve(appDirectory, 'ios'),
 		path.resolve(appDirectory, 'android'),
 
+		// Compiling these libraries with babel cause build errors.
 		/.*node_modules\/@babel.*/,
 		/.*node_modules\/@sqlite\.org\/.*/,
-		// path.resolve(appDirectory, 'node_modules/react-native-uncompiled')
 	],
 
 	use: {
@@ -38,8 +31,7 @@ const babelLoaderConfiguration = {
 	},
 };
 
-// This is needed for webpack to import static images in JavaScript files.
-const imageLoaderConfiguration = {
+const resourceLoaderConfiguration = {
 	test: /\.(gif|jpe?g|png|svg|ttf)$/,
 	type: 'asset/resource',
 };
@@ -54,23 +46,19 @@ module.exports = {
 		serviceWorker: path.resolve(appDirectory, 'web/serviceWorker.ts'),
 	},
 
-	// configures where the build ends up
 	output: {
 		filename: '[name].bundle.js',
 		path: path.resolve(appDirectory, 'web/dist'),
 	},
 
-	// ...the rest of your config
-
 	module: {
 		rules: [
 			babelLoaderConfiguration,
-			imageLoaderConfiguration,
+			resourceLoaderConfiguration,
 		],
 	},
 
 	resolve: {
-		// This will only alias the exact import "react-native"
 		alias: {
 			'react-native$': 'react-native-web',
 
@@ -90,9 +78,7 @@ module.exports = {
 			// See https://github.com/microsoft/TypeScript/issues/37053
 			'serviceworker': emptyLibraryMock,
 		},
-		// If you're working on a multi-platform React Native app, web-specific
-		// module implementations should be written in files using the extension
-		// `.web.js`.
+		// Prefers .web.js, .web.ts, etc. imports to other imports.
 		extensions: [
 			'.web.js',
 			'.js',
