@@ -7471,7 +7471,7 @@ __metadata:
     "@types/react": 18.2.58
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
-    "@types/serviceworker": ^0.0.88
+    "@types/serviceworker": 0.0.88
     "@types/tar-stream": 3.1.3
     assert-browserify: 2.0.0
     babel-jest: 29.7.0
@@ -7538,7 +7538,7 @@ __metadata:
     string-natural-compare: 3.0.1
     tar-stream: 3.1.7
     timers: 0.1.1
-    timers-browserify: ^2.0.12
+    timers-browserify: 2.0.12
     ts-jest: 29.1.1
     ts-loader: 9.5.1
     ts-node: 10.9.2
@@ -12471,7 +12471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:^0.0.88":
+"@types/serviceworker@npm:0.0.88":
   version: 0.0.88
   resolution: "@types/serviceworker@npm:0.0.88"
   checksum: 2ce6bb34f7d488e1beeed7f42a943d75e033f7df5992d4c23b12ed3afd1696d634213cbbfe7089f7466e783fc454652b53ad6ac2925e559acf885e9e1e6b5576
@@ -42445,21 +42445,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"timers-browserify@npm:2.0.12":
+  version: 2.0.12
+  resolution: "timers-browserify@npm:2.0.12"
+  dependencies:
+    setimmediate: ^1.0.4
+  checksum: ec37ae299066bef6c464dcac29c7adafba1999e7227a9bdc4e105a459bee0f0b27234a46bfd7ab4041da79619e06a58433472867a913d01c26f8a203f87cee70
+  languageName: node
+  linkType: hard
+
 "timers-browserify@npm:^1.0.1":
   version: 1.4.2
   resolution: "timers-browserify@npm:1.4.2"
   dependencies:
     process: ~0.11.0
   checksum: b7437e228684d8e6e193580d363ffdcd752396c0d1013503f50e412aa86e920248a8627450ad40557443e07ef6b9b602ffc940b3ba06db23774a7ab507e1911d
-  languageName: node
-  linkType: hard
-
-"timers-browserify@npm:^2.0.12":
-  version: 2.0.12
-  resolution: "timers-browserify@npm:2.0.12"
-  dependencies:
-    setimmediate: ^1.0.4
-  checksum: ec37ae299066bef6c464dcac29c7adafba1999e7227a9bdc4e105a459bee0f0b27234a46bfd7ab4041da79619e06a58433472867a913d01c26f8a203f87cee70
   languageName: node
   linkType: hard
 
