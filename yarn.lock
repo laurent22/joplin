@@ -7528,9 +7528,9 @@ __metadata:
     react-native-web: 0.19.12
     react-native-webview: 13.8.1
     react-native-zip-archive: 6.1.0
-    react-redux: 9.1.2
+    react-redux: 8.1.3
     react-test-renderer: 18.2.0
-    redux: 5.0.1
+    redux: 4.2.1
     rn-fetch-blob: 0.12.0
     sqlite3: 5.1.6
     stream: 0.0.2
@@ -7740,7 +7740,7 @@ __metadata:
     react: 18.2.0
     react-test-renderer: 18.2.0
     read-chunk: 2.1.0
-    redux: 5.0.1
+    redux: 4.2.1
     relative: 3.0.2
     reselect: 4.1.8
     server-destroy: 1.0.1
@@ -37483,25 +37483,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:9.1.2":
-  version: 9.1.2
-  resolution: "react-redux@npm:9.1.2"
-  dependencies:
-    "@types/use-sync-external-store": ^0.0.3
-    use-sync-external-store: ^1.0.0
-  peerDependencies:
-    "@types/react": ^18.2.25
-    react: ^18.0
-    redux: ^5.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    redux:
-      optional: true
-  checksum: 1ee9cf41f29f68267320b4fc3bcf6a76a3825c82441612582678ddd827a2b60834f687d2a8b755c905885dfce476a1eb41af42b36f4dd71f8ee9991296a1e515
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.14.0":
   version: 0.14.0
   resolution: "react-refresh@npm:0.14.0"
@@ -38053,13 +38034,6 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.9.2
   checksum: f63b9060c3a1d930ae775252bb6e579b42415aee7a23c4114e21a0b4ba7ec12f0ec76936c00f546893f06e139819f0e2855e0d55ebfce34ca9c026241a6950dd
-  languageName: node
-  linkType: hard
-
-"redux@npm:5.0.1":
-  version: 5.0.1
-  resolution: "redux@npm:5.0.1"
-  checksum: e74affa9009dd5d994878b9a1ce30d6569d986117175056edb003de2651c05b10fe7819d6fa94aea1a94de9a82f252f986547f007a2fbeb35c317a2e5f5ecf2c
   languageName: node
   linkType: hard
 
