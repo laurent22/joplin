@@ -53,9 +53,8 @@ const keepAppAboveKeyboard = () => {
 
 addEventListener('DOMContentLoaded', async () => {
 	if (window.crossOriginIsolated === false) {
-		// Currently, reloading might help because a service worker loaded by index.html
-		// tries to enable crossOriginIsolated.
-		// TODO: Handle this in a better way.
+		// Currently, reloading should be handled by serviceWorker.ts -- this change is left for
+		// debugging purposes.
 		document.body.appendChild(
 			document.createTextNode('Warning: crossOriginIsolated is false. SharedArrayBuffer and similar APIs may not work correctly. Try refreshing the page.'),
 		);
