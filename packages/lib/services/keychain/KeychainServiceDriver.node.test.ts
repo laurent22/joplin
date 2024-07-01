@@ -49,12 +49,13 @@ describe('KeychainServiceDriver.node', () => {
 		await switchClient(0);
 		Setting.setValue('keychain.supported', 1);
 		await KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), Setting.value('clientId')));
+		shim.electronBridge = null;
 	});
 
 	test('should migrate keys from keytar to safeStorage', async () => {
 		const keytarMock = mockKeytar();
 
-		// Set a few secure settings
+		// Set a secure setting
 		Setting.setValue('encryption.masterPassword', 'testing');
 		await Setting.saveAll();
 
@@ -72,5 +73,19 @@ describe('KeychainServiceDriver.node', () => {
 
 		await Setting.load();
 		expect(Setting.value('encryption.masterPassword')).toBe('testing');
+	});
+
+	test('should use keytar when safeStorage is unavailable', async () => {
+		const keytarMock = mockKeytar();
+		Setting.setValue('encryption.masterPassword', 'test-password');
+		await Setting.saveAll();
+		expect(keytarMock.setPassword).toHaveBeenCalledWith(
+			`${Setting.value('appId')}.setting.encryption.masterPassword`,
+			`${Setting.value('clientId')}@joplin`,
+			'test-password',
+		);
+
+		await Setting.load();
+		expect(Setting.value('encryption.masterPassword')).toBe('test-password');
 	});
 });
