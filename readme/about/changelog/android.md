@@ -1,5 +1,10 @@
 # Joplin Android Changelog
 
+## [android-v3.0.6](https://github.com/laurent22/joplin/releases/tag/android-v3.0.6) (Pre-release) - 2024-06-29T09:41:10Z
+
+- Updated Chinese and German translation (#10660 by [@cedecode](https://github.com/cedecode))
+- Fixed: Fix refocusing the note editor (#10644) (#10637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.5](https://github.com/laurent22/joplin/releases/tag/android-v3.0.5) (Pre-release) - 2024-06-19T12:02:12Z
 
 - Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))

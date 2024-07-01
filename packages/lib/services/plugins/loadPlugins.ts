@@ -1,11 +1,11 @@
-import Setting from '@joplin/lib/models/Setting';
-import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
-import PlatformImplementation from './PlatformImplementation';
+import Setting from '../../models/Setting';
+import BasePluginRunner from '../plugins/BasePluginRunner';
+import PluginService, { PluginSettings } from '../../services/plugins/PluginService';
 import { Store } from 'redux';
 import Logger from '@joplin/utils/Logger';
-import shim from '@joplin/lib/shim';
-import { AppState } from '../utils/types';
+import shim from '../../shim';
+import { State as AppState } from '../../reducer';
+import BasePlatformImplementation from './BasePlatformImplementation';
 
 const logger = Logger.create('loadPlugins');
 
@@ -14,15 +14,22 @@ type CancelEvent = { cancelled: boolean };
 export interface Props {
 	pluginRunner: BasePluginRunner;
 	pluginSettings: PluginSettings;
+	platformImplementation: BasePlatformImplementation;
 	store: Store<AppState>;
 	reloadAll: boolean;
 	cancelEvent: CancelEvent;
 }
 
-const loadPlugins = async ({ pluginRunner, pluginSettings, store, reloadAll, cancelEvent }: Props) => {
+const loadPlugins = async ({
+	pluginRunner,
+	platformImplementation,
+	pluginSettings,
+	store,
+	reloadAll,
+	cancelEvent,
+}: Props) => {
 	try {
 		const pluginService = PluginService.instance();
-		const platformImplementation = PlatformImplementation.instance();
 		pluginService.initialize(
 			platformImplementation.versionInfo.version, platformImplementation, pluginRunner, store,
 		);

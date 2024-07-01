@@ -1,4 +1,4 @@
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
 import bridge from '../bridge';
 import processStartFlags from '@joplin/lib/utils/processStartFlags';
 import { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
@@ -13,7 +13,7 @@ const restartInSafeModeFromMain = async () => {
 	// a large amount of other code) to the database.
 	const appName = bridge().appName();
 	Setting.setConstant('appId', `net.cozic.${appName}`);
-	Setting.setConstant('appType', 'desktop');
+	Setting.setConstant('appType', AppType.Desktop);
 	Setting.setConstant('appName', appName);
 
 	// Load just enough for us to write a file in the profile directory
