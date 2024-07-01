@@ -37,7 +37,7 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 //
 // `appMinVersion_` should really just be a constant but for testing purposes it can be changed
 // using `setAppMinVersion()`
-let appMinVersion_ = '0.0.0';
+let appMinVersion_ = '3.0.0';
 
 export const setAppMinVersion = (v: string) => {
 	appMinVersion_ = v;

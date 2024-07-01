@@ -1,5 +1,11 @@
 # Joplin iOS Changelog
 
+## [ios-v13.0.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.4) - 2024-06-29T10:21:04Z
+
+- Updated German and Chinese translation
+- Fixed: Fix refocusing the note editor (#10644) (#10637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix voice typing URL setting incorrectly visible (#10643 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.0.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.3) - 2024-06-19T15:29:15Z
 
 - Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))
