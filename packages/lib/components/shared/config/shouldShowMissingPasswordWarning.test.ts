@@ -8,7 +8,7 @@ const targetToRequiresPassword: Record<string, boolean> = {
 	'webdav': true,
 	'amazon_s3': true,
 	'joplinServer': true,
-	'joplinCloud': true,
+	'joplinCloud': false,
 	'onedrive': false,
 	'dropbox': false,
 };
