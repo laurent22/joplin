@@ -42,7 +42,7 @@ type WriteFileOptions = { keepExistingData?: boolean };
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(LogLevel.Debug);
+logger.setLevel(LogLevel.Info);
 
 export interface TransferableStat {
 	birthtime: number;
