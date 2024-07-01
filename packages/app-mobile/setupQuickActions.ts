@@ -15,7 +15,7 @@ export default async (dispatch: Dispatch) => {
 	const userInfo = { url: '' };
 
 	if (!QuickActions.setShortcutItems) {
-		console.warn('QuickActions unsupported');
+		logger.info('QuickActions unsupported');
 		return null;
 	}
 
