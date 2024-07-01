@@ -3682,6 +3682,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Dine data bliver genkrypteret og synkroniseret igen."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Din adgangskode er nødvendig for at dekryptere nogle af dine data."
 	],

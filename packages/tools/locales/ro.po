@@ -98,7 +98,7 @@ msgstr "Vizualizați"
 msgid "&Window"
 msgstr "Închide fereastra"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d zile"
 
@@ -161,8 +161,8 @@ msgstr "%s - Copiați"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Acest fișier nu a putut fi încărcat: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) ar dori să partajeze un notebook cu tine."
 
@@ -296,7 +296,7 @@ msgstr ""
 "Acceleratorul “%s” este utilizat pentru comenzile “%s” și “%s”. Acest lucru "
 "poate duce la un comportament neașteptat."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Accept"
@@ -491,11 +491,11 @@ msgstr ""
 "Orice e-mail trimis la această adresă va fi convertit într-o notă și va fi "
 "adăugat la colecția dumneavoastră. Nota va fi salvată în carnețelul Inbox"
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Aspect"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Aplicație"
 
@@ -611,7 +611,7 @@ msgstr "Auto-perechere de paranteze, paranteze, ghilimele etc."
 msgid "Automatically check for updates"
 msgstr "Verificarea automată a actualizărilor"
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1387,7 +1387,7 @@ msgstr "Data"
 msgid "Date format"
 msgstr "Format dată"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "zile"
 
@@ -1556,7 +1556,7 @@ msgstr "Dezactivați"
 msgid "Disable encryption"
 msgstr "Dezactivați criptarea"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr "Dezactivați modul de siguranță și reporniți"
 
@@ -1664,7 +1664,7 @@ msgstr ""
 "*unica* modalitate de decriptare a datelor! Pentru a activa criptarea, vă "
 "rugăm să introduceți parola dvs. mai jos."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 msgid "Donate, website"
 msgstr "Donează, website"
 
@@ -1852,7 +1852,7 @@ msgstr "Email to note"
 msgid "Email to Note"
 msgstr "Email to Note"
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 msgid "Email To Note, login information"
 msgstr "Email To Note, login information"
 
@@ -1951,7 +1951,7 @@ msgstr "Activați criptareaActivați istoricul notelor"
 msgid "Enable optical character recognition (OCR)"
 msgstr "Activați recunoașterea optică a caracterelor (OCR)"
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Gestionați-vă plugin-urile"
@@ -2017,7 +2017,7 @@ msgstr "Criptat"
 msgid "Encrypted items cannot be modified"
 msgstr "Itemii criptați nu pot fi editați"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Criptare"
 
@@ -2330,7 +2330,7 @@ msgstr "Lista completă a modificărilor"
 msgid "Full name"
 msgstr "Nume și prenume"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "General"
@@ -2346,7 +2346,7 @@ msgstr[0] "Se creează link..."
 msgstr[1] "Se crează un %s..."
 msgstr[2] "Se crează un %s..."
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 "Geolocație, verificare ortografică, bara de instrumente a editorului, "
@@ -2525,7 +2525,7 @@ msgstr "Imagini"
 msgid "Import"
 msgstr "Importați"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Export debug report"
@@ -2544,7 +2544,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Exportați datele dumneavoastră"
@@ -2743,7 +2743,7 @@ msgstr "Răspuns invalid: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Comandă invalidă: \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valoare nevalabilă a opțiunii: “%s”. Valorile posibile sunt: %s."
 
@@ -2790,7 +2790,7 @@ msgstr ""
 "Joplin vă poate sincroniza notițele folosind diverși furnizori. Selectați "
 "unul din lista de mai jos."
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2885,7 +2885,7 @@ msgstr "KaTeX"
 msgid "Keep note history for"
 msgstr "Păstrați istoricul notițelor pentru"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Păstrați istoricul notițelor pentru"
@@ -2898,7 +2898,7 @@ msgstr "Keyboard Mode"
 msgid "Keyboard Shortcut"
 msgstr "Scurtătură de la tastatură"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Comenzi rapide de la tastatură"
 
@@ -2918,7 +2918,7 @@ msgstr "Landscape"
 msgid "Language"
 msgstr "Limbă"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 msgid "Language, date format"
 msgstr "Limbă, Format dată"
 
@@ -3049,6 +3049,11 @@ msgstr ""
 msgid "Log"
 msgstr "Log"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Joplin Cloud"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Autentificați-vă cu Dropbox"
@@ -3062,7 +3067,7 @@ msgstr "Autentificați-vă cu OneDrive"
 msgid "Logout"
 msgstr "Logout"
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr "Locuri, profiluri, stare de sincronizare"
 
@@ -3113,7 +3118,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Manual"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3167,7 +3172,7 @@ msgstr "Dimensiunea maximă a notiței sau a atașamentului"
 msgid "Max Total Size"
 msgstr "Dimensiunea totală maximă"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr "Media player, matematică, diagrame, cuprins"
 
@@ -3195,11 +3200,11 @@ msgstr "Lipsește valoarea indicatorului necesar: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobile data - auto-sync disabled"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Informații suplimentare"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Informații suplimentare"
 
@@ -3274,7 +3279,7 @@ msgstr "Versiune nouă:% s"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Adăugați o nouă notiță"
 
@@ -3304,7 +3309,7 @@ msgstr "Etichete noi:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Adăugați o nouă sarcină"
 
@@ -3428,7 +3433,7 @@ msgstr "Nu acum"
 msgid "note"
 msgstr "notiță"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Notiță"
 
@@ -3461,7 +3466,7 @@ msgid "Note has been saved."
 msgstr "Notița a fost salvată."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Istoric notiță"
 
@@ -3504,7 +3509,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Note&book"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 msgid "Notebook"
 msgstr "Notebook"
 
@@ -3537,7 +3542,7 @@ msgstr "Agendele nu pot fi denumite \"%s\", care au un titlu rezervat."
 msgid "Notes"
 msgstr "Notițe"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Notițele și setările sunt stocate în: %s"
 
@@ -3579,7 +3584,7 @@ msgstr "OLED Dark"
 msgid "On %s: %s"
 msgstr "Pe %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Una dintre cheile dvs. master utilizează o metodă de criptare învechită."
@@ -3596,7 +3601,7 @@ msgstr ""
 "tastați `e2ee decriptare`. Dacă ați furnizat deja parola, elementele "
 "criptate sunt decriptate în fundal și vor fi disponibile în curând."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "Una sau mai multe chei master au nevoie de o parolă."
 
@@ -3887,7 +3892,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Plugin"
 
@@ -3941,7 +3946,7 @@ msgstr ""
 "Apăsați comanda rapidă și apoi apăsați ENTER. Sau apăsați BACKSPACE pentru a "
 "șterge comanda rapidă."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Apăsați pentru a seta parola de decriptare."
 
@@ -4108,7 +4113,7 @@ msgstr "Reîncărcați"
 msgid "Regular expression"
 msgstr "Expresie regulată"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4203,7 +4208,7 @@ msgstr "Redimensionați imaginile mari:"
 msgid "Resources: %d."
 msgstr "Resurse: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Restart și upgrade"
 
@@ -4313,7 +4318,7 @@ msgstr "S3 secret key"
 msgid "S3 URL"
 msgstr "S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4466,8 +4471,8 @@ msgstr ""
 "Setați-o la 0 pentru a ocupa tot spațiul disponibil. Lățimea recomandată "
 "este de 600."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Setați parola"
 
@@ -4584,11 +4589,11 @@ msgstr "Afișare / ascundere bara laterală"
 msgid "Shrink large images before adding them to notes."
 msgstr "Micșorați imaginile mari înainte de a le adăuga la notițe."
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu closed"
 msgstr "Meniu lateral închis"
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr "Meniu lateral deschis"
 
@@ -4635,16 +4640,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Unele elemente nu pot fi decriptate."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Unele elemente nu pot fi sincronizate."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Unele elemente nu pot fi sincronizate. Apăsați pentru mai multe informații."
@@ -4895,11 +4900,11 @@ msgstr "Versiunea de sincronizare: %s"
 msgid "Sync your notes"
 msgstr "Sincronizați-vă notițele"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 msgid "Sync, encryption, proxy"
 msgstr "Sincronizare, criptare, proxy"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Sincronizare"
 
@@ -5073,7 +5078,7 @@ msgstr ""
 "Metoda implicită de criptare a fost schimbată într-una mai sigură și se "
 "recomandă să o aplicați datelor dumnevoastră."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5217,7 +5222,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5228,13 +5233,13 @@ msgstr ""
 "pentru a fi finalizată, iar aplicația trebuie repornită. Pentru a continua, "
 "vă rugăm să faceți clic pe link."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Destinația de sincronizare trebuie să fie actualizată. Apăsați acest banner "
 "pentru a continua."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 msgid "The synchronisation password is missing."
 msgstr "Lipsește parola de sincronizare."
 
@@ -5277,7 +5282,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Temă"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 msgid "Themes, editor font"
 msgstr "Teme, editor font"
 
@@ -5329,7 +5334,7 @@ msgstr ""
 "obiectivul de sincronizare. Pentru a găsi aceste elemente, căutați fie "
 "titlul, fie ID-ul (care este afișat în paranteze mai sus)."
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5633,7 +5638,7 @@ msgstr "Comutarea editarea externă"
 msgid "Toggle menu bar"
 msgstr "Comutați bara laterală"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 msgid "Toggle note history, keep notes for"
 msgstr "Comutați istoricul notițelor, păstrați notițele pentru"
 
@@ -5661,7 +5666,7 @@ msgstr "Comutați câmpul de ordine de sortare"
 msgid "Token has been copied to the clipboard!"
 msgstr "Token-ul a fost copiat în clipboard!"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Instrumente"
 
@@ -5752,7 +5757,7 @@ msgstr "Unknown flag: %s"
 msgid "Unknown flag: %s"
 msgstr "Unknown flag: %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5896,7 +5901,7 @@ msgstr ""
 "Utilizați săgețile și pagina sus / jos pentru a derula listele și zonele de "
 "text (inclusiv această consolă)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Folosiți săgețile pentru a muta elementele de prezentare. Apăsați “Escape” "
@@ -5967,9 +5972,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Vizualizați pe hartă"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Vizualizați-le acum"
 
@@ -6018,7 +6023,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Clipper"
@@ -6180,6 +6185,11 @@ msgstr "Alegerea dumneavoastră: "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Datele dumneavoastre vor fi re-criptate și sincronizate din nou."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

@@ -3386,6 +3386,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"既存データを暗号化しなおし、再同期します。"
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"一部のデータを復号化するためにあなたのパスワードが必要です。"
 	],
