@@ -49,6 +49,7 @@ interface Props {
 }
 
 const iframeContainerStyles = { height: '100%', width: '100%' };
+const wrapperStyle: ViewStyle = { height: '100%', width: '100%', flex: 1 };
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -167,7 +168,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	}, [containerRef, props.html]);
 
 	return (
-		<View style={[{ width: '100%', height: '100%', flex: 1 }, props.style]}>
+		<View style={[wrapperStyle, props.style]}>
 			<div
 				ref={setContainerRef}
 				className='iframe-container'
