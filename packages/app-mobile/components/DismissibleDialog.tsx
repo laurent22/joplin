@@ -86,7 +86,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			backgroundColor='rgba(0, 0, 0, 0.1)'
 			transparent={true}
 		>
-			<Surface style={styles.dialogSurface} elevation={1} testID='surface'>
+			<Surface style={styles.dialogSurface} elevation={1}>
 				{closeButton}
 				{props.children}
 			</Surface>
