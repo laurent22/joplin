@@ -94,7 +94,14 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public async fileAtPath(path: string) {
-		return await this.messenger_.remoteApi.fileAtPath(path);
+		try {
+			return await this.messenger_.remoteApi.fileAtPath(path);
+		} catch (error) {
+			if (!await this.exists(path)) {
+				throw new JoplinError(`fileAtPath path doesn't exist: ${error}, stack: ${error.stack}`, 'ENOENT');
+			}
+			throw error;
+		}
 	}
 
 	public async readFile(path: string, encoding: BufferEncoding|'Buffer' = 'utf-8') {
@@ -138,7 +145,7 @@ export default class FsDriverWeb extends FsDriverBase {
 
 		const result = read.subarray(0, length);
 		handle.buffered = read.subarray(length, read.length);
-		if (result.length === 0 && handle.done) {
+		if (result.length === 0) {
 			return null;
 		} else {
 			return result;
@@ -146,11 +153,12 @@ export default class FsDriverWeb extends FsDriverBase {
 	}
 
 	public override async readFileChunk(handle: FileHandle, length: number, encoding: BufferEncoding = 'base64') {
-		return (await this.readFileChunkAsBuffer(handle, length))?.toString(encoding);
+		return (await this.readFileChunkAsBuffer(handle, length))?.toString(encoding) ?? null;
 	}
 
 	public override async close(handle: FileHandle) {
-		handle.reader.releaseLock();
+		handle.reader?.releaseLock();
+		handle.reader = null;
 	}
 
 	public override async mkdir(path: string) {

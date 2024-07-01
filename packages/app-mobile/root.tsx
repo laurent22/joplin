@@ -831,7 +831,11 @@ async function initialize(dispatch: Dispatch) {
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
 	if (Setting.value('env') === 'dev') {
-		await runRsaIntegrationTests();
+		if (Platform.OS !== 'web') {
+			await runRsaIntegrationTests();
+		} else {
+			logger.info('Skipping RSA tests -- not supported on mobile.');
+		}
 		await runOnDeviceFsDriverTests();
 	}
 

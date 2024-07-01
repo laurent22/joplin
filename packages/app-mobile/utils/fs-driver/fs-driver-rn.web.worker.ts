@@ -244,14 +244,16 @@ export class WorkerApi {
 		try {
 			return parent.getFileHandle(removeReservedWords(basename(path)), { create });
 		} catch (error) {
-			logger.warn(error, 'getting file handle at path', path, create);
 			if (create) {
 				throw new Error(`${error} while getting file at path ${path}.`);
 			}
 
-			// TODO: This should return null when a file doesn't exist, but should
-			// also report errors in other cases.
-			return null;
+			if (isNotFoundError(error)) {
+				return null;
+			}
+
+			logger.warn(error, 'getting file handle at path', path, create);
+			throw error;
 		}
 	}
 
@@ -264,39 +266,45 @@ export class WorkerApi {
 		logger.debug('writeFile', path);
 		const handle = await this.pathToFileHandle_(path, true);
 		let write, close;
-		try {
-			const writer = await handle.createSyncAccessHandle();
 
-			let at = 0;
-			if (!options?.keepExistingData) {
-				writer.truncate(0);
-			} else {
-				at = writer.getSize();
+		try {
+			try {
+				const writer = await handle.createSyncAccessHandle();
+
+				let at = 0;
+				if (!options?.keepExistingData) {
+					writer.truncate(0);
+				} else {
+					at = writer.getSize();
+				}
+
+				write = (data: ArrayBufferLike) => writer.write(data, { at });
+				close = () => writer.close();
+			} catch (error) {
+				// In some cases, createSyncAccessHandle isn't available. In other cases,
+				// createWritable isn't available.
+
+				logger.warn('Failed to createSyncAccessHandle', error);
+				const writer = await handle.createWritable({ keepExistingData: options?.keepExistingData });
+				write = (data: ArrayBufferLike) => writer.write(data);
+				close = () => writer.close();
 			}
 
-			write = (data: ArrayBufferLike) => writer.write(data, { at });
-			close = () => writer.close();
-		} catch (error) {
-			// In some cases, createSyncAccessHandle isn't available. In other cases,
-			// createWritable isn't available.
-
-			logger.warn('Failed to createSyncAccessHandle', error);
-			const writer = await handle.createWritable({ keepExistingData: options?.keepExistingData });
-			write = (data: ArrayBufferLike) => writer.write(data);
-			close = () => writer.close();
+			if (encoding === 'Buffer') {
+				await write(data as ArrayBuffer);
+			} else if (data instanceof ArrayBuffer) {
+				throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');
+			} else if (encoding === 'utf-8' || encoding === 'utf8') {
+				const encoder = new TextEncoder();
+				await write(encoder.encode(data));
+			} else {
+				await write(Buffer.from(data, encoding).buffer);
+			}
+		} finally {
+			if (close) {
+				await close();
+			}
 		}
-
-		if (encoding === 'Buffer') {
-			write(data as ArrayBuffer);
-		} else if (data instanceof ArrayBuffer) {
-			throw new Error('Cannot write ArrayBuffer to file without encoding = buffer');
-		} else if (encoding === 'utf-8' || encoding === 'utf8') {
-			const encoder = new TextEncoder();
-			write(encoder.encode(data));
-		} else {
-			write(Buffer.from(data, encoding).buffer);
-		}
-		close();
 		logger.debug('writeFile done', path);
 	}
 
