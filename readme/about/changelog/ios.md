@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.0.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.5) - 2024-07-01T15:47:53Z
+
+- Improved: Set min version for synchronising to 3.0.0 (e4b8976)
+- Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
+
 ## [ios-v13.0.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.4) - 2024-06-29T10:21:04Z
 
 - Updated German and Chinese translation
