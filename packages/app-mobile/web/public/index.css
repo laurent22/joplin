@@ -9,6 +9,9 @@ body, :root {
 	overflow: hidden;
 }
 
+
+/* Scrollbar styling */
+
 * {
 	scrollbar-width: thin;
 	scrollbar-color: rgba(100, 100, 100, 0.7) rgba(0, 0, 0, 0.1);
@@ -44,5 +47,16 @@ body, :root {
 	* {
 		scrollbar-width: unset;
 		scrollbar-color: unset;
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	:root {
+		/*
+		 When installed on iOS, this ensures that the status bar color matches the
+		 system light/dark theme.
+		 */
+		background-color: #222;
+		color: white;
 	}
 }
