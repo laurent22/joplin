@@ -2,7 +2,8 @@ import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { switchClient, setupDatabaseAndSynchronizer } from '../../testing/test-utils';
 import KeychainService from './KeychainService';
-import KeychainServiceDriver from './KeychainServiceDriver.node';
+import KeychainServiceDriverElectron from './KeychainServiceDriver.electron';
+import KeychainServiceDriverNode from './KeychainServiceDriver.node';
 
 interface SafeStorageMockOptions {
 	isEncryptionAvailable?: ()=> boolean;
@@ -20,6 +21,7 @@ const mockSafeStorage = ({ // Safe storage
 			isEncryptionAvailable,
 			encryptString,
 			decryptString,
+			getSelectedStorageBackend: () => 'mock',
 		},
 	});
 };
@@ -43,17 +45,22 @@ const mockKeytar = () => {
 	return keytarMock;
 };
 
-describe('KeychainServiceDriver.node', () => {
+const makeDrivers = () => [
+	new KeychainServiceDriverElectron(Setting.value('appId'), Setting.value('clientId')),
+	new KeychainServiceDriverNode(Setting.value('appId'), Setting.value('clientId')),
+];
+
+describe('KeychainService', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 		Setting.setValue('keychain.supported', 1);
-		await KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), Setting.value('clientId')));
 		shim.electronBridge = null;
 	});
 
 	test('should migrate keys from keytar to safeStorage', async () => {
 		const keytarMock = mockKeytar();
+		await KeychainService.instance().initialize(makeDrivers());
 
 		// Set a secure setting
 		Setting.setValue('encryption.masterPassword', 'testing');
@@ -61,7 +68,11 @@ describe('KeychainServiceDriver.node', () => {
 
 		mockSafeStorage({});
 
-		await KeychainService.instance().runMigration(48);
+		await KeychainService.instance().initialize(makeDrivers());
+		await Setting.load();
+		expect(Setting.value('encryption.masterPassword')).toBe('testing');
+
+		await Setting.saveAll();
 
 		expect(keytarMock.deletePassword).toHaveBeenCalled();
 		expect(keytarMock.deletePassword).toHaveBeenCalledWith(
@@ -77,6 +88,8 @@ describe('KeychainServiceDriver.node', () => {
 
 	test('should use keytar when safeStorage is unavailable', async () => {
 		const keytarMock = mockKeytar();
+		await KeychainService.instance().initialize(makeDrivers());
+
 		Setting.setValue('encryption.masterPassword', 'test-password');
 		await Setting.saveAll();
 		expect(keytarMock.setPassword).toHaveBeenCalledWith(

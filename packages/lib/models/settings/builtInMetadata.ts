@@ -920,6 +920,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
+		'keychain.lastAvailableDrivers': { value: [] as string[], type: SettingItemType.Array, public: false },
 		'db.ftsEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'db.fuzzySearchEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },

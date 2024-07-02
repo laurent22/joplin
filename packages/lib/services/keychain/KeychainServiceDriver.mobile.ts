@@ -1,6 +1,12 @@
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
+	public override readonly driverId: string = 'mobile-unknown';
+
+	public async supported(): Promise<boolean> {
+		return false;
+	}
+
 	public async setPassword(/* name:string, password:string*/): Promise<boolean> {
 		return false;
 	}

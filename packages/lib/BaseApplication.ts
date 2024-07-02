@@ -4,8 +4,8 @@ import shim from './shim';
 const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
-import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
-import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
+import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDriver.electron';
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
@@ -758,7 +758,9 @@ export default class BaseApplication {
 
 		setRSA(RSA);
 
-		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await loadKeychainServiceAndSettings(
+			options.keychainEnabled ? [KeychainServiceDriverElectron, KeychainServiceDriverNode] : [],
+		);
 		await migrateMasterPassword();
 		await handleSyncStartupOperation();
 

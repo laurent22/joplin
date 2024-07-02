@@ -912,7 +912,6 @@ packages/lib/markdownUtils.js
 packages/lib/markdownUtils2.test.js
 packages/lib/markupLanguageUtils.js
 packages/lib/migrations/42.js
-packages/lib/migrations/48.js
 packages/lib/mime-utils.js
 packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
@@ -1014,7 +1013,6 @@ packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
-packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1056,10 +1054,11 @@ packages/lib/services/interop/Module.js
 packages/lib/services/interop/types.js
 packages/lib/services/joplinCloudUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
+packages/lib/services/keychain/KeychainService.test.js
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainServiceDriver.dummy.js
+packages/lib/services/keychain/KeychainServiceDriver.electron.js
 packages/lib/services/keychain/KeychainServiceDriver.mobile.js
-packages/lib/services/keychain/KeychainServiceDriver.node.test.js
 packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js

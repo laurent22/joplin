@@ -976,16 +976,8 @@ class Setting extends BaseModel {
 				// As an optimisation, we check if the value exists on the keychain before writing it again.
 				try {
 					const passwordName = `setting.${s.key}`;
-					const currentValue = await this.keychainService().password(passwordName);
-					if (currentValue !== valueAsString) {
-						const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
-						if (wasSet) continue;
-					} else {
-						// The value is already in the keychain - so nothing to do
-						// Make sure to `continue` here otherwise it will save the password
-						// in clear text in the database.
-						continue;
-					}
+					const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
+					if (wasSet) continue;
 				} catch (error) {
 					logger.error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
 				}

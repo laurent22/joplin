@@ -607,7 +607,7 @@ async function initialize(dispatch: Dispatch) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 
-		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
+		await loadKeychainServiceAndSettings([KeychainServiceDriverMobile]);
 		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
