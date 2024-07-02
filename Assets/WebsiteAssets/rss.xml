@@ -41,7 +41,7 @@
 <li>Android: <a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></li>
 <li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></li>
 </ul>
-]]></description><link>https://joplinapp.org/news/20240701-release-3.0</link><guid isPermaLink="false">20240701-release-3.0</guid><pubDate>Mon, 01 Jul 2024 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 3.0</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.14]]></title><description><![CDATA[<h2>OCR<a name="ocr" href="#ocr" class="heading-anchor">🔗</a></h2>
+]]></description><link>https://joplinapp.org/news/20240701-release-3-0</link><guid isPermaLink="false">20240701-release-3-0</guid><pubDate>Mon, 01 Jul 2024 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 3.0</twitter-text></item><item><title><![CDATA[What's new in Joplin 2.14]]></title><description><![CDATA[<h2>OCR<a name="ocr" href="#ocr" class="heading-anchor">🔗</a></h2>
 <p>Optical Character Recognition (OCR) in Joplin enables the transformation of text-containing images into machine-readable text formats. From this version you can enable OCR in the Configuration screen under the &quot;General&quot; section. Once activated, Joplin scans images and PDFs, extracting text data for searchability.</p>
 <p>While OCR search is available on both desktop and mobile apps, document scanning is limited to the desktop due to resource demands. For more information head to the <a href="https://joplinapp.org/help/apps/ocr">OCR official documentation</a>!</p>
 <h2>Bundled plugins<a name="bundled-plugins" href="#bundled-plugins" class="heading-anchor">🔗</a></h2>
