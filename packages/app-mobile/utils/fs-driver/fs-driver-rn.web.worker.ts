@@ -42,7 +42,7 @@ type WriteFileOptions = { keepExistingData?: boolean };
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(LogLevel.Info);
+logger.setLevel(LogLevel.Debug);
 
 export interface TransferableStat {
 	birthtime: number;
@@ -407,7 +407,7 @@ export class WorkerApi {
 		};
 	}
 
-	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<TransferableStat[]> {
+	public async readDirStats(path: string, options: ReadDirStatsOptions = { recursive: false }): Promise<TransferableStat[]|null> {
 		const readDirStats = async (basePath: string, path: string, dirHandle?: FileSystemDirectoryHandle) => {
 			dirHandle ??= await this.pathToDirectoryHandle_(path);
 			if (!dirHandle) return null;
@@ -427,7 +427,11 @@ export class WorkerApi {
 					}
 				}
 			} catch (error) {
-				throw new Error(`readDirStats error: ${error}, path: ${basePath},${path}`);
+				if (isNotFoundError(error)) {
+					return null;
+				} else {
+					throw new Error(`readDirStats error: ${error}, path: ${basePath},${path}`);
+				}
 			}
 			return result;
 		};
