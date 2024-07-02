@@ -23,5 +23,6 @@ module.exports = {
 	'*.{js,jsx,ts,tsx,task2}': 'yarn spellcheck',
 	'*.{js,jsx,ts,tsx,task3}': 'yarn packageJsonLint',
 	'*.{js,jsx,ts,tsx,task4}': 'yarn linter-precommit',
-	'*.{md,mdx}': 'yarn spellcheck',
+	'*.{md,mdx,task5}': 'yarn spellcheck',
+	'*.{md,mdx,task6}': 'yarn validateFilenames',
 };

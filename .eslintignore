@@ -1389,6 +1389,7 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
 packages/tools/utils/translation.js
+packages/tools/validateFilenames.js
 packages/tools/website/build.js
 packages/tools/website/buildTranslations.js
 packages/tools/website/processDocs.test.js
