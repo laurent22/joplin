@@ -33,8 +33,8 @@ const keepAppAboveKeyboard = () => {
 			updateQueued = false;
 
 			// The visual viewport changes as the user zooms in and out. Only adjust the body's height
-			// when the user's zoom level is 100%.
-			if (window.visualViewport.scale === 1) {
+			// when the user's (pinch/touchpad) zoom level is roughly 100% or less.
+			if (window.visualViewport.scale <= 1.01) {
 				document.body.style.height = `${window.visualViewport.height}px`;
 
 				// Additional scroll space can also be added by the browser when focusing a text input (e.g.
