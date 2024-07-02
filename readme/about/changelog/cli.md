@@ -1,5 +1,24 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.0.1) - 2024-07-02T18:42:44Z
+
+- Improved: Add trash folder (#9671) (#483)
+- Improved: Allow deleting notes and notebooks permanently (#10107) (#10090 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Avoid unnecessary requests if Joplin Cloud credentials are empty (#10256 by [@pedr](https://github.com/pedr))
+- Improved: Bump @codemirror/view version. (#10174 by [@itzTheMeow](https://github.com/itzTheMeow))
+- Improved: Change Joplin Cloud login process (#9722 by [@pedr](https://github.com/pedr))
+- Improved: Clarify that the "restore" command is to restore items from the trash (8cb9c08)
+- Improved: Do not repeat failed requests with ENOTFOUND error (#6173)
+- Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))
+- Improved: Improved log formatting and allow saving last lines of log to memory (74bc9b3)
+- Improved: Improves formatting of log statements (aac8d58)
+- Improved: Log user actions (deletions) (#9585) (#9465 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Set min version for synchronising to 3.0.0 (e4b8976)
+- Improved: Updated packages @adobe/css-tools (v4.3.3), chokidar (v3.6.0), follow-redirects (v1.15.6), jsdom (v23), react, sass (v1.71.0), style-to-js (v1.1.11), terminal-kit (v3.0.2), tesseract.js (v5.0.5), turndown (v7.1.3)
+- Fixed: After deleting the last note from the conflicts folder, the application state is invalid (#10189)
+- Fixed: ENEX does not import correctly when title of note matches the name of the attachment (#10125)
+- Fixed: English: Use the plural form of a localization for negative and zero items (#10582) (#10581 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [cli-v2.14.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.14.1) - 2024-03-01T19:08:28Z
 
 - Improved: Allow setting a minimum app version on the sync target (#9778)
