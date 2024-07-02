@@ -629,8 +629,13 @@ async function initialize(dispatch: Dispatch) {
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
 			if (shim.mobilePlatform() === 'web') {
+				// Web browsers generally have more limited storage than desktop and mobile apps:
 				Setting.setValue('sync.resourceDownloadMode', 'auto');
-				logger.info('First start on web: Set resource download mode to auto.');
+				// For now, geolocation is disabled by default on web until the web permissions workflow
+				// is improved. At present, trackLocation=true causes the "allow location access" prompt
+				// to appear without a clear indicator for why Joplin wants this information.
+				Setting.setValue('trackLocation', false);
+				logger.info('First start on web: Set resource download mode to auto and disabled location tracking.');
 			}
 
 			Setting.skipDefaultMigrations();

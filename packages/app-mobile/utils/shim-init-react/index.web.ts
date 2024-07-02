@@ -10,6 +10,21 @@ import { FetchBlobOptions } from '@joplin/lib/types';
 import JoplinError from '@joplin/lib/JoplinError';
 
 const shimInit = () => {
+	type GetLocationOptions = { timeout?: number };
+	shim.Geolocation = {
+		currentPosition: ({ timeout = 10000 }: GetLocationOptions = {}) => {
+			return new Promise((resolve, reject) => {
+				navigator.geolocation?.getCurrentPosition((position) => {
+					if (!position?.coords) {
+						resolve(null);
+					}
+
+					resolve(position);
+				}, (error) => reject(error), { timeout });
+			});
+		},
+	};
+
 	let fsDriver_: FsDriverWeb|null = null;
 
 	const fsDriver = () => {

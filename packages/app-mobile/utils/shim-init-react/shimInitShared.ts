@@ -11,7 +11,6 @@ import Resource from '@joplin/lib/models/Resource';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 
 const shimInitShared = () => {
-	shim.Geolocation = null;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
 	shim.stringByteLength = function(string) {
