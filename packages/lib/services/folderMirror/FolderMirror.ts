@@ -237,8 +237,8 @@ export default class {
 				// IMPORTANT: Write the metadata first. When writing the resource triggers the file watcher,
 				//            this allows the item ID to be found.
 				// TODO: Remove this workaround & fix the underlying issue.
-				const metadata = resourceToMetadataYml(item);
-				await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
+				// const metadata = resourceToMetadataYml(item);
+				// await shim.fsDriver().writeFile(`${fullPath}${resourceMetadataExtension}`, metadata, 'utf8');
 
 				const internalSourcePath = Resource.fullPath(item, false);
 				debugLogger.debug('remote.update/copy resource', path, 'from', internalSourcePath, 'to', fullPath, 'id', item.id);
@@ -377,7 +377,6 @@ export default class {
 
 		this.localTree_.resetData();
 		this.remoteTree_.resetData();
-
 
 		const processFolders = async (basePath: string, parentId: string, folders: FolderEntityWithChildren[]) => {
 			for (const folder of folders) {
