@@ -1,6 +1,6 @@
 import { net, protocol } from 'electron';
-import { dirname, resolve, normalize, join } from 'path';
-import { pathToFileURL } from 'url';
+import { dirname, resolve, normalize } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { contentProtocolName } from './constants';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { LoggerWrapper } from '@joplin/utils/Logger';
@@ -72,39 +72,32 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 // in the main process.)
 const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => {
 	const readableDirectories: string[] = [];
-	const readableFiles = new Set<string>();
+	const readableFiles = new Map<string, number>();
 
 	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 	protocol.handle(contentProtocolName, async request => {
 		const url = new URL(request.url);
 		const host = url.host;
 
-		let pathname = normalize(url.pathname);
-
-		// On Windows, pathname can be normalized to
-		//   \C:\path\name\here
-		// (with an extra slash at the beginning).
-		if (pathname.startsWith('\\')) {
-			pathname = pathname.substring(1);
-		}
+		let pathname = normalize(fileURLToPath(`file://${url.pathname}`));
 
 		// See https://security.stackexchange.com/a/123723
 		if (pathname.startsWith('..')) {
 			throw new Error(`Invalid URL (not absolute), ${request.url}`);
 		}
 
+		pathname = resolve(appBundleDirectory, pathname);
+
 		const allowedHosts = ['note-viewer'];
 
-		// Path from which `pathname` should be resolved
-		let rootDirectory = null;
-
+		let canRead = false;
 		if (allowedHosts.includes(host)) {
 			if (readableFiles.has(pathname)) {
-				rootDirectory = '';
+				canRead = true;
 			} else {
 				for (const readableDirectory of readableDirectories) {
 					if (resolvePathWithinDir(readableDirectory, pathname)) {
-						rootDirectory = '';
+						canRead = true;
 						break;
 					}
 				}
@@ -113,13 +106,11 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			throw new Error(`Invalid URL ${request.url}`);
 		}
 
-		if (rootDirectory === null) {
+		if (!canRead) {
 			throw new Error(`Read access not granted for URL ${request.url}`);
 		}
 
-		const targetFile = join(rootDirectory, pathname);
-
-		const asFileUrl = pathToFileURL(targetFile).toString();
+		const asFileUrl = pathToFileURL(pathname).toString();
 		logger.debug('protocol handler: Fetch file URL', asFileUrl);
 
 		const rangeHeader = request.headers.get('Range');
@@ -127,27 +118,36 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			const response = await net.fetch(asFileUrl);
 			return response;
 		} else {
-			return handleRangeRequest(request, targetFile);
+			return handleRangeRequest(request, pathname);
 		}
 	});
 
 	const appBundleDirectory = dirname(dirname(__dirname));
 	return {
 		allowReadAccessToDirectory: (path: string) => {
-			const allowedPath = resolve(appBundleDirectory, path);
-			logger.info('protocol handler: Allow read access to directory', allowedPath);
+			path = resolve(appBundleDirectory, path);
+			logger.debug('protocol handler: Allow read access to directory', path);
 
-			readableDirectories.push(allowedPath);
+			readableDirectories.push(path);
 		},
 		allowReadAccessToFile: (path: string) => {
-			const allowedPath = resolve(appBundleDirectory, path);
-			logger.debug('protocol handler: Allow read access to file', allowedPath);
-			readableFiles.add(path);
+			path = resolve(appBundleDirectory, path);
+			logger.debug('protocol handler: Allow read access to file', path);
+
+			if (readableFiles.has(path)) {
+				readableFiles.set(path, readableFiles.get(path) + 1);
+			} else {
+				readableFiles.set(path, 1);
+			}
 
 			return {
 				remove: () => {
-					logger.debug('protocol handler: Remove read access to file', allowedPath);
-					readableFiles.delete(path);
+					if ((readableFiles.get(path) ?? 0) <= 1) {
+						logger.debug('protocol handler: Remove read access to file', path);
+						readableFiles.delete(path);
+					} else {
+						readableFiles.set(path, readableFiles.get(path) - 1);
+					}
 				},
 			};
 		},

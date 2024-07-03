@@ -42,6 +42,19 @@ const setUpProtocolHandler = () => {
 	return { protocolHandler, onRequestListener };
 };
 
+const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
+	const url = `joplin-content://note-viewer/${filePath}`;
+
+	await expect(
+		async () => await onRequestListener(new Request(url)),
+	).rejects.toThrowError('Read access not granted for URL');
+};
+
+const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
+	const handleRequestResult = await onRequestListener(new Request(`joplin-content://note-viewer/${filePath}`));
+	expect(handleRequestResult.body).toBeTruthy();
+};
+
 
 describe('handleCustomProtocols', () => {
 	beforeEach(() => {
@@ -54,36 +67,38 @@ describe('handleCustomProtocols', () => {
 	test('should only allow access to files in allowed directories', async () => {
 		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
 
-		const expectPathToBeBlocked = async (filePath: string) => {
-			const url = `joplin-content://note-viewer/${filePath}`;
-
-			await expect(
-				async () => await onRequestListener(new Request(url)),
-			).rejects.toThrowError('Read access not granted for URL');
-		};
-
-		const expectPathToBeUnblocked = async (filePath: string) => {
-			const handleRequestResult = await onRequestListener(new Request(`joplin-content://note-viewer/${filePath}`));
-			expect(handleRequestResult.body).toBeTruthy();
-		};
-
-		await expectPathToBeBlocked('/test/path');
-		await expectPathToBeBlocked('/');
+		await expectPathToBeBlocked(onRequestListener, '/test/path');
+		await expectPathToBeBlocked(onRequestListener, '/');
 
 		protocolHandler.allowReadAccessToDirectory('/test/path/');
-		await expectPathToBeUnblocked('/test/path');
-		await expectPathToBeUnblocked('/test/path/a.txt');
-		await expectPathToBeUnblocked('/test/path/b.txt');
+		await expectPathToBeUnblocked(onRequestListener, '/test/path');
+		await expectPathToBeUnblocked(onRequestListener, '/test/path/a.txt');
+		await expectPathToBeUnblocked(onRequestListener, '/test/path/b.txt');
 
-		await expectPathToBeBlocked('/');
-		await expectPathToBeBlocked('/test/path2');
-		await expectPathToBeBlocked('/test/path/../a.txt');
+		await expectPathToBeBlocked(onRequestListener, '/');
+		await expectPathToBeBlocked(onRequestListener, '/test/path2');
+		await expectPathToBeBlocked(onRequestListener, '/test/path/../a.txt');
 
 		protocolHandler.allowReadAccessToDirectory('/another/path/here');
 
-		await expectPathToBeBlocked('/another/path/here2');
-		await expectPathToBeUnblocked('/another/path/here');
-		await expectPathToBeUnblocked('/another/path/here/2');
+		await expectPathToBeBlocked(onRequestListener, '/another/path/here2');
+		await expectPathToBeUnblocked(onRequestListener, '/another/path/here');
+		await expectPathToBeUnblocked(onRequestListener, '/another/path/here/2');
+	});
+
+	test('should be possible to allow and remove read access for a file', async () => {
+		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		await expectPathToBeBlocked(onRequestListener, '/test/path/a.txt');
+
+		const handle1 = protocolHandler.allowReadAccessToFile('/test/path/a.txt');
+		await expectPathToBeUnblocked(onRequestListener, '/test/path/a.txt');
+		const handle2 = protocolHandler.allowReadAccessToFile('/test/path/a.txt');
+		await expectPathToBeUnblocked(onRequestListener, '/test/path/a.txt');
+		handle1.remove();
+		await expectPathToBeUnblocked(onRequestListener, '/test/path/a.txt');
+		handle2.remove();
+
+		await expectPathToBeBlocked(onRequestListener, '/test/path/a.txt');
 	});
 
 	test('should allow requesting part of a file', async () => {
