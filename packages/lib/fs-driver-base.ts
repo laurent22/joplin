@@ -2,6 +2,7 @@ import time from './time';
 import Setting from './models/Setting';
 import { filename, fileExtension } from './path-utils';
 const md5 = require('md5');
+import resolvePathWithinDir from './utils/resolvePathWithinDir';
 import { Buffer } from 'buffer';
 
 export interface Stat {
@@ -109,9 +110,8 @@ export default class FsDriverBase {
 	// also checks that the absolute path is within baseDir, to avoid security issues.
 	// It is expected that baseDir is a safe path (not user-provided).
 	public resolveRelativePathWithinDir(baseDir: string, relativePath: string) {
-		const resolvedBaseDir = this.resolve(baseDir);
-		const resolvedPath = this.resolve(baseDir, relativePath);
-		if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
+		const resolvedPath = resolvePathWithinDir(baseDir, relativePath);
+		if (!resolvedPath) throw new Error(`Resolved path for relative path "${relativePath}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
 		return resolvedPath;
 	}
 

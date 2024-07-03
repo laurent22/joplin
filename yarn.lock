@@ -6629,6 +6629,7 @@ __metadata:
     taboverride: 4.0.3
     tesseract.js: 5.0.5
     tinymce: 5.10.6
+    ts-jest: 29.1.1
     ts-node: 10.9.2
     typescript: 5.2.2
   languageName: unknown

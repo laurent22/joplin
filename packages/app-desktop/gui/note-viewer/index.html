@@ -48,7 +48,7 @@
 	// This is function used internally to send message from the webview to
 	// the host.
 	const ipcProxySendToHost = (methodName, arg) => {
-		window.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
+		window.parent.postMessage({ target: 'main', name: methodName, args: [ arg ] }, '*');
 	}
 
 	const webviewApiPromises_ = {};
@@ -179,14 +179,22 @@
 
 				let element = null;
 
+				// Needed on Windows:
+				//   C:/Path/Here
+				// is interpreted as a file path, even without a starting file://.
+				let src = encodedPath;
+				if (src.match(/^[/]/) || src.match(/^[^:/\\]+[:][\\/]/)) {
+					src = `joplin-content://note-viewer/${src}`;
+				}
+
 				if (asset.mime === 'application/javascript') {
 					element = document.createElement('script');
-					element.src = encodedPath;
+					element.src = src;
 					pluginAssetsContainer.appendChild(element);
 				} else if (asset.mime === 'text/css') {
 					element = document.createElement('link');
 					element.rel = 'stylesheet';
-					element.href = encodedPath
+					element.href = src;
 					pluginAssetsContainer.appendChild(element);
 				}
 

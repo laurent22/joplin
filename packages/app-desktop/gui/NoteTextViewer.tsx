@@ -1,6 +1,7 @@
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
+import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
@@ -14,6 +15,12 @@ interface Props {
 	themeId: number;
 }
 
+type RemovePluginAssetsCallback = ()=> void;
+
+interface SetHtmlOptions {
+	pluginAssets: { path: string }[];
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default class NoteTextViewerComponent extends React.Component<Props, any> {
 
@@ -23,6 +30,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	private webviewRef_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
+	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(props: any) {
@@ -64,8 +72,8 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.webview_domReady({});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private webview_message(event: any) {
+	private webview_message(event: MessageEvent) {
+		if (event.source !== this.webviewRef_.current?.contentWindow) return;
 		if (!event.data || event.data.target !== 'main') return;
 
 		const callName = event.data.name;
@@ -100,7 +108,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			wv.addEventListener(n, fn);
 		}
 
-		this.webviewRef_.current.contentWindow.addEventListener('message', this.webview_message);
+		window.addEventListener('message', this.webview_message);
 	}
 
 	public destroyWebview() {
@@ -113,17 +121,12 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			wv.removeEventListener(n, fn);
 		}
 
-		try {
-			// It seems this can throw a cross-origin error in a way that is hard to replicate so just wrap
-			// it in try/catch since it's not critical.
-			// https://github.com/laurent22/joplin/issues/3835
-			this.webviewRef_.current.contentWindow.removeEventListener('message', this.webview_message);
-		} catch (error) {
-			reg.logger().warn('Error destroying note viewer', error);
-		}
+		window.removeEventListener('message', this.webview_message);
 
 		this.initialized_ = false;
 		this.domReady_ = false;
+
+		this.removePluginAssetsCallback_?.();
 	}
 
 	public focus() {
@@ -163,6 +166,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
 		}
 
+		// External code should use .setHtml (rather than send('setHtml', ...))
 		if (channel === 'setHtml') {
 			win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
 		}
@@ -180,12 +184,47 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public setHtml(html: string, options: SetHtmlOptions) {
+		// Grant & remove asset access.
+		if (options.pluginAssets) {
+			this.removePluginAssetsCallback_?.();
+
+			const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+
+			const pluginAssetPaths: string[] = options.pluginAssets.map((asset) => asset.path);
+			const assetAccesses = pluginAssetPaths.map(
+				path => protocolHandler.allowReadAccessToFile(path),
+			);
+
+			this.removePluginAssetsCallback_ = () => {
+				for (const accessControl of assetAccesses) {
+					accessControl.remove();
+				}
+
+				this.removePluginAssetsCallback_ = null;
+			};
+		}
+
+		this.send('setHtml', html, options);
+	}
+
 	// ----------------------------------------------------------------
 	// Wrap WebView functions (END)
 	// ----------------------------------------------------------------
 
 	public render() {
 		const viewerStyle = { border: 'none', ...this.props.viewerStyle };
-		return <iframe className="noteTextViewer" ref={this.webviewRef_} style={viewerStyle} src="gui/note-viewer/index.html"></iframe>;
+
+		// allow=fullscreen: Required to allow the user to fullscreen videos.
+		return (
+			<iframe
+				className="noteTextViewer"
+				ref={this.webviewRef_}
+				style={viewerStyle}
+				allow='fullscreen autoplay'
+				src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
+			></iframe>
+		);
 	}
 }
