@@ -561,11 +561,7 @@ const SideMenuContentComponent = (props: Props) => {
 	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder'));
 
 	const folderTree = useMemo(() => {
-		reg.logger().info('!!! Building folder tree');
-		const ft = buildFolderTree(props.folders);
-		reg.logger().info('!!! Done');
-
-		return ft;
+		return buildFolderTree(props.folders);
 	}, [props.folders]);
 
 	if (props.folders.length) {
