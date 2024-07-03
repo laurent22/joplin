@@ -26,7 +26,6 @@ interface FolderTree {
 }
 
 interface RenderFoldersProps {
-	// All folders
 	folderTree: FolderTree;
 	collapsedFolderIds: string[];
 }
@@ -44,7 +43,7 @@ function folderIsCollapsed(context: RenderFoldersProps, folderId: string) {
 }
 
 function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
-	const folders = props.folderTree.parentIdToChildren.get(parentId ?? '');
+	const folders = props.folderTree.parentIdToChildren.get(parentId ?? '') ?? [];
 	const parentIdToChildren = props.folderTree.parentIdToChildren;
 	for (const folder of folders) {
 		if (folderIsCollapsed(props, folder.id)) continue;
