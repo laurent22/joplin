@@ -8,7 +8,7 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { ThemeStyle, themeStyle } from './global-style';
-import { isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
+import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -560,8 +560,20 @@ const SideMenuContentComponent = (props: Props) => {
 
 	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder'));
 
+	const folderTree = useMemo(() => {
+		reg.logger().info('!!! Building folder tree');
+		const ft = buildFolderTree(props.folders);
+		reg.logger().info('!!! Done');
+
+		return ft;
+	}, [props.folders]);
+
 	if (props.folders.length) {
-		const result = renderFolders(props, renderFolderItem);
+		const result = renderFolders({
+			folderTree,
+			collapsedFolderIds: props.collapsedFolderIds,
+		}, renderFolderItem);
+
 		const folderItems = result.items;
 		items = items.concat(folderItems);
 	}
