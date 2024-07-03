@@ -102,7 +102,7 @@ describe('handleCustomProtocols', () => {
 		expect(response.status).toBe(206); // Partial content
 		expect(response.headers.get('Accept-Ranges')).toBe('bytes');
 		expect(response.headers.get('Content-Type')).toBe('image/jpeg');
-		expect(response.headers.get('Content-Length')).toBe('10');
+		expect(response.headers.get('Content-Length')).toBe('11');
 		const targetStats = await stat(targetFilePath);
 		expect(response.headers.get('Content-Range')).toBe(`bytes 10-20/${targetStats.size}`);
 
