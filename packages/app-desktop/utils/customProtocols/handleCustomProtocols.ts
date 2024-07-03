@@ -35,7 +35,7 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 	//  bytes=1234-
 	// See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
 	const startByte = Number(rangeHeader.match(/(\d+)-/)?.[1] || '0');
-	const endByte = Number(rangeHeader.match(/-(\d+)/)?.[1] || `${stat.size}`);
+	const endByte = Number(rangeHeader.match(/-(\d+)/)?.[1] || `${stat.size - 1}`);
 
 	if (endByte > stat.size || startByte < 0) {
 		return makeUnsupportedRangeResponse();
@@ -48,7 +48,7 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 	const headers = new Headers([
 		['Accept-Ranges', 'bytes'],
 		['Content-Type', fromFilename(targetPath)],
-		['Content-Length', `${endByte - startByte}`],
+		['Content-Length', `${endByte + 1 - startByte}`],
 		['Content-Range', `bytes ${startByte}-${endByte}/${stat.size}`],
 	]);
 
