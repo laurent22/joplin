@@ -4677,7 +4677,7 @@ msgstr "Sortiere Notizen nach"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:138
 msgid "Sort selected lines"
-msgstr "Ausgewählte Zeilen bearbeiten"
+msgstr "Ausgewählte Zeilen sortieren"
 
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
