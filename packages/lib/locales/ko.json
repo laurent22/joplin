@@ -3527,6 +3527,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"데이터가 재 암호화 되고, 다시 동기화 될 것입니다."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"일부 데이터를 복호화하라면 암호가 필요합니다."
 	],

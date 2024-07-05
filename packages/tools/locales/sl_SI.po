@@ -99,7 +99,7 @@ msgstr "&Pogled"
 msgid "&Window"
 msgstr "Zapri okno"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d dnevi"
 
@@ -164,8 +164,8 @@ msgstr "%s - Kopiraj"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) ni možno prenesti: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) bi želel deliti zvezek z vami."
 
@@ -297,7 +297,7 @@ msgstr ""
 "Pospeševalnik \"%s\" je uporabljen za \"%s\" in \"%s\" ukaze. To lahko "
 "povzroči nepričakovano obnašanje."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Sprejmi"
@@ -483,11 +483,11 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Izgled"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Aplikacija"
 
@@ -602,7 +602,7 @@ msgstr "Avtomatsko zapri oglate oklepaje, oklepaje, narekovaje, itd."
 msgid "Automatically check for updates"
 msgstr "Preverjanje za posodobitvami..."
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1382,7 +1382,7 @@ msgstr "Datum"
 msgid "Date format"
 msgstr "Način zapisa datuma"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "dnevi"
 
@@ -1554,7 +1554,7 @@ msgstr "Onemogoči"
 msgid "Disable encryption"
 msgstr "Onemogoči šifriranje"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr "Onemogoči varni način in ponovno zaženi"
 
@@ -1665,7 +1665,7 @@ msgstr ""
 "Obvezno si zapomnite geslo, saj bo zaradi varnostnih namenov to edini način, "
 "da dešifrirate vsebino zvezka. Da omogočite šifriranje, vnesite geslo."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 #, fuzzy
 msgid "Donate, website"
 msgstr "Joplin spletna stran"
@@ -1859,7 +1859,7 @@ msgstr "Uredi beležko."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Prikaži informacije o verziji"
@@ -1959,7 +1959,7 @@ msgstr "Omogoči zgodovino beležke"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Upravljaj svoje dodatke"
@@ -2028,7 +2028,7 @@ msgstr "Šifrirano"
 msgid "Encrypted items cannot be modified"
 msgstr "Šifrirane predmeti ni možno spreminjati"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Šifriranje"
 
@@ -2348,7 +2348,7 @@ msgstr "Vse spremembe"
 msgid "Full name"
 msgstr "Vse spremembe"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Splošno"
@@ -2366,7 +2366,7 @@ msgstr[1] "Ustvarjanje povezav %s..."
 msgstr[2] "Ustvarjanje povezav %s..."
 msgstr[3] "Ustvarjanje povezav %s..."
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
@@ -2550,7 +2550,7 @@ msgstr ""
 msgid "Import"
 msgstr "Uvozi"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Izvozi poročilo o napakah"
@@ -2569,7 +2569,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Izvozi vse"
@@ -2765,7 +2765,7 @@ msgstr "Neveljaven odgovor: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Neveljaven ukaz: \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neveljavna vrednost: \"%s\". Možne vrednosti so: %s."
 
@@ -2813,7 +2813,7 @@ msgstr ""
 "Joplin lahko sinhronizira vaše beležke z uporabo različnih ponudnikov. "
 "Izberite enega iz seznama spodaj."
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2908,7 +2908,7 @@ msgstr ""
 msgid "Keep note history for"
 msgstr "Hrani zgodovino beležke za"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Hrani zgodovino beležke za"
@@ -2921,7 +2921,7 @@ msgstr "Način tipkovnice"
 msgid "Keyboard Shortcut"
 msgstr "Bližnjica na tipkovnici"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Bližnjice na tipkovnici"
 
@@ -2942,7 +2942,7 @@ msgstr "Ležeče"
 msgid "Language"
 msgstr "Jezik"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 #, fuzzy
 msgid "Language, date format"
 msgstr "Način zapisa datuma"
@@ -3079,6 +3079,11 @@ msgstr ""
 msgid "Log"
 msgstr "Dnevnik"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Joplin Cloud"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Prijav z Dropbox"
@@ -3091,7 +3096,7 @@ msgstr "Prijava z OneDrive"
 msgid "Logout"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -3147,7 +3152,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Ročno"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3203,7 +3208,7 @@ msgstr "Priponke beležke"
 msgid "Max Total Size"
 msgstr "Dejanska velikost"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3233,11 +3238,11 @@ msgstr "Manjka zahtevani argument %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobilni podatki - avtomatsko sinhroniziranje onemogočeno"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Več informacij"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Več informacij"
 
@@ -3311,7 +3316,7 @@ msgstr "Nova verzija: %s"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Nova beležka"
 
@@ -3340,7 +3345,7 @@ msgstr "Nove oznake:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Novi seznam opravil"
 
@@ -3463,7 +3468,7 @@ msgstr "Stori sedaj"
 msgid "note"
 msgstr "beležka"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Beležka"
 
@@ -3497,7 +3502,7 @@ msgid "Note has been saved."
 msgstr "Beležka je bila shranjena."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Zgodovina beležke"
 
@@ -3540,7 +3545,7 @@ msgstr "Beležka: Ko je bila beležka deljena, ne bo več kodirana na strežniku
 msgid "Note&book"
 msgstr "&Zvezek"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 #, fuzzy
 msgid "Notebook"
 msgstr "Zvezki"
@@ -3575,7 +3580,7 @@ msgstr "Zvezek ne more biti imenovan \"%s\", ker je to rezervirano ime."
 msgid "Notes"
 msgstr "Beležka"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Beležke in nastavitve so shranjene v: %s"
 
@@ -3617,7 +3622,7 @@ msgstr "OLED temno"
 msgid "On %s: %s"
 msgstr "Vključeno %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Eden od vaših glavnih ključev uporablja zastarelo enkripcijsko metodo."
 
@@ -3633,7 +3638,7 @@ msgstr ""
 "vnesli geslo, so šifrirani predmeti v stanju dešifriranja v ozadju in bodo "
 "kmalu na voljo."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "Eden ali več glavnih ključev potrebuje geslo."
 
@@ -3919,7 +3924,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Dodatki"
 
@@ -3973,7 +3978,7 @@ msgstr ""
 "Pritisni bližnjico in zatem ENTER. Ali, pritisni BACKSPACE za odstranitev "
 "bližnjice."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Klikni za nastavitev dekripcijskega gesla."
 
@@ -4145,7 +4150,7 @@ msgstr "Osveži"
 msgid "Regular expression"
 msgstr "Omogoči matematične izraze"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4243,7 +4248,7 @@ msgstr ""
 msgid "Resources: %d."
 msgstr "Viri: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Ponovno zaženi in nadgradi"
 
@@ -4358,7 +4363,7 @@ msgstr "AWS secret"
 msgid "S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4519,8 +4524,8 @@ msgid ""
 "is 600."
 msgstr "Nastavite na 0, da zavzame ves prostor na voljo."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Nastavi geslo"
 
@@ -4642,12 +4647,12 @@ msgstr ""
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 #, fuzzy
 msgid "Side menu closed"
 msgstr "Skrij meta podatke"
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr ""
 
@@ -4694,16 +4699,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Nekatere predmete ni možno dešifrirani."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Nekateri premeti ne morejo biti sinhronizirani."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 #, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Nekateri premeti ne morejo biti sinhronizirani."
@@ -4951,12 +4956,12 @@ msgstr "Verzija sinhronizacije: %s"
 msgid "Sync your notes"
 msgstr "Sinhronizirajte vaše beležke"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Omogoči šifriranje"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Sinhronizacija"
 
@@ -5125,7 +5130,7 @@ msgstr ""
 "Privzeta metoda za šifriranje je bila spremenjena na bolj zavarovanega in je "
 "priporočljivo da se uveljavi na vaših podatkih."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5268,7 +5273,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5278,13 +5283,13 @@ msgstr ""
 "Operacija bo trajala nekaj minut da se dokonča in aplikacija bo morala biti "
 "ponovno zagnana. Za nadaljevanje pritisnite na povezavo."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Sinhronizacijski cilj mora biti nadgrajen! Poženite `%s` za nadaljevanje."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 #, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Preveri nastavitve sinhronizacije"
@@ -5324,7 +5329,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Tema"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Urejevalnik pisava"
@@ -5377,7 +5382,7 @@ msgstr ""
 "sinhronizacijski cilj. Če želite najti te predmete, iščite po ali naslovu "
 "ali ID (je prikazan zgoraj v oklepajih)"
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5680,7 +5685,7 @@ msgstr "Omogoči zunanje urejanje"
 msgid "Toggle menu bar"
 msgstr "Preklopi stransko vrstice"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 #, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Hrani zgodovino beležke za"
@@ -5711,7 +5716,7 @@ msgstr "Preklopi varni način"
 msgid "Token has been copied to the clipboard!"
 msgstr "Žeton je bil kopiran v odložišče!"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Orodja"
 
@@ -5804,7 +5809,7 @@ msgstr "Nepoznana oznaka: %s"
 msgid "Unknown flag: %s"
 msgstr "Nepoznana oznaka: %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5950,7 +5955,7 @@ msgstr ""
 "Uporabite puščice in page up/down tipke za listanje strani in besedila "
 "(vključno s to konzolo)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Uporabite puščice za razporeditev elementov. Pritisnite \"Escape\" za izhod."
@@ -6017,9 +6022,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Prikaži na zemljevidu"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Prikaži jih sedaj"
 
@@ -6066,7 +6071,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Clipper"
@@ -6226,6 +6231,11 @@ msgstr "Vaša izbira: "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Vaši podatki bodo ponovni šifrirani in sinhronizirani."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."
