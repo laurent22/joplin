@@ -395,12 +395,13 @@ msgstr "Ferramentas avançadas"
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Todos os dados, incluindo notas, caderno e etiquetas serão apagados "
+"Todos os dados, incluindo notas, cadernos e etiquetas serão apagados "
 "permanentemente."
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr "Todos as falhas de sincronização foram marcadas como \"ignorada\"."
+msgstr ""
+"Todas as falhas de sincronização de itens foram marcadas como \"ignorada\"."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:184
@@ -416,7 +417,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1230
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr "Permite depurar plugins móveis. Ver %s para detalhes."
+msgstr "Permite depurar plugins de mobile. Ver %s para detalhes."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -440,7 +441,7 @@ msgstr "Abrir sempre ficheiros %s sem perguntar."
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Always resize"
-msgstr "Alterar sempre o tamanho"
+msgstr "Redimensionar sempre"
 
 #: packages/app-cli/app/command-mv.ts:37
 msgid ""
@@ -485,7 +486,7 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 "Qualquer email enviado para este endereço será convertido numa nota e "
-"adicionado à sua coleção. A nota será guardada ao caderno Caixa de Entrada"
+"adicionado à sua coleção. A nota será guardada no caderno Caixa de Entrada"
 
 #: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
@@ -1031,7 +1032,9 @@ msgstr "Desencriptação completa."
 msgid ""
 "Completed with warnings:\n"
 "%s"
-msgstr "Concluído com avisos: %s"
+msgstr ""
+"Concluído com avisos:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -1485,8 +1488,8 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
-"Eliminar este convite? O recipiente não poderá ter mais acesso a este "
-"caderno partilhado."
+"Eliminar este convite? O recipiente não poderá aceder a este caderno "
+"partilhado."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:98
 msgid "Delete this profile?"
@@ -1507,7 +1510,7 @@ msgstr "Itens remotos eliminados: %d."
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr "Elimina as notas permanente, ignorando o lixo."
+msgstr "Elimina as notas permanente, ignorando a lixeira."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1553,7 +1556,7 @@ msgstr "Desativar encriptação"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
-msgstr "Desativar o modo seguro e reiniciar"
+msgstr "Desativar o modo de segurança e reiniciar"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
 msgid "Disable Web Clipper Service"
@@ -1656,8 +1659,8 @@ msgid ""
 "below."
 msgstr ""
 "Não perca a palava-passe já que, por razões de segurança, esta será a "
-"*única* forma de desencriptar a informação! Para ativar a encriptação, "
-"insira por favor a sua palavra-passe abaixo."
+"*única* forma de desencriptar os dados! Para ativar a encriptação, insira "
+"por favor a sua palavra-passe abaixo."
 
 #: packages/lib/models/Setting.ts:2850
 msgid "Donate, website"
@@ -1998,7 +2001,7 @@ msgid ""
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
 "Ativar a encriptação significa que *todas* as suas notas e anexos serão re-"
-"sincronizados e enviados encriptados para o alvo de encriptação."
+"sincronizados e enviados encriptados para o alvo de sincronização."
 
 #: packages/lib/models/BaseItem.ts:913
 msgid "Encrypted"
@@ -2092,19 +2095,19 @@ msgstr "Erros apenas"
 
 #: packages/lib/services/interop/InteropService.ts:74
 msgid "Evernote Export File (as HTML)"
-msgstr "Ficheiro de Exportação do Evernote (como HTML)"
+msgstr "Ficheiro de Exportação do Evernote (em HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:83
 msgid "Evernote Export File (as Markdown)"
-msgstr "Ficheiro de Exportação do Evernote (como Markdown)"
+msgstr "Ficheiro de Exportação do Evernote (em Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:92
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Ficheiros de Exportação do Evernote (Diretório, como HTML)"
+msgstr "Ficheiros de Exportação do Evernote (Diretório, em HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:101
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Ficheiros de Exportação do Evernote (Diretório, como Markdown)"
+msgstr "Ficheiros de Exportação do Evernote (Diretório, em Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2131,7 +2134,7 @@ msgstr "Exportar todos"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:20
 msgid "Export all notes as JEX"
-msgstr "Exportar todas as notas como JEX"
+msgstr "Exportar todas as notas em formato JEX"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:199
 msgid "Export debug report"
@@ -2419,11 +2422,11 @@ msgstr "Ocultar avançado"
 
 #: packages/server/src/routes/admin/users.ts:206
 msgid "Hide disabled"
-msgstr "Ocultar desativado"
+msgstr "Ocultar desativados"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:160
 msgid "Hide disabled keys"
-msgstr "Ocultar teclas desativadas"
+msgstr "Ocultar chaves desativadas"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -2530,7 +2533,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr "Importar de JEX"
+msgstr "Importar a partir de JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
@@ -2938,7 +2941,7 @@ msgstr "Deixe em branco para transferir ficheiros de idioma do site padrão"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
 msgid "Leave notebook"
-msgstr "Deixa caderno"
+msgstr "Sair de caderno"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -3065,7 +3068,7 @@ msgstr "Gerir palavra-passe mestra"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 msgid "Manage master password..."
-msgstr "Gerir palavra passe mestra..."
+msgstr "Gerir palavra-passe mestra..."
 
 #: packages/lib/utils/joplinCloud/index.ts:201
 msgid "Manage multiple users"
@@ -3172,7 +3175,7 @@ msgstr "Argumento necessário em falta: %s"
 
 #: packages/app-cli/app/cli-utils.js:135
 msgid "Missing required flag value: %s"
-msgstr "Valor de bandeira obrigatório em falta: %s"
+msgstr "Valor de flag obrigatório em falta: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:541
 msgid "Mobile data - auto-sync disabled"
@@ -3768,7 +3771,7 @@ msgid ""
 "all the notes to show up on the recipient's device."
 msgstr ""
 "Por favor tenha em conta que se for um caderno de grandes dimensões, pode "
-"demorar alguns minutos até que que todas as notas apareçam no dispositivo do "
+"demorar alguns minutos até que todas as notas apareçam no dispositivo do "
 "recipiente."
 
 #: packages/lib/onedrive-api-node-utils.js:118
@@ -3814,7 +3817,7 @@ msgstr ""
 #: packages/lib/services/plugins/PluginService.ts:511
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr ""
-"Por favor, atualize o Joplin para a versão %s ou mais recente para poder "
+"Atualize por favor o Joplin para a versão %s ou mais recente para poder "
 "utilizar este plugin."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1378
@@ -4830,7 +4833,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:160
 msgid "Sync as many devices as you want"
-msgstr "Sincroniza tantos dispositivos quanto quiser"
+msgstr "Sincronizar tantos dispositivos quanto quiser"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:557
 msgid "Sync Status"
@@ -5079,8 +5082,8 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:550
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Os anexos seguintes correspondem aos seus parâmetros de pesquisa:"
-msgstr[1] "O anexo seguinte corresponde aos seus parâmetros de pesquisa:"
+msgstr[0] "O anexo seguinte corresponde aos seus parâmetros de pesquisa:"
+msgstr[1] "Os anexos seguintes correspondem aos seus parâmetros de pesquisa:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:534
 msgid "The following attachments are being watched for changes:"
@@ -5710,7 +5713,7 @@ msgstr "Tipo de ficheiro desconhecido"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
-msgstr "Bandeira desconhecida: %s"
+msgstr "Flag desconhecida: %s"
 
 #: packages/lib/Synchronizer.ts:1121
 msgid ""
@@ -5891,8 +5894,8 @@ msgid ""
 "font is used."
 msgstr ""
 "Usado quando uma fonte de largura fixa é necessária para mostrar o texto de "
-"forma legível (ex: tabelas, caixas de seleção, código). Se não encontrada, é "
-"utilizada uma fonte de largura fixa (monospace) genérica."
+"forma legível (ex: tabelas, caixas de seleção, código). Se não for "
+"encontrada, é utilizada uma fonte de largura fixa (monospace) genérica."
 
 # Unsure on the context by the code alone. I wrote it in a context of elimination of users.
 #: packages/server/src/services/MustacheService.ts:125
