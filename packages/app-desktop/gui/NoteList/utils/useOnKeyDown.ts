@@ -104,10 +104,17 @@ const useOnKeyDown = (
 			event.preventDefault();
 		}
 
-		if (noteIds.length && (key === 'Delete' || (key === 'Backspace' && event.metaKey))) {
-			event.preventDefault();
-			if (CommandService.instance().isEnabled('deleteNote')) {
-				void CommandService.instance().execute('deleteNote', noteIds);
+		if (noteIds.length) {
+			if (key === 'Delete' && event.shiftKey) {
+				event.preventDefault();
+				if (CommandService.instance().isEnabled('permanentlyDeleteNote')) {
+					void CommandService.instance().execute('permanentlyDeleteNote', noteIds);
+				}
+			} else if (key === 'Delete' || (key === 'Backspace' && event.metaKey)) {
+				event.preventDefault();
+				if (CommandService.instance().isEnabled('deleteNote')) {
+					void CommandService.instance().execute('deleteNote', noteIds);
+				}
 			}
 		}
 
