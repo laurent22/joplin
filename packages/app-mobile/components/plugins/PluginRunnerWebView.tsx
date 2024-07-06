@@ -27,7 +27,10 @@ const usePluginSettings = (serializedPluginSettings: SerializedPluginSettings) =
 
 const useReloadDevPluginCounter = (webviewLoaded: boolean, devPluginPaths: string) => {
 	const [reloadDevPluginCounter, setReloadDevPluginCounter] = useState(0);
-	const lastDevPluginStats = useRef(new Map<string, Stat>());
+	const lastDevPluginStats = useRef<Map<string, Stat>>();
+	if (!lastDevPluginStats.current) {
+		lastDevPluginStats.current = new Map<string, Stat>();
+	}
 
 	useEffect(() => {
 		if (!devPluginPaths.trim() || !webviewLoaded) return ()=>{};
@@ -44,11 +47,13 @@ const useReloadDevPluginCounter = (webviewLoaded: boolean, devPluginPaths: strin
 						const fullPath = `${path}/${stat.path}`;
 						if (fullPath.endsWith('.js') || fullPath.endsWith('.jpl')) {
 							const lastStat = lastDevPluginStats.current.get(fullPath);
+							lastDevPluginStats.current.set(fullPath, stat);
+
 							if (!lastStat || lastStat.mtime < stat.mtime) {
+								logger.info('Preparing to reload dev plugin at path', fullPath);
 								setReloadDevPluginCounter(counter => counter + 1);
 								break;
 							}
-							lastDevPluginStats.current.set(fullPath, stat);
 						}
 					}
 				}
