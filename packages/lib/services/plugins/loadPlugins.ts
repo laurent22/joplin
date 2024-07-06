@@ -51,10 +51,8 @@ const loadPlugins = async ({
 			}
 		}
 
-		if (Setting.value('env') === 'dev') {
-			logger.info('Running dev plugins (if any)...');
-			await pluginService.loadAndRunDevPlugins(pluginSettings);
-		}
+		logger.info('Running dev plugins (if any)...');
+		await pluginService.loadAndRunDevPlugins(pluginSettings);
 
 		if (cancelEvent.cancelled) {
 			logger.info('Cancelled.');

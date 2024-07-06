@@ -14,6 +14,7 @@ import { TouchableRipple } from 'react-native-paper';
 interface Props {
 	styles: ConfigScreenStyles;
 	settingMetadata: SettingItem;
+	mode: 'read'|'readwrite';
 	updateSettingValue: UpdateSettingValueCallback;
 }
 
@@ -35,9 +36,9 @@ const FileSystemPathSelector: FunctionComponent<Props> = props => {
 		if (shim.mobilePlatform() === 'web') {
 			// Directory picker IDs can't include certain characters.
 			const pickerId = `setting-${settingId}`.replace(/[^a-zA-Z]/g, '_');
-			const handle = await self.showDirectoryPicker({ id: pickerId, mode: 'readwrite' });
+			const handle = await self.showDirectoryPicker({ id: pickerId, mode: props.mode });
 			const fsDriver = shim.fsDriver() as FsDriverWeb;
-			const uri = await fsDriver.mountExternalDirectory(handle, pickerId);
+			const uri = await fsDriver.mountExternalDirectory(handle, pickerId, props.mode);
 			await props.updateSettingValue(settingId, uri);
 			setFileSystemPath(uri);
 		} else {
@@ -53,7 +54,7 @@ const FileSystemPathSelector: FunctionComponent<Props> = props => {
 				reg.logger().info('Didn\'t pick sync dir: ', e);
 			}
 		}
-	}, [props.updateSettingValue, settingId]);
+	}, [props.updateSettingValue, settingId, props.mode]);
 
 	// Supported on Android and some versions of Chrome
 	const supported = shim.fsDriver().isUsingAndroidSAF() || (shim.mobilePlatform() === 'web' && 'showDirectoryPicker' in self);

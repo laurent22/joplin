@@ -14,6 +14,7 @@ import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 import PlatformImplementation from '../../services/plugins/PlatformImplementation';
+import { Stat } from '@joplin/lib/fs-driver-base';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -24,10 +25,49 @@ const usePluginSettings = (serializedPluginSettings: SerializedPluginSettings) =
 	}, [serializedPluginSettings]);
 };
 
+const useReloadDevPluginCounter = (webviewLoaded: boolean, devPluginPaths: string) => {
+	const [reloadDevPluginCounter, setReloadDevPluginCounter] = useState(0);
+	const lastDevPluginStats = useRef(new Map<string, Stat>());
+
+	useEffect(() => {
+		if (!devPluginPaths.trim() || !webviewLoaded) return ()=>{};
+
+		// Poll for changes
+		const interval = shim.setInterval(async () => {
+			const paths = devPluginPaths.split(',');
+			for (const path of paths) {
+				if (!await shim.fsDriver().exists(path)) continue;
+
+				const stats = await shim.fsDriver().readDirStats(path);
+				if (stats) {
+					for (const stat of stats) {
+						const fullPath = `${path}/${stat.path}`;
+						if (fullPath.endsWith('.js') || fullPath.endsWith('.jpl')) {
+							const lastStat = lastDevPluginStats.current.get(fullPath);
+							if (!lastStat || lastStat.mtime < stat.mtime) {
+								setReloadDevPluginCounter(counter => counter + 1);
+								break;
+							}
+							lastDevPluginStats.current.set(fullPath, stat);
+						}
+					}
+				}
+			}
+		}, 5_000);
+
+		return () => {
+			shim.clearInterval(interval);
+		};
+	}, [devPluginPaths, webviewLoaded]);
+
+	return reloadDevPluginCounter;
+};
+
 const usePlugins = (
 	pluginRunner: PluginRunner,
 	webviewLoaded: boolean,
 	pluginSettings: PluginSettings,
+	devPluginPaths: string,
 ) => {
 	const store = useStore<AppState>();
 	const lastPluginRunner = usePrevious(pluginRunner);
@@ -36,6 +76,8 @@ const usePlugins = (
 	// even if loadPlugins is cancelled and re-run.
 	const reloadAllRef = useRef(false);
 	reloadAllRef.current ||= pluginRunner !== lastPluginRunner;
+
+	const reloadDevPluginCounter = useReloadDevPluginCounter(webviewLoaded, devPluginPaths);
 
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
@@ -55,7 +97,7 @@ const usePlugins = (
 		if (!event.cancelled) {
 			reloadAllRef.current = false;
 		}
-	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
+	}, [pluginRunner, store, webviewLoaded, pluginSettings, reloadDevPluginCounter]);
 };
 
 const useUnloadPluginsOnGlobalDisable = (
@@ -78,6 +120,7 @@ interface Props {
 	serializedPluginSettings: SerializedPluginSettings;
 	pluginSupportEnabled: boolean;
 	pluginStates: PluginStates;
+	devPluginPaths: string;
 	pluginHtmlContents: PluginHtmlContents;
 	themeId: number;
 }
@@ -97,7 +140,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, [webviewReloadCounter]);
 
 	const pluginSettings = usePluginSettings(props.serializedPluginSettings);
-	usePlugins(pluginRunner, webviewLoaded, pluginSettings);
+	usePlugins(pluginRunner, webviewLoaded, pluginSettings, props.devPluginPaths);
 	useUnloadPluginsOnGlobalDisable(props.pluginStates, props.pluginSupportEnabled);
 
 	const onLoadStart = useCallback(() => {
@@ -183,6 +226,7 @@ export default connect((state: AppState) => {
 		serializedPluginSettings: state.settings['plugins.states'],
 		pluginSupportEnabled: state.settings['plugins.pluginSupportEnabled'],
 		pluginStates: state.pluginService.plugins,
+		devPluginPaths: state.settings['plugins.devPluginPaths'],
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		themeId: state.settings.theme,
 	};

@@ -857,7 +857,10 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'plugins',
 			public: true,
 			advanced: true,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			show: (settings) => {
+				return shim.isElectron() || (shim.mobilePlatform() === 'web' && 'showDirectoryPicker' in self && settings['plugins.pluginSupportEnabled']);
+			},
 			label: () => 'Development plugins',
 			description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
 			storage: SettingStorage.File,

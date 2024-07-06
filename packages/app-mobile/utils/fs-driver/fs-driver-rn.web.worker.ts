@@ -13,6 +13,8 @@ const restoreReservedWords = (fileName: string) => {
 	return fileName.replace(/_tmp$/g, 'tmp');
 };
 
+export type AccessMode = 'read'|'readwrite';
+
 declare global {
 	interface FileSystemSyncAccessHandle {
 		close(): void;
@@ -24,8 +26,8 @@ declare global {
 	}
 
 	interface FileSystemHandle {
-		requestPermission(permission: { mode: string }): Promise<'granted'|string>;
-		queryPermission(permission: { mode: string }): Promise<'granted'|string>;
+		requestPermission(permission: { mode: AccessMode }): Promise<'granted'|string>;
+		queryPermission(permission: { mode: AccessMode }): Promise<'granted'|string>;
 	}
 
 	interface FileSystemFileHandle {
@@ -42,7 +44,7 @@ type WriteFileOptions = { keepExistingData?: boolean };
 
 const logger = new Logger();
 logger.addTarget(TargetType.Console);
-logger.setLevel(LogLevel.Info);
+logger.setLevel(LogLevel.Debug);
 
 export interface TransferableStat {
 	birthtime: number;
@@ -58,8 +60,8 @@ const externalDirectoryPrefix = '/external/';
 
 type AccessHandleDatabaseControl = {
 	clearExternalHandle(id: string): Promise<void>;
-	addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<void>;
-	queryExternalHandle(path: string): Promise<FileSystemDirectoryHandle|FileSystemFileHandle|null>;
+	addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle, mode: AccessMode): Promise<void>;
+	queryExternalHandle(path: string): Promise<[FileSystemDirectoryHandle|FileSystemFileHandle, AccessMode]|null>;
 };
 
 // Allows saving and restoring file system access handles. These handles are browser-serializable, so can
@@ -89,6 +91,11 @@ const createAccessHandleDatabase = async (): Promise<AccessHandleDatabaseControl
 		};
 	});
 
+	const toUniquePath = (path: string) => {
+		// normalize can leave the trailing /
+		return normalize(path).replace(/[/]$/, '');
+	};
+
 	return {
 		clearExternalHandle(id: string) {
 			return new Promise<void>((resolve, reject) => {
@@ -100,24 +107,34 @@ const createAccessHandleDatabase = async (): Promise<AccessHandleDatabaseControl
 				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
 			});
 		},
-		addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle) {
+		addExternalHandle(path: string, id: string, handle: FileSystemDirectoryHandle|FileSystemFileHandle, mode: AccessMode) {
+			path = toUniquePath(path);
+
 			return new Promise<void>((resolve, reject) => {
 				const request = db.transaction(['external-handles'], 'readwrite')
 					.objectStore('external-handles')
-					.put({ path, id: `id:${id}`, handle });
+					.put({ path, id: `id:${id}`, handle, mode });
 
 				request.onsuccess = () => resolve();
 				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
 			});
 		},
 		queryExternalHandle(path: string) {
-			return new Promise<FileSystemDirectoryHandle|FileSystemFileHandle>((resolve, reject) => {
+			path = toUniquePath(path);
+
+			return new Promise<[FileSystemDirectoryHandle|FileSystemFileHandle, AccessMode]|null>((resolve, reject) => {
 				const request = db.transaction(['external-handles'], 'readonly')
 					.objectStore('external-handles')
 					.index('path')
 					.get(path);
 
-				request.onsuccess = () => resolve(request.result?.handle ?? null);
+				request.onsuccess = () => {
+					const handle = request.result?.handle;
+					if (request.result && request.result.path !== path) {
+						throw new Error(`Path mismatch when querying external directory handle: ${JSON.stringify(path)} was ${JSON.stringify(request.result.path)}`);
+					}
+					resolve(handle ? [handle, request.result?.mode ?? 'readwrite'] : null);
+				};
 				request.onerror = (event) => reject(new Error(`Transaction failed: ${event}`));
 			});
 		},
@@ -158,6 +175,8 @@ export class WorkerApi {
 	}
 
 	private async getExternalHandle_(path: string) {
+		path = normalize(path);
+
 		if (!path.startsWith(externalDirectoryPrefix)) {
 			return null;
 		}
@@ -167,19 +186,26 @@ export class WorkerApi {
 		}
 
 		const saved = await this.accessHandleDatabase_.queryExternalHandle(path);
+		if (!saved) {
+			logger.debug('External lookup failed for', path);
+			return null;
+		}
+		const [handle, mode] = saved;
+
 		// At present, not all browsers support .queryPermission and .requestPermission on
 		// saved file handles.
-		if (!saved || !('queryPermission' in saved)) {
+		if (!('queryPermission' in handle)) {
+			logger.warn('Browser does not support .queryPermission. Loading path: ', path);
 			return null;
 		}
 
-		const permission = { mode: 'readwrite' };
-		if (await saved.queryPermission(permission) !== 'granted' && await saved.requestPermission(permission) !== 'granted') {
+		const permission = { mode };
+		if (await handle.queryPermission(permission) !== 'granted' && await handle.requestPermission(permission) !== 'granted') {
 			throw new Error('Missing read-write access. It might be necessary to share the folder with the application again.');
 		}
 
-		this.externalHandles_.set(path, saved);
-		return saved;
+		this.externalHandles_.set(path, handle);
+		return handle;
 	}
 
 	private async pathToDirectoryHandle_(path: string, create = false): Promise<FileSystemDirectoryHandle|null> {
@@ -188,8 +214,8 @@ export class WorkerApi {
 
 		if (path === '/') {
 			return this.fsRoot_;
-		} else if (path.startsWith(externalDirectoryPrefix)) {
-			if (path === externalDirectoryPrefix) {
+		} else if (`${path}/`.startsWith(externalDirectoryPrefix)) {
+			if (path === externalDirectoryPrefix || `${path}/` === externalDirectoryPrefix) {
 				// /external/ is virtual, it doesn't exist.
 				return null;
 			}
@@ -474,16 +500,16 @@ export class WorkerApi {
 		this.virtualFiles_.set(normalize(path), content);
 	}
 
-	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string) {
-		if (await handle.requestPermission({ mode: 'readwrite' }) !== 'granted') {
-			throw new Error('Write access is needed.');
+	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string, mode: AccessMode) {
+		if (await handle.requestPermission({ mode }) !== 'granted') {
+			throw new Error(`${mode} access is needed for ${id}.`);
 		}
 
 		const mountPath = resolve(externalDirectoryPrefix, crypto.randomUUID().replace(/-/g, ''));
 		this.externalHandles_.set(mountPath, handle);
 
 		await this.accessHandleDatabase_.clearExternalHandle(id);
-		await this.accessHandleDatabase_.addExternalHandle(mountPath, id, handle);
+		await this.accessHandleDatabase_.addExternalHandle(mountPath, id, handle, mode);
 
 		return mountPath;
 	}

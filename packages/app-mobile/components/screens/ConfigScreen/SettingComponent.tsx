@@ -115,9 +115,10 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			</View>
 		);
 	} else if (md.type === Setting.TYPE_STRING) {
-		if (md.key === 'sync.2.path' && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
+		if (['sync.2.path', 'plugins.devPluginPaths'].includes(md.key) && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
 			return (
 				<FileSystemPathSelector
+					mode={md.key === 'sync.2.path' ? 'readwrite' : 'read'}
 					styles={props.styles}
 					settingMetadata={md}
 					updateSettingValue={props.updateSettingValue}

@@ -5,7 +5,7 @@ import tarCreate, { TarCreateOptions } from './tarCreate';
 import { Buffer } from 'buffer';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
-import type { TransferableStat, WorkerApi } from './fs-driver-rn.web.worker';
+import type { AccessMode, TransferableStat, WorkerApi } from './fs-driver-rn.web.worker';
 import WorkerMessenger from '@joplin/lib/utils/ipc/WorkerMessenger';
 import JoplinError from '@joplin/lib/JoplinError';
 
@@ -222,8 +222,8 @@ export default class FsDriverWeb extends FsDriverBase {
 		return this.messenger_.remoteApi.createReadOnlyVirtualFile(path, content);
 	}
 
-	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string) {
-		const externalUri = await this.messenger_.remoteApi.mountExternalDirectory(handle, id);
+	public async mountExternalDirectory(handle: FileSystemDirectoryHandle, id: string, mode: AccessMode) {
+		const externalUri = await this.messenger_.remoteApi.mountExternalDirectory(handle, id, mode);
 		logger.info('Mounted handle with ID', id, 'at', externalUri);
 		return externalUri;
 	}
