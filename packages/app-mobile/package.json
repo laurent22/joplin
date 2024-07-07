@@ -109,7 +109,7 @@
     "jetifier": "2.0.0",
     "js-draw": "1.20.2",
     "jsdom": "23.0.1",
-    "nodemon": "3.0.3",
+    "nodemon": "3.1.0",
     "punycode": "2.3.1",
     "react-test-renderer": "18.2.0",
     "sqlite3": "5.1.6",
