@@ -25,3 +25,14 @@ export interface RSA {
 	publicKey(rsaKeyPair: RSAKeyPair): string;
 	privateKey(rsaKeyPair: RSAKeyPair): string;
 }
+
+export interface NativeEncryptionInterface {
+	getCiphers(): string[];
+	getHashes(): string[];
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
+	randomBytes(size: number): Promise<Buffer|any>;
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
+	pbkdf2Raw(password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer|any>;
+}

@@ -684,6 +684,7 @@ packages/app-mobile/gulpfile.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
+packages/app-mobile/services/e2ee/NativeEncryption.react-native.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
@@ -1019,6 +1020,7 @@ packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.js
+packages/lib/services/e2ee/NativeEncryption.node.js
 packages/lib/services/e2ee/RSA.node.js
 packages/lib/services/e2ee/ppk.test.js
 packages/lib/services/e2ee/ppk.js

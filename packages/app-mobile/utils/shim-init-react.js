@@ -26,6 +26,10 @@ function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
+	// copied from generated shim-init-node.js. Strange but works
+	const NativeEncryption = require('../services/e2ee/NativeEncryption.react-native');
+	shim.NativeEncryption = new NativeEncryption.default;
+
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) {
 			shim.fsDriver_ = new FsDriverRN();

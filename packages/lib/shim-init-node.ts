@@ -12,6 +12,7 @@ import { ResourceEntity } from './services/database/types';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
+import NativeEncryption from './services/e2ee/NativeEncryption.node';
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
@@ -135,6 +136,7 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
+	shim.NativeEncryption = new NativeEncryption;
 	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
