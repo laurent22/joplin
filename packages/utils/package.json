@@ -39,7 +39,7 @@
     "fs-extra": "11.2.0",
     "glob": "10.3.10",
     "html-entities": "1.4.0",
-    "markdown-it": "13.0.2",
+    "markdown-it": "14.0.0",
     "moment": "2.30.1",
     "node-fetch": "2.6.7",
     "sprintf-js": "1.1.3"
