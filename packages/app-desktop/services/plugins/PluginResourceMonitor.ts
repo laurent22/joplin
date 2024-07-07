@@ -1,9 +1,13 @@
 import bridge from '../bridge';
 
-export interface ResourceMetric {
+export interface PluginResourceMetric {
 	memory: number;
 	peakMemory: number;
 	cpu: number;
+}
+
+export interface PluginResourceData {
+	[key: string]: PluginResourceMetric;
 }
 
 export class PluginResourceMonitor {
@@ -19,12 +23,14 @@ export class PluginResourceMonitor {
 	}
 
 	private intervalId_: ReturnType<typeof setTimeout>;
-	private resourceMetrics_: { [key: string]: ResourceMetric };
+	private resourceMetrics_: PluginResourceData;
 
 	public constructor() {
 		this.intervalId_ = null;
 		this.resourceMetrics_ = {};
 	}
+
+	public ResourceMonitorGUIUpdate: (resourceMetrics: PluginResourceData)=> void | null = null;
 
 	private startResourceMonitor() {
 		this.intervalId_ = setInterval(() => {
@@ -37,6 +43,10 @@ export class PluginResourceMonitor {
 					peakMemory: metric.memory.peakWorkingSetSize,
 					cpu: metric.cpu.percentCPUUsage,
 				};
+			}
+
+			if (this.ResourceMonitorGUIUpdate) {
+				this.ResourceMonitorGUIUpdate(this.resourceMetrics_);
 			}
 		}, 5000);
 	}
@@ -58,4 +68,5 @@ export class PluginResourceMonitor {
 	public async stop() {
 		this.stopResourceMonitor();
 	}
+
 }

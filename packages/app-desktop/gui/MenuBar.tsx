@@ -553,7 +553,16 @@ function useMenu(props: Props) {
 						});
 					},
 				},
-				separator(),
+				{
+					label: _('Plugin Monitor'),
+					// todo: add accelerator
+					click: () => {
+						props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'PluginMonitor',
+						});
+					},
+				},
 			];
 
 			// the following menu items will be available for all OS under Tools
@@ -573,6 +582,7 @@ function useMenu(props: Props) {
 			toolsItems = toolsItems.concat(toolsItemsAll);
 
 			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.languages'], props['spellChecker.enabled']));
+
 
 			function _checkForUpdates() {
 				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });

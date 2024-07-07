@@ -52,6 +52,7 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
+	isPluginMonitorOpen: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -76,6 +77,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
+		isPluginMonitorOpen: false,
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -344,6 +346,22 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
+		case 'PLUGIN_MONITOR_OPEN':
+		case 'PLUGIN_MONITOR_CLOSE':
+			{
+				if (action.type === 'PLUGIN_MONITOR_OPEN') {
+					newState = {
+						...state,
+						isPluginMonitorOpen: true,
+					};
+				} else {
+					newState = {
+						...state,
+						isPluginMonitorOpen: false,
+					};
+				}
+			}
+			break;
 		}
 
 	} catch (error) {

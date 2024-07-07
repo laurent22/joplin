@@ -29,6 +29,7 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
+import PluginMonitorScreen from './PluginMonitorScreen';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -232,6 +233,7 @@ class RootComponent extends React.Component<Props, any> {
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
+			PluginMonitor: { screen: PluginMonitorScreen, title: () => _('Plugin Monitor') },
 		};
 
 		return (

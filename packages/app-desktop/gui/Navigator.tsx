@@ -54,6 +54,7 @@ class NavigatorComponent extends React.Component<Props> {
 const Navigator = connect((state: AppState) => {
 	return {
 		route: state.route,
+		isPluginMonitorOpen: state.isPluginMonitorOpen,
 	};
 })(NavigatorComponent);
 
