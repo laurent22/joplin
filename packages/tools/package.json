@@ -28,7 +28,7 @@
     "execa": "4.1.0",
     "fs-extra": "11.2.0",
     "gettext-parser": "7.0.1",
-    "glob": "10.3.10",
+    "glob": "10.3.12",
     "markdown-it": "13.0.2",
     "md5-file": "5.0.0",
     "moment": "2.30.1",
