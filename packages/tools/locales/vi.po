@@ -94,7 +94,7 @@ msgstr "&Giao diện"
 msgid "&Window"
 msgstr "Đóng cửa sổ"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d ngày"
 
@@ -159,8 +159,8 @@ msgstr "%s - Sao chép"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) không thể tỉa lên: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) muốn chia sẻ một sổ ghi chú với bạn."
 
@@ -292,7 +292,7 @@ msgstr ""
 "Bộ điều chỉnh “%s” được sử dụng cho các lệnh “%s” và “%s”. Điều này có thể "
 "dẫn đến hành vi không mong muốn."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Chấp nhận"
@@ -479,11 +479,11 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Bề ngoài"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Ứng dụng"
 
@@ -598,7 +598,7 @@ msgstr "Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 msgid "Automatically check for updates"
 msgstr "Đang kiểm tra cập nhật..."
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1381,7 +1381,7 @@ msgstr ""
 msgid "Date format"
 msgstr "Định dạng ngày"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "ngày"
 
@@ -1553,7 +1553,7 @@ msgstr "Đã tắt"
 msgid "Disable encryption"
 msgstr "Tắt chức năng mã hóa"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr "Tắt chế độ an toàn và khởi động lại"
 
@@ -1663,7 +1663,7 @@ msgstr ""
 "Đừng để mất mật khẩu, vì lí do bảo mật, mật khẩu là thứ duy nhất để mở khóa "
 "dữ liệu! Để bật chức năng mã hóa, vui lòng điền mật khẩu vào bên dưới."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 #, fuzzy
 msgid "Donate, website"
 msgstr "Website của Joplin"
@@ -1857,7 +1857,7 @@ msgstr "Sửa ghi chú."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Hiện thị thông tin phiên bản"
@@ -1957,7 +1957,7 @@ msgstr "Bật lịch sử note"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Quản lý các phần mở rộng"
@@ -2026,7 +2026,7 @@ msgstr "Đã mã hóa"
 msgid "Encrypted items cannot be modified"
 msgstr "Các mục đã mã hóa không thể chỉnh sửa"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Mã hóa"
 
@@ -2345,7 +2345,7 @@ msgstr "Toàn bộ thay đổi"
 msgid "Full name"
 msgstr "Toàn bộ thay đổi"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Chung"
@@ -2360,7 +2360,7 @@ msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Đang tạo đường dẫn..."
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
@@ -2539,7 +2539,7 @@ msgstr ""
 msgid "Import"
 msgstr "Xuất"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Xuất báo cáo lỗi"
@@ -2558,7 +2558,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Xuất tất cả"
@@ -2755,7 +2755,7 @@ msgstr "Câu trả lời không hợp lệ: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Câu lệnh sai: \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
 
@@ -2801,7 +2801,7 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2893,7 +2893,7 @@ msgstr ""
 msgid "Keep note history for"
 msgstr "Lưu giữ lịch sử note để"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Lưu giữ lịch sử note để"
@@ -2906,7 +2906,7 @@ msgstr "Ché độ bàn phím"
 msgid "Keyboard Shortcut"
 msgstr "Phím tắt"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Phím tắt bàn phím"
 
@@ -2927,7 +2927,7 @@ msgstr "Landscape"
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 #, fuzzy
 msgid "Language, date format"
 msgstr "Định dạng ngày"
@@ -3061,6 +3061,11 @@ msgstr ""
 msgid "Log"
 msgstr "Nhật ký"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Joplin Cloud"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Đăng nhập với Dropbox"
@@ -3073,7 +3078,7 @@ msgstr "Đăng nhập với OneDrive"
 msgid "Logout"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -3129,7 +3134,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Thủ công"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3187,7 +3192,7 @@ msgstr "Đính kèm ghi chú"
 msgid "Max Total Size"
 msgstr "Kích thước chuẩn"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3217,11 +3222,11 @@ msgstr "Thiếu đối số cho hàm: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Dữ liệu di động - tự động đồng bộ đã tắt"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Thêm thông tin"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Các thông tin khác"
 
@@ -3296,7 +3301,7 @@ msgstr "Phiên bản mới: %s"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Ghi chú mới"
 
@@ -3327,7 +3332,7 @@ msgstr "Tags mới:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "To-do mới"
 
@@ -3451,7 +3456,7 @@ msgstr "Thực hiện ngay"
 msgid "note"
 msgstr "ghi chú"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Note"
 
@@ -3485,7 +3490,7 @@ msgid "Note has been saved."
 msgstr "Ghi chú chưa được lưu."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Lịch sử của note"
 
@@ -3529,7 +3534,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Sổ&ghi chú"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 #, fuzzy
 msgid "Notebook"
 msgstr "Notebooks"
@@ -3564,7 +3569,7 @@ msgstr "Notesbook không thể đặt tên \"%s\", tên này đã được dành
 msgid "Notes"
 msgstr "Note"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Notes và cài đặt sẽ được lưu lại tại: %s"
 
@@ -3606,7 +3611,7 @@ msgstr "OLED Dark"
 msgid "On %s: %s"
 msgstr "On %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Một trong số các khoá chính của bạn đang sử dụng phương thức mã hoá bị lỗi "
@@ -3623,7 +3628,7 @@ msgstr ""
 "master. Để mở vui lòng ấn `e2ee decrypt`. Nếu bạn đã cung cấp mật khẩu, "
 "nhưng mục đã bị mã hóa đang được giải mã trong nền và sẽ có thể sử dụng sớm."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "Một hoặc nhiều khoá chính cần được đặt mật khẩu."
 
@@ -3909,7 +3914,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Phần mềm mở rộng"
 
@@ -3961,7 +3966,7 @@ msgid ""
 "shortcut."
 msgstr "Nhấn phím tắt sau đó nhấn ENTER. Hoặc nhấn BACKSPACE để xoá phím tắt."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Ấn để đặt mật khẩu giải mã."
 
@@ -4133,7 +4138,7 @@ msgstr "Tải lại"
 msgid "Regular expression"
 msgstr "Bật hỗ trợ toán học"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4231,7 +4236,7 @@ msgstr ""
 msgid "Resources: %d."
 msgstr "Tài nguyên: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Khởi động lại và nâng cấp"
 
@@ -4345,7 +4350,7 @@ msgstr "AWS secret"
 msgid "S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4506,8 +4511,8 @@ msgid ""
 "is 600."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Đặt mật khẩu"
 
@@ -4630,11 +4635,11 @@ msgstr ""
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu closed"
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr ""
 
@@ -4679,16 +4684,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Một số mục không thể được giải mã."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Một số mục không thể đồng bộ hóa."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
 
@@ -4936,12 +4941,12 @@ msgstr "Phiên bản đồng bộ hóa: %s"
 msgid "Sync your notes"
 msgstr "Sắp xếp notes theo"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Bật chức năng mã hóa"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Đồng bộ hóa"
 
@@ -5113,7 +5118,7 @@ msgstr ""
 "Phương thức mã hoá mặc định đã được thay đổi sang một phương thức bảo mật "
 "hơn, và nên được áp dụng cho dữ liệu của bạn."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5249,7 +5254,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5259,12 +5264,12 @@ msgstr ""
 "bộ. Quá trình có thể mất vài phút để hoàn tất và ứng dụng cần được khởi động "
 "lại. Để tiếp tục, hãy nhấn vào đường dẫn."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "Mục tiêu đồng bộ hóa phải được nâng cấp! Chạy `%s` để tiếp tục."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 #, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Kiểm tra cài đặt đồng bộ hóa"
@@ -5303,7 +5308,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Giao diện"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Font của trình chỉnh sửa văn bản"
@@ -5356,7 +5361,7 @@ msgstr ""
 "đồng bộ. Để tìm những mục này, tìm tiêu đề hoặc ID (được hiển thị trong "
 "ngoặc kép ở trên)."
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5646,7 +5651,7 @@ msgstr "Bật/tắt trình soạn thảo bên ngoài"
 msgid "Toggle menu bar"
 msgstr "Ẩn/hiện thanh bên"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 #, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Lưu giữ lịch sử note để"
@@ -5677,7 +5682,7 @@ msgstr "Bật/tắt chế độ an toàn"
 msgid "Token has been copied to the clipboard!"
 msgstr "Dữ liệu đã được sao chép!"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Công cụ"
 
@@ -5769,7 +5774,7 @@ msgstr "Không tìm thấy flag này: %s"
 msgid "Unknown flag: %s"
 msgstr "Không tìm thấy flag này: %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5917,7 +5922,7 @@ msgstr ""
 "Sử dụng phím mũi tên và page up/down để di chuyển lên xuống trong một danh "
 "sách hoặc trang chữ (bao gồm cả console)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "Sử dụng mũi tên để di chuyển các giao diện. Nhấn “Escape” để thoát."
 
@@ -5984,9 +5989,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Xem trên bản đồ"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Xem ngay"
 
@@ -6035,7 +6040,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Clipper"
@@ -6188,6 +6193,11 @@ msgstr "Lựa chọn của bạn "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Dữ liệu của bạn sẽ được tái mã hoá và đồng bộ lại."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

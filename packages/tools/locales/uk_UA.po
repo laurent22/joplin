@@ -98,7 +98,7 @@ msgstr "&Перегляд"
 msgid "&Window"
 msgstr "Закрити вікно"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d днів"
 
@@ -161,8 +161,8 @@ msgstr "%s - Копіювати"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Не вдалося завантажити %s (%s): %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) хоче поділитись нотаткою з вами."
 
@@ -295,7 +295,7 @@ msgstr ""
 "Прискорювач “%s” використовується для команд “%s” та “%s”. Це може призвести "
 "до несподіваної поведінки."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Прийняти"
@@ -486,11 +486,11 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Зовнішній вигляд"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Застосунок"
 
@@ -605,7 +605,7 @@ msgstr "Автоматичне закриття дужок, лапок тощо.
 msgid "Automatically check for updates"
 msgstr "Автоматично перевіряти наявність оновлень"
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1386,7 +1386,7 @@ msgstr "Дата"
 msgid "Date format"
 msgstr "Формат дати"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "днів"
 
@@ -1552,7 +1552,7 @@ msgstr "Відключити"
 msgid "Disable encryption"
 msgstr "Вимкнути шифрування"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr "Вимкніть безпечний режим і перезапустіть"
 
@@ -1659,7 +1659,7 @@ msgstr ""
 "Не втрачайте пароль, оскільки з міркувань безпеки це буде *єдиний* спосіб "
 "розшифрувати дані! Щоб увімкнути шифрування, введіть свій пароль нижче."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 #, fuzzy
 msgid "Donate, website"
 msgstr "Веб-сайт Joplin"
@@ -1848,7 +1848,7 @@ msgstr "Редагувати примітку."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Відображає інформацію про версію"
@@ -1948,7 +1948,7 @@ msgstr "Увімкнути історію нотаток"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Керування розширеннями"
@@ -2015,7 +2015,7 @@ msgstr "Зашифровано"
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифровані елементи не можуть бути змінені"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Шифрування"
 
@@ -2331,7 +2331,7 @@ msgstr "Повний журнал змін"
 msgid "Full name"
 msgstr "Повне ім'я"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Загальні"
@@ -2347,7 +2347,7 @@ msgstr[0] "Генерування посиланя…"
 msgstr[1] "Генерування посилань…"
 msgstr[2] "Генерування посилань…"
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
@@ -2524,7 +2524,7 @@ msgstr "Зображення"
 msgid "Import"
 msgstr "Імпорт"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Експорт звіту про налагодження"
@@ -2543,7 +2543,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Експортувати все"
@@ -2740,7 +2740,7 @@ msgstr "Хибна відповідь: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Хибна команда: “%s”"
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Недійсне значення параметра: “%s”. Можливі значення: %s."
 
@@ -2787,7 +2787,7 @@ msgstr ""
 "Joplin може синхронізувати ваші нотатки за допомогою різних провайдерів. "
 "Виберіть один зі списку нижче."
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2882,7 +2882,7 @@ msgstr "KaTeX"
 msgid "Keep note history for"
 msgstr "Зберігайте історію нотаток протягом"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Зберігайте історію нотаток протягом"
@@ -2895,7 +2895,7 @@ msgstr "Режим клавіатури"
 msgid "Keyboard Shortcut"
 msgstr "Комбінація клавіш"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Скорочення клавіатури"
 
@@ -2915,7 +2915,7 @@ msgstr "Горизонтально"
 msgid "Language"
 msgstr "Мова"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 #, fuzzy
 msgid "Language, date format"
 msgstr "Формат дати"
@@ -3047,6 +3047,11 @@ msgstr ""
 msgid "Log"
 msgstr "Логи"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Joplin Cloud"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Ввійти з Dropbox"
@@ -3059,7 +3064,7 @@ msgstr "Ввійти з OneDrive"
 msgid "Logout"
 msgstr "Вийти"
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -3110,7 +3115,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Вручну"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3164,7 +3169,7 @@ msgstr "Максимальний розмір нотатки або вкладе
 msgid "Max Total Size"
 msgstr "Максимальний загальний розмір"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3192,11 +3197,11 @@ msgstr "Відсутнє необхідне значення прапорця: %
 msgid "Mobile data - auto-sync disabled"
 msgstr "Мобільні дані – автоматичну синхронізацію вимкнено"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Більше інформації"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Більше інформації"
 
@@ -3270,7 +3275,7 @@ msgstr "Нова версія: %s"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Нова нотатка"
 
@@ -3299,7 +3304,7 @@ msgstr "Нові теги:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Нове завдання"
 
@@ -3421,7 +3426,7 @@ msgstr "Не зараз"
 msgid "note"
 msgstr "нотатка"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Нотатка"
 
@@ -3454,7 +3459,7 @@ msgid "Note has been saved."
 msgstr "Примітку збережено."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Історія нотатки"
 
@@ -3499,7 +3504,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Блокнот"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 msgid "Notebook"
 msgstr "Блокнот"
 
@@ -3532,7 +3537,7 @@ msgstr "Блокноти не можна назвати “%s”, що є зар
 msgid "Notes"
 msgstr "Нотатки"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Нотатки та налаштування зберігаються у: %s"
 
@@ -3574,7 +3579,7 @@ msgstr "OLED Dark"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Один з ваших мастер-ключів використовує застарілий метод шифрування."
 
@@ -3590,7 +3595,7 @@ msgstr ""
 "ви вже надали пароль, зашифровані елементи розшифровуються у фоновому режимі "
 "і незабаром будуть доступні."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "Один або більше мастер-ключів потребують пароль."
 
@@ -3879,7 +3884,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Розширення"
 
@@ -3933,7 +3938,7 @@ msgstr ""
 "Натисніть комбінацію клавіш і потім ENTER. Або натисніть BACKSPACE щоб "
 "очистити комбінацію."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Натисніть, щоб встановити пароль розшифровки."
 
@@ -4100,7 +4105,7 @@ msgstr "Оновити"
 msgid "Regular expression"
 msgstr "Регулярний вираз"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4195,7 +4200,7 @@ msgstr ""
 msgid "Resources: %d."
 msgstr "Ресурси: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Перезапустити і оновити"
 
@@ -4306,7 +4311,7 @@ msgstr "S3 secret key"
 msgid "S3 URL"
 msgstr "S3 посилання"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4463,8 +4468,8 @@ msgstr ""
 "Встановіть значення 0, щоб він займав весь доступний простір. Рекомендована "
 "ширина 600."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Встановити пароль"
 
@@ -4582,12 +4587,12 @@ msgstr "Показати/приховати бічну панель"
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 #, fuzzy
 msgid "Side menu closed"
 msgstr "Приховати інші дії"
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr ""
 
@@ -4634,16 +4639,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Деякі елементи не можуть бути дешифровані."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Деякі елементи не можуть бути синхронізовані."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Деякі елементи не можуть бути синхронізовані. Натисніть для отримання "
@@ -4894,12 +4899,12 @@ msgstr "Версія синхронізації: %s"
 msgid "Sync your notes"
 msgstr "Сортувати нотатки за"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Ввімкнути шифрування"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Синхронізація"
 
@@ -5072,7 +5077,7 @@ msgstr ""
 "Метод шифрування за замовчуванням змінено на більш безпечний, і "
 "рекомендується застосовувати його до своїх даних."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5215,7 +5220,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5225,12 +5230,12 @@ msgstr ""
 "Завершення операції може зайняти кілька хвилин і програму потрібно "
 "перезапустити. Щоб продовжити, натисніть на посилання."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Ціль синхронізації потрібно оновити. Натисніть цей банер, щоб продовжити."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 #, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Перевірте конфігурацію синхронізації"
@@ -5271,7 +5276,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Тема"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Шрифт редактора"
@@ -5324,7 +5329,7 @@ msgstr ""
 "синхронізації. Для того, щоб знайти ці елементи, знайдіть заголовок або "
 "ідентифікатор (який відображається в дужках вище)."
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5622,7 +5627,7 @@ msgstr "Переключити зовнішнє редагування"
 msgid "Toggle menu bar"
 msgstr "Переключити бокову панель"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 #, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Зберігайте історію нотаток протягом"
@@ -5651,7 +5656,7 @@ msgstr "Переключити поле порядку сортування"
 msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопійовано в буфер обміну!"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Інструменти"
 
@@ -5742,7 +5747,7 @@ msgstr "Невідомий прапорець: %s"
 msgid "Unknown flag: %s"
 msgstr "Невідомий прапорець: %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5885,7 +5890,7 @@ msgstr ""
 "За допомогою стрілок та page up/down прокручуйте списки та текстові області "
 "(включаючи цю консоль)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Використовуйте стрілки для переміщення елементів макета. Натисніть “Escape”, "
@@ -5955,9 +5960,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Показати на карті"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Показати елемент зараз"
 
@@ -6006,7 +6011,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Clipper"
@@ -6166,6 +6171,11 @@ msgstr "Ваш вибір: "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Ваші дані будуть повторно зашифровані та знову синхронізовані."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

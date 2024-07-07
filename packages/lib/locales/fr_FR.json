@@ -1826,6 +1826,9 @@
 	"Log": [
 		"Journal"
 	],
+	"Login to Joplin Cloud.": [
+		"Se connecter à Joplin Cloud."
+	],
 	"Login with Dropbox": [
 		"Se connecter à Dropbox"
 	],
@@ -3681,6 +3684,9 @@
 	],
 	"Your data is going to be re-encrypted and synced again.": [
 		"Vos données vont être chiffrées et synchronisées à nouveau."
+	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Votre mot de passe maître est requis pour déchiffrer une partie de vos données."

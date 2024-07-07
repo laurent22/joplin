@@ -3311,6 +3311,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Tietosi salataan ja synkronoidaan uudelleen."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Salasanaasi tarvitaan joidenkin tietojen salauksen purkamiseen."
 	],

@@ -60,7 +60,8 @@ export const setNotesSortOrder = (field?: string, reverse?: boolean) => {
 		nextReverse = !!nextReverse;
 		if (perFieldReverse[nextField] !== nextReverse) {
 			perFieldReverse[nextField] = nextReverse;
-			Setting.setValue('notes.perFieldReverse', { ...perFieldReverse });
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+			Setting.setValue('notes.perFieldReverse', { ...perFieldReverse } as any);
 		}
 	}
 };

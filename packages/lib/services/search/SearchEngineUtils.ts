@@ -58,7 +58,7 @@ export default class SearchEngineUtils {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const previewOptions: any = { order: [],
 			fields: fields,
-			conditions: [`id IN ("${noteIds.join('","')}")`], ...options };
+			conditions: [`id IN ('${noteIds.join('\',\'')}')`], ...options };
 
 		const notes = await Note.previews(null, previewOptions);
 

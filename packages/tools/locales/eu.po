@@ -96,7 +96,7 @@ msgstr ""
 msgid "&Window"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr ""
 
@@ -162,8 +162,8 @@ msgstr "Kopiatu"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "Koadernoa ezin gorde daiteke: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
@@ -296,7 +296,7 @@ msgid ""
 "unexpected behaviour."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr ""
@@ -484,11 +484,11 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 #, fuzzy
 msgid "Application"
 msgstr "Irten aplikaziotik"
@@ -604,7 +604,7 @@ msgstr ""
 msgid "Automatically check for updates"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1381,7 +1381,7 @@ msgstr ""
 msgid "Date format"
 msgstr "Data-formatua"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr ""
 
@@ -1559,7 +1559,7 @@ msgstr "Desgaituta"
 msgid "Disable encryption"
 msgstr "Zifratzea desgaitu"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr ""
 
@@ -1669,7 +1669,7 @@ msgstr ""
 "pasahitza, bera izango baita datuak deszifratzeko bide *bakarra*! Zifratua "
 "baimentzeko, mesedez, aurretik sartu zure pasahitza."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 msgid "Donate, website"
 msgstr ""
 
@@ -1867,7 +1867,7 @@ msgstr "Oharra editatu."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Erakutsi bertsioko informazioa"
@@ -1970,7 +1970,7 @@ msgstr "Zifratua gaitu"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 msgid "Enable or disable plugins"
 msgstr ""
 
@@ -2037,7 +2037,7 @@ msgstr "Zifratuta"
 msgid "Encrypted items cannot be modified"
 msgstr "Zifratutako itemak ezin aldatu daitezke"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 #, fuzzy
 msgid "Encryption"
 msgstr "Zifratua  da:"
@@ -2360,7 +2360,7 @@ msgstr ""
 msgid "Full name"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 #, fuzzy
 msgid "General"
@@ -2378,7 +2378,7 @@ msgid_plural "Generating links..."
 msgstr[0] "Oharrak inportatzen..."
 msgstr[1] "Oharrak inportatzen..."
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
@@ -2563,7 +2563,7 @@ msgstr ""
 msgid "Import"
 msgstr "Inportatu"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Esportatu arazketa txostena"
@@ -2582,7 +2582,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Inportatu"
@@ -2760,7 +2760,7 @@ msgstr "Erantzun baliogabea: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Komando baliogabea: \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
 
@@ -2808,7 +2808,7 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 #, fuzzy
 msgid "Joplin Cloud"
 msgstr "Evernotetik esportatutako fitxategiak"
@@ -2901,7 +2901,7 @@ msgstr ""
 msgid "Keep note history for"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 msgid "Keep notes in the trash for"
 msgstr ""
 
@@ -2913,7 +2913,7 @@ msgstr ""
 msgid "Keyboard Shortcut"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -2933,7 +2933,7 @@ msgstr ""
 msgid "Language"
 msgstr "Hizkuntza"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 #, fuzzy
 msgid "Language, date format"
 msgstr "Data-formatua"
@@ -3067,6 +3067,11 @@ msgstr ""
 msgid "Log"
 msgstr "Egunkaria"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Evernotetik esportatutako fitxategiak"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 #, fuzzy
 msgid "Login with Dropbox"
@@ -3080,7 +3085,7 @@ msgstr "Login with OneDrive"
 msgid "Logout"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -3137,7 +3142,7 @@ msgstr ""
 msgid "Manual"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3195,7 +3200,7 @@ msgstr "Erantsi fitxategia"
 msgid "Max Total Size"
 msgstr "Item lokalak eguneratuta: %d."
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3226,12 +3231,12 @@ msgstr "Beharrezko argumentua faltan: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 #, fuzzy
 msgid "More info"
 msgstr "Konfigurazioa"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 #, fuzzy
 msgid "More information"
 msgstr "Konfigurazioa"
@@ -3307,7 +3312,7 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Ohar berria"
 
@@ -3340,7 +3345,7 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Zeregin berria"
 
@@ -3465,7 +3470,7 @@ msgstr ""
 msgid "note"
 msgstr "Ohar berria"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 #, fuzzy
 msgid "Note"
 msgstr "Koadernoak"
@@ -3503,7 +3508,7 @@ msgid "Note has been saved."
 msgstr "Oharra gorde da."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 #, fuzzy
 msgid "Note History"
 msgstr "Koadernoak"
@@ -3551,7 +3556,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Koadernoak"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 #, fuzzy
 msgid "Notebook"
 msgstr "Koadernoak"
@@ -3588,7 +3593,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Koadernoak"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Oharrak eta ezarpenak hemen daude gordeta: %s"
 
@@ -3632,7 +3637,7 @@ msgstr "Iluna"
 msgid "On %s: %s"
 msgstr "On %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 #, fuzzy
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Sartu pasahitz nagusia:"
@@ -3649,7 +3654,7 @@ msgstr ""
 "Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira "
 "atzeko planoan eta laster izango dira eskuragarri."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 #, fuzzy
 msgid "One or more master keys need a password."
 msgstr "Sartu pasahitz nagusia:"
@@ -3935,7 +3940,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr ""
 
@@ -3987,7 +3992,7 @@ msgid ""
 "shortcut."
 msgstr ""
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Sakatu deszifratze pasahitza ezartzeko."
 
@@ -4161,7 +4166,7 @@ msgstr "Freskatu"
 msgid "Regular expression"
 msgstr "Zifratua gaitu"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4262,7 +4267,7 @@ msgstr ""
 msgid "Resources: %d."
 msgstr "Baliabideak: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr ""
 
@@ -4374,7 +4379,7 @@ msgstr ""
 msgid "S3 URL"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4539,8 +4544,8 @@ msgid ""
 "is 600."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Ezarri pasahitza"
 
@@ -4666,12 +4671,12 @@ msgstr ""
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 #, fuzzy
 msgid "Side menu closed"
 msgstr "Ezkutatu metadatuak"
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr ""
 
@@ -4716,16 +4721,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Zenbait item ezin dira deszifratu."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Zenbait item ezin dira sinkronizatu."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 #, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Zenbait item ezin dira sinkronizatu."
@@ -4978,12 +4983,12 @@ msgstr "Zifratzea da: %s"
 msgid "Sync your notes"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Zifratua gaitu"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 #, fuzzy
 msgid "Synchronisation"
 msgstr "Sinkronizazioaren egoera"
@@ -5150,7 +5155,7 @@ msgid ""
 "is recommended that you apply it to your data."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5268,18 +5273,18 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
 "proceed please click on the link."
 msgstr ""
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 #, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Sinkronizazioa utzi"
@@ -5319,7 +5324,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Gaia"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Oharra editatu."
@@ -5367,7 +5372,7 @@ msgstr ""
 "Itemok gailuan geratuko dira baina ez dira sinkronizatuko. Horiek aurkitzeko "
 "bilaketak egin titulu edo goiko parentesien arteko IDaren arabera."
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5636,7 +5641,7 @@ msgstr "Zifratua gaitu"
 msgid "Toggle menu bar"
 msgstr "Zifratua gaitu"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 msgid "Toggle note history, keep notes for"
 msgstr ""
 
@@ -5668,7 +5673,7 @@ msgstr "Zifratua gaitu"
 msgid "Token has been copied to the clipboard!"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 #, fuzzy
 msgid "Tools"
 msgstr "Tresnak"
@@ -5759,7 +5764,7 @@ msgstr "Marka ezezaguna: %s"
 msgid "Unknown flag: %s"
 msgstr "Marka ezezaguna: %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5908,7 +5913,7 @@ msgstr ""
 "Erabili geziak edo page up/down list eta testu guneen artean aldatzeko "
 "(kontsola hau ere kontuan izanda)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 
@@ -5968,9 +5973,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Ikusi mapan"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Ikusi hori orain"
 
@@ -6017,7 +6022,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr ""
@@ -6173,6 +6178,11 @@ msgstr "Zure aukera:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259

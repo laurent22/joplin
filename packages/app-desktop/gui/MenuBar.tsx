@@ -723,7 +723,7 @@ function useMenu(props: Props) {
 					label: layoutButtonSequenceOptions[value],
 					type: 'checkbox',
 					click: () => {
-						Setting.setValue('layoutButtonSequence', value);
+						Setting.setValue('layoutButtonSequence', Number(value));
 					},
 				});
 			}
