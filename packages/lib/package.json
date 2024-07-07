@@ -32,7 +32,7 @@
     "pdfjs-dist": "3.11.174",
     "react": "18.2.0",
     "react-test-renderer": "18.2.0",
-    "sharp": "0.33.2",
+    "sharp": "0.33.3",
     "tesseract.js": "5.0.5",
     "typescript": "5.2.2"
   },
