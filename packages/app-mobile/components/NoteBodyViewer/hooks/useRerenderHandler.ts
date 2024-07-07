@@ -131,7 +131,7 @@ const useRerenderHandler = (props: Props) => {
 						await (shim.fsDriver() as FsDriverWeb).fileAtPath(Resource.fullPath(resource.item)),
 					);
 				} catch (error) {
-					if (error.name !== 'NotFoundError') {
+					if (error.code !== 'ENOENT') {
 						throw error;
 					}
 					console.warn('ENOTFOUND', Resource.fullPath(resource.item), 'for', resource);
