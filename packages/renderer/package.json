@@ -38,7 +38,7 @@
     "json-stringify-safe": "5.0.1",
     "katex": "0.16.10",
     "markdown-it": "13.0.2",
-    "markdown-it-abbr": "1.0.4",
+    "markdown-it-abbr": "2.0.0",
     "markdown-it-anchor": "5.3.0",
     "markdown-it-deflist": "2.1.0",
     "markdown-it-emoji": "2.0.2",

@@ -7053,7 +7053,7 @@ __metadata:
     json-stringify-safe: 5.0.1
     katex: 0.16.10
     markdown-it: 13.0.2
-    markdown-it-abbr: 1.0.4
+    markdown-it-abbr: 2.0.0
     markdown-it-anchor: 5.3.0
     markdown-it-deflist: 2.1.0
     markdown-it-emoji: 2.0.2
@@ -29199,10 +29199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-abbr@npm:1.0.4":
-  version: 1.0.4
-  resolution: "markdown-it-abbr@npm:1.0.4"
-  checksum: b15f7e0d3277965f38639166a22dfa538d40cefe79b6381feba69647bf963505fc5516ee5261183fc28c63b7929f0f04f53b9b84968c04ff2307cc5a30941346
+"markdown-it-abbr@npm:2.0.0":
+  version: 2.0.0
+  resolution: "markdown-it-abbr@npm:2.0.0"
+  checksum: 13405f1485f0c2bf1c31bf719e9ee6d4f4dd45804d4bb958d147c02f024a89a03e822abd8f27acddea89d458b6a96ff076fd51b8ff169e5eabba3668e11ddd33
   languageName: node
   linkType: hard
 
