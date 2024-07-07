@@ -3374,6 +3374,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Les vostres dades es tornaran a xifrar i sincronitzar."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Fa falta la contrasenya per a desxifrar part de les dades."
 	],

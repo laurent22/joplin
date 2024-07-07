@@ -97,6 +97,7 @@ interface Props {
 	notesSortOrderField: string;
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
+	showInvalidJoplinCloudCredential: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -592,6 +593,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewJoplinCloudLoginScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'JoplinCloudLogin',
+			});
+		};
+
 		const onViewSyncSettingsScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -684,6 +692,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+		} else if (this.props.showInvalidJoplinCloudCredential) {
+			msg = this.renderNotificationMessage(
+				_('Your Joplin Cloud credentials are invalid, please login.'),
+				_('Login to Joplin Cloud.'),
+				onViewJoplinCloudLoginScreen,
+			);
 		}
 
 		return (
@@ -705,7 +719,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			props.isSafeMode ||
 			this.showShareInvitationNotification(props) ||
 			this.props.needApiAuth ||
-			!!this.props.mustUpgradeAppMessage;
+			!!this.props.mustUpgradeAppMessage ||
+			props.showInvalidJoplinCloudCredential;
 	}
 
 	public registerCommands() {
@@ -965,6 +980,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 	};
 };
 

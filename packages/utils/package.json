@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
@@ -32,7 +32,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.51",
+    "@joplin/fork-htmlparser2": "^4.1.52",
     "async-mutex": "0.4.1",
     "dayjs": "1.11.11",
     "execa": "5.1.1",
