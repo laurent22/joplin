@@ -2,17 +2,18 @@ import { NativeEncryptionInterface } from '@joplin/lib/services/e2ee/types';
 import crypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 
-class NativeEncryption implements NativeEncryptionInterface {
-	public getCiphers(): string[] {
-		return crypto.getCiphers();
-	}
+const NativeEncryption: NativeEncryptionInterface = {
 
-	public getHashes(): string[] {
+	getCiphers: (): string[] => {
+		return crypto.getCiphers();
+	},
+
+	getHashes: (): string[] => {
 		return crypto.getHashes();
-	}
+	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
-	public async randomBytes(size: number): Promise<Buffer | any> {
+	randomBytes: async (size: number): Promise<Buffer | any> => {
 		return new Promise((resolve, reject) => {
 			crypto.randomBytes(size, (error, result) => {
 				if (error) {
@@ -22,10 +23,10 @@ class NativeEncryption implements NativeEncryptionInterface {
 				}
 			});
 		});
-	}
+	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
-	public async pbkdf2Raw(password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer | any> {
+	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer | any> => {
 		const digestMap: { [key: string]: HashAlgorithm } = {
 			'sha1': 'SHA-1',
 			'sha224': 'SHA-224',
@@ -44,8 +45,7 @@ class NativeEncryption implements NativeEncryptionInterface {
 				}
 			});
 		});
-	}
-
-}
+	},
+};
 
 export default NativeEncryption;

@@ -2,21 +2,22 @@ import { NativeEncryptionInterface } from './types';
 import { promisify } from 'util';
 import crypto = require('crypto');
 
-class NativeEncryption implements NativeEncryptionInterface {
-	public getCiphers(): string[] {
+const NativeEncryption: NativeEncryptionInterface = {
+
+	getCiphers: (): string[] => {
 		return crypto.getCiphers();
-	}
+	},
 
-	public getHashes(): string[] {
+	getHashes: (): string[] => {
 		return crypto.getHashes();
-	}
+	},
 
-	public async randomBytes(size: number): Promise<Buffer> {
+	randomBytes: async (size: number): Promise<Buffer> => {
 		const randomBytesAsync = promisify(crypto.randomBytes);
 		return randomBytesAsync(size);
-	}
+	},
 
-	public async pbkdf2Raw(password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer> {
+	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer> => {
 		const digestMap: { [key: string]: string } = {
 			'sha-1': 'sha1',
 			'sha-224': 'sha224',
@@ -29,7 +30,7 @@ class NativeEncryption implements NativeEncryptionInterface {
 
 		const pbkdf2Async = promisify(crypto.pbkdf2);
 		return pbkdf2Async(password, salt, iterations, keylen, digestAlgorithm);
-	}
-}
+	},
+};
 
 export default NativeEncryption;

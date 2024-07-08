@@ -136,7 +136,7 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
-	shim.NativeEncryption = new NativeEncryption;
+	shim.NativeEncryption = NativeEncryption;
 	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
