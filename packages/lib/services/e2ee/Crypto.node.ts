@@ -1,8 +1,8 @@
-import { NativeEncryptionInterface } from './types';
+import { CryptoInterface } from './types';
 import { promisify } from 'util';
 import crypto = require('crypto');
 
-const NativeEncryption: NativeEncryptionInterface = {
+const Crypto: CryptoInterface = {
 
 	getCiphers: (): string[] => {
 		return crypto.getCiphers();
@@ -33,4 +33,4 @@ const NativeEncryption: NativeEncryptionInterface = {
 	},
 };
 
-export default NativeEncryption;
+export default Crypto;

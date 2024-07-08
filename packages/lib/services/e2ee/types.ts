@@ -26,7 +26,7 @@ export interface RSA {
 	privateKey(rsaKeyPair: RSAKeyPair): string;
 }
 
-export interface NativeEncryptionInterface {
+export interface CryptoInterface {
 	getCiphers(): string[];
 	getHashes(): string[];
 
