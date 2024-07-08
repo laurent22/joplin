@@ -88,6 +88,7 @@ describe('loadPlugins', () => {
 			platformImplementation,
 			store,
 			reloadAll: false,
+			reloadDevPlugins: false,
 			cancelEvent: { cancelled: false },
 		};
 		expect(Object.keys(PluginService.instance().plugins)).toHaveLength(0);
@@ -134,6 +135,7 @@ describe('loadPlugins', () => {
 			platformImplementation,
 			store,
 			reloadAll: true,
+			reloadDevPlugins: false,
 			cancelEvent: { cancelled: false },
 		};
 		await loadPlugins(loadPluginsOptions);

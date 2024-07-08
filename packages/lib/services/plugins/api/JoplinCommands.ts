@@ -2,6 +2,7 @@
 
 import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '../../CommandService';
 import { Command } from './types';
+import Plugin from '../Plugin';
 
 /**
  * This class allows executing or registering new Joplin commands. Commands
@@ -59,6 +60,7 @@ import { Command } from './types';
  *
  */
 export default class JoplinCommands {
+	public constructor(private plugin_: Plugin) { }
 
 	/**
 	 * Executes the given command.
@@ -118,6 +120,9 @@ export default class JoplinCommands {
 
 		CommandService.instance().registerDeclaration(declaration);
 		CommandService.instance().registerRuntime(declaration.name, runtime);
+		this.plugin_.addOnUnloadListener(() => {
+			CommandService.instance().unregisterRuntime(declaration.name);
+		});
 	}
 
 }

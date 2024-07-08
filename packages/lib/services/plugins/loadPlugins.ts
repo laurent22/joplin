@@ -17,6 +17,7 @@ export interface Props {
 	platformImplementation: BasePlatformImplementation;
 	store: Store<AppState>;
 	reloadAll: boolean;
+	reloadDevPlugins: boolean;
 	cancelEvent: CancelEvent;
 }
 
@@ -25,6 +26,7 @@ const loadPlugins = async ({
 	platformImplementation,
 	pluginSettings,
 	store,
+	reloadDevPlugins,
 	reloadAll,
 	cancelEvent,
 }: Props) => {
@@ -40,7 +42,11 @@ const loadPlugins = async ({
 		}
 
 		for (const pluginId of pluginService.pluginIds) {
-			if (reloadAll || (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)) {
+			if (
+				reloadAll
+				|| (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)
+				|| (reloadDevPlugins && pluginService.plugins[pluginId].devMode)
+			) {
 				logger.info('Unloading plugin', pluginId);
 				await pluginService.unloadPlugin(pluginId);
 			}

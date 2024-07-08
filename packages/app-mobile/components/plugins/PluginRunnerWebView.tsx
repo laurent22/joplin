@@ -38,6 +38,7 @@ const useReloadDevPluginCounter = (webviewLoaded: boolean, devPluginPaths: strin
 		// Poll for changes
 		const interval = shim.setInterval(async () => {
 			const paths = devPluginPaths.split(',');
+			let shouldReload = false;
 			for (const path of paths) {
 				if (!await shim.fsDriver().exists(path)) continue;
 
@@ -49,14 +50,18 @@ const useReloadDevPluginCounter = (webviewLoaded: boolean, devPluginPaths: strin
 							const lastStat = lastDevPluginStats.current.get(fullPath);
 							lastDevPluginStats.current.set(fullPath, stat);
 
-							if (!lastStat || lastStat.mtime < stat.mtime) {
+							if (lastStat && lastStat.mtime < stat.mtime) {
 								logger.info('Preparing to reload dev plugin at path', fullPath);
-								setReloadDevPluginCounter(counter => counter + 1);
+								shouldReload = true;
 								break;
 							}
 						}
 					}
 				}
+			}
+
+			if (shouldReload) {
+				setReloadDevPluginCounter(counter => counter + 1);
 			}
 		}, 5_000);
 
@@ -83,17 +88,24 @@ const usePlugins = (
 	reloadAllRef.current ||= pluginRunner !== lastPluginRunner;
 
 	const reloadDevPluginCounter = useReloadDevPluginCounter(webviewLoaded, devPluginPaths);
+	const lastReloadDevPluginCounter = usePrevious(reloadDevPluginCounter);
+
+	const reloadDevPluginsRef = useRef(false);
+	reloadDevPluginsRef.current ||= reloadDevPluginCounter !== lastReloadDevPluginCounter;
 
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
 		}
 
+		logger.debug('Reloading plugins -- dev plugin reload counter:', reloadDevPluginCounter);
+
 		await loadPlugins({
 			pluginRunner,
 			pluginSettings,
 			platformImplementation: PlatformImplementation.instance(),
 			store,
+			reloadDevPlugins: reloadDevPluginsRef.current,
 			reloadAll: reloadAllRef.current,
 			cancelEvent: event,
 		});
@@ -101,6 +113,7 @@ const usePlugins = (
 		// A full reload, if it was necessary, has been completed.
 		if (!event.cancelled) {
 			reloadAllRef.current = false;
+			reloadDevPluginsRef.current = false;
 		}
 	}, [pluginRunner, store, webviewLoaded, pluginSettings, reloadDevPluginCounter]);
 };
