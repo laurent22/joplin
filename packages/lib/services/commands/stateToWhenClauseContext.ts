@@ -27,6 +27,7 @@ export interface WhenClauseContext {
 	historyhasForwardNotes: boolean;
 	inConflictFolder: boolean;
 	inTrash: boolean;
+	shouldIgnoreSelectedFolderId: boolean;
 	joplinCloudAccountType: number;
 	joplinServerConnected: boolean;
 	multipleNotesSelected: boolean;
@@ -65,6 +66,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		// Application state
 		notesAreBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		syncStarted: state.syncStarted,
+		shouldIgnoreSelectedFolderId: state.notesParentType === 'SmartFilter' || state.notesParentType === 'Search',
 
 		// Current location
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),

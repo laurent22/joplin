@@ -74,6 +74,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'someNotesSelected && !inTrash',
+		enabledCondition: 'someNotesSelected && (!inTrash || shouldIgnoreSelectedFolderId)',
 	};
 };
