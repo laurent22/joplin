@@ -1,13 +1,75 @@
-
-// Used in safe mode
-
 import * as React from 'react';
 import { ForwardedRef } from 'react';
 import { useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
+const { clipboard } = require('electron');
 
 const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {
 	const editorRef = useRef<HTMLTextAreaElement>();
+
+	useEffect(() => {
+		if (!editorRef.current) return;
+
+		if (editorRef.current.value !== props.content) {
+			editorRef.current.value = props.content;
+		}
+	}, [props.content]);
+
+	const onChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
+		props.onChange({ changeId: null, content: event.target.value });
+	}, [props.onChange]);
+
+	const editorCopyText = useCallback(() => {
+		if (editorRef.current) {
+			const selectedText = editorRef.current.value.substring(
+				editorRef.current.selectionStart,
+				editorRef.current.selectionEnd,
+			);
+			clipboard.writeText(selectedText);
+		}
+	}, []);
+
+	const editorCutText = useCallback(() => {
+		if (editorRef.current) {
+			const selectedText = editorRef.current.value.substring(
+				editorRef.current.selectionStart,
+				editorRef.current.selectionEnd,
+			);
+			clipboard.writeText(selectedText);
+
+			const newValue =
+				editorRef.current.value.slice(0, editorRef.current.selectionStart) +
+				editorRef.current.value.slice(editorRef.current.selectionEnd);
+
+			editorRef.current.value = newValue;
+			props.onChange({ changeId: null, content: newValue });
+		}
+	}, [props]);
+
+	const editorPaste = useCallback(() => {
+		if (editorRef.current) {
+			const clipboardText = clipboard.readText();
+
+			const preservedText = clipboardText.replace(/^([ \t]*)([-*+]|\d+\.) \[ \]/gm, '$1- [ ]');
+
+			const selectionStart = editorRef.current.selectionStart;
+			const selectionEnd = editorRef.current.selectionEnd;
+
+			const newValue =
+			editorRef.current.value.slice(0, selectionStart) +
+			preservedText +
+			editorRef.current.value.slice(selectionEnd);
+
+			editorRef.current.value = newValue;
+			props.onChange({ changeId: null, content: newValue });
+
+			editorRef.current.setSelectionRange(
+				selectionStart + preservedText.length,
+				selectionStart + preservedText.length,
+			);
+		}
+	}, [props]);
+
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -18,28 +80,20 @@ const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEdito
 			scrollTo: () => {
 				// Not supported
 			},
-
-			supportsCommand: _name => {
-				return false;
+			supportsCommand: (name: string) => {
+				return ['textCopy', 'textCut', 'textPaste'].includes(name);
 			},
-			execCommand: async _command => {
-				// Not supported
+			execCommand: async (command) => {
+				if (command.name === 'textCopy') {
+					editorCopyText();
+				} else if (command.name === 'textCut') {
+					editorCutText();
+				} else if (command.name === 'textPaste') {
+					editorPaste();
+				}
 			},
 		};
-	}, []);
-
-	useEffect(() => {
-		if (!editorRef.current) return;
-
-		if (editorRef.current.value !== props.content) {
-			editorRef.current.value = props.content;
-		}
-	}, [props.content]);
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onChange = useCallback((event: any) => {
-		props.onChange({ changeId: null, content: event.target.value });
-	}, [props.onChange]);
+	}, [editorCopyText, editorCutText, editorPaste]);
 
 	return (
 		<div style={props.style}>
@@ -54,4 +108,3 @@ const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEdito
 };
 
 export default forwardRef(PlainEditor);
-
