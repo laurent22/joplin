@@ -7090,7 +7090,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.6
-    "@types/koa": 2.14.0
+    "@types/koa": 2.15.0
     "@types/markdown-it": 13.0.7
     "@types/mustache": 4.2.5
     "@types/node-os-utils": 1.3.4
@@ -7112,7 +7112,7 @@ __metadata:
     jquery: 3.7.1
     jsdom: 23.0.1
     knex: 3.1.0
-    koa: 2.15.1
+    koa: 2.15.2
     ldapts: 7.0.9
     markdown-it: 13.0.2
     mustache: 4.2.0
@@ -11076,9 +11076,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.14.0":
-  version: 2.14.0
-  resolution: "@types/koa@npm:2.14.0"
+"@types/koa@npm:2.15.0":
+  version: 2.15.0
+  resolution: "@types/koa@npm:2.15.0"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -11088,7 +11088,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: 57d809e42350c9ddefa2150306355e40757877468bb027e0bd99f5aeb43cfaf8ba8b14761ea65e419d6fb4c2403a1f3ed0762872a9cf040dbd14357caca56548
+  checksum: f429b92f36f96c8f5ceb5333f982400d0db20e177b7d89a7a576ac6f63aff8c964f7ab313e2e281a07bbb93931c66327fb42614cd4984b2ef33dfe7cbd76d741
   languageName: node
   linkType: hard
 
@@ -28085,9 +28085,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.15.1":
-  version: 2.15.1
-  resolution: "koa@npm:2.15.1"
+"koa@npm:2.15.2":
+  version: 2.15.2
+  resolution: "koa@npm:2.15.2"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -28112,7 +28112,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 4f8ed566f0e7dd270c77f0eb127d6354b4b2b7f18ffec9b7c50ba670fe3ce5c9cd210fd8bf85de3ea18c41b3a725e8e70d9a8f134fc43e76cd80dcf832594aa6
+  checksum: a55739e84a54d5534c35436427ff7a7e0671ff5df219356339acbbba39fdc832f01420b53b689abac116180ac7186f48e1bf1806f85d029c87670404b2d296b8
   languageName: node
   linkType: hard
 
