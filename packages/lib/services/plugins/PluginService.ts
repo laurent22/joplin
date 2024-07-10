@@ -202,6 +202,14 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
+	public pluginByOsPid(osPid: number): Plugin {
+		for (const pluginId in this.plugins_) {
+			const plugin = this.plugins_[pluginId];
+			if (plugin.osPid === osPid) return plugin;
+		}
+		return null;
+	}
+
 	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
 		const output = { ...settings };
 

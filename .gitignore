@@ -353,7 +353,8 @@ packages/app-desktop/gui/NotyfContext.js
 packages/app-desktop/gui/OneDriveLoginScreen.js
 packages/app-desktop/gui/PasswordInput/PasswordInput.js
 packages/app-desktop/gui/PdfViewer.js
-packages/app-desktop/gui/PluginMonitorScreen.js
+packages/app-desktop/gui/PluginMonitor/PluginMonitorScreen.js
+packages/app-desktop/gui/PluginMonitor/PluginMonitorWindow.js
 packages/app-desktop/gui/PromptDialog.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js

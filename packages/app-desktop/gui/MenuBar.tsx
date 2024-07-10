@@ -555,11 +555,9 @@ function useMenu(props: Props) {
 				},
 				{
 					label: _('Plugin Monitor'),
-					// todo: add accelerator
 					click: () => {
 						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'PluginMonitor',
+							type: 'RESOURCE_MONITOR_OPEN',
 						});
 					},
 				},
