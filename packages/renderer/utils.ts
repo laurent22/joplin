@@ -159,6 +159,8 @@ export const imageReplacement = function(ResourceModel: OptionsResourceModel, ma
 			attrs['data-original-after'] = markup.after;
 		}
 
+		// contenteditable="false": Improves support for the Rich Text Editor -- without this,
+		// users can add content within the <div>, which breaks the html-to-md conversion.
 		return (
 			`<div ${attributesHtml(attrs)} contenteditable="false">`
 				+ `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`
