@@ -1,23 +1,14 @@
 import * as React from 'react';
 
 const { connect } = require('react-redux');
-import { PluginResourceData, PluginResourceMonitor } from '../services/plugins/PluginResourceMonitor';
-import { AppState } from '../app.reducer';
+import { PluginResourceMetric, PluginResourceMonitor } from '../../services/plugins/PluginResourceMonitor';
+import { AppState } from '../../app.reducer';
 const { themeStyle } = require('@joplin/lib/theme');
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 interface Props {
 	themeId: string;
 }
 
-interface PluginData {
-	osPid: number;
-	name: string;
-	memory: number;
-	peakMemory: number;
-	cpu: number;
-	runningStatus: boolean;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class PluginMonitorScreen extends React.Component<any, any> {
@@ -25,7 +16,7 @@ class PluginMonitorScreen extends React.Component<any, any> {
 		super(props);
 
 		this.state = {
-			pluginData: [],
+			pluginData: PluginResourceMonitor.instance().resourceMetrics,
 		};
 	}
 
@@ -33,22 +24,8 @@ class PluginMonitorScreen extends React.Component<any, any> {
 		PluginResourceMonitor.instance().ResourceMonitorGUIUpdate = this.updatePluginData.bind(this);
 	}
 
-	public updatePluginData(pluginData: PluginResourceData) {
-		const plugins = PluginService.instance().plugins;
-		const data: PluginData[] = [];
-		for (const plugin in plugins) {
-			const osPid = plugins[plugin].osPid;
-			data.push({
-				osPid,
-				name: plugins[plugin].manifest.name,
-				memory: pluginData[osPid].memory,
-				peakMemory: pluginData[osPid].peakMemory,
-				cpu: pluginData[osPid].cpu,
-				runningStatus: plugins[plugin].running,
-			});
-		}
-
-		this.setState({ pluginData: data });
+	public updatePluginData(pluginData: PluginResourceMetric[]) {
+		this.setState({ pluginData });
 	}
 
 	public render() {
@@ -66,6 +43,7 @@ class PluginMonitorScreen extends React.Component<any, any> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
+		state: state.appState,
 		themeId: state.settings.theme,
 	};
 };

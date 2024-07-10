@@ -346,10 +346,10 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
-		case 'PLUGIN_MONITOR_OPEN':
-		case 'PLUGIN_MONITOR_CLOSE':
+		case 'RESOURCE_MONITOR_OPEN':
+		case 'RESOURCE_MONITOR_CLOSE':
 			{
-				if (action.type === 'PLUGIN_MONITOR_OPEN') {
+				if (action.type === 'RESOURCE_MONITOR_OPEN') {
 					newState = {
 						...state,
 						isPluginMonitorOpen: true,

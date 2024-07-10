@@ -29,7 +29,8 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
-import PluginMonitorScreen from './PluginMonitorScreen';
+import PluginMonitorWindow from './PluginMonitor/PluginMonitorWindow';
+import PluginMonitorScreen from './PluginMonitor/PluginMonitorScreen';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -240,6 +241,13 @@ class RootComponent extends React.Component<Props, any> {
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
 					<StyleSheetContainer themeId={this.props.themeId}></StyleSheetContainer>
+					{
+						this.props.isPluginMonitorOpen ?
+							<PluginMonitorWindow>
+								<PluginMonitorScreen themeId={this.props.themeId} />
+							</PluginMonitorWindow>
+							: null
+					}
 					<MenuBar/>
 					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
@@ -260,6 +268,7 @@ const mapStateToProps = (state: AppState) => {
 		needApiAuth: state.needApiAuth,
 		dialogs: state.dialogs,
 		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
+		isPluginMonitorOpen: state.isPluginMonitorOpen,
 	};
 };
 

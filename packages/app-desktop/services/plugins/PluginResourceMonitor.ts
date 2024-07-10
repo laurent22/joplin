@@ -1,13 +1,12 @@
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 import bridge from '../bridge';
-
 export interface PluginResourceMetric {
+	osPid: number;
+	name: string;
 	memory: number;
 	peakMemory: number;
 	cpu: number;
-}
-
-export interface PluginResourceData {
-	[key: string]: PluginResourceMetric;
+	runningStatus: boolean;
 }
 
 export class PluginResourceMonitor {
@@ -23,32 +22,49 @@ export class PluginResourceMonitor {
 	}
 
 	private intervalId_: ReturnType<typeof setTimeout>;
-	private resourceMetrics_: PluginResourceData;
+	private resourceMetrics_: PluginResourceMetric[];
+	private window_: Window | null = null;
 
 	public constructor() {
 		this.intervalId_ = null;
-		this.resourceMetrics_ = {};
+		this.resourceMetrics_ = [];
 	}
 
-	public ResourceMonitorGUIUpdate: (resourceMetrics: PluginResourceData)=> void | null = null;
+	public ResourceMonitorGUIUpdate: (resourceMetrics: PluginResourceMetric[])=> void | null = null;
+
+	private parseResourceMetrics(): PluginResourceMetric[] {
+
+		const appMetrics = bridge().electronApp().electronApp().getAppMetrics();
+		const data = [];
+
+		for (const metric of appMetrics) {
+			const osPid = metric.pid as number;
+			if (osPid) {
+				const plugin = PluginService.instance().pluginByOsPid(osPid);
+				if (plugin) {
+					data.push({
+						osPid,
+						name: plugin.manifest.name,
+						memory: metric.memory.workingSetSize,
+						peakMemory: metric.memory.peakWorkingSetSize,
+						cpu: metric.cpu.percentCPUUsage,
+						runningStatus: plugin.running,
+					});
+				}
+			}
+		}
+		return data;
+	}
 
 	private startResourceMonitor() {
 		this.intervalId_ = setInterval(() => {
 
-			const appMetrics = bridge().electronApp().electronApp().getAppMetrics();
-
-			for (const metric of appMetrics) {
-				this.resourceMetrics_[String(metric.pid)] = {
-					memory: metric.memory.workingSetSize,
-					peakMemory: metric.memory.peakWorkingSetSize,
-					cpu: metric.cpu.percentCPUUsage,
-				};
-			}
+			this.resourceMetrics_ = this.parseResourceMetrics();
 
 			if (this.ResourceMonitorGUIUpdate) {
 				this.ResourceMonitorGUIUpdate(this.resourceMetrics_);
 			}
-		}, 5000);
+		}, 2000);
 	}
 
 	private stopResourceMonitor() {
@@ -59,6 +75,14 @@ export class PluginResourceMonitor {
 
 	public get resourceMetrics() {
 		return this.resourceMetrics_;
+	}
+
+	public get window() {
+		return this.window_;
+	}
+
+	public set window(window: Window | null) {
+		this.window_ = window;
 	}
 
 	public async start() {
