@@ -26,7 +26,7 @@ function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
-	shim.Crypto = require('../services/e2ee/Crypto.react-native').default;
+	shim.Krypto = require('../services/e2ee/Krypto.react-native').default;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) {

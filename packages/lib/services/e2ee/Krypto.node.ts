@@ -1,8 +1,8 @@
-import { CryptoInterface } from './types';
+import { KryptoInterface } from './types';
 import { promisify } from 'util';
 import crypto = require('crypto');
 
-const Crypto: CryptoInterface = {
+const Krypto: KryptoInterface = {
 
 	getCiphers: (): string[] => {
 		return crypto.getCiphers();
@@ -33,4 +33,4 @@ const Crypto: CryptoInterface = {
 	},
 };
 
-export default Crypto;
+export default Krypto;

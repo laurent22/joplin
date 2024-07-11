@@ -112,3 +112,4 @@ Inkscape
 Ionicon
 Stormlikes
 ripemd
+krypto

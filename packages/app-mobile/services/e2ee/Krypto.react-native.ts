@@ -1,8 +1,8 @@
-import { CryptoInterface } from '@joplin/lib/services/e2ee/types';
+import { KryptoInterface } from '@joplin/lib/services/e2ee/types';
 import crypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 
-const Crypto: CryptoInterface = {
+const Krypto: KryptoInterface = {
 
 	getCiphers: (): string[] => {
 		return crypto.getCiphers();
@@ -48,4 +48,4 @@ const Crypto: CryptoInterface = {
 	},
 };
 
-export default Crypto;
+export default Krypto;
