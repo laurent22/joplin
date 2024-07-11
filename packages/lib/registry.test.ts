@@ -1,4 +1,4 @@
-import Setting from './models/Setting';
+import Setting, { Env } from './models/Setting';
 import { reg } from './registry';
 
 const sync = {
@@ -9,7 +9,7 @@ describe('Registry', () => {
 	let originalSyncTarget: typeof reg.syncTarget;
 
 	beforeAll(() => {
-		Setting.setConstant('env', 'prod');
+		Setting.setConstant('env', Env.Prod);
 		originalSyncTarget = reg.syncTarget;
 		reg.syncTarget = () => ({
 			isAuthenticated: () => true,
@@ -18,7 +18,7 @@ describe('Registry', () => {
 	});
 
 	afterAll(() => {
-		Setting.setConstant('env', 'dev');
+		Setting.setConstant('env', Env.Dev);
 		reg.syncTarget = originalSyncTarget;
 	});
 

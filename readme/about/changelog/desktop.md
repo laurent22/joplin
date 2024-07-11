@@ -1,5 +1,32 @@
 # Joplin Desktop Changelog
 
+## [v3.0.13](https://github.com/laurent22/joplin/releases/tag/v3.0.13) - 2024-07-06T11:29:00Z
+
+- Improved: Api: Do not return deleted notes in folders/: id/notes call ([3e0fb48](https://github.com/laurent22/joplin/commit/3e0fb48))
+- Fixed: Fix incorrect text rendering on MacOS by changing the default font to `Avenir Next` ([#10686](https://github.com/laurent22/joplin/issues/10686)) ([#10679](https://github.com/laurent22/joplin/issues/10679) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix shift-delete asks to permanently delete the current note, rather than cut text, when the editor is selected. ([#10687](https://github.com/laurent22/joplin/issues/10687)) ([#10685](https://github.com/laurent22/joplin/issues/10685) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sidebar performance regression with many nested notebooks ([#10676](https://github.com/laurent22/joplin/issues/10676)) ([#10674](https://github.com/laurent22/joplin/issues/10674) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.0.12](https://github.com/laurent22/joplin/releases/tag/v3.0.12) - 2024-07-02T17:11:14Z
+
+- Improved: Set min version for synchronising to 3.0.0 ([e4b8976](https://github.com/laurent22/joplin/commit/e4b8976))
+- Fixed: Show notification in case Joplin Cloud credential is not valid anymore ([#10649](https://github.com/laurent22/joplin/issues/10649)) ([#10645](https://github.com/laurent22/joplin/issues/10645) by [@pedr](https://github.com/pedr))
+
+## [v3.0.11](https://github.com/laurent22/joplin/releases/tag/v3.0.11) (Pre-release) - 2024-06-29T10:20:02Z
+
+- Updated Chinese and German translation
+
+## [v3.0.10](https://github.com/laurent22/joplin/releases/tag/v3.0.10) (Pre-release) - 2024-06-19T15:24:07Z
+
+- Improved: Don't render empty title page for Fountain ([#10631](https://github.com/laurent22/joplin/issues/10631) by [@XPhyro](https://github.com/XPhyro))
+- Improved: Start synchronisation just after login is complete ([#10574](https://github.com/laurent22/joplin/issues/10574) by [@pedr](https://github.com/pedr))
+- Improved: Updated packages chokidar (v3.6.0), css-loader (v6.10.0), follow-redirects (v1.15.6), jsdom (v23), sass (v1.71.0), style-to-js (v1.1.11), turndown (v7.1.3)
+- Fixed: Prevent application from crashing when the syncInfoCache is corrupted ([#10546](https://github.com/laurent22/joplin/issues/10546)) ([#10030](https://github.com/laurent22/joplin/issues/10030) by [@pedr](https://github.com/pedr))
+- Fixed: Don't re-order the note list when in search ([#10587](https://github.com/laurent22/joplin/issues/10587)) ([#10586](https://github.com/laurent22/joplin/issues/10586) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: English: Use the plural form of a localization for negative and zero items ([#10582](https://github.com/laurent22/joplin/issues/10582)) ([#10581](https://github.com/laurent22/joplin/issues/10581) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix paste adds newlines in the Rich Text Editor when certain plugins are enabled ([#10635](https://github.com/laurent22/joplin/issues/10635)) ([#10061](https://github.com/laurent22/joplin/issues/10061) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixes error when Joplin Cloud login is finished before the settings are saved ([#10575](https://github.com/laurent22/joplin/issues/10575) by [@pedr](https://github.com/pedr))
+
 ## [v3.0.9](https://github.com/laurent22/joplin/releases/tag/v3.0.9) (Pre-release) - 2024-06-12T19:07:50Z
 
 - New: Add Joplin Cloud account information to configuration screen ([#10553](https://github.com/laurent22/joplin/issues/10553) by [@pedr](https://github.com/pedr))

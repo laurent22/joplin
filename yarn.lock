@@ -6575,7 +6575,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     "@types/react": 18.2.58
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
@@ -6591,7 +6591,7 @@ __metadata:
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
     fs-extra: 11.2.0
-    glob: 10.3.10
+    glob: 10.3.12
     gulp: 4.0.2
     highlight.js: 11.9.0
     immer: 7.0.15
@@ -6655,7 +6655,7 @@ __metadata:
     "@react-native-community/geolocation": 3.1.0
     "@react-native-community/netinfo": 11.3.1
     "@react-native-community/push-notification-ios": 1.11.0
-    "@react-native-community/slider": 4.5.0
+    "@react-native-community/slider": 4.5.1
     "@react-native/babel-preset": 0.74.83
     "@react-native/metro-config": 0.74.83
     "@testing-library/jest-native": 5.4.3
@@ -6812,7 +6812,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.8
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     "@typescript-eslint/eslint-plugin": 6.8.0
     "@typescript-eslint/parser": 6.8.0
     coveralls: 3.1.1
@@ -6882,7 +6882,7 @@ __metadata:
     "@types/markdown-it": 13.0.7
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     "@types/node-rsa": 1.1.4
     "@types/react": 18.2.58
     "@types/uuid": 9.0.7
@@ -6988,7 +6988,7 @@ __metadata:
     "@joplin/utils": ^3.0.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -7043,7 +7043,7 @@ __metadata:
     "@joplin/utils": ^3.0.1
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.7
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.9.0
@@ -7090,7 +7090,7 @@ __metadata:
     "@types/jest": 29.5.8
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.6
-    "@types/koa": 2.14.0
+    "@types/koa": 2.15.0
     "@types/markdown-it": 13.0.7
     "@types/mustache": 4.2.5
     "@types/node-os-utils": 1.3.4
@@ -7112,7 +7112,7 @@ __metadata:
     jquery: 3.7.1
     jsdom: 23.0.1
     knex: 3.1.0
-    koa: 2.15.1
+    koa: 2.15.2
     ldapts: 7.0.9
     markdown-it: 13.0.2
     mustache: 4.2.0
@@ -7153,7 +7153,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.7
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     "@types/node-fetch": 2.6.11
     "@types/yargs": 17.0.32
     compare-versions: 6.1.0
@@ -7162,7 +7162,7 @@ __metadata:
     fs-extra: 11.2.0
     gettext-extractor: 3.8.0
     gettext-parser: 7.0.1
-    glob: 10.3.10
+    glob: 10.3.12
     gulp: 4.0.2
     html-entities: 1.4.0
     jest: 29.7.0
@@ -7225,9 +7225,10 @@ __metadata:
     "@types/markdown-it": 13.0.7
     "@types/node-fetch": 2.6.11
     async-mutex: 0.4.1
+    dayjs: 1.11.11
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.3.10
+    glob: 10.3.12
     html-entities: 1.4.0
     jest: 29.7.0
     markdown-it: 13.0.2
@@ -11075,9 +11076,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.14.0":
-  version: 2.14.0
-  resolution: "@types/koa@npm:2.14.0"
+"@types/koa@npm:2.15.0":
+  version: 2.15.0
+  resolution: "@types/koa@npm:2.15.0"
   dependencies:
     "@types/accepts": "*"
     "@types/content-disposition": "*"
@@ -11087,7 +11088,7 @@ __metadata:
     "@types/keygrip": "*"
     "@types/koa-compose": "*"
     "@types/node": "*"
-  checksum: 57d809e42350c9ddefa2150306355e40757877468bb027e0bd99f5aeb43cfaf8ba8b14761ea65e419d6fb4c2403a1f3ed0762872a9cf040dbd14357caca56548
+  checksum: f429b92f36f96c8f5ceb5333f982400d0db20e177b7d89a7a576ac6f63aff8c964f7ab313e2e281a07bbb93931c66327fb42614cd4984b2ef33dfe7cbd76d741
   languageName: node
   linkType: hard
 
@@ -11217,12 +11218,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.26":
-  version: 18.19.26
-  resolution: "@types/node@npm:18.19.26"
+"@types/node@npm:18.19.31":
+  version: 18.19.31
+  resolution: "@types/node@npm:18.19.31"
   dependencies:
     undici-types: ~5.26.4
-  checksum: d72d4e7e520206a2a05cb3e03a73696fc3bdcdc6ba5330a75cfef4818cb137b260c32dfe85e8b4ea28e8fe92f1d1497e26336c607254c5eaf47032a1b1c8bb6e
+  checksum: 949bddfd7071bd47300d1f33d380ee34695ccd5f046f1a03e4d2be0d953ace896905144d44a6f483f241b5ef34b86f0e40a0e312201117782eecf89e81a4ff13
   languageName: node
   linkType: hard
 
@@ -18327,6 +18328,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:1.11.11":
+  version: 1.11.11
+  resolution: "dayjs@npm:1.11.11"
+  checksum: 84788275aad8a87fee4f1ce4be08861df29687aae6b7b43dd65350118a37dda56772a3902f802cb2dc651dfed447a5a8df62d88f0fb900dba8333e411190a5d5
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:^1.11.7":
   version: 1.11.9
   resolution: "dayjs@npm:1.11.9"
@@ -23206,18 +23214,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.3.10":
-  version: 10.3.10
-  resolution: "glob@npm:10.3.10"
+"glob@npm:10.3.12":
+  version: 10.3.12
+  resolution: "glob@npm:10.3.12"
   dependencies:
     foreground-child: ^3.1.0
-    jackspeak: ^2.3.5
+    jackspeak: ^2.3.6
     minimatch: ^9.0.1
-    minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
-    path-scurry: ^1.10.1
+    minipass: ^7.0.4
+    path-scurry: ^1.10.2
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 4f2fe2511e157b5a3f525a54092169a5f92405f24d2aed3142f4411df328baca13059f4182f1db1bf933e2c69c0bd89e57ae87edd8950cba8c7ccbe84f721cf3
+  checksum: 2b0949d6363021aaa561b108ac317bf5a97271b8a5d7a5fac1a176e40e8068ecdcccc992f8a7e958593d501103ac06d673de92adc1efcbdab45edefe35f8d7c6
   languageName: node
   linkType: hard
 
@@ -26538,7 +26546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^2.3.5":
+"jackspeak@npm:^2.3.6":
   version: 2.3.6
   resolution: "jackspeak@npm:2.3.6"
   dependencies:
@@ -27281,7 +27289,7 @@ __metadata:
     "@joplin/utils": ~3.0
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.26
+    "@types/node": 18.19.31
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -28077,9 +28085,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.15.1":
-  version: 2.15.1
-  resolution: "koa@npm:2.15.1"
+"koa@npm:2.15.2":
+  version: 2.15.2
+  resolution: "koa@npm:2.15.2"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -28104,7 +28112,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: 4f8ed566f0e7dd270c77f0eb127d6354b4b2b7f18ffec9b7c50ba670fe3ce5c9cd210fd8bf85de3ea18c41b3a725e8e70d9a8f134fc43e76cd80dcf832594aa6
+  checksum: a55739e84a54d5534c35436427ff7a7e0671ff5df219356339acbbba39fdc832f01420b53b689abac116180ac7186f48e1bf1806f85d029c87670404b2d296b8
   languageName: node
   linkType: hard
 
@@ -28864,6 +28872,13 @@ __metadata:
     fault: ^1.0.2
     highlight.js: ~9.12.0
   checksum: a83edeab0a696733e88bde2e55e407227189969fa2084701b69fbebf38f1763584f802cd66df2c5834e7e56533b1e81f27d610d60868202215b1de9d3a77c149
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^10.2.0":
+  version: 10.3.1
+  resolution: "lru-cache@npm:10.3.1"
+  checksum: b7953350f61587102e27cbd298a6576fb32da510407f9ee92070f796f8c026c509cd41efc47cbf42f8f3986712b7a3f7f5fa6337e52ee3d7a8089b859da78523
   languageName: node
   linkType: hard
 
@@ -30919,6 +30934,13 @@ __metadata:
   version: 7.0.2
   resolution: "minipass@npm:7.0.2"
   checksum: 46776de732eb7cef2c7404a15fb28c41f5c54a22be50d47b03c605bf21f5c18d61a173c0a20b49a97e7a65f78d887245066410642551e45fffe04e9ac9e325bc
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^7.0.4":
+  version: 7.1.2
+  resolution: "minipass@npm:7.1.2"
+  checksum: 2bfd325b95c555f2b4d2814d49325691c7bee937d753814861b0b49d5edcda55cbbf22b6b6a60bb91eddac8668771f03c5ff647dcd9d0f798e9548b9cdc46ee3
   languageName: node
   linkType: hard
 
@@ -33487,6 +33509,16 @@ __metadata:
     lru-cache: ^9.1.1 || ^10.0.0
     minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
   checksum: e2557cff3a8fb8bc07afdd6ab163a92587884f9969b05bbbaf6fe7379348bfb09af9ed292af12ed32398b15fb443e81692047b786d1eeb6d898a51eb17ed7d90
+  languageName: node
+  linkType: hard
+
+"path-scurry@npm:^1.10.2":
+  version: 1.11.1
+  resolution: "path-scurry@npm:1.11.1"
+  dependencies:
+    lru-cache: ^10.2.0
+    minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
+  checksum: 890d5abcd593a7912dcce7cf7c6bf7a0b5648e3dee6caf0712c126ca0a65c7f3d7b9d769072a4d1baf370f61ce493ab5b038d59988688e0c5f3f646ee3c69023
   languageName: node
   linkType: hard
 
@@ -37717,7 +37749,7 @@ __metadata:
     eslint-plugin-react: 7.33.2
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.3.10
+    glob: 10.3.12
     gulp: 4.0.2
     http-server: 14.1.1
     husky: 3.1.0

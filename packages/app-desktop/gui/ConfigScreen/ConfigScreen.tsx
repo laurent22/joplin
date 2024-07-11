@@ -405,7 +405,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			return (
 				<div key={key} style={rowStyle}>
 					{label}
-					{this.renderDescription(this.props.themeId, md.description ? md.description() : null)}
+					{this.renderDescription(this.props.themeId, md.description ? md.description(AppType.Desktop) : null)}
 					<SettingComponent
 						metadata={md}
 						value={value}
@@ -667,7 +667,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			};
 
 			const label = [md.label()];
-			if (md.unitLabel) label.push(`(${md.unitLabel()})`);
+			if (md.unitLabel) label.push(`(${md.unitLabel(md.value)})`);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const inputStyle: any = { ...textInputBaseStyle };

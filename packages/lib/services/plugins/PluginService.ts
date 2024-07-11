@@ -215,8 +215,8 @@ export default class PluginService extends BaseService {
 		return output as PluginSettings;
 	}
 
-	public serializePluginSettings(settings: PluginSettings): string {
-		return JSON.stringify(settings);
+	public serializePluginSettings(settings: PluginSettings) {
+		return settings;
 	}
 
 	public pluginIdByContentScriptId(contentScriptId: string): string {

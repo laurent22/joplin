@@ -50,7 +50,7 @@ interface Props {
 }
 
 function fontFamilyFromSettings() {
-	const font = editorFont(Setting.value('style.editor.fontFamily'));
+	const font = editorFont(Setting.value('style.editor.fontFamily') as number);
 	return font ? `${font}, sans-serif` : 'sans-serif';
 }
 
