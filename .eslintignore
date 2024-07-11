@@ -816,6 +816,7 @@ packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.js
 packages/editor/CodeMirror/utils/formatting/toggleSelectedLinesStartWith.js
 packages/editor/CodeMirror/utils/formatting/types.js
 packages/editor/CodeMirror/utils/growSelectionToNode.js
+packages/editor/CodeMirror/utils/handlePasteEvent.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js

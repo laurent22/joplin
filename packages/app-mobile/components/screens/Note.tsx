@@ -1095,10 +1095,18 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const buttonId = await dialogs.pop(this, _('Choose an option'), buttons);
 
-		if (buttonId === 'takePhoto') void this.takePhoto_onPress();
-		if (buttonId === 'attachFile') void this.attachFile_onPress();
-		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+		if (buttonId === 'takePhoto') await this.takePhoto_onPress();
+		if (buttonId === 'attachFile') await this.attachFile_onPress();
+		if (buttonId === 'attachPhoto') await this.attachPhoto_onPress();
 	}
+
+	public onAttach = async (filePath?: string) => {
+		if (filePath) {
+			await this.attachFile({ uri: filePath }, 'all');
+		} else {
+			await this.showAttachMenu();
+		}
+	};
 
 	// private vosk_:Vosk;
 
@@ -1547,7 +1555,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 					onChange={this.onMarkdownEditorTextChange}
 					onSelectionChange={this.onMarkdownEditorSelectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					onAttach={() => this.showAttachMenu()}
+					onAttach={this.onAttach}
 					readOnly={this.state.readOnly}
 					plugins={this.props.plugins}
 					style={{

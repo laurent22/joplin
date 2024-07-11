@@ -26,11 +26,13 @@ import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComp
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
+import { join, dirname } from 'path';
+import * as mimeUtils from '@joplin/lib/mime-utils';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
-type OnAttachCallback = ()=> void;
+type OnAttachCallback = (filePath?: string)=> Promise<void>;
 
 const logger = Logger.create('NoteEditor');
 
@@ -411,6 +413,9 @@ function NoteEditor(props: Props, ref: any) {
 
 	const onEditorEvent = useRef((_event: EditorEvent) => {});
 
+	const onAttachRef = useRef(props.onAttach);
+	onAttachRef.current = props.onAttach;
+
 	const editorMessenger = useMemo(() => {
 		const localApi: WebViewToEditorApi = {
 			async onEditorEvent(event) {
@@ -418,6 +423,16 @@ function NoteEditor(props: Props, ref: any) {
 			},
 			async logMessage(message) {
 				logger.debug('CodeMirror:', message);
+			},
+			async onPasteFile(type, data) {
+				const tempFilePath = join(shim.fsDriver().getCacheDirectoryPath(), `paste.${mimeUtils.toFileExtension(type)}`);
+				await shim.fsDriver().mkdir(dirname(tempFilePath));
+				await shim.fsDriver().writeFile(tempFilePath, data, 'base64');
+				try {
+					await onAttachRef.current(tempFilePath);
+				} finally {
+					await shim.fsDriver().remove(tempFilePath);
+				}
 			},
 		};
 		const messenger = new RNToWebViewMessenger<WebViewToEditorApi, EditorBodyControl>(
