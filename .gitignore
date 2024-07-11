@@ -692,6 +692,8 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
+packages/app-mobile/utils/image/getImageDimensions.js
+packages/app-mobile/utils/image/resizeImage.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
@@ -773,6 +775,7 @@ packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.js
 packages/editor/CodeMirror/utils/formatting/toggleSelectedLinesStartWith.js
 packages/editor/CodeMirror/utils/formatting/types.js
 packages/editor/CodeMirror/utils/growSelectionToNode.js
+packages/editor/CodeMirror/utils/handlePasteEvent.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js
