@@ -7,6 +7,9 @@ import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
 
 import { StyleProp, View, ViewStyle } from 'react-native';
 import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('ExtendedWebView');
 
 // At present, react-native-webview doesn't support web. As such, ExtendedWebView.web.tsx
 // uses an iframe when running on web.
@@ -52,14 +55,19 @@ const iframeContainerStyles = { height: '100%', width: '100%' };
 const wrapperStyle: ViewStyle = { height: '100%', width: '100%', flex: 1 };
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
-	const iframeRef = useRef<HTMLIFrameElement>(null);
+	const iframeRef = useRef<HTMLIFrameElement|null>(null);
 
 	useImperativeHandle(ref, (): WebViewControl => {
 		return {
 			injectJS(js: string) {
 				if (!iframeRef.current) {
-					console.error(`ExtendedWebView(${props.webviewInstanceId}): WebView not loaded?`);
-					console.error('tried', js);
+					logger.warn(`WebView(${props.webviewInstanceId}): Tried to inject JavaScript after the iframe has unloaded.`);
+					return;
+				}
+
+				// react-native-webview doesn't seem to show a warning in the case where JavaScript
+				// is injected before the first page loads.
+				if (!iframeRef.current.contentWindow) {
 					return;
 				}
 
@@ -68,6 +76,11 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				}, '*');
 			},
 			postMessage(message: unknown) {
+				if (!iframeRef.current || !iframeRef.current.contentWindow) {
+					logger.warn(`WebView(${props.webviewInstanceId}): Tried to post a message to an unloaded iframe.`);
+					return;
+				}
+
 				iframeRef.current.contentWindow.postMessage({
 					postMessage: message,
 				}, '*');
@@ -75,7 +88,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		};
 	}, [props.webviewInstanceId]);
 
-	const [containerRef, setContainerRef] = useState<HTMLDivElement>();
+	const [containerElement, setContainerElement] = useState<HTMLDivElement>();
+	const containerRef = useRef(containerElement);
+	containerRef.current = containerElement;
 
 	const onMessageRef = useRef(props.onMessage);
 	onMessageRef.current = props.onMessage;
@@ -89,8 +104,6 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	injectedJavaScriptRef.current = props.injectedJavaScript;
 
 	useEffect(() => {
-		if (!containerRef) return () => {};
-
 		const headHtml = `
 			<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 			<meta charset="utf-8"/>
@@ -140,7 +153,11 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			permissions: 'allow-scripts allow-modals allow-popups allow-popups-to-escape-sandbox',
 			allow: 'clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=* encrypted-media=*',
 		});
-		containerRef.replaceChildren(iframe);
+
+		if (containerRef.current) {
+			containerRef.current.replaceChildren(iframe);
+		}
+
 		iframeRef.current = iframe;
 
 		iframe.style.height = '100%';
@@ -165,13 +182,27 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 		return () => {
 			window.removeEventListener('message', messageListener);
+
+			if (iframeRef.current.parentElement) {
+				iframeRef.current.remove();
+			}
+			iframeRef.current = null;
 		};
-	}, [containerRef, props.html]);
+	}, [props.html]);
+
+	useEffect(() => {
+		if (!iframeRef.current || !containerElement) return;
+		if (iframeRef.current.parentElement) {
+			iframeRef.current.remove();
+		}
+
+		containerElement.replaceChildren(iframeRef.current);
+	}, [containerElement]);
 
 	return (
 		<View style={[wrapperStyle, props.style]}>
 			<div
-				ref={setContainerRef}
+				ref={setContainerElement}
 				className='iframe-container'
 				style={iframeContainerStyles}
 			></div>

@@ -49,6 +49,11 @@ jest.mock('react-native-webview', () => {
 	};
 });
 
+// Prefer the web version of the WebView wrapper -- it works while testing.
+jest.mock('./components/ExtendedWebView', () => {
+	return require('./components/ExtendedWebView.web');
+});
+
 jest.mock('@react-native-clipboard/clipboard', () => {
 	return { default: { getString: jest.fn(), setString: jest.fn() } };
 });
