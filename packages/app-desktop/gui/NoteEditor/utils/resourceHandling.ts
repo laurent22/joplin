@@ -212,12 +212,11 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	html = html.replace(/[\u202F\u00A0]/g, ' ');
 
 	html = await processImagesInPastedHtml(html);
-
 	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
 	// Markdown. For example the content may have a dark background which would be supported by
 	// TinyMCE, but lost once the note is saved. So here we convert the HTML to Markdown then back
-	// to HTML to ensure that the content we paste will be handled correctly by the app.
-	if (htmlToMd && mdToHtml) {
+	// // to HTML to ensure that the content we paste will be handled correctly by the app.
+	if (!html.includes('joplin-checklist') && htmlToMd && mdToHtml) {
 		const md = await htmlToMd(MarkupLanguage.Markdown, html, '');
 		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
 
