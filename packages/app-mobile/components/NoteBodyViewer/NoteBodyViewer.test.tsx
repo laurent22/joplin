@@ -8,15 +8,20 @@ import '@testing-library/jest-native/extend-expect';
 import NoteBodyViewer from './NoteBodyViewer';
 import Setting from '@joplin/lib/models/Setting';
 import { MenuProvider } from 'react-native-popup-menu';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import { MarkupLanguage } from '@joplin/renderer';
+import { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
+import Resource from '@joplin/lib/models/Resource';
+import shim from '@joplin/lib/shim';
+import Note from '@joplin/lib/models/Note';
 
 interface WrapperProps {
 	noteBody: string;
 	highlightedKeywords?: string[];
 	noteResources?: unknown;
-	onJoplinLinkClick?: (message: string)=> void;
+	onJoplinLinkClick?: HandleMessageCallback;
 	onScroll?: (percent: number)=> void;
+	onMarkForDownload?: OnMarkForDownloadCallback;
 }
 
 const emptyObject = {};
@@ -29,6 +34,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 		noteResources = emptyObject,
 		onJoplinLinkClick = noOpFunction,
 		onScroll = noOpFunction,
+		onMarkForDownload,
 	}: WrapperProps,
 ) => {
 	return <MenuProvider>
@@ -43,6 +49,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 			initialScroll={0}
 			noteHash={''}
 			onJoplinLinkClick={onJoplinLinkClick}
+			onMarkForDownload={onMarkForDownload}
 			onScroll={onScroll}
 			pluginStates={emptyObject}
 		/>
@@ -72,8 +79,8 @@ describe('NoteBodyViewer', () => {
 		screen.unmount();
 	});
 
-	it('should render markdown, and re-render on change', async () => {
-		const wrappedViewer = render(<WrappedNoteViewer noteBody='# Test'/>);
+	it('should render markdown and re-render on change', async () => {
+		render(<WrappedNoteViewer noteBody='# Test'/>);
 
 		const expectHeaderToBe = async (text: string) => {
 			const noteViewer = await getNoteViewerDom();
@@ -83,11 +90,10 @@ describe('NoteBodyViewer', () => {
 		};
 
 		await expectHeaderToBe('Test');
-		wrappedViewer.rerender(<WrappedNoteViewer noteBody='# Test 2'/>);
+		screen.rerender(<WrappedNoteViewer noteBody='# Test 2'/>);
 		await expectHeaderToBe('Test 2');
-		wrappedViewer.rerender(<WrappedNoteViewer noteBody='# Test 3'/>);
+		screen.rerender(<WrappedNoteViewer noteBody='# Test 3'/>);
 		await expectHeaderToBe('Test 3');
-		wrappedViewer.unmount();
 	});
 
 	it.each([
@@ -95,7 +101,7 @@ describe('NoteBodyViewer', () => {
 		{ keywords: ['test'], body: 'No match.', expectedMatchCount: 0 },
 		{ keywords: ['a', 'b'], body: 'a, a, a, b, b, b', expectedMatchCount: 6 },
 	])('should highlight search terms (case %#)', async ({ keywords, body, expectedMatchCount }) => {
-		const noteViewer = render(
+		render(
 			<WrappedNoteViewer
 				highlightedKeywords={keywords}
 				noteBody={body}
@@ -108,7 +114,7 @@ describe('NoteBodyViewer', () => {
 		});
 
 		// Should update highlights when the keywords change
-		noteViewer.rerender(
+		screen.rerender(
 			<WrappedNoteViewer
 				highlightedKeywords={[]}
 				noteBody={body}
@@ -118,7 +124,58 @@ describe('NoteBodyViewer', () => {
 		await waitFor(() => {
 			expect(noteViewerDom.querySelectorAll('.highlighted-keyword')).toHaveLength(0);
 		});
+	});
 
-		noteViewer.unmount();
+	it('tapping on resource download icons should mark the resources for download', async () => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+
+		let note1 = await Note.save({ title: 'Note 1', parent_id: '' });
+		note1 = await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
+
+		await synchronizerStart();
+		await switchClient(0);
+		Setting.setValue('sync.resourceDownloadMode', 'manual');
+		await synchronizerStart();
+
+		const allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		const localResource = allResources[0];
+		const localState = await Resource.localState(localResource);
+		expect(localState.fetch_status).toBe(Resource.FETCH_STATUS_IDLE);
+
+		const onMarkForDownload: OnMarkForDownloadCallback = jest.fn(({ resourceId }) => {
+			return resourceFetcher().markForDownload([resourceId]);
+		});
+		render(
+			<WrappedNoteViewer
+				noteBody={note1.body}
+				noteResources={{ [localResource.id]: { localState, item: localResource } }}
+				onMarkForDownload={onMarkForDownload}
+			/>,
+		);
+
+		// The resource placeholder should have rendered
+		const noteViewerDom = await getNoteViewerDom();
+		let resourcePlaceholder: HTMLElement|null = null;
+		await waitFor(() => {
+			const placeholders = noteViewerDom.querySelectorAll<HTMLElement>(`[data-resource-id=${JSON.stringify(localResource.id)}]`);
+			expect(placeholders).toHaveLength(1);
+			resourcePlaceholder = placeholders[0];
+		});
+
+		expect([...resourcePlaceholder.classList]).toContain('resource-status-notDownloaded');
+
+		// Clicking on the placeholder should download its resource
+		await waitFor(() => {
+			resourcePlaceholder.click();
+			expect(onMarkForDownload).toHaveBeenCalled();
+		});
+
+		await resourceFetcher().waitForAllFinished();
+
+		await waitFor(async () => {
+			expect(await Resource.localState(localResource.id)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_DONE });
+		});
 	});
 });

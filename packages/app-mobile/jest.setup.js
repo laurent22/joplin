@@ -6,6 +6,7 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const injectedJs = require('./utils/injectedJs.js').default;
 const { mkdir, rm } = require('fs-extra');
 const path = require('path');
+const sharp = require('sharp');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
@@ -21,6 +22,7 @@ window.setImmediate = setImmediate;
 shimInit({
 	nodeSqlite: sqlite3,
 	React,
+	sharp,
 });
 shim.injectedJs = (name) => {
 	if (!(name in injectedJs)) {

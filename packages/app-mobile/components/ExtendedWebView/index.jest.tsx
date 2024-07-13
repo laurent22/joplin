@@ -13,8 +13,9 @@ const logger = Logger.create('ExtendedWebView');
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const dom = useMemo(() => {
-		// Note: Add `runScripts: 'dangerously'` to allow running inline <script></script>s.
-		return new JSDOM(props.html, { runScripts: 'outside-only' });
+		// Note: Adding `runScripts: 'dangerously'` to allow running inline <script></script>s.
+		// Use with caution.
+		return new JSDOM(props.html, { runScripts: 'dangerously' });
 	}, [props.html]);
 
 	useImperativeHandle(ref, (): WebViewControl => {

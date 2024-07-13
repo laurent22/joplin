@@ -6723,6 +6723,7 @@ __metadata:
     react-test-renderer: 18.2.0
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
+    sharp: 0.33.2
     sqlite3: 5.1.6
     stream: 0.0.2
     stream-browserify: 3.0.0

@@ -6,6 +6,7 @@ import Renderer from './Renderer';
 declare global {
 	interface Window {
 		rendererWebViewOptions: RendererWebViewOptions;
+		webviewLib: { postMessage: (message: string)=> void };
 	}
 }
 
@@ -32,6 +33,8 @@ webviewLib.initialize({
 		messenger.remoteApi.onPostMessage(message);
 	},
 });
+// Share the webview library globally so that the renderer can access it.
+window.webviewLib = webviewLib;
 
 const renderer = new Renderer({
 	...window.rendererWebViewOptions,
