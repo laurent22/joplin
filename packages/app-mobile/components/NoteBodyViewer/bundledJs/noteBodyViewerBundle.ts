@@ -58,5 +58,5 @@ const onMainContentScroll = () => {
 // scroll. However, window.addEventListener('scroll', callback) does.
 // - iOS needs a listener to be added to scrollingElement -- events aren't received when
 //   the listener is added to window with window.addEventListener('scroll', ...).
-document.scrollingElement.addEventListener('scroll', onMainContentScroll);
+document.scrollingElement?.addEventListener('scroll', onMainContentScroll);
 window.addEventListener('scroll', onMainContentScroll);

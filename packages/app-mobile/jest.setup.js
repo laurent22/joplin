@@ -1,7 +1,9 @@
 /* eslint-disable jest/require-top-level-describe */
 
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
+const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
+const injectedJs = require('./utils/injectedJs.js').default;
 const { mkdir, rm } = require('fs-extra');
 const path = require('path');
 const { tmpdir } = require('os');
@@ -20,6 +22,12 @@ shimInit({
 	nodeSqlite: sqlite3,
 	React,
 });
+shim.injectedJs = (name) => {
+	if (!(name in injectedJs)) {
+		throw new Error(`Cannot find injected JS with ID ${name}`);
+	}
+	return injectedJs[name];
+};
 
 // This library has the following error when running within Jest:
 //   Invariant Violation: `new NativeEventEmitter()` requires a non-null argument.

@@ -520,8 +520,9 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
-packages/app-mobile/components/ExtendedWebView.js
-packages/app-mobile/components/ExtendedWebView.web.js
+packages/app-mobile/components/ExtendedWebView/index.jest.js
+packages/app-mobile/components/ExtendedWebView/index.js
+packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
@@ -715,6 +716,7 @@ packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/initializeCommandService.js
+packages/app-mobile/utils/injectedJs.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/pickDocument.js

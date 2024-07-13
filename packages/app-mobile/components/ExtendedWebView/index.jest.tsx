@@ -12,26 +12,27 @@ import { JSDOM } from 'jsdom';
 const logger = Logger.create('ExtendedWebView');
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
-	const dom = useMemo(() =>
-		new JSDOM(props.html, { runScripts: 'dangerously', resources: 'usable' }),
-		[props.html],
-	);
+	const dom = useMemo(() => {
+		console.log('RECREATE DOM', props.html)
+		return new JSDOM(props.html, { runScripts: 'dangerously', resources: 'usable' });
+	}, [props.html]);
 
 	useImperativeHandle(ref, (): WebViewControl => {
 		const result = {
 			injectJS(js: string) {
-				logger.warn('injectjs', js.substring(0, 256));
+				logger.warn('injectJS', js.substring(0, 240));
 
 				return dom.window.eval(js);
 			},
 			postMessage(message: unknown) {
 				logger.warn('postmessage', message);
+				const messageEventContent = {
+					data: message,
+					source: 'react-native',
+				};
 				return dom.window.eval(`
 					window.dispatchEvent(
-						new MessageEvent('message', ${{
-							data: JSON.stringify(message),
-							source: 'react-native',
-						}}),
+						new MessageEvent('message', ${JSON.stringify(messageEventContent)}),
 					);
 				`);
 			},
@@ -42,7 +43,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			},
 		};
 		return result;
-	}, [props.webviewInstanceId, dom]);
+	}, [dom]);
 
 	const onMessageRef = useRef(props.onMessage);
 	onMessageRef.current = props.onMessage;
@@ -54,9 +55,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		dom.window.eval(`
 			window.setWebViewApi = (api) => {
-				console.warn('set webview api to', api);
 				window.ReactNativeWebView = api;
-				api.postMessage('test');
 			};
 		`);
 		dom.window.setWebViewApi({
@@ -66,10 +65,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			},
 		});
 
-		console.log('preparing to eval');
-
 		dom.window.eval(injectedJavaScriptRef.current);
-		console.log('eval\'d', injectedJavaScriptRef.current.substring(0, 1024));
 	}, [dom]);
 
 
@@ -79,13 +75,12 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	onLoadStartRef.current = props.onLoadStart;
 
 	useEffect(() => {
-		logger.warn(`DOM at ${dom.window?.location?.href} is reloading.`)
+		logger.warn(`DOM at ${dom.window?.location?.href} is reloading.`);
 		onLoadStartRef.current?.();
 		onLoadEndRef.current?.();
 	}, [dom]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- HACK: Allow wrapper testing
-	// logic to access the dom.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- HACK: Allow wrapper testing logic to access the DOM.
 	const additionalProps: any = { document: dom?.window?.document };
 	return (
 		<View style={props.style} testID={props.testID} {...additionalProps}/>

@@ -19,7 +19,6 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 		// This is the case in testing environments where no WebView is available.
 		if (!webviewControl.injectJS) return;
 
-		console.log('posting message...', message);
 		webviewControl.injectJS(`
 			window.dispatchEvent(
 				new MessageEvent(
@@ -34,7 +33,6 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 	}
 
 	public onWebViewMessage = (event: OnMessageEvent) => {
-		console.log('got message1', event);
 		if (!this.hasBeenClosed()) {
 			void this.onMessage(JSON.parse(event.nativeEvent.data));
 		}
