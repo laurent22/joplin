@@ -96,8 +96,6 @@ export default class Renderer {
 		this.lastSettings = settings;
 		this.lastRenderMarkup = markup;
 
-		console.log('RERENDER', markup.markup);
-
 		const options = {
 			onResourceLoaded: settings.onResourceLoaded,
 			highlightedKeywords: settings.highlightedKeywords,
@@ -153,8 +151,6 @@ export default class Renderer {
 		}
 
 		contentContainer.innerHTML = html;
-		console.log('RERENDER DONE', markup.markup);
-
 		addPluginAssets(pluginAssets);
 
 		this.afterRender(settings);

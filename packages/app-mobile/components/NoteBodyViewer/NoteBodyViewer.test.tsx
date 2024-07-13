@@ -78,7 +78,6 @@ describe('NoteBodyViewer', () => {
 		const expectHeaderToBe = async (text: string) => {
 			const noteViewer = await getNoteViewerDom();
 			await waitFor(async () => {
-				console.log((await getNoteViewerDom()).body.querySelector('#rendered-md').innerHTML);
 				expect(noteViewer.querySelector('h1').textContent).toBe(text);
 			});
 		};
@@ -92,9 +91,9 @@ describe('NoteBodyViewer', () => {
 	});
 
 	it.each([
-		{ keywords: ['match'], body: 'A match and another match. Both should be highlighted.', expectedMatchCount: 2 },	
-		{ keywords: ['test'], body: 'No match.', expectedMatchCount: 0 },	
-		{ keywords: ['a', 'b'], body: 'a, a, a, b, b, b', expectedMatchCount: 6 },	
+		{ keywords: ['match'], body: 'A match and another match. Both should be highlighted.', expectedMatchCount: 2 },
+		{ keywords: ['test'], body: 'No match.', expectedMatchCount: 0 },
+		{ keywords: ['a', 'b'], body: 'a, a, a, b, b, b', expectedMatchCount: 6 },
 	])('should highlight search terms (case %#)', async ({ keywords, body, expectedMatchCount }) => {
 		const noteViewer = render(
 			<WrappedNoteViewer

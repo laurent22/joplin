@@ -105,7 +105,6 @@ const useRerenderHandler = (props: Props) => {
 			logger.info('Only a checkbox has changed - not updating HTML');
 			return;
 		}
-		console.log('rerendering', props.noteBody)
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginSettings: Record<string, any> = { };
@@ -157,14 +156,14 @@ const useRerenderHandler = (props: Props) => {
 		};
 
 		try {
-			logger.warn('Starting render...');
+			logger.debug('Starting render...');
 
 			await props.renderer.rerender({
 				language: props.noteMarkupLanguage,
 				markup: props.noteBody,
 			}, config);
 
-			logger.warn('Render complete.');
+			logger.debug('Render complete.');
 		} catch (error) {
 			logger.error('Render failed:', error);
 		}

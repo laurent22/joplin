@@ -13,19 +13,16 @@ const logger = Logger.create('ExtendedWebView');
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const dom = useMemo(() => {
-		console.log('RECREATE DOM', props.html)
-		return new JSDOM(props.html, { runScripts: 'dangerously', resources: 'usable' });
+		// Note: Add `runScripts: 'dangerously'` to allow running inline <script></script>s.
+		return new JSDOM(props.html, { runScripts: 'outside-only' });
 	}, [props.html]);
 
 	useImperativeHandle(ref, (): WebViewControl => {
 		const result = {
 			injectJS(js: string) {
-				logger.warn('injectJS', js.substring(0, 240));
-
 				return dom.window.eval(js);
 			},
 			postMessage(message: unknown) {
-				logger.warn('postmessage', message);
 				const messageEventContent = {
 					data: message,
 					source: 'react-native',
@@ -60,7 +57,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		`);
 		dom.window.setWebViewApi({
 			postMessage: (message: unknown) => {
-				logger.warn('Got message', message);
+				logger.debug('Got message', message);
 				onMessageRef.current({ nativeEvent: { data: message } });
 			},
 		});
@@ -75,7 +72,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	onLoadStartRef.current = props.onLoadStart;
 
 	useEffect(() => {
-		logger.warn(`DOM at ${dom.window?.location?.href} is reloading.`);
+		logger.debug(`DOM at ${dom.window?.location?.href} is reloading.`);
 		onLoadStartRef.current?.();
 		onLoadEndRef.current?.();
 	}, [dom]);
