@@ -555,6 +555,7 @@ function useMenu(props: Props) {
 				},
 				{
 					label: _('Plugin Monitor'),
+					accelerator: keymapService.getAccelerator('pluginMonitor'),
 					click: () => {
 						props.dispatch({
 							type: 'RESOURCE_MONITOR_OPEN',
