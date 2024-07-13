@@ -40,15 +40,25 @@ jest.doMock('react-native-version-info', () => {
 });
 
 // react-native-webview expects native iOS/Android code so needs to be mocked.
-jest.mock('react-native-webview', () => {
-	const { View } = require('react-native');
-	return {
-		WebView: View,
-	};
+jest.mock('./components/ExtendedWebView', () => {
+	return require('./components/ExtendedWebView/index.jest.js');
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
 	return { default: { getString: jest.fn(), setString: jest.fn() } };
+});
+
+jest.mock('react-native-share', () => {
+	return { default: { } };
+});
+
+// Used by the renderer
+jest.mock('react-native-vector-icons/Ionicons', () => {
+	return {
+		default: {
+			getImageSourceSync: () => ({ uri: '' }),
+		},
+	};
 });
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.

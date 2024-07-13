@@ -500,11 +500,13 @@ packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/ExtendedWebView.web.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
+packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.test.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
@@ -583,7 +585,6 @@ packages/app-mobile/components/plugins/backgroundPage/pluginRunnerBackgroundPage
 packages/app-mobile/components/plugins/backgroundPage/startStopPlugin.js
 packages/app-mobile/components/plugins/backgroundPage/utils/getFormData.test.js
 packages/app-mobile/components/plugins/backgroundPage/utils/getFormData.js
-packages/app-mobile/components/plugins/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/components/plugins/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/components/plugins/backgroundPage/utils/wrapConsoleLog.js
 packages/app-mobile/components/plugins/dialogs/PluginDialogManager.js
@@ -1234,6 +1235,7 @@ packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/dom/makeSandboxedIframe.js
 packages/lib/utils/focusHandler.js
 packages/lib/utils/frontMatter.js
 packages/lib/utils/ipc/RemoteMessenger.test.js

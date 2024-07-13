@@ -1,12 +1,20 @@
 
-const makeSandboxedIframe = (
-	bodyHtml: string,
-	scripts: string[],
-) => {
+interface Options {
+	bodyHtml: string;
+	headHtml?: string;
+	scripts: string[];
+	permissions?: string;
+	allow?: string;
+}
+
+// allow-modals: Allows confirm/alert dialogs.
+const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow-scripts allow-modals', allow = '' }: Options) => {
 	const iframe = document.createElement('iframe');
 
-	// allow-modals: Allows confirm/alert dialogs.
-	iframe.setAttribute('sandbox', 'allow-scripts allow-modals');
+	iframe.setAttribute('sandbox', permissions);
+	if (allow) {
+		iframe.allow = allow;
+	}
 
 	iframe.addEventListener('load', async () => {
 		iframe.contentWindow.postMessage({
@@ -18,12 +26,11 @@ const makeSandboxedIframe = (
 	iframe.srcdoc = `
 		<!DOCTYPE html>
 		<html>
-		<head></head>
+		<head>${headHtml ?? '<meta charset="UTF-8"/>'}</head>
 		<body>
 			<script>
 				"use strict";
 				window.onmessage = (event) => {
-					console.log('got message', event);
 					if (event.source !== parent) {
 						console.log('Ignoring message: wrong source');
 						return;
@@ -33,7 +40,7 @@ const makeSandboxedIframe = (
 						return;
 					}
 
-					console.log('Adding plugin scripts...');
+					console.log('Adding scripts...');
 					window.onmessage = undefined;
 					for (const scriptText of event.data.scripts) {
 						const scriptElem = document.createElement('script');

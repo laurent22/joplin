@@ -78,5 +78,7 @@ describe('NoteEditor', () => {
 				}
 			});
 		}
+
+		wrappedNoteEditor.unmount();
 	});
 });

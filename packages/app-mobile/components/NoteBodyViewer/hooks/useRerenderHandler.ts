@@ -105,6 +105,7 @@ const useRerenderHandler = (props: Props) => {
 			logger.info('Only a checkbox has changed - not updating HTML');
 			return;
 		}
+		logger.warn('rerendering')
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginSettings: Record<string, any> = { };
