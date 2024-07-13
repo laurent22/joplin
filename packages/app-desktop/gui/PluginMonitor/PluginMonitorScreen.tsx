@@ -3,7 +3,7 @@ import * as React from 'react';
 const { connect } = require('react-redux');
 import { PluginResourceMetric, PluginResourceMonitor } from '../../services/plugins/PluginResourceMonitor';
 import { AppState } from '../../app.reducer';
-const { themeStyle } = require('@joplin/lib/theme');
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	themeId: string;
@@ -29,13 +29,31 @@ class PluginMonitorScreen extends React.Component<any, any> {
 	}
 
 	public render() {
-		const theme = themeStyle(this.props.themeId);
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: theme.backgroundColor }}>
-				<div style={{ padding: theme.configScreenPadding, flex: 1, color: theme.color }}>
-					{JSON.stringify(this.state.pluginData)}
-				</div>
+			<div className='plugin-monitor'>
+				<table>
+					<tr>
+						<th>{_('Plugin')}</th>
+						<th>{_('Memory')}</th>
+						<th>{_('Peak Memory')}</th>
+						<th>{_('CPU')}</th>
+						<th>{_('Running')}</th>
+						<th>{_('Process ID')}</th>
+					</tr>
+					{this.state.pluginData.map((plugin: PluginResourceMetric) => {
+						return (
+							<tr>
+								<td>{plugin.name}</td>
+								<td>{`${plugin.memory.toLocaleString()} K`}</td>
+								<td>{`${plugin.peakMemory.toLocaleString()} K`}</td>
+								<td>{`${plugin.cpu.toFixed(2)}%`}</td>
+								<td>{plugin.runningStatus ? _('Yes') : _('No')}</td>
+								<td>{plugin.osPid}</td>
+							</tr>
+						);
+					})}
+				</table>
 			</div>
 		);
 	}
