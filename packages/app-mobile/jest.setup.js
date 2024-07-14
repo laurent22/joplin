@@ -63,10 +63,10 @@ jest.mock('react-native-share', () => {
 });
 
 // Used by the renderer
-jest.mock('react-native-vector-icons/Ionicons', () => {
+jest.doMock('react-native-vector-icons/Ionicons', () => {
 	return {
-		default: {
-			getImageSourceSync: () => ({ uri: '' }),
+		default: class extends require('react-native').View {
+			static getImageSourceSync = () => ({ uri: '' });
 		},
 	};
 });
