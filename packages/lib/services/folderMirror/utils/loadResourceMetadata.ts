@@ -4,7 +4,7 @@ import * as yaml from 'js-yaml';
 import { ResourceEntity } from '../../database/types';
 import { basename, extname } from 'path';
 import debugLogger from './debugLogger';
-import { fromFilename as mimeFromFilename } from '@joplin/lib/mime-utils';
+import { fromFilename as mimeFromFilename } from '../../../mime-utils';
 
 
 const loadResourceMetadata = async (resourcePath: string): Promise<ResourceEntity> => {
