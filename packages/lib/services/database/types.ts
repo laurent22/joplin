@@ -276,7 +276,6 @@ export interface ResourceEntity {
   'encryption_applied'?: number;
   'encryption_blob_encrypted'?: number;
   'encryption_cipher_text'?: string;
-  'hash'?: string;
   'file_extension'?: string;
   'filename'?: string;
   'id'?: string | null;

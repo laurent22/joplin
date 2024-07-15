@@ -101,7 +101,7 @@ export default class ItemTree {
 	}
 
 	private getUniqueItemPathInParent(parentPath: string, item: FolderItem, allowPresentPaths: string[] = []) {
-		let baseName = encodeTitle(item.title ?? '');
+		let baseName = encodeTitle(item.title);
 		let extension = '';
 		if (item.type_ === ModelType.Note) {
 			extension = '.md';
@@ -113,11 +113,10 @@ export default class ItemTree {
 				extension = `.${extension}`;
 			}
 
-			// baseName = resource.filename ? resource.filename : baseName;
-			// if (baseName.endsWith(extension)) {
-			// 	baseName = baseName.substring(0, baseName.length - extension.length);
-			// }
-			baseName = item.id;
+			baseName = resource.filename ? resource.filename : baseName;
+			if (baseName.endsWith(extension)) {
+				baseName = baseName.substring(0, baseName.length - extension.length);
+			}
 		}
 
 		let filename;

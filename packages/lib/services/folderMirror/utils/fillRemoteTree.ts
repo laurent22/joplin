@@ -3,9 +3,8 @@ import ItemTree, { AddActionListener } from '../ItemTree';
 import debugLogger from './debugLogger';
 import statToItem from './statToItem';
 
-const fillRemoteTree = async (
-	baseFolderPath: string, remoteTree: ItemTree, addItemHandler: AddActionListener,
-) => {
+
+const fillRemoteTree = async (baseFolderPath: string, remoteTree: ItemTree, addItemHandler: AddActionListener) => {
 	const stats = await shim.fsDriver().readDirStats(baseFolderPath, { recursive: true });
 
 	// Sort so that parent folders are visited before child folders.

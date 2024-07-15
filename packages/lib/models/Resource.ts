@@ -25,7 +25,6 @@ import { unique } from '../array';
 import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
-import FsDriverBase from '../fs-driver-base';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
 	const s = {
@@ -49,7 +48,8 @@ export default class Resource extends BaseItem {
 
 	public static shareService_: ShareService = null;
 
-	public static fsDriver_: FsDriverBase;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static fsDriver_: any;
 
 	public static tableName() {
 		return 'resources';
@@ -426,7 +426,6 @@ export default class Resource extends BaseItem {
 			id: resource.id,
 			size: fileStat.size,
 			updated_time: now,
-			hash: await this.fsDriver().md5File(newBlobFilePath),
 			blob_updated_time: now,
 		}, {
 			autoTimestamp: false,
@@ -635,7 +634,6 @@ export default class Resource extends BaseItem {
 			if (!resource.created_time) resource.created_time = now;
 			if (!resource.updated_time) resource.updated_time = now;
 			if (!resource.blob_updated_time) resource.blob_updated_time = now;
-			if (!resource.hash) resource.hash = await this.fsDriver().md5File()
 		}
 
 		const output = await super.save(resource, options);

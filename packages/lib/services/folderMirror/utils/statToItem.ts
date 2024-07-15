@@ -10,6 +10,7 @@ import Note from '../../../models/Note';
 import { Stat } from '../../../fs-driver-base';
 import ItemTree from '../ItemTree';
 import { resourceMetadataExtension, resourcesDirItem, resourcesDirName } from '../constants';
+import loadResourceMetadata from './loadResourceMetadata';
 
 const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTree): Promise<FolderItem|null> => {
 	const base: FolderItem = {
@@ -56,13 +57,17 @@ const statToItem = async (baseFolderPath: string, stat: Stat, remoteTree: ItemTr
 			result = item;
 		}
 	} else if (isResource) {
-		const fileName = basename(path, extname(path));
-		const id = fileName.match(/^[a-z0-9]{32}$/) ? fileName : await shim.fsDriver().md5File(path);
+		// Metadata files are processed separately.
+		if (extension === resourceMetadataExtension) {
+			return null;
+		}
+
+		const metadata = await loadResourceMetadata(join(baseFolderPath, path));
 
 		result = {
 			...base,
-			id,
-			file_extension: extname(path),
+			...metadata,
+
 			type_: ModelType.Resource,
 		};
 	} else if (isNote) {
