@@ -34,11 +34,6 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 					);
 				`);
 			},
-
-			// Testing only
-			get document() {
-				return dom.window.document;
-			},
 		};
 		return result;
 	}, [dom]);
