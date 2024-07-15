@@ -607,6 +607,7 @@ packages/app-mobile/components/plugins/backgroundPage/pluginRunnerBackgroundPage
 packages/app-mobile/components/plugins/backgroundPage/startStopPlugin.js
 packages/app-mobile/components/plugins/backgroundPage/utils/getFormData.test.js
 packages/app-mobile/components/plugins/backgroundPage/utils/getFormData.js
+packages/app-mobile/components/plugins/backgroundPage/utils/makeSandboxedIframe.js
 packages/app-mobile/components/plugins/backgroundPage/utils/reportUnhandledErrors.js
 packages/app-mobile/components/plugins/backgroundPage/utils/wrapConsoleLog.js
 packages/app-mobile/components/plugins/dialogs/PluginDialogManager.js

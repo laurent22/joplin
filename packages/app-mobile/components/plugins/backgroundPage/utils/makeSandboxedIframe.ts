@@ -1,20 +1,12 @@
 
-interface Options {
-	bodyHtml: string;
-	headHtml?: string;
-	scripts: string[];
-	permissions?: string;
-	allow?: string;
-}
-
-// allow-modals: Allows confirm/alert dialogs.
-const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow-scripts allow-modals', allow = '' }: Options) => {
+const makeSandboxedIframe = (
+	bodyHtml: string,
+	scripts: string[],
+) => {
 	const iframe = document.createElement('iframe');
 
-	iframe.setAttribute('sandbox', permissions);
-	if (allow) {
-		iframe.allow = allow;
-	}
+	// allow-modals: Allows confirm/alert dialogs.
+	iframe.setAttribute('sandbox', 'allow-scripts allow-modals');
 
 	iframe.addEventListener('load', async () => {
 		iframe.contentWindow.postMessage({
@@ -26,11 +18,12 @@ const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow
 	iframe.srcdoc = `
 		<!DOCTYPE html>
 		<html>
-		<head>${headHtml ?? '<meta charset="UTF-8"/>'}</head>
+		<head></head>
 		<body>
 			<script>
 				"use strict";
 				window.onmessage = (event) => {
+					console.log('got message', event);
 					if (event.source !== parent) {
 						console.log('Ignoring message: wrong source');
 						return;
@@ -40,7 +33,7 @@ const makeSandboxedIframe = ({ bodyHtml, headHtml, scripts, permissions = 'allow
 						return;
 					}
 
-					console.log('Adding scripts...');
+					console.log('Adding plugin scripts...');
 					window.onmessage = undefined;
 					for (const scriptText of event.data.scripts) {
 						const scriptElem = document.createElement('script');
