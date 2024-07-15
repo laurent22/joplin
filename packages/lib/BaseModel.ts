@@ -350,7 +350,7 @@ class BaseModel {
 		if (!options.fields) options.fields = '*';
 
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
-		sql += ` WHERE id IN ("${ids.join('","')}")`;
+		sql += ` WHERE id IN ('${ids.join('\',\'')}')`;
 		const q = this.applySqlOptions(options, sql);
 		return this.modelSelectAll(q.sql);
 	}
@@ -749,7 +749,7 @@ class BaseModel {
 
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
-		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ("${ids.join('","')}")`;
+		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ('${ids.join('\',\'')}')`;
 		await this.db().exec(sql);
 	}
 

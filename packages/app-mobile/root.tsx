@@ -14,7 +14,7 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
-import Setting, { Env } from '@joplin/lib/models/Setting';
+import Setting, { AppType, Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
@@ -39,7 +39,7 @@ const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
@@ -122,12 +122,12 @@ import { ReactNode } from 'react';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import runOnDeviceFsDriverTests from './utils/fs-driver/runOnDeviceTests';
-import PluginRunnerWebView from './plugins/PluginRunner/PluginRunnerWebView';
+import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import initializeCommandService from './utils/initializeCommandService';
-import PlatformImplementation from './plugins/PlatformImplementation';
+import PlatformImplementation from './services/plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
@@ -493,7 +493,7 @@ const getInitialActiveFolder = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function initialize(dispatch: Function) {
+async function initialize(dispatch: Dispatch) {
 	shimInit();
 
 	setDispatch(dispatch);
@@ -505,9 +505,9 @@ async function initialize(dispatch: Function) {
 		value: profileConfig,
 	});
 
-	Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+	Setting.setConstant('env', __DEV__ ? Env.Dev : Env.Prod);
 	Setting.setConstant('appId', 'net.cozic.joplin-mobile');
-	Setting.setConstant('appType', 'mobile');
+	Setting.setConstant('appType', AppType.Mobile);
 	Setting.setConstant('tempDir', await initializeTempDir());
 	Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
@@ -535,6 +535,7 @@ async function initialize(dispatch: Function) {
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
+	reg.setDispatch(dispatch);
 
 	BaseService.logger_ = mainLogger;
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
@@ -619,7 +620,7 @@ async function initialize(dispatch: Function) {
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
 			Setting.skipDefaultMigrations();
-			Setting.setValue('firstStart', 0);
+			Setting.setValue('firstStart', false);
 		} else {
 			Setting.applyDefaultMigrations();
 		}
@@ -788,7 +789,7 @@ async function initialize(dispatch: Function) {
 	const pluginSettings = pluginService.unserializePluginSettings(Setting.value('plugins.states'));
 
 	const updatedSettings = pluginService.clearUpdateState(pluginSettings);
-	Setting.setValue('plugins.states', pluginService.serializePluginSettings(updatedSettings));
+	Setting.setValue('plugins.states', updatedSettings);
 
 	// ----------------------------------------------------------------------------
 	// Keep this below to test react-native-rsa-native

@@ -321,7 +321,7 @@ describe('syncInfoUtils', () => {
 		expect(result.version).toEqual(0);
 		expect(result.ppk).toEqual(null);
 		expect(result.e2ee).toEqual(false);
-		expect(result.appMinVersion).toEqual('0.0.0');
+		expect(result.appMinVersion).toEqual('3.0.0');
 		expect(result.masterKeys).toEqual([]);
 
 		Logger.globalLogger.enabled = true;

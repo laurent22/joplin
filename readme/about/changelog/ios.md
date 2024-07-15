@@ -1,5 +1,20 @@
 # Joplin iOS Changelog
 
+## [ios-v13.0.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.6) - 2024-07-06T11:22:58Z
+
+- Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [ios-v13.0.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.5) - 2024-07-01T15:47:53Z
+
+- Improved: Set min version for synchronising to 3.0.0 (e4b8976)
+- Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
+
+## [ios-v13.0.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.4) - 2024-06-29T10:21:04Z
+
+- Updated German and Chinese translation
+- Fixed: Fix refocusing the note editor (#10644) (#10637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix voice typing URL setting incorrectly visible (#10643 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.0.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.3) - 2024-06-19T15:29:15Z
 
 - Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))

@@ -58,7 +58,7 @@ export default function(theme: any, options: Options = null) {
 
 	theme = theme ? theme : {};
 
-	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
+	const fontFamily = '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
 
 	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : '#rendered-md';
 	const maxWidthCss = options.contentMaxWidth ? `

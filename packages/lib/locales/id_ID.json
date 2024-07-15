@@ -3629,6 +3629,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Data Anda akan dienkripsi ulang dan diselaraskan lagi."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Kata sandi Anda dibutuhkan untuk mendekripsi beberapa data Anda."
 	],

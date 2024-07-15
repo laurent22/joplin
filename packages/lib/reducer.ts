@@ -13,7 +13,7 @@ import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import FolderMirroringService from './services/folderMirror/FolderMirroringService';
 import Logger from '@joplin/utils/Logger';
-
+import { SettingsRecord } from './models/settings/types';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -102,8 +102,7 @@ export interface State {
 	syncReport: any;
 	searchQuery: string;
 	searchResults: ProcessResultsRow[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: Record<string, any>;
+	settings: Partial<SettingsRecord>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sharedData: any;
 	appState: string;
@@ -135,6 +134,7 @@ export interface State {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	mustAuthenticate: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -217,6 +217,7 @@ export const defaultState: State = {
 	},
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
+	mustAuthenticate: false,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1324,6 +1325,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_UPGRADE_APP':
 			draft.mustUpgradeAppMessage = action.message;
+			break;
+
+		case 'MUST_AUTHENTICATE':
+			draft.mustAuthenticate = action.value;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':
