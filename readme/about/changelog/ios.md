@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v13.0.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.6) - 2024-07-06T11:22:58Z
+
+- Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.0.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.5) - 2024-07-01T15:47:53Z
 
 - Improved: Set min version for synchronising to 3.0.0 (e4b8976)
