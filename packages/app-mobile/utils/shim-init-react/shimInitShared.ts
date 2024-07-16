@@ -1,6 +1,5 @@
 import { Linking, Platform } from 'react-native';
 import injectedJs from './injectedJs';
-import type ShimType from '@joplin/lib/shim';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import showMessageBox from '../showMessageBox';
 import { Buffer } from 'buffer';
@@ -8,7 +7,10 @@ import { basename, fileExtension } from '@joplin/utils/path';
 import uuid from '@joplin/lib/uuid';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import Resource from '@joplin/lib/models/Resource';
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
+import { getLocales } from 'react-native-localize';
+import type Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
+import { closestSupportedLocale, defaultLocale, setLocale } from '@joplin/lib/locale';
 
 const shimInitShared = () => {
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
@@ -64,7 +66,7 @@ const shimInitShared = () => {
 
 	// NOTE: This is a limited version of createResourceFromPath - unlike the Node version, it
 	// only really works with images. It does not resize the image either.
-	shim.createResourceFromPath = async function(filePath, defaultProps = null) {
+	shim.createResourceFromPath = async function(filePath, defaultProps = undefined) {
 		defaultProps = defaultProps ? defaultProps : {};
 		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
 
@@ -94,6 +96,30 @@ const shimInitShared = () => {
 		resource = await Resource.save(resource, { isNew: true });
 
 		return resource;
+	};
+
+	shim.detectAndSetLocale = (settings: typeof Setting) => {
+		// [
+		// 	{
+		// 		"countryCode": "US",
+		// 		"isRTL": false,
+		// 		"languageCode": "fr",
+		// 		"languageTag": "fr-US"
+		// 	},
+		// 	{
+		// 		"countryCode": "US",
+		// 		"isRTL": false,
+		// 		"languageCode": "en",
+		// 		"languageTag": "en-US"
+		// 	}
+		// ]
+
+		const locales = getLocales();
+		let locale = locales.length ? locales[0].languageTag : defaultLocale();
+		locale = closestSupportedLocale(locale);
+		settings.setValue('locale', locale);
+		setLocale(locale);
+		return locale;
 	};
 };
 

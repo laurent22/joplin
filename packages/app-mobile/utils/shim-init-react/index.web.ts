@@ -1,9 +1,6 @@
 import type ShimType from '@joplin/lib/shim';
 
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
-import { getLocales } from 'react-native-localize';
-import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import shimInitShared from './shimInitShared';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 import { FetchBlobOptions } from '@joplin/lib/types';
@@ -40,32 +37,6 @@ const shimInit = () => {
 		crypto.getRandomValues(buffer);
 
 		return [...buffer];
-	};
-
-	/* eslint-enable */
-
-	shim.detectAndSetLocale = (settings: typeof Setting) => {
-		// [
-		// 	{
-		// 		"countryCode": "US",
-		// 		"isRTL": false,
-		// 		"languageCode": "fr",
-		// 		"languageTag": "fr-US"
-		// 	},
-		// 	{
-		// 		"countryCode": "US",
-		// 		"isRTL": false,
-		// 		"languageCode": "en",
-		// 		"languageTag": "en-US"
-		// 	}
-		// ]
-
-		const locales = getLocales();
-		let locale = locales.length ? locales[0].languageTag : defaultLocale();
-		locale = closestSupportedLocale(locale);
-		settings.setValue('locale', locale);
-		setLocale(locale);
-		return locale;
 	};
 
 	shim.fetch = async function(url, options = null) {

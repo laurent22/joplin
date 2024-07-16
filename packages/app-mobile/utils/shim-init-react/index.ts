@@ -8,18 +8,7 @@ import FsDriverRN from '../fs-driver/fs-driver-rn';
 import { Buffer } from 'buffer';
 import { Linking, Platform } from 'react-native';
 import showMessageBox from '../showMessageBox';
-import { getLocales } from 'react-native-localize';
-import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
 const RNExitApp = require('react-native-exit-app').default;
-import type SettingType from '@joplin/lib/models/Setting';
-
-const injectedJs = {
-	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
-	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
-	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
-	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
-};
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -47,7 +36,7 @@ export default function shimInit() {
 
 	/* eslint-disable no-console */
 
-	shim.debugFetch = async (url: string, options: any = null) => {
+	shim.debugFetch = async (url, options = null) => {
 		options = {
 			method: 'GET',
 			headers: {},
@@ -88,30 +77,6 @@ export default function shimInit() {
 	};
 
 	/* eslint-enable */
-
-	shim.detectAndSetLocale = (Setting: typeof SettingType) => {
-		// [
-		// 	{
-		// 		"countryCode": "US",
-		// 		"isRTL": false,
-		// 		"languageCode": "fr",
-		// 		"languageTag": "fr-US"
-		// 	},
-		// 	{
-		// 		"countryCode": "US",
-		// 		"isRTL": false,
-		// 		"languageCode": "en",
-		// 		"languageTag": "en-US"
-		// 	}
-		// ]
-
-		const locales = getLocales();
-		let locale = locales.length ? locales[0].languageTag : defaultLocale();
-		locale = closestSupportedLocale(locale);
-		Setting.setValue('locale', locale);
-		setLocale(locale);
-		return locale;
-	};
 
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the

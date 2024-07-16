@@ -28,7 +28,7 @@ import useEditorCommandHandler from './hooks/useEditorCommandHandler';
 import { join, dirname } from 'path';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import uuid from '@joplin/lib/uuid';
-import { OnMessageEvent } from '../ExtendedWebView/types';
+import { WebViewMessageEvent } from 'react-native-webview';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -504,7 +504,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: OnMessageEvent) => {
+	const onMessage = useCallback((event: WebViewMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (typeof data === 'string' && data.indexOf('error:') === 0) {
