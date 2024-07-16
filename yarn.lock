@@ -27343,7 +27343,7 @@ __metadata:
     strip-ansi: 6.0.1
     tcp-port-used: 1.0.2
     temp: 0.9.4
-    terminal-kit: 3.0.2
+    terminal-kit: 3.1.1
     tkwidgets: 0.5.27
     typescript: 5.2.2
     url-parse: 1.5.10
@@ -40877,9 +40877,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terminal-kit@npm:3.0.2":
-  version: 3.0.2
-  resolution: "terminal-kit@npm:3.0.2"
+"terminal-kit@npm:3.1.1":
+  version: 3.1.1
+  resolution: "terminal-kit@npm:3.1.1"
   dependencies:
     "@cronvel/get-pixels": ^3.4.1
     chroma-js: ^2.4.2
@@ -40889,7 +40889,7 @@ __metadata:
     seventh: ^0.9.2
     string-kit: ^0.18.1
     tree-kit: ^0.8.7
-  checksum: ba0e5f51dc663d33526153b6a23f727464882ef75d329ab89a8a2d79fa7cc287491e253d9868341913cb6c9cb220d08f41bf50a102c7a3ad50fac28d2cf2b1ee
+  checksum: 5109aec23383cb6d04e756b561f3a3f3c8b86c13ab0f606029e637e70f0df02e38b39d8ee64c392e102a983ec3d80472d32fb1a0abc0bf3a9c2b38775aa90a81
   languageName: node
   linkType: hard
 
