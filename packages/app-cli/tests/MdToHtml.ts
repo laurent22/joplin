@@ -2,13 +2,16 @@ import MdToHtml from '@joplin/renderer/MdToHtml';
 const { filename } = require('@joplin/lib/path-utils');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
+import { RenderOptions } from '@joplin/renderer/types';
+import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function newTestMdToHtml(options: any = null) {
 	options = {
 		ResourceModel: {
-			isResourceUrl: () => false,
+			isResourceUrl: isResourceUrl,
+			urlToId: resourceUrlToId,
 		},
 		fsDriver: shim.fsDriver(),
 		...options,
@@ -39,7 +42,7 @@ describe('MdToHtml', () => {
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const mdToHtmlOptions: any = {
+			const mdToHtmlOptions: RenderOptions = {
 				bodyOnly: true,
 			};
 
@@ -51,6 +54,8 @@ describe('MdToHtml', () => {
 				};
 			} else if (mdFilename.startsWith('sourcemap_')) {
 				mdToHtmlOptions.mapsToLine = true;
+			} else if (mdFilename.startsWith('resource_')) {
+				mdToHtmlOptions.resources = {};
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);

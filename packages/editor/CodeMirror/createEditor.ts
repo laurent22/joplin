@@ -30,6 +30,7 @@ import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
+import handlePasteEvent from './utils/handlePasteEvent';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -256,6 +257,24 @@ const createEditor = (
 							kind: EditorEventType.Scroll,
 							fraction: getScrollFraction(view),
 						});
+					},
+					paste: (event, view) => {
+						if (props.onPasteFile) {
+							handlePasteEvent(event, view, props.onPasteFile);
+						}
+					},
+					dragover: (event, _view) => {
+						if (props.onPasteFile && event.dataTransfer.files.length) {
+							event.preventDefault();
+							event.dataTransfer.dropEffect = 'copy';
+							return true;
+						}
+						return false;
+					},
+					drop: (event, view) => {
+						if (props.onPasteFile) {
+							handlePasteEvent(event, view, props.onPasteFile);
+						}
 					},
 				}),
 
