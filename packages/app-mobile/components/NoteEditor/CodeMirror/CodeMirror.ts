@@ -33,7 +33,8 @@ export const initCodeMirror = (
 				reader.onload = async () => {
 					const dataUrl = reader.result as string;
 					const base64 = dataUrl.replace(/^data:.*;base64,/, '');
-					resolve(await messenger.remoteApi.onPasteFile(data.type, base64));
+					await messenger.remoteApi.onPasteFile(data.type, base64);
+					resolve();
 				};
 				reader.onerror = () => reject(new Error('Failed to load file.'));
 

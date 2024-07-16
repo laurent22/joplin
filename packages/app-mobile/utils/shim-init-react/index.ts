@@ -1,15 +1,25 @@
-import type ShimType from '@joplin/lib/shim';
 import shimInitShared from './shimInitShared';
 
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
+import shim from '@joplin/lib/shim';
 const { GeolocationReact } = require('../geolocation-react.js');
-const RNFetchBlob = require('rn-fetch-blob').default;
-const { generateSecureRandom } = require('react-native-securerandom');
+import RNFetchBlob from 'rn-fetch-blob';
+import { generateSecureRandom } from 'react-native-securerandom';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
-import type SettingType from '@joplin/lib/models/Setting';
-const { getLocales } = require('react-native-localize');
-const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
+import { Buffer } from 'buffer';
+import { Linking, Platform } from 'react-native';
+import showMessageBox from '../showMessageBox';
+import { getLocales } from 'react-native-localize';
+import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
 const RNExitApp = require('react-native-exit-app').default;
+import type SettingType from '@joplin/lib/models/Setting';
+
+const injectedJs = {
+	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
+	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
+	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
+	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
+	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
+};
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -21,7 +31,7 @@ export default function shimInit() {
 		return shim.fsDriver_;
 	};
 
-	shim.randomBytes = async count => {
+	shim.randomBytes = async (count: number) => {
 		const randomBytes = await generateSecureRandom(count);
 		const temp = [];
 		for (const n in randomBytes) {
@@ -37,8 +47,7 @@ export default function shimInit() {
 
 	/* eslint-disable no-console */
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(shim as any).debugFetch = async (url: string, options: any = null) => {
+	shim.debugFetch = async (url: string, options: any = null) => {
 		options = {
 			method: 'GET',
 			headers: {},
@@ -219,8 +228,20 @@ export default function shimInit() {
 		return RNFetchBlob.fs.readFile(path, 'base64');
 	};
 
-	shim.httpAgent = () => {
-		return null;
+	shim.stringByteLength = function(string) {
+		return Buffer.byteLength(string, 'utf-8');
+	};
+
+	shim.Buffer = Buffer;
+
+	shim.showMessageBox = showMessageBox;
+
+	shim.openUrl = url => {
+		return Linking.openURL(url);
+	};
+
+	shim.mobilePlatform = () => {
+		return Platform.OS;
 	};
 
 	shim.appVersion = () => {

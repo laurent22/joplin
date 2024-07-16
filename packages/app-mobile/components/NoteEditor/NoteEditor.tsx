@@ -21,13 +21,14 @@ import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
 import { join, dirname } from 'path';
 import * as mimeUtils from '@joplin/lib/mime-utils';
+import uuid from '@joplin/lib/uuid';
+import { OnMessageEvent } from '../ExtendedWebView/types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -425,10 +426,10 @@ function NoteEditor(props: Props, ref: any) {
 				logger.debug('CodeMirror:', message);
 			},
 			async onPasteFile(type, data) {
-				const tempFilePath = join(shim.fsDriver().getCacheDirectoryPath(), `paste.${mimeUtils.toFileExtension(type)}`);
+				const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${mimeUtils.toFileExtension(type)}`);
 				await shim.fsDriver().mkdir(dirname(tempFilePath));
-				await shim.fsDriver().writeFile(tempFilePath, data, 'base64');
 				try {
+					await shim.fsDriver().writeFile(tempFilePath, data, 'base64');
 					await onAttachRef.current(tempFilePath);
 				} finally {
 					await shim.fsDriver().remove(tempFilePath);
@@ -503,7 +504,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
+	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (typeof data === 'string' && data.indexOf('error:') === 0) {
