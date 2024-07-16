@@ -68,6 +68,8 @@ export default class {
 	private fullSyncEndListeners_: ((error: unknown)=> void)[] = [];
 	private remoteLinkTracker_: LinkTracker;
 
+	private createUuid_: ()=> string = () => uuid.create();
+
 	public constructor(public readonly baseFilePath: string, public readonly baseFolderId: string) {
 		if (baseFolderId === ALL_NOTES_FILTER_ID) {
 			this.baseFolderId = '';
@@ -110,6 +112,12 @@ export default class {
 			if (item.deleted_time || !('deleted_time' in item)) {
 				debugLogger.debug('onAddOrUpdate/move item from trash');
 				item = { ...item, deleted_time: 0 };
+			}
+
+			if (isNew && !item.id) {
+				// Use the custom UUID creation logic -- this allows consistent in-test
+				// ID generation.
+				item = { ...item, id: this.createUuid_() };
 			}
 
 			let result;
@@ -420,24 +428,29 @@ export default class {
 
 		await this.localTree_.addItemAt(resourcesDirName, resourcesDirItem, noOpActionListeners);
 		await processFolders('', baseFolderId, allFolders);
-		debugLogger.debug('built local tree');
+		debugLogger.debug('built local tree. Building remote:');
 
+		debugLogger.group();
 		const generatedIds: string[] = [];
 		await fillRemoteTree(filePath, this.remoteTree_, {
 			onAdd: async ({ item }) => {
 				// Items need IDs to be added to the remoteTree.
 				if (!item.id) {
+					debugLogger.debug('Item missing ID.');
+
 					if (this.localTree_.hasPath(filePath)) {
 						item = { ...item, id: this.localTree_.idAtPath(filePath) };
 					} else {
-						item = { ...item, id: uuid.create() };
+						item = { ...item, id: this.createUuid_() };
 						generatedIds.push(item.id);
+						debugLogger.debug('Creating a new ID,', item.id);
 					}
 				}
 
 				return item;
 			},
 		});
+		debugLogger.groupEnd();
 
 		for (const id of generatedIds) {
 			const path = this.remoteTree_.pathFromId(id);
@@ -674,4 +687,8 @@ export default class {
 		}
 		}
 	};
+
+	public test__setCreateUuid(fn: ()=> string) {
+		this.createUuid_ = fn;
+	}
 }

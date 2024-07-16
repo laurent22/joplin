@@ -6,47 +6,12 @@ import * as fs from 'fs-extra';
 import { Store, createStore } from 'redux';
 import reducer, { State as AppState, defaultState } from '../../reducer';
 import BaseItem from '../../models/BaseItem';
-import eventManager, { EventName, ItemChangeEvent } from '../../eventManager';
 import Folder from '../../models/Folder';
 import createFilesFromPathRecord from '../../utils/pathRecord/createFilesFromPathRecord';
-import { NoteEntity } from '../database/types';
-import { ModelType } from '../../BaseModel';
 import verifyDirectoryMatches from '../../utils/pathRecord/verifyDirectoryMatches';
 import Resource from '../../models/Resource';
 import shim from '../../shim';
-
-type ShouldMatchItemCallback = (item: NoteEntity)=> boolean;
-const waitForNoteChange = (itemMatcher?: ShouldMatchItemCallback) => {
-	return new Promise<void>(resolve => {
-		const onResolve = () => {
-			eventManager.off(EventName.ItemChange, eventHandler);
-			resolve();
-		};
-
-		const eventHandler = async (event: ItemChangeEvent) => {
-			if (event.itemType !== ModelType.Note) return;
-
-			if (!itemMatcher) {
-				onResolve();
-			} else if (itemMatcher(await Note.load(event.itemId))) {
-				onResolve();
-			}
-		};
-
-		eventManager.on(EventName.ItemChange, eventHandler);
-	});
-};
-
-const waitForTestNoteToBeWritten = async (parentDir: string) => {
-	// Push a new writeFile task to the end of the action queue and wait for it.
-	const waitForActionsToComplete = waitForNoteChange(item => item.body === 'waitForActionsToComplete');
-	await fs.writeFile(join(parentDir, 'waitForQueue.md'), 'waitForActionsToComplete', 'utf8');
-	await waitForActionsToComplete;
-
-	const waitForDeleteAction = waitForNoteChange(item => item.body === 'waitForActionsToComplete');
-	await fs.remove(join(parentDir, 'waitForQueue.md'));
-	await waitForDeleteAction;
-};
+import { waitForNoteChange, waitForTestNoteToBeWritten } from './utils/test-utils';
 
 let store: Store<AppState>;
 describe('FolderMirroringService', () => {
@@ -137,44 +102,6 @@ describe('FolderMirroringService', () => {
 			'test/test2/.folder.yml': `title: ${folder2.title}\nid: ${folder2.id}\n`,
 			'test/test2/note.md': `---\ntitle: ${note.title}\nid: ${note.id}\n---\n\ntest`,
 		});
-	});
-
-	test('should modify items locally when changed in a watched, non-empty remote folder', async () => {
-		const tempDir = await createTempDir();
-		await createFilesFromPathRecord(tempDir, {
-			'a.md': '---\ntitle: A test\n---',
-			'b.md': '---\ntitle: Another test\n---\n\n# Content',
-			'test/foo/c.md': 'Another note',
-		});
-		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
-
-		expect(await Note.loadByTitle('A test')).toMatchObject({ body: '', parent_id: '' });
-
-		const changeListener = waitForNoteChange(note => note.body === 'New content');
-		await fs.writeFile(join(tempDir, 'a.md'), '---\ntitle: A test\n---\n\nNew content', 'utf8');
-		await changeListener;
-		await waitForTestNoteToBeWritten(tempDir);
-
-		expect(await Note.loadByTitle('A test')).toMatchObject({ body: 'New content', parent_id: '' });
-	});
-
-	test('should move notes when moved in a watched folder', async () => {
-		const tempDir = await createTempDir();
-		await createFilesFromPathRecord(tempDir, {
-			'a.md': '---\ntitle: A test\n---',
-			'test/foo/c.md': 'Another note',
-		});
-		await FolderMirroringService.instance().mirrorFolder(tempDir, '');
-
-		const testFolderId = (await Folder.loadByTitle('test')).id;
-		const noteId = (await Note.loadByTitle('A test')).id;
-
-		await fs.move(join(tempDir, 'a.md'), join(tempDir, 'test', 'a.md'));
-
-		await waitForTestNoteToBeWritten(tempDir);
-
-		const movedNote = await Note.loadByTitle('A test');
-		expect(movedNote).toMatchObject({ parent_id: testFolderId, id: noteId });
 	});
 
 	test('should move folders locally when moved in a watched folder', async () => {

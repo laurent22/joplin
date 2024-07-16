@@ -23,7 +23,7 @@ export default class FolderMirroringService {
 		});
 	}
 
-	public async mirrorFolder(outputPath: string, baseFolderId: string) {
+	public async mirrorFolder(outputPath: string, baseFolderId: string, uuidCreate?: ()=> string) {
 		outputPath = normalize(outputPath);
 
 		for (const mirror of this.mirrors_) {
@@ -38,6 +38,11 @@ export default class FolderMirroringService {
 		}
 
 		const folderMirror = new FolderMirror(outputPath, baseFolderId);
+
+		// Allows consistent ID generation during tests
+		if (uuidCreate) {
+			folderMirror.test__setCreateUuid(uuidCreate);
+		}
 		this.mirrors_.push(folderMirror);
 		await folderMirror.fullSync();
 		await folderMirror.watch();
