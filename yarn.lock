@@ -6663,7 +6663,7 @@ __metadata:
     "@js-draw/material-icons": 1.20.0
     "@react-native-clipboard/clipboard": 1.14.1
     "@react-native-community/datetimepicker": 8.0.0
-    "@react-native-community/geolocation": 3.2.0
+    "@react-native-community/geolocation": 3.2.1
     "@react-native-community/netinfo": 11.3.1
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.5.2
@@ -9394,13 +9394,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@react-native-community/geolocation@npm:3.2.0"
+"@react-native-community/geolocation@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@react-native-community/geolocation@npm:3.2.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 83bd44d29c8cda2262bdef27869c43e710d959ccf98482aaf82fcb70d9ee07ec901e5f7d3e02fc12ebd1a82982e59e19f5d5edf771b26b845fae5c479f9766f0
+  checksum: 9d2749a9a86697f1b0da7ebf873d444efbf926eedee89a35810016385b81005d4802cbd7d1188ebfdfb146a41d5a11b8c907ee3ce8b434a4929fd81cac100f75
   languageName: node
   linkType: hard
 
