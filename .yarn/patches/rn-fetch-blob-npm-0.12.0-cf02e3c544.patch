@@ -50,10 +50,10 @@ index a4d70153f41e6c14eec65412b5b59822f1c6750b..d98c439f7b0aeb79afc82ab9f653e9c0
  
          }
 diff --git a/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java b/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
-index a8abd71833879201e3438b2fa51d712a311c4551..2f295a4bc3f59ed451d5aa3ee9eb5c240a115111 100644
+index a8abd71833879201e3438b2fa51d712a311c4551..b70cc13c004229f69157de5f82ae5ec3abf4358e 100644
 --- a/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
 +++ b/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
-@@ -49,8 +49,10 @@ import java.security.KeyStore;
+@@ -49,6 +49,7 @@ import java.security.KeyStore;
  import java.util.ArrayList;
  import java.util.Arrays;
  import java.util.List;
@@ -61,9 +61,7 @@ index a8abd71833879201e3438b2fa51d712a311c4551..2f295a4bc3f59ed451d5aa3ee9eb5c24
  import java.util.HashMap;
  
  import java.util.concurrent.TimeUnit;
- 
- import 	javax.net.ssl.SSLSocketFactory;
-@@ -300,14 +302,14 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+@@ -300,14 +301,14 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                              responseFormat = ResponseFormat.UTF8;
                      }
                      else {
@@ -81,7 +79,7 @@ index a8abd71833879201e3438b2fa51d712a311c4551..2f295a4bc3f59ed451d5aa3ee9eb5c24
  
                  if(rawRequestBodyArray != null) {
                      requestType = RequestType.Form;
-@@ -323,7 +325,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+@@ -323,7 +324,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                              || rawRequestBody.startsWith(RNFetchBlobConst.CONTENT_PREFIX)) {
                          requestType = RequestType.SingleFile;
                      }
@@ -90,7 +88,7 @@ index a8abd71833879201e3438b2fa51d712a311c4551..2f295a4bc3f59ed451d5aa3ee9eb5c24
                          cType = cType.replace(";base64","").replace(";BASE64","");
                          if(mheaders.containsKey("content-type"))
                              mheaders.put("content-type", cType);
-@@ -686,7 +688,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+@@ -686,7 +687,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
          boolean isCustomBinary = false;
          if(options.binaryContentTypes != null) {
              for(int i = 0; i< options.binaryContentTypes.size();i++) {
@@ -99,7 +97,7 @@ index a8abd71833879201e3438b2fa51d712a311c4551..2f295a4bc3f59ed451d5aa3ee9eb5c24
                      isCustomBinary = true;
                      break;
                  }
-@@ -698,13 +700,13 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+@@ -698,13 +699,13 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
      private String getHeaderIgnoreCases(Headers headers, String field) {
          String val = headers.get(field);
          if(val != null) return val;
