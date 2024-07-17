@@ -28,6 +28,7 @@ export default class HtmlToMd {
 			bulletListMarker: '-',
 			emDelimiter: '*',
 			strongDelimiter: '**',
+			allowResourcePlaceholders: true,
 
 			// If soft-breaks are enabled, lines need to end with two or more spaces for
 			// trailing <br/>s to render. See
