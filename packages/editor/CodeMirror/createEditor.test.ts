@@ -39,6 +39,7 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		// Force the generation of the syntax tree now.
@@ -66,6 +67,7 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
@@ -133,6 +135,7 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
