@@ -10,6 +10,7 @@ const createEditorControl = (initialText: string) => {
 		settings: editorSettings,
 		onEvent: _event => {},
 		onLogMessage: _message => {},
+		onPasteFile: null,
 	});
 };
 
