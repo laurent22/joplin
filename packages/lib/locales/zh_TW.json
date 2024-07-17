@@ -3413,6 +3413,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"您的資料將被重新加密並再次同步。"
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"需要輸入你的密碼，才能解密你的部分資料。"
 	],

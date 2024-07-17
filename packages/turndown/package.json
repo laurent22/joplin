@@ -1,7 +1,7 @@
 {
   "name": "@joplin/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "4.0.73",
+  "version": "4.0.74",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
   "publishConfig": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "@adobe/css-tools": "4.3.3",
     "html-entities": "1.4.0",
-    "jsdom": "23.0.1"
+    "jsdom": "23.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "25.0.7",

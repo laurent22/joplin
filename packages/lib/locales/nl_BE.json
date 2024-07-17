@@ -2906,6 +2906,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Uw data zullen opnieuw geëncrypteerd en gesynchroniseerd worden."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Je wachtwoord is nodig om een deel van je gegevens te decrypteren. Typ :e2ee decrypt` om je wachtwoord in te stellen."
 	],
