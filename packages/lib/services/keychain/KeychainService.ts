@@ -118,7 +118,7 @@ export default class KeychainService extends BaseService {
 		this.logger().info('KeychainService: checking if keychain supported');
 
 		const lastAvailableDrivers = Setting.value('keychain.lastAvailableDrivers');
-		const hasDifferentBackends = (() => {
+		const availableDriversChanged = (() => {
 			if (lastAvailableDrivers.length !== this.drivers_.length) return true;
 			return this.drivers_.some(driver => {
 				return !lastAvailableDrivers.includes(driver.driverId);
@@ -126,12 +126,12 @@ export default class KeychainService extends BaseService {
 		})();
 
 		const checkAlreadyDone = Setting.value('keychain.supported') >= 0;
-		if (checkAlreadyDone && !hasDifferentBackends) {
+		if (checkAlreadyDone && !availableDriversChanged) {
 			this.logger().info('KeychainService: check was already done - skipping. Supported:', Setting.value('keychain.supported'));
 			return;
 		}
 
-		if (hasDifferentBackends) {
+		if (availableDriversChanged) {
 			// Reset supported -- this allows the test .setPassword to work.
 			Setting.setValue('keychain.supported', -1);
 		}
