@@ -1,7 +1,7 @@
 import { Linking, Platform } from 'react-native';
 import injectedJs from './injectedJs';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
-import showMessageBox from '../showMessageBox';
+import makeShowMessageBox from '../makeShowMessageBox';
 import { Buffer } from 'buffer';
 import { basename, fileExtension } from '@joplin/utils/path';
 import uuid from '@joplin/lib/uuid';
@@ -29,7 +29,7 @@ const shimInitShared = () => {
 		return Linking.openURL(url);
 	};
 
-	shim.showMessageBox = showMessageBox;
+	shim.showMessageBox = makeShowMessageBox(null);
 
 	shim.waitForFrame = () => {
 		return new Promise<void>((resolve) => {

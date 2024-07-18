@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { createContext, useMemo, useRef, useState } from 'react';
+import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
 import Modal from './Modal';
 import { _ } from '@joplin/lib/locale';
+import shim from '@joplin/lib/shim';
+import makeShowMessageBox from '../utils/makeShowMessageBox';
 
-interface PromptButton {
+export interface PromptButton {
 	text: string;
 	onPress?: ()=> void;
 	style?: 'cancel'|'default'|'destructive';
@@ -86,6 +88,16 @@ const DialogManager: React.FC<Props> = props => {
 					});
 				}
 			},
+		};
+	}, []);
+	const dialogControlRef = useRef(dialogControl);
+	dialogControlRef.current = dialogControl;
+
+	useEffect(() => {
+		shim.showMessageBox = makeShowMessageBox(dialogControlRef);
+
+		return () => {
+			dialogControlRef.current = null;
 		};
 	}, []);
 

@@ -7,7 +7,6 @@ import { generateSecureRandom } from 'react-native-securerandom';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
 import { Buffer } from 'buffer';
 import { Linking, Platform } from 'react-native';
-import showMessageBox from '../showMessageBox';
 const RNExitApp = require('react-native-exit-app').default;
 
 export default function shimInit() {
@@ -198,8 +197,6 @@ export default function shimInit() {
 	};
 
 	shim.Buffer = Buffer;
-
-	shim.showMessageBox = showMessageBox;
 
 	shim.openUrl = url => {
 		return Linking.openURL(url);
