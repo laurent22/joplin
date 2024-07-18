@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 import Setting from '@joplin/lib/models/Setting';
 import Renderer, { RendererSettings, RendererSetupOptions } from './Renderer';
 import shim from '@joplin/lib/shim';

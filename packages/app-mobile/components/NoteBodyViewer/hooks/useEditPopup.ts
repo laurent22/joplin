@@ -19,7 +19,10 @@ const getEditIconSrc = (theme: Theme) => {
 	// Copy in the background -- the edit icon popover script doesn't need the
 	// icon immediately.
 	void (async () => {
-		await shim.fsDriver().copy(iconUri, destPath);
+		// Can be '' in a testing environment.
+		if (iconUri) {
+			await shim.fsDriver().copy(iconUri, destPath);
+		}
 	})();
 
 	return destPath;

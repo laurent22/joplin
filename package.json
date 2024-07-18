@@ -110,6 +110,7 @@
     "@react-native-community/slider": "patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch",
     "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch",
     "chokidar@^2.0.0": "3.5.3",
-    "react-native@0.74.1": "patch:react-native@npm%3A0.74.1#./.yarn/patches/react-native-npm-0.74.1-754c02ae9e.patch"
+    "react-native@0.74.1": "patch:react-native@npm%3A0.74.1#./.yarn/patches/react-native-npm-0.74.1-754c02ae9e.patch",
+    "rn-fetch-blob@0.12.0": "patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch"
   }
 }

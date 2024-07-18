@@ -52,6 +52,8 @@ const backlinksPluginId = 'joplin.plugin.ambrt.backlinksToNote';
 
 describe('PluginStates.installed', () => {
 	beforeEach(async () => {
+		jest.useRealTimers();
+
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 		reduxStore = createMockReduxStore();
@@ -60,6 +62,9 @@ describe('PluginStates.installed', () => {
 
 		await mockMobilePlatform('android');
 		await mockRepositoryApiConstructor();
+
+		// Fake timers are necessary to prevent a warning.
+		jest.useFakeTimers();
 	});
 	afterEach(async () => {
 		for (const pluginId of PluginService.instance().pluginIds) {
@@ -228,7 +233,7 @@ describe('PluginStates.installed', () => {
 
 		// After updating, the update button should read "updated". Use a large
 		// timeout because updating plugins can be slow, particularly in CI.
-		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true, timeout: 16000 });
+		const updatedButton = await screen.findByRole('button', { name: 'Updated', disabled: true }, { timeout: 16000 });
 		expect(updatedButton).toBeVisible();
 
 		// Should be marked as updated.

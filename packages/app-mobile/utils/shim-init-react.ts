@@ -14,14 +14,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { getLocales } from 'react-native-localize';
 import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
 import type SettingType from '@joplin/lib/models/Setting';
-
-const injectedJs = {
-	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
-	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
-	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
-	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
-};
+import injectedJs from './injectedJs';
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
