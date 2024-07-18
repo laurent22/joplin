@@ -1,0 +1,118 @@
+# Fixes sync issues caused by locale-sensitive lowercasing
+# of HTTP headers.
+# See https://github.com/laurent22/joplin/issues/10681
+diff --git a/android/src/main/java/com/RNFetchBlob/RNFetchBlobConfig.java b/android/src/main/java/com/RNFetchBlob/RNFetchBlobConfig.java
+index 8ac9e7a855162cefbf99024eb013c8a3b11de1ec..1c639cf9d84821b6ffc132960e2d1c044bedbd48 100644
+--- a/android/src/main/java/com/RNFetchBlob/RNFetchBlobConfig.java
++++ b/android/src/main/java/com/RNFetchBlob/RNFetchBlobConfig.java
+@@ -2,6 +2,7 @@ package com.RNFetchBlob;
+ 
+ import com.facebook.react.bridge.ReadableArray;
+ import com.facebook.react.bridge.ReadableMap;
++import java.util.Locale;
+ 
+ class RNFetchBlobConfig {
+ 
+@@ -33,7 +34,7 @@ class RNFetchBlobConfig {
+         }
+         if(options.hasKey("binaryContentTypes"))
+             this.binaryContentTypes = options.getArray("binaryContentTypes");
+-        if(this.path != null && path.toLowerCase().contains("?append=true")) {
++        if(this.path != null && path.toLowerCase(Locale.ROOT).contains("?append=true")) {
+             this.overwrite = false;
+         }
+         if(options.hasKey("overwrite"))
+diff --git a/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java b/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java
+index a4d70153f41e6c14eec65412b5b59822f1c6750b..d98c439f7b0aeb79afc82ab9f653e9c021086426 100644
+--- a/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java
++++ b/android/src/main/java/com/RNFetchBlob/RNFetchBlobFS.java
+@@ -29,6 +29,7 @@ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.Map;
+ import java.util.UUID;
++import java.util.Locale;
+ 
+ class RNFetchBlobFS {
+ 
+@@ -210,7 +211,7 @@ class RNFetchBlobFS {
+                 return;
+             }
+ 
+-            switch (encoding.toLowerCase()) {
++            switch (encoding.toLowerCase(Locale.ROOT)) {
+                 case "base64" :
+                     promise.resolve(Base64.encodeToString(bytes, Base64.NO_WRAP));
+                     break;
+@@ -1050,7 +1051,7 @@ class RNFetchBlobFS {
+         if(encoding.equalsIgnoreCase("ascii")) {
+             return data.getBytes(Charset.forName("US-ASCII"));
+         }
+-        else if(encoding.toLowerCase().contains("base64")) {
++        else if(encoding.toLowerCase(Locale.ROOT).contains("base64")) {
+             return Base64.decode(data, Base64.NO_WRAP);
+ 
+         }
+diff --git a/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java b/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
+index a8abd71833879201e3438b2fa51d712a311c4551..b70cc13c004229f69157de5f82ae5ec3abf4358e 100644
+--- a/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
++++ b/android/src/main/java/com/RNFetchBlob/RNFetchBlobReq.java
+@@ -49,6 +49,7 @@ import java.security.KeyStore;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
++import java.util.Locale;
+ import java.util.HashMap;
+ 
+ import java.util.concurrent.TimeUnit;
+@@ -300,14 +301,14 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+                             responseFormat = ResponseFormat.UTF8;
+                     }
+                     else {
+-                        builder.header(key.toLowerCase(), value);
+-                        mheaders.put(key.toLowerCase(), value);
++                        builder.header(key.toLowerCase(Locale.ROOT), value);
++                        mheaders.put(key.toLowerCase(Locale.ROOT), value);
+                     }
+                 }
+             }
+ 
+             if(method.equalsIgnoreCase("post") || method.equalsIgnoreCase("put") || method.equalsIgnoreCase("patch")) {
+-                String cType = getHeaderIgnoreCases(mheaders, "Content-Type").toLowerCase();
++                String cType = getHeaderIgnoreCases(mheaders, "Content-Type").toLowerCase(Locale.ROOT);
+ 
+                 if(rawRequestBodyArray != null) {
+                     requestType = RequestType.Form;
+@@ -323,7 +324,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+                             || rawRequestBody.startsWith(RNFetchBlobConst.CONTENT_PREFIX)) {
+                         requestType = RequestType.SingleFile;
+                     }
+-                    else if (cType.toLowerCase().contains(";base64") || cType.toLowerCase().startsWith("application/octet")) {
++                    else if (cType.toLowerCase(Locale.ROOT).contains(";base64") || cType.toLowerCase(Locale.ROOT).startsWith("application/octet")) {
+                         cType = cType.replace(";base64","").replace(";BASE64","");
+                         if(mheaders.containsKey("content-type"))
+                             mheaders.put("content-type", cType);
+@@ -686,7 +687,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+         boolean isCustomBinary = false;
+         if(options.binaryContentTypes != null) {
+             for(int i = 0; i< options.binaryContentTypes.size();i++) {
+-                if(ctype.toLowerCase().contains(options.binaryContentTypes.getString(i).toLowerCase())) {
++                if(ctype.toLowerCase(Locale.ROOT).contains(options.binaryContentTypes.getString(i).toLowerCase(Locale.ROOT))) {
+                     isCustomBinary = true;
+                     break;
+                 }
+@@ -698,13 +699,13 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
+     private String getHeaderIgnoreCases(Headers headers, String field) {
+         String val = headers.get(field);
+         if(val != null) return val;
+-        return headers.get(field.toLowerCase()) == null ? "" : headers.get(field.toLowerCase());
++        return headers.get(field.toLowerCase(Locale.ROOT)) == null ? "" : headers.get(field.toLowerCase(Locale.ROOT));
+     }
+ 
+     private String getHeaderIgnoreCases(HashMap<String,String> headers, String field) {
+         String val = headers.get(field);
+         if(val != null) return val;
+-        String lowerCasedValue = headers.get(field.toLowerCase());
++        String lowerCasedValue = headers.get(field.toLowerCase(Locale.ROOT));
+         return lowerCasedValue == null ? "" : lowerCasedValue;
+     }
+ 
