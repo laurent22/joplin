@@ -574,18 +574,10 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'Notes',
-				folderId: this.state.note.parent_id,
+				routeName: 'Note',
+				noteId: noteId,
+				noteHash: noteHash,
 			});
-
-			shim.setTimeout(() => {
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Note',
-					noteId: noteId,
-					noteHash: noteHash,
-				});
-			}, 5);
 		}
 	}
 
@@ -1665,6 +1657,16 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 }
 
+// We added this change to reset the component state when the props.noteId is changed.
+// NoteScreenComponent original implementation assumed that noteId would never change,
+// which can cause some bugs where previously set state to another note would interfere
+// how the new note should be rendered
+const NoteScreenWrapper = (props: Props) => {
+	return (
+		<NoteScreenComponent key={props.noteId} {...props} />
+	);
+};
+
 const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
@@ -1688,6 +1690,6 @@ const NoteScreen = connect((state: AppState) => {
 		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
-})(NoteScreenComponent);
+})(NoteScreenWrapper);
 
 export default NoteScreen;
