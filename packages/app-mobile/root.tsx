@@ -131,6 +131,8 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
+import { AppState } from './utils/types';
+import { getDisplayParentId } from '@joplin/lib/services/trash';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -159,7 +161,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
-	const newState = store.getState();
+	const newState: AppState = store.getState();
 	let doRefreshFolders = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -178,6 +180,12 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 		await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
+	}
+
+	if (action.type === 'NOTE_DELETE' && newState.route?.routeName === 'Note' && newState.route.noteId === action.id) {
+		const parentItem = action.originalItem?.parent_id ? await Folder.load(action.originalItem?.parent_id) : null;
+		const parentId = getDisplayParentId(action.originalItem, parentItem);
+		await NavService.go('Notes', { folderId: parentId });
 	}
 
 	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.interval' || action.type === 'SETTING_UPDATE_ALL') {

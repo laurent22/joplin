@@ -3,6 +3,7 @@ import eventManager, { EventListenerCallback, EventName } from '../eventManager'
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
+import type { WhenClauseContext } from './commands/stateToWhenClauseContext';
 
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
@@ -271,7 +272,7 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	public currentWhenClauseContext() {
+	public currentWhenClauseContext(): WhenClauseContext {
 		return this.stateToWhenClauseContext_(this.store_.getState());
 	}
 

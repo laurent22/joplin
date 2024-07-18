@@ -1,7 +1,7 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import { _ } from '@joplin/lib/locale';
-import Note from '@joplin/lib/models/Note';
-import bridge from '../../../services/bridge';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
+import { _ } from '../locale';
+import Note from '../models/Note';
+import shim from '../shim';
 
 export const declaration: CommandDeclaration = {
 	name: 'permanentlyDeleteNote',
@@ -16,12 +16,15 @@ export const runtime = (): CommandRuntime => {
 			if (!noteIds.length) return;
 			const msg = await Note.permanentlyDeleteMessage(noteIds);
 
-			const ok = bridge().showConfirmMessageBox(msg, {
+			const deleteIndex = 0;
+			const result = await shim.showMessageBox(msg, {
 				buttons: [_('Delete'), _('Cancel')],
 				defaultId: 1,
+				cancelId: 1,
+				type: 'question',
 			});
 
-			if (ok) {
+			if (result === deleteIndex) {
 				await Note.batchDelete(noteIds, { toTrash: false, sourceDescription: 'permanentlyDeleteNote command' });
 			}
 		},
