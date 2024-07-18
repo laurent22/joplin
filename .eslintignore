@@ -520,12 +520,15 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
-packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/ExtendedWebView/index.jest.js
+packages/app-mobile/components/ExtendedWebView/index.js
+packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
+packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.test.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
@@ -716,6 +719,7 @@ packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
 packages/app-mobile/utils/initializeCommandService.js
+packages/app-mobile/utils/injectedJs.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/pickDocument.js
@@ -1259,6 +1263,7 @@ packages/lib/urlUtils.js
 packages/lib/utils/ActionLogger.test.js
 packages/lib/utils/ActionLogger.js
 packages/lib/utils/credentialFiles.js
+packages/lib/utils/dom/makeSandboxedIframe.js
 packages/lib/utils/focusHandler.js
 packages/lib/utils/frontMatter.js
 packages/lib/utils/ipc/RemoteMessenger.test.js
