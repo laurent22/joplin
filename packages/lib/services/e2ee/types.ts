@@ -29,6 +29,10 @@ export interface RSA {
 export interface Crypto {
 	getCiphers(): string[];
 	getHashes(): string[];
-	randomBytes(size: number): Promise<Uint8Array>;
-	pbkdf2Raw(password: string, salt: Uint8Array, iterations: number, keylen: number, digest: string): Promise<Uint8Array>;
+	randomBytes(size: number): Promise<CryptoBuffer>;
+	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: string): Promise<CryptoBuffer>;
+}
+
+export interface CryptoBuffer extends Uint8Array {
+	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
 }

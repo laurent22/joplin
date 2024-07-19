@@ -1,4 +1,4 @@
-import { Crypto } from '@joplin/lib/services/e2ee/types';
+import { Crypto, CryptoBuffer } from '@joplin/lib/services/e2ee/types';
 import crypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 
@@ -12,7 +12,7 @@ const cryptoLib: Crypto = {
 		return crypto.getHashes();
 	},
 
-	randomBytes: async (size: number): Promise<Uint8Array> => {
+	randomBytes: async (size: number): Promise<CryptoBuffer> => {
 		return new Promise((resolve, reject) => {
 			crypto.randomBytes(size, (error, result) => {
 				if (error) {
@@ -24,7 +24,7 @@ const cryptoLib: Crypto = {
 		});
 	},
 
-	pbkdf2Raw: async (password: string, salt: Uint8Array, iterations: number, keylen: number, digest: string): Promise<Uint8Array> => {
+	pbkdf2Raw: async (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: string): Promise<CryptoBuffer> => {
 		const digestMap: { [key: string]: HashAlgorithm } = {
 			'sha1': 'SHA-1',
 			'sha224': 'SHA-224',

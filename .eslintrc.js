@@ -44,6 +44,8 @@ module.exports = {
 		'tinymce': 'readonly',
 
 		'JSX': 'readonly',
+
+		'BufferEncoding': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
