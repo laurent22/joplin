@@ -12,8 +12,7 @@ const cryptoLib: Crypto = {
 		return crypto.getHashes();
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
-	randomBytes: async (size: number): Promise<Buffer | any> => {
+	randomBytes: async (size: number): Promise<Uint8Array> => {
 		return new Promise((resolve, reject) => {
 			crypto.randomBytes(size, (error, result) => {
 				if (error) {
@@ -25,8 +24,7 @@ const cryptoLib: Crypto = {
 		});
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TODO: remove the type "any" here
-	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: string): Promise<Buffer | any> => {
+	pbkdf2Raw: async (password: string, salt: Uint8Array, iterations: number, keylen: number, digest: string): Promise<Uint8Array> => {
 		const digestMap: { [key: string]: HashAlgorithm } = {
 			'sha1': 'SHA-1',
 			'sha224': 'SHA-224',
