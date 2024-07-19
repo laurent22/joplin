@@ -1074,4 +1074,18 @@ export const mockMobilePlatform = (platform: string) => {
 	};
 };
 
+export const runWithFakeTimers = (callback: ()=> Promise<void>) => {
+	if (typeof jest === 'undefined') {
+		throw new Error('Fake timers are only supported in jest.');
+	}
+
+	jest.useFakeTimers();
+	try {
+		return callback();
+	} finally {
+		jest.runOnlyPendingTimers();
+		jest.useRealTimers();
+	}
+};
+
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

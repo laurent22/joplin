@@ -1,4 +1,4 @@
-// Currently disabled on iOS
+// Currently disabled on non-Android platforms
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type Vosk = any;

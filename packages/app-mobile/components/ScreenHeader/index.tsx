@@ -655,7 +655,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
-					<MenuTrigger style={contextMenuStyle}>
+					<MenuTrigger style={contextMenuStyle} testID='screen-header-menu-trigger'>
 						<View accessibilityLabel={_('Actions')}>
 							<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
 						</View>

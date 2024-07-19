@@ -1,4 +1,4 @@
-import { NoteEntity } from '../../services/database/types';
+import { FolderEntity, NoteEntity } from '../../services/database/types';
 import { reg } from '../../registry';
 import Folder from '../../models/Folder';
 import BaseModel, { ModelType } from '../../BaseModel';
@@ -12,9 +12,27 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
+interface SharedResource {
+	uri: string;
+	mimeType: string;
+	name: string;
+}
+
+interface SharedData {
+	title: string;
+	text: string;
+	resources: SharedResource[];
+}
+
+export interface Props {
+	provisionalNoteIds: string[];
+	noteId: string;
+	folders: FolderEntity[];
+	sharedData: SharedData|undefined;
+}
+
 export interface BaseNoteScreenComponent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: any;
+	props: Props;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	state: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

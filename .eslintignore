@@ -668,6 +668,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useUpdateState
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
+packages/app-mobile/components/screens/Note.test.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
@@ -689,7 +690,7 @@ packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
-packages/app-mobile/services/voiceTyping/vosk.ios.js
+packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
 packages/app-mobile/tools/buildInjectedJs/constants.js
@@ -728,6 +729,7 @@ packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shim-init-react.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
+packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
