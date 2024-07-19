@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -18,7 +18,11 @@ import { PaperProvider } from 'react-native-paper';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ModelType } from '@joplin/lib/BaseModel';
+import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
+import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import shim from '@joplin/lib/shim';
 
 interface WrapperProps {
@@ -46,48 +50,36 @@ const openNewNote = async (noteProperties: NoteEntity) => {
 		...noteProperties,
 	});
 
+	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
+
+	store.dispatch({
+		type: 'NOTE_UPDATE_ALL',
+		notes: await Note.previews(displayParentId),
+	});
+
 	store.dispatch({
 		type: 'FOLDER_AND_NOTE_SELECT',
 		id: note.id,
-		folderId: getDisplayParentId(note, await Folder.load(note.parent_id)),
+		folderId: displayParentId,
 	});
 	return note.id;
 };
 
-// Required to test react-native-popup-menu. See
-// https://github.com/instea/react-native-popup-menu/issues/197#issuecomment-2237691505
-jest.mock('react-native', () => {
-	const reactNative = jest.requireActual<typeof ReactNative>('react-native');
-	const ViewMock = class extends reactNative.View {
-		public constructor(props: ReactNative.ViewProps) {
-			super(props);
-
-			if (this.props.onLayout) {
-				const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
-				this.props.onLayout(mockedEvent as ReactNative.LayoutChangeEvent);
-			}
-		}
-
-		public measure = (callback: ReactNative.MeasureOnSuccessCallback) => {
-			callback(0, 0, 120, 100, 0, 0);
-		};
-	};
-
-	// Use a Proxy to avoid warnings -- react-native warns when attempting to access
-	// properties that correspond to deprecated APIs.
-	return new Proxy(reactNative, {
-		get(target, property) {
-			if (property === 'View') {
-				return ViewMock;
-			}
-			return target[property as keyof typeof ReactNative];
-		},
-	});
-});
-
 const openNoteActionsMenu = async () => {
 	// It doesn't seem possible to find the menu trigger with role/label.
 	const actionMenuButton = await screen.findByTestId('screen-header-menu-trigger');
+
+	// react-native-action-menu only shows the menu content after receiving onLayout
+	// events from various components (including a View that wraps the screen).
+	let cursor = actionMenuButton;
+	while (cursor.parent) {
+		if (cursor.props.onLayout) {
+			const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
+			cursor.props.onLayout(mockedEvent as ReactNative.LayoutChangeEvent);
+		}
+		cursor = cursor.parent;
+	}
+
 	await runWithFakeTimers(() => userEvent.press(actionMenuButton));
 };
 
@@ -141,7 +133,7 @@ describe('Note', () => {
 		render(<WrappedNoteScreen />);
 
 		await openNoteActionsMenu();
-		const deleteButton = await screen.findByText('Delete note');
+		const deleteButton = await screen.findByText('Delete');
 		fireEvent.press(deleteButton);
 
 		await waitFor(async () => {
@@ -150,21 +142,61 @@ describe('Note', () => {
 	});
 
 	it('should offer to permanently delete notes already in the trash', async () => {
-		const noteId = await openNewNote({ title: 'To be deleted', body: '...', deleted_time: Date.now() });
+		const noteId = await openNewNote({
+			title: 'To be permanently deleted',
+			body: '...',
+			deleted_time: Date.now(),
+		});
 
 		render(<WrappedNoteScreen />);
 
 		await openNoteActionsMenu();
 
 		const permanentDeleteButton = await screen.findByText('Permanently delete note');
-		shim.showMessageBox = jest.fn(
-			async (_message, options) => (options.buttons ?? []).indexOf('Delete'),
-		);
+		const mockMessageBoxResponse = (response: string) => {
+			shim.showMessageBox = jest.fn(async (_message, options) => {
+				return (options.buttons ?? []).indexOf(response);
+			});
+			return shim.showMessageBox;
+		};
+		const messageBoxMock = mockMessageBoxResponse('Delete');
+
 		fireEvent.press(permanentDeleteButton);
 
 		await waitFor(async () => {
-			expect(shim.showMessageBox).toHaveBeenCalled();
+			expect(messageBoxMock).toHaveBeenCalled();
 			expect(await Note.load(noteId) ?? null).toBe(null);
 		});
+	});
+
+	it('delete should be disabled in a read-only note', async () => {
+		const shareId = 'testShare';
+		const noteId = await openNewNote({
+			title: 'Title: Read-only note',
+			body: 'A **read-only** note.',
+			share_id: shareId,
+		});
+		const cleanup = simulateReadOnlyShareEnv(shareId, store);
+		expect(
+			itemIsReadOnlySync(
+				ModelType.Note,
+				ItemChange.SOURCE_UNSPECIFIED,
+				await Note.load(noteId) as ItemSlice,
+				'',
+				BaseItem.syncShareCache,
+			),
+		).toBe(true);
+
+		render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Title: Read-only note');
+		expect(titleInput).toBeVisible();
+		expect(titleInput).toBeDisabled();
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Delete');
+		expect(deleteButton).toBeDisabled();
+
+		cleanup();
 	});
 });

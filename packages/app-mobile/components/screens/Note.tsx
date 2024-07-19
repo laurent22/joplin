@@ -1179,7 +1179,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(',')].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1293,12 +1293,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const commandService = CommandService.instance();
 		const whenContext = commandService.currentWhenClauseContext();
-		const addButtonFromCommand = (commandName: string) => {
+		const addButtonFromCommand = (commandName: string, title?: string) => {
 			if (commandName === '-') {
 				output.push({ isDivider: true });
 			} else {
 				output.push({
-					title: commandService.description(commandName),
+					title: title ?? commandService.description(commandName),
 					onPress: async () => {
 						void commandService.execute(commandName);
 					},
@@ -1310,7 +1310,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		if (whenContext.inTrash) {
 			addButtonFromCommand('permanentlyDeleteNote');
 		} else {
-			addButtonFromCommand('deleteNote');
+			addButtonFromCommand('deleteNote', _('Delete'));
 		}
 
 		if (pluginCommands.length) {

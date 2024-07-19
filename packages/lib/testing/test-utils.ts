@@ -67,6 +67,7 @@ import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
+import { Store } from 'redux';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -1043,10 +1044,26 @@ const createTestShareData = (shareId: string): ShareState => {
 	};
 };
 
-const simulateReadOnlyShareEnv = (shareId: string) => {
+const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
 	Setting.setValue('sync.target', 10);
 	Setting.setValue('sync.userId', 'abcd');
-	BaseItem.syncShareCache = createTestShareData(shareId);
+	const shareData = createTestShareData(shareId);
+	BaseItem.syncShareCache = shareData;
+
+	if (store) {
+		store.dispatch({
+			type: 'SHARE_SET',
+			shares: shareData.shares,
+		});
+		store.dispatch({
+			type: 'SHARE_INVITATION_SET',
+			shareInvitations: shareData.shareInvitations,
+		});
+		store.dispatch({
+			type: 'SHARE_USER_SET',
+			shareUsers: shareData.shareUsers,
+		});
+	}
 
 	return () => {
 		BaseItem.syncShareCache = null;

@@ -709,6 +709,7 @@ packages/app-mobile/utils/shim-init-react.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
+packages/app-mobile/utils/testing/mockMessageBoxResponse.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js

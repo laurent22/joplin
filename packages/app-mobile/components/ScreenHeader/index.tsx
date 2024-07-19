@@ -540,7 +540,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				} else {
 					menuOptionComponents.push(
 						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
-							<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
+							<Text
+								style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}
+								disabled={!!o.disabled}
+							>{o.title}</Text>
 						</MenuOption>,
 					);
 				}
