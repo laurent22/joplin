@@ -182,6 +182,7 @@ packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
 packages/app-desktop/gui/MainScreen/commands/deleteFolder.js
+packages/app-desktop/gui/MainScreen/commands/deleteNote.js
 packages/app-desktop/gui/MainScreen/commands/duplicateNote.js
 packages/app-desktop/gui/MainScreen/commands/editAlarm.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
@@ -200,6 +201,7 @@ packages/app-desktop/gui/MainScreen/commands/openItem.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openPdfViewer.js
 packages/app-desktop/gui/MainScreen/commands/openTag.js
+packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.js
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
@@ -709,7 +711,6 @@ packages/app-mobile/utils/shim-init-react.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
-packages/app-mobile/utils/testing/mockMessageBoxResponse.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -841,12 +842,10 @@ packages/lib/array.js
 packages/lib/callbackUrlUtils.test.js
 packages/lib/callbackUrlUtils.js
 packages/lib/clipperUtils.js
-packages/lib/commands/deleteNote.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
-packages/lib/commands/permanentlyDeleteNote.js
 packages/lib/commands/synchronize.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js

@@ -2,6 +2,7 @@
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
 import * as deleteFolder from './deleteFolder';
+import * as deleteNote from './deleteNote';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
 import * as exportPdf from './exportPdf';
@@ -19,6 +20,7 @@ import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as openPdfViewer from './openPdfViewer';
 import * as openTag from './openTag';
+import * as permanentlyDeleteNote from './permanentlyDeleteNote';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
@@ -50,6 +52,7 @@ const index: any[] = [
 	addProfile,
 	commandPalette,
 	deleteFolder,
+	deleteNote,
 	duplicateNote,
 	editAlarm,
 	exportPdf,
@@ -67,6 +70,7 @@ const index: any[] = [
 	openNote,
 	openPdfViewer,
 	openTag,
+	permanentlyDeleteNote,
 	print,
 	renameFolder,
 	renameTag,

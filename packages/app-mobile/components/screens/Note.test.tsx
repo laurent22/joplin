@@ -23,7 +23,6 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
-import shim from '@joplin/lib/shim';
 
 interface WrapperProps {
 }
@@ -138,34 +137,6 @@ describe('Note', () => {
 
 		await waitFor(async () => {
 			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
-		});
-	});
-
-	it('should offer to permanently delete notes already in the trash', async () => {
-		const noteId = await openNewNote({
-			title: 'To be permanently deleted',
-			body: '...',
-			deleted_time: Date.now(),
-		});
-
-		render(<WrappedNoteScreen />);
-
-		await openNoteActionsMenu();
-
-		const permanentDeleteButton = await screen.findByText('Permanently delete note');
-		const mockMessageBoxResponse = (response: string) => {
-			shim.showMessageBox = jest.fn(async (_message, options) => {
-				return (options.buttons ?? []).indexOf(response);
-			});
-			return shim.showMessageBox;
-		};
-		const messageBoxMock = mockMessageBoxResponse('Delete');
-
-		fireEvent.press(permanentDeleteButton);
-
-		await waitFor(async () => {
-			expect(messageBoxMock).toHaveBeenCalled();
-			expect(await Note.load(noteId) ?? null).toBe(null);
 		});
 	});
 

@@ -1,6 +1,6 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
-import { _ } from '../locale';
-import Note from '../models/Note';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
+import { _ } from '@joplin/lib/locale';
+import Note from '@joplin/lib/models/Note';
 
 export const declaration: CommandDeclaration = {
 	name: 'deleteNote',

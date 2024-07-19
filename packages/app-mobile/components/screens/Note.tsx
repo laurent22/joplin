@@ -662,6 +662,21 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		await shared.saveOneProperty(this, name, value);
 	}
 
+	private async deleteNote_onPress() {
+		const note = this.state.note;
+		if (!note.id) return;
+
+		const folderId = note.parent_id;
+
+		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			folderId: folderId,
+		});
+	}
+
 	private async pickDocuments() {
 		const result = await pickDocument(true);
 		return result;
@@ -1291,33 +1306,30 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		const commandService = CommandService.instance();
-		const whenContext = commandService.currentWhenClauseContext();
-		const addButtonFromCommand = (commandName: string, title?: string) => {
-			if (commandName === '-') {
-				output.push({ isDivider: true });
-			} else {
-				output.push({
-					title: title ?? commandService.description(commandName),
-					onPress: async () => {
-						void commandService.execute(commandName);
-					},
-					disabled: !commandService.isEnabled(commandName, whenContext),
-				});
-			}
-		};
-
-		if (whenContext.inTrash) {
-			addButtonFromCommand('permanentlyDeleteNote');
-		} else {
-			addButtonFromCommand('deleteNote', _('Delete'));
-		}
+		output.push({
+			title: _('Delete'),
+			onPress: () => {
+				void this.deleteNote_onPress();
+			},
+			disabled: readOnly,
+		});
 
 		if (pluginCommands.length) {
 			output.push({ isDivider: true });
 
+			const commandService = CommandService.instance();
 			for (const commandName of pluginCommands) {
-				addButtonFromCommand(commandName);
+				if (commandName === '-') {
+					output.push({ isDivider: true });
+				} else {
+					output.push({
+						title: commandService.description(commandName),
+						onPress: async () => {
+							void commandService.execute(commandName);
+						},
+						disabled: !commandService.isEnabled(commandName),
+					});
+				}
 			}
 		}
 
