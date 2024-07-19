@@ -20,20 +20,21 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:600
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Kamera: um ein Bild aufzunehmen und an eine Notiz anzuhängen."
+msgstr ""
+"- Kamera: Erlaubt das Aufnehmen eines Bildes zum Anhängen an eine Notiz."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:603
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Standort: zum Anhängen von Geolokalisierungsinformationen an eine Notiz."
+"- Standort: Erlaubt das Anhängen von Standortinformationen an eine Notiz."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:597
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Speicher: um das Anhängen von Dateien an Notizen und die Synchronisation "
-"des Dateisystems zu ermöglichen."
+"- Speicher: Erlaubt das Anhängen von Dateien an Notizen und die "
+"Synchronisation des Dateisystems."
 
 #: packages/lib/services/KeymapService.ts:322
 #: packages/lib/services/KeymapService.ts:328
@@ -197,8 +198,8 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
-"%s ist nicht für die Synchronisation vieler kleiner Dateien optimiert, "
-"wodurch die erste Synchronisation langsam sein wird."
+"%s wurde nicht für die Synchronisation vieler kleiner Dateien optimiert, "
+"wodurch die erste Synchronisation lange dauern wird."
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
@@ -309,8 +310,7 @@ msgstr "Zugriff verweigert: Bitte überprüfe Benutzername und Passwort"
 #: packages/lib/WebDavApi.js:449
 msgid "Access denied: Please re-enter your password and/or username"
 msgstr ""
-"Zugriff verweigert: Bitte trage dein Passwort und/oder Benutzername erneut "
-"ein"
+"Zugriff verweigert: Bitte gib dein Passwort und/oder Benutzername erneut ein"
 
 #: packages/server/src/routes/admin/users.ts:144
 msgid "Account"
@@ -319,12 +319,12 @@ msgstr "Konto"
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
 msgid "Account information"
-msgstr "Konto-Informationen"
+msgstr "Kontoinformationen"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
 msgid "Account type"
-msgstr "Konto-Art"
+msgstr "Kontoart"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:106
 msgid "Action"
@@ -601,7 +601,7 @@ msgstr "Automatisch"
 
 #: packages/server/src/services/TaskService.ts:30
 msgid "Auto-add disabled accounts for deletion"
-msgstr "Automatisches Hinzufügen deaktivierter Accounts zur Löschliste"
+msgstr "Automatisches Hinzufügen deaktivierter Konten zur Löschliste"
 
 #: packages/lib/models/Setting.ts:998
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -2276,11 +2276,11 @@ msgstr "Fokus"
 
 #: packages/lib/models/Setting.ts:1153 packages/lib/models/Setting.ts:1170
 msgid "Focus body"
-msgstr "Inhalt fokussieren"
+msgstr "Cursor auf Inhalt"
 
 #: packages/lib/models/Setting.ts:1152 packages/lib/models/Setting.ts:1169
 msgid "Focus title"
-msgstr "Titel fokussieren"
+msgstr "Cursor auf Titel"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
@@ -2309,8 +2309,8 @@ msgstr ""
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Um die komplette Liste aller verfügbaren Tastenkürzel und "
-"Konfigurationseinstellungen anzuzeigen, tippe `help keymap` ein"
+"Um die Liste aller verfügbaren Tastenkürzel und Konfigurationseinstellungen "
+"anzuzeigen, tippe `help keymap` ein"
 
 #: packages/lib/models/Setting.ts:678
 msgid "Force path style"
@@ -2359,12 +2359,12 @@ msgstr[1] "Links erzeugen..."
 #: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
-"Geolokalisierung, Rechtschreibprüfung, Editor-Symbolleiste, "
-"Bildgrößenanpassung"
+"Standortdaten, Rechtschreibprüfung, Editor-Symbolleiste, Anpassung der "
+"Bildgröße"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
-msgstr "Hole es jetzt:"
+msgstr "Jetzt installieren:"
 
 #: packages/lib/models/Setting.ts:1481
 msgid "Get pre-releases when checking for updates"
@@ -2434,11 +2434,11 @@ msgstr "%s ausblenden"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Hide advanced"
-msgstr "Erweitertes verstecken"
+msgstr "Erweitertes ausblenden"
 
 #: packages/server/src/routes/admin/users.ts:206
 msgid "Hide disabled"
-msgstr "Deaktiviertes verstecken"
+msgstr "Deaktiviertes ausblenden"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:160
 msgid "Hide disabled keys"
@@ -3159,7 +3159,7 @@ msgstr "Master-Passwort:"
 
 #: packages/lib/models/Setting.ts:809
 msgid "Max concurrent connections"
-msgstr "Maximale Anzahl an gleichzeitigen Verbindungen"
+msgstr "Maximale Anzahl gleichzeitiger Verbindungen"
 
 #: packages/server/src/routes/admin/users.ts:148
 msgid "Max Item Size"
@@ -4075,7 +4075,7 @@ msgstr "Mehr erfahren"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:159
 msgid "Read time: %s min"
-msgstr "Lese-Zeit: %s Min"
+msgstr "Lesezeit: %s min"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
 msgid "Recipient has accepted the invitation"
@@ -4188,7 +4188,7 @@ msgstr "Betrügerische Erweiterung melden"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "Report system"
-msgstr "Meldesytem"
+msgstr "Meldesystem"
 
 #: packages/server/src/services/MustacheService.ts:137
 msgid "Reports"
@@ -4440,7 +4440,7 @@ msgstr "Eltern-Notizbuch auswählen"
 
 #: packages/app-desktop/gui/MenuBar.tsx:351
 msgid "Send bug report"
-msgstr "Fehlerprotokoll senden"
+msgstr "Fehlerbericht senden"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4679,7 +4679,7 @@ msgstr "Sortiere Notizen nach"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:138
 msgid "Sort selected lines"
-msgstr "Ausgewählte Zeilen bearbeiten"
+msgstr "Ausgewählte Zeilen sortieren"
 
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
@@ -5441,7 +5441,7 @@ msgstr[1] "Diese Notizen konnten nicht verschoben werden: %s"
 
 #: packages/lib/models/Note.ts:128
 msgid "This note does not have geolocation information."
-msgstr "Diese Notiz hat keine Standort-Informationen."
+msgstr "Diese Notiz hat keine Standortdaten."
 
 #: packages/app-mobile/components/screens/Note.tsx:210
 msgid "This note has been modified:"
@@ -5641,7 +5641,7 @@ msgstr "Entwicklerwerkzeuge umschalten"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.ts:6
 msgid "Toggle editor layout"
-msgstr "Editor-Layout umschalten"
+msgstr "Editorlayout umschalten"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6032,8 +6032,7 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
-"Wir haben ein System zur Meldung und Entfernung problematischer "
-"Erweiterungen."
+"Wir haben ein System zum Melden und Entfernen problematischer Erweiterungen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
