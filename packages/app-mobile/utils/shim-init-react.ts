@@ -15,12 +15,12 @@ import { getLocales } from 'react-native-localize';
 import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
 import type SettingType from '@joplin/lib/models/Setting';
 import injectedJs from './injectedJs';
+import cryptoLib from '../services/e2ee/crypto';
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
-
-	shim.Krypto = require('../services/e2ee/Krypto.react-native').default;
+	shim.cryptoLib = cryptoLib;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) {

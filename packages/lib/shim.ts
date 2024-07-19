@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
-import { KryptoInterface } from './services/e2ee/types';
+import { Crypto } from './services/e2ee/types';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -287,7 +287,7 @@ const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sjclModule: null as any,
 
-	Krypto: null as KryptoInterface,
+	cryptoLib: null as Crypto,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	randomBytes: async (_count: number): Promise<any> => {
