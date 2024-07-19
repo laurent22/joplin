@@ -1,28 +1,22 @@
-const shim = require('@joplin/lib/shim').default;
+import shim from '@joplin/lib/shim';
 const { GeolocationReact } = require('./geolocation-react.js');
-const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
-const RNFetchBlob = require('rn-fetch-blob').default;
-const { generateSecureRandom } = require('react-native-securerandom');
-const FsDriverRN = require('./fs-driver/fs-driver-rn').default;
-const { Buffer } = require('buffer');
-const { Linking, Platform } = require('react-native');
-const showMessageBox = require('./showMessageBox.js').default;
-const mimeUtils = require('@joplin/lib/mime-utils.js');
-const { basename, fileExtension } = require('@joplin/lib/path-utils');
-const uuid = require('@joplin/lib/uuid').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const { getLocales } = require('react-native-localize');
-const { setLocale, defaultLocale, closestSupportedLocale } = require('@joplin/lib/locale');
+import PoorManIntervals from '@joplin/lib/PoorManIntervals';
+import RNFetchBlob from 'rn-fetch-blob';
+import { generateSecureRandom } from 'react-native-securerandom';
+import FsDriverRN from './fs-driver/fs-driver-rn';
+import { Buffer } from 'buffer';
+import { Linking, Platform } from 'react-native';
+import showMessageBox from './showMessageBox.js';
+import * as mimeUtils from '@joplin/lib/mime-utils';
+import { basename, fileExtension } from '@joplin/lib/path-utils';
+import uuid from '@joplin/lib/uuid';
+import Resource from '@joplin/lib/models/Resource';
+import { getLocales } from 'react-native-localize';
+import { setLocale, defaultLocale, closestSupportedLocale } from '@joplin/lib/locale';
+import type SettingType from '@joplin/lib/models/Setting';
+import injectedJs from './injectedJs';
 
-const injectedJs = {
-	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../lib/rnInjectedJs/codeMirrorBundle.bundle'),
-	svgEditorBundle: require('../lib/rnInjectedJs/svgEditorBundle.bundle'),
-	pluginBackgroundPage: require('../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
-	noteBodyViewerBundle: require('../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
-};
-
-function shimInit() {
+export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
@@ -35,7 +29,7 @@ function shimInit() {
 		return shim.fsDriver_;
 	};
 
-	shim.randomBytes = async count => {
+	shim.randomBytes = async (count: number) => {
 		const randomBytes = await generateSecureRandom(count);
 		const temp = [];
 		for (const n in randomBytes) {
@@ -93,7 +87,7 @@ function shimInit() {
 
 	/* eslint-enable */
 
-	shim.detectAndSetLocale = (Setting) => {
+	shim.detectAndSetLocale = (Setting: typeof SettingType) => {
 		// [
 		// 	{
 		// 		"countryCode": "US",
@@ -181,7 +175,7 @@ function shimInit() {
 		try {
 			const response = await shim.fetchWithRetry(doFetchBlob, options);
 
-			// Returns an object that's roughtly compatible with a standard Response object
+			// Returns an object that's roughly compatible with a standard Response object
 			const output = {
 				ok: response.respInfo.status < 400,
 				path: response.data,
@@ -214,7 +208,7 @@ function shimInit() {
 				trusty: options.ignoreTlsErrors,
 			}).fetch(method, url, headers, RNFetchBlob.wrap(options.path));
 
-			// Returns an object that's roughtly compatible with a standard Response object
+			// Returns an object that's roughly compatible with a standard Response object
 			return {
 				ok: response.respInfo.status < 400,
 				data: response.data,
@@ -241,7 +235,7 @@ function shimInit() {
 	shim.showMessageBox = showMessageBox;
 
 	shim.openUrl = url => {
-		Linking.openURL(url);
+		return Linking.openURL(url);
 	};
 
 	shim.httpAgent = () => {
@@ -249,7 +243,7 @@ function shimInit() {
 	};
 
 	shim.waitForFrame = () => {
-		return new Promise((resolve) => {
+		return new Promise<void>((resolve) => {
 			requestAnimationFrame(() => {
 				resolve();
 			});
@@ -301,7 +295,7 @@ function shimInit() {
 
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
-		return injectedJs[name];
+		return injectedJs[name as keyof typeof injectedJs];
 	};
 
 	shim.setTimeout = (fn, interval) => {
@@ -322,4 +316,3 @@ function shimInit() {
 
 }
 
-module.exports = { shimInit };

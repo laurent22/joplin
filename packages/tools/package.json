@@ -28,7 +28,7 @@
     "execa": "4.1.0",
     "fs-extra": "11.2.0",
     "gettext-parser": "7.0.1",
-    "glob": "10.3.10",
+    "glob": "10.3.12",
     "markdown-it": "13.0.2",
     "md5-file": "5.0.0",
     "moment": "2.30.1",
@@ -36,7 +36,7 @@
     "node-fetch": "2.6.7",
     "relative": "3.0.2",
     "request": "2.88.2",
-    "sharp": "0.33.2",
+    "sharp": "0.33.3",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
     "yargs": "17.7.2"
@@ -50,7 +50,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.7",
     "@types/mustache": "4.2.5",
-    "@types/node": "18.19.30",
+    "@types/node": "18.19.31",
     "@types/node-fetch": "2.6.11",
     "@types/yargs": "17.0.32",
     "gettext-extractor": "3.8.0",
@@ -61,7 +61,7 @@
     "rss": "1.2.2",
     "sass": "1.71.0",
     "sqlite3": "5.1.6",
-    "style-to-js": "1.1.11",
+    "style-to-js": "1.1.12",
     "typescript": "5.2.2"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"

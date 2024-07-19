@@ -6,6 +6,7 @@ import Renderer from './Renderer';
 declare global {
 	interface Window {
 		rendererWebViewOptions: RendererWebViewOptions;
+		webviewLib: { postMessage: (message: string)=> void };
 	}
 }
 
@@ -32,6 +33,8 @@ webviewLib.initialize({
 		messenger.remoteApi.onPostMessage(message);
 	},
 });
+// Share the webview library globally so that the renderer can access it.
+window.webviewLib = webviewLib;
 
 const renderer = new Renderer({
 	...window.rendererWebViewOptions,
@@ -58,5 +61,5 @@ const onMainContentScroll = () => {
 // scroll. However, window.addEventListener('scroll', callback) does.
 // - iOS needs a listener to be added to scrollingElement -- events aren't received when
 //   the listener is added to window with window.addEventListener('scroll', ...).
-document.scrollingElement.addEventListener('scroll', onMainContentScroll);
+document.scrollingElement?.addEventListener('scroll', onMainContentScroll);
 window.addEventListener('scroll', onMainContentScroll);

@@ -499,12 +499,15 @@ packages/app-mobile/components/CameraView.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
-packages/app-mobile/components/ExtendedWebView.js
+packages/app-mobile/components/ExtendedWebView/index.jest.js
+packages/app-mobile/components/ExtendedWebView/index.js
+packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
+packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.test.js
 packages/app-mobile/components/NoteBodyViewer/NoteBodyViewer.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.test.js
 packages/app-mobile/components/NoteBodyViewer/bundledJs/Renderer.js
@@ -693,7 +696,10 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
+packages/app-mobile/utils/image/getImageDimensions.js
+packages/app-mobile/utils/image/resizeImage.js
 packages/app-mobile/utils/initializeCommandService.js
+packages/app-mobile/utils/injectedJs.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/pickDocument.js
@@ -701,6 +707,7 @@ packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareHandler.js
+packages/app-mobile/utils/shim-init-react.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/types.js
@@ -774,6 +781,7 @@ packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.js
 packages/editor/CodeMirror/utils/formatting/toggleSelectedLinesStartWith.js
 packages/editor/CodeMirror/utils/formatting/types.js
 packages/editor/CodeMirror/utils/growSelectionToNode.js
+packages/editor/CodeMirror/utils/handlePasteEvent.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js

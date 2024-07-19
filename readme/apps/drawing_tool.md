@@ -43,7 +43,7 @@ Here, the "insert drawing" button is part of the main editor toolbar:
 Double-click on an existing drawing to edit it:
 
 <figure>
-  <video src="/images/draw/edit-existing-drawing-on-desktop.mp4" alt="" controls="controls" width="90%"/>
+  <video src="/images/draw/edit-existing-drawing-on-desktop.mp4" alt="" controls="controls" width="90%"></video>
   <figcaption>In the Rich Text editor, double-clicking allows editing an existing drawing. This also works in the markdown viewer.</figcaption>
 </figure>
 

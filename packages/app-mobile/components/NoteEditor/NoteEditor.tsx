@@ -21,16 +21,19 @@ import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
+import { OnMessageEvent } from '../ExtendedWebView/types';
+import { join, dirname } from 'path';
+import * as mimeUtils from '@joplin/lib/mime-utils';
+import uuid from '@joplin/lib/uuid';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
-type OnAttachCallback = ()=> void;
+type OnAttachCallback = (filePath?: string)=> Promise<void>;
 
 const logger = Logger.create('NoteEditor');
 
@@ -373,6 +376,9 @@ function NoteEditor(props: Props, ref: any) {
 
 	const onEditorEvent = useRef((_event: EditorEvent) => {});
 
+	const onAttachRef = useRef(props.onAttach);
+	onAttachRef.current = props.onAttach;
+
 	const editorMessenger = useMemo(() => {
 		const localApi: WebViewToEditorApi = {
 			async onEditorEvent(event) {
@@ -380,6 +386,16 @@ function NoteEditor(props: Props, ref: any) {
 			},
 			async logMessage(message) {
 				logger.debug('CodeMirror:', message);
+			},
+			async onPasteFile(type, data) {
+				const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${mimeUtils.toFileExtension(type)}`);
+				await shim.fsDriver().mkdir(dirname(tempFilePath));
+				try {
+					await shim.fsDriver().writeFile(tempFilePath, data, 'base64');
+					await onAttachRef.current(tempFilePath);
+				} finally {
+					await shim.fsDriver().remove(tempFilePath);
+				}
 			},
 		};
 		const messenger = new RNToWebViewMessenger<WebViewToEditorApi, EditorBodyControl>(
@@ -450,7 +466,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
+	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (data.indexOf('error:') === 0) {

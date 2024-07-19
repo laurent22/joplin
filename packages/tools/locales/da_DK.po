@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -3007,9 +3009,8 @@ msgid "Log"
 msgstr "Log"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
-#, fuzzy
 msgid "Login to Joplin Cloud."
-msgstr "Forbind til Joplin Cloud"
+msgstr "Log ind på Joplin Cloud."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -6087,6 +6088,7 @@ msgstr "Dine data bliver genkrypteret og synkroniseret igen."
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
 msgstr ""
+"Dine Joplin Cloud-legitimationsoplysninger er ugyldige, log venligst ind."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

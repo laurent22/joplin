@@ -20,6 +20,13 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
+interface FetchOptions {
+	method?: string;
+	headers?: Record<string, string>;
+	body?: string;
+	agent?: unknown;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -240,9 +247,12 @@ const shim = {
 		}
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	fetch: (_url: string, _options: any = null): any => {
+	fetch: (_url: string, _options: FetchOptions|null = null): Promise<Response> => {
 		throw new Error('Not implemented: fetch');
+	},
+
+	debugFetch: (_url: string, _options: FetchOptions|null): Promise<unknown> => {
+		throw new Error('Not implemented: debugFetch');
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
