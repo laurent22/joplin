@@ -1,5 +1,4 @@
 import * as React from 'react';
-import type * as ReactNative from 'react-native';
 
 import { describe, it, beforeEach } from '@jest/globals';
 import { fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
@@ -23,6 +22,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
+import { LayoutChangeEvent } from 'react-native';
 
 interface WrapperProps {
 }
@@ -74,7 +74,7 @@ const openNoteActionsMenu = async () => {
 	while (cursor.parent) {
 		if (cursor.props.onLayout) {
 			const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
-			cursor.props.onLayout(mockedEvent as ReactNative.LayoutChangeEvent);
+			cursor.props.onLayout(mockedEvent as LayoutChangeEvent);
 		}
 		cursor = cursor.parent;
 	}
