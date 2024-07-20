@@ -1,20 +1,20 @@
 import { Crypto, CryptoBuffer } from '@joplin/lib/services/e2ee/types';
-import crypto from 'react-native-quick-crypto';
+import QuickCrypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 
-const cryptoLib: Crypto = {
+const crypto: Crypto = {
 
 	getCiphers: (): string[] => {
-		return crypto.getCiphers();
+		return QuickCrypto.getCiphers();
 	},
 
 	getHashes: (): string[] => {
-		return crypto.getHashes();
+		return QuickCrypto.getHashes();
 	},
 
 	randomBytes: async (size: number): Promise<CryptoBuffer> => {
 		return new Promise((resolve, reject) => {
-			crypto.randomBytes(size, (error, result) => {
+			QuickCrypto.randomBytes(size, (error, result) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -35,7 +35,7 @@ const cryptoLib: Crypto = {
 		};
 		const digestAlgorithm: string = digestMap[digest.toLowerCase()] || digest;
 		return new Promise((resolve, reject) => {
-			crypto.pbkdf2(password, salt, iterations, keylen, digestAlgorithm as HashAlgorithm, (error, result) => {
+			QuickCrypto.pbkdf2(password, salt, iterations, keylen, digestAlgorithm as HashAlgorithm, (error, result) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -46,4 +46,4 @@ const cryptoLib: Crypto = {
 	},
 };
 
-export default cryptoLib;
+export default crypto;

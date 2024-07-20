@@ -287,7 +287,7 @@ const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sjclModule: null as any,
 
-	cryptoLib: null as Crypto,
+	crypto: null as Crypto,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	randomBytes: async (_count: number): Promise<any> => {

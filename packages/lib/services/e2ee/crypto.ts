@@ -1,19 +1,23 @@
 import { Crypto } from './types';
 import { promisify } from 'util';
-import crypto = require('crypto');
+import {
+	getCiphers as nodeGetCiphers, getHashes as nodeGetHashes,
+	randomBytes as nodeRandomBytes,
+	pbkdf2 as nodePbkdf2,
+} from 'crypto';
 
-const cryptoLib: Crypto = {
+const crypto: Crypto = {
 
 	getCiphers: (): string[] => {
-		return crypto.getCiphers();
+		return nodeGetCiphers();
 	},
 
 	getHashes: (): string[] => {
-		return crypto.getHashes();
+		return nodeGetHashes();
 	},
 
 	randomBytes: async (size: number): Promise<Buffer> => {
-		const randomBytesAsync = promisify(crypto.randomBytes);
+		const randomBytesAsync = promisify(nodeRandomBytes);
 		return randomBytesAsync(size);
 	},
 
@@ -28,9 +32,9 @@ const cryptoLib: Crypto = {
 		};
 		const digestAlgorithm: string = digestMap[digest.toLowerCase()] || digest;
 
-		const pbkdf2Async = promisify(crypto.pbkdf2);
+		const pbkdf2Async = promisify(nodePbkdf2);
 		return pbkdf2Async(password, salt, iterations, keylen, digestAlgorithm);
 	},
 };
 
-export default cryptoLib;
+export default crypto;
