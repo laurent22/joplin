@@ -315,7 +315,7 @@ export default function(theme: any, options: Options = null) {
 		}
 		img {
 			max-width: 100%;
-			height: auto;
+			height: revert-layer;
 		}
 		
 		.inline-code,
