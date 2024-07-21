@@ -1,5 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
+import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
@@ -40,6 +41,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
+	private updaterService_: AutoUpdaterService = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
@@ -463,6 +465,9 @@ export default class ElectronAppWrapper {
 		if (alreadyRunning) return;
 
 		this.createWindow();
+
+		this.updaterService_ = new AutoUpdaterService(this.win_);
+		this.updaterService_.startPeriodicUpdateCheck();
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
