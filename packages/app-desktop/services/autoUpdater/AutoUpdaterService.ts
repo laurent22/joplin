@@ -79,7 +79,7 @@ export default class AutoUpdaterService {
 			autoUpdater.forceDevUpdateConfig = true;
 		}
 
-		autoUpdater.autoDownload = true;
+		autoUpdater.autoDownload = false;
 
 		autoUpdater.on(AutoUpdaterEvents.CheckingForUpdate, this.onCheckingForUpdate);
 		autoUpdater.on(AutoUpdaterEvents.UpdateNotAvailable, this.onUpdateNotAvailable);
@@ -118,11 +118,5 @@ export default class AutoUpdaterService {
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
 		log.info(`Update is available: ${info.version}.`);
-		// this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
 	};
-
-	public updateApp = (): void => {
-		autoUpdater.quitAndInstall(false, true);
-	};
-
 }
