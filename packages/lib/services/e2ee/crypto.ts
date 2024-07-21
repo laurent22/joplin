@@ -10,21 +10,21 @@ type NodeDigestNameMap = Record<HashAlgorithm, string>;
 
 const crypto: Crypto = {
 
-	getCiphers: (): string[] => {
+	getCiphers: () => {
 		return nodeGetCiphers();
 	},
 
-	getHashes: (): string[] => {
+	getHashes: () => {
 		return nodeGetHashes();
 	},
 
-	randomBytes: async (size: number): Promise<Buffer> => {
+	randomBytes: async (size: number) => {
 		const randomBytesAsync = promisify(nodeRandomBytes);
 		return randomBytesAsync(size);
 	},
 
-	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: HashAlgorithm): Promise<Buffer> => {
-		const digestMap: NodeDigestNameMap = {
+	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: HashAlgorithm) => {
+		const nodeDigestNameMap: NodeDigestNameMap = {
 			'SHA-1': 'sha1',
 			'SHA-224': 'sha224',
 			'SHA-256': 'sha256',
@@ -32,10 +32,10 @@ const crypto: Crypto = {
 			'SHA-512': 'sha512',
 			'RIPEMD-160': 'ripemd160',
 		};
-		const digestAlgorithm = digestMap[digest];
+		const nodeDigestName = nodeDigestNameMap[digest];
 
 		const pbkdf2Async = promisify(nodePbkdf2);
-		return pbkdf2Async(password, salt, iterations, keylen, digestAlgorithm);
+		return pbkdf2Async(password, salt, iterations, keylen, nodeDigestName);
 	},
 };
 
