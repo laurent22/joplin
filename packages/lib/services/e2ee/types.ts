@@ -30,9 +30,18 @@ export interface Crypto {
 	getCiphers(): string[];
 	getHashes(): string[];
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: string): Promise<CryptoBuffer>;
+	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: HashAlgorithm): Promise<CryptoBuffer>;
 }
 
 export interface CryptoBuffer extends Uint8Array {
 	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
 }
+
+// From react-native-quick-crypto
+export type HashAlgorithm =
+  | 'SHA-1'
+  | 'SHA-224'
+  | 'SHA-256'
+  | 'SHA-384'
+  | 'SHA-512'
+  | 'RIPEMD-160';
