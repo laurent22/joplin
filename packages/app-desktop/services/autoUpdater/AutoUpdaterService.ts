@@ -35,11 +35,9 @@ export interface AutoUpdaterServiceInterface {
 }
 
 export default class AutoUpdaterService {
-	private window_: BrowserWindow;
 	private updatePollInterval_: ReturnType<typeof setInterval>|null = null;
 
-	public constructor(mainWindow: BrowserWindow) {
-		this.window_ = mainWindow;
+	public constructor() {
 		this.configureAutoUpdater();
 	}
 

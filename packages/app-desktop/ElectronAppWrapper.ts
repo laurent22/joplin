@@ -466,7 +466,7 @@ export default class ElectronAppWrapper {
 
 		this.createWindow();
 
-		this.updaterService_ = new AutoUpdaterService(this.win_);
+		this.updaterService_ = new AutoUpdaterService();
 		this.updaterService_.startPeriodicUpdateCheck();
 
 		this.electronApp_.on('before-quit', () => {
