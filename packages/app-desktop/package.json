@@ -27,7 +27,6 @@
     "url": "https://github.com/laurent22/joplin/issues"
   },
   "build": {
-    "updaterCacheDirName": "joplin-update-cache",
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
     "productName": "Joplin",
