@@ -58,8 +58,9 @@ describe('htmlUtils', () => {
 		expect(actual).toEqual(expected);
 	});
 
-	it.only.each([
+	it.each([
 		'svg_with_text_and_style.html',
+		'many_svgs.html',
 	])('should extract svgs', async (filename: string) => {
 		const titleGenerator = () => {
 			let id = 0;
