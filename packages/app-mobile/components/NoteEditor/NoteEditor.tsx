@@ -4,7 +4,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 
 import * as React from 'react';
 import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
@@ -29,7 +30,6 @@ import { OnMessageEvent } from '../ExtendedWebView/types';
 import { join, dirname } from 'path';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import uuid from '@joplin/lib/uuid';
-import { WebViewMessageEvent } from 'react-native-webview';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;

@@ -1,7 +1,7 @@
 
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-import { WebViewControl } from '../../components/ExtendedWebView';
+import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { RefObject } from 'react';
 import { OnMessageEvent } from '../../components/ExtendedWebView/types';
 import { Platform } from 'react-native';

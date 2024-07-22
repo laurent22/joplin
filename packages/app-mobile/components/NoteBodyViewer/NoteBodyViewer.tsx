@@ -4,7 +4,8 @@ import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from '
 import { useRef, useCallback, useState, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 import useRenderer from './hooks/useRenderer';
 import { OnWebViewMessageHandler } from './types';

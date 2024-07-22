@@ -503,6 +503,7 @@ packages/app-mobile/components/Dropdown.test.js
 packages/app-mobile/components/Dropdown.js
 packages/app-mobile/components/ExtendedWebView/index.jest.js
 packages/app-mobile/components/ExtendedWebView/index.js
+packages/app-mobile/components/ExtendedWebView/index.web.js
 packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
