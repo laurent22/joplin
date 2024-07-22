@@ -1,9 +1,9 @@
 
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-import { WebViewMessageEvent } from 'react-native-webview';
 import { WebViewControl } from '../../components/ExtendedWebView';
 import { RefObject } from 'react';
+import { OnMessageEvent } from '../../components/ExtendedWebView/types';
 import { Platform } from 'react-native';
 
 const canUseOptimizedPostMessage = Platform.OS === 'web';
@@ -39,7 +39,7 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 		}
 	}
 
-	public onWebViewMessage = (event: WebViewMessageEvent) => {
+	public onWebViewMessage = (event: OnMessageEvent) => {
 		if (!this.hasBeenClosed()) {
 			if (canUseOptimizedPostMessage) {
 				void this.onMessage(event.nativeEvent.data);

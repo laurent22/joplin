@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
+import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';

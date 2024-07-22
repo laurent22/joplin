@@ -25,6 +25,7 @@ import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComp
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
+import { OnMessageEvent } from '../ExtendedWebView/types';
 import { join, dirname } from 'path';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import uuid from '@joplin/lib/uuid';
@@ -504,7 +505,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
+	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (typeof data === 'string' && data.indexOf('error:') === 0) {
