@@ -10,7 +10,6 @@ const sharp = require('sharp');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
 const sqlite3 = require('sqlite3');
-const shim = require('@joplin/lib/shim').default;
 const React = require('react');
 require('../../jest.base-setup.js')();
 
@@ -54,11 +53,6 @@ jest.doMock('react-native-version-info', () => {
 // react-native-webview expects native iOS/Android code so needs to be mocked.
 jest.mock('./components/ExtendedWebView', () => {
 	return require('./components/ExtendedWebView/index.jest.js');
-});
-
-// Prefer the web version of the WebView wrapper -- it works while testing.
-jest.mock('./components/ExtendedWebView', () => {
-	return require('./components/ExtendedWebView.web');
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
