@@ -59,9 +59,9 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
-	const settings = state.settings || {};
-
 	const isSmartFilter = state.notesParentType === 'SmartFilter' || state.notesParentType === 'Search';
+
+	const settings = state.settings || {};
 
 	return {
 		// Application state
