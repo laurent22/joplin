@@ -1,4 +1,4 @@
-import { Crypto, HashAlgorithm } from './types';
+import { Crypto, Digest } from './types';
 import { promisify } from 'util';
 import {
 	getCiphers as nodeGetCiphers, getHashes as nodeGetHashes,
@@ -6,7 +6,7 @@ import {
 	pbkdf2 as nodePbkdf2,
 } from 'crypto';
 
-type NodeDigestNameMap = Record<HashAlgorithm, string>;
+type DigestNameMap = Record<Digest, string>;
 
 const crypto: Crypto = {
 
@@ -23,8 +23,8 @@ const crypto: Crypto = {
 		return randomBytesAsync(size);
 	},
 
-	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: HashAlgorithm) => {
-		const nodeDigestNameMap: NodeDigestNameMap = {
+	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: Digest) => {
+		const digestNameMap: DigestNameMap = {
 			'SHA-1': 'sha1',
 			'SHA-224': 'sha224',
 			'SHA-256': 'sha256',
@@ -32,7 +32,7 @@ const crypto: Crypto = {
 			'SHA-512': 'sha512',
 			'RIPEMD-160': 'ripemd160',
 		};
-		const nodeDigestName = nodeDigestNameMap[digest];
+		const nodeDigestName = digestNameMap[digest];
 
 		const pbkdf2Async = promisify(nodePbkdf2);
 		return pbkdf2Async(password, salt, iterations, keylen, nodeDigestName);

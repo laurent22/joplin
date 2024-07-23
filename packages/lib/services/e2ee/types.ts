@@ -30,15 +30,15 @@ export interface Crypto {
 	getCiphers(): string[];
 	getHashes(): string[];
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: HashAlgorithm): Promise<CryptoBuffer>;
+	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer>;
 }
 
 export interface CryptoBuffer extends Uint8Array {
 	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
 }
 
-// From react-native-quick-crypto
-export type HashAlgorithm =
+// From react-native-quick-crypto.HashAlgorithm
+export type Digest =
   | 'SHA-1'
   | 'SHA-224'
   | 'SHA-256'

@@ -1,4 +1,4 @@
-import { Crypto, CryptoBuffer, HashAlgorithm } from '@joplin/lib/services/e2ee/types';
+import { Crypto, CryptoBuffer, Digest } from '@joplin/lib/services/e2ee/types';
 import QuickCrypto from 'react-native-quick-crypto';
 
 const crypto: Crypto = {
@@ -23,7 +23,7 @@ const crypto: Crypto = {
 		});
 	},
 
-	pbkdf2Raw: async (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: HashAlgorithm) => {
+	pbkdf2Raw: async (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest) => {
 		return new Promise((resolve, reject) => {
 			QuickCrypto.pbkdf2(password, salt, iterations, keylen, digest, (error, result) => {
 				if (error) {
