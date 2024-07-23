@@ -138,15 +138,14 @@ if (typeof window === 'undefined') {
 			return response;
 		};
 
-		const cacheResponse = (cache: Cache, response: Response) => {
+		const cacheResponse = (cache: Cache, response: Response, requestUrl: URL) => {
 			try {
-				const url = new URL(event.request.url);
 				if (
 					request.method === 'GET' &&
 					response.ok &&
-					url.origin === self.location.origin &&
+					requestUrl.origin === self.location.origin &&
 					(
-						url.pathname.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
+						requestUrl.pathname.match(/\.(js|css|wasm|json|ttf|html|png)$/) ||
 						// Also cache HTML responses (e.g. for index.html, when requested with a directory
 						// URL).
 						(response.headers?.get('Content-Type') ?? '').startsWith('text/html')
@@ -166,12 +165,22 @@ if (typeof window === 'undefined') {
 				return redirectResponse;
 			}
 
+			const requestUrl = new URL(event.request.url);
 			const cache = await caches.open('v1');
 			try {
 				const response = withExtraResponseHeaders(await fetch(request));
 
 				// Joplin modification: Store the response in the cache to support offline mode
-				cacheResponse(cache, response);
+				cacheResponse(cache, response, requestUrl);
+
+				if (requestUrl.origin === self.location.origin && !response.ok) {
+					console.warn('Response to request for a main page path', requestUrl, 'was not OK. Responding from the cache.');
+
+					const cachedResponse = await cache.match(request);
+					if (cachedResponse) {
+						return cachedResponse;
+					}
+				}
 
 				return response;
 			} catch (error) {
