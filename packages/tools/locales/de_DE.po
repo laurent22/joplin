@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: cedecode <christoph.eder@phsalzburg.at>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -484,7 +486,7 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Jede an diese Adresse gerichtete E-Mail wird zu einer Notiz konvertiert und "
+"Jedes an diese Adresse gerichtete Email wird zu einer Notiz umgewandelt und "
 "deiner Kollektion hinzugefügt. Die Notiz wird im Inbox-Notizbuch gespeichert"
 
 #: packages/lib/models/Setting.ts:2804
@@ -1208,7 +1210,7 @@ msgid ""
 msgstr ""
 "Es konnte keine Verbindung zum Joplin-Server hergestellt werden. Bitte "
 "überprüfe die Synchronisationsoptionen in der Konfigurationsmaske. "
-"Vollständiger Fehler war:\n"
+"Vollständiger Fehler:\n"
 "\n"
 "%s"
 
@@ -1250,12 +1252,12 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 "Der Freigabestatus dieses Notizbuchs konnte nicht überprüft werden - Vorgang "
-"wird abgebrochen. Bitte versuche es erneut, wenn eine Internetverbindung "
+"abgebrochen. Bitte versuche es erneut, sobald eine Internetverbindung "
 "besteht."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:20
 msgid "Could not verify your identity: %s"
-msgstr "Konnte deine Identität nicht verifizieren: %s"
+msgstr "Konnte deine Identität nicht überprüfen: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:301
 msgid "Create"
@@ -1492,7 +1494,7 @@ msgid ""
 msgstr ""
 "Das Inbox-Notizbuch löschen?\n"
 "\n"
-"Wenn du das Inbox-Notizbuch löschst, gehen in ihm gespeicherte E-Mails "
+"Wenn du das Inbox-Notizbuch löschst, gehen kürzlich dort eingegangene Emails "
 "möglicherweise verloren."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
@@ -1854,25 +1856,25 @@ msgstr "Emacs"
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:140
 msgid "Email"
-msgstr "E-Mail"
+msgstr "Email"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:47
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:23
 msgid "Email to note"
-msgstr "E-Mail zu Notiz"
+msgstr "Email zu Notiz"
 
 #: packages/lib/utils/joplinCloud/index.ts:187
 msgid "Email to Note"
-msgstr "E-Mail zu Notiz"
+msgstr "Email zu Notiz"
 
 #: packages/lib/models/Setting.ts:2843
 msgid "Email To Note, login information"
-msgstr "E-Mail zu Notiz, Login-Informationen"
+msgstr "Email zu Notiz, Login-Informationen"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
 msgid "Emails"
-msgstr "E-Mails"
+msgstr "Emails"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:191
 msgid "emphasised text"
@@ -1983,7 +1985,7 @@ msgstr "Weiche Zeilenumbrüche aktivieren"
 
 #: packages/lib/models/Setting.ts:1110
 msgid "Enable spellcheck in the text editor"
-msgstr "Aktiviere die Rechtschreibprüfung im Text-Editor"
+msgstr "Aktiviere die Rechtschreibprüfung im Texteditor"
 
 #: packages/lib/models/Setting.ts:1276
 msgid "Enable table of contents extension"
@@ -2017,8 +2019,8 @@ msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"Durch die Aktivierung der Verschlüsselung werden *alle* Notizen und Anhänge "
-"neu synchronisiert und verschlüsselt an das Synchronisationsziel gesendet."
+"Durch Aktivierung der Verschlüsselung werden *alle* Notizen und Anhänge neu "
+"synchronisiert und verschlüsselt an das Synchronisationsziel gesendet."
 
 #: packages/lib/models/BaseItem.ts:913
 msgid "Encrypted"
@@ -2849,7 +2851,7 @@ msgstr "Joplin Server"
 
 #: packages/lib/models/Setting.ts:709
 msgid "Joplin Server email"
-msgstr "Joplin Server E-Mail"
+msgstr "Joplin Server-Email"
 
 #: packages/lib/models/Setting.ts:721
 msgid "Joplin Server password"
@@ -2864,7 +2866,7 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Joplin Web-Clipper ermöglicht das Speichern von Webseiten und Screenshots "
+"Joplin Web Clipper ermöglicht das Speichern von Webseiten und Screenshots "
 "aus deinem Browser in Joplin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:612
@@ -3052,9 +3054,8 @@ msgid "Log"
 msgstr "Protokoll"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
-#, fuzzy
 msgid "Login to Joplin Cloud."
-msgstr "Mit Joplin Cloud verbinden"
+msgstr "Mit Joplin Cloud verbinden."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -3202,7 +3203,7 @@ msgstr "Mobile Daten - Auto-Synchronisierung deaktiviert"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
-msgstr "Weitere Information"
+msgstr "Weitere Infos"
 
 #: packages/lib/models/Setting.ts:2817
 msgid "More information"
@@ -3211,7 +3212,8 @@ msgstr "Weitere Informationen"
 #: packages/app-cli/app/app.ts:67
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"Mehr als ein Element stimmt mit „%s“ überein. Bitte schränke deine Suche ein."
+"Mehr als ein Element stimmt mit „%s“ überein. Bitte schränke deine "
+"Suchabfrage ein."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid ""
@@ -3266,7 +3268,7 @@ msgstr "N"
 
 #: packages/lib/models/Setting.ts:1189
 msgid "Never resize"
-msgstr "Größe niemals anpassen"
+msgstr "Größe nie anpassen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
@@ -3341,7 +3343,7 @@ msgstr "Nextcloud-WebDAV-URL"
 
 #: packages/lib/models/Setting.ts:418
 msgid "no"
-msgstr "Nein"
+msgstr "nein"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:32
 #: packages/app-mobile/components/screens/Note.tsx:747
@@ -3402,8 +3404,8 @@ msgstr "Kein Tab ausgewählt"
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Kein Texteditor festgelegt. Bitte stelle einen mit `config editor <Pfad-Zum-"
-"Texteditor>` ein"
+"Kein Texteditor festgelegt. Bitte wähle einen mit `config editor <Pfad-Zum-"
+"Texteditor>`"
 
 #: packages/lib/models/Setting.ts:435
 msgid "Nord"
@@ -3440,11 +3442,11 @@ msgstr "Notiz"
 
 #: packages/lib/models/Setting.ts:1805
 msgid "Note area growth factor"
-msgstr "Notiz-Flächenwachstumsfaktor"
+msgstr "Notizbereich-Wachstumsfaktor"
 
 #: packages/app-desktop/gui/Root.tsx:233
 msgid "Note attachments"
-msgstr "Anhänge"
+msgstr "Notiz-Anhänge"
 
 #: packages/app-desktop/gui/MenuBar.tsx:561
 msgid "Note attachments..."
@@ -3481,7 +3483,7 @@ msgstr "Notizliste"
 
 #: packages/lib/models/Setting.ts:1790
 msgid "Note list growth factor"
-msgstr "Notiz-Listenwachstumsfaktor"
+msgstr "Notizlisten-Wachstumsfaktor"
 
 #: packages/app-desktop/gui/MenuBar.tsx:781
 msgid "Note list style"
@@ -3498,18 +3500,18 @@ msgstr "Notiz-Titel"
 
 #: packages/lib/models/Setting.ts:1297
 msgid "Note: Does not work in all desktop environments."
-msgstr "Hinweis: Funktioniert nicht in allen Desktopumgebungen."
+msgstr "Hinweis: Funktioniert nicht in allen Desktop-Umgebungen."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:192
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
-"Achtung: Wenn eine Notiz geteilt wird, wird sie auf dem Server nicht mehr "
+"Hinweis: Wenn eine Notiz geteilt wird, wird sie auf dem Server nicht länger "
 "verschlüsselt sein."
 
 #: packages/app-desktop/gui/MenuBar.tsx:860
 msgid "Note&book"
-msgstr "Notizbücher"
+msgstr "Notiz&bücher"
 
 #: packages/lib/models/Setting.ts:2806
 msgid "Notebook"
@@ -3898,8 +3900,8 @@ msgid ""
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
 "Mit Erweiterungen lassen sich in Joplin zusätzliche Funktionen hinzufügen, "
-"die standardmäßig nicht verfügbar sind. Sie können den Editor, die Ansicht "
-"und vieles mehr erweitern."
+"die standardmäßig nicht verfügbar sind. Erweiterungen können den Editor, die "
+"Ansicht und vieles mehr ergänzen."
 
 #: packages/lib/models/Setting.ts:1543
 msgid "Portrait"
@@ -4570,11 +4572,11 @@ msgstr "Mehr Aktionen anzeigen"
 
 #: packages/lib/models/Setting.ts:952
 msgid "Show note counts"
-msgstr "Notizanzahl anzeigen"
+msgstr "Anzahl der Notizen anzeigen"
 
 #: packages/lib/models/Setting.ts:1020
 msgid "Show sort order buttons"
-msgstr "Knöpfe zur Einstellung der Sortierreihenfolge anzeigen"
+msgstr "Buttons für die Sortierreihenfolge anzeigen"
 
 #: packages/lib/models/Setting.ts:1295
 msgid "Show tray icon"
@@ -4677,7 +4679,7 @@ msgstr "Sortiere Notizen nach"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:138
 msgid "Sort selected lines"
-msgstr "Ausgewählte Zeilen bearbeiten"
+msgstr "Ausgewählte Zeilen sortieren"
 
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
@@ -4747,8 +4749,8 @@ msgstr "Synchronisation starten..."
 #: packages/app-cli/app/command-edit.ts:76
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Beginne die Notiz zu bearbeiten. Schließe das Textverarbeitungsprogramm, um "
-"zurück zum Terminal zu gelangen."
+"Bearbeite die Notiz jetzt. Schließe den Editor, um zurück zum Terminal zu "
+"gelangen."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:164
 msgid "Statistics"
@@ -5151,8 +5153,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
-"Das Joplin-Team hat dieses Plugin auf unsere Standards für Sicherheit und "
-"Leistung überprüft."
+"Das Joplin-Team hat dieses Plugin überprüft und es erfüllt unsere Standards "
+"für Sicherheit und Leistung."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:321
 msgid ""
@@ -5655,7 +5657,7 @@ msgstr "Menüleiste umschalten"
 
 #: packages/lib/models/Setting.ts:2846
 msgid "Toggle note history, keep notes for"
-msgstr "Notizverlauf umschalten, Notizen aufbewahren für"
+msgstr "Notizenverlauf umschalten, Notizen aufbewahren für"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
@@ -5927,8 +5929,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Verwende dies, um den Suchindex neu aufzubauen, wenn es ein Problem mit der "
-"Suche gibt. Dies kann je nach Anzahl der Notizen eine lange Zeit dauern."
+"Verwende dies zum Neuaufbau des Suchindex, falls es ein Problem mit der "
+"Suche gibt. Dies kann je nach Anzahl der Notizen etwas länger dauern."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
@@ -5973,7 +5975,7 @@ msgstr "Gültig"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr "Verifiziere deine Identität"
+msgstr "Überprüfe deine Identität"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid "View"
@@ -6024,7 +6026,7 @@ msgstr "Warnung"
 #: packages/app-desktop/gui/ResourceScreen.tsx:302
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Warnung: Aus Leistungsgründen werden nicht alle Anhänge angezeigt "
+"Warnung: Aus Kapazitätsgründen werden nicht alle Anhänge angezeigt "
 "(Obergrenze: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
@@ -6038,7 +6040,7 @@ msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
-"Wir kennzeichen Erweiterungen, die von vertrauenswürdigen Mitgliedern der "
+"Wir kennzeichnen Erweiterungen, die von vertrauenswürdigen Mitgliedern der "
 "Joplin-Community entwickelt wurden, als „empfohlen“."
 
 #: packages/lib/models/Setting.ts:2812
@@ -6086,8 +6088,8 @@ msgid ""
 msgstr ""
 "Willkommen bei Joplin!\n"
 "\n"
-"Tippe `:help shortcuts` für eine Liste der Shortcuts oder `:help` für "
-"Informationen zur Benutzung ein.\n"
+"Gib `:help shortcuts` für eine Liste der Shortcuts oder `:help` für Infos "
+"zur Benutzung ein.\n"
 "\n"
 "Um zum Beispiel ein Notizbuch zu erstellen, drücke `mb`; um eine Notiz zu "
 "erstellen drücke `mn`."
@@ -6102,11 +6104,11 @@ msgstr "Was sind Erweiterungen?"
 
 #: packages/lib/models/Setting.ts:1166
 msgid "When creating a new note:"
-msgstr "Wenn eine neue Notiz erstellt wird:"
+msgstr "Beim Erstellen einer neuen Notiz:"
 
 #: packages/lib/models/Setting.ts:1149
 msgid "When creating a new to-do:"
-msgstr "Wenn eine neue Aufgabe erstellt wird:"
+msgstr "Beim Erstellen einer neuen Aufgabe:"
 
 #: packages/lib/models/Setting.ts:882
 msgid ""
@@ -6114,8 +6116,7 @@ msgid ""
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
 "Wenn aktiviert, wird die Anwendung deine Anhänge einlesen und Text aus ihnen "
-"extrahieren. Dies wird dir ermöglichen, nach Text innerhalb dieser Anhänge "
-"zu suchen."
+"extrahieren. Damit kannst du innerhalb dieser Anhänge nach Text suchen."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:184
 msgid "Window unresponsive."
@@ -6197,7 +6198,7 @@ msgstr "Dein Konto hat keinen Zugriff auf diese Funktion"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
-msgstr "Deine Auswahl: "
+msgstr "Deine Wahl: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
@@ -6206,7 +6207,7 @@ msgstr "Deine Daten werden neu verschlüsselt und erneut synchronisiert."
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "Deine Zugangsdaten für Joplin Cloud sind ungültig, bitte einloggen."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."
@@ -6808,7 +6809,7 @@ msgstr "Herauszoomen"
 #~ msgstr "\"%s\": \"%s\""
 
 #~ msgid "File system synchronisation target directory"
-#~ msgstr "Dateisystem-Synchronisation Zielpfad"
+#~ msgstr "Dateisystem-Zielpfad für Synchronisation"
 
 #~ msgid "Set or clear alarm:"
 #~ msgstr "Erstelle oder entferne Alarm:"

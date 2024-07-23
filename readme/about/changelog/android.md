@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.0.8](https://github.com/laurent22/joplin/releases/tag/android-v3.0.8) (Pre-release) - 2024-07-06T10:26:06Z
+
+- Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.7](https://github.com/laurent22/joplin/releases/tag/android-v3.0.7) (Pre-release) - 2024-07-01T15:47:15Z
 
 - Improved: Set min version for synchronising to 3.0.0 (e4b8976)

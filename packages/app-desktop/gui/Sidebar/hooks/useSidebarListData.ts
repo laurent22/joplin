@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagListItem } from '../types';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
-import { renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
+import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
 import Setting from '@joplin/lib/models/Setting';
@@ -35,10 +35,13 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		});
 	}, [props.tags]);
 
+	const folderTree = useMemo(() => {
+		return buildFolderTree(props.folders);
+	}, [props.folders]);
 
 	const folderItems = useMemo(() => {
 		const renderProps = {
-			folders: props.folders,
+			folderTree,
 			collapsedFolderIds: props.collapsedFolderIds,
 		};
 		return renderFolders<ListItem>(renderProps, (folder, hasChildren, depth): FolderListItem => {
@@ -50,7 +53,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				key: folder.id,
 			};
 		});
-	}, [props.folders, props.collapsedFolderIds]);
+	}, [folderTree, props.collapsedFolderIds]);
 
 	return useMemo(() => {
 		const foldersHeader: HeaderListItem = {

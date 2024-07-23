@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -1713,7 +1715,7 @@ msgstr "Dropbox Girişi"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr "Şu tarihe kadar:"
+msgstr "Şu tarihe kadar: "
 
 #: packages/lib/models/Note.ts:63
 msgid "due date"
@@ -2858,7 +2860,7 @@ msgstr "Not tarihçesini şu kadar süre tut"
 
 #: packages/lib/models/Setting.ts:1936
 msgid "Keep notes in the trash for"
-msgstr "Çöp kutusunda notları şu kadar süre tut:"
+msgstr "Çöp kutusunda notları şu kadar süre tut: "
 
 #: packages/lib/models/Setting.ts:1567
 msgid "Keyboard Mode"
@@ -3017,9 +3019,8 @@ msgid "Log"
 msgstr "Log"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
-#, fuzzy
 msgid "Login to Joplin Cloud."
-msgstr "Joplin Cloud'a bağlan"
+msgstr "Joplin Cloud'a giriş yap."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -6110,7 +6111,7 @@ msgstr "Veriniz yeniden şifrelenecek ve senkron edilecek."
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "Joplin Cloud giriş bilgileriniz geçersiz, lütfen giriş yapın."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

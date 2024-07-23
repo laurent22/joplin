@@ -2,6 +2,9 @@
 const webviewApiPromises_ = {};
 let viewMessageHandler_ = () => {};
 
+// This silences a warning when running plugins generated with Webpack.
+window.exports ??= {};
+
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const webviewApi = {
 	postMessage: function(message) {

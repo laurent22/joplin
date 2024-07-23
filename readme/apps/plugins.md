@@ -1,6 +1,6 @@
 # Plugins
 
-The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin [plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) and can be installed & configured within the application via the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md). From this menu you can search for plugins uploaded to the plugin repository as well as manual installation of plugins using a 'Joplin Plugin Archive' (*.jpl) file.
+The **desktop** and **mobile** apps have the ability to extend beyond their standard functionality by the way of plugins. These plugins adhere to the Joplin [plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) and can be installed & configured within the application via the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md). From this menu you can search for plugins uploaded to the plugin repository as well as manual installation of plugins using a 'Joplin Plugin Archive' (*.jpl) file.
 
 Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
 
@@ -12,11 +12,19 @@ See the [Joplin Discourse 'plugins' category](https://discourse.joplinapp.org/c/
 
 ## Installing a plugin
 
-To install a plugin just search for the name of the plugin within the search box within the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md). Typing a <kbd>space</kbd> will display all plugins or you can browse the repository by pressing the `Plugin tools` "gear" button and selecting `Browse all plugins`.  
+To install a plugin just search for the name of the plugin within the search box within the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md). Typing a <kbd>space</kbd> will display all plugins or, on desktop, you can browse the repository by pressing the `Plugin tools` "gear" button and selecting `Browse all plugins`.  
 [Recommended plugins](https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins) are marked by a gold crown icon and have been vetted and recommended by the Joplin team.  
 To install a plugin just press its `Install` button, the application will then require restarting to finish the installation and will prompt you to do so.  
 
-Alternatively to install a plugin manually pressing the `Plugin tools` "gear" button and select `Install from file` then select the downloaded *.jpl file. Alternatively you can copy the *.jpl to your profile's `plugins` directory directory `~/.config/joplin-desktop/plugins` (This path might be different on your device - check at the top of the `Options` page in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md)). The plugin will be automatically loaded and executed when you restart the application. You may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
+Alternatively, to install a plugin manually, first download a plugin as a `.jpl` file. Next,
+- **On desktop**: press the `Plugin tools` "gear" button and select `Install from file` then select the downloaded `.jpl` file. Alternatively you can copy the `.jpl` to your profile's `plugins` directory directory `~/.config/joplin-desktop/plugins` (This path might be different on your device - check at the top of the `Options` page in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md)). The plugin will be automatically loaded and executed when you restart the application. You may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
+- **On Android**, the `Install from file` button is present under "Advanced settings" in the "Plugins" tab of the configuration screen.
+
+:::note
+
+To adhere to AppStore guidelines, the iOS app only allows installing recommended plugins.
+
+:::
 
 ## Managing Plugins
 
