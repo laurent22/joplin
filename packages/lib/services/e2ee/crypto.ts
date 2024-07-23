@@ -6,8 +6,6 @@ import {
 	pbkdf2 as nodePbkdf2,
 } from 'crypto';
 
-type DigestNameMap = Record<Digest, string>;
-
 const crypto: Crypto = {
 
 	getCiphers: () => {
@@ -24,18 +22,8 @@ const crypto: Crypto = {
 	},
 
 	pbkdf2Raw: async (password: string, salt: Buffer, iterations: number, keylen: number, digest: Digest) => {
-		const digestNameMap: DigestNameMap = {
-			'SHA-1': 'sha1',
-			'SHA-224': 'sha224',
-			'SHA-256': 'sha256',
-			'SHA-384': 'sha384',
-			'SHA-512': 'sha512',
-			'RIPEMD-160': 'ripemd160',
-		};
-		const nodeDigestName = digestNameMap[digest];
-
 		const pbkdf2Async = promisify(nodePbkdf2);
-		return pbkdf2Async(password, salt, iterations, keylen, nodeDigestName);
+		return pbkdf2Async(password, salt, iterations, keylen, digest);
 	},
 };
 

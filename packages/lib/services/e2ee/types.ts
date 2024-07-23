@@ -37,11 +37,12 @@ export interface CryptoBuffer extends Uint8Array {
 	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
 }
 
-// From react-native-quick-crypto.HashAlgorithm
-export type Digest =
-  | 'SHA-1'
-  | 'SHA-224'
-  | 'SHA-256'
-  | 'SHA-384'
-  | 'SHA-512'
-  | 'RIPEMD-160';
+// From react-native-quick-crypto.HashAlgorithm, but use the hash name style in node:crypto
+export enum Digest {
+	sha1 = 'sha1',
+	sha224 = 'sha224',
+	sha256 = 'sha256',
+	sha384 = 'sha384',
+	sha512 = 'sha512',
+	ripemd160 = 'ripemd160',
+}
