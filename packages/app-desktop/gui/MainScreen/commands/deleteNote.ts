@@ -23,6 +23,6 @@ export const runtime = (): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: '!noteIsReadOnly && someNotesSelected && (!inTrash || shouldIgnoreSelectedFolderId) ',
+		enabledCondition: '!noteIsReadOnly && !inTrash && someNotesSelected',
 	};
 };
