@@ -6,9 +6,10 @@ import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useState, useMemo, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform } from 'react-native';
+import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
+import AccessibleView from './accessibility/AccessibleView';
 
 type ButtonClickListener = ()=> void;
 interface ButtonProps {
@@ -120,16 +121,11 @@ const IconButton = (props: ButtonProps) => {
 		if (!props.description) return null;
 
 		return (
-			<View
+			<AccessibleView
 				// Any information given by the tooltip should also be provided via
 				// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
 				// from the screen reader.
-				// On Android:
-				importantForAccessibility='no-hide-descendants'
-				// On iOS:
-				accessibilityElementsHidden={true}
-				// Web
-				aria-hidden={true}
+				inert={true}
 
 				// Position the menu beneath the button so the tooltip appears in the
 				// correct location.
@@ -164,7 +160,7 @@ const IconButton = (props: ButtonProps) => {
 						</Text>
 					</MenuOptions>
 				</Menu>
-			</View>
+			</AccessibleView>
 		);
 	};
 
