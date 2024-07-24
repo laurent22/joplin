@@ -53,14 +53,16 @@ const AccessibleView: React.FC<Props> = ({ inert, refocusCounter, children, ...v
 		});
 	}, [containerRef, refocusCounter]);
 
+	const canFocus = (refocusCounter ?? null) !== null;
+
 	return <View
 		importantForAccessibility={inert ? 'no-hide-descendants' : 'auto'}
 		accessibilityElementsHidden={inert}
 		aria-hidden={inert}
 		pointerEvents={inert ? 'box-none' : 'auto'}
 
-		// Setting to true allows the view to be focused
-		accessible={(refocusCounter ?? null) !== null ? true : undefined}
+		// On some platforms, views must have accessible=true to be focused.
+		accessible={canFocus ? true : undefined}
 
 		ref={setContainerRef}
 		{...viewProps}

@@ -470,7 +470,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: Function = null, selected = false) => {
-		let icon = <Icon name={iconName} style={styles_.sidebarIcon} />;
+		let icon = <Icon name={iconName} style={styles_.sidebarIcon} aria-hidden={true} />;
 
 		if (key === 'synchronize_button') {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
