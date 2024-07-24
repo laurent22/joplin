@@ -16,7 +16,17 @@ const shimInit = () => {
 						resolve(null);
 					}
 
-					resolve(position);
+					resolve({
+						timestamp: position.timestamp,
+						// At least in Google Chrome, it seems necessary to read position.coords
+						// within the .getCurrentPosition callback. Otherwise, if read later,
+						// it can be undefined.
+						coords: {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+							altitude: position.coords.altitude,
+						},
+					});
 				}, (error) => reject(error), { timeout });
 			});
 		},
