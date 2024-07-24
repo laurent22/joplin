@@ -125,6 +125,8 @@ describe('models/Note', () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
+		await msleep(1);
+
 		const duplicatedNote = await Note.duplicate(note1.id);
 
 		expect(duplicatedNote !== note1).toBe(true);

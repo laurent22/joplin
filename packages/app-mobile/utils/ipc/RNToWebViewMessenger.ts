@@ -1,9 +1,9 @@
 
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-import { WebViewMessageEvent } from 'react-native-webview';
 import { WebViewControl } from '../../components/ExtendedWebView';
 import { RefObject } from 'react';
+import { OnMessageEvent } from '../../components/ExtendedWebView/types';
 
 export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, private webviewControl: WebViewControl|RefObject<WebViewControl>, localApi: LocalInterface) {
@@ -32,7 +32,7 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 		`);
 	}
 
-	public onWebViewMessage = (event: WebViewMessageEvent) => {
+	public onWebViewMessage = (event: OnMessageEvent) => {
 		if (!this.hasBeenClosed()) {
 			void this.onMessage(JSON.parse(event.nativeEvent.data));
 		}

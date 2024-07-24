@@ -2,6 +2,6 @@
 	"io.github.jackgruber.backup": {
 		"cloneUrl": "https://github.com/JackGruber/joplin-plugin-backup.git",
 		"branch": "master",
-		"commit": "52d898315cab259da638698cc41120e9fae593ef"
+		"commit": "5ba57c18ac0f24f20832f012e015a080b138f0c4"
 	}
 }

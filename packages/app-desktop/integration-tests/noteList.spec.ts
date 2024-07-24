@@ -51,6 +51,7 @@ test.describe('noteList', () => {
 
 		await activateMainMenuItem(electronApp, 'Note list', 'Focus');
 		await expect(mainScreen.noteListContainer.getByText('test note 1')).toBeVisible();
+		await expect(mainScreen.noteListContainer.getByText('test note 2')).toBeVisible();
 
 		await setMessageBoxResponse(electronApp, /^Delete/i);
 
@@ -61,9 +62,6 @@ test.describe('noteList', () => {
 			await mainWindow.keyboard.up('Shift');
 		};
 		await pressShiftDelete();
-
-		await folderBHeader.click();
-		await folderAHeader.click();
 		await expect(mainScreen.noteListContainer.getByText('test note 2')).not.toBeVisible();
 
 		// Should not delete when the editor is focused

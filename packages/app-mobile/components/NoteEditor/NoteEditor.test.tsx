@@ -38,7 +38,7 @@ describe('NoteEditor', () => {
 					onChange={()=>{}}
 					onSelectionChange={()=>{}}
 					onUndoRedoDepthChange={()=>{}}
-					onAttach={()=>{}}
+					onAttach={async ()=>{}}
 					plugins={{}}
 				/>
 			</MenuProvider>,
@@ -78,5 +78,7 @@ describe('NoteEditor', () => {
 				}
 			});
 		}
+
+		wrappedNoteEditor.unmount();
 	});
 });

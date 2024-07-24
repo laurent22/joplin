@@ -5,73 +5,17 @@ import * as React from 'react';
 import {
 	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,
 } from 'react';
-import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { WebViewErrorEvent, WebViewEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
+import { WebView } from 'react-native-webview';
+import { WebViewErrorEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
 
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
-import { StyleProp, ViewStyle } from 'react-native';
 import Logger from '@joplin/utils/Logger';
+import { Props, WebViewControl } from './types';
 
 const logger = Logger.create('ExtendedWebView');
 
-export interface WebViewControl {
-	// Evaluate the given [script] in the context of the page.
-	// Unlike react-native-webview/WebView, this does not need to return true.
-	injectJS(script: string): void;
-
-	// message must be convertible to JSON
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	postMessage(message: any): void;
-}
-
-interface SourceFileUpdateEvent {
-	uri: string;
-	baseUrl: string;
-
-	filePath: string;
-}
-
-export type OnMessageCallback = (event: WebViewMessageEvent)=> void;
-export type OnErrorCallback = (event: WebViewErrorEvent)=> void;
-export type OnLoadCallback = (event: WebViewEvent)=> void;
-type OnFileUpdateCallback = (event: SourceFileUpdateEvent)=> void;
-
-interface Props {
-	// A name to be associated with the WebView (e.g. NoteEditor)
-	// This name should be unique.
-	webviewInstanceId: string;
-
-	// If HTML is still being loaded, [html] should be an empty string.
-	html: string;
-
-	// Allow a secure origin to load content from any other origin.
-	// Defaults to 'never'.
-	// See react-native-webview's prop with the same name.
-	mixedContentMode?: 'never' | 'always';
-
-	allowFileAccessFromJs?: boolean;
-	hasPluginScripts?: boolean;
-
-	// Initial javascript. Must evaluate to true.
-	injectedJavaScript: string;
-
-	// iOS only: Scroll the outer content of the view. Set this to `false` if
-	// the main view container doesn't scroll.
-	scrollEnabled?: boolean;
-
-	style?: StyleProp<ViewStyle>;
-	onMessage: OnMessageCallback;
-	onError?: OnErrorCallback;
-	onLoadStart?: OnLoadCallback;
-	onLoadEnd?: OnLoadCallback;
-
-	// Triggered when the file containing [html] is overwritten with new content.
-	onFileUpdate?: OnFileUpdateCallback;
-
-	// Defaults to the resource directory
-	baseDirectory?: string;
-}
+export { WebViewControl, Props };
 
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const webviewRef = useRef(null);
@@ -124,11 +68,6 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				baseUrl,
 			};
 			setSource(newSource);
-
-			props.onFileUpdate?.({
-				...newSource,
-				filePath: tempFile,
-			});
 		}
 
 		if (props.html && props.html.length > 0) {
@@ -140,7 +79,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [props.html, props.webviewInstanceId, props.onFileUpdate, baseDirectory, baseUrl]);
+	}, [props.html, props.webviewInstanceId, baseDirectory, baseUrl]);
 
 	const onError = useCallback((event: WebViewErrorEvent) => {
 		logger.error('Error', event.nativeEvent.description);
