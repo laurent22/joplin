@@ -27,6 +27,6 @@ export const runtime = (): CommandRuntime => {
 
 			await Folder.delete(folderId, { toTrash: true, sourceDescription: 'deleteFolder command' });
 		},
-		enabledCondition: '!folderIsReadOnly',
+		enabledCondition: '(!folderIsReadOnly && !inTrash)',
 	};
 };

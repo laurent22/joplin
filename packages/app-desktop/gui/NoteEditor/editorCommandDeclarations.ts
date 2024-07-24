@@ -17,7 +17,7 @@ export const enabledCondition = (commandName: string) => {
 		markdownEditorOnly ? 'markdownEditorPaneVisible' : '(markdownEditorPaneVisible || richTextEditorVisible)',
 		'oneNoteSelected',
 		noteMustBeMarkdown ? 'noteIsMarkdown' : '',
-		'!noteIsReadOnly',
+		'(!noteIsReadOnly && !inTrash)',
 	];
 
 	return output.filter(c => !!c).join(' && ');

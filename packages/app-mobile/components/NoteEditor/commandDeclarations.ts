@@ -3,7 +3,7 @@ import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 export const enabledCondition = (_commandName: string) => {
 	const output = [
 		'!modalDialogVisible',
-		'!noteIsReadOnly',
+		'!noteIsReadOnly && !inTrash',
 	];
 
 	return output.filter(c => !!c).join(' && ');

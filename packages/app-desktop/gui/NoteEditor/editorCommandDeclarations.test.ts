@@ -9,6 +9,7 @@ const baseContext: Record<string, any> = {
 	oneNoteSelected: true,
 	noteIsMarkdown: true,
 	noteIsReadOnly: false,
+	inTrash: false,
 	richTextEditorVisible: false,
 };
 

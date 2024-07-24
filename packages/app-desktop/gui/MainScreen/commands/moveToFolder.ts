@@ -49,6 +49,6 @@ export const runtime = (comp: any): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'someNotesSelected && !noteIsReadOnly',
+		enabledCondition: 'someNotesSelected && (!noteIsReadOnly && !inTrash)',
 	};
 };

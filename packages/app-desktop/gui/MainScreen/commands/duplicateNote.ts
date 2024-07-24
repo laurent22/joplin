@@ -19,6 +19,6 @@ export const runtime = (): CommandRuntime => {
 				});
 			}
 		},
-		enabledCondition: '!noteIsReadOnly',
+		enabledCondition: '(!noteIsReadOnly && !inTrash)',
 	};
 };
