@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
 import { FolderEntity, NoteEntity } from '../database/types';
-import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
+import { itemIsReadOnlyFromShare, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 
@@ -59,7 +59,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
-	const isSmartFilter = state.notesParentType === 'SmartFilter' || state.notesParentType === 'Search';
+	const hasDeletedTime = selectedNote?.deleted_time !== 0 || commandFolder?.deleted_time !== 0;
 
 	const settings = state.settings || {};
 
@@ -70,7 +70,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Current location
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
-		inTrash: (state.selectedFolderId === getTrashFolderId() || commandFolder && !!commandFolder.deleted_time) && !isSmartFilter,
+		inTrash: (state.selectedFolderId === getTrashFolderId() || commandFolder && !!commandFolder.deleted_time) && hasDeletedTime,
 
 		// Note selection
 		oneNoteSelected: !!selectedNote,
@@ -93,7 +93,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
-		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		noteIsReadOnly: selectedNote ? itemIsReadOnlyFromShare(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
 		// Current context folder
@@ -103,7 +103,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 		folderIsDeleted: commandFolder ? !!commandFolder.deleted_time : false,
 		folderIsTrash: commandFolder ? commandFolder.id === getTrashFolderId() : false,
-		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		folderIsReadOnly: commandFolder ? itemIsReadOnlyFromShare(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
 
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,

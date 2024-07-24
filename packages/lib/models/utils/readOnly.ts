@@ -84,6 +84,10 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	// Item is in trash
 	if (!sharePermissionCheckOnly && item.deleted_time) return true;
 
+	return itemIsReadOnlyFromShare(itemType, changeSource, item, userId, shareState);
+};
+
+export const itemIsReadOnlyFromShare = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState): boolean => {
 	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 
 	checkObjectHasProperties(item, ['share_id']);
