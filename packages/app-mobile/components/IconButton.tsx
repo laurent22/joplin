@@ -78,7 +78,7 @@ const IconButton = (props: ButtonProps) => {
 		setButtonLayout({ ...layoutEvt });
 	}, []);
 
-	const { onTouchStart, onTouchEnd } = usePreventKeyboardDismissTouchListeners(
+	const { onTouchStart, onTouchMove, onTouchEnd } = usePreventKeyboardDismissTouchListeners(
 		props.preventKeyboardDismiss, props.onPress, props.disabled,
 	);
 
@@ -90,6 +90,7 @@ const IconButton = (props: ButtonProps) => {
 			onPressOut={onPressOut}
 
 			onTouchStart={onTouchStart}
+			onTouchMove={onTouchMove}
 			onTouchEnd={onTouchEnd}
 
 			style={ props.containerStyle }
@@ -198,26 +199,36 @@ const useTooltipStyles = (themeId: number) => {
 // virtual keyboard. This hook creates listeners that optionally prevent the keyboard from dismissing.
 const usePreventKeyboardDismissTouchListeners = (preventKeyboardDismiss: boolean, onPress: ()=> void, disabled: boolean) => {
 	const touchStartPointRef = useRef<[number, number]>();
+	const isTapRef = useRef<boolean>();
 	const onTouchStart = useCallback((event: GestureResponderEvent) => {
 		if (Platform.OS === 'web' && preventKeyboardDismiss) {
-			touchStartPointRef.current = [event.nativeEvent.pageX, event.nativeEvent.pageY];
+			const touch = event.nativeEvent.touches[0];
+			touchStartPointRef.current = [touch?.pageX, touch?.pageY];
+			isTapRef.current = true;
+		}
+	}, [preventKeyboardDismiss]);
+
+	const onTouchMove = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss && isTapRef.current) {
+			// Update isTapRef onTouchMove, rather than onTouchEnd -- the final
+			// touch position is unavailable in onTouchEnd on some devices.
+			const touch = event.nativeEvent.touches[0];
+			const dx = touch?.pageX - touchStartPointRef.current[0];
+			const dy = touch?.pageY - touchStartPointRef.current[1];
+			isTapRef.current = Math.hypot(dx, dy) < 15;
 		}
 	}, [preventKeyboardDismiss]);
 
 	const onTouchEnd = useCallback((event: GestureResponderEvent) => {
 		if (Platform.OS === 'web' && preventKeyboardDismiss) {
-			const dx = event.nativeEvent.pageX - touchStartPointRef.current[0];
-			const dy = event.nativeEvent.pageY - touchStartPointRef.current[1];
-
-			const isTap = Math.hypot(dx, dy) < 15;
-			if (isTap && !disabled) {
+			if (isTapRef.current && !disabled) {
 				event.preventDefault();
 				onPress();
 			}
 		}
 	}, [onPress, disabled, preventKeyboardDismiss]);
 
-	return { onTouchStart, onTouchEnd };
+	return { onTouchStart, onTouchMove, onTouchEnd };
 };
 
 export default IconButton;
