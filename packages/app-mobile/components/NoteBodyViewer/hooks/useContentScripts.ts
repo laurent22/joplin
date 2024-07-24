@@ -59,8 +59,8 @@ const useContentScripts = (pluginStates: PluginStates) => {
 				if (event.cancelled) return;
 
 				const contentScriptModule = `(function () {
-					const module = { exports: null };
 					const exports = {};
+					const module = { exports: exports };
 
 					${content}
 
