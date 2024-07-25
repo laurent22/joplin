@@ -17,7 +17,6 @@ export interface Props {
 	platformImplementation: BasePlatformImplementation;
 	store: Store<AppState>;
 	reloadAll: boolean;
-	reloadDevPlugins: boolean;
 	cancelEvent: CancelEvent;
 }
 
@@ -26,7 +25,6 @@ const loadPlugins = async ({
 	platformImplementation,
 	pluginSettings,
 	store,
-	reloadDevPlugins,
 	reloadAll,
 	cancelEvent,
 }: Props) => {
@@ -42,11 +40,7 @@ const loadPlugins = async ({
 		}
 
 		for (const pluginId of pluginService.pluginIds) {
-			if (
-				reloadAll
-				|| (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)
-				|| (reloadDevPlugins && pluginService.plugins[pluginId].devMode)
-			) {
+			if (reloadAll || (pluginSettings[pluginId] && !pluginSettings[pluginId].enabled)) {
 				logger.info('Unloading plugin', pluginId);
 				await pluginService.unloadPlugin(pluginId);
 			}
@@ -57,8 +51,10 @@ const loadPlugins = async ({
 			}
 		}
 
-		logger.info('Running dev plugins (if any)...');
-		await pluginService.loadAndRunDevPlugins(pluginSettings);
+		if (Setting.value('env') === 'dev') {
+			logger.info('Running dev plugins (if any)...');
+			await pluginService.loadAndRunDevPlugins(pluginSettings);
+		}
 
 		if (cancelEvent.cancelled) {
 			logger.info('Cancelled.');

@@ -20,7 +20,7 @@ const md5 = require('md5');
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import ActionButton from '../ActionButton';
+import FloatingActionButton from '../buttons/FloatingActionButton';
 const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
@@ -1585,7 +1585,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 			if (this.state.mode === 'edit') return null;
 
-			return <ActionButton mainButton={editButton} dispatch={this.props.dispatch} />;
+			return <FloatingActionButton mainButton={editButton} dispatch={this.props.dispatch} />;
 		};
 
 		// Save button is not really needed anymore with the improved save logic

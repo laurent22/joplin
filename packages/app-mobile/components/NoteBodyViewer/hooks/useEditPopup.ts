@@ -11,7 +11,15 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 export const editPopupClass = 'joplin-editPopup';
 
 const getEditIconSrc = (theme: Theme) => {
-	if (Platform.OS === 'web') return '';
+	// Use an inline edit icon on web -- getImageSourceSync isn't supported there.
+	if (Platform.OS === 'web') {
+		const svgData = `
+			<svg viewBox="-103 60 180 180" width="30" height="30" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+				<path d="m 100,19 c -11.7,0 -21.1,9.5 -21.2,21.2 0,0 42.3,0 42.3,0 0,-11.7 -9.5,-21.2 -21.2,-21.2 z M 79,43 v 143 l 21.3,26.4 21,-26.5 V 42.8 Z" style="transform: rotate(45deg)" fill=${JSON.stringify(theme.color2)}/>
+			</svg>
+		`.replace(/[ \t\n]+/, ' ');
+		return `data:image/svg+xml;utf8,${encodeURIComponent(svgData)}`;
+	}
 
 	const iconUri = Icon.getImageSourceSync('pencil', 20, theme.color2).uri;
 
@@ -22,7 +30,10 @@ const getEditIconSrc = (theme: Theme) => {
 	// Copy in the background -- the edit icon popover script doesn't need the
 	// icon immediately.
 	void (async () => {
-		await shim.fsDriver().copy(iconUri, destPath);
+		// Can be '' in a testing environment.
+		if (iconUri) {
+			await shim.fsDriver().copy(iconUri, destPath);
+		}
 	})();
 
 	return destPath;

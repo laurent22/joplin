@@ -3,9 +3,9 @@ import * as React from 'react';
 import {
 	forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState,
 } from 'react';
-import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
+import { Props, WebViewControl } from './types';
 
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
 import Logger from '@joplin/utils/Logger';
 
@@ -13,43 +13,6 @@ const logger = Logger.create('ExtendedWebView');
 
 // At present, react-native-webview doesn't support web. As such, ExtendedWebView.web.tsx
 // uses an iframe when running on web.
-
-export interface WebViewControl {
-	// Evaluate the given [script] in the context of the page.
-	// Unlike react-native-webview/WebView, this does not need to return true.
-	injectJS(script: string): void;
-
-	// message must be convertible to JSON
-	postMessage(message: unknown): void;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needs to interface with old code from before rule was applied.
-type OnMessageEvent = { nativeEvent: { data: any } };
-
-export type OnMessageCallback = (event: OnMessageEvent)=> void;
-export type OnErrorCallback = (event: WebViewErrorEvent)=> void;
-export type OnLoadCallback = ()=> void;
-
-interface Props {
-	// A name to be associated with the WebView (e.g. NoteEditor)
-	// This name should be unique.
-	webviewInstanceId: string;
-
-	// If HTML is still being loaded, [html] should be an empty string.
-	html: string;
-
-	// Initial javascript. Must evaluate to true.
-	injectedJavaScript: string;
-
-	style?: StyleProp<ViewStyle>;
-	onMessage: OnMessageCallback;
-	onError?: OnErrorCallback;
-	onLoadStart?: OnLoadCallback;
-	onLoadEnd?: OnLoadCallback;
-
-	// Defaults to the resource directory
-	baseDirectory?: string;
-}
 
 const iframeContainerStyles = { height: '100%', width: '100%' };
 const wrapperStyle: ViewStyle = { height: '100%', width: '100%', flex: 1 };

@@ -55,7 +55,7 @@ addEventListener('DOMContentLoaded', async () => {
 	if (window.crossOriginIsolated === false) {
 		// Currently, reloading should be handled by serviceWorker.ts -- this change is left for
 		// debugging purposes.
-		document.body.appendChild(
+		document.body.prepend(
 			document.createTextNode('Warning: crossOriginIsolated is false. SharedArrayBuffer and similar APIs may not work correctly. Try refreshing the page.'),
 		);
 	}

@@ -7,12 +7,13 @@ import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { MutableRefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Platform } from 'react-native';
-import { WebViewMessageEvent } from 'react-native-webview';
-import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
+import ExtendedWebView from '../../ExtendedWebView';
+import { WebViewControl } from '../../ExtendedWebView/types';
 import { clearAutosave, writeAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
 import VersionInfo from 'react-native-version-info';
 import { DialogContext } from '../../DialogManager';
+import { OnMessageEvent } from '../../ExtendedWebView/types';
 
 
 const logger = Logger.create('ImageEditor');
@@ -297,7 +298,7 @@ const ImageEditor = (props: Props) => {
 		})();`);
 	}, [webviewRef, props.resourceFilename]);
 
-	const onMessage = useCallback(async (event: WebViewMessageEvent) => {
+	const onMessage = useCallback(async (event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 		if (data.startsWith('error:')) {
 			logger.error('ImageEditor:', data);

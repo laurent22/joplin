@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PluginHtmlContents, ViewInfo } from '@joplin/lib/services/plugins/reducer';
-import ExtendedWebView, { WebViewControl } from '../../../components/ExtendedWebView';
+import ExtendedWebView from '../../ExtendedWebView';
+import { WebViewControl } from '../../ExtendedWebView/types';
 import { ViewStyle } from 'react-native';
 import usePlugin from '@joplin/lib/hooks/usePlugin';
 import shim from '@joplin/lib/shim';

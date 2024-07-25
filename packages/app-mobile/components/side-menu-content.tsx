@@ -19,6 +19,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
+import AccessibleView from './accessibility/AccessibleView';
 const { TouchableRipple } = require('react-native-paper');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
@@ -453,6 +454,7 @@ const SideMenuContentComponent = (props: Props) => {
 						event.preventDefault();
 						void folder_longPress(folder);
 					}}
+					role='button'
 				>
 					<View style={folderButtonStyle}>
 						{renderFolderIcon(folder.id, theme, folderIcon)}
@@ -468,7 +470,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: Function = null, selected = false) => {
-		let icon = <Icon name={iconName} style={styles_.sidebarIcon} />;
+		let icon = <Icon name={iconName} style={styles_.sidebarIcon} aria-hidden={true} />;
 
 		if (key === 'synchronize_button') {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
@@ -484,7 +486,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (!onPressHandler) return content;
 
 		return (
-			<TouchableOpacity key={key} onPress={onPressHandler}>
+			<TouchableOpacity key={key} onPress={onPressHandler} role='button'>
 				{content}
 			</TouchableOpacity>
 		);
@@ -594,16 +596,13 @@ const SideMenuContentComponent = (props: Props) => {
 		opacity: isHidden ? 0.5 : undefined,
 	};
 
-	// Note: iOS uses accessibilityElementsHidden and Android uses importantForAccessibility
-	//       to hide elements from the screenreader.
-
 	return (
-		<View
+		<AccessibleView
 			style={style}
 
-			accessibilityElementsHidden={isHidden}
-			importantForAccessibility={isHidden ? 'no-hide-descendants' : undefined}
-			aria-hidden={isHidden}
+			// Accessibility, keyboard, and touch hidden.
+			inert={isHidden}
+			refocusCounter={isHidden ? undefined : 1}
 		>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
@@ -611,7 +610,7 @@ const SideMenuContentComponent = (props: Props) => {
 				</ScrollView>
 				{renderBottomPanel()}
 			</View>
-		</View>
+		</AccessibleView>
 	);
 };
 

@@ -68,7 +68,7 @@ const FileSystemPathSelector: FunctionComponent<Props> = props => {
 		<TouchableRipple
 			onPress={selectDirectoryButtonPress}
 			style={styleSheet.settingContainer}
-			aria-role='button'
+			role='button'
 		>
 			<View style={styleSheet.settingContainer}>
 				<Text key="label" style={styleSheet.settingText}>

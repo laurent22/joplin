@@ -198,6 +198,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 						style={headerWrapperStyle}
 						disabled={this.props.disabled}
 						onPress={this.onOpenList}
+						role='button'
 					>
 						<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
 							{headerLabel}

@@ -2,9 +2,10 @@ import * as React from 'react';
 
 import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import { useRef, useCallback, useState, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 import useRenderer from './hooks/useRenderer';
 import { OnWebViewMessageHandler } from './types';
@@ -14,13 +15,13 @@ import Setting from '@joplin/lib/models/Setting';
 import uuid from '@joplin/lib/uuid';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useContentScripts from './hooks/useContentScripts';
+import { MarkupLanguage } from '@joplin/renderer';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+	style: ViewStyle;
 	noteBody: string;
-	noteMarkupLanguage: number;
+	noteMarkupLanguage: MarkupLanguage;
 	highlightedKeywords: string[];
 	noteResources: Record<string, ResourceInfo>;
 	paddingBottom: number;
@@ -110,6 +111,7 @@ export default function NoteBodyViewer(props: Props) {
 			<ExtendedWebView
 				ref={webviewRef}
 				webviewInstanceId='NoteBodyViewer'
+				testID='NoteBodyViewer'
 				html={html}
 				allowFileAccessFromJs={true}
 				injectedJavaScript={injectedJs}

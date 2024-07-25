@@ -4,7 +4,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 
 import * as React from 'react';
 import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
@@ -25,10 +26,10 @@ import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComp
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
+import { OnMessageEvent } from '../ExtendedWebView/types';
 import { join, dirname } from 'path';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import uuid from '@joplin/lib/uuid';
-import { WebViewMessageEvent } from 'react-native-webview';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -71,9 +72,8 @@ function useCss(themeId: number): string {
 			body {
 				margin: 0;
 				height: 100vh;
-				width: 100vh;
-				width: 100vw;
-				min-width: 100vw;
+				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
+				width: 100%;
 				box-sizing: border-box;
 
 				padding-left: 1px;
@@ -504,7 +504,7 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
+	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
 		if (typeof data === 'string' && data.indexOf('error:') === 0) {
