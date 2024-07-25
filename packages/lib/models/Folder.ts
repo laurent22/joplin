@@ -247,7 +247,7 @@ export default class Folder extends BaseItem {
 	// The remaining folders, that don't contain any notes are sorted by their own user_updated_time
 	public static async orderByLastModified(folders: FolderEntity[], dir = 'DESC') {
 		dir = dir.toUpperCase();
-		const sql = 'select parent_id, max(user_updated_time) content_updated_time from notes where parent_id != "" group by parent_id';
+		const sql = 'select parent_id, max(user_updated_time) content_updated_time from notes where parent_id != \'\' group by parent_id';
 		const rows = await this.db().selectAll(sql);
 
 		const folderIdToTime: Record<string, number> = {};
@@ -388,7 +388,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async rootSharedFolders(): Promise<FolderEntity[]> {
-		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
+		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\'');
 	}
 
 	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
@@ -431,9 +431,9 @@ export default class Folder extends BaseItem {
 		// if they've been moved out of a shared folder.
 		// await this.unshareItems(ModelType.Folder, sharedFolderIds);
 
-		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != ""'];
+		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != \'\''];
 		if (sharedFolderIds.length) {
-			sql.push(` AND id NOT IN ("${sharedFolderIds.join('","')}")`);
+			sql.push(` AND id NOT IN ('${sharedFolderIds.join('\',\'')}')`);
 		}
 
 		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
@@ -650,7 +650,7 @@ export default class Folder extends BaseItem {
 
 			const query = activeShareIds.length ? `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
-				WHERE share_id != "" AND share_id NOT IN ("${activeShareIds.join('","')}")
+				WHERE share_id != '' AND share_id NOT IN ('${activeShareIds.join('\',\'')}')
 			` : `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != ''

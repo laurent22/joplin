@@ -25,6 +25,34 @@ describe('routes/folders', () => {
 		expect(page.items[0].id).toBe(folder2.id);
 	});
 
+	test('should not include deleted folders in GET folders/:id/notes call', async () => {
+		const api = new Api();
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder.id });
+		const note2 = await Note.save({ parent_id: folder.id });
+
+		{
+			const notes = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`);
+			expect(notes.items.length).toBe(2);
+		}
+
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const notes = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`);
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note2.id);
+		}
+
+		// const tree = await api.route(RequestMethod.GET, 'folders', { as_tree: 1 });
+		// expect(tree.length).toBe(1);
+		// expect(tree[0].id).toBe(folder2.id);
+
+		// const page = await api.route(RequestMethod.GET, 'folders');
+		// expect(page.items.length).toBe(1);
+		// expect(page.items[0].id).toBe(folder2.id);
+	});
+
 	test('should be able to delete to trash', async () => {
 		const api = new Api();
 		const folder1 = await Folder.save({});

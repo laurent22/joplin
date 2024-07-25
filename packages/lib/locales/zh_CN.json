@@ -167,14 +167,23 @@
 	"Accept": [
 		"接受"
 	],
+	"Accepted invitations": [
+		"已接受邀请"
+	],
 	"Access denied: Please check your username and password": [
-		"访问被拒绝：请检查您的用户名和密码"
+		"拒绝访问：请检查您的用户名和密码"
 	],
 	"Access denied: Please re-enter your password and/or username": [
 		"拒绝访问： 请重新输入密码和/或用户名"
 	],
 	"Account": [
 		"账号"
+	],
+	"Account information": [
+		"帐号信息"
+	],
+	"Account type": [
+		"帐号类型"
 	],
 	"Action": [
 		"操作"
@@ -214,6 +223,9 @@
 	],
 	"Advanced options": [
 		"高级选项"
+	],
+	"Advanced settings": [
+		"高级设置"
 	],
 	"Advanced tools": [
 		"高级工具"
@@ -267,7 +279,7 @@
 		"有更新可用，是否现在进行下载？"
 	],
 	"Android API level: %d": [
-		""
+		"安卓应用程序接口（API）级别： %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"任何发送到此地址的电子邮件都将被转换为笔记并添加到您的收藏中。 该笔记将保存到收件箱笔记本中"
@@ -303,7 +315,7 @@
 		"添加照片"
 	],
 	"Attach...": [
-		"添加附件..."
+		"添加..."
 	],
 	"Attaches the given file to the note.": [
 		"将选定文件添加到笔记中。"
@@ -360,7 +372,7 @@
 		"Basic"
 	],
 	"Beta": [
-		""
+		"Beta"
 	],
 	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
@@ -444,7 +456,7 @@
 		"无法保存 %s “%s”，因为超过了允许的限制大小 (%s)。"
 	],
 	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
-		"无法保存 %s “%s”，因为超过了允许的限制大小 (%s)"
+		"无法保存 %s “%s”，因为超过了此帐户允许的总上限 (%s)"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
 		"无法与收件人 %s 共享加密的笔记本，因为他们没有启用端到端加密。他们可以通过 配置 > 加密 界面来启用。"
@@ -491,6 +503,9 @@
 	"Clear alarm": [
 		"清除提醒"
 	],
+	"Clear search": [
+		"清除搜索"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"单击 “%s” 以恢复笔记。它将会被复制到名为 “%s” 的笔记本中。笔记的当前版本不会被替换或修改。"
 	],
@@ -507,16 +522,16 @@
 		"关闭下拉列表"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		"关闭应用程序，然后删除“%s”中的个人资料，然后再次启动应用程序。 请确保您已事先将所有笔记以 JEX 格式导出来创建备份。"
+		"关闭应用程序，然后删除“%s”中您的配置文件，然后再次启动应用程序。 请确保您已事先将所有笔记以 JEX 格式导出来创建备份。"
 	],
 	"Close Window": [
 		"关闭窗口"
 	],
 	"Cmd-click to open": [
-		""
+		"单击 Cmd 打开"
 	],
 	"Cmd-click to open: %s": [
-		""
+		"单击 Cmd 以打开：%s"
 	],
 	"Code": [
 		"代码"
@@ -598,6 +613,9 @@
 	],
 	"Conflicts (attachments)": [
 		"冲突（附件）"
+	],
+	"Connect to Joplin Cloud": [
+		"连接至 Joplin Cloud"
 	],
 	"Consolidated billing": [
 		"合并计费"
@@ -747,10 +765,10 @@
 		"新建报告..."
 	],
 	"Ctrl-click to open": [
-		""
+		"按住 Ctrl 键打开"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"按住 Ctrl 键打开：%s"
 	],
 	"Current version is up-to-date.": [
 		"当前版本为最新版。"
@@ -906,7 +924,7 @@
 		"禁用加密会导致 *所有笔记与附件* 重新同步，并以非加密的数据形式发送到同步目标。确定继续吗？"
 	],
 	"Discard": [
-		"放弃更改"
+		"放弃"
 	],
 	"Discard changes": [
 		"放弃更改"
@@ -1350,7 +1368,7 @@
 		"仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 	],
 	"For example \"%s\"": [
-		"例如\"%s\""
+		"例如 \"%s\""
 	],
 	"For information on how to customise the shortcuts please visit %s": [
 		"若想了解有关如何自定义快捷键的信息，请访问 %s"
@@ -1402,6 +1420,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。如果没有提供 [name] 或 [value] 值，它将列出当前配置。"
+	],
+	"Go to Joplin Cloud profile": [
+		"转到 Joplin Cloud 简介"
 	],
 	"Go to source URL": [
 		"转到源 URL"
@@ -1595,6 +1616,9 @@
 	"Installed": [
 		"已安装"
 	],
+	"Installed (%d):": [
+		"已安装 (%d):"
+	],
 	"Installing...": [
 		"正在安装…"
 	],
@@ -1615,6 +1639,9 @@
 	],
 	"Invalid password": [
 		"无效密码"
+	],
+	"iOS version: %s": [
+		"iOS 版本：%s"
 	],
 	"Italic": [
 		"斜体"
@@ -1738,6 +1765,9 @@
 	],
 	"Leave it blank to download the language files from the default website": [
 		"留空可从默认网站下载语言文件"
+	],
+	"Leave notebook": [
+		"离开笔记本"
 	],
 	"Leave notebook...": [
 		"离开笔记本..."
@@ -1934,6 +1964,9 @@
 	"New": [
 		"新建"
 	],
+	"New invitations": [
+		"新邀请"
+	],
 	"New note": [
 		"新建笔记"
 	],
@@ -1986,7 +2019,7 @@
 		"没有 ID 为 %s 的项"
 	],
 	"No new invitations": [
-		""
+		"没有新的邀请"
 	],
 	"No notebook has been specified.": [
 		"未指定笔记本。"
@@ -1998,7 +2031,7 @@
 		"此处没有笔记。点击 “新建笔记” 创建。"
 	],
 	"No plugins are installed.": [
-		""
+		"没有任何已安装的插件。"
 	],
 	"No resources!": [
 		"没有资源！"
@@ -2502,13 +2535,16 @@
 		"报告问题"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"报告任何有关插件的问题。"
 	],
 	"Report fraudulent plugin": [
 		"报告欺诈性插件"
 	],
 	"Report system": [
 		"报告系统"
+	],
+	"Reports": [
+		"报告"
 	],
 	"Reset application layout": [
 		"重置应用布局"
@@ -2550,7 +2586,7 @@
 		"已恢复的笔记"
 	],
 	"Results (%d):": [
-		""
+		"结果（%d）："
 	],
 	"Retry": [
 		"重试"
@@ -2898,7 +2934,7 @@
 		"提交"
 	],
 	"Subscript": [
-		"订阅"
+		"下标"
 	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"成功！同步配置看起来没问题。"
@@ -3320,6 +3356,9 @@
 	"Toggle external editing": [
 		"切换外部编辑"
 	],
+	"Toggle menu bar": [
+		"切换菜单栏"
+	],
 	"Toggle note history, keep notes for": [
 		"设置是否保留笔记历史版本"
 	],
@@ -3421,6 +3460,9 @@
 	],
 	"Update": [
 		"更新"
+	],
+	"Update available": [
+		"有更新可用"
 	],
 	"Update profile": [
 		"更新配置文件"
@@ -3561,7 +3603,10 @@
 		"网站与文档"
 	],
 	"WebView package: %s": [
-		""
+		"WebView 包：%s"
+	],
+	"WebView version: %s": [
+		"WebView 版本：%s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"欢迎使用 Joplin！\n\n输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取用法信息。\n\n例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
@@ -3628,6 +3673,9 @@
 	],
 	"Your data is going to be re-encrypted and synced again.": [
 		"您的数据将被重新加密并再次同步。"
+	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"要解密您的某些数据，需要使用您的密码。"

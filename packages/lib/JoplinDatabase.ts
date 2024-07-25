@@ -312,7 +312,7 @@ export default class JoplinDatabase extends Database {
 			throw new Error(`\`notes_fts\` (${countFieldsNotesFts} fields) must have the same number of fields as \`items_fts\` (${countFieldsItemsFts} fields) for the search engine BM25 algorithm to work`);
 		}
 
-		const tableRows = await this.selectAll('SELECT name FROM sqlite_master WHERE type="table"');
+		const tableRows = await this.selectAll('SELECT name FROM sqlite_master WHERE type=\'table\'');
 
 		for (let i = 0; i < tableRows.length; i++) {
 			const tableName = tableRows[i].name;
@@ -416,7 +416,7 @@ export default class JoplinDatabase extends Database {
 
 			if (targetVersion === 4) {
 				queries.push('INSERT INTO settings (`key`, `value`) VALUES (\'sync.3.context\', (SELECT `value` FROM settings WHERE `key` = \'sync.context\'))');
-				queries.push('DELETE FROM settings WHERE `key` = "sync.context"');
+				queries.push('DELETE FROM settings WHERE `key` = \'sync.context\'');
 			}
 
 			if (targetVersion === 5) {

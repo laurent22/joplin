@@ -45,6 +45,9 @@
 	<script src="./scrollmap.js"></script>
 
 	<script>
+	// Fixes a warning when loading some TypeScript plugins generated with webpack.
+	window.exports = {};
+
 	// This is function used internally to send message from the webview to
 	// the host.
 	const ipcProxySendToHost = (methodName, arg) => {

@@ -1,18 +1,18 @@
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginApiGlobal from '@joplin/lib/services/plugins/api/Global';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
-import { WebViewControl } from '../../components/ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView';
 import { RefObject } from 'react';
-import { WebViewMessageEvent } from 'react-native-webview';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { PluginMainProcessApi, PluginWebViewApi } from './types';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import createOnLogHander from './utils/createOnLogHandler';
+import { OnMessageEvent } from '../ExtendedWebView/types';
 
 const logger = Logger.create('PluginRunner');
 
-type MessageEventListener = (event: WebViewMessageEvent)=> boolean;
+type MessageEventListener = (event: OnMessageEvent)=> boolean;
 
 export default class PluginRunner extends BasePluginRunner {
 	private messageEventListeners: MessageEventListener[] = [];
@@ -71,7 +71,7 @@ export default class PluginRunner extends BasePluginRunner {
 		`);
 	}
 
-	public onWebviewMessage = (event: WebViewMessageEvent) => {
+	public onWebviewMessage = (event: OnMessageEvent) => {
 		this.messageEventListeners = this.messageEventListeners.filter(
 			// Remove all listeners that return false
 			listener => listener(event),

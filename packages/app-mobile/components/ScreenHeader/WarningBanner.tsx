@@ -19,6 +19,7 @@ interface Props {
 	mustUpgradeAppMessage: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
+	showInvalidJoplinCloudCredential: boolean;
 }
 
 
@@ -49,6 +50,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	}
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
+	}
+	if (props.showInvalidJoplinCloudCredential) {
+		warningComps.push(renderWarningBox('JoplinCloudLogin', _('Your Joplin Cloud credentials are invalid, please login.')));
 	}
 
 	const shareInvitation = props.shareInvitations.find(inv => inv.status === ShareUserStatus.Waiting);
@@ -85,5 +89,6 @@ export default connect((state: AppState) => {
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
+		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 	};
 })(WarningBannerComponent);

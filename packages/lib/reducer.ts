@@ -133,6 +133,7 @@ export interface State {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	mustAuthenticate: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -215,6 +216,7 @@ export const defaultState: State = {
 	},
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
+	mustAuthenticate: false,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1322,6 +1324,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'MUST_UPGRADE_APP':
 			draft.mustUpgradeAppMessage = action.message;
+			break;
+
+		case 'MUST_AUTHENTICATE':
+			draft.mustAuthenticate = action.value;
 			break;
 
 		case 'NOTE_LIST_RENDERER_ADD':

@@ -1,5 +1,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
+import activateMainMenuItem from './util/activateMainMenuItem';
+import setMessageBoxResponse from './util/setMessageBoxResponse';
 
 test.describe('noteList', () => {
 	test('should be possible to edit notes in a different notebook when searching', async ({ mainWindow }) => {
@@ -34,5 +36,41 @@ test.describe('noteList', () => {
 
 		// Updating the title should force the sidebar to update sooner
 		await expect(editor.noteTitleInput).toHaveValue('note-1');
+	});
+
+	test('shift-delete should ask to permanently delete notes, but only when the note list is focused', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		const sidebar = mainScreen.sidebar;
+
+		const folderBHeader = await sidebar.createNewFolder('Folder B');
+		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await expect(folderAHeader).toBeVisible();
+
+		await mainScreen.createNewNote('test note 1');
+		await mainScreen.createNewNote('test note 2');
+
+		await activateMainMenuItem(electronApp, 'Note list', 'Focus');
+		await expect(mainScreen.noteListContainer.getByText('test note 1')).toBeVisible();
+		await expect(mainScreen.noteListContainer.getByText('test note 2')).toBeVisible();
+
+		await setMessageBoxResponse(electronApp, /^Delete/i);
+
+		const pressShiftDelete = async () => {
+			await mainWindow.keyboard.press('Shift');
+			await mainWindow.keyboard.press('Delete');
+			await mainWindow.keyboard.up('Delete');
+			await mainWindow.keyboard.up('Shift');
+		};
+		await pressShiftDelete();
+		await expect(mainScreen.noteListContainer.getByText('test note 2')).not.toBeVisible();
+
+		// Should not delete when the editor is focused
+		await mainScreen.noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('test');
+		await pressShiftDelete();
+
+		await folderBHeader.click();
+		await folderAHeader.click();
+		await expect(mainScreen.noteListContainer.getByText('test note 1')).toBeVisible();
 	});
 });

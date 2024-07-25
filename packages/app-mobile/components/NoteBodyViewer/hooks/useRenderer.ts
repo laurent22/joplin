@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction, useEffect, useMemo } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { WebViewControl } from '../../ExtendedWebView';
 import { OnScrollCallback, OnWebViewMessageHandler } from '../types';
 import RNToWebViewMessenger from '../../../utils/ipc/RNToWebViewMessenger';
@@ -35,11 +35,17 @@ const onPostPluginMessage = async (contentScriptId: string, message: any) => {
 };
 
 const useRenderer = (props: Props) => {
+	const onScrollRef = useRef(props.onScroll);
+	onScrollRef.current = props.onScroll;
+
+	const onPostMessageRef = useRef(props.onPostMessage);
+	onPostMessageRef.current = props.onPostMessage;
+
 	const messenger = useMemo(() => {
 		const fsDriver = shim.fsDriver();
 		const localApi = {
-			onScroll: props.onScroll,
-			onPostMessage: props.onPostMessage,
+			onScroll: (fraction: number) => onScrollRef.current?.(fraction),
+			onPostMessage: (message: string) => onPostMessageRef.current?.(message),
 			onPostPluginMessage,
 			fsDriver: {
 				writeFile: async (path: string, content: string, encoding?: string) => {
@@ -58,7 +64,7 @@ const useRenderer = (props: Props) => {
 		return new RNToWebViewMessenger<NoteViewerRemoteApi, NoteViewerLocalApi>(
 			'note-viewer', props.webviewRef, localApi,
 		);
-	}, [props.onScroll, props.onPostMessage, props.webviewRef, props.tempDir]);
+	}, [props.webviewRef, props.tempDir]);
 
 	useEffect(() => {
 		props.setOnWebViewMessage(() => (event: WebViewMessageEvent) => {

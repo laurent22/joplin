@@ -1,38 +1,9 @@
-import Folder from '../../models/Folder';
-import BaseModel from '../../BaseModel';
 import { FolderEntity, TagEntity, TagsWithNoteCountEntity } from '../../services/database/types';
-import { getDisplayParentId, getTrashFolderId } from '../../services/trash';
+import { getDisplayParentId } from '../../services/trash';
 import { getCollator } from '../../models/utils/getCollator';
 
 export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, depth: number)=> T;
 export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
-
-function folderHasChildren_(folders: FolderEntity[], folderId: string) {
-	if (folderId === getTrashFolderId()) {
-		return !!folders.find(f => !!f.deleted_time);
-	}
-
-	for (let i = 0; i < folders.length; i++) {
-		const folder = folders[i];
-		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
-		if (folderParentId === folderId) return true;
-	}
-
-	return false;
-}
-
-function folderIsCollapsed(folders: FolderEntity[], folderId: string, collapsedFolderIds: string[]) {
-	if (!collapsedFolderIds || !collapsedFolderIds.length) return false;
-
-	while (true) {
-		const folder: FolderEntity = BaseModel.byId(folders, folderId);
-		if (!folder) throw new Error(`No folder with id ${folder.id}`);
-		const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
-		if (!folderParentId) return false;
-		if (collapsedFolderIds.indexOf(folderParentId) >= 0) return true;
-		folderId = folderParentId;
-	}
-}
 
 interface FolderSelectedContext {
 	selectedFolderId: string;
@@ -48,21 +19,36 @@ type ItemsWithOrder<ItemType> = {
 	order: string[];
 };
 
-interface RenderFoldersProps {
+interface FolderTree {
 	folders: FolderEntity[];
+	parentIdToChildren: Map<string, FolderEntity[]>;
+	idToItem: Map<string, FolderEntity>;
+}
+
+interface RenderFoldersProps {
+	folderTree: FolderTree;
 	collapsedFolderIds: string[];
 }
 
+function folderIsCollapsed(context: RenderFoldersProps, folderId: string) {
+	if (!context.collapsedFolderIds || !context.collapsedFolderIds.length) return false;
+
+	while (true) {
+		const folder = context.folderTree.idToItem.get(folderId);
+		const folderParentId = getDisplayParentId(folder, context.folderTree.idToItem.get(folder.parent_id));
+		if (!folderParentId) return false;
+		if (context.collapsedFolderIds.includes(folderParentId)) return true;
+		folderId = folderParentId;
+	}
+}
+
 function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: RenderFolderItem<T>, items: T[], parentId: string, depth: number, order: string[]): ItemsWithOrder<T> {
-	const folders = props.folders;
-	for (let i = 0; i < folders.length; i++) {
-		const folder = folders[i];
+	const folders = props.folderTree.parentIdToChildren.get(parentId ?? '') ?? [];
+	const parentIdToChildren = props.folderTree.parentIdToChildren;
+	for (const folder of folders) {
+		if (folderIsCollapsed(props, folder.id)) continue;
 
-		const folderParentId = getDisplayParentId(folder, props.folders.find(f => f.id === folder.parent_id));
-
-		if (!Folder.idsEqual(folderParentId, parentId)) continue;
-		if (folderIsCollapsed(props.folders, folder.id, props.collapsedFolderIds)) continue;
-		const hasChildren = folderHasChildren_(folders, folder.id);
+		const hasChildren = parentIdToChildren.has(folder.id);
 		order.push(folder.id);
 		items.push(renderItem(folder, hasChildren, depth));
 		if (hasChildren) {
@@ -79,6 +65,24 @@ function renderFoldersRecursive_<T>(props: RenderFoldersProps, renderItem: Rende
 
 export const renderFolders = <T> (props: RenderFoldersProps, renderItem: RenderFolderItem<T>): ItemsWithOrder<T> => {
 	return renderFoldersRecursive_(props, renderItem, [], '', 0, []);
+};
+
+export const buildFolderTree = (folders: FolderEntity[]): FolderTree => {
+	const idToItem = new Map<string, FolderEntity>();
+	for (const folder of folders) {
+		idToItem.set(folder.id, folder);
+	}
+
+	const parentIdToChildren = new Map<string, FolderEntity[]>();
+	for (const folder of folders) {
+		const displayParentId = getDisplayParentId(folder, idToItem.get(folder.parent_id)) ?? '';
+		if (!parentIdToChildren.has(displayParentId)) {
+			parentIdToChildren.set(displayParentId, []);
+		}
+		parentIdToChildren.get(displayParentId).push(folder);
+	}
+
+	return { folders, parentIdToChildren, idToItem };
 };
 
 const sortTags = (tags: TagEntity[]) => {

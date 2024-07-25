@@ -3359,6 +3359,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Uw data wordt opnieuw versleuteld en gesynchroniseerd."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Uw wachtwoord is nodig om sommige van uw gegevens te decoderen."
 	],

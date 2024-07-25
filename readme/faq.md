@@ -92,7 +92,7 @@ Joplin does not have a background sync on mobile devices. When Joplin is closed,
 
 ## How can I check the sync status?
 
-Go to the synchronisation page. You can find it on the desktop application under `Help > Synchronisation Status` and on the mobile app under `Configuration > SYNC STATUS`.
+Go to the synchronisation page. You can find it on the desktop application under `Help > Synchronisation Status` and on the mobile app under `Configuration > Tools > SYNC STATUS`.
 
 `total items` = How many items there are in total to sync.  
 `synced items` = How many items have already been uploaded or downloaded.

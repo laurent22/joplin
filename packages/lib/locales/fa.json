@@ -3682,6 +3682,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"داده‌های شما دوباره رمزنگاری و همگام‌سازی خواهند شد."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"گذرواژه شما برای رمزگشایی برخی از داده های شما مورد نیاز است."
 	],

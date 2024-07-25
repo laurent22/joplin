@@ -3140,6 +3140,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Ditt innhold vil bli rekryptert og synkronisert igjen."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Passordet ditt er nødvendig for å dekryptere noen av dataene dine. Skriv `:e2ee decrypt` for å angi den."
 	],

@@ -2657,6 +2657,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Ваши подаци ће се поново шифровати и поново синхронизовати."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		""
 	],

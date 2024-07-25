@@ -168,11 +168,14 @@ export interface EditorSettings {
 
 export type LogMessageCallback = (message: string)=> void;
 export type OnEventCallback = (event: EditorEvent)=> void;
+export type PasteFileCallback = (data: File)=> Promise<void>;
 
 export interface EditorProps {
 	settings: EditorSettings;
 	initialText: string;
 
+	// If null, paste and drag-and-drop will not work for resources unless handled elsewhere.
+	onPasteFile: PasteFileCallback|null;
 	onEvent: OnEventCallback;
 	onLogMessage: LogMessageCallback;
 }

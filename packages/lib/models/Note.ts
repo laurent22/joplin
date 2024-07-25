@@ -896,7 +896,7 @@ export default class Note extends BaseItem {
 				const sql = `
 					UPDATE notes
 					SET	${updateSql.join(', ')}						
-					WHERE id IN ("${processIds.join('","')}")
+					WHERE id IN ('${processIds.join('\',\'')}')
 				`;
 
 				await this.db().exec({ sql, params });
