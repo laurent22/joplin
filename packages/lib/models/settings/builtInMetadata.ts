@@ -829,7 +829,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			show: (settings) => {
 				// Hide on iOS due to App Store guidelines. See
 				// https://github.com/laurent22/joplin/pull/10086 for details.
-				return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
+				// Hide on web -- debugging is enabled anyway, so this is not necessary.
+				return shim.mobilePlatform() === 'android' && settings['plugins.pluginSupportEnabled'];
 			},
 			needRestart: true,
 			advanced: true,
