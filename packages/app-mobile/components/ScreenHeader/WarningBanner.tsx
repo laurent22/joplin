@@ -66,8 +66,8 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox(
 			'ShareManager',
 			_('%s (%s) would like to share a notebook with you.',
-				substrWithEllipsis(sharer.full_name, 0, 48),
-				substrWithEllipsis(sharer.email, 0, 52)),
+				substrWithEllipsis(sharer?.full_name ?? 'Unknown', 0, 48),
+				substrWithEllipsis(sharer?.email ?? 'Unknown', 0, 52)),
 		));
 	}
 

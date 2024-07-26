@@ -916,6 +916,7 @@ export default class Note extends BaseItem {
 				this.dispatch({
 					type: 'NOTE_DELETE',
 					id: id,
+					originalItem: notes[i],
 				});
 			}
 		}

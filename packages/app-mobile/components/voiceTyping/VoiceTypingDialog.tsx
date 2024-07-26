@@ -5,7 +5,7 @@ import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
-import { modelIsDownloaded } from '../../services/voiceTyping/vosk.android';
+import { modelIsDownloaded } from '../../services/voiceTyping/vosk';
 
 interface Props {
 	locale: string;
