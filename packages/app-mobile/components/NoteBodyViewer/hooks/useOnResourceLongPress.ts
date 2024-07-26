@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 const { _ } = require('@joplin/lib/locale.js');
-import { reg } from '@joplin/lib/registry';
 const { dialogs } = require('../../../utils/dialogs.js');
 import Resource from '@joplin/lib/models/Resource';
 import { copyToCache } from '../../../utils/ShareUtils';
@@ -54,8 +53,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				onRequestEditResource(`edit:${resourceId}`);
 			}
 		} catch (e) {
-			logger.error(e);
-			reg.logger().error('Could not handle link long press', e);
+			logger.error('Could not handle link long press', e);
 			void shim.showMessageBox(`An error occurred, check log for details: ${e}`);
 		}
 	}, [onJoplinLinkClick, onRequestEditResource, dialogBoxRef]);
