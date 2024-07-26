@@ -500,6 +500,10 @@ packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
 packages/app-desktop/utils/checkForUpdatesUtils.js
 packages/app-desktop/utils/checkForUpdatesUtilsTestData.js
+packages/app-desktop/utils/customProtocols/constants.js
+packages/app-desktop/utils/customProtocols/handleCustomProtocols.test.js
+packages/app-desktop/utils/customProtocols/handleCustomProtocols.js
+packages/app-desktop/utils/customProtocols/registerCustomProtocols.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/markupLanguageUtils.js
@@ -670,6 +674,7 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useUpdateState
 packages/app-mobile/components/screens/ConfigScreen/types.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
 packages/app-mobile/components/screens/LogScreen.js
+packages/app-mobile/components/screens/Note.test.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
@@ -692,7 +697,7 @@ packages/app-mobile/services/e2ee/crypto.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
-packages/app-mobile/services/voiceTyping/vosk.ios.js
+packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
 packages/app-mobile/tools/buildInjectedJs/constants.js
@@ -731,6 +736,7 @@ packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shim-init-react.js
 packages/app-mobile/utils/showMessageBox.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
+packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/types.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
@@ -1282,6 +1288,8 @@ packages/lib/utils/joplinCloud/types.js
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
+packages/lib/utils/resolvePathWithinDir.test.js
+packages/lib/utils/resolvePathWithinDir.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js
