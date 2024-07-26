@@ -5,7 +5,6 @@ const { GeolocationReact } = require('../geolocation-react.js');
 import RNFetchBlob from 'rn-fetch-blob';
 import { generateSecureRandom } from 'react-native-securerandom';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
-import { Buffer } from 'buffer';
 import { Linking, Platform } from 'react-native';
 const RNExitApp = require('react-native-exit-app').default;
 
@@ -76,40 +75,6 @@ export default function shimInit() {
 	};
 
 	/* eslint-enable */
-
-	shim.fetch = async function(url, options = null) {
-		// The native fetch() throws an uncatchable error that crashes the
-		// app if calling it with an invalid URL such as '//.resource' or
-		// "http://ocloud. de" so detect if the URL is valid beforehand and
-		// throw a catchable error. Bug:
-		// https://github.com/facebook/react-native/issues/7436
-		let validatedUrl = '';
-		try { // Check if the url is valid
-			validatedUrl = new URL(url).href;
-		} catch (error) { // If the url is not valid, a TypeError will be thrown
-			throw new Error(`Not a valid URL: ${url}`);
-		}
-
-		return shim.fetchWithRetry(() => {
-			// If the request has a body and it's not a GET call, and it
-			// doesn't have a Content-Type header we display a warning,
-			// because it could trigger a "Network request failed" error.
-			// https://github.com/facebook/react-native/issues/30176
-			if (options?.body && options?.method && options.method !== 'GET' && !options?.headers?.['Content-Type']) {
-				console.warn('Done a non-GET fetch call without a Content-Type header. It may make the request fail.', url, options);
-			}
-
-			// Among React Native `fetch()` many bugs, one of them is that
-			// it will truncate strings when they contain binary data.
-			// Browser fetch() or Node fetch() work fine but as always RN's
-			// one doesn't. There's no obvious way to fix this so we'll
-			// have to wait if it's eventually fixed upstream. See here for
-			// more info:
-			// https://github.com/laurent22/joplin/issues/3986#issuecomment-718019688
-
-			return fetch(validatedUrl, options);
-		}, options);
-	};
 
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
@@ -191,12 +156,6 @@ export default function shimInit() {
 	shim.readLocalFileBase64 = async function(path) {
 		return RNFetchBlob.fs.readFile(path, 'base64');
 	};
-
-	shim.stringByteLength = function(string) {
-		return Buffer.byteLength(string, 'utf-8');
-	};
-
-	shim.Buffer = Buffer;
 
 	shim.openUrl = url => {
 		return Linking.openURL(url);
