@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
 import { FolderEntity, NoteEntity } from '../database/types';
-import { itemIsReadOnlyFromShare, ItemSlice } from '../../models/utils/readOnly';
+import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 
@@ -93,7 +93,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
-		noteIsReadOnly: selectedNote ? itemIsReadOnlyFromShare(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
 		// Current context folder
@@ -103,7 +103,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 		folderIsDeleted: commandFolder ? !!commandFolder.deleted_time : false,
 		folderIsTrash: commandFolder ? commandFolder.id === getTrashFolderId() : false,
-		folderIsReadOnly: commandFolder ? itemIsReadOnlyFromShare(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
 
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,
