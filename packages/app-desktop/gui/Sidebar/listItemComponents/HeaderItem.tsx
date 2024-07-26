@@ -61,7 +61,7 @@ const HeaderItem: React.FC<Props> = props => {
 				tabIndex={0}
 				ref={props.anchorRef}
 			>
-				<StyledHeaderIcon className={item.iconName}/>
+				<StyledHeaderIcon aria-label='' className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
 			{ item.onPlusButtonClick && addButton }

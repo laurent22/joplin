@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledNoteCount } from '../styles';
+import { _n } from '@joplin/lib/locale';
 
 
 interface Props {
@@ -8,7 +8,8 @@ interface Props {
 
 const NoteCount: React.FC<Props> = props => {
 	const count = props.count;
-	return count ? <StyledNoteCount className="note-count-label">{count}</StyledNoteCount> : null;
+	const title = _n('Contains %d note', 'Contains %d notes', count, count);
+	return count ? <div role='note' aria-label={title} title={title} className="note-count-label">{count}</div> : null;
 };
 
 export default NoteCount;
