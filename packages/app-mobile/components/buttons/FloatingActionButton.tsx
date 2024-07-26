@@ -12,7 +12,7 @@ const Icon = require('react-native-vector-icons/Ionicons').default;
 type FABGroupProps = React.ComponentProps<typeof FAB.Group>;
 
 type OnButtonPress = ()=> void;
-export interface SubmenuButtonSpec {
+interface ButtonSpec {
 	icon: string;
 	label: string;
 	color?: string;
@@ -20,10 +20,10 @@ export interface SubmenuButtonSpec {
 }
 
 interface ActionButtonProps {
-	buttons?: SubmenuButtonSpec[];
+	buttons?: ButtonSpec[];
 
 	// If not given, an "add" button will be used.
-	mainButton?: SubmenuButtonSpec;
+	mainButton?: ButtonSpec;
 	dispatch: Dispatch;
 }
 
