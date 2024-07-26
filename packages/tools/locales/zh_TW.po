@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Kevin Hsu <kevin.hsu.hws@gmail.com>\n"
 "Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:600
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -88,9 +90,8 @@ msgid "&View"
 msgstr "檢視 (&V)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:891
-#, fuzzy
 msgid "&Window"
-msgstr "關閉視窗"
+msgstr "&視窗"
 
 #: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
@@ -138,9 +139,8 @@ msgid "%d notes match this pattern. Delete them?"
 msgstr "相符的記事共有 %d 則，要刪除嗎？"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d notes will be permanently deleted. Continue?"
-msgstr "刪除選定的筆記"
+msgstr "刪除選定的記事？"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:227
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:237
@@ -197,7 +197,7 @@ msgstr "%s 沒有針對同步許多小文件進行優化，因此初始同步速
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:75
 msgid "%s tab opened"
-msgstr ""
+msgstr "%s 在分頁打開"
 
 #: packages/lib/services/ReportService.ts:286
 #: packages/lib/services/ReportService.ts:287
@@ -260,7 +260,7 @@ msgstr "A5"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:75
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
 msgid "About"
-msgstr ""
+msgstr "關於"
 
 #: packages/app-desktop/gui/MenuBar.tsx:605
 #: packages/app-desktop/gui/MenuBar.tsx:942
@@ -288,7 +288,6 @@ msgid "Accept"
 msgstr "接受"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
-#, fuzzy
 msgid "Accepted invitations"
 msgstr "共享對象已接受邀請"
 
@@ -306,13 +305,11 @@ msgstr "帳戶"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
-#, fuzzy
 msgid "Account information"
-msgstr "更多資訊"
+msgstr "帳戶訊息"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
-#, fuzzy
 msgid "Account type"
 msgstr "帳戶"
 
@@ -373,7 +370,6 @@ msgid "Advanced options"
 msgstr "顯示進階選項"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:660
-#, fuzzy
 msgid "Advanced settings"
 msgstr "顯示進階選項"
 
@@ -384,11 +380,11 @@ msgstr "進階工具"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:99
 msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
-msgstr "所有資料，包括筆記、筆記本和標籤將被永久刪除。"
+msgstr "所有資料，包括記事、記事本和標籤將被永久刪除。"
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr ""
+msgstr "所有項目同步失敗，將被標記忽略。"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:184
@@ -402,7 +398,7 @@ msgstr "所有預設埠號都在使用中 - 請到 %s 回報此問題"
 
 #: packages/lib/models/Setting.ts:1230
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr ""
+msgstr "允許對移動延伸模組進行偵錯。請參考%s以取得更多信息。"
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -422,7 +418,7 @@ msgstr "總是詢問"
 
 #: packages/app-desktop/bridge.ts:421
 msgid "Always open %s files without asking."
-msgstr ""
+msgstr "總是開啟 %s 檔案，不再詢問。"
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Always resize"
@@ -433,8 +429,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"不明確的筆記本 \"%s\"。請使用筆記本 ID - 按下 \"ti\" 以查看簡短的筆記本 ID，"
-"或使用 $b 來使用當前選定的筆記本"
+"不明確的記事本 \"%s\"。請使用記事本 ID - 按下 \"ti\" 以查看簡短的記事本 ID，"
+"或使用 $b 來使用當前選定的記事本"
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:30
@@ -442,7 +438,7 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
-"不明確的筆記本 \"%s\"。請使用簡短的筆記本 ID - 按下 \"ti\" 以查看簡短的筆記"
+"不明確的記事本 \"%s\"。請使用簡短的記事本 ID - 按下 \"ti\" 以查看簡短的記事"
 "本 ID"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
@@ -459,7 +455,7 @@ msgstr "已有更新，您想立即下載嗎？"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:21
 msgid "Android API level: %d"
-msgstr ""
+msgstr "安卓 API 版本: %d"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -566,9 +562,8 @@ msgstr "授權 Token："
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:88
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:162
-#, fuzzy
 msgid "Authorise"
-msgstr "授權 Token："
+msgstr "授權 Token"
 
 #: packages/lib/models/Setting.ts:786
 msgid "Auto"
@@ -588,7 +583,7 @@ msgstr "自動檢查更新"
 
 #: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr ""
+msgstr "幾天後自動刪除垃圾桶裡的筆記"
 
 #: packages/lib/models/Setting.ts:909
 msgid "Automatically switch theme to match system theme"
@@ -608,7 +603,7 @@ msgstr "基本"
 
 #: packages/app-mobile/components/BetaChip.tsx:37
 msgid "Beta"
-msgstr ""
+msgstr "測試"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:17
 msgid ""
@@ -636,7 +631,7 @@ msgstr "瀏覽..."
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:222
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:54
 msgid "Built-in"
-msgstr ""
+msgstr "內建"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:85
 msgid "Bulleted List"
@@ -644,7 +639,7 @@ msgstr "項目清單"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:129
 msgid "by %s"
-msgstr ""
+msgstr "經由 %s"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -859,9 +854,8 @@ msgid "Clear alarm"
 msgstr "清除提醒"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
-#, fuzzy
 msgid "Clear search"
-msgstr "清除提醒"
+msgstr "清除搜尋"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:204
 msgid ""
@@ -904,6 +898,8 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"關閉應用程式，然後刪除在「%s」中的個人檔案，並重新啟動應用程式。首先，創建備"
+"份，將所有筆記匯出為 JEX。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:687
@@ -912,11 +908,11 @@ msgstr "關閉視窗"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
-msgstr ""
+msgstr "Cmd-click 開啟"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:45
 msgid "Cmd-click to open: %s"
-msgstr ""
+msgstr "Cmd-click 開啟:%s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:34
@@ -944,9 +940,8 @@ msgid "Collapse"
 msgstr "收合"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
-#, fuzzy
 msgid "Collapse %s"
-msgstr "收合"
+msgstr "收合 %s"
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -980,9 +975,8 @@ msgid "Command palette..."
 msgstr "命令選擇區..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
-#, fuzzy
 msgid "Compact"
-msgstr "完成"
+msgstr "緊湊"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:70
@@ -998,6 +992,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"已完成但出現警告\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
@@ -1005,7 +1001,7 @@ msgstr "已完成: %s"
 
 #: packages/lib/models/Note.ts:64
 msgid "completion date"
-msgstr ""
+msgstr "完成日期"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1045,9 +1041,8 @@ msgstr "衝突 (附件)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:256
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:470
-#, fuzzy
 msgid "Connect to Joplin Cloud"
-msgstr "Joplin Cloud"
+msgstr "連結到Joplin Cloud"
 
 #: packages/lib/utils/joplinCloud/index.ts:208
 msgid "Consolidated billing"
@@ -1058,7 +1053,6 @@ msgid "Content provided by %s"
 msgstr "%s 提供的內容"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:102
-#, fuzzy
 msgid "Content provided by: %s"
 msgstr "%s 提供的內容"
 
@@ -1106,7 +1100,6 @@ msgstr "複製鏈結位址"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
-#, fuzzy
 msgid "Copy link to website"
 msgstr "Joplin 官方網站"
 
@@ -1134,9 +1127,8 @@ msgid "Copy token"
 msgstr "複製 Token"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
-#, fuzzy
 msgid "Copy version info"
-msgstr "顯示版本資訊"
+msgstr "複製版本資訊"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1290,11 +1282,11 @@ msgstr "正在建立新報告 %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:41
 msgid "Ctrl-click to open"
-msgstr ""
+msgstr "Ctrl-cilck 開啟"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:47
 msgid "Ctrl-click to open: %s"
-msgstr ""
+msgstr "Ctrl-click 開啟:%s"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
@@ -1453,7 +1445,6 @@ msgstr "刪除此設定檔「%s」？"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:69
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#, fuzzy
 msgid "Deleted"
 msgstr "刪除"
 
@@ -1467,7 +1458,7 @@ msgstr "已刪除的遠端項目: %d 項。"
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
-msgstr ""
+msgstr "永久刪除筆記，跳過垃圾桶。"
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
@@ -1682,12 +1673,11 @@ msgstr "Dropbox 登入"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "到期日"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "更新日期"
+msgstr "到期日"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:502
@@ -1802,9 +1792,8 @@ msgid "Email to Note"
 msgstr "電子郵件轉筆記"
 
 #: packages/lib/models/Setting.ts:2843
-#, fuzzy
 msgid "Email To Note, login information"
-msgstr "顯示版本資訊"
+msgstr "電子郵件轉換為記事，登入信息"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
@@ -1820,7 +1809,7 @@ msgstr "強調文字"
 #: packages/app-mobile/components/side-menu-content.tsx:157
 #: packages/app-mobile/components/side-menu-content.tsx:161
 msgid "Empty trash"
-msgstr ""
+msgstr "清空垃圾桶"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1902,7 +1891,6 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "啟用光學字符識別（OCR）"
 
 #: packages/lib/models/Setting.ts:2849
-#, fuzzy
 msgid "Enable or disable plugins"
 msgstr "管理您的延伸模組"
 
@@ -1912,9 +1900,8 @@ msgstr "啟用 PDF 查看器"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/Setting.ts:1241
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "啟用 Typographer 支援"
+msgstr "啟用延伸模組支援"
 
 #: packages/lib/models/Setting.ts:1263
 msgid "Enable soft breaks"
@@ -2057,12 +2044,10 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote 匯出檔案 (Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:92
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
 msgstr "Evernote 匯出檔案 (HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:101
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
 msgstr "Evernote 匯出檔案 (Markdown)"
 
@@ -2075,9 +2060,8 @@ msgid "Expand"
 msgstr "擴展"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
-#, fuzzy
 msgid "Expand %s"
-msgstr "擴展"
+msgstr "擴展 %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:191
@@ -2178,9 +2162,8 @@ msgstr "檔案系統"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:213
 #: packages/app-mobile/components/screens/LogScreen.tsx:214
-#, fuzzy
 msgid "Filter"
-msgstr "篩選標籤"
+msgstr "篩選"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:215
 msgid "Filter tags"
@@ -2311,9 +2294,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
-#, fuzzy
 msgid "Go to Joplin Cloud profile"
-msgstr "Joplin Cloud"
+msgstr "前往Joplin Cloud profile"
 
 #: packages/app-mobile/components/screens/Note.tsx:1113
 msgid "Go to source URL"
@@ -2330,7 +2312,7 @@ msgstr "授權"
 
 #: packages/app-cli/app/command-sync.ts:116
 msgid "Have you authorised the application login in the above URL?"
-msgstr ""
+msgstr "你已經授權應用程式登入上述URL了嗎？"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useHeaderButtons.ts:14
 msgid "Header %d"
@@ -2435,7 +2417,7 @@ msgstr "閒置"
 msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
-msgstr ""
+msgstr "如果您已經授權，請等待應用程式同步到Joplin Cloud。"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:89
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:360
@@ -2449,9 +2431,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 證書錯誤"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "無法同步的項目"
+msgstr "忽略無法同步的項目"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2465,33 +2446,32 @@ msgid "Import"
 msgstr "匯入"
 
 #: packages/lib/models/Setting.ts:2816
-#, fuzzy
 msgid "Import and Export"
-msgstr "匯出除錯報告"
+msgstr "導入與導出"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"導入失敗。請確保選擇了 JEX 文件。\n"
+"詳細：%s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "導入JEX檔"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "從JEX (Joplin Export)檔案導入筆記。"
 
 #: packages/lib/models/Setting.ts:2848
-#, fuzzy
 msgid "Import or export your data"
-msgstr "匯出你的資料"
+msgstr "導入或者導出你的資料"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "匯出成功！"
+msgstr "導入成功！"
 
 #: packages/app-desktop/gui/MenuBar.tsx:311
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2502,9 +2482,8 @@ msgid "Importing notes..."
 msgstr "正在匯入記事..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "匯出中..."
+msgstr "導入中..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2569,7 +2548,7 @@ msgstr ""
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:466
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr ""
+msgstr "為了同步，請升級您的應用程式版本到 %s 以上"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:120
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:218
@@ -2592,7 +2571,7 @@ msgstr "在: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
-msgstr ""
+msgstr "不相容"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:52
 msgid "Increase indent level"
@@ -2646,9 +2625,8 @@ msgid "Installed"
 msgstr "已安裝"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
-#, fuzzy
 msgid "Installed (%d):"
-msgstr "已安裝"
+msgstr "已安裝："
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:17
@@ -2680,9 +2658,8 @@ msgid "Invalid password"
 msgstr "無效的密碼"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:23
-#, fuzzy
 msgid "iOS version: %s"
-msgstr "最新版本: %s"
+msgstr "iOS最新版本: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:60
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useInlineFormattingButtons.ts:24
@@ -2722,12 +2699,10 @@ msgstr "Joplin Cloud"
 
 #: packages/app-desktop/gui/Root.tsx:230
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:148
-#, fuzzy
 msgid "Joplin Cloud Login"
-msgstr "Joplin Cloud"
+msgstr "Joplin Cloud 登入"
 
 #: packages/lib/services/plugins/PluginService.ts:517
-#, fuzzy
 msgid "Joplin Desktop"
 msgstr "Joplin 官方網站"
 
@@ -2735,7 +2710,7 @@ msgstr "Joplin 官方網站"
 msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
-msgstr ""
+msgstr "Joplin 無法識別%s 延伸模組。開啟這個檔案可能危險。您想要做什麼？"
 
 #: packages/lib/services/interop/InteropService.ts:149
 #: packages/lib/services/interop/InteropService.ts:66
@@ -2761,9 +2736,8 @@ msgid "Joplin Forum"
 msgstr "Joplin 討論區"
 
 #: packages/lib/services/plugins/PluginService.ts:515
-#, fuzzy
 msgid "Joplin Mobile"
-msgstr "Joplin 官方網站"
+msgstr "Joplin 行動版"
 
 #: packages/lib/SyncTargetJoplinServer.ts:61
 msgid "Joplin Server"
@@ -2808,9 +2782,8 @@ msgid "Keep note history for"
 msgstr "保留記事歷史記錄"
 
 #: packages/lib/models/Setting.ts:1936
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "保留記事歷史記錄"
+msgstr "將筆記n"
 
 #: packages/lib/models/Setting.ts:1567
 msgid "Keyboard Mode"
@@ -2854,7 +2827,7 @@ msgstr "稍後"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "緯度"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:623
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:231
@@ -2868,18 +2841,16 @@ msgstr "頁面佈局"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:15
-#, fuzzy
 msgid "Learn more"
-msgstr "增加縮排"
+msgstr "更多訊息"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Leave it blank to download the language files from the default website"
 msgstr "留空以從預設網站下載語言檔案"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
-#, fuzzy
 msgid "Leave notebook"
-msgstr "離開記事本..."
+msgstr "離開記事本"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
@@ -2901,7 +2872,7 @@ msgstr "光亮"
 msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
-msgstr ""
+msgstr "就像安裝任何軟體一樣，延伸模組也可能導致安全性問題或資料損失。"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -2966,9 +2937,8 @@ msgid "Log"
 msgstr "日誌"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
-#, fuzzy
 msgid "Login to Joplin Cloud."
-msgstr "Joplin Cloud"
+msgstr "登入Joplin Cloud."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -2988,7 +2958,7 @@ msgstr "日誌、設定檔、同步狀態"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "經度"
 
 #: packages/app-desktop/gui/MenuBar.tsx:914
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
@@ -3012,9 +2982,8 @@ msgid "Manage profiles"
 msgstr "管理設定檔"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:562
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "管理設定檔"
+msgstr "管理分享記事本"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:336
 msgid "Manage your plugins"
@@ -3093,7 +3062,7 @@ msgstr "媒體播放器、數學、圖表、目錄"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
-msgstr ""
+msgstr "最小化"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:320
 msgid "Missing keys"
@@ -3130,7 +3099,7 @@ msgstr "與 \"%s\" 相符的項目超過一個，請縮小查詢範圍。"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid ""
 "Most plugins have source code available for review on the plugin website."
-msgstr ""
+msgstr "大多數延伸模組在延伸模組網站上提供源代碼供您進行評估。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:591
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3139,16 +3108,15 @@ msgstr "要將 %d 移動到「%s」記事本嗎？"
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/MainScreen/commands/deleteFolder.ts:20
 #: packages/app-mobile/components/side-menu-content.tsx:229
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will also be moved to the "
 "trash."
 msgstr ""
-"確定刪除「%s」？\n"
+"移動記事本到垃圾桶?\n"
 "\n"
-"此記事本中的所有記事和子記事本也將刪除。"
+"此記事本中的所有記事和子記事本也將移動到垃圾桶。"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3181,12 +3149,11 @@ msgstr "永不調整大小"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/HeaderItem.tsx:46
 msgid "New"
-msgstr ""
+msgstr "新的"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
-#, fuzzy
 msgid "New invitations"
-msgstr "最新版本: %s"
+msgstr "新邀請"
 
 #: packages/app-desktop/gui/MainScreen/commands/newNote.ts:10
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
@@ -3269,7 +3236,7 @@ msgstr "沒有 ID 為 %s 的項目"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:92
 msgid "No new invitations"
-msgstr ""
+msgstr "沒有新的邀請"
 
 #: packages/app-cli/app/app.ts:104
 msgid "No notebook has been specified."
@@ -3285,7 +3252,7 @@ msgstr "目前沒有任何記事，請點選「新增記事」即可建立。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
 msgid "No plugins are installed."
-msgstr ""
+msgstr "沒有安裝延伸模組。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid "No resources!"
@@ -3304,9 +3271,8 @@ msgid "No suggestions"
 msgstr "沒有建議"
 
 #: packages/app-mobile/plugins/PluginRunner/dialogs/PluginPanelViewer.tsx:120
-#, fuzzy
 msgid "No tab selected"
-msgstr "未選擇記事本。"
+msgstr "未選擇分頁"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -3429,7 +3395,6 @@ msgid "Notebook: %s"
 msgstr "記事本: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
 msgstr "記事本: %s"
 
@@ -3529,7 +3494,6 @@ msgid "Open %s"
 msgstr "開啟 %s"
 
 #: packages/app-desktop/bridge.ts:425
-#, fuzzy
 msgid "Open it"
 msgstr "開啟"
 
@@ -3542,7 +3506,6 @@ msgid "Open profile directory"
 msgstr "開啟個人資料目錄"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
-#, fuzzy
 msgid "Open Source"
 msgstr "來源"
 
@@ -3634,32 +3597,30 @@ msgid "Per user. Minimum of %d users."
 msgstr "每位使用者。最少 %d 位使用者。"
 
 #: packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "刪除選定的筆記"
+msgstr "永久刪除記事"
 
 #: packages/lib/models/Note.ts:929
-#, fuzzy
 msgid "Permanently delete note \"%s\"?"
-msgstr "刪除此記事「%s」？"
+msgstr "永久刪除此記事「%s」?"
 
 #: packages/app-cli/app/command-rmbook.ts:36
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
-msgstr "確定要刪除記事本？此舉亦會刪除其中的所有記事和子記事本。"
+msgstr ""
+"永久刪除記事本？\n"
+"\n"
+"此舉亦會永久刪除其中的所有記事和子記事本。"
 
 #: packages/lib/models/Note.ts:931
-#, fuzzy
 msgid "Permanently delete these %d notes?"
-msgstr "刪除這些記事 %d ？"
+msgstr "永久刪除這些記事 %d ？"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "刪除這些記事 %d ？"
+msgstr "永久刪除這些記事本 ，不要移到垃圾桶。"
 
 #: packages/app-mobile/components/screens/Note.tsx:499
 msgid "Permission needed"
@@ -3730,9 +3691,8 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "請指定要匯入的記事本。"
 
 #: packages/lib/services/plugins/PluginService.ts:511
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "請升級 Joplin 以使用此延伸模組"
+msgstr "使用此延伸模組，請升級 Joplin 版本到%s以上，。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1378
 msgid ""
@@ -3746,28 +3706,24 @@ msgid "Please wait..."
 msgstr "請稍候..."
 
 #: packages/app-mobile/plugins/PlatformImplementation.ts:53
-#, fuzzy
 msgid "Plugin message"
-msgstr "延伸模組"
+msgstr "延伸模組訊息"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:444
-#, fuzzy
 msgid "Plugin panels"
-msgstr "延伸模組"
+msgstr "延伸模組分頁"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:111
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "延伸模組庫載入失敗"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:29
-#, fuzzy
 msgid "Plugin search"
-msgstr "延伸模組"
+msgstr "搜尋延伸模組"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
-#, fuzzy
 msgid "Plugin security"
-msgstr "延伸模組"
+msgstr "延伸模組安全性"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:334
 msgid "Plugin tools"
@@ -3775,7 +3731,7 @@ msgstr "延伸模組"
 
 #: packages/lib/models/Setting.ts:1229
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "延伸模組 WebView 偵錯中"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
@@ -3790,6 +3746,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"延伸模組可以擴展Joplin功能，提供預設功能以外的功能。延伸模組可以擴展Joplin的"
+"編輯器與查看器 等功能。"
 
 #: packages/lib/models/Setting.ts:1543
 msgid "Portrait"
@@ -3875,7 +3833,7 @@ msgstr "處理使用者刪除"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "處理中"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -3974,14 +3932,12 @@ msgid "Recipients:"
 msgstr "共享對象："
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:70
-#, fuzzy
 msgid "Recommended"
-msgstr "命令"
+msgstr "推薦"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "命令"
+msgstr "延伸模組推薦"
 
 #: packages/app-desktop/gui/MenuBar.tsx:742
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4057,25 +4013,23 @@ msgstr "取代："
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
-msgstr ""
+msgstr "回報問題"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr ""
+msgstr "回報延伸模組問題。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "回報惡意延伸模組"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
-#, fuzzy
 msgid "Report system"
-msgstr "檔案系統"
+msgstr "回報系統"
 
 #: packages/server/src/services/MustacheService.ts:137
-#, fuzzy
 msgid "Reports"
-msgstr "檔案系統"
+msgstr "回報"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -4117,24 +4071,20 @@ msgid "Restore"
 msgstr "還原"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
 msgstr "恢復的記事"
 
 #: packages/app-desktop/gui/MainScreen/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "新增記事本"
+msgstr "恢復記事本"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "刪除符合 <note-pattern> 的記事。"
+msgstr "從垃圾桶恢復符合 <note-pattern> 的記事。"
 
 #: packages/lib/services/trash/index.ts:88
-#, fuzzy
 msgid "Restored items"
-msgstr "恢復的記事"
+msgstr "恢復的項目"
 
 #: packages/lib/services/RevisionService.ts:248
 msgid "Restored Notes"
@@ -4142,7 +4092,7 @@ msgstr "恢復的記事"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:157
 msgid "Results (%d):"
-msgstr ""
+msgstr "結果 (%d):"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
@@ -4263,9 +4213,8 @@ msgid "Search for..."
 msgstr "搜尋..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:164
-#, fuzzy
 msgid "Search hidden"
-msgstr "搜尋"
+msgstr "隱藏搜尋"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -4276,9 +4225,8 @@ msgid "Search in current note"
 msgstr "在目前記事中搜尋"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:164
-#, fuzzy
 msgid "Search shown"
-msgstr "搜尋"
+msgstr "顯示搜尋"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -4389,9 +4337,8 @@ msgstr "分享筆記本給其他人"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
-#, fuzzy
 msgid "Share from %s (%s)"
-msgstr "%s = %s (%s)"
+msgstr "從%s = %s (%s) 分享"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:391
 msgid "Share Notebook"
@@ -4406,7 +4353,6 @@ msgid "Share permissions"
 msgstr "共享權限"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
 msgstr "分享"
 
@@ -4443,9 +4389,8 @@ msgid "Show disabled keys"
 msgstr "顯示已停用密鑰"
 
 #: packages/app-desktop/gui/ConfigScreen/FontSearch.tsx:130
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "編輯器字型系列"
+msgstr "只顯示monospace字型系列。"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/ToggleOverflowButton.tsx:19
 msgid "Show more actions"
@@ -4512,13 +4457,13 @@ msgstr "日光白"
 #: packages/lib/models/settings/settingValidations.ts:21
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
-msgstr ""
+msgstr "某些附件下載失敗。請您重新下載。"
 
 #: packages/lib/models/settings/settingValidations.ts:18
 msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
-msgstr ""
+msgstr "一些附件需要下載，將附件下載模式設為「總是」然後再試。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
@@ -4534,10 +4479,9 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "有些項目不能同步。請按此查看更多資訊。"
 
 #: packages/lib/models/settings/settingValidations.ts:24
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "有些項目不能同步。請按此查看更多資訊。"
+msgstr "有些項目不能同步。請先嘗試同步這些項目。"
 
 #: packages/lib/models/Setting.ts:1075
 msgid "Sort notebooks by"
@@ -4841,7 +4785,7 @@ msgstr "拍攝相片"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:72
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "任務\"%s\" 失敗 ，錯誤: %s"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/buttons/useListButtons.ts:32
 msgid "Task list"
@@ -4865,7 +4809,6 @@ msgid "Text editor command"
 msgstr "文字編輯器命令"
 
 #: packages/lib/utils/joplinCloud/index.ts:167
-#, fuzzy
 msgid ""
 "The [Web Clipper](%s) is a browser extension that allows you to save web "
 "pages and screenshots from your browser."
@@ -4957,10 +4900,9 @@ msgstr ""
 "變化。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:550
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "已監控下列附件的變動："
+msgstr[0] "以下附件符合您的查詢："
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:534
 msgid "The following attachments are being watched for changes:"
@@ -5014,15 +4956,13 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "已成功將「%s」還原至「%s」筆記本中。"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:65
-#, fuzzy
 msgid "The note was successfully moved to the trash."
 msgid_plural "The notes were successfully moved to the trash."
-msgstr[0] "已成功將「%s」還原至「%s」筆記本中。"
+msgstr[0] "已成功將「%s」還原至「%s」記事本中。"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:63
-#, fuzzy
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "已成功將「%s」還原至「%s」筆記本中。"
+msgstr "記事本和內容已成功移到垃圾桶中。"
 
 #: packages/app-mobile/components/screens/folder.js:76
 msgid "The notebook could not be saved: %s"
@@ -5117,9 +5057,8 @@ msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "您當前沒有任何記事。點擊 (+) 鈕即可新增。"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "保留記事歷史記錄"
+msgstr "垃圾桶中沒記事。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:266
 msgid "There are unsaved changes."
@@ -5148,7 +5087,7 @@ msgid ""
 "These items failed to sync, but have been marked as \"ignored\". They won't "
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
-msgstr ""
+msgstr "這些項目未能同步，但已經被標記為“忽略”。"
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5185,7 +5124,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "這個附件沒有OCR 資料(狀態:%s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:234
@@ -5214,22 +5153,19 @@ msgid ""
 msgstr "此為顯示記事相關附件的進階工具，刪除後將無法復原，請謹慎使用。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:275
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "無法開啟檔案：%s"
+msgstr[0] "無法刪除這個記事：%s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:262
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "無法儲存記事本：%s"
+msgstr[0] "這些記事無法製作副本：%s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:601
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "無法儲存記事本：%s"
+msgstr[0] "無法移動這些記事：%s"
 
 #: packages/lib/models/Note.ts:128
 msgid "This note does not have geolocation information."
@@ -5252,7 +5188,7 @@ msgstr "此記事沒有歷史紀錄"
 
 #: packages/lib/services/plugins/PluginService.ts:519
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "延伸模組不支援 %s。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:455
 msgid ""
@@ -5271,7 +5207,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "垃圾桶裡的子文件夾沒有筆記。"
 
 #: packages/lib/models/Setting.ts:1297
 msgid ""
@@ -5289,12 +5225,11 @@ msgstr "這將會開啟新視窗。儲存您目前的變更嗎？"
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:159
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "這將永久刪除垃圾桶裡所有項目，要繼續嗎？"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr "刪除此記事「%s」？"
+msgstr "這將永久刪除此記事「%s」，繼續？"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
@@ -5330,11 +5265,10 @@ msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項�
 #: packages/app-cli/app/command-sync.ts:110
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
-msgstr "請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項："
+msgstr "為了讓Joplin與Joplin Cloud進行同步，請使用以下網址登入："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -5394,7 +5328,6 @@ msgid "to-do"
 msgstr "待辦事項"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
 msgstr "待辦事項"
 
@@ -5423,12 +5356,10 @@ msgid "Toggle external editing"
 msgstr "切換外部編輯模式"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "顯示 / 隱藏側邊欄"
+msgstr "顯示 / 隱藏上方工具列"
 
 #: packages/lib/models/Setting.ts:2846
-#, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "保留記事歷史記錄"
 
@@ -5470,7 +5401,7 @@ msgstr "總數：%d/%d"
 
 #: packages/lib/services/trash/index.ts:44
 msgid "Trash"
-msgstr ""
+msgstr "垃圾桶"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:324
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5536,11 +5467,11 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"移除與重新安裝應用程式。首先確保你在桌面應用程式導出所有筆記來建立備份。"
 
 #: packages/app-desktop/bridge.ts:417
-#, fuzzy
 msgid "Unknown file type"
-msgstr "未知的標誌：%s"
+msgstr "未知的檔案類型：%s"
 
 #: packages/lib/utils/processStartFlags.ts:178
 msgid "Unknown flag: %s"
@@ -5591,9 +5522,8 @@ msgid "Update"
 msgstr "更新"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:77
-#, fuzzy
 msgid "Update available"
-msgstr "更新使用者"
+msgstr "可用更新"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -5744,7 +5674,7 @@ msgstr "檢視"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:141
 msgid "View OCR text"
-msgstr ""
+msgstr "顯示光學字元辨識文字"
 
 #: packages/app-mobile/components/screens/Note.tsx:1106
 msgid "View on map"
@@ -5776,9 +5706,8 @@ msgid "Voice typing..."
 msgstr "語音輸入..."
 
 #: packages/lib/services/joplinCloudUtils.ts:27
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "授權"
+msgstr "等待授權..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:227
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:120
@@ -5791,13 +5720,13 @@ msgstr "警告：為確保效能，將不會顯示所有資源（限制：%s）�
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
-msgstr ""
+msgstr "我們有一個用於報告與刪除問題延伸模組系統。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
-msgstr ""
+msgstr "我們將受信任的Joplin 社群成員開發延伸模組標記為\"推薦\"。"
 
 #: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
@@ -5827,12 +5756,11 @@ msgstr "官方網站及線上說明"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 msgid "WebView package: %s"
-msgstr ""
+msgstr "WebView 封包:%s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:12
-#, fuzzy
 msgid "WebView version: %s"
-msgstr "最新版本: %s"
+msgstr "WebView版本: %s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
@@ -5854,9 +5782,8 @@ msgid "Welcome!"
 msgstr "歡迎！"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
-#, fuzzy
 msgid "What are plugins?"
-msgstr "刪除延伸模組「%s」？"
+msgstr "什麼是延伸模組？"
 
 #: packages/lib/models/Setting.ts:1166
 msgid "When creating a new note:"
@@ -5911,7 +5838,7 @@ msgstr ""
 
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "您已經登入 Joplin Cloud，您可以離開這個畫面。"
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -5934,20 +5861,15 @@ msgstr ""
 "工具。"
 
 #: packages/lib/services/joplinCloudUtils.ts:53
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
-msgstr ""
-"設定你的 Joplin Cloud 帳戶時發生錯誤。請確認你的電子信箱與密碼並重試。錯誤訊"
-"息：\n"
-"\n"
-"%s"
+msgstr "無法連線到 Joplin Cloud. 請檢查您的認證信息並再試一次。錯誤:"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:55
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:70
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "您的帳戶無法訪問此功能"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -5960,7 +5882,7 @@ msgstr "您的資料將被重新加密並再次同步。"
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "你的 Joplin Cloud 憑證無效，請重新登入。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

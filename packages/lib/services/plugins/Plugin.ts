@@ -96,7 +96,11 @@ export default class Plugin {
 		this.running_ = running;
 	}
 
-	public async dataDir(): Promise<string> {
+	public get dataDir(): string {
+		return shim.fsDriver().resolve(this.dataDir_);
+	}
+
+	public async createAndGetDataDir(): Promise<string> {
 		if (this.dataDirCreated_) return this.dataDir_;
 
 		if (!(await shim.fsDriver().exists(this.dataDir_))) {

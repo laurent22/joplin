@@ -1,17 +1,17 @@
 
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { NoteViewerLocalApi, NoteViewerRemoteApi, RendererWebViewOptions } from './types';
+import { NoteViewerLocalApi, NoteViewerRemoteApi, RendererWebViewOptions, WebViewLib } from './types';
 import Renderer from './Renderer';
 
 declare global {
 	interface Window {
 		rendererWebViewOptions: RendererWebViewOptions;
-		webviewLib: { postMessage: (message: string)=> void };
+		webviewLib: WebViewLib;
 	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-declare const webviewLib: any;
+declare const webviewLib: WebViewLib;
 
 const messenger = new WebViewToRNMessenger<NoteViewerLocalApi, NoteViewerRemoteApi>(
 	'note-viewer',
@@ -34,6 +34,8 @@ webviewLib.initialize({
 	},
 });
 // Share the webview library globally so that the renderer can access it.
+window.webviewLib = webviewLib;
+
 window.webviewLib = webviewLib;
 
 const renderer = new Renderer({
