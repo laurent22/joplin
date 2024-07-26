@@ -9,7 +9,6 @@ import Logger from '@joplin/utils/Logger';
 import { ExtraContentScriptSource } from '../bundledJs/types';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
-import FsDriverWeb from '../../../utils/fs-driver/fs-driver-rn.web';
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 
@@ -123,18 +122,21 @@ const useRerenderHandler = (props: Props) => {
 		}
 		let newPluginSettingKeys = pluginSettingKeys;
 
+		// On web, resources are virtual files and thus need to be transferred to the WebView.
 		if (shim.mobilePlatform() === 'web') {
 			for (const [resourceId, resource] of Object.entries(props.noteResources)) {
 				try {
 					await props.renderer.setResourceFile(
 						resourceId,
-						await (shim.fsDriver() as FsDriverWeb).fileAtPath(Resource.fullPath(resource.item)),
+						await shim.fsDriver().fileAtPath(Resource.fullPath(resource.item)),
 					);
 				} catch (error) {
 					if (error.code !== 'ENOENT') {
 						throw error;
 					}
-					console.warn('ENOTFOUND', Resource.fullPath(resource.item), 'for', resource);
+
+					// This can happen if a resource hasn't been downloaded yet
+					logger.warn('Error: Resource file not found (ENOENT)', Resource.fullPath(resource.item), 'for ID', resource.item.id);
 				}
 			}
 		}
