@@ -33,6 +33,6 @@ export const runtime = (): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: '(!folderIsReadOnly && !inTrash)',
+		enabledCondition: '!folderIsReadOnly',
 	};
 };

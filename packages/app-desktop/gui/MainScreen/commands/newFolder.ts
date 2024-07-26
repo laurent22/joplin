@@ -18,6 +18,6 @@ export const runtime = (): CommandRuntime => {
 
 			void CommandService.instance().execute('openFolderDialog', options);
 		},
-		enabledCondition: '(!folderIsReadOnly && !inTrash)',
+		enabledCondition: '!folderIsReadOnly',
 	};
 };

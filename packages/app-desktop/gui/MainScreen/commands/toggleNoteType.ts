@@ -17,6 +17,6 @@ export const runtime = (): CommandRuntime => {
 				await Note.save(Note.toggleIsTodo(note), { userSideValidation: true });
 			}
 		},
-		enabledCondition: '(!noteIsReadOnly && !inTrash)',
+		enabledCondition: '!noteIsReadOnly',
 	};
 };
