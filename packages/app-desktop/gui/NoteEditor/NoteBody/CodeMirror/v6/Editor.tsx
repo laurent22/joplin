@@ -12,6 +12,7 @@ import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
 import useEditorSearch from '../utils/useEditorSearchExtension';
+import CommandService from '@joplin/lib/services/CommandService';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -145,7 +146,11 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			return;
 		}
 
-		setupVim(editor);
+		setupVim(editor, {
+			sync: () => {
+				void CommandService.instance().execute('synchronize');
+			},
+		});
 	}, [editor]);
 
 	useKeymap(editor);

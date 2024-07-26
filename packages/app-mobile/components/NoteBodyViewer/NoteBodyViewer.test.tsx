@@ -15,6 +15,7 @@ import Resource from '@joplin/lib/models/Resource';
 import shim from '@joplin/lib/shim';
 import Note from '@joplin/lib/models/Note';
 import { ResourceInfo } from './hooks/useRerenderHandler';
+import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 
 interface WrapperProps {
 	noteBody: string;
@@ -57,17 +58,8 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 	</MenuProvider>;
 };
 
-const getNoteViewerDom = async (): Promise<Document> => {
-	const webviewContent = await screen.findByTestId('NoteBodyViewer');
-	expect(webviewContent).toBeVisible();
-
-	await waitFor(() => {
-		expect(!!webviewContent.props.document).toBe(true);
-	});
-
-	// Return the composite ExtendedWebView component
-	// See https://callstack.github.io/react-native-testing-library/docs/advanced/testing-env#tree-navigation
-	return webviewContent.props.document;
+const getNoteViewerDom = async () => {
+	return await getWebViewDomById('NoteBodyViewer');
 };
 
 describe('NoteBodyViewer', () => {
