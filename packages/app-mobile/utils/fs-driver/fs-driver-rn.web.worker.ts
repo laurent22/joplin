@@ -141,7 +141,6 @@ const createAccessHandleDatabase = async (): Promise<AccessHandleDatabaseControl
 	};
 };
 
-// eslint-disable-next-line import/prefer-default-export -- This file is an entrypoint -- WorkerApi should only be used as a type.
 export class WorkerApi {
 	private fsRoot_: FileSystemDirectoryHandle;
 	private accessHandleDatabase_: AccessHandleDatabaseControl;
