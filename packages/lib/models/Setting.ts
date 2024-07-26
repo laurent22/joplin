@@ -973,7 +973,6 @@ class Setting extends BaseModel {
 				// Also we don't control what happens on the keychain - the values can be edited or deleted
 				// outside the application. For that reason, we rewrite it every time the values are saved,
 				// even if, internally, they haven't changed.
-				// As an optimisation, we check if the value exists on the keychain before writing it again.
 				try {
 					const passwordName = `setting.${s.key}`;
 					const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
