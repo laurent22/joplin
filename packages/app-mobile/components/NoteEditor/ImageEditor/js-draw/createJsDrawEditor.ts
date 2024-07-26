@@ -154,7 +154,7 @@ export const createJsDrawEditor = (
 			editor.hideLoadingWarning();
 
 			// On mobile, fetching the SVG data is much faster than transferring it via IPC. However, fetch
-			// doesn't work when running in a web browser (virtual file system).
+			// doesn't work for this when running in a web browser (virtual file system).
 			svgData ??= await fetchInitialSvgData(resourceUrl);
 
 			// Load from a template if no initial data
