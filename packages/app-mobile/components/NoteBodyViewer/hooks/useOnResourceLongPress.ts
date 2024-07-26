@@ -8,6 +8,9 @@ import { copyToCache } from '../../../utils/ShareUtils';
 import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
 import shim from '@joplin/lib/shim';
 import shareFile from '../../../utils/shareFile';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useOnResourceLongPress');
 
 interface Callbacks {
 	onJoplinLinkClick: (link: string)=> void;
@@ -25,7 +28,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 
 			// Handle the case where it's a long press on a link with no resource
 			if (!resource) {
-				reg.logger().warn(`Long-press: Resource with ID ${resourceId} does not exist (may be a note).`);
+				logger.warn(`Long-press: Resource with ID ${resourceId} does not exist (may be a note).`);
 				return;
 			}
 
@@ -51,7 +54,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				onRequestEditResource(`edit:${resourceId}`);
 			}
 		} catch (e) {
-			console.error(e);
+			logger.error(e);
 			reg.logger().error('Could not handle link long press', e);
 			void shim.showMessageBox(`An error occurred, check log for details: ${e}`);
 		}

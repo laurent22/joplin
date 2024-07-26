@@ -12,6 +12,9 @@ export interface RendererSetupOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	// True if asset and resource files should be transferred to the WebView before rendering.
+	// This must be true on web, where asset and resource files are virtual and can't be accessed
+	// without transferring.
 	useTransferredFiles: boolean;
 
 	fsDriver: RendererFsDriver;
