@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
 import log from 'electron-log';
 import path = require('path');
@@ -14,39 +14,28 @@ export enum AutoUpdaterEvents {
 	UpdateDownloaded = 'update-downloaded',
 }
 
-const DEFAULT_UPDATE_INTERVAL = 12 * 60 * 60 * 1000;
-const INITIAL_UPDATE_STARTUP = 5 * 1000;
+const defaultUpdateInterval = 12 * 60 * 60 * 1000;
+const initialUpdateStartup = 5 * 1000;
 
 export interface AutoUpdaterServiceInterface {
-	isUpdateDialogOpen: boolean;
-	updatePollInterval: ReturnType<typeof setInterval>|null;
-	mainWindow: BrowserWindow;
 	startPeriodicUpdateCheck(interval?: number): void;
 	stopPeriodicUpdateCheck(): void;
 	checkForUpdates(): void;
-	configureAutoUpdater(): void;
-	onCheckingForUpdate(): void;
-	onUpdateNotAvailable(info: UpdateInfo): void;
-	onUpdateAvailable(info: UpdateInfo): void;
-	onDownloadProgress(progressObj: { bytesPerSecond: number; percent: number; transferred: number; total: number }): void;
-	onUpdateDownloaded(info: UpdateInfo): void;
-	onError(error: Error): void;
-	promptUserToUpdate(info: UpdateInfo): Promise<void>;
 }
 
-export default class AutoUpdaterService {
+export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private updatePollInterval_: ReturnType<typeof setInterval>|null = null;
 
 	public constructor() {
 		this.configureAutoUpdater();
 	}
 
-	public startPeriodicUpdateCheck = (interval: number = DEFAULT_UPDATE_INTERVAL): void => {
+	public startPeriodicUpdateCheck = (interval: number = defaultUpdateInterval): void => {
 		this.stopPeriodicUpdateCheck();
 		this.updatePollInterval_ = setInterval(() => {
 			void this.checkForUpdates();
 		}, interval);
-		setTimeout(this.checkForUpdates, INITIAL_UPDATE_STARTUP);
+		setTimeout(this.checkForUpdates, initialUpdateStartup);
 	};
 
 	public stopPeriodicUpdateCheck = (): void => {
@@ -70,7 +59,6 @@ export default class AutoUpdaterService {
 	private configureAutoUpdater = (): void => {
 		autoUpdater.logger = log;
 		log.transports.file.level = 'info';
-
 		if (this.electronIsDev()) {
 			log.info('Development mode: using dev-app-update.yml');
 			autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
