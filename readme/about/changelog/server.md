@@ -1,5 +1,21 @@
 # Joplin Server Changelog
 
+## [server-v3.0.1](https://github.com/laurent22/joplin/releases/tag/server-v3.0.1) - 2024-07-25T15:21:56Z
+
+- New: Add support for Postgres replication (a90e3e0)
+- New: Add uploaded data size to report (e9e6d8a)
+- New: Added report page (7ad3b34)
+- Improved: Allow web client sync (#10775 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Avoid logging automated resource deletions (#10157 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Decrease maximum email and full_name sizes (#10303 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve log quality by increasing specificity of error (#10287 by [@pedr](https://github.com/pedr))
+- Improved: Optimize delta change query to prevent timeouts on large datasets (89dfbe3)
+- Improved: Prevent item size calculation task from failing when a user has been deleted (e6ec27a)
+- Improved: Print a heartbeat message to log once per minute (916fa39)
+- Improved: Updated packages @adobe/css-tools (v4.3.3), async-mutex (v0.4.1), chokidar (v3.6.0), follow-redirects (v1.15.6), glob (v10.3.12), jsdom (v23.2.0), koa (v2.15.2), ldapts (v7.0.9), moment (v2.30.1), node-mocks-http (v1.14.1), nodemailer (v6.9.8), pg (v8.11.5), pm2 (v5.3.1), react, sass (v1.71.0), sharp (v0.33.3), style-to-js (v1.1.12), tar (v6.2.1), tesseract.js (v5.0.5), turndown (v7.1.3)
+- Improved: Use slave database for reports (cd0ff94)
+- Fixed: Missing record validation before trying to add item to user (#10471) (#10118 by [@pedr](https://github.com/pedr))
+
 ## [server-v2.14.2](https://github.com/laurent22/joplin/releases/tag/server-v2.14.2) - 2024-01-18T17:22:42Z
 
 - Improved: Check Postgres required version before starting the server (#9695)

@@ -1,49 +1,46 @@
-import styled from 'styled-components';
-
-const DialogModalLayer = styled.div`
-	z-index: 9999;
-	display: flex;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0,0,0,0.6);
-	align-items: flex-start;
-	justify-content: center;
-
-	overflow: auto;
-	scrollbar-width: none;
-	&::-webkit-scrollbar {
-		display: none;
-	}
-`;
-
-const DialogRoot = styled.div`
-	background-color: ${props => props.theme.backgroundColor};
-	padding: 16px;
-	box-shadow: 6px 6px 20px rgba(0,0,0,0.5);
-	margin: 20px;
-	min-height: fit-content;
-	display: flex;
-	flex-direction: column;
-	border-radius: 10px;
-`;
+import * as React from 'react';
+import { ReactElement, ReactEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	renderContent: Function;
+	renderContent: ()=> ReactElement;
 	className?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose?: Function;
+	onClose?: ()=> void;
 }
 
 export default function Dialog(props: Props) {
+	const [dialogElement, setDialogRef] = useState<HTMLDialogElement>();
+
+	useEffect(() => {
+		if (!dialogElement) return;
+
+		// Use .showModal instead of the open attribute: .showModal correctly
+		// traps the keyboard focus in the dialog
+		dialogElement.showModal();
+	}, [dialogElement]);
+
+	const onCloseRef = useRef(props.onClose);
+	onCloseRef.current = props.onClose;
+
+	const onCancel: ReactEventHandler<HTMLDialogElement> = useCallback((event) => {
+		const canCancel = !!onCloseRef.current;
+		if (canCancel) {
+			// Prevents [Escape] from closing the dialog. In many places, this is handled
+			// elsewhere.
+			// See https://stackoverflow.com/a/61021326
+			event.preventDefault();
+		}
+	}, []);
+
 	return (
-		<DialogModalLayer className={props.className}>
-			<DialogRoot>
+		<dialog
+			ref={setDialogRef}
+			className={`dialog-modal-layer ${props.className}`}
+			onClose={props.onClose}
+			onCancel={onCancel}
+		>
+			<div className='content'>
 				{props.renderContent()}
-			</DialogRoot>
-		</DialogModalLayer>
+			</div>
+		</dialog>
 	);
 }

@@ -10,7 +10,7 @@ const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
@@ -35,7 +35,7 @@ import { BaseScreenComponent } from '../base-screen';
 import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-import shared, { BaseNoteScreenComponent } from '@joplin/lib/components/shared/note-screen-shared';
+import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib/components/shared/note-screen-shared';
 import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
@@ -47,7 +47,7 @@ import promptRestoreAutosave from '../NoteEditor/ImageEditor/promptRestoreAutosa
 import isEditableResource from '../NoteEditor/ImageEditor/isEditableResource';
 import VoiceTypingDialog from '../voiceTyping/VoiceTypingDialog';
 import { voskEnabled } from '../../services/voiceTyping/vosk';
-import { isSupportedLanguage } from '../../services/voiceTyping/vosk.android';
+import { isSupportedLanguage } from '../../services/voiceTyping/vosk';
 import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
 import { Dispatch } from 'redux';
@@ -71,7 +71,7 @@ const emptyArray: any[] = [];
 
 const logger = Logger.create('screens/Note');
 
-interface Props {
+interface Props extends BaseProps {
 	provisionalNoteIds: string[];
 	dispatch: Dispatch;
 	noteId: string;
@@ -81,8 +81,8 @@ interface Props {
 	editorFontSize: number;
 	editorFont: number; // e.g. Setting.FONT_MENLO
 	showSideMenu: boolean;
-	searchQuery: string[];
-	ftsEnabled: boolean;
+	searchQuery: string;
+	ftsEnabled: number;
 	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
@@ -574,18 +574,10 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 			this.props.dispatch({
 				type: 'NAV_GO',
-				routeName: 'Notes',
-				folderId: this.state.note.parent_id,
+				routeName: 'Note',
+				noteId: noteId,
+				noteHash: noteHash,
 			});
-
-			shim.setTimeout(() => {
-				this.props.dispatch({
-					type: 'NAV_GO',
-					routeName: 'Note',
-					noteId: noteId,
-					noteHash: noteHash,
-				});
-			}, 5);
 		}
 	}
 
@@ -1194,7 +1186,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(',')].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1665,6 +1657,16 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	}
 }
 
+// We added this change to reset the component state when the props.noteId is changed.
+// NoteScreenComponent original implementation assumed that noteId would never change,
+// which can cause some bugs where previously set state to another note would interfere
+// how the new note should be rendered
+const NoteScreenWrapper = (props: Props) => {
+	return (
+		<NoteScreenComponent key={props.noteId} {...props} />
+	);
+};
+
 const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
@@ -1673,7 +1675,7 @@ const NoteScreen = connect((state: AppState) => {
 		folders: state.folders,
 		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
-		editorFont: [state.settings['style.editor.fontFamily']],
+		editorFont: state.settings['style.editor.fontFamily'] as number,
 		editorFontSize: state.settings['style.editor.fontSize'],
 		toolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
 		ftsEnabled: state.settings['db.ftsEnabled'],
@@ -1688,6 +1690,6 @@ const NoteScreen = connect((state: AppState) => {
 		// confusing.
 		useEditorBeta: !state.settings['editor.usePlainText'],
 	};
-})(NoteScreenComponent);
+})(NoteScreenWrapper);
 
 export default NoteScreen;

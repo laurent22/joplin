@@ -672,7 +672,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			const percent = getLineScrollPercent();
 			setEditorPercentScroll(percent);
 			options.percent = percent;
-			webviewRef.current.send('setHtml', renderedBody.html, options);
+			webviewRef.current.setHtml(renderedBody.html, options);
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}

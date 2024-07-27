@@ -1075,6 +1075,8 @@ export default class ItemModel extends BaseModel<Item> {
 							.concat(changes.map(c => c.user_id)),
 					);
 
+					const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+
 					const totalSizes: TotalSizeRow[] = [];
 					for (const userId of userIds) {
 						if (doneUserIds[userId]) continue;
@@ -1089,10 +1091,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 					await this.withTransaction(async () => {
 						for (const row of totalSizes) {
-							await this.models().user().save({
-								id: row.userId,
-								total_item_size: row.totalSize,
-							});
+							if (!users.find(u => u.id === row.userId)) {
+								modelLogger.warn(`User item refers to a user that has been deleted - skipping it: ${row.userId}`);
+							} else {
+								await this.models().user().save({
+									id: row.userId,
+									total_item_size: row.totalSize,
+								});
+							}
 						}
 
 						await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', paginatedChanges.cursor);
