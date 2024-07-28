@@ -272,7 +272,15 @@ module.exports = {
 						selector: 'enumMember',
 						format: null,
 						'filter': {
-							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*|iOS|sha1|sha224|sha256|sha384|sha512|ripemd160)$',
+							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*|iOS)$',
+							'match': true,
+						},
+					},
+					{
+						selector: 'enumMember',
+						format: null,
+						'filter': {
+							'regex': '^(sha1|sha224|sha256|sha384|sha512|ripemd160|AES_128_CCM|AES_192_CCM|AES_256_CCM|AES_128_GCM|AES_192_GCM|AES_256_GCM)$',
 							'match': true,
 						},
 					},
