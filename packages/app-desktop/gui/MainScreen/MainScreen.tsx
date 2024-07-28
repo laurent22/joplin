@@ -48,6 +48,7 @@ import NotePropertiesDialog from '../NotePropertiesDialog';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from '../NoteListHeader/utils/validateColumns';
 import TrashNotification from '../TrashNotification/TrashNotification';
+import UpdateNotification from '../UpdateNotification/UpdateNotification';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
@@ -935,6 +936,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					dispatch={this.props.dispatch as any}
 				/>
+				<UpdateNotification themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}

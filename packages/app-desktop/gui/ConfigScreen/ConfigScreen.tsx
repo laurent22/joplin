@@ -34,6 +34,7 @@ interface Font {
 declare global {
 	interface Window {
 		queryLocalFonts(): Promise<Font[]>;
+		openChangelogLink: ()=> void;
 	}
 }
 

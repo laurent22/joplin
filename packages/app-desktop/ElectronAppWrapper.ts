@@ -476,7 +476,7 @@ export default class ElectronAppWrapper {
 
 		this.createWindow();
 
-		if (!shim.isLinux) {
+		if (!shim.isLinux()) {
 			this.updaterService_ = new AutoUpdaterService();
 			this.updaterService_.startPeriodicUpdateCheck();
 		}
