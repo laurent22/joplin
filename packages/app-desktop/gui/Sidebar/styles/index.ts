@@ -95,12 +95,6 @@ export const StyledShareIcon = styled.i`
 	margin-left: 8px;
 `;
 
-export const StyledNoteCount = styled.div`
-	color: ${(props: StyleProps) => props.theme.colorFaded2};
-	padding-left: 8px;
-	user-select: none;
-`;
-
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;
 `;
