@@ -27,10 +27,18 @@ export interface RSA {
 }
 
 export interface Crypto {
+	// low level functions
 	getCiphers(): string[];
 	getHashes(): string[];
 	randomBytes(size: number): Promise<CryptoBuffer>;
 	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer>;
+	encryptRaw(data: CryptoBuffer, algorithm: string, key: CryptoBuffer, iv: CryptoBuffer | null, authTagLength: number, associatedData: CryptoBuffer | null): Buffer;
+	decryptRaw(data: CryptoBuffer, algorithm: string, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer | null): Buffer;
+
+	// convenient functions
+	encrypt(password: string, iterationCount: number, salt: CryptoBuffer | null, data: CryptoBuffer): Promise<EncryptionResult>;
+	decrypt(password: string, data: EncryptionResult): Promise<Buffer>;
+	encryptString(password: string, iterationCount: number, salt: CryptoBuffer | null, data: string, encoding: BufferEncoding): Promise<EncryptionResult>;
 }
 
 export interface CryptoBuffer extends Uint8Array {
@@ -45,4 +53,23 @@ export enum Digest {
 	sha384 = 'sha384',
 	sha512 = 'sha512',
 	ripemd160 = 'ripemd160',
+}
+
+export enum CipherAlgorithm {
+	AES_128_CCM = 'aes-128-ccm',
+	AES_192_CCM = 'aes-192-ccm',
+	AES_256_CCM = 'aes-256-ccm',
+	AES_128_GCM = 'aes-128-gcm',
+	AES_192_GCM = 'aes-192-gcm',
+	AES_256_GCM = 'aes-256-gcm',
+}
+
+export interface EncryptionResult {
+	algo?: CipherAlgorithm; // cipher algorithm, default: aes-256-gcm
+	ts?: number; // authTagLength in bytes, default: 16
+	digest?: Digest; // digestAlgorithm, default: sha512
+	iter: number; // iteration count
+	salt: string; // base64 encoded
+	iv: string; // base64 encoded
+	ct: string; // cipherText, base64 encoded
 }
