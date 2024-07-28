@@ -942,6 +942,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				);
 				if (cancelled) return;
 
+				// Use an offset bookmark -- the default bookmark type is not preserved after unloading
+				// and reloading the editor.
+				// See https://github.com/tinymce/tinymce/issues/9736 for a brief description of the
+				// different bookmark types. An offset bookmark seems to have the smallest change
+				// when the note content is updated externally.
+				const offsetBookmarkId = 2;
+				const bookmark = editor.selection.getBookmark(offsetBookmarkId);
 				editor.setContent(awfulInitHack(result.html));
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
@@ -960,6 +967,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					// times would result in an empty note.
 					// https://github.com/laurent22/joplin/issues/3534
 					editor.undoManager.reset();
+				} else {
+					// Restore the cursor location
+					editor.selection.bookmarkManager.moveToBookmark(bookmark);
 				}
 
 				lastOnChangeEventInfo.current = {
