@@ -6848,7 +6848,7 @@ __metadata:
     "@joplin/tools": ~3.0
     "@joplin/utils": ~3.0
     "@js-draw/material-icons": 1.20.0
-    "@react-native-clipboard/clipboard": 1.14.1
+    "@react-native-clipboard/clipboard": 1.13.2
     "@react-native-community/datetimepicker": 8.0.0
     "@react-native-community/geolocation": 3.2.1
     "@react-native-community/netinfo": 11.3.1
@@ -9186,15 +9186,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-clipboard/clipboard@npm:1.14.1":
-  version: 1.14.1
-  resolution: "@react-native-clipboard/clipboard@npm:1.14.1"
+"@react-native-clipboard/clipboard@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@react-native-clipboard/clipboard@npm:1.13.2"
   peerDependencies:
-    react: 16.9.0 || 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0
-    react-native: ^0.61.5 || ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0
-    react-native-macos: ^0.61.0 || ^0.62.0 || ^0.63.0 || ^0.64.0 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0
-    react-native-windows: ^0.61.0 || ^0.62.0 || ^0.63.0 || ^0.64.0 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0
-  checksum: 005ce2bee4d6e30b2a6b11be0d0ee169ab108d24f2a9b518b0ba8e5b96616c6dfb089c28644c1b5e3c1b9aa786c92cbf781e525223f56ab8589da1df79cae31f
+    react: ">=16.0"
+    react-native: ">=0.57.0"
+  checksum: e26a2b92ff4cd8f5cc1bd5ae784fa7b2d9437d7801abf9a09bf34ddb450bb5e898256e1793f22543ef0576710dab99fa6ccf693364a04f1334acc6eccd64b497
   languageName: node
   linkType: hard
 
