@@ -56,7 +56,7 @@ const WarningBanner: React.FC<Props> = props => {
 	);
 
 	const showMarkdownPluginBanner = useMemo(() => {
-		if (props.bodyEditor === 'CodeMirror5') {
+		if (props.bodyEditor !== 'CodeMirror6') {
 			return false;
 		}
 
