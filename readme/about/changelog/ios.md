@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.0.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.7) - 2024-07-28T14:07:03Z
+
+- Fixed: #10677: Following a link to a previously open note wouldn't work (#10750) (#10677 by [@pedr](https://github.com/pedr))
+- Fixed: Fix manual resource download mode (#10748 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.0.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.6) - 2024-07-06T11:22:58Z
 
 - Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
