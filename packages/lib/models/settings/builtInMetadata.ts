@@ -1240,7 +1240,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
-		'editor.markdown-legacy': {
+		'editor.legacyMarkdown': {
 			advanced: true,
 			value: false,
 			type: SettingItemType.Bool,

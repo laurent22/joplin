@@ -25,7 +25,7 @@ const onRichTextReadMoreLinkClick = () => {
 };
 
 const onSwitchToLegacyEditor = () => {
-	Setting.setValue('editor.markdown-legacy', true);
+	Setting.setValue('editor.legacyMarkdown', true);
 };
 
 const incompatiblePluginIds = [

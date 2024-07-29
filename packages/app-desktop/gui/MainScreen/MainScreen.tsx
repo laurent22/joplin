@@ -969,7 +969,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
-		enableLegacyMarkdownEditor: state.settings['editor.markdown-legacy'],
+		enableLegacyMarkdownEditor: state.settings['editor.legacyMarkdown'],
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
