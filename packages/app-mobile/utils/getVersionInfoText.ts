@@ -10,8 +10,8 @@ const getWebViewVersionText = () => {
 		// SystemVersionInformationModule is unavailable on older versions of Android.
 		const constants = NativeModules.SystemVersionInformationModule?.getConstants();
 		return [
-			_('WebView version: %s', constants?.webViewVersion ?? 'Unknown'),
-			_('WebView package: %s', constants?.webViewPackage ?? 'Unknown'),
+			_('WebView version: %s', constants?.webViewVersion ?? _('Unknown')),
+			_('WebView package: %s', constants?.webViewPackage ?? _('Unknown')),
 		].join('\n');
 	}
 	return null;
