@@ -11,7 +11,7 @@ export default class NoteEditorPage {
 
 	public constructor(private readonly page: Page) {
 		this.containerLocator = page.locator('.rli-editor');
-		this.codeMirrorEditor = this.containerLocator.locator('.codeMirrorEditor');
+		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.noteTitleInput = this.containerLocator.locator('.title-input');
 		this.attachFileButton = this.containerLocator.locator('[title^="Attach file"]');
