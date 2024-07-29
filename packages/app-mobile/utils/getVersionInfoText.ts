@@ -7,10 +7,11 @@ import { _ } from '@joplin/lib/locale';
 
 const getWebViewVersionText = () => {
 	if (Platform.OS === 'android') {
-		const constants = NativeModules.SystemVersionInformationModule.getConstants();
+		// SystemVersionInformationModule is unavailable on older versions of Android.
+		const constants = NativeModules.SystemVersionInformationModule?.getConstants();
 		return [
-			_('WebView version: %s', constants.webViewVersion),
-			_('WebView package: %s', constants.webViewPackage),
+			_('WebView version: %s', constants?.webViewVersion ?? 'Unknown'),
+			_('WebView package: %s', constants?.webViewPackage ?? 'Unknown'),
 		].join('\n');
 	}
 	return null;
