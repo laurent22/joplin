@@ -28,6 +28,10 @@ const onSwitchToLegacyEditor = () => {
 	Setting.setValue('editor.legacyMarkdown', true);
 };
 
+const onDismissLegacyEditorPrompt = () => {
+	Setting.setValue('editor.pluginCompatibilityBannerDismissedFor', [...PluginService.instance().pluginIds]);
+};
+
 const incompatiblePluginIds = [
 	// cSpell:disable
 	'com.septemberhx.Joplin.Enhancement',
@@ -38,10 +42,6 @@ const incompatiblePluginIds = [
 	'com.ckant.joplin-plugin-better-code-blocks',
 	// cSpell:enable
 ];
-
-const onDismissLegacyEditorPrompt = () => {
-	Setting.setValue('editor.pluginCompatibilityBannerDismissedFor', [...PluginService.instance().pluginIds]);
-};
 
 const WarningBanner: React.FC<Props> = props => {
 	const wysiwygBanner = (
