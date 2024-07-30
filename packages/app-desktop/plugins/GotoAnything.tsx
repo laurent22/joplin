@@ -154,7 +154,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.inputRef = React.createRef();
 		this.itemListRef = React.createRef();
 
-		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.renderItem = this.renderItem.bind(this);
@@ -226,8 +225,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	public componentDidMount() {
-		document.addEventListener('keydown', this.onKeyDown);
-
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: 'gotoAnything',
@@ -236,23 +233,11 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 	public componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
-		document.removeEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_REMOVE',
 			name: 'gotoAnything',
 		});
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onKeyDown(event: any) {
-		if (event.keyCode === 27) { // ESCAPE
-			this.props.dispatch({
-				pluginName: PLUGIN_NAME,
-				type: 'PLUGINLEGACY_DIALOG_SET',
-				open: false,
-			});
-		}
 	}
 
 	private modalLayer_onDismiss = () => {
