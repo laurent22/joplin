@@ -1,0 +1,22 @@
+
+.user-webview-dialog {
+	overflow: unset;
+	--content-width: 90vw;
+	--content-height: 90vh;
+
+	&.-fit {
+		--content-width: auto;
+		--content-height: auto;
+	}
+
+	> .content {
+		display: flex;
+		flex-direction: column;
+		background-color: var(--joplin-background-color);
+		padding: var(--joplin-main-padding);
+		border-radius: 4px;
+		box-shadow: 0 6px 10px #00000077;
+		width: var(--content-width);
+		height: var(--content-height);
+	}
+}

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ReactElement, ReactEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactEventHandler, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
-	renderContent: ()=> ReactElement;
 	className?: string;
 	onClose?: ()=> void;
+	contentStyle?: React.CSSProperties;
+	children: ReactNode;
 }
 
 export default function Dialog(props: Props) {
@@ -38,8 +39,8 @@ export default function Dialog(props: Props) {
 			onClose={props.onClose}
 			onCancel={onCancel}
 		>
-			<div className='content'>
-				{props.renderContent()}
+			<div className='content' style={props.contentStyle}>
+				{props.children}
 			</div>
 		</dialog>
 	);
