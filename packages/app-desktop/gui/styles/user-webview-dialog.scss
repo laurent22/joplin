@@ -1,6 +1,9 @@
 
 .user-webview-dialog {
+	// Overflow should be handled within WebView dialogs (rather than externally).
+	// Allowing external overflow can create space for a scrollbar in some cases.
 	overflow: unset;
+	align-items: center;
 	--content-width: 90vw;
 	--content-height: 90vh;
 
