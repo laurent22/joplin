@@ -447,7 +447,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		return (
-			<Dialog onClose={this.props.onClose}>
+			<Dialog onCancel={this.props.onClose}>
 				<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
 				<div role='table' aria-labelledby='note-properties-dialog-title'>
 					{noteComps}

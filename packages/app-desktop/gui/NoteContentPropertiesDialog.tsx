@@ -159,7 +159,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	const readTimeLabel = _('Read time: %s min', formatReadTime(strippedReadTime));
 
 	return (
-		<Dialog onClose={props.onClose}>
+		<Dialog onCancel={props.onClose}>
 			<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
 			<table>
 				<thead>

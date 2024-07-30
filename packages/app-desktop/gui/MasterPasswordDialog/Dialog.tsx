@@ -240,6 +240,6 @@ export default function(props: Props) {
 	}
 
 	return (
-		<Dialog onClose={onClose} className="master-password-dialog">{renderDialogWrapper()}</Dialog>
+		<Dialog onCancel={onClose} className="master-password-dialog">{renderDialogWrapper()}</Dialog>
 	);
 }

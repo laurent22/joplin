@@ -277,6 +277,6 @@ export default function(props: Props) {
 	}
 
 	return (
-		<Dialog onClose={closeDialog}>{renderDialogWrapper()}</Dialog>
+		<Dialog onCancel={closeDialog}>{renderDialogWrapper()}</Dialog>
 	);
 }

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ReactEventHandler, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, ReactEventHandler, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
 	className?: string;
-	onClose?: ()=> void;
+	onCancel?: ()=> void;
 	contentStyle?: React.CSSProperties;
 	children: ReactNode;
 }
@@ -19,8 +19,8 @@ export default function Dialog(props: Props) {
 		dialogElement.showModal();
 	}, [dialogElement]);
 
-	const onCloseRef = useRef(props.onClose);
-	onCloseRef.current = props.onClose;
+	const onCloseRef = useRef(props.onCancel);
+	onCloseRef.current = props.onCancel;
 
 	const onCancel: ReactEventHandler<HTMLDialogElement> = useCallback((event) => {
 		const canCancel = !!onCloseRef.current;
@@ -32,12 +32,19 @@ export default function Dialog(props: Props) {
 		}
 	}, []);
 
+	const onContainerClick: MouseEventHandler<HTMLDialogElement> = useCallback((event) => {
+		if (event.target === dialogElement && props.onCancel) {
+			props.onCancel?.();
+		}
+	}, [dialogElement, props.onCancel]);
+
 	return (
 		<dialog
 			ref={setDialogRef}
 			className={`dialog-modal-layer ${props.className}`}
-			onClose={props.onClose}
+			onClose={props.onCancel}
 			onCancel={onCancel}
+			onClick={onContainerClick}
 		>
 			<div className='content' style={props.contentStyle}>
 				{props.children}
