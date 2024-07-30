@@ -288,11 +288,9 @@ export default class PromptDialog extends React.Component<Props, any> {
 				</button>,
 			);
 		}
-		let onCancel = null;
 		if (buttonTypes.indexOf('cancel') >= 0) {
-			onCancel = () => onClose(false, 'cancel');
 			buttonComps.push(
-				<button key="cancel" style={styles.button} onClick={onCancel}>
+				<button key="cancel" style={styles.button} onClick={() => onClose(false, 'cancel')}>
 					{_('Cancel')}
 				</button>,
 			);
@@ -306,7 +304,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 
 		return (
-			<Dialog className='prompt-dialog' onCancel={onCancel}>
+			<Dialog className='prompt-dialog'>
 				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}
