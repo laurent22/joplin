@@ -13,6 +13,7 @@
 
 	> .content {
 		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
 		padding: 16px;
 		box-shadow: 6px 6px 20px rgba(0,0,0,0.5);
 		margin: 20px;
@@ -23,6 +24,6 @@
 	}
 
 	&::backdrop {
-		background-color: rgba(0,0,0,0.6);
+		background-color: rgba(0,0,0,0.5);
 	}
 }

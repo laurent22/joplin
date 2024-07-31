@@ -1,6 +1,6 @@
 # Joplin Desktop Changelog
 
-## [v3.0.13](https://github.com/laurent22/joplin/releases/tag/v3.0.13) - 2024-07-06T11:29:00Z
+## [v3.0.14](https://github.com/laurent22/joplin/releases/tag/v3.0.14) - 2024-07-28T13:55:50Z
 
 - Improved: Api: Do not return deleted notes in folders/: id/notes call ([3e0fb48](https://github.com/laurent22/joplin/commit/3e0fb48))
 - Fixed: Fix incorrect text rendering on MacOS by changing the default font to `Avenir Next` ([#10686](https://github.com/laurent22/joplin/issues/10686)) ([#10679](https://github.com/laurent22/joplin/issues/10679) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
