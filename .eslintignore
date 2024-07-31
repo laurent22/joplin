@@ -453,6 +453,7 @@ packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
 packages/app-desktop/integration-tests/goToAnything.spec.js
 packages/app-desktop/integration-tests/main.spec.js
+packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
@@ -465,6 +466,7 @@ packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
+packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/test.js

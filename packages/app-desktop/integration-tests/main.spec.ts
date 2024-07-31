@@ -8,6 +8,7 @@ import createStartupArgs from './util/createStartupArgs';
 import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
+import getImageSourceSize from './util/getImageSourceSize';
 
 
 test.describe('main', () => {
@@ -108,27 +109,10 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const getImageSize = async () => {
-			const viewerFrame = editor.getNoteViewerIframe();
-			const renderedImage = viewerFrame.getByAltText(filename);
+		const viewerFrame = editor.getNoteViewerIframe();
+		const renderedImage = viewerFrame.getByAltText(filename);
 
-			// Use state: 'attached' -- we don't need the image to be on the screen (just present
-			// in the DOM).
-			await renderedImage.waitFor({ state: 'attached' });
-
-			// We load a copy of the image to avoid returning an overriden width set with
-			//    .width = some_number
-			return await renderedImage.evaluate((originalImage: HTMLImageElement) => {
-				return new Promise<[number, number]>(resolve => {
-					const testImage = new Image();
-					testImage.onload = () => {
-						resolve([testImage.width, testImage.height]);
-					};
-					testImage.src = originalImage.src;
-				});
-			});
-		};
-		const fullSize = await getImageSize();
+		const fullSize = await getImageSourceSize(renderedImage);
 
 		// To make it easier to find the image (one image per note), we switch to a new, empty note.
 		await mainScreen.createNewNote('Image resize test (part 2)');
@@ -138,7 +122,7 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^Yes/i);
 		await editor.attachFileButton.click();
 
-		const resizedSize = await getImageSize();
+		const resizedSize = await getImageSourceSize(renderedImage);
 		expect(resizedSize[0]).toBeLessThan(fullSize[0]);
 		expect(resizedSize[1]).toBeLessThan(fullSize[1]);
 
