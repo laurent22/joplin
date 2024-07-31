@@ -52,10 +52,6 @@ body, :root {
 
 @media screen and (prefers-color-scheme: dark) {
 	:root {
-		/*
-		 When installed on iOS, this ensures that the status bar color matches the
-		 system light/dark theme.
-		 */
 		background-color: #222;
 		color: white;
 	}
