@@ -59,8 +59,6 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
-	const hasDeletedTime = selectedNote?.deleted_time !== 0 || commandFolder?.deleted_time !== 0;
-
 	const settings = state.settings || {};
 
 	return {
@@ -70,7 +68,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Current location
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
-		inTrash: (state.selectedFolderId === getTrashFolderId() || commandFolder && !!commandFolder.deleted_time) && hasDeletedTime,
+		inTrash: ((state.selectedFolderId === getTrashFolderId() && !!selectedNote?.deleted_time) || commandFolder && !!commandFolder.deleted_time),
 
 		// Note selection
 		oneNoteSelected: !!selectedNote,
