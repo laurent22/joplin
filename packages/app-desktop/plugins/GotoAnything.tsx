@@ -22,6 +22,7 @@ import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import Dialog from '../gui/Dialog';
 
 const logger = Logger.create('GotoAnything');
 
@@ -116,7 +117,7 @@ class GotoAnything {
 
 }
 
-class Dialog extends React.PureComponent<Props, State> {
+class DialogComponent extends React.PureComponent<Props, State> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
@@ -153,10 +154,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.inputRef = React.createRef();
 		this.itemListRef = React.createRef();
 
-		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
-		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
 		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
@@ -226,8 +225,6 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	public componentDidMount() {
-		document.addEventListener('keydown', this.onKeyDown);
-
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: 'gotoAnything',
@@ -236,7 +233,6 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	public componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
-		document.removeEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_REMOVE',
@@ -244,27 +240,13 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onKeyDown(event: any) {
-		if (event.keyCode === 27) { // ESCAPE
-			this.props.dispatch({
-				pluginName: PLUGIN_NAME,
-				type: 'PLUGINLEGACY_DIALOG_SET',
-				open: false,
-			});
-		}
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private modalLayer_onClick(event: any) {
-		if (event.currentTarget === event.target) {
-			this.props.dispatch({
-				pluginName: PLUGIN_NAME,
-				type: 'PLUGINLEGACY_DIALOG_SET',
-				open: false,
-			});
-		}
-	}
+	private modalLayer_onDismiss = () => {
+		this.props.dispatch({
+			pluginName: PLUGIN_NAME,
+			type: 'PLUGINLEGACY_DIALOG_SET',
+			open: false,
+		});
+	};
 
 	private helpButton_onClick() {
 		this.setState({ showHelp: !this.state.showHelp });
@@ -646,21 +628,18 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	public render() {
-		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div className="help-text" style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
-			<div className="modal-layer" onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
-				<div className="modal-dialog" style={style.dialogBox}>
-					{helpComp}
-					<div style={style.inputHelpWrapper}>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
-						<HelpButton onClick={this.helpButton_onClick} />
-					</div>
-					{this.renderList()}
+			<Dialog className="go-to-anything-dialog" onCancel={this.modalLayer_onDismiss} contentStyle={style.dialogBox}>
+				{helpComp}
+				<div style={style.inputHelpWrapper}>
+					<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
+					<HelpButton onClick={this.helpButton_onClick} />
 				</div>
-			</div>
+				{this.renderList()}
+			</Dialog>
 		);
 	}
 
@@ -675,7 +654,7 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-GotoAnything.Dialog = connect(mapStateToProps)(Dialog);
+GotoAnything.Dialog = connect(mapStateToProps)(DialogComponent);
 
 GotoAnything.manifest = {
 

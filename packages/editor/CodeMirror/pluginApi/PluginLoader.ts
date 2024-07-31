@@ -82,7 +82,7 @@ export default class PluginLoader {
 				scriptElement.appendChild(document.createTextNode(`
 				(async () => {
 					const exports = {};
-					const module = {};
+					const module = { exports: exports };
 					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
 					const joplin = {
 						require,
@@ -90,7 +90,7 @@ export default class PluginLoader {
 		
 					${js};
 		
-					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports || exports);
+					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports);
 				})();
 				`));
 

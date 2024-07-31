@@ -3451,6 +3451,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Datele dumneavoastre vor fi re-criptate și sincronizate din nou."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"Parola dvs. este necesară pentru a decripta unele dintre datele dvs."
 	],

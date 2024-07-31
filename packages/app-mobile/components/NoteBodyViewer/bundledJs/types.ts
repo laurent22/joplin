@@ -31,3 +31,8 @@ export interface NoteViewerRemoteApi {
 	onPostPluginMessage(contentScriptId: string, message: any): Promise<any>;
 	fsDriver: RendererFsDriver;
 }
+
+export interface WebViewLib {
+	initialize(config: unknown): void;
+}
+

@@ -2984,6 +2984,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Dữ liệu của bạn sẽ được tái mã hoá và đồng bộ lại."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		""
 	],

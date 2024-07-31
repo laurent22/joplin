@@ -59,7 +59,6 @@ const globalCommands = appCommands.concat(libCommands);
 import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
 import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
-import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -71,6 +70,7 @@ import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
+import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 
 const pluginClasses = [
@@ -88,6 +88,7 @@ class Application extends BaseApplication {
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
+	private protocolHandler_: CustomProtocolHandler;
 
 	public constructor() {
 		super();
@@ -167,6 +168,12 @@ class Application extends BaseApplication {
 			this.handleThemeAutoDetect();
 		}
 
+		if (action.type === 'PLUGIN_ADD') {
+			const plugin = PluginService.instance().pluginById(action.plugin.id);
+			this.protocolHandler_.allowReadAccessToDirectory(plugin.baseDir);
+			this.protocolHandler_.allowReadAccessToDirectory(plugin.dataDir);
+		}
+
 		return result;
 	}
 
@@ -204,7 +211,7 @@ class Application extends BaseApplication {
 	public updateEditorFont() {
 		const fontFamilies = [];
 		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
-		fontFamilies.push('Avenir, Arial, sans-serif');
+		fontFamilies.push('\'Avenir Next\', Avenir, Arial, sans-serif');
 
 		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
 		// https://github.com/laurent22/joplin/issues/155
@@ -420,11 +427,26 @@ class Application extends BaseApplication {
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
 
+		reg.setDispatch(this.dispatch.bind(this));
 		reg.setShowErrorMessageBoxHandler((message: string) => { bridge().showErrorMessageBox(message); });
 
 		if (Setting.value('flagOpenDevTools')) {
 			bridge().openDevTools();
 		}
+
+		bridge().electronApp().initializeCustomProtocolHandler(
+			Logger.create('handleCustomProtocols'),
+		);
+		this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
+		this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
+		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
+		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));
+		// this.protocolHandler_.allowReadAccessTo(Setting.value('tempDir'));
+		// For now, this doesn't seem necessary:
+		//  this.protocolHandler_.allowReadAccessTo(Setting.value('profileDir'));
+		// If it is needed, note that they decrease the security of the protcol
+		// handler, and, as such, it may make sense to also limit permissions of
+		// allowed pages with a Content Security Policy.
 
 		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
 		PluginManager.instance().setLogger(reg.logger());
@@ -529,22 +551,6 @@ class Application extends BaseApplication {
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
-
-		// Note: Auto-update is a misnomer in the code.
-		// The code below only checks, if a new version is available.
-		// We only allow Windows and macOS users to automatically check for updates
-		if (shim.isWindows() || shim.isMac()) {
-			const runAutoUpdateCheck = () => {
-				if (Setting.value('autoUpdateEnabled')) {
-					void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-				}
-			};
-
-			// Initial check on startup
-			shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
-			// Then every x hours
-			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
-		}
 
 		initializeUserFetcher();
 		shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);

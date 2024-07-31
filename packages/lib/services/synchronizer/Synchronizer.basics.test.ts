@@ -486,7 +486,7 @@ describe('Synchronizer.basics', () => {
 		// Then after sync, appMinVersion should be the same as that client version
 		const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
 
-		expect(remoteInfoBefore.appMinVersion).toBe('0.0.0');
+		expect(remoteInfoBefore.appMinVersion).toBe('3.0.0');
 		expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
 
 		// Now simulates synchronising with an older client version. In that case, it should not be

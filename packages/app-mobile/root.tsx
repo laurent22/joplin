@@ -39,9 +39,9 @@ const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
-const { shimInit } = require('./utils/shim-init-react.js');
+import shimInit from './utils/shim-init-react';
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -131,6 +131,8 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
+import { AppState } from './utils/types';
+import { getDisplayParentId } from '@joplin/lib/services/trash';
 
 type SideMenuPosition = 'left' | 'right';
 
@@ -159,7 +161,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
-	const newState = store.getState();
+	const newState: AppState = store.getState();
 	let doRefreshFolders = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -178,6 +180,12 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 		await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
+	}
+
+	if (action.type === 'NOTE_DELETE' && newState.route?.routeName === 'Note' && newState.route.noteId === action.id) {
+		const parentItem = action.originalItem?.parent_id ? await Folder.load(action.originalItem?.parent_id) : null;
+		const parentId = getDisplayParentId(action.originalItem, parentItem);
+		await NavService.go('Notes', { folderId: parentId });
 	}
 
 	if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.interval' || action.type === 'SETTING_UPDATE_ALL') {
@@ -493,7 +501,7 @@ const getInitialActiveFolder = async () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function initialize(dispatch: Function) {
+async function initialize(dispatch: Dispatch) {
 	shimInit();
 
 	setDispatch(dispatch);
@@ -535,6 +543,7 @@ async function initialize(dispatch: Function) {
 
 	reg.setLogger(mainLogger);
 	reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
+	reg.setDispatch(dispatch);
 
 	BaseService.logger_ = mainLogger;
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());

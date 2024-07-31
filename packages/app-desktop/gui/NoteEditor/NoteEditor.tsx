@@ -138,7 +138,7 @@ function NoteEditor(props: NoteEditorProps) {
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
-			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
 			customCss: props.customCss,
 		});
 

@@ -11,6 +11,7 @@ const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');
 const { isCallbackUrl } = require('@joplin/lib/callbackUrlUtils');
 const determineBaseAppDirs = require('@joplin/lib/determineBaseAppDirs').default;
+const registerCustomProtocols = require('./utils/customProtocols/registerCustomProtocols.js').default;
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in
@@ -60,6 +61,7 @@ if (pathExistsSync(settingsPath)) {
 }
 
 electronApp.setAsDefaultProtocolClient('joplin');
+void registerCustomProtocols();
 
 const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 

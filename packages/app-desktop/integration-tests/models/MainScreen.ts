@@ -2,6 +2,7 @@ import { Page, Locator, ElectronApplication } from '@playwright/test';
 import NoteEditorScreen from './NoteEditorScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import Sidebar from './Sidebar';
+import GoToAnything from './GoToAnything';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -9,6 +10,7 @@ export default class MainScreen {
 	public readonly sidebar: Sidebar;
 	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
+	public readonly goToAnything: GoToAnything;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -16,6 +18,7 @@ export default class MainScreen {
 		this.sidebar = new Sidebar(page, this);
 		this.dialog = page.locator('.dialog-root');
 		this.noteEditor = new NoteEditorScreen(page);
+		this.goToAnything = new GoToAnything(page, this);
 	}
 
 	public async waitFor() {

@@ -94,7 +94,7 @@ msgstr "&Affichage"
 msgid "&Window"
 msgstr "&Fenêtre"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d jours"
 
@@ -156,8 +156,8 @@ msgstr "%s – Copie"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) n'a pas pu être envoyé : %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) souhaiterais partager un carnet avec vous."
 
@@ -291,7 +291,7 @@ msgstr ""
 "Le raccourci \"%s\" est utilisé par les commandes \"%s\" et \"%s\", ce qui "
 "peut causer des problèmes."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Accepter"
@@ -481,11 +481,11 @@ msgstr ""
 "Un email envoyé à cette adresse sera converti en note et ajouté à votre "
 "collection. La note sera sauvé dans votre carnet \"Inbox\""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Apparence"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Application"
 
@@ -599,7 +599,7 @@ msgstr "Auto‑compléter les paires de parenthèses, guillemets, etc."
 msgid "Automatically check for updates"
 msgstr "Vérifier automatiquement les mises à jour"
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 "Supprimer automatiquement les notes de la corbeille après plusieurs jours"
@@ -1378,7 +1378,7 @@ msgstr "Date"
 msgid "Date format"
 msgstr "Format de la date"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "jours"
 
@@ -1547,7 +1547,7 @@ msgstr "Désactiver"
 msgid "Disable encryption"
 msgstr "Désactiver le chiffrement"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr "Désactiver le mode sans échec et redémarrer"
 
@@ -1654,7 +1654,7 @@ msgstr ""
 "déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre "
 "mot de passe ci-dessous."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 msgid "Donate, website"
 msgstr "Donations, site web"
 
@@ -1842,7 +1842,7 @@ msgstr "Conversion email en note"
 msgid "Email to Note"
 msgstr "Conversion email en note"
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 msgid "Email To Note, login information"
 msgstr "\"Email to note\", info de connexion"
 
@@ -1941,7 +1941,7 @@ msgstr "Activer l'historique des notes"
 msgid "Enable optical character recognition (OCR)"
 msgstr "Activer la reconnaissance optique de caractères (OCR)"
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 msgid "Enable or disable plugins"
 msgstr "Activer ou désactiver les modules"
 
@@ -2005,7 +2005,7 @@ msgstr "Chiffré"
 msgid "Encrypted items cannot be modified"
 msgstr "Les objets chiffrés ne peuvent être modifiés"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Chiffrement"
 
@@ -2313,7 +2313,7 @@ msgstr "Changements complets"
 msgid "Full name"
 msgstr "Nom complet"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Général"
@@ -2328,7 +2328,7 @@ msgid_plural "Generating links..."
 msgstr[0] "Génération du lien…"
 msgstr[1] "Génération des liens…"
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 "Géolocalisation, vérification orthographique, barre d'outils, taille des "
@@ -2508,7 +2508,7 @@ msgstr "Images"
 msgid "Import"
 msgstr "Importer"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 msgid "Import and Export"
 msgstr "Importer et exporter"
 
@@ -2528,7 +2528,7 @@ msgstr "Importer depuis JEX"
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr "Importez des notes à partir d'un fichier JEX (Joplin Export)."
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 msgid "Import or export your data"
 msgstr "Importez ou exportez vos données"
 
@@ -2725,7 +2725,7 @@ msgstr "Réponse invalide : %s"
 msgid "Invalid command: \"%s\""
 msgstr "Commande invalide : \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
@@ -2771,7 +2771,7 @@ msgstr ""
 "Joplin peut synchroniser vos notes grâce à divers fournisseurs. "
 "Sélectionnez‑en un dans la liste ci‑dessous."
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2865,7 +2865,7 @@ msgstr "KaTeX"
 msgid "Keep note history for"
 msgstr "Garder l'historique des notes pour"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 msgid "Keep notes in the trash for"
 msgstr "Conservez les notes dans la corbeille pendant"
 
@@ -2877,7 +2877,7 @@ msgstr "Mode de clavier"
 msgid "Keyboard Shortcut"
 msgstr "Raccourci"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Raccourcis clavier"
 
@@ -2897,7 +2897,7 @@ msgstr "Paysage"
 msgid "Language"
 msgstr "Langue"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 msgid "Language, date format"
 msgstr "Langue, format de la date"
 
@@ -3026,6 +3026,10 @@ msgstr ""
 msgid "Log"
 msgstr "Journal"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+msgid "Login to Joplin Cloud."
+msgstr "Se connecter à Joplin Cloud."
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Se connecter à Dropbox"
@@ -3038,7 +3042,7 @@ msgstr "Se connecter à OneDrive"
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr "Logs, profils, info synchronisation"
 
@@ -3089,7 +3093,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Manuel"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3143,7 +3147,7 @@ msgstr "Taille de note maximum"
 msgid "Max Total Size"
 msgstr "Taille max totale"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr "Lecteur média, math, diagrammes, sommaire"
 
@@ -3171,11 +3175,11 @@ msgstr "Paramètre requis manquant : %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Données mobiles – sync auto désactivé"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Plus d'information"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Plus d'information"
 
@@ -3249,7 +3253,7 @@ msgstr "Nouvelles invitations"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Nouvelle note"
 
@@ -3280,7 +3284,7 @@ msgstr "Nouvelles étiquettes :"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Nouvelle tâche"
 
@@ -3403,7 +3407,7 @@ msgstr "Pas maintenant"
 msgid "note"
 msgstr "note"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Note"
 
@@ -3436,7 +3440,7 @@ msgid "Note has been saved."
 msgstr "La note a été enregistrée."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Historique des notes"
 
@@ -3480,7 +3484,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "Carnet"
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 msgid "Notebook"
 msgstr "Carnet"
 
@@ -3512,7 +3516,7 @@ msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
 msgid "Notes"
 msgstr "Notes"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes et paramètres se trouve dans : %s"
 
@@ -3554,7 +3558,7 @@ msgstr "OLED Sombre"
 msgid "On %s: %s"
 msgstr "Le %s : %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "L'une des clefs maîtres utilise une méthode de chiffrement obsolète."
 
@@ -3570,7 +3574,7 @@ msgstr ""
 "decrypt`. Si vous avez déjà fourni ce mot de passe, les objets chiffrés vont "
 "être déchiffré en tâche de fond et seront disponible prochainement."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "L'une des clefs maîtres requiert un mot de passe."
 
@@ -3855,7 +3859,7 @@ msgstr "Débogage de la WebView des plugins"
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Modules"
 
@@ -3912,7 +3916,7 @@ msgstr ""
 "Tapez le raccourci et appuyez sur ENTREE. Ou, appuyez sur la touche de "
 "retour arrière pour supprimer le raccourci."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr "Définir mot de passe de synchronisation."
 
@@ -4077,7 +4081,7 @@ msgstr "Rafraîchir"
 msgid "Regular expression"
 msgstr "Expressions régulières"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4170,7 +4174,7 @@ msgstr "Redimensionner les grandes images :"
 msgid "Resources: %d."
 msgstr "Ressources : %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Redémarrer et mettre à jour"
 
@@ -4277,7 +4281,7 @@ msgstr "Clef secrète S3"
 msgid "S3 URL"
 msgstr "URL S3"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4430,8 +4434,8 @@ msgstr ""
 "Choisissez 0 pour que la totalité de l'espace disponible soit utilisé. La "
 "largeur recommandée est 600."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Définir le mot de passe"
 
@@ -4547,11 +4551,11 @@ msgstr "Afficher/cacher la barre latérale"
 msgid "Shrink large images before adding them to notes."
 msgstr "Redimensionner les grandes images avant de les ajouter aux notes."
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu closed"
 msgstr "Menu latéral fermé"
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr "Menu latéral ouvert"
 
@@ -4602,16 +4606,16 @@ msgstr ""
 "Certaines pièces jointes doivent être téléchargées. Définissez le mode de "
 "téléchargement des pièces jointes sur \"toujours\" et réessayez."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Certains objets ne peuvent être déchiffrés."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Certains objets ne peuvent être synchronisés."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Certains objets ne peuvent être synchronisés."
 
@@ -4860,11 +4864,11 @@ msgstr "Version de Synchro : %s"
 msgid "Sync your notes"
 msgstr "Synchroniser vos notes"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 msgid "Sync, encryption, proxy"
 msgstr "Synchronisation, chiffrement, proxy"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Synchronisation"
 
@@ -5037,7 +5041,7 @@ msgstr ""
 "La méthode de chiffrage par défaut à été renforcée et il est recommandé de "
 "l'appliquer à vos données."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5185,7 +5189,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5195,13 +5199,13 @@ msgstr ""
 "plusieurs minutes et l'application devra être re‑démarrée. Pour continuer, "
 "veuillez cliquer sur le lien."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "La cible de synchronisation doit être mise à jour. Appuyer sur la bannière "
 "pour commencer."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 msgid "The synchronisation password is missing."
 msgstr "Le mot de passe de synchronisation est manquant."
 
@@ -5242,7 +5246,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Apparence"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 msgid "Themes, editor font"
 msgstr "Thèmes, police de l'éditeur"
 
@@ -5299,7 +5303,7 @@ msgstr ""
 "de la synchronisation. Pour trouver ces objets, faite une recherche sur le "
 "titre ou l'identifiant de l'objet (affiché ci‑dessus entre parenthèses)."
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5591,7 +5595,7 @@ msgstr "Basculer l'édition externe"
 msgid "Toggle menu bar"
 msgstr "Basculer la barre de menu"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 msgid "Toggle note history, keep notes for"
 msgstr "Activation historique des notes"
 
@@ -5619,7 +5623,7 @@ msgstr "Basculer le champ d'ordre de tri"
 msgid "Token has been copied to the clipboard!"
 msgstr "Le code d'authentification a été copié dans le presse‑papiers !"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Outils"
 
@@ -5711,7 +5715,7 @@ msgstr "Type de fichier inconnu"
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Objet inconnu téléchargé – veuillez mettre Joplin à jour"
@@ -5850,7 +5854,7 @@ msgstr ""
 "Utilisez les touches fléchées et page précédente/suivante pour faire défiler "
 "les listes et zones de texte (y compris cette console)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Utilisez les flèches pour déplacer les éléments de l'interface. Appuyez sur "
@@ -5920,9 +5924,9 @@ msgstr "Afficher le texte OCR"
 msgid "View on map"
 msgstr "Voir sur carte"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Les voir maintenant"
 
@@ -5974,7 +5978,7 @@ msgstr ""
 "Nous marquons les plugins développés par des membres de confiance de la "
 "communauté Joplin comme \"recommandés\"."
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Clipper"
@@ -6132,6 +6136,11 @@ msgstr "Votre choix : "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Vos données vont être chiffrées et synchronisées à nouveau."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

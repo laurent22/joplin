@@ -2,12 +2,14 @@ import * as React from 'react';
 
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import ExpandLink from './ExpandLink';
-import { StyledListItem, StyledListItemAnchor, StyledNoteCount, StyledShareIcon, StyledSpanFix } from '../styles';
+import { StyledListItem, StyledListItemAnchor, StyledShareIcon, StyledSpanFix } from '../styles';
 import { ItemClickListener, ItemContextMenuListener, ItemDragListener } from '../types';
 import FolderIconBox from '../../FolderIconBox';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
+import { _ } from '@joplin/lib/locale';
+import NoteCount from './NoteCount';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -47,8 +49,8 @@ interface FolderItemProps {
 function FolderItem(props: FolderItemProps) {
 	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
-	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
-	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
+	const shareTitle = _('Shared');
+	const shareIcon = shareId && !parentId ? <StyledShareIcon aria-label={shareTitle} title={shareTitle} className="fas fa-share-alt"/> : null;
 	const draggable = ![getTrashFolderId(), Folder.conflictFolderId()].includes(folderId);
 
 	const doRenderFolderIcon = () => {
@@ -69,6 +71,7 @@ function FolderItem(props: FolderItemProps) {
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				href="#"
 				selected={selected}
+				aria-selected={selected}
 				shareId={shareId}
 				data-id={folderId}
 				data-type={ModelType.Folder}
@@ -80,7 +83,7 @@ function FolderItem(props: FolderItemProps) {
 				onDoubleClick={onFolderToggleClick_}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
-				{shareIcon} {noteCountComp}
+				{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
 		</StyledListItem>
 	);

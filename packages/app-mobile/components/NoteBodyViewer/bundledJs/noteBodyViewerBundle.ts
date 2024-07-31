@@ -1,16 +1,17 @@
 
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-import { NoteViewerLocalApi, NoteViewerRemoteApi, RendererWebViewOptions } from './types';
+import { NoteViewerLocalApi, NoteViewerRemoteApi, RendererWebViewOptions, WebViewLib } from './types';
 import Renderer from './Renderer';
 
 declare global {
 	interface Window {
 		rendererWebViewOptions: RendererWebViewOptions;
+		webviewLib: WebViewLib;
 	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-declare const webviewLib: any;
+declare const webviewLib: WebViewLib;
 
 const messenger = new WebViewToRNMessenger<NoteViewerLocalApi, NoteViewerRemoteApi>(
 	'note-viewer',
@@ -32,6 +33,10 @@ webviewLib.initialize({
 		messenger.remoteApi.onPostMessage(message);
 	},
 });
+// Share the webview library globally so that the renderer can access it.
+window.webviewLib = webviewLib;
+
+window.webviewLib = webviewLib;
 
 const renderer = new Renderer({
 	...window.rendererWebViewOptions,
@@ -58,5 +63,5 @@ const onMainContentScroll = () => {
 // scroll. However, window.addEventListener('scroll', callback) does.
 // - iOS needs a listener to be added to scrollingElement -- events aren't received when
 //   the listener is added to window with window.addEventListener('scroll', ...).
-document.scrollingElement.addEventListener('scroll', onMainContentScroll);
+document.scrollingElement?.addEventListener('scroll', onMainContentScroll);
 window.addEventListener('scroll', onMainContentScroll);

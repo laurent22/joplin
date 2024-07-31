@@ -94,7 +94,7 @@ msgstr "&Nézet"
 msgid "&Window"
 msgstr "Ablak bezárása"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "%d days"
 msgstr "%d nap"
 
@@ -159,8 +159,8 @@ msgstr "%s - Másolás"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) nem tölthető fel: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:64
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) szeretne egy jegyzetfüzetet megosztani önnel."
 
@@ -284,7 +284,7 @@ msgstr ""
 "Gyorsbillentyű \"%s\" használva van a \"%s\" és \"%s\" parancsoknál. Ez "
 "váratlan viselkedéshez vezethet."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:668
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
 msgid "Accept"
 msgstr "Elfogadás"
@@ -470,11 +470,11 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2802
+#: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: packages/lib/models/Setting.ts:2807
+#: packages/lib/models/Setting.ts:2809
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -588,7 +588,7 @@ msgstr "Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
 msgid "Automatically check for updates"
 msgstr "Automatikus frissítés keresés"
 
-#: packages/lib/models/Setting.ts:1917
+#: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 
@@ -1362,7 +1362,7 @@ msgstr "Dátum"
 msgid "Date format"
 msgstr "Dátumforma"
 
-#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1930
+#: packages/lib/models/Setting.ts:1739 packages/lib/models/Setting.ts:1932
 msgid "days"
 msgstr "napok"
 
@@ -1529,7 +1529,7 @@ msgstr "Letiltás"
 msgid "Disable encryption"
 msgstr "Titkosítás letiltása"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:629
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:637
 msgid "Disable safe mode and restart"
 msgstr ""
 
@@ -1640,7 +1640,7 @@ msgstr ""
 "adatai dekódolására! A titkosítás engedélyezéséhez, kérem adja meg a jelszót "
 "lent."
 
-#: packages/lib/models/Setting.ts:2848
+#: packages/lib/models/Setting.ts:2850
 #, fuzzy
 msgid "Donate, website"
 msgstr "Joplin weboldal"
@@ -1832,7 +1832,7 @@ msgstr "Jegyzet szerkesztése."
 msgid "Email to Note"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2841
+#: packages/lib/models/Setting.ts:2843
 #, fuzzy
 msgid "Email To Note, login information"
 msgstr "Megjeleníti a verzió információit"
@@ -1932,7 +1932,7 @@ msgstr "Jegyzet előélet engedélyezése"
 msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2847
+#: packages/lib/models/Setting.ts:2849
 #, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Pluginok kezelése"
@@ -2001,7 +2001,7 @@ msgstr "Titkosítva"
 msgid "Encrypted items cannot be modified"
 msgstr "Titkosított elemek nem módosíthatóak"
 
-#: packages/lib/models/Setting.ts:2809
+#: packages/lib/models/Setting.ts:2811
 msgid "Encryption"
 msgstr "Titkosítás"
 
@@ -2312,7 +2312,7 @@ msgstr "Teljes változási napló"
 msgid "Full name"
 msgstr "Teljes változási napló"
 
-#: packages/lib/models/Setting.ts:2800
+#: packages/lib/models/Setting.ts:2802
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "Általános"
@@ -2327,7 +2327,7 @@ msgid_plural "Generating links..."
 msgstr[0] "Link létrehozása..."
 msgstr[1] "Linkek létrehozása..."
 
-#: packages/lib/models/Setting.ts:2843
+#: packages/lib/models/Setting.ts:2845
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 
@@ -2504,7 +2504,7 @@ msgstr "Képek"
 msgid "Import"
 msgstr "Importálás"
 
-#: packages/lib/models/Setting.ts:2814
+#: packages/lib/models/Setting.ts:2816
 #, fuzzy
 msgid "Import and Export"
 msgstr "Debug jelentés exportálása"
@@ -2523,7 +2523,7 @@ msgstr ""
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2846
+#: packages/lib/models/Setting.ts:2848
 #, fuzzy
 msgid "Import or export your data"
 msgstr "Mindent exportál"
@@ -2707,7 +2707,7 @@ msgstr "Érvénytelen válasz: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Érvénytelen parancs: \"%s\""
 
-#: packages/lib/models/Setting.ts:2283
+#: packages/lib/models/Setting.ts:2285
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
 
@@ -2752,7 +2752,7 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2812 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/lib/models/Setting.ts:2814 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -2841,7 +2841,7 @@ msgstr ""
 msgid "Keep note history for"
 msgstr "Jegyzet előélet megtartása"
 
-#: packages/lib/models/Setting.ts:1934
+#: packages/lib/models/Setting.ts:1936
 #, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Jegyzet előélet megtartása"
@@ -2854,7 +2854,7 @@ msgstr "Billentyűzet mód"
 msgid "Keyboard Shortcut"
 msgstr "Gyorsbillentyű"
 
-#: packages/lib/models/Setting.ts:2811
+#: packages/lib/models/Setting.ts:2813
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
@@ -2876,7 +2876,7 @@ msgstr "Fekvő"
 msgid "Language"
 msgstr "Nyelv"
 
-#: packages/lib/models/Setting.ts:2838
+#: packages/lib/models/Setting.ts:2840
 #, fuzzy
 msgid "Language, date format"
 msgstr "Dátumforma"
@@ -3008,6 +3008,11 @@ msgstr ""
 msgid "Log"
 msgstr "Napló"
 
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
+#, fuzzy
+msgid "Login to Joplin Cloud."
+msgstr "Joplin Cloud"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Belép Dropbox-al"
@@ -3020,7 +3025,7 @@ msgstr "Belép OneDrive-al"
 msgid "Logout"
 msgstr "Kilépés"
 
-#: packages/lib/models/Setting.ts:2845
+#: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
 msgstr ""
 
@@ -3074,7 +3079,7 @@ msgstr ""
 msgid "Manual"
 msgstr "Kézi"
 
-#: packages/lib/models/Setting.ts:2805
+#: packages/lib/models/Setting.ts:2807
 #: packages/lib/services/interop/InteropService.ts:118
 #: packages/lib/services/interop/InteropService.ts:155
 msgid "Markdown"
@@ -3130,7 +3135,7 @@ msgstr "Jegyzet csatolmányok"
 msgid "Max Total Size"
 msgstr "Aktív Méret"
 
-#: packages/lib/models/Setting.ts:2842
+#: packages/lib/models/Setting.ts:2844
 msgid "Media player, math, diagrams, table of contents"
 msgstr ""
 
@@ -3159,11 +3164,11 @@ msgstr "Szükséges paraméter hiányzik: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobil adat - auto-szinkronizáció letiltva"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:659
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
 msgstr "Több info"
 
-#: packages/lib/models/Setting.ts:2815
+#: packages/lib/models/Setting.ts:2817
 msgid "More information"
 msgstr "Több információ"
 
@@ -3237,7 +3242,7 @@ msgstr "Új verzió: %s"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:251
-#: packages/app-mobile/setupQuickActions.ts:18
+#: packages/app-mobile/setupQuickActions.ts:17
 msgid "New note"
 msgstr "Új jegyzet"
 
@@ -3267,7 +3272,7 @@ msgstr "Új tag-ek:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/app-mobile/components/screens/Notes.tsx:241
-#: packages/app-mobile/setupQuickActions.ts:19
+#: packages/app-mobile/setupQuickActions.ts:18
 msgid "New to-do"
 msgstr "Új to-do"
 
@@ -3390,7 +3395,7 @@ msgstr "Csináld meg most"
 msgid "note"
 msgstr "megjegyzés"
 
-#: packages/lib/models/Setting.ts:2803
+#: packages/lib/models/Setting.ts:2805
 msgid "Note"
 msgstr "Megjegyzés"
 
@@ -3424,7 +3429,7 @@ msgid "Note has been saved."
 msgstr "Jegyzet mentve."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:73
-#: packages/lib/models/Setting.ts:2808
+#: packages/lib/models/Setting.ts:2810
 msgid "Note History"
 msgstr "Jegyzet előélete"
 
@@ -3467,7 +3472,7 @@ msgstr ""
 msgid "Note&book"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2804
+#: packages/lib/models/Setting.ts:2806
 msgid "Notebook"
 msgstr "Jegyzetfüzet"
 
@@ -3500,7 +3505,7 @@ msgstr "Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
 msgid "Notes"
 msgstr "Jegyzetek"
 
-#: packages/lib/models/Setting.ts:2827
+#: packages/lib/models/Setting.ts:2829
 msgid "Notes and settings are stored in: %s"
 msgstr "Jegyzetek és beállítások tárolása itt: %s"
 
@@ -3542,7 +3547,7 @@ msgstr "OLED Sötét"
 msgid "On %s: %s"
 msgstr "%s-on: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:652
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:660
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Az egyik mester kulcsa egy elavult titkosítási módot használ."
 
@@ -3554,7 +3559,7 @@ msgid ""
 "background and will be available soon."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:681
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:689
 msgid "One or more master keys need a password."
 msgstr "Egy vagy több mester kulcs igényel jelszót."
 
@@ -3836,7 +3841,7 @@ msgstr ""
 #: packages/app-mobile/components/NoteEditor/MarkdownToolbar/MarkdownToolbar.tsx:65
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:531
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:2806
+#: packages/lib/models/Setting.ts:2808
 msgid "Plugins"
 msgstr "Bővítmények"
 
@@ -3890,7 +3895,7 @@ msgstr ""
 "Nyomja le a gyorsbillentyűt, majd az ENTER-t. Vagy nyomja le a BACKSPACE-t a "
 "gyorsbillentyű törléséhez."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:39
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
 msgstr ""
 
@@ -4062,7 +4067,7 @@ msgstr "Frissítés"
 msgid "Regular expression"
 msgstr "Képletek engedélyezése"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:670
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:678
 #: packages/app-desktop/gui/Root.tsx:183
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:45
 msgid "Reject"
@@ -4159,7 +4164,7 @@ msgstr ""
 msgid "Resources: %d."
 msgstr "Erőforrások: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:641
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:649
 msgid "Restart and upgrade"
 msgstr "Újraindítás és frissítés"
 
@@ -4268,7 +4273,7 @@ msgstr "S3 titkos kulcs"
 msgid "S3 URL"
 msgstr "S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:628
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:636
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -4424,8 +4429,8 @@ msgid ""
 "is 600."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:635
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:682
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:643
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:690
 msgid "Set the password"
 msgstr "Jelszó beállítása"
 
@@ -4544,11 +4549,11 @@ msgstr ""
 msgid "Shrink large images before adding them to notes."
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu closed"
 msgstr ""
 
-#: packages/app-mobile/root.tsx:1137
+#: packages/app-mobile/root.tsx:1143
 msgid "Side menu opened"
 msgstr ""
 
@@ -4595,16 +4600,16 @@ msgid ""
 "\"always\" and try again."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:646
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:51
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:654
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
 msgid "Some items cannot be decrypted."
 msgstr "Néhány elemet nem lehet visszafejteni."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:675
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:683
 msgid "Some items cannot be synchronised."
 msgstr "Néhány elemet nem lehet szinkronizálni."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:42
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Néhány elemet nem lehet szinkronizálni. Kattintson több információért."
 
@@ -4843,12 +4848,12 @@ msgstr "Szinkronizáció verzió: %s"
 msgid "Sync your notes"
 msgstr "Jegyzetek szinkronizálása"
 
-#: packages/lib/models/Setting.ts:2840
+#: packages/lib/models/Setting.ts:2842
 #, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Titkosítás engedélyezése"
 
-#: packages/lib/models/Setting.ts:2801
+#: packages/lib/models/Setting.ts:2803
 msgid "Synchronisation"
 msgstr "Szinkronizáció"
 
@@ -5014,7 +5019,7 @@ msgstr ""
 "Az alapértelmezett titkosítási mód megváltozott egy sokkal biztonságosabbra "
 "és javasolt hogy alkalmazza azt adataira."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:658
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:666
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -5138,7 +5143,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:640
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:648
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -5148,13 +5153,13 @@ msgstr ""
 "művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A "
 "folytatáshoz kattintson a lenti linkre."
 
-#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:45
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Szinkronizációs eszközt frissíteni kell! Futtassa a `%s`-t a folytatáshoz."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:634
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:642
 #, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Szinkronizációs beállítások ellenőrzése"
@@ -5191,7 +5196,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Téma"
 
-#: packages/lib/models/Setting.ts:2839
+#: packages/lib/models/Setting.ts:2841
 #, fuzzy
 msgid "Themes, editor font"
 msgstr "Szerkesztő betűkészlet"
@@ -5241,7 +5246,7 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2824
+#: packages/lib/models/Setting.ts:2826
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -5515,7 +5520,7 @@ msgstr "Külső szerkesztés váltása"
 msgid "Toggle menu bar"
 msgstr "Oldalsáv váltása"
 
-#: packages/lib/models/Setting.ts:2844
+#: packages/lib/models/Setting.ts:2846
 #, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Jegyzet előélet megtartása"
@@ -5547,7 +5552,7 @@ msgstr "Oldalsáv váltása"
 msgid "Token has been copied to the clipboard!"
 msgstr "Token vágólapra másolva!"
 
-#: packages/lib/models/Setting.ts:2813
+#: packages/lib/models/Setting.ts:2815
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -5638,7 +5643,7 @@ msgstr "Ismeretlen jelző %s"
 msgid "Unknown flag: %s"
 msgstr "Ismeretlen jelző %s"
 
-#: packages/lib/Synchronizer.ts:1118
+#: packages/lib/Synchronizer.ts:1121
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -5780,7 +5785,7 @@ msgid ""
 "(including this console)."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:901
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:916
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
@@ -5841,9 +5846,9 @@ msgstr ""
 msgid "View on map"
 msgstr "Mutasd a térképen"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:647
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:653
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:676
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:655
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:661
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:684
 msgid "View them now"
 msgstr "Mutasd ezeket most"
 
@@ -5890,7 +5895,7 @@ msgid ""
 "\"recommended\"."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2810
+#: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
 msgstr "Web Vágó"
@@ -6034,6 +6039,11 @@ msgstr "Ön választása: "
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Az adatai újra lesznek titkosítva és utána szinkronizálva."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
+#: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
+msgid "Your Joplin Cloud credentials are invalid, please login."
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

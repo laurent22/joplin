@@ -140,17 +140,16 @@ type SyncTargetInfoName = 'dropbox' | 'onedrive' | 'joplinCloud';
 export default function(props: Props) {
 	const joplinCloudDescriptionRef = useRef(null);
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	function closeDialog(dispatch: Function) {
-		dispatch({
+	const closeDialog = useCallback(() => {
+		props.dispatch({
 			type: 'DIALOG_CLOSE',
 			name: 'syncWizard',
 		});
-	}
+	}, [props.dispatch]);
 
 	const onButtonRowClick = useCallback(() => {
-		closeDialog(props.dispatch);
-	}, [props.dispatch]);
+		closeDialog();
+	}, [closeDialog]);
 
 	const { height: descriptionHeight } = useElementSize(joplinCloudDescriptionRef);
 
@@ -184,12 +183,12 @@ export default function(props: Props) {
 
 		Setting.setValue('sync.target', route.target);
 		await Setting.saveAll();
-		closeDialog(props.dispatch);
+		closeDialog();
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: route.name,
 		});
-	}, [props.dispatch]);
+	}, [props.dispatch, closeDialog]);
 
 	function renderSelectArea(info: SyncTargetInfo) {
 		return (
@@ -229,7 +228,7 @@ export default function(props: Props) {
 	}
 
 	const onSelfHostingClick = useCallback(() => {
-		closeDialog(props.dispatch);
+		closeDialog();
 
 		props.dispatch({
 			type: 'NAV_GO',
@@ -238,7 +237,7 @@ export default function(props: Props) {
 				defaultSection: 'sync',
 			},
 		});
-	}, [props.dispatch]);
+	}, [props.dispatch, closeDialog]);
 
 	function renderContent() {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -278,6 +277,6 @@ export default function(props: Props) {
 	}
 
 	return (
-		<Dialog renderContent={renderDialogWrapper}/>
+		<Dialog onCancel={closeDialog}>{renderDialogWrapper()}</Dialog>
 	);
 }

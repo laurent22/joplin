@@ -3314,6 +3314,9 @@
 	"Your data is going to be re-encrypted and synced again.": [
 		"Vaše data budou znovu zašifrována a znovu synchronizována."
 	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		""
+	],
 	"Your password is needed to decrypt some of your data.": [
 		"K dešifrování některých dat je potřeba heslo."
 	],

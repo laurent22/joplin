@@ -56,7 +56,9 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			const sessionId = await api.sessionId();
 			return !!sessionId;
 		} catch (error) {
-			if (error.code === 403) return false;
+			if (error.code === 403) {
+				return false;
+			}
 			throw error;
 		}
 	}
@@ -65,8 +67,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return 'JoplinCloudLogin';
 	}
 
+	// While Joplin Cloud requires password, the new login method makes this
+	// information useless
 	public static requiresPassword() {
-		return true;
+		return false;
 	}
 
 	public async fileApi(): Promise<FileApi> {

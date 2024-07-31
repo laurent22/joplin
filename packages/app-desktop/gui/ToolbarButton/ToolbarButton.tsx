@@ -50,16 +50,22 @@ export default function ToolbarButton(props: Props) {
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis' };
+	const disabled = !isEnabled;
 	return (
 		<StyledRoot
 			className={classes.join(' ')}
-			disabled={!isEnabled}
 			title={tooltip}
 			href="#"
 			hasTitle={!!title}
 			onClick={() => {
 				if (isEnabled && onClick) onClick();
 			}}
+
+			// At least on MacOS, the disabled HTML prop isn't sufficient for the screen reader
+			// to read the element as disable. For this, aria-disabled is necessary.
+			disabled={disabled}
+			aria-disabled={!isEnabled}
+			role='button'
 		>
 			{icon}
 			<span style={style}>{title}</span>

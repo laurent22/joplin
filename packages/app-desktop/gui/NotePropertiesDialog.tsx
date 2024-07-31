@@ -8,14 +8,14 @@ import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import Dialog from './Dialog';
 const Datetime = require('react-datetime').default;
 const { clipboard } = require('electron');
 const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
+	onClose: ()=> void;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onRevisionLinkClick: Function;
 	themeId: number;
@@ -174,7 +174,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			textDecoration: 'none',
 			backgroundColor: theme.backgroundColor,
 			padding: '.14em',
-			display: 'flex',
+			display: 'inline-flex',
 			alignItems: 'center',
 			justifyContent: 'center',
 			marginLeft: '0.5em',
@@ -281,11 +281,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public createNoteField(key: keyof FormNote, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
-		const labelComp = <label style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{this.formatLabel(key)}</label>;
+		const labelText = this.formatLabel(key);
+		const labelComp = <label role='rowheader' style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
 		let editCompIcon = null;
+		let editComDescription = null;
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onKeyDown = (event: any) => {
@@ -320,6 +322,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					void this.saveProperty();
 				};
 				editCompIcon = 'fa-save';
+				editComDescription = _('Save changes');
 			} else {
 				controlComp = (
 					<input
@@ -374,28 +377,35 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					this.editPropertyButtonClick(key, value);
 				};
 				editCompIcon = 'fa-edit';
+				editComDescription = _('Edit');
 			}
 
 			// Add the copy icon and the 'copy on click' event
 			if (key === 'id') {
 				editCompIcon = 'fa-copy';
 				editCompHandler = () => clipboard.writeText(value);
+				editComDescription = _('Copy');
 			}
 		}
 
 		if (editCompHandler && !this.isReadOnly()) {
 			editComp = (
-				<a href="#" onClick={editCompHandler} style={styles.editPropertyButton}>
+				<a
+					href="#"
+					onClick={editCompHandler}
+					style={styles.editPropertyButton}
+					aria-label={editComDescription}
+					title={editComDescription}
+				>
 					<i className={`fas ${editCompIcon}`} aria-hidden="true"></i>
 				</a>
 			);
 		}
 
 		return (
-			<div key={key} style={theme.controlBox} className="note-property-box">
+			<div role='row' key={key} style={theme.controlBox} className="note-property-box">
 				{labelComp}
-				{controlComp}
-				{editComp}
+				<span role='cell'>{controlComp} {editComp}</span>
 			</div>
 		);
 	}
@@ -437,13 +447,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		return (
-			<div style={theme.dialogModalLayer}>
-				<div style={theme.dialogBox}>
-					<div style={theme.dialogTitle}>{_('Note properties')}</div>
-					<div>{noteComps}</div>
-					<DialogButtonRow themeId={this.props.themeId} okButtonShow={!this.isReadOnly()} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+			<Dialog onCancel={this.props.onClose}>
+				<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
+				<div role='table' aria-labelledby='note-properties-dialog-title'>
+					{noteComps}
 				</div>
-			</div>
+				<DialogButtonRow themeId={this.props.themeId} okButtonShow={!this.isReadOnly()} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+			</Dialog>
 		);
 	}
 }
