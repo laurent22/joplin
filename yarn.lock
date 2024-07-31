@@ -7078,7 +7078,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
-    "@types/markdown-it": 13.0.7
+    "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
     "@types/node": 18.19.31
@@ -7241,7 +7241,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.17
     "@joplin/utils": ^3.0.1
     "@types/jest": 29.5.8
-    "@types/markdown-it": 13.0.7
+    "@types/markdown-it": 13.0.8
     "@types/node": 18.19.31
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
@@ -7290,7 +7290,7 @@ __metadata:
     "@types/jest-expect-message": 1.0.4
     "@types/jsdom": 21.1.6
     "@types/koa": 2.15.0
-    "@types/markdown-it": 13.0.7
+    "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
     "@types/node-os-utils": 1.3.4
     "@types/nodemailer": 6.4.14
@@ -7350,7 +7350,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
     "@types/js-yaml": 4.0.9
-    "@types/markdown-it": 13.0.7
+    "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
     "@types/node": 18.19.31
     "@types/node-fetch": 2.6.11
@@ -7421,7 +7421,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.52
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/markdown-it": 13.0.7
+    "@types/markdown-it": 13.0.8
     "@types/node-fetch": 2.6.11
     async-mutex: 0.4.1
     dayjs: 1.11.11
@@ -11289,20 +11289,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/linkify-it@npm:*":
-  version: 3.0.2
-  resolution: "@types/linkify-it@npm:3.0.2"
-  checksum: dff8f10fafb885422474e456596f12d518ec4cdd6c33cca7a08e7c86b912d301ed91cf5a7613e148c45a12600dc9ab3d85ad16d5b48dc1aaeda151a68f16b536
+"@types/linkify-it@npm:^3":
+  version: 3.0.5
+  resolution: "@types/linkify-it@npm:3.0.5"
+  checksum: fac28f41a6e576282300a459d70ea0d33aab70dbb77c3d09582bb0335bb00d862b6de69585792a4d590aae4173fbab0bf28861e2d90ca7b2b1439b52688e9ff6
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:13.0.7":
-  version: 13.0.7
-  resolution: "@types/markdown-it@npm:13.0.7"
+"@types/markdown-it@npm:13.0.8":
+  version: 13.0.8
+  resolution: "@types/markdown-it@npm:13.0.8"
   dependencies:
-    "@types/linkify-it": "*"
-    "@types/mdurl": "*"
-  checksum: c9e9af441340eb870a7b90b298f6197aa80b55bee28f179a4f85052333f0cb3d3f2763981359d58cf09024961f013999c1c743c1e52a185ca36576d4403f7eb9
+    "@types/linkify-it": ^3
+    "@types/mdurl": ^1
+  checksum: b94bb5e057207ace36b0b59bc0e9ce494ec7547769ca72dd0829b380fbeb791cbe4e96cb578252ca1c9f1b72e6bc09e9485aa417343edf1c3cef050d16a4e0ee
   languageName: node
   linkType: hard
 
@@ -11315,10 +11315,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mdurl@npm:*":
-  version: 1.0.2
-  resolution: "@types/mdurl@npm:1.0.2"
-  checksum: 79c7e523b377f53cf1f5a240fe23d0c6cae856667692bd21bf1d064eafe5ccc40ae39a2aa0a9a51e8c94d1307228c8f6b121e847124591a9a828c3baf65e86e2
+"@types/mdurl@npm:^1":
+  version: 1.0.5
+  resolution: "@types/mdurl@npm:1.0.5"
+  checksum: e8e872e8da8f517a9c748b06cec61c947cb73fd3069e8aeb0926670ec5dfac5d30549b3d0f1634950401633e812f9b7263f2d5dbe7e98fce12bcb2c659aa4b21
   languageName: node
   linkType: hard
 
