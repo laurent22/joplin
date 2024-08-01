@@ -60,7 +60,7 @@ describe('KeychainService', () => {
 		shim.keytar = null;
 	});
 
-	test('should migrate keys from keytar to safeStorage', async () => {
+	test('should copy keys from keytar to safeStorage', async () => {
 		const keytarMock = mockKeytar();
 		await KeychainService.instance().initialize(makeDrivers());
 
@@ -76,11 +76,10 @@ describe('KeychainService', () => {
 
 		await Setting.saveAll();
 
-		expect(keytarMock.deletePassword).toHaveBeenCalled();
-		expect(keytarMock.deletePassword).toHaveBeenCalledWith(
-			`${Setting.value('appId')}.setting.encryption.masterPassword`,
-			`${Setting.value('clientId')}@joplin`,
-		);
+		// For now, passwords should not be removed from old backends -- this allows
+		// users to revert to an earlier version of Joplin without data loss.
+		expect(keytarMock.deletePassword).not.toHaveBeenCalled();
+
 		expect(shim.electronBridge().safeStorage.encryptString).toHaveBeenCalled();
 		expect(shim.electronBridge().safeStorage.encryptString).toHaveBeenCalledWith('testing');
 

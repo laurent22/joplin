@@ -73,13 +73,14 @@ export default class KeychainService extends BaseService {
 		}
 
 		if (didSet && this.keysNeedingMigration_.has(name)) {
-			logger.info(`Migrating key ${name}...`);
+			logger.info(`Marking key ${name} as copied to new keychain backend...`);
 
-			// At this point, the key has been saved in drivers[i - 1]. Deleting the key
-			// from the less-preferred drivers completes the migration.
-			for (; i < this.drivers_.length; i++) {
-				await this.drivers_[i].deletePassword(name);
-			}
+			// At this point, the key has been saved in drivers[i - 1].
+			//
+			// Deleting the key from the less-preferred drivers would complete the
+			// migration. However, to allow users to roll back to a previous Joplin
+			// version without data loss, avoid deleting old keys here.
+
 			this.keysNeedingMigration_.delete(name);
 		}
 
