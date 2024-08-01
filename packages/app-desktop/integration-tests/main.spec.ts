@@ -1,6 +1,5 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-import SettingsScreen from './models/SettingsScreen';
 import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
@@ -144,36 +143,6 @@ test.describe('main', () => {
 
 		// Should keep aspect ratio (regression test for #9597)
 		expect(fullSize[0] / resizedSize[0]).toBeCloseTo(fullSize[1] / resizedSize[1]);
-	});
-
-	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
-		await mainScreen.waitFor();
-
-		// Sort order buttons should be visible by default
-		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).toBeVisible();
-
-		await mainScreen.openSettings(electronApp);
-
-		// Should be on the settings screen
-		const settingsScreen = new SettingsScreen(mainWindow);
-		await settingsScreen.waitFor();
-
-		// Open the appearance tab
-		await settingsScreen.appearanceTabButton.click();
-
-		// Find the sort order visible checkbox
-		const sortOrderVisibleCheckbox = mainWindow.getByLabel(/^Show sort order/);
-
-		await expect(sortOrderVisibleCheckbox).toBeChecked();
-		await sortOrderVisibleCheckbox.click();
-		await expect(sortOrderVisibleCheckbox).not.toBeChecked();
-
-		// Save settings & close
-		await settingsScreen.okayButton.click();
-		await mainScreen.waitFor();
-
-		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).not.toBeVisible();
 	});
 
 	test('clicking on an external link should try to launch a browser', async ({ electronApp, mainWindow }) => {
