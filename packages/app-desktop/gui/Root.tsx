@@ -167,7 +167,7 @@ class RootComponent extends React.Component<Props, any> {
 			);
 		};
 
-		return <Dialog renderContent={renderContent}/>;
+		return <Dialog>{renderContent()}</Dialog>;
 	}
 
 	private modalDialogProps(): ModalDialogProps {

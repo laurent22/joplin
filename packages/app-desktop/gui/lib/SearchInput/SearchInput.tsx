@@ -59,6 +59,7 @@ export interface OnChangeEvent {
 
 export default function(props: Props) {
 	const iconName = !props.searchStarted ? CommandService.instance().iconName('search') : 'fa fa-times';
+	const iconLabel = !props.searchStarted ? _('Search') : _('Clear search');
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onChange = useCallback((event: any) => {
@@ -79,7 +80,10 @@ export default function(props: Props) {
 				spellCheck={false}
 				disabled={props.disabled}
 			/>
-			<SearchButton onClick={props.onSearchButtonClick}>
+			<SearchButton
+				aria-label={iconLabel}
+				onClick={props.onSearchButtonClick}
+			>
 				<SearchButtonIcon className={iconName}/>
 			</SearchButton>
 		</Root>

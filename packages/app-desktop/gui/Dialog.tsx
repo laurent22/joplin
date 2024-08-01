@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ReactElement, ReactEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, ReactEventHandler, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
-	renderContent: ()=> ReactElement;
 	className?: string;
-	onClose?: ()=> void;
+	onCancel?: ()=> void;
+	contentStyle?: React.CSSProperties;
+	children: ReactNode;
 }
 
 export default function Dialog(props: Props) {
@@ -18,12 +19,12 @@ export default function Dialog(props: Props) {
 		dialogElement.showModal();
 	}, [dialogElement]);
 
-	const onCloseRef = useRef(props.onClose);
-	onCloseRef.current = props.onClose;
+	const onCancelRef = useRef(props.onCancel);
+	onCancelRef.current = props.onCancel;
 
 	const onCancel: ReactEventHandler<HTMLDialogElement> = useCallback((event) => {
-		const canCancel = !!onCloseRef.current;
-		if (canCancel) {
+		const canCancel = !!onCancelRef.current;
+		if (!canCancel) {
 			// Prevents [Escape] from closing the dialog. In many places, this is handled
 			// elsewhere.
 			// See https://stackoverflow.com/a/61021326
@@ -31,15 +32,23 @@ export default function Dialog(props: Props) {
 		}
 	}, []);
 
+	const onContainerClick: MouseEventHandler<HTMLDialogElement> = useCallback((event) => {
+		const onCancel = onCancelRef.current;
+		if (event.target === dialogElement && onCancel) {
+			onCancel();
+		}
+	}, [dialogElement]);
+
 	return (
 		<dialog
 			ref={setDialogRef}
 			className={`dialog-modal-layer ${props.className}`}
-			onClose={props.onClose}
+			onClose={props.onCancel}
 			onCancel={onCancel}
+			onClick={onContainerClick}
 		>
-			<div className='content'>
-				{props.renderContent()}
+			<div className='content' style={props.contentStyle}>
+				{props.children}
 			</div>
 		</dialog>
 	);
