@@ -268,12 +268,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		let advancedSettingsButton = null;
 		const advancedSettingsSectionStyle = { display: 'none' };
+		const advancedSettingsGroupId = `advanced_settings_${key}`;
 
 		if (advancedSettingComps.length) {
 			advancedSettingsButton = (
 				<ToggleAdvancedSettingsButton
 					onClick={() => shared.advancedSettingsButton_click(this)}
 					advancedSettingsVisible={this.state.showAdvancedSettings}
+					aria-controls={advancedSettingsGroupId}
 				/>
 			);
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
@@ -284,7 +286,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				{this.renderSectionDescription(section)}
 				<div>{settingComps}</div>
 				{advancedSettingsButton}
-				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>
+				<div
+					style={advancedSettingsSectionStyle}
+					id={advancedSettingsGroupId}
+					role='group'
+				>{advancedSettingComps}</div>
 			</div>
 		);
 	}

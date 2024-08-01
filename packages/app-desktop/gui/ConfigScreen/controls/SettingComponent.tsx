@@ -49,7 +49,9 @@ const SettingComponent: React.FC<Props> = props => {
 		backgroundColor: theme.backgroundColor,
 	};
 
-	const textInputBaseStyle = { ...controlStyle, fontFamily: theme.fontFamily,
+	const textInputBaseStyle: React.CSSProperties = {
+		...controlStyle,
+		fontFamily: theme.fontFamily,
 		border: '1px solid',
 		padding: '4px 6px',
 		boxSizing: 'border-box',
@@ -58,7 +60,8 @@ const SettingComponent: React.FC<Props> = props => {
 		paddingLeft: 6,
 		paddingRight: 6,
 		paddingTop: 4,
-		paddingBottom: 4 };
+		paddingBottom: 4,
+	};
 
 	const key = props.settingKey;
 	const md = Setting.settingMetadata(key);
@@ -72,7 +75,7 @@ const SettingComponent: React.FC<Props> = props => {
 		const CustomSettingComponent = settingKeyToControl[key];
 		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} /> : null;
 		return (
-			<div key={key} style={rowStyle}>
+			<div style={rowStyle}>
 				{label}
 				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null}/>
 				<CustomSettingComponent
@@ -112,7 +115,7 @@ const SettingComponent: React.FC<Props> = props => {
 			borderRadius: 3 };
 
 		return (
-			<div key={key} style={rowStyle}>
+			<div style={rowStyle}>
 				<SettingLabel htmlFor={inputId} text={md.label()}/>
 				<select
 					value={value}
@@ -131,32 +134,25 @@ const SettingComponent: React.FC<Props> = props => {
 	} else if (md.type === Setting.TYPE_BOOL) {
 		const value = props.value as boolean;
 
-		const onCheckboxClick = () => {
-			updateSettingValue(key, !value);
-		};
-
 		const checkboxSize = theme.fontSize * 1.1666666666666;
 
-		// Hack: The {key+value.toString()} is needed as otherwise the checkbox doesn't update when the state changes.
-		// There's probably a better way to do this but can't figure it out.
-
 		return (
-			<div key={key + (`${value}`).toString()} style={rowStyle}>
+			<div style={rowStyle}>
 				<div style={{ ...controlStyle, backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
 					<input
 						id={inputId}
 						type="checkbox"
 						checked={!!value}
-						onChange={() => {
-							onCheckboxClick();
-						}}
+						onChange={event => updateSettingValue(key, event.target.checked)}
 						style={{ marginLeft: 0, width: checkboxSize, height: checkboxSize }}
-						aria-describedby={descriptionId}
+
+						// Prefer aria-details to aria-describedby for checkbox inputs --
+						// on MacOS, VoiceOver reads "checked"/"unchecked" only after reading the
+						// potentially-lengthy description. For other input types, the input value
+						// is read first.
+						aria-details={descriptionId}
 					/>
 					<label
-						onClick={() => {
-							onCheckboxClick();
-						}}
 						className='setting-label -for-checkbox'
 						htmlFor={inputId}
 					>
@@ -237,15 +233,20 @@ const SettingComponent: React.FC<Props> = props => {
 			const cmd = splitCmd(value);
 			const path = md.subType === 'file_path_and_args' ? cmd[0] : value;
 
+			const argInputId = `setting_path_arg_${key}`;
 			const argComp = md.subType !== 'file_path_and_args' ? null : (
 				<div style={{ ...rowStyle, marginBottom: 5 }}>
-					<div className='setting-label -sub-label'>{_('Arguments:')}</div>
+					<label
+						className='setting-label -sub-label'
+						htmlFor={argInputId}
+					>{_('Arguments:')}</label>
 					<input
 						type={inputType}
 						style={inputStyle}
 						onChange={onArgsChange}
 						value={cmd[1]}
 						spellCheck={false}
+						id={argInputId}
 						aria-describedby={descriptionId}
 					/>
 					<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
@@ -254,16 +255,17 @@ const SettingComponent: React.FC<Props> = props => {
 				</div>
 			);
 
+			const pathDescriptionId = `setting_path_label_${key}`;
 			return (
-				<div key={key} style={rowStyle}>
+				<div style={rowStyle}>
 					<SettingLabel text={md.label()} htmlFor={inputId}/>
 					<div style={{ display: 'flex' }}>
 						<div style={{ flex: 1 }}>
 							<div style={{ ...rowStyle, marginBottom: 5 }}>
-								<label
+								<div
 									className='setting-label -sub-label'
-									htmlFor={inputId}
-								>{_('Path:')}</label>
+									id={pathDescriptionId}
+								>{_('Path:')}</div>
 								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: inputStyle.marginBottom }}>
 									<input
 										type={inputType}
@@ -272,7 +274,8 @@ const SettingComponent: React.FC<Props> = props => {
 										value={path}
 										spellCheck={false}
 										id={inputId}
-										aria-describedby={descriptionId}
+										aria-describedby={pathDescriptionId}
+										aria-details={descriptionId}
 									/>
 									<Button
 										level={ButtonLevel.Secondary}
@@ -295,7 +298,7 @@ const SettingComponent: React.FC<Props> = props => {
 				updateSettingValue(key, event.target.value);
 			};
 			return (
-				<div key={key} style={rowStyle}>
+				<div style={rowStyle}>
 					<SettingLabel text={md.label()} htmlFor={inputId}/>
 					{
 						md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
@@ -334,15 +337,12 @@ const SettingComponent: React.FC<Props> = props => {
 		const label = [md.label()];
 		if (md.unitLabel) label.push(`(${md.unitLabel(md.value)})`);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const inputStyle: any = { ...textInputBaseStyle };
-
 		return (
-			<div key={key} style={rowStyle}>
+			<div style={rowStyle}>
 				<SettingLabel htmlFor={inputId} text={label.join(' ')}/>
 				<input
 					type="number"
-					style={inputStyle}
+					style={textInputBaseStyle}
 					value={value}
 					onChange={onNumChange}
 					min={md.minimum}
@@ -361,7 +361,7 @@ const SettingComponent: React.FC<Props> = props => {
 		);
 
 		return (
-			<div key={key} style={rowStyle}>
+			<div style={rowStyle}>
 				{labelComp}
 				<Button
 					level={ButtonLevel.Secondary}
