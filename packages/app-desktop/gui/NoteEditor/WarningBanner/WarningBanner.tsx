@@ -55,20 +55,24 @@ const WarningBanner: React.FC<Props> = props => {
 		</BannerContent>
 	);
 
-	const showMarkdownPluginBanner = useMemo(() => {
+	const incompatiblePluginNames = useMemo(() => {
 		if (props.bodyEditor !== 'CodeMirror6') {
-			return false;
+			return [];
 		}
 
 		const runningPluginIds = Object.keys(props.plugins);
 
-		return runningPluginIds.some(id => {
-			if (props.pluginCompatibilityBannerDismissedFor.includes(id)) {
-				return false;
+		return runningPluginIds.map((id): string|string[] => {
+			if (props.pluginCompatibilityBannerDismissedFor?.includes(id)) {
+				return [];
 			}
 
-			return incompatiblePluginIds.includes(id);
-		});
+			if (incompatiblePluginIds.includes(id)) {
+				return PluginService.instance().pluginById(id).manifest.name;
+			} else {
+				return [];
+			}
+		}).flat();
 	}, [props.bodyEditor, props.plugins, props.pluginCompatibilityBannerDismissedFor]);
 
 	const markdownPluginBanner = (
@@ -76,9 +80,12 @@ const WarningBanner: React.FC<Props> = props => {
 			acceptMessage={_('Switch to the legacy editor')}
 			onAccept={onSwitchToLegacyEditor}
 			onDismiss={onDismissLegacyEditorPrompt}
-			visible={showMarkdownPluginBanner}
+			visible={incompatiblePluginNames.length > 0}
 		>
-			{_('One or more installed plugins does not support the current markdown editor.')}
+			{_('The following plugins may not support the current markdown editor:')}
+			<ul>
+				{incompatiblePluginNames.map((name, index) => <li key={index}>{name}</li>)}
+			</ul>
 		</BannerContent>
 	);
 

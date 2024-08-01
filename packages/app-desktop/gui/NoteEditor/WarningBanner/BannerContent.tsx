@@ -2,7 +2,7 @@ import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 
 interface Props {
-	children: React.ReactElement|string;
+	children: React.ReactNode;
 	acceptMessage: string;
 	onAccept: ()=> void;
 	onDismiss: ()=> void;
