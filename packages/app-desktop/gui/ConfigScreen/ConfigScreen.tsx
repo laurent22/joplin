@@ -228,7 +228,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (syncTargetMd.supportsConfigCheck) {
 				const messages = shared.checkSyncConfigMessages(this);
 				const statusComp = !messages.length ? null : (
-					<div style={statusStyle}>
+					<div style={statusStyle} aria-live='polite'>
 						{messages[0]}
 						{messages.length >= 1 ? <p>{messages[1]}</p> : null}
 					</div>
@@ -371,7 +371,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const settings = this.state.settings;
 
-		const containerStyle = {
+		const containerStyle: React.CSSProperties = {
 			overflow: 'auto',
 			padding: theme.configScreenPadding,
 			paddingTop: 0,
@@ -403,6 +403,35 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
 
+		const tabComponents: React.ReactNode[] = [];
+		for (const section of sections) {
+			const sectionId = `setting-section-${section.name}`;
+			let content = null;
+			const visible = section.name === this.state.selectedSectionName;
+			if (visible) {
+				content = (
+					<>
+						{screenComp}
+						<div style={containerStyle}>{settingComps}</div>
+					</>
+				);
+			}
+
+			tabComponents.push(
+				<div
+					key={sectionId}
+					id={sectionId}
+					className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+					hidden={!visible}
+					aria-labelledby={`setting-tab-${section.name}`}
+					tabIndex={0}
+					role='tabpanel'
+				>
+					{content}
+				</div>,
+			);
+		}
+
 		return (
 			<div className="config-screen" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
@@ -411,9 +440,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					sections={sections}
 				/>
 				<div style={rightStyle}>
-					{screenComp}
 					{needRestartComp}
-					<div style={containerStyle}>{settingComps}</div>
+					{tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}
 						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
