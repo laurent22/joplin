@@ -31,6 +31,7 @@ import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
+import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -282,6 +283,7 @@ const createEditor = (
 
 				// Apply styles to entire lines (block-display decorations)
 				decoratorExtension,
+				biDirectionalTextExtension,
 
 				// Adds additional CSS classes to tokens (the default CSS classes are
 				// auto-generated and thus unstable).

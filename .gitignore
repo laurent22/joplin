@@ -775,6 +775,7 @@ packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/testUtil/pressReleaseKey.js
 packages/editor/CodeMirror/testUtil/typeText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/biDirectionalTextExtension.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
 packages/editor/CodeMirror/utils/formatting/findInlineMatch.test.js
 packages/editor/CodeMirror/utils/formatting/findInlineMatch.js
