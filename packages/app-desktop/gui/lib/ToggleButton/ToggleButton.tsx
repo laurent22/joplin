@@ -24,6 +24,9 @@ export default function(props: Props) {
 			// Works around a bug in ReactToggleButton -- the hidden checkbox input associated
 			// with the toggle is always read as "unchecked" by screen readers.
 			checked: props.value,
+			// Silences a ReactJS warning: "You provided a `checked` prop to a form field without an `onChange` handler."
+			// Change events are handled by ReactToggleButton.
+			onChange: ()=>{},
 		};
 	}, [ariaLabel, props.value]);
 
