@@ -31,6 +31,27 @@ test.describe('goToAnything', () => {
 		}
 	});
 
+	test('closing go to anything should restore the original keyboard focus', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+
+		// Focus and start to fill the note title
+		await mainScreen.noteEditor.noteTitleInput.click();
+		await expect(mainScreen.noteEditor.noteTitleInput).toBeFocused();
+		await mainScreen.noteEditor.noteTitleInput.fill('Test');
+
+		const goToAnything = mainScreen.goToAnything;
+		await goToAnything.open(electronApp);
+
+		await goToAnything.expectToBeOpen();
+		await goToAnything.inputLocator.press('Escape');
+		await goToAnything.expectToBeClosed();
+
+		// Keyboard focus should have returned to the note title
+		await expect(mainScreen.noteEditor.noteTitleInput).toBeFocused();
+		await mainWindow.keyboard.type('ing...');
+		await expect(mainScreen.noteEditor.noteTitleInput).toHaveValue('Testing...');
+	});
+
 	test('should be possible to show the set tags dialog from goToAnything', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.createNewNote('Test note');

@@ -43,7 +43,7 @@ const Dialog: React.FC<Props> = props => {
 		</div>
 	);
 	return <>
-		{(dialogElement !== null) && createPortal(content, dialogElement)}
+		{dialogElement && createPortal(content, dialogElement)}
 	</>;
 };
 
@@ -78,6 +78,8 @@ const useDialogElement = (onCancel: undefined|OnCancelListener) => {
 
 		return () => {
 			if (dialog.open) {
+				// .close: Instructs the browser to restore keyboard focus to whatever was focused
+				// before the dialog.
 				dialog.close();
 			}
 			dialog.remove();
