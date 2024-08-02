@@ -2,6 +2,8 @@ import shim from '@joplin/lib/shim';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { openDocument } from '@joplin/react-native-saf-x';
 import Logger from '@joplin/utils/Logger';
+import type FsDriverWeb from './fs-driver/fs-driver-rn.web';
+import uuid from '@joplin/lib/uuid';
 
 interface SelectedDocument {
 	type: string;
@@ -12,10 +14,58 @@ interface SelectedDocument {
 
 const logger = Logger.create('pickDocument');
 
-const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
+interface Options {
+	multiple?: boolean;
+	preferCamera?: boolean;
+}
+
+const pickDocument = async ({ multiple = false, preferCamera = false }: Options = {}): Promise<SelectedDocument[]> => {
 	let result: SelectedDocument[] = [];
 	try {
-		if (shim.fsDriver().isUsingAndroidSAF()) {
+		if (shim.mobilePlatform() === 'web') {
+			await new Promise<void>((resolve, reject) => {
+				const input = document.createElement('input');
+				input.type = 'file';
+				input.style.display = 'none';
+				input.multiple = multiple;
+				if (preferCamera) {
+					input.capture = 'environment';
+					input.accept = 'image/*';
+				}
+				document.body.appendChild(input);
+
+				input.onchange = async () => {
+					try {
+						const fsDriver = shim.fsDriver() as FsDriverWeb;
+						if (input.files.length > 0) {
+							for (const file of input.files) {
+								const path = `/tmp/${uuid.create()}`;
+								await fsDriver.createReadOnlyVirtualFile(path, file);
+
+								result.push({
+									type: file.type,
+									mime: file.type,
+									uri: path,
+									fileName: file.name,
+								});
+							}
+						}
+						resolve();
+					} catch (error) {
+						reject(error);
+					} finally {
+						input.remove();
+					}
+				};
+
+				input.oncancel = () => {
+					input.remove();
+					resolve();
+				};
+
+				input.click();
+			});
+		} else if (shim.fsDriver().isUsingAndroidSAF()) {
 			const openDocResult = await openDocument({ multiple });
 			if (!openDocResult) {
 				throw new Error('User canceled document picker');
@@ -48,7 +98,7 @@ const pickDocument = async (multiple: boolean): Promise<SelectedDocument[]> => {
 			});
 		}
 	} catch (error) {
-		if (DocumentPicker.isCancel(error) || error?.message?.includes('cancel')) {
+		if (DocumentPicker?.isCancel?.(error) || error?.message?.includes('cancel')) {
 			logger.info('user has cancelled');
 			return [];
 		} else {

@@ -12,6 +12,11 @@ export interface RendererSetupOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	// True if asset and resource files should be transferred to the WebView before rendering.
+	// This must be true on web, where asset and resource files are virtual and can't be accessed
+	// without transferring.
+	useTransferredFiles: boolean;
+
 	fsDriver: RendererFsDriver;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
@@ -33,6 +38,7 @@ export interface RendererSettings {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginSettings: Record<string, any>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
+	readAssetBlob: (assetPath: string)=> Promise<Blob>;
 }
 
 export interface MarkupRecord {
@@ -45,6 +51,7 @@ export default class Renderer {
 	private lastSettings: RendererSettings|null = null;
 	private extraContentScripts: ExtraContentScript[] = [];
 	private lastRenderMarkup: MarkupRecord|null = null;
+	private resourcePathOverrides: Record<string, string> = Object.create(null);
 
 	public constructor(private setupOptions: RendererSetupOptions) {
 		this.recreateMarkupToHtml();
@@ -59,6 +66,18 @@ export default class Renderer {
 			ResourceModel: makeResourceModel(this.setupOptions.settings.resourceDir),
 			pluginOptions: this.setupOptions.pluginOptions,
 		});
+	}
+
+	// Intended for web, where resources can't be linked to normally.
+	public async setResourceFile(id: string, file: Blob) {
+		this.resourcePathOverrides[id] = URL.createObjectURL(file);
+	}
+
+	public getResourcePathOverride(resourceId: string) {
+		if (Object.prototype.hasOwnProperty.call(this.resourcePathOverrides, resourceId)) {
+			return this.resourcePathOverrides[resourceId];
+		}
+		return null;
 	}
 
 	public async setExtraContentScriptsAndRerender(
@@ -108,6 +127,7 @@ export default class Renderer {
 			editPopupFiletypes: ['image/svg+xml'],
 			createEditPopupSyntax: settings.createEditPopupSyntax,
 			destroyEditPopupSyntax: settings.destroyEditPopupSyntax,
+			itemIdToUrl: this.setupOptions.useTransferredFiles ? (id: string) => this.getResourcePathOverride(id) : undefined,
 
 			settingValue: (pluginId: string, settingName: string) => {
 				const settingKey = `${pluginId}.${settingName}`;
@@ -151,7 +171,17 @@ export default class Renderer {
 		}
 
 		contentContainer.innerHTML = html;
-		addPluginAssets(pluginAssets);
+
+		// Adding plugin assets can be slow -- run it asynchronously.
+		void (async () => {
+			await addPluginAssets(pluginAssets, {
+				inlineAssets: this.setupOptions.useTransferredFiles,
+				readAssetBlob: settings.readAssetBlob,
+			});
+
+			// Some plugins require this event to be dispatched just after being added.
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+		})();
 
 		this.afterRender(settings);
 	}
@@ -187,9 +217,6 @@ export default class Renderer {
 				}
 			}
 		}, 10);
-
-		// Used by some parts of the renderer (e.g. to rerender mermaid.js diagrams).
-		document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 	}
 
 	public clearCache(markupLanguage: MarkupLanguage) {

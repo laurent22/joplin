@@ -758,6 +758,8 @@ class Setting extends BaseModel {
 		const output = [];
 
 		for (const value of order) {
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
+
 			output.push({
 				[options.valueKey]: value,
 				[options.labelKey]: enumOptions[value],
@@ -957,7 +959,7 @@ class Setting extends BaseModel {
 		}
 
 		const queries = [];
-		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
+		queries.push(`DELETE FROM settings WHERE key IN ('${keys.join('\',\'')}')`);
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = { ...this.cache_[i] };

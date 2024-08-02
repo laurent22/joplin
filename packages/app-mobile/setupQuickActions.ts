@@ -13,6 +13,12 @@ type TData = {
 
 export default async (dispatch: Dispatch) => {
 	const userInfo = { url: '' };
+
+	if (!QuickActions.setShortcutItems) {
+		logger.info('QuickActions unsupported');
+		return null;
+	}
+
 	QuickActions.setShortcutItems([
 		{ type: 'New note', title: _('New note'), icon: 'Compose', userInfo },
 		{ type: 'New to-do', title: _('New to-do'), icon: 'Add', userInfo },

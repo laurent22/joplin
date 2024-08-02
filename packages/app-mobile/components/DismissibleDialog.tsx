@@ -33,14 +33,6 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 		const maxHeight = size === DialogSize.Large ? windowSize.height : 700;
 
 		return StyleSheet.create({
-			webView: {
-				backgroundColor: 'transparent',
-				display: 'flex',
-			},
-			webViewContainer: {
-				flexGrow: 1,
-				flexShrink: 1,
-			},
 			closeButtonContainer: {
 				flexDirection: 'row',
 				justifyContent: 'flex-end',

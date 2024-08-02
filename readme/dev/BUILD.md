@@ -67,6 +67,17 @@ Once this is done, open the file `ios/Joplin.xcworkspace` on XCode and run the a
 
 Normally the **bundler** should start automatically with the application. If it doesn't, run `yarn start` from `packages/app-mobile`.
 
+### Web
+
+To run the mobile app in a web browser,
+
+	cd packages/app-mobile
+	yarn serve-web
+
+Above, `yarn serve-web` starts a development server on port `8088`. To create a release build, instead run `yarn web`. The built output will be stored in `packages/app-mobile/web/dist`.
+
+Like the iOS and Android builds, it's necessary to compile TypeScript to JS. See "Watching files" below.
+
 ## Building the clipper
 
 	cd packages/app-clipper/popup

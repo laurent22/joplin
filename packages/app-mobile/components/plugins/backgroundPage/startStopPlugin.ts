@@ -2,7 +2,7 @@ import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { PluginMainProcessApi, PluginWebViewApi } from '../types';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import WindowMessenger from '@joplin/lib/utils/ipc/WindowMessenger';
-import makeSandboxedIframe from './utils/makeSandboxedIframe';
+import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
 
 type PluginRecord = {
 	iframe: HTMLIFrameElement;
@@ -50,7 +50,7 @@ export const runPlugin = (
 			${pluginScript}
 		})();
 	`;
-	const backgroundIframe = makeSandboxedIframe(bodyHtml, [initialJavaScript]).iframe;
+	const backgroundIframe = makeSandboxedIframe({ bodyHtml, headHtml: '', scripts: [initialJavaScript] }).iframe;
 
 	loadedPlugins[pluginId] = {
 		iframe: backgroundIframe,

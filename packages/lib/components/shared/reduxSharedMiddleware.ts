@@ -2,7 +2,7 @@ import Setting from '../../models/Setting';
 import Tag from '../../models/Tag';
 import BaseModel from '../../BaseModel';
 import Note from '../../models/Note';
-import { reg } from '../../registry.js';
+import { reg } from '../../registry';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
 import eventManager from '../../eventManager';

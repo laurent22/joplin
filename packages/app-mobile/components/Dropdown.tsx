@@ -115,6 +115,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const itemWrapperStyle: ViewStyle = {
 			...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}),
 			flex: 1,
+			flexBasis: 'auto',
 			justifyContent: 'center',
 			height: itemHeight,
 			paddingLeft: 20,
@@ -197,6 +198,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 						style={headerWrapperStyle}
 						disabled={this.props.disabled}
 						onPress={this.onOpenList}
+						role='button'
 					>
 						<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
 							{headerLabel}
@@ -215,6 +217,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
 						importantForAccessibility='no-hide-descendants'
+						aria-hidden={true}
 						onPress={this.onCloseList}
 						style={backgroundCloseButtonStyle}
 					>
