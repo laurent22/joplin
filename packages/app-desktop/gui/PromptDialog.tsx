@@ -191,6 +191,8 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		this.styles_.desc = { ...theme.textStyle, marginTop: 10 };
 
+		this.styles_.dialog = { maxWidth: width };
+
 		return this.styles_;
 	}
 
@@ -304,7 +306,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 
 		return (
-			<Dialog className='prompt-dialog'>
+			<Dialog className='prompt-dialog' contentStyle={styles.dialog}>
 				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}
