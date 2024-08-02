@@ -58,7 +58,7 @@ impl Renderer {
                                 section_group_dir.clone(),
                                 output_dir.to_owned(),
                             )?);
-                        }                     
+                        }
                     }
 
                     toc.push(templates::notebook::Toc::SectionGroup(
