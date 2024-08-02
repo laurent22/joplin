@@ -2,6 +2,7 @@ import * as React from 'react';
 const { connect } = require('react-redux');
 import { themeStyle } from '@joplin/lib/theme';
 import { AppState } from '../app.reducer';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	tip: string;
@@ -10,6 +11,9 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
+
+	'aria-controls'?: string;
+	'aria-expanded'?: string;
 }
 
 class HelpButtonComponent extends React.Component<Props> {
@@ -29,11 +33,21 @@ class HelpButtonComponent extends React.Component<Props> {
 		const helpIconStyle = { flex: 0, width: 16, height: 16, marginLeft: 10 };
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const extraProps: any = {};
-		if (this.props.tip) extraProps['data-tip'] = this.props.tip;
+		if (this.props.tip) {
+			extraProps['data-tip'] = this.props.tip;
+			extraProps['aria-description'] = this.props.tip;
+		}
 		return (
-			<a href="#" style={style} onClick={this.onClick} {...extraProps}>
-				<i style={helpIconStyle} className={'fa fa-question-circle'}></i>
-			</a>
+			<button
+				style={style}
+				onClick={this.onClick}
+				className='flat-button'
+				aria-controls={this.props['aria-controls']}
+				aria-expanded={this.props['aria-expanded']}
+				{...extraProps}
+			>
+				<i style={helpIconStyle} className={'fa fa-question-circle'} role='img' aria-label={_('Help')}></i>
+			</button>
 		);
 	}
 }
