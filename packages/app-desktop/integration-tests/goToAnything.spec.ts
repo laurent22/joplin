@@ -33,11 +33,11 @@ test.describe('goToAnything', () => {
 
 	test('closing go to anything should restore the original keyboard focus', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('');
 
-		// Focus and start to fill the note title
-		await mainScreen.noteEditor.noteTitleInput.click();
-		await expect(mainScreen.noteEditor.noteTitleInput).toBeFocused();
-		await mainScreen.noteEditor.noteTitleInput.fill('Test');
+		// Focus and start to fill the editor
+		await mainScreen.noteEditor.codeMirrorEditor.click();
+		await mainWindow.keyboard.type('Test');
 
 		const goToAnything = mainScreen.goToAnything;
 		await goToAnything.open(electronApp);
@@ -46,10 +46,9 @@ test.describe('goToAnything', () => {
 		await goToAnything.inputLocator.press('Escape');
 		await goToAnything.expectToBeClosed();
 
-		// Keyboard focus should have returned to the note title
-		await expect(mainScreen.noteEditor.noteTitleInput).toBeFocused();
+		// Keyboard focus should have returned to the editor
 		await mainWindow.keyboard.type('ing...');
-		await expect(mainScreen.noteEditor.noteTitleInput).toHaveValue('Testing...');
+		await expect(mainScreen.noteEditor.codeMirrorEditor).toHaveText('Testing...');
 	});
 
 	test('should be possible to show the set tags dialog from goToAnything', async ({ electronApp, mainWindow }) => {
