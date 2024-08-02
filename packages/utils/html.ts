@@ -83,13 +83,23 @@ export const extractUrls = (html: string) => {
 	return output;
 };
 
-type SvgXml = {
+export type SvgXml = {
 	title: string;
 	content: string;
 };
 
-export const extractSvgs = (html: string, titleGenerator: ()=> string): { svgs: SvgXml[]; html: string } => {
-	if (!html || !html.trim()) return { svgs: [], html };
+type ExtractSvgsReturn = {
+	svgs: SvgXml[];
+	html: string;
+};
+
+export const extractSvgs = (html: string, titleGenerator: ()=> string): ExtractSvgsReturn => {
+	if (!html || !html.trim()) {
+		return {
+			svgs: [],
+			html,
+		};
+	}
 
 	const tagStack: string[] = [];
 	const body: string[] = [];
@@ -156,11 +166,12 @@ export const extractSvgs = (html: string, titleGenerator: ()=> string): { svgs: 
 				if (svgTagDepth === 0) {
 					svgStack.push('</svg>');
 					const title = titleGenerator();
+					const fullPath = `./${title}`;
 					svgs.push({
 						title,
 						content: svgStack.join(''),
 					});
-					body.push(`<img style="${svgStyle}" src="${title}" />`);
+					body.push(`<img style="${svgStyle}" src="${fullPath}" />`);
 					svgStack = [];
 					svgStyle = '';
 					return;
