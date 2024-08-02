@@ -44,18 +44,19 @@ export default (props: Props) => {
 	const onKeyDown = useCallback((event: KeyboardEvent|React.KeyboardEvent) => {
 		// Early exit if it's neither ENTER nor ESCAPE, because isInSubModal
 		// function can be costly.
-		if (event.code !== 'Enter' && event.code !== 'Escape') return;
+		if (event.keyCode !== 13 && event.keyCode !== 27) return;
 
 		if (!isTopDialog() || isInSubModal(event.target)) return;
 
-		if (event.code === 'Enter') {
+		if (event.keyCode === 13) {
 			if ('nodeName' in event.target && event.target.nodeName === 'INPUT') {
 				const target = event.target as HTMLInputElement;
+
 				if (target.type !== 'button' && target.type !== 'checkbox') {
 					props.onOkButtonClick();
 				}
 			}
-		} else if (event.code === 'Escape') {
+		} else if (event.keyCode === 27) {
 			props.onCancelButtonClick();
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
