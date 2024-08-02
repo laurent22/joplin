@@ -34,6 +34,23 @@ test.describe('settings', () => {
 		await expect(sortOrderLocator).not.toBeVisible();
 	});
 
+	test('clicking the sync wizard button in settings should open a dialog', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		const generalTab = settingsScreen.getTabLocator('Synchronisation');
+		await generalTab.click();
+
+		await expect(mainScreen.dialog).not.toBeVisible();
+
+		const syncWizardButton = mainWindow.getByRole('button', { name: 'Open Sync Wizard' });
+		await syncWizardButton.click();
+
+		await expect(mainScreen.dialog).toBeVisible();
+	});
+
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.waitFor();
