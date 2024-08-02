@@ -17,7 +17,7 @@ const logger = Logger.create('models/Setting');
 
 export * from './settings/types';
 
-type SettingValueType<T extends string> = (
+export type SettingValueType<T extends string> = (
 	T extends BuiltInMetadataKeys
 		? BuiltInMetadataValues[T]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied

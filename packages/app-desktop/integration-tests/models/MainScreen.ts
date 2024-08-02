@@ -17,7 +17,7 @@ export default class MainScreen {
 		this.newNoteButton = page.locator('.new-note-button');
 		this.noteListContainer = page.locator('.rli-noteList');
 		this.sidebar = new Sidebar(page, this);
-		this.dialog = page.locator('.dialog-root');
+		this.dialog = page.locator('.dialog-modal-layer');
 		this.noteEditor = new NoteEditorScreen(page);
 		this.goToAnything = new GoToAnything(page, this);
 	}
