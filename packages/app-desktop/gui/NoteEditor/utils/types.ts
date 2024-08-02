@@ -50,7 +50,6 @@ export interface NoteEditorProps {
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
-	richTextBannerDismissed: boolean;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
