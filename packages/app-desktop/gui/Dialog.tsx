@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 
 type OnCancelListener = ()=> void;
 
@@ -78,6 +79,15 @@ const useDialogElement = (onCancel: undefined|OnCancelListener) => {
 			const closedByCancel = dialog.returnValue !== removedReturnValue;
 			if (closedByCancel) {
 				onCancelRef.current?.();
+			}
+
+			// Work around what seems to be an Electron bug -- if an input or contenteditable region is refocused after
+			// dismissing a dialog, it won't be editable.
+			// Note: While this addresses the issue in the note title input, it does not address the issue in the Rich Text Editor.
+			if (document.activeElement?.tagName === 'INPUT') {
+				const element = document.activeElement as HTMLElement;
+				blur('Dialog', element);
+				focus('Dialog', element);
 			}
 		});
 		document.body.appendChild(dialog);
