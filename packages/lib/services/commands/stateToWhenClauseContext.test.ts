@@ -5,8 +5,8 @@ import stateToWhenClauseContext from './stateToWhenClauseContext';
 
 describe('stateToWhenClauseContext', () => {
 
-	it('should be inTrash if selectedNote has deleted_time and selectedFolderId is trash', async () => {
-		const appState = {
+	it('should be in trash if selected note has been deleted and selected folder is trash', async () => {
+		const applicationState = {
 			selectedNoteIds: ['1'],
 			selectedFolderId: getTrashFolderId(),
 			notes: [
@@ -14,13 +14,13 @@ describe('stateToWhenClauseContext', () => {
 			],
 			folders: [],
 		} as State;
-		const result = stateToWhenClauseContext(appState);
+		const resultingState = stateToWhenClauseContext(applicationState);
 
-		expect(result.inTrash).toBe(true);
+		expect(resultingState.inTrash).toBe(true);
 	});
 
-	it('should NOT be inTrash if selectedNote deleted_time is 0', async () => {
-		const appState = {
+	it('should NOT be in trash if selected note has not been deleted', async () => {
+		const applicationState = {
 			selectedNoteIds: ['1'],
 			selectedFolderId: getTrashFolderId(),
 			notes: [
@@ -28,13 +28,13 @@ describe('stateToWhenClauseContext', () => {
 			],
 			folders: [],
 		} as State;
-		const result = stateToWhenClauseContext(appState);
+		const resultingState = stateToWhenClauseContext(applicationState);
 
-		expect(result.inTrash).toBe(false);
+		expect(resultingState.inTrash).toBe(false);
 	});
 
-	it('should NOT be inTrash if selectedFolderId is not trash', async () => {
-		const appState = {
+	it('should NOT be in trash if selected folder is not trash', async () => {
+		const applicationState = {
 			selectedNoteIds: ['1'],
 			selectedFolderId: 'any-other-folder',
 			notes: [
@@ -42,33 +42,33 @@ describe('stateToWhenClauseContext', () => {
 			],
 			folders: [],
 		} as State;
-		const result = stateToWhenClauseContext(appState);
+		const resultingState = stateToWhenClauseContext(applicationState);
 
-		expect(result.inTrash).toBe(false);
+		expect(resultingState.inTrash).toBe(false);
 	});
 
-	it('should be inTrash if commandFolder has deleted_time', async () => {
-		const appState = {
+	it('should be in trash if command folder is deleted', async () => {
+		const applicationState = {
 			notes: [],
 			folders: [
 				{ id: '1', deleted_time: 1722567036580, share_id: '', parent_id: '' },
 			],
 		} as State;
-		const result = stateToWhenClauseContext(appState, { commandFolderId: '1' });
+		const resultingState = stateToWhenClauseContext(applicationState, { commandFolderId: '1' });
 
-		expect(result.inTrash).toBe(true);
+		expect(resultingState.inTrash).toBe(true);
 	});
 
-	it('should NOT be inTrash if commandFolder deleted_time is 0', async () => {
-		const appState = {
+	it('should NOT be in trash if command folder is not deleted', async () => {
+		const applicationState = {
 			notes: [],
 			folders: [
 				{ id: '1', deleted_time: 0, share_id: '', parent_id: '' },
 			],
 		} as State;
-		const result = stateToWhenClauseContext(appState, { commandFolderId: '1' });
+		const resultingState = stateToWhenClauseContext(applicationState, { commandFolderId: '1' });
 
-		expect(result.inTrash).toBe(false);
+		expect(resultingState.inTrash).toBe(false);
 	});
 
 });
