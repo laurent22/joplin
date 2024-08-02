@@ -98,6 +98,8 @@ const getResultId = (result: GotoAnythingSearchResult) => {
 	return `goto-anything-result-${result.item_id ? result.item_id : result.id}`;
 };
 
+const itemListId = 'goto-anything-item-list';
+
 class GotoAnything {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -623,10 +625,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return maxItemCount * itemHeight;
 	}
 
-	private itemListId() {
-		return 'goto-anything-item-list';
-	}
-
 	public renderList() {
 		const style = this.style();
 
@@ -638,7 +636,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return (
 			<ItemList
 				ref={this.itemListRef}
-				id={this.itemListId()}
+				id={itemListId}
 				role='listbox'
 				aria-label={_('Search results')}
 				itemHeight={style.itemHeight}
@@ -677,7 +675,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 						aria-describedby={helpTextId}
 						aria-autocomplete='list'
-						aria-controls={this.itemListId()}
+						aria-controls={itemListId}
 						aria-activedescendant={this.state.selectedItemId}
 					/>
 					<HelpButton
