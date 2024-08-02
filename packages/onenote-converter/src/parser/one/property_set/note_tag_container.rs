@@ -18,6 +18,7 @@ use crate::parser::onestore::types::property::PropertyId;
 ///
 /// [\[MS-ONE\] 2.2.88]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/a9938236-87f8-41b1-81f3-5f760e1247b8
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) definition: Option<ExGuid>,
     pub(crate) created_at: Time,

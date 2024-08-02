@@ -14,6 +14,7 @@ use crate::parser::onestore::object::Object;
 ///
 /// [\[MS-ONE\] 2.2.19]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/e381b7c7-b434-43a2-ba23-0d08bafd281a
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) last_modified: Option<Time>,
     pub(crate) cached_title: Option<String>,

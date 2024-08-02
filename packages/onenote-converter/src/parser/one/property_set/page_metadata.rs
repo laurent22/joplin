@@ -11,6 +11,7 @@ use crate::parser::shared::guid::Guid;
 ///
 /// [\[MS-ONE\] 2.2.30]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/aaabcc70-5836-4dcb-8209-012ce5d45b3c
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) entity_guid: Guid,
     pub(crate) cached_title: String,

@@ -4,7 +4,6 @@ use crate::utils::{join_path, make_dir, remove_prefix, write_file};
 use crate::{page, templates};
 use color_eyre::eyre::Result;
 use std::collections::HashSet;
-use std::path::{Path, PathBuf};
 
 pub(crate) struct Renderer {
     pub(crate) files: HashSet<String>,

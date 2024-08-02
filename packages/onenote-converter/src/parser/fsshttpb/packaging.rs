@@ -12,6 +12,7 @@ use crate::parser::Reader;
 ///
 /// [\[MS-ONESTORE\] 2.8.1]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/a2f046ea-109a-49c4-912d-dc2888cf0565
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct OneStorePackaging {
     pub(crate) file_type: Guid,
     pub(crate) file: Guid,

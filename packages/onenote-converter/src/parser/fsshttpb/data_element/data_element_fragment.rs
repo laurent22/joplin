@@ -12,6 +12,7 @@ use crate::parser::Reader;
 ///
 /// [\[MS-FSSHTTPB\] 2.2.1.12.7]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/9a860e3b-cf61-484b-8ee3-d875afaf7a05
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct DataElementFragment {
     pub(crate) id: ExGuid,
     pub(crate) size: u64,
@@ -20,6 +21,7 @@ pub(crate) struct DataElementFragment {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct DataElementFragmentChunkReference {
     pub(crate) offset: u64,
     pub(crate) length: u64,

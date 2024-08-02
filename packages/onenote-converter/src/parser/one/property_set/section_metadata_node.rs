@@ -10,6 +10,7 @@ use crate::parser::onestore::object::Object;
 ///
 /// [\[MS-ONE\] 2.2.31]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/c8cd2fe2-593b-45f8-8da0-03ca6f6f704d
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) schema_revision_in_order_to_read: u32,
     pub(crate) schema_revision_in_order_to_write: u32,

@@ -14,6 +14,7 @@ use crate::parser::onestore::object::Object;
 ///
 /// [\[MS-ONE\] 2.2.20]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/b25fa331-e07e-474e-99c9-b3603b7bf937
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) last_modified: Time,
     pub(crate) children: Vec<ExGuid>,

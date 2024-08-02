@@ -12,6 +12,7 @@ use std::char::{decode_utf16, REPLACEMENT_CHARACTER};
 ///
 /// [\[MS-ONE\] 2.2.25]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/1a141e7a-4455-4971-bf0b-1621e221984e
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) last_modified: Time,
     pub(crate) list_font: Option<String>,

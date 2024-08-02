@@ -13,6 +13,7 @@ use crate::parser::shared::guid::Guid;
 ///
 /// [\[MS-ONE\] 2.2.23]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/980fae36-b5dd-4581-bf1e-5ab54177153d
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) context_id: ExGuid,
     pub(crate) entity_guid: Guid,

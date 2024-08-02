@@ -16,6 +16,7 @@ use crate::utils::utils::log_warn;
 ///
 /// [\[MS-ONE\] 2.2.23]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/980fae36-b5dd-4581-bf1e-5ab54177153d
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) last_modified_time: Time,
     pub(crate) tight_layout: bool,

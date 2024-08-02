@@ -5,7 +5,7 @@ use crate::parser::onenote::section::{Section, SectionEntry, SectionGroup};
 use crate::parser::onestore::parse_store;
 use crate::parser::reader::Reader;
 use crate::parser::utils::{exists, is_directory, read_dir, read_file};
-use crate::utils::utils::{log, log_warn};
+use crate::utils::utils::log;
 use crate::utils::{get_dir_name, get_file_extension, get_file_name, join_path};
 use std::panic;
 use web_sys::js_sys::Uint8Array;

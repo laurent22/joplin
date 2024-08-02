@@ -15,6 +15,7 @@ use crate::parser::shared::guid::Guid;
 ///
 /// [\[MS-ONE\] 2.2.18]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/e2957d3b-a2a8-4756-8662-4e67fefa9f4e
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) entity_guid: Guid,
     pub(crate) page_spaces: Vec<CellId>,

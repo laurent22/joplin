@@ -7,12 +7,9 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 use widestring::U16CString;
 
-pub(crate) fn px(inches: f32) -> String {
-    format!("{}px", (inches * 48.0).round())
-}
-
 pub(crate) struct AttributeSet(HashMap<&'static str, String>);
 
+#[allow(dead_code)]
 impl AttributeSet {
     pub(crate) fn new() -> Self {
         Self(HashMap::new())
@@ -36,10 +33,10 @@ impl Display for AttributeSet {
         )
     }
 }
-
 #[derive(Debug, Clone)]
 pub(crate) struct StyleSet(HashMap<&'static str, String>);
 
+#[allow(dead_code)]
 impl StyleSet {
     pub(crate) fn new() -> Self {
         Self(HashMap::new())

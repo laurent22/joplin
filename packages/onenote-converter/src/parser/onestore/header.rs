@@ -12,6 +12,7 @@ use crate::parser::shared::guid::Guid;
 ///
 /// [\[MS-ONESTORE\] 2.7.2]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/07a5dc4d-0d97-4a4c-ab69-aa7957d7115c
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct StoreHeader {
     file_identity: Guid,
     ancestor_identity: Guid,

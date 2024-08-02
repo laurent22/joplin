@@ -15,6 +15,7 @@ use std::fmt;
 ///
 /// [\[MS-FSSHTTPB\] 2.2.1.12.6]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/21404be6-0334-490e-80b5-82fccb9c04af
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct ObjectGroup {
     pub(crate) declarations: Vec<ObjectGroupDeclaration>,
     pub(crate) metadata: Vec<ObjectGroupMetadata>,
@@ -27,6 +28,7 @@ pub(crate) struct ObjectGroup {
 ///
 /// [\[MS-FSSHTTPB\] 2.2.1.12.6.1]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/ef660e4b-a099-4e76-81f7-ed5c04a70caa
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) enum ObjectGroupDeclaration {
     Object {
         object_id: ExGuid,
@@ -67,6 +69,7 @@ impl ObjectGroupDeclaration {
 /// [\[MS-FSSHTTPB\] 2.2.1.12.6.3]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/d35a8e21-e139-455c-a20b-3f47a5d9fb89
 /// [\[MS-FSSHTTPB\] 2.2.1.12.6.3.1]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/507c6b42-2772-4319-b530-8fbbf4d34afd
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct ObjectGroupMetadata {
     pub(crate) change_frequency: ObjectChangeFrequency,
 }

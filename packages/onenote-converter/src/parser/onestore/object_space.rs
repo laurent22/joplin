@@ -19,6 +19,7 @@ pub(crate) type GroupData<'a> = HashMap<(ExGuid, u64), &'a ObjectGroupData>;
 ///
 /// [\[MS-ONESTOR\] 2.1.4]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/1329433f-02a5-4e83-ab41-80d57ade38d9
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct ObjectSpace<'a> {
     id: ExGuid,
     context: ExGuid,

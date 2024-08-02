@@ -1,4 +1,4 @@
-use crate::parser::errors::{ErrorKind, Result};
+use crate::parser::errors::Result;
 use crate::parser::one::property::charset::Charset;
 use crate::parser::one::property::color_ref::ColorRef;
 use crate::parser::one::property::paragraph_alignment::ParagraphAlignment;
@@ -14,6 +14,7 @@ use crate::utils::utils::log_warn;
 /// [\[MS-ONE\] 2.2.43]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/38eb9b74-cfaf-4df7-b061-a83968c7ff5b
 /// [\[MS-ONE\] 2.2.44]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/f0baabae-f42a-42e0-8cb2-869d420e865f
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct Data {
     pub(crate) charset: Option<Charset>,
     pub(crate) bold: bool,

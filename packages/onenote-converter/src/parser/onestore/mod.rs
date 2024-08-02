@@ -18,6 +18,7 @@ mod revision_role;
 pub(crate) mod types;
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub(crate) struct OneStore<'a> {
     schema: Guid,
     header: StoreHeader,

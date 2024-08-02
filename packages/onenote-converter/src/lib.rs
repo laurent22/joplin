@@ -18,6 +18,7 @@ extern crate console_error_panic_hook;
 extern crate web_sys;
 
 #[wasm_bindgen]
+#[allow(non_snake_case)]
 pub fn oneNoteConverter(input: &str, output: &str, base_path: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
 
