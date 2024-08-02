@@ -12,9 +12,7 @@
   },
   "scripts": {
     "buildProduction": "wasm-pack build --release --target nodejs --scope joplin",
-    "buildDev": "wasm-pack build --dev --target nodejs --scope joplin"
-  },
-  "devDependencies": {
-    "wasm-pack": "0.12.1"
+    "buildDev": "wasm-pack build --dev --target nodejs --scope joplin",
+    "postinstall": "node build.js"
   }
 }
