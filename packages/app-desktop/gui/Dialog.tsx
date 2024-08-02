@@ -57,7 +57,8 @@ const useDialogElement = (onCancel: undefined|OnCancelListener) => {
 		const dialog = document.createElement('dialog');
 		dialog.addEventListener('click', event => {
 			const onCancel = onCancelRef.current;
-			if (event.target === dialog && onCancel) {
+			const isBackgroundClick = event.target === dialog;
+			if (isBackgroundClick && onCancel) {
 				onCancel();
 			}
 		});
@@ -66,12 +67,19 @@ const useDialogElement = (onCancel: undefined|OnCancelListener) => {
 			const canCancel = !!onCancelRef.current;
 			if (!canCancel) {
 				// Prevents [Escape] from closing the dialog. In many places, this is handled
-				// elsewhere.
+				// by external logic.
 				// See https://stackoverflow.com/a/61021326
 				event.preventDefault();
 			}
 		});
-		dialog.addEventListener('close', () => onCancelRef.current?.());
+
+		const removedReturnValue = 'removed-from-dom';
+		dialog.addEventListener('close', () => {
+			const closedByCancel = dialog.returnValue !== removedReturnValue;
+			if (closedByCancel) {
+				onCancelRef.current?.();
+			}
+		});
 		document.body.appendChild(dialog);
 
 		setDialogElement(dialog);
@@ -80,7 +88,7 @@ const useDialogElement = (onCancel: undefined|OnCancelListener) => {
 			if (dialog.open) {
 				// .close: Instructs the browser to restore keyboard focus to whatever was focused
 				// before the dialog.
-				dialog.close();
+				dialog.close(removedReturnValue);
 			}
 			dialog.remove();
 		};
