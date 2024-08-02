@@ -3,3 +3,8 @@
 
 /.idea
 *.iml
+
+pkg/onenote_converter_bg.wasm
+pkg/onenote_converter_bg.wasm.d.ts
+pkg/onenote_converter.d.ts
+pkg/node_functions.js
