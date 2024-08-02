@@ -121,8 +121,10 @@ export const extractSvgs = (html: string, titleGenerator: ()=> string): ExtractS
 			attrs = { ...attrs };
 
 			if (name === 'svg') {
-				svgStyle = attrs.style || '';
 				svgTagDepth++;
+				svgStyle = attrs.style || '';
+				delete attrs.style;
+				attrs.xmlns = 'http://www.w3.org/2000/svg';
 			}
 
 			let attrHtml = attributesHtml(attrs);
@@ -165,7 +167,7 @@ export const extractSvgs = (html: string, titleGenerator: ()=> string): ExtractS
 				svgTagDepth--;
 				if (svgTagDepth === 0) {
 					svgStack.push('</svg>');
-					const title = titleGenerator();
+					const title = `${titleGenerator()}.svg`;
 					const fullPath = `./${title}`;
 					svgs.push({
 						title,
