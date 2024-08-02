@@ -1011,6 +1011,7 @@ packages/lib/services/commands/commandsToMarkdownTable.js
 packages/lib/services/commands/focusEditorIfEditorCommand.js
 packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
+packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
