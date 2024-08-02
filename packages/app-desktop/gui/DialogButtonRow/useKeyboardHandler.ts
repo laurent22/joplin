@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { isInsideContainer } from '@joplin/lib/dom';
 
@@ -40,19 +41,21 @@ export default (props: Props) => {
 		return false;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onKeyDown = useCallback((event: any) => {
+	const onKeyDown = useCallback((event: KeyboardEvent|React.KeyboardEvent) => {
 		// Early exit if it's neither ENTER nor ESCAPE, because isInSubModal
 		// function can be costly.
-		if (event.keyCode !== 13 && event.keyCode !== 27) return;
+		if (event.code !== 'Enter' && event.code !== 'Escape') return;
 
 		if (!isTopDialog() || isInSubModal(event.target)) return;
 
-		if (event.keyCode === 13) {
-			if (event.target.nodeName !== 'TEXTAREA') {
-				props.onOkButtonClick();
+		if (event.code === 'Enter') {
+			if ('nodeName' in event.target && event.target.nodeName === 'INPUT') {
+				const target = event.target as HTMLInputElement;
+				if (target.type !== 'button' && target.type !== 'checkbox') {
+					props.onOkButtonClick();
+				}
 			}
-		} else if (event.keyCode === 27) {
+		} else if (event.code === 'Escape') {
 			props.onCancelButtonClick();
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
