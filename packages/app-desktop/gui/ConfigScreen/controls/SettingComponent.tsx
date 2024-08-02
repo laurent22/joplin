@@ -366,7 +366,7 @@ const SettingComponent: React.FC<Props> = props => {
 				<Button
 					level={ButtonLevel.Secondary}
 					title={md.label()}
-					onClick={md.onClick ? md.onClick : props.onSettingButtonClick}
+					onClick={md.onClick ? md.onClick : () => props.onSettingButtonClick(key)}
 				/>
 				{descriptionComp}
 			</div>
