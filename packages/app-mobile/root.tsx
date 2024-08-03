@@ -111,6 +111,7 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { runIntegrationTests as runCryptoIntegrationTests } from '@joplin/lib/services/e2ee/cryptoTestUtils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
 import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
 import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
@@ -827,6 +828,7 @@ async function initialize(dispatch: Dispatch) {
 	// ----------------------------------------------------------------------------
 	if (Setting.value('env') === 'dev') {
 		await runRsaIntegrationTests();
+		await runCryptoIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
 

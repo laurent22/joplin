@@ -96,25 +96,31 @@ describe('services_EncryptionService', () => {
 	}));
 
 	it('should not require a checksum for new master keys', (async () => {
-		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionMethod.SJCL4,
-		});
+		const masterKeyEncryptionMethodList = [EncryptionMethod.SJCL4, EncryptionMethod.KeyV1];
+		for (const masterKeyEncryptionMethod of masterKeyEncryptionMethodList) {
+			const masterKey = await service.generateMasterKey('123456', {
+				encryptionMethod: masterKeyEncryptionMethod,
+			});
 
-		expect(!masterKey.checksum).toBe(true);
-		expect(!!masterKey.content).toBe(true);
+			expect(!masterKey.checksum).toBe(true);
+			expect(!!masterKey.content).toBe(true);
 
-		const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
-		expect(decryptedMasterKey.length).toBe(512);
+			const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
+			expect(decryptedMasterKey.length).toBe(512);
+		}
 	}));
 
 	it('should throw an error if master key decryption fails', (async () => {
-		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionMethod.SJCL4,
-		});
+		const masterKeyEncryptionMethodList = [EncryptionMethod.SJCL4, EncryptionMethod.KeyV1];
+		for (const masterKeyEncryptionMethod of masterKeyEncryptionMethodList) {
+			const masterKey = await service.generateMasterKey('123456', {
+				encryptionMethod: masterKeyEncryptionMethod,
+			});
 
-		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKeyContent(masterKey, 'wrong'));
+			const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKeyContent(masterKey, 'wrong'));
 
-		expect(hasThrown).toBe(true);
+			expect(hasThrown).toBe(true);
+		}
 	}));
 
 	it('should return the master keys that need an upgrade', (async () => {
@@ -252,11 +258,15 @@ describe('services_EncryptionService', () => {
 		const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
 		const decryptedPath = `${Setting.value('tempDir')}/photo.jpg`;
 
-		await service.encryptFile(sourcePath, encryptedPath);
-		await service.decryptFile(encryptedPath, decryptedPath);
+		const fileEncryptionMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.FileV1, EncryptionMethod.StringV1];
+		for (const fileEncryptionMethod of fileEncryptionMethodList) {
+			service.defaultFileEncryptionMethod_ = fileEncryptionMethod;
+			await service.encryptFile(sourcePath, encryptedPath);
+			await service.decryptFile(encryptedPath, decryptedPath);
 
-		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
-		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
+			expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
+			expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
+		}
 	}));
 
 	it('should encrypt invalid UTF-8 data', (async () => {
@@ -271,10 +281,13 @@ describe('services_EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 
 		// Now check that the new one fixes the problem
-		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
-		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0, 5));
-		const plainText = await service.decryptString(cipherText);
-		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
+		const newEncryptionMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.StringV1];
+		for (const newEncryptionMethod of newEncryptionMethodList) {
+			service.defaultEncryptionMethod_ = newEncryptionMethod;
+			const cipherText = await service.encryptString('🐶🐶🐶'.substr(0, 5));
+			const plainText = await service.decryptString(cipherText);
+			expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
+		}
 	}));
 
 	it('should check if a master key is loaded', (async () => {
