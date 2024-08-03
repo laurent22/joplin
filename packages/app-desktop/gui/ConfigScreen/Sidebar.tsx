@@ -1,18 +1,22 @@
-import { AppType, SettingSectionSource } from '@joplin/lib/models/Setting';
+import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
+import { useCallback, useRef } from 'react';
+import { focus } from '@joplin/lib/utils/focusHandler';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
 type StyleProps = any;
 
+interface SectionChangeEvent {
+	section: SettingMetadataSection;
+}
+
 interface Props {
 	selection: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onSelectionChange: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-	sections: any[];
+	onSelectionChange: (event: SectionChangeEvent)=> void;
+	sections: MetadataBySection;
 }
 
 export const StyledRoot = styled.div`
@@ -73,24 +77,63 @@ export const StyledListItemIcon = styled.i`
 `;
 
 export default function Sidebar(props: Props) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-	const buttons: any[] = [];
+	const buttonRefs = useRef<HTMLElement[]>([]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-	function renderButton(section: any) {
+	// Making a tabbed region accessible involves supporting keyboard interaction.
+	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
+	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
+		let newIndex = selectedIndex;
+
+		if (event.code === 'ArrowUp') {
+			newIndex --;
+		} else if (event.code === 'ArrowDown') {
+			newIndex ++;
+		} else if (event.code === 'Home') {
+			newIndex = 0;
+		} else if (event.code === 'End') {
+			newIndex = props.sections.length - 1;
+		}
+
+		if (newIndex < 0) newIndex += props.sections.length;
+		newIndex %= props.sections.length;
+
+		if (newIndex !== selectedIndex) {
+			event.preventDefault();
+			props.onSelectionChange({ section: props.sections[newIndex] });
+
+			const targetButton = buttonRefs.current[newIndex];
+			if (targetButton) {
+				focus('Sidebar', targetButton);
+			}
+		}
+	}, [props.sections, props.selection, props.onSelectionChange]);
+
+	const buttons: React.ReactNode[] = [];
+
+	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
 		return (
 			<StyledListItem
 				key={section.name}
 				href='#'
 				role='tab'
+				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
+
+				id={`setting-tab-${section.name}`}
+				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
+				tabIndex={selected ? 0 : -1}
+
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
 				onClick={() => { props.onSelectionChange({ section: section }); }}
+				onKeyDown={onKeyDown}
 			>
 				<StyledListItemIcon
+					aria-label=''
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+					role='img'
 				/>
 				<StyledListItemLabel>
 					{Setting.sectionNameToLabel(section.name)}
@@ -109,13 +152,15 @@ export default function Sidebar(props: Props) {
 
 	let pluginDividerAdded = false;
 
+	let index = 0;
 	for (const section of props.sections) {
 		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded) {
 			buttons.push(renderDivider('divider-plugins'));
 			pluginDividerAdded = true;
 		}
 
-		buttons.push(renderButton(section));
+		buttons.push(renderButton(section, index));
+		index ++;
 	}
 
 	return (

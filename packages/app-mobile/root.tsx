@@ -28,8 +28,8 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, BackHandler, Animated, View, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, Linking, NativeEventSubscription, Appearance, AccessibilityInfo } from 'react-native';
+const { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } = require('react-native');
+import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -69,7 +69,6 @@ import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
-const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
@@ -87,6 +86,8 @@ import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
+
+import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -107,7 +108,6 @@ import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
-import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
 import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
@@ -132,6 +132,9 @@ import PlatformImplementation from './services/plugins/PlatformImplementation';
 import ShareManager from './components/screens/ShareManager';
 import appDefaultState, { DEFAULT_ROUTE } from './utils/appDefaultState';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
+import DatabaseDriverReactNative from './utils/database-driver-react-native';
+import DialogManager from './components/DialogManager';
+import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 
@@ -501,6 +504,8 @@ const getInitialActiveFolder = async () => {
 	return await Folder.load(folderId);
 };
 
+const singleInstanceLock = lockToSingleInstance();
+
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 async function initialize(dispatch: Dispatch) {
 	shimInit();
@@ -525,6 +530,10 @@ async function initialize(dispatch: Dispatch) {
 	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
 	await shim.fsDriver().mkdir(resourceDir);
+
+	// Do as much setup as possible before checking the lock -- the lock intentionally waits for
+	// messages from other clients for several hundred ms.
+	await singleInstanceLock;
 
 	const logDatabase = new Database(new DatabaseDriverReactNative());
 	await logDatabase.open({ name: 'log.sqlite' });
@@ -628,6 +637,16 @@ async function initialize(dispatch: Dispatch) {
 			const detectedLocale = shim.detectAndSetLocale(Setting);
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 
+			if (shim.mobilePlatform() === 'web') {
+				// Web browsers generally have more limited storage than desktop and mobile apps:
+				Setting.setValue('sync.resourceDownloadMode', 'auto');
+				// For now, geolocation is disabled by default on web until the web permissions workflow
+				// is improved. At present, trackLocation=true causes the "allow location access" prompt
+				// to appear without a clear indicator for why Joplin wants this information.
+				Setting.setValue('trackLocation', false);
+				logger.info('First start on web: Set resource download mode to auto and disabled location tracking.');
+			}
+
 			Setting.skipDefaultMigrations();
 			Setting.setValue('firstStart', false);
 		} else {
@@ -656,7 +675,6 @@ async function initialize(dispatch: Dispatch) {
 			Setting.setValue('welcome.enabled', false);
 		}
 
-		PluginAssetsLoader.instance().setLogger(mainLogger);
 		await PluginAssetsLoader.instance().importAssets();
 
 		// eslint-disable-next-line require-atomic-updates
@@ -827,8 +845,12 @@ async function initialize(dispatch: Dispatch) {
 	// just print some messages in the console.
 	// ----------------------------------------------------------------------------
 	if (Setting.value('env') === 'dev') {
-		await runRsaIntegrationTests();
-		await runCryptoIntegrationTests();
+		if (Platform.OS !== 'web') {
+			await runRsaIntegrationTests();
+			await runCryptoIntegrationTests();
+		} else {
+			logger.info('Skipping RSA tests -- not supported on mobile.');
+		}
 		await runOnDeviceFsDriverTests();
 	}
 
@@ -932,7 +954,7 @@ class AppComponent extends React.Component {
 				// This will be called right after adding the event listener
 				// so there's no need to check netinfo on startup
 				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
-					const isMobile = details.isConnectionExpensive || type === 'cellular';
+					const isMobile = details?.isConnectionExpensive || type === 'cellular';
 					reg.setIsOnMobileData(isMobile);
 					this.props.dispatch({
 						type: 'MOBILE_DATA_WARNING_UPDATE',
@@ -944,7 +966,16 @@ class AppComponent extends React.Component {
 				reg.logger().info(error);
 			}
 
-			await initialize(this.props.dispatch);
+			try {
+				await initialize(this.props.dispatch);
+			} catch (error) {
+				alert(`Something went wrong while starting the application: ${error}`);
+				this.props.dispatch({
+					type: 'APP_STATE_SET',
+					state: 'error',
+				});
+				throw error;
+			}
 
 			const loadedSensorInfo = await sensorInfo();
 			this.setState({ sensorInfo: loadedSensorInfo });
@@ -1171,7 +1202,20 @@ class AppComponent extends React.Component {
 	};
 
 	public render() {
-		if (this.props.appState !== 'ready') return null;
+		if (this.props.appState !== 'ready') {
+			if (this.props.appState === 'error') {
+				return <Text>Startup error.</Text>;
+			}
+
+			// Loading can take a particularly long time for the first time on web -- show progress.
+			if (Platform.OS === 'web') {
+				return <View style={{ marginLeft: 'auto', marginRight: 'auto', paddingTop: 20 }}>
+					<ActivityIndicator accessibilityLabel={_('Loading...')} />
+				</View>;
+			} else {
+				return null;
+			}
+		}
 		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent: ReactNode = null;
@@ -1302,7 +1346,9 @@ class AppComponent extends React.Component {
 					},
 				},
 			}}>
-				{mainContent}
+				<DialogManager>
+					{mainContent}
+				</DialogManager>
 			</PaperProvider>
 		);
 	}

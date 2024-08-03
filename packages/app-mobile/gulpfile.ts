@@ -7,6 +7,9 @@ const tasks = {
 	encodeAssets: {
 		fn: require('./tools/encodeAssets'),
 	},
+	copyWebAssets: {
+		fn: require('./tools/copyAssets').default,
+	},
 	...injectedJsGulpTasks,
 	podInstall: {
 		fn: require('./tools/podInstall'),
@@ -37,6 +40,7 @@ gulp.task('watchInjectedJs', gulp.series(
 
 gulp.task('build', gulp.series(
 	'buildInjectedJs',
+	'copyWebAssets',
 	'encodeAssets',
 	'podInstall',
 ));

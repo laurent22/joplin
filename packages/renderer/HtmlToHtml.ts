@@ -92,7 +92,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 			...options,
 		};
 
-		const cacheKey = md5(escape(JSON.stringify({ markup, options })));
+		const cacheKey = md5(escape(JSON.stringify({ markup, options, baseUrl: this.resourceBaseUrl_ })));
 		let html = this.cache_.value(cacheKey);
 
 		if (!html) {
@@ -100,11 +100,10 @@ export default class HtmlToHtml implements MarkupRenderer {
 				allowedFilePrefixes: options.allowedFilePrefixes,
 			});
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			html = htmlUtils.processImageTags(html, (data: any) => {
+			html = htmlUtils.processImageTags(html, (data) => {
 				if (!data.src) return null;
 
-				const r = utils.imageReplacement(this.ResourceModel_, data.src, options.resources, this.resourceBaseUrl_, options.itemIdToUrl);
+				const r = utils.imageReplacement(this.ResourceModel_, data, options.resources, this.resourceBaseUrl_, options.itemIdToUrl);
 				if (!r) return null;
 
 				if (typeof r === 'string') {

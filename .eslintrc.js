@@ -15,6 +15,18 @@ module.exports = {
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly',
+		'BufferEncoding': 'readonly',
+		'AsyncIterable': 'readonly',
+		'FileSystemFileHandle': 'readonly',
+		'FileSystemDirectoryHandle': 'readonly',
+		'ReadableStreamDefaultReader': 'readonly',
+		'FileSystemCreateWritableOptions': 'readonly',
+		'FileSystemHandle': 'readonly',
+
+		// ServiceWorker
+		'ExtendableEvent': 'readonly',
+		'WindowClient': 'readonly',
+		'FetchEvent': 'readonly',
 
 		// Jest variables
 		'test': 'readonly',
@@ -44,8 +56,6 @@ module.exports = {
 		'tinymce': 'readonly',
 
 		'JSX': 'readonly',
-
-		'BufferEncoding': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,

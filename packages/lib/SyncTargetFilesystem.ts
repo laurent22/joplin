@@ -26,18 +26,29 @@ export default class SyncTargetFilesystem extends BaseSyncTarget {
 		return true;
 	}
 
+	private syncPath_() {
+		return Setting.value('sync.2.path');
+	}
+
 	public async initFileApi() {
-		const syncPath = Setting.value('sync.2.path');
 		const driver = new FileApiDriverLocal();
-		const fileApi = new FileApi(syncPath, driver);
+
+		const fileApi = new FileApi(() => {
+			// The sync path can be set by the user after startup, so needs to be
+			// determined dynamically.
+			return this.syncPath_();
+		}, driver);
 		fileApi.setLogger(this.logger());
 		fileApi.setSyncTargetId(SyncTargetFilesystem.id());
+
+		const syncPath = this.syncPath_();
 		await driver.mkdir(syncPath);
 		return fileApi;
 	}
 
 	public async initSynchronizer() {
-		return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
+		const api = await this.fileApi();
+		return new Synchronizer(this.db(), api, Setting.value('appType'));
 	}
 }
 

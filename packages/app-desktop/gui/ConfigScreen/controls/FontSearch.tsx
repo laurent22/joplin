@@ -9,6 +9,7 @@ interface Props {
 	style: CSSProperties;
 	value: string;
 	availableFonts: string[];
+	inputId: string;
 	onChange: (font: string)=> void;
 	subtype: string;
 }
@@ -108,6 +109,7 @@ const FontSearch = (props: Props) => {
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				spellCheck={false}
+				id={props.inputId}
 				ref={fontInputRef}
 			/>
 			<div

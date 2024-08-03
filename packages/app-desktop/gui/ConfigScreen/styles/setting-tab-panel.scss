@@ -1,0 +1,18 @@
+
+.setting-tab-panel {
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-height: 0;
+
+	&.-hidden {
+		display: none;
+	}
+
+	&:focus-visible {
+		// Use a border rather than an outline -- an outline would be shown outside of the screen
+		// and thus invisible.
+		border: 1px solid var(--joplin-focus-outline-color);
+		outline: none;
+	}
+}

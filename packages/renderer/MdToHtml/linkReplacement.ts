@@ -116,10 +116,19 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 
+	// Handle overrides
+	let addedHrefAttr = false;
 	if (resourceId && options.itemIdToUrl) {
 		const url = options.itemIdToUrl(resourceId);
-		attrHtml.push(`href='${htmlentities(url)}'`);
-		resourceFullPath = url;
+		if (url !== null) {
+			attrHtml.push(`href='${htmlentities(url)}'`);
+			resourceFullPath = url;
+			addedHrefAttr = true;
+		}
+	}
+
+	if (addedHrefAttr) {
+		// Done -- the HREF has already bee set.
 	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);
