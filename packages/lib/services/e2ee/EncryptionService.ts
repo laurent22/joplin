@@ -42,6 +42,9 @@ export enum EncryptionMethod {
 	SJCL1a = 5,
 	Custom = 6,
 	SJCL1b = 7,
+	KeyV1 = 8,
+	FileV1 = 9,
+	StringV1 = 10,
 }
 
 export interface EncryptOptions {
@@ -75,6 +78,7 @@ export default class EncryptionService {
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
 	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
+	public defaultFileEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
@@ -105,6 +109,10 @@ export default class EncryptionService {
 
 	public defaultEncryptionMethod() {
 		return this.defaultEncryptionMethod_;
+	}
+
+	public defaultFileEncryptionMethod() {
+		return this.defaultFileEncryptionMethod_;
 	}
 
 	public setActiveMasterKeyId(id: string) {
@@ -278,8 +286,9 @@ export default class EncryptionService {
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
+		const crypto = shim.crypto;
 
-		const handlers: Record<EncryptionMethod, ()=> string> = {
+		const handlers: Record<EncryptionMethod, ()=> Promise<string>> = {
 			// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
 			[EncryptionMethod.SJCL]: () => {
 				try {
@@ -394,6 +403,26 @@ export default class EncryptionService {
 				}
 			},
 
+			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
+			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
+			// 2024-08: Set iteration count in pbkdf2 to 220000 as suggested by OWASP. https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
+			[EncryptionMethod.KeyV1]: async () => {
+				return JSON.stringify(await crypto.encryptString(key, 220000, null, plainText, 'hex'));
+			},
+
+			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
+			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
+			// The file content is base64 encoded. Decoding it before encryption to reduce the size overhead.
+			[EncryptionMethod.FileV1]: async () => {
+				return JSON.stringify(await crypto.encryptString(key, 200, null, plainText, 'base64'));
+			},
+
+			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
+			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
+			[EncryptionMethod.StringV1]: async () => {
+				return JSON.stringify(await crypto.encryptString(key, 200, null, plainText, 'utf16le'));
+			},
+
 			[EncryptionMethod.Custom]: () => {
 				// This is handled elsewhere but as a sanity check, throw an exception
 				throw new Error('Custom encryption method is not supported here');
@@ -408,19 +437,28 @@ export default class EncryptionService {
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
-		if (!this.isValidEncryptionMethod(method)) throw new Error(`Unknown decryption method: ${method}`);
+		const crypto = shim.crypto;
+		if (method === EncryptionMethod.KeyV1) {
+			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('hex');
+		} else if (method === EncryptionMethod.FileV1) {
+			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('base64');
+		} else if (method === EncryptionMethod.StringV1) {
+			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('utf16le');
+		} else if (this.isValidSjclEncryptionMethod(method)) {
+			try {
+				const output = sjcl.json.decrypt(key, cipherText);
 
-		try {
-			const output = sjcl.json.decrypt(key, cipherText);
-
-			if (method === EncryptionMethod.SJCL1a || method === EncryptionMethod.SJCL1b) {
-				return unescape(output);
-			} else {
-				return output;
+				if (method === EncryptionMethod.SJCL1a || method === EncryptionMethod.SJCL1b) {
+					return unescape(output);
+				} else {
+					return output;
+				}
+			} catch (error) {
+				// SJCL returns a string as error which means stack trace is missing so convert to an error object here
+				throw new Error(error.message);
 			}
-		} catch (error) {
-			// SJCL returns a string as error which means stack trace is missing so convert to an error object here
-			throw new Error(error.message);
+		} else {
+			throw new Error(`Unknown decryption method: ${method}`);
 		}
 	}
 
@@ -560,6 +598,8 @@ export default class EncryptionService {
 	}
 
 	public async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
+		options = { encryptionMethod: this.defaultFileEncryptionMethod(), ...options };
+
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -680,7 +720,7 @@ export default class EncryptionService {
 		return output;
 	}
 
-	public isValidEncryptionMethod(method: EncryptionMethod) {
+	public isValidSjclEncryptionMethod(method: EncryptionMethod) {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
