@@ -14,8 +14,12 @@ export default class NoteEditorPage {
 		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.noteTitleInput = this.containerLocator.locator('.title-input');
-		this.attachFileButton = this.containerLocator.locator('[title^="Attach file"]');
-		this.toggleEditorsButton = this.containerLocator.locator('[title^="Toggle editors"]');
+		this.attachFileButton = this.containerLocator.getByRole('button', { name: 'Attach file' });
+		this.toggleEditorsButton = this.containerLocator.getByRole('button', { name: 'Toggle editors' });
+	}
+
+	public toolbarButtonLocator(title: string) {
+		return this.containerLocator.getByRole('button', { name: title });
 	}
 
 	public getNoteViewerIframe() {
