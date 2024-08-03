@@ -26,5 +26,42 @@ test.describe('markdownEditor', () => {
 		await expect(image).toBeAttached();
 		await expect(await getImageSourceSize(image)).toMatchObject([117, 30]);
 	});
+
+	test('arrow keys should navigate the toolbar', async ({ mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Note 1');
+		await mainScreen.createNewNote('Note 2');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+
+		// Escape, then Shift+Tab should focus the toolbar
+		await mainWindow.keyboard.press('Escape');
+		await mainWindow.keyboard.press('Shift+Tab');
+
+		// Should focus the first item by default, the "back" arrow (back to "Note 1")
+		const firstItemLocator = noteEditor.toolbarButtonLocator('Back');
+		await expect(firstItemLocator).toBeFocused();
+
+		// Left arrow should wrap to the end
+		await mainWindow.keyboard.press('ArrowLeft');
+		const lastItemLocator = noteEditor.toolbarButtonLocator('Toggle editors');
+		await expect(lastItemLocator).toBeFocused();
+
+		await mainWindow.keyboard.press('ArrowRight');
+		await expect(firstItemLocator).toBeFocused();
+
+		// ArrowRight should skip disabled items (Forward).
+		await mainWindow.keyboard.press('ArrowRight');
+		await expect(noteEditor.toolbarButtonLocator('Toggle external editing')).toBeFocused();
+
+		// Home/end should navigate to the first/last items
+		await mainWindow.keyboard.press('End');
+		await expect(lastItemLocator).toBeFocused();
+
+		await mainWindow.keyboard.press('Home');
+		await expect(firstItemLocator).toBeFocused();
+	});
 });
 

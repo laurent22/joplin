@@ -1,0 +1,21 @@
+
+.editor-toolbar {
+	display: flex;
+	flex-direction: row;
+	box-sizing: border-box;
+	background-color: var(--joplin-background-color3);
+	padding: var(--joplin-toolbar-padding);
+	padding-right: var(--joplin-main-padding);
+
+	> .group {
+		display: flex;
+		flex-direction: row;
+		box-sizing: border-box;
+		min-width: 0;
+
+		&.-right {
+			flex: 1;
+			justify-content: flex-end;
+		}
+	}
+}
