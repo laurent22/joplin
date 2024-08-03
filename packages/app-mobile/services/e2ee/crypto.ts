@@ -2,7 +2,7 @@ import { _ } from '@joplin/lib/locale';
 import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult } from '@joplin/lib/services/e2ee/types';
 import QuickCrypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
-import type { CipherCCMOptions, CipherCCM, DecipherCCM, CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
+import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
 
 type DigestNameMap = Record<Digest, HashAlgorithm>;
 
@@ -56,12 +56,9 @@ const crypto: Crypto = {
 		}
 
 		let cipher = null;
-		if (algorithm === CipherAlgorithm.AES_128_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_256_GCM) {
+		if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
 			cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
 			iv = iv || QuickCrypto.randomBytes(12); // "For IVs, it is recommended that implementations restrict support to the length of 96 bits, to promote interoperability, efficiency, and simplicity of design." - NIST SP 800-38D
-		} else if (algorithm === CipherAlgorithm.AES_128_CCM || algorithm === CipherAlgorithm.AES_192_CCM || algorithm === CipherAlgorithm.AES_256_CCM) {
-			cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherCCMOptions) as CipherCCM;
-			iv = iv || QuickCrypto.randomBytes(13); // 13 is the maximum IV length for CCM mode - https://nodejs.org/docs/latest-v20.x/api/crypto.html#ccm-mode
 		} else {
 			throw new Error(_('Unknown cipher algorithm: %s', algorithm));
 		}
@@ -80,10 +77,8 @@ const crypto: Crypto = {
 		}
 
 		let decipher = null;
-		if (algorithm === CipherAlgorithm.AES_128_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_256_GCM) {
+		if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
 			decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
-		} else if (algorithm === CipherAlgorithm.AES_128_CCM || algorithm === CipherAlgorithm.AES_192_CCM || algorithm === CipherAlgorithm.AES_256_CCM) {
-			decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherCCMOptions) as DecipherCCM;
 		} else {
 			throw new Error(_('Unknown decipher algorithm: %s', algorithm));
 		}
@@ -107,7 +102,7 @@ const crypto: Crypto = {
 
 		// default encryption parameters
 		const cipherAlgorithm = CipherAlgorithm.AES_256_GCM;
-		const authTagLength = 16;
+		const authTagLength = 16; // 128 bits
 		const digest = Digest.sha512;
 		const keySize = 32; // For CipherAlgorithm.AES_256_GCM, 256 bits -> 32 bytes
 
@@ -135,7 +130,7 @@ const crypto: Crypto = {
 
 		// default encryption parameters
 		const cipherAlgorithm = data.algo || CipherAlgorithm.AES_256_GCM;
-		const authTagLength = data.ts || 16;
+		const authTagLength = data.ts || 16; // 128 bits
 		const digest = data.digest || Digest.sha512;
 		const keySize = 32; // For CipherAlgorithm.AES_256_GCM, 256 bits -> 32 bytes
 
