@@ -75,7 +75,7 @@ export default class EncryptionService {
 	//
 	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
 	// changed easily since the chunk size is incorporated into the encrypted data.
-	private chunkSize_ = 65536;
+	public chunkSize_ = 65536;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
 	public defaultEncryptionMethod_ = EncryptionMethod.StringV1; // public because used in tests
 	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests

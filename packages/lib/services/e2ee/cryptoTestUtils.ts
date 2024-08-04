@@ -1,5 +1,11 @@
 import { EncryptionMethod } from './EncryptionService';
 import EncryptionService from './EncryptionService';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import MasterKey from '../../models/MasterKey';
+import Setting from '../../models/Setting';
+import shim from '../..//shim';
+import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 interface DecryptTestData {
 	method: EncryptionMethod;
@@ -73,6 +79,127 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 	}
 }
 
+export async function testStringPerformance(chunkSize: number, method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
+	options = {
+		throwOnError: false,
+		silent: false,
+		...options,
+	};
+
+	// Verify that the ciphertext decrypted on this device and producing the same plaintext.
+	const messages: string[] = [];
+	let hasError = false;
+
+	try {
+		serviceInstance.defaultEncryptionMethod_ = method;
+		serviceInstance.chunkSize_ = chunkSize;
+		let masterKey = await serviceInstance.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await serviceInstance.loadMasterKey(masterKey, '123456', true);
+
+		const crypto = shim.crypto;
+
+		const content = (await crypto.randomBytes(dataSize / 2)).toString('hex');
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'encrypted note', body: content, parent_id: folder.id });
+
+		let encryptTime = 0.0;
+		let decryptTime = 0.0;
+		for (let i = 0; i < count; i++) {
+			const tick1 = performance.now();
+			const serialized = await Note.serializeForSync(note);
+			const tick2 = performance.now();
+			const deserialized = await Note.unserialize(serialized);
+			const decryptedNote = await Note.decrypt(deserialized);
+			const tick3 = performance.now();
+			(decryptedNote.title === note.title);
+			encryptTime += tick2 - tick1;
+			decryptTime += tick3 - tick2;
+		}
+
+		messages.push(`Crypto Tests: testStringPerformance(): chunkSize: ${chunkSize}, method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+
+	} catch (error) {
+		hasError = true;
+		messages.push(`Crypto Tests: testStringPerformance() failed. Error: ${error}`);
+	}
+
+	if (hasError && options.throwOnError) {
+		const label = options.testLabel ? ` (test ${options.testLabel})` : '';
+		throw new Error(`Testing Crypto failed${label}: \n${messages.join('\n')}`);
+	} else {
+		for (const msg of messages) {
+			if (hasError) {
+				console.warn(msg);
+			} else {
+				// eslint-disable-next-line no-console
+				if (!options.silent) console.info(msg);
+			}
+		}
+	}
+}
+
+export async function testFilePerformance(chunkSize: number, method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
+	options = {
+		throwOnError: false,
+		silent: false,
+		...options,
+	};
+
+	// Verify that the ciphertext decrypted on this device and producing the same plaintext.
+	const messages: string[] = [];
+	let hasError = false;
+
+	try {
+		serviceInstance.defaultFileEncryptionMethod_ = method;
+		serviceInstance.chunkSize_ = chunkSize;
+		let masterKey = await serviceInstance.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		await serviceInstance.loadMasterKey(masterKey, '123456', true);
+
+		const fsDriver = shim.fsDriver();
+		const crypto = shim.crypto;
+
+		const sourcePath = `${Setting.value('tempDir')}/testData.txt`;
+		const encryptedPath = `${Setting.value('tempDir')}/testData.crypted`;
+		const decryptedPath = `${Setting.value('tempDir')}/testData.decrypted`;
+		await fsDriver.writeFile(sourcePath, '');
+		await fsDriver.appendFile(sourcePath, (await crypto.randomBytes(dataSize)).toString('base64'), 'base64');
+
+		let encryptTime = 0.0;
+		let decryptTime = 0.0;
+		for (let i = 0; i < count; i++) {
+			const tick1 = performance.now();
+			await serviceInstance.encryptFile(sourcePath, encryptedPath);
+			const tick2 = performance.now();
+			await serviceInstance.decryptFile(encryptedPath, decryptedPath);
+			const tick3 = performance.now();
+			encryptTime += tick2 - tick1;
+			decryptTime += tick3 - tick2;
+		}
+
+		messages.push(`Crypto Tests: testFilePerformance(): chunkSize: ${chunkSize}, method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+
+	} catch (error) {
+		hasError = true;
+		messages.push(`Crypto Tests: testFilePerformance() failed. Error: ${error}`);
+	}
+
+	if (hasError && options.throwOnError) {
+		const label = options.testLabel ? ` (test ${options.testLabel})` : '';
+		throw new Error(`Testing Crypto failed${label}: \n${messages.join('\n')}`);
+	} else {
+		for (const msg of messages) {
+			if (hasError) {
+				console.warn(msg);
+			} else {
+				// eslint-disable-next-line no-console
+				if (!options.silent) console.info(msg);
+			}
+		}
+	}
+}
+
 // cSpell:disable
 
 // Data generated on desktop, using node:crypto in packages/lib/services/e2ee/crypto.ts
@@ -81,8 +208,7 @@ const decryptTestData: Record<string, DecryptTestData> = {
 		method: EncryptionMethod.StringV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: '中文にっぽんご한국어😀\uD83D\0\r\nenglish01234567890',
-		ciphertext:
-		'{"iter":200,"salt":"EUChaTc2I6nIdJPSVCe9YIKUSURd/W8jjX4yzcNvAus=","iv":"RPb1xewALYrPe0hM","ct":"HFEyN3KMsqf/EY2yTTKk0sBm34byHnmJVoL20v5GCuBdCJBl3w7NWoxKAcTD3D1jY3Rt3Brn1mJWykjJMDmPj6tjEyU8ZUS84TuLIW7MTcFOx5xM"}',
+		ciphertext: '{"iter":200,"salt":"EUChaTc2I6nIdJPSVCe9YIKUSURd/W8jjX4yzcNvAus=","iv":"RPb1xewALYrPe0hM","ct":"HFEyN3KMsqf/EY2yTTKk0sBm34byHnmJVoL20v5GCuBdCJBl3w7NWoxKAcTD3D1jY3Rt3Brn1mJWykjJMDmPj6tjEyU8ZUS84TuLIW7MTcFOx5xM"}',
 	},
 	hexKey: {
 		method: EncryptionMethod.KeyV1,
@@ -102,7 +228,7 @@ const decryptTestData: Record<string, DecryptTestData> = {
 
 // This can be used to run integration tests directly on device. It will throw
 // an error if something cannot be decrypted, or else print info messages.
-export const runIntegrationTests = async (silent = false) => {
+export const runIntegrationTests = async (silent = false, testPerformance = false) => {
 	const log = (s: string) => {
 		if (silent) return;
 		// eslint-disable-next-line no-console
@@ -110,6 +236,8 @@ export const runIntegrationTests = async (silent = false) => {
 	};
 
 	log('Crypto Tests: Running integration tests...');
+	const encryptionEnabled = getEncryptionEnabled();
+	setEncryptionEnabled(true);
 
 	log('Crypto Tests: Decrypting using known data...');
 	for (const testLabel in decryptTestData) {
@@ -120,4 +248,39 @@ export const runIntegrationTests = async (silent = false) => {
 	log('Crypto Tests: Decrypting using local data...');
 	const newData = await createDecryptTestData();
 	await checkDecryptTestData(newData, { silent, throwOnError: true });
+
+	// The performance test is very slow so it is disabled by default.
+	if (testPerformance) {
+		log('Crypto Tests: Testing performance...');
+		if (shim.mobilePlatform() === '') {
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 100, 1000);
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 1000000, 10);
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 5000000, 10);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 100, 1000);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 1000000, 10);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 5000000, 10);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 100, 1000);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 1000000, 3);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 5000000, 3);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100, 1000);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 1000000, 3);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 5000000, 3);
+		} else {
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 100, 100);
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 500000, 3);
+			await testStringPerformance(65536, EncryptionMethod.StringV1, 1000000, 3);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 100, 100);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 500000, 3);
+			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 1000000, 3);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 100, 100);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 100000, 3);
+			await testFilePerformance(65536, EncryptionMethod.FileV1, 500000, 3);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100, 100);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100000, 3);
+			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 500000, 3);
+		}
+
+	}
+
+	setEncryptionEnabled(encryptionEnabled);
 };
