@@ -1,6 +1,7 @@
 
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
+import { Locator } from '@playwright/test';
 
 test.describe('goToAnything', () => {
 	test('clicking outside of go to anything should close it', async ({ electronApp, mainWindow }) => {
@@ -28,6 +29,38 @@ test.describe('goToAnything', () => {
 			await goToAnything.expectToBeOpen();
 			await goToAnything.inputLocator.press('Escape');
 			await goToAnything.expectToBeClosed();
+		}
+	});
+
+	test('closing go to anything should restore the original keyboard focus', async ({ electronApp, mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('');
+
+		const initialFocusLocators: [Locator, boolean][] = [
+			[mainScreen.noteEditor.noteTitleInput, true],
+			[mainScreen.noteEditor.codeMirrorEditor, false],
+		];
+
+		// Focus and start to fill the editor
+		for (const [originalFocusLocator, isInput] of initialFocusLocators) {
+			await originalFocusLocator.click();
+			await mainWindow.keyboard.type('Test');
+
+			const goToAnything = mainScreen.goToAnything;
+			await goToAnything.open(electronApp);
+
+			await goToAnything.expectToBeOpen();
+			await goToAnything.inputLocator.press('Escape');
+			await goToAnything.expectToBeClosed();
+
+			// Keyboard focus should have returned to the editor
+			await mainWindow.keyboard.type('ing...');
+			if (isInput) {
+				await expect(originalFocusLocator).toBeFocused();
+				await expect(originalFocusLocator).toHaveValue('Testing...');
+			} else {
+				await expect(originalFocusLocator).toHaveText('Testing...');
+			}
 		}
 	});
 
