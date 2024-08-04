@@ -27,6 +27,12 @@ export default {
 				mime: 'text/css',
 			},
 			{
+				// This renders the icons in the mermaid graph in both the editor and the viewer
+				inline: true,
+				text: '@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");',
+				mime: 'text/css',
+			},
+			{
 				inline: true,
 				// Export button in mermaid graph should be shown only on hovering the mermaid graph
 				// ref: https://github.com/laurent22/joplin/issues/6101

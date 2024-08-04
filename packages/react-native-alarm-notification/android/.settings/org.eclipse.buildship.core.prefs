@@ -1,0 +1,13 @@
+arguments=--init-script C\:\\Users\\aarya\\AppData\\Roaming\\Code\\User\\globalStorage\\redhat.java\\1.34.2024080308\\config_win\\org.eclipse.osgi\\55\\0\\.cp\\gradle\\init\\init.gradle --init-script C\:\\Users\\aarya\\AppData\\Roaming\\Code\\User\\globalStorage\\redhat.java\\1.34.2024080308\\config_win\\org.eclipse.osgi\\55\\0\\.cp\\gradle\\protobuf\\init.gradle
+auto.sync=false
+build.scans.enabled=false
+connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(8.9))
+connection.project.dir=../../../../android
+eclipse.preferences.version=1
+gradle.user.home=
+java.home=C\:/Program Files/Java/jdk-17
+jvm.arguments=
+offline.mode=false
+override.workspace.settings=true
+show.console.view=true
+show.executions.view=true
