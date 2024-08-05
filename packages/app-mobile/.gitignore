@@ -74,3 +74,5 @@ web/public/pluginAssets/*
 
 utils/fs-driver-android.js
 android/app/build-*
+
+packageInfo.js
