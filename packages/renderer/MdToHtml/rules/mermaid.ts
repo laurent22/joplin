@@ -13,6 +13,12 @@ export default {
 			},
 			{
 				inline: true,
+				// This properly renders the fa-icons in both the Rich Text Editor and Markdown Pane / Read-Only Mode
+				text: '@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");',
+				mime: 'text/css',
+			},
+			{
+				inline: true,
 				// Note: Mermaid is buggy when rendering below a certain width (500px?)
 				// so set an arbitrarily high width here for the container. Once the
 				// diagram is rendered it will be reset to 100% in mermaid_render.js
