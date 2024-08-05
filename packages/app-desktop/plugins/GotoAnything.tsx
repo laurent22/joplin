@@ -93,8 +93,12 @@ const getContentMarkupLanguageAndBody = (result: GotoAnythingSearchResult, notes
 // result, we use this function - which returns either the item_id, if present,
 // or the note ID.
 const getResultId = (result: GotoAnythingSearchResult) => {
-	return result.item_id ? result.item_id : result.id;
+	// This ID used as a DOM ID for accessibility purposes, so it is prefixed to prevent
+	// name collisions.
+	return `goto-anything-result-${result.item_id ? result.item_id : result.id}`;
 };
+
+const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
@@ -192,7 +196,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				borderBottomColor: theme.dividerColor,
 				boxSizing: 'border-box',
 			},
-			help: { ...theme.textStyle, marginBottom: 10 },
 			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
 
@@ -530,10 +533,11 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		});
 	}
 
-	public renderItem(item: GotoAnythingSearchResult) {
+	public renderItem(item: GotoAnythingSearchResult, index: number) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const isSelected = getResultId(item) === this.state.selectedItemId;
+		const resultId = getResultId(item);
+		const isSelected = resultId === this.state.selectedItemId;
 		const rowStyle = isSelected ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.color};">${item.title}</span>`
@@ -541,12 +545,25 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
 
-		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" />;
+		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" role='img' aria-label={_('Notebook')} />;
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={getResultId(item)} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div
+				key={resultId}
+				className={isSelected ? 'selected' : null}
+				style={rowStyle}
+				onClick={this.listItem_onClick}
+
+				data-id={item.id}
+				data-parent-id={item.parent_id}
+				data-type={item.type}
+
+				role='option'
+				id={resultId}
+				aria-posinset={index + 1}
+			>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -619,6 +636,9 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return (
 			<ItemList
 				ref={this.itemListRef}
+				id={itemListId}
+				role='listbox'
+				aria-label={_('Search results')}
 				itemHeight={style.itemHeight}
 				items={this.state.results}
 				style={itemListStyle}
@@ -629,14 +649,40 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 	public render() {
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div className="help-text" style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
+		const helpTextId = 'goto-anything-help-text';
+		const helpComp = (
+			<div
+				className='help-text'
+				aria-live='polite'
+				id={helpTextId}
+				style={style.help}
+				hidden={!this.state.showHelp}
+			>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>
+		);
 
 		return (
-			<Dialog className="go-to-anything-dialog" onCancel={this.modalLayer_onDismiss} contentStyle={style.dialogBox}>
+			<Dialog className='go-to-anything-dialog' onCancel={this.modalLayer_onDismiss} contentStyle={style.dialogBox}>
 				{helpComp}
 				<div style={style.inputHelpWrapper}>
-					<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
-					<HelpButton onClick={this.helpButton_onClick} />
+					<input
+						autoFocus
+						type='text'
+						style={style.input}
+						ref={this.inputRef}
+						value={this.state.query}
+						onChange={this.input_onChange}
+						onKeyDown={this.input_onKeyDown}
+
+						aria-describedby={helpTextId}
+						aria-autocomplete='list'
+						aria-controls={itemListId}
+						aria-activedescendant={this.state.selectedItemId}
+					/>
+					<HelpButton
+						onClick={this.helpButton_onClick}
+						aria-controls={helpTextId}
+						aria-expanded={this.state.showHelp}
+					/>
 				</div>
 				{this.renderList()}
 			</Dialog>
