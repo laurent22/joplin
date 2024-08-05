@@ -14,5 +14,8 @@
     "buildProduction": "wasm-pack build --release --target nodejs --scope joplin",
     "buildDev": "wasm-pack build --dev --target nodejs --scope joplin",
     "postinstall": "node build.js"
+  },
+  "devDependencies": {
+    "wasm-pack": "0.13.0"
   }
 }

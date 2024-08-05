@@ -1,10 +1,12 @@
 const { execSync } = require('child_process');
 
-const build = (env = process.env.NODE_ENV) => {
-	if (env === 'dev') return;
+// This should in the postinstall script.
+// The idea is that users that don't need this package can skip the build step.
+// But that it should be built in production.
+const build = async () => {
+	if (process.env.NODE_ENV !== 'production') return;
 
-	const profile = env === 'production' ? '--release' : '--debug';
-	return execSync(`wasm-pack build --scope joplin --target nodejs ${profile}`);
+	return execSync('wasm-pack build --scope joplin --target nodejs --release');
 };
 
 build();
