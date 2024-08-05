@@ -8,6 +8,7 @@ use crate::parser::Reader;
 ///
 /// [\[MS-FSSHTTPB\] 2.2.1.9]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/9db15fa4-0dc2-4b17-b091-d33886d8a0f6
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct SerialNumber {
     pub guid: Guid,
     pub serial: u64,

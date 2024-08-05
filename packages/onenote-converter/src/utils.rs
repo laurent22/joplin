@@ -146,6 +146,7 @@ pub mod utils {
     pub(crate) use log_warn;
 }
 
+#[allow(dead_code)]
 pub(crate) trait Utf16ToString {
     fn utf16_to_string(&self) -> Result<String>;
 }

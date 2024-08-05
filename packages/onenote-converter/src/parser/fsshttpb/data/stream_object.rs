@@ -10,6 +10,7 @@ use num_traits::{FromPrimitive, ToPrimitive};
 ///
 /// [\[MS-FSSHTTPB\] 2.2.1.5]: https://docs.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-fsshttpb/5faee10f-8e55-43f8-935a-d6e4294856fc
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct ObjectHeader {
     pub compound: bool,
     pub object_type: ObjectType,

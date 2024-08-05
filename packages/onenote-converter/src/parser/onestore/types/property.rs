@@ -6,6 +6,7 @@ use std::fmt;
 
 /// A property value.
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub(crate) enum PropertyValue {
     Empty,
     Bool(bool),
