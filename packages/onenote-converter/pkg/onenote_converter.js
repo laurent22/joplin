@@ -7,5 +7,5 @@
 * @param {string} base_path
 */
 module.exports.oneNoteConverter = function(input, output, base_path) {
-    throw new Error('OneNoteConverter: not builded yet, this is only a place hol')
+    throw new Error('OneNoteConverter: not builded yet, this is only a placeholder and it must be replaced if needed')
 };
