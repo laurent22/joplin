@@ -4,9 +4,7 @@ This package is used to process OneNote backup files and output HTML that Joplin
 
 The code is based on the projects created by https://github.com/msiemens
 
-We adapted it to target WebAssembly, adding Node.js functions that could interface with the host machine. For that to 
-happen we are using custom-made functions (see `node_functions.js`) and the Node.js standard library (see 
-`src/utils.rs`).
+We adapted it to target WebAssembly, adding Node.js functions that could interface with the host machine. For that to  happen we are using custom-made functions (see `node_functions.js`) and the Node.js standard library (see `src/utils.rs`).
 
 
 ### Project structure:
@@ -28,32 +26,18 @@ happen we are using custom-made functions (see `node_functions.js`) and the Node
 To work with the code you will need:
 
 - Rust https://www.rust-lang.org/learn/get-started
-- wasm-pack https://rustwasm.github.io/wasm-pack/
 
-`wasm-pack` is the tool used to compile the Rust code to WebAssembly.
+To build, inside the `onenote-converter/package.json` I added two scripts to build it to release and dev, `buildProduction` and `buildDev`. For the dev build it might print out a lot of logs, but they can be disabled in the macro `log!()`
 
-To build, inside the `onenote-converter/package.json` I added two scripts to build it to release and dev.
-For the dev build, when using the code, it might print out a lot of logs, but they can be disabled in the macro `log!()`
-
-During development, it will be easier to test it where this library is called. 
-`InteropService_Importer_Onenote.ts` is the code that depends on this and already has some tests
+During development, it will be easier to test it where this library is called. `InteropService_Importer_Onenote.ts` is the code that depends on this and already has some tests.
 
 
-### Publishing release
+### Postinstall script
 
-`onenote-converter/package.json` has a `buildProduction` script
+There is a `postinstall` script that checks if the `NODE_ENV` is production and if it is it will try to build the library. If for some reason a developer might need to test the library or run on another environment value it is only necessary to run `buildProduction` or `buildDev` to generate the necessary files.
 
 
 ### Security concerns
 
 We are using WebAssembly with Node.js calls to the file system, reading and writing files and directories, which means
-it is not isolated (no more than Node.js is, for that matter). But since we opted for not requiring every dev to install 
-Rust and wasm-pack just to compile this library, we need to acknowledge that depending on how the `.wasm` binary is 
-added to the project it might be a security concern.
-
-While the review process is always important, if the binary is added to git by a malicious user he might be able 
-to include anything he wants inside the .wasm file, so that is why adding a CI step to generate the code is very 
-important.
-
-Our idea is to generate the WebAssembly package inside the CI so we can be sure that the code that was generated is
-the one that was accepted in the PR. Hopefully, this will be already implemented before this is merged.
+it is not isolated (no more than Node.js is, for that matter). 
