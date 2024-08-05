@@ -7,7 +7,7 @@ This guide demonstrates how to create a Markdown editor plugin. It expects you t
 
 :::note
 
-This guide describes how to create a plugin for Joplin's [CodeMirror 6](https://codemirror.net/)-based Markdown editor. This is the text editor on mobile devices and newer versions of Joplin desktop (>= 3.1). Before v3.1, this editor was in beta and needed to be enabled under settings > general.
+This guide describes how to create a plugin for Joplin's [CodeMirror 6](https://codemirror.net/)-based Markdown editor. The plugin created in this guide should work on both mobile and desktop. However, on Joplin desktop before version 3.1, the beta editor will need to be enabled in settings > general.
 
 :::
 
