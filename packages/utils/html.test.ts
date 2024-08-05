@@ -66,7 +66,7 @@ describe('htmlUtils', () => {
 			let id = 0;
 			return () => {
 				id += 1;
-				return `id${id}.svg`;
+				return `id${id}`;
 			};
 		};
 		const filepath = `${__dirname}/__fixtures__/${filename}`;
