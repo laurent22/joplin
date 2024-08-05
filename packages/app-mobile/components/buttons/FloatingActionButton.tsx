@@ -3,8 +3,9 @@ import { useState, useCallback, useMemo } from 'react';
 import { FAB, Portal } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions, View } from 'react-native';
 import shim from '@joplin/lib/shim';
+import AccessibleWebMenu from '../accessibility/AccessibleModalMenu';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 
 // eslint-disable-next-line no-undef -- Don't know why it says React is undefined when it's defined above
@@ -40,7 +41,7 @@ const useIcon = (iconName: string) => {
 	}, [iconName]);
 };
 
-const ActionButton = (props: ActionButtonProps) => {
+const FloatingActionButton = (props: ActionButtonProps) => {
 	const [open, setOpen] = useState(false);
 	const onMenuToggled: FABGroupProps['onStateChange'] = useCallback(state => {
 		props.dispatch({
@@ -75,23 +76,47 @@ const ActionButton = (props: ActionButtonProps) => {
 	const marginTop = adjustMargins ? Math.max(0, windowSize.height - 140) : undefined;
 	const marginStart = adjustMargins ? Math.max(0, windowSize.width - 200) : undefined;
 
+	const label = props.mainButton?.label ?? _('Add new');
+
+	// On Web, FAB.Group can't be used at all with accessibility tools. Work around this
+	// by hiding the FAB for accessibility, and providing a screen-reader-only custom menu.
+	const isWeb = Platform.OS === 'web';
+	const accessibleMenu = isWeb ? (
+		<AccessibleWebMenu
+			label={label}
+			onPress={props.mainButton?.onPress}
+			actions={props.buttons}
+		/>
+	) : null;
+
+	const menuContent = <FAB.Group
+		open={open}
+		accessibilityLabel={label}
+		style={{ marginStart, marginTop }}
+		icon={ open ? openIcon : closedIcon }
+		fabStyle={{
+			backgroundColor: props.mainButton?.color ?? 'rgba(231,76,60,1)',
+		}}
+		onStateChange={onMenuToggled}
+		actions={actions}
+		onPress={props.mainButton?.onPress ?? defaultOnPress}
+		visible={true}
+	/>;
+	const mainMenu = isWeb ? (
+		<View
+			aria-hidden={true}
+			pointerEvents='box-none'
+			tabIndex={-1}
+			style={{ flex: 1 }}
+		>{menuContent}</View>
+	) : menuContent;
+
 	return (
 		<Portal>
-			<FAB.Group
-				open={open}
-				accessibilityLabel={props.mainButton?.label ?? _('Add new')}
-				style={{ marginStart, marginTop }}
-				icon={ open ? openIcon : closedIcon }
-				fabStyle={{
-					backgroundColor: props.mainButton?.color ?? 'rgba(231,76,60,1)',
-				}}
-				onStateChange={onMenuToggled}
-				actions={actions}
-				onPress={props.mainButton?.onPress ?? defaultOnPress}
-				visible={true}
-			/>
+			{mainMenu}
+			{accessibleMenu}
 		</Portal>
 	);
 };
 
-export default ActionButton;
+export default FloatingActionButton;

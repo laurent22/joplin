@@ -1,7 +1,7 @@
 import { useMemo, RefObject } from 'react';
 import { DialogMainProcessApi, DialogWebViewApi } from '../../types';
 import Logger from '@joplin/utils/Logger';
-import { WebViewControl } from '../../../ExtendedWebView';
+import { WebViewControl } from '../../../ExtendedWebView/types';
 import createOnLogHander from '../../utils/createOnLogHandler';
 import RNToWebViewMessenger from '../../../../utils/ipc/RNToWebViewMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';

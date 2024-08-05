@@ -57,6 +57,7 @@ export interface DialogWebViewApi {
 	//       does not reload styles/scripts).
 	includeCssFiles: (paths: string[])=> Promise<void>;
 	includeJsFiles: (paths: string[])=> Promise<void>;
+	runScript: (key: string, content: string)=> Promise<void>;
 
 	setThemeCss: (css: string)=> Promise<void>;
 	getFormData: ()=> Promise<SerializableData>;

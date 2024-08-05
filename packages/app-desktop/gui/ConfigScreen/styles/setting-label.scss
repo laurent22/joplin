@@ -1,0 +1,20 @@
+
+.setting-label {
+	display: block;
+	color: var(--joplin-color);
+	font-size: calc(var(--joplin-font-size) * 1.083333);
+	font-weight: 500;
+	margin-bottom: calc(var(--joplin-main-padding) / 2);
+	line-height: var(--joplin-line-height);
+
+	&.-sub-label {
+		opacity: 0.7;
+	}
+
+	&.-for-checkbox {
+		margin-left: 5px;
+		margin-bottom: 0;
+		display: inline;
+		background-color: transparent;
+	}
+}

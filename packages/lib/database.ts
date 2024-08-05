@@ -59,7 +59,7 @@ export default class Database {
 		try {
 			await this.driver().open(options);
 		} catch (error) {
-			throw new Error(`Cannot open database: ${error.message}: ${JSON.stringify(options)}`);
+			throw new Error(`Cannot open database: ${error.message ?? error}: ${JSON.stringify(options)}`);
 		}
 
 		this.logger().info('Database was open successfully');

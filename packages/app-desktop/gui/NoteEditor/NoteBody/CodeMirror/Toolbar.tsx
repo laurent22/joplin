@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../../../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../../../services/commands/stateToWhenClauseContext';
+import { _ } from '@joplin/lib/locale';
 const { buildStyle } = require('@joplin/lib/theme');
 
 interface ToolbarProps {
@@ -29,7 +30,14 @@ const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
 function Toolbar(props: ToolbarProps) {
 	const styles = styles_(props);
-	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} disabled={!!props.disabled} />;
+	return (
+		<ToolbarBase
+			style={styles.root}
+			items={props.toolbarButtonInfos}
+			disabled={!!props.disabled}
+			aria-label={_('Editor actions')}
+		/>
+	);
 }
 
 const mapStateToProps = (state: AppState) => {

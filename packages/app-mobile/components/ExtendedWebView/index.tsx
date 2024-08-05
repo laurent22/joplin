@@ -15,8 +15,6 @@ import { Props, WebViewControl } from './types';
 
 const logger = Logger.create('ExtendedWebView');
 
-export { WebViewControl, Props };
-
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const webviewRef = useRef(null);
 	const [source, setSource] = useState<WebViewSource|undefined>(undefined);

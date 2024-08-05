@@ -1,14 +1,16 @@
 import { _ } from '@joplin/lib/locale';
-import { Alert, AlertButton } from 'react-native';
+import { Alert } from 'react-native';
+import { DialogControl, PromptButton } from '../components/DialogManager';
+import { RefObject } from 'react';
 
 interface Options {
 	title: string;
 	buttons: string[];
 }
 
-const showMessageBox = (message: string, options: Options = null) => {
+const makeShowMessageBox = (dialogControl: null|RefObject<DialogControl>) => (message: string, options: Options = null) => {
 	return new Promise<number>(resolve => {
-		const defaultButtons: AlertButton[] = [
+		const defaultButtons: PromptButton[] = [
 			{
 				text: _('OK'),
 				onPress: () => resolve(0),
@@ -30,11 +32,12 @@ const showMessageBox = (message: string, options: Options = null) => {
 			});
 		}
 
-		Alert.alert(
+		// Web doesn't support Alert.alert -- prefer using the global dialogControl if available.
+		(dialogControl?.current?.prompt ?? Alert.alert)(
 			options?.title ?? '',
 			message,
 			buttons,
 		);
 	});
 };
-export default showMessageBox;
+export default makeShowMessageBox;

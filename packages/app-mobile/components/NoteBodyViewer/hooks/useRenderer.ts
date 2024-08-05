@@ -1,5 +1,5 @@
 import { Dispatch, RefObject, SetStateAction, useEffect, useMemo, useRef } from 'react';
-import { WebViewControl } from '../../ExtendedWebView';
+import { WebViewControl } from '../../ExtendedWebView/types';
 import { OnScrollCallback, OnWebViewMessageHandler } from '../types';
 import RNToWebViewMessenger from '../../../utils/ipc/RNToWebViewMessenger';
 import { NoteViewerLocalApi, NoteViewerRemoteApi } from '../bundledJs/types';

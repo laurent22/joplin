@@ -10,7 +10,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '../global-style';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
-import ActionButton from '../ActionButton';
+import ActionButton from '../buttons/FloatingActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen');
@@ -18,6 +18,7 @@ const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
+import AccessibleView from '../accessibility/AccessibleView';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class NotesScreenComponent extends BaseScreenComponent<any> {
@@ -264,16 +265,13 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		const actionButtonComp = this.props.noteSelectionEnabled || !this.props.visible ? null : makeActionButtonComp();
 
 		// Ensure that screen readers can't focus the notes list when it isn't visible.
-		// accessibilityElementsHidden is used on iOS and importantForAccessibility is used
-		// on Android.
 		const accessibilityHidden = !this.props.visible;
 
 		return (
-			<View
+			<AccessibleView
 				style={rootStyle}
 
-				accessibilityElementsHidden={accessibilityHidden}
-				importantForAccessibility={accessibilityHidden ? 'no-hide-descendants' : undefined}
+				inert={accessibilityHidden}
 			>
 				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
@@ -284,7 +282,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 						this.dialogbox = dialogbox;
 					}}
 				/>
-			</View>
+			</AccessibleView>
 		);
 	}
 }

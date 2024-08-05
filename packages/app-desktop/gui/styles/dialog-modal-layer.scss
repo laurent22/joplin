@@ -11,6 +11,10 @@
 	margin: 0;
 	background-color: transparent;
 
+	&:not([open]) {
+		display: none;
+	}
+
 	> .content {
 		background-color: var(--joplin-background-color);
 		color: var(--joplin-color);

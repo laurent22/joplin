@@ -8,6 +8,7 @@ export interface RendererWebViewOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	useTransferredFiles: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
 }

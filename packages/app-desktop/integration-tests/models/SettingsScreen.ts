@@ -11,7 +11,7 @@ export default class SettingsScreen {
 	}
 
 	public getTabLocator(tabName: string) {
-		return this.page.locator('a[role="tab"] > span', { hasText: tabName });
+		return this.page.getByRole('tab', { name: tabName });
 	}
 
 	public async waitFor() {

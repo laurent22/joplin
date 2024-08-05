@@ -58,7 +58,7 @@ describe('createJsDrawEditor', () => {
 		});
 
 		// Load no image and an empty template so that autosave can start
-		await editorControl.loadImageOrTemplate('', '{}');
+		await editorControl.loadImageOrTemplate('', '{}', undefined);
 
 		expect(calledAutosaveCount).toBe(0);
 
