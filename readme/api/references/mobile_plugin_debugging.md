@@ -2,7 +2,9 @@
 
 ## Running on web
 
-It may be easiest to test custom mobile plugins in the [web build](https://joplin.github.io/web-app/) of Joplin mobile. This eliminates the need to transfer the plugin's built `.jpl` file to an Android device after every change.
+Plugins can be installed from `.jpl` files in the [web build](https://joplin.github.io/web-app/) of the mobile app. This can help with mobile plugin development in a few ways:
+- Eliminates the need to transfer the plugin's built `.jpl` file to an Android device after every change.
+- It may be easier to inspect running plugins from a browser's development tools.
 
 To install a custom plugin on web,
 1. Build your plugin (run `npm run dist` from the plugin's directory).
@@ -21,7 +23,14 @@ If you encounter an "incompatible with Joplin mobile" error, be sure that `"plat
 
 :::
 
-After loading, plugins are run in an `<iframe>` with an `about:srcdoc` URL.
+After loading, plugins are run in an `<iframe>` with an `about:srcdoc` URL. To view the plugin's console output and interact with global plugin variables (e.g. `joplin.commands`),
+1. Open your browser's development tools.
+   - On most desktop browsers, this can be done by pressing <kbd>F12</kbd>.
+   - The following steps were tested on Firefox, Chrome, and Safari desktop.
+2. Click on the "Console" tab.
+3. To run JavaScript in the context of your plugin, [select its JavaScript context](https://developer.chrome.com/docs/devtools/console/reference#context).
+   - The JavaScript context will be named `about:srcdoc`.
+   - If using Chrome's DevTools, the [`debug`](https://developer.chrome.com/docs/devtools/console/utilities#debug-function) and other console utility function may be helpful.
 
 
 ## Getting console output
