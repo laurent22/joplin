@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { FlatList, View, Text, Button, StyleSheet, Platform, Alert } from 'react-native';
+import { FlatList, View, Text, Button, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { reg } from '@joplin/lib/registry.js';
+import { reg } from '@joplin/lib/registry';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 import { themeStyle } from '../global-style';
@@ -11,10 +11,10 @@ import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';
 import { AppState } from '../../utils/types';
-import Share from 'react-native-share';
 import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
 import { TextInput } from 'react-native-paper';
+import shareFile from '../../utils/shareFile';
 
 const logger = Logger.create('LogScreen');
 
@@ -100,18 +100,12 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			// Using a .txt file extension causes a "No valid provider found from URL" error
 			// and blank share sheet on iOS for larger log files (around 200 KiB).
 			fileToShare = await writeTextToCacheFile(logData, 'mobile-log.log');
-
-			await Share.open({
-				type: 'text/plain',
-				filename: 'log.txt',
-				url: `file://${fileToShare}`,
-				failOnCancel: false,
-			});
+			await shareFile(fileToShare, 'text/plain');
 		} catch (e) {
 			logger.error('Unable to share log data:', e);
 
 			// Display a message to the user (e.g. in the case where the user is out of disk space).
-			Alert.alert(_('Error'), _('Unable to share log data. Reason: %s', e.toString()));
+			void shim.showMessageBox(_('Error'), _('Unable to share log data. Reason: %s', e.toString()));
 		} finally {
 			if (fileToShare) {
 				await shim.fsDriver().remove(fileToShare);
@@ -225,6 +219,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 				{this.state.filter !== undefined ? filterInput : null}
 				<FlatList
 					data={this.state.logEntries}
+					initialNumToRender={100}
 					renderItem={this.onRenderLogRow}
 					keyExtractor={item => { return `${item.id}`; }}
 				/>

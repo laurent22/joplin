@@ -6,9 +6,10 @@ import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useState, useMemo, useCallback, useRef } from 'react';
-import { View, Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle } from 'react-native';
+import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
+import AccessibleView from './accessibility/AccessibleView';
 
 type ButtonClickListener = ()=> void;
 interface ButtonProps {
@@ -21,6 +22,10 @@ interface ButtonProps {
 	iconStyle: TextStyle;
 
 	themeId: number;
+
+	// (web only) On web, touching buttons can cause the on-screen keyboard to be dismissed.
+	// Setting preventKeyboardDismiss overrides this behavior.
+	preventKeyboardDismiss?: boolean;
 
 	containerStyle?: ViewStyle;
 	contentWrapperStyle?: ViewStyle;
@@ -74,12 +79,20 @@ const IconButton = (props: ButtonProps) => {
 		setButtonLayout({ ...layoutEvt });
 	}, []);
 
+	const { onTouchStart, onTouchMove, onTouchEnd } = usePreventKeyboardDismissTouchListeners(
+		props.preventKeyboardDismiss, props.onPress, props.disabled,
+	);
+
 	const button = (
 		<Pressable
 			onPress={props.onPress}
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
 			onPressOut={onPressOut}
+
+			onTouchStart={onTouchStart}
+			onTouchMove={onTouchMove}
+			onTouchEnd={onTouchEnd}
 
 			style={ props.containerStyle }
 
@@ -108,14 +121,11 @@ const IconButton = (props: ButtonProps) => {
 		if (!props.description) return null;
 
 		return (
-			<View
+			<AccessibleView
 				// Any information given by the tooltip should also be provided via
 				// [accessibilityLabel]/[accessibilityHint]. As such, we can hide the tooltip
 				// from the screen reader.
-				// On Android:
-				importantForAccessibility='no-hide-descendants'
-				// On iOS:
-				accessibilityElementsHidden={true}
+				inert={true}
 
 				// Position the menu beneath the button so the tooltip appears in the
 				// correct location.
@@ -150,7 +160,7 @@ const IconButton = (props: ButtonProps) => {
 						</Text>
 					</MenuOptions>
 				</Menu>
-			</View>
+			</AccessibleView>
 		);
 	};
 
@@ -179,6 +189,42 @@ const useTooltipStyles = (themeId: number) => {
 			},
 		});
 	}, [themeId]);
+};
+
+// On web, by default, pressing buttons defocuses the active edit control, dismissing the
+// virtual keyboard. This hook creates listeners that optionally prevent the keyboard from dismissing.
+const usePreventKeyboardDismissTouchListeners = (preventKeyboardDismiss: boolean, onPress: ()=> void, disabled: boolean) => {
+	const touchStartPointRef = useRef<[number, number]>();
+	const isTapRef = useRef<boolean>();
+	const onTouchStart = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss) {
+			const touch = event.nativeEvent.touches[0];
+			touchStartPointRef.current = [touch?.pageX, touch?.pageY];
+			isTapRef.current = true;
+		}
+	}, [preventKeyboardDismiss]);
+
+	const onTouchMove = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss && isTapRef.current) {
+			// Update isTapRef onTouchMove, rather than onTouchEnd -- the final
+			// touch position is unavailable in onTouchEnd on some devices.
+			const touch = event.nativeEvent.touches[0];
+			const dx = touch?.pageX - touchStartPointRef.current[0];
+			const dy = touch?.pageY - touchStartPointRef.current[1];
+			isTapRef.current = Math.hypot(dx, dy) < 15;
+		}
+	}, [preventKeyboardDismiss]);
+
+	const onTouchEnd = useCallback((event: GestureResponderEvent) => {
+		if (Platform.OS === 'web' && preventKeyboardDismiss) {
+			if (isTapRef.current && !disabled) {
+				event.preventDefault();
+				onPress();
+			}
+		}
+	}, [onPress, disabled, preventKeyboardDismiss]);
+
+	return { onTouchStart, onTouchMove, onTouchEnd };
 };
 
 export default IconButton;

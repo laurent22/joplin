@@ -2,6 +2,14 @@
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
 
+interface ExtendedWindow extends Window {
+	ReactNativeWebView: {
+		postMessage(message: unknown): void;
+		supportsNonStringMessages?: boolean;
+	};
+}
+declare const window: ExtendedWindow;
+
 export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, localApi: LocalInterface) {
 		super(channelId, localApi);
@@ -24,8 +32,7 @@ export default class WebViewToRNMessenger<LocalInterface, RemoteInterface> exten
 	};
 
 	protected override postMessage(message: SerializableData): void {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(window as any).ReactNativeWebView.postMessage(JSON.stringify(message));
+		window.ReactNativeWebView.postMessage(window.ReactNativeWebView.supportsNonStringMessages ? message : JSON.stringify(message));
 	}
 
 	protected override onClose(): void {

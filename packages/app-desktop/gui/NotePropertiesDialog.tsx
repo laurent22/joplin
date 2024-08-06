@@ -8,14 +8,14 @@ import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import Dialog from './Dialog';
 const Datetime = require('react-datetime').default;
 const { clipboard } = require('electron');
 const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
+	onClose: ()=> void;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onRevisionLinkClick: Function;
 	themeId: number;
@@ -447,15 +447,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		return (
-			<div style={theme.dialogModalLayer}>
-				<div style={theme.dialogBox}>
-					<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
-					<div role='table' aria-labelledby='note-properties-dialog-title'>
-						{noteComps}
-					</div>
-					<DialogButtonRow themeId={this.props.themeId} okButtonShow={!this.isReadOnly()} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+			<Dialog onCancel={this.props.onClose}>
+				<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
+				<div role='table' aria-labelledby='note-properties-dialog-title'>
+					{noteComps}
 				</div>
-			</div>
+				<DialogButtonRow themeId={this.props.themeId} okButtonShow={!this.isReadOnly()} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+			</Dialog>
 		);
 	}
 }

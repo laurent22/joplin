@@ -4,7 +4,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 
 import * as React from 'react';
 import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
@@ -71,9 +72,8 @@ function useCss(themeId: number): string {
 			body {
 				margin: 0;
 				height: 100vh;
-				width: 100vh;
-				width: 100vw;
-				min-width: 100vw;
+				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
+				width: 100%;
 				box-sizing: border-box;
 
 				padding-left: 1px;
@@ -82,6 +82,44 @@ function useCss(themeId: number): string {
 				padding-top: 10px;
 
 				font-size: 13pt;
+			}
+
+			* {
+				scrollbar-width: thin;
+				scrollbar-color: rgba(100, 100, 100, 0.7) rgba(0, 0, 0, 0.1);
+			}
+
+			@supports selector(::-webkit-scrollbar) {
+				*::-webkit-scrollbar {
+					width: 7px;
+					height: 7px;
+				}
+
+				*::-webkit-scrollbar-corner {
+					background: none;
+				}
+
+				*::-webkit-scrollbar-track {
+					border: none;
+				}
+
+				*::-webkit-scrollbar-thumb {
+					background: rgba(100, 100, 100, 0.3);
+					border-radius: 5px;
+				}
+
+				*::-webkit-scrollbar-track:hover {
+					background: rgba(0, 0, 0, 0.1);
+				}
+
+				*::-webkit-scrollbar-thumb:hover {
+					background: rgba(100, 100, 100, 0.7);
+				}
+
+				* {
+					scrollbar-width: unset;
+					scrollbar-color: unset;
+				}
 			}
 		`;
 	}, [themeId]);
@@ -469,7 +507,7 @@ function NoteEditor(props: Props, ref: any) {
 	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
-		if (data.indexOf('error:') === 0) {
+		if (typeof data === 'string' && data.indexOf('error:') === 0) {
 			logger.error('CodeMirror error', data);
 			return;
 		}

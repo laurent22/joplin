@@ -10,6 +10,10 @@ interface Props<ItemType> {
 	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
 	className?: string;
 	onItemDrop?: DragEventHandler<HTMLElement>;
+
+	id?: string;
+	role?: string;
+	'aria-label'?: string;
 }
 
 interface State {
@@ -164,7 +168,20 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 		if (this.props.className) classes.push(this.props.className);
 
 		return (
-			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown} onDrop={this.onDrop}>
+			<div
+				ref={this.listRef}
+				className={classes.join(' ')}
+				style={style}
+
+				id={this.props.id}
+				role={this.props.role}
+				aria-label={this.props['aria-label']}
+				aria-setsize={items.length}
+
+				onScroll={this.onScroll}
+				onKeyDown={this.onKeyDown}
+				onDrop={this.onDrop}
+			>
 				{itemComps}
 			</div>
 		);

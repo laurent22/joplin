@@ -1,20 +1,78 @@
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
+import { join, dirname } from 'path';
 
 type PluginAssetRecord = {
 	element: HTMLElement;
 };
 const pluginAssetsAdded_: Record<string, PluginAssetRecord> = {};
 
+const assetUrlMap_: Map<string, ()=> Promise<string>> = new Map();
+
+// Some resources (e.g. CSS) reference other resources with relative paths. On web, due to sandboxing
+// and how plugin assets are stored, these links need to be rewritten.
+const rewriteInternalAssetLinks = async (asset: RenderResultPluginAsset, content: string) => {
+	if (asset.mime === 'text/css') {
+		const urlRegex = /(url\()([^)]+)(\))/g;
+
+		// Converting resource paths to URLs is async. To handle this, we do two passes.
+		// In the first, the original URLs are collected. In the second, the URLs are replaced.
+		const replacements: [string, string][] = [];
+		let replacementIndex = 0;
+		content = content.replace(urlRegex, (match, _group1, url, _group3) => {
+			const target = join(dirname(asset.path), url);
+			if (!assetUrlMap_.has(target)) return match;
+			const replaceString = `<<to-replace-with-url-${replacementIndex++}>>`;
+			replacements.push([replaceString, target]);
+			return `url(${replaceString})`;
+		});
+
+		for (const [replacement, path] of replacements) {
+			const url = await assetUrlMap_.get(path)();
+			content = content.replace(replacement, url);
+		}
+
+		return content;
+	} else {
+		return content;
+	}
+};
+
+interface Options {
+	inlineAssets: boolean;
+	readAssetBlob?(path: string): Promise<Blob>;
+}
+
 // Note that this function keeps track of what's been added so as not to
 // add the same CSS files multiple times.
-//
-// Shared with app-desktop/gui-note-viewer.
-//
-// TODO: If possible, refactor such that this function is not duplicated.
-const addPluginAssets = (assets: RenderResultPluginAsset[]) => {
+const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Options) => {
 	if (!assets) return;
 
 	const pluginAssetsContainer = document.getElementById('joplin-container-pluginAssetsContainer');
+
+	const prepareAssetBlobUrls = () => {
+		for (const asset of assets) {
+			const path = asset.path;
+			if (!assetUrlMap_.has(path)) {
+				// Fetching assets can be expensive -- avoid refetching assets where possible.
+				let url: string|null = null;
+				assetUrlMap_.set(path, async () => {
+					if (url !== null) return url;
+
+					const blob = await options.readAssetBlob(path);
+					if (!blob) {
+						url = '';
+					} else {
+						url = URL.createObjectURL(blob);
+					}
+					return url;
+				});
+			}
+		}
+	};
+
+	if (options.inlineAssets) {
+		prepareAssetBlobUrls();
+	}
 
 	const processedAssetIds = [];
 
@@ -34,14 +92,33 @@ const addPluginAssets = (assets: RenderResultPluginAsset[]) => {
 
 		let element = null;
 
-		if (asset.mime === 'application/javascript') {
-			element = document.createElement('script');
-			element.src = encodedPath;
-			pluginAssetsContainer.appendChild(element);
-		} else if (asset.mime === 'text/css') {
-			element = document.createElement('link');
-			element.rel = 'stylesheet';
-			element.href = encodedPath;
+		if (options.inlineAssets) {
+			if (asset.mime === 'application/javascript') {
+				element = document.createElement('script');
+			} else if (asset.mime === 'text/css') {
+				element = document.createElement('style');
+			}
+
+			if (element) {
+				const blob = await options.readAssetBlob(asset.path);
+				if (blob) {
+					const assetContent = await blob.text();
+					element.appendChild(
+						document.createTextNode(await rewriteInternalAssetLinks(asset, assetContent)),
+					);
+				}
+			}
+		} else {
+			if (asset.mime === 'application/javascript') {
+				element = document.createElement('script');
+				element.src = encodedPath;
+			} else if (asset.mime === 'text/css') {
+				element = document.createElement('link');
+				element.rel = 'stylesheet';
+				element.href = encodedPath;
+			}
+		}
+		if (element) {
 			pluginAssetsContainer.appendChild(element);
 		}
 

@@ -1,5 +1,10 @@
 # Joplin Android Changelog
 
+## [android-v3.0.9](https://github.com/laurent22/joplin/releases/tag/android-v3.0.9) (Pre-release) - 2024-07-28T14:00:59Z
+
+- Fixed: #10677: Following a link to a previously open note wouldn't work (#10750) (#10677 by [@pedr](https://github.com/pedr))
+- Fixed: Fix manual resource download mode (#10748 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.0.8](https://github.com/laurent22/joplin/releases/tag/android-v3.0.8) (Pre-release) - 2024-07-06T10:26:06Z
 
 - Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

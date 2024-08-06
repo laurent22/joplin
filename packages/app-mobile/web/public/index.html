@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,interactive-widget=resizes-content"/>
+		<!-- This content security policy also applies to content in the sandboxed
+			 note viewer iframe. As such, it needs to allow inline JavaScript and
+			 blob: URLs. -->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+				default-src 'self' ;
+				connect-src 'self' * http://* https://* ;
+				style-src 'unsafe-inline' 'self' blob: ;
+				child-src 'self' ;
+				script-src 'self' 'unsafe-eval' 'unsafe-inline' ;
+				media-src 'self' blob: data: https://* http://* ;
+				img-src 'self' blob: data: http://* https://* ;
+				font-src 'self' https://* blob: data: ;
+			"
+		/>
+
+		<link rel="manifest" href="./manifest.json"/>
+		<link rel="icon" href="./icons/icon-vector-large.svg"/>
+		<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+
+		<!-- For search engines -->
+		<meta
+			name="description"
+			content="A web application that allows Joplin notes to be accessed and edited from a web browser. Joplin Web is a web build of Joplin's mobile app."
+		/>
+
+		<!-- For social media websites -->
+		<meta property="og:description" content="Joplin Mobile (Web) -- Access your notes from a web browser!"/>
+		<meta property="og:image" content="./icons/icon-192.png"/>
+
+		<title>Joplin</title>
+		<script src="./environment.js"></script>
+		<script src="./serviceWorker.bundle.js"></script>
+		<link rel="stylesheet" href="./index.css"/>
+	</head>
+	<body>
+		<div id="root"></div>
+	</body>
+	<script defer src="./app.bundle.js"></script>
+</html>

@@ -86,7 +86,7 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
-	enableBetaMarkdownEditor: boolean;
+	enableLegacyMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
@@ -784,12 +784,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror6' : 'TinyMCE';
 
 				if (this.props.isSafeMode) {
 					bodyEditor = 'PlainText';
-				} else if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
-					bodyEditor = 'CodeMirror6';
+				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
+					bodyEditor = 'CodeMirror5';
 				}
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
@@ -971,7 +971,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
-		enableBetaMarkdownEditor: state.settings['editor.beta'],
+		enableLegacyMarkdownEditor: state.settings['editor.legacyMarkdown'],
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],
