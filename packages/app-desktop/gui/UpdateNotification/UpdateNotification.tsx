@@ -7,6 +7,7 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { AutoUpdaterEvents } from '../../services/autoUpdater/AutoUpdaterService';
 import { NotyfNotification } from 'notyf';
 import { _ } from '@joplin/lib/locale';
+import { htmlentities } from '@joplin/utils/html';
 
 interface UpdateNotificationProps {
 	themeId: number;
@@ -17,7 +18,7 @@ export enum UpdateNotificationEvents {
 	Dismiss = 'dismiss-update-notification',
 }
 
-const changelogLink = 'https://joplinapp.org/help/about/changelog/desktop/';
+const changelogLink = 'https://github.com/laurent22/joplin/releases';
 
 window.openChangelogLink = () => {
 	ipcRenderer.send('open-link', changelogLink);
@@ -56,12 +57,17 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 	const handleUpdateDownloaded = useCallback((_event: IpcRendererEvent, info: UpdateInfo) => {
 		if (notificationRef.current) return;
 
+		const updateAvailableHtml = htmlentities(_('A new update (%s) is available', info.version));
+		const seeChangelogHtml = htmlentities(_('See changelog'));
+		const restartNowHtml = htmlentities(_('Restart now'));
+		const updateLaterHtml = htmlentities(_('Update later'));
+
 		const messageHtml = `
 		<div class="update-notification" style="color: ${theme.color2};">
-			${_('A new update (%s) is available', info.version)}  <a href="#" onclick="openChangelogLink()" style="color: ${theme.color2};">${_('See Changelog')}</a>
+			${updateAvailableHtml}  <a href="#" onclick="openChangelogLink()" style="color: ${theme.color2};">${seeChangelogHtml}</a>
 			<div style="display: flex; gap: 10px; margin-top: 8px;">
-				<button onclick="document.dispatchEvent(new CustomEvent('${UpdateNotificationEvents.ApplyUpdate}'))" class="notyf__button notyf__button--confirm" style="color: ${theme.color2};">${_('Restart now')}</button>
-				<button onclick="document.dispatchEvent(new CustomEvent('${UpdateNotificationEvents.Dismiss}'))" class="notyf__button notyf__button--dismiss" style="color: ${theme.color2};">${_('Update Later')}</button>
+				<button onclick="document.dispatchEvent(new CustomEvent('${UpdateNotificationEvents.ApplyUpdate}'))" class="notyf__button notyf__button--confirm" style="color: ${theme.color2};">${restartNowHtml}</button>
+				<button onclick="document.dispatchEvent(new CustomEvent('${UpdateNotificationEvents.Dismiss}'))" class="notyf__button notyf__button--dismiss" style="color: ${theme.color2};">${updateLaterHtml}</button>
 			</div>
 		</div>
 		`;
