@@ -2,13 +2,13 @@
 
 ## Running on web
 
-Plugins can be installed from `.jpl` files in the [web build](https://joplin.github.io/web-app/) of the mobile app. This can help with mobile plugin development in a few ways:
+Plugins can be installed from `.jpl` files in the [web build](https://app.joplincloud.com/) of the mobile app. This can help with mobile plugin development in a few ways:
 - Eliminates the need to transfer the plugin's built `.jpl` file to an Android device after every change.
 - It may be easier to inspect running plugins from a browser's development tools.
 
 To install a custom plugin on web,
 1. Build your plugin (run `npm run dist` from the plugin's directory).
-2. Open [web build](https://joplin.github.io/web-app/) of Joplin mobile.
+2. Open [web build](https://app.joplincloud.com/) of Joplin mobile.
 3. Go to "Configuration" > "Plugins" > "Enable plugin support" > "Advanced".
 4. Click "Install from file".
 5. Navigate to the base directory of your plugin.
