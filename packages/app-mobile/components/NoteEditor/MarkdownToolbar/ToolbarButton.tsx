@@ -63,6 +63,7 @@ const ToolbarButton = ({ styleSheet, spec, onActionComplete, style }: ToolbarBut
 			onPress={onPress}
 			description={ spec.description }
 			disabled={ disabled }
+			preventKeyboardDismiss={true}
 
 			iconName={spec.icon}
 			iconStyle={styles.iconStyle}

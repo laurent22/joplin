@@ -1,4 +1,5 @@
 import { CallbackIds, SerializableData, SerializableDataAndCallbacks } from '../types';
+import isTransferableObject from './isTransferableObject';
 
 type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>;
 
@@ -68,6 +69,8 @@ function mergeCallbacksAndSerializable(
 					result.push(mergeCallbackAndSerializable(serializableObj[i], callbackObj[i]));
 				}
 				return result;
+			} else if (isTransferableObject(serializableObj)) {
+				return serializableObj;
 			} else {
 				if (Array.isArray(callbackObj)) {
 					throw new Error('callbackArgs should not be an array');

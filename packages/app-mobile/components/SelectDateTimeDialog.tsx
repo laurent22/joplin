@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
-const { Modal, View, Button, Text, StyleSheet } = require('react-native');
+const { View, Button, Text, StyleSheet } = require('react-native');
 import time from '@joplin/lib/time';
+import { Platform } from 'react-native';
+import Modal from './Modal';
+import { formatMsToLocal } from '@joplin/utils/time';
 const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
 
 const styles = StyleSheet.create({
@@ -10,7 +13,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 22,
 	},
 	modalView: {
 		display: 'flex',
@@ -100,8 +102,25 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.setState({ showPicker: true });
 	}
 
+	// web
+	private onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({ date: new Date(event.target.value) });
+	};
+
 	public renderContent() {
 		const theme = themeStyle(this.props.themeId);
+
+		// DateTimePickerModal doesn't support web.
+		if (Platform.OS === 'web') {
+			// See https://developer.mozilla.org/en-US/docs/Web/HTML/Date_and_time_formats#local_date_and_time_strings
+			// for the expected date input format:
+			const dateString = this.state.date ? formatMsToLocal(this.state.date.getTime(), 'YYYY-MM-DD[T]HH:mm:ss') : '';
+			return <input
+				type="datetime-local"
+				value={dateString}
+				onChange={this.onInputChange}
+			></input>;
+		}
 
 		return (
 			<View style={{ flex: 0, margin: 20, alignItems: 'center' }}>
@@ -129,36 +148,32 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		const theme = themeStyle(this.props.themeId);
 
 		return (
-			<View style={styles.centeredView}>
-				<Modal
-
-					transparent={true}
-					visible={modalVisible}
-					onRequestClose={() => {
-						this.onReject();
-					}}
-				>
-					<View style={styles.centeredView}>
-						<View style={{ ...styles.modalView, backgroundColor: theme.backgroundColor }}>
-							<View style={{ padding: 15, paddingBottom: 0, flex: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
-								<Text style={{ ...styles.modalText, color: theme.color, fontSize: 14, fontWeight: 'bold' }}>{_('Set alarm')}</Text>
-							</View>
-							{this.renderContent()}
-							<View style={{ padding: 20, borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: theme.dividerColor }}>
-								<View style={{ marginBottom: 10 }}>
-									<Button title={_('Save alarm')} onPress={() => this.onAccept()} key="saveButton" />
-								</View>
-								<View style={{ marginBottom: 10 }}>
-									<Button title={_('Clear alarm')} onPress={() => this.onClear()} key="clearButton" />
-								</View>
-								<View style={{ marginBottom: 10 }}>
-									<Button title={_('Cancel')} onPress={() => this.onReject()} key="cancelButton" />
-								</View>
-							</View>
+			<Modal
+				transparent={true}
+				visible={modalVisible}
+				containerStyle={styles.centeredView}
+				onRequestClose={() => {
+					this.onReject();
+				}}
+			>
+				<View style={{ ...styles.modalView, backgroundColor: theme.backgroundColor }}>
+					<View style={{ padding: 15, flexBasis: 'auto', paddingBottom: 0, flexGrow: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
+						<Text style={{ ...styles.modalText, color: theme.color, fontSize: 14, fontWeight: 'bold' }}>{_('Set alarm')}</Text>
+					</View>
+					{this.renderContent()}
+					<View style={{ padding: 20, flexBasis: 'auto', borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: theme.dividerColor }}>
+						<View style={{ marginBottom: 10 }}>
+							<Button title={_('Save alarm')} onPress={() => this.onAccept()} key="saveButton" />
+						</View>
+						<View style={{ marginBottom: 10 }}>
+							<Button title={_('Clear alarm')} onPress={() => this.onClear()} key="clearButton" />
+						</View>
+						<View style={{ marginBottom: 10 }}>
+							<Button title={_('Cancel')} onPress={() => this.onReject()} key="cancelButton" />
 						</View>
 					</View>
-				</Modal>
-			</View>
+				</View>
+			</Modal>
 		);
 	}
 

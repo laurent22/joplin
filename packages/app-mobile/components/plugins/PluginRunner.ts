@@ -1,7 +1,7 @@
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginApiGlobal from '@joplin/lib/services/plugins/api/Global';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
-import { WebViewControl } from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import { RefObject } from 'react';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { PluginMainProcessApi, PluginWebViewApi } from './types';

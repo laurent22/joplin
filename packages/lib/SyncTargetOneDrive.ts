@@ -23,6 +23,11 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		this.api_ = null;
 	}
 
+	public static unsupportedPlatforms() {
+		// Web: The login UI doesn't work.
+		return ['web'];
+	}
+
 	public static targetName() {
 		return 'onedrive';
 	}

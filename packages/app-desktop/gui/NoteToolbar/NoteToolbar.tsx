@@ -6,6 +6,7 @@ import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/comm
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 const { connect } = require('react-redux');
 import { buildStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
 
 interface NoteToolbarProps {
 	themeId: number;
@@ -29,7 +30,14 @@ function styles_(props: NoteToolbarProps) {
 
 function NoteToolbar(props: NoteToolbarProps) {
 	const styles = styles_(props);
-	return <ToolbarBase style={styles.root} items={props.toolbarButtonInfos} disabled={props.disabled}/>;
+	return (
+		<ToolbarBase
+			style={styles.root}
+			items={props.toolbarButtonInfos}
+			disabled={props.disabled}
+			aria-label={_('Note')}
+		/>
+	);
 }
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());

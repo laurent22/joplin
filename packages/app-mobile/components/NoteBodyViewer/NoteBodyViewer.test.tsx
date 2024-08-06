@@ -14,12 +14,13 @@ import { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnM
 import Resource from '@joplin/lib/models/Resource';
 import shim from '@joplin/lib/shim';
 import Note from '@joplin/lib/models/Note';
+import { ResourceInfo } from './hooks/useRerenderHandler';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 
 interface WrapperProps {
 	noteBody: string;
 	highlightedKeywords?: string[];
-	noteResources?: unknown;
+	noteResources?: Record<string, ResourceInfo>;
 	onJoplinLinkClick?: HandleMessageCallback;
 	onScroll?: (percent: number)=> void;
 	onMarkForDownload?: OnMarkForDownloadCallback;

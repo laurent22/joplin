@@ -407,7 +407,7 @@ function ShareFolderDialog(props: Props) {
 	}
 
 	return (
-		<Dialog renderContent={renderContent}/>
+		<Dialog>{renderContent()}</Dialog>
 	);
 }
 

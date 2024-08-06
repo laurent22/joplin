@@ -90,7 +90,7 @@ const shim = {
 	},
 
 	isLinux: () => {
-		return process && process.platform === 'linux';
+		return typeof process !== 'undefined' && process.platform === 'linux';
 	},
 
 	isGNOME: () => {
@@ -117,15 +117,15 @@ const shim = {
 	},
 
 	isFreeBSD: () => {
-		return process && process.platform === 'freebsd';
+		return typeof process !== 'undefined' && process.platform === 'freebsd';
 	},
 
 	isWindows: () => {
-		return process && process.platform === 'win32';
+		return typeof process !== 'undefined' && process.platform === 'win32';
 	},
 
 	isMac: () => {
-		return process && process.platform === 'darwin';
+		return typeof process !== 'undefined' && process.platform === 'darwin';
 	},
 
 	platformName: () => {
@@ -134,7 +134,7 @@ const shim = {
 		if (shim.isWindows()) return 'win32';
 		if (shim.isLinux()) return 'linux';
 		if (shim.isFreeBSD()) return 'freebsd';
-		if (process && process.platform) return process.platform;
+		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
 	},
 
@@ -393,6 +393,10 @@ const shim = {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {
+		throw new Error('Not implemented');
+	},
+
+	restartApp: (): void => {
 		throw new Error('Not implemented');
 	},
 
