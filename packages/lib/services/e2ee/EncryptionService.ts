@@ -720,7 +720,7 @@ export default class EncryptionService {
 		return output;
 	}
 
-	public isValidSjclEncryptionMethod(method: EncryptionMethod) {
+	private isValidSjclEncryptionMethod(method: EncryptionMethod) {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 

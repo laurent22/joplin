@@ -72,7 +72,6 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
-import { runIntegrationTests as runCryptoIntegrationTests } from '@joplin/lib/services/e2ee/cryptoTestUtils';
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
 ];
@@ -706,10 +705,6 @@ class Application extends BaseApplication {
 		// }, 2000);
 
 		// await runIntegrationTests();
-
-		if (Setting.value('env') === 'dev') {
-			await runCryptoIntegrationTests();
-		}
 
 		return null;
 	}

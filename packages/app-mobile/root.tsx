@@ -849,7 +849,7 @@ async function initialize(dispatch: Dispatch) {
 			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 		} else {
-			logger.info('Skipping RSA tests -- not supported on mobile.');
+			logger.info('Skipping encryption tests -- not supported on web.');
 		}
 		await runOnDeviceFsDriverTests();
 	}
