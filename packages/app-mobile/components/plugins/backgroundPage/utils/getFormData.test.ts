@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 import getFormData from './getFormData';
 
 describe('getFormData', () => {

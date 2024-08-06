@@ -112,4 +112,14 @@ filesync
 Scaleway
 Inkscape
 Ionicon
+onready
+opfs
+popups
+Zuidhof
+serviceworker
+Credentialless
+coepdegrade
+COEP
 Stormlikes
+Stormlikes
+BYTV

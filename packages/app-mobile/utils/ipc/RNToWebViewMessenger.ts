@@ -1,9 +1,12 @@
 
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-import { WebViewMessageEvent } from 'react-native-webview';
-import { WebViewControl } from '../../components/ExtendedWebView';
+import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { RefObject } from 'react';
+import { OnMessageEvent } from '../../components/ExtendedWebView/types';
+import { Platform } from 'react-native';
+
+const canUseOptimizedPostMessage = Platform.OS === 'web';
 
 export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, private webviewControl: WebViewControl|RefObject<WebViewControl>, localApi: LocalInterface) {
@@ -19,22 +22,30 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 		// This is the case in testing environments where no WebView is available.
 		if (!webviewControl.injectJS) return;
 
-		webviewControl.injectJS(`
-			window.dispatchEvent(
-				new MessageEvent(
-					'message',
-					{
-						data: ${JSON.stringify(message)},
-						origin: 'react-native'
-					},
-				),
-			);
-		`);
+		if (canUseOptimizedPostMessage) {
+			webviewControl.postMessage(message);
+		} else {
+			webviewControl.injectJS(`
+				window.dispatchEvent(
+					new MessageEvent(
+						'message',
+						{
+							data: ${JSON.stringify(message)},
+							origin: 'react-native'
+						},
+					),
+				);
+			`);
+		}
 	}
 
-	public onWebViewMessage = (event: WebViewMessageEvent) => {
+	public onWebViewMessage = (event: OnMessageEvent) => {
 		if (!this.hasBeenClosed()) {
-			void this.onMessage(JSON.parse(event.nativeEvent.data));
+			if (canUseOptimizedPostMessage) {
+				void this.onMessage(event.nativeEvent.data);
+			} else {
+				void this.onMessage(JSON.parse(event.nativeEvent.data));
+			}
 		}
 	};
 

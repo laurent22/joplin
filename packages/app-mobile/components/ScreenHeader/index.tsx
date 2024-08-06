@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, ViewStyle, Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
@@ -24,6 +24,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
+import WebBetaButton from './WebBetaButton';
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -112,7 +113,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			container: {
 				flexDirection: 'column',
 				backgroundColor: theme.backgroundColor2,
-				alignItems: 'center',
 				shadowColor: '#000000',
 				elevation: 5,
 			},
@@ -451,6 +451,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
+		const betaIconButton = () => {
+			if (Platform.OS !== 'web') return null;
+
+			return (
+				<WebBetaButton
+					themeId={themeId}
+					wrapperStyle={this.styles().iconButton}
+					iconStyle={this.styles().topIcon}
+				/>
+			);
+		};
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
@@ -540,7 +552,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				} else {
 					menuOptionComponents.push(
 						<MenuOption value={o.onPress} key={`menuOption_${key++}`} style={this.styles().contextMenuItem} disabled={!!o.disabled}>
-							<Text style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}>{o.title}</Text>
+							<Text
+								style={o.disabled ? this.styles().contextMenuItemTextDisabled : this.styles().contextMenuItemText}
+								disabled={!!o.disabled}
+							>{o.title}</Text>
 						</MenuOption>,
 					);
 				}
@@ -630,6 +645,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
+		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
@@ -639,7 +655,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient
 		// space while in use, we allow certain buttons to be hidden.
-		const hideableRightComponents = pluginPanelsComp;
+		const hideableRightComponents = <>
+			{pluginPanelsComp}
+			{betaIconComp}
+		</>;
 
 		const titleComp = createTitleComponent(headerItemDisabled, hideableRightComponents);
 		const windowHeight = Dimensions.get('window').height - 50;
@@ -655,7 +674,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptionComponents.length || !showContextMenuButton ? null : (
 				<Menu onSelect={value => this.menu_select(value)} style={this.styles().contextMenu}>
-					<MenuTrigger style={contextMenuStyle}>
+					<MenuTrigger style={contextMenuStyle} testID='screen-header-menu-trigger'>
 						<View accessibilityLabel={_('Actions')}>
 							<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
 						</View>

@@ -48,6 +48,7 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 			},
 			actionButton: {
 				flex: 0,
+				flexBasis: 'auto',
 				marginLeft: 2,
 				marginRight: 2,
 			},

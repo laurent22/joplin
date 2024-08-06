@@ -1,5 +1,6 @@
-import Logger from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
+import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
@@ -13,6 +14,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
+import handleCustomProtocols, { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
 
 interface RendererProcessQuitReply {
@@ -40,6 +42,8 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
+	private updaterService_: AutoUpdaterService = null;
+	private customProtocolHandler_: CustomProtocolHandler = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
@@ -454,6 +458,14 @@ export default class ElectronAppWrapper {
 		return false;
 	}
 
+	public initializeCustomProtocolHandler(logger: LoggerWrapper) {
+		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
+	}
+
+	public getCustomProtocolHandler() {
+		return this.customProtocolHandler_;
+	}
+
 	public async start() {
 		// Since we are doing other async things before creating the window, we might miss
 		// the "ready" event. So we use the function below to make sure that the app is ready.
@@ -463,6 +475,11 @@ export default class ElectronAppWrapper {
 		if (alreadyRunning) return;
 
 		this.createWindow();
+
+		if (!shim.isLinux) {
+			this.updaterService_ = new AutoUpdaterService();
+			this.updaterService_.startPeriodicUpdateCheck();
+		}
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;

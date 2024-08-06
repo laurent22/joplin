@@ -13,7 +13,7 @@
   "dependencies": {
     "@adobe/css-tools": "4.3.3",
     "html-entities": "1.4.0",
-    "jsdom": "23.0.1"
+    "jsdom": "23.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "25.0.7",

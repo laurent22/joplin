@@ -30,6 +30,8 @@ import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
+import handlePasteEvent from './utils/handlePasteEvent';
+import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -257,12 +259,31 @@ const createEditor = (
 							fraction: getScrollFraction(view),
 						});
 					},
+					paste: (event, view) => {
+						if (props.onPasteFile) {
+							handlePasteEvent(event, view, props.onPasteFile);
+						}
+					},
+					dragover: (event, _view) => {
+						if (props.onPasteFile && event.dataTransfer.files.length) {
+							event.preventDefault();
+							event.dataTransfer.dropEffect = 'copy';
+							return true;
+						}
+						return false;
+					},
+					drop: (event, view) => {
+						if (props.onPasteFile) {
+							handlePasteEvent(event, view, props.onPasteFile);
+						}
+					},
 				}),
 
 				EditorState.tabSize.of(4),
 
 				// Apply styles to entire lines (block-display decorations)
 				decoratorExtension,
+				biDirectionalTextExtension,
 
 				// Adds additional CSS classes to tokens (the default CSS classes are
 				// auto-generated and thus unstable).

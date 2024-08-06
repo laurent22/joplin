@@ -159,17 +159,6 @@ export default class ExternalEditWatcher {
 					this.logger().error('ExternalEditWatcher: error');
 				}
 			});
-			// Hack to support external watcher on some linux applications (gedit, gvim, etc)
-			// taken from https://github.com/paulmillr/chokidar/issues/591
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			this.watcher_.on('raw', async (event: string, _path: string, options: any) => {
-				const watchedPath: string = options.watchedPath;
-				this.logger().debug(`ExternalEditWatcher: Raw event: ${event}: ${watchedPath}`);
-				if (event === 'rename') {
-					this.watcher_.unwatch(watchedPath);
-					this.watcher_.add(watchedPath);
-				}
-			});
 		} else {
 			this.watcher_.add(fileToWatch);
 		}

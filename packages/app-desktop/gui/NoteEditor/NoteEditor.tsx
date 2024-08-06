@@ -35,7 +35,6 @@ import NoteSearchBar from '../NoteSearchBar';
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-import bridge from '../../services/bridge';
 import NoteRevisionViewer from '../NoteRevisionViewer';
 import { parseShareCache } from '@joplin/lib/services/share/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -51,6 +50,7 @@ import getPluginSettingValue from '@joplin/lib/services/plugins/utils/getPluginS
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
 import useScheduleSaveCallbacks from './utils/useScheduleSaveCallbacks';
+import WarningBanner from './WarningBanner/WarningBanner';
 const debounce = require('debounce');
 
 const commands = [
@@ -138,7 +138,7 @@ function NoteEditor(props: NoteEditorProps) {
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
-			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
 			customCss: props.customCss,
 		});
 
@@ -434,29 +434,13 @@ function NoteEditor(props: NoteEditorProps) {
 		editor = <TinyMCE {...editorProps}/>;
 	} else if (props.bodyEditor === 'PlainText') {
 		editor = <PlainEditor {...editorProps}/>;
-	} else if (props.bodyEditor === 'CodeMirror') {
+	} else if (props.bodyEditor === 'CodeMirror5') {
 		editor = <CodeMirror5 {...editorProps}/>;
 	} else if (props.bodyEditor === 'CodeMirror6') {
 		editor = <CodeMirror6 {...editorProps}/>;
 	} else {
 		throw new Error(`Invalid editor: ${props.bodyEditor}`);
 	}
-
-	const onRichTextReadMoreLinkClick = useCallback(() => {
-		void bridge().openExternal('https://joplinapp.org/help/apps/rich_text_editor');
-	}, []);
-
-	const onRichTextDismissLinkClick = useCallback(() => {
-		Setting.setValue('richTextBannerDismissed', true);
-	}, []);
-
-	const wysiwygBanner = props.bodyEditor !== 'TinyMCE' || props.richTextBannerDismissed ? null : (
-		<div style={styles.warningBanner}>
-			{_('This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.')}
-			&nbsp;&nbsp;<a onClick={onRichTextReadMoreLinkClick} style={styles.warningBannerLink} href="#">[ {_('Read more about it')} ]</a>
-			&nbsp;&nbsp;<a onClick={onRichTextDismissLinkClick} style={styles.warningBannerLink} href="#">[ {_('Dismiss')} ]</a>
-		</div>
-	);
 
 	const noteRevisionViewer_onBack = useCallback(() => {
 		setShowRevisions(false);
@@ -612,7 +596,7 @@ function NoteEditor(props: NoteEditorProps) {
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>
-				{wysiwygBanner}
+				<WarningBanner bodyEditor={props.bodyEditor}/>
 			</div>
 		</div>
 	);
@@ -636,7 +620,6 @@ const mapStateToProps = (state: AppState) => {
 		syncStarted: state.syncStarted,
 		decryptionStarted: state.decryptionWorker?.state !== 'idle',
 		themeId: state.settings.theme,
-		richTextBannerDismissed: state.settings.richTextBannerDismissed,
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: state.notesParentType,
 		selectedNoteTags: state.selectedNoteTags,

@@ -131,10 +131,17 @@ async function main() {
 	// layout these dependencies in code but not clear how to do this.
 	const corsAllowedDomains = [
 		'https://joplinapp.org',
+
+		// Allows sync with the web version of Joplin
+		'https://app.joplincloud.com',
 	];
 
 	if (env === Env.Dev) {
+		// Stripe (dev)
 		corsAllowedDomains.push('http://localhost:8077');
+
+		// Web client (dev)
+		corsAllowedDomains.push('http://localhost:8088');
 	}
 
 	function acceptOrigin(origin: string): boolean {

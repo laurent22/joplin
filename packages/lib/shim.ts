@@ -19,6 +19,13 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
+interface FetchOptions {
+	method?: string;
+	headers?: Record<string, string>;
+	body?: string;
+	agent?: unknown;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -83,7 +90,7 @@ const shim = {
 	},
 
 	isLinux: () => {
-		return process && process.platform === 'linux';
+		return typeof process !== 'undefined' && process.platform === 'linux';
 	},
 
 	isGNOME: () => {
@@ -110,15 +117,15 @@ const shim = {
 	},
 
 	isFreeBSD: () => {
-		return process && process.platform === 'freebsd';
+		return typeof process !== 'undefined' && process.platform === 'freebsd';
 	},
 
 	isWindows: () => {
-		return process && process.platform === 'win32';
+		return typeof process !== 'undefined' && process.platform === 'win32';
 	},
 
 	isMac: () => {
-		return process && process.platform === 'darwin';
+		return typeof process !== 'undefined' && process.platform === 'darwin';
 	},
 
 	platformName: () => {
@@ -127,7 +134,7 @@ const shim = {
 		if (shim.isWindows()) return 'win32';
 		if (shim.isLinux()) return 'linux';
 		if (shim.isFreeBSD()) return 'freebsd';
-		if (process && process.platform) return process.platform;
+		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
 	},
 
@@ -239,9 +246,12 @@ const shim = {
 		}
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	fetch: (_url: string, _options: any = null): any => {
+	fetch: (_url: string, _options: FetchOptions|null = null): Promise<Response> => {
 		throw new Error('Not implemented: fetch');
+	},
+
+	debugFetch: (_url: string, _options: FetchOptions|null): Promise<unknown> => {
+		throw new Error('Not implemented: debugFetch');
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -387,6 +397,10 @@ const shim = {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {
+		throw new Error('Not implemented');
+	},
+
+	restartApp: (): void => {
 		throw new Error('Not implemented');
 	},
 

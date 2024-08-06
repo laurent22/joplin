@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 import Setting from '@joplin/lib/models/Setting';
 import Renderer, { RendererSettings, RendererSetupOptions } from './Renderer';
 import shim from '@joplin/lib/shim';
@@ -11,6 +12,7 @@ const defaultRendererSettings: RendererSettings = {
 	codeTheme: 'atom-one-light.css',
 	noteHash: '',
 	initialScroll: 0,
+	readAssetBlob: async (_path: string)=>new Blob(),
 
 	createEditPopupSyntax: '',
 	destroyEditPopupSyntax: '',
@@ -27,6 +29,7 @@ const makeRenderer = (options: Partial<RendererSetupOptions>) => {
 			resourceDir: Setting.value('resourceDir'),
 			resourceDownloadMode: 'auto',
 		},
+		useTransferredFiles: false,
 		fsDriver: shim.fsDriver(),
 		pluginOptions: {},
 	};

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '@joplin/lib/services/plugins/loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
-import { View } from 'react-native';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -14,6 +14,7 @@ import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 import PlatformImplementation from '../../services/plugins/PlatformImplementation';
+import AccessibleView from '../accessibility/AccessibleView';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -172,9 +173,9 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	};
 
 	return (
-		<View style={{ display: 'none' }}>
+		<AccessibleView style={{ display: 'none' }} inert={true}>
 			{renderWebView()}
-		</View>
+		</AccessibleView>
 	);
 };
 

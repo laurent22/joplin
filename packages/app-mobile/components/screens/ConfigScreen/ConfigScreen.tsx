@@ -35,6 +35,7 @@ import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import shim from '@joplin/lib/shim';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -257,29 +258,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.state.changedSettingKeys.length > 0;
 	}
 
-	private promptSaveChanges(): Promise<void> {
-		return new Promise(resolve => {
-			if (this.hasUnsavedChanges()) {
-				const dialogTitle: string|null = null;
-				Alert.alert(
-					dialogTitle,
-					_('There are unsaved changes.'),
-					[{
-						text: _('Save changes'),
-						onPress: async () => {
-							await this.saveButton_press();
-							resolve();
-						},
-					},
-					{
-						text: _('Discard changes'),
-						onPress: () => resolve(),
-					}],
-				);
-			} else {
-				resolve();
+	private async promptSaveChanges(): Promise<void> {
+		if (this.hasUnsavedChanges()) {
+			const response = await shim.showMessageBox(_('There are unsaved changes.'), {
+				buttons: [_('Save changes'), _('Discard changes')],
+			});
+			if (response === 0) {
+				await this.saveButton_press();
 			}
-		});
+		}
 	}
 
 	private handleNavigateToNewScreen = async (): Promise<boolean> => {

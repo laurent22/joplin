@@ -4,7 +4,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 
 import * as React from 'react';
 import { forwardRef, RefObject, useEffect, useImperativeHandle } from 'react';
@@ -21,16 +22,19 @@ import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
-import { WebViewMessageEvent } from 'react-native-webview';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useEditorCommandHandler from './hooks/useEditorCommandHandler';
+import { OnMessageEvent } from '../ExtendedWebView/types';
+import { join, dirname } from 'path';
+import * as mimeUtils from '@joplin/lib/mime-utils';
+import uuid from '@joplin/lib/uuid';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
-type OnAttachCallback = ()=> void;
+type OnAttachCallback = (filePath?: string)=> Promise<void>;
 
 const logger = Logger.create('NoteEditor');
 
@@ -68,9 +72,8 @@ function useCss(themeId: number): string {
 			body {
 				margin: 0;
 				height: 100vh;
-				width: 100vh;
-				width: 100vw;
-				min-width: 100vw;
+				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
+				width: 100%;
 				box-sizing: border-box;
 
 				padding-left: 1px;
@@ -79,6 +82,44 @@ function useCss(themeId: number): string {
 				padding-top: 10px;
 
 				font-size: 13pt;
+			}
+
+			* {
+				scrollbar-width: thin;
+				scrollbar-color: rgba(100, 100, 100, 0.7) rgba(0, 0, 0, 0.1);
+			}
+
+			@supports selector(::-webkit-scrollbar) {
+				*::-webkit-scrollbar {
+					width: 7px;
+					height: 7px;
+				}
+
+				*::-webkit-scrollbar-corner {
+					background: none;
+				}
+
+				*::-webkit-scrollbar-track {
+					border: none;
+				}
+
+				*::-webkit-scrollbar-thumb {
+					background: rgba(100, 100, 100, 0.3);
+					border-radius: 5px;
+				}
+
+				*::-webkit-scrollbar-track:hover {
+					background: rgba(0, 0, 0, 0.1);
+				}
+
+				*::-webkit-scrollbar-thumb:hover {
+					background: rgba(100, 100, 100, 0.7);
+				}
+
+				* {
+					scrollbar-width: unset;
+					scrollbar-color: unset;
+				}
 			}
 		`;
 	}, [themeId]);
@@ -373,6 +414,9 @@ function NoteEditor(props: Props, ref: any) {
 
 	const onEditorEvent = useRef((_event: EditorEvent) => {});
 
+	const onAttachRef = useRef(props.onAttach);
+	onAttachRef.current = props.onAttach;
+
 	const editorMessenger = useMemo(() => {
 		const localApi: WebViewToEditorApi = {
 			async onEditorEvent(event) {
@@ -380,6 +424,16 @@ function NoteEditor(props: Props, ref: any) {
 			},
 			async logMessage(message) {
 				logger.debug('CodeMirror:', message);
+			},
+			async onPasteFile(type, data) {
+				const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${mimeUtils.toFileExtension(type)}`);
+				await shim.fsDriver().mkdir(dirname(tempFilePath));
+				try {
+					await shim.fsDriver().writeFile(tempFilePath, data, 'base64');
+					await onAttachRef.current(tempFilePath);
+				} finally {
+					await shim.fsDriver().remove(tempFilePath);
+				}
 			},
 		};
 		const messenger = new RNToWebViewMessenger<WebViewToEditorApi, EditorBodyControl>(
@@ -450,10 +504,10 @@ function NoteEditor(props: Props, ref: any) {
 		editorMessenger.onWebViewLoaded();
 	}, [editorMessenger]);
 
-	const onMessage = useCallback((event: WebViewMessageEvent) => {
+	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
-		if (data.indexOf('error:') === 0) {
+		if (typeof data === 'string' && data.indexOf('error:') === 0) {
 			logger.error('CodeMirror error', data);
 			return;
 		}

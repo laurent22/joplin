@@ -1,3 +1,5 @@
+/** @jest-environment jsdom */
+
 import CommandService from '@joplin/lib/services/CommandService';
 import useEditorCommandHandler from './useEditorCommandHandler';
 import commandDeclarations from '../commandDeclarations';

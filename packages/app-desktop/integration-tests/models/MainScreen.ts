@@ -2,6 +2,8 @@ import { Page, Locator, ElectronApplication } from '@playwright/test';
 import NoteEditorScreen from './NoteEditorScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import Sidebar from './Sidebar';
+import GoToAnything from './GoToAnything';
+import setFilePickerResponse from '../util/setFilePickerResponse';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -9,13 +11,15 @@ export default class MainScreen {
 	public readonly sidebar: Sidebar;
 	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
+	public readonly goToAnything: GoToAnything;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
 		this.noteListContainer = page.locator('.rli-noteList');
 		this.sidebar = new Sidebar(page, this);
-		this.dialog = page.locator('.dialog-root');
+		this.dialog = page.locator('.dialog-modal-layer');
 		this.noteEditor = new NoteEditorScreen(page);
+		this.goToAnything = new GoToAnything(page, this);
 	}
 
 	public async waitFor() {
@@ -52,5 +56,14 @@ export default class MainScreen {
 	public async search(text: string) {
 		const searchBar = this.page.getByPlaceholder('Search...');
 		await searchBar.fill(text);
+	}
+
+	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+		await setFilePickerResponse(electronApp, [path]);
+		const startedImport = await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
+
+		if (!startedImport) {
+			throw new Error('Unable to find HTML directory import menu item.');
+		}
 	}
 }

@@ -27,6 +27,7 @@ const useStyles = (backgroundColor?: string) => {
 				...backgroundPadding,
 				backgroundColor,
 				flexGrow: 1,
+				flexShrink: 1,
 			},
 		});
 	}, [isLandscape, backgroundColor]);

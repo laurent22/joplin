@@ -33,10 +33,12 @@ const TagItem = (props: Props) => {
 	}, [props.onClick, tag]);
 
 	return (
-		<StyledListItem selected={selected}
+		<StyledListItem
+			selected={selected}
 			className={`list-item-container ${selected ? 'selected' : ''}`}
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}
+			aria-selected={selected}
 		>
 			<EmptyExpandLink/>
 			<StyledListItemAnchor

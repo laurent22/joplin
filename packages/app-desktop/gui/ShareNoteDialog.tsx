@@ -226,7 +226,7 @@ export function ShareNoteDialog(props: Props) {
 	};
 
 	return (
-		<Dialog renderContent={renderContent}/>
+		<Dialog>{renderContent()}</Dialog>
 	);
 }
 

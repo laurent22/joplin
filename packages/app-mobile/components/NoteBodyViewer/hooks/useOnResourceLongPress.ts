@@ -1,13 +1,15 @@
 import { useCallback } from 'react';
 
-const { ToastAndroid } = require('react-native');
 const { _ } = require('@joplin/lib/locale.js');
-import { reg } from '@joplin/lib/registry';
 const { dialogs } = require('../../../utils/dialogs.js');
 import Resource from '@joplin/lib/models/Resource';
 import { copyToCache } from '../../../utils/ShareUtils';
 import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
-const Share = require('react-native-share').default;
+import shim from '@joplin/lib/shim';
+import shareFile from '../../../utils/shareFile';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useOnResourceLongPress');
 
 interface Callbacks {
 	onJoplinLinkClick: (link: string)=> void;
@@ -25,7 +27,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 
 			// Handle the case where it's a long press on a link with no resource
 			if (!resource) {
-				reg.logger().warn(`Long-press: Resource with ID ${resourceId} does not exist (may be a note).`);
+				logger.warn(`Long-press: Resource with ID ${resourceId} does not exist (may be a note).`);
 				return;
 			}
 
@@ -46,19 +48,13 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 				onJoplinLinkClick(`joplin://${resourceId}`);
 			} else if (action === 'share') {
 				const fileToShare = await copyToCache(resource);
-
-				await Share.open({
-					type: resource.mime,
-					filename: resource.title,
-					url: `file://${fileToShare}`,
-					failOnCancel: false,
-				});
+				await shareFile(fileToShare, resource.mime);
 			} else if (action === 'edit') {
 				onRequestEditResource(`edit:${resourceId}`);
 			}
 		} catch (e) {
-			reg.logger().error('Could not handle link long press', e);
-			ToastAndroid.show('An error occurred, check log for details', ToastAndroid.SHORT);
+			logger.error('Could not handle link long press', e);
+			void shim.showMessageBox(`An error occurred, check log for details: ${e}`);
 		}
 	}, [onJoplinLinkClick, onRequestEditResource, dialogBoxRef]);
 }
