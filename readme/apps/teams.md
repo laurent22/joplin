@@ -15,3 +15,8 @@ These members will receive an email with a link they will need to follow in orde
 ## Removing a member from your team
 
 To remove a member from your team click on the Profile icon (👤) for that user, then click on "Remove user".
+
+## Syncing data
+
+The main teams account is for managing users and billing. Add yourself as a team member to sync data.
+
