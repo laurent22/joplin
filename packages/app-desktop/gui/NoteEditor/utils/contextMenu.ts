@@ -151,8 +151,7 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				if (itemType === ContextMenuItemType.Resource) return true;
-				return itemType === ContextMenuItemType.Image && options.resourceId;
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
 		copyPathToClipboard: {
