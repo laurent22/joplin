@@ -56,7 +56,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		logger.info('Extracting SVGs into files');
-		await moveSvgToLocalFile(tempOutputDirectory);
+		await this.moveSvgToLocalFile(tempOutputDirectory);
 
 		logger.info('Importing HTML into Joplin');
 		const importer = new InteropService_Importer_Md();
@@ -73,27 +73,30 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		// remover temp directories?
 		return result;
 	}
+
+	private async moveSvgToLocalFile(baseFolder: string) {
+		const htmlFiles = await this.getValidHtmlFiles(baseFolder);
+
+		for (const file of htmlFiles) {
+			const originalHtml = await readFile(join(file.path, file.name), { encoding: 'utf-8' });
+			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
+
+			if (!svgs) continue;
+
+			await writeFile(join(file.path, file.name), updatedHtml);
+			await this.createSvgFiles(svgs, file.path);
+		}
+	}
+
+	private async getValidHtmlFiles(baseFolder: string) {
+		const files = await readdir(baseFolder, { recursive: true, encoding: 'utf-8', withFileTypes: true });
+		const htmlFiles = files.filter(f => f.isFile() && f.name.endsWith('.html'));
+		return htmlFiles;
+	}
+
+	private async createSvgFiles(svgs: SvgXml[], svgBaseFolder: string) {
+		for (const svg of svgs) {
+			await writeFile(join(svgBaseFolder, svg.title), svg.content);
+		}
+	}
 }
-
-
-const moveSvgToLocalFile = async (baseFolder: string) => {
-	const files = await readdir(baseFolder, { recursive: true, encoding: 'utf-8', withFileTypes: true });
-	const htmlFiles = files.filter(f => f.isFile() && f.name.endsWith('.html'));
-
-	for (const file of htmlFiles) {
-		const originalHtml = await readFile(join(file.path, file.name), { encoding: 'utf-8' });
-		const { svgs, html } = await extractSvgs(originalHtml, () => uuidgen(8));
-
-		if (!svgs) continue;
-
-		await writeFile(join(file.path, file.name), html);
-		await createSvgFile(svgs, file.path);
-	}
-};
-
-const createSvgFile = async (svgs: SvgXml[], svgBaseFolder: string) => {
-
-	for (const svg of svgs) {
-		await writeFile(join(svgBaseFolder, svg.title), svg.content);
-	}
-};
