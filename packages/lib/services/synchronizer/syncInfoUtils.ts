@@ -6,9 +6,6 @@ import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { compareVersions } from 'compare-versions';
-import { _ } from '../../locale';
-import JoplinError from '../../JoplinError';
-import { ErrorCode } from '../../errors';
 const fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
@@ -427,6 +424,8 @@ export function masterKeyById(id: string) {
 	return localSyncInfo().masterKeys.find(mk => mk.id === id);
 }
 
-export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
-	if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+export const checkIfCanSync = (_s: SyncInfo, _appVersion: string) => {
+	// Disabled to allow compatibility between 2.14 and 3.0 for users who can't upgrade
+
+	// if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
 };
