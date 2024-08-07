@@ -520,6 +520,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => _('Re-downloads language data files on the next restart.'),
 			storage: SettingStorage.Database,
 			needRestart: true,
+			autoSave: true,
 		},
 
 		theme: {
