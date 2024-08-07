@@ -16,7 +16,7 @@ These members will receive an email with a link they will need to follow in orde
 
 To remove a member from your team click on the Profile icon (👤) for that user, then click on "Remove user".
 
-## Syncing data
+## Adding yourself to the team
 
-The main teams account is for managing users and billing. Add yourself as a team member to sync data.
+The main teams account is only for managing users and billing. To collaborate with the other members of your team, add yourself as a member using a different email address.
 
