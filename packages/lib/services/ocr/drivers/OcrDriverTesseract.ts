@@ -50,27 +50,40 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		this.languageDataPath_ = languageDataPath;
 	}
 
-	public static clearLanguageDataCache() {
+	public static async clearLanguageDataCache() {
 		if (typeof indexedDB === 'undefined') {
 			throw new Error('Missing indexedDB access!');
 		}
 
-		logger.info('Clearing language data cache');
+		logger.info('Clearing cached language data...');
 
-		return new Promise<void>((resolve, reject) => {
-			// Tesseract.js stores cached language data files in a database called "keyval-store".
-			// Beware! This may impact plugins that use the same indexedDB name (if any).
-			const request = indexedDB.deleteDatabase('keyval-store');
-
-			request.addEventListener('success', () => { resolve(); });
-			request.addEventListener('error', (event) => {
-				if ('error' in event) {
-					reject(new Error(`Error clearing language data: ${event.error}`));
-				} else {
-					reject(new Error('Unknown error while attempting to clear language data.'));
-				}
+		const requestAsPromise = <T> (request: IDBRequest) => {
+			return new Promise<T>((resolve, reject) => {
+				request.addEventListener('success', () => { resolve(request.result); });
+				request.addEventListener('error', (event) => {
+					if ('error' in event) {
+						reject(new Error(`Request failed: ${event.error}`));
+					} else {
+						reject(new Error('Request failed with unknown error.'));
+					}
+				});
 			});
-		});
+		};
+
+		const db = await requestAsPromise<IDBDatabase>(indexedDB.open('keyval-store'));
+		const getStore = (mode: IDBTransactionMode) => {
+			return db.transaction(['keyval'], mode).objectStore('keyval');
+		};
+
+		const allKeys = await requestAsPromise<string[]>(getStore('readonly').getAllKeys());
+		// cSpell:disable
+		const languageDataExtension = '.traineddata';
+		// cSpell:enable
+		const keysToClear = allKeys.filter(key => key.endsWith(languageDataExtension));
+		for (const key of keysToClear) {
+			logger.info('Clearing language data with key', key);
+			await requestAsPromise(getStore('readwrite').delete(key));
+		}
 	}
 
 	private async acquireWorker(language: string) {
