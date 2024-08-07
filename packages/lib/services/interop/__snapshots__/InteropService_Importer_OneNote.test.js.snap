@@ -212,10 +212,10 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 `;
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Quick Notes 1`] = `
-"
+"<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/></meta>
+    <meta charset="UTF-8">
     <title>Quick Notes</title>
     <style>
         html, body { margin: 0; padding: 0; }
@@ -289,28 +289,28 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     .l5 { padding: 10px 20px 10px 100px }
 </style>
 <script>
-    document.addEventListener(&apos;click&apos;, function (event) {
-        // If the clicked element doesn&apos;t have the right selector, bail
-        if (!event.target.matches(&apos;nav a&apos;)) return;
+    document.addEventListener('click', function (event) {
+        // If the clicked element doesn't have the right selector, bail
+        if (!event.target.matches('nav a')) return;
         for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove(&apos;active&apos;);
+            child.classList.remove('active');
         }
-        event.target.parentElement.classList.add(&apos;active&apos;);
+        event.target.parentElement.classList.add('active');
 
     }, false);
 
-    window.addEventListener(&apos;message&apos;, (event) =&gt; {
+    window.addEventListener('message', (event) => {
         const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll(&apos;nav ul li a&apos;)) {
+        for (const link of document.querySelectorAll('nav ul li a')) {
             if (link.href === activeTarget) {
-                link.parentElement.classList.add(&apos;active&apos;);
+                link.parentElement.classList.add('active');
             }
         }
     });
 
     if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, &apos;*&apos;);
+        window.parent.postMessage(window.location.href, '*');
     }
 </script>
 
@@ -363,10 +363,10 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 `;
 
 exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
-"
+"<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/></meta>
+    <meta charset="UTF-8">
     <title>Page title</title>
     <style>
     * { margin: 0; padding: 0; font-weight: normal; }
@@ -395,7 +395,7 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 
 <script>
     if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, &apos;*&apos;);
+        window.parent.postMessage(window.location.href, '*');
     }
 </script>
 </body>

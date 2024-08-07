@@ -81,7 +81,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const originalHtml = await readFile(join(file.path, file.name), { encoding: 'utf-8' });
 			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
 
-			if (!svgs) continue;
+			if (!svgs || !svgs.length) continue;
 
 			await writeFile(join(file.path, file.name), updatedHtml);
 			await this.createSvgFiles(svgs, file.path);
