@@ -513,14 +513,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'ocr.clearLanguageDataCache': {
 			value: false,
 			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ocr.clearLanguageDataCacheButton': {
+			value: null as null,
+			type: SettingItemType.Button,
 			advanced: true,
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('OCR: Clear cache and re-download language data files'),
-			description: () => _('Re-downloads language data files on the next restart.'),
-			storage: SettingStorage.Database,
-			needRestart: true,
-			autoSave: true,
+			description: () => _('Re-downloads cached language data files on the next restart.'),
 		},
 
 		theme: {

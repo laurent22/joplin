@@ -104,6 +104,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
 			await restart();
+		} else if (key === 'ocr.clearLanguageDataCacheButton') {
+			if (!confirm(_('Joplin needs to restart to apply this change. Do you want to continue?'))) return;
+			Setting.setValue('ocr.clearLanguageDataCache', true);
+			await restart();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
