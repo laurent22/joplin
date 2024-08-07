@@ -108,7 +108,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	#
 	# https://stackoverflow.com/questions/38558989
 	export NODE_OPTIONS="--max-old-space-size=32768"
-	yarn test packages/lib
+	yarn test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
