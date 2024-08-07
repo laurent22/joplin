@@ -150,7 +150,10 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 					bridge().showInfoMessageBox(_('This attachment does not have OCR data (Status: %s)', resourceOcrStatusToString(resource.ocr_status)));
 				}
 			},
-			isActive: (itemType: ContextMenuItemType, _options: ContextMenuOptions) => itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				if (itemType === ContextMenuItemType.Resource) return true;
+				return itemType === ContextMenuItemType.Image && options.resourceId;
+			},
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
