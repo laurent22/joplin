@@ -498,6 +498,30 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'ocr.languageDataPath': {
+			value: '',
+			type: SettingItemType.String,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Language data URL'),
+			description: () => _('A URL or path to a directory with language data files for OCR. After the first download, language data files will be cached to the file system. Leave this blank to download OCR language data from the default website.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ocr.clearLanguageDataCache': {
+			value: false,
+			type: SettingItemType.Bool,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Clear cache and re-download language data files'),
+			description: () => _('Re-downloads language data files on the next restart.'),
+			storage: SettingStorage.Database,
+			needRestart: true,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

@@ -130,7 +130,7 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
-			this.setupOcrService();
+			void this.setupOcrService();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
@@ -360,16 +360,29 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
-	private setupOcrService() {
+	private async setupOcrService() {
+		if (Setting.value('ocr.clearLanguageDataCache')) {
+			Setting.setValue('ocr.clearLanguageDataCache', false);
+			try {
+				await OcrDriverTesseract.clearLanguageDataCache();
+			} catch (error) {
+				this.logger().warn('OCR: Failed to clear language data cache.', error);
+			}
+		}
+
 		if (Setting.value('ocr.enabled')) {
+
 			if (!this.ocrService_) {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const Tesseract = (window as any).Tesseract;
 
 				const driver = new OcrDriverTesseract(
 					{ createWorker: Tesseract.createWorker },
-					`${bridge().buildDir()}/tesseract.js/worker.min.js`,
-					`${bridge().buildDir()}/tesseract.js-core`,
+					{
+						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
+						corePath: `${bridge().buildDir()}/tesseract.js-core`,
+						languageDataPath: Setting.value('ocr.languageDataPath') || null,
+					},
 				);
 
 				this.ocrService_ = new OcrService(driver);
