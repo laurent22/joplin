@@ -14,7 +14,9 @@ import { ListRenderer } from './noteListType';
  *
  * * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/note_list_renderer)
  *
- * * [Default list renderer](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/noteList/defaultListRenderer.ts)
+ * * [Default simple renderer](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/noteList/defaultListRenderer.ts)
+ *
+ * * [Default detailed renderer](https://github.com/laurent22/joplin/tree/dev/packages/lib/services/noteList/defaultMultiColumnsRenderer.ts)
  *
  * ## Screenshots:
  *
@@ -30,6 +32,7 @@ import { ListRenderer } from './noteListType';
  *
  * <img width="250px" src="https://global.discourse-cdn.com/standard14/uploads/cozic/optimized/3X/7/2/72acb1bab67d32482cb3da7bb053e54d44ad87b8_2_580x500.png"/>
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinViewsNoteList {
     private plugin_;
