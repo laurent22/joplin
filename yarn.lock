@@ -7585,7 +7585,7 @@ __metadata:
     compare-versions: 6.1.0
     countable: 3.0.1
     debounce: 1.2.1
-    electron: 29.1.0
+    electron: 29.4.5
     electron-builder: 24.13.3
     electron-log: 5.1.6
     electron-updater: 6.2.1
@@ -21085,16 +21085,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:29.1.0":
-  version: 29.1.0
-  resolution: "electron@npm:29.1.0"
+"electron@npm:29.4.5":
+  version: 29.4.5
+  resolution: "electron@npm:29.4.5"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^20.9.0
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: b707c5a6915f7e3259bb3a6123b91d9fa43fdd314683f9affcf99382f3bf9aa2c9d78060cb8e7a30fdf9421cc770ec3cf866f5474f173a5611eb614886c5eeef
+  checksum: 8c90671ddbde19e3bb4a5e0544e42204b13d1d75f4f96343b400754956a750262c1ad9574f479c0c3b7e90444e675f40a3f61e5374a8bb6f6de45eb6417a7f4f
   languageName: node
   linkType: hard
 
