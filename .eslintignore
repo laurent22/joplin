@@ -1102,8 +1102,10 @@ packages/lib/services/interop/Module.js
 packages/lib/services/interop/types.js
 packages/lib/services/joplinCloudUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
+packages/lib/services/keychain/KeychainService.test.js
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainServiceDriver.dummy.js
+packages/lib/services/keychain/KeychainServiceDriver.electron.js
 packages/lib/services/keychain/KeychainServiceDriver.mobile.js
 packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js

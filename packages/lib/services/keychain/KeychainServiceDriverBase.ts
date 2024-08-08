@@ -16,10 +16,12 @@ abstract class KeychainServiceDriverBase {
 		return this.clientId_;
 	}
 
+	public abstract readonly driverId: string;
+	public abstract supported(): Promise<boolean>;
+	public abstract setPassword(name: string, password: string): Promise<boolean>;
 	public abstract setPassword(name: string, password: string): Promise<boolean>;
 	public abstract password(name: string): Promise<string>;
 	public abstract deletePassword(name: string): Promise<void>;
-
 }
 
 export default KeychainServiceDriverBase;
