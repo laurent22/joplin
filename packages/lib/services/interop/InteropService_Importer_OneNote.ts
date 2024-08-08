@@ -75,8 +75,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private async moveSvgToLocalFile(baseFolder: string) {
-		expect(baseFolder).toBe('');
-		const htmlFiles = await this.getValidHtmlFiles(baseFolder);
+		expect(path.resolve(baseFolder)).toBe('');
+		const htmlFiles = await this.getValidHtmlFiles(path.resolve(baseFolder));
 
 		expect(htmlFiles).toBe([]);
 
@@ -102,7 +102,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 	private async getValidHtmlFiles(baseFolder: string) {
 		const files = await readdir(baseFolder, { recursive: true, encoding: 'utf-8', withFileTypes: true });
+		expect(files).not.toBe([]);
 		const htmlFiles = files.filter(f => f.isFile() && f.name.endsWith('.html'));
+		expect(htmlFiles).not.toBe([]);
 		return htmlFiles;
 	}
 
