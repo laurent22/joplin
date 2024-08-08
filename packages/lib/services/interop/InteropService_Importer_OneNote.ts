@@ -75,7 +75,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private async moveSvgToLocalFile(baseFolder: string) {
-		expect(path.resolve(baseFolder)).toBe('');
 		const htmlFiles = await this.getValidHtmlFiles(path.resolve(baseFolder));
 
 		expect(htmlFiles).toBe([]);
