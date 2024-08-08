@@ -6,9 +6,8 @@ import { rtrimSlashes } from '../../path-utils';
 import { oneNoteConverter } from '@joplin/onenote-converter';
 import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import { join, resolve } from 'path';
+import { join, resolve, normalize, sep } from 'path';
 import Logger from '@joplin/utils/Logger';
-import path = require('path');
 import { SvgXml, extractSvgs } from '@joplin/utils/html';
 import { uuidgen } from '../../uuid';
 import { access, constants, readFile, readdir, writeFile } from 'fs-extra';
@@ -20,7 +19,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 	private getEntryDirectory(unzippedPath: string, entryName: string) {
 		const withoutBasePath = entryName.replace(unzippedPath, '');
-		return path.normalize(withoutBasePath).split(path.sep)[0];
+		return normalize(withoutBasePath).split(sep)[0];
 	}
 
 	public async exec(result: ImportExportResult) {
@@ -40,8 +39,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 		const tempOutputDirectory = await this.temporaryDirectory_(true);
 		const baseFolder = this.getEntryDirectory(unzipTempDirectory, files[0].entryName);
-		const notebookBaseDir = path.join(unzipTempDirectory, baseFolder, path.sep);
-		const outputDirectory2 = path.join(tempOutputDirectory, baseFolder);
+		const notebookBaseDir = join(unzipTempDirectory, baseFolder, sep);
+		const outputDirectory2 = join(tempOutputDirectory, baseFolder);
 
 		const notebookFiles = zip.getEntries().filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
 
@@ -75,7 +74,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private async moveSvgToLocalFile(baseFolder: string) {
-		const htmlFiles = await this.getValidHtmlFiles(path.resolve(baseFolder));
+		const htmlFiles = await this.getValidHtmlFiles(resolve(baseFolder));
 
 		expect(htmlFiles).toBe([]);
 
