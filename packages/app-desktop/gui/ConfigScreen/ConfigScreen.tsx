@@ -105,7 +105,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			await Setting.saveAll();
 			await restart();
 		} else if (key === 'ocr.clearLanguageDataCacheButton') {
-			if (!confirm(_('Joplin needs to restart to apply this change. Do you want to continue?'))) return;
+			if (!confirm(this.restartMessage())) return;
 			Setting.setValue('ocr.clearLanguageDataCache', true);
 			await restart();
 		} else if (key === 'sync.openSyncWizard') {
