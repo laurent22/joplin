@@ -88,7 +88,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(notesFromParentSection.length).toBe(2);
 	});
 
-	it.only('should expect notes to be rendered the same', async () => {
+	it('should expect notes to be rendered the same', async () => {
 		let idx = 0;
 		BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
