@@ -7,6 +7,7 @@ import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { MarkupToHtml } from '@joplin/renderer';
 import BaseModel from '../../BaseModel';
 import uuid from '../../uuid';
+import Resource from '../../models/Resource';
 
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -94,9 +95,11 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
 
 		const folders = await Folder.all();
+		const resources = await Resource.all();
 		const parentSection = folders.find(f => f.title === 'Quick Notes');
 		expect(folders.length).toBe(3);
 		expect(notes.length).toBe(7);
+		expect(resources.length).toBe(210);
 		expect(notes.filter(n => n.parent_id === parentSection.id).length).toBe(6);
 
 		for (const note of notes) {
