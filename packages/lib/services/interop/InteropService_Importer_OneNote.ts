@@ -86,7 +86,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 			expect(originalHtml).not.toEqual(updatedHtml);
 			await access(fileLocation, constants.W_OK);
-			await writeFile(fileLocation, updatedHtml, { encoding: 'utf-8' });
+			await writeFile(fileLocation, 'something else', { encoding: 'utf-8' });
 			const newHtml = await readFile(fileLocation, { encoding: 'utf-8' });
 			expect(originalHtml).not.toEqual(newHtml);
 			await this.createSvgFiles(svgs, file.path);

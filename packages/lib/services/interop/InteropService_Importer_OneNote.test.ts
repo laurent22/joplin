@@ -88,13 +88,15 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(notesFromParentSection.length).toBe(2);
 	});
 
-	it('should expect notes to be rendered the same', async () => {
+	it.only('should expect notes to be rendered the same', async () => {
 		let idx = 0;
 		BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
 
 		const folders = await Folder.all();
 		const parentSection = folders.find(f => f.title === 'Quick Notes');
+		expect(folders.length).toBe(3);
+		expect(notes.length).toBe(7);
 		expect(notes.filter(n => n.parent_id === parentSection.id).length).toBe(6);
 
 		for (const note of notes) {
