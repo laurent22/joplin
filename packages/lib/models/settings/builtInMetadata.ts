@@ -504,7 +504,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			public: true,
 			appTypes: [AppType.Desktop],
-			label: () => _('OCR: Language data URL or file path'),
+			label: () => _('OCR: Language data URL or path'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},

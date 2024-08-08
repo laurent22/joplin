@@ -32,6 +32,8 @@ This pluggable interface is present in the software but not currently exposed. W
 
 ## Custom OCR language data URL
 
-After enabling OCR, Joplin downloads language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. This URL can be customized in settings > advanced > "OCR: Language data URL or file path".
+After enabling OCR, Joplin downloads language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. This URL can be customized in settings > advanced > "OCR: Language data URL or path". This URL or path should point to a directory with a `.traineddata.gz` file for each language to be used for OCR.
+
+For reference, an example `.traineddata.gz` file can be found [here](https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz).
 
 To fully replace the cached language data with custom data, it may be necessary to click "Clear cache and re-download language data files".
