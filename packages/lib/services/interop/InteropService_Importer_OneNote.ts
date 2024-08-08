@@ -84,8 +84,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const originalHtml = await readFile(fileLocation, { encoding: 'utf-8' });
 			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
 
-			throw new Error('before svg');
-			// eslint-disable-next-line no-unreachable
 			if (!svgs || !svgs.length) continue;
 
 			expect(originalHtml).not.toEqual(updatedHtml);
@@ -101,9 +99,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 	private async getValidHtmlFiles(baseFolder: string) {
 		const files = await readdir(baseFolder, { recursive: true, encoding: 'utf-8', withFileTypes: true });
-		expect(files).not.toBe([]);
+		expect(files).not.toEqual([]);
 		const htmlFiles = files.filter(f => f.isFile() && f.name.endsWith('.html'));
-		expect(htmlFiles).not.toBe([]);
+		expect(htmlFiles).not.toEqual([]);
 		return htmlFiles;
 	}
 
