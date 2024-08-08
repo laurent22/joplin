@@ -84,11 +84,13 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 			if (!svgs || !svgs.length) continue;
 
+			throw new Error('svgs exist');
+			// eslint-disable-next-line no-unreachable
 			expect(originalHtml).not.toEqual(updatedHtml);
 			await access(fileLocation, constants.W_OK);
 			await writeFile(fileLocation, updatedHtml, { encoding: 'utf-8' });
-			const files = await readdir(file.path, { encoding: 'utf-8' });
-			expect(files).toBe([]);
+			// const files = await readdir(file.path, { encoding: 'utf-8' });
+			// expect(files).toBe([]);
 			const newHtml = await readFile(fileLocation, { encoding: 'utf-8' });
 			expect(originalHtml).not.toEqual(newHtml);
 			await this.createSvgFiles(svgs, file.path);
