@@ -6,11 +6,11 @@ import { rtrimSlashes } from '../../path-utils';
 import { oneNoteConverter } from '@joplin/onenote-converter';
 import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import { join, resolve, normalize, sep } from 'path';
+import { join, resolve, normalize, sep, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { SvgXml, extractSvgs } from '@joplin/utils/html';
 import { uuidgen } from '../../uuid';
-import { access, constants, readFile, readdir, writeFile } from 'fs-extra';
+import shim from '../../shim';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -76,37 +76,27 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	private async moveSvgToLocalFile(baseFolder: string) {
 		const htmlFiles = await this.getValidHtmlFiles(resolve(baseFolder));
 
-		expect(htmlFiles).toBe([]);
-
 		for (const file of htmlFiles) {
-			const fileLocation = join(file.path, file.name);
-			const originalHtml = await readFile(fileLocation, { encoding: 'utf-8' });
+			const fileLocation = join(baseFolder, file.path);
+			const originalHtml = await shim.fsDriver().readFile(fileLocation);
 			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
 
 			if (!svgs || !svgs.length) continue;
 
-			expect(originalHtml).not.toEqual(updatedHtml);
-			await access(fileLocation, constants.W_OK);
-			await writeFile(fileLocation, updatedHtml, { encoding: 'utf-8' });
-			// const files = await readdir(file.path, { encoding: 'utf-8' });
-			// expect(files).toBe([]);
-			const newHtml = await readFile(fileLocation, { encoding: 'utf-8' });
-			expect(originalHtml).not.toEqual(newHtml);
-			await this.createSvgFiles(svgs, file.path);
+			await shim.fsDriver().writeFile(fileLocation, updatedHtml, 'utf8');
+			await this.createSvgFiles(svgs, join(baseFolder, dirname(file.path)));
 		}
 	}
 
 	private async getValidHtmlFiles(baseFolder: string) {
-		const files = await readdir(baseFolder, { recursive: true, encoding: 'utf-8', withFileTypes: true });
-		expect(files).toEqual([]);
-		const htmlFiles = files.filter(f => f.isFile() && f.name.endsWith('.html'));
-		expect(htmlFiles).not.toEqual([]);
+		const files = await shim.fsDriver().readDirStats(baseFolder, { recursive: true });
+		const htmlFiles = files.filter(f => !f.isDirectory() && f.path.endsWith('.html'));
 		return htmlFiles;
 	}
 
 	private async createSvgFiles(svgs: SvgXml[], svgBaseFolder: string) {
 		for (const svg of svgs) {
-			await writeFile(join(svgBaseFolder, svg.title), svg.content);
+			await shim.fsDriver().writeFile(join(svgBaseFolder, svg.title), svg.content, 'utf8');
 		}
 	}
 }
