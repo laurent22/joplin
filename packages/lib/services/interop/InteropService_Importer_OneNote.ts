@@ -11,7 +11,7 @@ import Logger from '@joplin/utils/Logger';
 import path = require('path');
 import { SvgXml, extractSvgs } from '@joplin/utils/html';
 import { uuidgen } from '../../uuid';
-import { readFile, readdir, writeFile } from 'fs-extra';
+import { access, constants, readFile, readdir, writeFile } from 'fs-extra';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -78,14 +78,17 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const htmlFiles = await this.getValidHtmlFiles(baseFolder);
 
 		for (const file of htmlFiles) {
-			const originalHtml = await readFile(join(file.path, file.name), { encoding: 'utf-8' });
+			const fileLocation = join(file.path, file.name);
+			const originalHtml = await readFile(fileLocation, { encoding: 'utf-8' });
 			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
 
-			// eslint-ignore-next-line no-console
-			console.error({ svgsLength: svgs.length, file: join((file.path, file.name)) });
 			if (!svgs || !svgs.length) continue;
 
-			await writeFile(join(file.path, file.name), updatedHtml);
+			expect(originalHtml).not.toEqual(updatedHtml);
+			await access(fileLocation, constants.W_OK);
+			await writeFile(fileLocation, updatedHtml, { encoding: 'utf-8' });
+			const newHtml = await readFile(fileLocation, { encoding: 'utf-8' });
+			expect(originalHtml).not.toEqual(newHtml);
 			await this.createSvgFiles(svgs, file.path);
 		}
 	}
