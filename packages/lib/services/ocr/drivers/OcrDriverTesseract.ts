@@ -76,9 +76,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		};
 
 		const allKeys = await requestAsPromise<string[]>(getStore('readonly').getAllKeys());
-		// cSpell:disable
 		const languageDataExtension = '.traineddata';
-		// cSpell:enable
 		const keysToClear = allKeys.filter(key => key.endsWith(languageDataExtension));
 		for (const key of keysToClear) {
 			logger.info('Clearing language data with key', key);
