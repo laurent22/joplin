@@ -33,11 +33,15 @@ const AccessibleView: React.FC<Props> = ({ inert, refocusCounter, children, ...v
 		if ((refocusCounter ?? null) === null) return;
 
 		const autoFocus = () => {
-			// react-native-web defines UIManager.focus for setting the keyboard focus. However,
-			// this property is not available in standard react-native. As such, access it using type
-			// narrowing:
-			// eslint-disable-next-line no-restricted-properties
-			if ('focus' in UIManager && typeof UIManager.focus === 'function') {
+			if (Platform.OS === 'web') {
+				// react-native-web defines UIManager.focus for setting the keyboard focus. However,
+				// this property is not available in standard react-native. As such, access it using type
+				// narrowing:
+				// eslint-disable-next-line no-restricted-properties
+				if (!('focus' in UIManager) || typeof UIManager.focus !== 'function') {
+					throw new Error('Failed to focus sidebar. UIManager.focus is not a function.');
+				}
+
 				// Disable the "use focusHandler for all focus calls" rule -- UIManager.focus requires
 				// an argument, which is not supported by focusHandler.
 				// eslint-disable-next-line no-restricted-properties
