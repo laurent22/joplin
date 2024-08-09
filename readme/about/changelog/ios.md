@@ -1,5 +1,19 @@
 # Joplin iOS Changelog
 
+## [ios-v13.1.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.1.1) - 2024-08-09T11:15:15Z
+
+- Improved: Improve RTL support in the Markdown editor (#10810 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Include commit information in version information screen (#10829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support building for web (#10650 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support pasting images (#10751) (#9017 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/geolocation (v3.2.1), @react-native-community/slider (v4.5.2), glob (v10.3.12), jsdom (v23.2.0), react-native-device-info (v10.13.1), react-native-get-random-values (v1.11.0), react-native-webview (v13.8.4), sharp (v0.33.3), style-to-js (v1.1.12), tar (v6.2.1)
+- Improved: Upgrade react-native-webview to 13.8.6 to fix CI (#10761 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix dayjs-related startup error (#10652 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix math is invisible in certain mermaid diagrams (#10820) (#10785 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix incorrect Node exports emulation (#10776 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Remove search bar from plugins screen (#10648) (#10596 by Siddhant Paritosh Rao)
+- Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
+
 ## [ios-v13.0.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.0.7) - 2024-07-28T14:07:03Z
 
 - Fixed: #10677: Following a link to a previously open note wouldn't work (#10750) (#10677 by [@pedr](https://github.com/pedr))
