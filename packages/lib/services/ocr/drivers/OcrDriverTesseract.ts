@@ -4,7 +4,6 @@ import OcrDriverBase from '../OcrDriverBase';
 import { Minute } from '@joplin/utils/time';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
-import Setting from '../../../models/Setting';
 
 const logger = Logger.create('OcrDriverTesseract');
 
@@ -29,18 +28,60 @@ const formatTesseractBoundingBox = (boundingBox: Tesseract.Bbox): RecognizeResul
 // Above this is usually reliable.
 const minConfidence = 70;
 
+interface Options {
+	workerPath: string;
+	corePath: string;
+	languageDataPath: string|null;
+}
+
 export default class OcrDriverTesseract extends OcrDriverBase {
 
 	private tesseract_: Tesseract = null;
-	private workerPath_: string|null = null;
-	private corePath_: string|null = null;
+	private workerPath_: string;
+	private corePath_: string;
+	private languageDataPath_: string|null = null;
 	private workers_: Record<string, WorkerWrapper[]> = {};
 
-	public constructor(tesseract: Tesseract, workerPath: string|null = null, corePath: string|null = null) {
+	public constructor(tesseract: Tesseract, { workerPath, corePath, languageDataPath }: Options) {
 		super();
 		this.tesseract_ = tesseract;
 		this.workerPath_ = workerPath;
 		this.corePath_ = corePath;
+		this.languageDataPath_ = languageDataPath;
+	}
+
+	public static async clearLanguageDataCache() {
+		if (typeof indexedDB === 'undefined') {
+			throw new Error('Missing indexedDB access!');
+		}
+
+		logger.info('Clearing cached language data...');
+
+		const requestAsPromise = <T> (request: IDBRequest) => {
+			return new Promise<T>((resolve, reject) => {
+				request.addEventListener('success', () => { resolve(request.result); });
+				request.addEventListener('error', (event) => {
+					if ('error' in event) {
+						reject(new Error(`Request failed: ${event.error}`));
+					} else {
+						reject(new Error('Request failed with unknown error.'));
+					}
+				});
+			});
+		};
+
+		const db = await requestAsPromise<IDBDatabase>(indexedDB.open('keyval-store'));
+		const getStore = (mode: IDBTransactionMode) => {
+			return db.transaction(['keyval'], mode).objectStore('keyval');
+		};
+
+		const allKeys = await requestAsPromise<string[]>(getStore('readonly').getAllKeys());
+		const languageDataExtension = '.traineddata';
+		const keysToClear = allKeys.filter(key => key.endsWith(languageDataExtension));
+		for (const key of keysToClear) {
+			logger.info('Clearing language data with key', key);
+			await requestAsPromise(getStore('readwrite').delete(key));
+		}
 	}
 
 	private async acquireWorker(language: string) {
@@ -59,10 +100,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
 		if (this.corePath_) createWorkerOptions.corePath = this.corePath_;
-
-		// Getting the language files seems to be broken but maybe only on dev, and this is fixed by
-		// disabling the cache: https://github.com/naptha/tesseract.js/issues/901
-		if (Setting.value('env') === 'dev') createWorkerOptions.cacheMethod = 'none';
+		if (this.languageDataPath_) createWorkerOptions.langPath = this.languageDataPath_;
 
 		const worker = await this.tesseract_.createWorker(language, OEM.LSTM_ONLY, createWorkerOptions);
 

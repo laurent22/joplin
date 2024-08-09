@@ -498,6 +498,34 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'ocr.languageDataPath': {
+			value: '',
+			type: SettingItemType.String,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Language data URL or path'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ocr.clearLanguageDataCache': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ocr.clearLanguageDataCacheButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Clear cache and re-download language data files'),
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

@@ -1073,7 +1073,7 @@ const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
 };
 
 export const newOcrService = () => {
-	const driver = new OcrDriverTesseract({ createWorker });
+	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
 	return new OcrService(driver);
 };
 
