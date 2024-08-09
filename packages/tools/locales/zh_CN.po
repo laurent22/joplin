@@ -2562,7 +2562,7 @@ msgstr "正在处理"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:566
 msgid "In: %s"
-msgstr "已处理：%s"
+msgstr "归属于：%s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -2680,7 +2680,7 @@ msgstr "无法同步的条目"
 
 #: packages/app-desktop/gui/MenuBar.tsx:911
 msgid "Join us on Twitter"
-msgstr "在Twitter上加入我们"
+msgstr "在 Twitter 上加入我们"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:268
 msgid ""

@@ -25,6 +25,8 @@ const shimInitShared = () => {
 		return Buffer.byteLength(string, 'utf-8');
 	};
 
+	shim.httpAgent = () => null;
+
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the
 		// app if calling it with an invalid URL such as '//.resource' or

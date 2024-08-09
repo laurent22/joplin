@@ -939,7 +939,7 @@ PODS:
   - React-Mapbuffer (0.74.1):
     - glog
     - React-debug
-  - react-native-alarm-notification (3.0.0):
+  - react-native-alarm-notification (3.1.0):
     - React
   - react-native-camera (4.2.1):
     - React-Core
@@ -1003,7 +1003,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.0.1):
+  - react-native-saf-x (3.1.0):
     - React-Core
   - react-native-safe-area-context (4.10.1):
     - React-Core
@@ -1610,15 +1610,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 16b8530de1b383cdada1476cf52d1b52f0692cbc
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: 485f3e6dad83b7b77f1572eabc249f869ee55c02
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
-  RCTDeprecation: 4dc9c8fbcb15bc9e8f3cfa601ddc190e120f099b
+  RCTDeprecation: efb313d8126259e9294dc4ee0002f44a6f676aba
   RCTRequired: f49ea29cece52aee20db633ae7edc4b271435562
   RCTTypeSafety: a11979ff0570d230d74de9f604f7d19692157bc4
   React: 88794fad7f460349dbc9df8a274d95f37a009f5d
@@ -1641,7 +1641,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 233d1a798fe0ff33b8e630b8f00f62c4a8115fbc
   React-logger: 7e7403a2b14c97f847d90763af76b84b152b6fce
   React-Mapbuffer: 11029dcd47c5c9e057a4092ab9c2a8d10a496a33
-  react-native-alarm-notification: efb7227e85a0ae1ccd615fb81ce92510aaf740a9
+  react-native-alarm-notification: 43183613222c563c071f2c726624f9f6f06e605d
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-document-picker: 3599b238843369026201d2ef466df53f77ae0452
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
@@ -1651,7 +1651,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 669454edae94399b11e49c840e4da14482302293
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: c27aa591bf931bb1f55069f9551e4c9dfc9457bb
+  react-native-saf-x: 7dfb7e614512c82dba2dea3401509e1c44f3d1f9
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-slider: 03f213d3ffbf919b16298c7896c1b60101d8e137
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
@@ -1696,8 +1696,8 @@ SPEC CHECKSUMS:
   RNZipArchive: ef9451b849c45a29509bf44e65b788829ab07801
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
-  Yoga: b9a182ab00cf25926e7f79657d08c5d23c2d03b0
+  Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
 
 PODFILE CHECKSUM: 0b954caebefad4e9dc123f5491a2649c02c896ea
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2

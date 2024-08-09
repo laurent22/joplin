@@ -4,6 +4,9 @@ import KeychainService from './keychain/KeychainService';
 import Setting from '../models/Setting';
 import uuid from '../uuid';
 import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
+import KeychainServiceDriverBase from './keychain/KeychainServiceDriverBase';
+
+type KeychainServiceDriverConstructor = new (appId: string, clientId: string)=> KeychainServiceDriverBase;
 
 // This function takes care of initialising both the keychain service and settings.
 //
@@ -13,11 +16,12 @@ import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
 // In other words, it's not possible to load the settings without the KS service and it's not
 // possible to initialise the KS service without the settings.
 // The solution is to fetch just the client ID directly from the database.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function loadKeychainServiceAndSettings(KeychainServiceDriver: any) {
+export async function loadKeychainServiceAndSettings(keychainServiceDrivers: KeychainServiceDriverConstructor[]) {
 	const clientIdSetting = await Setting.loadOne('clientId');
 	const clientId = clientIdSetting ? clientIdSetting.value : uuid.create();
-	KeychainService.instance().initialize(new KeychainServiceDriver(Setting.value('appId'), clientId));
+	await KeychainService.instance().initialize(
+		keychainServiceDrivers.map(Driver => new Driver(Setting.value('appId'), clientId)),
+	);
 	Setting.setKeychainService(KeychainService.instance());
 	await Setting.load();
 

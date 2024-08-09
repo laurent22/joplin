@@ -19,6 +19,12 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
+export interface Keytar {
+	setPassword(key: string, client: string, password: string): Promise<void>;
+	getPassword(key: string, client: string): Promise<string|null>;
+	deletePassword(key: string, client: string): Promise<void>;
+}
+
 interface FetchOptions {
 	method?: string;
 	headers?: Record<string, string>;
@@ -485,8 +491,7 @@ const shim = {
 		return (shim.isWindows() || shim.isMac()) && !shim.isPortable();
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keytar: (): any => {
+	keytar: (): Keytar => {
 		throw new Error('Not implemented');
 	},
 

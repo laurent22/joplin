@@ -29,3 +29,11 @@ OCR is a technology that evolves rapidly especially with the recent advances in 
 Additionally in some cases it may make sense to use a cloud-based solution, or simply connect to your self-hosted or intranet-based server for OCR. The current system will allow this by writing specific drivers for these services.
 
 This pluggable interface is present in the software but not currently exposed. We will do so depending on feedback we receive and potential use cases. If you have any specific use case in mind or notice any issue with the current OCR system feel free to let us know [on the forum](https://discourse.joplinapp.org/).
+
+## Custom OCR language data URL
+
+After enabling OCR, Joplin downloads language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. This URL can be customized in settings > advanced > "OCR: Language data URL or path". This URL or path should point to a directory with a `.traineddata.gz` file for each language to be used for OCR.
+
+For reference, an example `.traineddata.gz` file can be found [here](https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz).
+
+To fully replace the cached language data with custom data, it may be necessary to click "Clear cache and re-download language data files".

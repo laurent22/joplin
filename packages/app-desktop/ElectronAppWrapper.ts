@@ -1,6 +1,6 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
+// import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
@@ -42,7 +42,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
-	private updaterService_: AutoUpdaterService = null;
+	// private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandler_: CustomProtocolHandler = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -476,10 +476,12 @@ export default class ElectronAppWrapper {
 
 		this.createWindow();
 
-		if (!shim.isLinux) {
-			this.updaterService_ = new AutoUpdaterService();
-			this.updaterService_.startPeriodicUpdateCheck();
-		}
+		// TODO: Disabled for now - needs to be behind a feature flag
+
+		// if (!shim.isLinux()) {
+		// 	this.updaterService_ = new AutoUpdaterService();
+		// 	this.updaterService_.startPeriodicUpdateCheck();
+		// }
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
