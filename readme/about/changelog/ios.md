@@ -1,7 +1,8 @@
 # Joplin iOS Changelog
 
-## [ios-v13.1.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.1.2) - 2024-08-10T11:51:08Z
+## [ios-v13.1.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.1.3) - 2024-08-10T13:08:24Z
 
+- Improved: Updated packages @react-native-community/netinfo (v11.3.2)
 - Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix crash on opening the sidebar (#10852 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
