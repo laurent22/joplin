@@ -166,39 +166,48 @@ jobs:
         # https://github.com/actions/runner-images/issues/6709
         os: [ubuntu-20.04]
     steps:
-
-      - name: Install Docker Engine
-        run: |
-          sudo apt-get install -y apt-transport-https
-          sudo apt-get install -y ca-certificates
-          sudo apt-get install -y curl
-          sudo apt-get install -y gnupg
-          sudo apt-get install -y lsb-release
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-          echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
       - uses: actions/checkout@v4
-
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'yarn'
-
-      - name: Install Yarn
+      - name: Install Yarn 
         run: |
           # https://yarnpkg.com/getting-started/install
           corepack enable
-
-      - name: Build Docker Image
+          yarn install
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=tag
+            type=raw,value=server-v0.0.0
+      - name: Build args
+        run: |
+          echo DATE=`date -u +'%FT%T.%2NZ'` >> $GITHUB_ENV
+          echo REV=`git rev-parse --short HEAD` >> $GITHUB_ENV
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile.server 
+          build-args: |
+            BUILD_DATE=${{ env.DATE }}
+            REVISION=${{ env.REV }}
+            VERSION=0.0.0-beta
+          tags: ${{ steps.meta.outputs.tags }}
+          platforms: linux/amd64
+          push: true
+      - name: Run Docker Image
         env:
           BUILD_SEQUENCIAL: 1
         run: |
-          yarn install
-          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server --dry-run
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
