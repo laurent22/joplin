@@ -27,7 +27,7 @@ jobs:
         os: [ubuntu-20.04]
     env:
       VERSION: 0.0.0-beta
-      IMAGE: joplin
+      IMAGE: ghcr.io/maresmar/joplin
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -54,7 +54,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/maresmar/${{ env.IMAGE }}
+            ${{ env.IMAGE }}
           tags: |
             type=ref,event=tag
             type=raw,value=${{ env.VERSION }}
@@ -72,6 +72,7 @@ jobs:
             VERSION=${{ env.VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64
+          load: true
           push: true
       - name: Validate build
         env:
