@@ -154,7 +154,7 @@ describe('services_EncryptionService', () => {
 		// Test that a long string, that is going to be split into multiple chunks, encrypt
 		// and decrypt properly too.
 		let veryLongSecret = '';
-		for (let i = 0; i < service.chunkSize() * 3; i++) veryLongSecret += Math.floor(Math.random() * 9);
+		for (let i = 0; i < service.chunkSize(service.defaultEncryptionMethod()) * 3; i++) veryLongSecret += Math.floor(Math.random() * 9);
 
 		const cipherText2 = await service.encryptString(veryLongSecret);
 		const plainText2 = await service.decryptString(cipherText2);

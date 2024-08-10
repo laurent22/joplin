@@ -79,7 +79,7 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 	}
 }
 
-export async function testStringPerformance(chunkSize: number, method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
+export async function testStringPerformance(method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
 	options = {
 		throwOnError: false,
 		silent: false,
@@ -92,7 +92,6 @@ export async function testStringPerformance(chunkSize: number, method: Encryptio
 
 	try {
 		serviceInstance.defaultEncryptionMethod_ = method;
-		serviceInstance.chunkSize_ = chunkSize;
 		let masterKey = await serviceInstance.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await serviceInstance.loadMasterKey(masterKey, '123456', true);
@@ -117,7 +116,7 @@ export async function testStringPerformance(chunkSize: number, method: Encryptio
 			decryptTime += tick3 - tick2;
 		}
 
-		messages.push(`Crypto Tests: testStringPerformance(): chunkSize: ${chunkSize}, method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+		messages.push(`Crypto Tests: testStringPerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
 
 	} catch (error) {
 		hasError = true;
@@ -139,7 +138,7 @@ export async function testStringPerformance(chunkSize: number, method: Encryptio
 	}
 }
 
-export async function testFilePerformance(chunkSize: number, method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
+export async function testFilePerformance(method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
 	options = {
 		throwOnError: false,
 		silent: false,
@@ -152,7 +151,6 @@ export async function testFilePerformance(chunkSize: number, method: EncryptionM
 
 	try {
 		serviceInstance.defaultFileEncryptionMethod_ = method;
-		serviceInstance.chunkSize_ = chunkSize;
 		let masterKey = await serviceInstance.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await serviceInstance.loadMasterKey(masterKey, '123456', true);
@@ -178,7 +176,7 @@ export async function testFilePerformance(chunkSize: number, method: EncryptionM
 			decryptTime += tick3 - tick2;
 		}
 
-		messages.push(`Crypto Tests: testFilePerformance(): chunkSize: ${chunkSize}, method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+		messages.push(`Crypto Tests: testFilePerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
 
 	} catch (error) {
 		hasError = true;
@@ -253,31 +251,31 @@ export const runIntegrationTests = async (silent = false, testPerformance = fals
 	if (testPerformance) {
 		log('Crypto Tests: Testing performance...');
 		if (shim.mobilePlatform() === '') {
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 100, 1000);
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 1000000, 10);
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 5000000, 10);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 100, 1000);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 1000000, 10);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 5000000, 10);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 100, 1000);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 1000000, 3);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 5000000, 3);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100, 1000);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 1000000, 3);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 5000000, 3);
+			await testStringPerformance(EncryptionMethod.StringV1, 100, 1000);
+			await testStringPerformance(EncryptionMethod.StringV1, 1000000, 10);
+			await testStringPerformance(EncryptionMethod.StringV1, 5000000, 10);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 100, 1000);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 1000000, 10);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 5000000, 10);
+			await testFilePerformance(EncryptionMethod.FileV1, 100, 1000);
+			await testFilePerformance(EncryptionMethod.FileV1, 1000000, 3);
+			await testFilePerformance(EncryptionMethod.FileV1, 5000000, 3);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 100, 1000);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 1000000, 3);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 5000000, 3);
 		} else {
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 100, 100);
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 500000, 3);
-			await testStringPerformance(65536, EncryptionMethod.StringV1, 1000000, 3);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 100, 100);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 500000, 3);
-			await testStringPerformance(5000, EncryptionMethod.SJCL1a, 1000000, 3);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 100, 100);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 100000, 3);
-			await testFilePerformance(65536, EncryptionMethod.FileV1, 500000, 3);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100, 100);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 100000, 3);
-			await testFilePerformance(5000, EncryptionMethod.SJCL1a, 500000, 3);
+			await testStringPerformance(EncryptionMethod.StringV1, 100, 100);
+			await testStringPerformance(EncryptionMethod.StringV1, 500000, 3);
+			await testStringPerformance(EncryptionMethod.StringV1, 1000000, 3);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 100, 100);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 500000, 3);
+			await testStringPerformance(EncryptionMethod.SJCL1a, 1000000, 3);
+			await testFilePerformance(EncryptionMethod.FileV1, 100, 100);
+			await testFilePerformance(EncryptionMethod.FileV1, 100000, 3);
+			await testFilePerformance(EncryptionMethod.FileV1, 500000, 3);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 100, 100);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 100000, 3);
+			await testFilePerformance(EncryptionMethod.SJCL1a, 500000, 3);
 		}
 
 	}

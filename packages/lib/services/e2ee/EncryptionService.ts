@@ -62,20 +62,6 @@ export default class EncryptionService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fsDriver_: any = null;
 
-	// Note: 1 MB is very slow with Node and probably even worse on mobile.
-	//
-	// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
-	// to have a relatively small size so as not to freeze the app. For example, on Android 7.1 simulator
-	// with 4.1 GB RAM, it takes this much to decrypt a block;
-	//
-	// 50KB => 1000 ms
-	// 25KB => 250ms
-	// 10KB => 200ms
-	// 5KB => 10ms
-	//
-	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
-	// changed easily since the chunk size is incorporated into the encrypted data.
-	public chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
 	public defaultEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.StringV1 : EncryptionMethod.SJCL1a; // public because used in tests
 	public defaultFileEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.FileV1 : EncryptionMethod.SJCL1a; // public because used in tests
@@ -103,8 +89,35 @@ export default class EncryptionService {
 		return Object.keys(this.decryptedMasterKeys_).length;
 	}
 
-	public chunkSize() {
-		return this.chunkSize_;
+	// Note: 1 MB is very slow with Node and probably even worse on mobile.
+	//
+	// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
+	// to have a relatively small size so as not to freeze the app. For example, on Android 7.1 simulator
+	// with 4.1 GB RAM, it takes this much to decrypt a block;
+	//
+	// 50KB => 1000 ms
+	// 25KB => 250ms
+	// 10KB => 200ms
+	// 5KB => 10ms
+	//
+	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
+	// changed easily since the chunk size is incorporated into the encrypted data.
+	public chunkSize(method: EncryptionMethod) {
+		type EncryptionMethodChunkSizeMap = Record<EncryptionMethod, number>;
+		const encryptionMethodChunkSizeMap: EncryptionMethodChunkSizeMap = {
+			[EncryptionMethod.SJCL]: 5000,
+			[EncryptionMethod.SJCL1a]: 5000,
+			[EncryptionMethod.SJCL1b]: 5000,
+			[EncryptionMethod.SJCL2]: 5000,
+			[EncryptionMethod.SJCL3]: 5000,
+			[EncryptionMethod.SJCL4]: 5000,
+			[EncryptionMethod.Custom]: 5000,
+			[EncryptionMethod.KeyV1]: 65536,
+			[EncryptionMethod.FileV1]: 65536,
+			[EncryptionMethod.StringV1]: 65536,
+		};
+
+		return encryptionMethodChunkSizeMap[method];
 	}
 
 	public defaultEncryptionMethod() {
@@ -469,6 +482,7 @@ export default class EncryptionService {
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
+		const chunkSize = this.chunkSize(method);
 
 		const header = {
 			encryptionMethod: method,
@@ -480,10 +494,10 @@ export default class EncryptionService {
 		let doneSize = 0;
 
 		while (true) {
-			const block = await source.read(this.chunkSize_);
+			const block = await source.read(chunkSize);
 			if (!block) break;
 
-			doneSize += this.chunkSize_;
+			doneSize += chunkSize;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
 			// Wait for a frame so that the app remains responsive in mobile.
