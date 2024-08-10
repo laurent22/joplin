@@ -120,6 +120,8 @@ coepdegrade
 COEP
 Stormlikes
 BYTV
+keyval
+traineddata
 ripemd
 rnqc
 owasp

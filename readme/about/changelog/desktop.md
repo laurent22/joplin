@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v2.14.23](https://github.com/laurent22/joplin/releases/tag/v2.14.23) - 2024-08-07T11:15:25Z
+
+- Improved: Disable sync version check to allow compatibility between 2.14 and 3.0 for users who cannot upgrade ([a6cc5bd](https://github.com/laurent22/joplin/commit/a6cc5bd))
+
 ## [v3.0.14](https://github.com/laurent22/joplin/releases/tag/v3.0.14) - 2024-07-28T13:55:50Z
 
 - Improved: Api: Do not return deleted notes in folders/: id/notes call ([3e0fb48](https://github.com/laurent22/joplin/commit/3e0fb48))

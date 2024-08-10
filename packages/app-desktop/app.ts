@@ -59,6 +59,7 @@ const globalCommands = appCommands.concat(libCommands);
 import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
 import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -129,7 +130,7 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
-			this.setupOcrService();
+			void this.setupOcrService();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
@@ -359,16 +360,29 @@ class Application extends BaseApplication {
 		Setting.setValue('wasClosedSuccessfully', false);
 	}
 
-	private setupOcrService() {
+	private async setupOcrService() {
+		if (Setting.value('ocr.clearLanguageDataCache')) {
+			Setting.setValue('ocr.clearLanguageDataCache', false);
+			try {
+				await OcrDriverTesseract.clearLanguageDataCache();
+			} catch (error) {
+				this.logger().warn('OCR: Failed to clear language data cache.', error);
+			}
+		}
+
 		if (Setting.value('ocr.enabled')) {
+
 			if (!this.ocrService_) {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const Tesseract = (window as any).Tesseract;
 
 				const driver = new OcrDriverTesseract(
 					{ createWorker: Tesseract.createWorker },
-					`${bridge().buildDir()}/tesseract.js/worker.min.js`,
-					`${bridge().buildDir()}/tesseract.js-core`,
+					{
+						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
+						corePath: `${bridge().buildDir()}/tesseract.js-core`,
+						languageDataPath: Setting.value('ocr.languageDataPath') || null,
+					},
 				);
 
 				this.ocrService_ = new OcrService(driver);
@@ -550,6 +564,22 @@ class Application extends BaseApplication {
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
+
+		// Note: Auto-update is a misnomer in the code.
+		// The code below only checks, if a new version is available.
+		// We only allow Windows and macOS users to automatically check for updates
+		if (shim.isWindows() || shim.isMac()) {
+			const runAutoUpdateCheck = () => {
+				if (Setting.value('autoUpdateEnabled')) {
+					void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+				}
+			};
+
+			// Initial check on startup
+			shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
+			// Then every x hours
+			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+		}
 
 		initializeUserFetcher();
 		shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);

@@ -22,6 +22,7 @@ module.exports = {
 		'ReadableStreamDefaultReader': 'readonly',
 		'FileSystemCreateWritableOptions': 'readonly',
 		'FileSystemHandle': 'readonly',
+		'IDBTransactionMode': 'readonly',
 
 		// ServiceWorker
 		'ExtendableEvent': 'readonly',

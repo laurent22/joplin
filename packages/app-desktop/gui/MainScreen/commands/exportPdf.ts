@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import InteropServiceHelper from '../../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'exportPdf',
@@ -29,6 +29,14 @@ export const runtime = (comp: any): CommandRuntime => {
 					path = await bridge().showOpenDialog({
 						properties: ['openDirectory', 'createDirectory'],
 					});
+				}
+
+				if (Array.isArray(path)) {
+					if (path.length > 1) {
+						throw new Error('Only one output directory can be selected');
+					}
+
+					path = path[0];
 				}
 
 				if (!path) return;
