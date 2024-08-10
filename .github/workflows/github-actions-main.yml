@@ -25,6 +25,9 @@ jobs:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
         os: [ubuntu-20.04]
+    env:
+      VERSION: 0.0.0-beta
+      IMAGE: ghcr.io/${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -50,10 +53,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ env.IMAGE }}
           tags: |
             type=ref,event=tag
-            type=raw,value=server-v0.0.0
+            type=raw,value=${{ env.VERSION }}
       - name: Build args
         run: |
           echo DATE=`date -u +'%FT%T.%2NZ'` >> $GITHUB_ENV
@@ -65,7 +68,7 @@ jobs:
           build-args: |
             BUILD_DATE=${{ env.DATE }}
             REVISION=${{ env.REV }}
-            VERSION=0.0.0-beta
+            VERSION=${{ env.VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64
           push: true
@@ -77,12 +80,12 @@ jobs:
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
-          docker run joplin/server:0.0.0-beta node dist/app.js migrate list
+          docker run ${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js migrate list
  
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 joplin/server:0.0.0-beta node dist/app.js --env dev &
+          docker run -p 22300:22300 j${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js --env dev &
 
           # Wait for server to start
           sleep 30
