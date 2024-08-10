@@ -1,7 +1,8 @@
 # Joplin Android Changelog
 
-## [android-v3.1.1](https://github.com/laurent22/joplin/releases/tag/android-v3.1.1) (Pre-release) - 2024-08-09T11:13:00Z
+## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) (Pre-release) - 2024-08-10T11:44:30Z
 
+- Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Improve RTL support in the Markdown editor (#10810 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Include commit information in version information screen (#10829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Support building for web (#10650 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
