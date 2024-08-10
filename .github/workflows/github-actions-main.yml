@@ -27,7 +27,7 @@ jobs:
         os: [ubuntu-20.04]
     env:
       VERSION: 0.0.0-beta
-      IMAGE: ghcr.io/${{ github.repository }}
+      IMAGE: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -53,7 +53,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.IMAGE }}
+          images: |
+            ${{ env.IMAGE }}
+            ghcr.io/${{ env.IMAGE }}
           tags: |
             type=ref,event=tag
             type=raw,value=${{ env.VERSION }}
