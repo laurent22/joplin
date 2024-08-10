@@ -80,6 +80,7 @@ jobs:
         run: |
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
+          docker images
           docker run ${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js migrate list
  
       - name: Check HTTP request
