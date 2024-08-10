@@ -2,7 +2,7 @@ name: Joplin Continuous Integration
 on: [push, pull_request]
 jobs:
   pre_job:
-    if: github.repository == 'laurent22/joplin'
+    # if: github.repository == 'laurent22/joplin'
     # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
     # https://github.com/actions/runner-images/issues/6709
     runs-on: ubuntu-20.04
@@ -14,151 +14,11 @@ jobs:
         with:
           concurrent_skipping: 'same_content_newer'
 
-  Main:
-    needs: pre_job
-    # We always process server or desktop release tags, because they also publish the release
-    if: github.repository == 'laurent22/joplin' && (needs.pre_job.outputs.should_skip != 'true' || startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/v'))
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
-        # https://github.com/actions/runner-images/issues/6709
-        os: [macos-12, ubuntu-20.04, windows-2019]
-    steps:
-
-      # Trying to fix random networking issues on Windows
-      # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
-      - name: Disable TCP/UDP offload on Windows
-        if: runner.os == 'Windows'
-        run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
-
-      - name: Disable TCP/UDP offload on Linux
-        if: runner.os == 'Linux'
-        run: sudo ethtool -K eth0 tx off rx off
-
-      - name: Disable TCP/UDP offload on macOS
-        if: runner.os == 'macOS'
-        run: |
-          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
-          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
-
-      # Silence apt-get update errors (for example when a module doesn't
-      # exist) since otherwise it will make the whole build fails, even though
-      # it might work without update. libsecret-1-dev is required for keytar -
-      # https://github.com/atom/node-keytar
-
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update || true
-          sudo apt-get install -y gettext
-          sudo apt-get install -y libsecret-1-dev
-          sudo apt-get install -y translate-toolkit
-          sudo apt-get install -y rsync
-          # Provides a virtual display on Linux. Used for Playwright integration
-          # testing.
-          sudo apt-get install -y xvfb
-
-      - name: Install macOs dependencies
-        if: runner.os == 'macOS'
-        run: |
-          # Required for building the canvas package
-          brew install pango
-
-      - name: Install Docker Engine
-        # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get install -y apt-transport-https
-          sudo apt-get install -y ca-certificates
-          sudo apt-get install -y curl
-          sudo apt-get install -y gnupg
-          sudo apt-get install -y lsb-release
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-          echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-      - uses: actions/checkout@v4
-      - uses: olegtarasov/get-tag@v2.1.3
-      - uses: actions/setup-node@v4
-        with:
-          # We need to pin the version to 18.15, because 18.16+ fails with this error:
-          # https://github.com/facebook/react-native/issues/36440
-          node-version: '18.15.0'
-          cache: 'yarn'
-
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
-      
-      # Login to Docker only if we're on a server release tag. If we run this on
-      # a pull request it will fail because the PR doesn't have access to
-      # secrets
-      - uses: docker/login-action@v3
-        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # macos-latest ships with Python 3.12 by default, but this removes a
-      # utility that's used by electron-builder (distutils) so we need to pin
-      # Python to an earlier version.
-      # Fixes error `ModuleNotFoundError: No module named 'distutils'`
-      # Ref: https://github.com/nodejs/node-gyp/issues/2869
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Run tests, build and publish Linux and macOS apps
-        if: runner.os == 'Linux' || runner.os == 'macOs'
-        env:
-          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          IS_CONTINUOUS_INTEGRATION: 1
-          BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
-          SERVER_TAG_PREFIX: server
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: |
-          "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
-
-      - name: Build and publish Windows app
-        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
-        env:
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          IS_CONTINUOUS_INTEGRATION: 1
-          BUILD_SEQUENCIAL: 1
-        # To ensure that the operations stop on failure, all commands
-        # should be on one line with "&&" in between.
-        run: |
-          yarn install && cd packages/app-desktop && yarn dist
-
-      # Build and package the Windows app, without publishing it, just to
-      # verify that the build process hasn't been broken.
-      - name: Build Windows app (no publishing)
-        if: runner.os == 'Windows' && !startsWith(github.ref, 'refs/tags/v')
-        env:
-          IS_CONTINUOUS_INTEGRATION: 1
-          BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
-          SERVER_TAG_PREFIX: server
-        run: |
-          yarn install && cd packages/app-desktop && yarn dist --publish=never
+  # Removed for testing
 
   ServerDockerImage:
     needs: pre_job
-    if: github.repository == 'laurent22/joplin' && needs.pre_job.outputs.should_skip != 'true'
+    # if: github.repository == 'laurent22/joplin' && needs.pre_job.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -180,6 +40,12 @@ jobs:
           # https://yarnpkg.com/getting-started/install
           corepack enable
           yarn install
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
