@@ -53,9 +53,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: |
-            ${{ env.IMAGE }}
-            ghcr.io/${{ env.IMAGE }}
+          images: ghcr.io/${{ env.IMAGE }}
           tags: |
             type=ref,event=tag
             type=raw,value=${{ env.VERSION }}
@@ -74,12 +72,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64
           push: true
-      - name: Run Docker Image
+      - name: Validate build
         env:
           BUILD_SEQUENCIAL: 1
         run: |
-          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server --dry-run
-
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0  if it works.
           docker run ${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js migrate list
@@ -87,7 +83,7 @@ jobs:
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 j${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js --env dev &
+          docker run -p 22300:22300 ${{ env.IMAGE }}:${{ env.VERSION }} node dist/app.js --env dev &
 
           # Wait for server to start
           sleep 30
