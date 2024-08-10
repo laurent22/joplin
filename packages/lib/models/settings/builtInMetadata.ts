@@ -1537,6 +1537,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		// 	storage: SettingStorage.File,
 		// },
 
+		'featureFlag.useBetaEncryptionMethod': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+		},
+
 		'sync.allowUnsupportedProviders': {
 			value: -1,
 			type: SettingItemType.Int,

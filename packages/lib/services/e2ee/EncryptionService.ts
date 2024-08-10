@@ -75,11 +75,11 @@ export default class EncryptionService {
 	//
 	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
 	// changed easily since the chunk size is incorporated into the encrypted data.
-	public chunkSize_ = 65536;
+	public chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	public defaultEncryptionMethod_ = EncryptionMethod.StringV1; // public because used in tests
-	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests
-	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.KeyV1;
+	public defaultEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.StringV1 : EncryptionMethod.SJCL1a; // public because used in tests
+	public defaultFileEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.FileV1 : EncryptionMethod.SJCL1a; // public because used in tests
+	private defaultMasterKeyEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.KeyV1 : EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
 		// Template version 1
