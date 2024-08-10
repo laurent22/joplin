@@ -54,7 +54,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ${{ env.IMAGE }}
             ghcr.io/maresmar/${{ env.IMAGE }}
           tags: |
             type=ref,event=tag
