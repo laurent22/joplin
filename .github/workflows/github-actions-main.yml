@@ -74,7 +74,7 @@ jobs:
             VERSION=${{ env.VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64, linux/arm64
-          load: true
+          # load: true works only with amd64
           push: true
       - name: Validate build
         env:
