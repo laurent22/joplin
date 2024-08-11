@@ -30,7 +30,7 @@ jobs:
       IMAGE: ghcr.io/maresmar/joplin
     steps:
       - name: Clenup runner space # based on https://github.com/orgs/community/discussions/25678
-        run: rm -rf /opt/hostedtoolcache/Java* /opt/hostedtoolcache/Python /opt/hostedtoolcache/PyPy
+        run: rm -rf /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/Java* /opt/hostedtoolcache/PyPy /opt/hostedtoolcache/Python /opt/hostedtoolcache/Ruby /opt/hostedtoolcache/go 
       - uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
