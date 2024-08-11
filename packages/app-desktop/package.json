@@ -112,9 +112,6 @@
         "MimeType": "x-scheme-handler/joplin;"
       },
       "target": "AppImage"
-    },
-    "dmg": {
-      "writeUpdateInfo": false
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",

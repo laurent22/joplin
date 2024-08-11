@@ -1,10 +1,10 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-// import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
+import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-import { BrowserWindow, Tray, screen } from 'electron';
+import { BrowserWindow, Tray, screen, shell } from 'electron';
 import bridge from './bridge';
 const url = require('url');
 const path = require('path');
@@ -42,7 +42,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
-	// private updaterService_: AutoUpdaterService = null;
+	private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandler_: CustomProtocolHandler = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -326,6 +326,18 @@ export default class ElectronAppWrapper {
 			}
 		});
 
+		ipcMain.on('open-link', async (_event, url) => {
+			try {
+				await shell.openExternal(url);
+			} catch (error) {
+				console.error(`Failed to open URL: ${url}`, error);
+			}
+		});
+
+		ipcMain.on('apply-update-now', () => {
+			this.updaterService_.updateApp();
+		});
+
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
 		// and restore the maximized or full screen state
@@ -462,6 +474,14 @@ export default class ElectronAppWrapper {
 		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public initializeAutoUpdaterService(logger: LoggerWrapper, initializedShim: any, devMode: boolean, allowPrereleaseUpdates: boolean) {
+		if (!shim.isLinux()) {
+			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, allowPrereleaseUpdates);
+			this.updaterService_.startPeriodicUpdateCheck();
+		}
+	}
+
 	public getCustomProtocolHandler() {
 		return this.customProtocolHandler_;
 	}
@@ -475,13 +495,6 @@ export default class ElectronAppWrapper {
 		if (alreadyRunning) return;
 
 		this.createWindow();
-
-		// TODO: Disabled for now - needs to be behind a feature flag
-
-		// if (!shim.isLinux()) {
-		// 	this.updaterService_ = new AutoUpdaterService();
-		// 	this.updaterService_.startPeriodicUpdateCheck();
-		// }
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
