@@ -1012,7 +1012,7 @@ msgstr ""
 "geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: /my/"
 "cert_dir, /other/custom.pem. Wenn du Änderungen an den TLS-Einstellungen "
 "vornimmst, musst du deine Änderungen speichern, bevor du auf "
-"„Synchronisierungskonfiguration prüfen“ klickst."
+"„Synchronisationskonfiguration prüfen“ klickst."
 
 #: packages/lib/services/KeymapService.ts:322
 msgid "command"
@@ -1462,7 +1462,7 @@ msgstr "Zeile löschen"
 
 #: packages/lib/models/Setting.ts:1473
 msgid "Delete local data and re-download from sync target"
-msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisierungsziel"
+msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisationsziel"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:7
 msgid "Delete note"
@@ -2636,9 +2636,9 @@ msgstr ""
 "\n"
 "1. Synchronisiere alle deine Geräte.\n"
 "2. Klicke auf „%s“.\n"
-"3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern "
+"3. Lass es komplett durchlaufen. Vermeide während der Ausführung das Ändern "
 "von Notizen auf anderen Geräten, um Konflikte zu vermeiden.\n"
-"4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, "
+"4. Sobald die Synchronisation auf diesem Gerät abgeschlossen ist, "
 "synchronisiere alle anderen Geräte und lass es komplett durchlaufen.\n"
 "\n"
 "Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
@@ -2839,7 +2839,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:908
 msgid "Joplin Forum"
-msgstr "Joplin Forum"
+msgstr "Joplin-Forum"
 
 #: packages/lib/services/plugins/PluginService.ts:515
 msgid "Joplin Mobile"
@@ -2956,7 +2956,7 @@ msgstr "Mehr erfahren"
 #: packages/lib/models/Setting.ts:1908
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
-"Lasse es leer, um die Sprachdateien von der Standardseite herunterzuladen"
+"Leer lassen, um die Sprachdateien von der Standard-Website herunterzuladen"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
 msgid "Leave notebook"
@@ -2964,7 +2964,7 @@ msgstr "Notizbuch verlassen"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
-msgstr "Verlasse Notizbuch..."
+msgstr "Notizbuch verlassen..."
 
 #: packages/lib/models/Setting.ts:1538
 msgid "Legal"
@@ -3071,7 +3071,7 @@ msgstr "Abmelden"
 
 #: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
-msgstr "Protokolle, Profile, Synchronisierungsstatus"
+msgstr "Protokolle, Profile, Synchronisationsstatus"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
@@ -3199,7 +3199,7 @@ msgstr "Fehlendes erforderliches Argument: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:541
 msgid "Mobile data - auto-sync disabled"
-msgstr "Mobile Daten - Auto-Synchronisierung deaktiviert"
+msgstr "Mobile Daten - Autosynchronisation deaktiviert"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
@@ -3827,7 +3827,7 @@ msgstr ""
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:31
 msgid "Please select where the sync status should be exported to"
 msgstr ""
-"Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
+"Bitte wähle aus, wohin der Synchronierungsstatus exportiert werden soll"
 
 #: packages/lib/services/interop/InteropService.ts:281
 msgid "Please specify import format for %s"
@@ -3928,14 +3928,14 @@ msgstr "Einstellungen..."
 # Both words don't strike me as a proper translation in this context.
 #: packages/lib/models/Setting.ts:939
 msgid "Preferred dark theme"
-msgstr "Bevorzugtes dunkles Design"
+msgstr "Bevorzugtes dunkles Erscheinungsbild"
 
 # Thema vs Theme
 # Not sure what other applications use. I don't have any German apps thus I can't say.
 # Both words don't strike me as a proper translation in this context.
 #: packages/lib/models/Setting.ts:923
 msgid "Preferred light theme"
-msgstr "Bevorzugtes helles Design"
+msgstr "Bevorzugtes helles Erscheinungsbild"
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -4067,7 +4067,7 @@ msgstr "Neuverschlüsselung"
 
 #: packages/lib/models/Setting.ts:1462
 msgid "Re-upload local data to sync target"
-msgstr "Lade lokale Daten erneut auf das Synchronisierungsziel hoch"
+msgstr "Lade lokale Daten erneut auf das Synchronisationsziel hoch"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:456
 msgid "Read more about it"
@@ -4873,7 +4873,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:160
 msgid "Sync as many devices as you want"
-msgstr "Synchronisierung beliebig vieler Geräte"
+msgstr "Synchronisiere mit beliebig vielen Geräten"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:557
 msgid "Sync Status"
@@ -4881,7 +4881,7 @@ msgstr "Synchronisationsstatus"
 
 #: packages/lib/services/ReportService.ts:321
 msgid "Sync status (synced items / total items)"
-msgstr "Synchronisationsstatus (synchronisierte Elemente / Elemente insgesamt)"
+msgstr "Synchronisationsstatus (Elemente synchronisiert / Elemente insgesamt)"
 
 #: packages/app-cli/app/command-sync.ts:271
 msgid "Sync target must be upgraded! Run `%s` to proceed."
@@ -4926,7 +4926,7 @@ msgstr "Synchronisation wird bereits ausgeführt."
 #: packages/app-desktop/gui/MenuBar.tsx:515
 #: packages/app-desktop/gui/Root.tsx:234
 msgid "Synchronisation Status"
-msgstr "Synchronisations-Status"
+msgstr "Synchronisationsstatus"
 
 #: packages/lib/models/Setting.ts:472
 msgid "Synchronisation target"
@@ -5297,11 +5297,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:896
 msgid "Theme"
-msgstr "Design"
+msgstr "Erscheinungsbild"
 
 #: packages/lib/models/Setting.ts:2841
 msgid "Themes, editor font"
-msgstr "Themen, Editor-Schriftart"
+msgstr "Erscheinungsbilder, Editor-Schriftart"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -5342,8 +5342,8 @@ msgid ""
 "click \"retry\"."
 msgstr ""
 "Diese Elemente konnten nicht synchronisiert werden, wurden jedoch als "
-"„ignoriert“ markiert. Sie werden keine Synchronisierungswarnung auslösen, "
-"sind aber immer noch nicht synchronisiert. Um die Ignorierung aufzuheben, "
+"„ignoriert“ markiert. Sie werden keine Synchronisationswarnung auslösen, "
+"sind aber immer noch nicht synchronisiert. Um das Ignorieren aufzuheben, "
 "klicke auf „Erneut versuchen“."
 
 #: packages/lib/services/ReportService.ts:187
@@ -5372,8 +5372,8 @@ msgstr ""
 "ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen "
 "*inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser "
 "Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die "
-"Formatierung der Erweiterung. Es ist unten angegeben, welche Erweiterungen "
-"mit dem WYSIWYG-Editor kompatibel sind oder nicht."
+"Formatierung der Erweiterung. Es wird angegeben, welche Erweiterungen mit "
+"dem WYSIWYG-Editor kompatibel und welche nicht."
 
 #: packages/lib/utils/joplinCloud/index.ts:174
 msgid ""
