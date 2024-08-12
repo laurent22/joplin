@@ -26,7 +26,8 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:603
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Standort: Erlaubt das Anhängen von Standortinformationen an eine Notiz."
+"- Standort: Erlaubt das Anhängen von geografischen Standortinformationen an "
+"eine Notiz."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:597
 msgid ""
@@ -512,8 +513,8 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
-"Sicher, dass du zum Standardlayout zurückkehren möchtest? Das aktuelle "
-"Layout geht dabei verloren."
+"Sicher, dass du zum Standardlayout zurückkehren möchtest? Die aktuelle "
+"Layoutkonfiguration geht dabei verloren."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:573
 msgid "Arguments:"
@@ -842,8 +843,8 @@ msgid ""
 "> Encryption."
 msgstr ""
 "Das verschlüsselte Notizbuch kann nicht mit %s geteilt werden, da die Person "
-"die Ende-zu-Ende Verschlüsselung nicht aktiviert hat. Dies ist unter "
-"Optionen > Verschlüsselung möglich."
+"die Ende-zu-Ende-Verschlüsselung nicht aktiviert hat. Dies ist unter "
+"Konfiguration > Verschlüsselung möglich."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:331
 msgid "Case sensitive"
@@ -873,7 +874,7 @@ msgstr "Auf Aktualisierungen prüfen..."
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:267
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:473
 msgid "Check synchronisation configuration"
-msgstr "Überprüfen der Synchronisationseinstellungen"
+msgstr "Synchronisationskonfiguration prüfen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:90
 msgid "Checkbox"
@@ -1012,7 +1013,7 @@ msgstr ""
 "geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: /my/"
 "cert_dir, /other/custom.pem. Wenn du Änderungen an den TLS-Einstellungen "
 "vornimmst, musst du deine Änderungen speichern, bevor du auf "
-"„Synchronisierungskonfiguration prüfen“ klickst."
+"„Synchronisationskonfiguration prüfen“ klickst."
 
 #: packages/lib/services/KeymapService.ts:322
 msgid "command"
@@ -1209,8 +1210,8 @@ msgid ""
 "%s"
 msgstr ""
 "Es konnte keine Verbindung zum Joplin-Server hergestellt werden. Bitte "
-"überprüfe die Synchronisationsoptionen in der Konfigurationsmaske. "
-"Vollständiger Fehler:\n"
+"überprüfe die Synchronisationsoptionen im Konfigurationsmenü. Vollständiger "
+"Fehler:\n"
 "\n"
 "%s"
 
@@ -1462,7 +1463,7 @@ msgstr "Zeile löschen"
 
 #: packages/lib/models/Setting.ts:1473
 msgid "Delete local data and re-download from sync target"
-msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisierungsziel"
+msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisationsziel"
 
 #: packages/app-desktop/gui/MainScreen/commands/deleteNote.ts:7
 msgid "Delete note"
@@ -1574,7 +1575,7 @@ msgstr "Sicheren Modus beenden und neu starten"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:93
 msgid "Disable Web Clipper Service"
-msgstr "Web-Clipper-Dienst deaktivieren"
+msgstr "Web Clipper-Dienst deaktivieren"
 
 #: packages/app-cli/app/command-e2ee.ts:129
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
@@ -2005,7 +2006,7 @@ msgstr "Videospieler aktivieren"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "Enable Web Clipper Service"
-msgstr "Web-Clipper-Dienst aktivieren"
+msgstr "Web Clipper-Dienst aktivieren"
 
 #: packages/app-cli/app/command-e2ee.ts:129
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
@@ -2055,7 +2056,7 @@ msgstr "Verschlüsselung:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
 msgid "End-to-end encryption"
-msgstr "Ende-zu-Ende Verschlüsselung"
+msgstr "Ende-zu-Ende-Verschlüsselung"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -2208,8 +2209,9 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Ausfallsicher: Lösche keine lokalen Daten, wenn das Synchronisationsziel "
-"leer ist (oft ein Resultat von Fehlkonfiguration oder einem Programmfehler)"
+"Ausfallsicher: Lokale Daten werden nicht gelöscht, wenn das "
+"Synchronisationsziel leer ist (oft das Ergebnis einer Fehlkonfiguration oder "
+"eines Bugs)"
 
 #: packages/app-cli/app/main.js:100
 msgid "Fatal error:"
@@ -2309,7 +2311,7 @@ msgstr ""
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Um die Liste aller verfügbaren Tastenkürzel und Konfigurationseinstellungen "
+"Um die Liste aller verfügbaren Tastenkürzel und Konfigurationsoptionen "
 "anzuzeigen, tippe `help keymap` ein"
 
 #: packages/lib/models/Setting.ts:678
@@ -2377,8 +2379,8 @@ msgid ""
 "current configuration."
 msgstr ""
 "Holt oder legt einen Konfigurationswert fest. Wenn [value] nicht angegeben "
-"ist, wird der Wert von [name] angezeigt. Wenn weder [name] noch [value] "
-"angegeben sind, wird die aktuelle Konfiguration aufgelistet."
+"wird, wird der Wert von [name] angezeigt. Wenn weder [name] noch [value] "
+"angegeben wird, wird die aktuelle Konfiguration angezeigt."
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -2608,10 +2610,10 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"Um den Standort zu der Notiz zuzuordnen, benötigt die Anwendung die "
-"Berechtigung zum Zugriff auf die Ortungsdaten.\n"
+"Um einen geografischen Standort mit der Notiz zu verknüpfen, benötigt die "
+"Anwendung die Berechtigung, auf Ihren Standort zuzugreifen.\n"
 "\n"
-"Diese Option kann jederzeit im Konfigurationsbildschirm deaktiviert werden."
+"Diese Option kann jederzeit im Konfigurationsmenü deaktiviert werden."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:346
 msgid ""
@@ -2636,9 +2638,9 @@ msgstr ""
 "\n"
 "1. Synchronisiere alle deine Geräte.\n"
 "2. Klicke auf „%s“.\n"
-"3. Lass es komplett durch laufen. Vermeide während der Ausführung das Ändern "
+"3. Lass es komplett durchlaufen. Vermeide während der Ausführung das Ändern "
 "von Notizen auf anderen Geräten, um Konflikte zu vermeiden.\n"
-"4. Sobald die Synchronisierung auf diesem Gerät abgeschlossen ist, "
+"4. Sobald die Synchronisation auf diesem Gerät abgeschlossen ist, "
 "synchronisiere alle anderen Geräte und lass es komplett durchlaufen.\n"
 "\n"
 "Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
@@ -2659,7 +2661,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:120
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Um den Web-Clipper zu benutzen, musst du Folgendes tun:"
+msgstr "Um den Web Clipper zu benutzen, musst du Folgendes tun:"
 
 #: packages/lib/Synchronizer.ts:325
 msgid "In progress"
@@ -2839,7 +2841,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:908
 msgid "Joplin Forum"
-msgstr "Joplin Forum"
+msgstr "Joplin-Forum"
 
 #: packages/lib/services/plugins/PluginService.ts:515
 msgid "Joplin Mobile"
@@ -2956,7 +2958,7 @@ msgstr "Mehr erfahren"
 #: packages/lib/models/Setting.ts:1908
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
-"Lasse es leer, um die Sprachdateien von der Standardseite herunterzuladen"
+"Leer lassen, um die Sprachdateien von der Standard-Website herunterzuladen"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
 msgid "Leave notebook"
@@ -2964,7 +2966,7 @@ msgstr "Notizbuch verlassen"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
-msgstr "Verlasse Notizbuch..."
+msgstr "Notizbuch verlassen..."
 
 #: packages/lib/models/Setting.ts:1538
 msgid "Legal"
@@ -3071,7 +3073,7 @@ msgstr "Abmelden"
 
 #: packages/lib/models/Setting.ts:2847
 msgid "Logs, profiles, sync status"
-msgstr "Protokolle, Profile, Synchronisierungsstatus"
+msgstr "Protokolle, Profile, Synchronisationsstatus"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
@@ -3199,7 +3201,7 @@ msgstr "Fehlendes erforderliches Argument: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:541
 msgid "Mobile data - auto-sync disabled"
-msgstr "Mobile Daten - Auto-Synchronisierung deaktiviert"
+msgstr "Mobile Daten - Autosynchronisation deaktiviert"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:667
 msgid "More info"
@@ -3827,7 +3829,7 @@ msgstr ""
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:31
 msgid "Please select where the sync status should be exported to"
 msgstr ""
-"Bitte wähle aus, wohin der Synchronisations-Status exportiert werden soll"
+"Bitte wähle aus, wohin der Synchronierungsstatus exportiert werden soll"
 
 #: packages/lib/services/interop/InteropService.ts:281
 msgid "Please specify import format for %s"
@@ -3928,14 +3930,14 @@ msgstr "Einstellungen..."
 # Both words don't strike me as a proper translation in this context.
 #: packages/lib/models/Setting.ts:939
 msgid "Preferred dark theme"
-msgstr "Bevorzugtes dunkles Design"
+msgstr "Bevorzugtes dunkles Erscheinungsbild"
 
 # Thema vs Theme
 # Not sure what other applications use. I don't have any German apps thus I can't say.
 # Both words don't strike me as a proper translation in this context.
 #: packages/lib/models/Setting.ts:923
 msgid "Preferred light theme"
-msgstr "Bevorzugtes helles Design"
+msgstr "Bevorzugtes helles Erscheinungsbild"
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -4067,7 +4069,7 @@ msgstr "Neuverschlüsselung"
 
 #: packages/lib/models/Setting.ts:1462
 msgid "Re-upload local data to sync target"
-msgstr "Lade lokale Daten erneut auf das Synchronisierungsziel hoch"
+msgstr "Lade lokale Daten erneut auf das Synchronisationsziel hoch"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:456
 msgid "Read more about it"
@@ -4363,7 +4365,7 @@ msgstr "Änderungen speichern?"
 
 #: packages/lib/models/Setting.ts:1089
 msgid "Save geo-location with notes"
-msgstr "Momentanen Standort zusammen mit Notizen speichern"
+msgstr "Geografischen Standort zusammen mit Notizen speichern"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:423
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:797
@@ -4826,7 +4828,7 @@ msgstr "Tiefgestellt"
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr ""
-"Erfolgreich! Die Konfiguration der Synchronisation scheint korrekt zu sein."
+"Erfolgreich! Die Synchronisationskonfiguration scheint korrekt zu sein."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
@@ -4873,7 +4875,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:160
 msgid "Sync as many devices as you want"
-msgstr "Synchronisierung beliebig vieler Geräte"
+msgstr "Synchronisiere mit beliebig vielen Geräten"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:557
 msgid "Sync Status"
@@ -4881,7 +4883,7 @@ msgstr "Synchronisationsstatus"
 
 #: packages/lib/services/ReportService.ts:321
 msgid "Sync status (synced items / total items)"
-msgstr "Synchronisationsstatus (synchronisierte Elemente / Elemente insgesamt)"
+msgstr "Synchronisationsstatus (Elemente synchronisiert / Elemente insgesamt)"
 
 #: packages/app-cli/app/command-sync.ts:271
 msgid "Sync target must be upgraded! Run `%s` to proceed."
@@ -4926,7 +4928,7 @@ msgstr "Synchronisation wird bereits ausgeführt."
 #: packages/app-desktop/gui/MenuBar.tsx:515
 #: packages/app-desktop/gui/Root.tsx:234
 msgid "Synchronisation Status"
-msgstr "Synchronisations-Status"
+msgstr "Synchronisationsstatus"
 
 #: packages/lib/models/Setting.ts:472
 msgid "Synchronisation target"
@@ -5015,7 +5017,7 @@ msgid ""
 "pages and screenshots from your browser."
 msgstr ""
 "Der [Web Clipper](%s) ist eine Browser-Erweiterung, welche dir erlaubt, "
-"Webseiten und Bildschirmfotos aus deinem Browser zu speichern."
+"Webseiten und Screenshots aus deinem Browser zu speichern."
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -5104,9 +5106,9 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"Der Editor-Befehl (kann Kommandozeilenargumente enthalten), der zum Öffnen "
-"einer Notiz verwendet wird. Wenn keiner angegeben wird, wird versucht, den "
-"Standard-Editor automatisch zu erkennen."
+"Der Editor-Befehl (kann Argumente enthalten), der zum Öffnen einer Notiz "
+"verwendet wird. Wenn keiner angegeben wird, wird versucht, den Standard-"
+"Editor automatisch zu erkennen."
 
 #: packages/lib/models/Setting.ts:1777 packages/lib/models/Setting.ts:1792
 #: packages/lib/models/Setting.ts:1807
@@ -5281,27 +5283,28 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:75
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Der Web-Clipper-Dienst ist aktiviert und auf Autostart eingestellt."
+msgstr "Der Web Clipper-Dienst ist aktiviert und auf Autostart eingestellt."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:99
 msgid "The web clipper service is not enabled."
-msgstr "Der Web-Clipper-Dienst ist nicht aktiviert."
+msgstr "Der Web Clipper-Dienst ist nicht aktiviert."
 
 #: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
-"Die WebDAV Implementation von %s ist nicht kompatibel mit Joplin und deshalb "
-"nicht länger unterstützt. Bitte verwende eine andere Sync-Methode."
+"Die WebDAV-Implementierung von %s ist nicht kompatibel mit Joplin und wird "
+"daher nicht mehr unterstützt. Bitte verwende eine andere "
+"Synchronisationsmethode."
 
 #: packages/lib/models/Setting.ts:896
 msgid "Theme"
-msgstr "Design"
+msgstr "Erscheinungsbild"
 
 #: packages/lib/models/Setting.ts:2841
 msgid "Themes, editor font"
-msgstr "Themen, Editor-Schriftart"
+msgstr "Erscheinungsbilder, Editor-Schriftart"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
@@ -5342,8 +5345,8 @@ msgid ""
 "click \"retry\"."
 msgstr ""
 "Diese Elemente konnten nicht synchronisiert werden, wurden jedoch als "
-"„ignoriert“ markiert. Sie werden keine Synchronisierungswarnung auslösen, "
-"sind aber immer noch nicht synchronisiert. Um die Ignorierung aufzuheben, "
+"„ignoriert“ markiert. Sie werden keine Synchronisationswarnung auslösen, "
+"sind aber immer noch nicht synchronisiert. Um das Ignorieren aufzuheben, "
 "klicke auf „Erneut versuchen“."
 
 #: packages/lib/services/ReportService.ts:187
@@ -5372,8 +5375,8 @@ msgstr ""
 "ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen "
 "*inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser "
 "Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die "
-"Formatierung der Erweiterung. Es ist unten angegeben, welche Erweiterungen "
-"mit dem WYSIWYG-Editor kompatibel sind oder nicht."
+"Formatierung der Erweiterung. Es wird angegeben, welche Erweiterungen mit "
+"dem WYSIWYG-Editor kompatibel und welche nicht."
 
 #: packages/lib/utils/joplinCloud/index.ts:174
 msgid ""
@@ -5731,7 +5734,7 @@ msgid ""
 msgstr ""
 "Gib den Titel einer Notiz oder einen Teil seines Inhalts ein, um dorthin zu "
 "springen. Oder gib # gefolgt von einem Schlagwort oder @ gefolgt vom Namen "
-"eines Notizbuchs ein. Oder gib : für eine Suche nach Kommandos ein."
+"eines Notizbuchs ein. Oder gib : für eine Suche nach Befehlen ein."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:223
 msgid "Type new tags or select from list"
@@ -6157,8 +6160,7 @@ msgstr ""
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
 msgstr ""
-"Du bist in Joplin Cloud angemeldet, du kannst jetzt diesen Bildschirm "
-"verlassen."
+"Du bist in Joplin Cloud angemeldet, du kannst jetzt diese Anzeige verlassen."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
