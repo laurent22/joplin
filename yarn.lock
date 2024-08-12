@@ -7654,7 +7654,7 @@ __metadata:
     "@joplin/utils": ~3.1
     "@js-draw/material-icons": 1.20.0
     "@react-native-clipboard/clipboard": 1.13.2
-    "@react-native-community/datetimepicker": 8.0.0
+    "@react-native-community/datetimepicker": 8.0.1
     "@react-native-community/geolocation": 3.2.1
     "@react-native-community/netinfo": 11.3.2
     "@react-native-community/push-notification-ios": 1.11.0
@@ -10428,19 +10428,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@react-native-community/datetimepicker@npm:8.0.0"
+"@react-native-community/datetimepicker@npm:8.0.1":
+  version: 8.0.1
+  resolution: "@react-native-community/datetimepicker@npm:8.0.1"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
     react: "*"
-    react-native: ^0.73.0
-    react-native-windows: ^0.73.0
+    react-native: "*"
+    react-native-windows: "*"
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: 25292edd5e87d1b71711cd6a961c8ffba884dfa398b8b83b1a5433216bfc77cc49c710c18bb65859a3994274d8cf09b93a12a2a4dee097d8106ad2decdbbc6e1
+  checksum: 553a40ebb3adadbe6f6d4d9e6ab9d72761014ee47614bff0888e4e38bd430f22947e34cdc11e8a97ebf97811986939ca25e79c98bf7a9baef51476481385adab
   languageName: node
   linkType: hard
 
