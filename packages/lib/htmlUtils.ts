@@ -172,6 +172,7 @@ class HtmlUtils {
 
 		return output.join(' ');
 	}
+
 }
 
 export default new HtmlUtils();
