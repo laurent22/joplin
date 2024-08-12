@@ -35,8 +35,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			return result;
 		}
 
-		// files that don't have a name seems to be local only and shouldn't be processed
-
 		const tempOutputDirectory = await this.temporaryDirectory_(true);
 		const baseFolder = this.getEntryDirectory(unzipTempDirectory, files[0].entryName);
 		const notebookBaseDir = join(unzipTempDirectory, baseFolder, sep);
@@ -69,7 +67,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		logger.info('Finished');
 		result = await importer.exec(result);
 
-		// remover temp directories?
 		return result;
 	}
 
