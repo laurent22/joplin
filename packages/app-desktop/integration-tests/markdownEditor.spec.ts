@@ -63,5 +63,60 @@ test.describe('markdownEditor', () => {
 		await mainWindow.keyboard.press('Home');
 		await expect(firstItemLocator).toBeFocused();
 	});
+
+	test('should sync local search between the viewer and editor', async ({ mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.waitFor();
+		const noteEditor = mainScreen.noteEditor;
+
+		await mainScreen.createNewNote('Note');
+
+		await noteEditor.focusCodeMirrorEditor();
+
+		await mainWindow.keyboard.type('# Testing');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('This is a test of search. `Test inline code`');
+
+		const viewer = noteEditor.getNoteViewerIframe();
+		await expect(viewer.locator('h1')).toHaveText('Testing');
+
+		const matches = viewer.locator('mark');
+		await expect(matches).toHaveCount(0);
+
+		await mainWindow.keyboard.press('Control+f');
+		await expect(noteEditor.editorSearchInput).toBeFocused();
+
+		await noteEditor.editorSearchInput.fill('test');
+		await mainWindow.keyboard.press('Enter');
+
+		// Should show at least one match in the viewer
+		await expect(matches).toHaveCount(3);
+		await expect(matches.first()).toBeAttached();
+
+		// Should show matches in code regions
+		await noteEditor.editorSearchInput.fill('inline code');
+		await mainWindow.keyboard.press('Enter');
+		await expect(matches).toHaveCount(1);
+
+		// Should continue searching after switching to view-only mode
+		await noteEditor.toggleEditorLayoutButton.click();
+		await noteEditor.toggleEditorLayoutButton.click();
+		await expect(noteEditor.codeMirrorEditor).not.toBeVisible();
+		await expect(noteEditor.editorSearchInput).not.toBeVisible();
+		await expect(noteEditor.viewerSearchInput).toBeVisible();
+
+		// Should stop searching after closing the search input
+		await noteEditor.viewerSearchInput.click();
+		await expect(matches).toHaveCount(1);
+		await mainWindow.keyboard.press('Escape');
+		await expect(noteEditor.viewerSearchInput).not.toBeVisible();
+		await expect(matches).toHaveCount(0);
+
+		// After showing the viewer again, search should still be hidden
+		await noteEditor.toggleEditorLayoutButton.click();
+		await expect(noteEditor.codeMirrorEditor).toBeVisible();
+		await expect(noteEditor.editorSearchInput).not.toBeVisible();
+	});
 });
 

@@ -1,8 +1,6 @@
 import { Compartment, EditorState, Prec } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
-import {
-	openSearchPanel, closeSearchPanel, getSearchQuery, search,
-} from '@codemirror/search';
+import { openSearchPanel, closeSearchPanel, searchPanelOpen } from '@codemirror/search';
 
 import { classHighlighter } from '@lezer/highlight';
 
@@ -15,7 +13,7 @@ import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap } from '@codemirror/commands';
 
-import { SearchState, EditorProps, EditorSettings } from '../types';
+import { EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
 import {
 	decreaseIndent, increaseIndent,
@@ -32,6 +30,7 @@ import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
 import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
+import searchExtension from './utils/searchExtension';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -41,7 +40,6 @@ const createEditor = (
 
 	props.onLogMessage('Initializing CodeMirror...');
 
-	let searchVisible = false;
 
 	// Handles firing an event when the undo/redo stack changes
 	let schedulePostUndoRedoDepthChangeId_: ReturnType<typeof setTimeout>|null = null;
@@ -92,36 +90,6 @@ const createEditor = (
 		});
 	};
 
-	const onSearchDialogUpdate = () => {
-		const query = getSearchQuery(editor.state);
-		const searchState: SearchState = {
-			searchText: query.search,
-			replaceText: query.replace,
-			useRegex: query.regexp,
-			caseSensitive: query.caseSensitive,
-			dialogVisible: searchVisible,
-		};
-		props.onEvent({
-			kind: EditorEventType.UpdateSearchDialog,
-			searchState,
-		});
-	};
-
-	const showSearchDialog = () => {
-		if (!searchVisible) {
-			openSearchPanel(editor);
-		}
-		searchVisible = true;
-		onSearchDialogUpdate();
-	};
-
-	const hideSearchDialog = () => {
-		if (searchVisible) {
-			closeSearchPanel(editor);
-		}
-		searchVisible = false;
-		onSearchDialogUpdate();
-	};
 
 	const globalSpellcheckEnabled = () => {
 		return editor.contentDOM.spellcheck;
@@ -188,11 +156,11 @@ const createEditor = (
 	const keymapConfig = Prec.low(keymap.of([
 		// Custom mod-f binding: Toggle the external dialog implementation
 		// (don't show/hide the Panel dialog).
-		keyCommand('Mod-f', (_: EditorView) => {
-			if (searchVisible) {
-				hideSearchDialog();
+		keyCommand('Mod-f', (editor: EditorView) => {
+			if (searchPanelOpen(editor.state)) {
+				closeSearchPanel(editor);
 			} else {
-				showSearchDialog();
+				openSearchPanel(editor);
 			}
 			return true;
 		}),
@@ -226,22 +194,7 @@ const createEditor = (
 
 				dynamicConfig.of(configFromSettings(props.settings)),
 				historyCompartment.of(history()),
-
-				search(settings.useExternalSearch ? {
-					createPanel(_: EditorView) {
-						return {
-							// The actual search dialog is implemented with react native,
-							// use a dummy element.
-							dom: document.createElement('div'),
-							mount() {
-								showSearchDialog();
-							},
-							destroy() {
-								hideSearchDialog();
-							},
-						};
-					},
-				} : undefined),
+				searchExtension(props.onEvent, props.settings),
 
 				// Allows multiple selections and allows selecting a rectangle
 				// with ctrl (as in CodeMirror 5)
@@ -295,6 +248,7 @@ const createEditor = (
 					notifySelectionChange(viewUpdate);
 					notifySelectionFormattingChange(viewUpdate);
 				}),
+
 			],
 			doc: initialText,
 		}),

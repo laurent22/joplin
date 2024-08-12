@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
@@ -20,16 +20,15 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 	const overlayTimeoutRef = useRef(null);
 	overlayTimeoutRef.current = overlayTimeout;
 
-	function clearMarkers() {
+	const clearMarkers = useCallback(() => {
 		for (let i = 0; i < markers.length; i++) {
 			markers[i].clear();
 		}
 
 		setMarkers([]);
-	}
+	}, [markers]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function clearOverlay(cm: any) {
+	const clearOverlay = useCallback((cm: CodeMirror5Emulation) => {
 		if (overlay) cm.removeOverlay(overlay);
 		if (scrollbarMarks) {
 			try {
@@ -47,10 +46,10 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		setOverlay(null);
 		setScrollbarMarks(null);
 		setOverlayTimeout(null);
-	}
+	}, [scrollbarMarks, overlay, overlayTimeout]);
 
 	// Modified from codemirror/addons/search/search.js
-	function searchOverlay(query: RegExp) {
+	const searchOverlay = useCallback((query: RegExp) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return { token: function(stream: any) {
 			query.lastIndex = stream.pos;
@@ -65,13 +64,13 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 			}
 			return null;
 		} };
-	}
+	}, []);
 
 	// Highlights the currently active found work
 	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
+	function highlightSearch(cm: CodeMirror5Emulation, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -120,6 +119,12 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 	CodeMirror?.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
 			options = { selectedIndex: 0, searchTimestamp: 0 };
+		}
+
+		if (options.showEditorMarkers === false) {
+			clearMarkers();
+			clearOverlay(this);
+			return;
 		}
 
 		clearMarkers();
