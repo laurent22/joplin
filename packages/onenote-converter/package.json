@@ -18,10 +18,11 @@
   "main": "./pkg/onenote_converter.js",
   "types": "./pkg/onenote_converter.d.ts",
   "scripts": {
-    "build": "wasm-pack build --release --target nodejs",
-    "buildDev": "wasm-pack build --dev --target nodejs"
+    "build": "node ./build.js --profile=release",
+    "buildDev": "node ./build.js --profile=dev"
   },
   "devDependencies": {
+    "yargs": "17.7.2",
     "wasm-pack": "0.13.0"
   }
 }

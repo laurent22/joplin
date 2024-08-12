@@ -7969,6 +7969,7 @@ __metadata:
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
     wasm-pack: 0.13.0
+    yargs: 17.7.2
   languageName: unknown
   linkType: soft
 
