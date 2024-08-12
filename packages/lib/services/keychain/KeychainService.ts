@@ -31,7 +31,7 @@ export default class KeychainService extends BaseService {
 			if (await driver.supported()) {
 				this.drivers_.push(driver);
 			} else {
-				logger.warn(`Driver unsupported:${driver.driverId}`);
+				logger.info(`Driver unsupported:${driver.driverId}`);
 			}
 		}
 	}
