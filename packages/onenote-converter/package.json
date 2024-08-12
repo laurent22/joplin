@@ -22,7 +22,7 @@
     "buildDev": "node ./build.js --profile=dev"
   },
   "devDependencies": {
-    "yargs": "17.7.2",
-    "wasm-pack": "0.13.0"
+    "wasm-pack": "0.13.0",
+    "yargs": "17.7.2"
   }
 }
