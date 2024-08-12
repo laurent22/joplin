@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:600
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -266,7 +268,7 @@ msgstr "A5"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:75
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
 msgid "About"
-msgstr ""
+msgstr "詳細"
 
 #: packages/app-desktop/gui/MenuBar.tsx:605
 #: packages/app-desktop/gui/MenuBar.tsx:942
@@ -381,9 +383,8 @@ msgid "Advanced options"
 msgstr "詳細な設定"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:660
-#, fuzzy
 msgid "Advanced settings"
-msgstr "詳細設定を表示"
+msgstr "詳細設定"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
@@ -999,14 +1000,13 @@ msgid "Command palette..."
 msgstr "コマンドパレット..."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
-#, fuzzy
 msgid "Compact"
-msgstr "完了"
+msgstr "コンパクト"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:70
 msgid "Completed"
-msgstr "完了"
+msgstr "完了日時"
 
 #: packages/app-cli/app/command-e2ee.ts:81
 msgid "Completed decryption."
@@ -1153,9 +1153,8 @@ msgid "Copy token"
 msgstr "トークンのコピー"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
-#, fuzzy
 msgid "Copy version info"
-msgstr "バージョン情報の表示"
+msgstr "バージョン情報をコピー"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1518,7 +1517,7 @@ msgstr "場所の形式: %s"
 #: packages/lib/services/noteList/defaultLeftToRightListRenderer.ts:25
 #: packages/lib/services/noteList/defaultMultiColumnsRenderer.ts:8
 msgid "Detailed"
-msgstr ""
+msgstr "詳細"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1712,12 +1711,11 @@ msgstr "Dropboxログイン"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr ""
+msgstr "締切日"
 
 #: packages/lib/models/Note.ts:63
-#, fuzzy
 msgid "due date"
-msgstr "更新日"
+msgstr "締切日"
 
 #: packages/app-desktop/gui/MainScreen/commands/duplicateNote.ts:7
 #: packages/app-mobile/components/ScreenHeader/index.tsx:502
@@ -1850,7 +1848,7 @@ msgstr "強調したいテキスト"
 #: packages/app-mobile/components/side-menu-content.tsx:157
 #: packages/app-mobile/components/side-menu-content.tsx:161
 msgid "Empty trash"
-msgstr ""
+msgstr "ごみ箱を空にする"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -1932,9 +1930,8 @@ msgid "Enable optical character recognition (OCR)"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2849
-#, fuzzy
 msgid "Enable or disable plugins"
-msgstr "プラグインを管理"
+msgstr "プラグインの有効化/無効化"
 
 #: packages/lib/models/Setting.ts:1273
 msgid "Enable PDF viewer"
@@ -1942,9 +1939,8 @@ msgstr "PDFビューアーを有効にする"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/Setting.ts:1241
-#, fuzzy
 msgid "Enable plugin support"
-msgstr "Typographer（記号文字）を有効にする"
+msgstr "プラグイン機能を有効化する"
 
 #: packages/lib/models/Setting.ts:1263
 msgid "Enable soft breaks"
@@ -2388,7 +2384,7 @@ msgstr "ヘルプ"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:113
 msgid "Here's what we do to make plugins safer:"
-msgstr ""
+msgstr "プラグインを安全にするために次のことを行っています:"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:44
 msgid "Hermes enabled: %d"
@@ -2501,9 +2497,8 @@ msgid "Import"
 msgstr "インポート"
 
 #: packages/lib/models/Setting.ts:2816
-#, fuzzy
 msgid "Import and Export"
-msgstr "デバッグレポートの出力"
+msgstr "インポートとエクスポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
@@ -2513,11 +2508,11 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "JEX形式のファイルをインポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "JEX(Joplin エクスポート)ファイルからノートをインポートします。"
 
 #: packages/lib/models/Setting.ts:2848
 #, fuzzy
@@ -2525,9 +2520,8 @@ msgid "Import or export your data"
 msgstr "データをエクスポートする"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
-#, fuzzy
 msgid "Imported successfully!"
-msgstr "エクスポート成功!"
+msgstr "インポート成功!"
 
 #: packages/app-desktop/gui/MenuBar.tsx:311
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
@@ -2539,9 +2533,8 @@ msgid "Importing notes..."
 msgstr "ノートのインポート中..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:26
-#, fuzzy
 msgid "Importing..."
-msgstr "エクスポート中..."
+msgstr "インポート中..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
@@ -2900,7 +2893,7 @@ msgstr "あとで"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:7
 msgid "Latitude"
-msgstr ""
+msgstr "緯度"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:623
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:231
@@ -2914,9 +2907,8 @@ msgstr "レイアウトボタンによる切り替え順"
 #: packages/app-desktop/bridge.ts:424
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:118
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:15
-#, fuzzy
 msgid "Learn more"
-msgstr "インデントを増やす"
+msgstr "さらに詳しく"
 
 #: packages/lib/models/Setting.ts:1908
 msgid "Leave it blank to download the language files from the default website"
@@ -2950,6 +2942,8 @@ msgid ""
 "Like any software you install, plugins can potentially cause security issues "
 "or data loss."
 msgstr ""
+"あなたがインストールする他のソフトウェアと同様に、プラグインはセキュリティー"
+"上の問題やデータの損失を引き起こす可能性があります。"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:108
 msgid "Lines"
@@ -3038,7 +3032,7 @@ msgstr "ログ、プロファイル、同期の状態"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
-msgstr ""
+msgstr "経度"
 
 #: packages/app-desktop/gui/MenuBar.tsx:914
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
@@ -3182,6 +3176,8 @@ msgstr ""
 msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
+"ほとんどのプラグインはソースコードをプラグインのウェブサイトで公開していま"
+"す。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:591
 msgid "Move %d notes to notebook \"%s\"?"
@@ -3338,7 +3334,7 @@ msgstr "ノートがありません。新しいノートを作成して下さい
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:199
 msgid "No plugins are installed."
-msgstr ""
+msgstr "プラグインはインストールされていません。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid "No resources!"
@@ -3445,9 +3441,8 @@ msgid "Note list growth factor"
 msgstr "ノート一覧のストレッチ係数"
 
 #: packages/app-desktop/gui/MenuBar.tsx:781
-#, fuzzy
 msgid "Note list style"
-msgstr "ノート一覧"
+msgstr "ノート一覧のスタイル"
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.ts:7
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
@@ -3603,9 +3598,8 @@ msgid "Open profile directory"
 msgstr "プロファイルディレクトリを開く"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
-#, fuzzy
 msgid "Open Source"
-msgstr "ソース"
+msgstr "オープンソース"
 
 #: packages/lib/models/Setting.ts:461
 msgid "Open Sync Wizard..."
@@ -3799,9 +3793,9 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "ノートをどのノートブックにインポートするのか指定してください。"
 
 #: packages/lib/services/plugins/PluginService.ts:511
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "このプラグインを使うにはJoplinをアップグレードしてください"
+msgstr ""
+"このプラグインを使うにはJoplinを %s 以上にバージョンアップしてください。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1378
 msgid ""
@@ -3836,9 +3830,8 @@ msgid "Plugin search"
 msgstr "プラグイン"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
-#, fuzzy
 msgid "Plugin security"
-msgstr "プラグイン"
+msgstr "プラグインの安全性"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:334
 msgid "Plugin tools"
@@ -3861,6 +3854,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"プラグインはJoplinを標準にはない機能によって拡張するものです。プラグインでは"
+"Joplinのエディターやビューアーなどを拡張できます。"
 
 #: packages/lib/models/Setting.ts:1543
 msgid "Portrait"
@@ -4047,14 +4042,12 @@ msgid "Recipients:"
 msgstr "受信者:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:70
-#, fuzzy
 msgid "Recommended"
-msgstr "コマンド"
+msgstr "おすすめ"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "コマンド"
+msgstr "おすすめのプラグイン"
 
 #: packages/app-desktop/gui/MenuBar.tsx:742
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4130,20 +4123,19 @@ msgstr "置換文字列: "
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
-msgstr ""
+msgstr "問題を報告"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr ""
+msgstr "プラグインに関する問題を報告する。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "不正なプラグインを報告"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
-#, fuzzy
 msgid "Report system"
-msgstr "ファイルシステム"
+msgstr "報告システム"
 
 #: packages/server/src/services/MustacheService.ts:137
 #, fuzzy
@@ -4215,7 +4207,7 @@ msgstr "復元されたノート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:157
 msgid "Results (%d):"
-msgstr ""
+msgstr "結果 (%d 件):"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
@@ -4400,9 +4392,8 @@ msgid "Select parent notebook"
 msgstr "親ノートブックを選択"
 
 #: packages/app-desktop/gui/MenuBar.tsx:351
-#, fuzzy
 msgid "Send bug report"
-msgstr "デバッグレポートの出力"
+msgstr "デバッグレポートの送信"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4490,7 +4481,6 @@ msgid "Share permissions"
 msgstr ""
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
 msgstr "共有"
 
@@ -5524,12 +5514,11 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:118
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:70
 msgid "to-do"
-msgstr "to-do"
+msgstr "ToDo"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "to-do"
+msgstr "ToDo"
 
 #: packages/app-mobile/components/note-item.js:145
 msgid "to-do: %s"
@@ -5556,9 +5545,8 @@ msgid "Toggle external editing"
 msgstr "外部エディターでの編集を開始・終了"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "サイドバーの表示切り替え"
+msgstr "メニューバーの表示切り替え"
 
 #: packages/lib/models/Setting.ts:2846
 msgid "Toggle note history, keep notes for"
@@ -5602,7 +5590,7 @@ msgstr "総数: %d/%d"
 
 #: packages/lib/services/trash/index.ts:44
 msgid "Trash"
-msgstr ""
+msgstr "ごみ箱"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:324
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -5931,13 +5919,15 @@ msgstr "注意: 性能上の理由により、リソースは最大 %s 件まで
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
-msgstr ""
+msgstr "問題のあるプラグインの報告と削除を行う仕組みがあります。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"信頼できるJoplinコミュニティーのメンバーが開発したプラグインを\"おすすめ\"と"
+"しています。"
 
 #: packages/lib/models/Setting.ts:2812
 #: packages/lib/utils/joplinCloud/index.ts:166
@@ -5995,9 +5985,8 @@ msgid "Welcome!"
 msgstr "ようこそ!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
-#, fuzzy
 msgid "What are plugins?"
-msgstr "プラグイン \"%s\" を削除しますか？"
+msgstr "プラグインとは？"
 
 #: packages/lib/models/Setting.ts:1166
 msgid "When creating a new note:"
