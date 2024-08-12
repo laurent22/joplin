@@ -1,5 +1,5 @@
 {
-  "name": "onenote-builder",
+  "name": "@joplin/onenote-converter",
   "collaborators": [
     "Pedro Luiz <pedrlz.frn@gmail.com>"
   ],
@@ -10,10 +10,16 @@
     "type": "git",
     "url": "https://github.com/laurent22/joplin"
   },
+  "files": [
+    "./pkg/onenote_converter_bg.wasm",
+    "./pkg/onenote_converter.js",
+    "./pkg/onenote_converter.d.ts"
+  ],
+  "main": "./pkg/onenote_converter.js",
+  "types": "./pkg/onenote_converter.d.ts",
   "scripts": {
-    "buildProduction": "wasm-pack build --release --target nodejs --scope joplin",
-    "buildDev": "wasm-pack build --dev --target nodejs --scope joplin",
-    "postinstall": "node build.js"
+    "build": "wasm-pack build --release --target nodejs",
+    "buildDev": "wasm-pack build --dev --target nodejs"
   },
   "devDependencies": {
     "wasm-pack": "0.13.0"

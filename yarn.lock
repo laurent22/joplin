@@ -7964,9 +7964,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter/pkg":
+"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
-  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter/pkg"
+  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
+  dependencies:
+    wasm-pack: 0.13.0
   languageName: unknown
   linkType: soft
 
@@ -34045,14 +34047,6 @@ __metadata:
   checksum: cd0a88501333edd640d95f0d2700fbde6bff20b3d4d9bdc521bdd31af0656b5706570d6c6afe532045a20bb8dc0849f8332d6f2a416e0ba6d3d3b98806c7db68
   languageName: node
   linkType: hard
-
-"onenote-builder@workspace:packages/onenote-converter":
-  version: 0.0.0-use.local
-  resolution: "onenote-builder@workspace:packages/onenote-converter"
-  dependencies:
-    wasm-pack: 0.13.0
-  languageName: unknown
-  linkType: soft
 
 "onetime@npm:^2.0.0":
   version: 2.0.1
