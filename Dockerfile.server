@@ -6,8 +6,18 @@ FROM node:18-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
-    python tini \
+    python tini curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Even if we aren't going to use, we need to build onenote-converter
+# since it is a requirement of lib
+RUN curl --proto '=https' --show-error --retry 3 --tlsv1.2 -sSf https://sh.rustup.rs --output /tmp/rustup-linux-install.sh \
+    && bash /tmp/rustup-linux-install.sh -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# If fails cargo is not present
+RUN cargo --help
 
 # Enables Yarn
 RUN corepack enable
@@ -80,7 +90,7 @@ ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.title="Joplin Server" \
+      org.opencontainers.image.title="Joplin Server WITH RUST" \
       org.opencontainers.image.description="Docker image for Joplin Server" \
       org.opencontainers.image.url="https://joplinapp.org/" \
       org.opencontainers.image.revision="$REVISION" \
