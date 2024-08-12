@@ -139,15 +139,6 @@ export const extractSvgs = (html: string, titleGenerator: ()=> string): ExtractS
 
 		ontext: (decodedText: string) => {
 			if (currentTag() === 'style') {
-				// For CSS, we have to put the style as-is inside the tag
-				// because if we html-entities encode it, it's not going to
-				// work. But it's ok because JavaScript won't run within the
-				// style tag. Ideally CSS should be loaded from an external
-				// file.
-
-				// We however have to encode at least the `<` characters to
-				// prevent certain XSS injections that would rely on the
-				// content not being encoded (see sanitize_13.md)
 				if (svgTagDepth > 0) {
 					svgStack.push(decodedText.replace(/</g, '&lt;'));
 				} else {
