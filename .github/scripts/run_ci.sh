@@ -68,13 +68,6 @@ echo "Node $( node -v )"
 echo "Npm $( npm -v )"
 echo "Yarn $( yarn -v )"
 echo "Rust $( rustc --version )"
-echo "Git $( git version )"
-
-touch test_file
-echo "add content to test_file" >> test_file
-git add test_file
-git commit -m "Test commit on CI"
-git push
 
 # =============================================================================
 # Install packages
