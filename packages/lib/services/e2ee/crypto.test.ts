@@ -1,7 +1,7 @@
 import { afterAllCleanUp, expectNotThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { runIntegrationTests } from './cryptoTestUtils';
 
-describe('e2ee/ppk', () => {
+describe('e2ee/crypto', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

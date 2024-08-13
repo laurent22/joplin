@@ -1,8 +1,8 @@
-import { EncryptionMethod } from './EncryptionService';
-import EncryptionService from './EncryptionService';
+import EncryptionService, { EncryptionMethod } from './EncryptionService';
+import BaseItem from '../../models/BaseItem';
 import Folder from '../../models/Folder';
-import Note from '../../models/Note';
 import MasterKey from '../../models/MasterKey';
+import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import shim from '../..//shim';
 import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
@@ -14,7 +14,7 @@ interface DecryptTestData {
 	ciphertext: string;
 }
 
-const serviceInstance = EncryptionService.instance();
+let serviceInstance: EncryptionService = null;
 
 // This is convenient to quickly generate some data to verify for example that
 // react-native-quick-crypto and node:crypto can decrypt the same data.
@@ -235,6 +235,8 @@ export const runIntegrationTests = async (silent = false, testPerformance = fals
 
 	log('Crypto Tests: Running integration tests...');
 	const encryptionEnabled = getEncryptionEnabled();
+	serviceInstance = EncryptionService.instance();
+	BaseItem.encryptionService_ = EncryptionService.instance();
 	setEncryptionEnabled(true);
 
 	log('Crypto Tests: Decrypting using known data...');
