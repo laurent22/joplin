@@ -61,7 +61,7 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 
 # When building the onenote-converter, target folder can become more than 200MB
 # which makes github actions fail with 'No space left on device' error
-RUN rm -r packages/onenote-converter/target
+RUN rm -r /build/packages/onenote-converter/target
 
 # =============================================================================
 # Final stage - we copy only the relevant files from the build stage and start
