@@ -143,7 +143,7 @@ jobs:
         # To ensure that the operations stop on failure, all commands
         # should be on one line with "&&" in between.
         run: |
-          yarn install && rm -r packages/app-desktop/node_modules && cd packages/app-desktop && yarn dist
+          yarn install && rm -r packages/onenote-converter/target && cd packages/app-desktop && yarn dist
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -155,7 +155,7 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && rm -r packages/app-desktop/node_modules && cd packages/app-desktop && yarn dist --publish=never
+          yarn install && rm -r packages/onenote-converter/target && cd packages/app-desktop && yarn dist --publish=never
 
   ServerDockerImage:
     needs: pre_job
