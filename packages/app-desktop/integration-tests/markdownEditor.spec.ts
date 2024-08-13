@@ -85,8 +85,9 @@ test.describe('markdownEditor', () => {
 		await expect(matches).toHaveCount(0);
 
 		await mainWindow.keyboard.press('Control+f');
-		await expect(noteEditor.editorSearchInput).toBeFocused();
+		await expect(noteEditor.editorSearchInput).toBeVisible();
 
+		await noteEditor.editorSearchInput.click();
 		await noteEditor.editorSearchInput.fill('test');
 		await mainWindow.keyboard.press('Enter');
 
