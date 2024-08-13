@@ -62,9 +62,7 @@ jobs:
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
-          npm pkg set 'build.mac.target'='["dmg","zip"]'
-          npm pkg set 'build.mac.target.arch[0]'='arm64'
-
+          npm pkg set 'build.mac.target'="[{'target':'dmg', 'arch':['x64']}, {'target':'zip', 'arch':['x64']}]"
           if [[ $GIT_TAG_NAME = v* ]]; then
             echo "Building and publishing desktop application..."
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
