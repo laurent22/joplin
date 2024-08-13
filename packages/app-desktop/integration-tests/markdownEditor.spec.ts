@@ -84,7 +84,7 @@ test.describe('markdownEditor', () => {
 		const matches = viewer.locator('mark');
 		await expect(matches).toHaveCount(0);
 
-		await mainWindow.keyboard.press('Control+f');
+		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Command+f' : 'Control+f');
 		await expect(noteEditor.editorSearchInput).toBeVisible();
 
 		await noteEditor.editorSearchInput.click();
