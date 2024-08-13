@@ -83,12 +83,20 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": {
-        "target": "dmg",
-        "arch": [
-          "x64"
-        ]
-      },
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "hardenedRuntime": true,
       "notarize": false,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
