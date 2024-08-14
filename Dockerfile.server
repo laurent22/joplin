@@ -9,7 +9,7 @@ RUN apt-get update \
     python tini libcairo2-dev libpango1.0-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Enables Yarn  
+# Enables Yarn
 RUN corepack enable
 
 WORKDIR /build
