@@ -56,5 +56,3 @@ jobs:
           sed -i -- 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/' app/build.gradle
           ./gradlew assembleRelease
           
-      - name: Output disk information
-        run: du -h
