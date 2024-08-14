@@ -80,8 +80,8 @@ jobs:
             VERSION=${{ env.VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64 ${{ env.PUBLISH == 'true' && ', linux/arm64' || '' }} # Build arm only when publishing
-          load: ${{ !env.PUBLISH }} # Push image to local regirstry
-          push: ${{ env.PUBLISH }} # Push image to remote registry
+          load: ${{ env.PUBLISH == 'false' }} # Push image to local regirstry, doesn't work with two platform builds
+          push: ${{ env.PUBLISH == 'true' }} # Push image to remote registry
       - name: Validate build
         env:
           BUILD_SEQUENCIAL: 1
