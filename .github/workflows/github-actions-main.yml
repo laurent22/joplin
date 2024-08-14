@@ -26,8 +26,8 @@ jobs:
         # https://github.com/actions/runner-images/issues/6709
         os: [ubuntu-20.04]
     env:
-      VERSION: 0.0.0-beta
-      IMAGE: ghcr.io/maresmar/joplin
+      PUBLISH: ${{ startsWith(github.ref, 'refs/tags/server-v') }}
+      IMAGE: ghcr.io/${{ github.repository }}
     steps:
       - name: Clenup runner space # based on https://github.com/orgs/community/discussions/25678
         run: rm -rf /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/Java* /opt/hostedtoolcache/PyPy /opt/hostedtoolcache/Python /opt/hostedtoolcache/Ruby /opt/hostedtoolcache/go 
@@ -51,6 +51,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build args
+        run: |
+          echo DATE=`date -u +'%FT%T.%2NZ'` >> $GITHUB_ENV
+          echo REV=`git rev-parse --short HEAD` >> $GITHUB_ENV
+          if [[ "${{ env.PUBLISH }}" == "true" ]]; then
+            echo VERSION=${GITHUB_REF##*/server-v} >> $GITHUB_ENV
+          else
+            echo VERSION=0.0.0-beta >> $GITHUB_ENV
+          fi
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
@@ -58,12 +67,9 @@ jobs:
           images: |
             ${{ env.IMAGE }}
           tags: |
-            type=ref,event=tag
-            type=raw,value=${{ env.VERSION }}
-      - name: Build args
-        run: |
-          echo DATE=`date -u +'%FT%T.%2NZ'` >> $GITHUB_ENV
-          echo REV=`git rev-parse --short HEAD` >> $GITHUB_ENV
+            type=semver,pattern={{version}},value=v${{ env.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
+            type=semver,pattern={{major}},value=v${{ env.VERSION }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -73,9 +79,9 @@ jobs:
             REVISION=${{ env.REV }}
             VERSION=${{ env.VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
-          platforms: linux/amd64, linux/arm64
-          # load: true works only with amd64
-          push: true
+          platforms: linux/amd64 ${{ env.PUBLISH && ', linux/arm64' || '' }} # Build arm only when publishing
+          load: ${{ !env.PUBLISH }} # Push image to local regirstry
+          push: ${{ env.PUBLISH }} # Push image to remote registry
       - name: Validate build
         env:
           BUILD_SEQUENCIAL: 1
