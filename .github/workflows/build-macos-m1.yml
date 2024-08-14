@@ -83,3 +83,6 @@ jobs:
 
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
           fi
+
+      - name: Output disk information
+        run: df
