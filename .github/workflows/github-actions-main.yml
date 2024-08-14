@@ -33,9 +33,9 @@ jobs:
         run: rm -rf /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/Java* /opt/hostedtoolcache/PyPy /opt/hostedtoolcache/Python /opt/hostedtoolcache/Ruby /opt/hostedtoolcache/go 
       - uses: actions/checkout@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -46,7 +46,7 @@ jobs:
           corepack enable
           yarn install
       - name: Log in to GitHub container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -62,7 +62,7 @@ jobs:
           fi
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.IMAGE }}
@@ -71,7 +71,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
             type=semver,pattern={{major}},value=v${{ env.VERSION }}
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           file: Dockerfile.server 
           build-args: |
