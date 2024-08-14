@@ -57,4 +57,4 @@ jobs:
           ./gradlew assembleRelease
           
       - name: Output disk information
-        run: df
+        run: du -h

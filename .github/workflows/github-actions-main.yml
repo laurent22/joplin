@@ -131,7 +131,7 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
-          df
+          du -h
 
       - name: Build and publish Windows app
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
@@ -157,8 +157,7 @@ jobs:
           SERVER_TAG_PREFIX: server
         run: |
           yarn install && rm -r packages/onenote-converter/target && cd packages/app-desktop && yarn dist --publish=never
-          df
-          fsutil fsinfo drives
+          du
 
   ServerDockerImage:
     needs: pre_job
@@ -210,7 +209,7 @@ jobs:
           docker run joplin/server:0.0.0-beta node dist/app.js migrate list
 
       - name: Output disk information
-        run: df
+        run: du -h
  
       - name: Check HTTP request
         run: |
