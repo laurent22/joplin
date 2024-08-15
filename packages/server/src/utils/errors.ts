@@ -142,12 +142,12 @@ export class ErrorTooManyRequests extends ApiError {
 	}
 }
 
-export class ErrorBadGateway extends ApiError {
-	public static httpCode = 502;
+export class ErrorServiceUnavailable extends ApiError {
+	public static httpCode = 503;
 
 	public constructor(message = 'Bad Gateway', options: ErrorOptions = null) {
-		super(message, ErrorBadGateway.httpCode, options);
-		Object.setPrototypeOf(this, ErrorBadGateway.prototype);
+		super(message, ErrorServiceUnavailable.httpCode, options);
+		Object.setPrototypeOf(this, ErrorServiceUnavailable.prototype);
 	}
 }
 
