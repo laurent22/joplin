@@ -4,7 +4,7 @@ Joplin Cloud's Teams functionality enables the efficient administration of multi
 
 ## Terminology
 
-- The **team admin account** is main account for a team. This account is only for managing users and billing.
+- The **team admin account** is main account for a team. This account is only for managing users and billing. You cannot synchronise data with it.
 - **Member account**s are added to a team by the **team admin** account. These accounts can sync data and collaborate with other member accounts on the same team.
 
 ## Setting up your team
