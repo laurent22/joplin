@@ -3,7 +3,7 @@ import { autoUpdater, UpdateInfo } from 'electron-updater';
 import path = require('path');
 import { setInterval } from 'timers';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
-
+import type ShimType from '@joplin/lib/shim';
 
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
@@ -26,22 +26,21 @@ export interface AutoUpdaterServiceInterface {
 export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private window_: BrowserWindow;
 	private logger_: LoggerWrapper;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private initializedShim_: any;
+	private initializedShim_: typeof ShimType;
 	private devMode_: boolean;
 	private updatePollInterval_: ReturnType<typeof setInterval>|null = null;
 	private enableDevMode = true; // force the updater to work in "dev" mode
 	private enableAutoDownload = false; // automatically download an update when it is found
-	private allowPrerelease_ = false;
+	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
+	private includePreReleases_ = false;
 	private allowDowngrade = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, initializedShim: any, devMode: boolean, allowPrereleaseUpdates: boolean) {
+	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
 		this.logger_ = logger;
 		this.initializedShim_ = initializedShim;
 		this.devMode_ = devMode;
-		this.allowPrerelease_ = allowPrereleaseUpdates;
+		this.includePreReleases_ = includePreReleases;
 		this.configureAutoUpdater();
 	}
 
@@ -62,7 +61,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	public checkForUpdates = async (): Promise<void> => {
 		try {
-			if (this.allowPrerelease_) {
+			if (this.includePreReleases_) {
 				// If this is set to true, then it will compare the versions semantically and it will also look at tags, so we need to manually get the latest pre-release
 				this.logger_.info('To be implemented...');
 			} else {
@@ -85,7 +84,8 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		}
 
 		autoUpdater.autoDownload = this.enableAutoDownload;
-		autoUpdater.allowPrerelease = this.allowPrerelease_;
+		autoUpdater.autoInstallOnAppQuit = this.autoInstallOnAppQuit;
+		autoUpdater.allowPrerelease = this.includePreReleases_;
 		autoUpdater.allowDowngrade = this.allowDowngrade;
 
 		autoUpdater.on(AutoUpdaterEvents.CheckingForUpdate, this.onCheckingForUpdate);

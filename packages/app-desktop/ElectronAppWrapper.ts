@@ -1,10 +1,11 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
-import shim from '@joplin/lib/shim';
+import type ShimType from '@joplin/lib/shim';
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-import { BrowserWindow, Tray, screen, shell } from 'electron';
+import { BrowserWindow, Tray, screen } from 'electron';
 import bridge from './bridge';
 const url = require('url');
 const path = require('path');
@@ -326,14 +327,6 @@ export default class ElectronAppWrapper {
 			}
 		});
 
-		ipcMain.on('open-link', async (_event, url) => {
-			try {
-				await shell.openExternal(url);
-			} catch (error) {
-				console.error(`Failed to open URL: ${url}`, error);
-			}
-		});
-
 		ipcMain.on('apply-update-now', () => {
 			this.updaterService_.updateApp();
 		});
@@ -474,10 +467,9 @@ export default class ElectronAppWrapper {
 		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public initializeAutoUpdaterService(logger: LoggerWrapper, initializedShim: any, devMode: boolean, allowPrereleaseUpdates: boolean) {
-		if (!shim.isLinux()) {
-			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, allowPrereleaseUpdates);
+	public initializeAutoUpdaterService(logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
+		if (shim.isWindows() || shim.isMac()) {
+			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, includePreReleases);
 			this.updaterService_.startPeriodicUpdateCheck();
 		}
 	}
