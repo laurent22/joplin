@@ -82,7 +82,20 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "default",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "hardenedRuntime": true,
       "notarize": false,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist",
@@ -110,7 +123,6 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "7zip-bin": "5.2.0",
     "@electron/rebuild": "3.3.0",
     "@joplin/default-plugins": "~3.1",
     "@joplin/tools": "~3.1",
@@ -123,6 +135,7 @@
     "@types/react-redux": "7.1.33",
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
+    "7zip-bin": "5.2.0",
     "electron": "29.1.0",
     "electron-builder": "24.13.3",
     "glob": "10.3.12",
