@@ -6730,6 +6730,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/react-fontawesome@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.1"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    "@fortawesome/fontawesome-svg-core": ~1 || ~6
+    react: ">=16.3"
+  checksum: ae499e95fd8a774d90b7e935d9a0621cce22186d05323186529bf8a140faa65b5ee512abc5e03dcc34e73925ec4a3f2208178ff35abbf7206948c2c49a7520fe
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -7967,7 +7979,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": 6.1.2
     "@fortawesome/free-solid-svg-icons": 6.1.2
-    "@fortawesome/react-fontawesome": 0.2.0
+    "@fortawesome/react-fontawesome": 0.2.1
     "@joplin/lib": ~3.1
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
