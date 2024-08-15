@@ -24,7 +24,7 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
 
         // Seems to be required for react-native-vosk, otherwise the lib looks for it at "https://maven.aliyun.com/repository/jcenter/com/alphacephei/vosk-android/0.3.46/vosk-android-0.3.46.aar" but it's not there. And we get this error:
         //

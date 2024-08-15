@@ -105,6 +105,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
 			await restart();
+		} else if (key === 'ocr.clearLanguageDataCacheButton') {
+			if (!confirm(this.restartMessage())) return;
+			Setting.setValue('ocr.clearLanguageDataCache', true);
+			await restart();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',

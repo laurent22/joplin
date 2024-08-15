@@ -13,6 +13,7 @@ In order to provide certain features, Joplin may need to connect to third-party 
 | Spellchecker dictionary | On Linux and Windows, the desktop application downloads the spellchecker dictionary from `redirector.gvt1.com`. | Enabled | Yes <sup>(2)</sup> |
 | Plugin repository | The desktop application downloads the list of available plugins from the [official GitHub repository](https://github.com/joplin/plugins). If this repository is not accessible (eg. in China) the app will try to get the plugin list from [various mirrors](https://github.com/laurent22/joplin/blob/8ac6017c02017b6efd59f5fcab7e0b07f8d44164/packages/lib/services/plugins/RepositoryApi.ts#L22), in which case the plugin screen [works slightly differently](https://github.com/laurent22/joplin/issues/5161#issuecomment-925226975). | Enabled | No
 | Voice typing | If you use the voice typing feature on Android, the application will download the language files from https://alphacephei.com/vosk/models | Disabled | Yes
+| OCR | If you have enabled optical character recognition on desktop, the application will download the language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. | Disabled | Yes 
 | Crash reports | If you have enabled crash auto-upload, the application will upload the report to Sentry when a crash happens. When Sentry is initialised it will also connect to `sentry.io`. | Disabled | Yes
 
 <sup>(1) https://github.com/laurent22/joplin/issues/5705</sup><br/>

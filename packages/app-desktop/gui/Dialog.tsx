@@ -116,7 +116,7 @@ const useDialogClassNames = (dialogElement: HTMLElement|null, classNames: undefi
 		// The React className prop can include multiple space-separated classes
 		const newClassNames = classNames
 			.split(/\s+/)
-			.filter(name => !dialogElement.classList.contains(name));
+			.filter(name => name.length && !dialogElement.classList.contains(name));
 		dialogElement.classList.add(...newClassNames);
 
 		return () => {

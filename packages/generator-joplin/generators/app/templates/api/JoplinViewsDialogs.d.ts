@@ -47,6 +47,8 @@ export default class JoplinViewsDialogs {
      * Displays a dialog to select a file or a directory. Same options and
      * output as
      * https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogbrowserwindow-options
+     *
+     * <span class="platform-desktop">desktop</span>
      */
     showOpenDialog(options: any): Promise<any>;
     /**
