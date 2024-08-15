@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, ObjectIdentifier, HeadObjectCommand } from '@aws-sdk/client-s3';
-import { CustomError, CustomErrorCode } from '../../../utils/errors';
+import { CustomError, CustomErrorCode, ErrorBadGateway } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
@@ -36,6 +36,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 		super(id, { type: StorageDriverType.S3, ...config });
 
 		this.client_ = new S3Client({
+			maxAttempts: 5,
 			// We need to set a region. See https://github.com/aws/aws-sdk-js-v3/issues/1845#issuecomment-754832210
 			region: this.config.region,
 			credentials: {
@@ -62,6 +63,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 
 			return stream2buffer(response.Body);
 		} catch (error) {
+			if (error?.Code === 'InternalError') throw new ErrorBadGateway('Storage driver server returned an internal error. Try again later.');
 			if (error?.$metadata?.httpStatusCode === 404) throw new CustomError(`No such item: ${itemId}`, CustomErrorCode.NotFound);
 			error.message = `Could not get item "${itemId}": ${error.message}`;
 			throw error;

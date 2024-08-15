@@ -142,6 +142,15 @@ export class ErrorTooManyRequests extends ApiError {
 	}
 }
 
+export class ErrorBadGateway extends ApiError {
+	public static httpCode = 502;
+
+	public constructor(message = 'Bad Gateway', options: ErrorOptions = null) {
+		super(message, ErrorBadGateway.httpCode, options);
+		Object.setPrototypeOf(this, ErrorBadGateway.prototype);
+	}
+}
+
 export function errorToString(error: Error): string {
 	// const msg: string[] = [];
 	// msg.push(error.message ? error.message : 'Unknown error');
