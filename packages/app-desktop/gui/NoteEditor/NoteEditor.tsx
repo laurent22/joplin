@@ -411,6 +411,9 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbar: null,
 		onScroll: onScroll,
 		setLocalSearchResultCount: setLocalSearchResultCount,
+		setLocalSearch: localSearch_change,
+		setShowLocalSearch,
+		useLocalSearch: showLocalSearch,
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
@@ -506,6 +509,7 @@ function NoteEditor(props: NoteEditorProps) {
 				onPrevious={localSearch_previous}
 				onClose={localSearch_close}
 				visiblePanes={props.noteVisiblePanes}
+				editorType={props.bodyEditor}
 			/>
 		);
 	}

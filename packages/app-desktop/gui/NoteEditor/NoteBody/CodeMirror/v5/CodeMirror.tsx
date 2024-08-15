@@ -686,6 +686,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorRef,
 		noteContent: props.content,
 		renderedBody,
+		showEditorMarkers: true,
 	});
 
 	const cellEditorStyle = useMemo(() => {
