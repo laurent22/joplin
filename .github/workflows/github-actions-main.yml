@@ -45,12 +45,6 @@ jobs:
           # https://yarnpkg.com/getting-started/install
           corepack enable
           yarn install
-      - name: Log in to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build args
         run: |
           echo DATE=`date -u +'%FT%T.%2NZ'` >> $GITHUB_ENV
@@ -70,6 +64,12 @@ jobs:
             type=semver,pattern={{version}},value=v${{ env.VERSION }}
             type=semver,pattern={{major}}.{{minor}},value=v${{ env.VERSION }}
             type=semver,pattern={{major}},value=v${{ env.VERSION }}
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
