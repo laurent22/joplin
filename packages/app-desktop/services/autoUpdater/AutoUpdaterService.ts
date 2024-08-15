@@ -54,7 +54,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	public stopPeriodicUpdateCheck = (): void => {
 		if (this.updatePollInterval_) {
-			clearInterval(this.updatePollInterval_);
+			this.initializedShim_.clearInterval(this.updatePollInterval_);
 			this.updatePollInterval_ = null;
 		}
 	};

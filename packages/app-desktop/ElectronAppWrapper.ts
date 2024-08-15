@@ -363,6 +363,7 @@ export default class ElectronAppWrapper {
 	}
 
 	public quit() {
+		this.stopLookingForUpdates();
 		this.electronApp_.quit();
 	}
 
@@ -471,6 +472,12 @@ export default class ElectronAppWrapper {
 		if (shim.isWindows() || shim.isMac()) {
 			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, includePreReleases);
 			this.updaterService_.startPeriodicUpdateCheck();
+		}
+	}
+
+	public stopLookingForUpdates() {
+		if (this.updaterService_ !== null) {
+			this.updaterService_.stopPeriodicUpdateCheck();
 		}
 	}
 

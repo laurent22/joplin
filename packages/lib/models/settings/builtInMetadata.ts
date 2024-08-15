@@ -1552,6 +1552,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 		},
 
+		'featureFlag.autoUpdaterServiceEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			label: () => 'Enable auto-updates',
+			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
+			section: 'application',
+			isGlobal: true,
+		},
+
+
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
 		// 	type: SettingItemType.Bool,
