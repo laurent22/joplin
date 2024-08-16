@@ -7,13 +7,35 @@ const useTabIndenter = (editor: Editor) => {
 
 		const canChangeIndentation = () => {
 			const selectionElement = editor.selection.getNode();
+			// List items and tables have their own tab key handlers.
 			return !selectionElement.closest('li, table') && !editor.readonly;
 		};
 
-		const tabStringLengthChars = 8;
-		let tabString = '';
-		for (let i = 0; i < tabStringLengthChars; i++) {
-			tabString += '&nbsp;';
+		const getSpacesBeforeSelectionRange = (maxLength: number) => {
+			const selectionRange = editor.selection.getRng();
+
+			let rangeStart = selectionRange.startOffset;
+			let outputRange = selectionRange.cloneRange();
+			while (rangeStart >= 0) {
+				rangeStart--;
+
+				const lastRange = outputRange.cloneRange();
+				outputRange.setStart(outputRange.startContainer, Math.max(rangeStart, 0));
+				const rangeContent = outputRange.toString();
+				const isWhitespace = rangeContent.match(/^\s*$/);
+				if (!isWhitespace || rangeContent.length > maxLength) {
+					outputRange = lastRange;
+					break;
+				}
+			}
+
+			return outputRange;
+		};
+
+		const indentLengthChars = 8;
+		let indentHtml = '';
+		for (let i = 0; i < indentLengthChars; i++) {
+			indentHtml += '&nbsp;';
 		}
 
 		let lastKeyWasEscape = false;
@@ -21,27 +43,16 @@ const useTabIndenter = (editor: Editor) => {
 		const eventHandler = (event: EditorEvent<KeyboardEvent>) => {
 			if (!event.isDefaultPrevented() && event.key === 'Tab' && canChangeIndentation() && !lastKeyWasEscape) {
 				if (!event.shiftKey) {
-					editor.execCommand('mceInsertContent', false, tabString);
+					editor.execCommand('mceInsertContent', false, indentHtml);
 					event.preventDefault();
 				} else {
 					const selectionRange = editor.selection.getRng();
 					if (selectionRange.collapsed) {
-						let rangeStart = selectionRange.startOffset;
-						let testRange = selectionRange.cloneRange();
-						while (rangeStart >= 0) {
-							rangeStart--;
+						const spacesRange = getSpacesBeforeSelectionRange(indentLengthChars);
 
-							const lastRange = testRange.cloneRange();
-							testRange.setStart(testRange.startContainer, Math.max(rangeStart, 0));
-							const rangeContent = testRange.toString();
-							if (!rangeContent.match(/^\s*$/) || rangeContent.length > tabStringLengthChars) {
-								testRange = lastRange;
-								break;
-							}
-						}
-
-						if (testRange.toString().match(/\s+/)) {
-							editor.selection.setRng(testRange);
+						const hasAtLeastOneSpace = spacesRange.toString().match(/^\s+$/);
+						if (hasAtLeastOneSpace) {
+							editor.selection.setRng(spacesRange);
 							editor.execCommand('Delete', false);
 							event.preventDefault();
 						}
