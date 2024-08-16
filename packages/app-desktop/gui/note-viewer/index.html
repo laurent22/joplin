@@ -231,17 +231,6 @@
 			}
 		}
 
-		const updateResourceUrls = (contentElement) => {
-			const resources = contentElement.querySelectorAll('img, source, video, audio, object');
-			for (const resource of resources) {
-				const propertyName = resource.tagName === 'OBJECT' ? 'data' : 'src';
-				const propertyValue = resource.getAttribute(propertyName);
-				if (!propertyValue || !propertyValue.startsWith('file://')) continue;
-
-				resource.setAttribute(propertyName, propertyValue.replace(/^file:\/\//, 'joplin-content://note-viewer/'));
-			}
-		};
-
 		ipc.scrollToHash = (event) => {
 			let retry = 0;
 			const fn = () => {
@@ -410,7 +399,6 @@
 			}
 
 			addPluginAssets(event.options.pluginAssets);
-			updateResourceUrls(contentElement);
 
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
