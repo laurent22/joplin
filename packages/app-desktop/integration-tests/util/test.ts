@@ -1,6 +1,6 @@
 import { resolve, join, dirname } from 'path';
 import { remove, mkdirp } from 'fs-extra';
-import { _electron as electron, Page, ElectronApplication, test as baseTest } from '@playwright/test';
+import { _electron as electron, Page, ElectronApplication, test as base } from '@playwright/test';
 import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
 import firstNonDevToolsWindow from './firstNonDevToolsWindow';
@@ -17,7 +17,7 @@ type JoplinFixtures = {
 // A custom fixture that loads an electron app. See
 // https://playwright.dev/docs/test-fixtures
 
-export const test = baseTest.extend<JoplinFixtures>({
+export const test = base.extend<JoplinFixtures>({
 	// Playwright fails if we don't use the object destructuring
 	// pattern in the first argument.
 	//
