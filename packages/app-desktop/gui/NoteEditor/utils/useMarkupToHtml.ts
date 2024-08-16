@@ -7,6 +7,7 @@ import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 import Note from '@joplin/lib/models/Note';
 import { MarkupToHtmlOptions } from './types';
+import Resource from '@joplin/lib/models/Resource';
 
 interface HookDependencies {
 	themeId: number;
@@ -21,8 +22,14 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 	const { themeId, customCss, plugins, whiteBackgroundNoteRendering } = deps;
 
 	const markupToHtml = useMemo(() => {
+		const resourceBaseUrl = `joplin-content://note-viewer/${Setting.value('resourceDir')}/`;
 		return markupLanguageUtils.newMarkupToHtml(plugins, {
-			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
+			resourceBaseUrl,
+			ResourceModel: class extends Resource {
+				public static override baseDirectoryPath() {
+					return resourceBaseUrl;
+				}
+			},
 			customCss: customCss || '',
 		});
 	}, [plugins, customCss]);
