@@ -81,15 +81,6 @@ if [ $testResult -ne 0 ]; then
 	exit $testResult
 fi
 
-# Onenote-converter build process create big artifcats, cleaning up is a good practice
-# to avoid github action running out of disk space
-rm -r packages/onenote-converter/target
-deletingArtifact=$?
-if [ $deletingArtifact -ne 0 ]; then
-	echo "Failed to remove artifact for onenote-converter. Path is wrong or package wasn't builded."
-	exit $deletingArtifact
-fi
-
 # =============================================================================
 # Run test units
 # =============================================================================

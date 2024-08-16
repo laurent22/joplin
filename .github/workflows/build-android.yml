@@ -47,9 +47,6 @@ jobs:
       - name: Install
         run:  yarn install
 
-      - name: Clean up onenote-converter artifact
-        run: rm -r packages/onenote-converter/target
-
       - name: Assemble Android Release
         run: |
           cd packages/app-mobile/android

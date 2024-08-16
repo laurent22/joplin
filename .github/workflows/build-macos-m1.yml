@@ -60,7 +60,6 @@ jobs:
           export npm_config_arch=arm64
           export npm_config_target_arch=arm64
           yarn install
-          rm -r packages/onenote-converter/target
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
           npm pkg set 'build.mac.target.target'='dmg'
