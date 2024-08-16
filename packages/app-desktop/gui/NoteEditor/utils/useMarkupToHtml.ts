@@ -65,7 +65,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			whiteBackgroundNoteRendering,
 			itemIdToUrl: (id: string, urlParameters = '') => {
 				if (!(id in resources) || !resources[id]) {
-					return false;
+					return null;
 				}
 
 				return resourceFullPath(resources[id].item, resourceBaseUrl) + urlParameters;
