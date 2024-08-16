@@ -82,35 +82,9 @@ test.describe('markdownEditor', () => {
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'video.mp4')]);
 		await editor.attachFileButton.click();
 
+		const videoLocator = editor.getNoteViewerIframe().locator('video');
 		const expectVideoToRender = async () => {
-			const videoLocator = editor.getNoteViewerIframe().locator('video');
-			await expect(videoLocator).toBeVisible();
-			await expect.poll(() => {
-				return videoLocator.evaluate(video => {
-					if (!(video instanceof HTMLVideoElement)) {
-						throw new Error('Not a video');
-					}
-
-					// Should have loaded the full 8s video and the video should be
-					// seekable.
-					return video.duration > 7 && video.seekable.end(0) > 0.1;
-				});
-			}).toBe(true);
-			await expect(videoLocator).toHaveJSProperty('error', null);
-
-			// Should support seeking
-			await videoLocator.evaluate(async (video: HTMLMediaElement) => {
-				video.currentTime = 6.9;
-				await video.play();
-			});
-
-			await expect.poll(() => {
-				return videoLocator.evaluate((video: HTMLVideoElement) => {
-					// Should have loaded the full 8s video and the video should be
-					// seekable.
-					return video.currentTime;
-				});
-			}).toBeGreaterThan(7);
+			await expect(videoLocator).toBeSeekableMediaElement(6.9, 7);
 		};
 
 		await expectVideoToRender();

@@ -473,8 +473,10 @@ packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/settings.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
+packages/app-desktop/integration-tests/test-profile/p2FsSyDN58csgGuQk7SRno/tmp/edited_resources/richTextEditor.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
+packages/app-desktop/integration-tests/util/extendedExpect.js
 packages/app-desktop/integration-tests/util/firstNonDevToolsWindow.js
 packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
