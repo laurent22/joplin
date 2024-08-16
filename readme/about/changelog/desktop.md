@@ -1,5 +1,12 @@
 # Joplin Desktop Changelog
 
+## [v3.1.2](https://github.com/laurent22/joplin/releases/tag/v3.1.2) (Pre-release) - 2024-08-16T09:00:59Z
+
+- Improved: Allow searching when only the note viewer is visible and sync search with editor ([#10866](https://github.com/laurent22/joplin/issues/10866) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Seamless-Updates: generate latest-mac.yml file ([#10869](https://github.com/laurent22/joplin/issues/10869) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Updated packages @fortawesome/react-fontawesome (v0.2.1)
+- Improved: Upgrade electron to v29.4.5 ([#10847](https://github.com/laurent22/joplin/issues/10847) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.1.1](https://github.com/laurent22/joplin/releases/tag/v3.1.1) (Pre-release) - 2024-08-10T11:36:02Z
 
 - New: Accessibility: Add missing labels and role information to several controls ([#10788](https://github.com/laurent22/joplin/issues/10788) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
