@@ -3,7 +3,6 @@ import { ImportExportResult, ImportModuleOutputFormat } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
-import { oneNoteConverter } from '@joplin/onenote-converter';
 import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, dirname } from 'path';
@@ -41,6 +40,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const outputDirectory2 = join(tempOutputDirectory, baseFolder);
 
 		const notebookFiles = zip.getEntries().filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
+		const { oneNoteConverter } = shim.requireDynamic('../../../onenote-converter/pkg/onenote_converter');
 
 		logger.info('Extracting OneNote to HTML');
 		for (const notebookFile of notebookFiles) {

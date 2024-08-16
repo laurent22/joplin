@@ -6,18 +6,10 @@ FROM node:18-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
-    python tini curl \
+    python tini \
     && rm -rf /var/lib/apt/lists/*
 
-# Even if we aren't going to use, we need to build onenote-converter
-# since it is a requirement of lib
-RUN curl --proto '=https' --show-error --retry 3 --tlsv1.2 -sSf https://sh.rustup.rs --output /tmp/rustup-linux-install.sh \
-    && bash /tmp/rustup-linux-install.sh -y
-
 ENV PATH="/root/.cargo/bin:${PATH}"
-
-# If fails cargo is not present
-RUN cargo --help
 
 # Enables Yarn
 RUN corepack enable
@@ -43,8 +35,10 @@ COPY packages/renderer ./packages/renderer
 COPY packages/tools ./packages/tools
 COPY packages/utils ./packages/utils
 COPY packages/lib ./packages/lib
-COPY packages/onenote-converter ./packages/onenote-converter
 COPY packages/server ./packages/server
+
+# We don't want to build onenote-converter since it is not used by the server
+RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
 
 # For some reason there's both a .yarn/cache and .yarn/berry/cache that are
 # being generated, and both have the same content. Not clear why it does this
@@ -58,10 +52,6 @@ COPY packages/server ./packages/server
 RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
     && yarn cache clean \
     && rm -rf .yarn/berry
-
-# When building the onenote-converter, target folder can become more than 200MB
-# which makes github actions fail with 'No space left on device' error
-RUN rm -r /build/packages/onenote-converter/target
 
 # =============================================================================
 # Final stage - we copy only the relevant files from the build stage and start
