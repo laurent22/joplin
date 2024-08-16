@@ -1,7 +1,8 @@
 const { writeFile, copy, mkdirp, remove } = require('fs-extra');
 const glob = require('glob');
-const { resolve } = require('path');
+const { resolve, basename } = require('path');
 const { dirname } = require('@joplin/tools/gulp/utils');
+const { toForwardSlashes } = require('@joplin/utils/path');
 
 const rootDir = resolve(__dirname, '../../..');
 const nodeModulesDir = resolve(__dirname, '../node_modules');
@@ -145,9 +146,9 @@ async function main() {
 		await withRetry(() => copy(sourceFile, destFile, { overwrite: true }));
 	}
 
-	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
-		s = s.split('/');
-		s = s[s.length - 1];
+	// glob requires forward slashes, even on Windows.
+	const supportedLocales = glob.sync(`${toForwardSlashes(langSourceDir)}/*.js`).map(s => {
+		s = basename(s);
 		s = s.split('.');
 		return s[0];
 	});
