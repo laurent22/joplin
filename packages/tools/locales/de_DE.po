@@ -487,8 +487,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Jede an diese Adresse gerichtete E-Mail wird zu einer Notiz umgewandelt und "
-"deiner Kollektion hinzugefügt. Die Notiz wird im Inbox-Notizbuch gespeichert"
+"Alle E-Mails, die an diese Adresse gesendet werden, werden zu Notizen umgewandelt und "
+"deiner Kollektion hinzugefügt. Die Notizen werden im Inbox-Notizbuch gespeichert"
 
 #: packages/lib/models/Setting.ts:2804
 msgid "Appearance"
@@ -6031,7 +6031,7 @@ msgstr "Warnung"
 #: packages/app-desktop/gui/ResourceScreen.tsx:302
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Warnung: Aus Performanzgründen werden nicht alle Anhänge angezeigt "
+"Warnung: Aus Leistungsgründen werden nicht alle Anhänge angezeigt "
 "(Obergrenze: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
