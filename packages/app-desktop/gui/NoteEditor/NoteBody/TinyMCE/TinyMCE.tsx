@@ -38,6 +38,7 @@ const md5 = require('md5');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
+import useTabIndenter from './utils/useTabIndenter';
 
 const logger = Logger.create('TinyMCE');
 
@@ -128,6 +129,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 	usePluginServiceRegistration(ref);
 	useContextMenu(editor, props.plugins, props.dispatch, props.htmlToMarkdown, props.markupToHtml);
+	useTabIndenter(editor);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const dispatchDidUpdate = (editor: any) => {
@@ -629,6 +631,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link joplinLists hr searchreplace codesample table',
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
+				iframe_aria_text: _('Rich Text editor. Press Escape then Tab to escape focus.'),
 
 				// #p: Pad empty paragraphs with &nbsp; to prevent them from being removed.
 				// *[*]: Allow all elements and attributes -- we already filter in sanitize_html
