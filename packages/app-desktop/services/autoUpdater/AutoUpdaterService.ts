@@ -1,9 +1,9 @@
-import { app } from 'electron';
+import { BrowserWindow } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
-import log from 'electron-log';
 import path = require('path');
 import { setInterval } from 'timers';
-
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
+import type ShimType from '@joplin/lib/shim';
 
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
@@ -24,48 +24,69 @@ export interface AutoUpdaterServiceInterface {
 }
 
 export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
+	private window_: BrowserWindow;
+	private logger_: LoggerWrapper;
+	private initializedShim_: typeof ShimType;
+	private devMode_: boolean;
 	private updatePollInterval_: ReturnType<typeof setInterval>|null = null;
+	private enableDevMode = true; // force the updater to work in "dev" mode
+	private enableAutoDownload = false; // automatically download an update when it is found
+	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
+	private includePreReleases_ = false;
+	private allowDowngrade = false;
 
-	public constructor() {
+	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
+		this.window_ = mainWindow;
+		this.logger_ = logger;
+		this.initializedShim_ = initializedShim;
+		this.devMode_ = devMode;
+		this.includePreReleases_ = includePreReleases;
 		this.configureAutoUpdater();
 	}
 
 	public startPeriodicUpdateCheck = (interval: number = defaultUpdateInterval): void => {
 		this.stopPeriodicUpdateCheck();
-		this.updatePollInterval_ = setInterval(() => {
+		this.updatePollInterval_ = this.initializedShim_.setInterval(() => {
 			void this.checkForUpdates();
 		}, interval);
-		setTimeout(this.checkForUpdates, initialUpdateStartup);
+		this.initializedShim_.setTimeout(this.checkForUpdates, initialUpdateStartup);
 	};
 
 	public stopPeriodicUpdateCheck = (): void => {
 		if (this.updatePollInterval_) {
-			clearInterval(this.updatePollInterval_);
+			this.initializedShim_.clearInterval(this.updatePollInterval_);
 			this.updatePollInterval_ = null;
 		}
 	};
 
 	public checkForUpdates = async (): Promise<void> => {
 		try {
-			await autoUpdater.checkForUpdates(); // Use async/await
+			if (this.includePreReleases_) {
+				// If this is set to true, then it will compare the versions semantically and it will also look at tags, so we need to manually get the latest pre-release
+				this.logger_.info('To be implemented...');
+			} else {
+				await autoUpdater.checkForUpdates();
+			}
 		} catch (error) {
-			log.error('Failed to check for updates:', error);
+			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
-				log.info('Server is not reachable. Will try again later.');
+				this.logger_.info('Server is not reachable. Will try again later.');
 			}
 		}
 	};
 
 	private configureAutoUpdater = (): void => {
-		autoUpdater.logger = log;
-		log.transports.file.level = 'info';
-		if (this.electronIsDev()) {
-			log.info('Development mode: using dev-app-update.yml');
+		autoUpdater.logger = (this.logger_) as Logger;
+		if (this.devMode_) {
+			this.logger_.info('Development mode: using dev-app-update.yml');
 			autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml');
-			autoUpdater.forceDevUpdateConfig = true;
+			autoUpdater.forceDevUpdateConfig = this.enableDevMode;
 		}
 
-		autoUpdater.autoDownload = false;
+		autoUpdater.autoDownload = this.enableAutoDownload;
+		autoUpdater.autoInstallOnAppQuit = this.autoInstallOnAppQuit;
+		autoUpdater.allowPrerelease = this.includePreReleases_;
+		autoUpdater.allowDowngrade = this.allowDowngrade;
 
 		autoUpdater.on(AutoUpdaterEvents.CheckingForUpdate, this.onCheckingForUpdate);
 		autoUpdater.on(AutoUpdaterEvents.UpdateNotAvailable, this.onUpdateNotAvailable);
@@ -75,34 +96,36 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		autoUpdater.on(AutoUpdaterEvents.Error, this.onError);
 	};
 
-	private electronIsDev = (): boolean => !app.isPackaged;
-
 	private onCheckingForUpdate = () => {
-		log.info('Checking for update...');
+		this.logger_.info('Checking for update...');
 	};
 
 	private onUpdateNotAvailable = (_info: UpdateInfo): void => {
-		log.info('Update not available.');
+		this.logger_.info('Update not available.');
 	};
 
 	private onUpdateAvailable = (info: UpdateInfo): void => {
-		log.info(`Update available: ${info.version}.`);
+		this.logger_.info(`Update available: ${info.version}.`);
 	};
 
 	private onDownloadProgress = (progressObj: { bytesPerSecond: number; percent: number; transferred: number; total: number }): void => {
-		log.info(`Download progress... ${progressObj.percent}% completed`);
+		this.logger_.info(`Download progress... ${progressObj.percent}% completed`);
 	};
 
 	private onUpdateDownloaded = (info: UpdateInfo): void => {
-		log.info('Update downloaded. It will be installed on restart.');
+		this.logger_.info('Update downloaded.');
 		void this.promptUserToUpdate(info);
 	};
 
 	private onError = (error: Error): void => {
-		log.error('Error in auto-updater.', error);
+		this.logger_.error('Error in auto-updater.', error);
 	};
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
-		log.info(`Update is available: ${info.version}.`);
+		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
+	};
+
+	public updateApp = (): void => {
+		autoUpdater.quitAndInstall(false, true);
 	};
 }
