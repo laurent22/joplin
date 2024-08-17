@@ -50,6 +50,16 @@ export default async function(request: Request, id: string = null, link: string 
 	if (request.method === RequestMethod.POST || request.method === RequestMethod.PUT) {
 		const isUpdate = request.method === RequestMethod.PUT;
 
+		// Should not be possible to change the resource mime type
+		// https://github.com/laurent22/joplin/issues/10654
+		if (request.method === RequestMethod.PUT) {
+			if (request.body) {
+				const body = JSON.parse(request.body);
+				delete body.mime;
+				request.body = JSON.stringify(body);
+			}
+		}
+
 		if (!request.files.length) {
 			if (request.method === RequestMethod.PUT) {
 				// In that case, we don't try to update the resource blob, we
