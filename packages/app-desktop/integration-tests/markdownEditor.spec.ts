@@ -2,6 +2,7 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { join } from 'path';
 import getImageSourceSize from './util/getImageSourceSize';
+import setFilePickerResponse from './util/setFilePickerResponse';
 
 
 test.describe('markdownEditor', () => {
@@ -25,6 +26,75 @@ test.describe('markdownEditor', () => {
 		const image = viewerFrame.getByAltText('An SVG image.');
 		await expect(image).toBeAttached();
 		await expect(await getImageSourceSize(image)).toMatchObject([117, 30]);
+	});
+
+	test('preview pane should render PDFs', async ({ mainWindow, electronApp }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('PDF attachments');
+		const editor = mainScreen.noteEditor;
+
+		await editor.focusCodeMirrorEditor();
+
+		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'small-pdf.pdf')]);
+		await editor.attachFileButton.click();
+
+		const viewerFrame = mainScreen.noteEditor.getNoteViewerIframe();
+		const pdfLink = viewerFrame.getByText('small-pdf.pdf');
+		await expect(pdfLink).toBeVisible();
+
+		const expectToBeRendered = async () => {
+
+			// PDF preview should render
+			const pdfViewer = viewerFrame.locator('object[data$=".pdf"]');
+			// Should create the PDF viewer. Note: This is not sufficient to determine that the PDF viewer
+			// has rendered.
+			await expect(pdfViewer).toBeAttached();
+
+			// Verify that the PDF viewer has rendered. This relies on how Chrome/Electron loads custom PDFs
+			// in an object.
+			// If this breaks due to an Electron upgrade,
+			// 1. manually verify that the PDF viewer has loaded and
+			// 2. replace this test with a screenshot comparison (https://playwright.dev/docs/test-snapshots)
+			await expect.poll(
+				() => pdfViewer.evaluate((handle) => {
+					const embed = (handle as HTMLObjectElement).contentDocument.querySelector('embed');
+					return !!embed;
+				}),
+			).toBe(true);
+		};
+
+		await expectToBeRendered();
+
+		// Should still render after switching editors
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.richTextEditor.waitFor();
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+
+		await expectToBeRendered();
+	});
+
+	test('preview pane should render video attachments', async ({ mainWindow, electronApp }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('Media attachments');
+		const editor = mainScreen.noteEditor;
+
+		await editor.focusCodeMirrorEditor();
+		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'video.mp4')]);
+		await editor.attachFileButton.click();
+
+		const videoLocator = editor.getNoteViewerIframe().locator('video');
+		const expectVideoToRender = async () => {
+			await expect(videoLocator).toBeSeekableMediaElement(6.9, 7);
+		};
+
+		await expectVideoToRender();
+
+		// Should be able to render again if the editor is closed and re-opened.
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.richTextEditor.waitFor();
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+
+		await expectVideoToRender();
 	});
 
 	test('arrow keys should navigate the toolbar', async ({ mainWindow }) => {
