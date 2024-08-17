@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: cedecode <christoph.eder@phsalzburg.at>\n"
+"Last-Translator: Mr-Kanister <viger_gtrc@simplelogin.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -401,7 +401,7 @@ msgstr ""
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
-"Alle fehlerhaft synchronisierten Elemente wurden als „ignoriert“ markiert."
+"Alle fehlerhaften Synchronisationen wurden als „ignoriert“ markiert."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:184
@@ -487,7 +487,7 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Jedes an diese Adresse gerichtete Email wird zu einer Notiz umgewandelt und "
+"Jede an diese Adresse gerichtete E-Mail wird zu einer Notiz umgewandelt und "
 "deiner Kollektion hinzugefügt. Die Notiz wird im Inbox-Notizbuch gespeichert"
 
 #: packages/lib/models/Setting.ts:2804
@@ -616,7 +616,7 @@ msgstr "Automatisch auf Aktualisierungen prüfen"
 
 #: packages/lib/models/Setting.ts:1919
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "Automatisch Notizen im Papierkorb löschen nach einer Anzahl von Tagen"
+msgstr "Notizen im Papierkorb automatisch nach einer Anzahl von Tagen löschen"
 
 # Thema vs Theme
 # Not sure what other applications use. I don't have any German apps thus I can't say.
@@ -624,6 +624,8 @@ msgstr "Automatisch Notizen im Papierkorb löschen nach einer Anzahl von Tagen"
 # I think "design" is a translation that I've seen before and that also everybody would understand.
 # ---
 # Gimp z. B. verwendet "Thema", ich denke aber, dass "Design" genauso allgemein verständlich ist.
+# ---
+# Wurde in #10660 ohne Begründung zu "Erscheinungsbild" geändert.
 #: packages/lib/models/Setting.ts:909
 msgid "Automatically switch theme to match system theme"
 msgstr ""
@@ -844,7 +846,7 @@ msgid ""
 msgstr ""
 "Das verschlüsselte Notizbuch kann nicht mit %s geteilt werden, da die Person "
 "die Ende-zu-Ende-Verschlüsselung nicht aktiviert hat. Dies ist unter "
-"Konfiguration > Verschlüsselung möglich."
+"Optionen > Verschlüsselung möglich."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:331
 msgid "Case sensitive"
@@ -852,7 +854,7 @@ msgstr "Groß- und Kleinschreibung beachtend"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
-msgstr "Erscheinungsbild der Anwendung ändern"
+msgstr "Layout der Anwendung ändern"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:210
 msgid "Change language"
@@ -1346,11 +1348,11 @@ msgstr "Bericht erstellen..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:41
 msgid "Ctrl-click to open"
-msgstr "Cmd-Klick zum Öffnen"
+msgstr "Strg-Klick zum Öffnen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:47
 msgid "Ctrl-click to open: %s"
-msgstr "Cmd-Klick zum Öffnen: %s"
+msgstr "Strg-Klick zum Öffnen: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
@@ -1495,7 +1497,7 @@ msgid ""
 msgstr ""
 "Das Inbox-Notizbuch löschen?\n"
 "\n"
-"Wenn du das Inbox-Notizbuch löschst, gehen kürzlich dort eingegangene Emails "
+"Wenn du das Inbox-Notizbuch löschst, gehen kürzlich dort eingegangene E-Mails "
 "möglicherweise verloren."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
@@ -1857,25 +1859,25 @@ msgstr "Emacs"
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:140
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:47
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:23
 msgid "Email to note"
-msgstr "Email zu Notiz"
+msgstr "E-Mail zu Notiz"
 
 #: packages/lib/utils/joplinCloud/index.ts:187
 msgid "Email to Note"
-msgstr "Email zu Notiz"
+msgstr "E-Mail zu Notiz"
 
 #: packages/lib/models/Setting.ts:2843
 msgid "Email To Note, login information"
-msgstr "Email zu Notiz, Login-Informationen"
+msgstr "E-Mail zu Notiz, Login-Informationen"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
 msgid "Emails"
-msgstr "Emails"
+msgstr "E-Mails"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:191
 msgid "emphasised text"
@@ -2157,11 +2159,11 @@ msgstr "Alle Notizen als JEX exportieren"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:199
 msgid "Export debug report"
-msgstr "Fehlerbericht exportieren"
+msgstr "Ereignisbericht exportieren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:14
 msgid "Export Debug Report"
-msgstr "Fehlerbericht exportieren"
+msgstr "Ereignisbericht exportieren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:16
 msgid "Export profile"
@@ -2853,22 +2855,22 @@ msgstr "Joplin Server"
 
 #: packages/lib/models/Setting.ts:709
 msgid "Joplin Server email"
-msgstr "Joplin Server-Email"
+msgstr "Joplin Server E-Mail"
 
 #: packages/lib/models/Setting.ts:721
 msgid "Joplin Server password"
-msgstr "Joplin Server-Passwort"
+msgstr "Joplin Server Passwort"
 
 #: packages/lib/models/Setting.ts:690
 msgid "Joplin Server URL"
-msgstr "Joplin Server-URL"
+msgstr "Joplin Server URL"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:119
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Joplin Web Clipper ermöglicht das Speichern von Webseiten und Screenshots "
+"Joplin Web Clipper ermöglicht das Speichern von Webseiten und Bildschirmfotos "
 "aus deinem Browser in Joplin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:612
@@ -4198,7 +4200,7 @@ msgstr "Meldungen"
 
 #: packages/app-desktop/gui/MainScreen/commands/resetLayout.ts:7
 msgid "Reset application layout"
-msgstr "Erscheinungsbild der Anwendung zurücksetzen"
+msgstr "Layout der Anwendung zurücksetzen"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:223
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:224
@@ -4578,7 +4580,7 @@ msgstr "Anzahl der Notizen anzeigen"
 
 #: packages/lib/models/Setting.ts:1020
 msgid "Show sort order buttons"
-msgstr "Buttons für die Sortierreihenfolge anzeigen"
+msgstr "Knöpfe für die Sortierreihenfolge anzeigen"
 
 #: packages/lib/models/Setting.ts:1295
 msgid "Show tray icon"
@@ -5017,7 +5019,7 @@ msgid ""
 "pages and screenshots from your browser."
 msgstr ""
 "Der [Web Clipper](%s) ist eine Browser-Erweiterung, welche dir erlaubt, "
-"Webseiten und Screenshots aus deinem Browser zu speichern."
+"Webseiten und Bildschirmfotos aus deinem Browser zu speichern."
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -5375,8 +5377,8 @@ msgstr ""
 "ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen "
 "*inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser "
 "Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die "
-"Formatierung der Erweiterung. Es wird angegeben, welche Erweiterungen mit "
-"dem WYSIWYG-Editor kompatibel und welche nicht."
+"Formatierung der Erweiterung. Es wird unten angegeben, welche Erweiterungen mit "
+"dem WYSIWYG-Editor kompatibel sind und welche nicht."
 
 #: packages/lib/utils/joplinCloud/index.ts:174
 msgid ""
@@ -5933,7 +5935,7 @@ msgid ""
 "may take a long time depending on the number of notes."
 msgstr ""
 "Verwende dies zum Neuaufbau des Suchindex, falls es ein Problem mit der "
-"Suche gibt. Dies kann je nach Anzahl der Notizen etwas länger dauern."
+"Suche gibt. Dies kann je nach Anzahl der Notizen eine lange Zeit dauern."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
@@ -6029,7 +6031,7 @@ msgstr "Warnung"
 #: packages/app-desktop/gui/ResourceScreen.tsx:302
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Warnung: Aus Kapazitätsgründen werden nicht alle Anhänge angezeigt "
+"Warnung: Aus Performanzgründen werden nicht alle Anhänge angezeigt "
 "(Obergrenze: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
