@@ -1,6 +1,9 @@
 {
 	"version": "0.2",
 	"language": "en_GB",
+	"words": [
+		"rcompare"
+	],
 	"ignoreRegExpList": [
 		"\\[.*?\\]\\(https:\\/\\/github.com\\/.*?\\)",
 		"by .*?\\)",
