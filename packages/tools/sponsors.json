@@ -81,12 +81,6 @@
 			"imageName": "HostingDe.png"
 		},
 		{
-			"url": "https://grundstueckspreise.info/",
-			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png",
-			"githubUser": "PeterSchumacher22"
-		},
-		{
 			"url": "https://citricsheep.com",
 			"title": "Citric Sheep",
 			"imageName": "CitricSheep.png",
@@ -150,6 +144,12 @@
 			"url": "https://tranio.com/spain/",
 			"title": "Property for sale in Spain",
 			"imageName": "TranioOverseasProperty.jpg"
+		},
+		{
+			"url": "https://grundstueckspreise.info/",
+			"title": "SP Software GmbH",
+			"imageName": "Grundstueckspreise.png",
+			"githubUser": "PeterSchumacher22"
 		}
 	]
 }
