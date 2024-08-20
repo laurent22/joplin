@@ -1,4 +1,3 @@
-import { _ } from '../../locale';
 import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from './types';
 import { promisify } from 'util';
 import {
@@ -15,12 +14,7 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 
 const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	let cipher = null;
-	if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
-		cipher = createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
-	} else {
-		throw new Error(_('Unknown cipher algorithm: %s', algorithm));
-	}
+	const cipher = createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
 
 	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
 
@@ -32,12 +26,7 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 
 const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	let decipher = null;
-	if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
-		decipher = createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
-	} else {
-		throw new Error(_('Unknown decipher algorithm: %s', algorithm));
-	}
+	const decipher = createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
 
 	const authTag = data.subarray(-authTagLength);
 	const encryptedData = data.subarray(0, data.byteLength - authTag.byteLength);
