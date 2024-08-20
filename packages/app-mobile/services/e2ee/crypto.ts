@@ -28,7 +28,7 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 	});
 };
 
-const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer | null, authTagLength: number, associatedData: CryptoBuffer | null) => {
+const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer | null) => {
 	if (associatedData === null) {
 		associatedData = Buffer.alloc(0);
 	}
@@ -36,7 +36,6 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 	let cipher = null;
 	if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
 		cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
-		iv = iv || QuickCrypto.randomBytes(12); // "For IVs, it is recommended that implementations restrict support to the length of 96 bits, to promote interoperability, efficiency, and simplicity of design." - NIST SP 800-38D
 	} else {
 		throw new Error(_('Unknown cipher algorithm: %s', algorithm));
 	}
@@ -105,7 +104,10 @@ const crypto: Crypto = {
 			iv: '',
 			ct: '', // cipherText
 		};
-		const iv = await crypto.randomBytes(12); // 96 bits
+
+		// 96 bits IV
+		// "For IVs, it is recommended that implementations restrict support to the length of 96 bits, to promote interoperability, efficiency, and simplicity of design." - NIST SP 800-38D
+		const iv = await crypto.randomBytes(12);
 
 		const key = await pbkdf2Raw(password, salt, iterationCount, keySize, digest);
 		const encrypted = encryptRaw(data, cipherAlgorithm, key, iv, authTagLength, null);
