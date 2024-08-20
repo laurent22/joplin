@@ -27,15 +27,7 @@ export interface RSA {
 }
 
 export interface Crypto {
-	// low level functions
-	getCiphers(): string[];
-	getHashes(): string[];
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	pbkdf2Raw(password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer>;
-	encryptRaw(data: CryptoBuffer, algorithm: string, key: CryptoBuffer, iv: CryptoBuffer | null, authTagLength: number, associatedData: CryptoBuffer | null): Buffer;
-	decryptRaw(data: CryptoBuffer, algorithm: string, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer | null): Buffer;
-
-	// convenient functions
 	encrypt(password: string, iterationCount: number, salt: CryptoBuffer | null, data: CryptoBuffer): Promise<EncryptionResult>;
 	decrypt(password: string, data: EncryptionResult): Promise<Buffer>;
 	encryptString(password: string, iterationCount: number, salt: CryptoBuffer | null, data: string, encoding: BufferEncoding): Promise<EncryptionResult>;
