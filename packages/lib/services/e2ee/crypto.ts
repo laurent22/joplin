@@ -75,7 +75,7 @@ const crypto: Crypto = {
 		const iv = await crypto.randomBytes(12);
 
 		const key = await pbkdf2Raw(password, salt, options.iterationCount, options.keyLength, options.digestAlgorithm);
-		const encrypted = encryptRaw(data, options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
+		const encrypted = encryptRaw(data, options.cipherAlgorithm, key, iv, options.authTagLength, options.associatedData);
 
 		result.iv = iv.toString('base64');
 		result.ct = encrypted.toString('base64');
@@ -89,7 +89,7 @@ const crypto: Crypto = {
 		const iv = Buffer.from(data.iv, 'base64');
 
 		const key = await pbkdf2Raw(password, salt, options.iterationCount, options.keyLength, options.digestAlgorithm);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
+		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), options.cipherAlgorithm, key, iv, options.authTagLength, options.associatedData);
 
 		return decrypted;
 	},

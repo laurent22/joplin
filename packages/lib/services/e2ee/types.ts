@@ -64,5 +64,6 @@ export interface EncryptionParameters {
 	authTagLength: number; // in bytes
 	digestAlgorithm: Digest;
 	keyLength: number; // in bytes
+	associatedData: Uint8Array;
 	iterationCount: number;
 }

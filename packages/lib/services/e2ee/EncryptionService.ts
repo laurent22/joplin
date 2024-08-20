@@ -10,6 +10,8 @@ const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
 
+const emptyUint8Array = new Uint8Array(0);
+
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
 }
@@ -425,6 +427,7 @@ export default class EncryptionService {
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					associatedData: emptyUint8Array,
 					iterationCount: 220000,
 				}));
 			},
@@ -438,6 +441,7 @@ export default class EncryptionService {
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					associatedData: emptyUint8Array,
 					iterationCount: 5,
 				}));
 			},
@@ -450,6 +454,7 @@ export default class EncryptionService {
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					associatedData: emptyUint8Array,
 					iterationCount: 5,
 				}));
 			},
@@ -475,6 +480,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				associatedData: emptyUint8Array,
 				iterationCount: 220000,
 			})).toString('hex');
 		} else if (method === EncryptionMethod.FileV1) {
@@ -483,6 +489,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				associatedData: emptyUint8Array,
 				iterationCount: 5,
 			})).toString('base64');
 		} else if (method === EncryptionMethod.StringV1) {
@@ -491,6 +498,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				associatedData: emptyUint8Array,
 				iterationCount: 5,
 			})).toString('utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
