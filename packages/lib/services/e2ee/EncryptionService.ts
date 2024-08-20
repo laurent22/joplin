@@ -305,7 +305,8 @@ export default class EncryptionService {
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
 
-		const handlers: Record<EncryptionMethod, ()=> Promise<string>> = {
+		type EncryptionMethodHandler = (()=> Promise<string>);
+		const handlers: Record<EncryptionMethod, EncryptionMethodHandler> = {
 			// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
 			[EncryptionMethod.SJCL]: () => {
 				try {
