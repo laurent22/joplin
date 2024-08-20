@@ -91,7 +91,9 @@ export default class EncryptionService {
 		return Object.keys(this.decryptedMasterKeys_).length;
 	}
 
-	// Note: 1 MB is very slow with Node and probably even worse on mobile.
+	// Note for methods using SJCL:
+	//
+	// 1 MB is very slow with Node and probably even worse on mobile.
 	//
 	// On mobile the time it takes to decrypt increases exponentially for some reason, so it's important
 	// to have a relatively small size so as not to freeze the app. For example, on Android 7.1 simulator
@@ -114,9 +116,9 @@ export default class EncryptionService {
 			[EncryptionMethod.SJCL3]: 5000,
 			[EncryptionMethod.SJCL4]: 5000,
 			[EncryptionMethod.Custom]: 5000,
-			[EncryptionMethod.KeyV1]: 65536,
-			[EncryptionMethod.FileV1]: 65536,
-			[EncryptionMethod.StringV1]: 65536,
+			[EncryptionMethod.KeyV1]: 5000, // Master key is not encrypted by chunks so this value will not be used.
+			[EncryptionMethod.FileV1]: 524288, // 512k
+			[EncryptionMethod.StringV1]: 65536, // 64k
 		};
 
 		return encryptionMethodChunkSizeMap[method];
