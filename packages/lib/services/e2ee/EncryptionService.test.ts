@@ -218,6 +218,48 @@ describe('services_EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 	}));
 
+	it('should fail to decrypt if ciphertext is not a valid JSON string', (async () => {
+		const masterKey = await service.generateMasterKey('123456');
+		const masterKeyContent = await service.decryptMasterKeyContent(masterKey, '123456');
+
+		const jsonCipherTextMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL4, EncryptionMethod.KeyV1, EncryptionMethod.FileV1, EncryptionMethod.StringV1];
+		for (const jsonCipherTextMethod of jsonCipherTextMethodList) {
+			const cipherTextString = await service.encrypt(jsonCipherTextMethod, masterKeyContent, 'e21de21d'); // 'e21de21d' is a valid base64/hex string
+
+			// Check if decryption is working
+			const plainText = await service.decrypt(jsonCipherTextMethod, masterKeyContent, cipherTextString);
+			expect(plainText).toBe('e21de21d');
+
+			// Make invalid JSON
+			const invalidCipherText = cipherTextString.replace('{', '{,');
+			const hasThrown = await checkThrowAsync(async () => await service.decrypt(jsonCipherTextMethod, masterKeyContent, invalidCipherText));
+			expect(hasThrown).toBe(true);
+		}
+	}));
+
+	it('should fail to decrypt if ciphertext authentication failed', (async () => {
+		const masterKey = await service.generateMasterKey('123456');
+		const masterKeyContent = await service.decryptMasterKeyContent(masterKey, '123456');
+
+		const authenticatedEncryptionMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL4, EncryptionMethod.KeyV1, EncryptionMethod.FileV1, EncryptionMethod.StringV1];
+		for (const authenticatedEncryptionMethod of authenticatedEncryptionMethodList) {
+			const cipherTextObject = JSON.parse(await service.encrypt(authenticatedEncryptionMethod, masterKeyContent, 'e21de21d')); // 'e21de21d' is a valid base64/hex string
+			expect(cipherTextObject).toHaveProperty('ct');
+			const ct = Buffer.from(cipherTextObject['ct'], 'base64');
+
+			// Should not fail if the binary data of ct is not modified
+			const oldCipherTextObject = { ...cipherTextObject, ct: ct.toString('base64') };
+			const plainText = await service.decrypt(authenticatedEncryptionMethod, masterKeyContent, JSON.stringify(oldCipherTextObject));
+			expect(plainText).toBe('e21de21d');
+
+			// The encrypted data part is changed so it doesn't match the authentication tag. Decryption should fail.
+			ct[0] ^= 0x55;
+			const newCipherTextObject = { ...cipherTextObject, ct: ct.toString('base64') };
+			const hasThrown = await checkThrowAsync(async () => service.decrypt(authenticatedEncryptionMethod, masterKeyContent, JSON.stringify(newCipherTextObject)));
+			expect(hasThrown).toBe(true);
+		}
+	}));
+
 	it('should encrypt and decrypt notes and folders', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
@@ -281,9 +323,9 @@ describe('services_EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 
 		// Now check that the new one fixes the problem
-		const newEncryptionMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.StringV1];
-		for (const newEncryptionMethod of newEncryptionMethodList) {
-			service.defaultEncryptionMethod_ = newEncryptionMethod;
+		const stringEncryptionMethodList = [EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.StringV1];
+		for (const stringEncryptionMethod of stringEncryptionMethodList) {
+			service.defaultEncryptionMethod_ = stringEncryptionMethod;
 			const cipherText = await service.encryptString('🐶🐶🐶'.substr(0, 5));
 			const plainText = await service.decryptString(cipherText);
 			expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));
