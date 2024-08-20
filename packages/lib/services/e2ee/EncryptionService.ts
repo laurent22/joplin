@@ -1,4 +1,4 @@
-import { MasterKeyEntity } from './types';
+import { CipherAlgorithm, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -420,20 +420,35 @@ export default class EncryptionService {
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			// 2024-08: Set iteration count in pbkdf2 to 220000 as suggested by OWASP. https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
 			[EncryptionMethod.KeyV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 220000, await crypto.randomBytes(32), plainText, 'hex'));
+				return JSON.stringify(await crypto.encryptString(key, 220000, await crypto.randomBytes(32), plainText, 'hex', {
+					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+					authTagLength: 16,
+					digestAlgorithm: Digest.sha512,
+					keyLength: 32,
+				}));
 			},
 
 			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			// The file content is base64 encoded. Decoding it before encryption to reduce the size overhead.
 			[EncryptionMethod.FileV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'base64'));
+				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'base64', {
+					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+					authTagLength: 16,
+					digestAlgorithm: Digest.sha512,
+					keyLength: 32,
+				}));
 			},
 
 			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			[EncryptionMethod.StringV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'utf16le'));
+				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'utf16le', {
+					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+					authTagLength: 16,
+					digestAlgorithm: Digest.sha512,
+					keyLength: 32,
+				}));
 			},
 
 			[EncryptionMethod.Custom]: () => {
@@ -452,11 +467,26 @@ export default class EncryptionService {
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
 		if (method === EncryptionMethod.KeyV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('hex');
+			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+				authTagLength: 16,
+				digestAlgorithm: Digest.sha512,
+				keyLength: 32,
+			})).toString('hex');
 		} else if (method === EncryptionMethod.FileV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('base64');
+			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+				authTagLength: 16,
+				digestAlgorithm: Digest.sha512,
+				keyLength: 32,
+			})).toString('base64');
 		} else if (method === EncryptionMethod.StringV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText))).toString('utf16le');
+			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
+				authTagLength: 16,
+				digestAlgorithm: Digest.sha512,
+				keyLength: 32,
+			})).toString('utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
 			try {
 				const output = sjcl.json.decrypt(key, cipherText);

@@ -1,5 +1,5 @@
 import { _ } from '@joplin/lib/locale';
-import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult } from '@joplin/lib/services/e2ee/types';
+import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionOptions } from '@joplin/lib/services/e2ee/types';
 import QuickCrypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
@@ -83,15 +83,9 @@ const crypto: Crypto = {
 		});
 	},
 
-	encrypt: async (password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer) => {
+	encrypt: async (password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionOptions) => {
 
-		// default encryption parameters
-		const cipherAlgorithm = CipherAlgorithm.AES_256_GCM;
-		const authTagLength = 16; // 128 bits
-		const digest = Digest.sha512;
-		const keySize = 32; // For CipherAlgorithm.AES_256_GCM, 256 bits -> 32 bytes
-
-		// default encryption parameters won't appear in result
+		// Parameters in EncryptionOptions won't appear in result
 		const result: EncryptionResult = {
 			iter: iterationCount,
 			salt: salt.toString('base64'),
@@ -103,8 +97,8 @@ const crypto: Crypto = {
 		// "For IVs, it is recommended that implementations restrict support to the length of 96 bits, to promote interoperability, efficiency, and simplicity of design." - NIST SP 800-38D
 		const iv = await crypto.randomBytes(12);
 
-		const key = await pbkdf2Raw(password, salt, iterationCount, keySize, digest);
-		const encrypted = encryptRaw(data, cipherAlgorithm, key, iv, authTagLength, Buffer.alloc(0));
+		const key = await pbkdf2Raw(password, salt, iterationCount, options.keyLength, options.digestAlgorithm);
+		const encrypted = encryptRaw(data, options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
 
 		result.iv = iv.toString('base64');
 		result.ct = encrypted.toString('base64');
@@ -112,25 +106,19 @@ const crypto: Crypto = {
 		return result;
 	},
 
-	decrypt: async (password: string, data: EncryptionResult) => {
-
-		// default encryption parameters
-		const cipherAlgorithm = data.algo || CipherAlgorithm.AES_256_GCM;
-		const authTagLength = data.ts || 16; // 128 bits
-		const digest = data.digest || Digest.sha512;
-		const keySize = 32; // For CipherAlgorithm.AES_256_GCM, 256 bits -> 32 bytes
+	decrypt: async (password: string, data: EncryptionResult, options: EncryptionOptions) => {
 
 		const salt = Buffer.from(data.salt, 'base64');
 		const iv = Buffer.from(data.iv, 'base64');
 
-		const key = await pbkdf2Raw(password, salt, data.iter, keySize, digest);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), cipherAlgorithm, key, iv, authTagLength, Buffer.alloc(0));
+		const key = await pbkdf2Raw(password, salt, data.iter, options.keyLength, options.digestAlgorithm);
+		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
 
 		return decrypted;
 	},
 
-	encryptString: async (password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding) => {
-		return crypto.encrypt(password, iterationCount, salt, Buffer.from(data, encoding));
+	encryptString: async (password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionOptions) => {
+		return crypto.encrypt(password, iterationCount, salt, Buffer.from(data, encoding), options);
 	},
 };
 

@@ -28,9 +28,9 @@ export interface RSA {
 
 export interface Crypto {
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	encrypt(password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer): Promise<EncryptionResult>;
-	decrypt(password: string, data: EncryptionResult): Promise<Buffer>;
-	encryptString(password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding): Promise<EncryptionResult>;
+	encrypt(password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionOptions): Promise<EncryptionResult>;
+	decrypt(password: string, data: EncryptionResult, options: EncryptionOptions): Promise<Buffer>;
+	encryptString(password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionOptions): Promise<EncryptionResult>;
 }
 
 export interface CryptoBuffer extends Uint8Array {
@@ -54,11 +54,15 @@ export enum CipherAlgorithm {
 }
 
 export interface EncryptionResult {
-	algo?: CipherAlgorithm; // cipher algorithm, default: aes-256-gcm
-	ts?: number; // authTagLength in bytes, default: 16
-	digest?: Digest; // digestAlgorithm, default: sha512
 	iter: number; // iteration count
 	salt: string; // base64 encoded
 	iv: string; // base64 encoded
 	ct: string; // cipherText, base64 encoded
+}
+
+export interface EncryptionOptions {
+	cipherAlgorithm: CipherAlgorithm;
+	authTagLength: number; // in bytes
+	digestAlgorithm: Digest;
+	keyLength: number; // in bytes
 }
