@@ -12,6 +12,7 @@ import { ResourceEntity } from './services/database/types';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
+import { fileTypeFromFile } from 'file-type';
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
@@ -304,9 +305,6 @@ function shimInit(options: ShimInitOptions = null) {
 			...options,
 		};
 
-		const readChunk = require('read-chunk');
-		const imageType = require('image-type');
-
 		const isUpdate = !!options.destinationResourceId;
 
 		const uuid = require('./uuid').default;
@@ -330,8 +328,7 @@ function shimInit(options: ShimInitOptions = null) {
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
 		if (!resource.mime) {
-			const buffer = await readChunk(filePath, 0, 64);
-			const detectedType = imageType(buffer);
+			const detectedType = await fileTypeFromFile(filePath);
 
 			if (detectedType) {
 				fileExt = detectedType.ext;
