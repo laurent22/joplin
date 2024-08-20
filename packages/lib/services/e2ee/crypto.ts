@@ -13,10 +13,7 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 	return pbkdf2Async(password, salt, iterations, keylen, digest);
 };
 
-const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer | null) => {
-	if (associatedData === null) {
-		associatedData = Buffer.alloc(0);
-	}
+const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
 	let cipher = null;
 	if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
@@ -33,10 +30,7 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 	return Buffer.concat([encryptedData, authTag]);
 };
 
-const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer | null) => {
-	if (associatedData === null) {
-		associatedData = Buffer.alloc(0);
-	}
+const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
 	let decipher = null;
 	if (algorithm === CipherAlgorithm.AES_256_GCM || algorithm === CipherAlgorithm.AES_192_GCM || algorithm === CipherAlgorithm.AES_128_GCM) {
@@ -88,7 +82,7 @@ const crypto: Crypto = {
 		const iv = await crypto.randomBytes(12);
 
 		const key = await pbkdf2Raw(password, salt, iterationCount, keySize, digest);
-		const encrypted = encryptRaw(data, cipherAlgorithm, key, iv, authTagLength, null);
+		const encrypted = encryptRaw(data, cipherAlgorithm, key, iv, authTagLength, Buffer.alloc(0));
 
 		result.iv = iv.toString('base64');
 		result.ct = encrypted.toString('base64');
@@ -108,7 +102,7 @@ const crypto: Crypto = {
 		const iv = Buffer.from(data.iv, 'base64');
 
 		const key = await pbkdf2Raw(password, salt, data.iter, keySize, digest);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), cipherAlgorithm, key, iv, authTagLength, null);
+		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), cipherAlgorithm, key, iv, authTagLength, Buffer.alloc(0));
 
 		return decrypted;
 	},
