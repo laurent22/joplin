@@ -1557,6 +1557,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: true,
 			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
 			label: () => 'Enable auto-updates',
 			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
 			section: 'application',
