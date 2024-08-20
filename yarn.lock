@@ -6730,6 +6730,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/react-fontawesome@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.1"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    "@fortawesome/fontawesome-svg-core": ~1 || ~6
+    react: ">=16.3"
+  checksum: ae499e95fd8a774d90b7e935d9a0621cce22186d05323186529bf8a140faa65b5ee512abc5e03dcc34e73925ec4a3f2208178ff35abbf7206948c2c49a7520fe
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -7585,7 +7597,7 @@ __metadata:
     compare-versions: 6.1.0
     countable: 3.0.1
     debounce: 1.2.1
-    electron: 29.1.0
+    electron: 29.4.5
     electron-builder: 24.13.3
     electron-log: 5.1.6
     electron-updater: 6.2.1
@@ -7652,7 +7664,7 @@ __metadata:
     "@joplin/renderer": ~3.1
     "@joplin/tools": ~3.1
     "@joplin/utils": ~3.1
-    "@js-draw/material-icons": 1.20.0
+    "@js-draw/material-icons": 1.20.2
     "@react-native-clipboard/clipboard": 1.13.2
     "@react-native-community/datetimepicker": 8.0.1
     "@react-native-community/geolocation": 3.2.1
@@ -7967,7 +7979,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": 6.1.2
     "@fortawesome/free-solid-svg-icons": 6.1.2
-    "@fortawesome/react-fontawesome": 0.2.0
+    "@fortawesome/react-fontawesome": 0.2.1
     "@joplin/lib": ~3.1
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
@@ -8402,12 +8414,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.20.0":
-  version: 1.20.0
-  resolution: "@js-draw/material-icons@npm:1.20.0"
+"@js-draw/material-icons@npm:1.20.2":
+  version: 1.20.2
+  resolution: "@js-draw/material-icons@npm:1.20.2"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: 4b0aca3098cd4b4941e1ceb1f5656e14f41476053cf0e2509bbc6a9c095c304e95c1a09c0ba8bb06caecc0e17b2031d4735b17b0e4271800efdc8d40cb4d73e6
+  checksum: 771f951e85535d40fc525947ba04b83b1243d1ce0161429580b3f603b3b8e7804b8b1bdff918d57604f5cd4cf6dcf1bb67940571d7c19e970b23b5495884cf10
   languageName: node
   linkType: hard
 
@@ -21099,16 +21111,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:29.1.0":
-  version: 29.1.0
-  resolution: "electron@npm:29.1.0"
+"electron@npm:29.4.5":
+  version: 29.4.5
+  resolution: "electron@npm:29.4.5"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^20.9.0
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: b707c5a6915f7e3259bb3a6123b91d9fa43fdd314683f9affcf99382f3bf9aa2c9d78060cb8e7a30fdf9421cc770ec3cf866f5474f173a5611eb614886c5eeef
+  checksum: 8c90671ddbde19e3bb4a5e0544e42204b13d1d75f4f96343b400754956a750262c1ad9574f479c0c3b7e90444e675f40a3f61e5374a8bb6f6de45eb6417a7f4f
   languageName: node
   linkType: hard
 

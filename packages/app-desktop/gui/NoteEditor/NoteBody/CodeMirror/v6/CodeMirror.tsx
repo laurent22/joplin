@@ -16,7 +16,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings, UserEventSource } from '@joplin/editor/types';
+import { EditorKeymap, EditorLanguageType, EditorSettings, SearchState, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -175,6 +175,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				}
 			},
 			supportsCommand: (name: string) => {
+				if (name === 'search' && !props.visiblePanes.includes('editor')) {
+					return false;
+				}
 				return name in commands || editorRef.current.supportsCommand(name);
 			},
 			execCommand: async (cmd: EditorCommand) => {
@@ -197,7 +200,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				return commandOutput;
 			},
 		};
-	}, [props.content, commands, resetScroll, setEditorPercentScroll, setViewerPercentScroll]);
+	}, [props.content, props.visiblePanes, commands, resetScroll, setEditorPercentScroll, setViewerPercentScroll]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -321,6 +324,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorRef,
 		noteContent: props.content,
 		renderedBody,
+		showEditorMarkers: !props.useLocalSearch,
 	});
 
 	useContextMenu({
@@ -330,6 +334,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorClassName: 'cm-editor',
 	});
 
+	const lastSearchState = useRef<SearchState|null>(null);
 	const onEditorEvent = useCallback((event: EditorEvent) => {
 		if (event.kind === EditorEventType.Scroll) {
 			editor_scroll();
@@ -337,8 +342,17 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			codeMirror_change(event.value);
 		} else if (event.kind === EditorEventType.SelectionRangeChange) {
 			setSelectionRange({ from: event.from, to: event.to });
+		} else if (event.kind === EditorEventType.UpdateSearchDialog) {
+			if (lastSearchState.current?.searchText !== event.searchState.searchText) {
+				props.setLocalSearch(event.searchState.searchText);
+			}
+
+			if (lastSearchState.current?.dialogVisible !== event.searchState.dialogVisible) {
+				props.setShowLocalSearch(event.searchState.dialogVisible);
+			}
+			lastSearchState.current = event.searchState;
 		}
-	}, [editor_scroll, codeMirror_change]);
+	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
 
 	const editorSettings = useMemo((): EditorSettings => {
 		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
@@ -389,6 +403,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					onEvent={onEditorEvent}
 					onLogMessage={logDebug}
 					onEditorPaste={onEditorPaste}
+					externalSearch={props.searchMarkers}
+					useLocalSearch={props.useLocalSearch}
 				/>
 			</div>
 		);

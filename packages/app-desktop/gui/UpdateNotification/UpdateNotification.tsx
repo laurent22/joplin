@@ -8,6 +8,7 @@ import { AutoUpdaterEvents } from '../../services/autoUpdater/AutoUpdaterService
 import { NotyfNotification } from 'notyf';
 import { _ } from '@joplin/lib/locale';
 import { htmlentities } from '@joplin/utils/html';
+import shim from '@joplin/lib/shim';
 
 interface UpdateNotificationProps {
 	themeId: number;
@@ -21,7 +22,7 @@ export enum UpdateNotificationEvents {
 const changelogLink = 'https://github.com/laurent22/joplin/releases';
 
 window.openChangelogLink = () => {
-	ipcRenderer.send('open-link', changelogLink);
+	shim.openUrl(changelogLink);
 };
 
 const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {

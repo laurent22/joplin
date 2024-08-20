@@ -82,5 +82,42 @@ test.describe('richTextEditor', () => {
 		expect(await openPathResult).toContain(basename(pathToAttach));
 	});
 
+	test('pressing Tab should indent', async ({ mainWindow }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.createNewNote('Testing tabs!');
+		const editor = mainScreen.noteEditor;
+
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.click();
+
+		await mainWindow.keyboard.type('This is a');
+		// Tab should add spaces
+		await mainWindow.keyboard.press('Tab');
+		await mainWindow.keyboard.type('test.');
+
+		// Shift-tab should remove spaces
+		await mainWindow.keyboard.press('Tab');
+		await mainWindow.keyboard.press('Tab');
+		await mainWindow.keyboard.press('Shift+Tab');
+		await mainWindow.keyboard.type('Test!');
+
+		// Escape then tab should move focus
+		await mainWindow.keyboard.press('Escape');
+		await expect(editor.richTextEditor).toBeFocused();
+		await mainWindow.keyboard.press('Tab');
+		await expect(editor.richTextEditor).not.toBeFocused();
+
+		// After re-focusing the editor, Tab should indent again.
+		await mainWindow.keyboard.press('Shift+Tab');
+		await expect(editor.richTextEditor).toBeFocused();
+		await mainWindow.keyboard.type(' Another:');
+		await mainWindow.keyboard.press('Tab');
+		await mainWindow.keyboard.type('!');
+
+		// After switching back to the Markdown editor,
+		await expect(editor.toggleEditorsButton).not.toBeDisabled();
+		await editor.toggleEditorsButton.click();
+		await expect(editor.codeMirrorEditor).toHaveText('This is a        test.        Test! Another:        !');
+	});
 });
 

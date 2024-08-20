@@ -1,5 +1,18 @@
 # Joplin Desktop Changelog
 
+## [v3.1.3](https://github.com/laurent22/joplin/releases/tag/v3.1.3) (Pre-release) - 2024-08-17T13:08:21Z
+
+- Improved: Rich Text Editor: Add eight spaces when pressing tab ([#10880](https://github.com/laurent22/joplin/issues/10880)) ([#5762](https://github.com/laurent22/joplin/issues/5762) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Seamless-Updates: added flow for automatic updates for releases ([#10857](https://github.com/laurent22/joplin/issues/10857) by [@AliceHincu](https://github.com/AliceHincu))
+- Fixed: Improve the reliability of fetching resources ([#10826](https://github.com/laurent22/joplin/issues/10826)) ([#10740](https://github.com/laurent22/joplin/issues/10740) by [@pedr](https://github.com/pedr))
+
+## [v3.1.2](https://github.com/laurent22/joplin/releases/tag/v3.1.2) (Pre-release) - 2024-08-16T09:00:59Z
+
+- Improved: Allow searching when only the note viewer is visible and sync search with editor ([#10866](https://github.com/laurent22/joplin/issues/10866) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Seamless-Updates: generate latest-mac.yml file ([#10869](https://github.com/laurent22/joplin/issues/10869) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Updated packages @fortawesome/react-fontawesome (v0.2.1)
+- Improved: Upgrade electron to v29.4.5 ([#10847](https://github.com/laurent22/joplin/issues/10847) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.1.1](https://github.com/laurent22/joplin/releases/tag/v3.1.1) (Pre-release) - 2024-08-10T11:36:02Z
 
 - New: Accessibility: Add missing labels and role information to several controls ([#10788](https://github.com/laurent22/joplin/issues/10788) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

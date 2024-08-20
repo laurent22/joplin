@@ -1,6 +1,6 @@
 const { writeFile, copy, mkdirp, remove } = require('fs-extra');
 const glob = require('glob');
-const { resolve } = require('path');
+const { resolve, basename } = require('path');
 const { dirname } = require('@joplin/tools/gulp/utils');
 
 const rootDir = resolve(__dirname, '../../..');
@@ -146,9 +146,7 @@ async function main() {
 	}
 
 	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
-		s = s.split('/');
-		s = s[s.length - 1];
-		s = s.split('.');
+		s = basename(s).split('.');
 		return s[0];
 	});
 

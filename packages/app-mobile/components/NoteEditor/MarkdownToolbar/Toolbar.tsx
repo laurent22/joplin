@@ -93,7 +93,7 @@ const Toolbar: React.FC<ToolbarProps> = (props: ToolbarProps) => {
 	);
 
 	const overflow = (
-		<ScrollView style={{ flex: 1 }}>
+		<ScrollView>
 			<ToolbarOverflowRows
 				buttonGroups={props.buttons}
 				styleSheet={props.styleSheet}

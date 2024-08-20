@@ -42,8 +42,12 @@ const setUpProtocolHandler = () => {
 	return { protocolHandler, onRequestListener };
 };
 
+// Although none of the paths in this test suite point to real files, file paths must be in
+// a certain format on Windows to avoid invalid path exceptions.
+const toPlatformPath = (path: string) => process.platform === 'win32' ? `C:/${path}` : path;
+
 const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
-	const url = `joplin-content://note-viewer/${filePath}`;
+	const url = `joplin-content://note-viewer/${toPlatformPath(filePath)}`;
 
 	await expect(
 		async () => await onRequestListener(new Request(url)),
@@ -51,7 +55,9 @@ const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePat
 };
 
 const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
-	const handleRequestResult = await onRequestListener(new Request(`joplin-content://note-viewer/${filePath}`));
+	const handleRequestResult = await onRequestListener(
+		new Request(`joplin-content://note-viewer/${toPlatformPath(filePath)}`),
+	);
 	expect(handleRequestResult.body).toBeTruthy();
 };
 
@@ -70,7 +76,7 @@ describe('handleCustomProtocols', () => {
 		await expectPathToBeBlocked(onRequestListener, '/test/path');
 		await expectPathToBeBlocked(onRequestListener, '/');
 
-		protocolHandler.allowReadAccessToDirectory('/test/path/');
+		protocolHandler.allowReadAccessToDirectory(toPlatformPath('/test/path/'));
 		await expectPathToBeUnblocked(onRequestListener, '/test/path');
 		await expectPathToBeUnblocked(onRequestListener, '/test/path/a.txt');
 		await expectPathToBeUnblocked(onRequestListener, '/test/path/b.txt');
@@ -79,7 +85,7 @@ describe('handleCustomProtocols', () => {
 		await expectPathToBeBlocked(onRequestListener, '/test/path2');
 		await expectPathToBeBlocked(onRequestListener, '/test/path/../a.txt');
 
-		protocolHandler.allowReadAccessToDirectory('/another/path/here');
+		protocolHandler.allowReadAccessToDirectory(toPlatformPath('/another/path/here'));
 
 		await expectPathToBeBlocked(onRequestListener, '/another/path/here2');
 		await expectPathToBeUnblocked(onRequestListener, '/another/path/here');
