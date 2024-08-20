@@ -1,5 +1,5 @@
 import { _ } from '../../locale';
-import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionOptions } from './types';
+import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from './types';
 import { promisify } from 'util';
 import {
 	randomBytes as nodeRandomBytes,
@@ -61,11 +61,10 @@ const crypto: Crypto = {
 		return randomBytesAsync(size);
 	},
 
-	encrypt: async (password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionOptions) => {
+	encrypt: async (password: string, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionParameters) => {
 
-		// Parameters in EncryptionOptions won't appear in result
+		// Parameters in EncryptionParameters won't appear in result
 		const result: EncryptionResult = {
-			iter: iterationCount,
 			salt: salt.toString('base64'),
 			iv: '',
 			ct: '', // cipherText
@@ -75,7 +74,7 @@ const crypto: Crypto = {
 		// "For IVs, it is recommended that implementations restrict support to the length of 96 bits, to promote interoperability, efficiency, and simplicity of design." - NIST SP 800-38D
 		const iv = await crypto.randomBytes(12);
 
-		const key = await pbkdf2Raw(password, salt, iterationCount, options.keyLength, options.digestAlgorithm);
+		const key = await pbkdf2Raw(password, salt, options.iterationCount, options.keyLength, options.digestAlgorithm);
 		const encrypted = encryptRaw(data, options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
 
 		result.iv = iv.toString('base64');
@@ -84,19 +83,19 @@ const crypto: Crypto = {
 		return result;
 	},
 
-	decrypt: async (password: string, data: EncryptionResult, options: EncryptionOptions) => {
+	decrypt: async (password: string, data: EncryptionResult, options: EncryptionParameters) => {
 
 		const salt = Buffer.from(data.salt, 'base64');
 		const iv = Buffer.from(data.iv, 'base64');
 
-		const key = await pbkdf2Raw(password, salt, data.iter, options.keyLength, options.digestAlgorithm);
+		const key = await pbkdf2Raw(password, salt, options.iterationCount, options.keyLength, options.digestAlgorithm);
 		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), options.cipherAlgorithm, key, iv, options.authTagLength, Buffer.alloc(0));
 
 		return decrypted;
 	},
 
-	encryptString: async (password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionOptions) => {
-		return crypto.encrypt(password, iterationCount, salt, Buffer.from(data, encoding), options);
+	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionParameters) => {
+		return crypto.encrypt(password, salt, Buffer.from(data, encoding), options);
 	},
 };
 

@@ -420,11 +420,12 @@ export default class EncryptionService {
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			// 2024-08: Set iteration count in pbkdf2 to 220000 as suggested by OWASP. https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
 			[EncryptionMethod.KeyV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 220000, await crypto.randomBytes(32), plainText, 'hex', {
+				return JSON.stringify(await crypto.encryptString(key, await crypto.randomBytes(32), plainText, 'hex', {
 					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					iterationCount: 220000,
 				}));
 			},
 
@@ -432,22 +433,24 @@ export default class EncryptionService {
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			// The file content is base64 encoded. Decoding it before encryption to reduce the size overhead.
 			[EncryptionMethod.FileV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'base64', {
+				return JSON.stringify(await crypto.encryptString(key, await crypto.randomBytes(32), plainText, 'base64', {
 					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					iterationCount: 5,
 				}));
 			},
 
 			// New encryption method powered by native crypto libraries(node:crypto/react-native-quick-crypto). Using AES-256-GCM and pbkdf2
 			// The master key is not directly used. A new data key is generated from the master key and a 256 bits random salt to prevent nonce reuse problem
 			[EncryptionMethod.StringV1]: async () => {
-				return JSON.stringify(await crypto.encryptString(key, 5, await crypto.randomBytes(32), plainText, 'utf16le', {
+				return JSON.stringify(await crypto.encryptString(key, await crypto.randomBytes(32), plainText, 'utf16le', {
 					cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 					authTagLength: 16,
 					digestAlgorithm: Digest.sha512,
 					keyLength: 32,
+					iterationCount: 5,
 				}));
 			},
 
@@ -472,6 +475,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				iterationCount: 220000,
 			})).toString('hex');
 		} else if (method === EncryptionMethod.FileV1) {
 			return (await crypto.decrypt(key, JSON.parse(cipherText), {
@@ -479,6 +483,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				iterationCount: 5,
 			})).toString('base64');
 		} else if (method === EncryptionMethod.StringV1) {
 			return (await crypto.decrypt(key, JSON.parse(cipherText), {
@@ -486,6 +491,7 @@ export default class EncryptionService {
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
+				iterationCount: 5,
 			})).toString('utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
 			try {

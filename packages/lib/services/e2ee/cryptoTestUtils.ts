@@ -206,19 +206,19 @@ const decryptTestData: Record<string, DecryptTestData> = {
 		method: EncryptionMethod.StringV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: '中文にっぽんご한국어😀\uD83D\0\r\nenglish01234567890',
-		ciphertext: '{"iter":200,"salt":"EUChaTc2I6nIdJPSVCe9YIKUSURd/W8jjX4yzcNvAus=","iv":"RPb1xewALYrPe0hM","ct":"HFEyN3KMsqf/EY2yTTKk0sBm34byHnmJVoL20v5GCuBdCJBl3w7NWoxKAcTD3D1jY3Rt3Brn1mJWykjJMDmPj6tjEyU8ZUS84TuLIW7MTcFOx5xM"}',
+		ciphertext: '{"salt":"6A3HyEPrxxNEgDq1m43BRrzEehxaIpcRRABBCWX3z9o=","iv":"FZNIQvkHiHolFdK7","ct":"uea3tJg8VJ/JuC2H62cOfEOeMVjLw0trphr4F08VsmKNpv46uYtZJHSx5Jz/5sP/MHNPsmFqXcxzrSdYFOLjRhqyxf71KFFpxGFJ44nMwwRbKgUw"}',
 	},
 	hexKey: {
 		method: EncryptionMethod.KeyV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: 'ea5d8dd43823a812c9a64f4eb09b57e1aa2dbfcda50bf9e416dcd1f8c569a6462f7f61861c3ccda0c7c16bf4192ed9c7ecaf3e1248517bd6f397d1080d2632fc69e1ead59a398a07e7478c8d90142745c0dce39c2105b6d34117424697de03879caa3b6410325f14dc5755b69efa944eb83f06970d04444e83fe054576af20576c0f3a5dc23e0d6dcfa3e84ec05c21139070c0809bd2bdc86a7782368c9d99eb072c858c61ec8926136e6e50dfd57b7e8e0084ad08b2d984db0436f50433cab44b3c462ccd22a8567c8ff86675fff618b11526030f09f735646a9f189f54ba5485d069ee25ac468ec0a873c1223eed34962bd219972020cc147041d4b00a3ab8',
-		ciphertext: '{"iter":220000,"salt":"0J0KrV2DUWbbY/0T/Do8b2E0cQ2gOGUeVay/uRHnjhY=","iv":"4Z+V0Lh0ID5U7lzN","ct":"X+PZIHUmc3rCIq77fU3MNth2o2GrGd0jgl7P6xwXpK1qhkr/XLVZ5nx5Yo1DVMYivDeoVrPVmpZ9enQ3P667LtUjD2i/qJU0zxOcqdb2ZkAQssRPf7r+8yvhp6dK5d8zKB8gEKJK+z51vWyoEd9CE+NCUzPiNfrStRTuqDwxxXYiBE1gB4lzFWK1GLvfS4998g6rOjonn+SzuIc0JgSLrx9xoP4aVzolGAVRU6C9Hl37hSIudBUuUDskQcJao4BUQ25I5mQ27c9vISonHF2mqt0MbToVMTvYqDZFX48s9zdHlJ52fbgJnTlPD76OgbZEYeCMgPKge2Ic61nD+EYoacMWjS/+WncMbeVH3+5F0gg="}',
+		ciphertext: '{"salt":"iv5kKP+scMyXKO2jqzef3q9y9p/o/mj6zAoKVltbPx0=","iv":"Gz1PtbDzoaZzRx5m","ct":"YSS4ga1Q0MeVpFbMn2V45TaAbbuJM12vU/qYQ/VEGYPXhNQ4YchfRt7+LjhVxwpvfc/rD0znt6kpAh4ROGS2CLDy27/n5VICgTVY2VVff+YjPAma6odKn2pm4Z88fZlkoJVLi7QyU96Mvb6bYVbuNjQ16hOjFQ3iIIztLcafsHaW6v6gUFrDWYVQPi1/xovmmCe/GaM3JeMye5QQiFrmLQIxEJMNv8YiNyppMVf5b1YGFtDlOjm3XE2H9bb+wWNAd82mcwcAe+ZUedz3AH9PKlsRyBGHfGQ/rfFzeoFj+Wjm4fvPniPa1muRSMQDHU2Zw5YGWQwMNVUHt+y7lDoqPF2NQv4DvPmY1kLz2yohIzc="}',
 	},
 	base64File: {
 		method: EncryptionMethod.FileV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: '5Lit5paH44Gr44Gj44G944KT44GU7ZWc6rWt7Ja08J+YgO+/vQANCmVuZ2xpc2gwMTIzNDU2Nzg5MA==',
-		ciphertext: '{"iter":200,"salt":"bTlrtQiEzgOY2RRzolmGI360+/j4ZIqn5U5dstwDWsI=","iv":"8zWMrp+ebcVyZB2N","ct":"bNSj8GHcTflaq2WkXoJstvyDgoBZJbojVAahdyRRU3Kn+WzVoeKZTTmyH+pfLsKkkAqxpGUFpZWZM8eFXmxKN83jQBPjrJCdyFY="}',
+		ciphertext: '{"salt":"wG/hFCK2IZTgi0JR5D1eZr09vnS17hDftWYim0FkU2w=","iv":"bpjlR7owtQzMYJwg","ct":"/CoRA2X3aiPaWdtkotcacpiutN3YJh0ebzplP1bOsukzeqA4ZgbkhKxMLg841nuNq1T8NoX+cQASHMdO5DNzrQP8raVLywd3MIg="}',
 	},
 };
 
