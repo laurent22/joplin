@@ -28,9 +28,9 @@ export interface RSA {
 
 export interface Crypto {
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	encrypt(password: string, iterationCount: number, salt: CryptoBuffer | null, data: CryptoBuffer): Promise<EncryptionResult>;
+	encrypt(password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer): Promise<EncryptionResult>;
 	decrypt(password: string, data: EncryptionResult): Promise<Buffer>;
-	encryptString(password: string, iterationCount: number, salt: CryptoBuffer | null, data: string, encoding: BufferEncoding): Promise<EncryptionResult>;
+	encryptString(password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding): Promise<EncryptionResult>;
 }
 
 export interface CryptoBuffer extends Uint8Array {

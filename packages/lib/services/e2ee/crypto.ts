@@ -68,7 +68,7 @@ const crypto: Crypto = {
 		return randomBytesAsync(size);
 	},
 
-	encrypt: async (password: string, iterationCount: number, salt: CryptoBuffer | null, data: CryptoBuffer) => {
+	encrypt: async (password: string, iterationCount: number, salt: CryptoBuffer, data: CryptoBuffer) => {
 
 		// default encryption parameters
 		const cipherAlgorithm = CipherAlgorithm.AES_256_GCM;
@@ -79,17 +79,15 @@ const crypto: Crypto = {
 		// default encryption parameters won't appear in result
 		const result: EncryptionResult = {
 			iter: iterationCount,
-			salt: '',
+			salt: salt.toString('base64'),
 			iv: '',
 			ct: '', // cipherText
 		};
-		salt = salt || await crypto.randomBytes(32); // 256 bits
 		const iv = await crypto.randomBytes(12); // 96 bits
 
 		const key = await pbkdf2Raw(password, salt, iterationCount, keySize, digest);
 		const encrypted = encryptRaw(data, cipherAlgorithm, key, iv, authTagLength, null);
 
-		result.salt = salt.toString('base64');
 		result.iv = iv.toString('base64');
 		result.ct = encrypted.toString('base64');
 
@@ -113,7 +111,7 @@ const crypto: Crypto = {
 		return decrypted;
 	},
 
-	encryptString: async (password: string, iterationCount: number, salt: CryptoBuffer | null, data: string, encoding: BufferEncoding) => {
+	encryptString: async (password: string, iterationCount: number, salt: CryptoBuffer, data: string, encoding: BufferEncoding) => {
 		return crypto.encrypt(password, iterationCount, salt, Buffer.from(data, encoding));
 	},
 };
