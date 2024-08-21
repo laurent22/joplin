@@ -847,10 +847,10 @@ async function initialize(dispatch: Dispatch) {
 	if (Setting.value('env') === 'dev') {
 		if (Platform.OS !== 'web') {
 			await runRsaIntegrationTests();
-			await runCryptoIntegrationTests();
 		} else {
 			logger.info('Skipping encryption tests -- not supported on web.');
 		}
+		await runCryptoIntegrationTests();
 		await runOnDeviceFsDriverTests();
 	}
 

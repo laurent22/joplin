@@ -1,7 +1,5 @@
 import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters, CipherAlgorithm } from './types';
-import {
-	webcrypto,
-} from 'crypto';
+import { webcrypto } from 'crypto';
 import { Buffer } from 'buffer';
 import digestNameMap from './constants';
 
