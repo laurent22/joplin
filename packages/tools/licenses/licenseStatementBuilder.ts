@@ -245,7 +245,7 @@ const buildForPackage = async (packageNames: string[]): Promise<string> => {
 
 const licenseStatementBuilder = async () => {
 	const baseDir = dirname(dirname(dirname(__dirname)));
-	const outputPath = join(baseDir, 'readme', 'third_party_licenses.md');
+	const outputPath = join(baseDir, 'readme', 'licenses.md');
 	const result = await buildForPackage([
 		'app-mobile',
 		'app-cli',
