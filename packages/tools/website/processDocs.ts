@@ -38,7 +38,6 @@ interface Context {
 	listStarting?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	currentLinkAttrs?: any;
-	currentFenceDelimiter?: string;
 	inFence?: boolean;
 	processedFiles?: string[];
 	isNews?: boolean;
@@ -158,11 +157,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		}
 	} else if (type === 'fence') {
 		context.inFence = true;
-		// Preserve the original fence delimiter if it contains more than 3 `s.
-		// This allows nested fence blocks.
-		const fenceDelimiter = token.markup.match(/^[`]{3,}$/) ? token.markup : '```';
-		context.currentFenceDelimiter = fenceDelimiter;
-		content.push(`${fenceDelimiter}${token.info || ''}\n`);
+		content.push(`\`\`\`${token.info || ''}\n`);
 	} else if (type === 'html_block') {
 		contentProcessed = true,
 		content.push(parseHtml(token.content.trim()));
@@ -255,7 +250,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	}
 
 	if (type === 'fence') {
-		content.push(context.currentFenceDelimiter ?? '```');
+		content.push('```');
 		content.push(paragraphBreak);
 		context.inFence = false;
 	}
