@@ -1,20 +1,12 @@
 import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from '@joplin/lib/services/e2ee/types';
+import { digestNameMap } from '@joplin/lib/services/e2ee/constants';
 import QuickCrypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
 
-type DigestNameMap = Record<Digest, HashAlgorithm>;
 
 const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer> => {
-	const digestNameMap: DigestNameMap = {
-		sha1: 'SHA-1',
-		sha224: 'SHA-224',
-		sha256: 'SHA-256',
-		sha384: 'SHA-384',
-		sha512: 'SHA-512',
-		ripemd160: 'RIPEMD-160',
-	};
-	const rnqcDigestName = digestNameMap[digest];
+	const rnqcDigestName = digestNameMap[digest] as HashAlgorithm;
 
 	return new Promise((resolve, reject) => {
 		QuickCrypto.pbkdf2(password, salt, iterations, keylen, rnqcDigestName, (error, result) => {
