@@ -84,6 +84,8 @@ describe('useFormNote', () => {
 	});
 
 
+	// Lacking is_conflict has previously caused UI issues. See https://github.com/laurent22/joplin/pull/10913
+	// for details.
 	it('should preserve value of is_conflict on save', async () => {
 		const testNote = await Note.save({ title: 'Test Note!', is_conflict: 1 });
 
