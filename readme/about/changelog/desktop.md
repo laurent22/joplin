@@ -3,7 +3,7 @@
 ## [v3.0.15](https://github.com/laurent22/joplin/releases/tag/v3.0.15) - 2024-08-21T09:19:58Z
 
 - Fixed: Improve the reliability of fetching resources ([#10826](https://github.com/laurent22/joplin/issues/10826)) ([#10740](https://github.com/laurent22/joplin/issues/10740) by [@pedr](https://github.com/pedr))
-- Security: Fix HTML parsing bug ([#10876](https://github.com/laurent22/joplin/issues/10876) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Security: Fix HTML parsing bug ([#10876](https://github.com/laurent22/joplin/issues/10876)) (reported by [@febou92](https://github.com/febou92))
 
 ## [v3.1.3](https://github.com/laurent22/joplin/releases/tag/v3.1.3) (Pre-release) - 2024-08-17T13:08:21Z
 
