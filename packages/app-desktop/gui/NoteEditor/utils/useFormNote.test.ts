@@ -1,9 +1,10 @@
 import Note from '@joplin/lib/models/Note';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import { act, renderHook } from '@testing-library/react-hooks';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
+import { join } from 'path';
 
 const defaultFormNoteProps: HookDependencies = {
 	syncStarted: false,
@@ -115,7 +116,7 @@ describe('useFormNote', () => {
 
 	test('should refresh resource infos when changed outside the editor', async () => {
 		let note = await Note.save({});
-		note = await shim.attachFileToNote(note, __filename);
+		note = await shim.attachFileToNote(note, join(supportDir, 'sample.txt'));
 		const resourceIds = Note.linkedItemIds(note.body);
 		const resource = await Resource.load(resourceIds[0]);
 
@@ -141,12 +142,12 @@ describe('useFormNote', () => {
 		});
 
 		await act(async () => {
-			await Resource.save({ ...resource, filename: 'test.ts' });
+			await Resource.save({ ...resource, filename: 'test.txt' });
 		});
 		await formNote.waitFor(() => {
 			const resourceInfo = formNote.result.current.resourceInfos[resource.id];
 			expect(resourceInfo.item).toMatchObject({
-				id: resource.id, filename: 'test.ts',
+				id: resource.id, filename: 'test.txt',
 			});
 		});
 
