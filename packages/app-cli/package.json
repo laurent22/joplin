@@ -47,7 +47,7 @@
     "aws-sdk": "2.1340.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
-    "file-type": "19.4.1",
+    "file-type": "16.5.4",
     "fs-extra": "11.2.0",
     "html-entities": "1.4.0",
     "keytar": "7.9.0",

@@ -12,7 +12,6 @@ import { ResourceEntity } from './services/database/types';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
-import { fileTypeFromFile } from 'file-type';
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
@@ -308,6 +307,7 @@ function shimInit(options: ShimInitOptions = null) {
 		const isUpdate = !!options.destinationResourceId;
 
 		const uuid = require('./uuid').default;
+		const { fromFile } = await import('file-type');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
@@ -328,7 +328,7 @@ function shimInit(options: ShimInitOptions = null) {
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
 		if (!resource.mime) {
-			const detectedType = await fileTypeFromFile(filePath);
+			const detectedType = await fromFile(filePath);
 
 			if (detectedType) {
 				fileExt = detectedType.ext;
