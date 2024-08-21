@@ -2,7 +2,7 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import waitForNextOpenPath from './util/waitForNextOpenPath';
-import { basename } from 'path';
+import { basename, join } from 'path';
 
 test.describe('richTextEditor', () => {
 	test('HTML links should be preserved when editing a note', async ({ electronApp, mainWindow }) => {
@@ -58,7 +58,7 @@ test.describe('richTextEditor', () => {
 		await editor.focusCodeMirrorEditor();
 
 		// Attach this file to the note (create a resource ID)
-		const pathToAttach = __filename;
+		const pathToAttach = join(__dirname, 'resources', 'test-file.txt');
 		await setFilePickerResponse(electronApp, [pathToAttach]);
 		await editor.attachFileButton.click();
 
