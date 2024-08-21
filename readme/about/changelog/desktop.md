@@ -1,5 +1,10 @@
 # Joplin Desktop Changelog
 
+## [v3.0.15](https://github.com/laurent22/joplin/releases/tag/v3.0.15) - 2024-08-21T09:19:58Z
+
+- Fixed: Improve the reliability of fetching resources ([#10826](https://github.com/laurent22/joplin/issues/10826)) ([#10740](https://github.com/laurent22/joplin/issues/10740) by [@pedr](https://github.com/pedr))
+- Security: Fix HTML parsing bug ([#10876](https://github.com/laurent22/joplin/issues/10876) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.1.3](https://github.com/laurent22/joplin/releases/tag/v3.1.3) (Pre-release) - 2024-08-17T13:08:21Z
 
 - Improved: Rich Text Editor: Add eight spaces when pressing tab ([#10880](https://github.com/laurent22/joplin/issues/10880)) ([#5762](https://github.com/laurent22/joplin/issues/5762) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
