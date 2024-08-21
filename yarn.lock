@@ -6730,15 +6730,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:0.2.1":
-  version: 0.2.1
-  resolution: "@fortawesome/react-fontawesome@npm:0.2.1"
+"@fortawesome/react-fontawesome@npm:0.2.2":
+  version: 0.2.2
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.2"
   dependencies:
     prop-types: ^15.8.1
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~1 || ~6
     react: ">=16.3"
-  checksum: ae499e95fd8a774d90b7e935d9a0621cce22186d05323186529bf8a140faa65b5ee512abc5e03dcc34e73925ec4a3f2208178ff35abbf7206948c2c49a7520fe
+  checksum: e4bed35bfb7fc88b5bcf2305d08ee1835b82fa7705945c4d310df33bb747b05ef07a33ac9db643c8870ca4f835228978290d84d82f2c6c6a70b9ab4c886731a6
   languageName: node
   linkType: hard
 
@@ -7664,7 +7664,7 @@ __metadata:
     "@joplin/renderer": ~3.1
     "@joplin/tools": ~3.1
     "@joplin/utils": ~3.1
-    "@js-draw/material-icons": 1.20.1
+    "@js-draw/material-icons": 1.20.2
     "@react-native-clipboard/clipboard": 1.13.2
     "@react-native-community/datetimepicker": 8.0.1
     "@react-native-community/geolocation": 3.2.1
@@ -7979,7 +7979,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": 6.1.2
     "@fortawesome/free-solid-svg-icons": 6.1.2
-    "@fortawesome/react-fontawesome": 0.2.1
+    "@fortawesome/react-fontawesome": 0.2.2
     "@joplin/lib": ~3.1
     "@types/jest": 29.5.8
     "@types/pdfjs-dist": 2.10.378
@@ -8228,7 +8228,7 @@ __metadata:
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
     "@adobe/css-tools": 4.3.3
-    "@rollup/plugin-commonjs": 25.0.7
+    "@rollup/plugin-commonjs": 25.0.8
     "@rollup/plugin-node-resolve": 15.2.3
     "@rollup/plugin-replace": 5.0.5
     browserify: 14.5.0
@@ -8414,12 +8414,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.20.1":
-  version: 1.20.1
-  resolution: "@js-draw/material-icons@npm:1.20.1"
+"@js-draw/material-icons@npm:1.20.2":
+  version: 1.20.2
+  resolution: "@js-draw/material-icons@npm:1.20.2"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: c16959d37b32cb3b5d45218c0ffad9cb3b059992e0c8b5d5ca791b000c42efc16821ac513f82dd4b44d929c8eabb69e5a01545b986029ab1819b4cd3b207f79a
+  checksum: 771f951e85535d40fc525947ba04b83b1243d1ce0161429580b3f603b3b8e7804b8b1bdff918d57604f5cd4cf6dcf1bb67940571d7c19e970b23b5495884cf10
   languageName: node
   linkType: hard
 
@@ -10795,9 +10795,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:25.0.7":
-  version: 25.0.7
-  resolution: "@rollup/plugin-commonjs@npm:25.0.7"
+"@rollup/plugin-commonjs@npm:25.0.8":
+  version: 25.0.8
+  resolution: "@rollup/plugin-commonjs@npm:25.0.8"
   dependencies:
     "@rollup/pluginutils": ^5.0.1
     commondir: ^1.0.1
@@ -10810,7 +10810,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 052e11839a9edc556eda5dcc759ab816dcc57e9f0f905a1e6e14fff954eaa6b1e2d0d544f5bd18d863993c5eba43d8ac9c19d9bb53b1c3b1213f32cfc9d50b2e
+  checksum: dd105ee5625fbcaf832c0cf80be0aaf6a86bbd8fe99ff911f9ac4b78c79f26e9e99442b5aa0cc1136b5ddf89ec0b6c5728e5341ac04d687aef1b53063670b395
   languageName: node
   linkType: hard
 
