@@ -47,4 +47,4 @@ For example, to use OCR on a computer without internet access:
 6. Click "Apply".
 7. Enable OCR.
 
-To replace cached language data with custom data, it may also be necessary to click "Clear cache and re-download language data files".
+To replace existing cached language data, click "Clear cache and re-download language data files".
