@@ -6,13 +6,68 @@ import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { LoggerWrapper } from '@joplin/utils/Logger';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
-import { Readable } from 'stream';
 import { fromFilename } from '@joplin/lib/mime-utils';
 
 export interface CustomProtocolHandler {
 	allowReadAccessToDirectory(path: string): void;
 	allowReadAccessToFile(path: string): { remove(): void };
 }
+
+
+// In some cases, the NodeJS built-in adapter (Readable.toWeb) closes its controller twice,
+// leading to an error dialog. See:
+// - https://github.com/nodejs/node/blob/e578c0b1e8d3dd817e692a0c5df1b97580bc7c7f/lib/internal/webstreams/adapters.js#L454
+// - https://github.com/nodejs/node/issues/54205
+// We work around this by creating a more-error-tolerant custom adapter.
+const nodeStreamToWeb = (resultStream: fs.ReadStream) => {
+	resultStream.pause();
+
+	let closed = false;
+
+	return new ReadableStream({
+		start: (controller) => {
+			resultStream.on('data', (chunk) => {
+				if (closed) {
+					return;
+				}
+
+				if (Buffer.isBuffer(chunk)) {
+					controller.enqueue(new Uint8Array(chunk));
+				} else {
+					controller.enqueue(chunk);
+				}
+
+				if (controller.desiredSize <= 0) {
+					resultStream.pause();
+				}
+			});
+
+			resultStream.on('error', (error) => {
+				controller.error(error);
+			});
+
+			resultStream.on('end', () => {
+				if (!closed) {
+					closed = true;
+					controller.close();
+				}
+			});
+		},
+		pull: (_controller) => {
+			if (closed) {
+				return;
+			}
+
+			resultStream.resume();
+		},
+		cancel: () => {
+			if (!closed) {
+				closed = true;
+				resultStream.close();
+			}
+		},
+	}, { highWaterMark: resultStream.readableHighWaterMark });
+};
 
 // Allows seeking videos.
 // See https://github.com/electron/electron/issues/38749 for why this is necessary.
@@ -42,7 +97,7 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 	}
 
 	// Note: end is inclusive.
-	const resultStream = Readable.toWeb(createReadStream(targetPath, { start: startByte, end: endByte }));
+	const resultStream = createReadStream(targetPath, { start: startByte, end: endByte });
 
 	// See the HTTP range requests guide: https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests
 	const headers = new Headers([
@@ -52,10 +107,9 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 		['Content-Range', `bytes ${startByte}-${endByte}/${stat.size}`],
 	]);
 
+
 	return new Response(
-		// This cast is necessary -- .toWeb produces a different type
-		// from the global ReadableStream.
-		resultStream as ReadableStream,
+		nodeStreamToWeb(resultStream),
 		{ headers, status: 206 },
 	);
 };

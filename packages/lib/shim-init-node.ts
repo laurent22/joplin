@@ -592,6 +592,7 @@ function shimInit(options: ShimInitOptions = null) {
 						cleanUpOnError(error);
 					});
 
+					const requestStart = new Date();
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const request = http.request(requestOptions, (response: any) => {
 
@@ -631,7 +632,10 @@ function shimInit(options: ShimInitOptions = null) {
 					});
 
 					request.on('timeout', () => {
-						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms.`));
+						// We choose to not destroy the request when a timeout value is not specified to keep
+						// the behavior we had before the addition of this event handler.
+						if (!requestOptions.timeout) return;
+						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms. Actual connection time: ${new Date().getTime() - requestStart.getTime()}ms`));
 					});
 
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

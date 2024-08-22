@@ -60,5 +60,4 @@ export const test = base.extend<JoplinFixtures>({
 	},
 });
 
-
-export { expect } from '@playwright/test';
+export { default as expect } from './extendedExpect';

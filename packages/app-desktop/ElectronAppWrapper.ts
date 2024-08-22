@@ -1,7 +1,8 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-// import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
-import shim from '@joplin/lib/shim';
+import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
+import type ShimType from '@joplin/lib/shim';
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import { BrowserWindow, Tray, screen } from 'electron';
@@ -42,7 +43,7 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
-	// private updaterService_: AutoUpdaterService = null;
+	private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandler_: CustomProtocolHandler = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -326,6 +327,10 @@ export default class ElectronAppWrapper {
 			}
 		});
 
+		ipcMain.on('apply-update-now', () => {
+			this.updaterService_.updateApp();
+		});
+
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
 		// and restore the maximized or full screen state
@@ -358,6 +363,7 @@ export default class ElectronAppWrapper {
 	}
 
 	public quit() {
+		this.stopLookingForUpdates();
 		this.electronApp_.quit();
 	}
 
@@ -462,6 +468,19 @@ export default class ElectronAppWrapper {
 		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
 	}
 
+	public initializeAutoUpdaterService(logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
+		if (shim.isWindows() || shim.isMac()) {
+			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, includePreReleases);
+			this.updaterService_.startPeriodicUpdateCheck();
+		}
+	}
+
+	public stopLookingForUpdates() {
+		if (this.updaterService_ !== null) {
+			this.updaterService_.stopPeriodicUpdateCheck();
+		}
+	}
+
 	public getCustomProtocolHandler() {
 		return this.customProtocolHandler_;
 	}
@@ -475,13 +494,6 @@ export default class ElectronAppWrapper {
 		if (alreadyRunning) return;
 
 		this.createWindow();
-
-		// TODO: Disabled for now - needs to be behind a feature flag
-
-		// if (!shim.isLinux()) {
-		// 	this.updaterService_ = new AutoUpdaterService();
-		// 	this.updaterService_.startPeriodicUpdateCheck();
-		// }
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;

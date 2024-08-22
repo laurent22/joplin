@@ -28,7 +28,10 @@ const distDir = path.resolve(rootDir, 'dist');
 const srcDir = path.resolve(rootDir, 'src');
 const publishDir = path.resolve(rootDir, 'publish');
 
-const userConfig = { extraScripts: [], ...(fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {}) };
+const userConfig = {
+	extraScripts: [],
+	...(fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {}),
+};
 
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
@@ -182,6 +185,7 @@ const baseConfig = {
 			},
 		],
 	},
+	...userConfig.webpackOverrides,
 };
 
 const pluginConfig = { ...baseConfig, entry: './src/index.ts',
