@@ -53,8 +53,20 @@ const validateEncryptionParameters = ({ cipherAlgorithm }: EncryptionParameters)
 const crypto: Crypto = {
 
 	randomBytes: async (size: number) => {
+		// .getRandomValues has a maximum output size
+		const maxChunkSize = 65536;
 		const result = new Uint8Array(size);
-		webcrypto.getRandomValues(result);
+
+		if (size < maxChunkSize) {
+			webcrypto.getRandomValues(result);
+		} else {
+			const fullSizeChunk = new Uint8Array(maxChunkSize);
+			for (let offset = 0; offset < size; offset += maxChunkSize) {
+				const chunk = offset + maxChunkSize > size ? new Uint8Array(size - offset) : fullSizeChunk;
+				webcrypto.getRandomValues(chunk);
+				result.set(chunk, offset);
+			}
+		}
 		return Buffer.from(result);
 	},
 
