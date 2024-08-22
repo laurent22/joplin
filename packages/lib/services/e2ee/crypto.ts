@@ -55,14 +55,21 @@ const crypto: Crypto = {
 		const maxChunkSize = 65536;
 		const result = new Uint8Array(size);
 
-		if (size < maxChunkSize) {
+		if (size <= maxChunkSize) {
 			webcrypto.getRandomValues(result);
 		} else {
 			const fullSizeChunk = new Uint8Array(maxChunkSize);
-			for (let offset = 0; offset < size; offset += maxChunkSize) {
-				const chunk = offset + maxChunkSize > size ? new Uint8Array(size - offset) : fullSizeChunk;
-				webcrypto.getRandomValues(chunk);
-				result.set(chunk, offset);
+			const lastChunkSize = size % maxChunkSize;
+			const maxOffset = size - lastChunkSize;
+			let offset = 0;
+			while (offset < maxOffset) {
+				webcrypto.getRandomValues(fullSizeChunk);
+				result.set(fullSizeChunk, offset);
+				offset += maxChunkSize;
+			}
+			if (lastChunkSize > 0) {
+				const lastChunk = webcrypto.getRandomValues(new Uint8Array(lastChunkSize));
+				result.set(lastChunk, offset);
 			}
 		}
 		return Buffer.from(result);
