@@ -8,7 +8,7 @@ import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
-import { fromFile } from 'file-type';
+import { fromFile as fileTypeFromFile } from 'file-type';
 
 class Command extends BaseCommand {
 	public usage() {
@@ -135,7 +135,7 @@ class Command extends BaseCommand {
 					const outputDir = options.output ? options.output : require('os').tmpdir();
 					let outFile = `${outputDir}/${pathUtils.filename(args.path)}.${Date.now()}.bin`;
 					await EncryptionService.instance().decryptFile(args.path, outFile);
-					const detectedType = await fromFile(outFile);
+					const detectedType = await fileTypeFromFile(outFile);
 
 					if (detectedType) {
 						const newOutFile = `${outFile}.${detectedType.ext}`;
