@@ -1,56 +1,77 @@
-import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from './types';
-import { promisify } from 'util';
-import {
-	randomBytes as nodeRandomBytes,
-	pbkdf2 as nodePbkdf2,
-	createCipheriv, createDecipheriv,
-	CipherGCMOptions, CipherGCM, DecipherGCM,
-} from 'crypto';
+import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters, CipherAlgorithm } from './types';
+import { webcrypto } from 'crypto';
+import { Buffer } from 'buffer';
+import digestNameMap from './constants';
 
-const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest) => {
-	const pbkdf2Async = promisify(nodePbkdf2);
-	return pbkdf2Async(password, salt, iterations, keylen, digest);
+const pbkdf2Raw = async (password: string, salt: Uint8Array, iterations: number, keylenBytes: number, digest: Digest) => {
+	const digestName = digestNameMap[digest];
+	const encoder = new TextEncoder();
+	const key = await webcrypto.subtle.importKey(
+		'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits'],
+	);
+	return Buffer.from(await webcrypto.subtle.deriveBits(
+		{ name: 'PBKDF2', salt, iterations, hash: digestName }, key, keylenBytes * 8,
+	));
 };
 
-const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
-
-	const cipher = createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
-
-	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
-
-	const encryptedData = Buffer.concat([cipher.update(data), cipher.final()]);
-	const authTag = cipher.getAuthTag();
-
-	return Buffer.concat([encryptedData, authTag]);
+const loadEncryptDecryptKey = async (keyData: Uint8Array) => {
+	return await webcrypto.subtle.importKey(
+		'raw',
+		keyData,
+		{ name: 'AES-GCM' },
+		false,
+		['encrypt', 'decrypt'],
+	);
 };
 
-const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
+const encryptRaw = async (data: Uint8Array, key: Uint8Array, iv: Uint8Array, authTagLengthBytes: number, additionalData: Uint8Array) => {
+	const loadedKey = await loadEncryptDecryptKey(key);
+	return Buffer.from(await webcrypto.subtle.encrypt({
+		name: 'AES-GCM',
+		iv,
+		additionalData,
+		tagLength: authTagLengthBytes * 8,
+	}, loadedKey, data));
+};
 
-	const decipher = createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
+const decryptRaw = async (data: Uint8Array, key: Uint8Array, iv: Uint8Array, authTagLengthBytes: number, associatedData: Uint8Array) => {
+	const loadedKey = await loadEncryptDecryptKey(key);
+	return Buffer.from(await webcrypto.subtle.decrypt({
+		name: 'AES-GCM',
+		iv,
+		additionalData: associatedData,
+		tagLength: authTagLengthBytes * 8,
+	}, loadedKey, data));
+};
 
-	const authTag = data.subarray(-authTagLength);
-	const encryptedData = data.subarray(0, data.byteLength - authTag.byteLength);
-	decipher.setAuthTag(authTag);
-	decipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
-
-	let decryptedData = null;
-	try {
-		decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
-	} catch (error) {
-		throw new Error(`Authentication failed! ${error}`);
+const validateEncryptionParameters = ({ cipherAlgorithm }: EncryptionParameters) => {
+	if (cipherAlgorithm !== CipherAlgorithm.AES_256_GCM) {
+		throw new Error(`Unsupported cipherAlgorithm: ${cipherAlgorithm}. Must be AES 256 GCM.`);
 	}
-
-	return decryptedData;
 };
 
 const crypto: Crypto = {
 
 	randomBytes: async (size: number) => {
-		const randomBytesAsync = promisify(nodeRandomBytes);
-		return randomBytesAsync(size);
+		// .getRandomValues has a maximum output size
+		const maxChunkSize = 65536;
+		const result = new Uint8Array(size);
+
+		if (size < maxChunkSize) {
+			webcrypto.getRandomValues(result);
+		} else {
+			const fullSizeChunk = new Uint8Array(maxChunkSize);
+			for (let offset = 0; offset < size; offset += maxChunkSize) {
+				const chunk = offset + maxChunkSize > size ? new Uint8Array(size - offset) : fullSizeChunk;
+				webcrypto.getRandomValues(chunk);
+				result.set(chunk, offset);
+			}
+		}
+		return Buffer.from(result);
 	},
 
 	encrypt: async (password: string, salt: CryptoBuffer, data: CryptoBuffer, encryptionParameters: EncryptionParameters) => {
+		validateEncryptionParameters(encryptionParameters);
 
 		// Parameters in EncryptionParameters won't appear in result
 		const result: EncryptionResult = {
@@ -64,7 +85,7 @@ const crypto: Crypto = {
 		const iv = await crypto.randomBytes(12);
 
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
-		const encrypted = encryptRaw(data, encryptionParameters.cipherAlgorithm, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
+		const encrypted = await encryptRaw(data, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
 		result.iv = iv.toString('base64');
 		result.ct = encrypted.toString('base64');
@@ -73,12 +94,13 @@ const crypto: Crypto = {
 	},
 
 	decrypt: async (password: string, data: EncryptionResult, encryptionParameters: EncryptionParameters) => {
+		validateEncryptionParameters(encryptionParameters);
 
 		const salt = Buffer.from(data.salt, 'base64');
 		const iv = Buffer.from(data.iv, 'base64');
 
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), encryptionParameters.cipherAlgorithm, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
+		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
 		return decrypted;
 	},
