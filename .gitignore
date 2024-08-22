@@ -1052,7 +1052,6 @@ packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.js
 packages/lib/services/e2ee/RSA.node.js
-packages/lib/services/e2ee/constants.js
 packages/lib/services/e2ee/crypto.test.js
 packages/lib/services/e2ee/crypto.js
 packages/lib/services/e2ee/cryptoTestUtils.js

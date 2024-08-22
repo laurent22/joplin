@@ -1,16 +1,14 @@
 import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters, CipherAlgorithm } from './types';
 import { webcrypto } from 'crypto';
 import { Buffer } from 'buffer';
-import digestNameMap from './constants';
 
 const pbkdf2Raw = async (password: string, salt: Uint8Array, iterations: number, keylenBytes: number, digest: Digest) => {
-	const digestName = digestNameMap[digest];
 	const encoder = new TextEncoder();
 	const key = await webcrypto.subtle.importKey(
 		'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits'],
 	);
 	return Buffer.from(await webcrypto.subtle.deriveBits(
-		{ name: 'PBKDF2', salt, iterations, hash: digestName }, key, keylenBytes * 8,
+		{ name: 'PBKDF2', salt, iterations, hash: digest }, key, keylenBytes * 8,
 	));
 };
 
