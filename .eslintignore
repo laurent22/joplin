@@ -98,7 +98,6 @@ packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
-packages/app-cli/app/command-e2ee.test.js
 packages/app-cli/app/command-e2ee.js
 packages/app-cli/app/command-edit.js
 packages/app-cli/app/command-exit.js
