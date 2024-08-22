@@ -5,41 +5,29 @@ import { Buffer } from 'buffer';
 const pbkdf2Raw = async (password: string, salt: Uint8Array, iterations: number, keylenBytes: number, digest: Digest) => {
 	const encoder = new TextEncoder();
 	const key = await webcrypto.subtle.importKey(
-		'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits'],
+		'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveKey'],
 	);
-	return Buffer.from(await webcrypto.subtle.deriveBits(
-		{ name: 'PBKDF2', salt, iterations, hash: digest }, key, keylenBytes * 8,
-	));
-};
-
-const loadEncryptDecryptKey = async (keyData: Uint8Array) => {
-	return await webcrypto.subtle.importKey(
-		'raw',
-		keyData,
-		{ name: 'AES-GCM' },
-		false,
-		['encrypt', 'decrypt'],
+	return webcrypto.subtle.deriveKey(
+		{ name: 'PBKDF2', salt, iterations, hash: digest }, key, { name: 'AES-GCM', length: keylenBytes * 8 }, false, ['encrypt', 'decrypt'],
 	);
 };
 
-const encryptRaw = async (data: Uint8Array, key: Uint8Array, iv: Uint8Array, authTagLengthBytes: number, additionalData: Uint8Array) => {
-	const loadedKey = await loadEncryptDecryptKey(key);
+const encryptRaw = async (data: Uint8Array, key: webcrypto.CryptoKey, iv: Uint8Array, authTagLengthBytes: number, additionalData: Uint8Array) => {
 	return Buffer.from(await webcrypto.subtle.encrypt({
 		name: 'AES-GCM',
 		iv,
 		additionalData,
 		tagLength: authTagLengthBytes * 8,
-	}, loadedKey, data));
+	}, key, data));
 };
 
-const decryptRaw = async (data: Uint8Array, key: Uint8Array, iv: Uint8Array, authTagLengthBytes: number, associatedData: Uint8Array) => {
-	const loadedKey = await loadEncryptDecryptKey(key);
+const decryptRaw = async (data: Uint8Array, key: webcrypto.CryptoKey, iv: Uint8Array, authTagLengthBytes: number, associatedData: Uint8Array) => {
 	return Buffer.from(await webcrypto.subtle.decrypt({
 		name: 'AES-GCM',
 		iv,
 		additionalData: associatedData,
 		tagLength: authTagLengthBytes * 8,
-	}, loadedKey, data));
+	}, key, data));
 };
 
 const crypto: Crypto = {

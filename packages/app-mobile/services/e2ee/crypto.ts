@@ -22,10 +22,10 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 
 	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
 
-	const encryptedData = Buffer.concat([cipher.update(data), cipher.final()]);
+	const encryptedData = [cipher.update(data), cipher.final()];
 	const authTag = cipher.getAuthTag();
 
-	return Buffer.concat([encryptedData, authTag]);
+	return Buffer.concat([encryptedData[0], encryptedData[1], authTag]);
 };
 
 const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
@@ -37,14 +37,11 @@ const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 	decipher.setAuthTag(authTag);
 	decipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
 
-	let decryptedData = null;
 	try {
-		decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+		return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
 	} catch (error) {
 		throw new Error(`Authentication failed! ${error}`);
 	}
-
-	return decryptedData;
 };
 
 const crypto: Crypto = {
