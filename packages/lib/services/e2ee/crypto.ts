@@ -1,4 +1,4 @@
-import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters, CipherAlgorithm } from './types';
+import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters } from './types';
 import { webcrypto } from 'crypto';
 import { Buffer } from 'buffer';
 
@@ -42,12 +42,6 @@ const decryptRaw = async (data: Uint8Array, key: Uint8Array, iv: Uint8Array, aut
 	}, loadedKey, data));
 };
 
-const validateEncryptionParameters = ({ cipherAlgorithm }: EncryptionParameters) => {
-	if (cipherAlgorithm !== CipherAlgorithm.AES_256_GCM) {
-		throw new Error(`Unsupported cipherAlgorithm: ${cipherAlgorithm}. Must be AES 256 GCM.`);
-	}
-};
-
 const crypto: Crypto = {
 
 	randomBytes: async (size: number) => {
@@ -76,7 +70,6 @@ const crypto: Crypto = {
 	},
 
 	encrypt: async (password: string, salt: CryptoBuffer, data: CryptoBuffer, encryptionParameters: EncryptionParameters) => {
-		validateEncryptionParameters(encryptionParameters);
 
 		// Parameters in EncryptionParameters won't appear in result
 		const result: EncryptionResult = {
@@ -99,7 +92,6 @@ const crypto: Crypto = {
 	},
 
 	decrypt: async (password: string, data: EncryptionResult, encryptionParameters: EncryptionParameters) => {
-		validateEncryptionParameters(encryptionParameters);
 
 		const salt = Buffer.from(data.salt, 'base64');
 		const iv = Buffer.from(data.iv, 'base64');
