@@ -761,7 +761,9 @@ class BaseModel {
 	}
 
 	public static setIdGenerator(generator: ()=> string) {
+		const previous = this.uuidGenerator;
 		this.uuidGenerator = generator;
+		return previous;
 	}
 	// static isReady() {
 	// 	return !!this.db_;

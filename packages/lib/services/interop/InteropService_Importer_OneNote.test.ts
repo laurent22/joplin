@@ -6,7 +6,6 @@ import { NoteEntity } from '../database/types';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { MarkupToHtml } from '@joplin/renderer';
 import BaseModel from '../../BaseModel';
-import uuid from '../../uuid';
 
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -90,7 +89,7 @@ describe('InteropService_Importer_OneNote', () => {
 
 	it('should expect notes to be rendered the same', async () => {
 		let idx = 0;
-		BaseModel.setIdGenerator(() => String(idx++));
+		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
 
 		const folders = await Folder.all();
@@ -102,7 +101,7 @@ describe('InteropService_Importer_OneNote', () => {
 		for (const note of notes) {
 			expect(note.body).toMatchSnapshot(note.title);
 		}
-		BaseModel.setIdGenerator(uuid.create);
+		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
 	it('should render the proper tree for notebook with group sections', async () => {
