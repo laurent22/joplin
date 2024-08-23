@@ -45,6 +45,18 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveColorStyles = true;
 			}
 
+			if (htmlFilename.indexOf('preserve_modified_table') === 0) {
+				htmlToMdOptions.preserveNestedTables = true;
+			}
+
+			if (htmlFilename.indexOf('not_preserve_modified_table') === 0) {
+				htmlToMdOptions.preserveNestedTables = false;
+			}
+
+			if (htmlFilename.indexOf('table_within_table_3') === 0) {
+				htmlToMdOptions.preserveNestedTables = true;
+			}
+
 			const html = await readFile(htmlPath, 'utf8');
 			let expectedMd = await readFile(mdPath, 'utf8');
 

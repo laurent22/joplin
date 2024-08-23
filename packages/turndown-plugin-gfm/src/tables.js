@@ -187,6 +187,12 @@ const nodeContains = (node, types) => {
   return false;
 }
 
+// Deskotp app table have, by default, border-collapse style,
+// so we need one more to know if the table is modified
+const isModifiedRTETable = (tableNode) => {
+  return tableNode.style.length > 1;
+}
+
 const tableShouldBeHtml = (tableNode, options) => {
   const possibleTags = [
     'UL',
@@ -209,7 +215,10 @@ const tableShouldBeHtml = (tableNode, options) => {
   if (options.preserveNestedTables) possibleTags.push('TABLE');
 
   return nodeContains(tableNode, 'code') ||
-    nodeContains(tableNode, possibleTags);
+    nodeContains(tableNode, possibleTags) ||
+    // We want keep only tables that are created by the RTE but modified, since 
+    // this option is only used from the NoteEditor code this should work
+    (isModifiedRTETable(tableNode) && options.preserveNestedTables);
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell

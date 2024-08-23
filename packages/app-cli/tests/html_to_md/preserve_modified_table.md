@@ -1,0 +1,1 @@
+<table border="1" style="border-collapse: collapse; width: 100%;"><thead><tr><th scope="col" style="width: 46.1585%;">1</th><th scope="col" style="width: 46.1585%;">2</th></tr></thead><tbody><tr><td style="width: 46.1585%;">3</td><td style="width: 46.1585%;">4</td></tr></tbody></table>
