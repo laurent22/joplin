@@ -13,8 +13,8 @@ const babelLoaderConfiguration = {
 		path.resolve(appDirectory, 'android'),
 
 		// Compiling these libraries with babel cause build errors.
-		/.*node_modules\/@babel.*/,
-		/.*node_modules\/@sqlite\.org\/.*/,
+		/.*node_modules[/\\]@babel.*/,
+		/.*node_modules[/\\]@sqlite\.org[/\\].*/,
 	],
 
 	use: {

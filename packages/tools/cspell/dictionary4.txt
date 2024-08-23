@@ -122,6 +122,11 @@ Stormlikes
 BYTV
 keyval
 traineddata
+bser
+fontiso
+entypo
+Zocial
+agplv
 Famegear
 rnqc
 owasp

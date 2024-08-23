@@ -131,8 +131,8 @@ export const toggleList = (listType: ListType): Command => {
 
 		// RegExps for different list types. The regular expressions MUST
 		// be mutually exclusive.
-		// `(?!\[[ xX]+\]\s?)` means "not followed by [x] or [ ]".
-		const bulletedRegex = /^\s*([-*])(?!\s\[[ xX]+\])\s?/;
+		// `(?!\[[ xX]+\])` means "not followed by [x] or [ ]".
+		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\])/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
 		const numberedRegex = /^\s*\d+\.\s?/;
 
