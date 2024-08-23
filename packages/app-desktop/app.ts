@@ -5,7 +5,8 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
-import shim from '@joplin/lib/shim';
+import type ShimType from '@joplin/lib/shim';
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/utils/Logger';
@@ -569,17 +570,19 @@ class Application extends BaseApplication {
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.
 		// We only allow Windows and macOS users to automatically check for updates
-		if (shim.isWindows() || shim.isMac()) {
-			const runAutoUpdateCheck = () => {
-				if (Setting.value('autoUpdateEnabled')) {
-					void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-				}
-			};
+		if (!Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+			if (shim.isWindows() || shim.isMac()) {
+				const runAutoUpdateCheck = () => {
+					if (Setting.value('autoUpdateEnabled')) {
+						void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+					}
+				};
 
-			// Initial check on startup
-			shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
-			// Then every x hours
-			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+				// Initial check on startup
+				shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
+				// Then every x hours
+				shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+			}
 		}
 
 		initializeUserFetcher();
@@ -684,6 +687,15 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
+
+		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+			bridge().electronApp().initializeAutoUpdaterService(
+				Logger.create('AutoUpdaterService'),
+				shim,
+				Setting.value('env') === 'dev',
+				Setting.value('autoUpdate.includePreReleases'),
+			);
+		}
 
 		// setTimeout(() => {
 		// 	void populateDatabase(reg.db(), {
