@@ -2,6 +2,9 @@ import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters } 
 import { webcrypto } from 'crypto';
 import { Buffer } from 'buffer';
 
+const nonceCounterLength = 8;
+const nonceTimestampLength = 7;
+
 const pbkdf2Raw = async (password: string, salt: Uint8Array, iterations: number, keylenBytes: number, digest: Digest) => {
 	const encoder = new TextEncoder();
 	const key = await webcrypto.subtle.importKey(
@@ -57,6 +60,10 @@ const crypto: Crypto = {
 		return Buffer.from(result);
 	},
 
+	digest: async (algorithm: Digest, data: Uint8Array) => {
+		return Buffer.from(await webcrypto.subtle.digest(algorithm, data));
+	},
+
 	encrypt: async (password: string, salt: CryptoBuffer, data: CryptoBuffer, encryptionParameters: EncryptionParameters) => {
 
 		// Parameters in EncryptionParameters won't appear in result
@@ -92,6 +99,39 @@ const crypto: Crypto = {
 
 	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, encryptionParameters: EncryptionParameters) => {
 		return crypto.encrypt(password, salt, Buffer.from(data, encoding), encryptionParameters);
+	},
+
+	generateNonce: async (nonce: Uint8Array) => {
+		const randomLength = nonce.length - nonceTimestampLength - nonceCounterLength;
+		if (randomLength < 1) {
+			throw new Error(`Nonce length should be greater than ${(nonceTimestampLength + nonceCounterLength) * 8} bits`);
+		}
+		nonce.set(await crypto.randomBytes(randomLength));
+		const timestampArray = new Uint8Array(nonceTimestampLength);
+		let timestamp = Date.now();
+		for (let i = 0; i < nonceTimestampLength; i++) {
+			timestampArray[i] = timestamp & 0xFF;
+			timestamp >>= 8;
+		}
+		nonce.set(timestampArray, randomLength);
+		nonce.set(new Uint8Array(nonceCounterLength), randomLength + nonceTimestampLength);
+		return nonce;
+	},
+
+	increaseNonce: async (nonce: Uint8Array) => {
+		const carry = 1;
+		const end = nonce.length - nonceCounterLength;
+		let i = nonce.length;
+		while (i-- > end) {
+			nonce[i] += carry;
+			if (nonce[i] !== 0 || carry !== 1) {
+				break;
+			}
+		}
+		if (i < end) {
+			await crypto.generateNonce(nonce);
+		}
+		return nonce;
 	},
 };
 

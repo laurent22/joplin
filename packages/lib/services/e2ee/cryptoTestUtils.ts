@@ -206,7 +206,7 @@ const decryptTestData: Record<string, DecryptTestData> = {
 		method: EncryptionMethod.StringV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: '中文にっぽんご한국어😀\uD83D\0\r\nenglish01234567890',
-		ciphertext: '{"salt":"6A3HyEPrxxNEgDq1m43BRrzEehxaIpcRRABBCWX3z9o=","iv":"FZNIQvkHiHolFdK7","ct":"uea3tJg8VJ/JuC2H62cOfEOeMVjLw0trphr4F08VsmKNpv46uYtZJHSx5Jz/5sP/MHNPsmFqXcxzrSdYFOLjRhqyxf71KFFpxGFJ44nMwwRbKgUw"}',
+		ciphertext: '{"salt":"6NKebMdcrFSGSzEWusbY8JUfG9rB98PxNZtk0QkYEFQ=","iv":"zHdXu8V5SYsO+vR/","ct":"4C3uyjOtRsNQZxCECvCeRaP+oPXMxjUMxsND67odnyiFg2A+fG6QW6O8axb6RHWU7QKHRG9/kHEs283DHL3hOAJbl4LS47R/dEDJbl8kWmGtLAsn"}',
 	},
 	hexKey: {
 		method: EncryptionMethod.KeyV1,
@@ -218,7 +218,7 @@ const decryptTestData: Record<string, DecryptTestData> = {
 		method: EncryptionMethod.FileV1,
 		password: '4BfJl8YbM,nXx.LVgs!AzkWWA]',
 		plaintext: '5Lit5paH44Gr44Gj44G944KT44GU7ZWc6rWt7Ja08J+YgO+/vQANCmVuZ2xpc2gwMTIzNDU2Nzg5MA==',
-		ciphertext: '{"salt":"wG/hFCK2IZTgi0JR5D1eZr09vnS17hDftWYim0FkU2w=","iv":"bpjlR7owtQzMYJwg","ct":"/CoRA2X3aiPaWdtkotcacpiutN3YJh0ebzplP1bOsukzeqA4ZgbkhKxMLg841nuNq1T8NoX+cQASHMdO5DNzrQP8raVLywd3MIg="}',
+		ciphertext: '{"salt":"19Zx/+hxpZ+Trc7MGBt837SsTOJjHe9aiY5UPnXP6Oo=","iv":"N4PTzsyh4wONNJWa","ct":"LxAibOnVox1q2WBtLAKxeZxIIxKOEd6xdD3NKAn5mgHhv4i60yPiyPbr8rS+MzHmeq7Z3BhHjR7540rtdeBugbmf1+b3tYuRudI="}',
 	},
 };
 

@@ -28,6 +28,9 @@ export interface RSA {
 
 export interface Crypto {
 	randomBytes(size: number): Promise<CryptoBuffer>;
+	digest(algorithm: Digest, data: Uint8Array): Promise<CryptoBuffer>;
+	generateNonce(nonce: Uint8Array): Promise<Uint8Array>;
+	increaseNonce(nonce: Uint8Array): Promise<Uint8Array>;
 	encrypt(password: string, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionParameters): Promise<EncryptionResult>;
 	decrypt(password: string, data: EncryptionResult, options: EncryptionParameters): Promise<Buffer>;
 	encryptString(password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionParameters): Promise<EncryptionResult>;
