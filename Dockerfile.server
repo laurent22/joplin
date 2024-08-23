@@ -9,8 +9,6 @@ RUN apt-get update \
     python tini \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/root/.cargo/bin:${PATH}"
-
 # Enables Yarn
 RUN corepack enable
 
@@ -84,7 +82,7 @@ ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.title="Joplin Server WITH RUST" \
+      org.opencontainers.image.title="Joplin Server" \
       org.opencontainers.image.description="Docker image for Joplin Server" \
       org.opencontainers.image.url="https://joplinapp.org/" \
       org.opencontainers.image.revision="$REVISION" \
