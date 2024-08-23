@@ -45,7 +45,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		return output;
 	};
 
-	return {
+	const output = {
 		'clientId': {
 			value: '',
 			type: SettingItemType.String,
@@ -1630,6 +1630,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 	} satisfies Record<string, SettingItem>;
+
+	for (const [key, md] of Object.entries(output)) {
+		if (key.startsWith('featureFlag.')) (md as SettingItem).advanced = true;
+	}
+
+	return output;
 };
 
 export type BuiltInMetadataKeys = keyof ReturnType<typeof builtInMetadata>;
