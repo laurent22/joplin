@@ -1565,6 +1565,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'featureFlag.syncLockEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			label: () => 'Enable sync locks',
+			description: () => 'This is an experimental setting to disable sync locks',
+			section: 'sync',
+			isGlobal: true,
+		},
+
 
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
