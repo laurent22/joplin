@@ -6,6 +6,14 @@ import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
 const nonceCounterLength = 8;
 const nonceTimestampLength = 7;
 
+type DigestNameMap = Record<Digest, string>;
+const digestNameMap: DigestNameMap = {
+	[Digest.sha1]: 'sha1',
+	[Digest.sha256]: 'sha256',
+	[Digest.sha384]: 'sha384',
+	[Digest.sha512]: 'sha512',
+};
+
 const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, keylen: number, digest: Digest): Promise<CryptoBuffer> => {
 	return new Promise((resolve, reject) => {
 		QuickCrypto.pbkdf2(password, salt, iterations, keylen, digest as HashAlgorithm, (error, result) => {
@@ -61,7 +69,7 @@ const crypto: Crypto = {
 	},
 
 	digest: async (algorithm: Digest, data: Uint8Array) => {
-		const hash = QuickCrypto.createHash(algorithm);
+		const hash = QuickCrypto.createHash(digestNameMap[algorithm]);
 		hash.update(data);
 		return hash.digest();
 	},
