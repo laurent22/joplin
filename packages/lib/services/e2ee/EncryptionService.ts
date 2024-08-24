@@ -128,7 +128,7 @@ export default class EncryptionService {
 			[EncryptionMethod.SJCL4]: 5000,
 			[EncryptionMethod.Custom]: 5000,
 			[EncryptionMethod.KeyV1]: 5000, // Master key is not encrypted by chunks so this value will not be used.
-			[EncryptionMethod.FileV1]: 524288, // 512k
+			[EncryptionMethod.FileV1]: 131072, // 128k
 			[EncryptionMethod.StringV1]: 65536, // 64k
 		};
 
