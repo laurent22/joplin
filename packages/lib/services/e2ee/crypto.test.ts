@@ -21,83 +21,83 @@ describe('e2ee/crypto', () => {
 	it('should not generate new nonce if counter does not overflow', (async () => {
 		jest.useFakeTimers();
 
-		const nonce = await crypto.generateNonce(new Uint8Array(32));
+		const nonce = await crypto.generateNonce(new Uint8Array(36));
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array(8));
-		const nonCounterPart = nonce.slice(0, 24);
+		const nonCounterPart = nonce.slice(0, 28);
 
 		jest.advanceTimersByTime(1);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
-		nonce.set(new Uint8Array([248, 249, 250, 251, 252, 253, 254, 255]), 24);
+		nonce.set(new Uint8Array([248, 249, 250, 251, 252, 253, 254, 255]), 28);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([248, 249, 250, 251, 252, 253, 255, 0]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
-		nonce.set(new Uint8Array([249, 250, 251, 252, 253, 254, 255, 255]), 24);
+		nonce.set(new Uint8Array([249, 250, 251, 252, 253, 254, 255, 255]), 28);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([249, 250, 251, 252, 253, 255, 0, 0]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
-		nonce.set(new Uint8Array([253, 254, 255, 255, 255, 255, 255, 255]), 24);
+		nonce.set(new Uint8Array([253, 254, 255, 255, 255, 255, 255, 255]), 28);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([253, 255, 0, 0, 0, 0, 0, 0]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
-		nonce.set(new Uint8Array([254, 255, 255, 255, 255, 255, 255, 255]), 24);
+		nonce.set(new Uint8Array([254, 255, 255, 255, 255, 255, 255, 255]), 28);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([255, 0, 0, 0, 0, 0, 0, 0]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 	}));
 
 	it('should generate new nonce if counter overflow', (async () => {
 		jest.useFakeTimers();
 
-		const nonce = await crypto.generateNonce(new Uint8Array(32));
+		const nonce = await crypto.generateNonce(new Uint8Array(36));
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array(8));
-		const nonCounterPart = nonce.slice(0, 24);
-		const randomPart = nonce.slice(0, 17);
-		const timestampPart = nonce.slice(17, 24);
+		const nonCounterPart = nonce.slice(0, 28);
+		const randomPart = nonce.slice(0, 21);
+		const timestampPart = nonce.slice(21, 28);
 
 		jest.advanceTimersByTime(1);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
 		// Non-counter part should stay the same
-		expect(nonce.subarray(0, 24)).toEqual(nonCounterPart);
+		expect(nonce.subarray(0, 28)).toEqual(nonCounterPart);
 
 		jest.advanceTimersByTime(1);
-		nonce.set(new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]), 24);
+		nonce.set(new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255]), 28);
 		await crypto.increaseNonce(nonce);
 		// Counter should have expected value
 		expect(nonce.subarray(-8)).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]));
 		// Random part should be changed
-		expect(nonce.subarray(0, 17)).not.toEqual(randomPart);
+		expect(nonce.subarray(0, 21)).not.toEqual(randomPart);
 		// Timestamp part should have expected value
-		expect(nonce[17]).toBe(timestampPart[0] + 2);
-		expect(nonce.subarray(18, 24)).toEqual(timestampPart.subarray(1));
+		expect(nonce[21]).toBe(timestampPart[0] + 2);
+		expect(nonce.subarray(22, 28)).toEqual(timestampPart.subarray(1));
 	}));
 
 });

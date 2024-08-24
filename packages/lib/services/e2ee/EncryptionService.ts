@@ -81,7 +81,7 @@ export default class EncryptionService {
 
 	public constructor() {
 		const crypto = shim.crypto;
-		crypto.generateNonce(new Uint8Array(32))
+		crypto.generateNonce(new Uint8Array(36))
 			// eslint-disable-next-line promise/prefer-await-to-then
 			.then((nonce) => this.encryptionNonce_ = nonce)
 			// eslint-disable-next-line promise/prefer-await-to-then
