@@ -108,8 +108,10 @@ const useEditorCommands = (props: Props) => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
 					focus('useEditorCommands::editor.focus', editorRef.current.editor);
 					if (options?.moveCursorToStart) {
-						const selectionCursor = { line: 0, ch: 0 };
-						editorRef.current.setSelection(selectionCursor, selectionCursor);
+						editorRef.current.editor.dispatch({
+							selection: { anchor: 0 },
+							scrollIntoView: true,
+						});
 					}
 				} else {
 					// If we just call focus() then the iframe is focused,
