@@ -39,6 +39,7 @@ const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
+import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
 
 const logger = Logger.create('TinyMCE');
 
@@ -130,6 +131,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	usePluginServiceRegistration(ref);
 	useContextMenu(editor, props.plugins, props.dispatch, props.htmlToMarkdown, props.markupToHtml);
 	useTabIndenter(editor);
+	useKeyboardRefocusHandler(editor);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const dispatchDidUpdate = (editor: any) => {
@@ -218,6 +220,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				} else if (cmd.name === 'editor.focus') {
 					focus('TinyMCE::editor.focus', editor);
+					if ((cmd.value ?? null) !== null) {
+						editor.selection.placeCaretAt(0, 0);
+						editor.selection.setCursorLocation(
+							editor.dom.root,
+							cmd.value,
+						);
+					}
 				} else if (cmd.name === 'editor.execCommand') {
 					if (!('ui' in cmd.value)) cmd.value.ui = false;
 					if (!('value' in cmd.value)) cmd.value.value = null;

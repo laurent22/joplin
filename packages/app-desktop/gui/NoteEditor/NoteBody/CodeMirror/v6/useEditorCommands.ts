@@ -103,9 +103,13 @@ const useEditorCommands = (props: Props) => {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
 				}
 			},
-			'editor.focus': () => {
+			'editor.focus': (cursorLocation?: number) => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
 					focus('useEditorCommands::editor.focus', editorRef.current.editor);
+					if (cursorLocation !== undefined) {
+						const selectionCursor = { line: 0, ch: cursorLocation };
+						editorRef.current.setSelection(selectionCursor, selectionCursor);
+					}
 				} else {
 					// If we just call focus() then the iframe is focused,
 					// but not its content, such that scrolling up / down

@@ -10,8 +10,8 @@ export const declaration: CommandDeclaration = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const runtime = (comp: any): CommandRuntime => {
 	return {
-		execute: async () => {
-			comp.editorRef.current.execCommand({ name: 'editor.focus' });
+		execute: async (_context: unknown, cursorLocation?: number) => {
+			comp.editorRef.current.execCommand({ name: 'editor.focus', value: cursorLocation });
 		},
 		enabledCondition: 'oneNoteSelected',
 	};

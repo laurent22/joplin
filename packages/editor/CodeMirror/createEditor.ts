@@ -31,6 +31,7 @@ import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
 import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
 import searchExtension from './utils/searchExtension';
+import isCursorAtBeginning from './utils/isCursorAtBeginning';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -176,10 +177,26 @@ const createEditor = (
 			return true;
 		}),
 		keyCommand('Tab', insertOrIncreaseIndent, true),
-		keyCommand('Shift-Tab', decreaseIndent, true),
+		keyCommand('Shift-Tab', (view) => {
+			// When at the beginning of the editor, allow shift-tab to act
+			// normally.
+			if (isCursorAtBeginning(view.state)) {
+				return false;
+			}
+
+			return decreaseIndent(view);
+		}, true),
 		keyCommand('Mod-Enter', (_: EditorView) => {
 			insertLineAfter(_);
 			return true;
+		}, true),
+
+		keyCommand('ArrowUp', (view: EditorView) => {
+			if (isCursorAtBeginning(view.state) && props.onSelectPastBeginning) {
+				props.onSelectPastBeginning();
+				return true;
+			}
+			return false;
 		}, true),
 
 		...standardKeymap, ...historyKeymap, ...searchKeymap,

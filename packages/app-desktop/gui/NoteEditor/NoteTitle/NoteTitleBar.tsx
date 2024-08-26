@@ -78,18 +78,13 @@ function styles_(props: Props) {
 export default function NoteTitleBar(props: Props) {
 	const styles = styles_(props);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTitleKeydown = useCallback((event: any) => {
-		const keyCode = event.keyCode;
-
-		if (keyCode === 9) { // TAB
+	const onTitleKeydown: React.KeyboardEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		const selectionAtEnd = titleElement.selectionEnd === titleElement.value.length;
+		if ((event.key === 'ArrowDown' && selectionAtEnd) || event.key === 'Enter') {
 			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'noteList');
-			} else {
-				void CommandService.instance().execute('focusElement', 'noteBody');
-			}
+			const focusStartOfEditor = event.key === 'ArrowDown';
+			void CommandService.instance().execute('focusElement', 'noteBody', focusStartOfEditor ? 0 : undefined);
 		}
 	}, []);
 

@@ -169,6 +169,7 @@ export interface EditorSettings {
 export type LogMessageCallback = (message: string)=> void;
 export type OnEventCallback = (event: EditorEvent)=> void;
 export type PasteFileCallback = (data: File)=> Promise<void>;
+type OnScrollPastBeginningCallback = ()=> void;
 
 export interface EditorProps {
 	settings: EditorSettings;
@@ -176,6 +177,7 @@ export interface EditorProps {
 
 	// If null, paste and drag-and-drop will not work for resources unless handled elsewhere.
 	onPasteFile: PasteFileCallback|null;
+	onSelectPastBeginning?: OnScrollPastBeginningCallback;
 	onEvent: OnEventCallback;
 	onLogMessage: LogMessageCallback;
 }
