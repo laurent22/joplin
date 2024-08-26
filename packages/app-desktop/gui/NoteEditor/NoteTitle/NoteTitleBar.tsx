@@ -83,8 +83,8 @@ export default function NoteTitleBar(props: Props) {
 		const selectionAtEnd = titleElement.selectionEnd === titleElement.value.length;
 		if ((event.key === 'ArrowDown' && selectionAtEnd) || event.key === 'Enter') {
 			event.preventDefault();
-			const focusStartOfEditor = event.key === 'ArrowDown';
-			void CommandService.instance().execute('focusElement', 'noteBody', { moveCursorToStart: focusStartOfEditor });
+			const moveCursorToStart = event.key === 'ArrowDown';
+			void CommandService.instance().execute('focusElement', 'noteBody', { moveCursorToStart });
 		}
 	}, []);
 
