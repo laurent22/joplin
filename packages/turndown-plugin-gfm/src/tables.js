@@ -190,7 +190,12 @@ const nodeContains = (node, types) => {
 // Deskotp app table have, by default, border-collapse style,
 // so we need one more to know if the table is modified
 const isModifiedRTETable = (tableNode) => {
-  return tableNode.style.length > 1;
+  return tableNode.style && (
+    tableNode.style.backgroundColor || 
+    tableNode.getAttribute('cellpadding') ||
+    (tableNode.style.marginLeft && tableNode.style.marginRight) ||
+    tableNode.style.width !== '100%'
+  );
 }
 
 const tableShouldBeHtml = (tableNode, options) => {
