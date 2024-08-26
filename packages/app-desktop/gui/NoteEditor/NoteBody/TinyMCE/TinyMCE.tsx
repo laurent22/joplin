@@ -220,11 +220,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.insertContent(result.html);
 				} else if (cmd.name === 'editor.focus') {
 					focus('TinyMCE::editor.focus', editor);
-					if ((cmd.value ?? null) !== null) {
+					if (cmd.value?.moveCursorToStart) {
 						editor.selection.placeCaretAt(0, 0);
 						editor.selection.setCursorLocation(
 							editor.dom.root,
-							cmd.value,
+							0,
 						);
 					}
 				} else if (cmd.name === 'editor.execCommand') {

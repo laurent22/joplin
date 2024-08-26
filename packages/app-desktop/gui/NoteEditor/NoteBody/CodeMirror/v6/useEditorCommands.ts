@@ -9,6 +9,7 @@ import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { FocusElementOptions } from '../../../../../commands/focusElement';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -103,11 +104,11 @@ const useEditorCommands = (props: Props) => {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
 				}
 			},
-			'editor.focus': (cursorLocation?: number) => {
+			'editor.focus': (options?: FocusElementOptions) => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
 					focus('useEditorCommands::editor.focus', editorRef.current.editor);
-					if (cursorLocation !== undefined) {
-						const selectionCursor = { line: 0, ch: cursorLocation };
+					if (options?.moveCursorToStart) {
+						const selectionCursor = { line: 0, ch: 0 };
 						editorRef.current.setSelection(selectionCursor, selectionCursor);
 					}
 				} else {
