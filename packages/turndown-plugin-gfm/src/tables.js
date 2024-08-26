@@ -179,7 +179,7 @@ const nodeContains = (node, types) => {
 
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes[i];
-    if (types === 'code' && isCodeBlock_(child)) return true;
+    if (types === 'code' && isCodeBlock_?.(child)) return true;
     if (types.includes(child.nodeName)) return true;
     if (nodeContains(child, types)) return true;
   }
