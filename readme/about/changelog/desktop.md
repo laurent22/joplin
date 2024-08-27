@@ -1,5 +1,21 @@
 # Joplin Desktop Changelog
 
+## [v3.1.4](https://github.com/laurent22/joplin/releases/tag/v3.1.4) (Pre-release) - 2024-08-27T17:46:38Z
+
+- Improved: Accessibility: Improve note title focus handling ([#10932](https://github.com/laurent22/joplin/issues/10932) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Added feature flag to disable sync lock support ([#10925](https://github.com/laurent22/joplin/issues/10925)) ([#10407](https://github.com/laurent22/joplin/issues/10407))
+- Improved: Make feature flags advanced settings by default ([700ffa2](https://github.com/laurent22/joplin/commit/700ffa2))
+- Improved: Seamless-Updates: implemented flow for prereleases ([#10892](https://github.com/laurent22/joplin/issues/10892) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Updated packages @fortawesome/react-fontawesome (v0.2.2), @rollup/plugin-commonjs (v25.0.8)
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms ([#10897](https://github.com/laurent22/joplin/issues/10897)) ([#10896](https://github.com/laurent22/joplin/issues/10896) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix BMP image rendering in the Markdown viewer ([#10915](https://github.com/laurent22/joplin/issues/10915)) ([#10914](https://github.com/laurent22/joplin/issues/10914) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fix editing notes in "Conflicts" causes them to temporarily vanish ([#10913](https://github.com/laurent22/joplin/issues/10913)) ([#10737](https://github.com/laurent22/joplin/issues/10737) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix alt+up/alt+down fails to re-order multiple lines ([#10899](https://github.com/laurent22/joplin/issues/10899)) ([#10895](https://github.com/laurent22/joplin/issues/10895) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix viewer and panel plugins that check for the presence of `exports` fail to load ([#10900](https://github.com/laurent22/joplin/issues/10900) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed italic support in Fountain documents ([5fdd088](https://github.com/laurent22/joplin/commit/5fdd088))
+- Fixed: Markdown editor: Fix toggling bulleted lists when items start with asterisks ([#10902](https://github.com/laurent22/joplin/issues/10902)) ([#10891](https://github.com/laurent22/joplin/issues/10891) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Security: Fix HTML parsing bug ([#10876](https://github.com/laurent22/joplin/issues/10876) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.0.15](https://github.com/laurent22/joplin/releases/tag/v3.0.15) - 2024-08-21T09:19:58Z
 
 - Fixed: Improve the reliability of fetching resources ([#10826](https://github.com/laurent22/joplin/issues/10826)) ([#10740](https://github.com/laurent22/joplin/issues/10740) by [@pedr](https://github.com/pedr))
