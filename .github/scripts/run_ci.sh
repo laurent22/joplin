@@ -180,6 +180,10 @@ fi
 if [ "$IS_LINUX" == "1" ]; then
 	echo "Step: Checking for files that should have been ignored..."
 
+	# .gitignore and .eslintignore can be modified during yarn install. Reset them
+	# so that checkIgnoredFiles works.
+	git restore .gitignore .eslintignore
+
 	node packages/tools/checkIgnoredFiles.js 
 	testResult=$?
 	if [ $testResult -ne 0 ]; then

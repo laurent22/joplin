@@ -148,6 +148,7 @@ export interface FormNote {
 	body: string;
 	parent_id: string;
 	is_todo: number;
+	is_conflict?: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyEditorContent?: any;
 	markup_language: number;
