@@ -1,6 +1,6 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-import AutoUpdaterService from './services/autoUpdater/AutoUpdaterService';
+import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -45,6 +45,7 @@ export default class ElectronAppWrapper {
 	private initialCallbackUrl_: string = null;
 	private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandler_: CustomProtocolHandler = null;
+	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
@@ -363,7 +364,7 @@ export default class ElectronAppWrapper {
 	}
 
 	public quit() {
-		this.stopLookingForUpdates();
+		this.stopPeriodicUpdateCheck();
 		this.electronApp_.quit();
 	}
 
@@ -468,18 +469,30 @@ export default class ElectronAppWrapper {
 		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
 	}
 
-	public initializeAutoUpdaterService(logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
+	// Electron's autoUpdater has to be init from the main process
+	public async initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		if (shim.isWindows() || shim.isMac()) {
-			this.updaterService_ = new AutoUpdaterService(this.win_, logger, initializedShim, devMode, includePreReleases);
-			this.updaterService_.startPeriodicUpdateCheck();
+			if (!this.updaterService_) {
+				this.updaterService_ = new AutoUpdaterService(this.win_, logger, devMode, includePreReleases);
+				this.startPeriodicUpdateCheck();
+			}
 		}
 	}
 
-	public stopLookingForUpdates() {
-		if (this.updaterService_ !== null) {
-			this.updaterService_.stopPeriodicUpdateCheck();
+	private startPeriodicUpdateCheck = (updateInterval: number = defaultUpdateInterval): void => {
+		this.stopPeriodicUpdateCheck();
+		this.updatePollInterval_ = setInterval(() => {
+			void this.updaterService_.checkForUpdates();
+		}, updateInterval);
+		setTimeout(this.updaterService_.checkForUpdates, initialUpdateStartup);
+	};
+
+	private stopPeriodicUpdateCheck = (): void => {
+		if (this.updatePollInterval_) {
+			clearInterval(this.updatePollInterval_);
+			this.updatePollInterval_ = null;
 		}
-	}
+	};
 
 	public getCustomProtocolHandler() {
 		return this.customProtocolHandler_;

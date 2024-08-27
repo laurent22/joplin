@@ -129,3 +129,4 @@ entypo
 Zocial
 agplv
 Famegear
+rcompare

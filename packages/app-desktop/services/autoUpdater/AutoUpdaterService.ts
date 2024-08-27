@@ -1,9 +1,11 @@
 import { BrowserWindow } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
 import path = require('path');
-import { setInterval } from 'timers';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import type ShimType from '@joplin/lib/shim';
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
+import { GitHubRelease, GitHubReleaseAsset } from '../../utils/checkForUpdatesUtils';
+import * as semver from 'semver';
 
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
@@ -14,64 +16,98 @@ export enum AutoUpdaterEvents {
 	UpdateDownloaded = 'update-downloaded',
 }
 
-const defaultUpdateInterval = 12 * 60 * 60 * 1000;
-const initialUpdateStartup = 5 * 1000;
+export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
+export const initialUpdateStartup = 5 * 1000;
+const releasesLink = 'https://objects.joplinusercontent.com/r/releases';
 
 export interface AutoUpdaterServiceInterface {
-	startPeriodicUpdateCheck(interval?: number): void;
-	stopPeriodicUpdateCheck(): void;
 	checkForUpdates(): void;
+	updateApp(): void;
 }
 
 export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private window_: BrowserWindow;
 	private logger_: LoggerWrapper;
-	private initializedShim_: typeof ShimType;
 	private devMode_: boolean;
-	private updatePollInterval_: ReturnType<typeof setInterval>|null = null;
 	private enableDevMode = true; // force the updater to work in "dev" mode
 	private enableAutoDownload = false; // automatically download an update when it is found
 	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
 
-	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, initializedShim: typeof ShimType, devMode: boolean, includePreReleases: boolean) {
+	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
 		this.logger_ = logger;
-		this.initializedShim_ = initializedShim;
 		this.devMode_ = devMode;
 		this.includePreReleases_ = includePreReleases;
 		this.configureAutoUpdater();
 	}
 
-	public startPeriodicUpdateCheck = (interval: number = defaultUpdateInterval): void => {
-		this.stopPeriodicUpdateCheck();
-		this.updatePollInterval_ = this.initializedShim_.setInterval(() => {
-			void this.checkForUpdates();
-		}, interval);
-		this.initializedShim_.setTimeout(this.checkForUpdates, initialUpdateStartup);
-	};
-
-	public stopPeriodicUpdateCheck = (): void => {
-		if (this.updatePollInterval_) {
-			this.initializedShim_.clearInterval(this.updatePollInterval_);
-			this.updatePollInterval_ = null;
-		}
-	};
-
 	public checkForUpdates = async (): Promise<void> => {
 		try {
-			if (this.includePreReleases_) {
-				// If this is set to true, then it will compare the versions semantically and it will also look at tags, so we need to manually get the latest pre-release
-				this.logger_.info('To be implemented...');
-			} else {
-				await autoUpdater.checkForUpdates();
-			}
+			await this.fetchLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
 				this.logger_.info('Server is not reachable. Will try again later.');
 			}
+		}
+	};
+
+	public updateApp = (): void => {
+		autoUpdater.quitAndInstall(false, true);
+	};
+
+	private fetchLatestReleases = async (): Promise<GitHubRelease[]> => {
+		const response = await fetch(releasesLink);
+
+		if (!response.ok) {
+			const responseText = await response.text();
+			throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
+		}
+
+		return (await response.json()) as GitHubRelease[];
+	};
+
+	private fetchLatestRelease = async (): Promise<void> => {
+		try {
+			const releases = await this.fetchLatestReleases();
+
+			const sortedReleasesByVersion = releases.sort((a, b) => {
+				return semver.rcompare(a.tag_name, b.tag_name);
+			});
+			const filteredReleases = sortedReleasesByVersion.filter(release => {
+				return this.includePreReleases_ || !release.prerelease;
+			});
+			const release = filteredReleases[0];
+
+			if (release) {
+				let assetUrl = null;
+
+				if (shim.isWindows()) {
+					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest.yml');
+					if (asset) {
+						assetUrl = asset.browser_download_url.replace('/latest.yml', '');
+					}
+				} else if (shim.isMac()) {
+					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest-mac.yml');
+					if (asset) {
+						assetUrl = asset.browser_download_url.replace('/latest-mac.yml', '');
+					}
+				}
+
+				if (assetUrl) {
+					autoUpdater.setFeedURL({
+						provider: 'generic',
+						url: assetUrl,
+					});
+					await autoUpdater.checkForUpdates();
+				} else {
+					this.logger_.error('No suitable update asset found for this platform.');
+				}
+			}
+		} catch (error) {
+			this.logger_.error(error);
 		}
 	};
 
@@ -123,9 +159,5 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
 		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
-	};
-
-	public updateApp = (): void => {
-		autoUpdater.quitAndInstall(false, true);
 	};
 }
