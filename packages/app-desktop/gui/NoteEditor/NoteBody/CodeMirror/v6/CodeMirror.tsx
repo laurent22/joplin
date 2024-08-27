@@ -27,6 +27,7 @@ import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
 import useEditorSearchHandler from '../utils/useEditorSearchHandler';
+import CommandService from '@joplin/lib/services/CommandService';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -354,6 +355,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
 
+	const onSelectPastBeginning = useCallback(() => {
+		void CommandService.instance().execute('focusElement', 'noteTitle');
+	}, []);
+
 	const editorSettings = useMemo((): EditorSettings => {
 		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
 
@@ -403,6 +408,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					onEvent={onEditorEvent}
 					onLogMessage={logDebug}
 					onEditorPaste={onEditorPaste}
+					onSelectPastBeginning={onSelectPastBeginning}
 					externalSearch={props.searchMarkers}
 					useLocalSearch={props.useLocalSearch}
 				/>
