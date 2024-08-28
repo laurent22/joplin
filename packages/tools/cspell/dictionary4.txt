@@ -128,5 +128,6 @@ entypo
 Zocial
 agplv
 Famegear
+rcompare
 rnqc
 owasp
