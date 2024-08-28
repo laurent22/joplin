@@ -40,6 +40,7 @@ const renderer: ListRenderer = {
 		'note.isWatched',
 		'note.title',
 		'note.todo_completed',
+		'note.todoStatusText',
 	],
 
 	itemCss: // css
@@ -71,6 +72,17 @@ const renderer: ListRenderer = {
 			> .checkbox {
 				display: flex;
 				align-items: center;
+
+				/* See https://www.w3.org/WAI/tutorials/forms/labels/#hiding-label-text */
+				> label {
+					width: 1px;
+					height: 1px;
+					margin: -1px;
+					opacity: 0;
+					padding: 0;
+					position: absolute;
+					overflow: hidden;
+				}
 
 				> input {
 					margin: 0px 10px 1px 0px;
@@ -133,7 +145,15 @@ const renderer: ListRenderer = {
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<label for="todo-checkbox-{{note.id}}">
+						{{note.todoStatusText}}
+					</label>
+					<input
+						data-id="todo-checkbox"
+						id="todo-checkbox-{{note.id}}"
+						type="checkbox"
+						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}
+					>
 				</div>
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">

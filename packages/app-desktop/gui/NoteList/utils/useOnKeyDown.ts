@@ -136,8 +136,7 @@ const useOnKeyDown = (
 			event.preventDefault();
 
 			const selectedNotes = BaseModel.modelsByIds(notes, noteIds);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const todos = selectedNotes.filter((n: any) => !!n.is_todo);
+			const todos = selectedNotes.filter(n => !!n.is_todo);
 			if (!todos.length) return;
 
 			for (let i = 0; i < todos.length; i++) {
@@ -145,6 +144,7 @@ const useOnKeyDown = (
 				await Note.save(toggledTodo);
 			}
 
+			dispatch({ type: 'NOTE_SORT' });
 			focusNote(todos[0].id);
 		}
 

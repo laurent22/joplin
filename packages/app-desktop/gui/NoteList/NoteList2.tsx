@@ -225,7 +225,6 @@ const NoteList = (props: Props) => {
 
 			const isSelected = props.selectedNoteIds.includes(note.id);
 			renderedSelectedItem ||= isSelected;
-			const isFocusable = activeNoteId === note.id;
 
 			currentRow.push(
 				<NoteListItem
@@ -245,7 +244,7 @@ const NoteList = (props: Props) => {
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
 					note={note}
-					tabIndex={isFocusable ? 0 : -1}
+					tabIndex={-1}
 					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
@@ -291,7 +290,7 @@ const NoteList = (props: Props) => {
 		return output;
 	}, [listRenderer.flow]);
 
-	const { notes, renderedSelectedItem } = renderNotes();
+	const { notes } = renderNotes();
 
 	return (
 		<div
@@ -301,7 +300,7 @@ const NoteList = (props: Props) => {
 			aria-multiselectable={true}
 			// Ensure that the note list can be focused, even if no selected
 			// items are visible.
-			tabIndex={!renderedSelectedItem ? 0 : undefined}
+			tabIndex={0}
 
 			className="note-list"
 			style={noteListStyle}
