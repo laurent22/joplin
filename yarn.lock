@@ -4789,13 +4789,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.9":
-  version: 3.0.9
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.9"
+"@bam.tech/react-native-image-resizer@npm:3.0.10":
+  version: 3.0.10
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.10"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 7c3d6a5d1e61c4d769c3e3ed583086ba4d7cbf65c255a305c7d4533b9f2af18d2e74b4b0847712ea8c290434134bc0bb2d4d488faf8ecbcea6b7adde579a8861
+  checksum: 34cb129d421939ae2937f876986088a5ff25480a008f17c17651bae16e8a4a87882f0803137221d3e28423f343e77008cfb10062bf171db1bc230678b57d865e
   languageName: node
   linkType: hard
 
@@ -7656,7 +7656,7 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": 7.24.7
     "@babel/preset-env": 7.24.7
     "@babel/runtime": 7.24.7
-    "@bam.tech/react-native-image-resizer": 3.0.9
+    "@bam.tech/react-native-image-resizer": 3.0.10
     "@joplin/editor": ~3.1
     "@joplin/lib": ~3.1
     "@joplin/react-native-alarm-notification": ~3.1
