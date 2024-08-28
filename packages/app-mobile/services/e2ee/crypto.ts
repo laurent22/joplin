@@ -2,9 +2,11 @@ import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, Encryp
 import QuickCrypto from 'react-native-quick-crypto';
 import { HashAlgorithm } from 'react-native-quick-crypto/lib/typescript/keys';
 import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
-
-const nonceCounterLength = 8;
-const nonceTimestampLength = 7;
+import {
+	generateNonce as generateNonceShared,
+	increaseNonce as increaseNonceShared,
+	setRandomBytesImplementation,
+} from '@joplin/lib/services/e2ee/cryptoShared';
 
 type DigestNameMap = Record<Digest, string>;
 const digestNameMap: DigestNameMap = {
@@ -111,38 +113,11 @@ const crypto: Crypto = {
 		return crypto.encrypt(password, salt, Buffer.from(data, encoding), encryptionParameters);
 	},
 
-	generateNonce: async (nonce: Uint8Array) => {
-		const randomLength = nonce.length - nonceTimestampLength - nonceCounterLength;
-		if (randomLength < 1) {
-			throw new Error(`Nonce length should be greater than ${(nonceTimestampLength + nonceCounterLength) * 8} bits`);
-		}
-		nonce.set(await crypto.randomBytes(randomLength));
-		const timestampArray = new Uint8Array(nonceTimestampLength);
-		let timestamp = Date.now();
-		for (let i = 0; i < nonceTimestampLength; i++) {
-			timestampArray[i] = timestamp & 0xFF;
-			timestamp >>= 8;
-		}
-		nonce.set(timestampArray, randomLength);
-		nonce.set(new Uint8Array(nonceCounterLength), randomLength + nonceTimestampLength);
-		return nonce;
-	},
+	generateNonce: generateNonceShared,
 
-	increaseNonce: async (nonce: Uint8Array) => {
-		const carry = 1;
-		const end = nonce.length - nonceCounterLength;
-		let i = nonce.length;
-		while (i-- > end) {
-			nonce[i] += carry;
-			if (nonce[i] !== 0 || carry !== 1) {
-				break;
-			}
-		}
-		if (i < end) {
-			await crypto.generateNonce(nonce);
-		}
-		return nonce;
-	},
+	increaseNonce: increaseNonceShared,
 };
+
+setRandomBytesImplementation(crypto.randomBytes);
 
 export default crypto;
