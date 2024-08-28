@@ -23,6 +23,7 @@ import useDragAndDrop from './utils/useDragAndDrop';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
+import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -202,7 +203,6 @@ const NoteList = (props: Props) => {
 
 		if (!props.notes.length) return { notes: rows, renderedSelectedItem };
 
-		const firstRowIndex = Math.floor(startNoteIndex / itemsPerLine);
 		let currentRow: JSX.Element[] = [];
 
 		const finalizeRow = () => {
@@ -210,18 +210,7 @@ const NoteList = (props: Props) => {
 				return;
 			}
 
-			// Rows are 1-indexed
-			const rowIndex = firstRowIndex + rows.length + 1;
-			rows.push(
-				<div
-					key={`row-${rowIndex}`}
-					role='row'
-					className='row'
-					aria-rowindex={rowIndex}
-				>
-					{currentRow}
-				</div>,
-			);
+			rows.push(...currentRow);
 			currentRow = [];
 		};
 
@@ -300,9 +289,9 @@ const NoteList = (props: Props) => {
 
 	return (
 		<div
-			role='grid'
-			aria-colcount={itemsPerLine}
-			aria-rowcount={totalLineCount}
+			role='listbox'
+			aria-label={_('Notes')}
+			aria-setsize={notes.length}
 			aria-multiselectable={true}
 			// Ensure that the note list can be focused, even if no selected
 			// items are visible.
@@ -317,7 +306,7 @@ const NoteList = (props: Props) => {
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
-			<div className='notes note-list-grid' role='rowgroup' style={notesStyle}>
+			<div className='notes note-list-grid' role='presentation' style={notesStyle}>
 				{notes}
 			</div>
 			{renderFiller('bottom', bottomFillerStyle)}

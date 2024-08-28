@@ -157,7 +157,8 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		onDragOver={props.onDragOver}
 
 		aria-selected={props.isSelected}
-		role='gridcell'
+		aria-posinset={1 + props.index}
+		role='option'
 	>
 		<div className="dragcursor" style={dragCursorStyle}></div>
 	</div>;
