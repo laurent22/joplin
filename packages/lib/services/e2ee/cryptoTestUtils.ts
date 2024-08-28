@@ -6,6 +6,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import shim from '../..//shim';
 import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import Logger from '@joplin/utils/Logger';
 
 interface DecryptTestData {
 	method: EncryptionMethod;
@@ -15,6 +16,8 @@ interface DecryptTestData {
 }
 
 let serviceInstance: EncryptionService = null;
+
+const logger = Logger.create('Crypto Tests');
 
 // This is convenient to quickly generate some data to verify for example that
 // react-native-quick-crypto and node:crypto can decrypt the same data.
@@ -52,16 +55,16 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 	try {
 		const decrypted = await EncryptionService.instance().decrypt(data.method, data.password, data.ciphertext);
 		if (decrypted !== data.plaintext) {
-			messages.push('Crypto Tests: Data could not be decrypted');
-			messages.push('Crypto Tests: Expected:', data.plaintext);
-			messages.push('Crypto Tests: Got:', decrypted);
+			messages.push('Data could not be decrypted');
+			messages.push('Expected:', data.plaintext);
+			messages.push('Got:', decrypted);
 			hasError = true;
 		} else {
-			messages.push('Crypto Tests: Data could be decrypted');
+			messages.push('Data could be decrypted');
 		}
 	} catch (error) {
 		hasError = true;
-		messages.push(`Crypto Tests: Failed to decrypt data: Error: ${error}`);
+		messages.push(`Failed to decrypt data: Error: ${error}`);
 	}
 
 	if (hasError && options.throwOnError) {
@@ -70,10 +73,9 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 	} else {
 		for (const msg of messages) {
 			if (hasError) {
-				console.warn(msg);
+				logger.warn(msg);
 			} else {
-				// eslint-disable-next-line no-console
-				if (!options.silent) console.info(msg);
+				if (!options.silent) logger.info(msg);
 			}
 		}
 	}
@@ -116,11 +118,11 @@ export async function testStringPerformance(method: EncryptionMethod, dataSize: 
 			decryptTime += tick3 - tick2;
 		}
 
-		messages.push(`Crypto Tests: testStringPerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+		messages.push(`testStringPerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
 
 	} catch (error) {
 		hasError = true;
-		messages.push(`Crypto Tests: testStringPerformance() failed. Error: ${error}`);
+		messages.push(`testStringPerformance() failed. Error: ${error}`);
 	}
 
 	if (hasError && options.throwOnError) {
@@ -129,10 +131,9 @@ export async function testStringPerformance(method: EncryptionMethod, dataSize: 
 	} else {
 		for (const msg of messages) {
 			if (hasError) {
-				console.warn(msg);
+				logger.warn(msg);
 			} else {
-				// eslint-disable-next-line no-console
-				if (!options.silent) console.info(msg);
+				if (!options.silent) logger.info(msg);
 			}
 		}
 	}
@@ -176,11 +177,11 @@ export async function testFilePerformance(method: EncryptionMethod, dataSize: nu
 			decryptTime += tick3 - tick2;
 		}
 
-		messages.push(`Crypto Tests: testFilePerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
+		messages.push(`testFilePerformance(): method: ${method}, count: ${count}, dataSize: ${dataSize}, encryptTime: ${encryptTime}, decryptTime: ${decryptTime}, encryptTime/count: ${encryptTime / count}, decryptTime/count: ${decryptTime / count}.`);
 
 	} catch (error) {
 		hasError = true;
-		messages.push(`Crypto Tests: testFilePerformance() failed. Error: ${error}`);
+		messages.push(`testFilePerformance() failed. Error: ${error}`);
 	}
 
 	if (hasError && options.throwOnError) {
@@ -189,10 +190,9 @@ export async function testFilePerformance(method: EncryptionMethod, dataSize: nu
 	} else {
 		for (const msg of messages) {
 			if (hasError) {
-				console.warn(msg);
+				logger.warn(msg);
 			} else {
-				// eslint-disable-next-line no-console
-				if (!options.silent) console.info(msg);
+				if (!options.silent) logger.info(msg);
 			}
 		}
 	}
@@ -229,29 +229,28 @@ const decryptTestData: Record<string, DecryptTestData> = {
 export const runIntegrationTests = async (silent = false, testPerformance = false) => {
 	const log = (s: string) => {
 		if (silent) return;
-		// eslint-disable-next-line no-console
-		console.info(s);
+		logger.info(s);
 	};
 
-	log('Crypto Tests: Running integration tests...');
+	log('Running integration tests...');
 	const encryptionEnabled = getEncryptionEnabled();
 	serviceInstance = EncryptionService.instance();
 	BaseItem.encryptionService_ = EncryptionService.instance();
 	setEncryptionEnabled(true);
 
-	log('Crypto Tests: Decrypting using known data...');
+	log('Decrypting using known data...');
 	for (const testLabel in decryptTestData) {
-		log(`Crypto Tests: Running decrypt test data case ${testLabel}...`);
+		log(`Running decrypt test data case ${testLabel}...`);
 		await checkDecryptTestData(decryptTestData[testLabel], { silent, testLabel, throwOnError: true });
 	}
 
-	log('Crypto Tests: Decrypting using local data...');
+	log('Decrypting using local data...');
 	const newData = await createDecryptTestData();
 	await checkDecryptTestData(newData, { silent, throwOnError: true });
 
 	// The performance test is very slow so it is disabled by default.
 	if (testPerformance) {
-		log('Crypto Tests: Testing performance...');
+		log('Testing performance...');
 		if (shim.mobilePlatform() === '') {
 			await testStringPerformance(EncryptionMethod.StringV1, 100, 1000);
 			await testStringPerformance(EncryptionMethod.StringV1, 1000000, 10);
