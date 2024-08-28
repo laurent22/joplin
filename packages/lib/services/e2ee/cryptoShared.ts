@@ -19,9 +19,16 @@ export const generateNonce = async (nonce: Uint8Array) => {
 	nonce.set(await randomBytesImplementation(randomLength));
 	const timestampArray = new Uint8Array(nonceTimestampLength);
 	let timestamp = Date.now();
-	for (let i = 0; i < nonceTimestampLength; i++) {
+	let timestampMsb = Math.floor(timestamp / 2 ** 32);
+	const lsbCount = Math.min(4, nonceTimestampLength);
+	for (let i = 0; i < lsbCount; i++) {
 		timestampArray[i] = timestamp & 0xFF;
-		timestamp >>= 8;
+		timestamp >>>= 8;
+	}
+	// The bitwise operators in Typescript only take the 32 LSBs to calculate, so we need to extract the MSBs manually.
+	for (let i = 4; i < nonceTimestampLength; i++) {
+		timestampArray[i] = timestampMsb & 0xFF;
+		timestampMsb >>>= 8;
 	}
 	nonce.set(timestampArray, randomLength);
 	nonce.set(new Uint8Array(nonceCounterLength), randomLength + nonceTimestampLength);
