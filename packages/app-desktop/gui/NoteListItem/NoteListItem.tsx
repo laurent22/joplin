@@ -28,6 +28,7 @@ interface NoteItemProps {
 	note: NoteEntity;
 	isSelected: boolean;
 	isWatched: boolean;
+	tabIndex: number;
 	listRenderer: ListRenderer;
 	columns: NoteListColumns;
 	dispatch: Dispatch;
@@ -147,13 +148,15 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		id={elementId}
 		ref={ref}
 		draggable={true}
-		tabIndex={0}
+		tabIndex={props.tabIndex}
 		className={className}
 		data-id={noteId}
 		style={{ height: props.itemSize.height }}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}
 		onDragOver={props.onDragOver}
+
+		role='gridcell'
 	>
 		<div className="dragcursor" style={dragCursorStyle}></div>
 	</div>;

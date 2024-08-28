@@ -30,7 +30,7 @@ const commands = {
 };
 
 const NoteList = (props: Props) => {
-	const listRef = useRef(null);
+	const listRef = useRef<HTMLDivElement>(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
 	const listRenderer = props.listRenderer;
 
@@ -65,7 +65,7 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 	);
 
-	const focusNote = useFocusNote(itemRefs, props.notes, makeItemIndexVisible);
+	const focusNote = useFocusNote(listRef, itemRefs, props.notes, makeItemIndexVisible);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
@@ -196,15 +196,42 @@ const NoteList = (props: Props) => {
 		return <div key={key} style={style}></div>;
 	};
 
+	let renderedSelectedItem = false;
 	const renderNotes = () => {
 		if (!props.notes.length) return null;
 
-		const output: JSX.Element[] = [];
+		const firstRowIndex = Math.floor(startNoteIndex / itemsPerLine);
+		const rows: JSX.Element[] = [];
+		let currentRow: JSX.Element[] = [];
+
+		const finalizeRow = () => {
+			if (currentRow.length === 0) {
+				return;
+			}
+
+			// Rows are 1-indexed
+			const rowIndex = firstRowIndex + rows.length + 1;
+			rows.push(
+				<div
+					key={`row-${rowIndex}`}
+					role='row'
+					className='row'
+					aria-rowindex={rowIndex}
+				>
+					{currentRow}
+				</div>,
+			);
+			currentRow = [];
+		};
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
 
-			output.push(
+			const isSelected = props.selectedNoteIds.includes(note.id);
+			renderedSelectedItem ||= isSelected;
+			const isFocusable = isSelected;
+
+			currentRow.push(
 				<NoteListItem
 					key={note.id}
 					ref={el => itemRefs.current[note.id] = el}
@@ -222,16 +249,22 @@ const NoteList = (props: Props) => {
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
 					note={note}
-					isSelected={props.selectedNoteIds.includes(note.id)}
+					tabIndex={isFocusable ? 0 : -1}
+					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
 					columns={props.columns}
 				/>,
 			);
-		}
 
-		return output;
+			if (currentRow.length >= itemsPerLine) {
+				finalizeRow();
+			}
+		}
+		finalizeRow();
+
+		return rows;
 	};
 
 	const topFillerHeight = startLineIndex * itemSize.height;
@@ -264,6 +297,13 @@ const NoteList = (props: Props) => {
 
 	return (
 		<div
+			role='grid'
+			aria-colcount={itemsPerLine}
+			aria-rowcount={totalLineCount}
+			// Ensure that the note list can be focused, even if no selected
+			// items are visible.
+			tabIndex={!renderedSelectedItem ? 0 : undefined}
+
 			className="note-list"
 			style={noteListStyle}
 			ref={listRef}
@@ -273,7 +313,7 @@ const NoteList = (props: Props) => {
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
-			<div className="notes" style={notesStyle}>
+			<div className="notes note-list-grid" style={notesStyle}>
 				{renderNotes()}
 			</div>
 			{renderFiller('bottom', bottomFillerStyle)}

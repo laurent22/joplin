@@ -1,19 +1,21 @@
 import shim from '@joplin/lib/shim';
-import { useRef, useCallback, MutableRefObject } from 'react';
+import { useRef, useCallback, MutableRefObject, RefObject } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export type FocusNote = (noteId: string)=> void;
+type ContainerRef = RefObject<HTMLElement>;
 type ItemRefs = MutableRefObject<Record<string, HTMLDivElement>>;
 type OnMakeIndexVisible = (i: number)=> void;
 
-const useFocusNote = (itemRefs: ItemRefs, notes: NoteEntity[], makeItemIndexVisible: OnMakeIndexVisible) => {
+const useFocusNote = (containerRef: ContainerRef, itemRefs: ItemRefs, notes: NoteEntity[], makeItemIndexVisible: OnMakeIndexVisible) => {
 	const focusItemIID = useRef(null);
 
 	const notesRef = useRef(notes);
 	notesRef.current = notes;
 
 	const focusNote: FocusNote = useCallback((noteId: string) => {
+
 		// - We need to focus the item manually otherwise focus might be lost when the
 		//   list is scrolled and items within it are being rebuilt.
 		// - We need to use an interval because when leaving the arrow pressed or scrolling
@@ -25,6 +27,9 @@ const useFocusNote = (itemRefs: ItemRefs, notes: NoteEntity[], makeItemIndexVisi
 			if (targetIndex > -1) {
 				makeItemIndexVisible(targetIndex);
 			}
+			// So that keyboard events can still be handled, we need to ensure that some part
+			// of the note list keeps focus.
+			focus('useFocusNote0', containerRef.current);
 
 			if (focusItemIID.current) shim.clearInterval(focusItemIID.current);
 			focusItemIID.current = shim.setInterval(() => {
@@ -38,7 +43,7 @@ const useFocusNote = (itemRefs: ItemRefs, notes: NoteEntity[], makeItemIndexVisi
 			if (focusItemIID.current) shim.clearInterval(focusItemIID.current);
 			focus('useFocusNote2', itemRefs.current[noteId]);
 		}
-	}, [itemRefs, makeItemIndexVisible]);
+	}, [containerRef, itemRefs, makeItemIndexVisible]);
 
 	return focusNote;
 };

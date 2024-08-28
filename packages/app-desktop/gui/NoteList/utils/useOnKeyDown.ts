@@ -84,18 +84,41 @@ const useOnKeyDown = (
 				}
 			}
 			event.preventDefault();
-		} else if (noteIds.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
-			const noteId = noteIds[0];
-			let noteIndex = BaseModel.modelIndexById(notes, noteId);
+		} else if (notes.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
+			// const isDownwardKey = [ 'ArrowDown', 'ArrowRight', 'PageDown', 'End' ].includes(key);
+			// let noteIndex = 0;
+			// for (let i = 0; i < notes.length; i++) {
+			// 	const index = isDownwardKey ? notes.length - 1 - i : i;
+			// 	if (selectedNoteIds.includes(notes[index].id)) {
+			// 		noteIndex = index;
+			// 		break;
+			// 	}
+			// }
 
+			const noteId = selectedNoteIds[selectedNoteIds.length - 1] ?? notes[0]?.id;
+			let noteIndex = BaseModel.modelIndexById(notes, noteId);
 			noteIndex = scrollNoteIndex(visibleItemCount, key, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = notes[noteIndex];
 
-			dispatch({
-				type: 'NOTE_SELECT',
-				id: newSelectedNote.id,
-			});
+			if (event.shiftKey) {
+				if (selectedNoteIds.includes(newSelectedNote.id)) {
+					dispatch({
+						type: 'NOTE_SELECT_REMOVE',
+						id: noteId,
+					});
+				}
+
+				dispatch({
+					type: 'NOTE_SELECT_ADD',
+					id: newSelectedNote.id,
+				});
+			} else {
+				dispatch({
+					type: 'NOTE_SELECT',
+					id: newSelectedNote.id,
+				});
+			}
 
 			makeItemIndexVisible(noteIndex);
 
