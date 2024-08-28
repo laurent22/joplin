@@ -8,6 +8,8 @@ import { Dispatch } from 'redux';
 import { FocusNote } from './useFocusNote';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { KeyboardEventKey } from '@joplin/lib/dom';
+import announceForAccessibility from '../../utils/announceForAccessibility';
+import { _ } from '@joplin/lib/locale';
 
 const useOnKeyDown = (
 	activeNoteId: string,
@@ -146,6 +148,8 @@ const useOnKeyDown = (
 
 			dispatch({ type: 'NOTE_SORT' });
 			focusNote(todos[0].id);
+			const oldCompleted = !!todos[0].todo_completed;
+			announceForAccessibility(!oldCompleted ? _('Complete') : _('Incomplete'));
 		}
 
 		if (key === 'Tab') {

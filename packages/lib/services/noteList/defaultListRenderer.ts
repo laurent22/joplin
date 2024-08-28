@@ -73,17 +73,6 @@ const renderer: ListRenderer = {
 				display: flex;
 				align-items: center;
 
-				/* See https://www.w3.org/WAI/tutorials/forms/labels/#hiding-label-text */
-				> label {
-					width: 1px;
-					height: 1px;
-					margin: -1px;
-					opacity: 0;
-					padding: 0;
-					position: absolute;
-					overflow: hidden;
-				}
-
 				> input {
 					margin: 0px 10px 1px 0px;
 				}
@@ -145,13 +134,10 @@ const renderer: ListRenderer = {
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<label for="todo-checkbox-{{note.id}}">
-						{{note.todoStatusText}}
-					</label>
 					<input
 						data-id="todo-checkbox"
-						id="todo-checkbox-{{note.id}}"
 						type="checkbox"
+						aria-label="{{note.todoStatusText}}"
 						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}
 					>
 				</div>
