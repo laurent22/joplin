@@ -196,12 +196,13 @@ const NoteList = (props: Props) => {
 		return <div key={key} style={style}></div>;
 	};
 
-	let renderedSelectedItem = false;
 	const renderNotes = () => {
-		if (!props.notes.length) return null;
+		let renderedSelectedItem = false;
+		const rows: JSX.Element[] = [];
+
+		if (!props.notes.length) return { notes: rows, renderedSelectedItem };
 
 		const firstRowIndex = Math.floor(startNoteIndex / itemsPerLine);
-		const rows: JSX.Element[] = [];
 		let currentRow: JSX.Element[] = [];
 
 		const finalizeRow = () => {
@@ -264,7 +265,7 @@ const NoteList = (props: Props) => {
 		}
 		finalizeRow();
 
-		return rows;
+		return { notes: rows, renderEmptyList };
 	};
 
 	const topFillerHeight = startLineIndex * itemSize.height;
@@ -295,11 +296,14 @@ const NoteList = (props: Props) => {
 		return output;
 	}, [listRenderer.flow]);
 
+	const { notes, renderedSelectedItem } = renderNotes();
+
 	return (
 		<div
 			role='grid'
 			aria-colcount={itemsPerLine}
 			aria-rowcount={totalLineCount}
+			aria-multiselectable={true}
 			// Ensure that the note list can be focused, even if no selected
 			// items are visible.
 			tabIndex={!renderedSelectedItem ? 0 : undefined}
@@ -313,8 +317,8 @@ const NoteList = (props: Props) => {
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
-			<div className="notes note-list-grid" style={notesStyle}>
-				{renderNotes()}
+			<div className='notes note-list-grid' role='rowgroup' style={notesStyle}>
+				{notes}
 			</div>
 			{renderFiller('bottom', bottomFillerStyle)}
 		</div>
