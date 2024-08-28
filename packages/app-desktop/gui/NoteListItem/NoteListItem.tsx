@@ -10,6 +10,7 @@ import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
+import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -36,7 +37,7 @@ interface NoteItemProps {
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const noteId = props.note.id;
-	const elementId = `list-note-${noteId}`;
+	const elementId = getNoteElementIdFromJoplinId(noteId);
 
 	const onInputChange: OnInputChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
 		const getValue = (element: HTMLInputElement) => {
@@ -158,6 +159,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 		aria-selected={props.isSelected}
 		aria-posinset={1 + props.index}
+		aria-setsize={props.noteCount}
 		role='option'
 	>
 		<div className="dragcursor" style={dragCursorStyle}></div>

@@ -24,6 +24,8 @@ import { itemIsInTrash } from '@joplin/lib/services/trash';
 import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
 import { _ } from '@joplin/lib/locale';
+import useActiveDescendantId from './utils/useActiveDescendantId';
+import getNoteElementIdFromJoplinId from '../NoteListItem/utils/getNoteElementIdFromJoplinId';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -66,7 +68,10 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 	);
 
-	const focusNote = useFocusNote(listRef, itemRefs, props.notes, makeItemIndexVisible);
+	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
+	const focusNote = useFocusNote(
+		listRef, itemRefs, props.notes, makeItemIndexVisible, setActiveNoteId,
+	);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
@@ -99,6 +104,7 @@ const NoteList = (props: Props) => {
 	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
 	const onKeyDown = useOnKeyDown(
+		activeNoteId,
 		props.selectedNoteIds,
 		moveNote,
 		makeItemIndexVisible,
@@ -219,7 +225,7 @@ const NoteList = (props: Props) => {
 
 			const isSelected = props.selectedNoteIds.includes(note.id);
 			renderedSelectedItem ||= isSelected;
-			const isFocusable = isSelected;
+			const isFocusable = activeNoteId === note.id;
 
 			currentRow.push(
 				<NoteListItem
@@ -291,7 +297,7 @@ const NoteList = (props: Props) => {
 		<div
 			role='listbox'
 			aria-label={_('Notes')}
-			aria-setsize={notes.length}
+			aria-activedescendant={getNoteElementIdFromJoplinId(activeNoteId)}
 			aria-multiselectable={true}
 			// Ensure that the note list can be focused, even if no selected
 			// items are visible.

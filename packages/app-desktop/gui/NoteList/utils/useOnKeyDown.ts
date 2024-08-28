@@ -10,6 +10,7 @@ import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { KeyboardEventKey } from '@joplin/lib/dom';
 
 const useOnKeyDown = (
+	activeNoteId: string,
 	selectedNoteIds: string[],
 	moveNote: (direction: number, inc: number)=> void,
 	makeItemIndexVisible: (itemIndex: number)=> void,
@@ -85,7 +86,7 @@ const useOnKeyDown = (
 			}
 			event.preventDefault();
 		} else if (notes.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
-			const noteId = selectedNoteIds[selectedNoteIds.length - 1] ?? notes[0]?.id;
+			const noteId = activeNoteId ?? notes[0]?.id;
 			let noteIndex = BaseModel.modelIndexById(notes, noteId);
 			noteIndex = scrollNoteIndex(visibleItemCount, key, event.ctrlKey, event.metaKey, noteIndex);
 
@@ -164,7 +165,7 @@ const useOnKeyDown = (
 				type: 'NOTE_SELECT_ALL',
 			});
 		}
-	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, dispatch, flow, itemsPerLine]);
+	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, activeNoteId, dispatch, flow, itemsPerLine]);
 
 
 	return onKeyDown;
