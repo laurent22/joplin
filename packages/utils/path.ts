@@ -7,6 +7,8 @@ export function dirname(path: string) {
 	return s.join('/');
 }
 
+export const join = (a: string, b: string) => `${a}/${b}`;
+
 export function basename(path: string) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);

@@ -11,6 +11,7 @@ import { FolderEntity, NoteEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
+import FolderMirroringService from './services/folderMirror/FolderMirroringService';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
 const fastDeepEqual = require('fast-deep-equal');
@@ -1362,6 +1363,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 	for (const additionalReducer of additionalReducers) {
 		additionalReducer.reducer(draft, action);
 	}
+
+	void FolderMirroringService.handleReducerAction(action);
 
 	// if (Setting.value('env') === 'dev') {
 	// 	return Object.freeze(newState);

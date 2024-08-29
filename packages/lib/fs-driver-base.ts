@@ -17,6 +17,20 @@ export interface ReadDirStatsOptions {
 	recursive: boolean;
 }
 
+export enum DirectoryWatchEventType {
+	Add = 'add',
+	Unlink = 'unlink',
+	Change = 'change',
+}
+export interface DirectoryWatchEvent {
+	type: DirectoryWatchEventType;
+	path: string;
+}
+export type OnWatchEventListener = (event: DirectoryWatchEvent)=> void;
+export interface DirectoryWatcher {
+	close(): Promise<void>;
+}
+
 export interface RemoveOptions {
 	recursive?: boolean;
 }
@@ -124,6 +138,10 @@ export default class FsDriverBase {
 
 	public resolve(..._paths: string[]): string {
 		throw new Error('Not implemented: resolve');
+	}
+
+	public watchDirectory(_path: string, _onEventHandler: OnWatchEventListener): Promise<DirectoryWatcher> {
+		throw new Error('Not implemented: watchDirectory');
 	}
 
 	// Resolves the provided relative path to an absolute path within baseDir. The function

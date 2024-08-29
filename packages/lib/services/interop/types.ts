@@ -84,6 +84,7 @@ export interface ImportExportResult {
 
 // These are the fields that will be included in an exported Md+Front Matter note
 export interface MdFrontMatterExport {
+	'id'?: string;
 	'title'?: string;
 	'source'?: string;
 	'author'?: string;
@@ -91,6 +92,7 @@ export interface MdFrontMatterExport {
 	'longitude'?: number;
 	'altitude'?: number;
 	'completed?'?: string;
+	'completed_time'?: string;
 	'due'?: string;
 	'updated'?: string;
 	'created'?: string;

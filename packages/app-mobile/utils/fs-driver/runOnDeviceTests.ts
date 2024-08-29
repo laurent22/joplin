@@ -5,8 +5,8 @@ import { join } from 'path';
 import FsDriverBase from '@joplin/lib/fs-driver-base';
 import Logger from '@joplin/utils/Logger';
 import { Buffer } from 'buffer';
-import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
-import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
+import createFilesFromPathRecord from '@joplin/lib/utils/pathRecord/createFilesFromPathRecord';
+import verifyDirectoryMatches from '@joplin/lib/utils/pathRecord/verifyDirectoryMatches';
 
 const logger = Logger.create('fs-driver-tests');
 

@@ -13,7 +13,7 @@ const convertDate = (datetime: number): string => {
 	return time.unixMsToRfc3339Sec(datetime);
 };
 
-export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'completed_time', 'due', 'tags'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
@@ -40,12 +40,19 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
+interface NoteToFrontMatterOptions {
+	includeId: boolean;
+	replaceResourceLinks: boolean;
+}
+
+export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
 	const md: MdFrontMatterExport = {};
 	// Every variable needs to be converted separately, so they will be handles in groups
 	//
 	// title
 	if (note.title) { md['title'] = note.title; }
+
+	if (note.id && options.includeId) { md['id'] = note.id; }
 
 	// source, author
 	if (note.source_url) { md['source'] = note.source_url; }
@@ -68,6 +75,7 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	if (note.is_todo) {
 		// boolean is not support by the yaml FAILSAFE_SCHEMA
 		md['completed?'] = note.todo_completed ? 'yes' : 'no';
+		if (note.todo_completed) { md['completed_time'] = convertDate(note.todo_completed); }
 	}
 	if (note.todo_due) { md['due'] = convertDate(note.todo_due); }
 
@@ -94,9 +102,12 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	return trimQuotes(rawOutput);
 };
 
-export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
-	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
-	const metadata = noteToFrontMatter(modNote, tagTitles);
+export const serialize = async (modNote: NoteEntity, tagTitles: string[], options: NoteToFrontMatterOptions) => {
+	let noteContent = await Note.serialize(modNote, ['body']);
+	if (options.replaceResourceLinks) {
+		noteContent = await Note.replaceResourceInternalToExternalLinks(noteContent);
+	}
+	const metadata = noteToFrontMatter(modNote, tagTitles, options);
 	return `---\n${metadata}---\n\n${noteContent}`;
 };
 

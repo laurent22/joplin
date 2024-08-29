@@ -226,6 +226,12 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
+			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+				menu.append(new MenuItem(
+					menuUtils.commandToStatefulMenuItem('mirrorFolder', itemId),
+				));
+			}
+
 			const pluginViews = pluginUtils.viewsByType(pluginsRef.current, 'menuItem');
 
 			for (const view of pluginViews) {

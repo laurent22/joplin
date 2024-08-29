@@ -1,8 +1,8 @@
 const fastDeepEqual = require('fast-deep-equal');
 import { EventEmitter } from 'events';
 import type { State as AppState } from './reducer';
-import { ModelType } from './BaseModel';
-import { NoteEntity } from './services/database/types';
+import type { ModelType } from './BaseModel';
+import type { NoteEntity, ResourceEntity } from './services/database/types';
 
 export enum EventName {
 	ResourceCreate = 'resourceCreate',
@@ -21,7 +21,7 @@ export enum EventName {
 	NoteResourceIndexed = 'noteResourceIndexed',
 }
 
-interface ItemChangeEvent {
+export interface ItemChangeEvent {
 	itemType: ModelType;
 	itemId: string;
 	eventType: number;
@@ -33,6 +33,7 @@ interface SyncCompleteEvent {
 
 interface ResourceChangeEvent {
 	id: string;
+	resource: ResourceEntity;
 }
 
 interface NoteContentChangeEvent {

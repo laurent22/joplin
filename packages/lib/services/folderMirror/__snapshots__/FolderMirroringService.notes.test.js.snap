@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FolderMirroringService.notes should assign IDs to notes that lack them on an initial sync: should assign IDs to new notes written while watching 1`] = `
+{
+  "a.md": "---
+title: A test
+id: 93b885adfe0da089cdf634904fd59f71
+---
+
+",
+  "b.md": "---
+title: Another test
+id: 55a54008ad1ba589aa210d2629c1df41
+---
+
+# Content",
+  "c.md": "---
+title: Another test
+id: 9e688c58a5487b8eaf69c9e1005ad0bf
+---
+
+",
+  "new.md": "New file with no ID",
+  "test/.folder.yml": "title: test
+id: 8666683506aacd900bbd5a74ac4edf68
+",
+  "test/foo/.folder.yml": "title: foo
+id: ec7f7e7bb43742ce868145f71d37b53c
+",
+  "test/foo/c.md": "---
+title: c
+id: 8bb6c17838643f9691cc6a4de6c51709
+---
+
+Another note",
+}
+`;
+
+exports[`FolderMirroringService.notes should assign IDs to notes that lack them on an initial sync: should assign IDs to notes that lack them on an initial sync 1`] = `
+{
+  "a.md": "---
+title: A test
+id: 93b885adfe0da089cdf634904fd59f71
+---
+
+",
+  "b.md": "---
+title: Another test
+id: 55a54008ad1ba589aa210d2629c1df41
+---
+
+# Content",
+  "c.md": "---
+title: Another test
+id: 9e688c58a5487b8eaf69c9e1005ad0bf
+---
+
+",
+  "test/.folder.yml": "title: test
+id: 8666683506aacd900bbd5a74ac4edf68
+",
+  "test/foo/.folder.yml": "title: foo
+id: ec7f7e7bb43742ce868145f71d37b53c
+",
+  "test/foo/c.md": "---
+title: c
+id: 8bb6c17838643f9691cc6a4de6c51709
+---
+
+Another note",
+}
+`;

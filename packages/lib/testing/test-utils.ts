@@ -264,6 +264,10 @@ async function afterAllCleanUp() {
 			console.warn('Could not clear sync target root:', error);
 		}
 	}
+
+	if (await fs.pathExists(baseTempDir)) {
+		await fs.remove(baseTempDir);
+	}
 }
 
 const settingFilename = (id: number): string => {
@@ -437,6 +441,7 @@ function pluginDir(id: number = null) {
 
 export interface CreateNoteAndResourceOptions {
 	path?: string;
+	noteTitle?: string;
 }
 
 const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
@@ -445,7 +450,7 @@ const createNoteAndResource = async (options: CreateNoteAndResourceOptions = nul
 		...options,
 	};
 
-	let note = await Note.save({});
+	let note = await Note.save({ title: options.noteTitle ?? '' });
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
 	const resource: ResourceEntity = await Resource.load(resourceIds[0]);

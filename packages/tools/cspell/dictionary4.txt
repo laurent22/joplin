@@ -107,6 +107,8 @@ libgtk
 libasound
 libatk
 ENOTFOUND
+unsynced
+filesync
 Scaleway
 Inkscape
 Ionicon
