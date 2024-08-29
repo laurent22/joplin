@@ -15,6 +15,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
 import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
 import { checkObjectHasProperties } from '@joplin/utils/object';
+import EncryptionService from '../services/e2ee/EncryptionService';
 
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -47,8 +48,7 @@ export interface EncryptedItemsStats {
 
 export default class BaseItem extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static encryptionService_: any = null;
+	public static encryptionService_: EncryptionService = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static revisionService_: any = null;
 	public static shareService_: ShareService = null;

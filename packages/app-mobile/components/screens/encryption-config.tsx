@@ -8,10 +8,10 @@ const { dialogs } = require('../../utils/dialogs.js');
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
-import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useRef, useState } from 'react';
 
@@ -122,6 +122,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
 					{renderPasswordInput(mk.id)}
 				</View>
+				<Button onPress={() => onToggleEnabledClick(mk)} title={masterKeyEnabled(mk) ? _('Disable') : _('Enable')}/>
 			</View>
 		);
 	};

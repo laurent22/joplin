@@ -74,6 +74,7 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
+	private disabledMasterKeyIds_: Set<string> = new Set();
 	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
@@ -122,6 +123,11 @@ export default class EncryptionService {
 		return id;
 	}
 
+	public disableMasterKey(masterKey: MasterKeyEntity) {
+		this.unloadMasterKey(masterKey);
+		this.disabledMasterKeyIds_.add(masterKey.id);
+	}
+
 	public isMasterKeyLoaded(masterKey: MasterKeyEntity) {
 		const d = this.decryptedMasterKeys_[masterKey.id];
 		if (!d) return false;
@@ -138,6 +144,7 @@ export default class EncryptionService {
 			updatedTime: model.updated_time,
 		};
 
+		this.disabledMasterKeyIds_.delete(model.id);
 		if (makeActive) this.setActiveMasterKeyId(model.id);
 	}
 
@@ -146,6 +153,11 @@ export default class EncryptionService {
 	}
 
 	public loadedMasterKey(id: string) {
+		if (this.disabledMasterKeyIds_.has(id)) {
+			const error = new JoplinError(`Master key is disabled: ${id}`, 'masterKeyDisabled');
+			throw error;
+		}
+
 		if (!this.decryptedMasterKeys_[id]) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const error: any = new Error(`Master key is not loaded: ${id}`);
