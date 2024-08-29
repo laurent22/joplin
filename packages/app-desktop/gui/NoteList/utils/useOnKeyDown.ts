@@ -90,6 +90,7 @@ const useOnKeyDown = (
 		} else if (notes.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
 			const noteId = activeNoteId ?? notes[0]?.id;
 			let noteIndex = BaseModel.modelIndexById(notes, noteId);
+
 			noteIndex = scrollNoteIndex(visibleItemCount, key, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = notes[noteIndex];
@@ -148,8 +149,8 @@ const useOnKeyDown = (
 
 			dispatch({ type: 'NOTE_SORT' });
 			focusNote(todos[0].id);
-			const oldCompleted = !!todos[0].todo_completed;
-			announceForAccessibility(!oldCompleted ? _('Complete') : _('Incomplete'));
+			const wasCompleted = !!todos[0].todo_completed;
+			announceForAccessibility(!wasCompleted ? _('Complete') : _('Incomplete'));
 		}
 
 		if (key === 'Tab') {

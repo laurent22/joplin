@@ -205,29 +205,15 @@ const NoteList = (props: Props) => {
 	};
 
 	const renderNotes = () => {
-		let renderedSelectedItem = false;
-		const rows: JSX.Element[] = [];
+		if (!props.notes.length) return [];
 
-		if (!props.notes.length) return { notes: rows, renderedSelectedItem };
-
-		let currentRow: JSX.Element[] = [];
-
-		const finalizeRow = () => {
-			if (currentRow.length === 0) {
-				return;
-			}
-
-			rows.push(...currentRow);
-			currentRow = [];
-		};
+		const output: JSX.Element[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
-
 			const isSelected = props.selectedNoteIds.includes(note.id);
-			renderedSelectedItem ||= isSelected;
 
-			currentRow.push(
+			output.push(
 				<NoteListItem
 					key={note.id}
 					ref={el => itemRefs.current[note.id] = el}
@@ -254,14 +240,9 @@ const NoteList = (props: Props) => {
 					columns={props.columns}
 				/>,
 			);
-
-			if (currentRow.length >= itemsPerLine) {
-				finalizeRow();
-			}
 		}
-		finalizeRow();
 
-		return { notes: rows, renderEmptyList };
+		return output;
 	};
 
 	const topFillerHeight = startLineIndex * itemSize.height;
@@ -292,8 +273,6 @@ const NoteList = (props: Props) => {
 		return output;
 	}, [listRenderer.flow]);
 
-	const { notes } = renderNotes();
-
 	return (
 		<div
 			role='listbox'
@@ -314,8 +293,8 @@ const NoteList = (props: Props) => {
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
-			<div className='notes note-list-grid' role='presentation' style={notesStyle}>
-				{notes}
+			<div className='notes' role='presentation' style={notesStyle}>
+				{renderNotes()}
 			</div>
 			{renderFiller('bottom', bottomFillerStyle)}
 		</div>
