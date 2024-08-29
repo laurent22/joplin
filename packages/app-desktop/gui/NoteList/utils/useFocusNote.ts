@@ -18,8 +18,9 @@ const useFocusNote = (
 			setActiveNoteId(noteId);
 		}
 
-		// So that keyboard events can still be handled, we need to ensure that some part
-		// of the note list keeps focus while the note element is loading.
+		// The note list container should have focus even when a note list item is visibly selected.
+		// The visibly focused item is determined by activeNoteId and is communicated to accessibility
+		// tools using aria- attributes
 		focus('useFocusNote', containerRef.current);
 
 		const targetIndex = notesRef.current.findIndex(note => note.id === noteId);
