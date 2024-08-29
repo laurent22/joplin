@@ -11,6 +11,7 @@ export default class KeychainService extends BaseService {
 	private keysNeedingMigration_: Set<string>;
 	private static instance_: KeychainService;
 	private enabled_ = true;
+	private readOnly_ = false;
 
 	public static instance(): KeychainService {
 		if (!this.instance_) this.instance_ = new KeychainService();
@@ -53,8 +54,17 @@ export default class KeychainService extends BaseService {
 		this.enabled_ = v;
 	}
 
+	public get readOnly() {
+		return this.readOnly_;
+	}
+
+	public set readOnly(v: boolean) {
+		this.readOnly_ = v;
+	}
+
 	public async setPassword(name: string, password: string): Promise<boolean> {
 		if (!this.enabled) return false;
+		if (this.readOnly_) return false;
 
 		// Optimization: Handles the case where the password doesn't need to change.
 		// TODO: Re-evaluate whether this optimization is necessary after refactoring the driver
@@ -137,16 +147,22 @@ export default class KeychainService extends BaseService {
 			Setting.setValue('keychain.supported', -1);
 		}
 
-		const passwordIsSet = await this.setPassword('zz_testingkeychain', 'mytest');
+		if (!this.readOnly) {
+			const passwordIsSet = await this.setPassword('zz_testingkeychain', 'mytest');
 
-		if (!passwordIsSet) {
-			this.logger().info('KeychainService: could not set test password - keychain support will be disabled');
-			Setting.setValue('keychain.supported', 0);
+			if (!passwordIsSet) {
+				this.logger().info('KeychainService: could not set test password - keychain support will be disabled');
+				Setting.setValue('keychain.supported', 0);
+			} else {
+				const result = await this.password('zz_testingkeychain');
+				await this.deletePassword('zz_testingkeychain');
+				this.logger().info('KeychainService: tried to set and get password. Result was:', result);
+				Setting.setValue('keychain.supported', result === 'mytest' ? 1 : 0);
+			}
 		} else {
-			const result = await this.password('zz_testingkeychain');
-			await this.deletePassword('zz_testingkeychain');
-			this.logger().info('KeychainService: tried to set and get password. Result was:', result);
-			Setting.setValue('keychain.supported', result === 'mytest' ? 1 : 0);
+			// The supported check requires write access to the keychain -- rely on the more
+			// limited support checks done by each driver.
+			Setting.setValue('keychain.supported', 1);
 		}
 		Setting.setValue('keychain.lastAvailableDrivers', this.drivers_.map(driver => driver.driverId));
 	}
