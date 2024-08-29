@@ -1,9 +1,17 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, RefObject } from 'react';
 
-const useFocusVisible = () => {
+const useFocusVisible = (containerRef: RefObject<HTMLElement>, onFocusEnter: ()=> void) => {
 	const [focusVisible, setFocusVisible] = useState(false);
 
-	const onFocus = useCallback(() => setFocusVisible(true), []);
+	const onFocusEnterRef = useRef(onFocusEnter);
+	onFocusEnterRef.current = onFocusEnter;
+
+	const onFocus = useCallback(() => {
+		if (containerRef.current.matches(':focus-visible')) {
+			setFocusVisible(true);
+			onFocusEnterRef.current();
+		}
+	}, [containerRef]);
 	const onBlur = useCallback(() => setFocusVisible(false), []);
 
 	return { focusVisible, onFocus, onBlur };

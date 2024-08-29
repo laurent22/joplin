@@ -183,7 +183,9 @@ const NoteList = (props: Props) => {
 	// 	}
 	// }, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
-	const { focusVisible, onFocus, onBlur } = useFocusVisible();
+	const { focusVisible, onFocus, onBlur } = useFocusVisible(listRef, () => {
+		focusNote(activeNoteId);
+	});
 
 	const highlightedWords = useMemo(() => {
 		if (props.notesParentType === 'Search') {
