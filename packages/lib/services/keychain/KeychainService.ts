@@ -162,7 +162,14 @@ export default class KeychainService extends BaseService {
 		} else {
 			// The supported check requires write access to the keychain -- rely on the more
 			// limited support checks done by each driver.
-			Setting.setValue('keychain.supported', 1);
+			const supported = this.drivers_.length > 0;
+			Setting.setValue('keychain.supported', supported ? 1 : 0);
+
+			if (supported) {
+				logger.info('Starting KeychainService in read-only mode. Keys will be read, but not written.');
+			} else {
+				logger.info('Failed to start in read-only mode -- no supported drivers found.');
+			}
 		}
 		Setting.setValue('keychain.lastAvailableDrivers', this.drivers_.map(driver => driver.driverId));
 	}
