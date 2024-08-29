@@ -99,7 +99,9 @@ const EncryptionConfigScreen = (props: Props) => {
 		inputStyle.borderBottomColor = theme.dividerColor;
 
 		const renderPasswordInput = (masterKeyId: string) => {
-			if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
+			if (!masterKeyEnabled(mk)) {
+				return <Text style={styles.normalText}>{_('Disabled')}</Text>;
+			} else if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
 				return (
 					<Text style={{ ...styles.normalText, color: theme.colorFaded, fontStyle: 'italic' }}>({_('Master password')})</Text>
 				);
