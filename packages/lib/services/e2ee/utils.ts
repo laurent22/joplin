@@ -142,9 +142,7 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 		const mk = masterKeys[i];
 		if (service.isMasterKeyLoaded(mk)) continue;
 
-		if (mk.enabled === 0) {
-			await service.disableMasterKey(mk);
-		} else {
+		if (masterKeyEnabled(mk)) {
 			const password = await findMasterKeyPassword(service, mk);
 			if (!password) continue;
 
@@ -153,6 +151,8 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 			} catch (error) {
 				logger.warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
 			}
+		} else {
+			await service.disableMasterKey(mk);
 		}
 	}
 

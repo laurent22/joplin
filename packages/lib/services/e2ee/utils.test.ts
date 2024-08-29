@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { activeMasterKeySanityCheck, migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { activeMasterKeySanityCheck, loadMasterKeysFromSettings, migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
 import { localSyncInfo, masterKeyById, masterKeyEnabled, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, ppkPasswordIsValid } from './ppk';
@@ -184,4 +184,16 @@ describe('e2ee/utils', () => {
 		expect(syncInfo.activeMasterKeyId).toBe(mk1.id);
 	});
 
+	test('should only load enabled master keys', async () => {
+		const mk1 = await MasterKey.save({ ...await encryptionService().generateMasterKey('test'), enabled: 0 });
+		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey('test'));
+
+		Setting.setValue('encryption.masterPassword', 'test');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		await expect(
+			() => encryptionService().encryptString('test', { masterKeyId: mk1.id }),
+		).rejects.toThrow(/disabled/i);
+		expect(await encryptionService().encryptString('test', { masterKeyId: mk2.id })).toBeTruthy();
+	});
 });
