@@ -2,11 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const sha512 = require('js-sha512');
+const distDirName = 'dist';
+const distPath = path.join(__dirname, distDirName);
 
-const generateChecksumFile = () => {
-	const distDirName = 'dist';
-	const distPath = path.join(__dirname, distDirName);
-
+const renameLatestYmlFile = () => {
 	if (os.platform() === 'darwin' && process.arch === 'arm64') {
 		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
 		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
@@ -18,7 +17,9 @@ const generateChecksumFile = () => {
 			throw new Error('latest-mac.yml not found!');
 		}
 	}
+};
 
+const generateChecksumFile = () => {
 	if (os.platform() !== 'linux') {
 		return []; // SHA-512 is only for AppImage
 	}
@@ -44,4 +45,5 @@ const generateChecksumFile = () => {
 	return [sha512FilePath];
 };
 
-exports.default = generateChecksumFile;
+renameLatestYmlFile();
+generateChecksumFile();
