@@ -134,6 +134,20 @@ describe('KeychainService', () => {
 		expect(Setting.value('keychain.supported')).toBe(0);
 	});
 
+	test('should load settings from a read-only KeychainService if not present in the database', async () => {
+		mockSafeStorage({});
+
+		const service = KeychainService.instance();
+		await service.initialize(makeDrivers());
+		expect(await service.setPassword('setting.encryption.masterPassword', 'keychain password')).toBe(true);
+
+		service.readOnly = true;
+		await service.initialize(makeDrivers());
+		await Setting.load();
+
+		expect(Setting.value('encryption.masterPassword')).toBe('keychain password');
+	});
+
 	test('settings should be saved to database with a read-only keychain', async () => {
 		const safeStorage = mockSafeStorage({});
 
