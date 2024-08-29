@@ -4,11 +4,25 @@ const os = require('os');
 const sha512 = require('js-sha512');
 
 const generateChecksumFile = () => {
+	const distDirName = 'dist';
+	const distPath = path.join(__dirname, distDirName);
+
+	if (os.platform() === 'darwin' && process.arch === 'arm64') {
+		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
+		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
+
+		if (fs.existsSync(latestMacFilePath)) {
+			fs.renameSync(latestMacFilePath, renamedMacFilePath);
+			return [renamedMacFilePath];
+		} else {
+			throw new Error('latest-mac.yml not found!');
+		}
+	}
+
 	if (os.platform() !== 'linux') {
 		return []; // SHA-512 is only for AppImage
 	}
-	const distDirName = 'dist';
-	const distPath = path.join(__dirname, distDirName);
+
 	let appImageName = '';
 	const files = fs.readdirSync(distPath);
 	for (const key in files) {

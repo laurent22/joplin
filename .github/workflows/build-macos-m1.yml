@@ -84,22 +84,3 @@ jobs:
 
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
           fi
-              
-      - name: Rename latest-mac.yml to latest-mac-arm64.yml
-        run: | 
-            cd packages/app-desktop/dist
-            mv latest-mac.yml latest-mac-arm64.yml
-            echo "Renamed latest-mac.yml to latest-mac-arm64.yml. Contents of file:"
-            cat latest-mac-arm64.yml
-
-      - name: Upload latest-mac-arm64.yml to release
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-        run: |
-          if [[ $GIT_TAG_NAME = v* ]]; then
-            echo "Uploading latest-mac-arm64.yml to Github Releases ..."
-            cd packages/app-desktop/dist
-            gh release upload "$GIT_TAG_NAME" "latest-mac-arm64.yml" --repo "$GH_REPO" --clobber
-          fi
-

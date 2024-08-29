@@ -41,7 +41,7 @@
       "build/tesseract.js-core/**",
       "build/7zip/**"
     ],
-    "afterAllArtifactBuild": "./generateSha512.js",
+    "afterAllArtifactBuild": "./afterAllArtifactBuild.js",
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
