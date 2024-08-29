@@ -7,11 +7,20 @@ import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
-import { SvgXml, extractSvgs } from '@joplin/utils/html';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
+
+export type SvgXml = {
+	title: string;
+	content: string;
+};
+
+type ExtractSvgsReturn = {
+	svgs: SvgXml[];
+	html: string;
+};
 
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
@@ -76,7 +85,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		for (const file of htmlFiles) {
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
-			const { svgs, html: updatedHtml } = await extractSvgs(originalHtml, () => uuidgen(10));
+			const { svgs, html: updatedHtml } = this.extractSvgs(originalHtml, () => uuidgen(10));
 
 			if (!svgs || !svgs.length) continue;
 
@@ -95,5 +104,44 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		for (const svg of svgs) {
 			await shim.fsDriver().writeFile(join(svgBaseFolder, svg.title), svg.content, 'utf8');
 		}
+	}
+
+	private extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
+		if (!DOMParser) {
+			throw new Error('DOMParser not found');
+		}
+
+		const domParser = new DOMParser();
+		const domParserDocument = domParser.parseFromString(html, 'text/html');
+
+		// get all "top-level" SVGS (ignore nested)
+		const svgNodeList = domParserDocument.querySelectorAll('svg');
+
+		if (!svgNodeList || !svgNodeList.length) {
+			return { svgs: [], html };
+		}
+
+		const serializer = new XMLSerializer();
+		const svgs: SvgXml[] = [];
+
+		for (const svgNode of svgNodeList) {
+			const title = `${titleGenerator()}.svg`;
+			const img = domParserDocument.createElement('img');
+			img.setAttribute('style', svgNode.getAttribute('style'));
+			img.setAttribute('src', `./${title}`);
+
+			svgs.push({
+				title,
+				content: serializer.serializeToString(svgNode),
+			});
+
+			domParserDocument.replaceChild(img, svgNode);
+		}
+
+
+		return {
+			svgs,
+			html: serializer.serializeToString(domParserDocument),
+		};
 	}
 }
