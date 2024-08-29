@@ -33,10 +33,6 @@ const renderer: ListRenderer = {
 			display: flex;
 			height: 100%;
 
-			&:hover, :focus-visible {
-				background-color: var(--joplin-background-color-hover3);
-			}
-
 			> .item {
 				display: flex;
 				align-items: center;
@@ -82,6 +78,10 @@ const renderer: ListRenderer = {
 
 		> .row.-completed {
 			opacity: 0.5;
+		}
+			
+		> .row:hover, &.-focus-visible > .row {
+			background-color: var(--joplin-background-color-hover3);
 		}
 	`,
 

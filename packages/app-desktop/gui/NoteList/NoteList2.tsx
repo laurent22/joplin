@@ -26,6 +26,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { _ } from '@joplin/lib/locale';
 import useActiveDescendantId from './utils/useActiveDescendantId';
 import getNoteElementIdFromJoplinId from '../NoteListItem/utils/getNoteElementIdFromJoplinId';
+import useFocusVisible from './utils/useFocusVisible';
 const { connect } = require('react-redux');
 
 const commands = {
@@ -184,6 +185,8 @@ const NoteList = (props: Props) => {
 	// 	}
 	// }, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
+	const { focusVisible, onFocus, onBlur } = useFocusVisible();
+
 	const highlightedWords = useMemo(() => {
 		if (props.notesParentType === 'Search') {
 			const query = BaseModel.byId(props.searches, props.selectedSearchId);
@@ -245,6 +248,7 @@ const NoteList = (props: Props) => {
 					flow={listRenderer.flow}
 					note={note}
 					tabIndex={-1}
+					focusVisible={focusVisible && activeNoteId === note.id}
 					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
@@ -298,9 +302,10 @@ const NoteList = (props: Props) => {
 			aria-label={_('Notes')}
 			aria-activedescendant={getNoteElementIdFromJoplinId(activeNoteId)}
 			aria-multiselectable={true}
-			// Ensure that the note list can be focused, even if no selected
-			// items are visible.
 			tabIndex={0}
+
+			onFocus={onFocus}
+			onBlur={onBlur}
 
 			className="note-list"
 			style={noteListStyle}

@@ -27,9 +27,12 @@ interface NoteItemProps {
 	onDragStart: DragEventHandler;
 	style: CSSProperties;
 	note: NoteEntity;
-	isSelected: boolean;
 	isWatched: boolean;
+
+	isSelected: boolean;
 	tabIndex: number;
+	focusVisible: boolean;
+
 	listRenderer: ListRenderer;
 	columns: NoteListColumns;
 	dispatch: Dispatch;
@@ -72,6 +75,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		rootElement,
 		noteId,
 		renderedNote ? renderedNote.html : '',
+		props.focusVisible,
 		props.style,
 		props.itemSize,
 		props.onClick,
