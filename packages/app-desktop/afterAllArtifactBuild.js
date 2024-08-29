@@ -2,11 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const sha512 = require('js-sha512');
+const packagesDirName = 'packages';
+const appDesktopDirname = 'app-desktop';
 const distDirName = 'dist';
-const distPath = path.join(__dirname, distDirName);
 
 const renameLatestYmlFile = () => {
 	if (os.platform() === 'darwin' && process.arch === 'arm64') {
+		const distPath = path.join(__dirname, packagesDirName, appDesktopDirname, distDirName);
 		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
 		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
 
@@ -24,6 +26,7 @@ const generateChecksumFile = () => {
 		return []; // SHA-512 is only for AppImage
 	}
 
+	const distPath = path.join(__dirname, distDirName);
 	let appImageName = '';
 	const files = fs.readdirSync(distPath);
 	for (const key in files) {
@@ -45,5 +48,9 @@ const generateChecksumFile = () => {
 	return [sha512FilePath];
 };
 
-renameLatestYmlFile();
-generateChecksumFile();
+const mainHook = () => {
+	renameLatestYmlFile();
+	generateChecksumFile();
+};
+
+exports.default = mainHook;
