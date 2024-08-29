@@ -183,7 +183,7 @@ const NoteList = (props: Props) => {
 	// 	}
 	// }, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
-	const { focusVisible, onFocus, onBlur } = useFocusVisible(listRef, () => {
+	const { focusVisible, onFocus, onBlur, onKeyUp } = useFocusVisible(listRef, () => {
 		focusNote(activeNoteId);
 	});
 
@@ -291,6 +291,7 @@ const NoteList = (props: Props) => {
 			ref={listRef}
 			onScroll={onScroll}
 			onKeyDown={onKeyDown}
+			onKeyUp={onKeyUp}
 			onDrop={onDrop}
 		>
 			{renderEmptyList()}
