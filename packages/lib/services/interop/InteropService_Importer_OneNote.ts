@@ -1,4 +1,4 @@
-import { ImportExportResult, ImportModuleOutputFormat } from './types';
+import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './types';
 
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
@@ -24,6 +24,17 @@ type ExtractSvgsReturn = {
 
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
+	private document: Document = null;
+	private xmlSerializer: XMLSerializer = null;
+
+	public async init(sourcePath: string, options: ImportOptions) {
+		await super.init(sourcePath, options);
+		if (!options.document || !options.xmlSerializer) {
+			throw new Error('OneNote importer requires document and xmlSerializer to be able to extract SVGs');
+		}
+		this.document = options.document;
+		this.xmlSerializer = options.xmlSerializer;
+	}
 
 	private getEntryDirectory(unzippedPath: string, entryName: string) {
 		const withoutBasePath = entryName.replace(unzippedPath, '');
@@ -107,41 +118,37 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
-		if (!DOMParser) {
-			throw new Error('DOMParser not found');
-		}
-
-		const domParser = new DOMParser();
-		const domParserDocument = domParser.parseFromString(html, 'text/html');
+		const root = this.document.createElement('div');
+		root.innerHTML = html;
 
 		// get all "top-level" SVGS (ignore nested)
-		const svgNodeList = domParserDocument.querySelectorAll('svg');
+		const svgNodeList = root.querySelectorAll('svg');
 
 		if (!svgNodeList || !svgNodeList.length) {
 			return { svgs: [], html };
 		}
 
-		const serializer = new XMLSerializer();
 		const svgs: SvgXml[] = [];
 
 		for (const svgNode of svgNodeList) {
 			const title = `${titleGenerator()}.svg`;
-			const img = domParserDocument.createElement('img');
+			const img = this.document.createElement('img');
 			img.setAttribute('style', svgNode.getAttribute('style'));
 			img.setAttribute('src', `./${title}`);
+			svgNode.removeAttribute('style');
 
 			svgs.push({
 				title,
-				content: serializer.serializeToString(svgNode),
+				content: this.xmlSerializer.serializeToString(svgNode),
 			});
 
-			domParserDocument.replaceChild(img, svgNode);
+			svgNode.parentElement.replaceChild(img, svgNode);
 		}
 
 
 		return {
 			svgs,
-			html: serializer.serializeToString(domParserDocument),
+			html: this.xmlSerializer.serializeToString(root),
 		};
 	}
 }

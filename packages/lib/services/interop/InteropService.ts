@@ -30,6 +30,8 @@ export default class InteropService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
+	private document_: Document;
+	private xmlSerializer_: XMLSerializer;
 
 	public static instance(): InteropService {
 		if (!this.instance_) this.instance_ = new InteropService();
@@ -197,6 +199,22 @@ export default class InteropService {
 		this.eventEmitter_.emit('modulesChanged');
 	}
 
+	public set xmlSerializer(xmlSerializer: XMLSerializer) {
+		this.xmlSerializer_ = xmlSerializer;
+	}
+
+	public get xmlSerializer() {
+		return this.xmlSerializer_;
+	}
+
+	public set document(document: Document) {
+		this.document_ = document;
+	}
+
+	public get document() {
+		return this.document_;
+	}
+
 	// Find the module that matches the given type ("importer" or "exporter")
 	// and the given format. Some formats can have multiple associated importers
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
@@ -281,6 +299,8 @@ export default class InteropService {
 			format: 'auto',
 			destinationFolderId: null,
 			destinationFolder: null,
+			xmlSerializer: this.xmlSerializer,
+			document: this.document,
 			...options,
 		};
 

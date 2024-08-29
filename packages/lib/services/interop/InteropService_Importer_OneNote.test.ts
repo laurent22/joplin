@@ -3,27 +3,31 @@ import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { NoteEntity } from '../database/types';
-import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { MarkupToHtml } from '@joplin/renderer';
 import BaseModel from '../../BaseModel';
+import InteropService from './InteropService';
+import { JSDOM } from 'jsdom';
+import { ImportModuleOutputFormat } from './types';
 
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
 	async function importNote(path: string) {
 		const newFolder = await Folder.save({ title: 'folder' });
-		const importer = new InteropService_Importer_OneNote();
-		await importer.init(path, {
-			format: 'md',
-			outputFormat: 'md',
+		const service = InteropService.instance();
+		await service.import({
+			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
 		});
-		importer.setMetadata({ fileExtensions: ['md'] });
-		await importer.exec({ warnings: [] });
 		const allNotes: NoteEntity[] = await Note.all();
 		return allNotes;
 	}
+	beforeAll(() => {
+		const jsdom = new JSDOM('<div></div>');
+		InteropService.instance().document = jsdom.window.document;
+		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+	});
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
