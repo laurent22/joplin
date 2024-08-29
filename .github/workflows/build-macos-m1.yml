@@ -93,7 +93,7 @@ jobs:
             cd packages/app-desktop/dist
             mv latest-mac.yml latest-mac-arm64.yml
             echo "Renamed latest-mac.yml to latest-mac-arm64.yml"
-            cat latest-mac-atm64.yml
+            cat latest-mac-arm64.yml
 
       - name: Upload latest-mac-arm64.yml to release
         env: 
