@@ -76,6 +76,8 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),
 		_('Profile Version: %s', reg.db().version()),
+		// The portable app temporarily supports read-only keychain access (but disallows
+		// write).
 		_('Keychain Supported: %s', (Setting.value('keychain.supported') >= 1 && !shim.isPortable()) ? _('Yes') : _('No')),
 	];
 
