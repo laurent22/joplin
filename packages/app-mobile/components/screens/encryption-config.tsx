@@ -53,6 +53,11 @@ const EncryptionConfigScreen = (props: Props) => {
 	}, [theme]);
 
 	const styles = useMemo(() => {
+		const normalText = {
+			flex: 1,
+			fontSize: theme.fontSize,
+			color: theme.color,
+		};
 		const styles = {
 			titleText: {
 				flex: 1,
@@ -65,11 +70,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				marginBottom: 5,
 				color: theme.color,
 			},
-			normalText: {
-				flex: 1,
-				fontSize: theme.fontSize,
-				color: theme.color,
-			},
+			normalText,
 			normalTextInput: {
 				margin: 10,
 				color: theme.color,
@@ -79,6 +80,9 @@ const EncryptionConfigScreen = (props: Props) => {
 			container: {
 				flex: 1,
 				padding: theme.margin,
+			},
+			passwordInputReplacement: {
+				...normalText, color: theme.colorFaded, fontStyle: 'italic',
 			},
 		};
 
@@ -98,12 +102,14 @@ const EncryptionConfigScreen = (props: Props) => {
 		inputStyle.borderBottomWidth = 1;
 		inputStyle.borderBottomColor = theme.dividerColor;
 
-		const renderPasswordInput = (masterKeyId: string) => {
+		const masterKeyId = mk.id;
+
+		const renderPasswordInput = () => {
 			if (!masterKeyEnabled(mk)) {
-				return <Text style={styles.normalText}>{_('Disabled')}</Text>;
+				return <Text style={styles.passwordInputReplacement}>({_('Disabled')})</Text>;
 			} else if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
 				return (
-					<Text style={{ ...styles.normalText, color: theme.colorFaded, fontStyle: 'italic' }}>({_('Master password')})</Text>
+					<Text style={styles.passwordInputReplacement}>({_('Master password')})</Text>
 				);
 			} else {
 				return (
@@ -118,11 +124,11 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		return (
 			<View key={mk.id}>
-				<Text style={styles.titleText}>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
+				<Text style={styles.titleText}>{_('Master Key %s', masterKeyId.substring(0, 6))}</Text>
 				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					{renderPasswordInput(mk.id)}
+					{renderPasswordInput()}
 				</View>
 				<Button onPress={() => onToggleEnabledClick(mk)} title={masterKeyEnabled(mk) ? _('Disable') : _('Enable')}/>
 			</View>
