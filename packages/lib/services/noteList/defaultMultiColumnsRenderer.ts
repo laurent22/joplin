@@ -108,7 +108,12 @@ const renderer: ListRenderer = {
 			`
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input
+						data-id="todo-checkbox"
+						type="checkbox"
+						aria-label="{{note.todoStatusText}}"
+						tabindex="-1"
+						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}
 		`,
