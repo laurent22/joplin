@@ -16,21 +16,20 @@ const useActiveDescendantId = (selectedFolderId: string, selectedNoteIds: string
 	useEffect(() => {
 		const previousNoteIds = previousNoteIdsRef.current ?? [];
 
-		// Check for items added
-		for (const id of selectedNoteIds) {
-			if (!previousNoteIds.includes(id)) {
-				setActiveNoteId(id);
-				return;
-			}
-		}
+		setActiveNoteId(current => {
+			if (selectedNoteIds.includes(current)) {
+				return current;
+			} else {
+				// Prefer added items
+				for (const id of selectedNoteIds) {
+					if (!previousNoteIds.includes(id)) {
+						return id;
+					}
+				}
 
-		// Check for items removed
-		for (const id of previousNoteIds) {
-			if (!selectedNoteIds.includes(id)) {
-				setActiveNoteId(id);
-				return;
+				return selectedNoteIds[0] ?? '';
 			}
-		}
+		});
 	}, [selectedNoteIds]);
 
 	return { activeNoteId, setActiveNoteId };

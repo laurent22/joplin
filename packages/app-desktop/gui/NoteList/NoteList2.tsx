@@ -70,9 +70,7 @@ const NoteList = (props: Props) => {
 	);
 
 	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
-	const focusNote = useFocusNote(
-		listRef, itemRefs, props.notes, makeItemIndexVisible, setActiveNoteId,
-	);
+	const focusNote = useFocusNote(listRef, props.notes, makeItemIndexVisible, setActiveNoteId);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
