@@ -9,10 +9,7 @@ import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchroniz
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
-import Logger from '@joplin/utils/Logger';
 const { useCallback, useEffect, useState } = shim.react();
-
-const logger = Logger.create('EncryptionConfigScreen/utils');
 
 type PasswordChecks = Record<string, boolean>;
 
@@ -88,7 +85,6 @@ export const useToggleShowDisabledMasterKeys = () => {
 };
 
 export const onToggleEnabledClick = (mk: MasterKeyEntity) => {
-	logger.info('Toggling master key enabled');
 	setMasterKeyEnabled(mk.id, !masterKeyEnabled(mk));
 };
 
