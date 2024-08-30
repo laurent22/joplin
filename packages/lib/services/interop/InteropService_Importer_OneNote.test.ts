@@ -1,11 +1,12 @@
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
-import * as fs from 'fs-extra';
+import { remove, readFile } from 'fs-extra';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { NoteEntity } from '../database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 import BaseModel from '../../BaseModel';
 import InteropService from './InteropService';
+import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat } from './types';
 
@@ -34,7 +35,7 @@ describe('InteropService_Importer_OneNote', () => {
 		tempDir = await createTempDir();
 	});
 	afterEach(async () => {
-		await fs.remove(tempDir);
+		await remove(tempDir);
 	});
 	it('should import a simple OneNote notebook', async () => {
 		const notes = await importNote(`${supportDir}/onenote/simple_notebook.zip`);
@@ -134,5 +135,32 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(notes.filter(n => n.parent_id === sectionA1.id).length).toBe(2);
 		expect(notes.filter(n => n.parent_id === sectionB1.id).length).toBe(2);
 		expect(notes.filter(n => n.parent_id === sectionD1.id).length).toBe(1);
+	});
+
+	it.each([
+		'svg_with_text_and_style.html',
+		'many_svgs.html',
+	])('should extract svgs', async (filename: string) => {
+		const titleGenerator = () => {
+			let id = 0;
+			return () => {
+				id += 1;
+				return `id${id}`;
+			};
+		};
+		const filepath = `${supportDir}/onenote/${filename}`;
+		const content = await readFile(filepath, 'utf-8');
+
+		const jsdom = new JSDOM('<div></div>');
+		InteropService.instance().document = jsdom.window.document;
+		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+
+		const importer = new InteropService_Importer_OneNote();
+		await importer.init('asdf', {
+			document: jsdom.window.document,
+			xmlSerializer: new jsdom.window.XMLSerializer(),
+		});
+
+		expect(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
 	});
 });

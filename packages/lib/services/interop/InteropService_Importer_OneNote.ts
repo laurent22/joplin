@@ -117,7 +117,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 	}
 
-	private extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
+	public extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
 		const root = this.document.createElement('html');
 		const body = this.document.createElement('body');
 		root.appendChild(body);
