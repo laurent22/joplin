@@ -12093,6 +12093,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsdom@npm:21.1.6":
+  version: 21.1.6
+  resolution: "@types/jsdom@npm:21.1.6"
+  dependencies:
+    "@types/node": "*"
+    "@types/tough-cookie": "*"
+    parse5: ^7.0.0
+  checksum: d6fbaab3065ec0bc5b54ae2f15eb18f28045ffa5cece438f96f4bc86819fc8c547e96cede650d14516429dfdc45075b36a46c135849f868b1ae8281717c8e591
+  languageName: node
+  linkType: hard
+
 "@types/jsdom@npm:21.1.7":
   version: 21.1.7
   resolution: "@types/jsdom@npm:21.1.7"
