@@ -6,7 +6,7 @@ This document explains how the Joplin Web App works from a technical perspective
 
 :::
 
-The Joplin Web App is a version of the mobile application that targets web using [`react-native-web`](https://www.npmjs.com/package/react-native-web). See [BUILD.md](../BUILD.md#web) for information about building thee web app.
+The Joplin Web App is a version of the mobile application that targets web using [`react-native-web`](https://www.npmjs.com/package/react-native-web). See [BUILD.md](../BUILD.md#web) for information about building the web app.
 
 
 ## File system
