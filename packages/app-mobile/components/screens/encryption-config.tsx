@@ -77,12 +77,14 @@ const EncryptionConfigScreen = (props: Props) => {
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
 			},
+			fadedText: {
+				...normalText,
+				color: theme.colorFaded,
+				fontStyle: 'italic',
+			},
 			container: {
 				flex: 1,
 				padding: theme.margin,
-			},
-			passwordInputReplacement: {
-				...normalText, color: theme.colorFaded, fontStyle: 'italic',
 			},
 		};
 
@@ -105,11 +107,9 @@ const EncryptionConfigScreen = (props: Props) => {
 		const masterKeyId = mk.id;
 
 		const renderPasswordInput = () => {
-			if (!masterKeyEnabled(mk)) {
-				return <Text style={styles.passwordInputReplacement}>({_('Disabled')})</Text>;
-			} else if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
+			if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
 				return (
-					<Text style={styles.passwordInputReplacement}>({_('Master password')})</Text>
+					<Text style={styles.fadedText}>({_('Master password')})</Text>
 				);
 			} else {
 				return (
@@ -122,14 +122,22 @@ const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		return (
-			<View key={mk.id}>
-				<Text style={styles.titleText}>{_('Master Key %s', masterKeyId.substring(0, 6))}</Text>
-				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
+		const renderPasswordRow = () => {
+			if (!masterKeyEnabled(mk)) return null;
+
+			return (
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
 					{renderPasswordInput()}
 				</View>
+			);
+		};
+
+		return (
+			<View key={mk.id}>
+				<Text style={styles.titleText}>{_('Master Key %s', masterKeyId.substring(0, 6))}</Text>
+				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
+				{renderPasswordRow()}
 				<Button onPress={() => onToggleEnabledClick(mk)} title={masterKeyEnabled(mk) ? _('Disable') : _('Enable')}/>
 			</View>
 		);
