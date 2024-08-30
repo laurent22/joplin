@@ -56,4 +56,5 @@ describe('htmlUtils', () => {
 		const actual = extractUrls(html);
 		expect(actual).toEqual(expected);
 	});
+
 });
