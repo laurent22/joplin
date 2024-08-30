@@ -51,6 +51,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		listItems: listItems,
 		selectedIndex,
 		updateSelectedIndex,
+		collapsedFolderIds: props.collapsedFolderIds,
 	});
 
 	const itemListRef = useRef<ItemList<ListItem>>();
