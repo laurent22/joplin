@@ -42,4 +42,11 @@ describe('fsDriver', () => {
 			await shim.fsDriver().findUniqueFilename(join(supportDir, 'this-file-does-not-exist.txt'), [join(supportDir, 'some-other-file.txt')]),
 		).toBe(join(supportDir, 'this-file-does-not-exist.txt'));
 	});
+
+	it('should handle cases where filename is too long in stat', async () => {
+		const fsDriver = new FsDriverNode();
+		const filename = `${'12345678'.repeat(32)}9`;
+
+		expect(await fsDriver.stat(`./${filename}`)).toBe(null);
+	});
 });

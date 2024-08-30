@@ -97,6 +97,7 @@ export default class FsDriverNode extends FsDriverBase {
 			};
 		} catch (error) {
 			if (error.code === 'ENOENT') return null;
+			if (error.code === 'ENAMETOOLONG') return null;
 			throw error;
 		}
 	}
