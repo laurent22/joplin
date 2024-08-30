@@ -30,7 +30,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	public async init(sourcePath: string, options: ImportOptions) {
 		await super.init(sourcePath, options);
 		if (!options.document || !options.xmlSerializer) {
-			throw new Error('OneNote importer requires document and xmlSerializer to be able to extract SVGs');
+			throw new Error('OneNote importer requires document and XMLSerializer to be able to extract SVG from HTML.');
 		}
 		this.document = options.document;
 		this.xmlSerializer = options.xmlSerializer;
@@ -118,7 +118,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
-		const root = this.document.createElement('div');
+		const root = this.document.createElement('html');
+		const body = this.document.createElement('body');
+		root.appendChild(body);
 		root.innerHTML = html;
 
 		// get all "top-level" SVGS (ignore nested)
@@ -144,7 +146,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 			svgNode.parentElement.replaceChild(img, svgNode);
 		}
-
 
 		return {
 			svgs,
