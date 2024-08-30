@@ -12,7 +12,7 @@ import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
-import { isDataUrl, isFilenameTooLong, isMailTo } from '@joplin/utils/url';
+import { isDataUrl } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
@@ -111,13 +111,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
-
-			if (isMailTo(link)) continue;
-			if (isFilenameTooLong(link)) {
-				// If a link is too long
-				continue;
-			}
-
 
 			if (isDataUrl(link)) {
 				// Just leave it as it is. We could potentially import
