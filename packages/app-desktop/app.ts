@@ -404,6 +404,16 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
+	private async setupAutoUpdaterService() {
+		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+			await bridge().electronApp().initializeAutoUpdaterService(
+				Logger.create('AutoUpdaterService'),
+				Setting.value('env') === 'dev',
+				Setting.value('autoUpdate.includePreReleases'),
+			);
+		}
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
@@ -688,14 +698,7 @@ class Application extends BaseApplication {
 			SearchEngine.instance().scheduleSyncTables();
 		});
 
-		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-			bridge().electronApp().initializeAutoUpdaterService(
-				Logger.create('AutoUpdaterService'),
-				shim,
-				Setting.value('env') === 'dev',
-				Setting.value('autoUpdate.includePreReleases'),
-			);
-		}
+		await this.setupAutoUpdaterService();
 
 		// setTimeout(() => {
 		// 	void populateDatabase(reg.db(), {
