@@ -33,10 +33,6 @@ const renderer: ListRenderer = {
 			display: flex;
 			height: 100%;
 
-			&:hover, :focus-visible {
-				background-color: var(--joplin-background-color-hover3);
-			}
-
 			> .item {
 				display: flex;
 				align-items: center;
@@ -83,6 +79,10 @@ const renderer: ListRenderer = {
 		> .row.-completed {
 			opacity: 0.5;
 		}
+			
+		> .row:hover, &.-focus-visible > .row {
+			background-color: var(--joplin-background-color-hover3);
+		}
 	`,
 
 	onHeaderClick: async (event: OnClickEvent) => {
@@ -108,7 +108,12 @@ const renderer: ListRenderer = {
 			`
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input
+						data-id="todo-checkbox"
+						type="checkbox"
+						aria-label="{{note.todoStatusText}}"
+						tabindex="-1"
+						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}
 		`,
