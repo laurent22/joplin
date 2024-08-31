@@ -319,8 +319,10 @@ packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
 packages/app-desktop/gui/NoteList/utils/types.js
+packages/app-desktop/gui/NoteList/utils/useActiveDescendantId.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
+packages/app-desktop/gui/NoteList/utils/useFocusVisible.js
 packages/app-desktop/gui/NoteList/utils/useItemCss.js
 packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
@@ -341,6 +343,7 @@ packages/app-desktop/gui/NoteListHeader/utils/useContextMenu.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.test.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.js
 packages/app-desktop/gui/NoteListItem/NoteListItem.js
+packages/app-desktop/gui/NoteListItem/utils/getNoteElementIdFromJoplinId.js
 packages/app-desktop/gui/NoteListItem/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.test.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.js
@@ -435,6 +438,7 @@ packages/app-desktop/gui/style/StyledLink.js
 packages/app-desktop/gui/style/StyledMessage.js
 packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
+packages/app-desktop/gui/utils/announceForAccessibility.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
@@ -445,6 +449,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/noteList.spec.js
