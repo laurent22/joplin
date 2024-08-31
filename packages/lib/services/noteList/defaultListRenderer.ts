@@ -40,6 +40,7 @@ const renderer: ListRenderer = {
 		'note.isWatched',
 		'note.title',
 		'note.todo_completed',
+		'note.todoStatusText',
 	],
 
 	itemCss: // css
@@ -57,7 +58,7 @@ const renderer: ListRenderer = {
 			background-color: var(--joplin-selected-color);
 		}
 
-		&:hover, :focus-visible > & > .content {
+		&:hover, &.-focus-visible > .content {
 			background-color: var(--joplin-background-color-hover3);
 		}
 	
@@ -133,7 +134,13 @@ const renderer: ListRenderer = {
 		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
-					<input data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
+					<input
+						data-id="todo-checkbox"
+						type="checkbox"
+						aria-label="{{note.todoStatusText}}"
+						tabindex="-1"
+						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}
+					>
 				</div>
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">

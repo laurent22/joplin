@@ -15,7 +15,8 @@ test.describe('markdownEditor', () => {
 		await importedFolder.waitFor();
 		await importedFolder.click();
 
-		const importedHtmlFileItem = mainScreen.noteListContainer.getByText('test-html-file-with-image');
+		await mainScreen.noteList.focusContent(electronApp);
+		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
 		await importedHtmlFileItem.click();
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerIframe();
