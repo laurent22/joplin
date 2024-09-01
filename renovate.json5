@@ -17,7 +17,12 @@
 		"stabilityDays": 90,
 	},
 
-	"prConcurrentLimit": 20,
+	// Keep a low limit because otherwise Renovate will do nothing for 3 months then
+	// suddenly dump 20 pull requests. And this intefer with our GitHub Action to 
+	// automerge PRs, not to mention that they all end up conflicting with each others
+	// if they are created at the same time.
+	"prConcurrentLimit": 4,
+
 	"prHourlyLimit": 0,
 
 	// Tell Renovate to rebase only when there's a conflict, otherwise pull
