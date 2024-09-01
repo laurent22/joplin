@@ -120,7 +120,7 @@
     "react-dom": "18.3.1",
     "react-native-web": "0.19.12",
     "react-test-renderer": "18.3.1",
-    "sharp": "0.33.2",
+    "sharp": "0.33.4",
     "sqlite3": "5.1.6",
     "timers-browserify": "2.0.12",
     "ts-jest": "29.1.1",
