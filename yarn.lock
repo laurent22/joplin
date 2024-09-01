@@ -7604,7 +7604,7 @@ __metadata:
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
     fs-extra: 11.2.0
-    glob: 10.3.12
+    glob: 10.3.16
     gulp: 4.0.2
     highlight.js: 11.9.0
     immer: 7.0.15
@@ -8187,7 +8187,7 @@ __metadata:
     fs-extra: 11.2.0
     gettext-extractor: 3.8.0
     gettext-parser: 7.0.1
-    glob: 10.3.12
+    glob: 10.3.16
     gulp: 4.0.2
     html-entities: 1.4.0
     jest: 29.7.0
@@ -8270,7 +8270,7 @@ __metadata:
     dayjs: 1.11.11
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.3.12
+    glob: 10.3.16
     html-entities: 1.4.0
     jest: 29.7.0
     markdown-it: 13.0.2
@@ -24517,18 +24517,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.3.12":
-  version: 10.3.12
-  resolution: "glob@npm:10.3.12"
+"glob@npm:10.3.16":
+  version: 10.3.16
+  resolution: "glob@npm:10.3.16"
   dependencies:
     foreground-child: ^3.1.0
-    jackspeak: ^2.3.6
+    jackspeak: ^3.1.2
     minimatch: ^9.0.1
     minipass: ^7.0.4
-    path-scurry: ^1.10.2
+    path-scurry: ^1.11.0
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 2b0949d6363021aaa561b108ac317bf5a97271b8a5d7a5fac1a176e40e8068ecdcccc992f8a7e958593d501103ac06d673de92adc1efcbdab45edefe35f8d7c6
+  checksum: 3cc49a0700fde72a1669ed587d167bb6921e23cd43fa3f03729794df6719a4188e0a5f3520a6d27b7762bd6b634a275fa6f400298b1559633d2e51bab8096c2e
   languageName: node
   linkType: hard
 
@@ -27923,19 +27923,6 @@ __metadata:
     "@pkgjs/parseargs":
       optional: true
   checksum: e29291c0d0f280a063fa18fbd1e891ab8c2d7519fd34052c0ebde38538a15c603140d60c2c7f432375ff7ee4c5f1c10daa8b2ae19a97c3d4affe308c8360c1df
-  languageName: node
-  linkType: hard
-
-"jackspeak@npm:^2.3.6":
-  version: 2.3.6
-  resolution: "jackspeak@npm:2.3.6"
-  dependencies:
-    "@isaacs/cliui": ^8.0.2
-    "@pkgjs/parseargs": ^0.11.0
-  dependenciesMeta:
-    "@pkgjs/parseargs":
-      optional: true
-  checksum: 57d43ad11eadc98cdfe7496612f6bbb5255ea69fe51ea431162db302c2a11011642f50cfad57288bd0aea78384a0612b16e131944ad8ecd09d619041c8531b54
   languageName: node
   linkType: hard
 
@@ -35003,7 +34990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^1.10.2, path-scurry@npm:^1.11.1":
+"path-scurry@npm:^1.11.0, path-scurry@npm:^1.11.1":
   version: 1.11.1
   resolution: "path-scurry@npm:1.11.1"
   dependencies:
@@ -39300,7 +39287,7 @@ __metadata:
     eslint-plugin-react: 7.33.2
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.3.12
+    glob: 10.3.16
     gulp: 4.0.2
     http-server: 14.1.1
     husky: 3.1.0
