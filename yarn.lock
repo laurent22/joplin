@@ -7711,7 +7711,7 @@ __metadata:
     react-dom: 18.3.1
     react-native: 0.74.1
     react-native-camera: 4.2.1
-    react-native-device-info: 10.13.1
+    react-native-device-info: 10.13.2
     react-native-dialogbox: 0.6.10
     react-native-document-picker: 9.1.1
     react-native-dropdownalert: 5.1.0
@@ -37299,12 +37299,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:10.13.1":
-  version: 10.13.1
-  resolution: "react-native-device-info@npm:10.13.1"
+"react-native-device-info@npm:10.13.2":
+  version: 10.13.2
+  resolution: "react-native-device-info@npm:10.13.2"
   peerDependencies:
     react-native: "*"
-  checksum: 27854142fb9bbd57013bdbd66677ca8b19600b738e45e1a114f7082ae3603769b4ceaca25d12e5a80bdb2cfc0915252c0c23b3dbfde84349d73ccd2879e4e126
+  checksum: ef0d9aa4587d7909df5139b07d9792970006d1b886538d88f3e4d0a673e04e0a15eac8131b7999a0fed12600a05667379fe22fe1d5b1a5a12adffa226b1ec7e2
   languageName: node
   linkType: hard
 
