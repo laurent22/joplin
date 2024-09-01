@@ -8138,7 +8138,7 @@ __metadata:
     jsdom: 23.2.0
     knex: 3.1.0
     koa: 2.15.3
-    ldapts: 7.0.9
+    ldapts: 7.0.12
     markdown-it: 13.0.2
     mustache: 4.2.0
     node-cron: 3.0.3
@@ -29657,9 +29657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:7.0.9":
-  version: 7.0.9
-  resolution: "ldapts@npm:7.0.9"
+"ldapts@npm:7.0.12":
+  version: 7.0.12
+  resolution: "ldapts@npm:7.0.12"
   dependencies:
     "@types/asn1": ">=0.2.4"
     "@types/uuid": ">=9"
@@ -29667,7 +29667,7 @@ __metadata:
     debug: ~4.3.4
     strict-event-emitter-types: ~2.0.0
     uuid: ~9.0.1
-  checksum: 728a1904193ea3b17986ea4e3b2ac75bfc8e6c8cb1b5c6015bee2ccbac7c8cd58631a638b46a4632342bca82c10e1c028397b7bc6b7fce22ee6388bda101bc9d
+  checksum: 4b3fe6796d3763e414cb98121af656437c994ff159872855e1fd747a68bea300b6a18744e7215a01755dc16faa0fda091bc324b23283729638cde5b293b614fd
   languageName: node
   linkType: hard
 
