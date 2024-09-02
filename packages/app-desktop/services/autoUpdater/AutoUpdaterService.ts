@@ -19,10 +19,16 @@ export enum AutoUpdaterEvents {
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
 export const initialUpdateStartup = 5 * 1000;
 const releasesLink = 'https://objects.joplinusercontent.com/r/releases';
+const supportedPlatformAssets: { [key in string]: string } = {
+	'darwin': 'latest-mac.yml',
+	'win32': 'latest.yml',
+};
 
 export interface AutoUpdaterServiceInterface {
 	checkForUpdates(): void;
 	updateApp(): void;
+	fetchLatestRelease(includePreReleases: boolean): Promise<GitHubRelease>;
+	getDownloadUrlForPlatform(release: GitHubRelease, platform: string): string;
 }
 
 export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
@@ -45,7 +51,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	public checkForUpdates = async (): Promise<void> => {
 		try {
-			await this.fetchLatestRelease();
+			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
@@ -58,7 +64,33 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		autoUpdater.quitAndInstall(false, true);
 	};
 
-	private fetchLatestReleases = async (): Promise<GitHubRelease[]> => {
+	public fetchLatestRelease = async (includePreReleases: boolean): Promise<GitHubRelease> => {
+		const releases = await this.fetchReleases(includePreReleases);
+		const release = releases[0];
+
+		if (!release) {
+			throw new Error('No suitable release found');
+		}
+
+		return release;
+	};
+
+
+	public getDownloadUrlForPlatform(release: GitHubRelease, platform: string): string {
+		const assetName: string = supportedPlatformAssets[platform];
+		if (!assetName) {
+			throw new Error(`The AutoUpdaterService does not support the following platform: ${platform}`);
+		}
+
+		const asset: GitHubReleaseAsset = release.assets.find(a => a.name === assetName);
+		if (!asset) {
+			throw new Error('No suitable update asset found for this platform.');
+		}
+
+		return asset.browser_download_url;
+	}
+
+	private fetchReleases = async (includePreReleases: boolean): Promise<GitHubRelease[]> => {
 		const response = await fetch(releasesLink);
 
 		if (!response.ok) {
@@ -66,48 +98,29 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
 		}
 
-		return (await response.json()) as GitHubRelease[];
+		const releases: GitHubRelease[] = await response.json();
+		const sortedReleasesByVersion = releases.sort((a, b) => semver.rcompare(a.tag_name, b.tag_name));
+		const filteredReleases = sortedReleasesByVersion.filter(release => includePreReleases || !release.prerelease);
+
+		return filteredReleases;
 	};
 
-	private fetchLatestRelease = async (): Promise<void> => {
+	private checkForLatestRelease = async (): Promise<void> => {
 		try {
-			const releases = await this.fetchLatestReleases();
+			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
 
-			const sortedReleasesByVersion = releases.sort((a, b) => {
-				return semver.rcompare(a.tag_name, b.tag_name);
-			});
-			const filteredReleases = sortedReleasesByVersion.filter(release => {
-				return this.includePreReleases_ || !release.prerelease;
-			});
-			const release = filteredReleases[0];
-
-			if (release) {
-				let assetUrl = null;
-
-				if (shim.isWindows()) {
-					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest.yml');
-					if (asset) {
-						assetUrl = asset.browser_download_url.replace('/latest.yml', '');
-					}
-				} else if (shim.isMac()) {
-					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest-mac.yml');
-					if (asset) {
-						assetUrl = asset.browser_download_url.replace('/latest-mac.yml', '');
-					}
-				}
-
-				if (assetUrl) {
-					autoUpdater.setFeedURL({
-						provider: 'generic',
-						url: assetUrl,
-					});
-					await autoUpdater.checkForUpdates();
-				} else {
-					this.logger_.error('No suitable update asset found for this platform.');
-				}
+			try {
+				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName());
+				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
+				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
+				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
+				await autoUpdater.checkForUpdates();
+			} catch (error) {
+				this.logger_.error(`Update download url failed: ${error.message}`);
 			}
+
 		} catch (error) {
-			this.logger_.error(error);
+			this.logger_.error(`Fetching releases failed:  ${error.message}`);
 		}
 	};
 
