@@ -12,7 +12,6 @@ import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
-import { isDataUrl } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
@@ -112,52 +111,47 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 
-			// We could be importing data: as resources, but for now we are just
-
+			// Just leave it as it is. We could potentially import 'data:' links
+			// as a resource but for now that's good enough.
 			if (!this.isLinkToLocalFile(link)) continue;
 
-			if (isDataUrl(link)) {
-				// Just leave it as it is. We could potentially import
-				// it as a resource but for now that's good enough.
-			} else {
-				// Handle anchor links appropriately
-				const trimmedLink = this.trimAnchorLink(link);
-				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
-				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
-				const stat = await shim.fsDriver().stat(pathWithExtension);
-				const isDir = stat ? stat.isDirectory() : false;
-				if (stat && !isDir) {
-					const supportedFileExtension = this.metadata().fileExtensions;
-					const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
-					let id = '';
-					// If the link looks like a note, then import it
-					if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
-						// If the note hasn't been imported yet, do so now
-						if (!this.importedNotes[resolvedPath]) {
-							await this.importFile(resolvedPath, parentFolderId);
-						}
-
-						id = this.importedNotes[resolvedPath].id;
-					} else {
-						const resource = await shim.createResourceFromPath(pathWithExtension, null, { resizeLargeImages: 'never' });
-						id = resource.id;
+			// Handle anchor links appropriately
+			const trimmedLink = this.trimAnchorLink(link);
+			const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
+			const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
+			const stat = await shim.fsDriver().stat(pathWithExtension);
+			const isDir = stat ? stat.isDirectory() : false;
+			if (stat && !isDir) {
+				const supportedFileExtension = this.metadata().fileExtensions;
+				const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
+				let id = '';
+				// If the link looks like a note, then import it
+				if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
+					// If the note hasn't been imported yet, do so now
+					if (!this.importedNotes[resolvedPath]) {
+						await this.importFile(resolvedPath, parentFolderId);
 					}
 
-					// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
-					// Only opening patterns are consider in order to cover all occurrences
-					// We need to use the encoded link as well because some links (link's with spaces)
-					// will appear encoded in the source. Other links (unicode chars) will not
-					const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];
+					id = this.importedNotes[resolvedPath].id;
+				} else {
+					const resource = await shim.createResourceFromPath(pathWithExtension, null, { resizeLargeImages: 'never' });
+					id = resource.id;
+				}
 
-					for (let j = 0; j < linksToReplace.length; j++) {
-						const linkToReplace = pregQuote(linksToReplace[j]);
+				// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
+				// Only opening patterns are consider in order to cover all occurrences
+				// We need to use the encoded link as well because some links (link's with spaces)
+				// will appear encoded in the source. Other links (unicode chars) will not
+				const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];
 
-						// Markdown links
-						updated = markdownUtils.replaceResourceUrl(updated, linkToReplace, id);
+				for (let j = 0; j < linksToReplace.length; j++) {
+					const linkToReplace = pregQuote(linksToReplace[j]);
 
-						// HTML links
-						updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
-					}
+					// Markdown links
+					updated = markdownUtils.replaceResourceUrl(updated, linkToReplace, id);
+
+					// HTML links
+					updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
 				}
 			}
 		}
