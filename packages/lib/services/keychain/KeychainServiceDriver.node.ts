@@ -5,7 +5,7 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 	public override readonly driverId: string = 'node-keytar';
 
 	public async supported(): Promise<boolean> {
-		return !!shim.keytar();
+		return !!shim.keytar?.();
 	}
 
 	public async setPassword(name: string, password: string): Promise<boolean> {
