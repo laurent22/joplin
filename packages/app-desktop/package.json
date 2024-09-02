@@ -123,6 +123,7 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
+    "7zip-bin": "5.2.0",
     "@electron/rebuild": "3.3.0",
     "@joplin/default-plugins": "~3.1",
     "@joplin/tools": "~3.1",
@@ -135,7 +136,6 @@
     "@types/react-redux": "7.1.33",
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
-    "7zip-bin": "5.2.0",
     "electron": "29.4.5",
     "electron-builder": "24.13.3",
     "glob": "10.3.16",
