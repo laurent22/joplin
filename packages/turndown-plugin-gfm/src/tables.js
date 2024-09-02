@@ -192,9 +192,8 @@ const nodeContains = (node, types) => {
 const isModifiedRTETable = (tableNode) => {
   return tableNode.style && (
     tableNode.style.backgroundColor || 
-    tableNode.getAttribute('cellpadding') ||
-    (tableNode.style.marginLeft && tableNode.style.marginRight) ||
-    tableNode.style.width !== '100%'
+    tableNode.style.float ||
+    (tableNode.style.marginLeft === 'auto' && tableNode.style.marginRight === 'auto')
   );
 }
 
@@ -223,7 +222,7 @@ const tableShouldBeHtml = (tableNode, options) => {
     nodeContains(tableNode, possibleTags) ||
     // We want keep only tables that are created by the RTE but modified, since 
     // this option is only used from the NoteEditor code this should work
-    (isModifiedRTETable(tableNode) && options.preserveNestedTables);
+    (options.preserveNestedTables && isModifiedRTETable(tableNode));
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell
