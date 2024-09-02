@@ -195,4 +195,27 @@ describe('InteropService_Importer_Md', () => {
 		// The invalid image is imported as-is
 		expect(resource.title).toBe('invalid-image.jpg');
 	});
+
+	it.each([
+		'https://example.com',
+		'http://example.com',
+		'https://example.com/image.png',
+		'mailto:admin@example.com?subject=test',
+		'onenote:Title of the note',
+		'tel:554799992292910',
+	])('should filter paths to external files', async (link: string) => {
+		const importer = new InteropService_Importer_Md();
+		expect(importer.isLinkToLocalFile(link)).toBe(false);
+	});
+
+	it.each([
+		'asdfasf',
+		'asdfasf.png',
+		'base/path/asdfasf.png',
+		'./base/path/asdfasf.png',
+		'/base/path/asdfasf.pdf',
+	])('should consider local file', async (link: string) => {
+		const importer = new InteropService_Importer_Md();
+		expect(importer.isLinkToLocalFile(link)).toBe(true);
+	});
 });

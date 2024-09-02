@@ -112,6 +112,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		for (const encodedLink of fileLinks) {
 			const link = decodeURI(encodedLink);
 
+			// We could be importing data: as resources, but for now we are just
+
+			if (!this.isLinkToLocalFile(link)) continue;
+
 			if (isDataUrl(link)) {
 				// Just leave it as it is. We could potentially import
 				// it as a resource but for now that's good enough.
@@ -183,5 +187,17 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
 		return this.importedNotes[resolvedPath];
+	}
+
+	public isLinkToLocalFile(path: string) {
+		try {
+			const url = new URL(path);
+			if (url.protocol) return false;
+		} catch (error) {
+			// if it fails it probably is a relative path (local file)
+			if (error && error.code === 'ERR_INVALID_URL') return true;
+			throw error;
+		}
+		return false;
 	}
 }
