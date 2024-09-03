@@ -32,6 +32,15 @@ const generateChecksumFile = () => {
 };
 
 const renameLatestYmlFile = () => {
+	// latest-mac.yml is only generated when publishing.
+	/* eslint-disable no-console */
+	console.info(`${process.env.PUBLISH_ENABLED}`);
+	if (!process.env.PUBLISH_ENABLED) {
+		/* eslint-disable no-console */
+		console.info(`Publishing not enabled - skipping renaming latest-mac.yml file. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
+		return;
+	}
+
 	if (os.platform() === 'darwin' && process.arch === 'arm64') {
 		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
 		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
