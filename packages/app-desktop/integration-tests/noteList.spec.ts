@@ -91,7 +91,14 @@ test.describe('noteList', () => {
 		await noteList.focusContent(electronApp);
 		// The most recently-created note should be visible
 		const note4Item = noteList.getNoteItemByTitle('note_4');
+		const note3Item = noteList.getNoteItemByTitle('note_3');
+		const note2Item = noteList.getNoteItemByTitle('note_2');
+		const note1Item = noteList.getNoteItemByTitle('note_1');
 		await expect(note4Item).toBeVisible();
+		await expect(note3Item).toBeVisible();
+		await expect(note2Item).toBeVisible();
+		await expect(note1Item).toBeVisible();
+
 		await noteList.expectNoteToBeSelected('note_4');
 
 		await noteList.container.press('ArrowUp');
