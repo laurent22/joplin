@@ -7487,7 +7487,7 @@ __metadata:
     "@react-native-community/netinfo": 11.3.2
     "@react-native-community/push-notification-ios": 1.11.0
     "@react-native-community/slider": 4.5.2
-    "@react-native/babel-preset": 0.74.83
+    "@react-native/babel-preset": 0.74.84
     "@react-native/metro-config": 0.74.84
     "@sqlite.org/sqlite-wasm": 3.46.0-build2
     "@testing-library/jest-native": 5.4.3

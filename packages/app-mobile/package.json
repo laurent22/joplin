@@ -91,7 +91,7 @@
     "@babel/runtime": "7.24.7",
     "@joplin/tools": "~3.1",
     "@js-draw/material-icons": "1.20.3",
-    "@react-native/babel-preset": "0.74.83",
+    "@react-native/babel-preset": "0.74.84",
     "@react-native/metro-config": "0.74.84",
     "@sqlite.org/sqlite-wasm": "3.46.0-build2",
     "@testing-library/jest-native": "5.4.3",
