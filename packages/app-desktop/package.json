@@ -26,6 +26,13 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "laurent22",
+      "repo": "joplin"
+    }
+  ], 
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
@@ -42,7 +49,6 @@
       "build/7zip/**"
     ],
     "afterAllArtifactBuild": "./afterAllArtifactBuild.js",
-    "afterPack": "./artifactBuildCompleted.js",
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
