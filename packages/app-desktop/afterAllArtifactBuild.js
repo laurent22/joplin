@@ -33,9 +33,7 @@ const generateChecksumFile = () => {
 
 const renameLatestYmlFile = () => {
 	// latest-mac.yml is only generated when publishing.
-	/* eslint-disable no-console */
-	console.info(`${process.env.PUBLISH_ENABLED}`);
-	if (!process.env.PUBLISH_ENABLED) {
+	if (process.env.PUBLISH_ENABLED === 'false') {
 		/* eslint-disable no-console */
 		console.info(`Publishing not enabled - skipping renaming latest-mac.yml file. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
 		return;

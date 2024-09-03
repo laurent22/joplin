@@ -26,13 +26,6 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
-  "publish": [
-    {
-      "provider": "github",
-      "owner": "laurent22",
-      "repo": "joplin"
-    }
-  ], 
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
