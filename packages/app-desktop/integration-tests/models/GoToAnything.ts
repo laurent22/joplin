@@ -14,10 +14,7 @@ export default class GoToAnything {
 
 	public async open(electronApp: ElectronApplication) {
 		await this.mainScreen.waitFor();
-
-		if (!await activateMainMenuItem(electronApp, 'Goto Anything...')) {
-			throw new Error('Menu item for opening Goto Anything not found');
-		}
+		await activateMainMenuItem(electronApp, 'Goto Anything...');
 
 		return this.waitFor();
 	}

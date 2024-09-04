@@ -3,9 +3,11 @@ import { ElectronApplication, Locator, Page, expect } from '@playwright/test';
 
 export default class NoteList {
 	public readonly container: Locator;
+	public readonly sortOrderButton: Locator;
 
 	public constructor(page: Page) {
 		this.container = page.locator('.rli-noteList');
+		this.sortOrderButton = this.container.getByRole('button', { name: 'Toggle sort order' });
 	}
 
 	public waitFor() {
@@ -13,14 +15,12 @@ export default class NoteList {
 	}
 
 	private async sortBy(electronApp: ElectronApplication, sortMethod: string) {
-		const success = await activateMainMenuItem(electronApp, sortMethod, 'Sort notes by');
-		if (!success) {
-			throw new Error(`Unable to find sorting menu item: ${sortMethod}`);
-		}
+		await activateMainMenuItem(electronApp, sortMethod, 'Sort notes by');
 	}
 
 	public async sortByTitle(electronApp: ElectronApplication) {
-		return this.sortBy(electronApp, 'Title');
+		await this.sortBy(electronApp, 'Title');
+		await expect(this.sortOrderButton).toHaveAttribute('title', /Toggle sort order field:[\n ]*title ->/);
 	}
 
 	public async focusContent(electronApp: ElectronApplication) {
