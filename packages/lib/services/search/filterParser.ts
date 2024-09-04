@@ -67,6 +67,33 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 	return terms;
 };
 
+const parsePhraseAndWords = (queryValue: string) => {
+	const output: string[] = [];
+	let phrase = '';
+	let inQuote = false;
+	const words = queryValue.split(/[\s-_]+/);
+
+	for (const word of words) {
+		if (word.startsWith('"') && word.endsWith('"')) {
+			output.push(word);
+		} else if (word.startsWith('"')) {
+			phrase = word;
+			inQuote = true;
+		} else if (word.endsWith('"')) {
+			phrase += ` ${word}`;
+			output.push(phrase);
+			phrase = '';
+			inQuote = false;
+		} else if (inQuote) {
+			phrase += ` ${word}`;
+		} else {
+			output.push(word);
+		}
+	}
+
+	return output;
+};
+
 const parseQuery = (query: string): Term[] => {
 	const validFilters = new Set(['any', 'title', 'body', 'tag',
 		'notebook', 'created', 'updated', 'type',
@@ -87,12 +114,9 @@ const parseQuery = (query: string): Term[] => {
 			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
 				result.push({ name, value: trimQuotes(value.replace(/[*]/g, '%')), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
-				// Trim quotes since we don't support phrase query here
-				// eg. Split title:"hello world" to title:hello title:world
-				const values = trimQuotes(value).split(/[\s-_]+/);
-				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-				values.forEach(value => {
-					result.push({ name, value, negated, wildcard: value.indexOf('*') >= 0 });
+				const parseWordsAndPhrases = parsePhraseAndWords(value);
+				parseWordsAndPhrases.map(word => {
+					result.push({ name, value: word, negated, wildcard: word.indexOf('*') >= 0 });
 				});
 			} else {
 				result.push({ name, value, negated });
