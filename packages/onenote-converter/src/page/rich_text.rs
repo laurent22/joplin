@@ -8,6 +8,7 @@ use color_eyre::Result;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
+use crate::utils::utils::log_warn;
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_rich_text(&mut self, text: &RichText) -> Result<String> {
@@ -60,13 +61,27 @@ impl<'a> Renderer<'a> {
                 .join(""));
         }
 
-        let indices = data.text_run_indices();
-        let styles = data.text_run_formatting();
+        let mut indices = data.text_run_indices().to_vec();
+        let mut styles = data.text_run_formatting().to_vec();
 
         let mut text = data.text().to_string();
 
         if text.is_empty() {
             text = "&nbsp;".to_string();
+        }
+
+        // TODO: Maybe this shouldn't be here
+        // When the this character is at the start of the paragraph it makes
+        // all the styles to be shifted by minues one.
+        // A better solution would be to look if there isn't anything wrong with the parser,
+        // but I haven't found what could be causing this yet.
+        if text.starts_with("\u{000B}") && !indices.is_empty(){
+            indices.remove(0);
+            styles.pop();
+        }
+
+        if text.clone().contains("Action research involves") {
+            log_warn!("Hyperlink: {:?}, indices: {:?}, styles: {:?}", text, indices, styles);
         }
 
         if indices.is_empty() {
