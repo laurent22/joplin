@@ -1,5 +1,14 @@
 # Joplin Desktop Changelog
 
+## [v3.1.6](https://github.com/laurent22/joplin/releases/tag/v3.1.6) (Pre-release) - 2024-09-02T13:19:40Z
+
+- New: Add left/right arrow keys as expand/collapse shortcuts for notebooks ([#10944](https://github.com/laurent22/joplin/issues/10944) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Seamless-Updates: added latest-mac-arm64.yml ([#10941](https://github.com/laurent22/joplin/issues/10941) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Accessibility: Improve note list keyboard and screen reader accessibility ([#10940](https://github.com/laurent22/joplin/issues/10940) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Seamless-Updates - added tests for autoUpdaterService ([#10935](https://github.com/laurent22/joplin/issues/10935) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Updated packages @playwright/test (v1.43.1), async-mutex (v0.5.0), dayjs (v1.11.11), glob (v10.3.16), re-resizable (v6.9.17), react, sass (v1.76.0), sharp (v0.33.4)
+- Fixed: Windows portable: Fix keychain-backed storage incorrectly enabled ([#10942](https://github.com/laurent22/joplin/issues/10942) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.1.4](https://github.com/laurent22/joplin/releases/tag/v3.1.4) (Pre-release) - 2024-08-27T17:46:38Z
 
 - Improved: Accessibility: Improve note title focus handling ([#10932](https://github.com/laurent22/joplin/issues/10932) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
