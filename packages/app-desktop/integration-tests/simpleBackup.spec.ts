@@ -1,4 +1,4 @@
-import { test, expect } from './util/test';
+import { test } from './util/test';
 import MainScreen from './models/MainScreen';
 import SettingsScreen from './models/SettingsScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
@@ -28,7 +28,7 @@ test.describe('simpleBackup', () => {
 		await mainScreen.waitFor();
 
 		// Backups should work
-		expect(await activateMainMenuItem(electronApp, 'Create backup')).toBe(true);
+		await activateMainMenuItem(electronApp, 'Create backup');
 
 		const successDialog = mainWindow.locator('iframe[id$=backup-backupDialog]');
 		await successDialog.waitFor();

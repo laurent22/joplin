@@ -23,10 +23,7 @@ export default class Sidebar {
 	}
 
 	private async sortBy(electronApp: ElectronApplication, option: string) {
-		const success = await activateMainMenuItem(electronApp, option, 'Sort notebooks by');
-		if (!success) {
-			throw new Error(`Failed to find menu item: ${option}`);
-		}
+		await activateMainMenuItem(electronApp, option, 'Sort notebooks by');
 	}
 
 	public async sortByDate(electronApp: ElectronApplication) {

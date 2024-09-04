@@ -13,10 +13,16 @@ test.describe('markdownEditor', () => {
 		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
 		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
 		await importedFolder.waitFor();
-		await importedFolder.click();
 
-		const importedHtmlFileItem = mainScreen.noteListContainer.getByText('test-html-file-with-image');
-		await importedHtmlFileItem.click();
+		// Retry -- focusing the imported-folder may fail in some cases
+		await expect(async () => {
+			await importedFolder.click();
+
+			await mainScreen.noteList.focusContent(electronApp);
+
+			const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+			await importedHtmlFileItem.click({ timeout: 300 });
+		}).toPass();
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerIframe();
 		// Should render headers

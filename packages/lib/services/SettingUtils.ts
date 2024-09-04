@@ -5,6 +5,7 @@ import Setting from '../models/Setting';
 import uuid from '../uuid';
 import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
 import KeychainServiceDriverBase from './keychain/KeychainServiceDriverBase';
+import shim from '../shim';
 
 type KeychainServiceDriverConstructor = new (appId: string, clientId: string)=> KeychainServiceDriverBase;
 
@@ -19,6 +20,14 @@ type KeychainServiceDriverConstructor = new (appId: string, clientId: string)=> 
 export async function loadKeychainServiceAndSettings(keychainServiceDrivers: KeychainServiceDriverConstructor[]) {
 	const clientIdSetting = await Setting.loadOne('clientId');
 	const clientId = clientIdSetting ? clientIdSetting.value : uuid.create();
+
+	// Temporary workaround: For a short time, pre-release versions of Joplin Portable encrypted
+	// saved keys using the keychain. This can break sync when transferring Joplin between devices.
+	// To prevent secure keys from being lost, we enable read-only keychain access in portable mode.
+	if (shim.isPortable()) {
+		KeychainService.instance().readOnly = true;
+	}
+
 	await KeychainService.instance().initialize(
 		keychainServiceDrivers.map(Driver => new Driver(Setting.value('appId'), clientId)),
 	);
