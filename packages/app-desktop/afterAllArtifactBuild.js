@@ -32,18 +32,22 @@ const generateChecksumFile = () => {
 };
 
 const renameLatestYmlFile = () => {
-	// latest-mac.yml is only generated when publishing.
-	if (process.env.PUBLISH_ENABLED === 'false') {
-		/* eslint-disable no-console */
-		console.info(`Publishing not enabled - skipping renaming latest-mac.yml file. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
-		return;
-	}
-
 	if (os.platform() === 'darwin' && process.arch === 'arm64') {
+		// latest-mac.yml is only generated when publishing.
+		if (process.env.PUBLISH_ENABLED === 'false') {
+			/* eslint-disable no-console */
+			console.info(`Publishing not enabled - skipping renaming latest-mac.yml file for arm64 architecture. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
+			return;
+		}
+
+		/* eslint-disable no-console */
+		console.info('Renaming latest-mac.yml file...');
 		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
 		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
 
 		if (fs.existsSync(latestMacFilePath)) {
+			/* eslint-disable no-console */
+			console.info('Renamed latest-mac.yml file to latest-mac-arm64.yml succesfully!');
 			fs.renameSync(latestMacFilePath, renamedMacFilePath);
 			return [renamedMacFilePath];
 		} else {
