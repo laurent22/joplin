@@ -45,7 +45,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		return output;
 	};
 
-	return {
+	const output = {
 		'clientId': {
 			value: '',
 			type: SettingItemType.String,
@@ -1553,13 +1553,26 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'featureFlag.autoUpdaterServiceEnabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Enable auto-updates',
+			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
+			show: () => shim.isWindows() || shim.isMac(),
+			section: 'application',
+			isGlobal: true,
+		},
+
+		'featureFlag.syncLockEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
 			storage: SettingStorage.File,
-			label: () => 'Enable auto-updates',
-			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
-			section: 'application',
+			label: () => 'Enable sync locks',
+			description: () => 'This is an experimental setting to disable sync locks',
+			section: 'sync',
 			isGlobal: true,
 		},
 
@@ -1628,6 +1641,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 	} satisfies Record<string, SettingItem>;
+
+	for (const [key, md] of Object.entries(output)) {
+		if (key.startsWith('featureFlag.')) (md as SettingItem).advanced = true;
+	}
+
+	return output;
 };
 
 export type BuiltInMetadataKeys = keyof ReturnType<typeof builtInMetadata>;

@@ -11,6 +11,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
+import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 
 
 export interface ResourceInfo {
@@ -179,9 +180,19 @@ const useRerenderHandler = (props: Props) => {
 				}
 			},
 			readAssetBlob: (assetPath: string) => {
-				const assetsDir = `${Setting.value('resourceDir')}/`;
-				const path = shim.fsDriver().resolveRelativePathWithinDir(assetsDir, assetPath);
-				return shim.fsDriver().fileAtPath(path);
+				// Built-in assets are in resourceDir, external plugin assets are in cacheDir.
+				const assetsDirs = [Setting.value('resourceDir'), Setting.value('cacheDir')];
+
+				let resolvedPath = null;
+				for (const assetDir of assetsDirs) {
+					resolvedPath ??= resolvePathWithinDir(assetDir, assetPath);
+					if (resolvedPath) break;
+				}
+
+				if (!resolvedPath) {
+					throw new Error(`Failed to load asset at ${assetPath} -- not in any of the allowed asset directories: ${assetsDirs.join(',')}.`);
+				}
+				return shim.fsDriver().fileAtPath(resolvedPath);
 			},
 
 			createEditPopupSyntax,

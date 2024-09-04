@@ -131,6 +131,7 @@ export default class Synchronizer {
 	public lockHandler() {
 		if (this.lockHandler_) return this.lockHandler_;
 		this.lockHandler_ = new LockHandler(this.api());
+		this.lockHandler_.enabled = Setting.value('featureFlag.syncLockEnabled');
 		return this.lockHandler_;
 	}
 
