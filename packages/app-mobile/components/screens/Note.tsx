@@ -787,7 +787,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 				if (this.editorRef.current) {
 					this.editorRef.current.insertText(newText);
 				} else {
-					logger.error(`Tried to attach resource ${resource.id} to the note when the editor is not visible!`);
+					logger.info(`Tried to attach resource ${resource.id} to the note when the editor is not visible -- updating the note body instead.`);
 				}
 			}
 		} else {
@@ -900,20 +900,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	};
 
 	private drawPicture_onPress = async () => {
-		if (this.state.mode === 'edit') {
-			// Create a new empty drawing and attach it now, before the image editor is opened.
-			// With the present structure of Note.tsx, the we can't use this.editorRef while
-			// the image editor is open, and thus can't attach drawings at the cursor location.
-			const resource = await this.attachNewDrawing('');
-			await this.editDrawing(resource);
-		} else {
-			logger.info('Showing image editor...');
-			this.setState({
-				showImageEditor: true,
-				imageEditorResourceFilepath: null,
-				imageEditorResource: null,
-			});
-		}
+		logger.info('Showing image editor...');
+		this.setState({
+			showImageEditor: true,
+			imageEditorResourceFilepath: null,
+			imageEditorResource: null,
+		});
 	};
 
 	private async editDrawing(item: BaseItem) {
