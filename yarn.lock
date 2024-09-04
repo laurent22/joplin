@@ -8048,7 +8048,7 @@ __metadata:
     "@adobe/css-tools": 4.3.3
     "@rollup/plugin-commonjs": 25.0.8
     "@rollup/plugin-node-resolve": 15.2.3
-    "@rollup/plugin-replace": 5.0.6
+    "@rollup/plugin-replace": 5.0.7
     browserify: 14.5.0
     html-entities: 1.4.0
     jsdom: 23.2.0
@@ -10753,9 +10753,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-replace@npm:5.0.6":
-  version: 5.0.6
-  resolution: "@rollup/plugin-replace@npm:5.0.6"
+"@rollup/plugin-replace@npm:5.0.7":
+  version: 5.0.7
+  resolution: "@rollup/plugin-replace@npm:5.0.7"
   dependencies:
     "@rollup/pluginutils": ^5.0.1
     magic-string: ^0.30.3
@@ -10764,7 +10764,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: b24d9b4beef8fc5ac4f69e64f5dd9dc403bdf9f7ccb3ff5cb77a59685277e118c31b0802eb64096fc8d80db5b0368cfe2323e476577e8c470a0f6ee761109d32
+  checksum: 67985e3f4056b92a5f6847b9ddf5b8e9aaecefa0e20b96751dcd63c3ca1f907dadad2940f270867dab2e24bc27da6b0e82f0ce6bb20309aa3465869a9d2e3f13
   languageName: node
   linkType: hard
 
