@@ -8,7 +8,6 @@ use color_eyre::Result;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
-use crate::utils::utils::log_warn;
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_rich_text(&mut self, text: &RichText) -> Result<String> {
@@ -78,10 +77,6 @@ impl<'a> Renderer<'a> {
         if text.starts_with("\u{000B}") && !indices.is_empty(){
             indices.remove(0);
             styles.pop();
-        }
-
-        if text.clone().contains("Action research involves") {
-            log_warn!("Hyperlink: {:?}, indices: {:?}, styles: {:?}", text, indices, styles);
         }
 
         if indices.is_empty() {
