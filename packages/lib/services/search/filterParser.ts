@@ -36,7 +36,6 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 			if (inQuote) {
 				terms.push(makeTerm(currentCol, currentTerm));
 				currentTerm = '';
-				currentCol = '_';
 				inQuote = false;
 			} else {
 				inQuote = true;
@@ -48,7 +47,6 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 			inTerm = false;
 			if (!currentTerm) continue;
 			terms.push(makeTerm(currentCol, currentTerm));
-			currentCol = '_';
 			currentTerm = '';
 			continue;
 		}
