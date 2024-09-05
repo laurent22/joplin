@@ -45,13 +45,21 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
 	});
 
-	it.only('body with phrase and multiple words', () => {
+	it('body with phrase and multiple words', () => {
 		const searchString = 'title:testTitle body:"word1 word2" word3 word4';
 		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'testTitle', false));
 		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
 		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word3', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word4', false));
 	});
 
+	it('body with phrase and multiple words and negatives', () => {
+		const searchString = '-word4 title:testTitle body:"word1 word2" word3 ';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'testTitle', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word3', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"word4"', true));
+	});
 
 	it('single word text', () => {
 		const searchString = 'joplin';
