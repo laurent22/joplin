@@ -65,6 +65,7 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 	return terms;
 };
 
+// Phrase is a string surrounded by double quotes
 const parsePhraseAndWords = (queryValue: string) => {
 	const output: string[] = [];
 	let phrase = '';
@@ -112,8 +113,8 @@ const parseQuery = (query: string): Term[] => {
 			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
 				result.push({ name, value: trimQuotes(value.replace(/[*]/g, '%')), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
-				const parseWordsAndPhrases = parsePhraseAndWords(value);
-				parseWordsAndPhrases.map(word => {
+				const phrasesAndWords = parsePhraseAndWords(value);
+				phrasesAndWords.map(word => {
 					result.push({ name, value: word, negated, wildcard: word.indexOf('*') >= 0 });
 				});
 			} else {
