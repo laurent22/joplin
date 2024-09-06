@@ -7415,7 +7415,6 @@ __metadata:
     debounce: 1.2.1
     electron: 29.4.5
     electron-builder: 24.13.3
-    electron-log: 5.1.6
     electron-updater: 6.2.1
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
@@ -20948,13 +20947,6 @@ __metadata:
     electron-builder: cli.js
     install-app-deps: install-app-deps.js
   checksum: 8d7943d990363e547f1fbe391fee6b94d5e35e78c355645399f1f9b6709b6c167f0781abf8926c984c8a92475e6647f863f5e6a6938101a8a3a18ca85559810b
-  languageName: node
-  linkType: hard
-
-"electron-log@npm:5.1.6":
-  version: 5.1.6
-  resolution: "electron-log@npm:5.1.6"
-  checksum: 57f01fd535a2d6654e2dcde96afb85e2bd7433100e220a183a90b9d83ccd23468178188a4c88b3b312c2b6146962f4277910502d8acf02d94841cb5b28c3c65e
   languageName: node
   linkType: hard
 
