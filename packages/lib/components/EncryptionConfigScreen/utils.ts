@@ -160,15 +160,20 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 		const newPasswordChecks: PasswordChecks = {};
 		const newMasterPasswordKeys: PasswordChecks = {};
 
+		const masterPasswordCorrect = masterPassword ? await masterPasswordIsValid(masterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)) : true;
+		newPasswordChecks['master'] = masterPasswordCorrect;
+
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
 			const password = await findMasterKeyPassword(EncryptionService.instance(), mk, passwords);
 			const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 			newPasswordChecks[mk.id] = ok;
-			newMasterPasswordKeys[mk.id] = password === masterPassword;
-		}
 
-		newPasswordChecks['master'] = masterPassword ? await masterPasswordIsValid(masterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)) : true;
+			const triedMasterPassword = password === masterPassword;
+			// If the master password is correct but can't decrypt the key, then this key should not be
+			// controlled by the master password.
+			newMasterPasswordKeys[mk.id] = triedMasterPassword && (!masterPasswordCorrect || ok);
+		}
 
 		if (event.cancelled) return;
 
