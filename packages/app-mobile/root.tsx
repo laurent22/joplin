@@ -211,7 +211,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	// Previously, this only ran when encryption was enabled/disabled. However, after fetching
 	// a new key, this needs to run and so we run it when the sync target info changes.
 	if (
-		(action.type === 'SETTING_UPDATE_ONE' && ['encryption.passwordCache', 'encryption.masterPassword', 'syncInfoCache'].includes(action.key))
+		(action.type === 'SETTING_UPDATE_ONE' && (action.key === 'syncInfoCache' || action.key.startsWith('encryption.')))
 		|| action.type === 'SETTING_UPDATE_ALL'
 	) {
 		await loadMasterKeysFromSettings(EncryptionService.instance());
