@@ -65,32 +65,48 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 	return terms;
 };
 
-// Phrase is a string surrounded by double quotes
-const parsePhraseAndWords = (queryValue: string) => {
+// Create an array of:
+// - phrase: start and end with double quotes
+// - everything before, in-between or after phrases
+export const splitQueryByPhrases = (queryValue: string) => {
 	const output: string[] = [];
-	let phrase = '';
 	let inQuote = false;
-	const words = queryValue.split(/[\s-_]+/);
 
-	for (const word of words) {
-		if (word.startsWith('"') && word.endsWith('"')) {
-			output.push(word);
-		} else if (word.startsWith('"')) {
-			phrase = word;
-			inQuote = true;
-		} else if (word.endsWith('"')) {
-			phrase += ` ${word}`;
-			output.push(phrase);
-			phrase = '';
-			inQuote = false;
-		} else if (inQuote) {
-			phrase += ` ${word}`;
-		} else {
-			output.push(word);
+	let current = '';
+	for (const char of queryValue) {
+		current += char;
+
+		if (char === '"') {
+			if (inQuote) {
+				output.push(current);
+				inQuote = false;
+				current = '';
+			} else {
+				output.push(current.slice(0, -1));
+				current = '"';
+				inQuote = true;
+			}
 		}
 	}
+	output.push(current);
 
-	return output;
+	return output.filter(word => word.trim());
+};
+
+export const parsePhrasesAndWords = (queryValue: string) => {
+
+	const splittedQuery = splitQueryByPhrases(queryValue);
+	const phrases = splittedQuery
+		.filter(phrase => phrase.length > 2 && quoted(phrase))
+		.map(v => `\\${v.slice(0, -1)}\\"`);
+
+	const words = splittedQuery
+		.filter(w => !quoted(w))
+		.join(' ')
+		.split(/[\s-_]+/)
+		.filter(w => w.trim());
+
+	return words.concat(phrases);
 };
 
 const parseQuery = (query: string): Term[] => {
@@ -113,7 +129,7 @@ const parseQuery = (query: string): Term[] => {
 			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
 				result.push({ name, value: trimQuotes(value.replace(/[*]/g, '%')), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
-				const phrasesAndWords = parsePhraseAndWords(value);
+				const phrasesAndWords = parsePhrasesAndWords(value);
 				phrasesAndWords.map(word => {
 					result.push({ name, value: word, negated, wildcard: word.indexOf('*') >= 0 });
 				});
