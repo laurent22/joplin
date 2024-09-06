@@ -14,7 +14,7 @@ describe('e2ee/crypto', () => {
 		await afterAllCleanUp();
 	});
 
-	it('should decrypt data from different devices', (async () => {
+	it('should encrypt and decrypt data from different devices', (async () => {
 		await expectNotThrow(async () => runIntegrationTests(true));
 	}));
 
