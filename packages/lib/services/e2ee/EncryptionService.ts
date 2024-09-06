@@ -150,13 +150,17 @@ export default class EncryptionService {
 				return;
 			}
 
-			this.decryptedMasterKeys_.set(model.id, {
-				plainText: await this.decryptMasterKeyContent(model, password),
-				updatedTime: model.updated_time,
-			});
-			this.encryptedMasterKeys_.delete(model.id);
+			try {
+				this.decryptedMasterKeys_.set(model.id, {
+					plainText: await this.decryptMasterKeyContent(model, password),
+					updatedTime: model.updated_time,
+				});
+				this.encryptedMasterKeys_.delete(model.id);
 
-			if (makeActive) this.setActiveMasterKeyId(model.id);
+				if (makeActive) this.setActiveMasterKeyId(model.id);
+			} catch (error) {
+				logger.warn(`Cannot load master key ${model.id}. Invalid password?`, error);
+			}
 		};
 
 		if (!makeActive) {
