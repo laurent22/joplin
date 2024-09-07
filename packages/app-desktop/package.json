@@ -199,7 +199,7 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tesseract.js": "5.0.5",
+    "tesseract.js": "5.1.0",
     "tinymce": "5.10.6"
   }
 }
