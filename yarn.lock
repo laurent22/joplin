@@ -7552,7 +7552,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-web: 0.19.12
-    react-native-webview: 13.8.7
+    react-native-webview: 13.10.0
     react-native-zip-archive: 6.1.2
     react-redux: 8.1.3
     react-test-renderer: 18.3.1
@@ -37523,16 +37523,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.8.7":
-  version: 13.8.7
-  resolution: "react-native-webview@npm:13.8.7"
+"react-native-webview@npm:13.10.0":
+  version: 13.10.0
+  resolution: "react-native-webview@npm:13.10.0"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 67ee40f45cf46736775c1db338f235191eba8e59ef136fa369fa60002312839ec8591b9a767e9fd27856744976aa157db03189c417ea7323db0d7e794e3ff318
+  checksum: 95de904ec797b0a6034b8c0b7398f7266c3ad118d14a21b0e2f1ecafb13ffc840c72bae375ad395f91c69aa6bea96a492402817e36c305164a6cbe8304fd2218
   languageName: node
   linkType: hard
 
