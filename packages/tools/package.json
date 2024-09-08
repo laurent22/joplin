@@ -28,7 +28,7 @@
     "dayjs": "1.11.11",
     "execa": "4.1.0",
     "fs-extra": "11.2.0",
-    "gettext-parser": "7.0.1",
+    "gettext-parser": "8.0.0",
     "glob": "10.3.16",
     "license-checker-rseidelsohn": "4.3.0",
     "markdown-it": "13.0.2",

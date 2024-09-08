@@ -8001,7 +8001,7 @@ __metadata:
     execa: 4.1.0
     fs-extra: 11.2.0
     gettext-extractor: 3.8.0
-    gettext-parser: 7.0.1
+    gettext-parser: 8.0.0
     glob: 10.3.16
     gulp: 4.0.2
     html-entities: 1.4.0
@@ -24267,15 +24267,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:7.0.1":
-  version: 7.0.1
-  resolution: "gettext-parser@npm:7.0.1"
+"gettext-parser@npm:8.0.0":
+  version: 8.0.0
+  resolution: "gettext-parser@npm:8.0.0"
   dependencies:
     content-type: ^1.0.5
     encoding: ^0.1.13
-    readable-stream: ^4.3.0
+    readable-stream: ^4.5.2
     safe-buffer: ^5.2.1
-  checksum: 251174700e4c7a4b9d868acf3b0e233211724a40f779bd9869357f782b004abd1f0a587f6c9f4219fd24f468bbfc18ca654cdd6e375f19610bd99f1587046ffa
+  checksum: a9310ef9eba066931c5a2dfd80fbaaf11de7af3f905d02e6f8afe015389ec2297029d2eabb851779e647492b646dd8e3b5b8294326754442237ec63c71b6b9a4
   languageName: node
   linkType: hard
 
@@ -38135,16 +38135,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^4.3.0":
-  version: 4.4.2
-  resolution: "readable-stream@npm:4.4.2"
+"readable-stream@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "readable-stream@npm:4.5.2"
   dependencies:
     abort-controller: ^3.0.0
     buffer: ^6.0.3
     events: ^3.3.0
     process: ^0.11.10
     string_decoder: ^1.3.0
-  checksum: 6f4063763dbdb52658d22d3f49ca976420e1fbe16bbd241f744383715845350b196a2f08b8d6330f8e219153dff34b140aeefd6296da828e1041a7eab1f20d5e
+  checksum: c4030ccff010b83e4f33289c535f7830190773e274b3fcb6e2541475070bdfd69c98001c3b0cb78763fc00c8b62f514d96c2b10a8bd35d5ce45203a25fa1d33a
   languageName: node
   linkType: hard
 
