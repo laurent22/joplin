@@ -52,6 +52,12 @@ export interface EncryptOptions {
 	masterKeyId?: string;
 }
 
+type GetPasswordCallback = ()=> string|Promise<string>;
+interface EncryptedMasterKey {
+	updatedTime: number;
+	decrypt: ()=> Promise<void>;
+}
+
 export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
@@ -73,7 +79,8 @@ export default class EncryptionService {
 	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
-	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
+	private encryptedMasterKeys_: Map<string, EncryptedMasterKey> = new Map();
+	private decryptedMasterKeys_: Map<string, DecryptedMasterKey> = new Map();
 	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
@@ -96,7 +103,7 @@ export default class EncryptionService {
 	}
 
 	public loadedMasterKeysCount() {
-		return Object.keys(this.decryptedMasterKeys_).length;
+		return this.loadedMasterKeyIds().length;
 	}
 
 	public chunkSize() {
@@ -123,41 +130,78 @@ export default class EncryptionService {
 	}
 
 	public isMasterKeyLoaded(masterKey: MasterKeyEntity) {
-		const d = this.decryptedMasterKeys_[masterKey.id];
+		if (this.encryptedMasterKeys_.get(masterKey.id)) {
+			return true;
+		}
+		const d = this.decryptedMasterKeys_.get(masterKey.id);
 		if (!d) return false;
 		return d.updatedTime === masterKey.updated_time;
 	}
 
-	public async loadMasterKey(model: MasterKeyEntity, password: string, makeActive = false) {
+	public async loadMasterKey(model: MasterKeyEntity, getPassword: string|GetPasswordCallback, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 
-		logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
+		const loadKey = async () => {
+			logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
-		this.decryptedMasterKeys_[model.id] = {
-			plainText: await this.decryptMasterKeyContent(model, password),
-			updatedTime: model.updated_time,
+			const password = typeof getPassword === 'string' ? getPassword : (await getPassword());
+			if (!password) {
+				logger.info(`Loading master key ${model.id} failed. No valid password found.`);
+			} else {
+				try {
+					this.decryptedMasterKeys_.set(model.id, {
+						plainText: await this.decryptMasterKeyContent(model, password),
+						updatedTime: model.updated_time,
+					});
+
+					if (makeActive) this.setActiveMasterKeyId(model.id);
+				} catch (error) {
+					logger.warn(`Cannot load master key ${model.id}. Invalid password?`, error);
+				}
+			}
+
+			this.encryptedMasterKeys_.delete(model.id);
 		};
 
-		if (makeActive) this.setActiveMasterKeyId(model.id);
+		if (!makeActive) {
+			this.encryptedMasterKeys_.set(model.id, {
+				decrypt: loadKey,
+				updatedTime: model.updated_time,
+			});
+		} else {
+			await loadKey();
+		}
 	}
 
 	public unloadMasterKey(model: MasterKeyEntity) {
-		delete this.decryptedMasterKeys_[model.id];
+		this.decryptedMasterKeys_.delete(model.id);
+		this.encryptedMasterKeys_.delete(model.id);
 	}
 
-	public loadedMasterKey(id: string) {
-		if (!this.decryptedMasterKeys_[id]) {
+	public async loadedMasterKey(id: string) {
+		const cachedKey = this.decryptedMasterKeys_.get(id);
+		if (cachedKey) return cachedKey;
+
+		const decryptCallback = this.encryptedMasterKeys_.get(id);
+		if (decryptCallback) {
+			// TODO: Handle invalid password errors?
+			await decryptCallback.decrypt();
+		}
+
+		const key = this.decryptedMasterKeys_.get(id);
+
+		if (!key) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const error: any = new Error(`Master key is not loaded: ${id}`);
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
 		}
-		return this.decryptedMasterKeys_[id];
+		return key;
 	}
 
 	public loadedMasterKeyIds() {
-		return Object.keys(this.decryptedMasterKeys_);
+		return [...this.decryptedMasterKeys_.keys(), ...this.encryptedMasterKeys_.keys()];
 	}
 
 	public fsDriver() {
@@ -430,7 +474,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
+		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
 
 		const header = {
 			encryptionMethod: method,
@@ -465,7 +509,7 @@ export default class EncryptionService {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId).plainText;
+		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
 
 		let doneSize = 0;
 

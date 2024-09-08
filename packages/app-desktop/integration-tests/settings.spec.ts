@@ -8,7 +8,7 @@ test.describe('settings', () => {
 		await mainScreen.waitFor();
 
 		// Sort order buttons should be visible by default
-		const sortOrderLocator = mainScreen.noteList.container.getByRole('button', { name: 'Toggle sort order' });
+		const sortOrderLocator = mainScreen.noteList.sortOrderButton;
 		await expect(sortOrderLocator).toBeVisible();
 
 		await mainScreen.openSettings(electronApp);
