@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const sha512 = require('js-sha512');
+const crypto = require('crypto');
 const distDirName = 'dist';
 const distPath = path.join(__dirname, distDirName);
 
 const generateChecksumFile = () => {
 	if (os.platform() !== 'linux') {
-		return []; // SHA-512 is only for AppImage
+		return; // SHA-512 is only for AppImage
 	}
 
 	let appImageName = '';
@@ -28,37 +29,91 @@ const generateChecksumFile = () => {
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
 	fs.writeFileSync(sha512FilePath, checksum);
-	return [sha512FilePath];
+	return sha512FilePath;
 };
 
-const renameLatestYmlFile = () => {
-	if (os.platform() === 'darwin' && process.arch === 'arm64') {
-		// latest-mac.yml is only generated when publishing.
-		if (process.env.PUBLISH_ENABLED === 'false') {
-			/* eslint-disable no-console */
-			console.info(`Publishing not enabled - skipping renaming latest-mac.yml file for arm64 architecture. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
-			return;
-		}
+const generateYML = () => {
+	if (os.platform() !== 'darwin' && process.arch !== 'arm64') {
+		return;
+	}
 
-		/* eslint-disable no-console */
-		console.info('Renaming latest-mac.yml file...');
-		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
-		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
+	const calculateHash = (filePath) => {
+		const fileBuffer = fs.readFileSync(filePath);
+		const hashSum = crypto.createHash('sha512');
+		hashSum.update(fileBuffer);
+		return hashSum.digest('base64');
+	};
 
-		if (fs.existsSync(latestMacFilePath)) {
-			/* eslint-disable no-console */
-			console.info('Renamed latest-mac.yml file to latest-mac-arm64.yml succesfully!');
-			fs.renameSync(latestMacFilePath, renamedMacFilePath);
-			return [renamedMacFilePath];
-		} else {
-			throw new Error('latest-mac.yml not found!');
+	const getFileSize = (filePath) => {
+		return fs.statSync(filePath).size;
+	};
+
+	const extractVersion = (filePath) => {
+		return path.basename(filePath).split('-')[1];
+	};
+
+	const files = fs.readdirSync(distPath);
+	let dmgPath = '';
+	let zipPath = '';
+	for (const file of files) {
+		if (file.endsWith('arm64.dmg')) {
+			dmgPath = path.join(distPath, file);
+		} else if (file.endsWith('arm64.zip')) {
+			zipPath = path.join(distPath, file);
 		}
 	}
+	const versionFromFilePath = extractVersion(zipPath);
+
+	const info = {
+		version: versionFromFilePath,
+		tagName: 'v'.concat(versionFromFilePath),
+		dmgPath: dmgPath,
+		zipPath: zipPath,
+		releaseDate: new Date().toISOString(),
+	};
+
+	/* eslint-disable no-console */
+	if (!fs.existsSync(info.dmgPath) || !fs.existsSync(info.zipPath)) {
+		console.error('One or both executable files do not exist:', info.dmgPath, info.zipPath);
+		return;
+	}
+
+	console.info('Calculating hash of files...');
+	const dmgHash = calculateHash(info.dmgPath);
+	const zipHash = calculateHash(info.zipPath);
+
+	console.info('Calculating size of files...');
+	const dmgSize = getFileSize(info.dmgPath);
+	const zipSize = getFileSize(info.zipPath);
+
+	console.info('Generating content of latest-mac-arm64.yml file...');
+	const yamlFilePath = path.join(distPath, 'latest-mac-arm64.yml');
+	const yamlContent = `version: ${info.version}
+files:
+  - url: ${path.basename(info.zipPath)}
+    sha512: ${zipHash}
+    size: ${zipSize}
+  - url: ${path.basename(info.dmgPath)}
+    sha512: ${dmgHash}
+    size: ${dmgSize}
+path: ${path.basename(info.zipPath)}
+sha512: ${zipHash}
+releaseDate: '${info.releaseDate}'
+`;
+	fs.writeFileSync(yamlFilePath, yamlContent);
+	console.log('YML file generated successfully for arm64 architecure.');
+
+	const fileContent = fs.readFileSync(yamlFilePath, 'utf8');
+	console.log('Generated YML Content:\n', fileContent);
+	/* eslint-enable no-console */
+	return yamlFilePath;
 };
 
 const mainHook = () => {
-	generateChecksumFile();
-	renameLatestYmlFile();
+	const sha512FilePath = generateChecksumFile();
+	const yamlFilePath = generateYML();
+	const outputFiles = [sha512FilePath, yamlFilePath].filter(item => item);
+	return outputFiles;
 };
 
 exports.default = mainHook;
