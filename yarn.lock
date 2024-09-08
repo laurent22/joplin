@@ -7896,7 +7896,7 @@ __metadata:
     markdown-it-abbr: 1.0.4
     markdown-it-anchor: 5.3.0
     markdown-it-deflist: 2.1.0
-    markdown-it-emoji: 2.0.2
+    markdown-it-emoji: 3.0.0
     markdown-it-expand-tabs: 1.0.13
     markdown-it-footnote: 3.0.3
     markdown-it-ins: 3.0.1
@@ -30598,10 +30598,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-emoji@npm:2.0.2":
-  version: 2.0.2
-  resolution: "markdown-it-emoji@npm:2.0.2"
-  checksum: e93ca19591b8dd543029e1997763e094a0861185f71403ffa522f09860da0a6457b3a2bd50e6e59cf1551b28ff464a2c2f596045a577323bd1d546cd1f0cc377
+"markdown-it-emoji@npm:3.0.0":
+  version: 3.0.0
+  resolution: "markdown-it-emoji@npm:3.0.0"
+  checksum: 421290e310285b9ef979e409ea056623489541013ee7307956a3450a06e0de034c585e217ed43a7bf9a6f16102542cb75799b975a861ba01a2db2b7105e16871
   languageName: node
   linkType: hard
 
