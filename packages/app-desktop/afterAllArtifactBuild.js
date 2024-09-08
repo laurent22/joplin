@@ -32,7 +32,7 @@ const generateChecksumFile = () => {
 	return sha512FilePath;
 };
 
-const generateYML = () => {
+const generateLatestArm64Yml = () => {
 	if (os.platform() !== 'darwin' && process.arch !== 'arm64') {
 		return;
 	}
@@ -66,7 +66,6 @@ const generateYML = () => {
 
 	const info = {
 		version: versionFromFilePath,
-		tagName: 'v'.concat(versionFromFilePath),
 		dmgPath: dmgPath,
 		zipPath: zipPath,
 		releaseDate: new Date().toISOString(),
@@ -111,8 +110,8 @@ releaseDate: '${info.releaseDate}'
 
 const mainHook = () => {
 	const sha512FilePath = generateChecksumFile();
-	const yamlFilePath = generateYML();
-	const outputFiles = [sha512FilePath, yamlFilePath].filter(item => item);
+	const lastestArm64YmlFilePath = generateLatestArm64Yml();
+	const outputFiles = [sha512FilePath, lastestArm64YmlFilePath].filter(item => item);
 	return outputFiles;
 };
 
