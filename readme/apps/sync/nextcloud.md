@@ -11,4 +11,4 @@ In the **terminal application**, you will need to set the `sync.target` config v
 	:config sync.5.password YOUR_PASSWORD
 	:config sync.target 5
 
-If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.  Joplin uses the WebDAV capabilities of NextCloud, sync configuration can be tested with other WebDave clients.
+If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
