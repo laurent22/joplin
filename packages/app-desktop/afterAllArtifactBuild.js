@@ -57,7 +57,8 @@ const generateLatestArm64Yml = () => {
 	let zipPath = '';
 	for (const file of files) {
 		if (file.endsWith('arm64.dmg')) {
-			dmgPath = path.join(distPath, file);
+			const fileRenamed = `${file.slice(0, -4)}.DMG`; // renameReleaseAssets script will rename from .dmg to .DMG
+			dmgPath = path.join(distPath, fileRenamed);
 		} else if (file.endsWith('arm64.zip')) {
 			zipPath = path.join(distPath, file);
 		}
