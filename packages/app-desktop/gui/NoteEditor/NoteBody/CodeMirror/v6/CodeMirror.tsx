@@ -28,6 +28,7 @@ import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
 import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 import CommandService from '@joplin/lib/services/CommandService';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -317,6 +318,26 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
+
+	const lastVisiblePanes = useRef(props.visiblePanes);
+	useEffect(() => {
+		const editorHasFocus = editorRef.current?.cm6?.dom?.contains(document.activeElement);
+		const viewerHasFocus = document.activeElement?.tagName === 'IFRAME';
+
+		const lastHadViewer = lastVisiblePanes.current.includes('viewer');
+		const hasViewer = props.visiblePanes.includes('viewer');
+		const lastHadEditor = lastVisiblePanes.current.includes('editor');
+		const hasEditor = props.visiblePanes.includes('editor');
+		if (lastHadViewer !== hasViewer && !hasViewer && viewerHasFocus) {
+			focus('CodeMirror/refocusEditor', editorRef.current);
+		}
+
+		if (lastHadEditor !== hasEditor && !hasEditor && editorHasFocus) {
+			focus('CodeMirror/refocusViewer', webviewRef.current);
+		}
+
+		lastVisiblePanes.current = props.visiblePanes;
+	}, [props.visiblePanes]);
 
 	useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,

@@ -132,6 +132,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	public focus() {
 		if (this.webviewRef_.current) {
 			focus('NoteTextViewer::focus', this.webviewRef_.current);
+			this.send('focus');
 		}
 	}
 
