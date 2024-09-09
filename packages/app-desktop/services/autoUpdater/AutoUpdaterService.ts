@@ -48,7 +48,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private logger_: LoggerWrapper;
 	private devMode_: boolean;
 	private enableDevMode = true; // force the updater to work in "dev" mode
-	private enableAutoDownload = true; // automatically download an update when it is found
+	private enableAutoDownload = false; // automatically download an update when it is found
 	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
@@ -73,8 +73,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	public updateApp = (): void => {
-		this.logger_.info('here')
-		;		autoUpdater.quitAndInstall(false, true);
+		autoUpdater.quitAndInstall(false, true);
 	};
 
 	public fetchLatestRelease = async (includePreReleases: boolean): Promise<GitHubRelease> => {
