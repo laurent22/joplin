@@ -1,5 +1,12 @@
 # Joplin Desktop Changelog
 
+## [v3.1.8](https://github.com/laurent22/joplin/releases/tag/v3.1.8) (Pre-release) - 2024-09-08T20:32:44Z
+
+- Improved: Seamless-Updates - rename latest-mac.yml to latest-mac-arm64.yml ([#10985](https://github.com/laurent22/joplin/issues/10985) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Updated packages @playwright/test (v1.44.1), sass (v1.77.4), tesseract.js (v5.1.0)
+- Fixed: Decrypt master keys only as needed ([#10990](https://github.com/laurent22/joplin/issues/10990)) ([#10856](https://github.com/laurent22/joplin/issues/10856) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Removed unneeded electron-log dependency ([#10865](https://github.com/laurent22/joplin/issues/10865))
+
 ## [v3.1.6](https://github.com/laurent22/joplin/releases/tag/v3.1.6) (Pre-release) - 2024-09-02T13:19:40Z
 
 - New: Add left/right arrow keys as expand/collapse shortcuts for notebooks ([#10944](https://github.com/laurent22/joplin/issues/10944) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
