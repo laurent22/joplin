@@ -48,7 +48,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private logger_: LoggerWrapper;
 	private devMode_: boolean;
 	private enableDevMode = true; // force the updater to work in "dev" mode
-	private enableAutoDownload = false; // automatically download an update when it is found
+	private enableAutoDownload = true; // automatically download an update when it is found
 	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
@@ -73,7 +73,8 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	public updateApp = (): void => {
-		autoUpdater.quitAndInstall(false, true);
+		this.logger_.info('here')
+		;		autoUpdater.quitAndInstall(false, true);
 	};
 
 	public fetchLatestRelease = async (includePreReleases: boolean): Promise<GitHubRelease> => {
@@ -101,7 +102,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 		const asset: GitHubReleaseAsset = release.assets.find(a => a.name === assetName);
 		if (!asset) {
-			throw new Error(`Yml file: ${assetName} not found for platform: ${platform} and architecture: ${arch}`);
+			throw new Error(`Yml file: ${assetName} not found for version: ${release.tag_name} platform: ${platform} and architecture: ${arch}`);
 		}
 
 		return asset.browser_download_url;
