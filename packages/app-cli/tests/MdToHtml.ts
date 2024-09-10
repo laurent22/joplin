@@ -256,10 +256,23 @@ describe('MdToHtml', () => {
 	it.each([
 		'[test](http://example.com/)',
 		'[test](mailto:test@example.com)',
-	])('should add onclick handlers to links (%j)', async (markdown) => {
+	])('should add onclick handlers to links when linkRenderingType is JavaScriptHandler (%j)', async (markdown) => {
 		const mdToHtml = newTestMdToHtml();
+
+		const renderWithoutOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.HrefHandler,
+		};
 		expect(
-			(await mdToHtml.render(markdown, undefined, { bodyOnly: true })).html,
+			(await mdToHtml.render(markdown, undefined, renderWithoutOnClickOptions)).html,
+		).not.toContain('onclick');
+
+		const renderWithOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.JavaScriptHandler,
+		};
+		expect(
+			(await mdToHtml.render(markdown, undefined, renderWithOnClickOptions)).html,
 		).toMatch(/<a data-from-md .*onclick=['"].*['"].*>/);
 	});
 
