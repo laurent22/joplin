@@ -14,7 +14,7 @@ const showResource = async (item: ResourceEntity) => {
 	if (shim.mobilePlatform() === 'web') {
 		const url = URL.createObjectURL(await shim.fsDriver().fileAtPath(resourcePath));
 		const w = window.open(url, '_blank');
-		w.addEventListener('close', () => {
+		w?.addEventListener('close', () => {
 			URL.revokeObjectURL(url);
 		}, { once: true });
 	} else {
