@@ -218,17 +218,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@asamuzakjp/dom-selector@npm:^2.0.1":
-  version: 2.0.2
-  resolution: "@asamuzakjp/dom-selector@npm:2.0.2"
-  dependencies:
-    bidi-js: ^1.0.3
-    css-tree: ^2.3.1
-    is-potential-custom-element-name: ^1.0.1
-  checksum: a454537fcba4f241d3c1303f6068944462fc0ba9cd2c5e3ad639c0acb58ffb7809e5d4cbdac805c8c2525b2450d53a992ff98f07a323c5246044e8e3de3561fe
-  languageName: node
-  linkType: hard
-
 "@aws-crypto/crc32@npm:3.0.0":
   version: 3.0.0
   resolution: "@aws-crypto/crc32@npm:3.0.0"
@@ -7396,7 +7385,7 @@ __metadata:
     "@joplin/renderer": ~3.1
     "@joplin/tools": ~3.1
     "@joplin/utils": ~3.1
-    "@playwright/test": 1.43.1
+    "@playwright/test": 1.44.1
     "@sentry/electron": 4.17.0
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
@@ -7415,7 +7404,6 @@ __metadata:
     debounce: 1.2.1
     electron: 29.4.5
     electron-builder: 24.13.3
-    electron-log: 5.1.6
     electron-updater: 6.2.1
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
@@ -7456,7 +7444,7 @@ __metadata:
     styled-components: 5.3.11
     styled-system: 5.1.5
     taboverride: 4.0.3
-    tesseract.js: 5.0.5
+    tesseract.js: 5.1.0
     tinymce: 5.10.6
     ts-jest: 29.1.1
     ts-node: 10.9.2
@@ -7516,7 +7504,7 @@ __metadata:
     jest-environment-jsdom: 29.7.0
     jetifier: 2.0.0
     js-draw: 1.20.3
-    jsdom: 23.2.0
+    jsdom: 24.0.0
     lodash: 4.17.21
     md5: 2.3.0
     nodemon: 3.0.3
@@ -7529,7 +7517,7 @@ __metadata:
     react-native-camera: 4.2.1
     react-native-device-info: 10.13.2
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 9.1.1
+    react-native-document-picker: 9.2.0
     react-native-dropdownalert: 5.1.0
     react-native-exit-app: 2.0.0
     react-native-file-viewer: 2.1.5
@@ -7537,7 +7525,7 @@ __metadata:
     react-native-fs: 2.20.0
     react-native-get-random-values: 1.11.0
     react-native-image-picker: 7.1.1
-    react-native-localize: 3.0.6
+    react-native-localize: 3.1.0
     react-native-modal-datetime-picker: 17.1.0
     react-native-paper: 5.12.3
     react-native-popup-menu: 0.16.1
@@ -7545,7 +7533,7 @@ __metadata:
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.10.4
     react-native-securerandom: 1.0.1
-    react-native-share: 10.0.2
+    react-native-share: 10.2.1
     react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
@@ -7553,7 +7541,7 @@ __metadata:
     react-native-version-info: 1.1.1
     react-native-vosk: 0.1.12
     react-native-web: 0.19.12
-    react-native-webview: 13.8.7
+    react-native-webview: 13.10.3
     react-native-zip-archive: 6.1.2
     react-redux: 8.1.3
     react-test-renderer: 18.3.1
@@ -7779,7 +7767,7 @@ __metadata:
     string-to-stream: 3.0.1
     tar: 6.2.1
     tcp-port-used: 1.0.2
-    tesseract.js: 5.0.5
+    tesseract.js: 5.1.0
     typescript: 5.2.2
     uglifycss: 0.0.29
     url-parse: 1.5.10
@@ -7951,7 +7939,7 @@ __metadata:
     jest: 29.7.0
     jest-expect-message: 1.1.3
     jquery: 3.7.1
-    jsdom: 23.2.0
+    jsdom: 24.0.0
     knex: 3.1.0
     koa: 2.15.3
     ldapts: 7.0.12
@@ -8017,7 +8005,7 @@ __metadata:
     relative: 3.0.2
     request: 2.88.2
     rss: 1.2.2
-    sass: 1.76.0
+    sass: 1.77.4
     sharp: 0.33.4
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -8051,7 +8039,7 @@ __metadata:
     "@rollup/plugin-replace": 5.0.7
     browserify: 14.5.0
     html-entities: 1.4.0
-    jsdom: 23.2.0
+    jsdom: 24.0.0
     rollup: 4.2.0
     standard: 17.1.0
     turndown-attendant: 0.0.3
@@ -9794,14 +9782,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.43.1":
-  version: 1.43.1
-  resolution: "@playwright/test@npm:1.43.1"
+"@playwright/test@npm:1.44.1":
+  version: 1.44.1
+  resolution: "@playwright/test@npm:1.44.1"
   dependencies:
-    playwright: 1.43.1
+    playwright: 1.44.1
   bin:
     playwright: cli.js
-  checksum: f9db387b488a03125e5dc22dd7ffed9c661d1f2428188912a35a2235b3bd9d826b390e7600d04998639994f5a96695b9dc9034ca9cb59e261d2fdee93a60df3f
+  checksum: 90507b77e388aa984deb92db56f7bb3b305c6be441e1d0087ca046989cfdda068bbc26d75bd29c20ad3dbb2434e69a8ff0d6b30003b88c9234cd3aa6a9f7deb9
   languageName: node
   linkType: hard
 
@@ -15552,15 +15540,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bidi-js@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "bidi-js@npm:1.0.3"
-  dependencies:
-    require-from-string: ^2.0.2
-  checksum: 877c5dcfd69a35fd30fee9e49a03faf205a7a4cd04a38af7648974a659cab7b1cd51fa881d7957c07bd1fc5adf22b90a56da3617bb0885ee69d58ff41117658c
-  languageName: node
-  linkType: hard
-
 "big-integer@npm:^1.6.44":
   version: 1.6.51
   resolution: "big-integer@npm:1.6.51"
@@ -18782,16 +18761,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-tree@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "css-tree@npm:2.3.1"
-  dependencies:
-    mdn-data: 2.0.30
-    source-map-js: ^1.0.1
-  checksum: 493cc24b5c22b05ee5314b8a0d72d8a5869491c1458017ae5ed75aeb6c3596637dbe1b11dac2548974624adec9f7a1f3a6cf40593dc1f9185eb0e8279543fbc0
-  languageName: node
-  linkType: hard
-
 "css-what@npm:^6.0.1, css-what@npm:^6.1.0":
   version: 6.1.0
   resolution: "css-what@npm:6.1.0"
@@ -20948,13 +20917,6 @@ __metadata:
     electron-builder: cli.js
     install-app-deps: install-app-deps.js
   checksum: 8d7943d990363e547f1fbe391fee6b94d5e35e78c355645399f1f9b6709b6c167f0781abf8926c984c8a92475e6647f863f5e6a6938101a8a3a18ca85559810b
-  languageName: node
-  linkType: hard
-
-"electron-log@npm:5.1.6":
-  version: 5.1.6
-  resolution: "electron-log@npm:5.1.6"
-  checksum: 57f01fd535a2d6654e2dcde96afb85e2bd7433100e220a183a90b9d83ccd23468178188a4c88b3b312c2b6146962f4277910502d8acf02d94841cb5b28c3c65e
   languageName: node
   linkType: hard
 
@@ -28835,11 +28797,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:23.2.0":
-  version: 23.2.0
-  resolution: "jsdom@npm:23.2.0"
+"jsdom@npm:24.0.0":
+  version: 24.0.0
+  resolution: "jsdom@npm:24.0.0"
   dependencies:
-    "@asamuzakjp/dom-selector": ^2.0.1
     cssstyle: ^4.0.1
     data-urls: ^5.0.0
     decimal.js: ^10.4.3
@@ -28848,6 +28809,7 @@ __metadata:
     http-proxy-agent: ^7.0.0
     https-proxy-agent: ^7.0.2
     is-potential-custom-element-name: ^1.0.1
+    nwsapi: ^2.2.7
     parse5: ^7.1.2
     rrweb-cssom: ^0.6.0
     saxes: ^6.0.0
@@ -28865,7 +28827,7 @@ __metadata:
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 3ba97e6ac56c38d92d0ce2d0fac5de4042f7dec40d127872e1aa88dd379980f8ea2108a008319ceac54dc07a784078ed4b4401bf9109a76276ca2cace229c8df
+  checksum: 180cf672c1f5e4375fd831b6990c453b4c22b540619abe7a0a3ed0d18eca1171dea9f25739bc06dfea26d1c0d71c7ac26e62fc9a2d9b1657003fc8fd1bf6f9f4
   languageName: node
   linkType: hard
 
@@ -30828,13 +30790,6 @@ __metadata:
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
   checksum: 9d0128ed425a89f4cba8f787dca27ad9408b5cb1b220af2d938e2a0629d17d879a34d2cb19318bdb26c3f14c77dd5dfbae67211f5caaf07b61b1f2c5c8c7dc16
-  languageName: node
-  linkType: hard
-
-"mdn-data@npm:2.0.30":
-  version: 2.0.30
-  resolution: "mdn-data@npm:2.0.30"
-  checksum: d6ac5ac7439a1607df44b22738ecf83f48e66a0874e4482d6424a61c52da5cde5750f1d1229b6f5fa1b80a492be89465390da685b11f97d62b8adcc6e88189aa
   languageName: node
   linkType: hard
 
@@ -33678,6 +33633,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nwsapi@npm:^2.2.7":
+  version: 2.2.12
+  resolution: "nwsapi@npm:2.2.12"
+  checksum: 4dbce7ecbcf336eef1edcbb5161cbceea95863e63a16d9bcec8e81cbb260bdab3d07e6c7b58354d465dc803eef6d0ea4fb20220a80fa148ae65f18d56df81799
+  languageName: node
+  linkType: hard
+
 "nyc@npm:^15.1.0":
   version: 15.1.0
   resolution: "nyc@npm:15.1.0"
@@ -35362,27 +35324,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.43.1":
-  version: 1.43.1
-  resolution: "playwright-core@npm:1.43.1"
+"playwright-core@npm:1.44.1":
+  version: 1.44.1
+  resolution: "playwright-core@npm:1.44.1"
   bin:
     playwright-core: cli.js
-  checksum: 7c96b3a4a4bce2ee22c3cd680c9b0bb9e4bf07ee4b51d1e9a7f47a6489c7b0b960d4b550e530b8f41d1ffeadd26c7c6bb626ae8689dfd90dce1cb8e35ae78ff7
+  checksum: ebc6fa0ff77792fe52648fda06cc4474d4e9746db6dc5750d262b7fe2caf9f9e2327a71f1fb365e862213403a9daf95361c5040a9b0fd462928d7eb4fdc760e1
   languageName: node
   linkType: hard
 
-"playwright@npm:1.43.1":
-  version: 1.43.1
-  resolution: "playwright@npm:1.43.1"
+"playwright@npm:1.44.1":
+  version: 1.44.1
+  resolution: "playwright@npm:1.44.1"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.43.1
+    playwright-core: 1.44.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: de9db021f93018a18275bbb5af09ebf1804aa0534f47578b35b440064abc774509740205802824afc94a99fc84dd55ffe9e215718ad3ecc691b251ab3882b096
+  checksum: c2e8ff0a855e4a9e665ae5ffa0ff90423289546157be55e83f78916d17075c5910a7244773739c2a973da884a4ff0b3cf9b6e6b543de112e43b12169a9208e86
   languageName: node
   linkType: hard
 
@@ -37256,9 +37218,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:9.1.1":
-  version: 9.1.1
-  resolution: "react-native-document-picker@npm:9.1.1"
+"react-native-document-picker@npm:9.2.0":
+  version: 9.2.0
+  resolution: "react-native-document-picker@npm:9.2.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -37268,7 +37230,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: e29b9406dd77e16f461e64035a5f7056b1fcb0d05fb26b23f0073ff2211520a7ac9b57da7e58e61ff03bcbe1120d2e104fb1c90282412736feeb12abe96e2d3b
+  checksum: 51fc0eb75f35f7834904a806c053ac0173799141d0f5a8022cbd9d961b8b715847cba6f15eca78673c36dbc63d2ef2696332508a983d9f929c017cf0ec3d197b
   languageName: node
   linkType: hard
 
@@ -37348,9 +37310,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.0.6":
-  version: 3.0.6
-  resolution: "react-native-localize@npm:3.0.6"
+"react-native-localize@npm:3.1.0":
+  version: 3.1.0
+  resolution: "react-native-localize@npm:3.1.0"
   peerDependencies:
     react: ">=18.1.0"
     react-native: ">=0.70.0"
@@ -37358,7 +37320,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: 83d0c7756f316b97951af2dc70713d922d7aa67130242add08c6851b08a07c719ecd3a02b87b1b3fd2e33f46bec719658ecc745bd3e48fa7e6d12ce3ea821a6b
+  checksum: 93753788facca7493b21056098f968217a53321d3324a467d4913f5b1b010cb4fde5e6107d538b84eae87ba9390c4a67a32d5a5fe54710b509b8097f1cf437ae
   languageName: node
   linkType: hard
 
@@ -37432,10 +37394,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:10.0.2":
-  version: 10.0.2
-  resolution: "react-native-share@npm:10.0.2"
-  checksum: 3d9f747633edadced0b5ac88fb02f6afade9bb91e115b010d6392b60798b169927a08762e3d15c0f7edbfed91a4a175fc334e5c990a590c56bd5a977b953fd82
+"react-native-share@npm:10.2.1":
+  version: 10.2.1
+  resolution: "react-native-share@npm:10.2.1"
+  checksum: 9dd4e0329b344668e04ff5421ab982e319dc3ba988d0b7990a619bd1c551beb6012623abe238a80e427f86f2bb03dd21b7afc0e957ee7348e0bd9fb39956912e
   languageName: node
   linkType: hard
 
@@ -37531,16 +37493,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.8.7":
-  version: 13.8.7
-  resolution: "react-native-webview@npm:13.8.7"
+"react-native-webview@npm:13.10.3":
+  version: 13.10.3
+  resolution: "react-native-webview@npm:13.10.3"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 67ee40f45cf46736775c1db338f235191eba8e59ef136fa369fa60002312839ec8591b9a767e9fd27856744976aa157db03189c417ea7323db0d7e794e3ff318
+  checksum: 333e940a2af300c7151106737cd812f102efd7e872286ce922290c2a0044e736ba86abab0841df591f42628017897344ab549ba6205471a44f74baff8bf196b1
   languageName: node
   linkType: hard
 
@@ -39509,16 +39471,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.76.0":
-  version: 1.76.0
-  resolution: "sass@npm:1.76.0"
+"sass@npm:1.77.4":
+  version: 1.77.4
+  resolution: "sass@npm:1.77.4"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 5f3fa7e7a1be09b7cea842a397fb07b9413fa9903bf82ead2ea059aa56faea534c2a84ede5a140103ee18a1dec9162b2fa1413fe71bbe8f8074712bf3bd3a8c7
+  checksum: 415d76960e35d78310ffc33bc61fdb2b35a54bb2823dfc4eff50eee960096dacc210d7ef7ae6695120e1a4f005f269719c34d58c77c54ff7787516bda6a89e55
   languageName: node
   linkType: hard
 
@@ -42601,6 +42563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tesseract.js-core@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "tesseract.js-core@npm:5.1.1"
+  checksum: aba4001806626e78776a6ad92711eb7ed3ec2b4653c9652dc89af3f2373e771150215ae9a5ff0a4909ec6af16bae2453e87562e43cfa7fdb51225cc825c93ad1
+  languageName: node
+  linkType: hard
+
 "tesseract.js@npm:*":
   version: 5.0.4
   resolution: "tesseract.js@npm:5.0.4"
@@ -42619,9 +42588,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tesseract.js@npm:5.0.5":
-  version: 5.0.5
-  resolution: "tesseract.js@npm:5.0.5"
+"tesseract.js@npm:5.1.0":
+  version: 5.1.0
+  resolution: "tesseract.js@npm:5.1.0"
   dependencies:
     bmp-js: ^0.1.0
     idb-keyval: ^6.2.0
@@ -42630,10 +42599,10 @@ __metadata:
     node-fetch: ^2.6.9
     opencollective-postinstall: ^2.0.3
     regenerator-runtime: ^0.13.3
-    tesseract.js-core: ^5.0.0
+    tesseract.js-core: ^5.1.0
     wasm-feature-detect: ^1.2.11
     zlibjs: ^0.3.1
-  checksum: 2cd9e6c58c6a38db6063a99fcfbac8dd8d3ed6a44585b8435d201ba5b3da1649fd0cefe5e3862a0e9cfbe45fa9e1e74c4ee26dd105ac02e7edac263668dd693c
+  checksum: 8ef2574ab107bbafa585884610290c576da4b5e9132a7d098914e2a7f68bc8287c7c54d8ebb37d6473b11f489b084e8e68340e75bf7272368545b99e164209e6
   languageName: node
   linkType: hard
 
