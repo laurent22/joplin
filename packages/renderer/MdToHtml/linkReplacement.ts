@@ -114,10 +114,19 @@ export default function(href: string, {
 
 	let resourceFullPath = resource && ResourceModel?.fullPath ? ResourceModel.fullPath(resource) : null;
 
-	const customResourceUrl = resourceId ? itemIdToUrl?.(resourceId) : null;
-	if (customResourceUrl) {
-		attrHtml.push(`href='${htmlentities(customResourceUrl)}'`);
-		resourceFullPath = customResourceUrl;
+	// Handle overrides
+	let addedHrefAttr = false;
+	if (resourceId && itemIdToUrl) {
+		const url = itemIdToUrl(resourceId);
+		if (url !== null) {
+			attrHtml.push(`href='${htmlentities(url)}'`);
+			resourceFullPath = url;
+			addedHrefAttr = true;
+		}
+	}
+
+	if (addedHrefAttr) {
+		// Done -- the HREF has already bee set.
 	} else if (plainResourceRendering || linkRenderingType === LinkRenderingType.HrefHandler) {
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);
