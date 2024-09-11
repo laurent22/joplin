@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
@@ -18,7 +18,7 @@ import { OnMessageEvent } from '../../ExtendedWebView/types';
 
 const logger = Logger.create('ImageEditor');
 
-type OnSaveCallback = (svgData: string)=> void;
+type OnSaveCallback = (svgData: string)=> Promise<void>;
 type OnCancelCallback = ()=> void;
 
 interface Props {
@@ -231,6 +231,15 @@ const ImageEditor = (props: Props) => {
 			}));
 		};
 
+		const saveThenClose = (drawing) => {
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'save-and-close',
+					data: drawing.outerHTML,
+				}),
+			);
+		};
+
 		try {
 			if (window.editorControl === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
@@ -239,6 +248,7 @@ const ImageEditor = (props: Props) => {
 					{
 						saveDrawing,
 						closeEditor,
+						saveThenClose,
 						updateEditorTemplate,
 						setImageHasChanges,
 					},
@@ -308,12 +318,15 @@ const ImageEditor = (props: Props) => {
 		const json = JSON.parse(data);
 		if (json.action === 'save') {
 			await clearAutosave();
-			props.onSave(json.data);
+			await props.onSave(json.data);
 		} else if (json.action === 'autosave') {
 			await writeAutosave(json.data);
 		} else if (json.action === 'save-toolbar') {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
 		} else if (json.action === 'close') {
+			onRequestCloseEditor(json.promptIfUnsaved);
+		} else if (json.action === 'save-and-close') {
+			await props.onSave(json.data);
 			onRequestCloseEditor(json.promptIfUnsaved);
 		} else if (json.action === 'ready-to-load-data') {
 			void onReadyToLoadData();

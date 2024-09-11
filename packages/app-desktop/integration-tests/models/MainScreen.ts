@@ -46,12 +46,7 @@ export default class MainScreen {
 
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
-		const openedWithPreferences = await activateMainMenuItem(electronApp, 'Preferences...');
-		const openedWithOptions = await activateMainMenuItem(electronApp, 'Options');
-
-		if (!openedWithOptions && !openedWithPreferences) {
-			throw new Error('Unable to find settings menu item in application menus.');
-		}
+		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
 	}
 
 	public async search(text: string) {
@@ -61,10 +56,6 @@ export default class MainScreen {
 
 	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
 		await setFilePickerResponse(electronApp, [path]);
-		const startedImport = await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
-
-		if (!startedImport) {
-			throw new Error('Unable to find HTML directory import menu item.');
-		}
+		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
 	}
 }
