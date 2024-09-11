@@ -146,6 +146,14 @@ interface PluginContext {
 	};
 }
 
+export enum LinkRenderingType {
+	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
+	JavaScriptHandler = 1,
+
+	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
+	HrefHandler = 2,
+}
+
 export interface RuleOptions {
 	context: PluginContext;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -174,9 +182,7 @@ export interface RuleOptions {
 	enableLongPress?: boolean;
 
 	// Use by `link_open` rule.
-	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
-	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
-	linkRenderingType?: number;
+	linkRenderingType?: LinkRenderingType;
 
 	// A list of MIME types for which an edit button appears on tap/hover.
 	// Used by the image editor in the mobile app.

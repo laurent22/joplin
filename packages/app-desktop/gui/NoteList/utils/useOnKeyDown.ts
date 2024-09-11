@@ -153,14 +153,9 @@ const useOnKeyDown = (
 			announceForAccessibility(!wasCompleted ? _('Complete') : _('Incomplete'));
 		}
 
-		if (key === 'Tab') {
+		if (key === 'Tab' && event.shiftKey) {
 			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'sideBar');
-			} else {
-				void CommandService.instance().execute('focusElement', 'noteTitle');
-			}
+			void CommandService.instance().execute('focusElement', 'sideBar');
 		}
 
 		if (key.toUpperCase() === 'A' && (event.ctrlKey || event.metaKey)) {
