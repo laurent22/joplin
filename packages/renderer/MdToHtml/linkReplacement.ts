@@ -27,19 +27,18 @@ export interface LinkReplacementResult {
 	resourceFullPath: string;
 }
 
-export default function(href: string, options: Options = null): LinkReplacementResult {
-	options = { ...options };
-	options.title ??= '';
-	options.resources ??= {};
-	options.ResourceModel ??= null;
-	options.linkRenderingType ??= LinkRenderingType.JavaScriptHandler;
-	options.plainResourceRendering ??= false;
-	options.postMessageSyntax ??= 'postMessage';
-	options.enableLongPress ??= false;
-
+export default function(href: string, {
+	title = '',
+	resources = {},
+	ResourceModel = null,
+	linkRenderingType = LinkRenderingType.JavaScriptHandler,
+	plainResourceRendering = false,
+	postMessageSyntax = 'postMessage',
+	enableLongPress = false,
+	itemIdToUrl = null,
+}: Options = null): LinkReplacementResult {
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
-	const isResourceUrl = options.resources && !!resourceHrefInfo;
-	let title = options.title;
+	const isResourceUrl = resources && !!resourceHrefInfo;
 
 	let resourceIdAttr = '';
 	let icon = '';
@@ -50,8 +49,8 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (isResourceUrl) {
 		resourceId = resourceHrefInfo.itemId;
 
-		const result = options.resources[resourceId];
-		const resourceStatus = utils.resourceStatus(options.ResourceModel, result);
+		const result = resources[resourceId];
+		const resourceStatus = utils.resourceStatus(ResourceModel, result);
 
 		if (result && result.item) {
 			if (!title) title = result.item.title;
@@ -59,7 +58,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			resource = result.item;
 		}
 
-		if (result && resourceStatus !== 'ready' && !options.plainResourceRendering) {
+		if (result && resourceStatus !== 'ready' && !plainResourceRendering) {
 			const icon = utils.resourceStatusFile(resourceStatus);
 
 			return {
@@ -93,12 +92,12 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	// https://github.com/laurent22/joplin/issues/2030
 	href = href.replace(/'/g, '%27');
 
-	let js = `${options.postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
-	if (options.enableLongPress && !!resourceId) {
-		const onClick = `${options.postMessageSyntax}(${JSON.stringify(href)})`;
+	let js = `${postMessageSyntax}(${JSON.stringify(href)}, { resourceId: ${JSON.stringify(resourceId)} }); return false;`;
+	if (enableLongPress && !!resourceId) {
+		const onClick = `${postMessageSyntax}(${JSON.stringify(href)})`;
 		js = createEventHandlingAttrs(resourceId, {
-			enableLongPress: options.enableLongPress ?? false,
-			postMessageSyntax: options.postMessageSyntax ?? 'void',
+			enableLongPress: enableLongPress ?? false,
+			postMessageSyntax: postMessageSyntax ?? 'void',
 			enableEditPopup: false,
 		}, onClick);
 	} else {
@@ -113,29 +112,20 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	if (title) attrHtml.push(`title='${htmlentities(title)}'`);
 	if (mime) attrHtml.push(`type='${htmlentities(mime)}'`);
 
-	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
+	let resourceFullPath = resource && ResourceModel?.fullPath ? ResourceModel.fullPath(resource) : null;
 
-	// Handle overrides
-	let addedHrefAttr = false;
-	if (resourceId && options.itemIdToUrl) {
-		const url = options.itemIdToUrl(resourceId);
-		if (url !== null) {
-			attrHtml.push(`href='${htmlentities(url)}'`);
-			resourceFullPath = url;
-			addedHrefAttr = true;
-		}
-	}
-
-	if (addedHrefAttr) {
-		// Done -- the HREF has already bee set.
-	} else if (options.plainResourceRendering || options.linkRenderingType === LinkRenderingType.HrefHandler) {
+	const customResourceUrl = resourceId ? itemIdToUrl?.(resourceId) : null;
+	if (customResourceUrl) {
+		attrHtml.push(`href='${htmlentities(customResourceUrl)}'`);
+		resourceFullPath = customResourceUrl;
+	} else if (plainResourceRendering || linkRenderingType === LinkRenderingType.HrefHandler) {
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);
 	} else {
 		attrHtml.push(`href='${htmlentities(hrefAttr)}'`);
 	}
 
-	if (js && options.linkRenderingType === LinkRenderingType.JavaScriptHandler) {
+	if (js && linkRenderingType === LinkRenderingType.JavaScriptHandler) {
 		attrHtml.push(js);
 	}
 
