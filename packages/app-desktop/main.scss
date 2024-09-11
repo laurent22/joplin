@@ -143,7 +143,7 @@ a {
 
 
 *:focus-visible {
-	outline: 1px solid var(--joplin-color-warn);
+	outline: 1px solid var(--joplin-focus-outline-color);
 }
 
 // The browser-default focus-visible indicator was originally removed for aesthetic
@@ -247,6 +247,22 @@ a {
 p.info-text {
 	font-style: italic;
 	color: var(--joplin-color-faded);
+}
+
+// Hides elements, but still exposes them to accessibility tools.
+// Avoids `visibility: hidden` and `display: none`, because this may cause some
+// screen readers to ignore the element.
+// See https://www.w3.org/WAI/tutorials/forms/labels/#hiding-label-text
+.visually-hidden {
+	opacity: 0;
+	z-index: -1;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	pointer-events: none;
+	position: absolute;
 }
 
 /* =========================================================================================

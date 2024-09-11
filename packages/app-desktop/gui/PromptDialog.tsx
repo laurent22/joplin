@@ -7,6 +7,8 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import Dialog from './Dialog';
+
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -89,31 +91,6 @@ export default class PromptDialog extends React.Component<Props, any> {
 		this.styleKey_ = styleKey;
 
 		this.styles_ = {};
-
-		const paddingTop = 20;
-
-		this.styles_.modalLayer = {
-			zIndex: 9999,
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			width: width,
-			height: height,
-			boxSizing: 'border-box',
-			backgroundColor: 'rgba(0,0,0,0.6)',
-			display: visible ? 'flex' : 'none',
-			alignItems: 'flex-start',
-			justifyContent: 'center',
-			paddingTop: `${paddingTop}px`,
-		};
-
-		this.styles_.promptDialog = {
-			backgroundColor: theme.backgroundColor,
-			padding: 16,
-			display: 'inline-block',
-			maxWidth: width * 0.5,
-			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
-		};
 
 		this.styles_.button = {
 			minWidth: theme.buttonMinWidth,
@@ -214,10 +191,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		this.styles_.desc = { ...theme.textStyle, marginTop: 10 };
 
+		this.styles_.dialog = { maxWidth: width };
+
 		return this.styles_;
 	}
 
 	public render() {
+		if (!this.state.visible) return null;
+
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 		const buttonTypes = this.props.buttons ? this.props.buttons : ['ok', 'cancel'];
@@ -325,16 +306,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 
 		return (
-			<div className="modal-layer" style={styles.modalLayer}>
-				<div className="modal-dialog" style={styles.promptDialog}>
-					<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
-					<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
-						{inputComp}
-						{descComp}
-					</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>
+			<Dialog className='prompt-dialog' contentStyle={styles.dialog}>
+				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
+				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
+					{inputComp}
+					{descComp}
 				</div>
-			</div>
+				<div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>
+			</Dialog>
 		);
 	}
 }

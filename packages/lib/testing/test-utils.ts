@@ -11,7 +11,7 @@ import uuid from '../uuid';
 import ResourceService from '../services/ResourceService';
 import KeymapService from '../services/KeymapService';
 import KvStore from '../services/KvStore';
-import KeychainServiceDriver from '../services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverNode from '../services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from '../services/keychain/KeychainServiceDriver.dummy';
 import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
@@ -67,6 +67,7 @@ import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
+import { Store } from 'redux';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -280,6 +281,7 @@ async function switchClient(id: number, options: any = null) {
 
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
+	KvStore.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
@@ -295,7 +297,7 @@ async function switchClient(id: number, options: any = null) {
 	Setting.setConstant('pluginDir', pluginDir(id));
 	Setting.setConstant('isSubProfile', false);
 
-	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+	await loadKeychainServiceAndSettings([options.keychainEnabled ? KeychainServiceDriverNode : KeychainServiceDriverDummy]);
 
 	Setting.setValue('sync.target', syncTargetId());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitly set in the test itself
@@ -359,7 +361,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
-		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await loadKeychainServiceAndSettings([options.keychainEnabled ? KeychainServiceDriverNode : KeychainServiceDriverDummy]);
 		Setting.setValue('sync.target', syncTargetId());
 		return;
 	}
@@ -378,7 +380,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 
 	BaseModel.setDb(databases_[id]);
 	await clearSettingFile(id);
-	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+	await loadKeychainServiceAndSettings([options.keychainEnabled ? KeychainServiceDriverNode : KeychainServiceDriverDummy]);
 
 	reg.setDb(databases_[id]);
 	Setting.setValue('sync.target', syncTargetId());
@@ -1043,10 +1045,26 @@ const createTestShareData = (shareId: string): ShareState => {
 	};
 };
 
-const simulateReadOnlyShareEnv = (shareId: string) => {
+const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
 	Setting.setValue('sync.target', 10);
 	Setting.setValue('sync.userId', 'abcd');
-	BaseItem.syncShareCache = createTestShareData(shareId);
+	const shareData = createTestShareData(shareId);
+	BaseItem.syncShareCache = shareData;
+
+	if (store) {
+		store.dispatch({
+			type: 'SHARE_SET',
+			shares: shareData.shares,
+		});
+		store.dispatch({
+			type: 'SHARE_INVITATION_SET',
+			shareInvitations: shareData.shareInvitations,
+		});
+		store.dispatch({
+			type: 'SHARE_USER_SET',
+			shareUsers: shareData.shareUsers,
+		});
+	}
 
 	return () => {
 		BaseItem.syncShareCache = null;
@@ -1055,7 +1073,7 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 };
 
 export const newOcrService = () => {
-	const driver = new OcrDriverTesseract({ createWorker });
+	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
 	return new OcrService(driver);
 };
 
@@ -1072,6 +1090,20 @@ export const mockMobilePlatform = (platform: string) => {
 			shim.isNode = originalIsNode;
 		},
 	};
+};
+
+export const runWithFakeTimers = (callback: ()=> Promise<void>) => {
+	if (typeof jest === 'undefined') {
+		throw new Error('Fake timers are only supported in jest.');
+	}
+
+	jest.useFakeTimers();
+	try {
+		return callback();
+	} finally {
+		jest.runOnlyPendingTimers();
+		jest.useRealTimers();
+	}
 };
 
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

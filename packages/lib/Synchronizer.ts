@@ -131,6 +131,7 @@ export default class Synchronizer {
 	public lockHandler() {
 		if (this.lockHandler_) return this.lockHandler_;
 		this.lockHandler_ = new LockHandler(this.api());
+		this.lockHandler_.enabled = Setting.value('featureFlag.syncLockEnabled');
 		return this.lockHandler_;
 	}
 
@@ -349,7 +350,12 @@ export default class Synchronizer {
 		const password = getMasterPassword(false);
 		if (!password) return localInfo;
 
-		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		try {
+			localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		} catch (error) {
+			// TODO: Remove after RSA encryption is supported on all platforms.
+			logger.error('Failed to generate RSA key pair', error);
+		}
 		return localInfo;
 	}
 

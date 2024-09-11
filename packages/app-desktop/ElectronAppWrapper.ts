@@ -1,6 +1,8 @@
-import Logger from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-import shim from '@joplin/lib/shim';
+import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
+import type ShimType from '@joplin/lib/shim';
+const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import { BrowserWindow, Tray, screen } from 'electron';
@@ -13,6 +15,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
+import handleCustomProtocols, { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
 
 interface RendererProcessQuitReply {
@@ -40,6 +43,9 @@ export default class ElectronAppWrapper {
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
 	private initialCallbackUrl_: string = null;
+	private updaterService_: AutoUpdaterService = null;
+	private customProtocolHandler_: CustomProtocolHandler = null;
+	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
@@ -322,6 +328,10 @@ export default class ElectronAppWrapper {
 			}
 		});
 
+		ipcMain.on('apply-update-now', () => {
+			this.updaterService_.updateApp();
+		});
+
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
 		// and restore the maximized or full screen state
@@ -354,6 +364,7 @@ export default class ElectronAppWrapper {
 	}
 
 	public quit() {
+		this.stopPeriodicUpdateCheck();
 		this.electronApp_.quit();
 	}
 
@@ -452,6 +463,39 @@ export default class ElectronAppWrapper {
 		});
 
 		return false;
+	}
+
+	public initializeCustomProtocolHandler(logger: LoggerWrapper) {
+		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
+	}
+
+	// Electron's autoUpdater has to be init from the main process
+	public async initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
+		if (shim.isWindows() || shim.isMac()) {
+			if (!this.updaterService_) {
+				this.updaterService_ = new AutoUpdaterService(this.win_, logger, devMode, includePreReleases);
+				this.startPeriodicUpdateCheck();
+			}
+		}
+	}
+
+	private startPeriodicUpdateCheck = (updateInterval: number = defaultUpdateInterval): void => {
+		this.stopPeriodicUpdateCheck();
+		this.updatePollInterval_ = setInterval(() => {
+			void this.updaterService_.checkForUpdates();
+		}, updateInterval);
+		setTimeout(this.updaterService_.checkForUpdates, initialUpdateStartup);
+	};
+
+	private stopPeriodicUpdateCheck = (): void => {
+		if (this.updatePollInterval_) {
+			clearInterval(this.updatePollInterval_);
+			this.updatePollInterval_ = null;
+		}
+	};
+
+	public getCustomProtocolHandler() {
+		return this.customProtocolHandler_;
 	}
 
 	public async start() {

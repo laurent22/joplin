@@ -135,7 +135,7 @@ module.exports = {
 
 	// The glob patterns Jest uses to detect test files
 	testMatch: [
-		'**/*.test.js',
+		'**/*.test.(ts|tsx)',
 	],
 
 	// The regexp pattern or array of patterns that Jest uses to detect test files
@@ -154,7 +154,9 @@ module.exports = {
 	// timers: "real",
 
 	// A map from regular expressions to paths to transformers
-	// transform: undefined,
+	transform: {
+		'\\.(ts|tsx)$': 'ts-jest',
+	},
 
 	// An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
 	// unmockedModulePathPatterns: undefined,

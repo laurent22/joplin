@@ -4,11 +4,12 @@ import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from '
 import { useRef, useCallback, useState, useMemo } from 'react';
 import { View, ViewStyle } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
-import ExtendedWebView, { WebViewControl } from '../ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 import useRenderer from './hooks/useRenderer';
 import { OnWebViewMessageHandler } from './types';
-import useRerenderHandler from './hooks/useRerenderHandler';
+import useRerenderHandler, { ResourceInfo } from './hooks/useRerenderHandler';
 import useSource from './hooks/useSource';
 import Setting from '@joplin/lib/models/Setting';
 import uuid from '@joplin/lib/uuid';
@@ -22,8 +23,7 @@ interface Props {
 	noteBody: string;
 	noteMarkupLanguage: MarkupLanguage;
 	highlightedKeywords: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	noteResources: any;
+	noteResources: Record<string, ResourceInfo>;
 	paddingBottom: number;
 	initialScroll: number|null;
 	noteHash: string;

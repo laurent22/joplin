@@ -8,6 +8,16 @@ import { useEffect, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { ExtraContentScriptSource } from '../bundledJs/types';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
+import Resource from '@joplin/lib/models/Resource';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
+import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
+
+
+export interface ResourceInfo {
+	localState: unknown;
+	item: ResourceEntity;
+}
 
 interface Props {
 	renderer: Renderer;
@@ -17,7 +27,7 @@ interface Props {
 	themeId: number;
 
 	highlightedKeywords: string[];
-	noteResources: string[];
+	noteResources: Record<string, ResourceInfo>;
 	noteHash: string;
 	initialScroll: number|undefined;
 
@@ -113,6 +123,25 @@ const useRerenderHandler = (props: Props) => {
 		}
 		let newPluginSettingKeys = pluginSettingKeys;
 
+		// On web, resources are virtual files and thus need to be transferred to the WebView.
+		if (shim.mobilePlatform() === 'web') {
+			for (const [resourceId, resource] of Object.entries(props.noteResources)) {
+				try {
+					await props.renderer.setResourceFile(
+						resourceId,
+						await shim.fsDriver().fileAtPath(Resource.fullPath(resource.item)),
+					);
+				} catch (error) {
+					if (error.code !== 'ENOENT') {
+						throw error;
+					}
+
+					// This can happen if a resource hasn't been downloaded yet
+					logger.warn('Error: Resource file not found (ENOENT)', Resource.fullPath(resource.item), 'for ID', resource.item.id);
+				}
+			}
+		}
+
 		const theme = themeStyle(props.themeId);
 		const config = {
 			// We .stringify the theme to avoid a JSON serialization error involving
@@ -149,6 +178,21 @@ const useRerenderHandler = (props: Props) => {
 					newPluginSettingKeys = { ...newPluginSettingKeys, [`${pluginId}.${settingKey}`]: true };
 					setPluginSettingKeys(newPluginSettingKeys);
 				}
+			},
+			readAssetBlob: (assetPath: string) => {
+				// Built-in assets are in resourceDir, external plugin assets are in cacheDir.
+				const assetsDirs = [Setting.value('resourceDir'), Setting.value('cacheDir')];
+
+				let resolvedPath = null;
+				for (const assetDir of assetsDirs) {
+					resolvedPath ??= resolvePathWithinDir(assetDir, assetPath);
+					if (resolvedPath) break;
+				}
+
+				if (!resolvedPath) {
+					throw new Error(`Failed to load asset at ${assetPath} -- not in any of the allowed asset directories: ${assetsDirs.join(',')}.`);
+				}
+				return shim.fsDriver().fileAtPath(resolvedPath);
 			},
 
 			createEditPopupSyntax,

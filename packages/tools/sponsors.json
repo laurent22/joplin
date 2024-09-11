@@ -81,12 +81,6 @@
 			"imageName": "HostingDe.png"
 		},
 		{
-			"url": "https://grundstueckspreise.info/",
-			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png",
-			"githubUser": "PeterSchumacher22"
-		},
-		{
 			"url": "https://citricsheep.com",
 			"title": "Citric Sheep",
 			"imageName": "CitricSheep.png",
@@ -127,6 +121,18 @@
 			"title": "Route4Me",
 			"imageName": "Route4Me.png",
 			"githubUser": "route4me"
+		},
+		{
+			"url": "https://buyyoutubviews.com",
+			"title": "BYTV",
+			"imageName": "BYTV.png",
+			"githubUser": "bytv1"
+		},
+		{
+			"url": "https://www.famegear.com",
+			"title": "Famegear",
+			"imageName": "Famegear.png",
+			"githubUser": "rankmediateknologi"
 		}
 	],
 	"orgsOld": [
@@ -144,6 +150,12 @@
 			"url": "https://tranio.com/spain/",
 			"title": "Property for sale in Spain",
 			"imageName": "TranioOverseasProperty.jpg"
+		},
+		{
+			"url": "https://grundstueckspreise.info/",
+			"title": "SP Software GmbH",
+			"imageName": "Grundstueckspreise.png",
+			"githubUser": "PeterSchumacher22"
 		}
 	]
 }

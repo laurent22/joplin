@@ -45,7 +45,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		return output;
 	};
 
-	return {
+	const output = {
 		'clientId': {
 			value: '',
 			type: SettingItemType.String,
@@ -423,6 +423,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		notesParent: { value: '', type: SettingItemType.String, public: false },
 
 		richTextBannerDismissed: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
+		'editor.pluginCompatibilityBannerDismissedFor': {
+			value: [] as string[], // List of plugin IDs
+			type: SettingItemType.Array,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			public: false,
+		},
 
 		firstStart: { value: true, type: SettingItemType.Bool, public: false },
 		locale: {
@@ -489,6 +496,34 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => _('When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.'),
 			storage: SettingStorage.File,
 			isGlobal: true,
+		},
+
+		'ocr.languageDataPath': {
+			value: '',
+			type: SettingItemType.String,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Language data URL or path'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ocr.clearLanguageDataCache': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ocr.clearLanguageDataCacheButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Clear cache and re-download language data files'),
 		},
 
 		theme: {
@@ -829,7 +864,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			show: (settings) => {
 				// Hide on iOS due to App Store guidelines. See
 				// https://github.com/laurent22/joplin/pull/10086 for details.
-				return shim.mobilePlatform() !== 'ios' && settings['plugins.pluginSupportEnabled'];
+				// Hide on web -- debugging is enabled anyway, so this is not necessary.
+				return shim.mobilePlatform() === 'android' && settings['plugins.pluginSupportEnabled'];
 			},
 			needRestart: true,
 			advanced: true,
@@ -920,6 +956,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
+		'keychain.lastAvailableDrivers': { value: [] as string[], type: SettingItemType.Array, public: false },
 		'db.ftsEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'db.fuzzySearchEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },
@@ -1195,8 +1232,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop],
-			label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
-			description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
+			label: () => _('Enable spell checking in Markdown editor?'),
+			description: () => _('Checks spelling in most non-code regions of the Markdown editor.'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1225,10 +1262,23 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			section: 'general',
-			public: true,
+			public: false,
 			appTypes: [AppType.Desktop],
 			label: () => 'Opt-in to the editor beta',
-			description: () => 'This beta adds improved accessibility and plugin API compatibility with the mobile editor. If you find bugs, please report them in the Discourse forum.',
+			description: () => 'Currently unused',
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'editor.legacyMarkdown': {
+			advanced: true,
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'general',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Use the legacy Markdown editor'),
+			description: () => _('Enable the the legacy Markdown editor. Some plugins require this editor to function. However, it has accessibility issues and other plugins will not work.'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1483,6 +1533,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			label: () => `${_('Use biometrics to secure access to the app')} (Beta)`,
 			description: () => 'Important: This is a beta feature and it is not compatible with certain devices. If the app no longer starts after enabling this or is very slow to start, please uninstall and reinstall the app.',
+			show: () => shim.mobilePlatform() !== 'web',
 			public: true,
 			appTypes: [AppType.Mobile],
 		},
@@ -1500,6 +1551,31 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			appTypes: [AppType.Mobile],
 		},
+
+		'featureFlag.autoUpdaterServiceEnabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Enable auto-updates',
+			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
+			show: () => shim.isWindows() || shim.isMac(),
+			section: 'application',
+			isGlobal: true,
+		},
+
+		'featureFlag.syncLockEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			label: () => 'Enable sync locks',
+			description: () => 'This is an experimental setting to disable sync locks',
+			section: 'sync',
+			isGlobal: true,
+		},
+
 
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
@@ -1534,8 +1610,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			description: () => _('Leave it blank to download the language files from the default website'),
 			label: () => _('Voice typing language files (URL)'),
-			// For now, iOS doesn't support voice typing.
-			show: () => shim.mobilePlatform() !== 'ios',
+			// For now, iOS and web don't support voice typing.
+			show: () => shim.mobilePlatform() === 'android',
 			section: 'note',
 		},
 
@@ -1565,6 +1641,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 	} satisfies Record<string, SettingItem>;
+
+	for (const [key, md] of Object.entries(output)) {
+		if (key.startsWith('featureFlag.')) (md as SettingItem).advanced = true;
+	}
+
+	return output;
 };
 
 export type BuiltInMetadataKeys = keyof ReturnType<typeof builtInMetadata>;

@@ -1,13 +1,12 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, ListType } from '../../types';
-import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine } from '@codemirror/commands';
+import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine, moveLineUp, moveLineDown } from '@codemirror/commands';
 import {
 	decreaseIndent, increaseIndent,
 	toggleBolded, toggleCode,
 	toggleHeaderLevel, toggleItalicized,
 	toggleList, toggleMath,
 } from '../markdown/markdownCommands';
-import swapLine, { SwapLineDirection } from './swapLine';
 import duplicateLine from './duplicateLine';
 import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
@@ -55,8 +54,8 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.IndentLess]: decreaseIndent,
 	[EditorCommandType.IndentAuto]: indentSelection,
 	[EditorCommandType.InsertNewlineAndIndent]: insertNewlineAndIndent,
-	[EditorCommandType.SwapLineUp]: swapLine(SwapLineDirection.Up),
-	[EditorCommandType.SwapLineDown]: swapLine(SwapLineDirection.Down),
+	[EditorCommandType.SwapLineUp]: moveLineUp,
+	[EditorCommandType.SwapLineDown]: moveLineDown,
 	[EditorCommandType.GoDocEnd]: cursorDocEnd,
 	[EditorCommandType.GoDocStart]: cursorDocStart,
 	[EditorCommandType.GoLineStart]: cursorLineStart,

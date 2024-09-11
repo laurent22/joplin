@@ -1,5 +1,7 @@
 const utils = require('@joplin/tools/gulp/utils');
+const { toForwardSlashes } = require('@joplin/utils/path');
 const fs = require('fs-extra');
+const path = require('path');
 const md5 = require('md5');
 
 const rootDir = `${__dirname}/..`;
@@ -21,19 +23,33 @@ const walk = function(dir) {
 	return results;
 };
 
-async function encodeFile(sourcePath, destPath) {
-	const buffer = await fs.readFile(sourcePath);
-	const hash = md5(buffer.toString('base64'));
-	const js = `module.exports = \`${buffer.toString('base64')}\`;`;
-	const outputPath = `${outputDir}/${destPath}.base64.js`;
-	console.info(`Encoding "${sourcePath}" => "${outputPath}"`);
-	await utils.mkdirp(utils.dirname(outputPath));
-	await fs.writeFile(outputPath, js);
+const readAsBase64 = async (path, mime) => {
+	let buffer;
+	// Normalize line endings to prevent hashes from changing when recompiling on
+	// Windows (if originally compiled on Unix).
+	if (mime === 'application/javascript' || mime.startsWith('text/')) {
+		const file = await fs.readFile(path, 'utf-8');
+		buffer = Buffer.from(file.replace(/\r\n/g, '\n'), 'utf-8');
+	} else {
+		buffer = await fs.readFile(path);
+	}
 
+	return buffer.toString('base64');
+};
+
+async function encodeFile(sourcePath, destPath) {
 	const ext = utils.fileExtension(sourcePath).toLowerCase();
 	let mime = 'application/octet-stream';
 	if (ext === 'js') mime = 'application/javascript';
 	if (ext === 'css') mime = 'text/css';
+
+	const base64Data = await readAsBase64(sourcePath, mime);
+	const hash = md5(base64Data);
+	const js = `module.exports = \`${base64Data}\`;`;
+	const outputPath = `${outputDir}/${destPath}.base64.js`;
+	console.info(`Encoding "${sourcePath}" => "${outputPath}"`);
+	await utils.mkdirp(utils.dirname(outputPath));
+	await fs.writeFile(outputPath, js);
 
 	return {
 		encoding: 'base64',
@@ -69,6 +85,10 @@ async function main() {
 			const hash = md5(hashes.join(''));
 
 			await fs.writeFile(`${outputDir}/index.js`, `module.exports = {\nhash:"${hash}", files: {\n${indexJs.join('\n')}\n}\n};`);
+			await fs.writeFile(`${outputDir}/index.web.js`, `module.exports = ${JSON.stringify({
+				hash,
+				files: files.map(file => toForwardSlashes(path.relative(sourceAssetDir, file))),
+			})}`);
 
 			return;
 		} catch (error) {

@@ -491,6 +491,7 @@ async function main() {
 		`${readmeDir}/privacy.md`,
 		`${readmeDir}/donate.md`,
 		`${readmeDir}/connection_check.md`,
+		`${readmeDir}/licenses.md`,
 		`${readmeDir}/welcome`,
 		`${readmeDir}/news`,
 	], mainContext);

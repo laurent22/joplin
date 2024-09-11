@@ -1,22 +1,24 @@
-const React = require('react');
+import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, BackHandler } from 'react-native';
-import ExtendedWebView, { WebViewControl } from '../../ExtendedWebView';
+import { MutableRefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { BackHandler, Platform } from 'react-native';
+import ExtendedWebView from '../../ExtendedWebView';
+import { WebViewControl } from '../../ExtendedWebView/types';
 import { clearAutosave, writeAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
 import VersionInfo from 'react-native-version-info';
+import { DialogContext } from '../../DialogManager';
 import { OnMessageEvent } from '../../ExtendedWebView/types';
 
 
 const logger = Logger.create('ImageEditor');
 
-type OnSaveCallback = (svgData: string)=> void;
+type OnSaveCallback = (svgData: string)=> Promise<void>;
 type OnCancelCallback = ()=> void;
 
 interface Props {
@@ -85,6 +87,8 @@ const ImageEditor = (props: Props) => {
 	const webviewRef: MutableRefObject<WebViewControl>|null = useRef(null);
 	const [imageChanged, setImageChanged] = useState(false);
 
+	const dialogs = useContext(DialogContext);
+
 	const onRequestCloseEditor = useCallback((promptIfUnsaved: boolean) => {
 		const discardChangesAndClose = async () => {
 			await clearAutosave();
@@ -96,7 +100,7 @@ const ImageEditor = (props: Props) => {
 			return true;
 		}
 
-		Alert.alert(
+		dialogs.prompt(
 			_('Save changes?'), _('This drawing may have unsaved changes.'), [
 				{
 					text: _('Discard changes'),
@@ -114,7 +118,7 @@ const ImageEditor = (props: Props) => {
 			],
 		);
 		return true;
-	}, [webviewRef, props.onExit, imageChanged]);
+	}, [webviewRef, dialogs, props.onExit, imageChanged]);
 
 	useEffect(() => {
 		const hardwareBackPressListener = () => {
@@ -227,6 +231,15 @@ const ImageEditor = (props: Props) => {
 			}));
 		};
 
+		const saveThenClose = (drawing) => {
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					action: 'save-and-close',
+					data: drawing.outerHTML,
+				}),
+			);
+		};
+
 		try {
 			if (window.editorControl === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
@@ -235,6 +248,7 @@ const ImageEditor = (props: Props) => {
 					{
 						saveDrawing,
 						closeEditor,
+						saveThenClose,
 						updateEditorTemplate,
 						setImageHasChanges,
 					},
@@ -268,14 +282,28 @@ const ImageEditor = (props: Props) => {
 	}, [css]);
 
 	const onReadyToLoadData = useCallback(async () => {
+		const getInitialInjectedData = async () => {
+			// On mobile, it's faster to load the image within the WebView with an XMLHttpRequest.
+			// In this case, the image is loaded elsewhere.
+			if (Platform.OS !== 'web') {
+				return undefined;
+			}
+
+			// On web, however, this doesn't work, so the image needs to be loaded here.
+			if (!props.resourceFilename) {
+				return '';
+			}
+			return await shim.fsDriver().readFile(props.resourceFilename, 'utf-8');
+		};
 		// It can take some time for initialSVGData to be transferred to the WebView.
 		// Thus, do so after the main content has been loaded.
 		webviewRef.current.injectJS(`(async () => {
 			if (window.editorControl) {
 				const initialSVGPath = ${JSON.stringify(props.resourceFilename)};
 				const initialTemplateData = ${JSON.stringify(Setting.value('imageeditor.imageTemplate'))};
+				const initialData = ${JSON.stringify(await getInitialInjectedData())};
 
-				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData);
+				editorControl.loadImageOrTemplate(initialSVGPath, initialTemplateData, initialData);
 			}
 		})();`);
 	}, [webviewRef, props.resourceFilename]);
@@ -290,12 +318,15 @@ const ImageEditor = (props: Props) => {
 		const json = JSON.parse(data);
 		if (json.action === 'save') {
 			await clearAutosave();
-			props.onSave(json.data);
+			await props.onSave(json.data);
 		} else if (json.action === 'autosave') {
 			await writeAutosave(json.data);
 		} else if (json.action === 'save-toolbar') {
 			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
 		} else if (json.action === 'close') {
+			onRequestCloseEditor(json.promptIfUnsaved);
+		} else if (json.action === 'save-and-close') {
+			await props.onSave(json.data);
 			onRequestCloseEditor(json.promptIfUnsaved);
 		} else if (json.action === 'ready-to-load-data') {
 			void onReadyToLoadData();

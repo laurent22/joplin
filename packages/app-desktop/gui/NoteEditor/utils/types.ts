@@ -6,6 +6,7 @@ import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
 import { Dispatch } from 'redux';
 import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
 import { DropHandler } from './useDropHandler';
+import { SearchMarkers } from './useSearchMarkers';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -50,7 +51,6 @@ export interface NoteEditorProps {
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
-	richTextBannerDismissed: boolean;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
@@ -120,8 +120,11 @@ export interface NoteBodyEditorProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
+	setLocalSearch(search: string): void;
+	setShowLocalSearch(show: boolean): void;
+	useLocalSearch: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	searchMarkers: any;
+	searchMarkers: SearchMarkers;
 	visiblePanes: string[];
 	keyboardMode: string;
 	resourceInfos: ResourceInfos;
@@ -145,6 +148,7 @@ export interface FormNote {
 	body: string;
 	parent_id: string;
 	is_todo: number;
+	is_conflict?: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	bodyEditorContent?: any;
 	markup_language: number;

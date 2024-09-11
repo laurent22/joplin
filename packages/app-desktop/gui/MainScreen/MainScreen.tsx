@@ -48,6 +48,7 @@ import NotePropertiesDialog from '../NotePropertiesDialog';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from '../NoteListHeader/utils/validateColumns';
 import TrashNotification from '../TrashNotification/TrashNotification';
+import UpdateNotification from '../UpdateNotification/UpdateNotification';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
@@ -85,7 +86,7 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
-	enableBetaMarkdownEditor: boolean;
+	enableLegacyMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
@@ -783,12 +784,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror6' : 'TinyMCE';
 
 				if (this.props.isSafeMode) {
 					bodyEditor = 'PlainText';
-				} else if (this.props.settingEditorCodeView && this.props.enableBetaMarkdownEditor) {
-					bodyEditor = 'CodeMirror6';
+				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
+					bodyEditor = 'CodeMirror5';
 				}
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
@@ -935,6 +936,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					dispatch={this.props.dispatch as any}
 				/>
+				<UpdateNotification themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}
@@ -969,7 +971,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
-		enableBetaMarkdownEditor: state.settings['editor.beta'],
+		enableLegacyMarkdownEditor: state.settings['editor.legacyMarkdown'],
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
 		listRendererId: state.settings['notes.listRendererId'],

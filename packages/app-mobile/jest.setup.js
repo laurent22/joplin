@@ -21,6 +21,7 @@ window.setImmediate = setImmediate;
 
 shimInit({
 	nodeSqlite: sqlite3,
+	appVersion: () => require('./package.json').version,
 	React,
 	sharp,
 });
@@ -58,9 +59,28 @@ jest.mock('@react-native-clipboard/clipboard', () => {
 	return { default: { getString: jest.fn(), setString: jest.fn() } };
 });
 
-jest.mock('react-native-share', () => {
+const emptyMockPackages = [
+	'react-native-share',
+	'react-native-file-viewer',
+	'react-native-image-picker',
+	'react-native-document-picker',
+	'@joplin/react-native-saf-x',
+];
+for (const packageName of emptyMockPackages) {
+	jest.doMock(packageName, () => {
+		return { default: { } };
+	});
+}
+
+jest.mock('react-native-file-viewer', () => {
 	return { default: { } };
 });
+
+jest.mock('react-native-image-picker', () => {
+	return { default: { } };
+});
+
+jest.mock('react-native-document-picker', () => ({ default: { } }));
 
 // Used by the renderer
 jest.doMock('react-native-vector-icons/Ionicons', () => {
@@ -80,6 +100,10 @@ jest.doMock('react-native-fs', () => {
 		CachesDirectoryPath: tempDirectoryPath,
 	};
 });
+
+shim.fsDriver().getCacheDirectoryPath = () => {
+	return tempDirectoryPath;
+};
 
 beforeAll(async () => {
 	await mkdir(tempDirectoryPath);

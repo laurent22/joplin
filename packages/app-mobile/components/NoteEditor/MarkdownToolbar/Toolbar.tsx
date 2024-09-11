@@ -92,6 +92,16 @@ const Toolbar: React.FC<ToolbarProps> = (props: ToolbarProps) => {
 		</View>
 	);
 
+	const overflow = (
+		<ScrollView>
+			<ToolbarOverflowRows
+				buttonGroups={props.buttons}
+				styleSheet={props.styleSheet}
+				onToggleOverflow={onToggleOverflowVisible}
+			/>
+		</ScrollView>
+	);
+
 	return (
 		<View
 			style={{
@@ -106,14 +116,7 @@ const Toolbar: React.FC<ToolbarProps> = (props: ToolbarProps) => {
 			}}
 			onLayout={onContainerLayout}
 		>
-			<ScrollView>
-				<ToolbarOverflowRows
-					buttonGroups={props.buttons}
-					styleSheet={props.styleSheet}
-					visible={overflowButtonsVisible}
-					onToggleOverflow={onToggleOverflowVisible}
-				/>
-			</ScrollView>
+			{ overflowButtonsVisible ? overflow : null }
 			{ !overflowButtonsVisible ? mainButtonRow : null }
 		</View>
 	);

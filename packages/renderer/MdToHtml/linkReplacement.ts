@@ -1,3 +1,4 @@
+import { LinkRenderingType } from '../MdToHtml';
 import { ItemIdToUrlHandler, OptionsResourceModel } from '../types';
 import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
@@ -11,7 +12,7 @@ export interface Options {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	resources?: any;
 	ResourceModel?: OptionsResourceModel;
-	linkRenderingType?: number;
+	linkRenderingType?: LinkRenderingType;
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
@@ -27,16 +28,14 @@ export interface LinkReplacementResult {
 }
 
 export default function(href: string, options: Options = null): LinkReplacementResult {
-	options = {
-		title: '',
-		resources: {},
-		ResourceModel: null,
-		linkRenderingType: 1,
-		plainResourceRendering: false,
-		postMessageSyntax: 'postMessage',
-		enableLongPress: false,
-		...options,
-	};
+	options = { ...options };
+	options.title ??= '';
+	options.resources ??= {};
+	options.ResourceModel ??= null;
+	options.linkRenderingType ??= LinkRenderingType.JavaScriptHandler;
+	options.plainResourceRendering ??= false;
+	options.postMessageSyntax ??= 'postMessage';
+	options.enableLongPress ??= false;
 
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 	const isResourceUrl = options.resources && !!resourceHrefInfo;
@@ -116,16 +115,28 @@ export default function(href: string, options: Options = null): LinkReplacementR
 
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 
+	// Handle overrides
+	let addedHrefAttr = false;
 	if (resourceId && options.itemIdToUrl) {
 		const url = options.itemIdToUrl(resourceId);
-		attrHtml.push(`href='${htmlentities(url)}'`);
-		resourceFullPath = url;
-	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {
+		if (url !== null) {
+			attrHtml.push(`href='${htmlentities(url)}'`);
+			resourceFullPath = url;
+			addedHrefAttr = true;
+		}
+	}
+
+	if (addedHrefAttr) {
+		// Done -- the HREF has already bee set.
+	} else if (options.plainResourceRendering || options.linkRenderingType === LinkRenderingType.HrefHandler) {
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);
 	} else {
 		attrHtml.push(`href='${htmlentities(hrefAttr)}'`);
-		if (js) attrHtml.push(js);
+	}
+
+	if (js && options.linkRenderingType === LinkRenderingType.JavaScriptHandler) {
+		attrHtml.push(js);
 	}
 
 	return {

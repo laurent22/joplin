@@ -110,6 +110,7 @@ export function extraStyles(theme: Theme) {
 	const bgColor4 = theme.backgroundColor4;
 	const borderColor4: string = Color(theme.color).alpha(0.3);
 	const iconColor = Color(theme.color).alpha(0.8);
+	const focusOutlineColor = theme.colorWarn;
 
 	const backgroundColor5 = theme.backgroundColor5 ?? theme.color4;
 	const backgroundColorHover5 = Color(backgroundColor5).darken(0.2).hex();
@@ -230,6 +231,7 @@ export function extraStyles(theme: Theme) {
 		backgroundColor5,
 		backgroundColorHover5,
 		backgroundColorActive5,
+		focusOutlineColor,
 
 		icon: {
 			...globalStyle.icon,

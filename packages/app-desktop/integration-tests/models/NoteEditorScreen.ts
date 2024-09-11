@@ -7,22 +7,33 @@ export default class NoteEditorPage {
 	public readonly noteTitleInput: Locator;
 	public readonly attachFileButton: Locator;
 	public readonly toggleEditorsButton: Locator;
+	public readonly toggleEditorLayoutButton: Locator;
+	public readonly editorSearchInput: Locator;
+	public readonly viewerSearchInput: Locator;
 	private readonly containerLocator: Locator;
 
 	public constructor(private readonly page: Page) {
 		this.containerLocator = page.locator('.rli-editor');
-		this.codeMirrorEditor = this.containerLocator.locator('.codeMirrorEditor');
+		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.noteTitleInput = this.containerLocator.locator('.title-input');
-		this.attachFileButton = this.containerLocator.locator('[title^="Attach file"]');
-		this.toggleEditorsButton = this.containerLocator.locator('[title^="Toggle editors"]');
+		this.attachFileButton = this.containerLocator.getByRole('button', { name: 'Attach file' });
+		this.toggleEditorsButton = this.containerLocator.getByRole('button', { name: 'Toggle editors' });
+		this.toggleEditorLayoutButton = this.containerLocator.getByRole('button', { name: 'Toggle editor layout' });
+		// The editor and viewer have slightly different search UI
+		this.editorSearchInput = this.containerLocator.getByPlaceholder('Find');
+		this.viewerSearchInput = this.containerLocator.getByPlaceholder('Search...');
+	}
+
+	public toolbarButtonLocator(title: string) {
+		return this.containerLocator.getByRole('button', { name: title });
 	}
 
 	public getNoteViewerIframe() {
 		// The note viewer can change content when the note re-renders. As such,
 		// a new locator needs to be created after re-renders (and this can't be a
 		// static property).
-		return this.page.frame({ url: /.*note-viewer[/\\]index.html.*/ });
+		return this.page.frameLocator('[src$="note-viewer/index.html"]');
 	}
 
 	public getTinyMCEFrameLocator() {

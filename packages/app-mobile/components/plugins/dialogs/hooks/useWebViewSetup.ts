@@ -29,8 +29,16 @@ const useWebViewSetup = (props: Props) => {
 				jsPaths.push(resolvedPath);
 			}
 		}
-		void dialogControl.includeCssFiles(cssPaths);
-		void dialogControl.includeJsFiles(jsPaths);
+		if (shim.mobilePlatform() === 'web') {
+			void (async () => {
+				for (const path of [...jsPaths, ...cssPaths]) {
+					void dialogControl.runScript(path, await shim.fsDriver().readFile(path, 'utf-8'));
+				}
+			})();
+		} else {
+			void dialogControl.includeCssFiles(cssPaths);
+			void dialogControl.includeJsFiles(jsPaths);
+		}
 	}, [dialogControl, scriptPaths, props.webViewLoadCount, pluginBaseDir]);
 
 	useEffect(() => {

@@ -4,7 +4,6 @@ import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
 import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
 import { CreateFromPdfOptions, Implementation as ImagingImplementation } from '@joplin/lib/services/plugins/api/JoplinImaging';
-import RNVersionInfo from 'react-native-version-info';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -32,7 +31,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 
 	public get versionInfo(): VersionInfo {
 		return {
-			version: RNVersionInfo.appVersion,
+			version: shim.appVersion(),
 			syncVersion: Setting.value('syncVersion'),
 			profileVersion: reg.db().version(),
 			platform: 'mobile',

@@ -19,6 +19,12 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
+export interface Keytar {
+	setPassword(key: string, client: string, password: string): Promise<void>;
+	getPassword(key: string, client: string): Promise<string|null>;
+	deletePassword(key: string, client: string): Promise<void>;
+}
+
 interface FetchOptions {
 	method?: string;
 	headers?: Record<string, string>;
@@ -90,7 +96,7 @@ const shim = {
 	},
 
 	isLinux: () => {
-		return process && process.platform === 'linux';
+		return typeof process !== 'undefined' && process.platform === 'linux';
 	},
 
 	isGNOME: () => {
@@ -117,15 +123,15 @@ const shim = {
 	},
 
 	isFreeBSD: () => {
-		return process && process.platform === 'freebsd';
+		return typeof process !== 'undefined' && process.platform === 'freebsd';
 	},
 
 	isWindows: () => {
-		return process && process.platform === 'win32';
+		return typeof process !== 'undefined' && process.platform === 'win32';
 	},
 
 	isMac: () => {
-		return process && process.platform === 'darwin';
+		return typeof process !== 'undefined' && process.platform === 'darwin';
 	},
 
 	platformName: () => {
@@ -134,7 +140,7 @@ const shim = {
 		if (shim.isWindows()) return 'win32';
 		if (shim.isLinux()) return 'linux';
 		if (shim.isFreeBSD()) return 'freebsd';
-		if (process && process.platform) return process.platform;
+		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
 	},
 
@@ -396,6 +402,10 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	restartApp: (): void => {
+		throw new Error('Not implemented');
+	},
+
 	// setTimeout/setInterval are in the shim so that in Electron renderer process
 	// we can force the use of the Node timers from the "timers" package. This is to go around
 	// a bug that happened while testing plugins (on WSL2 / X-Server, so same as Linux):
@@ -481,8 +491,7 @@ const shim = {
 		return (shim.isWindows() || shim.isMac()) && !shim.isPortable();
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keytar: (): any => {
+	keytar: (): Keytar => {
 		throw new Error('Not implemented');
 	},
 

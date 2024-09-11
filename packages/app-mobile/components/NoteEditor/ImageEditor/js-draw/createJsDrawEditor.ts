@@ -91,11 +91,15 @@ export const createJsDrawEditor = (
 		}
 	};
 
-	const saveNow = () => {
-		callbacks.saveDrawing(editor.toSVG({
+	const getEditorSVG = () => {
+		return editor.toSVG({
 			// Grow small images to this minimum size
 			minDimension: 50,
-		}), false);
+		});
+	};
+
+	const saveNow = () => {
+		callbacks.saveDrawing(getEditorSVG(), false);
 
 		// The image is now up-to-date with the resource
 		setImageHasChanges(false);
@@ -149,11 +153,13 @@ export const createJsDrawEditor = (
 
 	const editorControl = {
 		editor,
-		loadImageOrTemplate: async (resourceUrl: string, templateData: string) => {
+		loadImageOrTemplate: async (resourceUrl: string, templateData: string, svgData: string|undefined) => {
 			// loadFromSVG shows its own loading message. Hide the original.
 			editor.hideLoadingWarning();
 
-			const svgData = await fetchInitialSvgData(resourceUrl);
+			// On mobile, fetching the SVG data is much faster than transferring it via IPC. However, fetch
+			// doesn't work for this when running in a web browser (virtual file system).
+			svgData ??= await fetchInitialSvgData(resourceUrl);
 
 			// Load from a template if no initial data
 			if (svgData === '') {
@@ -175,13 +181,7 @@ export const createJsDrawEditor = (
 		},
 		saveNow,
 		saveThenExit: async () => {
-			saveNow();
-
-			// Don't show a confirmation dialog -- it's possible that
-			// the code outside of the WebView still thinks changes haven't
-			// been saved:
-			const showConfirmation = false;
-			callbacks.closeEditor(showConfirmation);
+			callbacks.saveThenClose(getEditorSVG());
 		},
 	};
 

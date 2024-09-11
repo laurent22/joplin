@@ -51,7 +51,7 @@ export default class Joplin {
 		this.imaging_ = new JoplinImaging(implementation.imaging);
 		this.workspace_ = new JoplinWorkspace(plugin, store);
 		this.filters_ = new JoplinFilters();
-		this.commands_ = new JoplinCommands();
+		this.commands_ = new JoplinCommands(plugin);
 		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);

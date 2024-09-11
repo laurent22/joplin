@@ -1,7 +1,7 @@
 const Resource = require('../models/Resource').default;
 const Setting = require('../models/Setting').default;
 const shim = require('../shim').default;
-const { reg } = require('../registry.js');
+const { reg } = require('../registry');
 const { fileExtension } = require('../path-utils');
 
 const script = {};

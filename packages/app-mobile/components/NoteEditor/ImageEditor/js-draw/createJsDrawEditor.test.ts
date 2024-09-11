@@ -22,6 +22,7 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 
 	const allCallbacks: ImageEditorCallbacks = {
 		saveDrawing: () => {},
+		saveThenClose: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
 		updateEditorTemplate: ()=> {},
@@ -58,7 +59,7 @@ describe('createJsDrawEditor', () => {
 		});
 
 		// Load no image and an empty template so that autosave can start
-		await editorControl.loadImageOrTemplate('', '{}');
+		await editorControl.loadImageOrTemplate('', '{}', undefined);
 
 		expect(calledAutosaveCount).toBe(0);
 

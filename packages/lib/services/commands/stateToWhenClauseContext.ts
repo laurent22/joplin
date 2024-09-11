@@ -68,7 +68,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Current location
 		inConflictFolder: state.selectedFolderId === Folder.conflictFolderId(),
-		inTrash: state.selectedFolderId === getTrashFolderId() || commandFolder && !!commandFolder.deleted_time,
+		inTrash: !!((state.selectedFolderId === getTrashFolderId() && !!selectedNote?.deleted_time) || commandFolder && !!commandFolder.deleted_time),
 
 		// Note selection
 		oneNoteSelected: !!selectedNote,
@@ -101,7 +101,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 		folderIsDeleted: commandFolder ? !!commandFolder.deleted_time : false,
 		folderIsTrash: commandFolder ? commandFolder.id === getTrashFolderId() : false,
-		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
 
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,

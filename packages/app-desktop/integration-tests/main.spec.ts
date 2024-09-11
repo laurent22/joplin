@@ -1,6 +1,5 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-import SettingsScreen from './models/SettingsScreen';
 import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
@@ -8,6 +7,7 @@ import createStartupArgs from './util/createStartupArgs';
 import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
+import getImageSourceSize from './util/getImageSourceSize';
 
 
 test.describe('main', () => {
@@ -24,7 +24,7 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
-		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
+		await expect(mainScreen.noteList.getNoteItemByTitle('Test note')).toBeVisible();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();
@@ -62,12 +62,19 @@ test.describe('main', () => {
 			'',
 			'Sum: $\\sum_{x=0}^{100} \\tan x$',
 		];
+		let firstLine = true;
 		for (const line of noteText) {
 			if (line) {
-				await mainWindow.keyboard.press('Shift+Tab');
+				if (!firstLine) {
+					// Remove any auto-indentation, but avoid pressing shift-tab at
+					// the beginning of the editor.
+					await mainWindow.keyboard.press('Shift+Tab');
+				}
+
 				await mainWindow.keyboard.type(line);
 			}
 			await mainWindow.keyboard.press('Enter');
+			firstLine = false;
 		}
 
 		// Should render mermaid
@@ -108,27 +115,10 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const getImageSize = async () => {
-			const viewerFrame = editor.getNoteViewerIframe();
-			const renderedImage = viewerFrame.getByAltText(filename);
+		const viewerFrame = editor.getNoteViewerIframe();
+		const renderedImage = viewerFrame.getByAltText(filename);
 
-			// Use state: 'attached' -- we don't need the image to be on the screen (just present
-			// in the DOM).
-			await renderedImage.waitFor({ state: 'attached' });
-
-			// We load a copy of the image to avoid returning an overriden width set with
-			//    .width = some_number
-			return await renderedImage.evaluate((originalImage: HTMLImageElement) => {
-				return new Promise<[number, number]>(resolve => {
-					const testImage = new Image();
-					testImage.onload = () => {
-						resolve([testImage.width, testImage.height]);
-					};
-					testImage.src = originalImage.src;
-				});
-			});
-		};
-		const fullSize = await getImageSize();
+		const fullSize = await getImageSourceSize(renderedImage);
 
 		// To make it easier to find the image (one image per note), we switch to a new, empty note.
 		await mainScreen.createNewNote('Image resize test (part 2)');
@@ -138,42 +128,12 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^Yes/i);
 		await editor.attachFileButton.click();
 
-		const resizedSize = await getImageSize();
+		const resizedSize = await getImageSourceSize(renderedImage);
 		expect(resizedSize[0]).toBeLessThan(fullSize[0]);
 		expect(resizedSize[1]).toBeLessThan(fullSize[1]);
 
 		// Should keep aspect ratio (regression test for #9597)
 		expect(fullSize[0] / resizedSize[0]).toBeCloseTo(fullSize[1] / resizedSize[1]);
-	});
-
-	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
-		await mainScreen.waitFor();
-
-		// Sort order buttons should be visible by default
-		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).toBeVisible();
-
-		await mainScreen.openSettings(electronApp);
-
-		// Should be on the settings screen
-		const settingsScreen = new SettingsScreen(mainWindow);
-		await settingsScreen.waitFor();
-
-		// Open the appearance tab
-		await settingsScreen.appearanceTabButton.click();
-
-		// Find the sort order visible checkbox
-		const sortOrderVisibleCheckbox = mainWindow.getByLabel(/^Show sort order/);
-
-		await expect(sortOrderVisibleCheckbox).toBeChecked();
-		await sortOrderVisibleCheckbox.click();
-		await expect(sortOrderVisibleCheckbox).not.toBeChecked();
-
-		// Save settings & close
-		await settingsScreen.okayButton.click();
-		await mainScreen.waitFor();
-
-		await expect(mainScreen.noteListContainer.locator('[title^="Toggle sort order"]')).not.toBeVisible();
 	});
 
 	test('clicking on an external link should try to launch a browser', async ({ electronApp, mainWindow }) => {

@@ -21,7 +21,7 @@ interface Props {
 export const IconSelector = (props: Props) => {
 	const [emojiButtonClassReady, setEmojiButtonClassReady] = useState<boolean>(false);
 	const [picker, setPicker] = useState<EmojiButton>();
-	const buttonRef = useRef(null);
+	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const loadScripts = async () => {
@@ -61,6 +61,7 @@ export const IconSelector = (props: Props) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const p: EmojiButton = new (window as any).EmojiButton({
 			zIndex: 10000,
+			rootElement: buttonRef.current?.parentElement,
 		});
 
 		const onEmoji = (selection: FolderIcon) => {
@@ -73,6 +74,7 @@ export const IconSelector = (props: Props) => {
 
 		return () => {
 			p.off('emoji', onEmoji);
+			p.destroyPicker();
 		};
 	}, [emojiButtonClassReady, props.onChange]);
 

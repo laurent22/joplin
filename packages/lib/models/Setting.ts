@@ -17,7 +17,7 @@ const logger = Logger.create('models/Setting');
 
 export * from './settings/types';
 
-type SettingValueType<T extends string> = (
+export type SettingValueType<T extends string> = (
 	T extends BuiltInMetadataKeys
 		? BuiltInMetadataValues[T]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
@@ -142,7 +142,6 @@ export type SettingMetadataSection = {
 export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
-
 	public static schemaUrl = 'https://joplinapp.org/schema/settings.json';
 
 	// For backward compatibility
@@ -758,6 +757,8 @@ class Setting extends BaseModel {
 		const output = [];
 
 		for (const value of order) {
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
+
 			output.push({
 				[options.valueKey]: value,
 				[options.labelKey]: enumOptions[value],
@@ -957,7 +958,7 @@ class Setting extends BaseModel {
 		}
 
 		const queries = [];
-		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
+		queries.push(`DELETE FROM settings WHERE key IN ('${keys.join('\',\'')}')`);
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = { ...this.cache_[i] };
@@ -974,19 +975,10 @@ class Setting extends BaseModel {
 				// Also we don't control what happens on the keychain - the values can be edited or deleted
 				// outside the application. For that reason, we rewrite it every time the values are saved,
 				// even if, internally, they haven't changed.
-				// As an optimisation, we check if the value exists on the keychain before writing it again.
 				try {
 					const passwordName = `setting.${s.key}`;
-					const currentValue = await this.keychainService().password(passwordName);
-					if (currentValue !== valueAsString) {
-						const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
-						if (wasSet) continue;
-					} else {
-						// The value is already in the keychain - so nothing to do
-						// Make sure to `continue` here otherwise it will save the password
-						// in clear text in the database.
-						continue;
-					}
+					const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
+					if (wasSet) continue;
 				} catch (error) {
 					logger.error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
 				}
