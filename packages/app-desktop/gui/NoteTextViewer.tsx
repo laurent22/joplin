@@ -26,8 +26,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	private initialized_ = false;
 	private domReady_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private webviewRef_: any;
+	private webviewRef_: React.RefObject<HTMLIFrameElement>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
@@ -134,6 +133,10 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			focus('NoteTextViewer::focus', this.webviewRef_.current);
 			this.send('focus');
 		}
+	}
+
+	public hasFocus() {
+		return this.webviewRef_.current?.contains(document.activeElement);
 	}
 
 	public tryInit() {

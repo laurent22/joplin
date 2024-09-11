@@ -3,6 +3,7 @@ import MainScreen from './models/MainScreen';
 import { join } from 'path';
 import getImageSourceSize from './util/getImageSourceSize';
 import setFilePickerResponse from './util/setFilePickerResponse';
+import activateMainMenuItem from './util/activateMainMenuItem';
 
 
 test.describe('markdownEditor', () => {
@@ -212,6 +213,40 @@ test.describe('markdownEditor', () => {
 		await noteEditor.toggleEditorLayoutButton.click();
 		await expect(noteEditor.codeMirrorEditor).toBeVisible();
 		await expect(noteEditor.editorSearchInput).not.toBeVisible();
+	});
+
+	test('should move focus when the visible editor panes change', async ({ mainWindow, electronApp }) => {
+		const mainScreen = new MainScreen(mainWindow);
+		await mainScreen.waitFor();
+		const noteEditor = mainScreen.noteEditor;
+
+		await mainScreen.createNewNote('Note');
+
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('test');
+		const focusInMarkdownEditor = noteEditor.codeMirrorEditor.locator(':focus');
+		await expect(focusInMarkdownEditor).toBeAttached();
+
+		const toggleEditorLayout = () => activateMainMenuItem(electronApp, 'Toggle editor layout');
+
+		// Editor only
+		await toggleEditorLayout();
+		await expect(noteEditor.noteViewerContainer).not.toBeVisible();
+		// Markdown editor should be focused
+		await expect(focusInMarkdownEditor).toBeAttached();
+
+		// Viewer only
+		await toggleEditorLayout();
+		await expect(noteEditor.codeMirrorEditor).not.toBeVisible();
+		// Viewer should be focused
+		await expect(noteEditor.noteViewerContainer).toBeFocused();
+
+		// Viewer and editor
+		await toggleEditorLayout();
+		await expect(noteEditor.noteViewerContainer).toBeAttached();
+		await expect(noteEditor.codeMirrorEditor).toBeVisible();
+		// Editor should be focused
+		await expect(focusInMarkdownEditor).toBeAttached();
 	});
 });
 
