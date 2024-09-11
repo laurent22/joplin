@@ -25,7 +25,7 @@ test.describe('markdownEditor', () => {
 			await importedHtmlFileItem.click({ timeout: 300 });
 		}).toPass();
 
-		const viewerFrame = mainScreen.noteEditor.getNoteViewerIframe();
+		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		// Should render headers
 		await expect(viewerFrame.locator('h1')).toHaveText('Test HTML file!');
 
@@ -45,7 +45,7 @@ test.describe('markdownEditor', () => {
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'small-pdf.pdf')]);
 		await editor.attachFileButton.click();
 
-		const viewerFrame = mainScreen.noteEditor.getNoteViewerIframe();
+		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		const pdfLink = viewerFrame.getByText('small-pdf.pdf');
 		await expect(pdfLink).toBeVisible();
 
@@ -107,7 +107,7 @@ test.describe('markdownEditor', () => {
 		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'video.mp4')]);
 		await editor.attachFileButton.click();
 
-		const videoLocator = editor.getNoteViewerIframe().locator('video');
+		const videoLocator = editor.getNoteViewerFrameLocator().locator('video');
 		const expectVideoToRender = async () => {
 			await expect(videoLocator).toBeSeekableMediaElement(6.9, 7);
 		};
@@ -173,7 +173,7 @@ test.describe('markdownEditor', () => {
 		await mainWindow.keyboard.press('Enter');
 		await mainWindow.keyboard.type('This is a test of search. `Test inline code`');
 
-		const viewer = noteEditor.getNoteViewerIframe();
+		const viewer = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewer.locator('h1')).toHaveText('Testing');
 
 		const matches = viewer.locator('mark');

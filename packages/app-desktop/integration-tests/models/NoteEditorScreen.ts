@@ -31,11 +31,11 @@ export default class NoteEditorPage {
 		return this.containerLocator.getByRole('button', { name: title });
 	}
 
-	public getNoteViewerIframe() {
+	public getNoteViewerFrameLocator() {
 		// The note viewer can change content when the note re-renders. As such,
 		// a new locator needs to be created after re-renders (and this can't be a
 		// static property).
-		return this.noteViewerContainer.frameLocator('iframe');
+		return this.noteViewerContainer.frameLocator(':scope');
 	}
 
 	public getTinyMCEFrameLocator() {
