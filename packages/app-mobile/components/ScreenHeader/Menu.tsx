@@ -78,6 +78,7 @@ const MenuComponent: React.FC<Props> = props => {
 
 	const menuOptionComponents: React.ReactNode[] = [];
 
+	// When undefined/null: Don't auto-focus anything.
 	const [refocusCounter, setRefocusCounter] = useState<number|undefined>(undefined);
 
 	let key = 0;
