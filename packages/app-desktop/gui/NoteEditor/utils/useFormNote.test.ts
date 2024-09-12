@@ -5,6 +5,7 @@ import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { join } from 'path';
+import { formNoteToNote } from '.';
 
 const defaultFormNoteProps: HookDependencies = {
 	syncStarted: false,
@@ -77,6 +78,39 @@ describe('useFormNote', () => {
 				encryption_applied: 0,
 				title: 'Test Note!',
 			});
+		});
+
+		formNote.unmount();
+	});
+
+
+	// Lacking is_conflict has previously caused UI issues. See https://github.com/laurent22/joplin/pull/10913
+	// for details.
+	it('should preserve value of is_conflict on save', async () => {
+		const testNote = await Note.save({ title: 'Test Note!', is_conflict: 1 });
+
+		const makeFormNoteProps = (): HookDependencies => {
+			return {
+				...defaultFormNoteProps,
+				noteId: testNote.id,
+			};
+		};
+
+		const formNote = renderHook(props => useFormNote(props), {
+			initialProps: makeFormNoteProps(),
+		});
+		await formNote.waitFor(() => {
+			expect(formNote.result.current.formNote).toMatchObject({
+				is_conflict: 1,
+				title: testNote.title,
+			});
+		});
+
+		// Should preserve is_conflict after save.
+		expect(await formNoteToNote(formNote.result.current.formNote)).toMatchObject({
+			is_conflict: 1,
+			deleted_time: 0,
+			title: testNote.title,
 		});
 
 		formNote.unmount();

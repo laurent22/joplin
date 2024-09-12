@@ -9,6 +9,7 @@ import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { FocusElementOptions } from '../../../../../commands/focusElement';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -103,9 +104,15 @@ const useEditorCommands = (props: Props) => {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
 				}
 			},
-			'editor.focus': () => {
+			'editor.focus': (options?: FocusElementOptions) => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
 					focus('useEditorCommands::editor.focus', editorRef.current.editor);
+					if (options?.moveCursorToStart) {
+						editorRef.current.editor.dispatch({
+							selection: { anchor: 0 },
+							scrollIntoView: true,
+						});
+					}
 				} else {
 					// If we just call focus() then the iframe is focused,
 					// but not its content, such that scrolling up / down

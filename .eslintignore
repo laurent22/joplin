@@ -297,6 +297,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/shouldPasteResources.
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/shouldPasteResources.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
@@ -341,8 +342,10 @@ packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
 packages/app-desktop/gui/NoteList/utils/types.js
+packages/app-desktop/gui/NoteList/utils/useActiveDescendantId.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
+packages/app-desktop/gui/NoteList/utils/useFocusVisible.js
 packages/app-desktop/gui/NoteList/utils/useItemCss.js
 packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
@@ -363,6 +366,7 @@ packages/app-desktop/gui/NoteListHeader/utils/useContextMenu.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.test.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.js
 packages/app-desktop/gui/NoteListItem/NoteListItem.js
+packages/app-desktop/gui/NoteListItem/utils/getNoteElementIdFromJoplinId.js
 packages/app-desktop/gui/NoteListItem/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.test.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.js
@@ -457,6 +461,7 @@ packages/app-desktop/gui/style/StyledLink.js
 packages/app-desktop/gui/style/StyledMessage.js
 packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
+packages/app-desktop/gui/utils/announceForAccessibility.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
@@ -467,6 +472,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/noteList.spec.js
@@ -485,6 +491,7 @@ packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
+packages/app-desktop/services/autoUpdater/AutoUpdaterService.test.js
 packages/app-desktop/services/autoUpdater/AutoUpdaterService.js
 packages/app-desktop/services/bridge.js
 packages/app-desktop/services/commands/stateToWhenClauseContext.js
@@ -605,6 +612,7 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ScreenHeader/Menu.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.js
 packages/app-mobile/components/ScreenHeader/WarningBox.js
@@ -798,8 +806,6 @@ packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
-packages/editor/CodeMirror/editorCommands/swapLine.test.js
-packages/editor/CodeMirror/editorCommands/swapLine.js
 packages/editor/CodeMirror/getScrollFraction.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/defaultLanguage.js
@@ -846,6 +852,7 @@ packages/editor/CodeMirror/utils/formatting/types.js
 packages/editor/CodeMirror/utils/getSearchState.js
 packages/editor/CodeMirror/utils/growSelectionToNode.js
 packages/editor/CodeMirror/utils/handlePasteEvent.js
+packages/editor/CodeMirror/utils/isCursorAtBeginning.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/searchExtension.js
 packages/editor/CodeMirror/utils/setupVim.js
@@ -911,6 +918,7 @@ packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/synchronize.js
+packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/config/config-shared.js
@@ -1429,7 +1437,23 @@ packages/tools/generate-database-types.js
 packages/tools/generate-images.js
 packages/tools/git-changelog.test.js
 packages/tools/git-changelog.js
-packages/tools/licenseChecker.js
+packages/tools/licenses/getLicenses.js
+packages/tools/licenses/licenseChecker.js
+packages/tools/licenses/licenseOverrides/fontAwesomeOverride/index.js
+packages/tools/licenses/licenseOverrides/fontIsoOverride/index.js
+packages/tools/licenses/licenseOverrides/index.js
+packages/tools/licenses/licenseOverrides/materialCommunityIconsOverride/index.js
+packages/tools/licenses/licenseOverrides/materialIconsOverride/index.js
+packages/tools/licenses/licenseOverrides/types.js
+packages/tools/licenses/licenseStatementBuilder.js
+packages/tools/licenses/licenseText/agplv3.js
+packages/tools/licenses/licenseText/apache2.js
+packages/tools/licenses/licenseText/mit.js
+packages/tools/licenses/utils/equalIgnoringSpacing.js
+packages/tools/licenses/utils/matchApache2.test.js
+packages/tools/licenses/utils/matchApache2.js
+packages/tools/licenses/utils/matchMit.test.js
+packages/tools/licenses/utils/matchMit.js
 packages/tools/packageJsonLint.js
 packages/tools/postPreReleasesToForum.js
 packages/tools/release-android.js

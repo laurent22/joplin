@@ -70,6 +70,7 @@ describe('PluginStates.installed', () => {
 		for (const pluginId of PluginService.instance().pluginIds) {
 			await act(() => PluginService.instance().unloadPlugin(pluginId));
 		}
+		jest.useRealTimers();
 	});
 
 	it.each([

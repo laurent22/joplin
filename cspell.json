@@ -61,6 +61,7 @@
 		"/packages/turndown/config",
 		"/readme/_i18n",
 		"/readme/about/changelog/desktop.md",
+		"/readme/licenses.md",
 		"/readme/i18n",
 		"cspell.json",
 		"node_modules"

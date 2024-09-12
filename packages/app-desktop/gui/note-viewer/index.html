@@ -46,9 +46,6 @@
 	<script src="./scrollmap.js"></script>
 
 	<script>
-	// Fixes a warning when loading some TypeScript plugins generated with webpack.
-	window.exports = {};
-
 	// This is function used internally to send message from the webview to
 	// the host.
 	const ipcProxySendToHost = (methodName, arg) => {
@@ -372,7 +369,7 @@
 		ipc.focus = (event) => {
 			const dummyID = 'joplin-content-focus-dummy';
 			if (! document.getElementById(dummyID)) {
-				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#">focus dummy</a></div>';
+				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#">Note viewer top</a></div>';
 				contentElement.insertAdjacentHTML("afterbegin", focusDummy);
 			}
 			const scrollTop = contentElement.scrollTop;

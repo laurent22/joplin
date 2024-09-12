@@ -24,7 +24,7 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
-		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
+		await expect(mainScreen.noteList.getNoteItemByTitle('Test note')).toBeVisible();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();
@@ -62,12 +62,19 @@ test.describe('main', () => {
 			'',
 			'Sum: $\\sum_{x=0}^{100} \\tan x$',
 		];
+		let firstLine = true;
 		for (const line of noteText) {
 			if (line) {
-				await mainWindow.keyboard.press('Shift+Tab');
+				if (!firstLine) {
+					// Remove any auto-indentation, but avoid pressing shift-tab at
+					// the beginning of the editor.
+					await mainWindow.keyboard.press('Shift+Tab');
+				}
+
 				await mainWindow.keyboard.type(line);
 			}
 			await mainWindow.keyboard.press('Enter');
+			firstLine = false;
 		}
 
 		// Should render mermaid

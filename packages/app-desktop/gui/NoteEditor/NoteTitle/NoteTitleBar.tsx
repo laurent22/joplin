@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useRef } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
@@ -75,23 +75,47 @@ function styles_(props: Props) {
 	});
 }
 
-export default function NoteTitleBar(props: Props) {
-	const styles = styles_(props);
+const useReselectHandlers = () => {
+	const lastTitleFocus = useRef([0, 0]);
+	const lastTitleValue = useRef('');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTitleKeydown = useCallback((event: any) => {
-		const keyCode = event.keyCode;
+	const onTitleBlur: React.FocusEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		lastTitleFocus.current = [titleElement.selectionStart, titleElement.selectionEnd];
+		lastTitleValue.current = titleElement.value;
+	}, []);
 
-		if (keyCode === 9) { // TAB
-			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'noteList');
+	const onTitleFocus: React.FocusEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		// By default, focusing the note title bar can cause its content to become selected. We override
+		// this with a more reasonable default:
+		if (titleElement.selectionStart === 0 && titleElement.selectionEnd === titleElement.value.length) {
+			if (lastTitleValue.current !== titleElement.value) {
+				titleElement.selectionStart = titleElement.value.length;
 			} else {
-				void CommandService.instance().execute('focusElement', 'noteBody');
+				titleElement.selectionStart = lastTitleFocus.current[0];
+				titleElement.selectionEnd = lastTitleFocus.current[1];
 			}
 		}
 	}, []);
+
+	return { onTitleBlur, onTitleFocus };
+};
+
+export default function NoteTitleBar(props: Props) {
+	const styles = styles_(props);
+
+	const onTitleKeydown: React.KeyboardEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		const selectionAtEnd = titleElement.selectionEnd === titleElement.value.length;
+		if ((event.key === 'ArrowDown' && selectionAtEnd) || event.key === 'Enter') {
+			event.preventDefault();
+			const moveCursorToStart = event.key === 'ArrowDown';
+			void CommandService.instance().execute('focusElement', 'noteBody', { moveCursorToStart });
+		}
+	}, []);
+
+	const { onTitleFocus, onTitleBlur } = useReselectHandlers();
 
 	function renderTitleBarDate() {
 		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
@@ -116,6 +140,8 @@ export default function NoteTitleBar(props: Props) {
 				readOnly={props.disabled}
 				onChange={props.onTitleChange}
 				onKeyDown={onTitleKeydown}
+				onFocus={onTitleFocus}
+				onBlur={onTitleBlur}
 				value={props.noteTitle}
 			/>
 			<InfoGroup>
