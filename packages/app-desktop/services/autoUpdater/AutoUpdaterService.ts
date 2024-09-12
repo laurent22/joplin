@@ -19,10 +19,10 @@ export enum AutoUpdaterEvents {
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
 export const initialUpdateStartup = 5 * 1000;
 const releasesLink = 'https://objects.joplinusercontent.com/r/releases';
-
+export type Architecture = typeof process.arch;
 interface PlatformAssets {
 	[platform: string]: {
-		[arch: string]: string;
+		[arch in Architecture]?: string;
 	};
 }
 const supportedPlatformAssets: PlatformAssets = {
@@ -93,11 +93,11 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			throw new Error(`The AutoUpdaterService does not support the following platform: ${platform}`);
 		}
 
-		const assetName: string = supportedPlatformAssets[platform][arch];
+		const platformAssets = supportedPlatformAssets[platform];
+		const assetName: string | undefined = platformAssets ? platformAssets[arch as Architecture] : undefined;
 		if (!assetName) {
 			throw new Error(`The AutoUpdaterService does not support the architecture: ${arch} for platform: ${platform}`);
 		}
-
 
 		const asset: GitHubReleaseAsset = release.assets.find(a => a.name === assetName);
 		if (!asset) {
@@ -127,7 +127,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
 
 			try {
-				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), shim.architecture());
+				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
 				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });

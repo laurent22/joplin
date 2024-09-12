@@ -144,11 +144,6 @@ const shim = {
 		throw new Error('Cannot determine platform');
 	},
 
-	architecture: () => {
-		if (typeof process !== 'undefined' && process.arch) return process.arch;
-		throw new Error('Cannot determine architecture');
-	},
-
 	// "ios" or "android", or "" if not on mobile
 	mobilePlatform: () => {
 		return ''; // Default if we're not on mobile (React Native)
