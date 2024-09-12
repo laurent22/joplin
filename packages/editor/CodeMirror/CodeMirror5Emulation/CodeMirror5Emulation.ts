@@ -427,8 +427,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	public getDoc() {
-		// [this] has several of the methods available on a CodeMirror 5 document.
-		// For some plugins, this is sufficient.
+		// The emulation layer has several of the methods available on a CodeMirror 5 document.
+		// For some plugins, `this` is sufficient.
 		return this;
 	}
 
