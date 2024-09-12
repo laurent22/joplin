@@ -612,6 +612,7 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ScreenHeader/Menu.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.js
 packages/app-mobile/components/ScreenHeader/WarningBox.js
