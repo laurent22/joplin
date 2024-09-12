@@ -187,13 +187,51 @@ const nodeContains = (node, types) => {
   return false;
 }
 
+const wasResized = (tableNode) => {
+  try {
+    const tHeaders = tableNode.getElementsByTagName('thead');
+    const tBodys = tableNode.getElementsByTagName('tbody');
+    if (!tHeaders.length || !tBodys.length) return false;
+
+    const headerTrs = tHeaders[0].getElementsByTagName('tr');
+
+    if (!headerTrs.length) return false;
+
+    const headerTrChildren = headerTrs[0].children;
+    const bodyTr = tBodys[0].children;
+    return checkIfStylesAreDifferent(headerTrChildren) || checkIfStylesAreDifferent(bodyTr);
+  } catch (error) {
+    console.warn('Table was not what we expected', error);
+    return false;
+  }
+}
+
+// Check if any node in list has different height or width (meaning it was resized)
+const checkIfStylesAreDifferent = (nodes) => {
+  let width = undefined;
+  let height = undefined;
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    if (i === 0) {
+      width = node.style.width;
+      height = node.style.height;
+    }
+
+    if (width !== node.style.width) return true;
+    if (height !== node.style.height) return true;
+  }
+
+  return false;
+}
+
 // Deskotp app table have, by default, border-collapse style,
 // so we need one more to know if the table is modified
 const isModifiedRTETable = (tableNode) => {
   return tableNode.style && (
     tableNode.style.backgroundColor || 
     tableNode.style.float ||
-    (tableNode.style.marginLeft === 'auto' && tableNode.style.marginRight === 'auto')
+    (tableNode.style.marginLeft === 'auto' && tableNode.style.marginRight === 'auto') ||
+    wasResized(tableNode)
   );
 }
 

@@ -37,7 +37,13 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
-			if (htmlFilename.indexOf('preserve_nested_tables') === 0) {
+			if ([
+				'preserve_modified_table',
+				'preserve_nested_tables',
+				'preserve_table_resized_column',
+				'preserve_table_resized_row',
+				'table_within_table_3',
+			].some(x => htmlFilename.indexOf(x) === 0)) {
 				htmlToMdOptions.preserveNestedTables = true;
 			}
 
@@ -45,16 +51,8 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveColorStyles = true;
 			}
 
-			if (htmlFilename.indexOf('preserve_modified_table') === 0) {
-				htmlToMdOptions.preserveNestedTables = true;
-			}
-
 			if (htmlFilename.indexOf('not_preserve_modified_table') === 0) {
 				htmlToMdOptions.preserveNestedTables = false;
-			}
-
-			if (htmlFilename.indexOf('table_within_table_3') === 0) {
-				htmlToMdOptions.preserveNestedTables = true;
 			}
 
 			const html = await readFile(htmlPath, 'utf8');
