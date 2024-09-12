@@ -18,7 +18,7 @@ test.describe('richTextEditor', () => {
 		await editor.attachFileButton.click();
 
 		// Wait to render
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		await viewerFrame.locator('a[data-from-md]').waitFor();
 
 		// Should have an attached resource
