@@ -2,7 +2,6 @@ import PostMessageService, { MessageResponse, ResponderComponentType } from '@jo
 import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../services/bridge';
-import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -130,7 +129,9 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	public focus() {
 		if (this.webviewRef_.current) {
-			focus('NoteTextViewer::focus', this.webviewRef_.current);
+			// Note: Calling .focus on this.webviewRef.current seems to focus the viewer
+			// iframe. However, when this is done, it isn't scrollable with the arrow keys.
+			// To allow arrow-key scrolling, focus is done from within the iframe:
 			this.send('focus');
 		}
 	}
