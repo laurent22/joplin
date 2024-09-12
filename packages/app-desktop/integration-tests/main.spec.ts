@@ -36,7 +36,7 @@ test.describe('main', () => {
 		await mainWindow.keyboard.type('New note content!');
 
 		// Should render
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
 	});
 
@@ -78,7 +78,7 @@ test.describe('main', () => {
 		}
 
 		// Should render mermaid
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		await expect(
 			viewerFrame.locator('pre.mermaid text', { hasText: testCommitId }),
 		).toBeVisible();
@@ -115,7 +115,7 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		const renderedImage = viewerFrame.getByAltText(filename);
 
 		const fullSize = await getImageSourceSize(renderedImage);
