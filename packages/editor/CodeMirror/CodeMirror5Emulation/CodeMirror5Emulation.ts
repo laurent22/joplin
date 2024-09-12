@@ -426,6 +426,12 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		);
 	}
 
+	public getDoc() {
+		// The emulation layer has several of the methods available on a CodeMirror 5 document.
+		// For some plugins, `this` is sufficient.
+		return this;
+	}
+
 	public static commands = (() => {
 		const commands: Record<string, CodeMirror5Command> = {
 			...BaseCodeMirror5Emulation.commands,
