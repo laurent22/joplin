@@ -130,8 +130,9 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	public focus() {
 		if (this.webviewRef_.current) {
-			// Calling focus on webviewRef_ seems necessary to mark the iframe as focused
-			// during automated testing.
+			// Calling focus on webviewRef_ seems to be necessary when NoteTextViewer.focus
+			// is called outside of a user event (e.g. in a setTimeout) or during automated
+			// tests:
 			focus('NoteTextViewer::focus', this.webviewRef_.current);
 
 			// Calling .focus on this.webviewRef.current isn't sufficient.
