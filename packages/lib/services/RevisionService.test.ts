@@ -1,4 +1,4 @@
-import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep, simulateReadOnlyShareEnv } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -6,6 +6,7 @@ import Revision from '../models/Revision';
 import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
+import { itemIsInTrash } from './trash';
 
 describe('services/RevisionService', () => {
 
@@ -184,6 +185,51 @@ describe('services/RevisionService', () => {
 			expect(rev1.title).toBe('note 2 (v2)');
 		}
 	}));
+
+	it.each([
+		{ inTrash: false },
+		{ inTrash: true },
+	])('should not delete old revisions associated with a read-only share (where %j)', async ({ inTrash }) => {
+		jest.useFakeTimers({ advanceTimers: true });
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+
+		const note = await Note.save({
+			title: 'note',
+			share_id: 'test-share-id',
+			deleted_time: inTrash ? Date.now() : 0,
+		});
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		jest.advanceTimersByTime(1_000_000);
+
+		// Should create revisions
+		await Note.save({ id: note.id, title: 'note REV', share_id: 'test-share-id' });
+		await revisionService().collectRevisions();
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV1', share_id: 'test-share-id' });
+		await revisionService().collectRevisions();
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		const cleanup = simulateReadOnlyShareEnv('test-share-id');
+
+		// Should refuse to delete revisions associated with a read-only share.
+		await revisionService().deleteOldRevisions(10);
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		cleanup();
+
+		await revisionService().deleteOldRevisions(0);
+		expect(await getNoteRevisions()).toHaveLength(0);
+
+		// Verify that the note has correctly been in the trash/not during the above test.
+		expect(itemIsInTrash(await Note.load(note.id))).toBe(inTrash);
+
+		jest.useRealTimers();
+	});
 
 	it('should handle conflicts', (async () => {
 		const service = new RevisionService();
