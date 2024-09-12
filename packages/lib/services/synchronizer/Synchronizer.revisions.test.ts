@@ -221,8 +221,8 @@ describe('Synchronizer.revisions', () => {
 		await synchronizer().start();
 		expect(await getNoteRevisions()).toHaveLength(0);
 
-		// After switching back to the original client, syncing should sync the deleted
-		// revisions.
+		// After switching back to the original client, syncing should locally delete
+		// the remotely deleted revisions.
 		await switchClient(1);
 		expect(await getNoteRevisions()).toHaveLength(2);
 		await synchronizer().start();
