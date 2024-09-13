@@ -421,6 +421,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor3};
 			}
 
+			.tox .tox-checkbox__icons .tox-checkbox-icon__unchecked svg {
+				fill: ${theme.color};
+			}
+
 			.tox .tox-collection--list .tox-collection__item--active {
 				color: ${theme.backgroundColor};
 			}
