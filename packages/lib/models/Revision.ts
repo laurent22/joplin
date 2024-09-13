@@ -322,15 +322,25 @@ export default class Revision extends BaseItem {
 			itemIdToOldRevisions.get(itemId).push(rev);
 		}
 
-		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
+		const canDeleteRevisionsForItem = async (itemType: ModelType, itemId: string) => {
 			const item = await BaseItem.loadItemById(itemId);
-			const permissionCheckOnly = true;
-			const readOnly = itemIsReadOnlySync(
-				item.type_, ItemChange.SOURCE_UNSPECIFIED, item, Setting.value('sync.userId'), BaseItem.syncShareCache, permissionCheckOnly,
-			);
 
-			if (readOnly) {
-				this.logger().debug('Not deleting revisions for read-only shared item. ID:', itemId);
+			if (item) {
+				const permissionCheckOnly = true;
+				const readOnly = itemIsReadOnlySync(
+					itemType, ItemChange.SOURCE_UNSPECIFIED, item, Setting.value('sync.userId'), BaseItem.syncShareCache, permissionCheckOnly,
+				);
+				if (readOnly) {
+					this.logger().debug('Can\'t delete revisions for read-only shared item. ID:', itemId);
+					return false;
+				}
+			}
+
+			return true;
+		};
+
+		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
+			if (!await canDeleteRevisionsForItem(itemType, itemId)) {
 				return;
 			}
 

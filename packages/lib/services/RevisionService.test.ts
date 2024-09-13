@@ -7,6 +7,30 @@ import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
 import { itemIsInTrash } from './trash';
+import { NoteEntity } from './database/types';
+
+interface CreateTestRevisionOptions {
+	delaysBetweenModifications: number[];
+}
+
+const createTestRevisions = async (
+	noteProperties: Partial<NoteEntity>,
+	{ delaysBetweenModifications }: CreateTestRevisionOptions,
+) => {
+	const note = await Note.save({
+		title: 'note',
+		...noteProperties,
+	});
+
+	let counter = 0;
+	for (const delay of delaysBetweenModifications) {
+		jest.advanceTimersByTime(delay);
+		await Note.save({ ...noteProperties, id: note.id, title: `note REV${counter++}` });
+		await revisionService().collectRevisions();
+	}
+
+	return note;
+};
 
 describe('services/RevisionService', () => {
 
@@ -14,6 +38,8 @@ describe('services/RevisionService', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		Setting.setValue('revisionService.intervalBetweenRevisions', 0);
+
+		jest.useFakeTimers({ advanceTimers: true });
 	});
 
 	it('should create diff and rebuild notes', (async () => {
@@ -190,28 +216,15 @@ describe('services/RevisionService', () => {
 		{ inTrash: false },
 		{ inTrash: true },
 	])('should not delete old revisions associated with a read-only share (where %j)', async ({ inTrash }) => {
-		jest.useFakeTimers({ advanceTimers: true });
 		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
 
-		const note = await Note.save({
-			title: 'note',
+		const note = await createTestRevisions({
 			share_id: 'test-share-id',
 			deleted_time: inTrash ? Date.now() : 0,
-		});
+		}, { delaysBetweenModifications: [1_000_000, 200] });
 		const getNoteRevisions = () => {
 			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		};
-		jest.advanceTimersByTime(1_000_000);
-
-		// Should create revisions
-		await Note.save({ id: note.id, title: 'note REV', share_id: 'test-share-id' });
-		await revisionService().collectRevisions();
-		expect(await getNoteRevisions()).toHaveLength(1);
-
-		jest.advanceTimersByTime(200);
-
-		await Note.save({ id: note.id, title: 'note REV1', share_id: 'test-share-id' });
-		await revisionService().collectRevisions();
 		expect(await getNoteRevisions()).toHaveLength(2);
 
 		const cleanup = simulateReadOnlyShareEnv('test-share-id');
@@ -227,8 +240,25 @@ describe('services/RevisionService', () => {
 
 		// Verify that the note has correctly been in the trash/not during the above test.
 		expect(itemIsInTrash(await Note.load(note.id))).toBe(inTrash);
+	});
 
-		jest.useRealTimers();
+	it('should not error on revisions for missing (not downloaded yet/permanently deleted) notes', async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+
+		const note = await createTestRevisions({
+			share_id: 'test-share-id',
+		}, { delaysBetweenModifications: [200, 400, 600, 8_000] });
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		expect(await getNoteRevisions()).toHaveLength(4);
+
+		await Note.delete(note.id, { toTrash: false, sourceDescription: 'tests/RevisionService' });
+
+		await revisionService().deleteOldRevisions(4_000);
+
+		// Should leave newer revisions (handle the case where revisions are downloaded before the note).
+		expect(await getNoteRevisions()).toHaveLength(1);
 	});
 
 	it('should handle conflicts', (async () => {
