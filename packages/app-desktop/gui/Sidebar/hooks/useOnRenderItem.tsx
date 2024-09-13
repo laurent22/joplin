@@ -150,6 +150,10 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
+			if (itemType === BaseModel.TYPE_FOLDER) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId])));
+			}
+
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
