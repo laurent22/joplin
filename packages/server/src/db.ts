@@ -460,7 +460,7 @@ export const versionCheck = async (db: DbConnection) => {
 		if (result && result.rows && result.rows[0].server_version_num) {
 			const serverVersionNum = parseInt(result.rows[0].server_version_num, 10);
 			if (Number.isNaN(serverVersionNum)) throw new Error(`Could not fetch Postgres version info. Got: ${JSON.stringify(result.rows)}`);
-			if (minPostgresVersion > serverVersionNum) throw new Error(`Postgres version not supported: ${result.version}. Min required version is: ${minPostgresVersion}`);
+			if (minPostgresVersion > serverVersionNum) throw new Error(`Postgres version not supported: ${serverVersionNum}. Min required version is: ${minPostgresVersion}`);
 		} else {
 			throw new Error(`Could not fetch Postgres version info. Got: ${JSON.stringify(result)}`);
 		}
