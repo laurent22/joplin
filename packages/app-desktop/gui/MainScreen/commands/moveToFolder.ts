@@ -48,6 +48,12 @@ export const runtime = (comp: any): CommandRuntime => {
 			const addOptions = (folders: FolderEntityWithChildren[], depth: number) => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
+
+					// Disallow making a folder a subfolder of itself.
+					if (itemIdToType.has(folder.id)) {
+						continue;
+					}
+
 					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}

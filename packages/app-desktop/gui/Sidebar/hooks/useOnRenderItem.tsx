@@ -150,11 +150,14 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId])));
-			}
-
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+				menu.append(new MenuItem({
+					...menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId]),
+					// By default, enabled is based on the selected folder. However, the right-click
+					// menu can be shown for unselected folders.
+					enabled: true,
+				}));
+
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
 				menu.append(new MenuItem({ type: 'separator' }));
