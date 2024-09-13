@@ -411,6 +411,20 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				color: ${theme.color};
 			}
 
+			.tox .tox-dialog__body-nav-item {
+				color: ${theme.color};
+			}
+
+			.tox .tox-dialog__body-nav-item[aria-selected=true] {
+				color: ${theme.color3};
+				border-color: ${theme.color3};
+				background-color: ${theme.backgroundColor3};
+			}
+
+			.tox .tox-checkbox__icons .tox-checkbox-icon__unchecked svg {
+				fill: ${theme.color};
+			}
+
 			.tox .tox-collection--list .tox-collection__item--active {
 				color: ${theme.backgroundColor};
 			}
