@@ -36,6 +36,7 @@ export const runtime = (comp: any): CommandRuntime => {
 			const startFolders: any[] = [];
 			const maxDepth = 15;
 
+			// It's okay for folders (but not notes) to have no parent folder:
 			if (allAreFolders) {
 				startFolders.push({
 					key: '',
