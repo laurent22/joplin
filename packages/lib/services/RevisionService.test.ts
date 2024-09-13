@@ -10,6 +10,8 @@ import { itemIsInTrash } from './trash';
 import { NoteEntity } from './database/types';
 
 interface CreateTestRevisionOptions {
+	// How long to pause (in milliseconds) between each note modification.
+	// For example, [10, 20] would modify the note twice, with pauses of 10ms and 20ms.
 	delaysBetweenModifications: number[];
 }
 
