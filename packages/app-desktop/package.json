@@ -15,7 +15,7 @@
     "test": "jest",
     "test-ui": "playwright test",
     "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
-    "renameReleaseAssets": "node tools/renameReleaseAssets.js"
+    "modifyReleaseAssets": "node tools/modifyReleaseAssets.js"
   },
   "repository": {
     "type": "git",
