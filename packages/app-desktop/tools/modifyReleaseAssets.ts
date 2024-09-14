@@ -62,9 +62,6 @@ const modifyReleaseAssets = async () => {
 		},
 	});
 
-	console.log(args.values.tag);
-	console.log(args.values.token);
-	console.log(args.values.repo);
 	if (!args.values.tag || !args.values.token || !args.values.repo) {
 		throw new Error([
 			'Required arguments: --tag, --token, --repo',
