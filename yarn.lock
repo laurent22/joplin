@@ -7892,7 +7892,7 @@ __metadata:
     markdown-it-ins: 3.0.1
     markdown-it-mark: 3.0.1
     markdown-it-multimd-table: 4.2.3
-    markdown-it-sub: 1.0.0
+    markdown-it-sub: 2.0.0
     markdown-it-sup: 1.0.0
     markdown-it-toc-done-right: 4.2.0
     md5: 2.3.0
@@ -30613,10 +30613,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-sub@npm:1.0.0":
-  version: 1.0.0
-  resolution: "markdown-it-sub@npm:1.0.0"
-  checksum: 8b5a71a11f718d787e591e22ed028adc789ba62dac6ca0e22a4714c9533868431a4227dbefb921be39ad3388c25fa019d9a510dffed865811ebcb2cbecbbf53d
+"markdown-it-sub@npm:2.0.0":
+  version: 2.0.0
+  resolution: "markdown-it-sub@npm:2.0.0"
+  checksum: fc0a1992f7e6c3acdaa836647ea8d94432f92b228b779702caa7181bb359f31288274e03667e73f2d1686dce30d45922a6c2bedb67373c9244a5fe0fc2d70a85
   languageName: node
   linkType: hard
 
