@@ -7889,7 +7889,7 @@ __metadata:
     markdown-it-emoji: 2.0.2
     markdown-it-expand-tabs: 1.0.13
     markdown-it-footnote: 3.0.3
-    markdown-it-ins: 3.0.1
+    markdown-it-ins: 4.0.0
     markdown-it-mark: 3.0.1
     markdown-it-multimd-table: 4.2.3
     markdown-it-sub: 1.0.0
@@ -30592,10 +30592,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-ins@npm:3.0.1":
-  version: 3.0.1
-  resolution: "markdown-it-ins@npm:3.0.1"
-  checksum: f4ddc456bf67eeae872bd77146723cd6c6a035b2dfa4c8a6f282c1fc6eb35b503836ac567aee4d6550bbd5e67a014003f52bad4c28661387662e215c3c1ab2ae
+"markdown-it-ins@npm:4.0.0":
+  version: 4.0.0
+  resolution: "markdown-it-ins@npm:4.0.0"
+  checksum: 40cc1e362edeb24afa4746039a21688eff8885eea53e98cb146e41bc5da878c772607330a60694cfda87ed3acc9fe60697e6b4e0c7ea5b4aadbe878179645537
   languageName: node
   linkType: hard
 
