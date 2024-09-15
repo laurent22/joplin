@@ -184,7 +184,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 
 				let startX;
 				let dx;
-				const relDy = gestureState.dy;
+				const dy = gestureState.dy;
 
 				// Untransformed start position of the gesture -- moveX is the current position of
 				// the pointer. Subtracting dx gives us the original start position.
@@ -200,7 +200,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 					dx = -gestureState.dx;
 				}
 
-				const motionWithinToleranceY = Math.abs(relDy) <= props.toleranceY;
+				const motionWithinToleranceY = Math.abs(dy) <= props.toleranceY;
 				let startWithinTolerance, motionWithinToleranceX;
 				if (open) {
 					startWithinTolerance = startX >= openMenuOffset - props.edgeHitWidth;
