@@ -138,7 +138,7 @@ const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps)
 	const updateMenuPosition = useCallback(() => {
 		const baseAnimationProps = {
 			easing: Easing.ease,
-			duration: reduceMotionEnabledRef.current ? 0 : 300,
+			duration: reduceMotionEnabledRef.current ? 0 : 200,
 			useNativeDriver: true,
 		};
 		setIsAnimating(true);
