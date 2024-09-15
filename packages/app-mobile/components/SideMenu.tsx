@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
+import { Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
@@ -39,11 +39,14 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 	return useMemo(() => {
 		return StyleSheet.create({
-			outerWrapper: {
+			mainContainer: {
 				display: 'flex',
 				alignContent: 'stretch',
 				height: windowHeight,
-
+			},
+			contentOuterWrapper: {
+				width: windowWidth,
+				height: windowHeight,
 				transform: [{
 					translateX: menuOpenFraction.interpolate({
 						inputRange: [0, 1],
@@ -65,9 +68,9 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 				// In React Native, RTL replaces `left` with `right` and `right` with `left`.
 				// As such, we need to reverse the normal direction in RTL mode.
 				...(isLeftMenu === !I18nManager.isRTL ? {
-					left: -openMenuOffset,
+					left: 0,
 				} : {
-					right: -openMenuOffset,
+					right: 0,
 				}),
 			},
 			closeButtonOverlay: {
@@ -244,7 +247,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 
 	const styles = useStyles({ menuOpenFraction, openMenuOffset: openMenuOffset, isLeftMenu });
 
-	const wrappedMenu = (
+	const menuComponent = (
 		<AccessibleView
 			inert={!open}
 			// Auto-focus the menu when the sidemenu opens
@@ -255,7 +258,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 		</AccessibleView>
 	);
 
-	const wrappedContent = (
+	const contentComponent = (
 		<AccessibleView
 			inert={open}
 			style={styles.contentWrapper}
@@ -263,7 +266,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 			{props.children}
 		</AccessibleView>
 	);
-	const contentOverlay = (open || animating) ? (
+	const closeButtonOverlay = (open || animating) ? (
 		<Animated.View
 			style={[styles.closeButtonOverlay, { opacity: menuOpenFraction }]}
 		>
@@ -276,15 +279,17 @@ const SideMenuComponent: React.FC<Props> = props => {
 	) : null;
 
 	return (
-		<Animated.View
+		<View
 			onLayout={onLayoutChange}
-			style={styles.outerWrapper}
+			style={styles.mainContainer}
 			{...panResponder.panHandlers}
 		>
-			{wrappedMenu}
-			{wrappedContent}
-			{contentOverlay}
-		</Animated.View>
+			{menuComponent}
+			<Animated.View style={styles.contentOuterWrapper}>
+				{contentComponent}
+				{closeButtonOverlay}
+			</Animated.View>
+		</View>
 	);
 };
 
