@@ -5,6 +5,7 @@ import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
 import { _ } from '@joplin/lib/locale';
+import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 
 export enum SideMenuPosition {
 	Left = 'left',
@@ -128,11 +129,15 @@ const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnima
 		return result;
 	}, [menuDragOffset, basePositioningFraction, openMenuOffset, isLeftMenu]);
 
+	const reduceMotionEnabled = useReduceMotionEnabled();
+	const reduceMotionEnabledRef = useRef(false);
+	reduceMotionEnabledRef.current = reduceMotionEnabled;
+
 	const menuUpdateAnimationRef = useRef<Animated.CompositeAnimation>(null);
 	const updateMenuPosition = useCallback(() => {
 		const baseAnimationProps = {
 			easing: Easing.ease,
-			duration: 200,
+			duration: reduceMotionEnabledRef.current ? 0 : 300,
 			useNativeDriver: true,
 		};
 		setIsAnimating(true);
