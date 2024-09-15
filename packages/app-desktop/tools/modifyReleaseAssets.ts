@@ -20,6 +20,7 @@ const renameReleaseAssets = async (context: Context, release: GitHubRelease) => 
 			if (asset.name.match(pattern)) {
 				const newName = asset.name.replace(pattern, replacement);
 				await updateReleaseAsset(context, asset.url, newName);
+				asset.name = newName;
 
 				// Only rename a release once.
 				break;
