@@ -7748,7 +7748,7 @@ __metadata:
     nanoid: 3.3.7
     node-fetch: 2.6.7
     node-notifier: 10.0.1
-    node-persist: 3.1.3
+    node-persist: 4.0.1
     node-rsa: 1.1.1
     pdfjs-dist: 3.11.174
     promise: 8.3.0
@@ -33093,10 +33093,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-persist@npm:3.1.3":
-  version: 3.1.3
-  resolution: "node-persist@npm:3.1.3"
-  checksum: a67d1f7e646e9926558237b4f30a50cc73ae9e58a1be28fb87203b0b7180b7f7178c380f74229900c62cf7ee139e00c4c8bd5abcbb82e91326d8eb7938a827a9
+"node-persist@npm:4.0.1":
+  version: 4.0.1
+  resolution: "node-persist@npm:4.0.1"
+  checksum: 4d0fe3e125660ac2fd36310373232b47bfcba2de00222d943033b4c2a49220db4bac06f73f965b10f39b569b7c2919c1ff05cf36184acddf72d67cf05a17402d
   languageName: node
   linkType: hard
 
