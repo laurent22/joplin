@@ -66,7 +66,7 @@ const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js'
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 import { MenuProvider } from 'react-native-popup-menu';
-import SideMenu from './components/SideMenu';
+import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 import { reg } from '@joplin/lib/registry';
@@ -136,8 +136,6 @@ import DialogManager from './components/DialogManager';
 import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
-
-type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -1223,12 +1221,12 @@ class AppComponent extends React.Component {
 		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent: ReactNode = null;
-		let menuPosition: SideMenuPosition = 'left';
+		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
-			menuPosition = 'right';
+			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {

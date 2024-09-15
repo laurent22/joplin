@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Animated, Dimensions, Easing, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
@@ -11,8 +11,8 @@ export enum SideMenuPosition {
 	Right = 'right',
 }
 
-// Built to have an API roughly compatible with
-// https://www.npmjs.com/package/react-native-side-menu-updated
+type OnSlidingCallback = (openFraction: number)=> void;
+
 interface Props {
 	isOpen: boolean;
 
@@ -26,10 +26,16 @@ interface Props {
 
 	onChange: (isOpen: boolean)=> void;
 	disableGestures: boolean;
-	onSliding?: (percent: number)=> void;
+	onSliding?: OnSlidingCallback;
 }
 
-const useStyles = () => {
+interface UseStylesProps {
+	isLeftMenu: boolean;
+	openMenuOffset: number;
+	menuOpenFraction: Animated.AnimatedInterpolation<number>;
+}
+
+const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesProps) => {
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 	return useMemo(() => {
 		return StyleSheet.create({
@@ -37,25 +43,44 @@ const useStyles = () => {
 				display: 'flex',
 				alignContent: 'stretch',
 				height: windowHeight,
+
+				transform: [{
+					translateX: menuOpenFraction.interpolate({
+						inputRange: [0, 1],
+						outputRange: [0, isLeftMenu ? openMenuOffset : -openMenuOffset],
+						extrapolate: 'clamp',
+					}),
+				}],
 			},
 			contentWrapper: {
 				display: 'flex',
 				flexDirection: 'column',
-				height: windowHeight,
+				flexGrow: 1,
 			},
 			menuWrapper: {
 				position: 'absolute',
 				height: windowHeight,
+				width: openMenuOffset,
+
+				// In React Native, RTL replaces `left` with `right` and `right` with `left`.
+				// As such, we need to reverse the normal direction in RTL mode.
+				...(isLeftMenu === !I18nManager.isRTL ? {
+					left: -openMenuOffset,
+				} : {
+					right: -openMenuOffset,
+				}),
 			},
-			overlay: {
+			closeButtonOverlay: {
 				position: 'absolute',
 				left: 0,
 				right: 0,
 				top: 0,
 				bottom: 0,
+
 				zIndex: 1,
 				width: windowWidth,
 				height: windowHeight,
+
 				backgroundColor: 'rgba(0, 0, 0, 0.1)',
 				display: 'flex',
 				alignContent: 'stretch',
@@ -65,12 +90,77 @@ const useStyles = () => {
 				width: windowWidth,
 			},
 		});
-	}, [windowWidth, windowHeight]);
+	}, [isLeftMenu, windowWidth, windowHeight, openMenuOffset, menuOpenFraction]);
+};
+
+interface UseAnimationsProps {
+	onSliding: OnSlidingCallback;
+	openMenuOffset: number;
+	isLeftMenu: boolean;
+	open: boolean;
+}
+
+const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnimationsProps) => {
+	const [animating, setIsAnimating] = useState(false);
+	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
+	const basePositioningFraction = useMemo(() => new Animated.Value(0), []);
+
+	const onSlidingRef = useRef(onSliding);
+	onSlidingRef.current = onSliding;
+	const menuOpenFraction = useMemo(() => {
+		// || 1: Prevents divide by zero
+		const animatedDragFraction = Animated.divide(
+			menuDragOffset,
+			// In a right-side menu, the drag offset increases while the menu is closing.
+			// It needs to be inverted in that case:
+			(openMenuOffset || 1) * (isLeftMenu ? 1 : -1),
+		);
+
+		const result = Animated.add(basePositioningFraction, animatedDragFraction);
+		result.addListener(({ value }: { value: number }) => {
+			if (0 <= value && value <= 1) {
+				onSlidingRef.current?.(value);
+			}
+		});
+		return result;
+	}, [menuDragOffset, basePositioningFraction, openMenuOffset, isLeftMenu]);
+
+	const menuUpdateAnimationRef = useRef<Animated.CompositeAnimation>(null);
+	const updateMenuPosition = useCallback(() => {
+		const baseAnimationProps = {
+			easing: Easing.ease,
+			duration: 200,
+			useNativeDriver: true,
+		};
+		setIsAnimating(true);
+		menuUpdateAnimationRef.current?.stop();
+
+		const animation = Animated.parallel([
+			Animated.timing(basePositioningFraction, { toValue: open ? 1 : 0, ...baseAnimationProps }),
+			Animated.timing(menuDragOffset, { toValue: 0, ...baseAnimationProps }),
+		]);
+		animation.start((result) => {
+			if (result.finished) {
+				setIsAnimating(false);
+			}
+		});
+		menuUpdateAnimationRef.current = animation;
+	}, [open, menuDragOffset, basePositioningFraction]);
+	useEffect(() => {
+		updateMenuPosition();
+	}, [updateMenuPosition]);
+
+	return { setIsAnimating, animating, updateMenuPosition, menuOpenFraction, menuDragOffset };
 };
 
 const SideMenuComponent: React.FC<Props> = props => {
 	const [openMenuOffset, setOpenMenuOffset] = useState(0);
 	const [size, setSize] = useState({ width: 0, height: 0 });
+
+	// In right-to-left layout, swap left and right to be consistent with other parts of
+	// the app's layout.
+	const isLeftMenu = props.menuPosition === (I18nManager.isRTL ? SideMenuPosition.Right : SideMenuPosition.Left);
+
 	const onLayoutChange = useCallback((e: LayoutChangeEvent) => {
 		const { width, height } = e.nativeEvent.layout;
 		const openMenuOffsetPercentage = props.openMenuOffset / Dimensions.get('window').width;
@@ -79,45 +169,11 @@ const SideMenuComponent: React.FC<Props> = props => {
 		setSize({ width, height });
 		setOpenMenuOffset(openMenuOffset);
 	}, [props.openMenuOffset]);
-	const isLeftMenu = props.menuPosition === SideMenuPosition.Left;
 	const [open, setIsOpen] = useState(false);
-	const [animating, setIsAnimating] = useState(false);
-	const menuDragOffsetAnim = useMemo(() => new Animated.Value(0), []);
-	const menuPositionAnim = useMemo(() => new Animated.Value(0), []);
-	const composedMenuOffsetAnim = useMemo(() => {
-		return Animated.add(menuPositionAnim, menuDragOffsetAnim);
-	}, [menuPositionAnim, menuDragOffsetAnim]);
 
-	const onSlidingRef = useRef(props.onSliding);
-	onSlidingRef.current = props.onSliding;
-	const menuOpenFraction = useMemo(() => {
-		const result = Animated.divide(composedMenuOffsetAnim, (isLeftMenu ? openMenuOffset : -openMenuOffset) || 1);
-		result.addListener(({ value }: { value: number }) => {
-			if (0 >= value && value <= 1) {
-				onSlidingRef.current?.(value * 100);
-			}
-		});
-		return result;
-	}, [composedMenuOffsetAnim, openMenuOffset, isLeftMenu]);
-
-	const updateMenuPosition = useCallback(() => {
-		const targetOpenValue = isLeftMenu ? openMenuOffset : -openMenuOffset;
-		const baseAnimationProps = {
-			easing: Easing.ease,
-			duration: 200,
-			useNativeDriver: true,
-		};
-		setIsAnimating(true);
-		Animated.parallel([
-			Animated.timing(menuPositionAnim, { toValue: open ? targetOpenValue : 0, ...baseAnimationProps }),
-			Animated.timing(menuDragOffsetAnim, { toValue: 0, ...baseAnimationProps }),
-		]).start(() => {
-			setIsAnimating(false);
-		});
-	}, [open, isLeftMenu, openMenuOffset, menuDragOffsetAnim, menuPositionAnim]);
-	useEffect(() => {
-		updateMenuPosition();
-	}, [updateMenuPosition]);
+	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
+		onSliding: props.onSliding, isLeftMenu, openMenuOffset, open,
+	});
 
 	const panResponder = useMemo(() => {
 		return PanResponder.create({
@@ -126,16 +182,21 @@ const SideMenuComponent: React.FC<Props> = props => {
 					return false;
 				}
 
-				// Transform x, y, dx, dy such that they are relative to the target screen edge.
 				let startX;
 				let dx;
 				const relDy = gestureState.dy;
 
+				// Untransformed start position of the gesture -- moveX is the current position of
+				// the pointer. Subtracting dx gives us the original start position.
+				const gestureStartScreenX = gestureState.moveX - gestureState.dx;
+
+				// Transform x, dx such that they are relative to the target screen edge -- this simplifies later
+				// math.
 				if (isLeftMenu) {
-					startX = gestureState.moveX - gestureState.dx;
+					startX = gestureStartScreenX;
 					dx = gestureState.dx;
 				} else {
-					startX = size.width - (gestureState.moveX - gestureState.dx);
+					startX = size.width - gestureStartScreenX;
 					dx = -gestureState.dx;
 				}
 
@@ -154,7 +215,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 			onPanResponderGrant: () => {
 				setIsAnimating(true);
 			},
-			onPanResponderMove: Animated.event([null, { dx: menuDragOffsetAnim }], { useNativeDriver: false }),
+			onPanResponderMove: Animated.event([null, { dx: menuDragOffset }], { useNativeDriver: false }),
 			onPanResponderEnd: (_event, gestureState) => {
 				const newOpen = (gestureState.dx > 0) === isLeftMenu;
 				if (newOpen === open) {
@@ -164,7 +225,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 			},
 		});
-	}, [isLeftMenu, menuDragOffsetAnim, openMenuOffset, props.toleranceX, props.toleranceY, size, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition]);
+	}, [isLeftMenu, menuDragOffset, openMenuOffset, props.toleranceX, props.toleranceY, size, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
 
 	useEffect(() => {
 		setIsOpen(props.isOpen);
@@ -176,21 +237,19 @@ const SideMenuComponent: React.FC<Props> = props => {
 		onChangeRef.current(open);
 	}, [open]);
 
+	const onCloseButtonPress = useCallback(() => {
+		setIsOpen(false);
+		setIsAnimating(true);
+	}, [setIsAnimating]);
 
-	const styles = useStyles();
+	const styles = useStyles({ menuOpenFraction, openMenuOffset: openMenuOffset, isLeftMenu });
 
-	const overlayOffset = useMemo(() => {
-		if (isLeftMenu) {
-			return { left: -openMenuOffset, width: openMenuOffset };
-		} else {
-			return { right: -openMenuOffset, width: openMenuOffset };
-		}
-	}, [openMenuOffset, isLeftMenu]);
 	const wrappedMenu = (
 		<AccessibleView
 			inert={!open}
+			// Auto-focus the menu when the sidemenu opens
 			refocusCounter={open ? 1 : undefined}
-			style={[styles.menuWrapper, overlayOffset]}
+			style={styles.menuWrapper}
 		>
 			{props.menu}
 		</AccessibleView>
@@ -206,29 +265,26 @@ const SideMenuComponent: React.FC<Props> = props => {
 	);
 	const contentOverlay = (open || animating) ? (
 		<Animated.View
-			style={[styles.overlay, { opacity: menuOpenFraction }]}
+			style={[styles.closeButtonOverlay, { opacity: menuOpenFraction }]}
 		>
 			<Pressable
 				aria-label={_('Close sidemenu')}
-				onPress={() => setIsOpen(false)}
+				onPress={onCloseButtonPress}
 				style={styles.overlayContent}
 			></Pressable>
 		</Animated.View>
 	) : null;
 
 	return (
-		<View
+		<Animated.View
 			onLayout={onLayoutChange}
 			style={styles.outerWrapper}
+			{...panResponder.panHandlers}
 		>
-			<Animated.View style={{
-				transform: [{ translateX: composedMenuOffsetAnim }],
-			}} {...panResponder.panHandlers}>
-				{wrappedMenu}
-				{wrappedContent}
-				{contentOverlay}
-			</Animated.View>
-		</View>
+			{wrappedMenu}
+			{wrappedContent}
+			{contentOverlay}
+		</Animated.View>
 	);
 };
 
