@@ -391,12 +391,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.showSideMenu = false;
 			break;
 
-		case 'SIDE_MENU_OPEN_PERCENT':
-
-			newState = { ...state };
-			newState.sideMenuOpenPercent = action.value;
-			break;
-
 		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
 			newState = { ...state };
 			newState.showPanelsDialog = action.visible;
@@ -1281,12 +1275,6 @@ class AppComponent extends React.Component {
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					disableGestures={disableSideMenuGestures}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
-					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuProvider style={{ flex: 1 }}>

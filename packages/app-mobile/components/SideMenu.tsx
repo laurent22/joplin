@@ -12,8 +12,6 @@ export enum SideMenuPosition {
 	Right = 'right',
 }
 
-type OnSlidingCallback = (openFraction: number)=> void;
-
 interface Props {
 	isOpen: boolean;
 
@@ -27,7 +25,6 @@ interface Props {
 
 	onChange: (isOpen: boolean)=> void;
 	disableGestures: boolean;
-	onSliding?: OnSlidingCallback;
 }
 
 interface UseStylesProps {
@@ -98,19 +95,16 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 };
 
 interface UseAnimationsProps {
-	onSliding: OnSlidingCallback;
 	openMenuOffset: number;
 	isLeftMenu: boolean;
 	open: boolean;
 }
 
-const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnimationsProps) => {
+const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps) => {
 	const [animating, setIsAnimating] = useState(false);
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
 	const basePositioningFraction = useMemo(() => new Animated.Value(0), []);
 
-	const onSlidingRef = useRef(onSliding);
-	onSlidingRef.current = onSliding;
 	const menuOpenFraction = useMemo(() => {
 		// || 1: Prevents divide by zero
 		const animatedDragFraction = Animated.divide(
@@ -120,13 +114,7 @@ const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnima
 			(openMenuOffset || 1) * (isLeftMenu ? 1 : -1),
 		);
 
-		const result = Animated.add(basePositioningFraction, animatedDragFraction);
-		result.addListener(({ value }: { value: number }) => {
-			if (0 <= value && value <= 1) {
-				onSlidingRef.current?.(value);
-			}
-		});
-		return result;
+		return Animated.add(basePositioningFraction, animatedDragFraction);
 	}, [menuDragOffset, basePositioningFraction, openMenuOffset, isLeftMenu]);
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
@@ -177,7 +165,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 	const [open, setIsOpen] = useState(false);
 
 	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
-		onSliding: props.onSliding, isLeftMenu, openMenuOffset, open,
+		isLeftMenu, openMenuOffset, open,
 	});
 
 	const panResponder = useMemo(() => {

@@ -610,8 +610,6 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,
-		// Don't do the opacity animation as it means re-rendering the list multiple times
-		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
