@@ -42,6 +42,14 @@ const createReleaseAssets = async (context: Context, release: GitHubRelease) => 
 		}
 	}
 
+	if (zipPath === undefined || dmgPath === undefined) {
+		const formattedAssets = release.assets.map(asset => ({
+			name: asset.name,
+			url: asset.url,
+		}));
+		throw new Error(`Zip path: ${zipPath} and/or dmg path: ${dmgPath} are not defined. Logging assets of release: ${JSON.stringify(formattedAssets, null, 2)}`);
+	}
+
 	const info: GenerateInfo = {
 		version: release.tag_name.slice(1),
 		dmgPath: dmgPath,
