@@ -19,14 +19,12 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
-import AccessibleView from './accessibility/AccessibleView';
 const { TouchableRipple } = require('react-native-paper');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
-	sideMenuVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	collapsedFolderIds: string[];
@@ -583,34 +581,22 @@ const SideMenuContentComponent = (props: Props) => {
 		items = items.concat(folderItems);
 	}
 
-	const isHidden = !props.sideMenuVisible;
-
 	const style = {
 		flex: 1,
 		borderRightWidth: 1,
 		borderRightColor: theme.dividerColor,
 		backgroundColor: theme.backgroundColor,
-
-		// Have the UI reflect whether the View is hidden to the screen reader.
-		// This way, there will be visual feedback if isHidden is incorrect.
-		opacity: isHidden ? 0.5 : undefined,
 	};
 
 	return (
-		<AccessibleView
-			style={style}
-
-			// Accessibility, keyboard, and touch hidden.
-			inert={isHidden}
-			refocusCounter={isHidden ? undefined : 1}
-		>
+		<View style={style}>
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
 				</ScrollView>
 				{renderBottomPanel()}
 			</View>
-		</AccessibleView>
+		</View>
 	);
 };
 
@@ -624,7 +610,6 @@ export default connect((state: AppState) => {
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,
-		sideMenuVisible: state.showSideMenu,
 		// Don't do the opacity animation as it means re-rendering the list multiple times
 		// opacity: state.sideMenuOpenPercent,
 		collapsedFolderIds: state.collapsedFolderIds,
