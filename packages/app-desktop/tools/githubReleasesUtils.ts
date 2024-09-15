@@ -45,15 +45,20 @@ export const getTargetRelease = async (context: Context, targetTag: string): Pro
 };
 
 // Download a file from Joplin Desktop releases
-export const downloadFile = async (asset: GitHubReleaseAsset, destinationDir: string): Promise<string> => {
+export const downloadFile = async (context: Context, asset: GitHubReleaseAsset, destinationDir: string): Promise<string> => {
 	const downloadPath = path.join(destinationDir, asset.name);
 	if (!fs.existsSync(destinationDir)) {
 		fs.mkdirSync(destinationDir);
 	}
 
 	/* eslint-disable no-console */
-	console.log(`Downloading ${asset.name} to ${downloadPath}`);
-	const response = await fetch(asset.browser_download_url);
+	console.log(`Downloading ${asset.name} from ${asset.url} to ${downloadPath}`);
+	const response = await fetch(asset.url, {
+		headers: {
+			...defaultApiHeaders(context),
+			'Accept': 'application/octet-stream',
+		},
+	});
 	if (!response.ok) {
 		throw new Error(`Failed to download file: Status Code ${response.status}`);
 	}
