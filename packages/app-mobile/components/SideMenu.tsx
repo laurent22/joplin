@@ -133,7 +133,6 @@ const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnima
 	const reduceMotionEnabledRef = useRef(false);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
 
-	const menuUpdateAnimationRef = useRef<Animated.CompositeAnimation>(null);
 	const updateMenuPosition = useCallback(() => {
 		const baseAnimationProps = {
 			easing: Easing.ease,
@@ -141,7 +140,6 @@ const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnima
 			useNativeDriver: true,
 		};
 		setIsAnimating(true);
-		menuUpdateAnimationRef.current?.stop();
 
 		const animation = Animated.parallel([
 			Animated.timing(basePositioningFraction, { toValue: open ? 1 : 0, ...baseAnimationProps }),
@@ -152,7 +150,6 @@ const useAnimations = ({ onSliding, openMenuOffset, isLeftMenu, open }: UseAnima
 				setIsAnimating(false);
 			}
 		});
-		menuUpdateAnimationRef.current = animation;
 	}, [open, menuDragOffset, basePositioningFraction]);
 	useEffect(() => {
 		updateMenuPosition();
@@ -255,8 +252,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 	const menuComponent = (
 		<AccessibleView
 			inert={!open}
-			// Auto-focus the menu when the sidemenu opens
-			refocusCounter={open ? 1 : undefined}
 			style={styles.menuWrapper}
 		>
 			{props.menu}
@@ -277,6 +272,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 		>
 			<Pressable
 				aria-label={_('Close sidemenu')}
+				role='button'
 				onPress={onCloseButtonPress}
 				style={styles.overlayContent}
 			></Pressable>
