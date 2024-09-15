@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
 import { _ } from '@joplin/lib/locale';
 import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
+import { themeStyle } from './global-style';
 
 export enum SideMenuPosition {
 	Left = 'left',
@@ -13,6 +14,7 @@ export enum SideMenuPosition {
 }
 
 interface Props {
+	themeId: number;
 	isOpen: boolean;
 
 	menu: React.ReactNode;
@@ -28,14 +30,16 @@ interface Props {
 }
 
 interface UseStylesProps {
+	themeId: number;
 	isLeftMenu: boolean;
 	openMenuOffset: number;
 	menuOpenFraction: Animated.AnimatedInterpolation<number>;
 }
 
-const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesProps) => {
+const useStyles = ({ themeId, isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesProps) => {
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 	return useMemo(() => {
+		const theme = themeStyle(themeId);
 		return StyleSheet.create({
 			mainContainer: {
 				display: 'flex',
@@ -49,9 +53,10 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 					translateX: menuOpenFraction.interpolate({
 						inputRange: [0, 1],
 						outputRange: [0, isLeftMenu ? openMenuOffset : -openMenuOffset],
-						extrapolate: 'clamp',
 					}),
-				}],
+					// The RN Animation docs suggests setting "perspective" while setting other transform styles:
+					// https://reactnative.dev/docs/animations#bear-in-mind
+				}, { perspective: 1000 }],
 			},
 			contentWrapper: {
 				display: 'flex',
@@ -82,7 +87,12 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 				width: windowWidth,
 				height: windowHeight,
 
-				backgroundColor: 'rgba(0, 0, 0, 0.1)',
+				opacity: menuOpenFraction.interpolate({
+					inputRange: [0, 1],
+					outputRange: [0, 0.1],
+					extrapolate: 'clamp',
+				}),
+				backgroundColor: theme.colorFaded,
 				display: 'flex',
 				alignContent: 'stretch',
 			},
@@ -91,7 +101,7 @@ const useStyles = ({ isLeftMenu, openMenuOffset, menuOpenFraction }: UseStylesPr
 				width: windowWidth,
 			},
 		});
-	}, [isLeftMenu, windowWidth, windowHeight, openMenuOffset, menuOpenFraction]);
+	}, [themeId, isLeftMenu, windowWidth, windowHeight, openMenuOffset, menuOpenFraction]);
 };
 
 interface UseAnimationsProps {
@@ -104,18 +114,22 @@ const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps)
 	const [animating, setIsAnimating] = useState(false);
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
 	const basePositioningFraction = useMemo(() => new Animated.Value(0), []);
+	const maximumDragOffsetValue = useMemo(() => new Animated.Value(1), []);
+
+	// Update the value in a useEffect to prevent delays in applying the animation caused by
+	// re-renders.
+	useEffect(() => {
+		// In a right-side menu, the drag offset increases while the menu is closing.
+		// It needs to be inverted in that case:
+		maximumDragOffsetValue.setValue((openMenuOffset || 1) * (isLeftMenu ? 1 : -1));
+	}, [openMenuOffset, isLeftMenu, maximumDragOffsetValue]);
 
 	const menuOpenFraction = useMemo(() => {
 		// || 1: Prevents divide by zero
-		const animatedDragFraction = Animated.divide(
-			menuDragOffset,
-			// In a right-side menu, the drag offset increases while the menu is closing.
-			// It needs to be inverted in that case:
-			(openMenuOffset || 1) * (isLeftMenu ? 1 : -1),
-		);
+		const animatedDragFraction = Animated.divide(menuDragOffset, maximumDragOffsetValue);
 
 		return Animated.add(basePositioningFraction, animatedDragFraction);
-	}, [menuDragOffset, basePositioningFraction, openMenuOffset, isLeftMenu]);
+	}, [menuDragOffset, basePositioningFraction, maximumDragOffsetValue]);
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
 	const reduceMotionEnabledRef = useRef(false);
@@ -148,18 +162,18 @@ const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps)
 
 const SideMenuComponent: React.FC<Props> = props => {
 	const [openMenuOffset, setOpenMenuOffset] = useState(0);
-	const [size, setSize] = useState({ width: 0, height: 0 });
+	const [contentWidth, setContentWidth] = useState(0);
 
 	// In right-to-left layout, swap left and right to be consistent with other parts of
 	// the app's layout.
 	const isLeftMenu = props.menuPosition === (I18nManager.isRTL ? SideMenuPosition.Right : SideMenuPosition.Left);
 
 	const onLayoutChange = useCallback((e: LayoutChangeEvent) => {
-		const { width, height } = e.nativeEvent.layout;
+		const { width } = e.nativeEvent.layout;
 		const openMenuOffsetPercentage = props.openMenuOffset / Dimensions.get('window').width;
-		const openMenuOffset = width * openMenuOffsetPercentage;
+		const openMenuOffset = Math.floor(width * openMenuOffsetPercentage);
 
-		setSize({ width, height });
+		setContentWidth(width);
 		setOpenMenuOffset(openMenuOffset);
 	}, [props.openMenuOffset]);
 	const [open, setIsOpen] = useState(false);
@@ -189,7 +203,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 					startX = gestureStartScreenX;
 					dx = gestureState.dx;
 				} else {
-					startX = size.width - gestureStartScreenX;
+					startX = contentWidth - gestureStartScreenX;
 					dx = -gestureState.dx;
 				}
 
@@ -218,7 +232,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, openMenuOffset, props.toleranceX, props.toleranceY, size, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, openMenuOffset, props.toleranceX, props.toleranceY, contentWidth, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
 
 	useEffect(() => {
 		setIsOpen(props.isOpen);
@@ -235,7 +249,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 		setIsAnimating(true);
 	}, [setIsAnimating]);
 
-	const styles = useStyles({ menuOpenFraction, openMenuOffset: openMenuOffset, isLeftMenu });
+	const styles = useStyles({ themeId: props.themeId, menuOpenFraction, openMenuOffset: openMenuOffset, isLeftMenu });
 
 	const menuComponent = (
 		<AccessibleView
@@ -256,7 +270,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 	);
 	const closeButtonOverlay = (open || animating) ? (
 		<Animated.View
-			style={[styles.closeButtonOverlay, { opacity: menuOpenFraction }]}
+			style={styles.closeButtonOverlay}
 		>
 			<Pressable
 				aria-label={_('Close sidemenu')}
@@ -284,6 +298,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 
 const SideMenu = connect((state: State) => {
 	return {
+		themeId: state.settings.theme,
 		isOpen: state.showSideMenu,
 	};
 })(SideMenuComponent);
