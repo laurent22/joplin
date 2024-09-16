@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
@@ -12,6 +12,8 @@ export enum SideMenuPosition {
 	Left = 'left',
 	Right = 'right',
 }
+
+export type OnChangeCallback = (isOpen: boolean)=> void;
 
 interface Props {
 	themeId: number;
@@ -25,7 +27,7 @@ interface Props {
 	openMenuOffset: number;
 	menuPosition: SideMenuPosition;
 
-	onChange: (isOpen: boolean)=> void;
+	onChange: OnChangeCallback;
 	disableGestures: boolean;
 }
 
@@ -161,6 +163,12 @@ const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps)
 };
 
 const SideMenuComponent: React.FC<Props> = props => {
+	const [open, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		setIsOpen(props.isOpen);
+	}, [props.isOpen]);
+
 	const [openMenuOffset, setOpenMenuOffset] = useState(0);
 	const [contentWidth, setContentWidth] = useState(0);
 
@@ -176,7 +184,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 		setContentWidth(width);
 		setOpenMenuOffset(openMenuOffset);
 	}, [props.openMenuOffset]);
-	const [open, setIsOpen] = useState(false);
 
 	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
 		isLeftMenu, openMenuOffset, open,
@@ -222,7 +229,11 @@ const SideMenuComponent: React.FC<Props> = props => {
 			onPanResponderGrant: () => {
 				setIsAnimating(true);
 			},
-			onPanResponderMove: Animated.event([null, { dx: menuDragOffset }], { useNativeDriver: false }),
+			onPanResponderMove: Animated.event([
+				null,
+				// Updates menuDragOffset with the .dx property of the second argument:
+				{ dx: menuDragOffset },
+			], { useNativeDriver: false }),
 			onPanResponderEnd: (_event, gestureState) => {
 				const newOpen = (gestureState.dx > 0) === isLeftMenu;
 				if (newOpen === open) {
@@ -234,18 +245,19 @@ const SideMenuComponent: React.FC<Props> = props => {
 		});
 	}, [isLeftMenu, menuDragOffset, openMenuOffset, props.toleranceX, props.toleranceY, contentWidth, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
 
-	useEffect(() => {
-		setIsOpen(props.isOpen);
-	}, [props.isOpen]);
-
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
 	useEffect(() => {
 		onChangeRef.current(open);
+
+		AccessibilityInfo.announceForAccessibility(
+			open ? _('Side menu opened') : _('Side menu closed'),
+		);
 	}, [open]);
 
 	const onCloseButtonPress = useCallback(() => {
 		setIsOpen(false);
+		// Set isAnimating as soon as possible to avoid components disappearing, then reappearing.
 		setIsAnimating(true);
 	}, [setIsAnimating]);
 
@@ -256,6 +268,13 @@ const SideMenuComponent: React.FC<Props> = props => {
 			inert={!open}
 			style={styles.menuWrapper}
 		>
+			<AccessibleView
+				// Auto-focuses an empty view at the beginning of the sidemenu -- if we instead
+				// focus the container view, VoiceOver fails to focus to any components within
+				// the sidebar.
+				refocusCounter={!open ? 1 : undefined}
+			/>
+
 			{props.menu}
 		</AccessibleView>
 	);
@@ -265,6 +284,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 			inert={open}
 			style={styles.contentWrapper}
 		>
+			<AccessibleView refocusCounter={open ? 1 : undefined} />
 			{props.children}
 		</AccessibleView>
 	);
@@ -273,7 +293,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 			style={styles.closeButtonOverlay}
 		>
 			<Pressable
-				aria-label={_('Close sidemenu')}
+				aria-label={_('Close side menu')}
 				role='button'
 				onPress={onCloseButtonPress}
 				style={styles.overlayContent}
