@@ -14,7 +14,7 @@ export function findContainerListTypeFromEvent(event) {
 
 export function findContainerListTypeFromElement(element) {
   while (element) {
-    if (element.nodeName === 'UL' || element.nodName === 'OL') {
+    if (element.nodeName === 'UL' || element.nodeName === 'OL') {
       return isCheckboxListItem(element) ? 'joplinChecklist' : 'regular';
     }
     element = element.parentNode;

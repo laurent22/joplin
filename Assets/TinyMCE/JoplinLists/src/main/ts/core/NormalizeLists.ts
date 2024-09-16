@@ -11,6 +11,10 @@ import * as NodeType from './NodeType';
 
 const DOM = DOMUtils.DOM;
 
+const isCheckboxList = function (ul) {
+  return ul.classList && ul.classList.contains('joplin-checklist');
+};
+
 const normalizeList = function (dom, ul) {
   let sibling;
   const parentNode = ul.parentNode;
@@ -40,7 +44,11 @@ const normalizeList = function (dom, ul) {
 
 const normalizeLists = function (dom, element) {
   Tools.each(Tools.grep(dom.select('ol,ul', element)), function (ul) {
-    normalizeList(dom, ul);
+    if (isCheckboxList(ul)) {
+      // Handle checkbox lists separately if needed
+    } else {
+      normalizeList(dom, ul);
+    }
   });
 };
 

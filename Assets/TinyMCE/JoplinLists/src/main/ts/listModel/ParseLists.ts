@@ -9,6 +9,7 @@ import { Arr, Cell, Option } from '@ephox/katamari';
 import { Compare, Element, Traverse } from '@ephox/sugar';
 import { createEntry, Entry } from './Entry';
 import { isList } from './Util';
+import { isCheckboxListItem } from './JoplinListUtil';
 
 type Parser = (depth: number, itemSelection: Option<ItemSelection>, selectionState: Cell<boolean>, element: Element) => Entry[];
 
@@ -62,10 +63,17 @@ const parseLists = (lists: Element[], itemSelection: Option<ItemSelection>): Ent
   const selectionState = Cell(false);
   const initialDepth = 0;
 
-  return Arr.map(lists, (list) => ({
-    sourceList: list,
-    entries: parseList(initialDepth, itemSelection, selectionState, list)
-  }));
+  return Arr.map(lists, (list) => {
+    const entries = parseList(initialDepth, itemSelection, selectionState, list);
+    const isCheckboxList = isCheckboxListItem(list.dom());
+    return {
+      sourceList: list,
+      entries: entries.map(entry => ({
+        ...entry,
+        listType: isCheckboxList ? 'joplinChecklist' : entry.listType,
+      })),
+    };
+  });
 };
 
 export { parseLists };
