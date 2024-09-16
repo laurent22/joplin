@@ -18,7 +18,7 @@ Below is our schedule related to the phases mentioned above:
 | **Joplin 2.13** | Nov 16 2023 | Dec 1 2023 - Dec 7 2023 |
 | **Joplin 2.14** | Feb 16 2024 | Mar 1 2024 - Mar 7 2024 |
 | **Joplin 3.0**  | Jun 16 2024 | Jul 1 2024 - Jul 7 2024 |
-| **Joplin 3.1**  | Sept 16 2024 | Oct 1 2024 - Oct 7 2024 |
+| **Joplin 3.1**  | Sept 26 2024 | Oct 11 2024 - Oct 18 2024 |
 | **Joplin 3.2**  | Dec 16 2024 | Jan 1 2025 - Jan 7 2025 |
 
 Please note that during this release process, [prereleases are also regularly made available](https://joplinapp.org/help/about/prereleases/). This allows you to test the application before its final release and to provide feedback on the new features being added and influence development. Moreover, if you find an issue, you can report it and we will give it a high priority and attempt to fix it as soon as possible.

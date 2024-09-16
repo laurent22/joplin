@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.1.8",
+  "version": "3.1.12",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -15,7 +15,7 @@
     "test": "jest",
     "test-ui": "playwright test",
     "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
-    "renameReleaseAssets": "node tools/renameReleaseAssets.js"
+    "modifyReleaseAssets": "node tools/modifyReleaseAssets.js"
   },
   "repository": {
     "type": "git",
@@ -130,7 +130,7 @@
     "@playwright/test": "1.44.1",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.8",
-    "@types/node": "18.19.34",
+    "@types/node": "18.19.36",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@types/react-redux": "7.1.33",

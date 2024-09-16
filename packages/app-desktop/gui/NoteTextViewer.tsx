@@ -26,8 +26,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	private initialized_ = false;
 	private domReady_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private webviewRef_: any;
+	private webviewRef_: React.RefObject<HTMLIFrameElement>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
@@ -131,8 +130,19 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	public focus() {
 		if (this.webviewRef_.current) {
+			// Calling focus on webviewRef_ seems to be necessary when NoteTextViewer.focus
+			// is called outside of a user event (e.g. in a setTimeout) or during automated
+			// tests:
 			focus('NoteTextViewer::focus', this.webviewRef_.current);
+
+			// Calling .focus on this.webviewRef.current isn't sufficient.
+			// To allow arrow-key scrolling, focus must also be set within the iframe:
+			this.send('focus');
 		}
+	}
+
+	public hasFocus() {
+		return this.webviewRef_.current?.contains(document.activeElement);
 	}
 
 	public tryInit() {
