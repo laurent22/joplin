@@ -123,11 +123,11 @@ const useAnimations = ({ openMenuOffset, isLeftMenu, open }: UseAnimationsProps)
 	useEffect(() => {
 		// In a right-side menu, the drag offset increases while the menu is closing.
 		// It needs to be inverted in that case:
+		// || 1: Prevents division by zero
 		maximumDragOffsetValue.setValue((openMenuOffset || 1) * (isLeftMenu ? 1 : -1));
 	}, [openMenuOffset, isLeftMenu, maximumDragOffsetValue]);
 
 	const menuOpenFraction = useMemo(() => {
-		// || 1: Prevents divide by zero
 		const animatedDragFraction = Animated.divide(menuDragOffset, maximumDragOffsetValue);
 
 		return Animated.add(basePositioningFraction, animatedDragFraction);
