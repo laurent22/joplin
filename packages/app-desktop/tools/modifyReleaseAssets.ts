@@ -1,7 +1,7 @@
 
 import path = require('path');
 import { parseArgs } from 'util';
-import { Context, downloadFile, getTargetRelease, updateReleaseAsset, uploadReleaseAsset } from './githubReleasesUtils';
+import { Context, downloadFileFromGitHub, getTargetRelease, updateReleaseAsset, uploadReleaseAsset } from './githubReleasesUtils';
 import { GitHubRelease } from '../utils/checkForUpdatesUtils';
 import { GenerateInfo, generateLatestArm64Yml } from './generateLatestArm64Yml';
 
@@ -36,9 +36,9 @@ const createReleaseAssets = async (context: Context, release: GitHubRelease) => 
 	let zipPath;
 	for (const asset of release.assets) {
 		if (asset.name.endsWith('arm64.zip')) {
-			zipPath = await downloadFile(context, asset, downloadDir);
+			zipPath = await downloadFileFromGitHub(context, asset, downloadDir);
 		} else if (asset.name.endsWith('arm64.DMG')) {
-			dmgPath = await downloadFile(context, asset, downloadDir);
+			dmgPath = await downloadFileFromGitHub(context, asset, downloadDir);
 		}
 	}
 
