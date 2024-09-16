@@ -602,8 +602,8 @@ const SideMenuContentComponent = (props: Props) => {
 
 			// Accessibility, keyboard, and touch hidden.
 			inert={isHidden}
-			refocusCounter={isHidden ? undefined : 1}
 		>
+			<AccessibleView refocusCounter={isHidden ? undefined : 1} />
 			<View style={{ flex: 1, opacity: props.opacity }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
