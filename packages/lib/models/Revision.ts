@@ -4,9 +4,6 @@ import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
 import * as ArrayUtils from '../ArrayUtils';
 import JoplinError from '../JoplinError';
-import { itemIsReadOnlySync } from './utils/readOnly';
-import ItemChange from './ItemChange';
-import Setting from './Setting';
 const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
@@ -322,28 +319,7 @@ export default class Revision extends BaseItem {
 			itemIdToOldRevisions.get(itemId).push(rev);
 		}
 
-		const canDeleteRevisionsForItem = async (itemType: ModelType, itemId: string) => {
-			const item = await BaseItem.loadItemById(itemId);
-
-			if (item) {
-				const permissionCheckOnly = true;
-				const readOnly = itemIsReadOnlySync(
-					itemType, ItemChange.SOURCE_UNSPECIFIED, item, Setting.value('sync.userId'), BaseItem.syncShareCache, permissionCheckOnly,
-				);
-				if (readOnly) {
-					this.logger().debug('Can\'t delete revisions for read-only shared item. ID:', itemId);
-					return false;
-				}
-			}
-
-			return true;
-		};
-
 		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
-			if (!await canDeleteRevisionsForItem(itemType, itemId)) {
-				return;
-			}
-
 			const keptRev = await this.modelSelectOne(
 				'SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1',
 				[cutOffDate, itemType, itemId],

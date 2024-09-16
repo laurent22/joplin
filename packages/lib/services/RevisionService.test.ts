@@ -1,4 +1,4 @@
-import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep, simulateReadOnlyShareEnv } from '../testing/test-utils';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -6,7 +6,6 @@ import Revision from '../models/Revision';
 import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
-import { itemIsInTrash } from './trash';
 import { NoteEntity } from './database/types';
 
 interface CreateTestRevisionOptions {
@@ -213,36 +212,6 @@ describe('services/RevisionService', () => {
 			expect(rev1.title).toBe('note 2 (v2)');
 		}
 	}));
-
-	it.each([
-		{ inTrash: false },
-		{ inTrash: true },
-	])('should not delete old revisions associated with a read-only share (where %j)', async ({ inTrash }) => {
-		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
-
-		const note = await createTestRevisions({
-			share_id: 'test-share-id',
-			deleted_time: inTrash ? Date.now() : 0,
-		}, { delaysBetweenModifications: [1_000_000, 200] });
-		const getNoteRevisions = () => {
-			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
-		};
-		expect(await getNoteRevisions()).toHaveLength(2);
-
-		const cleanup = simulateReadOnlyShareEnv('test-share-id');
-
-		// Should refuse to delete revisions associated with a read-only share.
-		await revisionService().deleteOldRevisions(10);
-		expect(await getNoteRevisions()).toHaveLength(2);
-
-		cleanup();
-
-		await revisionService().deleteOldRevisions(0);
-		expect(await getNoteRevisions()).toHaveLength(0);
-
-		// Verify that the note has correctly been in the trash/not during the above test.
-		expect(itemIsInTrash(await Note.load(note.id))).toBe(inTrash);
-	});
 
 	it('should not error on revisions for missing (not downloaded yet/permanently deleted) notes', async () => {
 		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
