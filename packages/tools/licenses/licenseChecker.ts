@@ -1,6 +1,6 @@
 import { readdir, stat, writeFile } from 'fs-extra';
 import { chdir, cwd } from 'process';
-import { rootDir } from './tool-utils';
+import { rootDir } from '../tool-utils';
 import { execCommand } from '@joplin/utils';
 import yargs = require('yargs');
 import { rtrimSlashes } from '@joplin/lib/path-utils';

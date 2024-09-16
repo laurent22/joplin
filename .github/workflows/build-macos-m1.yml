@@ -44,6 +44,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set Publish Flag
+        run: |
+          if [[ $GIT_TAG_NAME = v* ]]; then
+            echo "PUBLISH_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "PUBLISH_ENABLED=false" >> $GITHUB_ENV
+          fi
+
       - name: Build macOS M1 app
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
@@ -56,20 +64,23 @@ jobs:
           GH_REPO: ${{ github.repository }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
+          PUBLISH_ENABLED: ${{ env.PUBLISH_ENABLED }}
         run: |
           export npm_config_arch=arm64
           export npm_config_target_arch=arm64
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
-          npm pkg set 'build.mac.target.target'='dmg'
-          npm pkg set 'build.mac.target.arch[0]'='arm64'
+          npm pkg set 'build.mac.target[0].target'='dmg'
+          npm pkg set 'build.mac.target[0].arch[0]'='arm64'
+          npm pkg set 'build.mac.target[1].target'='zip'
+          npm pkg set 'build.mac.target[1].arch[0]'='arm64'
 
-          if [[ $GIT_TAG_NAME = v* ]]; then
+          if [[ "$PUBLISH_ENABLED" == "true" ]]; then
             echo "Building and publishing desktop application..."
             PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
 
-            yarn renameReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
+            yarn modifyReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
           else
             echo "Building but *not* publishing desktop application..."
 

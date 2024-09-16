@@ -171,8 +171,10 @@ export const imageReplacement = function(ResourceModel: OptionsResourceModel, ma
 	if (ResourceModel.isSupportedImageMimeType(mime)) {
 		let newSrc = '';
 
-		if (itemIdToUrl) {
-			newSrc = itemIdToUrl(resource.id);
+		const timestampParameter = `?t=${resource.updated_time}`;
+		const idToUrlResult = itemIdToUrl?.(resource.id, timestampParameter) ?? null;
+		if (idToUrlResult !== null) {
+			newSrc = idToUrlResult;
 		} else {
 			const temp = [];
 
@@ -183,7 +185,7 @@ export const imageReplacement = function(ResourceModel: OptionsResourceModel, ma
 			}
 
 			temp.push(ResourceModel.filename(resource));
-			temp.push(`?t=${resource.updated_time}`);
+			temp.push(timestampParameter);
 
 			newSrc = temp.join('');
 		}

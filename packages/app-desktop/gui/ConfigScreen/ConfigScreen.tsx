@@ -28,6 +28,7 @@ interface Font {
 declare global {
 	interface Window {
 		queryLocalFonts(): Promise<Font[]>;
+		openChangelogLink: ()=> void;
 	}
 }
 
@@ -103,6 +104,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
+			await restart();
+		} else if (key === 'ocr.clearLanguageDataCacheButton') {
+			if (!confirm(this.restartMessage())) return;
+			Setting.setValue('ocr.clearLanguageDataCache', true);
 			await restart();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({

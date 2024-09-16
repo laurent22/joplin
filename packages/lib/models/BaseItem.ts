@@ -506,6 +506,13 @@ export default class BaseItem extends BaseModel {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
+			if (error.code === 'masterKeyNotLoaded' && error.masterKeyId) {
+				this.dispatch?.({
+					type: 'MASTERKEY_ADD_NOT_LOADED',
+					id: error.masterKeyId,
+				});
+			}
+
 			const msg = [`Could not encrypt item ${item.id}`];
 			if (error && error.message) msg.push(error.message);
 			const newError = new Error(msg.join(': '));

@@ -45,7 +45,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		return output;
 	};
 
-	return {
+	const output = {
 		'clientId': {
 			value: '',
 			type: SettingItemType.String,
@@ -498,6 +498,34 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'ocr.languageDataPath': {
+			value: '',
+			type: SettingItemType.String,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Language data URL or path'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ocr.clearLanguageDataCache': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ocr.clearLanguageDataCacheButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: Clear cache and re-download language data files'),
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,
@@ -928,6 +956,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
+		'keychain.lastAvailableDrivers': { value: [] as string[], type: SettingItemType.Array, public: false },
 		'db.ftsEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'db.fuzzySearchEnabled': { value: -1, type: SettingItemType.Int, public: false },
 		'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },
@@ -1523,6 +1552,31 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 		},
 
+		'featureFlag.autoUpdaterServiceEnabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Enable auto-updates',
+			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
+			show: () => shim.isWindows() || shim.isMac(),
+			section: 'application',
+			isGlobal: true,
+		},
+
+		'featureFlag.syncLockEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			label: () => 'Enable sync locks',
+			description: () => 'This is an experimental setting to disable sync locks',
+			section: 'sync',
+			isGlobal: true,
+		},
+
+
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
 		// 	type: SettingItemType.Bool,
@@ -1587,6 +1641,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 	} satisfies Record<string, SettingItem>;
+
+	for (const [key, md] of Object.entries(output)) {
+		if (key.startsWith('featureFlag.')) (md as SettingItem).advanced = true;
+	}
+
+	return output;
 };
 
 export type BuiltInMetadataKeys = keyof ReturnType<typeof builtInMetadata>;

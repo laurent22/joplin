@@ -1,7 +1,10 @@
 import { focus } from '@joplin/lib/utils/focusHandler';
+import Logger from '@joplin/utils/Logger';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo, findNodeHandle, Platform, UIManager, View, ViewProps } from 'react-native';
+
+const logger = Logger.create('AccessibleView');
 
 interface Props extends ViewProps {
 	// Prevents a view from being interacted with by accessibility tools, the mouse, or the keyboard focus.
@@ -31,20 +34,29 @@ const AccessibleView: React.FC<Props> = ({ inert, refocusCounter, children, ...v
 
 	useEffect(() => {
 		if ((refocusCounter ?? null) === null) return;
+		if (!containerRef) return;
 
 		const autoFocus = () => {
-			// react-native-web defines UIManager.focus for setting the keyboard focus. However,
-			// this property is not available in standard react-native. As such, access it using type
-			// narrowing:
-			// eslint-disable-next-line no-restricted-properties
-			if ('focus' in UIManager && typeof UIManager.focus === 'function') {
+			if (Platform.OS === 'web') {
+				// react-native-web defines UIManager.focus for setting the keyboard focus. However,
+				// this property is not available in standard react-native. As such, access it using type
+				// narrowing:
+				// eslint-disable-next-line no-restricted-properties
+				if (!('focus' in UIManager) || typeof UIManager.focus !== 'function') {
+					throw new Error('Failed to focus sidebar. UIManager.focus is not a function.');
+				}
+
 				// Disable the "use focusHandler for all focus calls" rule -- UIManager.focus requires
 				// an argument, which is not supported by focusHandler.
 				// eslint-disable-next-line no-restricted-properties
 				UIManager.focus(containerRef);
 			} else {
 				const handle = findNodeHandle(containerRef as View);
-				AccessibilityInfo.setAccessibilityFocus(handle);
+				if (handle !== null) {
+					AccessibilityInfo.setAccessibilityFocus(handle);
+				} else {
+					logger.warn('Couldn\'t find a view to focus.');
+				}
 			}
 		};
 

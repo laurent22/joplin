@@ -1,5 +1,34 @@
 # Joplin Android Changelog
 
+## [android-v3.1.3](https://github.com/laurent22/joplin/releases/tag/android-v3.1.3) (Pre-release) - 2024-09-02T12:16:46Z
+
+- Improved: Added feature flag to disable sync lock support (#10925) (#10407)
+- Improved: Make feature flags advanced settings by default (700ffa2)
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.10), @js-draw/material-icons (v1.20.2), @react-native-clipboard/clipboard (v1.14.1), @react-native-community/datetimepicker (v8.0.1), @react-native-community/netinfo (v11.3.2), @rollup/plugin-commonjs (v25.0.8), async-mutex (v0.5.0), dayjs (v1.11.11), glob (v10.3.16), react, react-native-device-info (v10.13.2), react-native-safe-area-context (v4.10.3), react-native-webview (v13.8.7), react-native-zip-archive (v6.1.2), sass (v1.76.0), sharp (v0.33.4)
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms (#10897) (#10896 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix BMP image rendering in the Markdown viewer (#10915) (#10914 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix crash on opening settings on old versions of Android (#10793 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix toolbar overflow menu is invisible (#10871) (#10867 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed italic support in Fountain documents (5fdd088)
+- Fixed: Markdown editor: Fix toggling bulleted lists when items start with asterisks (#10902) (#10891 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) (Pre-release) - 2024-08-10T11:44:30Z
+
+- Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve RTL support in the Markdown editor (#10810 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Include commit information in version information screen (#10829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support building for web (#10650 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support pasting images (#10751) (#9017 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/geolocation (v3.2.1), @react-native-community/slider (v4.5.2), glob (v10.3.12), jsdom (v23.2.0), react-native-device-info (v10.13.1), react-native-get-random-values (v1.11.0), react-native-webview (v13.8.4), sharp (v0.33.3), style-to-js (v1.1.12), tar (v6.2.1)
+- Improved: Upgrade react-native-webview to 13.8.6 to fix CI (#10761 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Dropbox sync for certain device languages (#10759) (#10681 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix dayjs-related startup error (#10652 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix math is invisible in certain mermaid diagrams (#10820) (#10785 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix pasting PNG and JPEG images from the clipboard (#10777 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix incorrect Node exports emulation (#10776 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Remove search bar from plugins screen (#10648) (#10596 by Siddhant Paritosh Rao)
+- Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
+
 ## [android-v3.0.9](https://github.com/laurent22/joplin/releases/tag/android-v3.0.9) (Pre-release) - 2024-07-28T14:00:59Z
 
 - Fixed: #10677: Following a link to a previously open note wouldn't work (#10750) (#10677 by [@pedr](https://github.com/pedr))

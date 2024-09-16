@@ -29,3 +29,22 @@ OCR is a technology that evolves rapidly especially with the recent advances in 
 Additionally in some cases it may make sense to use a cloud-based solution, or simply connect to your self-hosted or intranet-based server for OCR. The current system will allow this by writing specific drivers for these services.
 
 This pluggable interface is present in the software but not currently exposed. We will do so depending on feedback we receive and potential use cases. If you have any specific use case in mind or notice any issue with the current OCR system feel free to let us know [on the forum](https://discourse.joplinapp.org/).
+
+## Custom OCR language data URL
+
+After enabling OCR, Joplin downloads language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. This URL can be customized in settings > advanced > "OCR: Language data URL or path". This URL or path should point to a directory with a `.traineddata.gz` file for each language to be used for OCR. After the first download, language data files are cached.
+
+For example, to use OCR on a computer without internet access:
+1. Transfer the `.traineddata.gz` files for the languages that will be OCRed.
+	- English: https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz
+	- French: https://cdn.jsdelivr.net/npm/@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz
+	- In general, trained data can be obtained from `https://cdn.jsdelivr.net/npm/@tesseract.js-data/[language]/4.0.0_best_int/[language].traineddata.gz` where `[language]` should be replaced with `eng`, `fra`, `chi_sim`, `deu`, `spa`, or one of the other supported language codes.
+2. Transfer the `.traineddata.gz` files to the offline computer.
+3. Move all of the files to the same directory (e.g. `C:\Users\User\Documents\joplin-ocr-data\`).
+4. In Joplin, open settings > general > advanced.
+5. Set the "OCR: Language data URL or path" to the filepath of the directory with training data.
+	- This should be the path to the directory selected in step 3.
+6. Click "Apply".
+7. Enable OCR.
+
+To replace existing cached language data, click "Clear cache and re-download language data files".

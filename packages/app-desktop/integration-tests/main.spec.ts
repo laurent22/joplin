@@ -24,7 +24,7 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
-		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
+		await expect(mainScreen.noteList.getNoteItemByTitle('Test note')).toBeVisible();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();
@@ -36,7 +36,7 @@ test.describe('main', () => {
 		await mainWindow.keyboard.type('New note content!');
 
 		// Should render
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		await expect(viewerFrame.locator('h1')).toHaveText('Test note!');
 	});
 
@@ -62,16 +62,23 @@ test.describe('main', () => {
 			'',
 			'Sum: $\\sum_{x=0}^{100} \\tan x$',
 		];
+		let firstLine = true;
 		for (const line of noteText) {
 			if (line) {
-				await mainWindow.keyboard.press('Shift+Tab');
+				if (!firstLine) {
+					// Remove any auto-indentation, but avoid pressing shift-tab at
+					// the beginning of the editor.
+					await mainWindow.keyboard.press('Shift+Tab');
+				}
+
 				await mainWindow.keyboard.type(line);
 			}
 			await mainWindow.keyboard.press('Enter');
+			firstLine = false;
 		}
 
 		// Should render mermaid
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		await expect(
 			viewerFrame.locator('pre.mermaid text', { hasText: testCommitId }),
 		).toBeVisible();
@@ -108,7 +115,7 @@ test.describe('main', () => {
 		await setMessageBoxResponse(electronApp, /^No/i);
 		await editor.attachFileButton.click();
 
-		const viewerFrame = editor.getNoteViewerIframe();
+		const viewerFrame = editor.getNoteViewerFrameLocator();
 		const renderedImage = viewerFrame.getByAltText(filename);
 
 		const fullSize = await getImageSourceSize(renderedImage);

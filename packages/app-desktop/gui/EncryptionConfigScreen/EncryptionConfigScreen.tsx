@@ -116,7 +116,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				);
 			} else {
 				return (
-					<td style={missingPasswordCellStyle}>
+					<td style={passwordChecks[masterKeyId] ? theme.textStyle : missingPasswordCellStyle}>
 						<input
 							type="password"
 							placeholder={_('Enter password')}

@@ -1,4 +1,4 @@
-import MdToHtml from '@joplin/renderer/MdToHtml';
+import MdToHtml, { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 const { filename } = require('@joplin/lib/path-utils');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
@@ -218,6 +218,9 @@ describe('MdToHtml', () => {
 		const mdToHtmlLinkifyOn = newTestMdToHtml({
 			pluginOptions: {
 				linkify: { enabled: true },
+				link_open: {
+					linkRenderingType: LinkRenderingType.HrefHandler,
+				},
 			},
 		});
 
@@ -227,28 +230,51 @@ describe('MdToHtml', () => {
 			},
 		});
 
+		const renderOptions = {
+			bodyOnly: true,
+			plainResourceRendering: true,
+			linkRenderingType: LinkRenderingType.HrefHandler,
+		};
+
 		for (const testCase of testCases) {
 			const [input, expectedLinkifyOff, expectedLinkifyOn] = testCase;
 
 			{
-				const actual = await mdToHtmlLinkifyOn.render(input, null, {
-					bodyOnly: true,
-					plainResourceRendering: true,
-				});
+				const actual = await mdToHtmlLinkifyOn.render(input, null, renderOptions);
 
 				expect(actual.html).toBe(expectedLinkifyOn);
 			}
 
 			{
-				const actual = await mdToHtmlLinkifyOff.render(input, null, {
-					bodyOnly: true,
-					plainResourceRendering: true,
-				});
+				const actual = await mdToHtmlLinkifyOff.render(input, null, renderOptions);
 
 				expect(actual.html).toBe(expectedLinkifyOff);
 			}
 		}
 	}));
+
+	it.each([
+		'[test](http://example.com/)',
+		'[test](mailto:test@example.com)',
+	])('should add onclick handlers to links when linkRenderingType is JavaScriptHandler (%j)', async (markdown) => {
+		const mdToHtml = newTestMdToHtml();
+
+		const renderWithoutOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.HrefHandler,
+		};
+		expect(
+			(await mdToHtml.render(markdown, undefined, renderWithoutOnClickOptions)).html,
+		).not.toContain('onclick');
+
+		const renderWithOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.JavaScriptHandler,
+		};
+		expect(
+			(await mdToHtml.render(markdown, undefined, renderWithOnClickOptions)).html,
+		).toMatch(/<a data-from-md .*onclick=['"].*['"].*>/);
+	});
 
 	it('should return attributes of line numbers', (async () => {
 		const mdToHtml = newTestMdToHtml();

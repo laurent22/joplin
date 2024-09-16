@@ -13,12 +13,12 @@
   "dependencies": {
     "@adobe/css-tools": "4.3.3",
     "html-entities": "1.4.0",
-    "jsdom": "23.2.0"
+    "jsdom": "24.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-commonjs": "25.0.8",
     "@rollup/plugin-node-resolve": "15.2.3",
-    "@rollup/plugin-replace": "5.0.5",
+    "@rollup/plugin-replace": "5.0.7",
     "browserify": "14.5.0",
     "rollup": "4.2.0",
     "standard": "17.1.0",
