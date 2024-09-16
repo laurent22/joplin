@@ -697,7 +697,9 @@ packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/voiceTyping/AddNewReplacement.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
+packages/app-mobile/components/voiceTyping/VoiceTypingOptions.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/index.web.js
 packages/app-mobile/root.js

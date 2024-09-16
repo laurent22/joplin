@@ -1603,7 +1603,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		const renderVoiceTypingDialog = () => {
 			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+			return <VoiceTypingDialog themeId={this.props.themeId} locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
 		};
 
 		return (

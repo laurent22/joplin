@@ -1615,6 +1615,22 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'note',
 		},
 
+		'voiceTyping.replacements.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'Enable word replacements',
+		},
+
+		'voiceTyping.replacements.words': {
+			value: {} as Record<string, string>,
+			type: SettingItemType.Object,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'Replacement key/value map for voice typing',
+		},
+
 		'trash.autoDeletionEnabled': {
 			value: true,
 			type: SettingItemType.Bool,

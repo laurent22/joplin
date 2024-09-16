@@ -6,8 +6,12 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import { modelIsDownloaded } from '../../services/voiceTyping/vosk';
+import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
+import VoiceTypingOptions from './VoiceTypingOptions';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
+	themeId: number;
 	locale: string;
 	onDismiss: ()=> void;
 	onText: (text: string)=> void;
@@ -68,9 +72,30 @@ export default (props: Props) => {
 
 	useEffect(() => {
 		if (recorderState === RecorderState.Recording) {
+			let uppercaseNext = false;
 			setRecorder(startRecording(vosk, {
 				onResult: (text: string) => {
-					props.onText(text);
+					const replacements = Setting.value('voiceTyping.replacements.words');
+					props.onText(text.split(/\s+/).map(word => {
+						const uppercaseCurrent = uppercaseNext;
+						uppercaseNext = false;
+
+						if (Object.prototype.hasOwnProperty.call(replacements, word)) {
+							const action = replacements[word];
+							if (action === 'uppercase') {
+								uppercaseNext = true;
+								word = '';
+							} else if (action.startsWith('insert:')) {
+								word = action.substring('insert:'.length);
+							}
+						}
+
+						if (uppercaseCurrent) {
+							word = word.replace(/^(\w)(.*)$/, (_match, firstLetter: string, remainder) => `${firstLetter.toLocaleUpperCase()}${remainder}`);
+						}
+
+						return word;
+					}).filter(word => !!word.length).join(' '));
 				},
 			}));
 		}
@@ -80,6 +105,8 @@ export default (props: Props) => {
 		if (recorder) recorder.cleanup();
 		props.onDismiss();
 	}, [recorder, props.onDismiss]);
+
+	const [settingsDialogVisible, setSettingsDialogVisible] = useState(false);
 
 	const renderContent = () => {
 		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -107,16 +134,30 @@ export default (props: Props) => {
 	};
 
 	return (
-		<Banner
-			visible={true}
-			icon={renderIcon()}
-			actions={[
-				{
-					label: _('Done'),
-					onPress: onDismiss,
-				},
-			]}>
-			{`${_('Voice typing...')}\n${renderContent()}`}
-		</Banner>
+		<>
+			<Banner
+				visible={true}
+				icon={renderIcon()}
+				actions={[
+					{
+						label: _('Options'),
+						onPress: () => setSettingsDialogVisible(true),
+					},
+					{
+						label: _('Done'),
+						onPress: onDismiss,
+					},
+				]}>
+				{`${_('Voice typing...')}\n${renderContent()}`}
+			</Banner>
+			<DismissibleDialog
+				themeId={props.themeId}
+				visible={settingsDialogVisible}
+				size={DialogSize.Small}
+				onDismiss={() => setSettingsDialogVisible(false)}
+			>
+				<VoiceTypingOptions />
+			</DismissibleDialog>
+		</>
 	);
 };
