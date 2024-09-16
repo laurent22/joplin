@@ -169,11 +169,25 @@ class BaseModel {
 
 	public static modelsByIds<T extends BaseItemEntity>(items: T[], ids: string[]): T[] {
 		const output = [];
-		for (let i = 0; i < items.length; i++) {
-			if (ids.indexOf(items[i].id) >= 0) {
-				output.push(items[i]);
+
+		// This is in O(n^2), but lacks the overhead of creating a new Map and so should be
+		// faster for small numbers of items/ids.
+		if (items.length < 30 || ids.length < 30) {
+			for (const item of items) {
+				if (ids.includes(item.id)) {
+					output.push(item);
+				}
+			}
+		} else {
+			// This is faster, but involves creating a Set.
+			const idSet = new Set(ids);
+			for (const item of items) {
+				if (idSet.has(item.id)) {
+					output.push(item);
+				}
 			}
 		}
+
 		return output;
 	}
 
