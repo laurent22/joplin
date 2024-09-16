@@ -386,13 +386,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						if (row.fields.includes('body')) {
 							let fragments = '...';
 
-							if (i < limit) { // Display note fragments of search keyword matches
-								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
-									row,
-									notesById,
-									resources,
-								);
-
+							const loadFragments = (markupLanguage: MarkupLanguage, content: string) => {
 								const indices = [];
 								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
 								const normalizedBody = removeDiacritics(body);
@@ -415,6 +409,19 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+							};
+
+							if (i < limit) { // Display note fragments of search keyword matches
+								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
+									row,
+									notesById,
+									resources,
+								);
+
+								// Don't load fragments for long notes -- doing so can lead to UI freezes.
+								if (content.length < 100_000) {
+									loadFragments(markupLanguage, content);
+								}
 							}
 
 							results[i] = { ...row, path, fragments };
