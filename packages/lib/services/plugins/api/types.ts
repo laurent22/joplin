@@ -395,6 +395,7 @@ export enum SettingItemType {
 	Array = 4,
 	Object = 5,
 	Button = 6,
+	BigInt = 7,
 }
 
 export enum SettingItemSubType {

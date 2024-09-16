@@ -1407,7 +1407,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'revisionService.ttlDays': {
 			section: 'revisionService',
 			value: 90,
-			type: SettingItemType.Int,
+			type: SettingItemType.BigInt,
 			public: true,
 			minimum: 1,
 			maximum: 365 * 2,
@@ -1626,7 +1626,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		'trash.ttlDays': {
 			value: 90,
-			type: SettingItemType.Int,
+			type: SettingItemType.BigInt,
 			public: true,
 			minimum: 1,
 			maximum: 300,

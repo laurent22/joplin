@@ -114,6 +114,33 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 				</View>
 			</View>
 		);
+	} else if (md.type === Setting.TYPE_BIGINT) {
+		const value = props.value?.toString();
+		const label = `${md.label()} (${md.unitLabel(md.value)})`;
+
+		return (
+			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
+				<View key={props.settingId} style={containerStyle}>
+					<Text key="label" style={styleSheet.settingText}>
+						{label}
+					</Text>
+					<TextInput
+						keyboardType="numeric"
+						autoCorrect={false}
+						autoComplete="off"
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						autoCapitalize="none"
+						key="control"
+						style={styleSheet.settingControl}
+						value={value}
+						onChangeText={newValue => void props.updateSettingValue(props.settingId, newValue.replace(/[^0-9]/g, ''))}
+						secureTextEntry={!!md.secure}
+					/>
+				</View>
+				{descriptionComp}
+			</View>
+		);
 	} else if (md.type === Setting.TYPE_STRING) {
 		if (['sync.2.path', 'plugins.devPluginPaths'].includes(md.key) && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
 			return (

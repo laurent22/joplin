@@ -12,6 +12,7 @@ function settingTypeToSchemaType(type: SettingItemType): string {
 		[SettingItemType.Array]: 'array',
 		[SettingItemType.Object]: 'object',
 		[SettingItemType.Button]: '',
+		[SettingItemType.BigInt]: 'integer',
 	};
 
 	const r = map[type];

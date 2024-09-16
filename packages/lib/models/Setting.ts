@@ -151,6 +151,7 @@ class Setting extends BaseModel {
 	public static TYPE_ARRAY = SettingItemType.Array;
 	public static TYPE_OBJECT = SettingItemType.Object;
 	public static TYPE_BUTTON = SettingItemType.Button;
+	public static TYPE_BIGINT = SettingItemType.BigInt;
 
 	public static THEME_LIGHT = 1;
 	public static THEME_DARK = 2;
@@ -782,7 +783,7 @@ class Setting extends BaseModel {
 	public static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
-		if (md.type === SettingItemType.Int) return value.toFixed(0);
+		if (md.type === SettingItemType.Int || md.type === SettingItemType.BigInt) return value.toFixed(0);
 		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
 		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
 		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
@@ -801,7 +802,7 @@ class Setting extends BaseModel {
 	public static formatValue(key: string | SettingItemType, value: any) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
-		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
+		if (type === SettingItemType.Int || type === SettingItemType.BigInt) return !value ? 0 : Math.floor(Number(value));
 
 		if (type === SettingItemType.Bool) {
 			if (typeof value === 'string') {
@@ -1086,7 +1087,7 @@ class Setting extends BaseModel {
 	}
 
 	public static typeToString(typeId: SettingItemType) {
-		if (typeId === SettingItemType.Int) return 'int';
+		if (typeId === SettingItemType.Int || typeId === SettingItemType.BigInt) return 'int';
 		if (typeId === SettingItemType.String) return 'string';
 		if (typeId === SettingItemType.Bool) return 'bool';
 		if (typeId === SettingItemType.Array) return 'array';
