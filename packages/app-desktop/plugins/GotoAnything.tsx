@@ -129,7 +129,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	private inputRef: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private itemListRef: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listUpdateQueue_: AsyncActionQueue;
 	private markupToHtml_: MarkupToHtml;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
