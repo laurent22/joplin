@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, TextInput, FlatList, TouchableHighlight, TextStyle } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -38,7 +38,7 @@ class SearchScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private isMounted_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private styles_: any = {};
+	private styles_: Record<string, any> = {};
 	private searchActionQueue_ = new AsyncActionQueue(200);
 
 	public static navigationOptions() {
@@ -60,7 +60,7 @@ class SearchScreenComponent extends BaseScreenComponent<Props, State> {
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
-		const styles: Record<string, TextStyle> = {
+		const styleSheet = StyleSheet.create({
 			body: {
 				flex: 1,
 			},
@@ -70,21 +70,22 @@ class SearchScreenComponent extends BaseScreenComponent<Props, State> {
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
 			},
-		};
-
-		styles.searchTextInput = { ...theme.lineInput };
-		styles.searchTextInput.paddingLeft = theme.marginLeft;
-		styles.searchTextInput.flex = 1;
-		styles.searchTextInput.backgroundColor = theme.backgroundColor;
-		styles.searchTextInput.color = theme.color;
-
-		styles.clearIcon = { ...theme.icon };
-		styles.clearIcon.color = theme.colorFaded;
-		styles.clearIcon.paddingRight = theme.marginRight;
-		styles.clearIcon.backgroundColor = theme.backgroundColor;
-
-		this.styles_[this.props.themeId] = StyleSheet.create(styles);
-		return this.styles_[this.props.themeId];
+			searchTextInput: {
+				...theme.lineInput,
+				paddingLeft: theme.marginLeft,
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+				color: theme.color,
+			},
+			clearIcon: {
+				...theme.icon,
+				color: theme.colorFaded,
+				paddingRight: theme.marginRight,
+				backgroundColor: theme.backgroundColor,
+			},
+		});
+		this.styles_[this.props.themeId] = styleSheet;
+		return styleSheet;
 	}
 
 	public componentDidMount() {
