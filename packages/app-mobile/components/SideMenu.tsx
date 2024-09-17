@@ -46,7 +46,7 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 			mainContainer: {
 				display: 'flex',
 				alignContent: 'stretch',
-				flexBasis: windowHeight,
+				height: windowHeight,
 				flexGrow: 1,
 				flexShrink: 1,
 			},
@@ -69,7 +69,6 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				flexDirection: 'column',
 				flexGrow: 1,
 				flexShrink: 1,
-				flexBasis: windowHeight,
 			},
 			menuWrapper: {
 				position: 'absolute',
