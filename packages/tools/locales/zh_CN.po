@@ -1,11 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: qx100 <ztymaxwell@gmail.com>\n"
 "Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:600
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -228,9 +230,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，用于从 "
-"[note] 中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用"
-"于列出所有的标签（对于过长选项请使用 -l 参数）。"
+"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，分别用于从 "
+"[note] 中赋值或删除 [tag]，列出与 [tag] 相关的笔记，列出与[note]相关的tag。"
+"`tag list` 命令可以用于列出所有的标签（对于过长选项请使用 -l 参数）。"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -240,8 +242,8 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办事"
-"项的完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命令来把待"
-"办事项转换到普通笔记。"
+"项的完成/未完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命"
+"令来把待办事项转换到普通笔记。"
 
 #: packages/lib/models/Setting.ts:1535
 msgid "A3"
@@ -382,7 +384,7 @@ msgstr "包含笔记，笔记本和标签在内的所有数据将会被永久删
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr "所有同步失败的条目都被标记为 \"忽略\"。"
+msgstr "所有同步失败的条目都被标记为 \"已忽略\"。"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:61
 #: packages/app-mobile/components/screens/Notes.tsx:184
@@ -1860,7 +1862,7 @@ msgstr "启用 Fountain 语法支持"
 
 #: packages/lib/models/Setting.ts:1265
 msgid "Enable Linkify"
-msgstr "启用自动链接"
+msgstr "启用自动链接（Linkify）"
 
 #: packages/lib/models/Setting.ts:1281
 msgid "Enable markdown emoji"
@@ -2802,7 +2804,7 @@ msgstr "需要升级的密钥"
 
 #: packages/lib/models/Setting.ts:1544
 msgid "Landscape"
-msgstr "横板"
+msgstr "横版"
 
 #: packages/lib/models/Setting.ts:826
 msgid "Language"
@@ -2934,9 +2936,8 @@ msgid "Log"
 msgstr "日志"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:698
-#, fuzzy
 msgid "Login to Joplin Cloud."
-msgstr "连接至 Joplin Cloud"
+msgstr "登录Joplin Cloud"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -4080,7 +4081,7 @@ msgstr "恢复笔记本"
 
 #: packages/app-cli/app/command-restore.ts:12
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "恢复符合 <note-pattern> 的笔记。"
+msgstr "从回收站恢复符合 <pattern> 的笔记。"
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
@@ -5888,7 +5889,7 @@ msgstr "您的数据将被重新加密并再次同步。"
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:697
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "您的 Joplin Cloud 认证无效，请登录。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

@@ -1,10 +1,9 @@
 import * as fs from 'fs';
 import { createWriteStream } from 'fs';
 import * as path from 'path';
-import { promisify } from 'util';
+import { pipeline } from 'stream/promises';
+import axios from 'axios';
 import { GitHubRelease, GitHubReleaseAsset } from '../utils/checkForUpdatesUtils';
-
-const pipeline = promisify(require('stream').pipeline);
 
 export interface Context {
 	repo: string; // {owner}/{repo}
@@ -14,6 +13,7 @@ export interface Context {
 
 const apiBaseUrl = 'https://api.github.com/repos/';
 const defaultApiHeaders = (context: Context) => ({
+	'User-Agent': 'Joplin',
 	'Authorization': `token ${context.githubToken}`,
 	'X-GitHub-Api-Version': '2022-11-28',
 	'Accept': 'application/vnd.github+json',
@@ -45,7 +45,7 @@ export const getTargetRelease = async (context: Context, targetTag: string): Pro
 };
 
 // Download a file from Joplin Desktop releases
-export const downloadFile = async (context: Context, asset: GitHubReleaseAsset, destinationDir: string): Promise<string> => {
+export const downloadFileFromGitHub = async (context: Context, asset: GitHubReleaseAsset, destinationDir: string) => {
 	const downloadPath = path.join(destinationDir, asset.name);
 	if (!fs.existsSync(destinationDir)) {
 		fs.mkdirSync(destinationDir);
@@ -53,20 +53,28 @@ export const downloadFile = async (context: Context, asset: GitHubReleaseAsset, 
 
 	/* eslint-disable no-console */
 	console.log(`Downloading ${asset.name} from ${asset.url} to ${downloadPath}`);
-	const response = await fetch(asset.url, {
-		headers: {
-			...defaultApiHeaders(context),
-			'Accept': 'application/octet-stream',
-		},
-	});
-	if (!response.ok) {
-		throw new Error(`Failed to download file: Status Code ${response.status}`);
+	try {
+		const response = await axios({
+			method: 'get',
+			url: asset.url,
+			responseType: 'stream',
+			headers: {
+				...defaultApiHeaders(context),
+				'Accept': 'application/octet-stream',
+			},
+		});
+
+		if (response.status < 200 || response.status >= 300) {
+			throw new Error(`Failed to download file: Status Code ${response.status}`);
+		}
+
+		await pipeline(response.data, createWriteStream(downloadPath));
+		console.log('Download successful!');
+		/* eslint-enable no-console */
+		return downloadPath;
+	} catch (error) {
+		throw new Error('Download not successful.');
 	}
-	const fileStream = createWriteStream(downloadPath);
-	await pipeline(response.body, fileStream);
-	console.log('Download successful!');
-	/* eslint-enable no-console */
-	return downloadPath;
 };
 
 export const updateReleaseAsset = async (context: Context, assetUrl: string, newName: string) => {
