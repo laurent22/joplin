@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, TouchableHighlight, TextStyle } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -60,8 +60,7 @@ class SearchScreenComponent extends BaseScreenComponent<Props, State> {
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styles: any = {
+		const styles: Record<string, TextStyle> = {
 			body: {
 				flex: 1,
 			},
@@ -234,4 +233,4 @@ const SearchScreen = connect((state: AppState) => {
 	};
 })(SearchScreenComponent);
 
-module.exports = { SearchScreen };
+export default SearchScreen;
