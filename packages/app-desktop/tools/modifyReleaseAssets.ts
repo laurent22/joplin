@@ -35,11 +35,14 @@ const createReleaseAssets = async (context: Context, release: GitHubRelease) => 
 	let dmgPath;
 	let zipPath;
 	for (const asset of release.assets) {
-		console.log(`Current asset from iteration: ${asset.name}. Verification of second condition: ${asset.name.endsWith('arm64.DMG')}`);
+		console.log(`Current asset from iteration: ${asset.name}.`);
 		if (asset.name.endsWith('arm64.zip')) {
 			zipPath = await downloadFileFromGitHub(context, asset, downloadDir);
-		} else if (asset.name.endsWith('arm64.DMG')) {
-			dmgPath = await downloadFileFromGitHub(context, asset, downloadDir);
+		} else {
+			console.log(`Verification of second condition: ${asset.name.toLowerCase().endsWith('arm64.dmg')}`);
+			if (asset.name.toLowerCase().endsWith('arm64.dmg')) {
+				dmgPath = await downloadFileFromGitHub(context, asset, downloadDir);
+			}
 		}
 	}
 
