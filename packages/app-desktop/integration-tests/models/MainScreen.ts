@@ -4,10 +4,11 @@ import activateMainMenuItem from '../util/activateMainMenuItem';
 import Sidebar from './Sidebar';
 import GoToAnything from './GoToAnything';
 import setFilePickerResponse from '../util/setFilePickerResponse';
+import NoteList from './NoteList';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
-	public readonly noteListContainer: Locator;
+	public readonly noteList: NoteList;
 	public readonly sidebar: Sidebar;
 	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
@@ -15,7 +16,7 @@ export default class MainScreen {
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
-		this.noteListContainer = page.locator('.rli-noteList');
+		this.noteList = new NoteList(page);
 		this.sidebar = new Sidebar(page, this);
 		this.dialog = page.locator('.dialog-modal-layer');
 		this.noteEditor = new NoteEditorScreen(page);
@@ -24,7 +25,7 @@ export default class MainScreen {
 
 	public async waitFor() {
 		await this.newNoteButton.waitFor();
-		await this.noteListContainer.waitFor();
+		await this.noteList.waitFor();
 	}
 
 	// Follows the steps a user would use to create a new note.
@@ -45,12 +46,7 @@ export default class MainScreen {
 
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
-		const openedWithPreferences = await activateMainMenuItem(electronApp, 'Preferences...');
-		const openedWithOptions = await activateMainMenuItem(electronApp, 'Options');
-
-		if (!openedWithOptions && !openedWithPreferences) {
-			throw new Error('Unable to find settings menu item in application menus.');
-		}
+		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
 	}
 
 	public async search(text: string) {
@@ -60,10 +56,6 @@ export default class MainScreen {
 
 	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
 		await setFilePickerResponse(electronApp, [path]);
-		const startedImport = await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
-
-		if (!startedImport) {
-			throw new Error('Unable to find HTML directory import menu item.');
-		}
+		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
 	}
 }

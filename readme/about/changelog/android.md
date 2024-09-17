@@ -1,5 +1,17 @@
 # Joplin Android Changelog
 
+## [android-v3.1.3](https://github.com/laurent22/joplin/releases/tag/android-v3.1.3) (Pre-release) - 2024-09-02T12:16:46Z
+
+- Improved: Added feature flag to disable sync lock support (#10925) (#10407)
+- Improved: Make feature flags advanced settings by default (700ffa2)
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.10), @js-draw/material-icons (v1.20.2), @react-native-clipboard/clipboard (v1.14.1), @react-native-community/datetimepicker (v8.0.1), @react-native-community/netinfo (v11.3.2), @rollup/plugin-commonjs (v25.0.8), async-mutex (v0.5.0), dayjs (v1.11.11), glob (v10.3.16), react, react-native-device-info (v10.13.2), react-native-safe-area-context (v4.10.3), react-native-webview (v13.8.7), react-native-zip-archive (v6.1.2), sass (v1.76.0), sharp (v0.33.4)
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms (#10897) (#10896 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix BMP image rendering in the Markdown viewer (#10915) (#10914 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix crash on opening settings on old versions of Android (#10793 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix toolbar overflow menu is invisible (#10871) (#10867 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed italic support in Fountain documents (5fdd088)
+- Fixed: Markdown editor: Fix toggling bulleted lists when items start with asterisks (#10902) (#10891 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) (Pre-release) - 2024-08-10T11:44:30Z
 
 - Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

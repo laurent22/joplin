@@ -24,7 +24,7 @@ test.describe('main', () => {
 		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
-		await expect(mainScreen.noteListContainer.getByText('Test note')).toBeVisible();
+		await expect(mainScreen.noteList.getNoteItemByTitle('Test note')).toBeVisible();
 
 		// Focus the editor
 		await editor.codeMirrorEditor.click();

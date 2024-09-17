@@ -8,8 +8,11 @@ import { Dispatch } from 'redux';
 import { FocusNote } from './useFocusNote';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { KeyboardEventKey } from '@joplin/lib/dom';
+import announceForAccessibility from '../../utils/announceForAccessibility';
+import { _ } from '@joplin/lib/locale';
 
 const useOnKeyDown = (
+	activeNoteId: string,
 	selectedNoteIds: string[],
 	moveNote: (direction: number, inc: number)=> void,
 	makeItemIndexVisible: (itemIndex: number)=> void,
@@ -84,18 +87,32 @@ const useOnKeyDown = (
 				}
 			}
 			event.preventDefault();
-		} else if (noteIds.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
-			const noteId = noteIds[0];
+		} else if (notes.length > 0 && (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'PageDown' || key === 'PageUp' || key === 'End' || key === 'Home')) {
+			const noteId = activeNoteId ?? notes[0]?.id;
 			let noteIndex = BaseModel.modelIndexById(notes, noteId);
 
 			noteIndex = scrollNoteIndex(visibleItemCount, key, event.ctrlKey, event.metaKey, noteIndex);
 
 			const newSelectedNote = notes[noteIndex];
 
-			dispatch({
-				type: 'NOTE_SELECT',
-				id: newSelectedNote.id,
-			});
+			if (event.shiftKey) {
+				if (selectedNoteIds.includes(newSelectedNote.id)) {
+					dispatch({
+						type: 'NOTE_SELECT_REMOVE',
+						id: noteId,
+					});
+				}
+
+				dispatch({
+					type: 'NOTE_SELECT_ADD',
+					id: newSelectedNote.id,
+				});
+			} else {
+				dispatch({
+					type: 'NOTE_SELECT',
+					id: newSelectedNote.id,
+				});
+			}
 
 			makeItemIndexVisible(noteIndex);
 
@@ -122,8 +139,7 @@ const useOnKeyDown = (
 			event.preventDefault();
 
 			const selectedNotes = BaseModel.modelsByIds(notes, noteIds);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const todos = selectedNotes.filter((n: any) => !!n.is_todo);
+			const todos = selectedNotes.filter(n => !!n.is_todo);
 			if (!todos.length) return;
 
 			for (let i = 0; i < todos.length; i++) {
@@ -131,17 +147,15 @@ const useOnKeyDown = (
 				await Note.save(toggledTodo);
 			}
 
+			dispatch({ type: 'NOTE_SORT' });
 			focusNote(todos[0].id);
+			const wasCompleted = !!todos[0].todo_completed;
+			announceForAccessibility(!wasCompleted ? _('Complete') : _('Incomplete'));
 		}
 
-		if (key === 'Tab') {
+		if (key === 'Tab' && event.shiftKey) {
 			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'sideBar');
-			} else {
-				void CommandService.instance().execute('focusElement', 'noteTitle');
-			}
+			void CommandService.instance().execute('focusElement', 'sideBar');
 		}
 
 		if (key.toUpperCase() === 'A' && (event.ctrlKey || event.metaKey)) {
@@ -151,7 +165,7 @@ const useOnKeyDown = (
 				type: 'NOTE_SELECT_ALL',
 			});
 		}
-	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, dispatch, flow, itemsPerLine]);
+	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, activeNoteId, dispatch, flow, itemsPerLine]);
 
 
 	return onKeyDown;

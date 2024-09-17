@@ -14,6 +14,7 @@ const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
 import { assetsToHeaders } from '@joplin/renderer';
 import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
+import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -115,8 +116,14 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			const bodyMd = await this.processNoteResources_(item);
 			const result = await this.markupToHtml_.render(item.markup_language, bodyMd, this.style_, {
 				resources: this.resources_,
-				plainResourceRendering: true,
 				settingValue: getPluginSettingValue,
+
+				plainResourceRendering: true,
+				plugins: {
+					link_open: {
+						linkRenderingType: LinkRenderingType.HrefHandler,
+					},
+				},
 			});
 			const noteContent = [];
 			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
