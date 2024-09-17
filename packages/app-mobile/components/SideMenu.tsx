@@ -64,6 +64,8 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				display: 'flex',
 				flexDirection: 'column',
 				flexGrow: 1,
+				flexShrink: 1,
+				flexBasis: windowHeight,
 			},
 			menuWrapper: {
 				position: 'absolute',
