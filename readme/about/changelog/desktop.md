@@ -1,5 +1,23 @@
 # Joplin Desktop Changelog
 
+## [v3.1.15](https://github.com/laurent22/joplin/releases/tag/v3.1.15) (Pre-release) - 2024-09-17T09:15:10Z
+
+- New: Accessibility: Add "Move to" context menu action for notebooks ([#11039](https://github.com/laurent22/joplin/issues/11039) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Improve text read by screen readers when focusing the note viewer ([#11030](https://github.com/laurent22/joplin/issues/11030) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve the performance of GoToAnything ([#11064](https://github.com/laurent22/joplin/issues/11064)) ([#11063](https://github.com/laurent22/joplin/issues/11063) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Seamless-Updates: generated and uploaded latest-mac-arm64.yml to GitHub Releases ([#11042](https://github.com/laurent22/joplin/issues/11042) by [@AliceHincu](https://github.com/AliceHincu))
+- Improved: Update plugin compatibility layer to allow more legacy plugins (e.g. Markdown Prettier) to run ([#11033](https://github.com/laurent22/joplin/issues/11033) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages jsdom (v24), markdown-it-ins (v4), markdown-it-sup (v2), sass (v1.77.5)
+- Improved: Upgrade CodeMirror packages ([#11034](https://github.com/laurent22/joplin/issues/11034) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix multi-note selection menu not tab-focusable ([#11018](https://github.com/laurent22/joplin/issues/11018) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Encryption screen: Fix "invalid password" border shown for some correct passwords ([#11027](https://github.com/laurent22/joplin/issues/11027) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix clicking on most non-media resource links opens them inline ([#11022](https://github.com/laurent22/joplin/issues/11022)) ([#11020](https://github.com/laurent22/joplin/issues/11020) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix editor/viewer loses focus when visible panels are changed with ctrl-l ([#11029](https://github.com/laurent22/joplin/issues/11029) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix table column and rows not being resizable on RTE ([#11037](https://github.com/laurent22/joplin/issues/11037)) ([#10560](https://github.com/laurent22/joplin/issues/10560) by [@pedr](https://github.com/pedr))
+- Fixed: Fix unable to change incorrect decryption password if the same as the master password ([#11026](https://github.com/laurent22/joplin/issues/11026) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: MacOS: Fixed shortcut for permanent note deletion ([41b03f9](https://github.com/laurent22/joplin/commit/41b03f9))
+- Fixed: Table options not visible on dark theme ([#11036](https://github.com/laurent22/joplin/issues/11036)) ([#10561](https://github.com/laurent22/joplin/issues/10561) by [@pedr](https://github.com/pedr))
+
 ## [v3.1.8](https://github.com/laurent22/joplin/releases/tag/v3.1.8) (Pre-release) - 2024-09-08T20:32:44Z
 
 - Improved: Seamless-Updates - rename latest-mac.yml to latest-mac-arm64.yml ([#10985](https://github.com/laurent22/joplin/issues/10985) by [@AliceHincu](https://github.com/AliceHincu))
