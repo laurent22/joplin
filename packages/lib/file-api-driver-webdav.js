@@ -107,6 +107,8 @@ class FileApiDriverWebDav {
 			output = href.substr(baseUrl.length);
 		} else if (href.indexOf(relativeBaseUrl) === 0) {
 			output = href.substr(relativeBaseUrl.length);
+		} else if (decodeURIComponent(href).indexOf(decodeURIComponent(relativeBaseUrl)) === 0) {
+			output = decodeURIComponent(href).substring(decodeURIComponent(relativeBaseUrl).length);
 		} else {
 			throw new Error(`href ${href} not in baseUrl ${baseUrl} nor relativeBaseUrl ${relativeBaseUrl}`);
 		}
