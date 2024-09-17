@@ -185,8 +185,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 	public isLinkToLocalFile(path: string) {
 		try {
-			const url = new URL(path);
-			if (url.protocol) return false;
+			new URL(path);
 		} catch (error) {
 			// if it fails it probably is a relative path (local file)
 			if (error && error.code === 'ERR_INVALID_URL') return true;
