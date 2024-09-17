@@ -35,6 +35,7 @@ const createReleaseAssets = async (context: Context, release: GitHubRelease) => 
 	let dmgPath;
 	let zipPath;
 	for (const asset of release.assets) {
+		console.log(`Current asset from iteration: ${asset.name}. Verification of second condition: ${asset.name.endsWith('arm64.DMG')}`);
 		if (asset.name.endsWith('arm64.zip')) {
 			zipPath = await downloadFileFromGitHub(context, asset, downloadDir);
 		} else if (asset.name.endsWith('arm64.DMG')) {
