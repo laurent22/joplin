@@ -11,7 +11,6 @@ export const DEFAULT_ROUTE = {
 const appDefaultState: AppState = {
 	smartFilterId: undefined,
 	...defaultState,
-	sideMenuOpenPercent: 0,
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
