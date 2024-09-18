@@ -85,10 +85,6 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 		});
 
 		notificationRef.current = notification;
-
-		notification.on(NotyfEvent.Dismiss, () => {
-			notificationRef.current = null;
-		});
 	}, [notyf, theme]);
 
 	const handleUpdateNotAvailable = useCallback(() => {
@@ -129,7 +125,6 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateDownloaded, handleUpdateDownloaded);
 			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateNotAvailable, handleUpdateNotAvailable);
 			document.removeEventListener(UpdateNotificationEvents.ApplyUpdate, handleApplyUpdate);
-			document.removeEventListener(UpdateNotificationEvents.Dismiss, handleDismissNotification);
 		};
 	}, [handleApplyUpdate, handleDismissNotification, handleUpdateDownloaded, handleUpdateNotAvailable]);
 
