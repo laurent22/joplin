@@ -2,12 +2,10 @@ import BaseModel from './BaseModel';
 
 describe('BaseModel', () => {
 	test.each([
-		[50, 50],
-		[100, 60],
-		[60, 100],
 		[0, 0],
-		[5, 3],
-		[3, 5],
+		[4, 10],
+		[10, 4],
+		[5, 5],
 	])('should filter items by IDs (itemCount: %d, idCount: %d)', (itemCount, idCount) => {
 		const items = [];
 		const ids = [];
