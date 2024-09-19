@@ -56,6 +56,7 @@ export default function() {
 		'editor.sortSelectedLines',
 		'editor.swapLineUp',
 		'editor.swapLineDown',
+		'exportDeletionLogs',
 		'toggleSafeMode',
 		'showShareNoteDialog',
 		'showShareFolderDialog',
