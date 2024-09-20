@@ -55,6 +55,17 @@ class NoteItemComponent extends PureComponent<Props, State> {
 			selectionWrapper: {
 				backgroundColor: theme.backgroundColor,
 			},
+			checkboxStyle: {
+				color: theme.color,
+				paddingRight: 10,
+				paddingTop: theme.itemMarginTop,
+				paddingBottom: theme.itemMarginBottom,
+				paddingLeft: theme.marginLeft,
+			},
+			checkedOpacityStyle: {
+				opacity: 0.4,
+			},
+			uncheckedOpacityStyle: { },
 		};
 
 		styles.listItemWithCheckbox = { ...styles.listItem };
@@ -115,23 +126,12 @@ class NoteItemComponent extends PureComponent<Props, State> {
 	public render() {
 		const note = this.props.note ? this.props.note : {};
 		const isTodo = !!Number(note.is_todo);
-
-		const theme = themeStyle(this.props.themeId);
-
-		const checkboxStyle: TextStyle = { color: theme.color };
-
-		if (isTodo) {
-			checkboxStyle.paddingRight = 10;
-			checkboxStyle.paddingTop = theme.itemMarginTop;
-			checkboxStyle.paddingBottom = theme.itemMarginBottom;
-			checkboxStyle.paddingLeft = theme.marginLeft;
-		}
-
 		const checkboxChecked = !!Number(note.todo_completed);
 
+		const checkboxStyle = this.styles().checkboxStyle;
 		const listItemStyle = isTodo ? this.styles().listItemWithCheckbox : this.styles().listItem;
 		const listItemTextStyle = isTodo ? this.styles().listItemTextWithCheckbox : this.styles().listItemText;
-		const opacityStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
+		const opacityStyle = isTodo && checkboxChecked ? this.styles().checkedOpacityStyle : this.styles().uncheckedOpacityStyle;
 		const isSelected = this.props.noteSelectionEnabled && this.props.selectedNoteIds.indexOf(note.id) >= 0;
 
 		const selectionWrapperStyle = isSelected ? this.styles().selectionWrapperSelected : this.styles().selectionWrapper;
