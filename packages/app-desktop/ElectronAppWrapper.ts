@@ -495,6 +495,7 @@ export default class ElectronAppWrapper {
 		if (this.updatePollInterval_) {
 			clearInterval(this.updatePollInterval_);
 			this.updatePollInterval_ = null;
+			this.updaterService_ = null;
 		}
 	};
 
