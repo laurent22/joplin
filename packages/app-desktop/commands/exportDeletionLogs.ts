@@ -9,7 +9,7 @@ import bridge from '../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'exportDeletionLogs',
-	label: () => _('Export deletion logs'),
+	label: () => _('Export deletion log'),
 };
 
 export const runtime = (): CommandRuntime => {
@@ -36,7 +36,7 @@ export const runtime = (): CommandRuntime => {
 
 			await shim.fsDriver().writeFile(deletionLogPath, deletionLog, 'utf8');
 
-			await void bridge().openItem(Setting.value('profileDir'));
+			await void bridge().openItem(deletionLogPath);
 		},
 	};
 };
