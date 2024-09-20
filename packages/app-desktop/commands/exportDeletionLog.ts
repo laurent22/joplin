@@ -9,7 +9,7 @@ import bridge from '../services/bridge';
 import { Stat } from '@joplin/lib/fs-driver-base';
 
 export const declaration: CommandDeclaration = {
-	name: 'exportDeletionLogs',
+	name: 'exportDeletionLog',
 	label: () => _('Export deletion log'),
 };
 
