@@ -36,7 +36,7 @@ export const runtime = (): CommandRuntime => {
 
 			await shim.fsDriver().writeFile(deletionLogPath, deletionLog, 'utf8');
 
-			await void bridge().openItem(deletionLogPath);
+			await bridge().openItem(deletionLogPath);
 		},
 	};
 };
