@@ -6,7 +6,7 @@ import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-const { NoteItem } = require('../note-item.js');
+import NoteItem from '../NoteItem';
 const { BaseScreenComponent } = require('../base-screen');
 import { themeStyle } from '../global-style';
 const DialogBox = require('react-native-dialogbox').default;
