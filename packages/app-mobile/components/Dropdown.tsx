@@ -79,7 +79,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		this.setState({ listVisible: false });
 	};
 	private onListLoad = (listRef: FlatList|null) => {
-		if (!listRef || !this.state.listVisible) return;
+		if (!listRef) return;
 
 		for (let i = 0; i < this.props.items.length; i++) {
 			const item = this.props.items[i];
