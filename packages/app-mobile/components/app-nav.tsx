@@ -115,7 +115,7 @@ class AppNavComponent extends Component<Props, State> {
 				behavior={Platform.OS === 'ios' ? 'padding' : null}
 				style={style}
 			>
-				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
+				<NotesScreen visible={notesScreenVisible} />
 				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
 				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={this.props.themeId} dispatch={this.props.dispatch} />}
 				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
