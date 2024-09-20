@@ -148,7 +148,7 @@ class NotesScreenComponent extends BaseScreenComponent<Props, State> {
 		}
 	}
 
-	public async refreshNotes(props: Props = null) {
+	public async refreshNotes(props: Props|null = null) {
 		if (props === null) props = this.props;
 
 		const options = {
