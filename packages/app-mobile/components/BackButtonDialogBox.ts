@@ -1,4 +1,4 @@
-import BackButtonService from '../services/BackButtonService';
+const { BackButtonService } = require('../services/back-button.js');
 const DialogBox = require('react-native-dialogbox').default;
 
 export default class BackButtonDialogBox extends DialogBox {

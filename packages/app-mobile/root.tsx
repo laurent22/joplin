@@ -37,7 +37,7 @@ const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
-import BackButtonService from './services/BackButtonService';
+const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';

@@ -14,7 +14,7 @@ import ActionButton from '../buttons/FloatingActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { BaseScreenComponent } = require('../base-screen');
-import BackButtonService from '../../services/BackButtonService';
+const { BackButtonService } = require('../../services/back-button.js');
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';

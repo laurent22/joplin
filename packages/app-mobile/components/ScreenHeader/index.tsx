@@ -3,7 +3,7 @@ import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
-import BackButtonService from '../../services/BackButtonService';
+const { BackButtonService } = require('../../services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
