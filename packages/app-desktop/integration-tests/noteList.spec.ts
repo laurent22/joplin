@@ -32,7 +32,7 @@ test.describe('noteList', () => {
 		await mainWindow.keyboard.type('[Testing...](http://example.com/)');
 
 		// Wait to render
-		await expect(editor.getNoteViewerIframe().locator('a', { hasText: 'Testing...' })).toBeVisible();
+		await expect(editor.getNoteViewerFrameLocator().locator('a', { hasText: 'Testing...' })).toBeVisible();
 
 		// Updating the title should force the sidebar to update sooner
 		await expect(editor.noteTitleInput).toHaveValue('note-1');

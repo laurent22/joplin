@@ -46,23 +46,37 @@ describe('AutoUpdaterService', () => {
 		expect(release.tag_name).toBe('v3.1.2');
 	});
 
-	it('should return the correct download URL for Windows', async () => {
+	it('should return the correct download URL for Windows x32', async () => {
 		const release = await service.fetchLatestRelease(true);
 		expect(release).toBeDefined();
-		const url = service.getDownloadUrlForPlatform(release, 'win32');
+		const url = service.getDownloadUrlForPlatform(release, 'win32', 'ia32');
 		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest.yml');
 	});
 
-	it('should return the correct download URL for Mac', async () => {
+	it('should return the correct download URL for Windows x64', async () => {
 		const release = await service.fetchLatestRelease(true);
 		expect(release).toBeDefined();
-		const url = service.getDownloadUrlForPlatform(release, 'darwin');
+		const url = service.getDownloadUrlForPlatform(release, 'win32', 'x64');
+		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest.yml');
+	});
+
+	it('should return the correct download URL for Mac x64', async () => {
+		const release = await service.fetchLatestRelease(true);
+		expect(release).toBeDefined();
+		const url = service.getDownloadUrlForPlatform(release, 'darwin', 'x64');
 		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest-mac.yml');
+	});
+
+	it('should return the correct download URL for Mac arm64', async () => {
+		const release = await service.fetchLatestRelease(true);
+		expect(release).toBeDefined();
+		const url = service.getDownloadUrlForPlatform(release, 'darwin', 'arm64');
+		expect(url).toBe('https://github.com/laurent22/joplin/releases/download/v3.1.3/latest-mac-arm64.yml');
 	});
 
 	it('should throw an error for Linux', async () => {
 		const release = await service.fetchLatestRelease(true);
 		expect(release).toBeDefined();
-		expect(() => service.getDownloadUrlForPlatform(release, 'linux')).toThrow('The AutoUpdaterService does not support the following platform: linux');
+		expect(() => service.getDownloadUrlForPlatform(release, 'linux', 'amd64')).toThrow('The AutoUpdaterService does not support the following platform: linux');
 	});
 });
