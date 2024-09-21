@@ -122,7 +122,7 @@ const useOnKeyDown = (
 		}
 
 		if (noteIds.length) {
-			if (key === 'Delete' && event.shiftKey) {
+			if (key === 'Delete' && event.shiftKey || (key === 'Backspace' && event.metaKey && event.altKey)) {
 				event.preventDefault();
 				if (CommandService.instance().isEnabled('permanentlyDeleteNote')) {
 					void CommandService.instance().execute('permanentlyDeleteNote', noteIds);

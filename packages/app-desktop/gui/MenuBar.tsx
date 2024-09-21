@@ -26,6 +26,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import { getListRendererById, getListRendererIds } from '@joplin/lib/services/noteList/renderers';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { EventName } from '@joplin/lib/eventManager';
+import { ipcRenderer } from 'electron';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -575,7 +576,12 @@ function useMenu(props: Props) {
 			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.languages'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
-				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+				if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+					ipcRenderer.send('check-for-updates');
+				} else {
+					void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+				}
+
 			}
 
 			function _showAbout() {

@@ -32,7 +32,7 @@ export default class NoteListUtils {
 
 		const menuUtils = new MenuUtils(cmdService);
 
-		const notes: NoteEntity[] = noteIds.map(id => BaseModel.byId(props.notes, id));
+		const notes: NoteEntity[] = BaseModel.modelsByIds(props.notes, noteIds);
 
 		const singleNoteId = noteIds.length === 1 ? noteIds[0] : null;
 

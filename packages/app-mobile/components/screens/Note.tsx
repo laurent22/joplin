@@ -26,7 +26,7 @@ import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import NoteTagsDialog from './NoteTagsDialog';
 import time from '@joplin/lib/time';
-const { Checkbox } = require('../checkbox.js');
+import Checkbox from '../Checkbox';
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
@@ -625,21 +625,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async saveOneProperty(name: string, value: any) {
 		await shared.saveOneProperty(this, name, value);
-	}
-
-	private async deleteNote_onPress() {
-		const note = this.state.note;
-		if (!note.id) return;
-
-		const folderId = note.parent_id;
-
-		await Note.delete(note.id, { toTrash: true, sourceDescription: 'Delete note button' });
-
-		this.props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'Notes',
-			folderId: folderId,
-		});
 	}
 
 	private async pickDocuments() {
@@ -1283,30 +1268,33 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 		}
 
-		output.push({
-			title: _('Delete'),
-			onPress: () => {
-				void this.deleteNote_onPress();
-			},
-			disabled: readOnly,
-		});
+		const commandService = CommandService.instance();
+		const whenContext = commandService.currentWhenClauseContext();
+		const addButtonFromCommand = (commandName: string, title?: string) => {
+			if (commandName === '-') {
+				output.push({ isDivider: true });
+			} else {
+				output.push({
+					title: title ?? commandService.description(commandName),
+					onPress: async () => {
+						void commandService.execute(commandName);
+					},
+					disabled: !commandService.isEnabled(commandName, whenContext),
+				});
+			}
+		};
+
+		if (whenContext.inTrash) {
+			addButtonFromCommand('permanentlyDeleteNote');
+		} else {
+			addButtonFromCommand('deleteNote', _('Delete'));
+		}
 
 		if (pluginCommands.length) {
 			output.push({ isDivider: true });
 
-			const commandService = CommandService.instance();
 			for (const commandName of pluginCommands) {
-				if (commandName === '-') {
-					output.push({ isDivider: true });
-				} else {
-					output.push({
-						title: commandService.description(commandName),
-						onPress: async () => {
-							void commandService.execute(commandName);
-						},
-						disabled: !commandService.isEnabled(commandName),
-					});
-				}
+				addButtonFromCommand(commandName);
 			}
 		}
 

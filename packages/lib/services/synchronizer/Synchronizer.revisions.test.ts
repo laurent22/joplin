@@ -181,4 +181,53 @@ describe('Synchronizer.revisions', () => {
 		expect((await Revision.all()).length).toBe(0);
 	}));
 
+	it('should delete old revisions remotely when deleted locally', async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		jest.useFakeTimers({ advanceTimers: true });
+
+		const note = await Note.save({ title: 'note' });
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV0' });
+		jest.advanceTimersByTime(200);
+
+		await revisionService().collectRevisions(); // REV0
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		// Should sync the revisions
+		await synchronizer().start();
+		await switchClient(2);
+		await synchronizer().start();
+
+		expect(await getNoteRevisions()).toHaveLength(2);
+		await revisionService().deleteOldRevisions(100);
+		expect(await getNoteRevisions()).toHaveLength(0);
+
+		await synchronizer().start();
+		expect(await getNoteRevisions()).toHaveLength(0);
+
+		// Syncing a new client should not download the deleted revisions
+		await setupDatabaseAndSynchronizer(3);
+		await switchClient(3);
+		await synchronizer().start();
+		expect(await getNoteRevisions()).toHaveLength(0);
+
+		// After switching back to the original client, syncing should locally delete
+		// the remotely deleted revisions.
+		await switchClient(1);
+		expect(await getNoteRevisions()).toHaveLength(2);
+		await synchronizer().start();
+		expect(await getNoteRevisions()).toHaveLength(0);
+
+		jest.useRealTimers();
+	});
 });

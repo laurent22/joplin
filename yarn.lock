@@ -7391,13 +7391,14 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.8
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     "@types/react": 18.3.3
     "@types/react-dom": 18.3.0
     "@types/react-redux": 7.1.33
     "@types/styled-components": 5.1.32
     "@types/tesseract.js": 2.0.0
     async-mutex: 0.5.0
+    axios: ^1.7.7
     codemirror: 5.65.9
     color: 3.2.1
     compare-versions: 6.1.0
@@ -7535,7 +7536,6 @@ __metadata:
     react-native-safe-area-context: 4.10.5
     react-native-securerandom: 1.0.1
     react-native-share: 10.2.1
-    react-native-side-menu-updated: 1.3.2
     react-native-sqlite-storage: 6.0.1
     react-native-url-polyfill: 2.0.0
     react-native-vector-icons: 10.1.0
@@ -7642,7 +7642,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.8
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     "@typescript-eslint/eslint-plugin": 6.8.0
     "@typescript-eslint/parser": 6.8.0
     coveralls: 3.1.1
@@ -7712,7 +7712,7 @@ __metadata:
     "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     "@types/node-rsa": 1.1.4
     "@types/react": 18.3.3
     "@types/uuid": 9.0.7
@@ -7818,7 +7818,7 @@ __metadata:
     "@joplin/utils": ~3.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -7873,7 +7873,7 @@ __metadata:
     "@joplin/utils": ~3.1
     "@types/jest": 29.5.8
     "@types/markdown-it": 13.0.8
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.9.0
@@ -7983,7 +7983,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     "@types/node-fetch": 2.6.11
     "@types/yargs": 17.0.32
     compare-versions: 6.1.0
@@ -12235,12 +12235,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.36":
-  version: 18.19.36
-  resolution: "@types/node@npm:18.19.36"
+"@types/node@npm:18.19.39":
+  version: 18.19.39
+  resolution: "@types/node@npm:18.19.39"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 97fce6e862fd1853ae3e0c4ed5c87181d18af1646c367a22befc17697bc68a98401dc037219630a90d2e27032bf1a2306cf876ce709c553c3f42585584fe2c7a
+  checksum: d1de755983127b405458c427ae2cf77c89d120a617ca70999086a75fb0b6c6dbc1bdddfe1a8a7374c9ae55ed0589a2bd023ffb3b09ee25440c013afc6502dfe6
   languageName: node
   linkType: hard
 
@@ -15017,6 +15017,17 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.7
   checksum: 2a8a3787c05f2a0c9c3878f49782357e2a9f38945b93018fb0c4fd788171c43dceefbb577988628e09fea53952744d1ecebde234b561f1e703aa43e0a598a3ad
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.7.7":
+  version: 1.7.7
+  resolution: "axios@npm:1.7.7"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 882d4fe0ec694a07c7f5c1f68205eb6dc5a62aecdb632cc7a4a3d0985188ce3030e0b277e1a8260ac3f194d314ae342117660a151fabffdc5081ca0b5a8b47fe
   languageName: node
   linkType: hard
 
@@ -23454,6 +23465,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.9
+  resolution: "follow-redirects@npm:1.15.9"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 859e2bacc7a54506f2bf9aacb10d165df78c8c1b0ceb8023f966621b233717dab56e8d08baadc3ad3b9db58af290413d585c999694b7c146aaf2616340c3d2a6
+  languageName: node
+  linkType: hard
+
 "font-awesome-filetypes@npm:2.1.0":
   version: 2.1.0
   resolution: "font-awesome-filetypes@npm:2.1.0"
@@ -28593,7 +28614,7 @@ __metadata:
     "@joplin/utils": ~3.1
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.8
-    "@types/node": 18.19.36
+    "@types/node": 18.19.39
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -36465,7 +36486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.5.10, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -37399,15 +37420,6 @@ __metadata:
   version: 10.2.1
   resolution: "react-native-share@npm:10.2.1"
   checksum: 9dd4e0329b344668e04ff5421ab982e319dc3ba988d0b7990a619bd1c551beb6012623abe238a80e427f86f2bb03dd21b7afc0e957ee7348e0bd9fb39956912e
-  languageName: node
-  linkType: hard
-
-"react-native-side-menu-updated@npm:1.3.2":
-  version: 1.3.2
-  resolution: "react-native-side-menu-updated@npm:1.3.2"
-  dependencies:
-    prop-types: ^15.5.10
-  checksum: 5d7ae7d2b372c80d9f7a3472f945daa6c11b43f00193ebec92fdb40ee853e86f522686736aa6a510a4fb09479c8eb7e4f14b53ad117d7e23749cd58c3c9d6cb7
   languageName: node
   linkType: hard
 

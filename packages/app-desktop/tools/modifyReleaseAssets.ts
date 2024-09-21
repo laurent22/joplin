@@ -1,7 +1,7 @@
 
 import path = require('path');
 import { parseArgs } from 'util';
-import { Context, downloadFile, getTargetRelease, updateReleaseAsset, uploadReleaseAsset } from './githubReleasesUtils';
+import { Context, downloadFileFromGitHub, getTargetRelease, updateReleaseAsset, uploadReleaseAsset } from './githubReleasesUtils';
 import { GitHubRelease } from '../utils/checkForUpdatesUtils';
 import { GenerateInfo, generateLatestArm64Yml } from './generateLatestArm64Yml';
 
@@ -32,17 +32,19 @@ const renameReleaseAssets = async (context: Context, release: GitHubRelease) => 
 // Creates release assets in Joplin Desktop releases
 const createReleaseAssets = async (context: Context, release: GitHubRelease) => {
 	// Create latest-mac-arm64.yml file and publish
-	let dmgPath;
-	let zipPath;
+	let dmgPath: string;
+	let zipPath: string;
 	for (const asset of release.assets) {
+		console.log(`Checking asset: ${asset.name}`);
+
 		if (asset.name.endsWith('arm64.zip')) {
-			zipPath = await downloadFile(context, asset, downloadDir);
+			zipPath = await downloadFileFromGitHub(context, asset, downloadDir);
 		} else if (asset.name.endsWith('arm64.DMG')) {
-			dmgPath = await downloadFile(context, asset, downloadDir);
+			dmgPath = await downloadFileFromGitHub(context, asset, downloadDir);
 		}
 	}
 
-	if (zipPath === undefined || dmgPath === undefined) {
+	if (!zipPath || !dmgPath) {
 		const formattedAssets = release.assets.map(asset => ({
 			name: asset.name,
 			url: asset.url,
@@ -58,7 +60,7 @@ const createReleaseAssets = async (context: Context, release: GitHubRelease) => 
 	};
 
 	const latestArm64FilePath = generateLatestArm64Yml(info, downloadDir);
-	void uploadReleaseAsset(context, release, latestArm64FilePath);
+	await uploadReleaseAsset(context, release, latestArm64FilePath);
 };
 
 
@@ -94,9 +96,9 @@ const modifyReleaseAssets = async () => {
 	}
 
 	console.log('Renaming release assets for tag', context.targetTag, context.repo);
-	void renameReleaseAssets(context, release);
+	await renameReleaseAssets(context, release);
 	console.log('Creating latest-mac-arm64.yml asset for tag', context.targetTag, context.repo);
-	void createReleaseAssets(context, release);
+	await createReleaseAssets(context, release);
 };
 
 void modifyReleaseAssets();

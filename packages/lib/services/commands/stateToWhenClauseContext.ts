@@ -54,7 +54,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const selectedNoteIds = state.selectedNoteIds || [];
 	const selectedNoteId = selectedNoteIds.length === 1 ? selectedNoteIds[0] : null;
 	const selectedNote: NoteEntity = selectedNoteId ? BaseModel.byId(state.notes, selectedNoteId) : null;
-	const selectedNotes = selectedNoteIds.map(id => state.notes.find(n => n.id === id)).filter(n => !!n);
+	const selectedNotes = BaseModel.modelsByIds(state.notes ?? [], selectedNoteIds);
 
 	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;

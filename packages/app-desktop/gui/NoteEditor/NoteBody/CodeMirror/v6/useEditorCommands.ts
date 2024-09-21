@@ -88,7 +88,7 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.updateBody(newBody);
 				}
 			},
-			textHorizontalRule: () => editorRef.current.insertText('* * *'),
+			textHorizontalRule: () => editorRef.current.execCommand(EditorCommandType.InsertHorizontalRule),
 			'editor.execCommand': (value: CommandValue) => {
 				if (!('args' in value)) value.args = [];
 
