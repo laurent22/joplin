@@ -87,13 +87,15 @@ const parseQuery = (query: string): Term[] => {
 			if (name === 'tag' || name === 'notebook' || name === 'resource' || name === 'sourceurl') {
 				result.push({ name, value: trimQuotes(value.replace(/[*]/g, '%')), negated }); // for wildcard search
 			} else if (name === 'title' || name === 'body') {
-				// Trim quotes since we don't support phrase query here
-				// eg. Split title:"hello world" to title:hello title:world
-				const values = trimQuotes(value).split(/[\s-_]+/);
-				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-				values.forEach(value => {
-					result.push({ name, value, negated, wildcard: value.indexOf('*') >= 0 });
-				});
+				// Exact search
+				if (quoted(value)) {
+					result.push({ name, value: value, negated, wildcard: value.indexOf('*') >= 0 });
+				} else {
+					value.split(/[\s-_]+/)
+						.map(word => {
+							result.push({ name, value: word, negated, wildcard: word.indexOf('*') >= 0 });
+						});
+				}
 			} else {
 				result.push({ name, value, negated });
 			}

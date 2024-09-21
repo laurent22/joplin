@@ -1248,6 +1248,7 @@ packages/lib/services/search/filterParser.js
 packages/lib/services/search/gotoAnythingStyleQuery.test.js
 packages/lib/services/search/gotoAnythingStyleQuery.js
 packages/lib/services/search/queryBuilder.js
+packages/lib/services/search/types.js
 packages/lib/services/share/ShareService.test.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/invitationRespond.js
