@@ -23,6 +23,7 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { LayoutChangeEvent } from 'react-native';
+import shim from '@joplin/lib/shim';
 
 interface WrapperProps {
 }
@@ -138,6 +139,24 @@ describe('Note', () => {
 		await waitFor(async () => {
 			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
 		});
+	});
+
+	it('pressing "delete permanently" should permanently delete a note', async () => {
+		const noteId = await openNewNote({ title: 'To be deleted', body: '...', deleted_time: Date.now() });
+		render(<WrappedNoteScreen />);
+
+		// Permanently delete note shows a confirmation dialog -- mock it.
+		const deleteId = 0;
+		shim.showMessageBox = jest.fn(async () => deleteId);
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Permanently delete note');
+		fireEvent.press(deleteButton);
+
+		await waitFor(async () => {
+			expect(await Note.load(noteId)).toBeUndefined();
+		});
+		expect(shim.showMessageBox).toHaveBeenCalled();
 	});
 
 	it('delete should be disabled in a read-only note', async () => {
