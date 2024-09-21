@@ -548,20 +548,6 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
 
-		this.cache_ = [];
-
-		const pushItemsToCache = (items: CacheItem[]) => {
-			for (let i = 0; i < items.length; i++) {
-				const c = items[i];
-
-				if (!this.keyExists(c.key)) continue;
-
-				c.value = this.formatValue(c.key, c.value);
-				c.value = this.filterValue(c.key, c.value);
-
-				this.cache_.push(c);
-			}
-		};
 
 		// Keys in the database takes precedence over keys in the keychain because
 		// they are more likely to be up to date (saving to keychain can fail, but
@@ -601,6 +587,25 @@ class Setting extends BaseModel {
 				});
 			}
 		}
+
+
+		this.cache_ = [];
+		const cachedKeys = new Set();
+		const pushItemsToCache = (items: CacheItem[]) => {
+			for (let i = 0; i < items.length; i++) {
+				const c = items[i];
+
+				// Avoid duplicating keys -- doing so causes save issues.
+				if (cachedKeys.has(c.key)) continue;
+				if (!this.keyExists(c.key)) continue;
+
+				c.value = this.formatValue(c.key, c.value);
+				c.value = this.filterValue(c.key, c.value);
+
+				cachedKeys.add(c.key);
+				this.cache_.push(c);
+			}
+		};
 
 		pushItemsToCache(rows);
 		pushItemsToCache(secureItems);
