@@ -1,5 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import {
+	insertHorizontalRule,
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
@@ -292,6 +293,36 @@ describe('markdownCommands', () => {
 			from: 6,
 			to: 6,
 		});
+	});
+
+	it('insertHorizontalRule should insert a horizontal rule after the current line', async () => {
+		const initialText = 'testing\n\n> this is a test\n> ';
+		const editor = await createTestEditor(
+			initialText,
+			EditorSelection.cursor(0),
+			[],
+		);
+
+		// Add a second selection
+		editor.dispatch({
+			selection: editor.state.selection.addRange(EditorSelection.cursor(initialText.length)),
+		});
+		expect(editor.state.selection.ranges).toHaveLength(2);
+
+		insertHorizontalRule(editor);
+
+		expect(editor.state.doc.toString()).toBe('testing\n* * *\n\n> this is a test\n> * * *');
+		expect(editor.state.selection.ranges).toMatchObject([{
+			from: 'testing\n* * *'.length,
+			empty: true,
+		}, {
+			from: editor.state.doc.length,
+			empty: true,
+		}]);
+
+		insertHorizontalRule(editor);
+
+		expect(editor.state.doc.toString()).toBe('testing\n* * *\n* * *\n\n> this is a test\n> * * *\n> * * *');
 	});
 });
 

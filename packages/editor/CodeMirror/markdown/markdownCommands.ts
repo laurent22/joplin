@@ -401,6 +401,30 @@ export const toggleHeaderLevel = (level: number): Command => {
 	};
 };
 
+export const insertHorizontalRule: Command = (view: EditorView) => {
+	view.dispatch(view.state.changeByRange(selection => {
+		const line = view.state.doc.lineAt(selection.to);
+		const processedLineText = stripBlockquote(line);
+		const inBlockQuote = processedLineText !== line.text;
+		const needsNewLine = processedLineText !== '';
+
+		let prefix = inBlockQuote && needsNewLine ? '> ' : '';
+		if (needsNewLine) {
+			prefix = `\n${prefix}`;
+		}
+		const insert = `${prefix}* * *`;
+
+		return {
+			range: EditorSelection.cursor(line.to + insert.length),
+			changes: {
+				from: line.to,
+				insert,
+			},
+		};
+	}));
+	return true;
+};
+
 // Prepends the given editor's indentUnit to all lines of the current selection
 // and re-numbers modified ordered lists (if any).
 export const increaseIndent: Command = (view: EditorView): boolean => {
