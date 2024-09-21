@@ -543,7 +543,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		themeAutoDetect: {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			section: 'appearance',
 			appTypes: [AppType.Mobile, AppType.Desktop],
