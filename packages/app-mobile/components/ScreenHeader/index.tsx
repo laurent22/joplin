@@ -36,6 +36,13 @@ const PADDING_V = 10;
 
 type OnPressCallback=()=> void;
 
+export interface FolderPickerOptions {
+	enabled: boolean;
+	selectedFolderId?: string;
+	onValueChange?: OnValueChangedListener;
+	mustSelect?: boolean;
+}
+
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
@@ -49,12 +56,7 @@ interface ScreenHeaderProps {
 	menuOptions: MenuOptionType[];
 	title?: string|null;
 	folders: FolderEntity[];
-	folderPickerOptions?: {
-		enabled: boolean;
-		selectedFolderId?: string;
-		onValueChange?: OnValueChangedListener;
-		mustSelect?: boolean;
-	};
+	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
 
 	dispatch: Dispatch;
