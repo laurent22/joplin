@@ -548,6 +548,7 @@ packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/CameraView.js
+packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
@@ -611,6 +612,7 @@ packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteItem.js
 packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
