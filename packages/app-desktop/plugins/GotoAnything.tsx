@@ -23,6 +23,7 @@ import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Dialog from '../gui/Dialog';
+import { SearchType } from '@joplin/lib/services/search/types';
 
 const logger = Logger.create('GotoAnything');
 
@@ -272,7 +273,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	public async keywords(searchQuery: string) {
-		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, SearchType.Auto);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 

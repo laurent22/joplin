@@ -64,6 +64,7 @@ import { join } from 'path';
 import processStartFlags from './utils/processStartFlags';
 import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
+import { SearchType } from './services/search/types';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -253,7 +254,7 @@ export default class BaseApplication {
 				const response = await SearchEngineUtils.notesForQuery(search.query_pattern, true, { appendWildCards: true });
 				notes = response.notes;
 				searchResults = response.results;
-				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
+				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern, SearchType.Auto);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
 				notes = await Note.previews(parentId, options);

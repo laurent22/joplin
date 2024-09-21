@@ -3,6 +3,7 @@ import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
+import { SearchType } from './types';
 
 let engine: SearchEngine = null;
 
@@ -478,7 +479,7 @@ describe('services/SearchEngine', () => {
 			const t = testCases[i];
 			const input = t[0];
 			const expected = t[1];
-			const actual = await engine.parseQuery(input);
+			const actual = await engine.parseQuery(input, SearchType.Auto);
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const _Values = actual.terms._ ? actual.terms._.map((v: any) => v.value) : undefined;
@@ -562,6 +563,44 @@ describe('services/SearchEngine', () => {
 		const rows = await engine.search('éçà');
 		expect(rows.length).toBe(1);
 	}));
+
+	it.each([
+		['"2024-05-06"', '\\"2024-05-06\\"'],
+		['2024-05-06', '2024-05-06'],
+		['', ''],
+		['a b c', 'a b c'],
+		['"b c"', '\\"b c\\"'],
+		['""', '\\"\\"'],
+		['hello world"', 'hello world"'],
+		['"hello world', '"hello world'],
+	])('should escape double quoted strings', (input: string, output: string) => {
+		const engine = new SearchEngine();
+		expect(engine.escapeDoubleQuotes(input, SearchType.Auto)).toEqual(output);
+	});
+
+	it('should not escape double quote value when it is non latin search', () => {
+		const engine = new SearchEngine();
+		const input = '"hello world"';
+		expect(engine.escapeDoubleQuotes(input, SearchType.Nonlatin)).toEqual(input);
+	});
+
+	it('should allow exact search with double quotes when searching for title or body', (async () => {
+		await Note.save({ title: '2024-05-06' });
+		await Note.save({ title: '2024-06-05' });
+		await Note.save({ title: 'a', body: '2023-01-02' });
+		await Note.save({ title: 'b', body: '2023-02-01' });
+
+		await engine.syncTables();
+
+		expect((await engine.search('title: 2024-05-06', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(2);
+		expect((await engine.search('title: "2024-05-06"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(1);
+		expect((await engine.search('title: "2024-06-05"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(1);
+
+		expect((await engine.search('body: 2023-01-02', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(2);
+		expect((await engine.search('body: "2023-01-02"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(1);
+		expect((await engine.search('body: "2023-02-01"', { searchType: SearchEngine.SEARCH_TYPE_FTS })).length).toBe(1);
+	}));
+
 
 	// Disabled for now:
 	// https://github.com/laurent22/joplin/issues/9769#issuecomment-1912459744

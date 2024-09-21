@@ -15,15 +15,9 @@ import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 import { htmlentitiesDecode } from '@joplin/utils/html';
+import { SearchType } from './types';
 const { sprintf } = require('sprintf-js');
 const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
-
-enum SearchType {
-	Auto = 'auto',
-	Basic = 'basic',
-	Nonlatin = 'nonlatin',
-	Fts = 'fts',
-}
 
 interface SearchOptions {
 	searchType?: SearchType;
@@ -67,6 +61,8 @@ export interface Terms {
 	title: (string | ComplexTerm)[];
 	body: (string | ComplexTerm)[];
 }
+
+const quoted = (s: string) => s.startsWith('"') && s.endsWith('"');
 
 export default class SearchEngine {
 
@@ -521,9 +517,9 @@ export default class SearchEngine {
 		return regexString;
 	}
 
-	public async parseQuery(query: string) {
+	public async parseQuery(query: string, searchType: SearchType) {
 
-		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+		const trimQuotes = (str: string) => quoted(str) ? str.substr(1, str.length - 2) : str;
 
 		let allTerms: Term[] = [];
 
@@ -591,8 +587,14 @@ export default class SearchEngine {
 		//
 
 		allTerms = allTerms.map(x => {
-			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
+			if (x.name === 'text') {
 				return { ...x, value: this.normalizeText_(x.value) };
+			}
+			if (x.name === 'title' || x.name === 'body') {
+				const escaped = this.escapeDoubleQuotes(x.value, searchType);
+				const newValue = this.normalizeText_(escaped);
+
+				return { ...x, value: newValue };
 			}
 			return x;
 		});
@@ -604,6 +606,13 @@ export default class SearchEngine {
 			allTerms: allTerms,
 			any: !!allTerms.find(term => term.name === 'any'),
 		};
+	}
+
+	public escapeDoubleQuotes(value: string, searchType: SearchType) {
+		if (searchType === SearchType.Nonlatin) return value;
+		if (!quoted(value)) return value;
+
+		return `\\${value.slice(0, -1)}\\"`;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -658,7 +667,7 @@ export default class SearchEngine {
 
 	public async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
-		const parsedQuery = await this.parseQuery(query);
+		const parsedQuery = await this.parseQuery(query, SearchType.Basic);
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const searchOptions: any = {};
 
@@ -757,7 +766,7 @@ export default class SearchEngine {
 		};
 
 		const searchType = this.determineSearchType_(searchString, options.searchType);
-		const parsedQuery = await this.parseQuery(searchString);
+		const parsedQuery = await this.parseQuery(searchString, searchType);
 
 		let rows: ProcessResultsRow[] = [];
 

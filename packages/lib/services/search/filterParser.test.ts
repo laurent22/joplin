@@ -1,4 +1,4 @@
-import filterParser, { parsePhrasesAndWords, splitQueryByPhrases } from './filterParser';
+import filterParser from './filterParser';
 
 const makeTerm = (name: string, value: string, negated: boolean, quoted = false, wildcard = false) => {
 	if (name === 'text') { return { name, value, negated, quoted, wildcard }; }
@@ -35,29 +35,29 @@ describe('filterParser should be correct filter for keyword', () => {
 
 	it('title with multiple words', () => {
 		const searchString = 'title:"word1 word2" body:testBody';
-		expect(filterParser(searchString)).toContainEqual(makeTerm('title', '\\"word1 word2\\"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('title', '"word1 word2"', false));
 		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'testBody', false));
 	});
 
 	it('body with multiple words', () => {
 		const searchString = 'title:testTitle body:"word1 word2"';
 		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'testTitle', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '\\"word1 word2\\"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
 	});
 
 	it('body with phrase and multiple words', () => {
 		const searchString = 'title:testTitle body:"word1 word2" word3 word4';
 		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'testTitle', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '\\"word1 word2\\"', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word3', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word4', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"word3"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"word4"', false));
 	});
 
 	it('body with phrase and multiple words and negatives', () => {
 		const searchString = '-word4 title:testTitle body:"word1 word2" word3 ';
 		expect(filterParser(searchString)).toContainEqual(makeTerm('title', 'testTitle', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '\\"word1 word2\\"', false));
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', 'word3', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"word1 word2"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"word3"', false));
 		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"word4"', true));
 	});
 
@@ -85,7 +85,7 @@ describe('filterParser should be correct filter for keyword', () => {
 
 	it('multi word body', () => {
 		const searchString = 'body:"foo bar"';
-		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '\\"foo bar\\"', false));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('body', '"foo bar"', false));
 	});
 
 	it('negated tag queries', () => {
@@ -169,26 +169,5 @@ describe('filterParser should be correct filter for keyword', () => {
 		searchString = '-iscompleted:1';
 		expect(() => filterParser(searchString)).toThrow(new Error('iscompleted can\'t be negated'));
 
-	});
-
-	it.each([
-		['something "1 2 3" "2-34-" some-thing', ['something ', '"1 2 3"', '"2-34-"', ' some-thing']],
-		['"something something"', ['"something something"']],
-		['"something', ['"something']],
-		['"some\\"', ['"some\\"']],
-	])('split query by phrases', (input: string, output: string[]) => {
-		expect(splitQueryByPhrases(input)).toEqual(output);
-	});
-
-	it.each([
-		[' "2024-05-06"', ['\\"2024-05-06\\"']],
-		['', []],
-		['a b c', ['a', 'b', 'c']],
-		['a "b c"', ['a', '\\"b c\\"']],
-		['""', []],
-		['hello world"', ['hello', 'world']],
-		['"hello world', ['"hello', 'world']],
-	])('parse query into words and phrases', (input: string, output: string[]) => {
-		expect(parsePhrasesAndWords(input)).toEqual(output);
 	});
 });
