@@ -705,6 +705,7 @@ packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/AlarmServiceDriver.web.js
+packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js

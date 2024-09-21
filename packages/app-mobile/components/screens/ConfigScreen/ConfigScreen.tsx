@@ -7,7 +7,7 @@ import checkPermissions from '../../../utils/checkPermissions';
 import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
-const { BackButtonService } = require('../../../services/back-button.js');
+import BackButtonService from '../../../services/BackButtonService';
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
