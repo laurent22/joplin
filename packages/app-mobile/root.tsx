@@ -267,7 +267,6 @@ const navHistory: any[] = [];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function historyCanGoBackTo(route: any) {
-	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 
 	// There's no point going back to these screens in general and, at least in OneDrive case,
@@ -292,12 +291,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 			if (action.type === 'NAV_BACK') {
 				if (!navHistory.length) break;
 
-				let newAction = null;
-				while (navHistory.length) {
-					newAction = navHistory.pop();
-					if (newAction.routeName !== state.route.routeName) break;
-				}
-
+				const newAction = navHistory.pop();
 				action = newAction ? newAction : navHistory.pop();
 
 				historyGoingBack = true;
@@ -307,27 +301,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
-					if (currentRoute.routeName === action.routeName) {
-					// nothing
-					} else {
-						navHistory.push(currentRoute);
-					}
-				}
-
-				// HACK: whenever a new screen is loaded, all the previous screens of that type
-				// are overwritten with the new screen parameters. This is because the way notes
-				// are currently loaded is not optimal (doesn't retain history properly) so
-				// this is a simple fix without doing a big refactoring to change the way notes
-				// are loaded. Might be good enough since going back to different folders
-				// is probably not a common workflow.
-				for (let i = 0; i < navHistory.length; i++) {
-					const n = navHistory[i];
-					if (n.routeName === action.routeName) {
-						navHistory[i] = { ...action };
-					}
+					navHistory.push(currentRoute);
 				}
 
 				newState = { ...state };
