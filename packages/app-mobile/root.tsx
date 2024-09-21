@@ -68,7 +68,7 @@ const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
-const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
+import SideMenuContentNote from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
