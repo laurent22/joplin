@@ -2,11 +2,10 @@ import * as React from 'react';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import shim from '@joplin/lib/shim';
 const { connect } = require('react-redux');
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
-import SearchEngine from '@joplin/lib/services/search/SearchEngine';
+import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import gotoAnythingStyleQuery from '@joplin/lib/services/search/gotoAnythingStyleQuery';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
@@ -14,7 +13,7 @@ import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import ItemList from '../gui/ItemList';
 import HelpButton from '../gui/HelpButton';
-const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
+import { surroundKeywords, nextWhitespaceIndex, removeDiacritics } from '@joplin/lib/string-utils';
 import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
@@ -24,6 +23,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Dialog from '../gui/Dialog';
 import { SearchType } from '@joplin/lib/services/search/types';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 
 const logger = Logger.create('GotoAnything');
 
@@ -130,8 +130,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	private inputRef: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private itemListRef: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private listUpdateIID_: any;
+	private listUpdateQueue_: AsyncActionQueue;
 	private markupToHtml_: MarkupToHtml;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private userCallback_: any = null;
@@ -142,6 +141,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
 
 		this.userCallback_ = props?.userData?.callback;
+		this.listUpdateQueue_ = new AsyncActionQueue(100);
 
 		this.state = {
 			query: startString,
@@ -236,7 +236,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	public componentWillUnmount() {
-		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
+		void this.listUpdateQueue_.reset();
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_REMOVE',
@@ -264,12 +264,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	public scheduleListUpdate() {
-		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
-
-		this.listUpdateIID_ = shim.setTimeout(async () => {
-			await this.updateList();
-			this.listUpdateIID_ = null;
-		}, 100);
+		this.listUpdateQueue_.push(() => this.updateList());
 	}
 
 	public async keywords(searchQuery: string) {
@@ -361,7 +356,6 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					}
 				} else {
 					const limit = 20;
-					const searchKeywords = await this.keywords(searchQuery);
 
 					// Note: any filtering must be done **before** fetching the notes, because we're
 					// going to apply a limit to the number of fetched notes.
@@ -382,6 +376,10 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					results = results.filter(r => !!notesById[r.id])
 						.map(r => ({ ...r, title: notesById[r.id].title }));
 
+					const normalizedKeywords = (await this.keywords(searchQuery)).map(
+						({ valueRegex }: ComplexTerm) => new RegExp(removeDiacritics(valueRegex), 'ig'),
+					);
+
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
@@ -389,21 +387,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						if (row.fields.includes('body')) {
 							let fragments = '...';
 
-							if (i < limit) { // Display note fragments of search keyword matches
-								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
-									row,
-									notesById,
-									resources,
-								);
-
+							const loadFragments = (markupLanguage: MarkupLanguage, content: string) => {
 								const indices = [];
 								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
+								const normalizedBody = removeDiacritics(body);
 
 								// Iterate over all matches in the body for each search keyword
-								for (let { valueRegex } of searchKeywords) {
-									valueRegex = removeDiacritics(valueRegex);
-
-									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+								for (const keywordRegex of normalizedKeywords) {
+									for (const match of normalizedBody.matchAll(keywordRegex)) {
 										// Populate 'indices' with [begin index, end index] of each note fragment
 										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
 										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
@@ -419,6 +410,19 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+							};
+
+							if (i < limit) { // Display note fragments of search keyword matches
+								const { markupLanguage, content } = getContentMarkupLanguageAndBody(
+									row,
+									notesById,
+									resources,
+								);
+
+								// Don't load fragments for long notes -- doing so can lead to UI freezes.
+								if (content.length < 100_000) {
+									loadFragments(markupLanguage, content);
+								}
 							}
 
 							results[i] = { ...row, path, fragments };

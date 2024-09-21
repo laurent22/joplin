@@ -17,7 +17,7 @@ import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacte
 import { htmlentitiesDecode } from '@joplin/utils/html';
 import { SearchType } from './types';
 const { sprintf } = require('sprintf-js');
-const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
+import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 
 interface SearchOptions {
 	searchType?: SearchType;
@@ -53,7 +53,7 @@ export interface ComplexTerm {
 	value: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	scriptType: any;
-	valueRegex?: RegExp;
+	valueRegex?: string;
 }
 
 export interface Terms {

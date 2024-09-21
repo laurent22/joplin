@@ -14,6 +14,7 @@ import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { SearchType } from '@joplin/lib/services/search/types';
 
 class SearchScreenComponent extends BaseScreenComponent {
 
@@ -118,7 +119,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 		if (!this.isMounted_) return;
 
-		const parsedQuery = await SearchEngine.instance().parseQuery(query);
+		const parsedQuery = await SearchEngine.instance().parseQuery(query, SearchType.Auto);
 		const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 
 		this.props.dispatch({

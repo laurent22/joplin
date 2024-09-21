@@ -2,7 +2,7 @@ const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const stringUtilsCommon = require('./string-utils-common.js');
 
-export const pregQuote = stringUtilsCommon.pregQuote;
+export const pregQuote = stringUtilsCommon.pregQuote as (str: string, delimiter?: string)=> string;
 export const replaceRegexDiacritics = stringUtilsCommon.replaceRegexDiacritics;
 
 const defaultDiacriticsRemovalMap = [

@@ -3,6 +3,7 @@ import { Locator, Page } from '@playwright/test';
 
 export default class NoteEditorPage {
 	public readonly codeMirrorEditor: Locator;
+	public readonly noteViewerContainer: Locator;
 	public readonly richTextEditor: Locator;
 	public readonly noteTitleInput: Locator;
 	public readonly attachFileButton: Locator;
@@ -12,7 +13,7 @@ export default class NoteEditorPage {
 	public readonly viewerSearchInput: Locator;
 	private readonly containerLocator: Locator;
 
-	public constructor(private readonly page: Page) {
+	public constructor(page: Page) {
 		this.containerLocator = page.locator('.rli-editor');
 		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
@@ -20,6 +21,7 @@ export default class NoteEditorPage {
 		this.attachFileButton = this.containerLocator.getByRole('button', { name: 'Attach file' });
 		this.toggleEditorsButton = this.containerLocator.getByRole('button', { name: 'Toggle editors' });
 		this.toggleEditorLayoutButton = this.containerLocator.getByRole('button', { name: 'Toggle editor layout' });
+		this.noteViewerContainer = this.containerLocator.locator('iframe[src$="note-viewer/index.html"]');
 		// The editor and viewer have slightly different search UI
 		this.editorSearchInput = this.containerLocator.getByPlaceholder('Find');
 		this.viewerSearchInput = this.containerLocator.getByPlaceholder('Search...');
@@ -29,11 +31,11 @@ export default class NoteEditorPage {
 		return this.containerLocator.getByRole('button', { name: title });
 	}
 
-	public getNoteViewerIframe() {
+	public getNoteViewerFrameLocator() {
 		// The note viewer can change content when the note re-renders. As such,
 		// a new locator needs to be created after re-renders (and this can't be a
 		// static property).
-		return this.page.frameLocator('[src$="note-viewer/index.html"]');
+		return this.noteViewerContainer.frameLocator(':scope');
 	}
 
 	public getTinyMCEFrameLocator() {

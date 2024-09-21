@@ -122,7 +122,7 @@ const useOnKeyDown = (
 		}
 
 		if (noteIds.length) {
-			if (key === 'Delete' && event.shiftKey) {
+			if (key === 'Delete' && event.shiftKey || (key === 'Backspace' && event.metaKey && event.altKey)) {
 				event.preventDefault();
 				if (CommandService.instance().isEnabled('permanentlyDeleteNote')) {
 					void CommandService.instance().execute('permanentlyDeleteNote', noteIds);
@@ -153,14 +153,9 @@ const useOnKeyDown = (
 			announceForAccessibility(!wasCompleted ? _('Complete') : _('Incomplete'));
 		}
 
-		if (key === 'Tab') {
+		if (key === 'Tab' && event.shiftKey) {
 			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'sideBar');
-			} else {
-				void CommandService.instance().execute('focusElement', 'noteTitle');
-			}
+			void CommandService.instance().execute('focusElement', 'sideBar');
 		}
 
 		if (key.toUpperCase() === 'A' && (event.ctrlKey || event.metaKey)) {

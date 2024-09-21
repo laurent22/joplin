@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, ActivityIndicator } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -66,7 +66,7 @@ const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js'
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 import { MenuProvider } from 'react-native-popup-menu';
-import SideMenu from './components/SideMenu';
+import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
 const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
 import { reg } from '@joplin/lib/registry';
@@ -137,8 +137,6 @@ import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 
-type SideMenuPosition = 'left' | 'right';
-
 const logger = Logger.create('root');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -207,7 +205,13 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		setTimeLocale(Setting.value('locale'));
 	}
 
-	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type === 'SETTING_UPDATE_ALL')) {
+	// Like the desktop and CLI apps, we run this whenever the sync target properties change.
+	// Previously, this only ran when encryption was enabled/disabled. However, after fetching
+	// a new key, this needs to run and so we run it when the sync target info changes.
+	if (
+		(action.type === 'SETTING_UPDATE_ONE' && (action.key === 'syncInfoCache' || action.key.startsWith('encryption.')))
+		|| action.type === 'SETTING_UPDATE_ALL'
+	) {
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		void DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -385,12 +389,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = { ...state };
 			newState.showSideMenu = false;
-			break;
-
-		case 'SIDE_MENU_OPEN_PERCENT':
-
-			newState = { ...state };
-			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
@@ -1182,9 +1180,6 @@ class AppComponent extends React.Component {
 		this.props.dispatch({
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
-		AccessibilityInfo.announceForAccessibility(
-			isOpen ? _('Side menu opened') : _('Side menu closed'),
-		);
 	}
 
 	private getSideMenuWidth = () => {
@@ -1217,12 +1212,12 @@ class AppComponent extends React.Component {
 		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent: ReactNode = null;
-		let menuPosition: SideMenuPosition = 'left';
+		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
-			menuPosition = 'right';
+			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {
@@ -1277,12 +1272,6 @@ class AppComponent extends React.Component {
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					disableGestures={disableSideMenuGestures}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
-					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuProvider style={{ flex: 1 }}>

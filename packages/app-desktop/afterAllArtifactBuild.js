@@ -7,7 +7,7 @@ const distPath = path.join(__dirname, distDirName);
 
 const generateChecksumFile = () => {
 	if (os.platform() !== 'linux') {
-		return []; // SHA-512 is only for AppImage
+		return; // SHA-512 is only for AppImage
 	}
 
 	let appImageName = '';
@@ -28,37 +28,13 @@ const generateChecksumFile = () => {
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
 	fs.writeFileSync(sha512FilePath, checksum);
-	return [sha512FilePath];
-};
-
-const renameLatestYmlFile = () => {
-	if (os.platform() === 'darwin' && process.arch === 'arm64') {
-		// latest-mac.yml is only generated when publishing.
-		if (process.env.PUBLISH_ENABLED === 'false') {
-			/* eslint-disable no-console */
-			console.info(`Publishing not enabled - skipping renaming latest-mac.yml file for arm64 architecture. process.env.PUBLISH_ENABLED = ${process.env.PUBLISH_ENABLED}`);
-			return;
-		}
-
-		/* eslint-disable no-console */
-		console.info('Renaming latest-mac.yml file...');
-		const latestMacFilePath = path.join(distPath, 'latest-mac.yml');
-		const renamedMacFilePath = path.join(distPath, 'latest-mac-arm64.yml');
-
-		if (fs.existsSync(latestMacFilePath)) {
-			/* eslint-disable no-console */
-			console.info('Renamed latest-mac.yml file to latest-mac-arm64.yml succesfully!');
-			fs.renameSync(latestMacFilePath, renamedMacFilePath);
-			return [renamedMacFilePath];
-		} else {
-			throw new Error('latest-mac.yml not found!');
-		}
-	}
+	return sha512FilePath;
 };
 
 const mainHook = () => {
-	generateChecksumFile();
-	renameLatestYmlFile();
+	const sha512FilePath = generateChecksumFile();
+	const outputFiles = [sha512FilePath].filter(item => item);
+	return outputFiles;
 };
 
 exports.default = mainHook;

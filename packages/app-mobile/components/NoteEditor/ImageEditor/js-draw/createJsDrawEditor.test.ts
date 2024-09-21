@@ -22,6 +22,7 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 
 	const allCallbacks: ImageEditorCallbacks = {
 		saveDrawing: () => {},
+		saveThenClose: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
 		updateEditorTemplate: ()=> {},

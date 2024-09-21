@@ -113,6 +113,10 @@ const defaultMigrations: DefaultMigration[] = [
 		name: 'style.editor.contentMaxWidth',
 		previousDefault: 600,
 	},
+	{
+		name: 'themeAutoDetect',
+		previousDefault: false,
+	},
 ];
 
 // "UserSettingMigration" are used to migrate existing user setting to a new setting. With a way
