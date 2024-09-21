@@ -29,6 +29,7 @@ export type ThemeStyle = BaseTheme & typeof baseStyle & {
 	urlText: TextStyle;
 	headerStyle: TextStyle;
 	headerWrapperStyle: ViewStyle;
+	rootStyle: ViewStyle;
 	keyboardAppearance: 'light'|'dark';
 };
 
@@ -81,6 +82,11 @@ function extraStyles(theme: BaseTheme) {
 		backgroundColor: theme.headerBackgroundColor,
 	};
 
+	const rootStyle: ViewStyle = {
+		flex: 1,
+		backgroundColor: theme.backgroundColor,
+	};
+
 	return {
 		marginRight: baseStyle.margin,
 		marginLeft: baseStyle.margin,
@@ -94,6 +100,7 @@ function extraStyles(theme: BaseTheme) {
 		urlText,
 		headerStyle,
 		headerWrapperStyle,
+		rootStyle,
 
 		keyboardAppearance: theme.appearance,
 		color5: theme.color5 ?? theme.backgroundColor4,
