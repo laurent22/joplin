@@ -132,7 +132,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 
 	return (
 		<Modal
-			animationType="slide"
+			animationType="fade"
 			containerStyle={styles.modalContent}
 			transparent={true}
 			visible={props.visible}
