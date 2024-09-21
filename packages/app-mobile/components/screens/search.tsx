@@ -1,37 +1,53 @@
-const React = require('react');
+import * as React from 'react';
 
 import { StyleSheet, View, TextInput, FlatList, TouchableHighlight } from 'react-native';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import NoteItem from '../NoteItem';
-const { BaseScreenComponent } = require('../base-screen');
+import { BaseScreenComponent } from '../base-screen';
 import { themeStyle } from '../global-style';
 const DialogBox = require('react-native-dialogbox').default;
 import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { AppState } from '../../utils/types';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { Dispatch } from 'redux';
 
-class SearchScreenComponent extends BaseScreenComponent {
+interface Props {
+	themeId: number;
+	query: string;
+	visible: boolean;
+	dispatch: Dispatch;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private state: any = null;
+	noteSelectionEnabled: boolean;
+	ftsEnabled: number;
+}
+
+interface State {
+	query: string;
+	notes: NoteEntity[];
+}
+
+class SearchScreenComponent extends BaseScreenComponent<Props, State> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied.
+	public dialogbox: any;
+
 	private isMounted_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private styles_: any = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleSearchTimer_: any = null;
+	private styles_: Record<string, any> = {};
+	private searchActionQueue_ = new AsyncActionQueue(200);
 
 	public static navigationOptions() {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		return { header: null } as any;
 	}
 
-	public constructor() {
-		super();
+	public constructor(props: Props) {
+		super(props);
 		this.state = {
 			query: '',
 			notes: [],
@@ -44,8 +60,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		if (this.styles_[this.props.themeId]) return this.styles_[this.props.themeId];
 		this.styles_ = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styles: any = {
+		const styleSheet = StyleSheet.create({
 			body: {
 				flex: 1,
 			},
@@ -55,21 +70,22 @@ class SearchScreenComponent extends BaseScreenComponent {
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
 			},
-		};
-
-		styles.searchTextInput = { ...theme.lineInput };
-		styles.searchTextInput.paddingLeft = theme.marginLeft;
-		styles.searchTextInput.flex = 1;
-		styles.searchTextInput.backgroundColor = theme.backgroundColor;
-		styles.searchTextInput.color = theme.color;
-
-		styles.clearIcon = { ...theme.icon };
-		styles.clearIcon.color = theme.colorFaded;
-		styles.clearIcon.paddingRight = theme.marginRight;
-		styles.clearIcon.backgroundColor = theme.backgroundColor;
-
-		this.styles_[this.props.themeId] = StyleSheet.create(styles);
-		return this.styles_[this.props.themeId];
+			searchTextInput: {
+				...theme.lineInput,
+				paddingLeft: theme.marginLeft,
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+				color: theme.color,
+			},
+			clearIcon: {
+				...theme.icon,
+				color: theme.colorFaded,
+				paddingRight: theme.marginRight,
+				backgroundColor: theme.backgroundColor,
+			},
+		});
+		this.styles_[this.props.themeId] = styleSheet;
+		return styleSheet;
 	}
 
 	public componentDidMount() {
@@ -98,7 +114,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 		let notes: NoteEntity[] = [];
 
 		if (query) {
-			if (this.props.settings['db.ftsEnabled']) {
+			if (this.props.ftsEnabled) {
 				const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
 				notes = r.notes;
 			} else {
@@ -130,12 +146,11 @@ class SearchScreenComponent extends BaseScreenComponent {
 	}
 
 	public scheduleSearch() {
-		if (this.scheduleSearchTimer_) clearTimeout(this.scheduleSearchTimer_);
+		this.searchActionQueue_.push(() => this.refreshSearch(this.state.query));
+	}
 
-		this.scheduleSearchTimer_ = setTimeout(() => {
-			this.scheduleSearchTimer_ = null;
-			void this.refreshSearch(this.state.query);
-		}, 200);
+	public onComponentWillUnmount() {
+		void this.searchActionQueue_.reset();
 	}
 
 	private searchTextInput_changeText(text: string) {
@@ -215,7 +230,8 @@ const SearchScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		settings: state.settings,
 		noteSelectionEnabled: state.noteSelectionEnabled,
+		ftsEnabled: state.settings['db.ftsEnabled'],
 	};
 })(SearchScreenComponent);
 
-module.exports = { SearchScreen };
+export default SearchScreen;
