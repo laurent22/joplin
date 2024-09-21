@@ -37,7 +37,7 @@ const supportedPlatformAssets: PlatformAssets = {
 };
 
 export interface AutoUpdaterServiceInterface {
-	checkForUpdates(): void;
+	checkForUpdates(isManualCheck: boolean): void;
 	updateApp(): void;
 	fetchLatestRelease(includePreReleases: boolean): Promise<GitHubRelease>;
 	getDownloadUrlForPlatform(release: GitHubRelease, platform: string, arch: string): string;
@@ -48,10 +48,11 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private logger_: LoggerWrapper;
 	private devMode_: boolean;
 	private enableDevMode = true; // force the updater to work in "dev" mode
-	private enableAutoDownload = false; // automatically download an update when it is found
+	private enableAutoDownload = true; // automatically download an update when it is found
 	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
+	private isManualCheckInProgress = false;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -61,8 +62,9 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.configureAutoUpdater();
 	}
 
-	public checkForUpdates = async (): Promise<void> => {
+	public checkForUpdates = async (isManualCheck = false): Promise<void> => {
 		try {
+			this.isManualCheckInProgress = isManualCheck;
 			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
@@ -132,6 +134,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
 				await autoUpdater.checkForUpdates();
+				this.isManualCheckInProgress = false;
 			} catch (error) {
 				this.logger_.error(`Update download url failed: ${error.message}`);
 			}
@@ -167,6 +170,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private onUpdateNotAvailable = (_info: UpdateInfo): void => {
+		if (this.isManualCheckInProgress) {
+			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
+		}
+
 		this.logger_.info('Update not available.');
 	};
 

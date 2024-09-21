@@ -169,11 +169,15 @@ class BaseModel {
 
 	public static modelsByIds<T extends BaseItemEntity>(items: T[], ids: string[]): T[] {
 		const output = [];
-		for (let i = 0; i < items.length; i++) {
-			if (ids.indexOf(items[i].id) >= 0) {
-				output.push(items[i]);
+
+		// Prefer a `Set` to using `ids.includes` -- this gives a better running time.
+		const idSet = new Set(ids);
+		for (const item of items) {
+			if (idSet.has(item.id)) {
+				output.push(item);
 			}
 		}
+
 		return output;
 	}
 

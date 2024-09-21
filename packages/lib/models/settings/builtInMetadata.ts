@@ -543,7 +543,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		themeAutoDetect: {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			section: 'appearance',
 			appTypes: [AppType.Mobile, AppType.Desktop],
@@ -1127,7 +1127,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 
-		autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: platform !== 'linux', appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
+		autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: false, appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
 		'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
 
 		'autoUploadCrashDumps': {
