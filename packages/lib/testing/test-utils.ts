@@ -1092,16 +1092,32 @@ export const mockMobilePlatform = (platform: string) => {
 	};
 };
 
-export const runWithFakeTimers = (callback: ()=> Promise<void>) => {
+export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 	if (typeof jest === 'undefined') {
 		throw new Error('Fake timers are only supported in jest.');
 	}
 
 	jest.useFakeTimers();
+
+	// The shim.setTimeout and similar functions need to be changed to
+	// use fake timers.
+	const originalSetTimeout = shim.setTimeout;
+	const originalSetInterval = shim.setInterval;
+	const originalClearTimeout = shim.clearTimeout;
+	const originalClearInterval = shim.clearInterval;
+	shim.setTimeout = setTimeout;
+	shim.setInterval = setInterval;
+	shim.clearInterval = clearInterval;
+	shim.clearTimeout = clearTimeout;
+
 	try {
-		return callback();
+		return await callback();
 	} finally {
 		jest.runOnlyPendingTimers();
+		shim.setTimeout = originalSetTimeout;
+		shim.setInterval = originalSetInterval;
+		shim.clearTimeout = originalClearTimeout;
+		shim.clearInterval = originalClearInterval;
 		jest.useRealTimers();
 	}
 };
