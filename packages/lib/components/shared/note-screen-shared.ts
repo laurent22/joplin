@@ -280,19 +280,32 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		comp.scheduleFocusUpdate();
 	}
 
-	const folder = Folder.byId(comp.props.folders, note.parent_id);
-
-	comp.setState({
-		lastSavedNote: { ...note },
-		note: note,
-		mode: mode,
-		folder: folder,
-		isLoading: false,
-		fromShare: !!comp.props.sharedData,
-		noteResources: await shared.attachedResources(note ? note.body : ''),
-		readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
-	});
-
+	const fromShare = !!comp.props.sharedData;
+	if (note) {
+		const folder = Folder.byId(comp.props.folders, note.parent_id);
+		comp.setState({
+			lastSavedNote: { ...note },
+			note: note,
+			mode: mode,
+			folder: folder,
+			isLoading: false,
+			fromShare: !!comp.props.sharedData,
+			noteResources: await shared.attachedResources(note ? note.body : ''),
+			readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+		});
+	} else {
+		// Handle the case where a non-existent note is loaded. This can happen briefly after deleting a note.
+		comp.setState({
+			lastSavedNote: {},
+			note: {},
+			mode,
+			folder: null,
+			isLoading: true,
+			fromShare,
+			noteResources: [],
+			readOnly: true,
+		});
+	}
 
 	if (comp.props.sharedData) {
 		if (comp.props.sharedData.title) {
@@ -315,7 +328,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 	}
 
 	// eslint-disable-next-line require-atomic-updates
-	comp.lastLoadedNoteId_ = note.id;
+	comp.lastLoadedNoteId_ = note?.id;
 };
 
 shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {

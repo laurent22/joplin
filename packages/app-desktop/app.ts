@@ -404,9 +404,9 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.ResourceChange, handleResourceChange);
 	}
 
-	private async setupAutoUpdaterService() {
+	private setupAutoUpdaterService() {
 		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-			await bridge().electronApp().initializeAutoUpdaterService(
+			bridge().electronApp().initializeAutoUpdaterService(
 				Logger.create('AutoUpdaterService'),
 				Setting.value('env') === 'dev',
 				Setting.value('autoUpdate.includePreReleases'),
@@ -448,6 +448,8 @@ class Application extends BaseApplication {
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		await injectCustomStyles('appStyles', Setting.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP));
+
+		this.setupAutoUpdaterService();
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -697,8 +699,6 @@ class Application extends BaseApplication {
 		eventManager.on(EventName.NoteResourceIndexed, async () => {
 			SearchEngine.instance().scheduleSyncTables();
 		});
-
-		await this.setupAutoUpdaterService();
 
 		// setTimeout(() => {
 		// 	void populateDatabase(reg.db(), {

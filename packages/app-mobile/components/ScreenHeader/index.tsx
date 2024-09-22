@@ -3,7 +3,7 @@ import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { BackButtonService } = require('../../services/back-button.js');
+import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
@@ -36,6 +36,13 @@ const PADDING_V = 10;
 
 type OnPressCallback=()=> void;
 
+export interface FolderPickerOptions {
+	enabled: boolean;
+	selectedFolderId?: string;
+	onValueChange?: OnValueChangedListener;
+	mustSelect?: boolean;
+}
+
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
@@ -49,12 +56,7 @@ interface ScreenHeaderProps {
 	menuOptions: MenuOptionType[];
 	title?: string|null;
 	folders: FolderEntity[];
-	folderPickerOptions?: {
-		enabled: boolean;
-		selectedFolderId?: string;
-		onValueChange?: OnValueChangedListener;
-		mustSelect?: boolean;
-	};
+	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
 
 	dispatch: Dispatch;

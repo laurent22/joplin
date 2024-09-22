@@ -26,6 +26,7 @@ const createTestEditor = async (
 			}),
 			indentUnit.of('\t'),
 			EditorState.tabSize.of(4),
+			EditorState.allowMultipleSelections.of(true),
 			extraExtensions,
 		],
 	});

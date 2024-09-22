@@ -332,6 +332,10 @@ export default class ElectronAppWrapper {
 			this.updaterService_.updateApp();
 		});
 
+		ipcMain.on('check-for-updates', () => {
+			void this.updaterService_.checkForUpdates(true);
+		});
+
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
 		// and restore the maximized or full screen state
@@ -470,7 +474,7 @@ export default class ElectronAppWrapper {
 	}
 
 	// Electron's autoUpdater has to be init from the main process
-	public async initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
+	public initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		if (shim.isWindows() || shim.isMac()) {
 			if (!this.updaterService_) {
 				this.updaterService_ = new AutoUpdaterService(this.win_, logger, devMode, includePreReleases);
@@ -482,7 +486,7 @@ export default class ElectronAppWrapper {
 	private startPeriodicUpdateCheck = (updateInterval: number = defaultUpdateInterval): void => {
 		this.stopPeriodicUpdateCheck();
 		this.updatePollInterval_ = setInterval(() => {
-			void this.updaterService_.checkForUpdates();
+			void this.updaterService_.checkForUpdates(false);
 		}, updateInterval);
 		setTimeout(this.updaterService_.checkForUpdates, initialUpdateStartup);
 	};
@@ -491,6 +495,7 @@ export default class ElectronAppWrapper {
 		if (this.updatePollInterval_) {
 			clearInterval(this.updatePollInterval_);
 			this.updatePollInterval_ = null;
+			this.updaterService_ = null;
 		}
 	};
 

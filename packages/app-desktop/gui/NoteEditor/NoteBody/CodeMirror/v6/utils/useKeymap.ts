@@ -27,6 +27,10 @@ const useKeymap = (editorControl: CodeMirrorControl) => {
 					binding.accelerator, CodeMirrorVersion.CodeMirror6,
 				),
 				run: () => {
+					if (!CommandService.instance().isEnabled(binding.command)) {
+						return false;
+					}
+
 					void CommandService.instance().execute(binding.command);
 					return true;
 				},

@@ -1,86 +1,117 @@
-const React = require('react');
-import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription } from 'react-native';
+import * as React from 'react';
+import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, ViewStyle, TextStyle } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import NoteList from '../NoteList';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
-import Note from '@joplin/lib/models/Note';
+import Note, { PreviewsOrder } from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '../global-style';
-import { ScreenHeader } from '../ScreenHeader';
+import { FolderPickerOptions, ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import ActionButton from '../buttons/FloatingActionButton';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const { BaseScreenComponent } = require('../base-screen');
-const { BackButtonService } = require('../../services/back-button.js');
+import BackButtonService from '../../services/BackButtonService';
+import { BaseScreenComponent } from '../base-screen';
 import { AppState } from '../../utils/types';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import AccessibleView from '../accessibility/AccessibleView';
+import { Dispatch } from 'redux';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-class NotesScreenComponent extends BaseScreenComponent<any> {
+interface Props {
+	dispatch: Dispatch;
+
+	themeId: number;
+	visible: boolean;
+
+	folders: FolderEntity[];
+	tags: TagEntity[];
+	notesSource: string;
+	notesOrder: PreviewsOrder[];
+	uncompletedTodosOnTop: boolean;
+	showCompletedTodos: boolean;
+	noteSelectionEnabled: boolean;
+
+	activeFolderId: string;
+	selectedFolderId: string;
+	selectedTagId: string;
+	selectedSmartFilterId: string;
+	notesParentType: string;
+}
+
+interface State {
+
+}
+
+type Styles = Record<string, ViewStyle|TextStyle>;
+
+class NotesScreenComponent extends BaseScreenComponent<Props, State> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
+	private dialogbox: any;
 
 	private onAppStateChangeSub_: NativeEventSubscription = null;
+	private styles_: Record<number, Styles> = {};
+	private folderPickerOptions_: FolderPickerOptions;
 
-	public constructor() {
-		super();
-
-		this.onAppStateChange_ = async () => {
-			// Force an update to the notes list when app state changes
-			const newProps = { ...this.props };
-			newProps.notesSource = '';
-			await this.refreshNotes(newProps);
-		};
-
-		this.sortButton_press = async () => {
-			const buttons = [];
-			const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
-
-			const makeCheckboxText = function(selected: boolean, sign: string, label: string) {
-				const s = sign === 'tick' ? '✓' : '⬤';
-				return (selected ? `${s} ` : '') + label;
-			};
-
-			for (const field in sortNoteOptions) {
-				if (!sortNoteOptions.hasOwnProperty(field)) continue;
-				buttons.push({
-					text: makeCheckboxText(Setting.value('notes.sortOrder.field') === field, 'bullet', sortNoteOptions[field]),
-					id: { name: 'notes.sortOrder.field', value: field },
-				});
-			}
-
-			buttons.push({
-				text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', `[ ${Setting.settingMetadata('notes.sortOrder.reverse').label()} ]`),
-				id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
-			});
-
-			buttons.push({
-				text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', `[ ${Setting.settingMetadata('uncompletedTodosOnTop').label()} ]`),
-				id: { name: 'uncompletedTodosOnTop', value: !Setting.value('uncompletedTodosOnTop') },
-			});
-
-			buttons.push({
-				text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', `[ ${Setting.settingMetadata('showCompletedTodos').label()} ]`),
-				id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
-			});
-
-			const r = await dialogs.pop(this, Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
-			if (!r) return;
-
-			Setting.setValue(r.name, r.value);
-		};
-
-		this.backHandler = () => {
-			if (this.dialogbox && this.dialogbox.state && this.dialogbox.state.isVisible) {
-				this.dialogbox.close();
-				return true;
-			}
-			return false;
-		};
+	public constructor(props: Props) {
+		super(props);
 	}
+
+	private onAppStateChange_ = async () => {
+		// Force an update to the notes list when app state changes
+		const newProps = { ...this.props };
+		newProps.notesSource = '';
+		await this.refreshNotes(newProps);
+	};
+
+	private sortButton_press = async () => {
+		const buttons = [];
+		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
+
+		const makeCheckboxText = function(selected: boolean, sign: string, label: string) {
+			const s = sign === 'tick' ? '✓' : '⬤';
+			return (selected ? `${s} ` : '') + label;
+		};
+
+		for (const field in sortNoteOptions) {
+			if (!sortNoteOptions.hasOwnProperty(field)) continue;
+			buttons.push({
+				text: makeCheckboxText(Setting.value('notes.sortOrder.field') === field, 'bullet', sortNoteOptions[field]),
+				id: { name: 'notes.sortOrder.field', value: field },
+			});
+		}
+
+		buttons.push({
+			text: makeCheckboxText(Setting.value('notes.sortOrder.reverse'), 'tick', `[ ${Setting.settingMetadata('notes.sortOrder.reverse').label()} ]`),
+			id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
+		});
+
+		buttons.push({
+			text: makeCheckboxText(Setting.value('uncompletedTodosOnTop'), 'tick', `[ ${Setting.settingMetadata('uncompletedTodosOnTop').label()} ]`),
+			id: { name: 'uncompletedTodosOnTop', value: !Setting.value('uncompletedTodosOnTop') },
+		});
+
+		buttons.push({
+			text: makeCheckboxText(Setting.value('showCompletedTodos'), 'tick', `[ ${Setting.settingMetadata('showCompletedTodos').label()} ]`),
+			id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
+		});
+
+		const r = await dialogs.pop(this, Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
+		if (!r) return;
+
+		Setting.setValue(r.name, r.value);
+	};
+
+	private backHandler = () => {
+		if (this.dialogbox && this.dialogbox.state && this.dialogbox.state.isVisible) {
+			this.dialogbox.close();
+			return true;
+		}
+		return false;
+	};
 
 	public styles() {
 		if (!this.styles_) this.styles_ = {};
@@ -111,15 +142,13 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		BackButtonService.removeHandler(this.backHandler);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: Props) {
 		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
 			await this.refreshNotes(this.props);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async refreshNotes(props: any = null) {
+	public async refreshNotes(props: Props|null = null) {
 		if (props === null) props = this.props;
 
 		const options = {
@@ -172,8 +201,7 @@ class NotesScreenComponent extends BaseScreenComponent<any> {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public parentItem(props: any = null) {
+	public parentItem(props: Props|null = null) {
 		if (!props) props = this.props;
 
 		let output = null;
@@ -305,8 +333,6 @@ const NotesScreen = connect((state: AppState) => {
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
 	};
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-})(NotesScreenComponent as any);
+})(NotesScreenComponent);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default NotesScreen as any;
+export default NotesScreen;

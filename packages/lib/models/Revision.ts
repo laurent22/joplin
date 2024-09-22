@@ -1,5 +1,5 @@
 import BaseModel, { ModelType } from '../BaseModel';
-import { RevisionEntity } from '../services/database/types';
+import { RevisionEntity, StringOrSqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
 import * as ArrayUtils from '../ArrayUtils';
@@ -305,43 +305,71 @@ export default class Revision extends BaseItem {
 		// and modify that revision into a "merged" one.
 
 		const cutOffDate = Date.now() - ttl;
-		const revisions = await this.modelSelectAll('SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC', [cutOffDate]);
-		const doneItems: Record<string, boolean> = {};
+		const allOldRevisions: RevisionEntity[] = await this.modelSelectAll(
+			'SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC',
+			[cutOffDate],
+		);
 
-		for (const rev of revisions) {
-			const doneKey = `${rev.item_type}_${rev.item_id}`;
-			if (doneItems[doneKey]) continue;
+		const itemIdToOldRevisions = new Map<string, RevisionEntity[]>();
+		for (const rev of allOldRevisions) {
+			const itemId = rev.item_id;
+			if (!itemIdToOldRevisions.has(itemId)) {
+				itemIdToOldRevisions.set(itemId, []);
+			}
+			itemIdToOldRevisions.get(itemId).push(rev);
+		}
 
-			const keptRev = await this.modelSelectOne('SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1', [cutOffDate, rev.item_type, rev.item_id]);
+		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
+			const keptRev = await this.modelSelectOne(
+				'SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1',
+				[cutOffDate, itemType, itemId],
+			);
+			const queries: StringOrSqlQuery[] = [];
+			if (!keptRev) {
+				const hasEncrypted = await this.modelSelectOne(
+					'SELECT * FROM revisions WHERE encryption_applied = 1 AND item_updated_time < ? AND item_id = ?',
+					[cutOffDate, itemId],
+				);
+				if (hasEncrypted) {
+					throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
+				}
+			} else {
+				// Note: we don't need to check for encrypted rev here because
+				// mergeDiff will already throw the revision_encrypted exception
+				// if a rev is encrypted.
+				const merged = await this.mergeDiffs(keptRev);
+
+				const titleDiff = this.createTextPatch('', merged.title);
+				const bodyDiff = this.createTextPatch('', merged.body);
+				const metadataDiff = this.createObjectPatch({}, merged.metadata);
+				queries.push({
+					sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?',
+					params: [titleDiff, bodyDiff, metadataDiff, keptRev.id],
+				});
+			}
+
+			await this.batchDelete(oldRevisions.map(item => item.id), { sourceDescription: 'Revision.deleteOldRevisions' });
+			if (queries.length) {
+				await this.db().transactionExecBatch(queries);
+			}
+		};
+
+		for (const [itemId, oldRevisions] of itemIdToOldRevisions.entries()) {
+			if (!oldRevisions.length) {
+				throw new Error('Invalid state: There must be at least one old revision per item to be processed.');
+			}
+
+			const latestOldRevision = oldRevisions[oldRevisions.length - 1];
 
 			try {
-				const deleteQueryCondition = 'item_updated_time < ? AND item_id = ?';
-				const deleteQueryParams = [cutOffDate, rev.item_id];
-				const deleteQuery = { sql: `DELETE FROM revisions WHERE ${deleteQueryCondition}`, params: deleteQueryParams };
-
-				if (!keptRev) {
-					const hasEncrypted = await this.modelSelectOne(`SELECT * FROM revisions WHERE encryption_applied = 1 AND ${deleteQueryCondition}`, deleteQueryParams);
-					if (hasEncrypted) throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
-					await this.db().transactionExecBatch([deleteQuery]);
-				} else {
-					// Note: we don't need to check for encrypted rev here because
-					// mergeDiff will already throw the revision_encrypted exception
-					// if a rev is encrypted.
-					const merged = await this.mergeDiffs(keptRev);
-
-					const queries = [deleteQuery, { sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ? WHERE id = ?', params: [this.createTextPatch('', merged.title), this.createTextPatch('', merged.body), this.createObjectPatch({}, merged.metadata), keptRev.id] }];
-
-					await this.db().transactionExecBatch(queries);
-				}
+				await deleteOldRevisionsForItem(latestOldRevision.item_type, itemId, oldRevisions);
 			} catch (error) {
 				if (error.code === 'revision_encrypted') {
-					this.logger().info(`Aborted deletion of old revisions for item "${rev.item_id}" (rev "${rev.id}") because one of the revisions is still encrypted`, error);
+					this.logger().info(`Aborted deletion of old revisions for item "${itemId}" (latest old rev "${latestOldRevision.id}") because one of the revisions is still encrypted`, error);
 				} else {
 					throw error;
 				}
 			}
-
-			doneItems[doneKey] = true;
 		}
 	}
 
