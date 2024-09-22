@@ -9,6 +9,7 @@ import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
 import Note from '@joplin/lib/models/Note';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { ProgressBar } from 'react-native-paper';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	query: string;
@@ -69,17 +70,18 @@ const useIsLongRunning = (isPending: boolean) => {
 	const isPendingRef = useRef(isPending);
 	isPendingRef.current = isPending;
 
-	const timeoutRef = useRef<ReturnType<typeof setTimeout>|null>(null);
+	type TimeoutType = ReturnType<typeof shim.setTimeout>;
+	const timeoutRef = useRef<TimeoutType|null>(null);
 
 	useEffect(() => {
 		if (timeoutRef.current !== null) {
-			clearTimeout(timeoutRef.current);
+			shim.clearTimeout(timeoutRef.current);
 			timeoutRef.current = null;
 		}
 
 		if (isPending) {
 			const longRunningTimeout = 1000;
-			timeoutRef.current = setTimeout(() => {
+			timeoutRef.current = shim.setTimeout(() => {
 				timeoutRef.current = null;
 				setIsLongRunning(isPendingRef.current);
 			}, longRunningTimeout);
