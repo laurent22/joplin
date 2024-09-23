@@ -930,6 +930,7 @@ packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
+packages/lib/file-api-driver-webdav.test.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js
 packages/lib/file-api.js
