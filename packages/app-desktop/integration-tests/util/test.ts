@@ -6,16 +6,20 @@ import createStartupArgs from './createStartupArgs';
 import firstNonDevToolsWindow from './firstNonDevToolsWindow';
 
 
+type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
 
 type JoplinFixtures = {
 	profileDirectory: string;
 	electronApp: ElectronApplication;
+	startAppWithPlugins: (pluginPaths: string[])=> Promise<StartWithPluginsResult>;
 	startupPluginsLoaded: Promise<void>;
 	mainWindow: Page;
 };
 
 // A custom fixture that loads an electron app. See
 // https://playwright.dev/docs/test-fixtures
+
+const testDir = dirname(__dirname);
 
 export const test = base.extend<JoplinFixtures>({
 	// Playwright fails if we don't use the object destructuring
@@ -25,7 +29,7 @@ export const test = base.extend<JoplinFixtures>({
 	//
 	// eslint-disable-next-line no-empty-pattern
 	profileDirectory: async ({ }, use) => {
-		const profilePath = resolve(join(dirname(__dirname), 'test-profile'));
+		const profilePath = resolve(join(testDir, 'test-profile'));
 		const profileSubdir = join(profilePath, uuid.createNano());
 		await mkdirp(profileSubdir);
 
@@ -42,6 +46,35 @@ export const test = base.extend<JoplinFixtures>({
 
 		await electronApp.firstWindow();
 		await electronApp.close();
+	},
+
+	startAppWithPlugins: async ({ profileDirectory }, use) => {
+		const startupArgs = createStartupArgs(profileDirectory);
+		let electronApp: ElectronApplication;
+
+		await use(async (pluginPaths: string[]) => {
+			if (electronApp) {
+				throw new Error('Electron app already created');
+			}
+			electronApp = await electron.launch({
+				args: [
+					...startupArgs,
+					'--dev-plugins',
+					pluginPaths.map(path => resolve(testDir, path)).join(','),
+				],
+			});
+			const mainWindow = await firstNonDevToolsWindow(electronApp);
+
+			return {
+				app: electronApp,
+				mainWindow,
+			};
+		});
+
+		if (electronApp) {
+			await electronApp.firstWindow();
+			await electronApp.close();
+		}
 	},
 
 	startupPluginsLoaded: async ({ electronApp }, use) => {

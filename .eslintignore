@@ -475,6 +475,7 @@ packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/noteList.spec.js
+packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/settings.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
