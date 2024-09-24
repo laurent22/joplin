@@ -19,6 +19,18 @@ type JoplinFixtures = {
 // A custom fixture that loads an electron app. See
 // https://playwright.dev/docs/test-fixtures
 
+const getAndResizeMainWindow = async (electronApp: ElectronApplication) => {
+	const mainWindow = await firstNonDevToolsWindow(electronApp);
+
+	// Setting the viewport size helps keep test environments consistent.
+	await mainWindow.setViewportSize({
+		width: 1200,
+		height: 800,
+	});
+
+	return mainWindow;
+};
+
 const testDir = dirname(__dirname);
 
 export const test = base.extend<JoplinFixtures>({
@@ -63,11 +75,10 @@ export const test = base.extend<JoplinFixtures>({
 					pluginPaths.map(path => resolve(testDir, path)).join(','),
 				],
 			});
-			const mainWindow = await firstNonDevToolsWindow(electronApp);
 
 			return {
 				app: electronApp,
-				mainWindow,
+				mainWindow: await getAndResizeMainWindow(electronApp),
 			};
 		});
 
@@ -88,15 +99,7 @@ export const test = base.extend<JoplinFixtures>({
 	},
 
 	mainWindow: async ({ electronApp }, use) => {
-		const mainWindow = await firstNonDevToolsWindow(electronApp);
-
-		// Setting the viewport size helps keep test environments consistent.
-		await mainWindow.setViewportSize({
-			width: 1200,
-			height: 800,
-		});
-
-		await use(mainWindow);
+		await use(await getAndResizeMainWindow(electronApp));
 	},
 });
 
