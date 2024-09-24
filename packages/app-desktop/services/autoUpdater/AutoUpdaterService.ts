@@ -53,6 +53,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
 	private isManualCheckInProgress = false;
+	private isUpdateInProgress = false;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -63,14 +64,23 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	}
 
 	public checkForUpdates = async (isManualCheck = false): Promise<void> => {
+		if (this.isUpdateInProgress) {
+			this.logger_.info('Update check already in progress. Waiting for the current check to finish.');
+			return;
+		}
+
+		this.lockUpdateProcess();
+		this.isManualCheckInProgress = isManualCheck;
+
 		try {
-			this.isManualCheckInProgress = isManualCheck;
 			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
 				this.logger_.info('Server is not reachable. Will try again later.');
 			}
+		} finally {
+			this.isManualCheckInProgress = false;
 		}
 	};
 
@@ -134,7 +144,6 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
 				await autoUpdater.checkForUpdates();
-				this.isManualCheckInProgress = false;
 			} catch (error) {
 				this.logger_.error(`Update download url failed: ${error.message}`);
 			}
@@ -187,6 +196,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private onUpdateDownloaded = (info: UpdateInfo): void => {
 		this.logger_.info('Update downloaded.');
+		this.unlockUpdateProcess();
 		void this.promptUserToUpdate(info);
 	};
 
@@ -196,5 +206,15 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
 		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
+	};
+
+	private lockUpdateProcess = (): void => {
+		this.logger_.info('Locking update process');
+		this.isUpdateInProgress = true;
+	};
+
+	private unlockUpdateProcess = (): void => {
+		this.logger_.info('Unlocking update process');
+		this.isUpdateInProgress = false;
 	};
 }
