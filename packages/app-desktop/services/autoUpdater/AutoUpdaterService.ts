@@ -16,6 +16,10 @@ export enum AutoUpdaterEvents {
 	UpdateDownloaded = 'update-downloaded',
 }
 
+export interface CheckForUpdatesArgs {
+	includePreReleases: boolean;
+}
+
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
 export const initialUpdateStartup = 5 * 1000;
 const releasesLink = 'https://objects.joplinusercontent.com/r/releases';
@@ -63,7 +67,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.configureAutoUpdater();
 	}
 
-	public checkForUpdates = async (isManualCheck = false): Promise<void> => {
+	public checkForUpdates = async (isManualCheck = false, includePreReleases = this.includePreReleases_): Promise<void> => {
 		if (this.isUpdateInProgress) {
 			this.logger_.info('Update check already in progress. Waiting for the current check to finish.');
 			return;
@@ -73,6 +77,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.isManualCheckInProgress = isManualCheck;
 
 		try {
+			autoUpdater.allowPrerelease = includePreReleases;
 			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);

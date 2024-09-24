@@ -405,12 +405,17 @@ class Application extends BaseApplication {
 	}
 
 	private setupAutoUpdaterService() {
+		// since the remote process doesn't stop running after app is closed, we need to initialize the service, even if its flag is set to false, or else it will throw an error.
+		bridge().electronApp().initializeAutoUpdaterService(
+			Logger.create('AutoUpdaterService'),
+			Setting.value('env') === 'dev',
+			Setting.value('autoUpdate.includePreReleases'),
+		);
+
+		// since the remote process doesn't stop running after app is closed, the period check starts only if the flag is set to true and the app is quit from the system tray.
+		// if the user sets the flag to true and closes the app but does not quit the app from the system tray, the periodic check won't start. The manual check will work.
 		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-			bridge().electronApp().initializeAutoUpdaterService(
-				Logger.create('AutoUpdaterService'),
-				Setting.value('env') === 'dev',
-				Setting.value('autoUpdate.includePreReleases'),
-			);
+			bridge().electronApp().startPeriodicUpdateCheck();
 		}
 	}
 

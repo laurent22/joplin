@@ -577,7 +577,7 @@ function useMenu(props: Props) {
 
 			function _checkForUpdates() {
 				if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-					ipcRenderer.send('check-for-updates');
+					ipcRenderer.send('check-for-updates', '', { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 				} else {
 					void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 				}

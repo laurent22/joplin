@@ -1127,8 +1127,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 
-		autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: false, appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
-		'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/help/about/prereleases') },
+		autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: false, appTypes: [AppType.Desktop], label: () => _('Automatically check for updates') },
+		'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s. Restart app (quit app from system tray) to start getting them', 'https://joplinapp.org/help/about/prereleases') },
 
 		'autoUploadCrashDumps': {
 			value: false,
@@ -1559,7 +1559,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			appTypes: [AppType.Desktop],
 			label: () => 'Enable auto-updates',
-			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app to start receiving auto-updates.',
+			description: () => 'Enable this feature to receive notifications about updates and install them instead of manually downloading them. Restart app (quit app from system tray) to start receiving auto-updates.',
 			show: () => shim.isWindows() || shim.isMac(),
 			section: 'application',
 			isGlobal: true,
