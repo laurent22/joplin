@@ -154,6 +154,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private configureAutoUpdater = (): void => {
+		this.logger_.info('Initiating ...');
 		autoUpdater.logger = (this.logger_) as Logger;
 		if (this.devMode_) {
 			this.logger_.info('Development mode: using dev-app-update.yml');
@@ -183,6 +184,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
 		}
 
+		this.unlockUpdateProcess();
 		this.logger_.info('Update not available.');
 	};
 
