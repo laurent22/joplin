@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import NotesScreen from './screens/Notes';
-import SearchScreen from './screens/search';
+import SearchScreen from './screens/SearchScreen';
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
 import { AppState } from '../utils/types';
