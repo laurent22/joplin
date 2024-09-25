@@ -1,11 +1,11 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
-import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
+import AutoUpdaterService, { CheckForUpdatesArgs, defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-import { BrowserWindow, Tray, screen } from 'electron';
+import { BrowserWindow, IpcMainEvent, Tray, screen } from 'electron';
 import bridge from './bridge';
 const url = require('url');
 const path = require('path');
@@ -332,8 +332,8 @@ export default class ElectronAppWrapper {
 			this.updaterService_.updateApp();
 		});
 
-		ipcMain.on('check-for-updates', () => {
-			void this.updaterService_.checkForUpdates(true);
+		ipcMain.on('check-for-updates', (_event: IpcMainEvent, _message: string, args: CheckForUpdatesArgs) => {
+			void this.updaterService_.checkForUpdates(true, args.includePreReleases);
 		});
 
 		// Let us register listeners on the window, so we can update the state
@@ -478,12 +478,11 @@ export default class ElectronAppWrapper {
 		if (shim.isWindows() || shim.isMac()) {
 			if (!this.updaterService_) {
 				this.updaterService_ = new AutoUpdaterService(this.win_, logger, devMode, includePreReleases);
-				this.startPeriodicUpdateCheck();
 			}
 		}
 	}
 
-	private startPeriodicUpdateCheck = (updateInterval: number = defaultUpdateInterval): void => {
+	public startPeriodicUpdateCheck = (updateInterval: number = defaultUpdateInterval): void => {
 		this.stopPeriodicUpdateCheck();
 		this.updatePollInterval_ = setInterval(() => {
 			void this.updaterService_.checkForUpdates(false);

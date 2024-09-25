@@ -14,6 +14,14 @@ export enum AutoUpdaterEvents {
 	Error = 'error',
 	DownloadProgress = 'download-progress',
 	UpdateDownloaded = 'update-downloaded',
+	NotificationMessage = 'notify-with-message',
+}
+
+export interface CheckForUpdatesArgs {
+	includePreReleases: boolean;
+}
+export interface UpdateNotificationMessage {
+	message: string;
 }
 
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
@@ -53,6 +61,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
 	private isManualCheckInProgress = false;
+	private isUpdateInProgress = false;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -62,15 +71,28 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.configureAutoUpdater();
 	}
 
-	public checkForUpdates = async (isManualCheck = false): Promise<void> => {
+	public checkForUpdates = async (isManualCheck = false, includePreReleases = this.includePreReleases_): Promise<void> => {
+		if (this.isUpdateInProgress) {
+			this.logger_.info('Update check already in progress. Waiting for the current check to finish.');
+			if (isManualCheck) {
+				this.sendNotification('Update check already in progress.');
+			}
+			return;
+		}
+
+		this.lockUpdateProcess();
+		this.isManualCheckInProgress = isManualCheck;
+
 		try {
-			this.isManualCheckInProgress = isManualCheck;
+			autoUpdater.allowPrerelease = includePreReleases;
 			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
 				this.logger_.info('Server is not reachable. Will try again later.');
 			}
+		} finally {
+			this.isManualCheckInProgress = false;
 		}
 	};
 
@@ -134,7 +156,6 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
 				await autoUpdater.checkForUpdates();
-				this.isManualCheckInProgress = false;
 			} catch (error) {
 				this.logger_.error(`Update download url failed: ${error.message}`);
 			}
@@ -145,6 +166,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private configureAutoUpdater = (): void => {
+		this.logger_.info('Initiating ...');
 		autoUpdater.logger = (this.logger_) as Logger;
 		if (this.devMode_) {
 			this.logger_.info('Development mode: using dev-app-update.yml');
@@ -171,9 +193,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private onUpdateNotAvailable = (_info: UpdateInfo): void => {
 		if (this.isManualCheckInProgress) {
-			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
+			this.sendNotification('Update is not available.');
 		}
 
+		this.unlockUpdateProcess();
 		this.logger_.info('Update not available.');
 	};
 
@@ -187,6 +210,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private onUpdateDownloaded = (info: UpdateInfo): void => {
 		this.logger_.info('Update downloaded.');
+		this.unlockUpdateProcess();
 		void this.promptUserToUpdate(info);
 	};
 
@@ -196,5 +220,22 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
 		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
+	};
+
+	private lockUpdateProcess = (): void => {
+		this.logger_.info('Locking update process');
+		this.isUpdateInProgress = true;
+	};
+
+	private unlockUpdateProcess = (): void => {
+		this.logger_.info('Unlocking update process');
+		this.isUpdateInProgress = false;
+	};
+
+	private sendNotification = (message: string): void => {
+		const notificationMessage: UpdateNotificationMessage = {
+			message: message,
+		};
+		this.window_.webContents.send(AutoUpdaterEvents.NotificationMessage, notificationMessage);
 	};
 }

@@ -4,8 +4,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import NotyfContext from '../NotyfContext';
 import { UpdateInfo } from 'electron-updater';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { AutoUpdaterEvents } from '../../services/autoUpdater/AutoUpdaterService';
-import { NotyfEvent, NotyfNotification } from 'notyf';
+import { AutoUpdaterEvents, UpdateNotificationMessage } from '../../services/autoUpdater/AutoUpdaterService';
+import { NotyfNotification } from 'notyf';
 import { _ } from '@joplin/lib/locale';
 import { htmlentities } from '@joplin/utils/html';
 import shim from '@joplin/lib/shim';
@@ -16,11 +16,11 @@ interface UpdateNotificationProps {
 
 export enum UpdateNotificationEvents {
 	ApplyUpdate = 'apply-update',
-	UpdateNotAvailable = 'update-not-available',
 	Dismiss = 'dismiss-update-notification',
 }
 
 const changelogLink = 'https://github.com/laurent22/joplin/releases';
+const notificationDuration = 5000; // 5 seconds
 
 window.openChangelogLink = () => {
 	shim.openUrl(changelogLink);
@@ -87,10 +87,10 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 		notificationRef.current = notification;
 	}, [notyf, theme]);
 
-	const handleUpdateNotAvailable = useCallback(() => {
+	const handleNotificationMessage = useCallback((_event: IpcRendererEvent, args: UpdateNotificationMessage) => {
 		if (notificationRef.current) return;
 
-		const noUpdateMessageHtml = htmlentities(_('No updates available'));
+		const noUpdateMessageHtml = htmlentities(_('%s', args.message));
 
 		const messageHtml = `
 			<div class="update-notification" style="color: ${theme.color2};">
@@ -105,28 +105,29 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 				x: 'right',
 				y: 'bottom',
 			},
-			duration: 5000,
+			duration: notificationDuration,
 		});
-
-		notification.on(NotyfEvent.Dismiss, () => {
-			notificationRef.current = null;
-		});
-
 		notificationRef.current = notification;
+
+		setTimeout(() => {
+			if (notificationRef.current === notification) {
+				notificationRef.current = null;
+			}
+		}, notificationDuration);
 	}, [notyf, theme]);
 
 	useEffect(() => {
 		ipcRenderer.on(AutoUpdaterEvents.UpdateDownloaded, handleUpdateDownloaded);
-		ipcRenderer.on(AutoUpdaterEvents.UpdateNotAvailable, handleUpdateNotAvailable);
+		ipcRenderer.on(AutoUpdaterEvents.NotificationMessage, handleNotificationMessage);
 		document.addEventListener(UpdateNotificationEvents.ApplyUpdate, handleApplyUpdate);
 		document.addEventListener(UpdateNotificationEvents.Dismiss, handleDismissNotification);
 
 		return () => {
 			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateDownloaded, handleUpdateDownloaded);
-			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateNotAvailable, handleUpdateNotAvailable);
+			ipcRenderer.removeListener(AutoUpdaterEvents.NotificationMessage, handleNotificationMessage);
 			document.removeEventListener(UpdateNotificationEvents.ApplyUpdate, handleApplyUpdate);
 		};
-	}, [handleApplyUpdate, handleDismissNotification, handleUpdateDownloaded, handleUpdateNotAvailable]);
+	}, [handleApplyUpdate, handleDismissNotification, handleUpdateDownloaded, handleNotificationMessage]);
 
 
 	return (
