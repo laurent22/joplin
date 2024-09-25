@@ -5,7 +5,7 @@ import NotyfContext from '../NotyfContext';
 import { UpdateInfo } from 'electron-updater';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { AutoUpdaterEvents, UpdateNotificationMessage } from '../../services/autoUpdater/AutoUpdaterService';
-import { NotyfEvent, NotyfNotification } from 'notyf';
+import { NotyfNotification } from 'notyf';
 import { _ } from '@joplin/lib/locale';
 import { htmlentities } from '@joplin/utils/html';
 import shim from '@joplin/lib/shim';
@@ -20,6 +20,7 @@ export enum UpdateNotificationEvents {
 }
 
 const changelogLink = 'https://github.com/laurent22/joplin/releases';
+const notificationDuration = 5000; // 5 seconds
 
 window.openChangelogLink = () => {
 	shim.openUrl(changelogLink);
@@ -104,14 +105,15 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 				x: 'right',
 				y: 'bottom',
 			},
-			duration: 5000,
+			duration: notificationDuration,
 		});
-
-		notification.on(NotyfEvent.Dismiss, () => {
-			notificationRef.current = null;
-		});
-
 		notificationRef.current = notification;
+
+		setTimeout(() => {
+			if (notificationRef.current === notification) {
+				notificationRef.current = null;
+			}
+		}, notificationDuration);
 	}, [notyf, theme]);
 
 	useEffect(() => {
