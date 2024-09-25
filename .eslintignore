@@ -1307,6 +1307,7 @@ packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
+packages/lib/shim-init-node.test.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
