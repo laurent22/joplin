@@ -74,7 +74,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	public checkForUpdates = async (isManualCheck = false, includePreReleases = this.includePreReleases_): Promise<void> => {
 		if (this.isUpdateInProgress) {
 			this.logger_.info('Update check already in progress. Waiting for the current check to finish.');
-			if (this.isManualCheckInProgress) {
+			if (isManualCheck) {
 				this.sendNotification('Update check already in progress.');
 			}
 			return;
