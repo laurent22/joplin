@@ -163,4 +163,14 @@ describe('InteropService_Importer_OneNote', () => {
 
 		expect(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
 	});
+
+	it('should ignore broken characters at the start of paragraph', async () => {
+		let idx = 0;
+		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
+		const notes = await importNote(`${supportDir}/onenote/bug_broken_character.zip`);
+
+		expect(notes.find(n => n.title === 'Action research - Wikipedia').body).toMatchSnapshot();
+
+		BaseModel.setIdGenerator(originalIdGenerator);
+	});
 });
