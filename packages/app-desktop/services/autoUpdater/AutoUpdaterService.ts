@@ -19,10 +19,28 @@ export enum AutoUpdaterEvents {
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
 export const initialUpdateStartup = 5 * 1000;
 const releasesLink = 'https://objects.joplinusercontent.com/r/releases';
+export type Architecture = typeof process.arch;
+interface PlatformAssets {
+	[platform: string]: {
+		[arch in Architecture]?: string;
+	};
+}
+const supportedPlatformAssets: PlatformAssets = {
+	'darwin': {
+		'x64': 'latest-mac.yml',
+		'arm64': 'latest-mac-arm64.yml',
+	},
+	'win32': {
+		'x64': 'latest.yml',
+		'ia32': 'latest.yml',
+	},
+};
 
 export interface AutoUpdaterServiceInterface {
-	checkForUpdates(): void;
+	checkForUpdates(isManualCheck: boolean): void;
 	updateApp(): void;
+	fetchLatestRelease(includePreReleases: boolean): Promise<GitHubRelease>;
+	getDownloadUrlForPlatform(release: GitHubRelease, platform: string, arch: string): string;
 }
 
 export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
@@ -30,10 +48,11 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private logger_: LoggerWrapper;
 	private devMode_: boolean;
 	private enableDevMode = true; // force the updater to work in "dev" mode
-	private enableAutoDownload = false; // automatically download an update when it is found
+	private enableAutoDownload = true; // automatically download an update when it is found
 	private autoInstallOnAppQuit = false; // automatically install the downloaded update once the user closes the application
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
+	private isManualCheckInProgress = false;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -43,9 +62,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.configureAutoUpdater();
 	}
 
-	public checkForUpdates = async (): Promise<void> => {
+	public checkForUpdates = async (isManualCheck = false): Promise<void> => {
 		try {
-			await this.fetchLatestRelease();
+			this.isManualCheckInProgress = isManualCheck;
+			await this.checkForLatestRelease();
 		} catch (error) {
 			this.logger_.error('Failed to check for updates:', error);
 			if (error.message.includes('ERR_CONNECTION_REFUSED')) {
@@ -58,7 +78,38 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		autoUpdater.quitAndInstall(false, true);
 	};
 
-	private fetchLatestReleases = async (): Promise<GitHubRelease[]> => {
+	public fetchLatestRelease = async (includePreReleases: boolean): Promise<GitHubRelease> => {
+		const releases = await this.fetchReleases(includePreReleases);
+		const release = releases[0];
+
+		if (!release) {
+			throw new Error('No suitable release found');
+		}
+
+		return release;
+	};
+
+
+	public getDownloadUrlForPlatform(release: GitHubRelease, platform: string, arch: string): string {
+		if (!supportedPlatformAssets[platform]) {
+			throw new Error(`The AutoUpdaterService does not support the following platform: ${platform}`);
+		}
+
+		const platformAssets = supportedPlatformAssets[platform];
+		const assetName: string | undefined = platformAssets ? platformAssets[arch as Architecture] : undefined;
+		if (!assetName) {
+			throw new Error(`The AutoUpdaterService does not support the architecture: ${arch} for platform: ${platform}`);
+		}
+
+		const asset: GitHubReleaseAsset = release.assets.find(a => a.name === assetName);
+		if (!asset) {
+			throw new Error(`Yml file: ${assetName} not found for version: ${release.tag_name} platform: ${platform} and architecture: ${arch}`);
+		}
+
+		return asset.browser_download_url;
+	}
+
+	private fetchReleases = async (includePreReleases: boolean): Promise<GitHubRelease[]> => {
 		const response = await fetch(releasesLink);
 
 		if (!response.ok) {
@@ -66,48 +117,30 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
 		}
 
-		return (await response.json()) as GitHubRelease[];
+		const releases: GitHubRelease[] = await response.json();
+		const sortedReleasesByVersion = releases.sort((a, b) => semver.rcompare(a.tag_name, b.tag_name));
+		const filteredReleases = sortedReleasesByVersion.filter(release => includePreReleases || !release.prerelease);
+
+		return filteredReleases;
 	};
 
-	private fetchLatestRelease = async (): Promise<void> => {
+	private checkForLatestRelease = async (): Promise<void> => {
 		try {
-			const releases = await this.fetchLatestReleases();
+			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
 
-			const sortedReleasesByVersion = releases.sort((a, b) => {
-				return semver.rcompare(a.tag_name, b.tag_name);
-			});
-			const filteredReleases = sortedReleasesByVersion.filter(release => {
-				return this.includePreReleases_ || !release.prerelease;
-			});
-			const release = filteredReleases[0];
-
-			if (release) {
-				let assetUrl = null;
-
-				if (shim.isWindows()) {
-					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest.yml');
-					if (asset) {
-						assetUrl = asset.browser_download_url.replace('/latest.yml', '');
-					}
-				} else if (shim.isMac()) {
-					const asset = release.assets.find((asset: GitHubReleaseAsset) => asset.name === 'latest-mac.yml');
-					if (asset) {
-						assetUrl = asset.browser_download_url.replace('/latest-mac.yml', '');
-					}
-				}
-
-				if (assetUrl) {
-					autoUpdater.setFeedURL({
-						provider: 'generic',
-						url: assetUrl,
-					});
-					await autoUpdater.checkForUpdates();
-				} else {
-					this.logger_.error('No suitable update asset found for this platform.');
-				}
+			try {
+				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
+				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
+				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
+				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
+				await autoUpdater.checkForUpdates();
+				this.isManualCheckInProgress = false;
+			} catch (error) {
+				this.logger_.error(`Update download url failed: ${error.message}`);
 			}
+
 		} catch (error) {
-			this.logger_.error(error);
+			this.logger_.error(`Fetching releases failed:  ${error.message}`);
 		}
 	};
 
@@ -137,6 +170,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private onUpdateNotAvailable = (_info: UpdateInfo): void => {
+		if (this.isManualCheckInProgress) {
+			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
+		}
+
 		this.logger_.info('Update not available.');
 	};
 

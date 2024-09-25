@@ -2,13 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const sha512 = require('js-sha512');
+const distDirName = 'dist';
+const distPath = path.join(__dirname, distDirName);
 
 const generateChecksumFile = () => {
 	if (os.platform() !== 'linux') {
-		return []; // SHA-512 is only for AppImage
+		return; // SHA-512 is only for AppImage
 	}
-	const distDirName = 'dist';
-	const distPath = path.join(__dirname, distDirName);
+
 	let appImageName = '';
 	const files = fs.readdirSync(distPath);
 	for (const key in files) {
@@ -27,7 +28,13 @@ const generateChecksumFile = () => {
 	const sha512FileName = `${appImageName}.sha512`;
 	const sha512FilePath = path.join(distPath, sha512FileName);
 	fs.writeFileSync(sha512FilePath, checksum);
-	return [sha512FilePath];
+	return sha512FilePath;
 };
 
-exports.default = generateChecksumFile;
+const mainHook = () => {
+	const sha512FilePath = generateChecksumFile();
+	const outputFiles = [sha512FilePath].filter(item => item);
+	return outputFiles;
+};
+
+exports.default = mainHook;

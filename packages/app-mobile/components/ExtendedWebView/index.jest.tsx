@@ -15,7 +15,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const dom = useMemo(() => {
 		// Note: Adding `runScripts: 'dangerously'` to allow running inline <script></script>s.
 		// Use with caution.
-		return new JSDOM(props.html, { runScripts: 'dangerously' });
+		return new JSDOM(props.html, { runScripts: 'dangerously', pretendToBeVisual: true });
 	}, [props.html]);
 
 	useImperativeHandle(ref, (): WebViewControl => {
@@ -46,6 +46,25 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	injectedJavaScriptRef.current = props.injectedJavaScript;
 
 	useEffect(() => {
+		// JSDOM polyfills
+		dom.window.eval(`
+			// Prevents the CodeMirror error "getClientRects is undefined".
+			// See https://github.com/jsdom/jsdom/issues/3002#issue-652790925
+			document.createRange = () => {
+				const range = new Range();
+				range.getBoundingClientRect = () => {};
+				range.getClientRects = () => {
+					return {
+						length: 0,
+						item: () => null,
+						[Symbol.iterator]: () => {},
+					};
+				};
+
+				return range;
+			};
+		`);
+
 		dom.window.eval(`
 			window.setWebViewApi = (api) => {
 				window.ReactNativeWebView = api;

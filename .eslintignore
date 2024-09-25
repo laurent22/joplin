@@ -210,7 +210,6 @@ packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
 packages/app-desktop/gui/MainScreen/commands/deleteFolder.js
-packages/app-desktop/gui/MainScreen/commands/deleteNote.js
 packages/app-desktop/gui/MainScreen/commands/duplicateNote.js
 packages/app-desktop/gui/MainScreen/commands/editAlarm.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
@@ -229,7 +228,6 @@ packages/app-desktop/gui/MainScreen/commands/openItem.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openPdfViewer.js
 packages/app-desktop/gui/MainScreen/commands/openTag.js
-packages/app-desktop/gui/MainScreen/commands/permanentlyDeleteNote.js
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/renameFolder.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
@@ -288,6 +286,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useKeymap.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useRefocusOnVisiblePaneChange.js
 packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
@@ -343,8 +342,10 @@ packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
 packages/app-desktop/gui/NoteList/utils/types.js
+packages/app-desktop/gui/NoteList/utils/useActiveDescendantId.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
+packages/app-desktop/gui/NoteList/utils/useFocusVisible.js
 packages/app-desktop/gui/NoteList/utils/useItemCss.js
 packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
@@ -365,6 +366,7 @@ packages/app-desktop/gui/NoteListHeader/utils/useContextMenu.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.test.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.js
 packages/app-desktop/gui/NoteListItem/NoteListItem.js
+packages/app-desktop/gui/NoteListItem/utils/getNoteElementIdFromJoplinId.js
 packages/app-desktop/gui/NoteListItem/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.test.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.js
@@ -459,6 +461,7 @@ packages/app-desktop/gui/style/StyledLink.js
 packages/app-desktop/gui/style/StyledMessage.js
 packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/utils/NoteListUtils.js
+packages/app-desktop/gui/utils/announceForAccessibility.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
@@ -469,6 +472,7 @@ packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
 packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/noteList.spec.js
@@ -487,6 +491,7 @@ packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
+packages/app-desktop/services/autoUpdater/AutoUpdaterService.test.js
 packages/app-desktop/services/autoUpdater/AutoUpdaterService.js
 packages/app-desktop/services/bridge.js
 packages/app-desktop/services/commands/stateToWhenClauseContext.js
@@ -512,8 +517,10 @@ packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/copy7Zip.js
+packages/app-desktop/tools/generateLatestArm64Yml.js
+packages/app-desktop/tools/githubReleasesUtils.js
+packages/app-desktop/tools/modifyReleaseAssets.js
 packages/app-desktop/tools/notarizeMacApp.js
-packages/app-desktop/tools/renameReleaseAssets.js
 packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
 packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
@@ -540,6 +547,7 @@ packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/CameraView.js
+packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager.js
 packages/app-mobile/components/DismissibleDialog.js
 packages/app-mobile/components/Dropdown.test.js
@@ -603,10 +611,12 @@ packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/hooks/useKeyboardVisible.js
 packages/app-mobile/components/NoteEditor/types.js
+packages/app-mobile/components/NoteItem.js
 packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ScreenHeader/Menu.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.js
 packages/app-mobile/components/ScreenHeader/WarningBox.js
@@ -614,6 +624,7 @@ packages/app-mobile/components/ScreenHeader/WebBetaButton.js
 packages/app-mobile/components/ScreenHeader/index.js
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
+packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
 packages/app-mobile/components/accessibility/AccessibleView.js
@@ -702,13 +713,14 @@ packages/app-mobile/components/screens/Note.test.js
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/SearchScreen/SearchResults.js
+packages/app-mobile/components/screens/SearchScreen/index.js
 packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
 packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
 packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
-packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
@@ -718,6 +730,7 @@ packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/AlarmServiceDriver.web.js
+packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
@@ -752,6 +765,7 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
+packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
@@ -878,6 +892,7 @@ packages/lib/ArrayUtils.js
 packages/lib/AsyncActionQueue.test.js
 packages/lib/AsyncActionQueue.js
 packages/lib/BaseApplication.js
+packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
 packages/lib/ClipperServer.js
@@ -907,11 +922,14 @@ packages/lib/array.js
 packages/lib/callbackUrlUtils.test.js
 packages/lib/callbackUrlUtils.js
 packages/lib/clipperUtils.js
+packages/lib/commands/deleteNote.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
 packages/lib/commands/openMasterPasswordDialog.js
+packages/lib/commands/permanentlyDeleteNote.js
 packages/lib/commands/synchronize.js
+packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/config/config-shared.js
@@ -937,6 +955,7 @@ packages/lib/eventManager.js
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-local.js
 packages/lib/file-api-driver-memory.js
+packages/lib/file-api-driver-webdav.test.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js
 packages/lib/file-api.js
@@ -950,6 +969,8 @@ packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js
 packages/lib/hooks/usePlugin.js
 packages/lib/hooks/usePrevious.js
+packages/lib/hooks/useQueuedAsyncEffect.test.js
+packages/lib/hooks/useQueuedAsyncEffect.js
 packages/lib/htmlUtils.test.js
 packages/lib/htmlUtils.js
 packages/lib/htmlUtils2.test.js

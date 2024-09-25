@@ -29,7 +29,7 @@ import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
 const { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } = require('react-native');
-import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, AccessibilityInfo, ActivityIndicator } from 'react-native';
+import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -37,7 +37,7 @@ const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
-const { BackButtonService } = require('./services/back-button.js');
+import BackButtonService from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
@@ -61,14 +61,14 @@ import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 import LogScreen from './components/screens/LogScreen';
 import StatusScreen from './components/screens/status';
-const { SearchScreen } = require('./components/screens/search.js');
+import SearchScreen from './components/screens/SearchScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 import { MenuProvider } from 'react-native-popup-menu';
-import SideMenu from './components/SideMenu';
+import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
-const { SideMenuContentNote } = require('./components/side-menu-content-note.js');
+import SideMenuContentNote from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
@@ -136,8 +136,6 @@ import DialogManager from './components/DialogManager';
 import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
-
-type SideMenuPosition = 'left' | 'right';
 
 const logger = Logger.create('root');
 
@@ -207,7 +205,13 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		setTimeLocale(Setting.value('locale'));
 	}
 
-	if ((action.type === 'SETTING_UPDATE_ONE' && (action.key.indexOf('encryption.') === 0)) || (action.type === 'SETTING_UPDATE_ALL')) {
+	// Like the desktop and CLI apps, we run this whenever the sync target properties change.
+	// Previously, this only ran when encryption was enabled/disabled. However, after fetching
+	// a new key, this needs to run and so we run it when the sync target info changes.
+	if (
+		(action.type === 'SETTING_UPDATE_ONE' && (action.key === 'syncInfoCache' || action.key.startsWith('encryption.')))
+		|| action.type === 'SETTING_UPDATE_ALL'
+	) {
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		void DecryptionWorker.instance().scheduleStart();
 		const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -263,7 +267,6 @@ const navHistory: any[] = [];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function historyCanGoBackTo(route: any) {
-	if (route.routeName === 'Note') return false;
 	if (route.routeName === 'Folder') return false;
 
 	// There's no point going back to these screens in general and, at least in OneDrive case,
@@ -288,12 +291,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 			if (action.type === 'NAV_BACK') {
 				if (!navHistory.length) break;
 
-				let newAction = null;
-				while (navHistory.length) {
-					newAction = navHistory.pop();
-					if (newAction.routeName !== state.route.routeName) break;
-				}
-
+				const newAction = navHistory.pop();
 				action = newAction ? newAction : navHistory.pop();
 
 				historyGoingBack = true;
@@ -303,27 +301,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				const currentRoute = state.route;
 
 				if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-				// If the route *name* is the same (even if the other parameters are different), we
-				// overwrite the last route in the history with the current one. If the route name
-				// is different, we push a new history entry.
-					if (currentRoute.routeName === action.routeName) {
-					// nothing
-					} else {
-						navHistory.push(currentRoute);
-					}
-				}
-
-				// HACK: whenever a new screen is loaded, all the previous screens of that type
-				// are overwritten with the new screen parameters. This is because the way notes
-				// are currently loaded is not optimal (doesn't retain history properly) so
-				// this is a simple fix without doing a big refactoring to change the way notes
-				// are loaded. Might be good enough since going back to different folders
-				// is probably not a common workflow.
-				for (let i = 0; i < navHistory.length; i++) {
-					const n = navHistory[i];
-					if (n.routeName === action.routeName) {
-						navHistory[i] = { ...action };
-					}
+					navHistory.push(currentRoute);
 				}
 
 				newState = { ...state };
@@ -385,12 +363,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 			newState = { ...state };
 			newState.showSideMenu = false;
-			break;
-
-		case 'SIDE_MENU_OPEN_PERCENT':
-
-			newState = { ...state };
-			newState.sideMenuOpenPercent = action.value;
 			break;
 
 		case 'SET_PLUGIN_PANELS_DIALOG_VISIBLE':
@@ -1182,9 +1154,6 @@ class AppComponent extends React.Component {
 		this.props.dispatch({
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
-		AccessibilityInfo.announceForAccessibility(
-			isOpen ? _('Side menu opened') : _('Side menu closed'),
-		);
 	}
 
 	private getSideMenuWidth = () => {
@@ -1217,12 +1186,12 @@ class AppComponent extends React.Component {
 		const theme: Theme = themeStyle(this.props.themeId);
 
 		let sideMenuContent: ReactNode = null;
-		let menuPosition: SideMenuPosition = 'left';
+		let menuPosition = SideMenuPosition.Left;
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
-			menuPosition = 'right';
+			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {
@@ -1277,12 +1246,6 @@ class AppComponent extends React.Component {
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					disableGestures={disableSideMenuGestures}
-					onSliding={(percent: number) => {
-						this.props.dispatch({
-							type: 'SIDE_MENU_OPEN_PERCENT',
-							value: percent,
-						});
-					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuProvider style={{ flex: 1 }}>

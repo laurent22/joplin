@@ -10,6 +10,7 @@ import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
+import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
 
 interface NoteItemProps {
 	dragIndex: number;
@@ -26,8 +27,12 @@ interface NoteItemProps {
 	onDragStart: DragEventHandler;
 	style: CSSProperties;
 	note: NoteEntity;
-	isSelected: boolean;
 	isWatched: boolean;
+
+	isSelected: boolean;
+	tabIndex: number;
+	focusVisible: boolean;
+
 	listRenderer: ListRenderer;
 	columns: NoteListColumns;
 	dispatch: Dispatch;
@@ -35,7 +40,7 @@ interface NoteItemProps {
 
 const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 	const noteId = props.note.id;
-	const elementId = `list-note-${noteId}`;
+	const elementId = getNoteElementIdFromJoplinId(noteId);
 
 	const onInputChange: OnInputChange = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
 		const getValue = (element: HTMLInputElement) => {
@@ -70,6 +75,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		rootElement,
 		noteId,
 		renderedNote ? renderedNote.html : '',
+		props.focusVisible,
 		props.style,
 		props.itemSize,
 		props.onClick,
@@ -147,13 +153,18 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		id={elementId}
 		ref={ref}
 		draggable={true}
-		tabIndex={0}
+		tabIndex={props.tabIndex}
 		className={className}
 		data-id={noteId}
 		style={{ height: props.itemSize.height }}
 		onContextMenu={props.onContextMenu}
 		onDragStart={props.onDragStart}
 		onDragOver={props.onDragOver}
+
+		aria-selected={props.isSelected}
+		aria-posinset={1 + props.index}
+		aria-setsize={props.noteCount}
+		role='option'
 	>
 		<div className="dragcursor" style={dragCursorStyle}></div>
 	</div>;

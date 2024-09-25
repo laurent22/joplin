@@ -30,6 +30,8 @@ export enum EditorCommandType {
 	ToggleHeading4 = 'textHeading4',
 	ToggleHeading5 = 'textHeading5',
 
+	InsertHorizontalRule = 'textHorizontalRule',
+
 	// Find commands
 	ShowSearch = 'find',
 	HideSearch = 'hideSearchDialog',

@@ -1,5 +1,37 @@
 # Joplin Android Changelog
 
+## [android-v3.1.4](https://github.com/laurent22/joplin/releases/tag/android-v3.1.4) (Pre-release) - 2024-09-24T14:21:42Z
+
+- Improved: Automatically detect and use operating system theme by default (5beb80b)
+- Improved: Make pressing "back" navigate to the previous note after following a link (#11086) (#11082 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Scroll dropdown to selected value when first opened (#11091 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Show loading indicator while loading search results (#11104 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support permanent note deletion on mobile  (#10786) (#10763 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @js-draw/material-icons (v1.20.3), @react-native/babel-preset (v0.74.84), @react-native/metro-config (v0.74.84), @rollup/plugin-replace (v5.0.7), glob (v10.4.2), js-draw (v1.20.3), jsdom (v24.1.0), markdown-it-ins (v4), markdown-it-sup (v2), react-native-device-info (v10.14.0), react-native-document-picker (v9.2.0), react-native-localize (v3.1.0), react-native-safe-area-context (v4.10.5), react-native-share (v10.2.1), react-native-webview (v13.10.4), sass (v1.77.6), tesseract.js (v5.1.0), turndown (v7.2.0)
+- Improved: Upgrade CodeMirror packages (#11034 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Use fade animation for edit link dialog (#11090 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix sidebar broken in right-to-left mode, improve screen reader accessibility (#11056) (#11028 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Decrypt master keys only as needed (#10990) (#10856 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Delete revisions on the sync target when deleted locally (#11035) (#11017 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Drawing: Fix clicking "cancel" after starting a new drawing in editing mode creates an empty resource (#10986 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix scroll issues and incorrect main content height (#11071 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unable to change incorrect decryption password if the same as the master password (#11026 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve performance when there are many selected items (#11067) (#11065 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Move accessibility focus to the first note action menu item on open (#11031) (#10253 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: WebDAV synchronisation not working because of URL encoding differences (#11076) (#10608 by [@pedr](https://github.com/pedr))
+
+## [android-v3.1.3](https://github.com/laurent22/joplin/releases/tag/android-v3.1.3) (Pre-release) - 2024-09-02T12:16:46Z
+
+- Improved: Added feature flag to disable sync lock support (#10925) (#10407)
+- Improved: Make feature flags advanced settings by default (700ffa2)
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.10), @js-draw/material-icons (v1.20.2), @react-native-clipboard/clipboard (v1.14.1), @react-native-community/datetimepicker (v8.0.1), @react-native-community/netinfo (v11.3.2), @rollup/plugin-commonjs (v25.0.8), async-mutex (v0.5.0), dayjs (v1.11.11), glob (v10.3.16), react, react-native-device-info (v10.13.2), react-native-safe-area-context (v4.10.3), react-native-webview (v13.8.7), react-native-zip-archive (v6.1.2), sass (v1.76.0), sharp (v0.33.4)
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms (#10897) (#10896 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix BMP image rendering in the Markdown viewer (#10915) (#10914 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix crash on opening settings on old versions of Android (#10793 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix toolbar overflow menu is invisible (#10871) (#10867 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed italic support in Fountain documents (5fdd088)
+- Fixed: Markdown editor: Fix toggling bulleted lists when items start with asterisks (#10902) (#10891 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) (Pre-release) - 2024-08-10T11:44:30Z
 
 - Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

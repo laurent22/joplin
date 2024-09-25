@@ -10,7 +10,7 @@ import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmp
 import Folder from '@joplin/lib/models/Folder';
 
 const { _ } = require('@joplin/lib/locale');
-const { NoteItem } = require('./note-item.js');
+import NoteItem from './NoteItem';
 import { themeStyle } from './global-style';
 
 interface NoteListProps {

@@ -6,6 +6,7 @@ export interface ImageEditorCallbacks {
 	saveDrawing: SaveDrawingCallback;
 	updateEditorTemplate: UpdateEditorTemplateCallback;
 
+	saveThenClose: (svgData: SVGElement)=> void;
 	closeEditor: (promptIfUnsaved: boolean)=> void;
 	setImageHasChanges: (hasChanges: boolean)=> void;
 }

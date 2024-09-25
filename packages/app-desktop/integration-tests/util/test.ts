@@ -56,6 +56,13 @@ export const test = base.extend<JoplinFixtures>({
 
 	mainWindow: async ({ electronApp }, use) => {
 		const mainWindow = await firstNonDevToolsWindow(electronApp);
+
+		// Setting the viewport size helps keep test environments consistent.
+		await mainWindow.setViewportSize({
+			width: 1200,
+			height: 800,
+		});
+
 		await use(mainWindow);
 	},
 });
