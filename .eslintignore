@@ -733,6 +733,7 @@ packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/Whisper.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/setupQuickActions.js
@@ -741,6 +742,7 @@ packages/app-mobile/tools/buildInjectedJs/constants.js
 packages/app-mobile/tools/buildInjectedJs/copyJs.js
 packages/app-mobile/tools/buildInjectedJs/gulpTasks.js
 packages/app-mobile/tools/copyAssets.js
+packages/app-mobile/utils/AudioRecorder.js
 packages/app-mobile/utils/ShareExtension.js
 packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js

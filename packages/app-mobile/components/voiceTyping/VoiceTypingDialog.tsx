@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Banner, ActivityIndicator } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
-import { modelIsDownloaded } from '../../services/voiceTyping/vosk';
+import Whisper, { OnTextCallback } from '../../services/voiceTyping/Whisper';
 
 interface Props {
 	locale: string;
@@ -21,18 +20,21 @@ enum RecorderState {
 	Downloading = 5,
 }
 
-const useVosk = (locale: string): [Error | null, boolean, Vosk|null] => {
-	const [vosk, setVosk] = useState<Vosk>(null);
+const useWhisper = (locale: string, onText: OnTextCallback): [Error | null, boolean, Whisper|null] => {
+	const [whisper, setWhisper] = useState<Whisper>(null);
 	const [error, setError] = useState<Error>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
+
+	const onTextRef = useRef(onText);
+	onTextRef.current = onText;
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		if (mustDownloadModel === null) return;
 
 		try {
-			const v = await getVosk(locale);
+			const v = await Whisper.fetched(locale, (text) => onTextRef.current(text));
 			if (event.cancelled) return;
-			setVosk(v);
+			setWhisper(v);
 		} catch (error) {
 			setError(error);
 		} finally {
@@ -41,24 +43,23 @@ const useVosk = (locale: string): [Error | null, boolean, Vosk|null] => {
 	}, [locale, mustDownloadModel]);
 
 	useAsyncEffect(async (_event: AsyncEffectEvent) => {
-		setMustDownloadModel(!(await modelIsDownloaded(locale)));
-	}, [locale]);
+		setMustDownloadModel(await Whisper.mustDownload());
+	}, []);
 
-	return [error, mustDownloadModel, vosk];
+	return [error, mustDownloadModel, whisper];
 };
 
 export default (props: Props) => {
-	const [recorder, setRecorder] = useState<Recorder>(null);
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
-	const [voskError, mustDownloadModel, vosk] = useVosk(props.locale);
+	const [whisperError, mustDownloadModel, whisper] = useWhisper(props.locale, props.onText);
 
 	useEffect(() => {
-		if (voskError) {
+		if (whisperError) {
 			setRecorderState(RecorderState.Error);
-		} else if (vosk) {
+		} else if (whisper) {
 			setRecorderState(RecorderState.Recording);
 		}
-	}, [vosk, voskError]);
+	}, [whisper, whisperError]);
 
 	useEffect(() => {
 		if (mustDownloadModel) {
@@ -68,27 +69,22 @@ export default (props: Props) => {
 
 	useEffect(() => {
 		if (recorderState === RecorderState.Recording) {
-			setRecorder(startRecording(vosk, {
-				onResult: (text: string) => {
-					props.onText(text);
-				},
-			}));
+			void whisper.start();
 		}
-	}, [recorderState, vosk, props.onText]);
+	}, [recorderState, whisper, props.onText]);
 
 	const onDismiss = useCallback(() => {
-		if (recorder) recorder.cleanup();
+		void whisper.stop();
 		props.onDismiss();
-	}, [recorder, props.onDismiss]);
+	}, [whisper, props.onDismiss]);
 
 	const renderContent = () => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const components: Record<RecorderState, Function> = {
+		const components: Record<RecorderState, ()=> string> = {
 			[RecorderState.Loading]: () => _('Loading...'),
 			[RecorderState.Recording]: () => _('Please record your voice...'),
 			[RecorderState.Processing]: () => _('Converting speech to text...'),
 			[RecorderState.Downloading]: () => _('Downloading %s language files...', languageName(props.locale)),
-			[RecorderState.Error]: () => _('Error: %s', voskError.message),
+			[RecorderState.Error]: () => _('Error: %s', whisperError.message),
 		};
 
 		return components[recorderState]();
