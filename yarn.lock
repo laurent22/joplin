@@ -7410,7 +7410,7 @@ __metadata:
     electron-window-state: 5.0.3
     formatcoords: 1.1.3
     fs-extra: 11.2.0
-    glob: 10.4.1
+    glob: 10.4.2
     gulp: 4.0.2
     highlight.js: 11.9.0
     immer: 7.0.15
@@ -7506,7 +7506,7 @@ __metadata:
     jest-environment-jsdom: 29.7.0
     jetifier: 2.0.0
     js-draw: 1.20.3
-    jsdom: 24.0.0
+    jsdom: 24.1.0
     lodash: 4.17.21
     md5: 2.3.0
     nodemon: 3.0.3
@@ -7940,7 +7940,7 @@ __metadata:
     jest: 29.7.0
     jest-expect-message: 1.1.3
     jquery: 3.7.1
-    jsdom: 24.0.0
+    jsdom: 24.1.0
     knex: 3.1.0
     koa: 2.15.3
     ldapts: 7.0.12
@@ -7952,7 +7952,7 @@ __metadata:
     nodemailer: 6.9.14
     nodemon: 3.0.3
     pg: 8.11.6
-    pm2: 5.4.0
+    pm2: 5.4.1
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
     query-string: 7.1.3
@@ -7992,7 +7992,7 @@ __metadata:
     fs-extra: 11.2.0
     gettext-extractor: 3.8.0
     gettext-parser: 7.0.1
-    glob: 10.4.1
+    glob: 10.4.2
     gulp: 4.0.2
     html-entities: 1.4.0
     jest: 29.7.0
@@ -8040,7 +8040,7 @@ __metadata:
     "@rollup/plugin-replace": 5.0.7
     browserify: 14.5.0
     html-entities: 1.4.0
-    jsdom: 24.0.0
+    jsdom: 24.1.0
     rollup: 4.2.0
     standard: 17.1.0
     turndown-attendant: 0.0.3
@@ -8075,7 +8075,7 @@ __metadata:
     dayjs: 1.11.11
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.4.1
+    glob: 10.4.2
     html-entities: 1.4.0
     jest: 29.7.0
     markdown-it: 13.0.2
@@ -24410,18 +24410,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.4.1":
-  version: 10.4.1
-  resolution: "glob@npm:10.4.1"
+"glob@npm:10.4.2, glob@npm:^10.3.7":
+  version: 10.4.2
+  resolution: "glob@npm:10.4.2"
   dependencies:
     foreground-child: ^3.1.0
     jackspeak: ^3.1.2
     minimatch: ^9.0.4
     minipass: ^7.1.2
+    package-json-from-dist: ^1.0.0
     path-scurry: ^1.11.1
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 5d33c686c80bf6877f4284adf99a8c3cbb2a6eccbc92342943fe5d4b42c01d78c1881f2223d950c92a938d0f857e12e37b86a8e5483ab2141822e053b67d0dde
+  checksum: bd7c0e30701136e936f414e5f6f82c7f04503f01df77408f177aa584927412f0bde0338e6ec541618cd21eacc57dde33e7b3c6c0a779cc1c6e6a0e14f3d15d9b
   languageName: node
   linkType: hard
 
@@ -24465,22 +24466,6 @@ __metadata:
   bin:
     glob: dist/cjs/src/bin.js
   checksum: 19c8c2805658b1002fecf0722cd609a33153d756a0d5260676bd0e9c5e6ef889ec9cce6d3dac0411aa90bce8de3d14f25b6f5589a3292582cccbfeddd0e98cc4
-  languageName: node
-  linkType: hard
-
-"glob@npm:^10.3.7":
-  version: 10.4.2
-  resolution: "glob@npm:10.4.2"
-  dependencies:
-    foreground-child: ^3.1.0
-    jackspeak: ^3.1.2
-    minimatch: ^9.0.4
-    minipass: ^7.1.2
-    package-json-from-dist: ^1.0.0
-    path-scurry: ^1.11.1
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: bd7c0e30701136e936f414e5f6f82c7f04503f01df77408f177aa584927412f0bde0338e6ec541618cd21eacc57dde33e7b3c6c0a779cc1c6e6a0e14f3d15d9b
   languageName: node
   linkType: hard
 
@@ -25742,6 +25727,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"http-proxy-agent@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "http-proxy-agent@npm:7.0.2"
+  dependencies:
+    agent-base: ^7.1.0
+    debug: ^4.3.4
+  checksum: 670858c8f8f3146db5889e1fa117630910101db601fff7d5a8aa637da0abedf68c899f03d3451cac2f83bcc4c3d2dabf339b3aa00ff8080571cceb02c3ce02f3
+  languageName: node
+  linkType: hard
+
 "http-proxy-middleware@npm:^2.0.3":
   version: 2.0.6
   resolution: "http-proxy-middleware@npm:2.0.6"
@@ -25859,6 +25854,16 @@ __metadata:
     agent-base: ^7.0.2
     debug: 4
   checksum: 088969a0dd476ea7a0ed0a2cf1283013682b08f874c3bc6696c83fa061d2c157d29ef0ad3eb70a2046010bb7665573b2388d10fdcb3e410a66995e5248444292
+  languageName: node
+  linkType: hard
+
+"https-proxy-agent@npm:^7.0.4":
+  version: 7.0.5
+  resolution: "https-proxy-agent@npm:7.0.5"
+  dependencies:
+    agent-base: ^7.0.2
+    debug: 4
+  checksum: 2e1a28960f13b041a50702ee74f240add8e75146a5c37fc98f1960f0496710f6918b3a9fe1e5aba41e50f58e6df48d107edd9c405c5f0d73ac260dabf2210857
   languageName: node
   linkType: hard
 
@@ -28752,37 +28757,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:24.0.0":
-  version: 24.0.0
-  resolution: "jsdom@npm:24.0.0"
+"jsdom@npm:24.1.0":
+  version: 24.1.0
+  resolution: "jsdom@npm:24.1.0"
   dependencies:
     cssstyle: ^4.0.1
     data-urls: ^5.0.0
     decimal.js: ^10.4.3
     form-data: ^4.0.0
     html-encoding-sniffer: ^4.0.0
-    http-proxy-agent: ^7.0.0
-    https-proxy-agent: ^7.0.2
+    http-proxy-agent: ^7.0.2
+    https-proxy-agent: ^7.0.4
     is-potential-custom-element-name: ^1.0.1
-    nwsapi: ^2.2.7
+    nwsapi: ^2.2.10
     parse5: ^7.1.2
-    rrweb-cssom: ^0.6.0
+    rrweb-cssom: ^0.7.0
     saxes: ^6.0.0
     symbol-tree: ^3.2.4
-    tough-cookie: ^4.1.3
+    tough-cookie: ^4.1.4
     w3c-xmlserializer: ^5.0.0
     webidl-conversions: ^7.0.0
     whatwg-encoding: ^3.1.1
     whatwg-mimetype: ^4.0.0
     whatwg-url: ^14.0.0
-    ws: ^8.16.0
+    ws: ^8.17.0
     xml-name-validator: ^5.0.0
   peerDependencies:
     canvas: ^2.11.2
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 180cf672c1f5e4375fd831b6990c453b4c22b540619abe7a0a3ed0d18eca1171dea9f25739bc06dfea26d1c0d71c7ac26e62fc9a2d9b1657003fc8fd1bf6f9f4
+  checksum: c24b244308cabb2aabee2bdcc5041c810bc45320d0e8721c3eaaf5700d5f8498730809b10da4a97065abfccd937132700d64ae275491424c6b1b20a21d58d2e2
   languageName: node
   linkType: hard
 
@@ -33581,17 +33586,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nwsapi@npm:^2.2.10":
+  version: 2.2.12
+  resolution: "nwsapi@npm:2.2.12"
+  checksum: 4dbce7ecbcf336eef1edcbb5161cbceea95863e63a16d9bcec8e81cbb260bdab3d07e6c7b58354d465dc803eef6d0ea4fb20220a80fa148ae65f18d56df81799
+  languageName: node
+  linkType: hard
+
 "nwsapi@npm:^2.2.2":
   version: 2.2.2
   resolution: "nwsapi@npm:2.2.2"
   checksum: 43769106292bc95f776756ca2f3513dab7b4d506a97c67baec32406447841a35f65f29c1f95ab5d42785210fd41668beed33ca16fa058780be43b101ad73e205
-  languageName: node
-  linkType: hard
-
-"nwsapi@npm:^2.2.7":
-  version: 2.2.12
-  resolution: "nwsapi@npm:2.2.12"
-  checksum: 4dbce7ecbcf336eef1edcbb5161cbceea95863e63a16d9bcec8e81cbb260bdab3d07e6c7b58354d465dc803eef6d0ea4fb20220a80fa148ae65f18d56df81799
   languageName: node
   linkType: hard
 
@@ -35392,9 +35397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pm2@npm:5.4.0":
-  version: 5.4.0
-  resolution: "pm2@npm:5.4.0"
+"pm2@npm:5.4.1":
+  version: 5.4.1
+  resolution: "pm2@npm:5.4.1"
   dependencies:
     "@pm2/agent": ~2.0.0
     "@pm2/io": ~6.0.0
@@ -35434,7 +35439,7 @@ __metadata:
     pm2-dev: bin/pm2-dev
     pm2-docker: bin/pm2-docker
     pm2-runtime: bin/pm2-runtime
-  checksum: d556657e73b6d47791c646ea6dcb1c712dfdd82e7874cbcc8d7c794c4f3d90a3a8157e336ed51de12bed34ef5a0962e464f2c6a9506fdc84af4291877fd2654a
+  checksum: 75af3958eeca80bdde83a9b65d96d57b6e8b6f65800b1f3f757f376b528527e6394b89d0de4310d52994925a8e89cfbdb1dee9d7347314ac5fd2637676f34520
   languageName: node
   linkType: hard
 
@@ -39201,7 +39206,7 @@ __metadata:
     eslint-plugin-react: 7.33.2
     execa: 5.1.1
     fs-extra: 11.2.0
-    glob: 10.4.1
+    glob: 10.4.2
     gulp: 4.0.2
     http-server: 14.1.1
     husky: 3.1.0
@@ -39219,6 +39224,13 @@ __metadata:
   version: 0.6.0
   resolution: "rrweb-cssom@npm:0.6.0"
   checksum: 182312f6e4f41d18230ccc34f14263bc8e8a6b9d30ee3ec0d2d8e643c6f27964cd7a8d638d4a00e988d93e8dc55369f4ab5a473ccfeff7a8bab95b36d2b5499c
+  languageName: node
+  linkType: hard
+
+"rrweb-cssom@npm:^0.7.0":
+  version: 0.7.1
+  resolution: "rrweb-cssom@npm:0.7.1"
+  checksum: 62e410ddbaaba6abc196c3bbfa8de4952e0a134d9f2b454ee293039bf9931322d806e14d52ed122a5c2bd332a868b9da2e99358fb6232c33758b5ede86d992c8
   languageName: node
   linkType: hard
 
@@ -42937,7 +42949,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:^4.1.3":
+"tough-cookie@npm:^4.1.4":
   version: 4.1.4
   resolution: "tough-cookie@npm:4.1.4"
   dependencies:
@@ -46030,7 +46042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.16.0":
+"ws@npm:^8.16.0, ws@npm:^8.17.0":
   version: 8.18.0
   resolution: "ws@npm:8.18.0"
   peerDependencies:

@@ -259,7 +259,6 @@ class NotesScreenComponent extends BaseScreenComponent<Props, State> {
 		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
 
 		const addFolderNoteButtons = !!buttonFolderId;
-		const thisComp = this;
 
 		const makeActionButtonComp = () => {
 			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
@@ -301,7 +300,7 @@ class NotesScreenComponent extends BaseScreenComponent<Props, State> {
 
 				inert={accessibilityHidden}
 			>
-				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader title={iconString + title} showBackButton={false} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList />
 				{actionButtonComp}
 				<DialogBox
