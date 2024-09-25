@@ -7606,7 +7606,7 @@ __metadata:
     lodash: 4.17.21
     md5: 2.3.0
     nodemon: 3.0.3
-    onnxruntime-react-native: ^1.19.2
+    onnxruntime-react-native: 1.19.2
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.1
@@ -34138,7 +34138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"onnxruntime-react-native@npm:^1.19.2":
+"onnxruntime-react-native@npm:1.19.2":
   version: 1.19.2
   resolution: "onnxruntime-react-native@npm:1.19.2"
   dependencies:

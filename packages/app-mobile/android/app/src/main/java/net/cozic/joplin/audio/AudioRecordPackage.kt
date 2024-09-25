@@ -12,8 +12,6 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.uimanager.ViewManager
 
-class InvalidSessionIdException(id: Int) : IllegalArgumentException("Invalid session ID $id") {
-}
 
 class AudioRecordPackage : ReactPackage {
 	override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {

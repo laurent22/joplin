@@ -13,7 +13,7 @@ class AudioRecorder(context: Context) : Closeable {
 	private val sampleRate = 16_000
 
 	init {
-		val permissionResult = context.checkSelfPermission("android.permission.RECORD_AUDIO")
+		val permissionResult = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO)
 		if (permissionResult == PackageManager.PERMISSION_DENIED) {
 			throw SecurityException("Missing RECORD_AUDIO permission!")
 		}
