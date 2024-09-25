@@ -4,7 +4,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import NotyfContext from '../NotyfContext';
 import { UpdateInfo } from 'electron-updater';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import { AutoUpdaterEvents } from '../../services/autoUpdater/AutoUpdaterService';
+import { AutoUpdaterEvents, UpdateNotificationMessage } from '../../services/autoUpdater/AutoUpdaterService';
 import { NotyfEvent, NotyfNotification } from 'notyf';
 import { _ } from '@joplin/lib/locale';
 import { htmlentities } from '@joplin/utils/html';
@@ -16,7 +16,6 @@ interface UpdateNotificationProps {
 
 export enum UpdateNotificationEvents {
 	ApplyUpdate = 'apply-update',
-	UpdateNotAvailable = 'update-not-available',
 	Dismiss = 'dismiss-update-notification',
 }
 
@@ -87,10 +86,10 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 		notificationRef.current = notification;
 	}, [notyf, theme]);
 
-	const handleUpdateNotAvailable = useCallback(() => {
+	const handleNotificationMessage = useCallback((_event: IpcRendererEvent, args: UpdateNotificationMessage) => {
 		if (notificationRef.current) return;
 
-		const noUpdateMessageHtml = htmlentities(_('No updates available'));
+		const noUpdateMessageHtml = htmlentities(_('%s', args.message));
 
 		const messageHtml = `
 			<div class="update-notification" style="color: ${theme.color2};">
@@ -117,16 +116,16 @@ const UpdateNotification = ({ themeId }: UpdateNotificationProps) => {
 
 	useEffect(() => {
 		ipcRenderer.on(AutoUpdaterEvents.UpdateDownloaded, handleUpdateDownloaded);
-		ipcRenderer.on(AutoUpdaterEvents.UpdateNotAvailable, handleUpdateNotAvailable);
+		ipcRenderer.on(AutoUpdaterEvents.NotificationMessage, handleNotificationMessage);
 		document.addEventListener(UpdateNotificationEvents.ApplyUpdate, handleApplyUpdate);
 		document.addEventListener(UpdateNotificationEvents.Dismiss, handleDismissNotification);
 
 		return () => {
 			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateDownloaded, handleUpdateDownloaded);
-			ipcRenderer.removeListener(AutoUpdaterEvents.UpdateNotAvailable, handleUpdateNotAvailable);
+			ipcRenderer.removeListener(AutoUpdaterEvents.NotificationMessage, handleNotificationMessage);
 			document.removeEventListener(UpdateNotificationEvents.ApplyUpdate, handleApplyUpdate);
 		};
-	}, [handleApplyUpdate, handleDismissNotification, handleUpdateDownloaded, handleUpdateNotAvailable]);
+	}, [handleApplyUpdate, handleDismissNotification, handleUpdateDownloaded, handleNotificationMessage]);
 
 
 	return (

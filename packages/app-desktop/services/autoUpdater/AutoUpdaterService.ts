@@ -14,10 +14,14 @@ export enum AutoUpdaterEvents {
 	Error = 'error',
 	DownloadProgress = 'download-progress',
 	UpdateDownloaded = 'update-downloaded',
+	NotificationMessage = 'notify-with-message',
 }
 
 export interface CheckForUpdatesArgs {
 	includePreReleases: boolean;
+}
+export interface UpdateNotificationMessage {
+	message: string;
 }
 
 export const defaultUpdateInterval = 12 * 60 * 60 * 1000;
@@ -70,6 +74,9 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	public checkForUpdates = async (isManualCheck = false, includePreReleases = this.includePreReleases_): Promise<void> => {
 		if (this.isUpdateInProgress) {
 			this.logger_.info('Update check already in progress. Waiting for the current check to finish.');
+			if (this.isManualCheckInProgress) {
+				this.sendNotification('Update check already in progress.');
+			}
 			return;
 		}
 
@@ -186,7 +193,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private onUpdateNotAvailable = (_info: UpdateInfo): void => {
 		if (this.isManualCheckInProgress) {
-			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
+			this.sendNotification('Update is not available.');
 		}
 
 		this.unlockUpdateProcess();
@@ -223,5 +230,12 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private unlockUpdateProcess = (): void => {
 		this.logger_.info('Unlocking update process');
 		this.isUpdateInProgress = false;
+	};
+
+	private sendNotification = (message: string): void => {
+		const notificationMessage: UpdateNotificationMessage = {
+			message: message,
+		};
+		this.window_.webContents.send(AutoUpdaterEvents.NotificationMessage, notificationMessage);
 	};
 }
