@@ -10,6 +10,8 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.uimanager.ViewManager
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class SpeechToTextPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
@@ -23,9 +25,9 @@ class SpeechToTextPackage : ReactPackage {
     class SpeechToTextModule(
         private var context: ReactApplicationContext,
     ) : ReactContextBaseJavaModule(context), LifecycleEventListener {
-        private var nextSessionId: Int = 0
-        private var sessions: MutableMap<Int, SpeechToTextConverter> = mutableMapOf()
         private var environment: OrtEnvironment? = null
+        private val executorService: ExecutorService = Executors.newFixedThreadPool(1)
+        private val sessionManager = SpeechToTextSessionManager(executorService)
 
         override fun getName() = "SpeechToTextModule"
 
@@ -38,14 +40,14 @@ class SpeechToTextPackage : ReactPackage {
         @ReactMethod
         fun openSession(modelPath: String, locale: String, promise: Promise) {
             val appContext = context.applicationContext
+            // Initialize environment as late as possible:
             val ortEnvironment = environment ?: OrtEnvironment.getEnvironment()
             if (environment != null) {
                 environment = ortEnvironment
             }
 
             try {
-                val sessionId = nextSessionId++
-                sessions[sessionId] = SpeechToTextConverter(modelPath, locale, ortEnvironment, appContext)
+                val sessionId = sessionManager.openSession(modelPath, locale, ortEnvironment, appContext)
                 promise.resolve(sessionId)
             } catch (exception: Throwable) {
                 promise.reject(exception)
@@ -54,51 +56,17 @@ class SpeechToTextPackage : ReactPackage {
 
         @ReactMethod
         fun startRecording(sessionId: Int, promise: Promise) {
-            val session = sessions[sessionId]
-
-            if (session == null) {
-                promise.reject(InvalidSessionIdException(sessionId))
-                return
-            }
-
-            session.start()
-            promise.resolve(sessionId)
+            sessionManager.startRecording(sessionId, promise)
         }
 
         @ReactMethod
         fun pullData(sessionId: Int, duration: Double, blocking: Boolean, promise: Promise) {
-            val session = sessions[sessionId]
-
-            if (session == null) {
-                promise.reject(InvalidSessionIdException(sessionId))
-                return
-            }
-
-            try {
-                val result =
-                    if (blocking)
-                        session.convertBlocking(duration)
-                    else
-                        session.convertNonblocking(duration)
-                Log.d("Whisper", "Result: $result")
-                promise.resolve(result)
-            } catch (exception: Throwable) {
-                promise.reject(exception)
-            }
+            sessionManager.pullData(sessionId, duration, blocking, promise)
         }
 
         @ReactMethod
         fun closeSession(sessionId: Int, promise: Promise) {
-            val session = sessions[sessionId]
-
-            if (session == null) {
-                promise.reject(InvalidSessionIdException(sessionId))
-                return
-            }
-
-            session.close()
-            sessions.remove(sessionId)
-            promise.resolve(sessionId)
+            sessionManager.closeSession(sessionId, promise)
         }
     }
 }

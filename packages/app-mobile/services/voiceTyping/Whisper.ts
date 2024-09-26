@@ -20,7 +20,6 @@ export default class Whisper {
 	}
 
 	public static async mustDownload() {
-		await shim.fsDriver().remove(this.getModelPath());
 		return !await shim.fsDriver().exists(this.getModelPath());
 	}
 
@@ -65,6 +64,11 @@ export default class Whisper {
 	}
 
 	public async stop() {
+		if (this.sessionId === null) {
+			logger.warn('Session already closed.');
+			return;
+		}
+
 		const sessionId = this.sessionId;
 		this.sessionId = null;
 		await SpeechToTextModule.closeSession(sessionId);

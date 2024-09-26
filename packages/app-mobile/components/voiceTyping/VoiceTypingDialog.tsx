@@ -74,7 +74,7 @@ export default (props: Props) => {
 	}, [recorderState, whisper, props.onText]);
 
 	const onDismiss = useCallback(() => {
-		void whisper?.stop();
+		void whisper.stop();
 		props.onDismiss();
 	}, [whisper, props.onDismiss]);
 
