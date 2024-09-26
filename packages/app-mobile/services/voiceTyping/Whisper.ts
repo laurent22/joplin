@@ -45,16 +45,15 @@ export default class Whisper {
 
 			while (true) {
 				logger.debug('reading block');
-				const duration = 5;
-				const blocking = true;
-				const data = await SpeechToTextModule.pullData(this.sessionId, duration, blocking);
+				const data = await SpeechToTextModule.expandBufferAndConvert(this.sessionId, 3);
 				logger.debug('done reading block. Length', data?.length);
 
 				if (this.sessionId === null) {
 					return;
 				}
 
-				this.onText(data);
+				// TODO: Merge with the previous data (may need to enable model output timestamps).
+				this.onText(`\n${data}`);
 			}
 		} catch (error) {
 			logger.error('Whisper error:', error);

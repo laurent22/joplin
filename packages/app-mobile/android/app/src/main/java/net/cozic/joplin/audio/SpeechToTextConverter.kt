@@ -1,19 +1,17 @@
 package net.cozic.joplin.audio
 
-import ai.onnxruntime.OnnxJavaType
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import ai.onnxruntime.extensions.OrtxPackage
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import java.io.Closeable
-import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.time.DurationUnit
+import kotlin.time.measureTimedValue
 
 class SpeechToTextConverter(
     modelPath: String,
@@ -30,9 +28,10 @@ class SpeechToTextConverter(
         },
     )
     private val decoderInputIds = when (locale) {
-        "en" -> intArrayOf(50258, 50259, 50359, 50363)
-        "fr" -> intArrayOf(50258, 50265, 50359, 50363)
-        "es" -> intArrayOf(50258, 50262, 50359, 50363)
+        // Add 50363 to the end to omit timestamps
+        "en" -> intArrayOf(50258, 50259, 50359)
+        "fr" -> intArrayOf(50258, 50265, 50359)
+        "es" -> intArrayOf(50258, 50262, 50359)
         else -> intArrayOf(50258)
     }
 
@@ -74,23 +73,42 @@ class SpeechToTextConverter(
         )
     }
 
-    // TODO
+    // TODO .get() fails on older Android versions
     @SuppressLint("NewApi")
     private fun convert(data: FloatArray): String {
-        val outputs = session.run(getInputs(data), setOf("str"))
+        val (inputs, convertInputsTime) = measureTimedValue {
+            getInputs(data)
+        }
+        val (outputs, getOutputsTime) = measureTimedValue {
+            session.run(inputs, setOf("str"))
+        }
         val mainOutput = outputs.get("str").get().value as Array<Array<String>>
         outputs.close()
-        Log.d("Whisper", "Main output value: ${mainOutput[0][0]} ${mainOutput.size} ${mainOutput[0].size}")
+
+        Log.i("Whisper", "Converted ${data.size / 16000}s of data in ${
+            getOutputsTime.toString(DurationUnit.SECONDS, 2)
+        } converted inputs in ${convertInputsTime.inWholeMilliseconds}ms")
         return mainOutput[0][0]
     }
 
-    // Converts **at most** the last [n] seconds of buffered data
-    fun convertNonblocking(seconds: Double): String {
-        return convert(recorder.readNonblocking(seconds));
+    fun dropFirstSeconds(seconds: Double) {
+        Log.i("Whisper", "Drop first seconds $seconds")
+        recorder.dropFirstSeconds(seconds)
     }
 
-    fun convertBlocking(seconds: Double): String {
-        return convert(recorder.readBlocking(seconds))
+    fun expandBufferAndConvert(seconds: Double): String {
+        recorder.pullNextSeconds(seconds)
+        // Also pull any extra available data, in case the speech-to-text converter
+        // is lagging behind the audio recorder.
+        recorder.pullAvailable()
+
+        return convert(recorder.bufferedData)
+    }
+
+    // Converts as many seconds of buffered data as possible, without waiting
+    fun expandBufferAndConvert(): String {
+        recorder.pullAvailable()
+        return convert(recorder.bufferedData)
     }
 
     override fun close() {

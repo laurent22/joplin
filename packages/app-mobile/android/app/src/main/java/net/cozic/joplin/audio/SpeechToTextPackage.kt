@@ -60,8 +60,18 @@ class SpeechToTextPackage : ReactPackage {
         }
 
         @ReactMethod
-        fun pullData(sessionId: Int, duration: Double, blocking: Boolean, promise: Promise) {
-            sessionManager.pullData(sessionId, duration, blocking, promise)
+        fun dropFirstSeconds(sessionId: Int, duration: Double, promise: Promise) {
+            sessionManager.dropFirstSeconds(sessionId, duration, promise)
+        }
+
+        @ReactMethod
+        fun expandBufferAndConvert(sessionId: Int, duration: Double, promise: Promise) {
+            sessionManager.expandBufferAndConvert(sessionId, duration, promise)
+        }
+
+        @ReactMethod
+        fun convertAvailable(sessionId: Int, promise: Promise) {
+            sessionManager.convertAvailable(sessionId, promise)
         }
 
         @ReactMethod

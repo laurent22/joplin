@@ -38,7 +38,10 @@ class SpeechToTextSessionManager(
 		return sessions[id] ?: throw InvalidSessionIdException(id)
 	}
 
-	private fun concurrentWithSession(id: Int, callback: (session: SpeechToTextSession)->Unit) {
+	private fun concurrentWithSession(
+		id: Int,
+		callback: (session: SpeechToTextSession)->Unit,
+	) {
 		executor.execute {
 			val session = getSession(id)
 			session.mutex.lock()
@@ -49,26 +52,47 @@ class SpeechToTextSessionManager(
 			}
 		}
 	}
+	private fun concurrentWithSession(
+		id: Int,
+		onError: (error: Throwable)->Unit,
+		callback: (session: SpeechToTextSession)->Unit,
+	) {
+		return concurrentWithSession(id) { session ->
+			try {
+				callback(session)
+			} catch (error: Throwable) {
+				onError(error)
+			}
+		}
+	}
 
 	fun startRecording(sessionId: Int, promise: Promise) {
-		this.concurrentWithSession(sessionId) { session ->
+		this.concurrentWithSession(sessionId, promise::reject) { session ->
 			session.converter.start()
 			promise.resolve(null)
 		}
 	}
 
-	fun pullData(sessionId: Int, duration: Double, blocking: Boolean, promise: Promise) {
-		this.concurrentWithSession(sessionId) { session ->
-			try {
-				val result =
-					if (blocking)
-						session.converter.convertBlocking(duration)
-					else
-						session.converter.convertNonblocking(duration)
-				promise.resolve(result)
-			} catch (error: Throwable) {
-				promise.reject(error)
-			}
+	// Left-shifts the recording buffer by [duration] seconds
+	fun dropFirstSeconds(sessionId: Int, duration: Double, promise: Promise) {
+		this.concurrentWithSession(sessionId, promise::reject) { session ->
+			session.converter.dropFirstSeconds(duration)
+		}
+	}
+
+	// Waits for the next [duration] seconds to become available, then converts
+	fun expandBufferAndConvert(sessionId: Int, duration: Double, promise: Promise) {
+		this.concurrentWithSession(sessionId, promise::reject) { session ->
+			val result = session.converter.expandBufferAndConvert(duration)
+			promise.resolve(result)
+		}
+	}
+
+	// Converts all available recorded data
+	fun convertAvailable(sessionId: Int, promise: Promise) {
+		this.concurrentWithSession(sessionId, promise::reject) { session ->
+			val result = session.converter.expandBufferAndConvert()
+			promise.resolve(result)
 		}
 	}
 

@@ -8,9 +8,18 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder.AudioSource
 import java.io.Closeable
+import kotlin.math.max
+import kotlin.math.min
 
 class AudioRecorder(context: Context) : Closeable {
 	private val sampleRate = 16_000
+	private val maxLengthSeconds = 30 // Whisper supports a maximum of 30s
+	private val maxBufferSize = sampleRate * maxLengthSeconds
+	private val buffer = FloatArray(maxBufferSize)
+	private var bufferWriteOffset = 0
+
+	// Accessor must not modify result
+	val bufferedData: FloatArray get() = buffer.sliceArray(0 until bufferWriteOffset)
 
 	init {
 		val permissionResult = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO)
@@ -31,26 +40,51 @@ class AudioRecorder(context: Context) : Closeable {
 				.setChannelMask(AudioFormat.CHANNEL_IN_MONO)
 				.build()
 		)
-		.setBufferSizeInBytes(sampleRate * 30) // 30s of audio
+		.setBufferSizeInBytes(maxBufferSize * Float.SIZE_BYTES)
 		.build()
+
+	// Discards the first [samples] samples from the start of the buffer. Conceptually, this
+	// advances the buffer's start point.
+	private fun advanceStartBySamples(samples: Int) {
+		val samplesClamped = min(samples, maxBufferSize)
+		val remainingBuffer = buffer.sliceArray(samplesClamped until maxBufferSize)
+
+		buffer.fill(0f, samplesClamped, maxBufferSize)
+		remainingBuffer.copyInto(buffer, 0)
+		bufferWriteOffset = max(bufferWriteOffset - samplesClamped, 0)
+	}
+
+	fun dropFirstSeconds(seconds: Double) {
+		advanceStartBySamples((seconds * sampleRate).toInt())
+	}
 
 	fun start() {
 		recorder.startRecording()
 	}
 
-	private fun read(seconds: Double, mode: Int): FloatArray {
-		val size = (seconds * sampleRate).toInt()
-		val output = FloatArray(size)
-		recorder.read(output, 0, size, mode);
-		return output
+	private fun read(requestedSize: Int, mode: Int) {
+		val size = min(requestedSize, maxBufferSize - bufferWriteOffset)
+		val sizeRead = recorder.read(buffer, bufferWriteOffset, size, mode)
+		if (sizeRead > 0) {
+			bufferWriteOffset += sizeRead
+		}
 	}
 
-	fun readNonblocking(seconds: Double): FloatArray {
-		return read(seconds, AudioRecord.READ_NON_BLOCKING)
+	// Pulls all available data from the audio recorder's buffer
+	fun pullAvailable() {
+		return read(maxBufferSize, AudioRecord.READ_NON_BLOCKING)
 	}
 
-	fun readBlocking(seconds: Double): FloatArray {
-		return read(seconds, AudioRecord.READ_BLOCKING)
+	fun pullNextSeconds(seconds: Double) {
+		val remainingSize = maxBufferSize - bufferWriteOffset
+		val requestedSize = (seconds * sampleRate).toInt()
+
+		// If low on size, make more room.
+		if (remainingSize < maxBufferSize / 3) {
+			advanceStartBySamples(maxBufferSize / 3)
+		}
+
+		return read(requestedSize, AudioRecord.READ_BLOCKING)
 	}
 
 	override fun close() {
