@@ -47,12 +47,7 @@ const useStyles = (theme: ThemeStyle, visible: boolean) => {
 				paddingRight: theme.marginRight,
 				backgroundColor: theme.backgroundColor,
 			},
-			rootStyle: {
-				...theme.rootStyle,
-
-				// TODO: Improve. This hides the component without unmounting it.
-				flex: !visible ? 0.001 : 1,
-			},
+			rootStyle: visible ? theme.rootStyle : theme.hiddenRootStyle,
 		});
 	}, [theme, visible]);
 };
