@@ -41,7 +41,6 @@
     "events": "3.3.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",
-    "onnxruntime-react-native": "1.19.2",
     "path-browserify": "1.0.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
@@ -133,7 +132,6 @@
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.0.4"
   },
-  "onnxruntimeExtensionsEnabled": "true",
   "engines": {
     "node": ">=18"
   }
