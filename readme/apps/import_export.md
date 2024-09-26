@@ -46,6 +46,11 @@ In general the way to import notes from any application into Joplin is to conver
 * OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
 * NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplinapp.org/t/import-from-nixnote/183/3).
 
+### Mac Specific privacy issues
+* When working on mac there can be specific privacy controls that do not allow users to import, access, and or upload files from local or third part apps.
+* To bypass this control issue go to System Preferences, Secruity and Privacy, General and then allow Joplin.
+* This will fix any access control issues that you are facing.
+
 ## Exporting
 
 Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
