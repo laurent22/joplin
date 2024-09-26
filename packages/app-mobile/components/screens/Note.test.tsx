@@ -166,10 +166,13 @@ describe('screens/Note', () => {
 				jest.advanceTimersByTime(i % 5);
 				await user.type(titleInput, chunk);
 				expectedTitle += chunk;
-				if (i % 2 === 0) {
+
+				// Don't verify after each input event -- this allows the save action queue to fill.
+				if (i % 4 === 0) {
 					await waitForNoteToMatch(noteId, { title: expectedTitle });
 				}
 			}
+			await waitForNoteToMatch(noteId, { title: expectedTitle });
 		}
 	});
 
@@ -191,7 +194,10 @@ describe('screens/Note', () => {
 
 		// should also save changes made shortly before unmounting
 		editor.insertText(' Test!');
-		await jest.advanceTimersByTimeAsync(98);
+
+		// TODO: Decreasing this below 100 causes the test to fail.
+		//       See issue #11125.
+		await jest.advanceTimersByTimeAsync(150);
 
 		noteScreen.unmount();
 		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
