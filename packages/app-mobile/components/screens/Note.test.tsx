@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, waitFor } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, waitFor, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -26,6 +26,8 @@ import { LayoutChangeEvent } from 'react-native';
 import shim from '@joplin/lib/shim';
 import getWebViewWindowById from '../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import Setting from '@joplin/lib/models/Setting';
+import Resource from '@joplin/lib/models/Resource';
 
 interface WrapperProps {
 }
@@ -67,12 +69,8 @@ const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => 
 	}));
 };
 
-const openNewNote = async (noteProperties: NoteEntity) => {
-	const note = await Note.save({
-		parent_id: (await Folder.defaultFolder()).id,
-		...noteProperties,
-	});
-
+const openExistingNote = async (noteId: string) => {
+	const note = await Note.load(noteId);
 	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
 
 	store.dispatch({
@@ -85,7 +83,15 @@ const openNewNote = async (noteProperties: NoteEntity) => {
 		id: note.id,
 		folderId: displayParentId,
 	});
+};
 
+const openNewNote = async (noteProperties: NoteEntity) => {
+	const note = await Note.save({
+		parent_id: (await Folder.defaultFolder()).id,
+		...noteProperties,
+	});
+
+	await openExistingNote(note.id);
 	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
 
 	return note.id;
@@ -106,21 +112,20 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	await userEvent.press(actionMenuButton);
+	await runWithFakeTimers(() => userEvent.press(actionMenuButton));
 };
 
 const openEditor = async () => {
 	const editButton = await screen.findByLabelText('Edit');
-	await userEvent.press(editButton);
+	fireEvent.press(editButton);
 };
 
 describe('screens/Note', () => {
-	beforeAll(() => {
+	beforeEach(async () => {
 		// advanceTimers: Needed by internal note save logic
 		jest.useFakeTimers({ advanceTimers: true });
-	});
 
-	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 
@@ -264,5 +269,54 @@ describe('screens/Note', () => {
 		expect(deleteButton).toBeDisabled();
 
 		cleanup();
+	});
+
+	it.each([
+		'auto',
+		'manual',
+	])('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
+		// This test interacts with the synchronizer, which seems to need real timers.
+		jest.useRealTimers();
+
+		let note = await Note.save({ title: 'Note 1', parent_id: (await Folder.defaultFolder()).id });
+		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		await synchronizerStart();
+		await switchClient(1);
+		Setting.setValue('sync.resourceDownloadMode', downloadMode);
+		await synchronizerStart();
+
+		// Before opening the note, the resource should not be marked for download
+		const allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		const resource = allResources[0];
+		expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+
+		await openExistingNote(note.id);
+
+		render(<WrappedNoteScreen />);
+
+		// Note should render
+		const titleInput = await screen.findByDisplayValue('Note 1');
+		expect(titleInput).toBeVisible();
+
+		// Wrap in act() -- the component may update in the background during this.
+		await act(async () => {
+			await resourceFetcher().waitForAllFinished();
+
+			// After opening the note, the resource should be marked for download only in automatic mode
+			if (downloadMode === 'auto') {
+				await waitFor(async () => {
+					expect(await Resource.localState(resource.id)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_DONE });
+				});
+			} else if (downloadMode === 'manual') {
+				// In manual mode, should not mark for download
+				expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+			} else {
+				throw new Error(`Should not be testing downloadMode: ${downloadMode}.`);
+			}
+		});
+
+		screen.unmount();
 	});
 });

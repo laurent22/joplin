@@ -286,6 +286,7 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
+	ResourceFetcher.instance_ = resourceFetchers_[id];
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -1125,7 +1126,8 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		throw new Error('Fake timers are only supported in jest.');
 	}
 
-	jest.useFakeTimers();
+	// advanceTimers: true is needed for certain Joplin APIs to work.
+	jest.useFakeTimers({ advanceTimers: true });
 
 	// The shim.setTimeout and similar functions need to be changed to
 	// use fake timers.

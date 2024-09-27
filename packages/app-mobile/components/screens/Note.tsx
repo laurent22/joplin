@@ -493,11 +493,6 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.undoRedoService_ = new UndoRedoService();
 		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
-		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
-			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
-			await ResourceFetcher.instance().markForDownload(resourceIds);
-		}
-
 		// Although it is async, we don't wait for the answer so that if permission
 		// has already been granted, it doesn't slow down opening the note. If it hasn't
 		// been granted, the popup will open anyway.
@@ -509,8 +504,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		void ResourceFetcher.instance().markForDownload(event.resourceId);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public componentDidUpdate(prevProps: any, prevState: any) {
+	public async markAllAttachedResourcesForDownload() {
+		const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+		await ResourceFetcher.instance().markForDownload(resourceIds);
+	}
+
+	public componentDidUpdate(prevProps: Props, prevState: State) {
 		if (this.doFocusUpdate_) {
 			this.doFocusUpdate_ = false;
 			this.scheduleFocusUpdate();
@@ -528,6 +527,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			void promptRestoreAutosave((drawingData: string) => {
 				void this.attachNewDrawing(drawingData);
 			});
+
+			// Handle automatic resource downloading
+			if (this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+				void this.markAllAttachedResourcesForDownload();
+			}
 		}
 
 		// Disable opening/closing the side menu with touch gestures
