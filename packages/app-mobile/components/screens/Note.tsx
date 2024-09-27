@@ -529,7 +529,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			});
 
 			// Handle automatic resource downloading
-			if (this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+			if (this.state.note?.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 				void this.markAllAttachedResourcesForDownload();
 			}
 		}
