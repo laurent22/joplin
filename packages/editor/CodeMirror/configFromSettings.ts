@@ -10,7 +10,7 @@ import lookUpLanguage from './markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
-import { indentUnit } from '@codemirror/language';
+import { indentOnInput, indentUnit } from '@codemirror/language';
 import { Prec } from '@codemirror/state';
 
 const configFromSettings = (settings: EditorSettings) => {
@@ -28,11 +28,16 @@ const configFromSettings = (settings: EditorSettings) => {
 						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
 					codeLanguages: lookUpLanguage,
+					addKeymap: settings.autocompleteMarkup,
+					completeHTMLTags: settings.autocompleteMarkup,
 				}),
-				markdownLanguage.data.of({ closeBrackets: openingBrackets }),
+				markdownLanguage.data.of({
+					closeBrackets: openingBrackets,
+					...(settings.autocompleteMarkup ? { autocomplete: false } : {}),
+				}),
 			];
 		} else if (language === EditorLanguageType.Html) {
-			return html();
+			return html({ autoCloseTags: settings.autocompleteMarkup });
 		} else {
 			const exhaustivenessCheck: never = language;
 			return exhaustivenessCheck;
@@ -50,6 +55,10 @@ const configFromSettings = (settings: EditorSettings) => {
 		EditorState.readOnly.of(settings.readOnly),
 		indentUnit.of(settings.indentWithTabs ? '\t' : '    '),
 	];
+
+	if (settings.autoIndent) {
+		extensions.push(indentOnInput());
+	}
 
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());

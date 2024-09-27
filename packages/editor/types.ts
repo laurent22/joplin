@@ -152,6 +152,8 @@ export interface EditorSettings {
 	useExternalSearch: boolean;
 
 	automatchBraces: boolean;
+	autoIndent: boolean;
+	autocompleteMarkup: boolean;
 
 	// True if internal command keyboard shortcuts should be ignored (thus
 	// allowing Joplin shortcuts to run).

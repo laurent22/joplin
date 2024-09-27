@@ -345,6 +345,8 @@ function NoteEditor(props: Props, ref: any) {
 
 		automatchBraces: false,
 		ignoreModifiers: false,
+		autoIndent: Setting.value('editor.autoIndent'),
+		autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
 
 		indentWithTabs: true,
 	}), [props.themeId, props.readOnly]);

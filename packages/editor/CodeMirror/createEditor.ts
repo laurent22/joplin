@@ -1,5 +1,5 @@
 import { Compartment, EditorState, Prec } from '@codemirror/state';
-import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
+import { syntaxHighlighting } from '@codemirror/language';
 import { openSearchPanel, closeSearchPanel, searchPanelOpen } from '@codemirror/search';
 
 import { classHighlighter } from '@lezer/highlight';
@@ -220,7 +220,6 @@ const createEditor = (
 				drawSelection(),
 
 				highlightSpecialChars(),
-				indentOnInput(),
 
 				EditorView.domEventHandlers({
 					scroll: (_event, view) => {

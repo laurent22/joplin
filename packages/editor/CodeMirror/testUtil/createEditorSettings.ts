@@ -10,6 +10,8 @@ const createEditorSettings = (themeId: number) => {
 		readOnly: false,
 		automatchBraces: false,
 		ignoreModifiers: false,
+		autocompleteMarkup: true,
+		autoIndent: true,
 
 		keymap: EditorKeymap.Default,
 		language: EditorLanguageType.Markdown,
