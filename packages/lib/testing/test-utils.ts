@@ -1126,8 +1126,7 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		throw new Error('Fake timers are only supported in jest.');
 	}
 
-	// advanceTimers: true is needed for certain Joplin APIs to work.
-	jest.useFakeTimers({ advanceTimers: true });
+	jest.useFakeTimers();
 
 	// The shim.setTimeout and similar functions need to be changed to
 	// use fake timers.

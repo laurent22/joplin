@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, waitFor, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, waitFor, supportDir, synchronizerStart, resourceFetcher } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -112,12 +112,12 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	await runWithFakeTimers(() => userEvent.press(actionMenuButton));
+	await userEvent.press(actionMenuButton);
 };
 
 const openEditor = async () => {
 	const editButton = await screen.findByLabelText('Edit');
-	fireEvent.press(editButton);
+	await userEvent.press(editButton);
 };
 
 describe('screens/Note', () => {
