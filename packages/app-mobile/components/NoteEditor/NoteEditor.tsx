@@ -569,6 +569,7 @@ function NoteEditor(props: Props, ref: any) {
 			}}>
 				<ExtendedWebView
 					webviewInstanceId='NoteEditor'
+					testID='NoteEditor'
 					scrollEnabled={true}
 					ref={webviewRef}
 					html={html}
