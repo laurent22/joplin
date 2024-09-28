@@ -82,7 +82,7 @@
     "node-rsa": "1.1.1",
     "promise": "8.3.0",
     "query-string": "7.1.3",
-    "re-reselect": "4.0.1",
+    "re-reselect": "5.1.0",
     "read-chunk": "2.1.0",
     "redux": "4.2.1",
     "relative": "3.0.2",

@@ -7753,7 +7753,7 @@ __metadata:
     pdfjs-dist: 3.11.174
     promise: 8.3.0
     query-string: 7.1.3
-    re-reselect: 4.0.1
+    re-reselect: 5.1.0
     react: 18.3.1
     react-test-renderer: 18.3.1
     read-chunk: 2.1.0
@@ -36881,12 +36881,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-reselect@npm:4.0.1":
-  version: 4.0.1
-  resolution: "re-reselect@npm:4.0.1"
+"re-reselect@npm:5.1.0":
+  version: 5.1.0
+  resolution: "re-reselect@npm:5.1.0"
   peerDependencies:
-    reselect: ">1.0.0"
-  checksum: 6acb302c5a3d7aa44d32b329babaeed73a5d78eb832e2020d4f5f9515d38d3bebae5d0cfe853e5ceb2682abd8cdfe41b51ab76a997c18fcc8f1cfa4ab81ff58e
+    reselect: ^5.0.0
+  checksum: af708df8f2a00d721d15f46246b7e2b4affa93d36d1866950aded33813d6989dc56342502dae4ec5a2ed4e363f225ac665c8a5171282c400246af9d419402cc0
   languageName: node
   linkType: hard
 
