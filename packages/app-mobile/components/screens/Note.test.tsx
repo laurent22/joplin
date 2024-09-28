@@ -68,8 +68,11 @@ const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => 
 	}));
 };
 
-const openExistingNote = async (noteId: string) => {
-	const note = await Note.load(noteId);
+const openNewNote = async (noteProperties: NoteEntity) => {
+	const note = await Note.save({
+		parent_id: (await Folder.defaultFolder()).id,
+		...noteProperties,
+	});
 	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
 
 	store.dispatch({
@@ -82,15 +85,7 @@ const openExistingNote = async (noteId: string) => {
 		id: note.id,
 		folderId: displayParentId,
 	});
-};
 
-const openNewNote = async (noteProperties: NoteEntity) => {
-	const note = await Note.save({
-		parent_id: (await Folder.defaultFolder()).id,
-		...noteProperties,
-	});
-
-	await openExistingNote(note.id);
 	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
 
 	return note.id;
