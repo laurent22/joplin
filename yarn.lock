@@ -7509,7 +7509,7 @@ __metadata:
     jsdom: 24.1.0
     lodash: 4.17.21
     md5: 2.3.0
-    nodemon: 3.0.3
+    nodemon: 3.1.2
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.1
@@ -7519,7 +7519,7 @@ __metadata:
     react-native-camera: 4.2.1
     react-native-device-info: 10.14.0
     react-native-dialogbox: 0.6.10
-    react-native-document-picker: 9.2.0
+    react-native-document-picker: 9.3.0
     react-native-dropdownalert: 5.1.0
     react-native-exit-app: 2.0.0
     react-native-file-viewer: 2.1.5
@@ -7950,13 +7950,13 @@ __metadata:
     node-mocks-http: 1.14.1
     node-os-utils: 1.3.7
     nodemailer: 6.9.14
-    nodemon: 3.0.3
+    nodemon: 3.1.2
     pg: 8.11.6
     pm2: 5.4.1
     pretty-bytes: 5.6.0
     prettycron: 0.10.0
     query-string: 7.1.3
-    rate-limiter-flexible: 3.0.6
+    rate-limiter-flexible: 5.0.3
     raw-body: 2.5.2
     source-map-support: 0.5.21
     sqlite3: 5.1.6
@@ -33144,9 +33144,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:3.0.3":
-  version: 3.0.3
-  resolution: "nodemon@npm:3.0.3"
+"nodemon@npm:3.1.2":
+  version: 3.1.2
+  resolution: "nodemon@npm:3.1.2"
   dependencies:
     chokidar: ^3.5.2
     debug: ^4
@@ -33160,7 +33160,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 121ebb6349167d87cefd5767ec453ceb49ec5a8d50146134a54b0e25502c29ad01caaa41460e303b35728439012564782d278b3fef3c615f3c278979c2b7d586
+  checksum: 8ab01dcf970c66d9910ede58db7c24afca4839eaaadbeebbfac4b5f755cc8ba9fa72e0e2c1f14ef5081514d3b9c37888426d896b356adbe0450ccb5b461de0b9
   languageName: node
   linkType: hard
 
@@ -36836,10 +36836,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rate-limiter-flexible@npm:3.0.6":
-  version: 3.0.6
-  resolution: "rate-limiter-flexible@npm:3.0.6"
-  checksum: 65cf8edacde55b78255d5de0286b1297ec897fee128f4f18734f36a230297d75433fa599ea423f7726b61b8f8ebf108d66ee09e7155e37aa25f506015b5166a4
+"rate-limiter-flexible@npm:5.0.3":
+  version: 5.0.3
+  resolution: "rate-limiter-flexible@npm:5.0.3"
+  checksum: 2cf9edb7f887470cd5849bb7d2645d77953719a693d2f98afe38bc6e6af9976832b3ff6cd01469743a7105c5bcfe3122f7ba0300bb34fba3d97a4773326920d2
   languageName: node
   linkType: hard
 
@@ -37178,9 +37178,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-document-picker@npm:9.2.0":
-  version: 9.2.0
-  resolution: "react-native-document-picker@npm:9.2.0"
+"react-native-document-picker@npm:9.3.0":
+  version: 9.3.0
+  resolution: "react-native-document-picker@npm:9.3.0"
   dependencies:
     invariant: ^2.2.4
   peerDependencies:
@@ -37190,7 +37190,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: 51fc0eb75f35f7834904a806c053ac0173799141d0f5a8022cbd9d961b8b715847cba6f15eca78673c36dbc63d2ef2696332508a983d9f929c017cf0ec3d197b
+  checksum: 622c9bd3a17b7b92ff6b13571ccf2a916dd2477f2aa8c22b79e4b204156742ba95680dea912ee5ee56718f13c537107f5937e5bcf88d93cdf2142d508dc16351
   languageName: node
   linkType: hard
 
@@ -39214,7 +39214,7 @@ __metadata:
     lint-staged: 15.2.7
     madge: 6.1.0
     node-gyp: 9.4.1
-    nodemon: 3.0.3
+    nodemon: 3.1.2
     npm-package-json-lint: 7.1.0
     typescript: 5.2.2
   languageName: unknown
