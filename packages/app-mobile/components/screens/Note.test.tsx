@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
 import { waitFor as waitForWithRealTimers } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
