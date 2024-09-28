@@ -192,7 +192,7 @@
     "react-select": "5.8.0",
     "react-toggle-button": "2.2.0",
     "react-tooltip": "4.5.1",
-    "redux": "4.2.1",
+    "redux": "5.0.1",
     "reselect": "4.1.8",
     "roboto-fontface": "0.10.0",
     "smalltalk": "2.5.1",

@@ -7438,7 +7438,7 @@ __metadata:
     react-test-renderer: 18.3.1
     react-toggle-button: 2.2.0
     react-tooltip: 4.5.1
-    redux: 4.2.1
+    redux: 5.0.1
     reselect: 4.1.8
     roboto-fontface: 0.10.0
     smalltalk: 2.5.1
@@ -7546,7 +7546,7 @@ __metadata:
     react-native-zip-archive: 6.1.2
     react-redux: 8.1.3
     react-test-renderer: 18.3.1
-    redux: 4.2.1
+    redux: 5.0.1
     rn-fetch-blob: 0.12.0
     sharp: 0.33.4
     sqlite3: 5.1.6
@@ -7757,7 +7757,7 @@ __metadata:
     react: 18.3.1
     react-test-renderer: 18.3.1
     read-chunk: 2.1.0
-    redux: 4.2.1
+    redux: 5.0.1
     relative: 3.0.2
     reselect: 4.1.8
     server-destroy: 1.0.1
@@ -38224,12 +38224,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:4.2.1":
-  version: 4.2.1
-  resolution: "redux@npm:4.2.1"
-  dependencies:
-    "@babel/runtime": ^7.9.2
-  checksum: f63b9060c3a1d930ae775252bb6e579b42415aee7a23c4114e21a0b4ba7ec12f0ec76936c00f546893f06e139819f0e2855e0d55ebfce34ca9c026241a6950dd
+"redux@npm:5.0.1":
+  version: 5.0.1
+  resolution: "redux@npm:5.0.1"
+  checksum: e74affa9009dd5d994878b9a1ce30d6569d986117175056edb003de2651c05b10fe7819d6fa94aea1a94de9a82f252f986547f007a2fbeb35c317a2e5f5ecf2c
   languageName: node
   linkType: hard
 
