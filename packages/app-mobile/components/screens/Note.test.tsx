@@ -292,9 +292,6 @@ describe('screens/Note', () => {
 		'auto',
 		'manual',
 	])('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
-		// This test interacts with the synchronizer, which seems to need real timers.
-		jest.useRealTimers();
-
 		let note = await Note.save({ title: 'Note 1', parent_id: (await Folder.defaultFolder()).id });
 		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 
@@ -333,7 +330,5 @@ describe('screens/Note', () => {
 				throw new Error(`Should not be testing downloadMode: ${downloadMode}.`);
 			}
 		});
-
-		screen.unmount();
 	});
 });
