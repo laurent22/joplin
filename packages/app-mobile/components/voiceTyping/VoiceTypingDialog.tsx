@@ -6,9 +6,13 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
 import whisper from '../../services/voiceTyping/whisper';
+import vosk from '../../services/voiceTyping/vosk';
+import { AppState } from '../../utils/types';
+import { connect } from 'react-redux';
 
 interface Props {
 	locale: string;
+	provider: string;
 	onDismiss: ()=> void;
 	onText: (text: string)=> void;
 }
@@ -21,7 +25,14 @@ enum RecorderState {
 	Downloading = 5,
 }
 
-const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnTextCallback): [Error | null, boolean, VoiceTypingSession|null] => {
+interface UseVoiceTypingProps {
+	locale: string;
+	provider: string;
+	onSetPreview: OnTextCallback;
+	onText: OnTextCallback;
+}
+
+const useWhisper = ({ locale, provider, onSetPreview, onText }: UseVoiceTypingProps): [Error | null, boolean, VoiceTypingSession|null] => {
 	const [voiceTyping, setVoiceTyping] = useState<VoiceTypingSession>(null);
 	const [error, setError] = useState<Error>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
@@ -35,8 +46,8 @@ const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnText
 	voiceTypingRef.current = voiceTyping;
 
 	const builder = useMemo(() => {
-		return new VoiceTyping(locale, [whisper]);
-	}, [locale]);
+		return new VoiceTyping(locale, provider?.startsWith('whisper') ? [whisper] : [vosk]);
+	}, [locale, provider]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		try {
@@ -68,10 +79,15 @@ const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnText
 	return [error, mustDownloadModel, voiceTyping];
 };
 
-export default (props: Props) => {
+const VoiceTypingDialog: React.FC<Props> = props => {
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
 	const [preview, setPreview] = useState<string>('');
-	const [modelError, mustDownloadModel, voiceTyping] = useWhisper(props.locale, setPreview, props.onText);
+	const [modelError, mustDownloadModel, voiceTyping] = useWhisper({
+		locale: props.locale,
+		onSetPreview: setPreview,
+		onText: props.onText,
+		provider: props.provider,
+	});
 
 	useEffect(() => {
 		if (modelError) {
@@ -136,3 +152,7 @@ export default (props: Props) => {
 		</Banner>
 	);
 };
+
+export default connect((state: AppState) => ({
+	provider: state.settings['voiceTyping.preferredProvider'],
+}))(VoiceTypingDialog);

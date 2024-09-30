@@ -5,7 +5,7 @@ import { rtrimSlashes } from '@joplin/utils/path';
 import { NativeModules } from 'react-native';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 
-const logger = Logger.create('Whisper');
+const logger = Logger.create('voiceTyping/whisper');
 
 const { SpeechToTextModule } = NativeModules;
 
@@ -36,7 +36,7 @@ class Whisper implements VoiceTypingSession {
 			const loopStartCounter = this.closeCounter;
 			while (this.closeCounter === loopStartCounter) {
 				logger.debug('reading block');
-				const data: string = await SpeechToTextModule.expandBufferAndConvert(this.sessionId, 3);
+				const data: string = await SpeechToTextModule.expandBufferAndConvert(this.sessionId, 6);
 				logger.debug('done reading block. Length', data?.length);
 
 				if (this.sessionId === null) {
