@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Banner, ActivityIndicator } from 'react-native-paper';
+import { Banner, ActivityIndicator, Text } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
@@ -9,6 +9,7 @@ import whisper from '../../services/voiceTyping/whisper';
 import vosk from '../../services/voiceTyping/vosk';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 
 interface Props {
 	locale: string;
@@ -138,6 +139,10 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 		return components[recorderState];
 	};
 
+	const renderPreview = () => {
+		return <Text variant='labelSmall'>{preview}</Text>;
+	};
+
 	return (
 		<Banner
 			visible={true}
@@ -147,8 +152,12 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 					label: _('Done'),
 					onPress: onDismiss,
 				},
-			]}>
-			{`${_('Voice typing...')}\n${renderContent()}\n${preview}`}
+			]}
+		>
+			<View style={{ flexDirection: 'column' }}>
+				<Text variant='bodyMedium'>{`${_('Voice typing...')}\n${renderContent()}`}</Text>
+				{renderPreview()}
+			</View>
 		</Banner>
 	);
 };
