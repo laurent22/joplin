@@ -1616,7 +1616,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'voiceTyping.preferredProvider': {
-			value: 'vosk',
+			value: 'whisper-tiny',
 			type: SettingItemType.String,
 			public: true,
 			appTypes: [AppType.Mobile],
