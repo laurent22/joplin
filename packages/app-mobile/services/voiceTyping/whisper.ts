@@ -1,19 +1,13 @@
+import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { rtrimSlashes } from '@joplin/utils/path';
 import { NativeModules } from 'react-native';
+import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 
 const logger = Logger.create('Whisper');
 
-export type OnTextCallback = (text: string)=> void;
-
 const { SpeechToTextModule } = NativeModules;
-
-export interface SpeechToTextCallbacks {
-	// Called with a block of text that might change in the future
-	onPreview: OnTextCallback;
-	// Called with text that will not change and should be added to the document
-	onFinalize: OnTextCallback;
-}
 
 // Timestamps are in the form <|0.00|>. They seem to be added mostly just between sentences.
 const timestampExp = /<\|(\d+\.\d*)\|>/g;
@@ -21,34 +15,14 @@ const postProcessSpeech = (text: string) => {
 	return text.replace(timestampExp, '').replace(/\[BLANK_AUDIO\]/g, '');
 };
 
-export default class Whisper {
-	private lastData: string;
+class Whisper implements VoiceTypingSession {
+	private lastPreviewData: string;
 	private closeCounter = 0;
 
-	private constructor(
+	public constructor(
 		private sessionId: number|null,
 		private callbacks: SpeechToTextCallbacks,
 	) { }
-
-	private static getModelPath() {
-		return `${shim.fsDriver().getCacheDirectoryPath()}/whisper-models/model_tiny_with_timestamps.onnx`;
-	}
-
-	public static async mustDownload() {
-		await shim.fsDriver().removeAllThatStartWith(`${shim.fsDriver().getCacheDirectoryPath()}/whisper-models/`, 'model');
-		return !await shim.fsDriver().exists(this.getModelPath());
-	}
-
-	public static async fetched(locale: string, callbacks: SpeechToTextCallbacks) {
-		const url = 'http://localhost:8000/model_tiny_with_timestamps.onnx';
-		const destPath = this.getModelPath();
-		if (await this.mustDownload()) {
-			await shim.fetchBlob(url, { path: destPath });
-		}
-
-		const sessionId = await SpeechToTextModule.openSession(destPath, locale);
-		return new Whisper(sessionId, callbacks);
-	}
 
 	public async start() {
 		if (this.sessionId === null) {
@@ -94,17 +68,17 @@ export default class Whisper {
 					logger.debug('Trim to', trimTo, 'in recording with length', recordingLength);
 					this.callbacks.onFinalize(postProcessSpeech(dataBeforeTrim));
 					this.callbacks.onPreview(postProcessSpeech(dataAfterTrim));
+					this.lastPreviewData = dataAfterTrim;
 					await SpeechToTextModule.dropFirstSeconds(this.sessionId, trimTo);
 				} else {
 					logger.debug('Preview', data);
+					this.lastPreviewData = data;
 					this.callbacks.onPreview(postProcessSpeech(data));
 				}
-
-				this.lastData = data;
 			}
 		} catch (error) {
 			logger.error('Whisper error:', error);
-			this.lastData = '';
+			this.lastPreviewData = '';
 			await this.stop();
 			throw error;
 		}
@@ -121,8 +95,33 @@ export default class Whisper {
 		this.closeCounter ++;
 		await SpeechToTextModule.closeSession(sessionId);
 
-		if (this.lastData) {
-			this.callbacks.onFinalize(postProcessSpeech(this.lastData));
+		if (this.lastPreviewData) {
+			this.callbacks.onFinalize(postProcessSpeech(this.lastPreviewData));
 		}
 	}
 }
+
+const modelLocalFilepath = () => {
+	return `${shim.fsDriver().getAppDirectoryPath()}/voice-typing-models/whisper_tiny.onnx`;
+};
+
+const whisper: VoiceTypingProvider = {
+	supported: () => !!SpeechToTextModule,
+	modelLocalFilepath: modelLocalFilepath,
+	getDownloadUrl: () => {
+		let urlTemplate = rtrimSlashes(Setting.value('voiceTypingBaseUrl').trim());
+
+		if (!urlTemplate) {
+			urlTemplate = 'https://github.com/personalizedrefrigerator/joplin-voice-typing-test/releases/download/test-release/{task}.zip';
+		}
+
+		return urlTemplate.replace(/\{task\}/g, 'whisper_tiny.onnx');
+	},
+	build: async ({ modelPath, callbacks, locale }) => {
+		const sessionId = await SpeechToTextModule.openSession(modelPath, locale);
+		return new Whisper(sessionId, callbacks);
+	},
+	modelName: 'whisper',
+};
+
+export default whisper;

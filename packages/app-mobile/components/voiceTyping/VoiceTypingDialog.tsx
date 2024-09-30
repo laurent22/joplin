@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Banner, ActivityIndicator } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
-import Whisper, { OnTextCallback } from '../../services/voiceTyping/Whisper';
+import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
+import whisper from '../../services/voiceTyping/whisper';
 
 interface Props {
 	locale: string;
@@ -20,8 +21,8 @@ enum RecorderState {
 	Downloading = 5,
 }
 
-const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnTextCallback): [Error | null, boolean, Whisper|null] => {
-	const [whisper, setWhisper] = useState<Whisper>(null);
+const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnTextCallback): [Error | null, boolean, VoiceTypingSession|null] => {
+	const [voiceTyping, setVoiceTyping] = useState<VoiceTypingSession>(null);
 	const [error, setError] = useState<Error>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
 
@@ -30,47 +31,55 @@ const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnText
 	const onSetPreviewRef = useRef(onSetPreview);
 	onSetPreviewRef.current = onSetPreview;
 
-	const whisperRef = useRef(whisper);
-	whisperRef.current = whisper;
+	const voiceTypingRef = useRef(voiceTyping);
+	voiceTypingRef.current = voiceTyping;
+
+	const builder = useMemo(() => {
+		return new VoiceTyping(locale, [whisper]);
+	}, [locale]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (mustDownloadModel === null) return;
-
 		try {
-			await whisperRef.current?.stop();
+			await voiceTypingRef.current?.stop();
 
-			const v = await Whisper.fetched(locale, {
+			if (!await builder.isDownloaded()) {
+				if (event.cancelled) return;
+				await builder.download();
+			}
+			if (event.cancelled) return;
+
+			const voiceTyping = await builder.build({
 				onPreview: (text) => onSetPreviewRef.current(text),
 				onFinalize: (text) => onTextRef.current(text),
 			});
 			if (event.cancelled) return;
-			setWhisper(v);
+			setVoiceTyping(voiceTyping);
 		} catch (error) {
 			setError(error);
 		} finally {
 			setMustDownloadModel(false);
 		}
-	}, [locale, mustDownloadModel]);
+	}, [builder]);
 
 	useAsyncEffect(async (_event: AsyncEffectEvent) => {
-		setMustDownloadModel(await Whisper.mustDownload());
-	}, []);
+		setMustDownloadModel(!(await builder.isDownloaded()));
+	}, [builder]);
 
-	return [error, mustDownloadModel, whisper];
+	return [error, mustDownloadModel, voiceTyping];
 };
 
 export default (props: Props) => {
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
 	const [preview, setPreview] = useState<string>('');
-	const [whisperError, mustDownloadModel, whisper] = useWhisper(props.locale, setPreview, props.onText);
+	const [modelError, mustDownloadModel, voiceTyping] = useWhisper(props.locale, setPreview, props.onText);
 
 	useEffect(() => {
-		if (whisperError) {
+		if (modelError) {
 			setRecorderState(RecorderState.Error);
-		} else if (whisper) {
+		} else if (voiceTyping) {
 			setRecorderState(RecorderState.Recording);
 		}
-	}, [whisper, whisperError]);
+	}, [voiceTyping, modelError]);
 
 	useEffect(() => {
 		if (mustDownloadModel) {
@@ -80,14 +89,14 @@ export default (props: Props) => {
 
 	useEffect(() => {
 		if (recorderState === RecorderState.Recording) {
-			void whisper.start();
+			void voiceTyping.start();
 		}
-	}, [recorderState, whisper, props.onText]);
+	}, [recorderState, voiceTyping, props.onText]);
 
 	const onDismiss = useCallback(() => {
-		void whisper?.stop();
+		void voiceTyping?.stop();
 		props.onDismiss();
-	}, [whisper, props.onDismiss]);
+	}, [voiceTyping, props.onDismiss]);
 
 	const renderContent = () => {
 		const components: Record<RecorderState, ()=> string> = {
@@ -95,7 +104,7 @@ export default (props: Props) => {
 			[RecorderState.Recording]: () => _('Please record your voice...'),
 			[RecorderState.Processing]: () => _('Converting speech to text...'),
 			[RecorderState.Downloading]: () => _('Downloading %s language files...', languageName(props.locale)),
-			[RecorderState.Error]: () => _('Error: %s', whisperError.message),
+			[RecorderState.Error]: () => _('Error: %s', modelError.message),
 		};
 
 		return components[recorderState]();

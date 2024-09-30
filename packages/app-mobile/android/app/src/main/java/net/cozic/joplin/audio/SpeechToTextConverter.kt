@@ -75,12 +75,12 @@ class SpeechToTextConverter(
 
         return mutableMapOf(
             "audio_pcm" to audioPcmTensor,
-            "max_length" to intTensor(200),
-            "min_length" to intTensor(1),
+            "max_length" to intTensor(412),
+            "min_length" to intTensor(0),
             "num_return_sequences" to intTensor(1),
-            "num_beams" to intTensor(3),
-            "length_penalty" to floatTensor(1f),
-            "repetition_penalty" to floatTensor(2f),
+            "num_beams" to intTensor(1),
+            "length_penalty" to floatTensor(1.1f),
+            "repetition_penalty" to floatTensor(3f),
             "decoder_input_ids" to decoderInputIdsTensor,
 
             // Required for timestamps
