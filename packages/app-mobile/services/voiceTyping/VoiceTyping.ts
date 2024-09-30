@@ -1,6 +1,7 @@
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { dirname } from '@joplin/utils/path';
+import { PermissionsAndroid, Platform } from 'react-native';
 import { unzip } from 'react-native-zip-archive';
 const md5 = require('md5');
 
@@ -116,6 +117,11 @@ export default class VoiceTyping {
 
 		if (!await this.isDownloaded()) {
 			await this.download();
+		}
+
+		const audioPermission = 'android.permission.RECORD_AUDIO';
+		if (Platform.OS === 'android' && !await PermissionsAndroid.check(audioPermission)) {
+			await PermissionsAndroid.request(audioPermission);
 		}
 
 		return this.provider.build({
