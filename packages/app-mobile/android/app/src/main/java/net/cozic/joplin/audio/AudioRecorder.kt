@@ -11,6 +11,8 @@ import java.io.Closeable
 import kotlin.math.max
 import kotlin.math.min
 
+typealias AudioRecorderFactory = (context: Context)->AudioRecorder;
+
 class AudioRecorder(context: Context) : Closeable {
 	private val sampleRate = 16_000
 	private val maxLengthSeconds = 30 // Whisper supports a maximum of 30s
@@ -20,6 +22,7 @@ class AudioRecorder(context: Context) : Closeable {
 
 	// Accessor must not modify result
 	val bufferedData: FloatArray get() = buffer.sliceArray(0 until bufferWriteOffset)
+	val bufferLengthSeconds: Double get() = bufferWriteOffset.toDouble() / sampleRate
 
 	init {
 		val permissionResult = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO)
@@ -90,5 +93,9 @@ class AudioRecorder(context: Context) : Closeable {
 	override fun close() {
 		recorder.stop()
 		recorder.release()
+	}
+
+	companion object {
+		val factory: AudioRecorderFactory = { context -> AudioRecorder(context) }
 	}
 }

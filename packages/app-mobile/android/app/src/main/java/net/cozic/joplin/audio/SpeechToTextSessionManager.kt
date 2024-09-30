@@ -3,9 +3,6 @@ package net.cozic.joplin.audio
 import ai.onnxruntime.OrtEnvironment
 import android.content.Context
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.Executor
 import java.util.concurrent.locks.ReentrantLock
 
@@ -29,7 +26,9 @@ class SpeechToTextSessionManager(
 	): Int {
 		val sessionId = nextSessionId++
 		sessions[sessionId] = SpeechToTextSession(
-			SpeechToTextConverter(modelPath, locale, environment, context)
+			SpeechToTextConverter(
+				modelPath, locale, recorderFactory = AudioRecorder.factory, environment, context,
+			)
 		)
 		return sessionId
 	}
@@ -77,6 +76,13 @@ class SpeechToTextSessionManager(
 	fun dropFirstSeconds(sessionId: Int, duration: Double, promise: Promise) {
 		this.concurrentWithSession(sessionId, promise::reject) { session ->
 			session.converter.dropFirstSeconds(duration)
+			promise.resolve(sessionId)
+		}
+	}
+
+	fun getBufferLengthSeconds(sessionId: Int, promise: Promise) {
+		this.concurrentWithSession(sessionId, promise::reject) { session ->
+			promise.resolve(session.converter.bufferLengthSeconds)
 		}
 	}
 

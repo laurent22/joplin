@@ -20,19 +20,29 @@ enum RecorderState {
 	Downloading = 5,
 }
 
-const useWhisper = (locale: string, onText: OnTextCallback): [Error | null, boolean, Whisper|null] => {
+const useWhisper = (locale: string, onSetPreview: OnTextCallback, onText: OnTextCallback): [Error | null, boolean, Whisper|null] => {
 	const [whisper, setWhisper] = useState<Whisper>(null);
 	const [error, setError] = useState<Error>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
 
 	const onTextRef = useRef(onText);
 	onTextRef.current = onText;
+	const onSetPreviewRef = useRef(onSetPreview);
+	onSetPreviewRef.current = onSetPreview;
+
+	const whisperRef = useRef(whisper);
+	whisperRef.current = whisper;
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		if (mustDownloadModel === null) return;
 
 		try {
-			const v = await Whisper.fetched(locale, (text) => onTextRef.current(text));
+			await whisperRef.current?.stop();
+
+			const v = await Whisper.fetched(locale, {
+				onPreview: (text) => onSetPreviewRef.current(text),
+				onFinalize: (text) => onTextRef.current(text),
+			});
 			if (event.cancelled) return;
 			setWhisper(v);
 		} catch (error) {
@@ -51,7 +61,8 @@ const useWhisper = (locale: string, onText: OnTextCallback): [Error | null, bool
 
 export default (props: Props) => {
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
-	const [whisperError, mustDownloadModel, whisper] = useWhisper(props.locale, props.onText);
+	const [preview, setPreview] = useState<string>('');
+	const [whisperError, mustDownloadModel, whisper] = useWhisper(props.locale, setPreview, props.onText);
 
 	useEffect(() => {
 		if (whisperError) {
@@ -74,7 +85,7 @@ export default (props: Props) => {
 	}, [recorderState, whisper, props.onText]);
 
 	const onDismiss = useCallback(() => {
-		void whisper.stop();
+		void whisper?.stop();
 		props.onDismiss();
 	}, [whisper, props.onDismiss]);
 
@@ -112,7 +123,7 @@ export default (props: Props) => {
 					onPress: onDismiss,
 				},
 			]}>
-			{`${_('Voice typing...')}\n${renderContent()}`}
+			{`${_('Voice typing...')}\n${renderContent()}\n${preview}`}
 		</Banner>
 	);
 };

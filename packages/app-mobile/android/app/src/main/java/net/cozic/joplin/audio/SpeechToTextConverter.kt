@@ -16,10 +16,11 @@ import kotlin.time.measureTimedValue
 class SpeechToTextConverter(
     modelPath: String,
     locale: String,
+    recorderFactory: AudioRecorderFactory,
     private val environment: OrtEnvironment,
     context: Context,
 ) : Closeable {
-    private val recorder = AudioRecorder(context)
+    private val recorder = recorderFactory(context)
     private val session: OrtSession = environment.createSession(
         modelPath,
         OrtSession.SessionOptions().apply {
@@ -66,10 +67,13 @@ class SpeechToTextConverter(
             "max_length" to intTensor(200),
             "min_length" to intTensor(1),
             "num_return_sequences" to intTensor(1),
-            "num_beams" to intTensor(2),
+            "num_beams" to intTensor(3),
             "length_penalty" to floatTensor(1f),
-            "repetition_penalty" to floatTensor(1f),
+            "repetition_penalty" to floatTensor(2f),
             "decoder_input_ids" to decoderInputIdsTensor,
+
+            // Required for timestamps
+            "logits_processor" to intTensor(1)
         )
     }
 
@@ -95,6 +99,8 @@ class SpeechToTextConverter(
         Log.i("Whisper", "Drop first seconds $seconds")
         recorder.dropFirstSeconds(seconds)
     }
+
+    val bufferLengthSeconds: Double get() = recorder.bufferLengthSeconds
 
     fun expandBufferAndConvert(seconds: Double): String {
         recorder.pullNextSeconds(seconds)

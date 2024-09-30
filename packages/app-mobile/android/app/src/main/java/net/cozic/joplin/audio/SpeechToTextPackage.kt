@@ -1,7 +1,6 @@
 package net.cozic.joplin.audio
 
 import ai.onnxruntime.OrtEnvironment
-import android.util.Log
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.NativeModule
@@ -57,6 +56,11 @@ class SpeechToTextPackage : ReactPackage {
         @ReactMethod
         fun startRecording(sessionId: Int, promise: Promise) {
             sessionManager.startRecording(sessionId, promise)
+        }
+
+        @ReactMethod
+        fun getBufferLengthSeconds(sessionId: Int, promise: Promise) {
+            sessionManager.getBufferLengthSeconds(sessionId, promise)
         }
 
         @ReactMethod
