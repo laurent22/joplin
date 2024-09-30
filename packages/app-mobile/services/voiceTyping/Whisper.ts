@@ -16,7 +16,7 @@ export interface SpeechToTextCallbacks {
 }
 
 // Timestamps are in the form <|0.00|>. They seem to be added mostly just between sentences.
-const timestampExp = /<\|(\d+\.\d+)\|>/g;
+const timestampExp = /<\|(\d+\.\d*)\|>/g;
 const postProcessSpeech = (text: string) => {
 	return text.replace(timestampExp, '').replace(/\[BLANK_AUDIO\]/g, '');
 };
@@ -35,7 +35,7 @@ export default class Whisper {
 	}
 
 	public static async mustDownload() {
-		// await shim.fsDriver().remove(this.getModelPath());
+		await shim.fsDriver().removeAllThatStartWith(`${shim.fsDriver().getCacheDirectoryPath()}/whisper-models/`, 'model');
 		return !await shim.fsDriver().exists(this.getModelPath());
 	}
 
@@ -62,7 +62,7 @@ export default class Whisper {
 			const loopStartCounter = this.closeCounter;
 			while (this.closeCounter === loopStartCounter) {
 				logger.debug('reading block');
-				const data: string = await SpeechToTextModule.expandBufferAndConvert(this.sessionId, 2);
+				const data: string = await SpeechToTextModule.expandBufferAndConvert(this.sessionId, 3);
 				logger.debug('done reading block. Length', data?.length);
 
 				if (this.sessionId === null) {
@@ -122,7 +122,7 @@ export default class Whisper {
 		await SpeechToTextModule.closeSession(sessionId);
 
 		if (this.lastData) {
-			this.callbacks.onFinalize(this.lastData);
+			this.callbacks.onFinalize(postProcessSpeech(this.lastData));
 		}
 	}
 }

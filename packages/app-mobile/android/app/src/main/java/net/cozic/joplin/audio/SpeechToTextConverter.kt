@@ -28,11 +28,22 @@ class SpeechToTextConverter(
             registerCustomOpLibrary(OrtxPackage.getLibraryPath())
         },
     )
-    private val decoderInputIds = when (locale) {
+    private val languageCode = Regex("_.*").replace(locale, "")
+    private val decoderInputIds = when (languageCode) {
         // Add 50363 to the end to omit timestamps
         "en" -> intArrayOf(50258, 50259, 50359)
         "fr" -> intArrayOf(50258, 50265, 50359)
         "es" -> intArrayOf(50258, 50262, 50359)
+        "de" -> intArrayOf(50258, 50261, 50359)
+        "it" -> intArrayOf(50258, 50274, 50359)
+        "nl" -> intArrayOf(50258, 50271, 50359)
+        "ko" -> intArrayOf(50258, 50264, 50359)
+        "th" -> intArrayOf(50258, 50289, 50359)
+        "ru" -> intArrayOf(50258, 50263, 50359)
+        "pt" -> intArrayOf(50258, 50267, 50359)
+        "pl" -> intArrayOf(50258, 50269, 50359)
+        "id" -> intArrayOf(50258, 50275, 50359)
+        "hi" -> intArrayOf(50258, 50276, 50359)
         else -> intArrayOf(50258)
     }
 
