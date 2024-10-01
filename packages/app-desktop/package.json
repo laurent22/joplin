@@ -129,7 +129,7 @@
     "@joplin/tools": "~3.1",
     "@playwright/test": "1.44.1",
     "@testing-library/react-hooks": "8.0.1",
-    "@types/jest": "29.5.8",
+    "@types/jest": "29.5.12",
     "@types/node": "18.19.39",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
@@ -146,9 +146,9 @@
     "js-sha512": "0.9.0",
     "nan": "2.19.0",
     "react-test-renderer": "18.3.1",
-    "ts-jest": "29.1.1",
+    "ts-jest": "29.1.5",
     "ts-node": "10.9.2",
-    "typescript": "5.2.2"
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "@electron/notarize": "2.1.0",
