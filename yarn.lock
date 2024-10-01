@@ -7516,7 +7516,7 @@ __metadata:
     jsdom: 24.1.0
     lodash: 4.17.21
     md5: 2.3.0
-    nodemon: 3.1.2
+    nodemon: 3.1.4
     path-browserify: 1.0.1
     prop-types: 15.8.1
     punycode: 2.3.1
@@ -7957,7 +7957,7 @@ __metadata:
     node-mocks-http: 1.14.1
     node-os-utils: 1.3.7
     nodemailer: 6.9.14
-    nodemon: 3.1.2
+    nodemon: 3.1.4
     pg: 8.11.6
     pm2: 5.4.1
     pretty-bytes: 5.6.0
@@ -33563,9 +33563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:3.1.2":
-  version: 3.1.2
-  resolution: "nodemon@npm:3.1.2"
+"nodemon@npm:3.1.4":
+  version: 3.1.4
+  resolution: "nodemon@npm:3.1.4"
   dependencies:
     chokidar: ^3.5.2
     debug: ^4
@@ -33579,7 +33579,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: 8ab01dcf970c66d9910ede58db7c24afca4839eaaadbeebbfac4b5f755cc8ba9fa72e0e2c1f14ef5081514d3b9c37888426d896b356adbe0450ccb5b461de0b9
+  checksum: 3f003fc2c7bdaba559108320f188b7cb063220455e5da218ff3bf4f7468ad7059852da6e35a52b8c690cc27f6e36a433a9ad1f1bdb8096ec1ee3d930629cbeca
   languageName: node
   linkType: hard
 
@@ -39739,7 +39739,7 @@ __metadata:
     lint-staged: 15.2.7
     madge: 6.1.0
     node-gyp: 9.4.1
-    nodemon: 3.1.2
+    nodemon: 3.1.4
     npm-package-json-lint: 7.1.0
     typescript: 5.4.5
   languageName: unknown
