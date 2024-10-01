@@ -234,14 +234,7 @@ class NotesScreenComponent extends BaseScreenComponent<Props, State> {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.themeId);
 
-		const rootStyle = {
-			flex: 1,
-			backgroundColor: theme.backgroundColor,
-		};
-
-		if (!this.props.visible) {
-			rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
-		}
+		const rootStyle = this.props.visible ? theme.rootStyle : theme.hiddenRootStyle;
 
 		const title = parent ? parent.title : null;
 		if (!parent) {

@@ -351,6 +351,7 @@ packages/app-desktop/gui/NoteListItem/utils/useItemElement.js
 packages/app-desktop/gui/NoteListItem/utils/useItemEventHandlers.js
 packages/app-desktop/gui/NoteListItem/utils/useOnContextMenu.js
 packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
+packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
 packages/app-desktop/gui/NotePropertiesDialog.js
@@ -452,6 +453,7 @@ packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
 packages/app-desktop/integration-tests/noteList.spec.js
+packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/richTextEditor.spec.js
 packages/app-desktop/integration-tests/settings.spec.js
 packages/app-desktop/integration-tests/sidebar.spec.js
@@ -765,6 +767,7 @@ packages/app-mobile/utils/shim-init-react/injectedJs.js
 packages/app-mobile/utils/shim-init-react/shimInitShared.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
+packages/app-mobile/utils/testing/getWebViewWindowById.js
 packages/app-mobile/utils/types.js
 packages/app-mobile/web/serviceWorker.js
 packages/default-plugins/build.js

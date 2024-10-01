@@ -38,7 +38,7 @@ test.describe('richTextEditor', () => {
 		await editor.richTextEditor.waitFor();
 
 		// Edit the note to cause the original content to update
-		await editor.getTinyMCEFrameLocator().locator('a').click();
+		await editor.getRichTextFrameLocator().locator('a').click();
 		await mainWindow.keyboard.type('Test...');
 
 		await editor.toggleEditorsButton.click();
@@ -70,7 +70,7 @@ test.describe('richTextEditor', () => {
 
 		// Click on the attached file URL
 		const openPathResult = waitForNextOpenPath(electronApp);
-		const targetLink = editor.getTinyMCEFrameLocator().getByRole('link', { name: basename(pathToAttach) });
+		const targetLink = editor.getRichTextFrameLocator().getByRole('link', { name: basename(pathToAttach) });
 		if (process.platform === 'darwin') {
 			await targetLink.click({ modifiers: ['Meta'] });
 		} else {

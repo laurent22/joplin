@@ -139,6 +139,7 @@ const MenuComponent: React.FC<Props> = props => {
 					style={styles.menuContentScroller}
 					aria-modal={true}
 					accessibilityViewIsModal={true}
+					testID={`menu-content-${refocusCounter ? 'refocusing' : ''}`}
 				>{menuOptionComponents}</ScrollView>
 			</MenuOptions>
 		</Menu>

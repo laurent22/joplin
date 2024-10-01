@@ -10,6 +10,7 @@ import { Dispatch } from 'redux';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import IconButton from '../../IconButton';
 import SearchResults from './SearchResults';
+import AccessibleView from '../../accessibility/AccessibleView';
 
 interface Props {
 	themeId: number;
@@ -21,7 +22,7 @@ interface Props {
 	ftsEnabled: number;
 }
 
-const useStyles = (theme: ThemeStyle) => {
+const useStyles = (theme: ThemeStyle, visible: boolean) => {
 	return useMemo(() => {
 		return StyleSheet.create({
 			body: {
@@ -46,13 +47,14 @@ const useStyles = (theme: ThemeStyle) => {
 				paddingRight: theme.marginRight,
 				backgroundColor: theme.backgroundColor,
 			},
+			rootStyle: visible ? theme.rootStyle : theme.hiddenRootStyle,
 		});
-	}, [theme]);
+	}, [theme, visible]);
 };
 
 const SearchScreenComponent: React.FC<Props> = props => {
 	const theme = themeStyle(props.themeId);
-	const styles = useStyles(theme);
+	const styles = useStyles(theme, props.visible);
 
 	const [query, setQuery] = useState(props.query);
 
@@ -79,7 +81,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 	}, [props.dispatch]);
 
 	return (
-		<View style={theme.rootStyle}>
+		<AccessibleView style={styles.rootStyle} inert={!props.visible}>
 			<ScreenHeader
 				title={_('Search')}
 				folderPickerOptions={{
@@ -115,7 +117,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 					onHighlightedWordsChange={onHighlightedWordsChange}
 				/>
 			</View>
-		</View>
+		</AccessibleView>
 	);
 };
 

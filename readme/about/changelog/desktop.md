@@ -1,14 +1,15 @@
 # Joplin Desktop Changelog
 
-## [v3.1.16](https://github.com/laurent22/joplin/releases/tag/v3.1.16) (Pre-release) - 2024-09-24T16:11:51Z
+## [v3.1.17](https://github.com/laurent22/joplin/releases/tag/v3.1.17) (Pre-release) - 2024-09-26T11:57:54Z
 
+- Improved: Enable again auto-updates ([058a559](https://github.com/laurent22/joplin/commit/058a559))
 - New: Fix horizontal rule button when cursor is not on a new line ([#11085](https://github.com/laurent22/joplin/issues/11085) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Automatically detect and use operating system theme by default ([5beb80b](https://github.com/laurent22/joplin/commit/5beb80b))
-- Improved: Seamless-Updates: triggering updates ([#11079](https://github.com/laurent22/joplin/issues/11079) by [@AliceHincu](https://github.com/AliceHincu))
 - Improved: Updated packages glob (v10.4.2), jsdom (v24.1.0), sass (v1.77.6), turndown (v7.2.0)
 - Fixed: Delete revisions on the sync target when deleted locally ([#11035](https://github.com/laurent22/joplin/issues/11035)) ([#11017](https://github.com/laurent22/joplin/issues/11017) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix ctrl/cmd-n can create new notes while the trash folder is selected ([#11092](https://github.com/laurent22/joplin/issues/11092) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Improve performance when there are many selected items ([#11067](https://github.com/laurent22/joplin/issues/11067)) ([#11065](https://github.com/laurent22/joplin/issues/11065) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Save changes made with `editor.setText` ([#11117](https://github.com/laurent22/joplin/issues/11117)) ([#11105](https://github.com/laurent22/joplin/issues/11105) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: WebDAV synchronisation not working because of URL encoding differences ([#11076](https://github.com/laurent22/joplin/issues/11076)) ([#10608](https://github.com/laurent22/joplin/issues/10608) by [@pedr](https://github.com/pedr))
 
 ## [v3.1.15](https://github.com/laurent22/joplin/releases/tag/v3.1.15) (Pre-release) - 2024-09-17T09:15:10Z
