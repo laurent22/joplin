@@ -109,7 +109,7 @@ The end to end encryption that Joplin implements is to protect the data during t
 
 On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted VeraCrypt drive for instance.
 
-For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
+For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin. Currently [Face ID](https://support.apple.com/en-us/108411) is supported on iOS.
 
 There is however an issue open about it, so pull requests are welcome: https://github.com/laurent22/joplin/issues/289
 
