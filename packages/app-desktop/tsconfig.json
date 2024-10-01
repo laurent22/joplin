@@ -1,5 +1,8 @@
 {
 	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"target": "es2022",
+	},
     "include": [
         "**/*.ts",
         "**/*.tsx", "../lib/utils/focusHandler.ts",
