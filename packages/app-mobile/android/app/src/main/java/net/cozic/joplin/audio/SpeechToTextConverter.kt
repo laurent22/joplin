@@ -44,6 +44,7 @@ class SpeechToTextConverter(
         "pl" -> intArrayOf(50258, 50269, 50359)
         "id" -> intArrayOf(50258, 50275, 50359)
         "hi" -> intArrayOf(50258, 50276, 50359)
+        // Let Whisper guess the language
         else -> intArrayOf(50258)
     }
 
