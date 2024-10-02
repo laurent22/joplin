@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { connect } from 'react-redux';
-import { Text, StyleSheet, Linking, View } from 'react-native';
+import { Text, StyleSheet, Linking, View, Platform, useWindowDimensions } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { ViewStyle } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { DialogContext } from '../DialogManager';
 import { AppState } from '../../utils/types';
@@ -15,6 +15,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { LinkButton, PrimaryButton } from '../buttons';
 import BackButtonService from '../../services/BackButtonService';
 import { themeStyle } from '../global-style';
+import fitRectIntoBounds from './utils/fitRectIntoBounds';
 
 interface CameraData {
 	uri: string;
@@ -32,14 +33,48 @@ interface Props {
 interface UseStyleProps {
 	themeId: number;
 	style: ViewStyle;
+	cameraRatio: string;
 }
 
-const useStyles = ({ themeId, style }: UseStyleProps) => {
+const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
+	const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+	const outputPositioning = useMemo(() => {
+		const ratioMatch = cameraRatio.match(/^(\d+):(\d+)$/);
+		if (!ratioMatch) {
+			return { left: 0, top: 0 };
+		}
+		const output = fitRectIntoBounds({
+			width: Number(ratioMatch[2]),
+			height: Number(ratioMatch[1]),
+		}, {
+			width: Math.min(screenWidth, screenHeight),
+			height: Math.max(screenWidth, screenHeight),
+		});
+
+		if (screenWidth > screenHeight) {
+			const w = output.width;
+			output.width = output.height;
+			output.height = w;
+		}
+
+		return {
+			left: (screenWidth - output.width) / 2,
+			top: (screenHeight - output.height) / 2,
+			width: output.width,
+			height: output.height,
+		};
+	}, [cameraRatio, screenWidth, screenHeight]);
+
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		return StyleSheet.create({
 			container: {
+				backgroundColor: '#000',
+				...style,
+			},
+			camera: {
 				position: 'relative',
+				...outputPositioning,
 				...style,
 			},
 			errorContainer: {
@@ -49,20 +84,15 @@ const useStyles = ({ themeId, style }: UseStyleProps) => {
 				marginRight: 'auto',
 				padding: 28,
 				borderRadius: 28,
-				...style,
 			},
 		});
-	}, [themeId, style]);
+	}, [themeId, style, outputPositioning]);
 };
 
-const useAvailablePictureSizes = (cameraRef: RefObject<CameraView>, cameraReady: boolean) => {
-	const [availablePictureSizes, setAvailablePictureSizes] = useState<string[]>([]);
-	useAsyncEffect(async () => {
-		if (!cameraReady) return;
-		setAvailablePictureSizes(await cameraRef.current.getAvailablePictureSizesAsync());
-	}, [cameraReady, cameraRef]);
-
-	return availablePictureSizes;
+const androidRatios: CameraRatio[] = ['1:1', '4:3', '16:9'];
+const iOSRatios: CameraRatio[] = [];
+const useAvailableRatios = (): string[] => {
+	return Platform.OS === 'android' ? androidRatios : iOSRatios;
 };
 
 const CameraViewComponent: React.FC<Props> = props => {
@@ -103,12 +133,12 @@ const CameraViewComponent: React.FC<Props> = props => {
 		Setting.setValue('camera.type', newDirection);
 	}, [props.cameraType]);
 
-	const availablePictureSizes = useAvailablePictureSizes(cameraRef, cameraReady);
+	const availableRatios = useAvailableRatios();
 	const onNextCameraRatio = useCallback(async () => {
-		const ratioIndex = Math.max(0, availablePictureSizes.indexOf(props.cameraRatio));
+		const ratioIndex = Math.max(0, availableRatios.indexOf(props.cameraRatio));
 
-		Setting.setValue('camera.ratio', availablePictureSizes[(ratioIndex + 1) % availablePictureSizes.length]);
-	}, [props.cameraRatio, availablePictureSizes]);
+		Setting.setValue('camera.ratio', availableRatios[(ratioIndex + 1) % availableRatios.length]);
+	}, [props.cameraRatio, availableRatios]);
 
 	const onCameraReady = useCallback(() => {
 		setCameraReady(true);
@@ -130,20 +160,19 @@ const CameraViewComponent: React.FC<Props> = props => {
 		}
 	}, [props.onPhoto]);
 
+	let content;
 	if (!hasPermission?.canAskAgain && !hasPermission?.granted) {
-		return <View style={styles.errorContainer}>
+		content = <View style={styles.errorContainer}>
 			<Text>{_('Missing camera permission')}</Text>
 			<LinkButton onPress={() => Linking.openSettings()}>{_('Open settings')}</LinkButton>
 			<PrimaryButton onPress={props.onCancel}>{_('Go back')}</PrimaryButton>
 		</View>;
-	}
-
-	return (
-		<CameraView
+	} else {
+		content = <CameraView
 			ref={cameraRef}
-			style={styles.container}
+			style={styles.camera}
 			facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
-			pictureSize={availablePictureSizes.includes(props.cameraRatio) ? props.cameraRatio : undefined}
+			ratio={availableRatios.includes(props.cameraRatio) ? (props.cameraRatio as CameraRatio) : undefined}
 			onCameraReady={onCameraReady}
 		>
 			<ActionBar
@@ -157,7 +186,13 @@ const CameraViewComponent: React.FC<Props> = props => {
 				onCancelPhoto={props.onCancel}
 				cameraReady={cameraReady}
 			/>
-		</CameraView>
+		</CameraView>;
+	}
+
+	return (
+		<View style={styles.container}>
+			{content}
+		</View>
 	);
 };
 

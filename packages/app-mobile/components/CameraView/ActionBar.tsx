@@ -27,14 +27,13 @@ const useStyles = () => {
 			borderRadius: 32,
 			minWidth: 60,
 			minHeight: 60,
-			aspectRatio: 1,
 			borderColor: '#00000040',
 			borderWidth: 1,
 			borderStyle: 'solid',
 			backgroundColor: '#ffffff77',
 			justifyContent: 'center',
 			alignItems: 'center',
-			alignSelf: 'baseline',
+			alignSelf: 'flex-end',
 		};
 
 		return StyleSheet.create({
