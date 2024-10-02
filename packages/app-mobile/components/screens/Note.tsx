@@ -38,7 +38,7 @@ import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib
 import { Asset, ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
-import CameraView from '../CameraView';
+import CameraView from '../CameraView/CameraView';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
 import ImageEditor from '../NoteEditor/ImageEditor/ImageEditor';
@@ -1437,7 +1437,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
-			return <CameraView themeId={this.props.themeId} style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+			return <CameraView style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
 		} else if (this.state.showImageEditor) {
 			return <ImageEditor
 				resourceFilename={this.state.imageEditorResourceFilepath}

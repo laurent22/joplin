@@ -547,7 +547,8 @@ packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
-packages/app-mobile/components/CameraView.js
+packages/app-mobile/components/CameraView/ActionBar.js
+packages/app-mobile/components/CameraView/CameraView.js
 packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager.js
 packages/app-mobile/components/DismissibleDialog.js
