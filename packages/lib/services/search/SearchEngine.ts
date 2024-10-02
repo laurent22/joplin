@@ -16,7 +16,7 @@ import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
-const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
+import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 
 enum SearchType {
 	Auto = 'auto',
@@ -59,7 +59,7 @@ export interface ComplexTerm {
 	value: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	scriptType: any;
-	valueRegex?: RegExp;
+	valueRegex?: string;
 }
 
 export interface Terms {

@@ -190,23 +190,49 @@ export async function setPackagePrivateField(filePath: string, value: any) {
 	await writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
 }
 
-export async function downloadFile(url: string, targetPath: string) {
+export async function downloadFile(url: string, targetPath: string, headers: { [key: string]: string }) {
 	const https = require('https');
 
 	return new Promise((resolve, reject) => {
-		const file = createWriteStream(targetPath);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		https.get(url, (response: any) => {
-			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
-			response.pipe(file);
-			file.on('finish', () => {
-				// file.close();
-				resolve(null);
+		const makeDownloadRequest = (url: string) => {
+			const file = createWriteStream(targetPath);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			https.get(url, headers, (response: any) => {
+				if (response.statusCode === 403) {
+					let data = '';
+					response.on('data', (chunk: string) => {
+						data += chunk;
+					});
+					response.on('end', () => {
+						console.log(`Body: ${data}`);
+						reject(new Error('Access forbidden. Possibly due to rate limiting or lack of permission.'));
+					});
+				} else if (response.statusCode === 302 || response.statusCode === 301) {
+					const newUrl = response.headers.location;
+					if (newUrl) {
+						console.log(`Redirecting download request to ${newUrl}`);
+						file.close();
+						makeDownloadRequest(url);
+					} else {
+						reject(new Error('Redirection failed, url undefined'));
+					}
+				} else if (response.statusCode !== 200) {
+					reject(new Error(`HTTP error ${response.statusCode}`));
+				} else {
+					response.pipe(file);
+					file.on('finish', () => {
+						file.close();
+						resolve(null);
+					});
+				}
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			}).on('error', (error: any) => {
+				reject(error);
 			});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		}).on('error', (error: any) => {
-			reject(error);
-		});
+		};
+
+		makeDownloadRequest(url);
 	});
 }
 

@@ -518,8 +518,10 @@ packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/copy7Zip.js
+packages/app-desktop/tools/generateLatestArm64Yml.js
+packages/app-desktop/tools/githubReleasesUtils.js
+packages/app-desktop/tools/modifyReleaseAssets.js
 packages/app-desktop/tools/notarizeMacApp.js
-packages/app-desktop/tools/renameReleaseAssets.js
 packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
 packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
@@ -759,6 +761,7 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
+packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
