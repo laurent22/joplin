@@ -327,7 +327,7 @@ const SettingComponent: React.FC<Props> = props => {
 				</div>
 			);
 		}
-	} else if (md.type === Setting.TYPE_INT || md.type === Setting.TYPE_BIGINT) {
+	} else if (md.type === Setting.TYPE_INT) {
 		const value = props.value as number;
 
 		const onNumChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {

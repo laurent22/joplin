@@ -323,7 +323,6 @@ export enum SettingItemType {
 	Array = 4,
 	Object = 5,
 	Button = 6,
-	BigInt = 7,
 }
 
 // Redefine a simplified interface to mask internal details

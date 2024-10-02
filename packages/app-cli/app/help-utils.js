@@ -61,7 +61,7 @@ function renderCommandHelp(cmd, width = null) {
 			if ('value' in md) {
 				if (md.type === Setting.TYPE_STRING) {
 					defaultString = md.value ? `"${md.value}"` : null;
-				} else if (md.type === Setting.TYPE_INT || md.type === Setting.TYPE_BIGINT) {
+				} else if (md.type === Setting.TYPE_INT) {
 					defaultString = (md.value ? md.value : 0).toString();
 				} else if (md.type === Setting.TYPE_BOOL) {
 					defaultString = md.value === true ? 'true' : 'false';

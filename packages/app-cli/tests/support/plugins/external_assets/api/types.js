@@ -85,7 +85,6 @@ var SettingItemType;
     SettingItemType[SettingItemType["Array"] = 4] = "Array";
     SettingItemType[SettingItemType["Object"] = 5] = "Object";
     SettingItemType[SettingItemType["Button"] = 6] = "Button";
-    SettingItemType[SettingItemType["BigInt"] = 7] = "BigInt";
 })(SettingItemType = exports.SettingItemType || (exports.SettingItemType = {}));
 var ContentScriptType;
 (function (ContentScriptType) {
