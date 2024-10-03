@@ -7,6 +7,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
+import ListItemWrapper from './ListItemWrapper';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -15,8 +16,10 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 interface Props {
 	item: HeaderListItem;
+	isSelected: boolean;
 	onDrop: React.DragEventHandler|null;
-	anchorRef: React.Ref<HTMLElement>;
+	index: number;
+	itemCount: number;
 }
 
 const HeaderItem: React.FC<Props> = props => {
@@ -50,7 +53,10 @@ const HeaderItem: React.FC<Props> = props => {
 	/>;
 
 	return (
-		<div
+		<ListItemWrapper
+			selected={props.isSelected}
+			itemIndex={props.index}
+			itemCount={props.itemCount}
 			className='sidebar-header-container'
 			{...item.extraProps}
 			onDrop={props.onDrop}
@@ -58,14 +64,12 @@ const HeaderItem: React.FC<Props> = props => {
 			<StyledHeader
 				onContextMenu={onContextMenu}
 				onClick={onClick}
-				tabIndex={0}
-				ref={props.anchorRef}
 			>
 				<StyledHeaderIcon aria-label='' className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
 			{ item.onPlusButtonClick && addButton }
-		</div>
+		</ListItemWrapper>
 	);
 };
 

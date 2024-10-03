@@ -44,6 +44,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		...props,
 		selectedIndex,
 		onSelectedElementShown: setSelectedListElement,
+		listItems,
 	});
 
 	const onKeyEventHandler = useOnSidebarKeyDownHandler({
@@ -75,6 +76,8 @@ const FolderAndTagList: React.FC<Props> = props => {
 				items={listItems}
 				itemRenderer={onRenderItem}
 				onKeyDown={onKeyEventHandler}
+				tabIndex={0}
+				role='tree'
 
 				itemHeight={30}
 			/>

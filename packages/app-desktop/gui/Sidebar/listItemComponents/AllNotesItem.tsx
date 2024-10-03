@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledAllNotesIcon, StyledListItem, StyledListItemAnchor } from '../styles';
+import { StyledAllNotesIcon, StyledListItemAnchor } from '../styles';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import bridge from '../../../services/bridge';
@@ -10,6 +10,7 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
+import ListItemWrapper from './ListItemWrapper';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const Menu = bridge().Menu;
@@ -18,7 +19,8 @@ const MenuItem = bridge().MenuItem;
 interface Props {
 	dispatch: Dispatch;
 	selected: boolean;
-	anchorRef: React.Ref<HTMLAnchorElement>;
+	index: number;
+	itemCount: number;
 }
 
 const menuUtils = new MenuUtils(CommandService.instance());
@@ -46,21 +48,25 @@ const AllNotesItem: React.FC<Props> = props => {
 	}, []);
 
 	return (
-		<StyledListItem key="allNotesHeader" selected={props.selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
+		<ListItemWrapper
+			key="allNotesHeader"
+			selected={props.selected}
+			className={'list-item-container list-item-depth-0 all-notes'}
+			itemIndex={props.index}
+			itemCount={props.itemCount}
+		>
 			<EmptyExpandLink/>
 			<StyledAllNotesIcon className="icon-notes"/>
 			<StyledListItemAnchor
-				ref={props.anchorRef}
 				className="list-item"
 				isSpecialItem={true}
-				href="#"
 				selected={props.selected}
 				onClick={onAllNotesClick_}
 				onContextMenu={toggleAllNotesContextMenu}
 			>
 				{_('All notes')}
 			</StyledListItemAnchor>
-		</StyledListItem>
+		</ListItemWrapper>
 	);
 };
 

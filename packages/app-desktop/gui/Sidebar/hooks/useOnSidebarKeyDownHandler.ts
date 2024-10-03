@@ -29,6 +29,8 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 
 	return useCallback<KeyboardEventHandler<HTMLElement>>((event) => {
 		const selectedItem = listItems[selectedIndex];
+		let indexChange = 0;
+
 		if (selectedItem?.kind === ListItemType.Folder && isToggleShortcut(event.code, selectedItem, collapsedFolderIds)) {
 			event.preventDefault();
 
@@ -36,18 +38,13 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 				type: 'FOLDER_TOGGLE',
 				id: selectedItem.folder.id,
 			});
-		}
-
-		if ((event.ctrlKey || event.metaKey) && event.code === 'KeyA') { // ctrl+a or cmd+a
+		} else if ((event.ctrlKey || event.metaKey) && event.code === 'KeyA') { // ctrl+a or cmd+a
 			event.preventDefault();
-		}
-
-		let indexChange = 0;
-		if (event.code === 'ArrowUp') {
+		} else if (event.code === 'ArrowUp') {
 			indexChange = -1;
 		} else if (event.code === 'ArrowDown') {
 			indexChange = 1;
-		} else if (event.code === 'Tab') {
+		} else if (event.code === 'ArrowRight') {
 			event.preventDefault();
 
 			if (event.shiftKey) {

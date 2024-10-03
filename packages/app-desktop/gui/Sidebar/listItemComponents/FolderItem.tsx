@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import ExpandLink from './ExpandLink';
-import { StyledListItem, StyledListItemAnchor, StyledShareIcon, StyledSpanFix } from '../styles';
+import { StyledListItemAnchor, StyledShareIcon, StyledSpanFix } from '../styles';
 import { ItemClickListener, ItemContextMenuListener, ItemDragListener } from '../types';
 import FolderIconBox from '../../FolderIconBox';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
@@ -10,6 +10,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
+import ListItemWrapper from './ListItemWrapper';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -43,7 +44,9 @@ interface FolderItemProps {
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
 	selected: boolean;
-	anchorRef: React.Ref<HTMLElement>;
+
+	index: number;
+	itemCount: number;
 }
 
 function FolderItem(props: FolderItemProps) {
@@ -63,29 +66,39 @@ function FolderItem(props: FolderItemProps) {
 	};
 
 	return (
-		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={draggable} data-folder-id={folderId}>
+		<ListItemWrapper
+			depth={depth}
+			selected={selected}
+			itemIndex={props.index}
+			itemCount={props.itemCount}
+			aria-expanded={hasChildren ? props.isExpanded : undefined}
+			className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`}
+			onDragStart={onFolderDragStart_}
+			onDragOver={onFolderDragOver_}
+			onDrop={onFolderDrop_}
+			draggable={draggable}
+			data-folder-id={folderId}
+		>
 			<ExpandLink hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
-				ref={props.anchorRef}
 				className="list-item"
 				isConflictFolder={folderId === Folder.conflictFolderId()}
-				href="#"
 				selected={selected}
-				aria-selected={selected}
 				shareId={shareId}
 				data-id={folderId}
 				data-type={ModelType.Folder}
 				onContextMenu={itemContextMenu}
 				data-folder-id={folderId}
+				onDoubleClick={onFolderToggleClick_}
+			
 				onClick={() => {
 					folderItem_click(folderId);
 				}}
-				onDoubleClick={onFolderToggleClick_}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
 				{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
-		</StyledListItem>
+		</ListItemWrapper>
 	);
 }
 

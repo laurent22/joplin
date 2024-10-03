@@ -1,4 +1,4 @@
-import { MutableRefObject, RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ListItem } from '../types';
 import ItemList from '../../ItemList';
 import { focus } from '@joplin/lib/utils/focusHandler';
@@ -10,20 +10,8 @@ interface Props {
 	listItems: ListItem[];
 }
 
-const useFocusAfterNextRenderHandler = (
-	shouldFocusAfterNextRender: MutableRefObject<boolean>,
-	selectedListElement: HTMLElement|null,
-) => {
-	useEffect(() => {
-		if (!shouldFocusAfterNextRender.current || !selectedListElement) return;
-		focus('FolderAndTagList/useFocusHandler/afterRender', selectedListElement);
-		shouldFocusAfterNextRender.current = false;
-	}, [selectedListElement, shouldFocusAfterNextRender]);
-};
-
-const useRefocusOnSelectionChangeHandler = (
+const useScrollToSelectionHandler = (
 	itemListRef: RefObject<ItemList<ListItem>>,
-	shouldFocusAfterNextRender: MutableRefObject<boolean>,
 	listItems: ListItem[],
 	selectedIndex: number,
 ) => {
@@ -49,31 +37,24 @@ const useRefocusOnSelectionChangeHandler = (
 	useEffect(() => {
 		if (!itemListRef.current || !selectedItemKey) return;
 
-		const hasFocus = !!itemListRef.current.container.querySelector(':scope :focus');
-		shouldFocusAfterNextRender.current = hasFocus;
+		const hasFocus = !!itemListRef.current.container.contains(document.activeElement);
 
 		if (hasFocus) {
 			itemListRef.current.makeItemIndexVisible(selectedIndexRef.current);
 		}
-	}, [selectedItemKey, itemListRef, shouldFocusAfterNextRender]);
+	}, [selectedItemKey, itemListRef]);
 };
 
 const useFocusHandler = (props: Props) => {
 	const { itemListRef, selectedListElement, selectedIndex, listItems } = props;
 
-	// When set to true, when selectedListElement next changes, select it.
-	const shouldFocusAfterNextRender = useRef(false);
-
-	useRefocusOnSelectionChangeHandler(itemListRef, shouldFocusAfterNextRender, listItems, selectedIndex);
-	useFocusAfterNextRenderHandler(shouldFocusAfterNextRender, selectedListElement);
+	useScrollToSelectionHandler(itemListRef, listItems, selectedIndex);
 
 	const focusSidebar = useCallback(() => {
 		if (!selectedListElement || !itemListRef.current.isIndexVisible(selectedIndex)) {
 			itemListRef.current.makeItemIndexVisible(selectedIndex);
-			shouldFocusAfterNextRender.current = true;
-		} else {
-			focus('FolderAndTagList/useFocusHandler/focusSidebar', selectedListElement);
 		}
+		focus('FolderAndTagList/useFocusHandler/focusSidebar', itemListRef.current.container);
 	}, [selectedListElement, selectedIndex, itemListRef]);
 
 	return { focusSidebar };

@@ -13,7 +13,7 @@ interface ExpandLinkProps {
 
 const ExpandLink: React.FC<ExpandLinkProps> = props => {
 	return props.hasChildren ? (
-		<a className='sidebar-expand-link' href="#" data-folder-id={props.folderId} onClick={props.onClick}>
+		<a className='sidebar-expand-link' data-folder-id={props.folderId} onClick={props.onClick}>
 			<ExpandIcon isVisible={true} isExpanded={props.isExpanded} targetTitle={props.folderTitle}/>
 		</a>
 	) : (

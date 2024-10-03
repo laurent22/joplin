@@ -29,6 +29,7 @@ import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
 import AllNotesItem from '../listItemComponents/AllNotesItem';
+import ListItemWrapper from '../listItemComponents/ListItemWrapper';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -44,6 +45,7 @@ interface Props {
 
 	selectedIndex: number;
 	onSelectedElementShown: (element: HTMLElement)=> void;
+	listItems: ListItem[];
 }
 
 type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
@@ -326,26 +328,21 @@ const useOnRenderItem = (props: Props) => {
 	const selectedIndexRef = useRef(props.selectedIndex);
 	selectedIndexRef.current = props.selectedIndex;
 
+	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
 		const selected = props.selectedIndex === index;
-		const anchorRefCallback = selected ? (
-			(element: HTMLElement) => {
-				if (selectedIndexRef.current === index) {
-					props.onSelectedElementShown(element);
-				}
-			}
-		) : null;
 
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
 			return <TagItem
 				key={item.key}
-				anchorRef={anchorRefCallback}
 				selected={selected}
 				onClick={tagItem_click}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
 				tag={tag}
+				itemCount={itemCount}
+				index={index}
 			/>;
 		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
@@ -368,7 +365,6 @@ const useOnRenderItem = (props: Props) => {
 			}
 			return <FolderItem
 				key={item.key}
-				anchorRef={anchorRefCallback}
 				selected={selected}
 				folderId={folder.id}
 				folderTitle={Folder.displayTitle(folder)}
@@ -386,23 +382,36 @@ const useOnRenderItem = (props: Props) => {
 				shareId={folder.share_id}
 				parentId={folder.parent_id}
 				showFolderIcon={showFolderIcons}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.Header) {
 			return <HeaderItem
 				key={item.id}
 				item={item}
-				anchorRef={anchorRefCallback}
+				isSelected={selected}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.AllNotes) {
 			return <AllNotesItem
 				key={item.key}
 				selected={selected}
-				anchorRef={anchorRefCallback}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.Spacer) {
 			return (
-				<a key={item.key} className='sidebar-spacer-item' ref={anchorRefCallback} aria-label={_('Spacer')}></a>
+				<ListItemWrapper
+					key={item.key}
+					selected={selected}
+					itemIndex={index}
+					itemCount={itemCount}
+					className='sidebar-spacer-item'
+				>
+					<div aria-label={_('Spacer')}></div>
+				</ListItemWrapper>
 			);
 		} else {
 			const exhaustivenessCheck: never = item;
@@ -422,6 +431,7 @@ const useOnRenderItem = (props: Props) => {
 		tagItem_click,
 		props.selectedIndex,
 		props.onSelectedElementShown,
+		itemCount,
 	]);
 };
 

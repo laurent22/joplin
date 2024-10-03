@@ -14,6 +14,7 @@ interface Props<ItemType> {
 	id?: string;
 	role?: string;
 	'aria-label'?: string;
+	tabIndex?: number;
 }
 
 interface State {
@@ -177,6 +178,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 				role={this.props.role}
 				aria-label={this.props['aria-label']}
 				aria-setsize={items.length}
+				tabIndex={this.props.tabIndex}
 
 				onScroll={this.onScroll}
 				onKeyDown={this.onKeyDown}
