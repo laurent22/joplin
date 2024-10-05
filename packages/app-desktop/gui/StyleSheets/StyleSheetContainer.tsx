@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import { themeStyle } from '@joplin/lib/theme';
+import useDom from '../hooks/useDom';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -21,6 +22,8 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(props: Props): any {
 	const [styleSheetContent, setStyleSheetContent] = useState('');
+	const [elementRef, setElementRef] = useState<HTMLElement|null>(null);
+	const doc = useDom(elementRef);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const theme = themeStyle(props.themeId);
@@ -30,14 +33,16 @@ export default function(props: Props): any {
 	}, [props.themeId]);
 
 	useEffect(() => {
-		const element = document.createElement('style');
+		if (!doc) return () => {};
+
+		const element = doc.createElement('style');
 		element.setAttribute('id', 'main-theme-stylesheet-container');
-		document.head.appendChild(element);
+		doc.head.appendChild(element);
 		element.appendChild(document.createTextNode(styleSheetContent));
 		return () => {
-			document.head.removeChild(element);
+			doc.head.removeChild(element);
 		};
-	}, [styleSheetContent]);
+	}, [styleSheetContent, doc]);
 
-	return <div style={{ display: 'none' }}></div>;
+	return <div ref={setElementRef} style={{ display: 'none' }}></div>;
 }

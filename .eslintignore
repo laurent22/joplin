@@ -302,6 +302,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
+packages/app-desktop/gui/NoteEditor/NoteEditorWrapper.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.js
@@ -446,6 +447,7 @@ packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/TrashNotification/TrashNotification.js
 packages/app-desktop/gui/UpdateNotification/UpdateNotification.js
 packages/app-desktop/gui/dialogs.js
+packages/app-desktop/gui/hooks/useDom.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useElementHeight.js
 packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js

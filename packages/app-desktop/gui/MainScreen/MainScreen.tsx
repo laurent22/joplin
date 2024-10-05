@@ -4,7 +4,6 @@ import findItemByKey from '../ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
 import { move } from '../ResizableLayout/utils/movements';
 import { LayoutItem } from '../ResizableLayout/utils/types';
-import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -49,6 +48,7 @@ import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from '../NoteListHeader/utils/validateColumns';
 import TrashNotification from '../TrashNotification/TrashNotification';
 import UpdateNotification from '../UpdateNotification/UpdateNotification';
+import NoteEditorWrapper from '../NoteEditor/NoteEditorWrapper';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
@@ -791,7 +791,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
 					bodyEditor = 'CodeMirror5';
 				}
-				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+				return <NoteEditorWrapper key={key} bodyEditor={bodyEditor} newWindow={true} />;
 			},
 		};
 
