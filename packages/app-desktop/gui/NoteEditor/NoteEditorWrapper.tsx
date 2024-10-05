@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useCallback } from 'react';
 import NoteEditor from './NoteEditor';
 import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
-import shim from '@joplin/lib/shim';
+import NewWindowOrIFrame from '../NewWindowOrIFrame';
 
 interface Props {
 	dispatch: Dispatch;
@@ -19,93 +18,19 @@ interface Props {
 }
 
 const NoteEditorWrapper: React.FC<Props> = props => {
-	const [iframeRef, setIframeRef] = useState<HTMLIFrameElement|null>(null);
-	const [loaded, setLoaded] = useState(false);
-	const [doc, setDoc] = useState<Document>(null);
-
-	useEffect(() => {
-		let openedWindow: Window|null = null;
-		const unmounted = false;
-		if (iframeRef) {
-			setDoc(iframeRef?.contentWindow?.document);
-		} else if (props.newWindow) {
-			openedWindow = window.open('about:blank');
-			setDoc(openedWindow.document);
-
-			void (async () => {
-				while (!unmounted) {
-					await new Promise<void>(resolve => {
-						shim.setTimeout(() => resolve(), 2000);
-					});
-
-					// .onbeforeunload and .onclose events don't seem to fire when closed by a user -- rely on polling
-					// instead:
-					if (openedWindow?.closed) {
-						props.dispatch({ type: 'NOTE_WINDOW_CLOSE', noteId: props.noteId });
-						openedWindow = null;
-						break;
-					}
-				}
-			})();
-		}
-
-		return () => {
-			// Delay: Closing immediately causes Electron to crash
-			setTimeout(() => {
-				if (!openedWindow?.closed) {
-					openedWindow?.close();
-				}
-			}, 200);
-		};
-	}, [iframeRef, props.newWindow, props.noteId, props.dispatch]);
-
-	useEffect(() => {
-		if (!doc) return;
-
-		doc.open();
-		doc.write('<!DOCTYPE html><html><head></head><body></body></html>');
-		doc.close();
-
-		const cssUrls = [
-			'style.min.css',
-			'style/icons/style.css',
-			'vendor/lib/@fortawesome/fontawesome-free/css/all.min.css',
-			'vendor/lib/react-datetime/css/react-datetime.css',
-			'vendor/lib/smalltalk/css/smalltalk.css',
-			'vendor/lib/roboto-fontface/css/roboto/roboto-fontface.css',
-			'vendor/lib/codemirror/lib/codemirror.css',
-		];
-
-		for (const url of cssUrls) {
-			const style = doc.createElement('link');
-			style.rel = 'stylesheet';
-			style.href = url;
-			doc.head.appendChild(style);
-		}
-
-		doc.body.style.height = '100vh';
-
-		setLoaded(true);
-	}, [doc]);
-	const parentNode = loaded ? doc?.body : null;
+	const onClose = useCallback(() => {
+		props.dispatch({ type: 'NOTE_WINDOW_CLOSE', noteId: props.noteId });
+	}, [props.dispatch, props.noteId]);
 
 	const noteId = props.noteId ?? props.defaultNoteId;
-	const content = <>
-		<NoteEditor bodyEditor={props.bodyEditor} noteId={noteId} isProvisional={props.provisionalNoteIds.includes(noteId)}/>
-		<StyleSheetContainer themeId={props.themeId}/>
-	</>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM
-	const contentPortal = parentNode && createPortal(content, parentNode) as any;
-	if (props.newWindow) {
-		return <div style={{ display: 'none' }}>{contentPortal}</div>;
-	} else {
-		return <iframe
-			ref={setIframeRef}
-			style={{ flexGrow: 1, width: '100%', height: '100%', border: 'none' }}
-		>
-			{contentPortal}
-		</iframe>;
-	}
+	const editor = <NoteEditor bodyEditor={props.bodyEditor} noteId={noteId} isProvisional={props.provisionalNoteIds.includes(noteId)}/>;
+
+	// TODO: Always render the editor in an <iframe> or window. Doing so would allow more easily catching bugs specific
+	// to running the editor in a separate window but would also break custom CSS and tests.
+	return props.newWindow ? <NewWindowOrIFrame newWindow={true} onClose={onClose}>
+		{editor}
+		<StyleSheetContainer />
+	</NewWindowOrIFrame> : editor;
 };
 
 export default connect((state: AppState) => {

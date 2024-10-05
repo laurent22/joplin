@@ -135,10 +135,6 @@ class Application extends BaseApplication {
 			void this.setupOcrService();
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'style.editor.fontFamily' || action.type === 'SETTING_UPDATE_ALL') {
-			this.updateEditorFont();
-		}
-
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'windowContentZoomFactor' || action.type === 'SETTING_UPDATE_ALL') {
 			webFrame.setZoomFactor(Setting.value('windowContentZoomFactor') / 100);
 		}
@@ -208,23 +204,6 @@ class Application extends BaseApplication {
 			]);
 			app.createTray(contextMenu);
 		}
-	}
-
-	public updateEditorFont() {
-		const fontFamilies = [];
-		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
-		fontFamilies.push('\'Avenir Next\', Avenir, Arial, sans-serif');
-
-		// The '*' and '!important' parts are necessary to make sure Russian text is displayed properly
-		// https://github.com/laurent22/joplin/issues/155
-		//
-		// Note: Be careful about the specificity here. Incorrect specificity can break monospaced fonts in tables.
-
-		const css = `.CodeMirror5 *, .cm-editor .cm-content { font-family: ${fontFamilies.join(', ')} !important; }`;
-		const styleTag = document.createElement('style');
-		styleTag.type = 'text/css';
-		styleTag.appendChild(document.createTextNode(css));
-		document.head.appendChild(styleTag);
 	}
 
 	public setupContextMenu() {

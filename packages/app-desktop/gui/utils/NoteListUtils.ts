@@ -58,10 +58,18 @@ export default class NoteListUtils {
 			);
 
 			if (singleNoteId) {
+				const editInMenu = new Menu();
+
 				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
+				editInMenu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
+				editInMenu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem('openNoteInNewWindow', singleNoteId)),
+				);
+
+				menu.append(new MenuItem({ label: _('Edit in...'), submenu: editInMenu }));
 			}
+
 
 			if (noteIds.length <= 1) {
 				menu.append(
