@@ -68,14 +68,10 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 }
 
 export default function useFormNote(dependencies: HookDependencies) {
-	const {
-		syncStarted, decryptionStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad,
-	} = dependencies;
+	const { noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
-	const prevSyncStarted = usePrevious(syncStarted);
-	const prevDecryptionStarted = usePrevious(decryptionStarted);
 	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
 
@@ -177,29 +173,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 		// and start a new one.
 		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
 	}, [formNoteRefreshScheduled]);
-
-	useEffect(() => {
-		// Check that synchronisation has just finished - and
-		// if the note has never been changed, we reload it.
-		// If the note has already been changed, it's a conflict
-		// that's already been handled by the synchronizer.
-		const decryptionJustEnded = prevDecryptionStarted && !decryptionStarted;
-		const syncJustEnded = prevSyncStarted && !syncStarted;
-
-		if (!decryptionJustEnded && !syncJustEnded) return;
-		if (formNoteRef.current.hasChanged) return;
-
-		logger.debug('Sync or decryption finished with an unchanged formNote.');
-
-		// Refresh the form note.
-		// This is kept separate from the above logic so that when prevSyncStarted is changed
-		// from true to false, it doesn't cancel the note from loading.
-		refreshFormNote();
-	}, [
-		prevSyncStarted, syncStarted,
-		prevDecryptionStarted, decryptionStarted,
-		refreshFormNote,
-	]);
 
 	useEffect(() => {
 		if (!noteId) return ()=>{};
