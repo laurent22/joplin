@@ -38,6 +38,7 @@ export interface AppState extends State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	windowContentSize: any;
 	watchedNoteFiles: string[];
+	newWindowNoteIds: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -67,6 +68,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		noteVisiblePanes: ['editor', 'viewer'],
 		windowContentSize, // bridge().windowContentSize(),
 		watchedNoteFiles: [],
+		newWindowNoteIds: [],
 		lastEditorScrollPercents: {},
 		devToolsVisible: false,
 		visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
@@ -246,6 +248,16 @@ export default function(state: AppState, action: any) {
 				newState = { ...state };
 				newState.watchedNoteFiles = [];
 			}
+			break;
+
+		case 'NOTE_WINDOW_OPEN':
+			if (!state.newWindowNoteIds.includes(action.noteId)) {
+				newState = { ...state, newWindowNoteIds: [...state.newWindowNoteIds, action.noteId] };
+			}
+			break;
+
+		case 'NOTE_WINDOW_CLOSE':
+			newState = { ...state, newWindowNoteIds: state.newWindowNoteIds.filter(id => id !== action.noteId) };
 			break;
 
 		case 'EDITOR_SCROLL_PERCENT_SET':

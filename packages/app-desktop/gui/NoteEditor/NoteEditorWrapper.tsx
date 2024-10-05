@@ -5,11 +5,17 @@ import NoteEditor from './NoteEditor';
 import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
+import { Dispatch } from 'redux';
+import shim from '@joplin/lib/shim';
 
 interface Props {
+	dispatch: Dispatch;
 	themeId: number;
 	bodyEditor: string;
 	newWindow: boolean;
+	noteId?: string;
+	defaultNoteId: string;
+	provisionalNoteIds: string[];
 }
 
 const NoteEditorWrapper: React.FC<Props> = props => {
@@ -19,18 +25,39 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 
 	useEffect(() => {
 		let openedWindow: Window|null = null;
+		const unmounted = false;
 		if (iframeRef) {
 			setDoc(iframeRef?.contentWindow?.document);
 		} else if (props.newWindow) {
 			openedWindow = window.open('about:blank');
 			setDoc(openedWindow.document);
+
+			void (async () => {
+				while (!unmounted) {
+					await new Promise<void>(resolve => {
+						shim.setTimeout(() => resolve(), 2000);
+					});
+
+					// .onbeforeunload and .onclose events don't seem to fire when closed by a user -- rely on polling
+					// instead:
+					if (openedWindow?.closed) {
+						props.dispatch({ type: 'NOTE_WINDOW_CLOSE', noteId: props.noteId });
+						openedWindow = null;
+						break;
+					}
+				}
+			})();
 		}
 
 		return () => {
 			// Delay: Closing immediately causes Electron to crash
-			setTimeout(() => openedWindow?.close(), 200);
+			setTimeout(() => {
+				if (!openedWindow?.closed) {
+					openedWindow?.close();
+				}
+			}, 200);
 		};
-	}, [iframeRef, props.newWindow]);
+	}, [iframeRef, props.newWindow, props.noteId, props.dispatch]);
 
 	useEffect(() => {
 		if (!doc) return;
@@ -62,8 +89,9 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	}, [doc]);
 	const parentNode = loaded ? doc?.body : null;
 
+	const noteId = props.noteId ?? props.defaultNoteId;
 	const content = <>
-		<NoteEditor bodyEditor={props.bodyEditor}/>
+		<NoteEditor bodyEditor={props.bodyEditor} noteId={noteId} isProvisional={props.provisionalNoteIds.includes(noteId)}/>
 		<StyleSheetContainer themeId={props.themeId}/>
 	</>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM
@@ -81,7 +109,20 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 };
 
 export default connect((state: AppState) => {
+	let bodyEditor = state.settings['editor.codeView'] ? 'CodeMirror6' : 'TinyMCE';
+
+	if (state.settings.isSafeMode) {
+		bodyEditor = 'PlainText';
+	} else if (state.settings['editor.codeView'] && state.settings['editor.legacyMarkdown']) {
+		bodyEditor = 'CodeMirror5';
+	}
+
+	const defaultNoteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
+
 	return {
 		themeId: state.settings.theme,
+		provisionalNoteIds: state.provisionalNoteIds,
+		defaultNoteId: defaultNoteId,
+		bodyEditor,
 	};
 })(NoteEditorWrapper);

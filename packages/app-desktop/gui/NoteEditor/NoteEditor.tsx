@@ -611,15 +611,12 @@ export {
 };
 
 const mapStateToProps = (state: AppState) => {
-	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
-		noteId: noteId,
 		notes: state.notes,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedFolderId: state.selectedFolderId,
-		isProvisional: state.provisionalNoteIds.includes(noteId),
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
 		decryptionStarted: state.decryptionWorker?.state !== 'idle',

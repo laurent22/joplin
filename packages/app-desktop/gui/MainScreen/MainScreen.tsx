@@ -66,6 +66,7 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	mainLayout: LayoutItem;
+	newWindowNoteIds: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	layoutMoveMode: boolean;
@@ -784,14 +785,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror6' : 'TinyMCE';
-
-				if (this.props.isSafeMode) {
-					bodyEditor = 'PlainText';
-				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
-					bodyEditor = 'CodeMirror5';
-				}
-				return <NoteEditorWrapper key={key} bodyEditor={bodyEditor} newWindow={true} />;
+				return <NoteEditorWrapper key={key} newWindow={false} />;
 			},
 		};
 
@@ -918,6 +912,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			/>
 		) : null;
 
+		const newWindowNotes = this.props.newWindowNoteIds.map(noteId => {
+			return <NoteEditorWrapper key={`new-window-note-${noteId}`} newWindow={true} noteId={noteId}/>;
+		});
+
 		return (
 			<div style={style}>
 				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
@@ -940,6 +938,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				{messageComp}
 				{layoutComp}
 				{pluginDialog}
+				{newWindowNotes}
 			</div>
 		);
 	}
@@ -983,6 +982,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		newWindowNoteIds: state.newWindowNoteIds,
 	};
 };
 

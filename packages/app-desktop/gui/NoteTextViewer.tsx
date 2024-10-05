@@ -126,7 +126,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			wv.removeEventListener(n, fn);
 		}
 
-		this.getContainerWindow().removeEventListener('message', this.webview_message);
+		this.getContainerWindow()?.removeEventListener('message', this.webview_message);
 
 		this.initialized_ = false;
 		this.domReady_ = false;
