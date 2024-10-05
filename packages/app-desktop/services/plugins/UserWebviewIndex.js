@@ -51,6 +51,7 @@ const webviewApi = {
 
 	docReady(() => {
 		const rootElement = document.createElement('div');
+		rootElement.setAttribute('id', 'joplin-plugin-content-root');
 		document.getElementsByTagName('body')[0].appendChild(rootElement);
 
 		const contentElement = document.createElement('div');

@@ -7,13 +7,15 @@ export const isInsideContainer = (node: any, className: string): boolean => {
 	return false;
 };
 
+interface CancelEvent { cancelled: boolean }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const waitForElement = async (parent: any, id: string): Promise<any> => {
+export const waitForElement = async (parent: any, id: string, cancelEvent?: CancelEvent): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const iid = setInterval(() => {
 			try {
 				const element = parent.getElementById(id);
-				if (element) {
+				if (element || cancelEvent?.cancelled) {
 					clearInterval(iid);
 					resolve(element);
 				}

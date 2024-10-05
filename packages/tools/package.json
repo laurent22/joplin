@@ -29,7 +29,7 @@
     "execa": "4.1.0",
     "fs-extra": "11.2.0",
     "gettext-parser": "7.0.1",
-    "glob": "10.4.1",
+    "glob": "10.4.2",
     "license-checker-rseidelsohn": "4.3.0",
     "markdown-it": "13.0.2",
     "md5-file": "5.0.0",
@@ -48,7 +48,7 @@
     "@joplin/fork-htmlparser2": "^4.1.52",
     "@rmp135/sql-ts": "1.18.1",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.8",
+    "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.8",
     "@types/mustache": "4.2.5",
@@ -65,7 +65,7 @@
     "sqlite3": "5.1.6",
     "style-to-js": "1.1.12",
     "ts-node": "10.9.2",
-    "typescript": "5.2.2"
+    "typescript": "5.4.5"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }
