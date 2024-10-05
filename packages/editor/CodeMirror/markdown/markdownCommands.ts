@@ -132,9 +132,9 @@ export const toggleList = (listType: ListType): Command => {
 		// RegExps for different list types. The regular expressions MUST
 		// be mutually exclusive.
 		// `(?!\[[ xX]+\])` means "not followed by [x] or [ ]".
-		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\])/;
-		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
-		const numberedRegex = /^\s*\d+\.\s?/;
+		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\]\s)/;
+		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s/;
+		const numberedRegex = /^\s*\d+\.\s/;
 
 		const listRegexes: Record<ListType, RegExp> = {
 			[ListType.OrderedList]: numberedRegex,

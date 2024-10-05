@@ -543,11 +543,22 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		const resultId = getResultId(item);
 		const isSelected = resultId === this.state.selectedItemId;
 		const rowStyle = isSelected ? style.rowSelected : style.row;
+
+		const wrapKeywordMatches = (unescapedContent: string) => {
+			return surroundKeywords(
+				this.state.keywords,
+				unescapedContent,
+				`<span class="match-highlight" style="font-weight: bold; color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`,
+				'</span>',
+				{ escapeHtml: true },
+			);
+		};
+
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.color};">${item.title}</span>`
-			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
+			: wrapKeywordMatches(item.title);
 
-		const fragmentsHtml = !item.fragments ? null : surroundKeywords(this.state.keywords, item.fragments, `<span style="color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`, '</span>', { escapeHtml: true });
+		const fragmentsHtml = !item.fragments ? null : wrapKeywordMatches(item.fragments);
 
 		const folderIcon = <i style={{ fontSize: theme.fontSize, marginRight: 2 }} className="fa fa-book" role='img' aria-label={_('Notebook')} />;
 		const pathComp = !item.path ? null : <div style={style.rowPath}>{folderIcon} {item.path}</div>;

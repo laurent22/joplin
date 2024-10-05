@@ -29,6 +29,8 @@ export type ThemeStyle = BaseTheme & typeof baseStyle & {
 	urlText: TextStyle;
 	headerStyle: TextStyle;
 	headerWrapperStyle: ViewStyle;
+	rootStyle: ViewStyle;
+	hiddenRootStyle: ViewStyle;
 	keyboardAppearance: 'light'|'dark';
 };
 
@@ -81,6 +83,16 @@ function extraStyles(theme: BaseTheme) {
 		backgroundColor: theme.headerBackgroundColor,
 	};
 
+	const rootStyle: ViewStyle = {
+		flex: 1,
+		backgroundColor: theme.backgroundColor,
+	};
+
+	const hiddenRootStyle: ViewStyle = {
+		...rootStyle,
+		flex: 0.001, // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
+	};
+
 	return {
 		marginRight: baseStyle.margin,
 		marginLeft: baseStyle.margin,
@@ -94,6 +106,8 @@ function extraStyles(theme: BaseTheme) {
 		urlText,
 		headerStyle,
 		headerWrapperStyle,
+		rootStyle,
+		hiddenRootStyle,
 
 		keyboardAppearance: theme.appearance,
 		color5: theme.color5 ?? theme.backgroundColor4,

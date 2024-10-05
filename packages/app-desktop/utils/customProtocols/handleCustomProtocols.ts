@@ -125,6 +125,11 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 // TODO: Use Logger.create (doesn't work for now because Logger is only initialized
 // in the main process.)
 const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => {
+	logger = {
+		...logger,
+		debug: () => {},
+	};
+
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
 
