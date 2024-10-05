@@ -124,7 +124,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@electron/rebuild": "3.3.0",
+    "@electron/rebuild": "3.6.0",
     "@joplin/default-plugins": "~3.1",
     "@joplin/tools": "~3.1",
     "@playwright/test": "1.44.1",
@@ -151,7 +151,7 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@electron/notarize": "2.1.0",
+    "@electron/notarize": "2.3.2",
     "@electron/remote": "2.1.2",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
@@ -159,7 +159,7 @@
     "@joplin/lib": "~3.1",
     "@joplin/renderer": "~3.1",
     "@joplin/utils": "~3.1",
-    "@sentry/electron": "4.17.0",
+    "@sentry/electron": "4.24.0",
     "@types/mustache": "4.2.5",
     "async-mutex": "0.5.0",
     "codemirror": "5.65.9",
