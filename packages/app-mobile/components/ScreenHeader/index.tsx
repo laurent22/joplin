@@ -3,14 +3,13 @@ import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { BackButtonService } = require('../../services/back-button.js');
+import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import { themeStyle } from '../global-style';
 import { OnValueChangedListener } from '../Dropdown';
-const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
@@ -26,6 +25,7 @@ import WarningBanner from './WarningBanner';
 import WebBetaButton from './WebBetaButton';
 
 import Menu, { MenuOptionType } from './Menu';
+import shim from '@joplin/lib/shim';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -36,25 +36,25 @@ const PADDING_V = 10;
 
 type OnPressCallback=()=> void;
 
+export interface FolderPickerOptions {
+	enabled: boolean;
+	selectedFolderId?: string;
+	onValueChange?: OnValueChangedListener;
+	mustSelect?: boolean;
+}
+
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
 	notesParentType: string;
 	noteSelectionEnabled: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	parentComponent: any;
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
 	menuOptions: MenuOptionType[];
 	title?: string|null;
 	folders: FolderEntity[];
-	folderPickerOptions?: {
-		enabled: boolean;
-		selectedFolderId?: string;
-		onValueChange?: OnValueChangedListener;
-		mustSelect?: boolean;
-	};
+	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
 
 	dispatch: Dispatch;
@@ -542,7 +542,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await dialogs.confirm(this.props.parentComponent, _('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await shim.showConfirmationDialog(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });

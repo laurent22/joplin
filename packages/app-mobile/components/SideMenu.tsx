@@ -47,8 +47,12 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				display: 'flex',
 				alignContent: 'stretch',
 				height: windowHeight,
+				flexGrow: 1,
+				flexShrink: 1,
 			},
 			contentOuterWrapper: {
+				flexGrow: 1,
+				flexShrink: 1,
 				width: windowWidth,
 				height: windowHeight,
 				transform: [{
@@ -64,10 +68,12 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				display: 'flex',
 				flexDirection: 'column',
 				flexGrow: 1,
+				flexShrink: 1,
 			},
 			menuWrapper: {
 				position: 'absolute',
-				height: windowHeight,
+				top: 0,
+				bottom: 0,
 				width: menuWidth,
 
 				// In React Native, RTL replaces `left` with `right` and `right` with `left`.
@@ -86,8 +92,6 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				bottom: 0,
 
 				zIndex: 1,
-				width: windowWidth,
-				height: windowHeight,
 
 				opacity: menuOpenFraction.interpolate({
 					inputRange: [0, 1],

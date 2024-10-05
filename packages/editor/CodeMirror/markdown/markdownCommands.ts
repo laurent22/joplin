@@ -132,9 +132,9 @@ export const toggleList = (listType: ListType): Command => {
 		// RegExps for different list types. The regular expressions MUST
 		// be mutually exclusive.
 		// `(?!\[[ xX]+\])` means "not followed by [x] or [ ]".
-		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\])/;
-		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
-		const numberedRegex = /^\s*\d+\.\s?/;
+		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\]\s)/;
+		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s/;
+		const numberedRegex = /^\s*\d+\.\s/;
 
 		const listRegexes: Record<ListType, RegExp> = {
 			[ListType.OrderedList]: numberedRegex,
@@ -399,6 +399,30 @@ export const toggleHeaderLevel = (level: number): Command => {
 
 		return true;
 	};
+};
+
+export const insertHorizontalRule: Command = (view: EditorView) => {
+	view.dispatch(view.state.changeByRange(selection => {
+		const line = view.state.doc.lineAt(selection.to);
+		const processedLineText = stripBlockquote(line);
+		const inBlockQuote = processedLineText !== line.text;
+		const needsNewLine = processedLineText !== '';
+
+		let prefix = inBlockQuote && needsNewLine ? '> ' : '';
+		if (needsNewLine) {
+			prefix = `\n${prefix}`;
+		}
+		const insert = `${prefix}* * *`;
+
+		return {
+			range: EditorSelection.cursor(line.to + insert.length),
+			changes: {
+				from: line.to,
+				insert,
+			},
+		};
+	}));
+	return true;
 };
 
 // Prepends the given editor's indentUnit to all lines of the current selection

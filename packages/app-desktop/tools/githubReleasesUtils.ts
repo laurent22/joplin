@@ -1,8 +1,9 @@
 import * as fs from 'fs';
+import { createWriteStream } from 'fs';
 import * as path from 'path';
+import { pipeline } from 'stream/promises';
+import axios from 'axios';
 import { GitHubRelease, GitHubReleaseAsset } from '../utils/checkForUpdatesUtils';
-import { downloadFile } from '../../tools/tool-utils';
-
 
 export interface Context {
 	repo: string; // {owner}/{repo}
@@ -52,11 +53,28 @@ export const downloadFileFromGitHub = async (context: Context, asset: GitHubRele
 
 	/* eslint-disable no-console */
 	console.log(`Downloading ${asset.name} from ${asset.url} to ${downloadPath}`);
-	await downloadFile(asset.url, downloadPath, {
-		...defaultApiHeaders(context),
-		'Accept': 'application/octet-stream',
-	});
-	return downloadPath;
+	try {
+		const response = await axios({
+			method: 'get',
+			url: asset.url,
+			responseType: 'stream',
+			headers: {
+				...defaultApiHeaders(context),
+				'Accept': 'application/octet-stream',
+			},
+		});
+
+		if (response.status < 200 || response.status >= 300) {
+			throw new Error(`Failed to download file: Status Code ${response.status}`);
+		}
+
+		await pipeline(response.data, createWriteStream(downloadPath));
+		console.log('Download successful!');
+		/* eslint-enable no-console */
+		return downloadPath;
+	} catch (error) {
+		throw new Error('Download not successful.');
+	}
 };
 
 export const updateReleaseAsset = async (context: Context, assetUrl: string, newName: string) => {

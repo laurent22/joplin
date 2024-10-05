@@ -38,7 +38,6 @@ const incompatiblePluginIds = [
 	'ylc395.noteLinkSystem',
 	'outline',
 	'joplin.plugin.cmoptions',
-	'plugin.calebjohn.MathMode',
 	'com.ckant.joplin-plugin-better-code-blocks',
 	// cSpell:enable
 ];

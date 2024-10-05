@@ -1,5 +1,6 @@
 
 import { Locator, Page } from '@playwright/test';
+import { expect } from '../util/test';
 
 export default class NoteEditorPage {
 	public readonly codeMirrorEditor: Locator;
@@ -31,6 +32,31 @@ export default class NoteEditorPage {
 		return this.containerLocator.getByRole('button', { name: title });
 	}
 
+	public async contentLocator() {
+		const richTextBody = this.getRichTextFrameLocator().locator('body');
+		const markdownEditor = this.codeMirrorEditor;
+
+		// Work around an issue where .or doesn't work with frameLocators.
+		// See https://github.com/microsoft/playwright/issues/27688#issuecomment-1771403495
+		await Promise.race([
+			richTextBody.waitFor({ state: 'visible' }).catch(()=>{}),
+			markdownEditor.waitFor({ state: 'visible' }).catch(()=>{}),
+		]);
+		if (await richTextBody.isVisible()) {
+			return richTextBody;
+		} else {
+			return markdownEditor;
+		}
+	}
+
+	public async expectToHaveText(content: string) {
+		// expect(...).toHaveText can fail in the Rich Text Editor (perhaps due to frame locators).
+		// Using expect.poll refreshes the locator on each attempt, which seems to prevent flakiness.
+		await expect.poll(
+			async () => (await this.contentLocator()).textContent(),
+		).toBe(content);
+	}
+
 	public getNoteViewerFrameLocator() {
 		// The note viewer can change content when the note re-renders. As such,
 		// a new locator needs to be created after re-renders (and this can't be a
@@ -38,7 +64,7 @@ export default class NoteEditorPage {
 		return this.noteViewerContainer.frameLocator(':scope');
 	}
 
-	public getTinyMCEFrameLocator() {
+	public getRichTextFrameLocator() {
 		// We use frameLocator(':scope') to convert the richTextEditor Locator into
 		// a FrameLocator. (:scope selects the locator itself).
 		// https://playwright.dev/docs/api/class-framelocator
@@ -52,5 +78,11 @@ export default class NoteEditorPage {
 	public async waitFor() {
 		await this.noteTitleInput.waitFor();
 		await this.toggleEditorsButton.waitFor();
+	}
+
+	public async goBack() {
+		const backButton = this.toolbarButtonLocator('Back');
+		await expect(backButton).not.toBeDisabled();
+		await backButton.click();
 	}
 }

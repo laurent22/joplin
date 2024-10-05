@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
 import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { waitFor as waitForWithRealTimers } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -23,6 +24,9 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import { LayoutChangeEvent } from 'react-native';
+import shim from '@joplin/lib/shim';
+import getWebViewWindowById from '../../utils/testing/getWebViewWindowById';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 
 interface WrapperProps {
 }
@@ -43,12 +47,32 @@ const getNoteViewerDom = async () => {
 	return await getWebViewDomById('NoteBodyViewer');
 };
 
+const getNoteEditorControl = async () => {
+	const noteEditor = await getWebViewWindowById('NoteEditor');
+	const getEditorControl = () => {
+		if ('cm' in noteEditor.window && noteEditor.window.cm) {
+			return noteEditor.window.cm as CodeMirrorControl;
+		}
+		return null;
+	};
+	await waitFor(async () => {
+		expect(getEditorControl()).toBeTruthy();
+	});
+	return getEditorControl();
+};
+
+const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => {
+	await act(() => waitForWithRealTimers(async () => {
+		const loadedNote = await Note.load(noteId);
+		expect(loadedNote).toMatchObject(note);
+	}));
+};
+
 const openNewNote = async (noteProperties: NoteEntity) => {
 	const note = await Note.save({
 		parent_id: (await Folder.defaultFolder()).id,
 		...noteProperties,
 	});
-
 	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
 
 	store.dispatch({
@@ -61,6 +85,9 @@ const openNewNote = async (noteProperties: NoteEntity) => {
 		id: note.id,
 		folderId: displayParentId,
 	});
+
+	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
+
 	return note.id;
 };
 
@@ -79,10 +106,31 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	await runWithFakeTimers(() => userEvent.press(actionMenuButton));
+	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
+	// warnings).
+	await act(async () => {
+		await runWithFakeTimers(async () => {
+			await userEvent.press(actionMenuButton);
+		});
+
+		// State can update until the menu content is marked as in the process of refocusing (part of the
+		// menu transition).
+		await waitFor(async () => {
+			expect(await screen.findByTestId('menu-content-refocusing')).toBeVisible();
+		});
+	});
 };
 
-describe('Note', () => {
+const openEditor = async () => {
+	const editButton = await screen.findByLabelText('Edit');
+
+	fireEvent.press(editButton);
+	await waitFor(() => {
+		expect(screen.queryByLabelText('Edit')).toBeNull();
+	});
+};
+
+describe('screens/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
@@ -112,19 +160,62 @@ describe('Note', () => {
 
 	it('changing the note title input should update the note\'s title', async () => {
 		const noteId = await openNewNote({ title: 'Change me!', body: 'Unchanged body' });
+
 		render(<WrappedNoteScreen />);
 
 		const titleInput = await screen.findByDisplayValue('Change me!');
-		// We need to use fake timers while using userEvent to avoid warnings:
-		await runWithFakeTimers(async () => {
-			const user = userEvent.setup();
-			await user.clear(titleInput);
-			await user.type(titleInput, 'New title');
-		});
 
-		await waitFor(async () => {
-			expect(await Note.load(noteId)).toMatchObject({ title: 'New title', body: 'Unchanged body' });
+		const user = userEvent.setup();
+		await user.clear(titleInput);
+		await user.type(titleInput, 'New title');
+
+		await waitForNoteToMatch(noteId, { title: 'New title', body: 'Unchanged body' });
+
+		// Use fake timers to allow advancing timers without pausing the test
+		await runWithFakeTimers(async () => {
+			let expectedTitle = 'New title';
+			for (let i = 0; i <= 10; i++) {
+				for (const chunk of ['!', ' test', '!!!', ' Testing']) {
+					jest.advanceTimersByTime(i % 5);
+					await user.type(titleInput, chunk);
+					expectedTitle += chunk;
+
+					// Don't verify after each input event -- this allows the save action queue to fill.
+					if (i % 4 === 0) {
+						await waitForNoteToMatch(noteId, { title: expectedTitle });
+					}
+				}
+				await waitForNoteToMatch(noteId, { title: expectedTitle });
+			}
 		});
+	});
+
+	it('changing the note body in the editor should update the note\'s body', async () => {
+		const defaultBody = 'Change me!';
+		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });
+
+		const noteScreen = render(<WrappedNoteScreen />);
+		await act(async () => await runWithFakeTimers(async () => {
+			await openEditor();
+			const editor = await getNoteEditorControl();
+			editor.select(defaultBody.length, defaultBody.length);
+
+			editor.insertText(' Testing!!!');
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
+
+			editor.insertText(' This is a test.');
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test.' });
+
+			// should also save changes made shortly before unmounting
+			editor.insertText(' Test!');
+
+			// TODO: Decreasing this below 100 causes the test to fail.
+			//       See issue #11125.
+			await jest.advanceTimersByTimeAsync(450);
+
+			noteScreen.unmount();
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
+		}));
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {
@@ -138,6 +229,24 @@ describe('Note', () => {
 		await waitFor(async () => {
 			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
 		});
+	});
+
+	it('pressing "delete permanently" should permanently delete a note', async () => {
+		const noteId = await openNewNote({ title: 'To be deleted', body: '...', deleted_time: Date.now() });
+		render(<WrappedNoteScreen />);
+
+		// Permanently delete note shows a confirmation dialog -- mock it.
+		const deleteId = 0;
+		shim.showMessageBox = jest.fn(async () => deleteId);
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Permanently delete note');
+		fireEvent.press(deleteButton);
+
+		await waitFor(async () => {
+			expect(await Note.load(noteId)).toBeUndefined();
+		});
+		expect(shim.showMessageBox).toHaveBeenCalled();
 	});
 
 	it('delete should be disabled in a read-only note', async () => {
