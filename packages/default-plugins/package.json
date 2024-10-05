@@ -15,7 +15,7 @@
   "devDependencies": {
     "@types/yargs": "17.0.32",
     "ts-node": "10.9.2",
-    "typescript": "5.2.2"
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "@joplin/utils": "~3.1",

@@ -46,7 +46,7 @@
     "node-cron": "3.0.3",
     "node-os-utils": "1.3.7",
     "nodemailer": "6.9.14",
-    "nodemon": "3.1.2",
+    "nodemon": "3.1.7",
     "pg": "8.11.6",
     "pm2": "5.4.1",
     "pretty-bytes": "5.6.0",
@@ -66,8 +66,8 @@
     "@types/bcryptjs": "2.4.6",
     "@types/formidable": "2.0.6",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.8",
-    "@types/jest-expect-message": "1.0.4",
+    "@types/jest": "29.5.12",
+    "@types/jest-expect-message": "1.1.0",
     "@types/jsdom": "21.1.7",
     "@types/koa": "2.15.0",
     "@types/markdown-it": "13.0.8",
@@ -82,6 +82,6 @@
     "jsdom": "24.1.0",
     "node-mocks-http": "1.14.1",
     "source-map-support": "0.5.21",
-    "typescript": "5.2.2"
+    "typescript": "5.4.5"
   }
 }
