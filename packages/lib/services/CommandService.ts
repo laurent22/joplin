@@ -22,6 +22,8 @@ export interface CommandRuntime {
 	// Used for the (optional) toolbar button title
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	mapStateToTitle?(state: any): string;
+	// Used to break ties when commands are registered by different components.
+	getPriority?(state: State): number;
 }
 
 export interface CommandDeclaration {
@@ -55,7 +57,7 @@ export interface CommandDeclaration {
 
 export interface Command {
 	declaration: CommandDeclaration;
-	runtime?: CommandRuntime;
+	runtime?: CommandRuntime|CommandRuntime[];
 }
 
 interface CommandSpec {
@@ -100,6 +102,10 @@ export interface SearchResult {
 	title: string;
 }
 
+export interface RegisteredRuntime {
+	deregister: ()=> void;
+}
+
 export default class CommandService extends BaseService {
 
 	private static instance_: CommandService;
@@ -112,7 +118,7 @@ export default class CommandService extends BaseService {
 
 	private commands_: Commands = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store_: any;
+	private store_: ReduxStore;
 	private devMode_: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private stateToWhenClauseContext_: Function;
@@ -203,14 +209,40 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	public registerRuntime(commandName: string, runtime: CommandRuntime) {
+	public registerRuntime(commandName: string, runtime: CommandRuntime, allowMultiple = false): RegisteredRuntime {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
 		const command = this.commandByName(commandName);
 
 		runtime = { ...runtime };
 		if (!runtime.enabledCondition) runtime.enabledCondition = 'true';
-		command.runtime = runtime;
+		if (!allowMultiple) {
+			command.runtime = runtime;
+		} else {
+			if (!Array.isArray(command.runtime)) {
+				command.runtime = command.runtime ? [command.runtime] : [];
+			}
+			command.runtime.push(runtime);
+		}
+
+		return {
+			// Like .deregisterRuntime, but deletes only the current runtime if there are multiple runtimes
+			// for the same command.
+			deregister: () => {
+				const command = this.commandByName(commandName);
+				if (Array.isArray(command.runtime)) {
+					command.runtime = command.runtime.filter(r => {
+						return r !== runtime;
+					});
+
+					if (command.runtime.length === 0) {
+						delete command.runtime;
+					}
+				} else if (command.runtime) {
+					delete command.runtime;
+				}
+			},
+		};
 	}
 
 	public registerCommands(commands: CommandSpec[]) {
@@ -254,6 +286,22 @@ export default class CommandService extends BaseService {
 		};
 	}
 
+	private getRuntime(command: Command) {
+		if (!Array.isArray(command.runtime)) return command.runtime;
+		if (!command.runtime.length) return null;
+
+		let bestRuntime = null;
+		let bestRuntimeScore = -1;
+		for (const runtime of command.runtime) {
+			const score = runtime.getPriority?.(this.store_.getState()) ?? 0;
+			if (score >= bestRuntimeScore) {
+				bestRuntime = runtime;
+				bestRuntimeScore = score;
+			}
+		}
+		return bestRuntime;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		const command = this.commandByName(commandName);
@@ -261,8 +309,11 @@ export default class CommandService extends BaseService {
 		// times per seconds, so we should only display this message in
 		// debug mode.
 		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, args);
-		if (!command.runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
-		return command.runtime.execute(this.createContext(), ...args);
+
+		const runtime = this.getRuntime(command);
+		if (!runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
+
+		return runtime.execute(this.createContext(), ...args);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -286,11 +337,13 @@ export default class CommandService extends BaseService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public isEnabled(commandName: string, whenClauseContext: any = null): boolean {
 		const command = this.commandByName(commandName);
-		if (!command || !command.runtime) return false;
+		if (!command) return false;
+		const runtime = this.getRuntime(command);
+		if (!runtime) return false;
 
 		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 
-		const exp = new WhenClause(command.runtime.enabledCondition, this.devMode_);
+		const exp = new WhenClause(runtime.enabledCondition, this.devMode_);
 		return exp.evaluate(whenClauseContext);
 	}
 
@@ -300,12 +353,14 @@ export default class CommandService extends BaseService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public title(commandName: string, state: any = null): string {
 		const command = this.commandByName(commandName);
-		if (!command || !command.runtime) return null;
+		if (!command) return null;
+		const runtime = this.getRuntime(command);
+		if (!runtime) return null;
 
 		state = state || this.store_.getState();
 
-		if (command.runtime.mapStateToTitle) {
-			return command.runtime.mapStateToTitle(state);
+		if (runtime.mapStateToTitle) {
+			return runtime.mapStateToTitle(state);
 		} else {
 			return '';
 		}

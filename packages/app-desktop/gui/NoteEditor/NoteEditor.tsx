@@ -225,6 +225,7 @@ function NoteEditor(props: NoteEditorProps) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
+	const containerRef = useRef<HTMLDivElement>(null);
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
 		setShowLocalSearch,
@@ -232,6 +233,7 @@ function NoteEditor(props: NoteEditorProps) {
 		editorRef,
 		titleInputRef,
 		onBodyChange,
+		containerRef,
 	});
 
 	// const onTitleKeydown = useCallback((event:any) => {
@@ -575,7 +577,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const theme = themeStyle(props.themeId);
 
 	return (
-		<div style={styles.root} onDrop={onDrop}>
+		<div style={styles.root} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
