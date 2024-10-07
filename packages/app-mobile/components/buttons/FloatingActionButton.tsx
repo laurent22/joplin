@@ -100,6 +100,9 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 		onStateChange={onMenuToggled}
 		actions={actions}
 		onPress={props.mainButton?.onPress ?? defaultOnPress}
+		// The long press delay is too short by default (and we don't use the long press event). See https://github.com/laurent22/joplin/issues/11183.
+		// Increase to a large value:
+		delayLongPress={10_000}
 		visible={true}
 	/>;
 	const mainMenu = isWeb ? (
