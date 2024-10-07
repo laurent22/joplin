@@ -59,14 +59,14 @@ test.describe('sidebar', () => {
 		await childFolderHeader.dragTo(parentFolderHeader);
 
 		// Verify that it's now a child folder -- expand and collapse the parent
-		const collapseButton = sidebar.container.getByRole('link', { name: 'Collapse Parent folder' });
+		const collapseButton = sidebar.container.getByTitle('Collapse Parent folder');
 		await expect(collapseButton).toBeVisible();
 		await collapseButton.click();
 
 		// Should be collapsed
 		await expect(childFolderHeader).not.toBeAttached();
 
-		const expandButton = sidebar.container.getByRole('link', { name: 'Expand Parent folder' });
+		const expandButton = sidebar.container.getByTitle('Expand Parent folder');
 		await expandButton.click();
 
 		// Should be possible to move back to the root
