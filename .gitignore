@@ -183,6 +183,7 @@ packages/app-desktop/gui/KeymapConfig/styles/index.js
 packages/app-desktop/gui/KeymapConfig/utils/getLabel.js
 packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
+packages/app-desktop/gui/MainScreen/DialogAndCommandHandler.js
 packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
@@ -232,6 +233,9 @@ packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.js
 packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.js
 packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js
 packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js
+packages/app-desktop/gui/MainScreen/types.js
+packages/app-desktop/gui/MainScreen/utils/usePrintToCallback.js
+packages/app-desktop/gui/MainScreen/utils/useWindowControl.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
 packages/app-desktop/gui/MultiNoteActions.js

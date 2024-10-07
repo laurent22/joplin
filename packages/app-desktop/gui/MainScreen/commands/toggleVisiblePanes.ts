@@ -1,4 +1,4 @@
-import { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
+import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
@@ -7,11 +7,10 @@ export const declaration: CommandDeclaration = {
 	iconName: 'icon-layout ',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (): CommandRuntime => {
 	return {
-		execute: async () => {
-			comp.props.dispatch({
+		execute: async (context: CommandContext) => {
+			context.dispatch({
 				type: 'NOTE_VISIBLE_PANES_TOGGLE',
 			});
 		},

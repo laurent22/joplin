@@ -1,0 +1,15 @@
+
+.window-modal-overlay {
+	font-family: var(--joplin-font-family);
+	font-size: var(--joplin-font-size);
+	line-height: 1.6em;
+	color: var(--joplin-color);
+	z-index: 10000;
+	position: 'absolute';
+	top: 0;
+	left: 0;
+	background-color: var(--joplin-background-color);
+	width: calc(100vw - 20px);
+	height: calc(100vw - 20px);
+	padding: 10px;
+}

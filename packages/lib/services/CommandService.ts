@@ -65,7 +65,7 @@ interface CommandSpec {
 	runtime: ()=> CommandRuntime;
 }
 
-interface ComponentCommandSpec<ComponentType> {
+export interface ComponentCommandSpec<ComponentType> {
 	declaration: CommandDeclaration;
 	runtime: (component: ComponentType)=> CommandRuntime;
 }
