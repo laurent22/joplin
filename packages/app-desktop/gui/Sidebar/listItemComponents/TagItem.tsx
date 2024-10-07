@@ -40,6 +40,7 @@ const TagItem = (props: Props) => {
 		<ListItemWrapper
 			containerRef={props.anchorRef}
 			selected={selected}
+			depth={1}
 			className={`list-item-container ${selected ? 'selected' : ''}`}
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}

@@ -59,14 +59,14 @@ const HeaderItem: React.FC<Props> = props => {
 			selected={props.isSelected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
+			expanded={props.item.expanded}
+			onContextMenu={onContextMenu}
+			depth={0}
 			className='sidebar-header-container'
 			{...item.extraProps}
 			onDrop={props.onDrop}
 		>
-			<StyledHeader
-				onContextMenu={onContextMenu}
-				onClick={onClick}
-			>
+			<StyledHeader onClick={onClick}>
 				<StyledHeaderIcon aria-label='' className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>

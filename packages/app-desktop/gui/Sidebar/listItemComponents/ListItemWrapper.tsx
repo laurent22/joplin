@@ -1,3 +1,4 @@
+import { ModelType } from '@joplin/lib/BaseModel';
 import * as React from 'react';
 import { useMemo } from 'react';
 
@@ -9,16 +10,19 @@ interface Props {
 	itemIndex: number;
 	itemCount: number;
 	expanded?: boolean|undefined;
-	depth?: number;
+	depth: number;
 	className?: string;
 	children: (React.ReactNode[])|React.ReactNode;
 
+	onContextMenu?: React.MouseEventHandler;
 	onDrag?: React.DragEventHandler;
 	onDragStart?: React.DragEventHandler;
 	onDragOver?: React.DragEventHandler;
 	onDrop?: React.DragEventHandler;
 	draggable?: boolean;
 	'data-folder-id'?: string;
+	'data-id'?: string;
+	'data-type'?: ModelType;
 }
 
 const ListItemWrapper: React.FC<Props> = props => {
@@ -38,15 +42,20 @@ const ListItemWrapper: React.FC<Props> = props => {
 			// aria-level is 1-based, where depth is zero-based
 			aria-level={props.depth + 1}
 			tabIndex={props.selected ? 0 : -1}
+
+			onContextMenu={props.onContextMenu}
 			onDrag={props.onDrag}
 			onDragStart={props.onDragStart}
 			onDragOver={props.onDragOver}
 			onDrop={props.onDrop}
 			draggable={props.draggable}
+
 			role='treeitem'
 			className={`list-item-wrapper ${props.selected ? '-selected' : ''} ${props.className ?? ''}`}
 			style={style}
 			data-folder-id={props['data-folder-id']}
+			data-id={props['data-id']}
+			data-type={props['data-type']}
 		>
 			{props.children}
 		</div>

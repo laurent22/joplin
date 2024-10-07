@@ -53,6 +53,7 @@ const AllNotesItem: React.FC<Props> = props => {
 			containerRef={props.anchorRef}
 			key="allNotesHeader"
 			selected={props.selected}
+			depth={1}
 			className={'list-item-container list-item-depth-0 all-notes'}
 			itemIndex={props.index}
 			itemCount={props.itemCount}

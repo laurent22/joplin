@@ -419,6 +419,7 @@ const useOnRenderItem = (props: Props) => {
 				<ListItemWrapper
 					key={item.key}
 					containerRef={anchorRef}
+					depth={0}
 					selected={selected}
 					itemIndex={index}
 					itemCount={itemCount}

@@ -69,7 +69,8 @@ function FolderItem(props: FolderItemProps) {
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
-			depth={depth}
+			// Folders are contained within the "Notebooks" section (which has depth 0):
+			depth={depth + 1}
 			selected={selected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
@@ -78,8 +79,11 @@ function FolderItem(props: FolderItemProps) {
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
 			onDrop={onFolderDrop_}
+			onContextMenu={itemContextMenu}
 			draggable={draggable}
 			data-folder-id={folderId}
+			data-id={folderId}
+			data-type={ModelType.Folder}
 		>
 			<ExpandLink aria-label='' hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
@@ -87,10 +91,6 @@ function FolderItem(props: FolderItemProps) {
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				selected={selected}
 				shareId={shareId}
-				data-id={folderId}
-				data-type={ModelType.Folder}
-				onContextMenu={itemContextMenu}
-				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
 				onClick={() => {

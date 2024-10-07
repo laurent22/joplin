@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
-import { FolderListItem, ListItem, ListItemType, SetSelectedIndexCallback } from '../types';
+import { ListItem, ListItemType, SetSelectedIndexCallback } from '../types';
 import { KeyboardEventHandler, useCallback } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
+import toggleHeader from './toggleHeader';
 
 interface Props {
 	dispatch: Dispatch;
@@ -12,15 +13,20 @@ interface Props {
 }
 
 
-const isToggleShortcut = (keyCode: string, selectedItem: FolderListItem, collapsedFolderIds: string[]) => {
+const isToggleShortcut = (keyCode: string, selectedItem: ListItem, collapsedFolderIds: string[]) => {
+	if (selectedItem.kind !== ListItemType.Header && selectedItem.kind !== ListItemType.Folder) {
+		return false;
+	}
+
 	if (!['Space', 'ArrowLeft', 'ArrowRight'].includes(keyCode)) {
 		return false;
 	}
+
 	if (keyCode === 'Space') {
 		return true;
 	}
 
-	const isCollapsed = collapsedFolderIds.includes(selectedItem.folder.id);
+	const isCollapsed = 'expanded' in selectedItem ? !selectedItem.expanded : collapsedFolderIds.includes(selectedItem.folder.id);
 	return (keyCode === 'ArrowRight') === isCollapsed;
 };
 
@@ -31,13 +37,17 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 		const selectedItem = listItems[selectedIndex];
 		let indexChange = 0;
 
-		if (selectedItem?.kind === ListItemType.Folder && isToggleShortcut(event.code, selectedItem, collapsedFolderIds)) {
+		if (selectedItem && isToggleShortcut(event.code, selectedItem, collapsedFolderIds)) {
 			event.preventDefault();
 
-			dispatch({
-				type: 'FOLDER_TOGGLE',
-				id: selectedItem.folder.id,
-			});
+			if (selectedItem.kind === ListItemType.Folder) {
+				dispatch({
+					type: 'FOLDER_TOGGLE',
+					id: selectedItem.folder.id,
+				});
+			} else if (selectedItem.kind === ListItemType.Header) {
+				toggleHeader(selectedItem.id);
+			}
 		} else if ((event.ctrlKey || event.metaKey) && event.code === 'KeyA') { // ctrl+a or cmd+a
 			event.preventDefault();
 		} else if (event.code === 'ArrowUp') {
