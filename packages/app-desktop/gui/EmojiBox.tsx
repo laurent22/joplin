@@ -44,5 +44,5 @@ export default (props: Props) => {
 		return spanFontSize;
 	}, [props.width, props.height, props.emoji, containerReady, containerRef]);
 
-	return <div className="emoji-box" ref={el => { containerRef.current = el; setContainerReady(true); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: props.width, height: props.height, fontSize }}>{props.emoji}</div>;
+	return <div className="emoji-box" role='img' ref={el => { containerRef.current = el; setContainerReady(true); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: props.width, height: props.height, fontSize }}>{props.emoji}</div>;
 };

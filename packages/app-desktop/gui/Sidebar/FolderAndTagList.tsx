@@ -39,12 +39,12 @@ const FolderAndTagList: React.FC<Props> = props => {
 		listItems: listItems,
 	});
 
-	const [selectedListElement, setSelectedListElement] = useState<HTMLElement|null>(null);
+	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
 		...props,
 		selectedIndex,
-		onSelectedElementShown: setSelectedListElement,
 		listItems,
+		containerRef: listContainerRef,
 	});
 
 	const onKeyEventHandler = useOnSidebarKeyDownHandler({
@@ -56,11 +56,12 @@ const FolderAndTagList: React.FC<Props> = props => {
 	});
 
 	const itemListRef = useRef<ItemList<ListItem>>();
-	const { focusSidebar } = useFocusHandler({ itemListRef, selectedListElement, selectedIndex, listItems });
+	const { focusSidebar } = useFocusHandler({ itemListRef, selectedIndex, listItems });
 
 	useSidebarCommandHandler({ focusSidebar });
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
+	listContainerRef.current = itemListContainer;
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 

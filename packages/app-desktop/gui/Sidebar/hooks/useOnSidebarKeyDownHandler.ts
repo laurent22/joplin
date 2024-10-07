@@ -44,7 +44,7 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 			indexChange = -1;
 		} else if (event.code === 'ArrowDown') {
 			indexChange = 1;
-		} else if (event.code === 'ArrowRight') {
+		} else if (event.code === 'Tab') {
 			event.preventDefault();
 
 			if (event.shiftKey) {

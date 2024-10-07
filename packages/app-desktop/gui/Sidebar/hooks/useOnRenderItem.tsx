@@ -30,6 +30,7 @@ import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
 import AllNotesItem from '../listItemComponents/AllNotesItem';
 import ListItemWrapper from '../listItemComponents/ListItemWrapper';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -42,15 +43,21 @@ interface Props {
 	plugins: PluginStates;
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
+	containerRef: React.RefObject<HTMLDivElement>;
 
 	selectedIndex: number;
-	onSelectedElementShown: (element: HTMLElement)=> void;
 	listItems: ListItem[];
 }
 
 type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
+
+const focusListItem = (item: HTMLElement) => {
+	focus('useOnRenderItem', item);
+};
+
+const noFocusListItem = () => {};
 
 const useOnRenderItem = (props: Props) => {
 
@@ -331,11 +338,14 @@ const useOnRenderItem = (props: Props) => {
 	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
 		const selected = props.selectedIndex === index;
+		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
+		const anchorRef = (focusInList && selected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
 			return <TagItem
 				key={item.key}
+				anchorRef={anchorRef}
 				selected={selected}
 				onClick={tagItem_click}
 				onTagDrop={onTagDrop_}
@@ -365,6 +375,7 @@ const useOnRenderItem = (props: Props) => {
 			}
 			return <FolderItem
 				key={item.key}
+				anchorRef={anchorRef}
 				selected={selected}
 				folderId={folder.id}
 				folderTitle={Folder.displayTitle(folder)}
@@ -388,6 +399,7 @@ const useOnRenderItem = (props: Props) => {
 		} else if (item.kind === ListItemType.Header) {
 			return <HeaderItem
 				key={item.id}
+				anchorRef={anchorRef}
 				item={item}
 				isSelected={selected}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
@@ -397,6 +409,7 @@ const useOnRenderItem = (props: Props) => {
 		} else if (item.kind === ListItemType.AllNotes) {
 			return <AllNotesItem
 				key={item.key}
+				anchorRef={anchorRef}
 				selected={selected}
 				index={index}
 				itemCount={itemCount}
@@ -405,6 +418,7 @@ const useOnRenderItem = (props: Props) => {
 			return (
 				<ListItemWrapper
 					key={item.key}
+					containerRef={anchorRef}
 					selected={selected}
 					itemIndex={index}
 					itemCount={itemCount}
@@ -430,7 +444,7 @@ const useOnRenderItem = (props: Props) => {
 		showFolderIcons,
 		tagItem_click,
 		props.selectedIndex,
-		props.onSelectedElementShown,
+		props.containerRef,
 		itemCount,
 	]);
 };

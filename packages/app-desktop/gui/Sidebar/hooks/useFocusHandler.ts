@@ -5,7 +5,6 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	itemListRef: RefObject<ItemList<ListItem>>;
-	selectedListElement: HTMLElement|null;
 	selectedIndex: number;
 	listItems: ListItem[];
 }
@@ -46,16 +45,23 @@ const useScrollToSelectionHandler = (
 };
 
 const useFocusHandler = (props: Props) => {
-	const { itemListRef, selectedListElement, selectedIndex, listItems } = props;
+	const { itemListRef, selectedIndex, listItems } = props;
 
 	useScrollToSelectionHandler(itemListRef, listItems, selectedIndex);
 
 	const focusSidebar = useCallback(() => {
-		if (!selectedListElement || !itemListRef.current.isIndexVisible(selectedIndex)) {
+		if (!itemListRef.current.isIndexVisible(selectedIndex)) {
 			itemListRef.current.makeItemIndexVisible(selectedIndex);
 		}
-		focus('FolderAndTagList/useFocusHandler/focusSidebar', itemListRef.current.container);
-	}, [selectedListElement, selectedIndex, itemListRef]);
+
+		// Select the focusable item, if it's visible
+		const selectableItem = itemListRef.current.container.querySelector('[role="treeitem"][tabindex="0"]');
+		if (selectableItem) {
+			focus('FolderAndTagList/focusSidebarItem', selectableItem);
+		} else {
+			focus('FolderAndTagList/focusSidebarContainer', itemListRef.current.container);
+		}
+	}, [selectedIndex, itemListRef]);
 
 	return { focusSidebar };
 };

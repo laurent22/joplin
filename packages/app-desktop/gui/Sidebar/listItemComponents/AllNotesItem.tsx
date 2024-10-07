@@ -10,7 +10,7 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
-import ListItemWrapper from './ListItemWrapper';
+import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const Menu = bridge().Menu;
@@ -18,6 +18,7 @@ const MenuItem = bridge().MenuItem;
 
 interface Props {
 	dispatch: Dispatch;
+	anchorRef: ListItemRef;
 	selected: boolean;
 	index: number;
 	itemCount: number;
@@ -49,6 +50,7 @@ const AllNotesItem: React.FC<Props> = props => {
 
 	return (
 		<ListItemWrapper
+			containerRef={props.anchorRef}
 			key="allNotesHeader"
 			selected={props.selected}
 			className={'list-item-container list-item-depth-0 all-notes'}

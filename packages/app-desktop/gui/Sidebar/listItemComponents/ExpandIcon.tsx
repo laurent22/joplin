@@ -27,7 +27,7 @@ const ExpandIcon: React.FC<ExpandIconProps> = props => {
 		}
 		return _('Expand %s', props.targetTitle);
 	};
-	return <i className={classNames.join(' ')} aria-label={getLabel()}></i>;
+	return <i className={classNames.join(' ')} title={getLabel()} role='img'></i>;
 };
 
 export default ExpandIcon;

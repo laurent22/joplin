@@ -10,7 +10,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
-import ListItemWrapper from './ListItemWrapper';
+import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -27,6 +27,7 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 };
 
 interface FolderItemProps {
+	anchorRef: ListItemRef;
 	hasChildren: boolean;
 	showFolderIcon: boolean;
 	isExpanded: boolean;
@@ -67,11 +68,12 @@ function FolderItem(props: FolderItemProps) {
 
 	return (
 		<ListItemWrapper
+			containerRef={props.anchorRef}
 			depth={depth}
 			selected={selected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
-			aria-expanded={hasChildren ? props.isExpanded : undefined}
+			expanded={hasChildren ? props.isExpanded : undefined}
 			className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`}
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
@@ -79,7 +81,7 @@ function FolderItem(props: FolderItemProps) {
 			draggable={draggable}
 			data-folder-id={folderId}
 		>
-			<ExpandLink hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
+			<ExpandLink aria-label='' hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				className="list-item"
 				isConflictFolder={folderId === Folder.conflictFolderId()}
@@ -90,7 +92,7 @@ function FolderItem(props: FolderItemProps) {
 				onContextMenu={itemContextMenu}
 				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
-			
+
 				onClick={() => {
 					folderItem_click(folderId);
 				}}

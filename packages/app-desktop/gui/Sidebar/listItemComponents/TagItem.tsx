@@ -7,11 +7,12 @@ import BaseModel from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import Tag from '@joplin/lib/models/Tag';
 import EmptyExpandLink from './EmptyExpandLink';
-import ListItemWrapper from './ListItemWrapper';
+import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 
 export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined };
 
 interface Props {
+	anchorRef: ListItemRef;
 	selected: boolean;
 	tag: TagsWithNoteCountEntity;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
@@ -37,6 +38,7 @@ const TagItem = (props: Props) => {
 
 	return (
 		<ListItemWrapper
+			containerRef={props.anchorRef}
 			selected={selected}
 			className={`list-item-container ${selected ? 'selected' : ''}`}
 			onDrop={props.onTagDrop}
