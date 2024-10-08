@@ -11,6 +11,7 @@
 @use 'gui/UpdateNotification/style.scss' as update-notification;
 @use 'gui/TrashNotification/style.scss' as trash-notification;
 @use 'gui/Sidebar/style.scss' as sidebar-styles;
-@use 'gui/styles/index.scss';
-@use 'gui/NoteEditor/style.scss';
+@use 'gui/NoteEditor/style.scss' as note-editor-styles;
+@use 'services/plugins/styles/index.scss' as plugins-styles;
+@use 'gui/styles/index.scss' as gui-styles;
 @use 'main.scss' as main;
