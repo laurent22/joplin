@@ -1,6 +1,6 @@
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
-import MainScreen from './MainScreen/MainScreen';
+import MainScreen from './MainScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';
 import OneDriveLoginScreen from './OneDriveLoginScreen';
@@ -29,6 +29,7 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
+import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -240,6 +241,7 @@ class RootComponent extends React.Component<Props, any> {
 					<StyleSheetContainer/>
 					<MenuBar/>
 					<GlobalStyle/>
+					<WindowCommandHandler />
 					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 					{this.renderModalMessage(this.modalDialogProps())}
 					{this.renderDialogs()}

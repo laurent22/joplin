@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
 import NewWindowOrIFrame from '../NewWindowOrIFrame';
-import DialogAndCommandHandler from '../MainScreen/DialogAndCommandHandler';
+import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
 
 interface Props {
 	dispatch: Dispatch;
@@ -29,7 +29,7 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	// TODO: Always render the editor in an <iframe> or window. Doing so would allow more easily catching bugs specific
 	// to running the editor in a separate window but would also break custom CSS and tests.
 	return props.newWindow ? <NewWindowOrIFrame newWindow={true} onClose={onClose}>
-		<DialogAndCommandHandler />
+		<WindowCommandHandler />
 		{editor}
 		<StyleSheetContainer />
 	</NewWindowOrIFrame> : editor;

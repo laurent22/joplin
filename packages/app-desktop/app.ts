@@ -35,7 +35,7 @@ const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
-import mainScreenCommands from './gui/MainScreen/commands/index';
+import mainScreenCommands from './gui/WindowCommandHandler/commands/index';
 import noteEditorCommands from './gui/NoteEditor/commands/index';
 import noteListCommands from './gui/NoteList/commands/index';
 import noteListControlsCommands from './gui/NoteListControls/commands/index';

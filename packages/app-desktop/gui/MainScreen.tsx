@@ -1,47 +1,46 @@
 import * as React from 'react';
-import ResizableLayout from '../ResizableLayout/ResizableLayout';
-import findItemByKey from '../ResizableLayout/utils/findItemByKey';
-import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
-import { move } from '../ResizableLayout/utils/movements';
-import { LayoutItem } from '../ResizableLayout/utils/types';
+import ResizableLayout from './ResizableLayout/ResizableLayout';
+import findItemByKey from './ResizableLayout/utils/findItemByKey';
+import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
+import { move } from './ResizableLayout/utils/movements';
+import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import Sidebar from '../Sidebar/Sidebar';
-import UserWebview from '../../services/plugins/UserWebview';
-import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
+import Sidebar from './Sidebar/Sidebar';
+import UserWebview from '../services/plugins/UserWebview';
+import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
-import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app.reducer';
-import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
+import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
+import { AppState } from '../app.reducer';
+import { saveLayout, loadLayout } from './ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import produce from 'immer';
 import shim from '@joplin/lib/shim';
-import bridge from '../../services/bridge';
+import bridge from '../services/bridge';
 import styled from 'styled-components';
 import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
-import validateLayout from '../ResizableLayout/utils/validateLayout';
-import iterateItems from '../ResizableLayout/utils/iterateItems';
-import removeItem from '../ResizableLayout/utils/removeItem';
+import validateLayout from './ResizableLayout/utils/validateLayout';
+import iterateItems from './ResizableLayout/utils/iterateItems';
+import removeItem from './ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
-import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
+import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-import ElectronAppWrapper from '../../ElectronAppWrapper';
+import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
-import restart from '../../services/restart';
+import restart from '../services/restart';
 import { connect } from 'react-redux';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
-import validateColumns from '../NoteListHeader/utils/validateColumns';
-import TrashNotification from '../TrashNotification/TrashNotification';
-import UpdateNotification from '../UpdateNotification/UpdateNotification';
-import NoteEditorWrapper from '../NoteEditor/NoteEditorWrapper';
-import DialogAndCommandHandler from './DialogAndCommandHandler';
+import validateColumns from './NoteListHeader/utils/validateColumns';
+import TrashNotification from './TrashNotification/TrashNotification';
+import UpdateNotification from './UpdateNotification/UpdateNotification';
+import NoteEditorWrapper from './NoteEditor/NoteEditorWrapper';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -751,7 +750,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={style}>
-				<DialogAndCommandHandler />
 				<TrashNotification
 					lastDeletion={this.props.lastDeletion}
 					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}

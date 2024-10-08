@@ -62,7 +62,7 @@ module.exports = {
 	src: '',
 	fn: async function() {
 		await processDirectory(`${rootDir}/packages/app-desktop/commands`);
-		await processDirectory(`${rootDir}/packages/app-desktop/gui/MainScreen/commands`);
+		await processDirectory(`${rootDir}/packages/app-desktop/gui/WindowCommandHandler/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteEditor/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteList/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteListControls/commands`);

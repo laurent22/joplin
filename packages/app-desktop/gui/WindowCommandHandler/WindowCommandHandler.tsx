@@ -48,7 +48,7 @@ const defaultDialogState: DialogState = {
 	promptOptions: null,
 };
 
-const DialogAndCommandHandler: React.FC<Props> = props => {
+const WindowCommandHandler: React.FC<Props> = props => {
 	const [dialogState, setDialogState] = useState<DialogState>(defaultDialogState);
 
 	const lastDialogStateRef = useRef(dialogState);
@@ -238,4 +238,4 @@ export default connect((state: AppState) => ({
 	editorNoteStatuses: state.editorNoteStatuses,
 	pluginsLegacy: state.pluginsLegacy,
 	modalMessage: state.modalOverlayMessage,
-}))(DialogAndCommandHandler);
+}))(WindowCommandHandler);
