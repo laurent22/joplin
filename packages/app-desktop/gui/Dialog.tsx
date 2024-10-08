@@ -10,6 +10,7 @@ interface Props {
 	className?: string;
 	onCancel?: OnCancelListener;
 	contentStyle?: React.CSSProperties;
+	contentFillsScreen?: boolean;
 	children: ReactNode;
 }
 
@@ -37,6 +38,16 @@ const Dialog: React.FC<Props> = props => {
 			dialogElement.showModal();
 		}
 	}, [dialogElement, contentRendered]);
+
+	useEffect(() => {
+		if (!dialogElement) return;
+
+		if (props.contentFillsScreen) {
+			dialogElement.classList.add('-fullscreen');
+		} else {
+			dialogElement.classList.remove('-fullscreen');
+		}
+	}, [props.contentFillsScreen, dialogElement]);
 
 	if (dialogElement && !contentRendered) {
 		setContentRendered(true);

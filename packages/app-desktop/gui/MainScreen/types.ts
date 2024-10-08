@@ -28,8 +28,4 @@ export interface DialogState {
 		value?: string;
 		onClose?: (answer: unknown, buttonType: unknown)=> void;
 	}|null;
-	modalLayer: {
-		visible: boolean;
-		message: string;
-	};
 }

@@ -185,6 +185,7 @@ packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainScreen/DialogAndCommandHandler.js
 packages/app-desktop/gui/MainScreen/MainScreen.js
+packages/app-desktop/gui/MainScreen/ModalMessageOverlay.js
 packages/app-desktop/gui/MainScreen/commands/addProfile.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
 packages/app-desktop/gui/MainScreen/commands/deleteFolder.js

@@ -16,6 +16,7 @@ import useWindowControl, { WindowControl } from './utils/useWindowControl';
 import commands from './commands';
 import CommandService, { CommandRuntime, ComponentCommandSpec } from '@joplin/lib/services/CommandService';
 import { Dispatch } from 'redux';
+import ModalMessageOverlay from './ModalMessageOverlay';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 
@@ -25,6 +26,7 @@ interface Props {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
 	pluginsLegacy: unknown;
+	modalMessage: string|null;
 
 	customCss: string;
 	editorNoteStatuses: Record<string, string>;
@@ -44,7 +46,6 @@ const defaultDialogState: DialogState = {
 		visible: false,
 	},
 	promptOptions: null,
-	modalLayer: { visible: false, message: '' },
 };
 
 const DialogAndCommandHandler: React.FC<Props> = props => {
@@ -174,13 +175,13 @@ const DialogAndCommandHandler: React.FC<Props> = props => {
 	const dialogInfo = PluginManager.instance().pluginDialogToShow(props.pluginsLegacy);
 	const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
-	const { modalLayer, noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions } = dialogState;
+	const { noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions } = dialogState;
 
 
 	return <>
 		<div ref={onReferenceElementLoad}/>
 		{pluginDialog}
-		{modalLayer.visible ? <div className='window-modal-overlay'>{modalLayer.message}</div> : null}
+		{props.modalMessage !== null ? <ModalMessageOverlay message={props.modalMessage}/> : null}
 		{renderPluginDialogs()}
 		{noteContentPropertiesDialogOptions.visible && (
 			<NoteContentPropertiesDialog
@@ -217,8 +218,8 @@ const DialogAndCommandHandler: React.FC<Props> = props => {
 			autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null}
 			defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''}
 			themeId={props.themeId}
-			// TODO: Don't hardcode.
-			style={{ width: 500, height: 500 }}
+			// TODO: Don't hardcode. Instead, use CSS.
+			style={{ width: window.innerWidth, height: window.innerHeight }}
 			onClose={promptOnClose}
 			label={promptOptions ? promptOptions.label : ''}
 			description={promptOptions ? promptOptions.description : null}
@@ -236,4 +237,5 @@ export default connect((state: AppState) => ({
 	customCss: state.customCss,
 	editorNoteStatuses: state.editorNoteStatuses,
 	pluginsLegacy: state.pluginsLegacy,
+	modalMessage: state.modalOverlayMessage,
 }))(DialogAndCommandHandler);

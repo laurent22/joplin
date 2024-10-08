@@ -46,6 +46,7 @@ export interface AppState extends State {
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
+	modalOverlayMessage: string|null;
 
 	// Extra reducer keys go here
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -78,6 +79,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		startupPluginsLoaded: false,
 		dialogs: [],
 		isResettingLayout: false,
+		modalOverlayMessage: null,
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -217,6 +219,14 @@ export default function(state: AppState, action: any) {
 				}
 			}
 
+			break;
+
+		case 'SHOW_MODAL_MESSAGE':
+			newState = { ...newState, modalOverlayMessage: action.message };
+			break;
+
+		case 'HIDE_MODAL_MESSAGE':
+			newState = { ...newState, modalOverlayMessage: null };
 			break;
 
 		case 'NOTE_FILE_WATCHER_ADD':
