@@ -399,17 +399,17 @@ export default class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	//
+	// Note: syncInternal_ does not clean up state post sync.
 	private async syncInternal_(synchronizationId: string, options: SyncOptions) {
-		// This should be checked for in the calling code
 		if (this.state() !== 'idle') {
-			throw new Error('state must be idle when starting a sync');
+			throw new Error('State must be idle when entering syncInternal_');
 		}
 
 		this.state_ = 'in_progress';
 
 		const syncSteps = options.syncSteps;
-		const lastContext: SyncContext = options.context ? options.context : {};
+		const lastContext: SyncContext = options.context;
 
 		// The default is to log errors, but when testing it's convenient to be able to catch and verify errors
 		const throwOnError = options.throwOnError === true;
@@ -1182,6 +1182,8 @@ export default class Synchronizer {
 		this.progressReport_ = { errors: [] };
 		const syncSteps = options.syncSteps ?? ['update_remote', 'delete_remote', 'delta'];
 
+		// The main sync logic is wrapped in a try { ... } finally { ... } to ensure that
+		// the sync cleanup logic runs even if syncInternal_ throws an unhandled Error.
 		try {
 			return await this.syncInternal_(synchronizationId, {
 				context: options.context ?? {},
@@ -1203,14 +1205,12 @@ export default class Synchronizer {
 				withErrors: Synchronizer.reportHasErrors(this.progressReport_),
 			});
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			await checkDisabledSyncItemsNotification((action: any) => this.dispatch(action));
+			await checkDisabledSyncItemsNotification((action) => this.dispatch(action));
 
 			this.onProgress_ = () => {};
 			this.progressReport_ = {};
 
 			this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
-
 		}
 	}
 }
