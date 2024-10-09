@@ -54,6 +54,20 @@ function isCannotSyncError(error: any): boolean {
 	return false;
 }
 
+interface SyncContext {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code
+	delta?: any;
+}
+
+interface SyncOptions {
+	context: SyncContext;
+	throwOnError: boolean;
+	saveContextHandler: ((context: SyncContext)=> void)|null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code
+	onProgress: (progressReport: any)=> void;
+	syncSteps: string[];
+}
+
 export default class Synchronizer {
 
 	public static verboseMode = true;
@@ -386,34 +400,25 @@ export default class Synchronizer {
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = null) {
-		if (!options) options = {};
-
+	private async syncInternal_(synchronizationId: string, options: SyncOptions) {
+		// This should be checked for in the calling code
 		if (this.state() !== 'idle') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
-			error.code = 'alreadyStarted';
-			throw error;
+			throw new Error('state must be idle when starting a sync');
 		}
 
 		this.state_ = 'in_progress';
 
-		this.onProgress_ = options.onProgress ? options.onProgress : function() {};
-		this.progressReport_ = { errors: [] };
-
-		const lastContext = options.context ? options.context : {};
-
-		const syncSteps = options.syncSteps ? options.syncSteps : ['update_remote', 'delete_remote', 'delta'];
+		const syncSteps = options.syncSteps;
+		const lastContext: SyncContext = options.context ? options.context : {};
 
 		// The default is to log errors, but when testing it's convenient to be able to catch and verify errors
 		const throwOnError = options.throwOnError === true;
+		this.onProgress_ = options.onProgress;
 
 		const syncTargetId = this.api().syncTargetId();
 
 		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;
-
-		const synchronizationId = time.unixMs().toString();
 
 		const outputContext = { ...lastContext };
 
@@ -1160,28 +1165,52 @@ export default class Synchronizer {
 			}
 		}
 
-		this.progressReport_.completedTime = time.unixMs();
-
-		this.logSyncOperation('finished', null, null, `Synchronisation finished [${synchronizationId}]`);
-
-		await this.logSyncSummary(this.progressReport_);
-
-		eventManager.emit(EventName.SyncComplete, {
-			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
-		});
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await checkDisabledSyncItemsNotification((action: any) => this.dispatch(action));
-
-		this.onProgress_ = function() {};
-		this.progressReport_ = {};
-
-		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
-
-		this.state_ = 'idle';
-
 		if (errorToThrow) throw errorToThrow;
 
 		return outputContext;
+	}
+
+	public async start(options: Partial<SyncOptions> = {}) {
+		if (this.state() !== 'idle') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			error.code = 'alreadyStarted';
+			throw error;
+		}
+
+		const synchronizationId = time.unixMs().toString();
+		this.progressReport_ = { errors: [] };
+		const syncSteps = options.syncSteps ?? ['update_remote', 'delete_remote', 'delta'];
+
+		try {
+			return await this.syncInternal_(synchronizationId, {
+				context: options.context ?? {},
+				throwOnError: options.throwOnError ?? false,
+				saveContextHandler: options.saveContextHandler ?? null,
+				onProgress: options.onProgress ?? (() => {}),
+				syncSteps,
+			});
+		} finally {
+			this.state_ = 'idle';
+
+			this.progressReport_.completedTime = time.unixMs();
+
+			this.logSyncOperation('finished', null, null, `Synchronisation finished [${synchronizationId}]`);
+
+			await this.logSyncSummary(this.progressReport_);
+
+			eventManager.emit(EventName.SyncComplete, {
+				withErrors: Synchronizer.reportHasErrors(this.progressReport_),
+			});
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			await checkDisabledSyncItemsNotification((action: any) => this.dispatch(action));
+
+			this.onProgress_ = () => {};
+			this.progressReport_ = {};
+
+			this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
+
+		}
 	}
 }
