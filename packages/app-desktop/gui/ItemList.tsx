@@ -163,8 +163,8 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
 		if (this.props.alwaysRenderSelection && isFinite(this.props.selectedIndex)) {
 			const selectionVisible = this.props.selectedIndex >= this.state.topItemIndex && this.props.selectedIndex <= this.state.bottomItemIndex;
-
-			if (!selectionVisible) {
+			const isValidSelection = this.props.selectedIndex >= 0 && this.props.selectedIndex < items.length;
+			if (!selectionVisible && isValidSelection) {
 				renderableBlocks.push({ from: this.props.selectedIndex, to: this.props.selectedIndex });
 			}
 		}
