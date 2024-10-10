@@ -8,9 +8,10 @@ import { Dispatch } from 'redux';
 import NewWindowOrIFrame from '../NewWindowOrIFrame';
 import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
 
+const { StyleSheetManager } = require('styled-components');
+// Note: Transitive dependencies used only by react-select. Remove if react-select is removed.
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-const { StyleSheetManager } = require('styled-components');
 
 interface Props {
 	dispatch: Dispatch;
