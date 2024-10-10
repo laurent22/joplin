@@ -5,6 +5,30 @@ import { ChangeEvent, useCallback, useRef } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
+import styled from 'styled-components';
+
+const StyledRoot = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: ${props => props.theme.editorPaddingLeft}px;
+
+	@media (max-width: 800px) {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+`;
+
+const InfoGroup = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	@media (max-width: 800px) {
+		border-top: 1px solid ${props => props.theme.dividerColor};
+		width: 100%;
+	}
+`;
 
 interface Props {
 	themeId: number;
@@ -106,7 +130,7 @@ export default function NoteTitleBar(props: Props) {
 	}
 
 	return (
-		<div className='note-title-wrapper'>
+		<StyledRoot>
 			<input
 				className="title-input"
 				type="text"
@@ -120,10 +144,10 @@ export default function NoteTitleBar(props: Props) {
 				onBlur={onTitleBlur}
 				value={props.noteTitle}
 			/>
-			<div className='note-title-info-group'>
+			<InfoGroup>
 				{renderTitleBarDate()}
 				{renderNoteToolbar()}
-			</div>
-		</div>
+			</InfoGroup>
+		</StyledRoot>
 	);
 }

@@ -7,11 +7,17 @@ import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from '../../gui/Dialog';
+const styled = require('styled-components').default;
 
 interface Props extends UserWebviewProps {
 	buttons: ButtonSpec[];
 	fitToContent: boolean;
 }
+
+const UserWebViewWrapper = styled.div`
+	display: flex;
+	flex: 1;
+`;
 
 function defaultButtons(): ButtonSpec[] {
 	return [
@@ -78,7 +84,7 @@ export default function UserWebviewDialog(props: Props) {
 
 	return (
 		<Dialog className={`user-webview-dialog ${props.fitToContent ? '-fit' : ''}`}>
-			<div className='user-dialog-wrapper'>
+			<UserWebViewWrapper>
 				<UserWebview
 					ref={webviewRef}
 					html={props.html}
@@ -92,7 +98,7 @@ export default function UserWebviewDialog(props: Props) {
 					onDismiss={onDismiss}
 					onReady={onReady}
 				/>
-			</div>
+			</UserWebViewWrapper>
 			<UserWebviewDialogButtonBar buttons={buttons}/>
 		</Dialog>
 	);

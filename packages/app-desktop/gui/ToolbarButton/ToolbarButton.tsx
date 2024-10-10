@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
+import { StyledIconSpan, StyledIconI } from './styles';
 
 interface Props {
 	readonly themeId: number;
@@ -35,12 +36,8 @@ export default function ToolbarButton(props: Props) {
 	let icon = null;
 	const iconName = getProp(props, 'iconName');
 	if (iconName) {
-		const iconProps: React.HTMLProps<HTMLDivElement> = {
-			'aria-label': '',
-			role: 'img',
-			className: `toolbar-icon ${title ? '-has-title' : ''} ${iconName}`,
-		};
-		icon = isFontAwesomeIcon(iconName) ? <i {...iconProps} /> : <span {...iconProps} />;
+		const IconClass = isFontAwesomeIcon(iconName) ? StyledIconI : StyledIconSpan;
+		icon = <IconClass className={iconName} aria-label='' hasTitle={!!title} role='img'/>;
 	}
 
 	// Keep this for legacy compatibility but for consistency we should use "disabled" prop
