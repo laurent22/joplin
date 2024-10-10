@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import NoteEditor from './NoteEditor';
 import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
@@ -7,6 +7,10 @@ import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
 import NewWindowOrIFrame from '../NewWindowOrIFrame';
 import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
+
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+const { StyleSheetManager } = require('styled-components');
 
 interface Props {
 	dispatch: Dispatch;
@@ -26,13 +30,40 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	const noteId = props.noteId ?? props.defaultNoteId;
 	const editor = <NoteEditor bodyEditor={props.bodyEditor} noteId={noteId} isProvisional={props.provisionalNoteIds.includes(noteId)}/>;
 
-	// TODO: Always render the editor in an <iframe> or window. Doing so would allow more easily catching bugs specific
-	// to running the editor in a separate window but would also break custom CSS and tests.
-	return props.newWindow ? <NewWindowOrIFrame newWindow={true} onClose={onClose}>
-		<WindowCommandHandler />
-		{editor}
+	const windowContent = <NewWindowOrIFrame newWindow={props.newWindow} onClose={onClose}>
+		<LibraryStyleRoot>
+			<WindowCommandHandler />
+			{editor}
+		</LibraryStyleRoot>
 		<StyleSheetContainer />
-	</NewWindowOrIFrame> : editor;
+	</NewWindowOrIFrame>;
+	return props.newWindow ? windowContent : editor;
+};
+
+interface StyleProviderProps {
+	children: React.ReactNode[]|React.ReactNode;
+}
+
+// Sets the root style container for libraries. At present, this is needed by react-select (which uses @emotion/...)
+// and styled-components.
+// See: https://github.com/JedWatson/react-select/issues/3680 and https://github.com/styled-components/styled-components/issues/659
+const LibraryStyleRoot: React.FC<StyleProviderProps> = props => {
+	const [dependencyStyleContainer, setDependencyStyleContainer] = useState<HTMLDivElement|null>(null);
+	const cache = useMemo(() => {
+		return createCache({
+			key: 'new-window-cache',
+			container: dependencyStyleContainer,
+		});
+	}, [dependencyStyleContainer]);
+
+	return <>
+		<div ref={setDependencyStyleContainer}></div>
+		<StyleSheetManager target={dependencyStyleContainer}>
+			<CacheProvider value={cache}>
+				{props.children}
+			</CacheProvider>
+		</StyleSheetManager>
+	</>;
 };
 
 export default connect((state: AppState) => {
