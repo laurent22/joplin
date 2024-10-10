@@ -53,8 +53,10 @@ type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-const focusListItem = (item: HTMLElement) => {
-	focus('useOnRenderItem', item);
+const focusListItem = (item: HTMLElement|null) => {
+	if (item) {
+		focus('useOnRenderItem', item);
+	}
 };
 
 const noFocusListItem = () => {};
