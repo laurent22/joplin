@@ -77,11 +77,14 @@ const FolderAndTagList: React.FC<Props> = props => {
 				items={listItems}
 				itemRenderer={onRenderItem}
 				onKeyDown={onKeyEventHandler}
+				// Allow focusing the item list when there is no selection
 				tabIndex={0}
 				role='tree'
 
-				selectedIndex={selectedIndex}
+				// The selected item is the only item with tabindex=0. Always render it
+				// to allow the item list to be focused.
 				alwaysRenderSelection={true}
+				selectedIndex={selectedIndex}
 
 				itemHeight={30}
 			/>

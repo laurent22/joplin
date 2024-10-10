@@ -55,7 +55,10 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
-		focus('useOnRenderItem', item);
+		// Avoid scrolling to the selected item when refocusing the note list. Such a refocus
+		// can happen if the note list rerenders and the selection is scrolled out of view and
+		// can cause scroll to change unexpectedly.
+		focus('useOnRenderItem', item, { preventScroll: true });
 	}
 };
 
