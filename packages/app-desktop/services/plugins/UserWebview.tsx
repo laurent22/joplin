@@ -141,8 +141,8 @@ function UserWebview(props: Props, ref: any) {
 	);
 
 	const style = useMemo(() => ({
-		'--content-width': contentSize.width,
-		'--content-height': contentSize.height,
+		'--content-width': `${contentSize.width}px`,
+		'--content-height': `${contentSize.height}px`,
 	} as React.CSSProperties), [contentSize.width, contentSize.height]);
 
 	return <iframe
