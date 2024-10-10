@@ -80,6 +80,9 @@ const FolderAndTagList: React.FC<Props> = props => {
 				tabIndex={0}
 				role='tree'
 
+				selectedIndex={selectedIndex}
+				alwaysRenderSelection={true}
+
 				itemHeight={30}
 			/>
 		</div>

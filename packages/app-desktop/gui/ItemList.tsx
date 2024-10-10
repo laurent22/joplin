@@ -10,6 +10,8 @@ interface Props<ItemType> {
 	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
 	className?: string;
 	onItemDrop?: DragEventHandler<HTMLElement>;
+	selectedIndex?: number;
+	alwaysRenderSelection?: boolean;
 
 	id?: string;
 	role?: string;
@@ -156,14 +158,37 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 			return <div key={key} style={{ height: height }}></div>;
 		};
 
-		const itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
+		type RenderRange = { from: number; to: number };
+		const renderableBlocks: RenderRange[] = [];
 
-		for (let i = this.state.topItemIndex; i <= this.state.bottomItemIndex; i++) {
-			const itemComp = this.props.itemRenderer(items[i], i);
-			itemComps.push(itemComp);
+		if (this.props.alwaysRenderSelection && isFinite(this.props.selectedIndex)) {
+			const selectionVisible = this.props.selectedIndex >= this.state.topItemIndex && this.props.selectedIndex <= this.state.bottomItemIndex;
+
+			if (!selectionVisible) {
+				renderableBlocks.push({ from: this.props.selectedIndex, to: this.props.selectedIndex });
+			}
 		}
 
-		itemComps.push(blankItem('bottom', (items.length - this.state.bottomItemIndex - 1) * this.props.itemHeight));
+		renderableBlocks.push({ from: this.state.topItemIndex, to: this.state.bottomItemIndex });
+
+		// Ascending order
+		renderableBlocks.sort(({ from: fromA }, { from: fromB }) => fromA - fromB);
+
+		const itemComps: React.ReactNode[] = [];
+		for (let i = 0; i < renderableBlocks.length; i++) {
+			const currentBlock = renderableBlocks[i];
+			if (i === 0) {
+				itemComps.push(blankItem('top', currentBlock.from * this.props.itemHeight));
+			}
+
+			for (let j = currentBlock.from; j <= currentBlock.to; j++) {
+				const itemComp = this.props.itemRenderer(items[j], j);
+				itemComps.push(itemComp);
+			}
+
+			const nextBlockFrom = i + 1 < renderableBlocks.length ? renderableBlocks[i + 1].from : items.length;
+			itemComps.push(blankItem(`after-${i}`, (nextBlockFrom - currentBlock.to - 1) * this.props.itemHeight));
+		}
 
 		const classes = ['item-list'];
 		if (this.props.className) classes.push(this.props.className);
