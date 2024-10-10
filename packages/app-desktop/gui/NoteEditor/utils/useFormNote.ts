@@ -208,7 +208,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 		}
 		setResourceInfos(resources);
 		setFormNote(newFormNote);
-		logger.debug('form note body change', formNoteRef.current.body, '->', newFormNote.body);
 		formNoteRef.current = newFormNote;
 
 		logger.debug('Resource info and form note set.');
