@@ -15,6 +15,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 
 const logger = Logger.create('useFormNote');
 
@@ -67,6 +68,82 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	return false;
 }
 
+// Should be a fast-to-compute string uniquely determined by properties of [note] that
+// change the editor.
+const computeNoteContentKey = (note: NoteEntity) => {
+	return JSON.stringify({
+		id: note.id,
+		body: note.body,
+		title: note.title,
+		is_todo: note.is_todo,
+		todo_completed: note.todo_completed,
+		markup_language: note.markup_language,
+		encryption_applied: note.encryption_applied,
+	});
+};
+
+type InitNoteStateCallback = (note: NoteEntity, isNew: boolean)=> Promise<FormNote>;
+const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, noteId: string, initNoteState: InitNoteStateCallback) => {
+	// Increasing the value of this counter cancels any ongoing note refreshes and starts
+	// a new refresh.
+	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
+
+	useQueuedAsyncEffect(async (event) => {
+		if (formNoteRefreshScheduled <= 0) return;
+		if (formNoteRef.current.hasChanged) {
+			logger.info('Form note changed between scheduling a refresh and the refresh itself. Cancelling the refresh.');
+			return;
+		}
+
+		logger.info('Sync has finished and note has never been changed - reloading it');
+
+		const loadNote = async () => {
+			const n = await Note.load(noteId);
+			if (event.cancelled) return;
+
+			// Normally should not happened because if the note has been deleted via sync
+			// it would not have been loaded in the editor (due to note selection changing
+			// on delete)
+			if (!n) {
+				logger.warn('Trying to reload note that has been deleted:', noteId);
+				return;
+			}
+
+			await initNoteState(n, false);
+			if (event.cancelled) return;
+			setFormNoteRefreshScheduled(0);
+		};
+
+		await loadNote();
+	}, [formNoteRefreshScheduled, noteId, initNoteState]);
+
+	const refreshFormNote = useCallback(() => {
+		// Increase the counter to cancel any ongoing refresh attempts
+		// and start a new one.
+		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
+	}, [formNoteRefreshScheduled]);
+
+	useEffect(() => {
+		if (!noteId) return ()=>{};
+
+		let cancelled = false;
+
+		type ChangeEventSlice = { itemId: string };
+		const listener = ({ itemId }: ChangeEventSlice) => {
+			if (itemId === noteId && !cancelled) {
+				if (formNoteRef.current.hasChanged) return;
+				refreshFormNote();
+			}
+		};
+		eventManager.on(EventName.ItemChange, listener);
+
+		return () => {
+			eventManager.off(EventName.ItemChange, listener);
+			cancelled = true;
+		};
+	}, [formNoteRef, noteId, refreshFormNote]);
+};
+
 export default function useFormNote(dependencies: HookDependencies) {
 	const { noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
@@ -77,12 +154,9 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 	const formNoteRef = useRef(formNote);
 	formNoteRef.current = formNote;
+	const recentNoteKeys = useRef<Set<string>>(new Set());
 
-	// Increasing the value of this counter cancels any ongoing note refreshes and starts
-	// a new refresh.
-	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
-
-	const initNoteState = useCallback(async (n: NoteEntity, isNewNote: boolean) => {
+	const initNoteState: InitNoteStateCallback = useCallback(async (n, isNewNote) => {
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -110,6 +184,16 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		logger.debug('Initializing note state');
 
+		const newContentKey = computeNoteContentKey(newFormNote);
+		const changeIsFromRecentSave = recentNoteKeys.current.has(newContentKey);
+		recentNoteKeys.current.clear();
+		recentNoteKeys.current.add(newContentKey);
+
+		if (changeIsFromRecentSave) {
+			logger.debug('Cancelled note refresh -- the just-loaded note content was recently saved.');
+			return null;
+		}
+
 		// Note that for performance reason,the call to setResourceInfos should
 		// be first because it loads the resource infos in an async way. If we
 		// swap them, the formNote will be updated first and rendered, then the
@@ -122,9 +206,10 @@ export default function useFormNote(dependencies: HookDependencies) {
 			logger.info('Cancelled note refresh -- form note changed while loading attached resources.');
 			return null;
 		}
-
 		setResourceInfos(resources);
 		setFormNote(newFormNote);
+		logger.debug('form note body change', formNoteRef.current.body, '->', newFormNote.body);
+		formNoteRef.current = newFormNote;
 
 		logger.debug('Resource info and form note set.');
 
@@ -133,63 +218,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return newFormNote;
 	}, []);
 
-	useEffect(() => {
-		if (formNoteRefreshScheduled <= 0) return () => {};
-		if (formNoteRef.current.hasChanged) {
-			logger.info('Form note changed between scheduling a refresh and the refresh itself. Cancelling the refresh.');
-			return () => {};
-		}
-
-		logger.info('Sync has finished and note has never been changed - reloading it');
-
-		let cancelled = false;
-
-		const loadNote = async () => {
-			const n = await Note.load(noteId);
-			if (cancelled) return;
-
-			// Normally should not happened because if the note has been deleted via sync
-			// it would not have been loaded in the editor (due to note selection changing
-			// on delete)
-			if (!n) {
-				logger.warn('Trying to reload note that has been deleted:', noteId);
-				return;
-			}
-
-			await initNoteState(n, false);
-
-			setFormNoteRefreshScheduled(0);
-		};
-
-		void loadNote();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [formNoteRefreshScheduled, noteId, initNoteState]);
-
-	const refreshFormNote = useCallback(() => {
-		// Increase the counter to cancel any ongoing refresh attempts
-		// and start a new one.
-		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
-	}, [formNoteRefreshScheduled]);
-
-	useEffect(() => {
-		if (!noteId) return ()=>{};
-
-		type ChangeEventSlice = { itemId: string };
-		const listener = ({ itemId }: ChangeEventSlice) => {
-			if (itemId === noteId) {
-				if (formNoteRef.current.hasChanged) return;
-				refreshFormNote();
-			}
-		};
-		eventManager.on(EventName.ItemChange, listener);
-
-		return () => {
-			eventManager.off(EventName.ItemChange, listener);
-		};
-	}, [noteId, refreshFormNote]);
+	useRefreshFormNoteOnChange(formNoteRef, noteId, initNoteState);
 
 	useEffect(() => {
 		if (!noteId) {
@@ -262,6 +291,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	useEffect(() => {
 		if (previousNoteId !== formNote.id) {
 			void onResourceChange();
+			recentNoteKeys.current.clear();
 		}
 	}, [previousNoteId, formNote.id, onResourceChange]);
 
@@ -287,14 +317,15 @@ export default function useFormNote(dependencies: HookDependencies) {
 	// changes, with no delay during which async code can run. Even a small delay (e.g. that introduced
 	// by a setState -> useEffect) can lead to a race condition. See https://github.com/laurent22/joplin/issues/8960.
 	const onSetFormNote: OnSetFormNote = useCallback(newFormNote => {
+		let newNote;
 		if (typeof newFormNote === 'function') {
-			const newNote = newFormNote(formNoteRef.current);
-			formNoteRef.current = newNote;
-			setFormNote(newNote);
+			newNote = newFormNote(formNoteRef.current);
 		} else {
-			formNoteRef.current = newFormNote;
-			setFormNote(newFormNote);
+			newNote = newFormNote;
 		}
+		recentNoteKeys.current.add(computeNoteContentKey(newNote));
+		formNoteRef.current = newNote;
+		setFormNote(newNote);
 	}, [setFormNote]);
 
 	return {
