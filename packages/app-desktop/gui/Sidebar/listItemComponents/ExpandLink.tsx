@@ -14,8 +14,7 @@ interface ExpandLinkProps {
 
 const ExpandLink: React.FC<ExpandLinkProps> = props => {
 	return props.hasChildren ? (
-		// The expand/collapse information is conveyed through ARIA.
-		<a className={`sidebar-expand-link ${props.className}`} data-folder-id={props.folderId} onClick={props.onClick} aria-label=''>
+		<a className={`sidebar-expand-link ${props.className}`} data-folder-id={props.folderId} onClick={props.onClick} role='button'>
 			<ExpandIcon isVisible={true} isExpanded={props.isExpanded} targetTitle={props.folderTitle}/>
 		</a>
 	) : (

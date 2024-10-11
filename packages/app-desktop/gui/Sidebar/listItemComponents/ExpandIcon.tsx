@@ -25,10 +25,10 @@ const ExpandIcon: React.FC<ExpandIconProps> = props => {
 		if (props.isExpanded) {
 			return _('Expanded, press space to collapse.');
 		}
-		return _('Collapse, press space to expand.');
+		return _('Collapsed, press space to expand.');
 	};
 	const label = getLabel();
-	return <i className={classNames.join(' ')} title={label} aria-label={label} role='img'></i>;
+	return <i className={classNames.join(' ')} aria-label={label} role='img'></i>;
 };
 
 export default ExpandIcon;
