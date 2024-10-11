@@ -8,17 +8,18 @@ interface ExpandLinkProps {
 	folderTitle: string;
 	hasChildren: boolean;
 	isExpanded: boolean;
+	className: string;
 	onClick: MouseEventHandler<HTMLElement>;
 }
 
 const ExpandLink: React.FC<ExpandLinkProps> = props => {
 	return props.hasChildren ? (
 		// The expand/collapse information is conveyed through ARIA.
-		<a className='sidebar-expand-link' data-folder-id={props.folderId} onClick={props.onClick} aria-label=''>
+		<a className={`sidebar-expand-link ${props.className}`} data-folder-id={props.folderId} onClick={props.onClick} aria-label=''>
 			<ExpandIcon isVisible={true} isExpanded={props.isExpanded} targetTitle={props.folderTitle}/>
 		</a>
 	) : (
-		<EmptyExpandLink/>
+		<EmptyExpandLink className={props.className}/>
 	);
 };
 

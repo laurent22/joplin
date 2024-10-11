@@ -85,7 +85,6 @@ function FolderItem(props: FolderItemProps) {
 			data-id={folderId}
 			data-type={ModelType.Folder}
 		>
-			<ExpandLink aria-label='' hasChildren={hasChildren} folderTitle={folderTitle} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				className="list-item"
 				isConflictFolder={folderId === Folder.conflictFolderId()}
@@ -100,6 +99,14 @@ function FolderItem(props: FolderItemProps) {
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
 				{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
+			<ExpandLink
+				className='toggle'
+				hasChildren={hasChildren}
+				folderTitle={folderTitle}
+				folderId={folderId}
+				onClick={onFolderToggleClick_}
+				isExpanded={isExpanded}
+			/>
 		</ListItemWrapper>
 	);
 }

@@ -59,7 +59,7 @@ const AllNotesItem: React.FC<Props> = props => {
 			itemCount={props.itemCount}
 		>
 			<EmptyExpandLink/>
-			<StyledAllNotesIcon className="icon-notes"/>
+			<StyledAllNotesIcon aria-label='' role='img' className='icon-notes'/>
 			<StyledListItemAnchor
 				className="list-item"
 				isSpecialItem={true}

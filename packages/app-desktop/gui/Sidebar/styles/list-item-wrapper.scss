@@ -9,6 +9,12 @@
 	background: none;
 	transition: 0.1s;
 
+	// Show the toggle button first, even if it's markup is included later for a better screen reader
+	// experience.
+	> .toggle {
+		order: -1;
+	}
+
 	&.-selected {
 		background: var(--joplin-selected-color2);
 	}
