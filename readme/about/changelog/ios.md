@@ -1,6 +1,6 @@
 # Joplin iOS Changelog
 
-## [ios-v13.1.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.1.4) - 2024-10-11T22:17:55Z
+## [ios-v13.1.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.1.5) - 2024-10-11T22:29:29Z
 
 - Improved: Added feature flag to disable sync lock support (#10925) (#10407)
 - Improved: Automatically detect and use operating system theme by default (5beb80b)
