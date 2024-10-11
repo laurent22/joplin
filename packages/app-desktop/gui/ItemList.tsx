@@ -26,13 +26,13 @@ interface State {
 
 class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
-	private scrollTop_: number;
+	private lastScrollTop_: number;
 	private listRef: React.MutableRefObject<HTMLDivElement>;
 
 	public constructor(props: Props<ItemType>) {
 		super(props);
 
-		this.scrollTop_ = 0;
+		this.lastScrollTop_ = 0;
 
 		this.listRef = React.createRef();
 
@@ -49,10 +49,10 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	public updateStateItemIndexes(props: Props<ItemType> = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 
-		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
+		const topItemIndex = Math.floor(this.offsetScroll() / props.itemHeight);
 		const visibleItemCount = this.visibleItemCount(props);
 
-		let bottomItemIndex = topItemIndex + (visibleItemCount - 1);
+		let bottomItemIndex = topItemIndex + visibleItemCount;
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
 
 		this.setState({
@@ -66,7 +66,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public offsetScroll() {
-		return this.scrollTop_;
+		return this.container?.scrollTop ?? this.lastScrollTop_;
 	}
 
 	public get container() {
@@ -82,7 +82,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public onScroll: UIEventHandler<HTMLDivElement> = event => {
-		this.scrollTop_ = (event.target as HTMLElement).scrollTop;
+		this.lastScrollTop_ = (event.target as HTMLElement).scrollTop;
 		this.updateStateItemIndexes();
 	};
 
@@ -107,23 +107,28 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public makeItemIndexVisible(itemIndex: number) {
-		if (this.isIndexVisible(itemIndex)) return;
+		// The first and last visible indices are often partially out of view and can thus be made more visible
+		if (this.isIndexVisible(itemIndex) && itemIndex !== this.lastVisibleIndex && itemIndex !== this.firstVisibleIndex) {
+			return;
+		}
 
-		const top = this.firstVisibleIndex;
-
-		let scrollTop = 0;
-		if (itemIndex < top) {
+		const currentScroll = this.offsetScroll();
+		let scrollTop = currentScroll;
+		if (itemIndex <= this.firstVisibleIndex) {
 			scrollTop = this.props.itemHeight * itemIndex;
-		} else {
-			scrollTop = this.props.itemHeight * itemIndex - (this.visibleItemCount() - 1) * this.props.itemHeight;
+		} else if (itemIndex >= this.lastVisibleIndex - 1) {
+			const scrollBottom = this.props.itemHeight * (itemIndex + 1);
+			scrollTop = scrollBottom - this.props.style.height;
 		}
 
 		if (scrollTop < 0) scrollTop = 0;
 
-		this.scrollTop_ = scrollTop;
-		this.listRef.current.scrollTop = scrollTop;
+		if (currentScroll !== scrollTop) {
+			this.lastScrollTop_ = scrollTop;
+			this.listRef.current.scrollTop = scrollTop;
 
-		this.updateStateItemIndexes();
+			this.updateStateItemIndexes();
+		}
 	}
 
 	// shouldComponentUpdate(nextProps, nextState) {
