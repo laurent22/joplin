@@ -48,6 +48,17 @@ var turndownService = new TurndownService()
 turndownService.use(tables)
 ```
 
+### Typescript
+
+To use this in a typescript project, add this to a `declarations.d.ts` file, as described in https://www.npmjs.com/package/@joplin/turndown, and then add:
+
+```ts
+declare module "@joplin/turndown-plugin-gfm" {
+  export const gfm: any;
+  // Add other named exports if necessary
+}
+```
+
 ## License
 
 turndown-plugin-gfm is copyright © 2017+ Dom Christie and released under the MIT license.
