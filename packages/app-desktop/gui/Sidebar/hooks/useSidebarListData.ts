@@ -4,7 +4,7 @@ import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/data
 import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-import toggleHeader from './toggleHeader';
+import toggleHeader from './utils/toggleHeader';
 
 interface Props {
 	tags: TagsWithNoteCountEntity[];

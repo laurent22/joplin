@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { ListItem, ListItemType, SetSelectedIndexCallback } from '../types';
 import { KeyboardEventHandler, useCallback } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
-import toggleHeader from './toggleHeader';
+import toggleHeader from './utils/toggleHeader';
 
 interface Props {
 	dispatch: Dispatch;
