@@ -19,7 +19,7 @@
 		background: var(--joplin-selected-color2);
 	}
 
-	&:hover {
+	&.-highlight-on-hover:hover {
 		background-color: var(--joplin-background-color-hover2);
 	}
 }

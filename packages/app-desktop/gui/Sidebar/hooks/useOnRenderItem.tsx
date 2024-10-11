@@ -428,6 +428,7 @@ const useOnRenderItem = (props: Props) => {
 					selected={selected}
 					itemIndex={index}
 					itemCount={itemCount}
+					highlightOnHover={false}
 					className='sidebar-spacer-item'
 				>
 					<div aria-label={_('Spacer')}></div>

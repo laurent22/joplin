@@ -42,6 +42,7 @@ const TagItem = (props: Props) => {
 			selected={selected}
 			depth={1}
 			className={`list-item-container ${selected ? 'selected' : ''}`}
+			highlightOnHover={true}
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}
 			aria-selected={selected}

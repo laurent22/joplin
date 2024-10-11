@@ -76,6 +76,7 @@ function FolderItem(props: FolderItemProps) {
 			itemCount={props.itemCount}
 			expanded={hasChildren ? props.isExpanded : undefined}
 			className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`}
+			highlightOnHover={true}
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
 			onDrop={onFolderDrop_}

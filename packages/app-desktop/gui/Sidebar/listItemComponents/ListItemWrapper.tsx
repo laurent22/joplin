@@ -12,6 +12,7 @@ interface Props {
 	expanded?: boolean|undefined;
 	depth: number;
 	className?: string;
+	highlightOnHover: boolean;
 	children: (React.ReactNode[])|React.ReactNode;
 
 	onContextMenu?: React.MouseEventHandler;
@@ -51,7 +52,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			draggable={props.draggable}
 
 			role='treeitem'
-			className={`list-item-wrapper ${props.selected ? '-selected' : ''} ${props.className ?? ''}`}
+			className={`list-item-wrapper ${props.highlightOnHover ? '-highlight-on-hover' : ''} ${props.selected ? '-selected' : ''} ${props.className ?? ''}`}
 			style={style}
 			data-folder-id={props['data-folder-id']}
 			data-id={props['data-id']}
