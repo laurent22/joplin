@@ -100,6 +100,8 @@ function FolderItem(props: FolderItemProps) {
 				{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
 			<ExpandLink
+				// The ExpandLink is included after the title so that the screen reader reads the
+				// title first.
 				className='toggle'
 				hasChildren={hasChildren}
 				folderTitle={folderTitle}
