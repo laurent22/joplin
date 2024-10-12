@@ -54,12 +54,13 @@ const useFocusHandler = (props: Props) => {
 			itemListRef.current.makeItemIndexVisible(selectedIndex);
 		}
 
-		// Select the focusable item, if it's visible
-		const selectableItem = itemListRef.current.container.querySelector('[role="treeitem"][tabindex="0"]');
-		if (selectableItem) {
-			focus('FolderAndTagList/focusSidebarItem', selectableItem);
-		} else {
-			focus('FolderAndTagList/focusSidebarContainer', itemListRef.current.container);
+		const focusableItem = itemListRef.current.container.querySelector('[role="treeitem"][tabindex="0"]');
+		const focusableContainer = itemListRef.current.container.querySelector('[role="tree"][tabindex="0"]');
+		if (focusableItem) {
+			focus('FolderAndTagList/focusSidebarItem', focusableItem);
+		} else if (focusableContainer) {
+			// Handles the case where no items in the tree can be focused.
+			focus('FolderAndTagList/focusSidebarTree', focusableContainer);
 		}
 	}, [selectedIndex, itemListRef]);
 

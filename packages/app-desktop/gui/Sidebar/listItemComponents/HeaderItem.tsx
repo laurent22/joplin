@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { ButtonLevel } from '../../Button/Button';
-import { StyledAddButton, StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
+import { StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
 import { HeaderId, HeaderListItem } from '../types';
-import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -46,13 +44,6 @@ const HeaderItem: React.FC<Props> = props => {
 		}
 	}, [itemId]);
 
-	const addButton = <StyledAddButton
-		iconLabel={_('New')}
-		onClick={item.onPlusButtonClick}
-		iconName='fas fa-plus'
-		level={ButtonLevel.SidebarSecondary}
-	/>;
-
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
@@ -71,7 +62,6 @@ const HeaderItem: React.FC<Props> = props => {
 				<StyledHeaderIcon aria-label='' role='img' className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
-			{ item.onPlusButtonClick && addButton }
 		</ListItemWrapper>
 	);
 };

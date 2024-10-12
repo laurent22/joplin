@@ -3,7 +3,6 @@ import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagLi
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
-import CommandService from '@joplin/lib/services/CommandService';
 import toggleHeader from './utils/toggleHeader';
 
 interface Props {
@@ -13,10 +12,6 @@ interface Props {
 	folderHeaderIsExpanded: boolean;
 	tagHeaderIsExpanded: boolean;
 }
-
-const onAddFolderButtonClick = () => {
-	void CommandService.instance().execute('newFolder');
-};
 
 const useSidebarListData = (props: Props): ListItem[] => {
 	const tagItems = useMemo(() => {
@@ -58,7 +53,6 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			id: HeaderId.FolderHeader,
 			key: HeaderId.FolderHeader,
 			onClick: toggleHeader,
-			onPlusButtonClick: onAddFolderButtonClick,
 			extraProps: {
 				['data-folder-id']: '',
 			},
@@ -78,7 +72,6 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			id: HeaderId.TagHeader,
 			key: HeaderId.TagHeader,
 			onClick: toggleHeader,
-			onPlusButtonClick: null,
 			extraProps: { },
 			supportsFolderDrop: false,
 		};

@@ -14,6 +14,7 @@ import useFocusHandler from './hooks/useFocusHandler';
 import useOnRenderItem from './hooks/useOnRenderItem';
 import { ListItem } from './types';
 import useSidebarCommandHandler from './hooks/useSidebarCommandHandler';
+import useOnRenderListWrapper from './hooks/useOnRenderListWrapper';
 
 interface Props {
 	dispatch: Dispatch;
@@ -65,6 +66,8 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
+	const onRenderContentWrapper = useOnRenderListWrapper({ selectedIndex, onKeyDown: onKeyEventHandler });
+
 	return (
 		<div
 			className='folder-and-tag-list'
@@ -74,12 +77,10 @@ const FolderAndTagList: React.FC<Props> = props => {
 				className='items'
 				ref={itemListRef}
 				style={listStyle}
+
 				items={listItems}
 				itemRenderer={onRenderItem}
-				onKeyDown={onKeyEventHandler}
-				// Allow focusing the item list when there is no selection
-				tabIndex={0}
-				role='tree'
+				renderContentWrapper={onRenderContentWrapper}
 
 				// The selected item is the only item with tabindex=0. Always render it
 				// to allow the item list to be focused.

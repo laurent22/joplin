@@ -396,6 +396,7 @@ packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/index.js
 packages/app-desktop/gui/Sidebar/hooks/useFocusHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.js
+packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.js
 packages/app-desktop/gui/Sidebar/hooks/useOnSidebarKeyDownHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndex.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarCommandHandler.js

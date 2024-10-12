@@ -25,7 +25,6 @@ export interface HeaderListItem extends BaseListItem {
 	iconName: string;
 	id: HeaderId;
 	onClick: ((headerId: HeaderId, event: ReactMouseEvent<HTMLElement>)=> void)|null;
-	onPlusButtonClick: MouseEventHandler<HTMLElement>|null;
 	extraProps: Record<string, string>;
 	supportsFolderDrop: boolean;
 }

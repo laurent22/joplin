@@ -5,18 +5,21 @@ interface Props<ItemType> {
 	style: React.CSSProperties & { height: number };
 	itemHeight: number;
 	items: ItemType[];
+
 	disabled?: boolean;
-	onKeyDown?: KeyboardEventHandler<HTMLElement>;
-	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
 	className?: string;
+
+	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
+	renderContentWrapper?: (listItems: React.ReactNode[])=> React.ReactNode;
+	onKeyDown?: KeyboardEventHandler<HTMLElement>;
 	onItemDrop?: DragEventHandler<HTMLElement>;
+
 	selectedIndex?: number;
 	alwaysRenderSelection?: boolean;
 
 	id?: string;
 	role?: string;
 	'aria-label'?: string;
-	tabIndex?: number;
 }
 
 interface State {
@@ -198,6 +201,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 		const classes = ['item-list'];
 		if (this.props.className) classes.push(this.props.className);
 
+		const wrapContent = this.props.renderContentWrapper ?? ((children) => <>{children}</>);
 		return (
 			<div
 				ref={this.listRef}
@@ -208,13 +212,12 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 				role={this.props.role}
 				aria-label={this.props['aria-label']}
 				aria-setsize={items.length}
-				tabIndex={this.props.tabIndex}
 
 				onScroll={this.onScroll}
 				onKeyDown={this.onKeyDown}
 				onDrop={this.onDrop}
 			>
-				{itemComps}
+				{wrapContent(itemComps)}
 			</div>
 		);
 	}
