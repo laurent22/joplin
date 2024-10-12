@@ -286,6 +286,7 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
+	ResourceFetcher.instance_ = resourceFetchers_[id];
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
