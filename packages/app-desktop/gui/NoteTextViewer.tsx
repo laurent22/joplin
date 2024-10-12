@@ -178,6 +178,9 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	public send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 
+		// Window may already be closed
+		if (!win) return;
+
 		if (channel === 'focus') {
 			win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
 		}

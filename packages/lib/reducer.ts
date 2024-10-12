@@ -7,7 +7,7 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
-import { FolderEntity, NoteEntity } from './services/database/types';
+import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
@@ -70,20 +70,15 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
-export interface State {
+export interface WindowState {
+	windowId: string;
 	notes: NoteEntity[];
 	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
-	folders: FolderEntity[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	tags: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	masterKeys: any[];
-	notLoadedMasterKeys: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	searches: any[];
-	highlightedWords: string[];
+	selectedNoteTags: NoteTagEntity[];
+	searchQuery: string;
+
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
 	selectedFolderId: string;
@@ -91,6 +86,40 @@ export interface State {
 	selectedSearchId: string;
 	selectedItemType: string;
 	selectedSmartFilterId: string;
+
+	backwardHistoryNotes: NoteEntity[];
+	forwardHistoryNotes: NoteEntity[];
+}
+
+const defaultWindowState: WindowState = {
+	windowId: 'default',
+	searchQuery: '',
+	notes: [],
+	notesSource: '',
+	notesParentType: null,
+	selectedNoteIds: [],
+	selectedNoteHash: '',
+	selectedFolderId: null,
+	selectedTagId: null,
+	selectedSearchId: null,
+	selectedSmartFilterId: null,
+	selectedItemType: 'note',
+	selectedNoteTags: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
+};
+
+export interface State extends WindowState {
+	backgroundWindows: Record<string, WindowState>;
+
+	folders: FolderEntity[];
+	tags: NoteTagEntity[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	masterKeys: any[];
+	notLoadedMasterKeys: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	searches: any[];
+	highlightedWords: string[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
 	showSideMenu: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -99,7 +128,6 @@ export interface State {
 	syncStarted: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
-	searchQuery: string;
 	searchResults: ProcessResultsRow[];
 	settings: Partial<SettingsRecord>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -112,13 +140,7 @@ export interface State {
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	selectedNoteTags: any[];
 	resourceFetcher: StateResourceFetcher;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	backwardHistoryNotes: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	forwardHistoryNotes: any[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginsLegacy: any;
 	provisionalNoteIds: string[];
@@ -141,22 +163,14 @@ export interface State {
 }
 
 export const defaultState: State = {
-	notes: [],
-	notesSource: '',
-	notesParentType: null,
+	...defaultWindowState,
+	backgroundWindows: {},
 	folders: [],
 	tags: [],
 	masterKeys: [],
 	notLoadedMasterKeys: [],
 	searches: [],
 	highlightedWords: [],
-	selectedNoteIds: [],
-	selectedNoteHash: '',
-	selectedFolderId: null,
-	selectedTagId: null,
-	selectedSearchId: null,
-	selectedSmartFilterId: null,
-	selectedItemType: 'note',
 	lastSelectedNotesIds: {
 		Folder: {},
 		Tag: {},
@@ -189,13 +203,10 @@ export const defaultState: State = {
 		decryptedItemCount: 0,
 		skippedItemCount: 0,
 	},
-	selectedNoteTags: [],
 	resourceFetcher: {
 		toFetchCount: 0,
 		fetchingCount: 0,
 	},
-	backwardHistoryNotes: [],
-	forwardHistoryNotes: [],
 	// pluginsLegacy is the original plugin system, which eventually was used only for GotoAnything.
 	// GotoAnything should be refactored to part of core and when it's done the pluginsLegacy key can
 	// be removed. It was originally named "plugins", then renamed "pluginsLegacy" so as not to conflict
@@ -290,7 +301,7 @@ class StateUtils {
 		return selectArrayShallow(props, cacheKey);
 	}
 
-	public oneNoteSelected(state: State): boolean {
+	public oneNoteSelected(state: WindowState): boolean {
 		return state.selectedNoteIds.length === 1;
 	}
 
@@ -352,17 +363,45 @@ class StateUtils {
 		return output ? output : [];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedNote(state: State): any {
+	public selectedNote(state: WindowState): NoteEntity {
 		const noteId = this.selectedNoteId(state);
 		return noteId ? BaseModel.byId(state.notes, noteId) : null;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedNoteId(state: State): any {
+	public selectedNoteId(state: WindowState): string|null {
 		return state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
 	}
 
+	public activeWindowId(state: State) {
+		return state.windowId;
+	}
+
+	private allWindowIds(state: State) {
+		return [state.windowId, ...Object.keys(state.backgroundWindows)];
+	}
+
+	public windowStateById(state: State, id: string) {
+		return id === state.windowId ? state : state.backgroundWindows[id];
+	}
+
+	public mainWindowState(state: State) {
+		return this.windowStateById(state, 'default');
+	}
+
+	public secondaryWindowStates(state: State) {
+		const windowIds = [state.windowId, ...Object.keys(state.backgroundWindows)];
+		return windowIds
+			.filter(id => (id !== 'default'))
+			.map(id => this.windowStateById(state, id));
+	}
+
+	public windowIdToSelectedNoteIds(state: State) {
+		const result: Record<string, string[]> = {};
+		for (const id of this.allWindowIds(state)) {
+			result[id] = this.windowStateById(state, id).selectedNoteIds;
+		}
+		return result;
+	}
 }
 
 export const stateUtils: StateUtils = new StateUtils();
@@ -815,6 +854,61 @@ function handleHistory(draft: Draft<State>, action: any) {
 	}
 }
 
+type WindowAction = {
+	type: 'WINDOW_OPEN';
+	windowId: string;
+	folderId: string;
+	noteId: string;
+}|{
+	type: 'WINDOW_FOCUS'|'WINDOW_CLOSE';
+	windowId: string;
+};
+
+const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
+	switch (action.type) {
+
+	case 'WINDOW_OPEN': {
+		if (action.windowId in draft.backgroundWindows) {
+			throw new Error(`Window with id ${action.windowId} is already open!`);
+		}
+
+		draft.backgroundWindows[action.windowId] = {
+			...defaultWindowState,
+			notesParentType: 'Folder',
+			selectedFolderId: action.folderId,
+			windowId: action.windowId,
+			selectedNoteIds: [action.noteId],
+		};
+		break;
+	}
+	case 'WINDOW_FOCUS': {
+		if (draft.windowId !== action.windowId) {
+			const windowId = action.windowId;
+			const previousWindowId = draft.windowId;
+
+			const focusedWindowState = stateUtils.windowStateById(draft, windowId);
+			const previousWindowState = { ...defaultWindowState };
+
+			for (const key of Object.keys(defaultWindowState)) {
+				const stateKey = key as keyof WindowState;
+
+				type AssignableWindowState = Record<keyof WindowState, unknown>;
+				(previousWindowState as AssignableWindowState)[stateKey] = draft[stateKey];
+				(draft as AssignableWindowState)[stateKey] = focusedWindowState[stateKey];
+			}
+
+			delete draft.backgroundWindows[windowId];
+			draft.backgroundWindows[previousWindowId] = previousWindowState;
+		}
+		break;
+	}
+	case 'WINDOW_CLOSE': {
+		delete draft.backgroundWindows[action.windowId];
+		break;
+	}
+	}
+};
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
@@ -828,6 +922,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 	if (action.type !== 'NOTE_DELETE') {
 		handleHistory(draft, action);
 	}
+
+	handleWindowActions(draft, action);
 
 	try {
 		switch (action.type) {
@@ -952,87 +1048,94 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
-				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
+				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note: NoteEntity, folderId: string) {
-					if (note.is_conflict && isViewingConflictFolder) return true;
-					const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
-					return folderId === noteDisplayParentId;
-				};
+					const noteIsInFolder = function(note: NoteEntity, folderId: string) {
+						if (note.is_conflict && isViewingConflictFolder) return true;
+						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+						return folderId === noteDisplayParentId;
+					};
 
-				let movedNotePreviousIndex = 0;
-				let noteFolderHasChanged = false;
-				const newNotes = draft.notes.slice();
-				let found = false;
-				for (let i = 0; i < newNotes.length; i++) {
-					const n = newNotes[i];
-					if (n.id === modNote.id) {
-						const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-						if (n.is_conflict && !modNote.is_conflict) {
-							// Note was a conflict but was moved outside of
-							// the conflict folder
-							newNotes.splice(i, 1);
-							noteFolderHasChanged = true;
-							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
-							// Note is still in the same folder
-							// Merge the properties that have changed (in modNote) into
-							// the object we already have.
-							newNotes[i] = { ...newNotes[i] };
+					let movedNotePreviousIndex = 0;
+					let noteFolderHasChanged = false;
+					const newNotes = windowDraft.notes.slice();
+					let found = false;
+					for (let i = 0; i < newNotes.length; i++) {
+						const n = newNotes[i];
+						if (n.id === modNote.id) {
+							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
+							if (n.is_conflict && !modNote.is_conflict) {
+								// Note was a conflict but was moved outside of
+								// the conflict folder
+								newNotes.splice(i, 1);
+								noteFolderHasChanged = true;
+								movedNotePreviousIndex = i;
+							} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
+								// Note is still in the same folder
+								// Merge the properties that have changed (in modNote) into
+								// the object we already have.
+								newNotes[i] = { ...newNotes[i] };
 
-							for (const n in modNote) {
-								if (!modNote.hasOwnProperty(n)) continue;
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								(newNotes[i] as any)[n] = (modNote as any)[n];
+								for (const n in modNote) {
+									if (!modNote.hasOwnProperty(n)) continue;
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									(newNotes[i] as any)[n] = (modNote as any)[n];
+								}
+							} else {
+								// Note has moved to a different folder
+								newNotes.splice(i, 1);
+								noteFolderHasChanged = true;
+								movedNotePreviousIndex = i;
 							}
-						} else {
-							// Note has moved to a different folder
-							newNotes.splice(i, 1);
-							noteFolderHasChanged = true;
-							movedNotePreviousIndex = i;
+							found = true;
+							break;
 						}
-						found = true;
-						break;
 					}
-				}
 
-				// Note was not found - if the current folder is the same as the note folder,
-				// add it to it.
-				if (!found) {
-					if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
-						newNotes.push(modNote);
+					// Note was not found - if the current folder is the same as the note folder,
+					// add it to it.
+					if (!found) {
+						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
+							newNotes.push(modNote);
+						}
 					}
-				}
 
-				draft.notes = newNotes;
+					windowDraft.notes = newNotes;
 
-				// Ensure that the selected note is still in the current folder.
-				// For example, if the user drags the current note to a different folder,
-				// a new note should be selected.
-				// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
-				if (noteFolderHasChanged && !action.preserveSelection) {
-					let newIndex = movedNotePreviousIndex;
-					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
-					if (!newNotes.length) newIndex = -1;
-					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
-				}
+					// Ensure that the selected note is still in the current folder.
+					// For example, if the user drags the current note to a different folder,
+					// a new note should be selected.
+					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+					if (noteFolderHasChanged && !action.preserveSelection) {
+						let newIndex = movedNotePreviousIndex;
+						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
+						if (!newNotes.length) newIndex = -1;
+						windowDraft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
+					}
 
-				if (!action.ignoreProvisionalFlag) {
-					let newProvisionalNoteIds = draft.provisionalNoteIds;
+					if (!action.ignoreProvisionalFlag) {
+						let newProvisionalNoteIds = draft.provisionalNoteIds;
 
-					if (action.provisional) {
-						newProvisionalNoteIds = newProvisionalNoteIds.slice();
-						newProvisionalNoteIds.push(modNote.id);
-					} else {
 						const idx = newProvisionalNoteIds.indexOf(modNote.id);
-						if (idx >= 0) {
+						if (action.provisional) {
+							if (idx < 0) {
+								newProvisionalNoteIds = newProvisionalNoteIds.slice();
+								newProvisionalNoteIds.push(modNote.id);
+							}
+						} else if (idx >= 0) {
 							newProvisionalNoteIds = newProvisionalNoteIds.slice();
 							newProvisionalNoteIds.splice(idx, 1);
 						}
-					}
 
-					draft.provisionalNoteIds = newProvisionalNoteIds;
+						draft.provisionalNoteIds = newProvisionalNoteIds;
+					}
+				};
+
+				handleWindowState(draft);
+				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
+					handleWindowState(backgroundWindow);
 				}
 			}
 			break;

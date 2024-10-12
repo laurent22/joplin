@@ -9,6 +9,7 @@ interface Props {
 	children: React.ReactNode[]|React.ReactNode;
 	newWindow: boolean;
 	onClose: ()=> void;
+	onFocus?: ()=> void;
 }
 
 const NewWindowOrIFrame: React.FC<Props> = props => {
@@ -18,6 +19,8 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 
 	const onCloseRef = useRef(props.onClose);
 	onCloseRef.current = props.onClose;
+	const onFocusRef = useRef(props.onFocus);
+	onFocusRef.current = props.onFocus;
 
 	useEffect(() => {
 		let openedWindow: Window|null = null;
@@ -86,6 +89,14 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		}
 
 		doc.body.style.height = '100vh';
+
+		const containerWindow = doc.defaultView;
+		containerWindow.addEventListener('focus', () => {
+			onFocusRef.current?.();
+		});
+		if (doc.hasFocus()) {
+			onFocusRef.current?.();
+		}
 
 		setLoaded(true);
 	}, [doc]);

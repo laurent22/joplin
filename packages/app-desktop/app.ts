@@ -661,6 +661,13 @@ class Application extends BaseApplication {
 			Setting.setValue('linking.extraAllowedExtensions', newExtensions);
 		});
 
+		window.addEventListener('focus', () => {
+			this.dispatch({
+				type: 'WINDOW_FOCUS',
+				windowId: 'default',
+			});
+		});
+
 		await this.initPluginService();
 
 		this.setupContextMenu();

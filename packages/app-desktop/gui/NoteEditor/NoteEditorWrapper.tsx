@@ -12,33 +12,51 @@ const { StyleSheetManager } = require('styled-components');
 // Note: Transitive dependencies used only by react-select. Remove if react-select is removed.
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import { stateUtils } from '@joplin/lib/reducer';
 
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 	bodyEditor: string;
 	newWindow: boolean;
-	noteId?: string;
-	defaultNoteId: string;
+	windowId: string;
+	activeWindowId: string;
+
+	secondaryWindowNoteIds: Record<string, string[]>;
 	provisionalNoteIds: string[];
 }
 
 const NoteEditorWrapper: React.FC<Props> = props => {
-	const onClose = useCallback(() => {
-		props.dispatch({ type: 'NOTE_WINDOW_CLOSE', noteId: props.noteId });
-	}, [props.dispatch, props.noteId]);
+	const newWindow = props.newWindow;
+	const onWindowClose = useCallback(() => {
+		if (newWindow) {
+			props.dispatch({ type: 'WINDOW_CLOSE', windowId: props.windowId });
+		}
+	}, [props.dispatch, props.windowId, newWindow]);
 
-	const noteId = props.noteId ?? props.defaultNoteId;
-	const editor = <NoteEditor bodyEditor={props.bodyEditor} noteId={noteId} isProvisional={props.provisionalNoteIds.includes(noteId)}/>;
+	const onWindowFocus = useCallback(() => {
+		props.dispatch({ type: 'WINDOW_FOCUS', windowId: props.windowId });
+	}, [props.dispatch, props.windowId]);
 
-	const windowContent = <NewWindowOrIFrame newWindow={props.newWindow} onClose={onClose}>
+	const noteId = props.secondaryWindowNoteIds[props.windowId][0] ?? '';
+	const editor = noteId ? <NoteEditor
+		bodyEditor={props.bodyEditor}
+		noteId={noteId}
+		isProvisional={props.provisionalNoteIds.includes(noteId)}
+	/> : null;
+
+	const windowContent = <NewWindowOrIFrame
+		newWindow={newWindow}
+		onClose={onWindowClose}
+		onFocus={onWindowFocus}
+	>
 		<LibraryStyleRoot>
 			<WindowCommandHandler />
 			{editor}
 		</LibraryStyleRoot>
 		<StyleSheetContainer />
 	</NewWindowOrIFrame>;
-	return props.newWindow ? windowContent : editor;
+	return newWindow ? windowContent : editor;
 };
 
 interface StyleProviderProps {
@@ -76,12 +94,11 @@ export default connect((state: AppState) => {
 		bodyEditor = 'CodeMirror5';
 	}
 
-	const defaultNoteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-
 	return {
 		themeId: state.settings.theme,
 		provisionalNoteIds: state.provisionalNoteIds,
-		defaultNoteId: defaultNoteId,
+		secondaryWindowNoteIds: stateUtils.windowIdToSelectedNoteIds(state),
+		activeWindowId: stateUtils.activeWindowId(state),
 		bodyEditor,
 	};
 })(NoteEditorWrapper);

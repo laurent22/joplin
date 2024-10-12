@@ -10,7 +10,7 @@ import Sidebar from './Sidebar/Sidebar';
 import UserWebview from '../services/plugins/UserWebview';
 import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
+import { StateLastDeletion, stateUtils, WindowState } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
 import { AppState } from '../app.reducer';
@@ -52,7 +52,7 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	mainLayout: LayoutItem;
-	newWindowNoteIds: string[];
+	secondaryWindowStates: WindowState[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	layoutMoveMode: boolean;
@@ -635,7 +635,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				return <NoteEditorWrapper key={key} newWindow={false} />;
+				return <NoteEditorWrapper
+					windowId='default'
+					key={key}
+					newWindow={false}
+				/>;
 			},
 		};
 
@@ -744,8 +748,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			/>
 		) : null;
 
-		const newWindowNotes = this.props.newWindowNoteIds.map(noteId => {
-			return <NoteEditorWrapper key={`new-window-note-${noteId}`} newWindow={true} noteId={noteId}/>;
+		const newWindowNotes = this.props.secondaryWindowStates.map(windowState => {
+			return <NoteEditorWrapper
+				key={`new-window-note-${windowState.windowId}`}
+				windowId={windowState.windowId}
+				newWindow={true}
+			/>;
 		});
 
 		return (
@@ -801,7 +809,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
-		newWindowNoteIds: state.newWindowNoteIds,
+		secondaryWindowStates: stateUtils.secondaryWindowStates(state),
 	};
 };
 

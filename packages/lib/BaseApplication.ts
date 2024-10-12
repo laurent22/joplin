@@ -511,6 +511,11 @@ export default class BaseApplication {
 			refreshNotesUseSelectedNoteId = true;
 		}
 
+		if (action.type === 'WINDOW_FOCUS') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		// Should refresh the notes when:
 		// - A tag is selected, to show the notes for that tag
 		// - When a tag is updated so that when searching by tags, the search results are updated
