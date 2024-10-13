@@ -1,1 +1,1 @@
-<table><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td><h1>Testing</h1><p>hello</p></td><td>d</td></tr></tbody></table>
+<div class="joplin-table-wrapper"><table><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td><h1>Testing</h1><p>hello</p></td><td>d</td></tr></tbody></table></div>
