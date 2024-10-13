@@ -100,7 +100,6 @@ rules.table = {
         return html
       }
     } else {
-
       if (tableShouldBeSkipped(node)) return content;
 
       // Ensure there are no blank lines
