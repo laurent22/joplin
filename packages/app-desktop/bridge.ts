@@ -452,8 +452,7 @@ export class Bridge {
 		return nativeTheme.shouldUseDarkColors;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public addEventListener(name: string, fn: Function) {
+	public addEventListener(name: string, fn: ()=> void) {
 		if (name === 'nativeThemeUpdated') {
 			nativeTheme.on('updated', fn);
 		} else {
