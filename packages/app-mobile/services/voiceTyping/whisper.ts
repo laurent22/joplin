@@ -2,6 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
+import { dirname, join } from 'path';
 import { NativeModules } from 'react-native';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 
@@ -116,6 +117,9 @@ const whisper: VoiceTypingProvider = {
 		}
 
 		return urlTemplate.replace(/\{task\}/g, 'whisper_tiny.onnx');
+	},
+	getUuidPath: () => {
+		return join(dirname(modelLocalFilepath()), 'uuid');
 	},
 	build: async ({ modelPath, callbacks, locale }) => {
 		const sessionId = await SpeechToTextModule.openSession(modelPath, locale);

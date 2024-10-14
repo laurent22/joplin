@@ -6,6 +6,7 @@ import shim from '@joplin/lib/shim';
 import Vosk from 'react-native-vosk';
 import RNFetchBlob from 'rn-fetch-blob';
 import { VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
+import { join } from 'path';
 
 const logger = Logger.create('voiceTyping/vosk');
 
@@ -175,6 +176,7 @@ const vosk: VoiceTypingProvider = {
 	supported: () => true,
 	modelLocalFilepath: (locale: string) => getModelDir(locale),
 	getDownloadUrl: (locale) => languageModelUrl(locale),
+	getUuidPath: (locale: string) => join(getModelDir(locale), 'uuid'),
 	build: async ({ callbacks, locale, modelPath }) => {
 		const vosk = await getVosk(modelPath, locale);
 		return startRecording(vosk, { onResult: callbacks.onFinalize });

@@ -1,6 +1,5 @@
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import { dirname } from '@joplin/utils/path';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { unzip } from 'react-native-zip-archive';
 const md5 = require('md5');
@@ -32,6 +31,7 @@ export interface VoiceTypingProvider {
 	supported(): boolean;
 	modelLocalFilepath(locale: string): string;
 	getDownloadUrl(locale: string): string;
+	getUuidPath(locale: string): string;
 	build(options: BuildProviderOptions): Promise<VoiceTypingSession>;
 }
 
@@ -61,7 +61,10 @@ export default class VoiceTyping {
 	}
 
 	private getUuidPath() {
-		return `${dirname(this.getModelPath())}/uuid`;
+		return shim.fsDriver().resolveRelativePathWithinDir(
+			shim.fsDriver().getAppDirectoryPath(),
+			this.provider.getUuidPath(this.locale),
+		);
 	}
 
 	public async isDownloaded() {
@@ -102,7 +105,10 @@ export default class VoiceTyping {
 				logger.info(`Moving ${fullUnzipPath} => ${modelPath}`);
 				await shim.fsDriver().move(fullUnzipPath, modelPath);
 
-				await shim.fsDriver().writeFile(this.getUuidPath(), md5(modelUrl));
+				await shim.fsDriver().writeFile(this.getUuidPath(), md5(modelUrl), 'utf8');
+				if (!await this.isDownloaded()) {
+					logger.warn('Model should be downloaded!');
+				}
 			} finally {
 				await shim.fsDriver().remove(unzipDir);
 				await shim.fsDriver().remove(downloadPath);
