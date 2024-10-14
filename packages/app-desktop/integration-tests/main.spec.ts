@@ -136,50 +136,55 @@ test.describe('main', () => {
 		expect(fullSize[0] / resizedSize[0]).toBeCloseTo(fullSize[1] / resizedSize[1]);
 	});
 
-	test('clicking on an external link should try to launch a browser', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
-		await mainScreen.waitFor();
+	for (const target of ['', '_blank']) {
+		test(`clicking on an external link with target=${JSON.stringify(target)} should try to launch a browser`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = new MainScreen(mainWindow);
+			await mainScreen.waitFor();
 
-		// Mock openExternal
-		const nextExternalUrlPromise = electronApp.evaluate(({ shell }) => {
-			return new Promise<string>(resolve => {
-				const openExternal = async (url: string) => {
-					resolve(url);
-				};
-				shell.openExternal = openExternal;
+			// Mock openExternal
+			const nextExternalUrlPromise = electronApp.evaluate(({ shell }) => {
+				return new Promise<string>(resolve => {
+					const openExternal = async (url: string) => {
+						resolve(url);
+					};
+					shell.openExternal = openExternal;
+				});
 			});
+
+			// Create a test link
+			const testLinkTitle = 'This is a test link!';
+			const linkHref = 'https://joplinapp.org/';
+
+			await mainWindow.evaluate(({ testLinkTitle, linkHref, target }) => {
+				const testLink = document.createElement('a');
+				testLink.textContent = testLinkTitle;
+				testLink.onclick = () => {
+					// We need to navigate by setting location.href -- clicking on a link
+					// directly within the main window (i.e. not in a PDF viewer) doesn't
+					// navigate.
+					location.href = linkHref;
+				};
+				testLink.href = '#';
+
+				// Display on top of everything
+				testLink.style.zIndex = '99999';
+				testLink.style.position = 'fixed';
+				testLink.style.top = '0';
+				testLink.style.left = '0';
+				if (target) {
+					testLink.target = target;
+				}
+
+				document.body.appendChild(testLink);
+			}, { testLinkTitle, linkHref, target });
+
+			const testLink = mainWindow.getByText(testLinkTitle);
+			await expect(testLink).toBeVisible();
+			await testLink.click({ noWaitAfter: true });
+
+			expect(await nextExternalUrlPromise).toBe(linkHref);
 		});
-
-		// Create a test link
-		const testLinkTitle = 'This is a test link!';
-		const linkHref = 'https://joplinapp.org/';
-
-		await mainWindow.evaluate(({ testLinkTitle, linkHref }) => {
-			const testLink = document.createElement('a');
-			testLink.textContent = testLinkTitle;
-			testLink.onclick = () => {
-				// We need to navigate by setting location.href -- clicking on a link
-				// directly within the main window (i.e. not in a PDF viewer) doesn't
-				// navigate.
-				location.href = linkHref;
-			};
-			testLink.href = '#';
-
-			// Display on top of everything
-			testLink.style.zIndex = '99999';
-			testLink.style.position = 'fixed';
-			testLink.style.top = '0';
-			testLink.style.left = '0';
-
-			document.body.appendChild(testLink);
-		}, { testLinkTitle, linkHref });
-
-		const testLink = mainWindow.getByText(testLinkTitle);
-		await expect(testLink).toBeVisible();
-		await testLink.click({ noWaitAfter: true });
-
-		expect(await nextExternalUrlPromise).toBe(linkHref);
-	});
+	}
 
 	test('should start in safe mode if profile-dir/force-safe-mode-on-next-start exists', async ({ profileDirectory }) => {
 		await writeFile(join(profileDirectory, 'force-safe-mode-on-next-start'), 'true', 'utf8');
