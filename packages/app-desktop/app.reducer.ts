@@ -38,7 +38,6 @@ export interface AppState extends State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	windowContentSize: any;
 	watchedNoteFiles: string[];
-	newWindowNoteIds: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

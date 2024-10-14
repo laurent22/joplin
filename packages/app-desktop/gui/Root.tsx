@@ -30,6 +30,8 @@ import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
+import NoteEditorWrapper from './NoteEditor/NoteEditorWrapper';
+import { stateUtils, WindowState } from '@joplin/lib/reducer';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -42,6 +44,7 @@ interface Props {
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
+	secondaryWindowStates: WindowState[];
 }
 
 interface ModalDialogProps {
@@ -216,6 +219,16 @@ class RootComponent extends React.Component<Props, any> {
 		return output;
 	}
 
+	private renderSecondaryWindows() {
+		return this.props.secondaryWindowStates.map((windowState: WindowState) => {
+			return <NoteEditorWrapper
+				key={`new-window-note-${windowState.windowId}`}
+				windowId={windowState.windowId}
+				newWindow={true}
+			/>;
+		});
+	}
+
 	public render() {
 		const navigatorStyle = {
 			width: this.props.size.width / this.props.zoomFactor,
@@ -243,6 +256,7 @@ class RootComponent extends React.Component<Props, any> {
 					<GlobalStyle/>
 					<WindowCommandHandler />
 					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
+					{this.renderSecondaryWindows()}
 					{this.renderModalMessage(this.modalDialogProps())}
 					{this.renderDialogs()}
 				</ThemeProvider>
@@ -260,6 +274,7 @@ const mapStateToProps = (state: AppState) => {
 		needApiAuth: state.needApiAuth,
 		dialogs: state.dialogs,
 		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
+		secondaryWindowStates: stateUtils.secondaryWindowStates(state),
 	};
 };
 
