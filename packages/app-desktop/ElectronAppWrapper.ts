@@ -241,6 +241,20 @@ export default class ElectronAppWrapper {
 			}
 		});
 
+		// Override calls to window.open and links with target="_blank": Open most in a browser instead
+		// of Electron:
+		this.win_.webContents.setWindowOpenHandler((event) => {
+			const url = new URL(event.url);
+
+			if (event.url === 'about:blank') {
+				// Script-controlled pages: Used by certain plugins
+				return { action: 'allow' };
+			} else if (['http:', 'https:'].includes(url.protocol)) {
+				void bridge().openExternal(event.url);
+			}
+			return { action: 'deny' };
+		});
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
