@@ -1,0 +1,12 @@
+
+.note-title-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: var(--joplin-editor-padding-left);
+
+	@media (max-width: 800px) {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
