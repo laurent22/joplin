@@ -9,7 +9,6 @@ import whisper from '../../services/voiceTyping/whisper';
 import vosk from '../../services/voiceTyping/vosk';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
 
 interface Props {
 	locale: string;
@@ -143,6 +142,7 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 		return <Text variant='labelSmall'>{preview}</Text>;
 	};
 
+	const headerAndStatus = <Text variant='bodyMedium'>{`${_('Voice typing...')}\n${renderContent()}`}</Text>;
 	return (
 		<Banner
 			visible={true}
@@ -154,10 +154,9 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 				},
 			]}
 		>
-			<View style={{ flexDirection: 'column' }}>
-				<Text variant='bodyMedium'>{`${_('Voice typing...')}\n${renderContent()}`}</Text>
-				{renderPreview()}
-			</View>
+			{headerAndStatus}
+			<Text>{'\n'}</Text>
+			{renderPreview()}
 		</Banner>
 	);
 };
