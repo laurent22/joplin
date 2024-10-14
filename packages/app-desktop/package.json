@@ -164,7 +164,7 @@
     "async-mutex": "0.5.0",
     "codemirror": "5.65.9",
     "color": "3.2.1",
-    "compare-versions": "6.1.0",
+    "compare-versions": "6.1.1",
     "countable": "3.0.1",
     "debounce": "1.2.1",
     "electron-updater": "6.2.1",

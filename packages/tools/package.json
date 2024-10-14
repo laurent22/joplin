@@ -24,7 +24,7 @@
     "@joplin/lib": "~3.1",
     "@joplin/renderer": "~3.1",
     "@joplin/utils": "~3.1",
-    "compare-versions": "6.1.0",
+    "compare-versions": "6.1.1",
     "dayjs": "1.11.11",
     "execa": "4.1.0",
     "fs-extra": "11.2.0",
