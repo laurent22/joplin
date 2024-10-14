@@ -256,7 +256,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
-packages/app-desktop/gui/NoteEditor/NoteEditorWrapper.js
+packages/app-desktop/gui/NoteEditor/NoteEditorContent.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.js
@@ -266,6 +266,7 @@ packages/app-desktop/gui/NoteEditor/commands/index.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
+packages/app-desktop/gui/NoteEditor/commands/toggleEditors.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.test.js
 packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
 packages/app-desktop/gui/NoteEditor/styles/index.js
@@ -273,6 +274,7 @@ packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.test.js
 packages/app-desktop/gui/NoteEditor/utils/clipboardUtils.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenu.js
 packages/app-desktop/gui/NoteEditor/utils/contextMenuUtils.js
+packages/app-desktop/gui/NoteEditor/utils/getWindowCommandPriority.js
 packages/app-desktop/gui/NoteEditor/utils/index.js
 packages/app-desktop/gui/NoteEditor/utils/markupRenderOptions.js
 packages/app-desktop/gui/NoteEditor/utils/resourceHandling.test.js
@@ -440,7 +442,6 @@ packages/app-desktop/gui/WindowCommandHandler/commands/showShareFolderDialog.js
 packages/app-desktop/gui/WindowCommandHandler/commands/showShareNoteDialog.js
 packages/app-desktop/gui/WindowCommandHandler/commands/showSpellCheckerMenu.test.js
 packages/app-desktop/gui/WindowCommandHandler/commands/showSpellCheckerMenu.js
-packages/app-desktop/gui/WindowCommandHandler/commands/toggleEditors.js
 packages/app-desktop/gui/WindowCommandHandler/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/WindowCommandHandler/commands/toggleMenuBar.js
 packages/app-desktop/gui/WindowCommandHandler/commands/toggleNoteList.js

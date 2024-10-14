@@ -1,5 +1,5 @@
+import * as React from 'react';
 import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
-import Setting from '@joplin/lib/models/Setting';
 import { stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
 
@@ -9,7 +9,9 @@ export const declaration: CommandDeclaration = {
 	iconName: 'fa-columns',
 };
 
-export const runtime = (): CommandRuntime => {
+type SetCodeViewCallback = React.Dispatch<React.SetStateAction<boolean>>;
+
+export const runtime = (setCodeView: SetCodeViewCallback): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			// A bit of a hack, but for now don't allow changing code view
@@ -17,7 +19,7 @@ export const runtime = (): CommandRuntime => {
 			// TinyMCE because it won't have time to send its content before
 			// being switch to Ace Editor.
 			if (stateUtils.hasNotesBeingSaved(context.state)) return;
-			Setting.toggle('editor.codeView');
+			setCodeView(codeView => !codeView);
 		},
 		enabledCondition: '!notesAreBeingSaved && oneNoteSelected',
 	};

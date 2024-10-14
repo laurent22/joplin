@@ -40,7 +40,7 @@ import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './NoteListHeader/utils/validateColumns';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
-import NoteEditorWrapper from './NoteEditor/NoteEditorWrapper';
+import NoteEditorWrapper from './NoteEditor/NoteEditor';
 
 const ipcRenderer = require('electron').ipcRenderer;
 

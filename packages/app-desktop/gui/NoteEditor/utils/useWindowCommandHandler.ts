@@ -4,6 +4,7 @@ import editorCommandDeclarations, { enabledCondition } from '../editorCommandDec
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';
+import getWindowCommandPriority from './getWindowCommandPriority';
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
@@ -80,18 +81,7 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, onBodyChange, containerRef } = dependencies;
 
 	useEffect(() => {
-		const getRuntimePriority = () => {
-			if (!containerRef.current) return 0;
-			const containerDocument = containerRef.current.getRootNode() as Document;
-			if (!containerDocument || !containerDocument.hasFocus()) return 0;
-
-			if (containerRef.current.contains(containerDocument.activeElement)) {
-				return 2;
-			}
-
-			// Container document has focus, but not this editor.
-			return 1;
-		};
+		const getRuntimePriority = () => getWindowCommandPriority(containerRef);
 
 		const deregisterCallbacks: RegisteredRuntime[] = [];
 		for (const declaration of editorCommandDeclarations) {

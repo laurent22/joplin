@@ -30,7 +30,7 @@ import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
-import NoteEditorWrapper from './NoteEditor/NoteEditorWrapper';
+import NoteEditorWrapper from './NoteEditor/NoteEditor';
 import { stateUtils, WindowState } from '@joplin/lib/reducer';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 const bridge = require('@electron/remote').require('./bridge').default;

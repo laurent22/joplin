@@ -47,7 +47,9 @@ export default class ToolbarButtonUtils {
 			return this.toolbarButtonCache_[commandName].info;
 		}
 
-		const command = this.service.commandByName(commandName, { runtimeMustBeRegistered: true });
+		// Don't force the command to have a registered runtime at this point -- if the command doesn't
+		// have a runtime, it will be disabled.
+		const command = this.service.commandByName(commandName);
 
 		const output = {
 			name: commandName,
