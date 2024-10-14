@@ -1,0 +1,11 @@
+
+.note-title-info-group {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	@media (max-width: 800px) {
+		border-top: 1px solid var(--joplin-divider-color);
+		width: 100%;
+	}
+}

@@ -1,5 +1,15 @@
 # Joplin Android Changelog
 
+## [android-v3.1.5](https://github.com/laurent22/joplin/releases/tag/android-v3.1.5) (Pre-release) - 2024-10-11T22:11:20Z
+
+- Improved: Downgrade CodeMirror packages to fix various Android regressions (#11170 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Name webview root attribute so that it can be styled (75b8caf)
+- Improved: Updated packages @react-native/babel-preset (v0.74.85), @react-native/metro-config (v0.74.85), glob (v10.4.5), katex (v0.16.11), react-native-document-picker (v9.3.0), react-native-safe-area-context (v4.10.7), stream (v0.0.3)
+- Fixed: Fix automatic resource download mode (#11144) (#11134 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix incorrect list switching behavior (#11137) (#11135 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix new note/edit buttons only work if pressed quickly (#11185) (#11183 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix regression: Search screen not hidden when cached for search result navigation (#11131) (#11130 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.1.4](https://github.com/laurent22/joplin/releases/tag/android-v3.1.4) (Pre-release) - 2024-09-24T14:21:42Z
 
 - Improved: Automatically detect and use operating system theme by default (5beb80b)
