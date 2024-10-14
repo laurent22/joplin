@@ -7,6 +7,7 @@ import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
 import NewWindowOrIFrame from '../NewWindowOrIFrame';
 import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
+import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 
 import * as toggleEditors from './commands/toggleEditors';
 
@@ -39,24 +40,26 @@ interface UseToggleEditorsProps {
 	isSafeMode: boolean;
 	codeView: boolean;
 	legacyMarkdown: boolean;
-	container: RefObject<HTMLDivElement>;
+	containerRef: RefObject<HTMLDivElement>;
 }
 
 const useToggleEditors = (props: UseToggleEditorsProps) => {
 	const [codeView, setCodeView] = useState(props.codeView);
 
-	useEffect(() => {
+	// useLayoutEffect: Run the effect as soon as possible -- renders of child components (toolbar buttons)
+	// expect the command to have a registered runtime.
+	useNowEffect(() => {
 		const runtime = toggleEditors.runtime(setCodeView);
 		const registeredRuntime = CommandService.instance().registerRuntime(
 			toggleEditors.declaration.name,
-			{ ...runtime, getPriority: () => getWindowCommandPriority(props.container) },
+			{ ...runtime, getPriority: () => getWindowCommandPriority(props.containerRef) },
 			true,
 		);
 
 		return () => {
 			registeredRuntime.deregister();
 		};
-	}, [props.container]);
+	}, [props.containerRef]);
 
 	useEffect(() => {
 		Setting.setValue('editor.codeView', codeView);
@@ -79,7 +82,7 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const bodyEditor = useToggleEditors({
-		isSafeMode: props.isSafeMode, codeView: props.codeView, legacyMarkdown: props.legacyMarkdown, container: containerRef,
+		isSafeMode: props.isSafeMode, codeView: props.codeView, legacyMarkdown: props.legacyMarkdown, containerRef: containerRef,
 	});
 	const noteId = props.secondaryWindowNoteIds[props.windowId][0] ?? '';
 	const editor = noteId ? <div className='note-editor-wrapper' ref={containerRef}>
