@@ -37,7 +37,7 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.3.3",
+    "@adobe/css-tools": "4.4.0",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
     "@joplin/fork-htmlparser2": "^4.1.52",
