@@ -310,12 +310,6 @@ function renderToStringWithCache(latex: string, katexOptions: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function renderKatexError(latex: string, error: any): string {
-	console.error('Katex error for:', latex, error);
-	return `<div class="inline-code">${error.message}</div>`;
-}
-
 export default {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: function(markdownIt: any, options: RuleOptions) {
@@ -329,6 +323,10 @@ export default {
 		katexOptions.macros = options.context.userData.__katex.macros;
 		katexOptions.trust = true;
 
+		const renderKatexError = (error: Error): string => {
+			return `<div class="inline-code">${markdownIt.utils.escapeHtml(error.message)}</div>`;
+		};
+
 		// set KaTeX as the renderer for markdown-it-simplemath
 		const katexInline = function(latex: string) {
 			katexOptions.displayMode = false;
@@ -336,7 +334,7 @@ export default {
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				outputHtml = renderKatexError(latex, error);
+				outputHtml = renderKatexError(error);
 			}
 			return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${outputHtml}</span>`;
 		};
@@ -353,7 +351,7 @@ export default {
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				outputHtml = renderKatexError(latex, error);
+				outputHtml = renderKatexError(error);
 			}
 
 			return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;
