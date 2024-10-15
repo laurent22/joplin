@@ -5,7 +5,7 @@ import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
-import NewWindowOrIFrame from '../NewWindowOrIFrame';
+import NewWindowOrIFrame, { WindowMode } from '../NewWindowOrIFrame';
 import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
 import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 
@@ -84,14 +84,12 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	const bodyEditor = useToggleEditors({
 		isSafeMode: props.isSafeMode, codeView: props.codeView, legacyMarkdown: props.legacyMarkdown, containerRef: containerRef,
 	});
-	const noteId = props.secondaryWindowNoteIds[props.windowId][0] ?? '';
-	const editor = noteId ? <div className='note-editor-wrapper' ref={containerRef}>
+	const editor = <div className='note-editor-wrapper' ref={containerRef}>
 		<NoteEditorContent
 			bodyEditor={bodyEditor}
-			noteId={noteId}
-			isProvisional={props.provisionalNoteIds.includes(noteId)}
+			windowId={props.windowId}
 		/>
-	</div> : null;
+	</div>;
 
 	const newWindow = props.newWindow;
 	const onWindowClose = useCallback(() => {
@@ -105,7 +103,8 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	}, [props.dispatch, props.windowId]);
 
 	const windowContent = <NewWindowOrIFrame
-		newWindow={newWindow}
+		mode={newWindow ? WindowMode.NewWindow : WindowMode.Iframe}
+		windowId={props.windowId}
 		onClose={onWindowClose}
 		onFocus={onWindowFocus}
 	>

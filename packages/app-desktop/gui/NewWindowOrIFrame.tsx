@@ -1,13 +1,20 @@
 import shim from '@joplin/lib/shim';
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, createContext } from 'react';
 import { createPortal } from 'react-dom';
+
+export enum WindowMode {
+	Iframe, NewWindow,
+}
+
+export const WindowIdContext = createContext('default');
 
 interface Props {
 	// Note: children will be rendered in a different DOM from this node. Avoid using document.* methods
 	// in child components.
 	children: React.ReactNode[]|React.ReactNode;
-	newWindow: boolean;
+	mode: WindowMode;
+	windowId: string;
 	onClose: ()=> void;
 	onFocus?: ()=> void;
 }
@@ -27,7 +34,7 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		const unmounted = false;
 		if (iframeRef) {
 			setDoc(iframeRef?.contentWindow?.document);
-		} else if (props.newWindow) {
+		} else if (props.mode === WindowMode.NewWindow) {
 			openedWindow = window.open('about:blank');
 			setDoc(openedWindow.document);
 
@@ -62,7 +69,7 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 				onCloseRef.current?.();
 			}
 		};
-	}, [iframeRef, props.newWindow]);
+	}, [iframeRef, props.mode]);
 
 	useEffect(() => {
 		if (!doc) return;
@@ -101,10 +108,11 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		setLoaded(true);
 	}, [doc]);
 	const parentNode = loaded ? doc?.body : null;
+	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM
-	const contentPortal = parentNode && createPortal(props.children, parentNode) as any;
-	if (props.newWindow) {
+	const contentPortal = parentNode && createPortal(wrappedChildren, parentNode) as any;
+	if (props.mode === WindowMode.NewWindow) {
 		return <div style={{ display: 'none' }}>{contentPortal}</div>;
 	} else {
 		return <iframe

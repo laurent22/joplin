@@ -91,8 +91,9 @@ export interface WindowState {
 	forwardHistoryNotes: NoteEntity[];
 }
 
+export const defaultWindowId = 'default';
 const defaultWindowState: WindowState = {
-	windowId: 'default',
+	windowId: defaultWindowId,
 	searchQuery: '',
 	notes: [],
 	notesSource: '',
@@ -380,18 +381,24 @@ class StateUtils {
 		return [state.windowId, ...Object.keys(state.backgroundWindows)];
 	}
 
-	public windowStateById(state: State, id: string) {
+	public allWindowStates<T extends State|Draft<State>>(state: T) {
+		return this.allWindowIds(state).map(id => this.windowStateById(state, id));
+	}
+
+	public windowStateById<T extends State|Draft<State>>(
+		state: T, id: string,
+	): T extends State ? WindowState : Draft<WindowState> {
 		return id === state.windowId ? state : state.backgroundWindows[id];
 	}
 
 	public mainWindowState(state: State) {
-		return this.windowStateById(state, 'default');
+		return this.windowStateById(state, defaultWindowId);
 	}
 
 	public secondaryWindowStates(state: State) {
 		const windowIds = [state.windowId, ...Object.keys(state.backgroundWindows)];
 		return windowIds
-			.filter(id => (id !== 'default'))
+			.filter(id => (id !== defaultWindowId))
 			.map(id => this.windowStateById(state, id));
 	}
 
@@ -446,8 +453,8 @@ function removeAdjacentDuplicates(items: any[]) {
 // When deleting a note, tag or folder
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function handleItemDelete(draft: Draft<State>, action: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const map: any = {
+	type SelectionKey = 'selectedFolderId'|'selectedNoteIds'|'selectedTagId'|'selectedSearchId';
+	const map: Record<string, [keyof State, SelectionKey, boolean]> = {
 		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
 		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
 		TAG_DELETE: ['tags', 'selectedTagId', true],
@@ -458,68 +465,70 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	const selectedItemKey = map[action.type][1];
 	const isSingular = map[action.type][2];
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const selectedItemKeys = isSingular ? [(draft as any)[selectedItemKey]] : (draft as any)[selectedItemKey];
-	const isSelected = selectedItemKeys.includes(action.id);
+	for (const windowDraft of stateUtils.allWindowStates(draft)) {
+		const selectedItemKeys = isSingular ? [windowDraft[selectedItemKey]] : windowDraft[selectedItemKey];
+		const isSelected = selectedItemKeys.includes(action.id);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const items = (draft as any)[listKey];
-	const newItems = [];
-	let newSelectedIndexes: number[] = [];
+		const items = listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey];
+		const newItems = [];
+		let newSelectedIndexes: number[] = [];
 
-	for (let i = 0; i < items.length; i++) {
-		const item = items[i];
-		if (isSelected) {
-			// the selected item is deleted so select the following item
-			// if multiple items are selected then just use the first one
-			if (selectedItemKeys[0] === item.id) {
-				newSelectedIndexes.push(newItems.length);
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			if (isSelected) {
+				// the selected item is deleted so select the following item
+				// if multiple items are selected then just use the first one
+				if (selectedItemKeys[0] === item.id) {
+					newSelectedIndexes.push(newItems.length);
+				}
+			} else {
+				// the selected item/s is not deleted so keep it selected
+				if (selectedItemKeys.includes(item.id)) {
+					newSelectedIndexes.push(newItems.length);
+				}
 			}
+			if (item.id === action.id) {
+				continue;
+			}
+			newItems.push(item);
+		}
+
+		if (newItems.length === 0) {
+			newSelectedIndexes = []; // no remaining items so no selection
+
+		} else if (newSelectedIndexes.length === 0) {
+			newSelectedIndexes.push(0); // no selection exists so select the top
+
 		} else {
-			// the selected item/s is not deleted so keep it selected
-			if (selectedItemKeys.includes(item.id)) {
-				newSelectedIndexes.push(newItems.length);
+			// when the items at end of list are deleted then select the end
+			for (let i = 0; i < newSelectedIndexes.length; i++) {
+				if (newSelectedIndexes[i] >= newItems.length) {
+					newSelectedIndexes = [newItems.length - 1];
+					break;
+				}
 			}
 		}
-		if (item.id === action.id) {
-			continue;
+
+		if (listKey in windowDraft) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			(windowDraft as any)[listKey] = newItems;
 		}
-		newItems.push(item);
-	}
 
-	if (newItems.length === 0) {
-		newSelectedIndexes = []; // no remaining items so no selection
-
-	} else if (newSelectedIndexes.length === 0) {
-		newSelectedIndexes.push(0); // no selection exists so select the top
-
-	} else {
-		// when the items at end of list are deleted then select the end
+		const newIds = [];
 		for (let i = 0; i < newSelectedIndexes.length; i++) {
-			if (newSelectedIndexes[i] >= newItems.length) {
-				newSelectedIndexes = [newItems.length - 1];
-				break;
-			}
+			newIds.push(newItems[newSelectedIndexes[i]].id);
 		}
-	}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		(windowDraft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(draft as any)[listKey] = newItems;
-
-	const newIds = [];
-	for (let i = 0; i < newSelectedIndexes.length; i++) {
-		newIds.push(newItems[newSelectedIndexes[i]].id);
-	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(draft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
-
-	if ((newIds.length === 0) && draft.notesParentType !== 'Folder') {
-		draft.notesParentType = 'Folder';
+		if ((newIds.length === 0) && windowDraft.notesParentType !== 'Folder') {
+			windowDraft.notesParentType = 'Folder';
+		}
 	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function updateOneItem(draft: Draft<State>, action: any, keyName = '') {
+function updateOneItem(draft: Draft<State|WindowState>, action: any, keyName = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
@@ -1219,10 +1228,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'TAG_UPDATE_ONE':
 			{
-				// We only want to update the selected note tags if the tag belongs to the currently open note
-				const selectedNoteHasTag = !!draft.selectedNoteTags.find(tag => tag.id === action.item.id);
 				updateOneItem(draft, action);
-				if (selectedNoteHasTag) updateOneItem(draft, action, 'selectedNoteTags');
+
+				// We only want to update the selected note tags if the tag belongs to the currently open note
+				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
+					const selectedNoteHasTag = !!windowStateDraft.selectedNoteTags.find(tag => tag.id === action.item.id);
+					if (selectedNoteHasTag) {
+						updateOneItem(windowStateDraft, action, 'selectedNoteTags');
+					}
+				}
 			}
 			break;
 
@@ -1230,7 +1244,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				updateOneItem(draft, action, 'tags');
 				const tagRemoved = action.item;
-				draft.selectedNoteTags = removeItemFromArray(draft.selectedNoteTags, 'id', tagRemoved.id);
+				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
+					windowStateDraft.selectedNoteTags = removeItemFromArray(windowStateDraft.selectedNoteTags, 'id', tagRemoved.id);
+				}
 			}
 			break;
 

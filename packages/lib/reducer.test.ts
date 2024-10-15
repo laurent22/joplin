@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } from './testing/test-utils';
-import reducer, { defaultState, MAX_HISTORY, State } from './reducer';
+import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State } from './reducer';
 import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
 import Note from './models/Note';
 import BaseModel from './BaseModel';
@@ -72,6 +72,32 @@ function createExpectedState(items: BaseItemEntity[], keepIndexes: number[], sel
 	}
 	return expected;
 }
+
+const createBackgroundWindow = (state: State, windowId: string, selectedNote: NoteEntity, notes: NoteEntity[]) => {
+	state = reducer(state, {
+		type: 'WINDOW_OPEN',
+		windowId,
+		folderId: selectedNote.parent_id,
+		noteId: selectedNote.id,
+	});
+	const previousWindowId = state.windowId;
+
+	state = reducer(state, {
+		type: 'WINDOW_FOCUS',
+		windowId,
+	});
+	state = reducer(state, {
+		type: 'NOTE_UPDATE_ALL',
+		notes: notes,
+		notesSource: 'test',
+	});
+	state = reducer(state, {
+		type: 'WINDOW_FOCUS',
+		windowId: previousWindowId,
+	});
+
+	return state;
+};
 
 function getIds(items: BaseItemEntity[], indexes: number[]|null = null) {
 	const ids = [];
@@ -252,6 +278,30 @@ describe('reducer', () => {
 
 		const expected = createExpectedState(notes, [1, 3], [1]);
 
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+	}));
+
+	it('should delete notes from background window states', (async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		let state = initTestState(folders, 0, notes, [0, 2, 4]);
+
+		const backgroundWindowId = 'window1';
+		state = createBackgroundWindow(state, backgroundWindowId, notes[2], notes);
+
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[0].id });
+
+		let expected = createExpectedState(notes, [1, 3, 4], [1]);
+		expect(getIds(state.notes)).toEqual(getIds(expected.items));
+		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
+
+		state = reducer(state, {
+			type: 'WINDOW_FOCUS',
+			windowId: backgroundWindowId,
+		});
+		expected = createExpectedState(notes, [1, 3, 4], [3]);
 		expect(getIds(state.notes)).toEqual(getIds(expected.items));
 		expect(state.selectedNoteIds).toEqual(expected.selectedIds);
 	}));
@@ -667,5 +717,46 @@ describe('reducer', () => {
 		// Original note should no longer be present in the sidebar
 		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
 		expect(state.selectedFolderId).toBe(folders[0].id);
+	});
+
+	// window tests
+	test('switching windows should move state from background to the foreground', async () => {
+		const folders = await createNTestFolders(2);
+		const notes1 = await createNTestNotes(3, folders[0]);
+		const noteIds1 = getIds(notes1);
+		const notes2 = await createNTestNotes(4, folders[1]);
+		const noteIds2 = getIds(notes2);
+		let state = initTestState(folders, 0, notes1, [0]);
+
+		const window1Id = 'window1';
+		const window2Id = 'window2';
+		state = createBackgroundWindow(state, window1Id, notes1[2], notes1);
+		state = createBackgroundWindow(state, window2Id, notes2[1], notes2);
+
+		const checkCurrentState = (windowId: string) => {
+			expect(state.windowId).toBe(windowId);
+			expect(getIds(state.notes)).toEqual(windowId === window2Id ? noteIds2 : noteIds1);
+			expect(state.selectedFolderId).toBe(windowId === window2Id ? folders[1].id : folders[0].id);
+
+			let expectedSelectedNoteIds = [notes1[0].id];
+			if (windowId === window2Id) {
+				expectedSelectedNoteIds = [notes2[1].id];
+			} else if (windowId === window1Id) {
+				expectedSelectedNoteIds = [notes1[2].id];
+			}
+			expect(state.selectedNoteIds).toEqual(expectedSelectedNoteIds);
+		};
+
+		const navigationPattern = [
+			window1Id, window2Id, defaultWindowId, defaultWindowId, window2Id, window1Id, defaultWindowId,
+		];
+
+		for (const windowId of navigationPattern) {
+			state = reducer(state, {
+				type: 'WINDOW_FOCUS',
+				windowId,
+			});
+			checkCurrentState(windowId);
+		}
 	});
 });
