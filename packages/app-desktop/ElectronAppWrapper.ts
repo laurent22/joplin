@@ -5,7 +5,7 @@ import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
-import { BrowserWindow, Tray, screen } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen } from 'electron';
 import bridge from './bridge';
 const url = require('url');
 const path = require('path');
@@ -232,14 +232,35 @@ export default class ElectronAppWrapper {
 			}, 3000);
 		}
 
-		// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
-		this.win_.webContents.on('will-frame-navigate', event => {
-			// If the link changes the URL of the browser window,
-			if (event.isMainFrame) {
-				event.preventDefault();
-				void bridge().openExternal(event.url);
-			}
-		});
+		const addWindowEventHandlers = (webContents: WebContents) => {
+			// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
+			webContents.on('will-frame-navigate', event => {
+				// If the link changes the URL of the browser window,
+				if (event.isMainFrame) {
+					event.preventDefault();
+					void bridge().openExternal(event.url);
+				}
+			});
+
+			// Override calls to window.open and links with target="_blank": Open most in a browser instead
+			// of Electron:
+			webContents.setWindowOpenHandler((event) => {
+				if (event.url === 'about:blank') {
+					// Script-controlled pages: Used for opening notes in new windows
+					return {
+						action: 'allow',
+					};
+				} else if (event.url.match(/^https?:\/\//)) {
+					void bridge().openExternal(event.url);
+				}
+				return { action: 'deny' };
+			});
+
+			webContents.on('did-create-window', (event) => {
+				addWindowEventHandlers(event.webContents);
+			});
+		};
+		addWindowEventHandlers(this.win_.webContents);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
