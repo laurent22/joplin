@@ -154,7 +154,7 @@ a {
 // sufficient because it matches any focused input (https://stackoverflow.com/a/66109577).
 //
 // See https://github.com/laurent22/joplin/issues/9982.
-input:not([type=button]):not([type=checkbox]), select {
+input:not([type=button]):not([type=checkbox]) {
 	&:focus-visible {
 		outline: none;
 	}

@@ -5,11 +5,17 @@ interface Props<ItemType> {
 	style: React.CSSProperties & { height: number };
 	itemHeight: number;
 	items: ItemType[];
+
 	disabled?: boolean;
-	onKeyDown?: KeyboardEventHandler<HTMLElement>;
-	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
 	className?: string;
+
+	itemRenderer: (item: ItemType, index: number)=> React.JSX.Element;
+	renderContentWrapper?: (listItems: React.ReactNode[])=> React.ReactNode;
+	onKeyDown?: KeyboardEventHandler<HTMLElement>;
 	onItemDrop?: DragEventHandler<HTMLElement>;
+
+	selectedIndex?: number;
+	alwaysRenderSelection?: boolean;
 
 	id?: string;
 	role?: string;
@@ -23,13 +29,13 @@ interface State {
 
 class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 
-	private scrollTop_: number;
+	private lastScrollTop_: number;
 	private listRef: React.MutableRefObject<HTMLDivElement>;
 
 	public constructor(props: Props<ItemType>) {
 		super(props);
 
-		this.scrollTop_ = 0;
+		this.lastScrollTop_ = 0;
 
 		this.listRef = React.createRef();
 
@@ -46,10 +52,10 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	public updateStateItemIndexes(props: Props<ItemType> = undefined) {
 		if (typeof props === 'undefined') props = this.props;
 
-		const topItemIndex = Math.floor(this.scrollTop_ / props.itemHeight);
+		const topItemIndex = Math.floor(this.offsetScroll() / props.itemHeight);
 		const visibleItemCount = this.visibleItemCount(props);
 
-		let bottomItemIndex = topItemIndex + (visibleItemCount - 1);
+		let bottomItemIndex = topItemIndex + visibleItemCount;
 		if (bottomItemIndex >= props.items.length) bottomItemIndex = props.items.length - 1;
 
 		this.setState({
@@ -63,7 +69,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public offsetScroll() {
-		return this.scrollTop_;
+		return this.container?.scrollTop ?? this.lastScrollTop_;
 	}
 
 	public get container() {
@@ -79,7 +85,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public onScroll: UIEventHandler<HTMLDivElement> = event => {
-		this.scrollTop_ = (event.target as HTMLElement).scrollTop;
+		this.lastScrollTop_ = (event.target as HTMLElement).scrollTop;
 		this.updateStateItemIndexes();
 	};
 
@@ -104,23 +110,28 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 	}
 
 	public makeItemIndexVisible(itemIndex: number) {
-		if (this.isIndexVisible(itemIndex)) return;
+		// The first and last visible indices are often partially out of view and can thus be made more visible
+		if (this.isIndexVisible(itemIndex) && itemIndex !== this.lastVisibleIndex && itemIndex !== this.firstVisibleIndex) {
+			return;
+		}
 
-		const top = this.firstVisibleIndex;
-
-		let scrollTop = 0;
-		if (itemIndex < top) {
+		const currentScroll = this.offsetScroll();
+		let scrollTop = currentScroll;
+		if (itemIndex <= this.firstVisibleIndex) {
 			scrollTop = this.props.itemHeight * itemIndex;
-		} else {
-			scrollTop = this.props.itemHeight * itemIndex - (this.visibleItemCount() - 1) * this.props.itemHeight;
+		} else if (itemIndex >= this.lastVisibleIndex - 1) {
+			const scrollBottom = this.props.itemHeight * (itemIndex + 1);
+			scrollTop = scrollBottom - this.props.style.height;
 		}
 
 		if (scrollTop < 0) scrollTop = 0;
 
-		this.scrollTop_ = scrollTop;
-		this.listRef.current.scrollTop = scrollTop;
+		if (currentScroll !== scrollTop) {
+			this.lastScrollTop_ = scrollTop;
+			this.listRef.current.scrollTop = scrollTop;
 
-		this.updateStateItemIndexes();
+			this.updateStateItemIndexes();
+		}
 	}
 
 	// shouldComponentUpdate(nextProps, nextState) {
@@ -155,18 +166,42 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 			return <div key={key} style={{ height: height }}></div>;
 		};
 
-		const itemComps = [blankItem('top', this.state.topItemIndex * this.props.itemHeight)];
+		type RenderRange = { from: number; to: number };
+		const renderableBlocks: RenderRange[] = [];
 
-		for (let i = this.state.topItemIndex; i <= this.state.bottomItemIndex; i++) {
-			const itemComp = this.props.itemRenderer(items[i], i);
-			itemComps.push(itemComp);
+		if (this.props.alwaysRenderSelection && isFinite(this.props.selectedIndex)) {
+			const selectionVisible = this.props.selectedIndex >= this.state.topItemIndex && this.props.selectedIndex <= this.state.bottomItemIndex;
+			const isValidSelection = this.props.selectedIndex >= 0 && this.props.selectedIndex < items.length;
+			if (!selectionVisible && isValidSelection) {
+				renderableBlocks.push({ from: this.props.selectedIndex, to: this.props.selectedIndex });
+			}
 		}
 
-		itemComps.push(blankItem('bottom', (items.length - this.state.bottomItemIndex - 1) * this.props.itemHeight));
+		renderableBlocks.push({ from: this.state.topItemIndex, to: this.state.bottomItemIndex });
+
+		// Ascending order
+		renderableBlocks.sort(({ from: fromA }, { from: fromB }) => fromA - fromB);
+
+		const itemComps: React.ReactNode[] = [];
+		for (let i = 0; i < renderableBlocks.length; i++) {
+			const currentBlock = renderableBlocks[i];
+			if (i === 0) {
+				itemComps.push(blankItem('top', currentBlock.from * this.props.itemHeight));
+			}
+
+			for (let j = currentBlock.from; j <= currentBlock.to; j++) {
+				const itemComp = this.props.itemRenderer(items[j], j);
+				itemComps.push(itemComp);
+			}
+
+			const nextBlockFrom = i + 1 < renderableBlocks.length ? renderableBlocks[i + 1].from : items.length;
+			itemComps.push(blankItem(`after-${i}`, (nextBlockFrom - currentBlock.to - 1) * this.props.itemHeight));
+		}
 
 		const classes = ['item-list'];
 		if (this.props.className) classes.push(this.props.className);
 
+		const wrapContent = this.props.renderContentWrapper ?? ((children) => <>{children}</>);
 		return (
 			<div
 				ref={this.listRef}
@@ -182,7 +217,7 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 				onKeyDown={this.onKeyDown}
 				onDrop={this.onDrop}
 			>
-				{itemComps}
+				{wrapContent(itemComps)}
 			</div>
 		);
 	}
