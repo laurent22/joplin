@@ -19,7 +19,7 @@ export default class Sidebar {
 		const submitButton = this.mainScreen.dialog.getByRole('button', { name: 'OK' });
 		await submitButton.click();
 
-		return this.container.getByText(title);
+		return this.container.getByRole('treeitem', { name: title });
 	}
 
 	private async sortBy(electronApp: ElectronApplication, option: string) {
