@@ -12,12 +12,16 @@ enum ToggleFocusAction {
 	Blur = 'blur',
 }
 
+interface FocusOptions {
+	preventScroll: boolean;
+}
+
 interface FocusableElement {
-	focus: ()=> void;
+	focus: (options?: FocusOptions)=> void;
 	blur: ()=> void;
 }
 
-const toggleFocus = (source: string, element: FocusableElement, action: ToggleFocusAction) => {
+const toggleFocus = (source: string, element: FocusableElement, action: ToggleFocusAction, options: FocusOptions|null) => {
 	if (!element) {
 		logger.warn(`Tried action "${action}" on an undefined element: ${source}`);
 		return;
@@ -29,15 +33,19 @@ const toggleFocus = (source: string, element: FocusableElement, action: ToggleFo
 	}
 
 	logger.debug(`Action "${action}" from "${source}"`);
-	element[action]();
+	if (options) {
+		element[action](options);
+	} else {
+		element[action]();
+	}
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const focus = (source: string, element: any) => {
-	toggleFocus(source, element, ToggleFocusAction.Focus);
+export const focus = (source: string, element: any, options: FocusOptions|null = null) => {
+	toggleFocus(source, element, ToggleFocusAction.Focus, options);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const blur = (source: string, element: any) => {
-	toggleFocus(source, element, ToggleFocusAction.Blur);
+	toggleFocus(source, element, ToggleFocusAction.Blur, null);
 };

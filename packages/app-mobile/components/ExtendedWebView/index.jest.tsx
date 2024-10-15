@@ -93,7 +93,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	}, [dom]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- HACK: Allow wrapper testing logic to access the DOM.
-	const additionalProps: any = { document: dom?.window?.document };
+	const additionalProps: any = { window: dom?.window };
 	return (
 		<View style={props.style} testID={props.testID} {...additionalProps}/>
 	);

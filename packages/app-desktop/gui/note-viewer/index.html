@@ -733,6 +733,13 @@
 		}));
 
 		document.addEventListener('click', webviewLib.logEnabledEventHandler(e => {
+			// Links should all have custom click handlers. Allowing Electron to load custom links
+			// can cause security issues, particularly if these links have the same domain as the
+			// top-level page.
+			if (e.target.hasAttribute('href')) {
+				e.preventDefault();
+			}
+
 			document.querySelectorAll('.media-pdf').forEach(element => {
 				if(!!element.contentWindow){
 					element.contentWindow.postMessage({
