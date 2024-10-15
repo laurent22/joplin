@@ -10,15 +10,6 @@
 	width: var(--joplin-toolbar-height);
 	max-width: var(--joplin-toolbar-height);
 
-	&.-has-title {
-		width: auto;
-		max-width: unset;
-	}
-
-	&:disabled {
-		opacity: 0.3;
-	}
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -33,6 +24,14 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 
+	&.-has-title {
+		width: auto;
+		max-width: unset;
+	}
+
+	&:disabled {
+		opacity: 0.3;
+	}
 
 	&:not(:disabled) {
 		&:hover, &:focus-visible {
