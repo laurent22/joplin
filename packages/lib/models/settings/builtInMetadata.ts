@@ -1615,6 +1615,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'note',
 		},
 
+		'voiceTyping.preferredProvider': {
+			value: 'whisper-tiny',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Mobile],
+			label: () => _('Preferred voice typing provider'),
+			isEnum: true,
+			// For now, iOS and web don't support voice typing.
+			show: () => shim.mobilePlatform() === 'android',
+			section: 'note',
+
+			options: () => {
+				return {
+					'vosk': _('Vosk'),
+					'whisper-tiny': _('Whisper'),
+				};
+			},
+		},
+
 		'trash.autoDeletionEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
