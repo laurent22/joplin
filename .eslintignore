@@ -866,6 +866,7 @@ packages/editor/CodeMirror/utils/growSelectionToNode.js
 packages/editor/CodeMirror/utils/handlePasteEvent.js
 packages/editor/CodeMirror/utils/isCursorAtBeginning.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
+packages/editor/CodeMirror/utils/localisation.js
 packages/editor/CodeMirror/utils/searchExtension.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js
