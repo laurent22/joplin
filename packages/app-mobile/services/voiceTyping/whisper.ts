@@ -5,6 +5,7 @@ import { rtrimSlashes } from '@joplin/utils/path';
 import { dirname, join } from 'path';
 import { NativeModules } from 'react-native';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
+import splitWhisperText from './utils/splitWhisperText';
 
 const logger = Logger.create('voiceTyping/whisper');
 
@@ -15,7 +16,6 @@ const { SpeechToTextModule } = NativeModules;
 // - Between sentences (in pairs).
 // - At the beginning and end of a sequence.
 const timestampExp = /<\|(\d+\.\d*)\|>/g;
-const timestampPairExp = /<\|(\d+\.\d*)\|><\|(\d+\.\d*)\|>/g;
 const postProcessSpeech = (text: string) => {
 	return text.replace(timestampExp, '').replace(/\[BLANK_AUDIO\]/g, '');
 };
@@ -49,39 +49,11 @@ class Whisper implements VoiceTypingSession {
 					return;
 				}
 
-				const timestampPairs = data.matchAll(timestampPairExp);
-
-				// Trim to one of the first nonzero timestamps
-				let trimTo = 0;
-				let dataBeforeTrim = '';
-				let dataAfterTrim = '';
-				for (const timestampMatch of timestampPairs) {
-					// Check the second timestamp in the pair, to remove leading silence.
-					const timestamp = Number(timestampMatch[2]);
-					// Should always be a finite number (i.e. not NaN)
-					if (!isFinite(timestamp)) throw new Error(`Timestamp match failed with ${timestampMatch[0]}`);
-
-					const contentBefore = data.substring(Math.max(timestampMatch.index - 3, 0), timestampMatch.index);
-					const isNearEndOfLatinSentence = contentBefore.match(/[.?!]/);
-					const isNearEndOfData = timestampMatch.index + timestampMatch[0].length >= data.length - 4;
-
-					// Use a heuristic to determine whether to move content from the preview to the document.
-					// These are based on the maximum buffer length of 30 seconds -- as the buffer gets longer, the
-					// data should be more likely to be broken into chunks. Where possible, the break should be near
-					// the end of a sentence:
-					const canBreak = (timestamp > 4 && isNearEndOfLatinSentence && !isNearEndOfData)
-							|| (timestamp > 8 && !isNearEndOfData)
-							|| timestamp > 16;
-					if (canBreak) {
-						trimTo = timestamp;
-						dataBeforeTrim = data.substring(0, timestampMatch.index);
-						dataAfterTrim = data.substring(timestampMatch.index + timestampMatch[0].length);
-						break;
-					}
-				}
-
 				const recordingLength = await SpeechToTextModule.getBufferLengthSeconds(this.sessionId);
-				if (trimTo > 0 && trimTo < recordingLength * 2 / 3) {
+				logger.debug('recording length so far', recordingLength);
+				const { trimTo, dataBeforeTrim, dataAfterTrim } = splitWhisperText(data, recordingLength);
+
+				if (trimTo > 2) {
 					logger.debug('Trim to', trimTo, 'in recording with length', recordingLength);
 					this.callbacks.onFinalize(postProcessSpeech(dataBeforeTrim));
 					this.callbacks.onPreview(postProcessSpeech(dataAfterTrim));
