@@ -352,4 +352,12 @@ describe('MdToHtml', () => {
 		expect(html).toContain('Inline</span>');
 		expect(html).toContain('Block</span>');
 	});
+
+	it('should sanitize KaTeX errors', async () => {
+		const markdown = '$\\a<svg>$';
+		const renderResult = await newTestMdToHtml().render(markdown, null, { bodyOnly: true });
+
+		// Should not contain the HTML in unsanitized form
+		expect(renderResult.html).not.toContain('<svg>');
+	});
 });
