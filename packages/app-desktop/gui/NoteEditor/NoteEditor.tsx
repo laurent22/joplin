@@ -31,9 +31,6 @@ interface Props {
 	newWindow: boolean;
 	windowId: string;
 	activeWindowId: string;
-
-	secondaryWindowNoteIds: Record<string, string[]>;
-	provisionalNoteIds: string[];
 }
 
 interface UseToggleEditorsProps {
@@ -149,8 +146,6 @@ export default connect((state: AppState) => {
 		isSafeMode: state.settings.isSafeMode,
 		codeView: state.settings['editor.codeView'],
 		legacyMarkdown: state.settings['editor.legacyMarkdown'],
-		provisionalNoteIds: state.provisionalNoteIds,
-		secondaryWindowNoteIds: stateUtils.windowIdToSelectedNoteIds(state),
 		activeWindowId: stateUtils.activeWindowId(state),
 	};
 })(NoteEditorWrapper);
