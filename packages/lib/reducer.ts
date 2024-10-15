@@ -89,6 +89,7 @@ export interface WindowState {
 
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
+	lastSelectedNotesIds: StateLastSelectedNotesIds;
 }
 
 export const defaultWindowId = 'default';
@@ -108,6 +109,11 @@ const defaultWindowState: WindowState = {
 	selectedNoteTags: [],
 	backwardHistoryNotes: [],
 	forwardHistoryNotes: [],
+	lastSelectedNotesIds: {
+		Folder: {},
+		Tag: {},
+		Search: {},
+	},
 };
 
 export interface State extends WindowState {
@@ -121,7 +127,6 @@ export interface State extends WindowState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searches: any[];
 	highlightedWords: string[];
-	lastSelectedNotesIds: StateLastSelectedNotesIds;
 	showSideMenu: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	screens: any;
@@ -172,11 +177,6 @@ export const defaultState: State = {
 	notLoadedMasterKeys: [],
 	searches: [],
 	highlightedWords: [],
-	lastSelectedNotesIds: {
-		Folder: {},
-		Tag: {},
-		Search: {},
-	},
 	showSideMenu: false,
 	screens: {},
 	historyCanGoBack: false,
@@ -1230,8 +1230,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				updateOneItem(draft, action);
 
-				// We only want to update the selected note tags if the tag belongs to the currently open note
 				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
+					// We only want to update the selected note tags if the tag belongs to the currently open note
 					const selectedNoteHasTag = !!windowStateDraft.selectedNoteTags.find(tag => tag.id === action.item.id);
 					if (selectedNoteHasTag) {
 						updateOneItem(windowStateDraft, action, 'selectedNoteTags');
