@@ -4,7 +4,7 @@ import Logger from '@joplin/utils/Logger';
 import KvStore from '../KvStore';
 import Setting from '../../models/Setting';
 
-const logger = Logger.create('KeychainServiceDriver.node');
+const logger = Logger.create('KeychainServiceDriver.electron');
 
 const canUseSafeStorage = () => {
 	return !!shim.electronBridge?.()?.safeStorage?.isEncryptionAvailable();
