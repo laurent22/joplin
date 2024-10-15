@@ -50,7 +50,7 @@ const useOnContextMenu = (
 			customCss: customCss,
 		});
 
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().mainWindow() });
 	}, [selectedNoteIds, notes, dispatch, watchedNoteFiles, plugins, selectedFolderId, customCss]);
 };
 

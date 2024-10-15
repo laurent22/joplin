@@ -42,7 +42,7 @@ const AllNotesItem: React.FC<Props> = props => {
 			}));
 		}
 
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().mainWindow() });
 	}, []);
 
 	return (

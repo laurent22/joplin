@@ -32,8 +32,8 @@ import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
 import NoteEditorWrapper from './NoteEditor/NoteEditor';
 import { stateUtils, WindowState } from '@joplin/lib/reducer';
+import bridge from '../services/bridge';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
-const bridge = require('@electron/remote').require('./bridge').default;
 
 interface Props {
 	themeId: number;
@@ -105,7 +105,7 @@ const GlobalStyle = createGlobalStyle`
 let wcsTimeoutId_: any = null;
 
 async function initialize() {
-	bridge().window().on('resize', () => {
+	bridge().activeWindow().on('resize', () => {
 		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
 
 		wcsTimeoutId_ = shim.setTimeout(() => {

@@ -46,6 +46,6 @@ export default (columns: NoteListColumns) => {
 
 		const menu = Menu.buildFromTemplate(menuItems);
 
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().mainWindow() });
 	}, [columns]);
 };

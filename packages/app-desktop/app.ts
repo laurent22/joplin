@@ -198,7 +198,7 @@ class Application extends BaseApplication {
 			app.destroyTray();
 		} else {
 			const contextMenu = Menu.buildFromTemplate([
-				{ label: _('Open %s', app.electronApp().name), click: () => { app.window().show(); } },
+				{ label: _('Open %s', app.electronApp().name), click: () => { app.mainWindow().show(); } },
 				{ type: 'separator' },
 				{ label: _('Quit'), click: () => { void app.quit(); } },
 			]);
@@ -407,7 +407,7 @@ class Application extends BaseApplication {
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
 			reg.logger().info('app.start: doing upgradeSyncTarget action');
-			bridge().window().show();
+			bridge().mainWindow().show();
 			return { action: 'upgradeSyncTarget' };
 		}
 
@@ -565,7 +565,7 @@ class Application extends BaseApplication {
 			if (shim.isWindows() || shim.isMac()) {
 				const runAutoUpdateCheck = () => {
 					if (Setting.value('autoUpdateEnabled')) {
-						void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+						void checkForUpdates(true, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 					}
 				};
 
@@ -586,9 +586,9 @@ class Application extends BaseApplication {
 		}, 1000 * 60 * 60);
 
 		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
-			bridge().window().hide();
+			bridge().mainWindow().hide();
 		} else {
-			bridge().window().show();
+			bridge().mainWindow().show();
 		}
 
 		void ShareService.instance().maintenance();

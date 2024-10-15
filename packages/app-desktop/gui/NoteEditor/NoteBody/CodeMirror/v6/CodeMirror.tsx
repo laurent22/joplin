@@ -336,6 +336,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'cm-editor',
+		containerRef: rootRef,
 	});
 
 	const lastSearchState = useRef<SearchState|null>(null);

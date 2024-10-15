@@ -68,8 +68,12 @@ export default class ElectronAppWrapper {
 		return this.logger_;
 	}
 
-	public window() {
+	public mainWindow() {
 		return this.win_;
+	}
+
+	public activeWindow() {
+		return BrowserWindow.getFocusedWindow() ?? this.win_;
 	}
 
 	public env() {
@@ -445,11 +449,11 @@ export default class ElectronAppWrapper {
 			this.tray_.setContextMenu(contextMenu);
 
 			this.tray_.on('click', () => {
-				if (!this.window()) {
+				if (!this.mainWindow()) {
 					console.warn('The window object was not available during the click event from tray icon');
 					return;
 				}
-				this.window().show();
+				this.mainWindow().show();
 			});
 		} catch (error) {
 			console.error('Cannot create tray', error);
@@ -476,7 +480,7 @@ export default class ElectronAppWrapper {
 		// Someone tried to open a second instance - focus our window instead
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.electronApp_.on('second-instance', (_e: any, argv: string[]) => {
-			const win = this.window();
+			const win = this.mainWindow();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();

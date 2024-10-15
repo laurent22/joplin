@@ -12,17 +12,18 @@ import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
+import { Editor } from 'tinymce';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function contextMenuElement(editor: any, x: number, y: number) {
+function contextMenuElement(editor: Editor, x: number, y: number) {
 	if (!editor || !editor.getDoc()) return null;
 
-	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
+	const containerDoc = editor.getContainer().ownerDocument;
+	const iframes = containerDoc.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
 	const zoom = Setting.value('windowContentZoomFactor') / 100;
@@ -31,7 +32,7 @@ function contextMenuElement(editor: any, x: number, y: number) {
 
 	// We use .elementFromPoint to handle the case where a dialog is covering
 	// part of the editor.
-	const targetElement = document.elementFromPoint(xScreen, yScreen);
+	const targetElement = containerDoc.elementFromPoint(xScreen, yScreen);
 	if (targetElement !== iframes[0]) {
 		return null;
 	}
@@ -49,7 +50,7 @@ interface ContextMenuActionOptions {
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(editor: any, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
+export default function(editor: Editor, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -66,9 +67,9 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function, 
 
 			if (element.nodeName === 'IMG') {
 				itemType = ContextMenuItemType.Image;
-				resourceId = Resource.pathToId(element.src);
+				resourceId = Resource.pathToId((element as HTMLImageElement).src);
 			} else if (element.nodeName === 'A') {
-				resourceId = Resource.pathToId(element.href);
+				resourceId = Resource.pathToId((element as HTMLAnchorElement).href);
 				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
 				linkToCopy = element.getAttribute('href') || '';
 			} else {
@@ -118,14 +119,14 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function, 
 			template = template.concat(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu));
 
 			const menu = bridge().Menu.buildFromTemplate(template);
-			menu.popup({ window: bridge().window() });
+			menu.popup();
 		}
 
-		bridge().window().webContents.on('context-menu', onContextMenu);
+		bridge().activeWindow().webContents.on('context-menu', onContextMenu);
 
 		return () => {
-			if (bridge().window()?.webContents?.off) {
-				bridge().window().webContents.off('context-menu', onContextMenu);
+			if (bridge().activeWindow()?.webContents?.off) {
+				bridge().activeWindow().webContents.off('context-menu', onContextMenu);
 			}
 		};
 	}, [editor, plugins, dispatch, htmlToMd, mdToHtml]);
