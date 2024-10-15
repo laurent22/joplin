@@ -21,7 +21,6 @@ import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
-import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
 import { _, setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
@@ -596,7 +595,7 @@ async function initialize(dispatch: Dispatch) {
 		reg.logger().info('Database is ready.');
 		reg.logger().info('Loading settings...');
 
-		await loadKeychainServiceAndSettings([KeychainServiceDriverMobile]);
+		await loadKeychainServiceAndSettings([]);
 		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
