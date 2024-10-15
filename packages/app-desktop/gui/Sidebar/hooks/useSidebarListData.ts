@@ -3,8 +3,7 @@ import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagLi
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
-import CommandService from '@joplin/lib/services/CommandService';
-import Setting from '@joplin/lib/models/Setting';
+import toggleHeader from './utils/toggleHeader';
 
 interface Props {
 	tags: TagsWithNoteCountEntity[];
@@ -13,16 +12,6 @@ interface Props {
 	folderHeaderIsExpanded: boolean;
 	tagHeaderIsExpanded: boolean;
 }
-
-const onAddFolderButtonClick = () => {
-	void CommandService.instance().execute('newFolder');
-};
-
-const onHeaderClick = (headerId: HeaderId) => {
-	const settingKey = headerId === HeaderId.TagHeader ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded';
-	const current = Setting.value(settingKey);
-	Setting.setValue(settingKey, !current);
-};
 
 const useSidebarListData = (props: Props): ListItem[] => {
 	const tagItems = useMemo(() => {
@@ -60,10 +49,10 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			kind: ListItemType.Header,
 			label: _('Notebooks'),
 			iconName: 'icon-notebooks',
+			expanded: props.folderHeaderIsExpanded,
 			id: HeaderId.FolderHeader,
 			key: HeaderId.FolderHeader,
-			onClick: onHeaderClick,
-			onPlusButtonClick: onAddFolderButtonClick,
+			onClick: toggleHeader,
 			extraProps: {
 				['data-folder-id']: '',
 			},
@@ -79,10 +68,10 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			kind: ListItemType.Header,
 			label: _('Tags'),
 			iconName: 'icon-tags',
+			expanded: props.tagHeaderIsExpanded,
 			id: HeaderId.TagHeader,
 			key: HeaderId.TagHeader,
-			onClick: onHeaderClick,
-			onPlusButtonClick: null,
+			onClick: toggleHeader,
 			extraProps: { },
 			supportsFolderDrop: false,
 		};

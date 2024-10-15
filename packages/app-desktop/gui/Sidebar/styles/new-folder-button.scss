@@ -1,0 +1,25 @@
+
+.new-folder-button {
+	position: absolute;
+	top: 0;
+	inset-inline-end: 0;
+
+	padding-inline-end: 15px;
+	padding-top: 4px;
+	height: 30px;
+	border: none;
+
+	background-color: transparent;
+	font-size: var(--joplin-toolbar-icon-size);
+	color: var(--joplin-color2);
+
+	&:hover {
+		color: var(--joplin-color-hover2);
+		background: none;
+	}
+
+	&:active {
+		color: var(--joplin-color-active2);
+		background: none;
+	}
+}

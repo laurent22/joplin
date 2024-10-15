@@ -15,6 +15,7 @@ import useOnRenderItem from './hooks/useOnRenderItem';
 import { ListItem } from './types';
 import useSidebarCommandHandler from './hooks/useSidebarCommandHandler';
 import { stateUtils } from '@joplin/lib/reducer';
+import useOnRenderListWrapper from './hooks/useOnRenderListWrapper';
 
 interface Props {
 	dispatch: Dispatch;
@@ -40,11 +41,12 @@ const FolderAndTagList: React.FC<Props> = props => {
 		listItems: listItems,
 	});
 
-	const [selectedListElement, setSelectedListElement] = useState<HTMLElement|null>(null);
+	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
 		...props,
 		selectedIndex,
-		onSelectedElementShown: setSelectedListElement,
+		listItems,
+		containerRef: listContainerRef,
 	});
 
 	const onKeyEventHandler = useOnSidebarKeyDownHandler({
@@ -56,13 +58,16 @@ const FolderAndTagList: React.FC<Props> = props => {
 	});
 
 	const itemListRef = useRef<ItemList<ListItem>>();
-	const { focusSidebar } = useFocusHandler({ itemListRef, selectedListElement, selectedIndex, listItems });
+	const { focusSidebar } = useFocusHandler({ itemListRef, selectedIndex, listItems });
 
 	useSidebarCommandHandler({ focusSidebar });
 
 	const [itemListContainer, setItemListContainer] = useState<HTMLDivElement|null>(null);
+	listContainerRef.current = itemListContainer;
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
+
+	const onRenderContentWrapper = useOnRenderListWrapper({ selectedIndex, onKeyDown: onKeyEventHandler });
 
 	return (
 		<div
@@ -73,9 +78,15 @@ const FolderAndTagList: React.FC<Props> = props => {
 				className='items'
 				ref={itemListRef}
 				style={listStyle}
+
 				items={listItems}
 				itemRenderer={onRenderItem}
-				onKeyDown={onKeyEventHandler}
+				renderContentWrapper={onRenderContentWrapper}
+
+				// The selected item is the only item with tabindex=0. Always render it
+				// to allow the item list to be focused.
+				alwaysRenderSelection={true}
+				selectedIndex={selectedIndex}
 
 				itemHeight={30}
 			/>

@@ -107,19 +107,12 @@ const SettingComponent: React.FC<Props> = props => {
 			);
 		}
 
-		const selectStyle = { ...controlStyle, paddingLeft: 6,
-			paddingRight: 6,
-			paddingTop: 4,
-			paddingBottom: 4,
-			borderColor: theme.borderColor4,
-			borderRadius: 3 };
-
 		return (
 			<div style={rowStyle}>
 				<SettingLabel htmlFor={inputId} text={md.label()}/>
 				<select
 					value={value}
-					style={selectStyle}
+					className='setting-select-control'
 					onChange={(event) => {
 						updateSettingValue(key, event.target.value);
 					}}

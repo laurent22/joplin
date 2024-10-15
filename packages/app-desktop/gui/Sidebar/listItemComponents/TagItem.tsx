@@ -1,22 +1,26 @@
 import Setting from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { useCallback } from 'react';
-import { StyledListItem, StyledListItemAnchor, StyledSpanFix } from '../styles';
+import { StyledListItemAnchor, StyledSpanFix } from '../styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import Tag from '@joplin/lib/models/Tag';
 import EmptyExpandLink from './EmptyExpandLink';
+import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 
 export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined };
 
 interface Props {
+	anchorRef: ListItemRef;
 	selected: boolean;
-	anchorRef: React.Ref<HTMLElement>;
 	tag: TagsWithNoteCountEntity;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
 	onContextMenu: React.MouseEventHandler<HTMLElement>;
 	onClick: (event: TagLinkClickEvent)=> void;
+
+	itemCount: number;
+	index: number;
 }
 
 const TagItem = (props: Props) => {
@@ -33,18 +37,21 @@ const TagItem = (props: Props) => {
 	}, [props.onClick, tag]);
 
 	return (
-		<StyledListItem
+		<ListItemWrapper
+			containerRef={props.anchorRef}
 			selected={selected}
+			depth={1}
 			className={`list-item-container ${selected ? 'selected' : ''}`}
+			highlightOnHover={true}
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}
 			aria-selected={selected}
+			itemIndex={props.index}
+			itemCount={props.itemCount}
 		>
 			<EmptyExpandLink/>
 			<StyledListItemAnchor
-				ref={props.anchorRef}
 				className="list-item"
-				href="#"
 				selected={selected}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
@@ -54,7 +61,7 @@ const TagItem = (props: Props) => {
 				<StyledSpanFix className="tag-label">{Tag.displayTitle(tag)}</StyledSpanFix>
 				{noteCount}
 			</StyledListItemAnchor>
-		</StyledListItem>
+		</ListItemWrapper>
 	);
 };
 
