@@ -5,6 +5,7 @@ import shimInitShared from './shimInitShared';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 import { FetchBlobOptions } from '@joplin/lib/types';
 import JoplinError from '@joplin/lib/JoplinError';
+import joplinCrypto from '@joplin/lib/services/e2ee/crypto';
 
 const shimInit = () => {
 	type GetLocationOptions = { timeout?: number };
@@ -41,6 +42,7 @@ const shimInit = () => {
 		return fsDriver_;
 	};
 	shim.fsDriver = fsDriver;
+	shim.crypto = joplinCrypto;
 
 	shim.randomBytes = async (count: number) => {
 		const buffer = new Uint8Array(count);

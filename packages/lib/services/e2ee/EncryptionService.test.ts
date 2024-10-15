@@ -95,9 +95,12 @@ describe('services_EncryptionService', () => {
 		expect(!!masterKey.content).toBe(true);
 	}));
 
-	it('should not require a checksum for new master keys', (async () => {
+	it.each([
+		EncryptionMethod.SJCL4,
+		EncryptionMethod.KeyV1,
+	])('should not require a checksum for new master keys', (async (masterKeyEncryptionMethod) => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionMethod.SJCL4,
+			encryptionMethod: masterKeyEncryptionMethod,
 		});
 
 		expect(!masterKey.checksum).toBe(true);
@@ -107,9 +110,12 @@ describe('services_EncryptionService', () => {
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
-	it('should throw an error if master key decryption fails', (async () => {
+	it.each([
+		EncryptionMethod.SJCL4,
+		EncryptionMethod.KeyV1,
+	])('should throw an error if master key decryption fails', (async (masterKeyEncryptionMethod) => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionMethod.SJCL4,
+			encryptionMethod: masterKeyEncryptionMethod,
 		});
 
 		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKeyContent(masterKey, 'wrong'));
@@ -148,7 +154,7 @@ describe('services_EncryptionService', () => {
 		// Test that a long string, that is going to be split into multiple chunks, encrypt
 		// and decrypt properly too.
 		let veryLongSecret = '';
-		for (let i = 0; i < service.chunkSize() * 3; i++) veryLongSecret += Math.floor(Math.random() * 9);
+		for (let i = 0; i < service.chunkSize(service.defaultEncryptionMethod()) * 3; i++) veryLongSecret += Math.floor(Math.random() * 9);
 
 		const cipherText2 = await service.encryptString(veryLongSecret);
 		const plainText2 = await service.decryptString(cipherText2);
@@ -212,6 +218,56 @@ describe('services_EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 	}));
 
+	it.each([
+		EncryptionMethod.SJCL1a,
+		EncryptionMethod.SJCL1b,
+		EncryptionMethod.SJCL4,
+		EncryptionMethod.KeyV1,
+		EncryptionMethod.FileV1,
+		EncryptionMethod.StringV1,
+	])('should fail to decrypt if ciphertext is not a valid JSON string', (async (jsonCipherTextMethod) => {
+		const masterKey = await service.generateMasterKey('123456');
+		const masterKeyContent = await service.decryptMasterKeyContent(masterKey, '123456');
+
+		const cipherTextString = await service.encrypt(jsonCipherTextMethod, masterKeyContent, 'e21de21d'); // 'e21de21d' is a valid base64/hex string
+
+		// Check if decryption is working
+		const plainText = await service.decrypt(jsonCipherTextMethod, masterKeyContent, cipherTextString);
+		expect(plainText).toBe('e21de21d');
+
+		// Make invalid JSON
+		const invalidCipherText = cipherTextString.replace('{', '{,');
+		const hasThrown = await checkThrowAsync(async () => await service.decrypt(jsonCipherTextMethod, masterKeyContent, invalidCipherText));
+		expect(hasThrown).toBe(true);
+	}));
+
+	it.each([
+		EncryptionMethod.SJCL1a,
+		EncryptionMethod.SJCL1b,
+		EncryptionMethod.SJCL4,
+		EncryptionMethod.KeyV1,
+		EncryptionMethod.FileV1,
+		EncryptionMethod.StringV1,
+	])('should fail to decrypt if ciphertext authentication failed', (async (authenticatedEncryptionMethod) => {
+		const masterKey = await service.generateMasterKey('123456');
+		const masterKeyContent = await service.decryptMasterKeyContent(masterKey, '123456');
+
+		const cipherTextObject = JSON.parse(await service.encrypt(authenticatedEncryptionMethod, masterKeyContent, 'e21de21d')); // 'e21de21d' is a valid base64/hex string
+		expect(cipherTextObject).toHaveProperty('ct');
+		const ct = Buffer.from(cipherTextObject['ct'], 'base64');
+
+		// Should not fail if the binary data of ct is not modified
+		const oldCipherTextObject = { ...cipherTextObject, ct: ct.toString('base64') };
+		const plainText = await service.decrypt(authenticatedEncryptionMethod, masterKeyContent, JSON.stringify(oldCipherTextObject));
+		expect(plainText).toBe('e21de21d');
+
+		// The encrypted data part is changed so it doesn't match the authentication tag. Decryption should fail.
+		ct[0] ^= 0x55;
+		const newCipherTextObject = { ...cipherTextObject, ct: ct.toString('base64') };
+		const hasThrown = await checkThrowAsync(async () => service.decrypt(authenticatedEncryptionMethod, masterKeyContent, JSON.stringify(newCipherTextObject)));
+		expect(hasThrown).toBe(true);
+	}));
+
 	it('should encrypt and decrypt notes and folders', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
@@ -243,7 +299,12 @@ describe('services_EncryptionService', () => {
 		expect(decryptedNote.parent_id).toBe(note.parent_id);
 	}));
 
-	it('should encrypt and decrypt files', (async () => {
+	it.each([
+		EncryptionMethod.SJCL1a,
+		EncryptionMethod.SJCL1b,
+		EncryptionMethod.FileV1,
+		EncryptionMethod.StringV1,
+	])('should encrypt and decrypt files', (async (fileEncryptionMethod) => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await service.loadMasterKey(masterKey, '123456', true);
@@ -252,6 +313,7 @@ describe('services_EncryptionService', () => {
 		const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
 		const decryptedPath = `${Setting.value('tempDir')}/photo.jpg`;
 
+		service.defaultFileEncryptionMethod_ = fileEncryptionMethod;
 		await service.encryptFile(sourcePath, encryptedPath);
 		await service.decryptFile(encryptedPath, decryptedPath);
 
@@ -259,7 +321,11 @@ describe('services_EncryptionService', () => {
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
 
-	it('should encrypt invalid UTF-8 data', (async () => {
+	it.each([
+		EncryptionMethod.SJCL1a,
+		EncryptionMethod.SJCL1b,
+		EncryptionMethod.StringV1,
+	])('should encrypt invalid UTF-8 data', (async (stringEncryptionMethod) => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
@@ -271,7 +337,7 @@ describe('services_EncryptionService', () => {
 		expect(hasThrown).toBe(true);
 
 		// Now check that the new one fixes the problem
-		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
+		service.defaultEncryptionMethod_ = stringEncryptionMethod;
 		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0, 5));
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0, 5));

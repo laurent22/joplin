@@ -712,6 +712,7 @@ packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/AlarmServiceDriver.web.js
 packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
+packages/app-mobile/services/e2ee/crypto.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
@@ -1077,6 +1078,10 @@ packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.js
 packages/lib/services/e2ee/RSA.node.js
+packages/lib/services/e2ee/crypto.test.js
+packages/lib/services/e2ee/crypto.js
+packages/lib/services/e2ee/cryptoShared.js
+packages/lib/services/e2ee/cryptoTestUtils.js
 packages/lib/services/e2ee/ppk.test.js
 packages/lib/services/e2ee/ppk.js
 packages/lib/services/e2ee/ppkTestUtils.js

@@ -61,6 +61,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			'react-native$': 'react-native-web',
+			'crypto': path.resolve(__dirname, 'mocks/nodeCrypto.js'),
 
 			// Map some modules that don't work on web to the empty dictionary.
 			'react-native-fingerprint-scanner': emptyLibraryMock,
