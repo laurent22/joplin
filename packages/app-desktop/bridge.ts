@@ -294,11 +294,11 @@ export class Bridge {
 	}
 
 	public openDevTools() {
-		return this.mainWindow().webContents.openDevTools();
+		return this.activeWindow().webContents.openDevTools();
 	}
 
 	public closeDevTools() {
-		return this.mainWindow().webContents.closeDevTools();
+		return this.activeWindow().webContents.closeDevTools();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

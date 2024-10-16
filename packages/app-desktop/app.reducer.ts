@@ -38,6 +38,7 @@ export interface AppWindowState extends WindowState {
 	noteVisiblePanes: string[];
 	editorCodeView: boolean;
 	visibleDialogs: VisibleDialogs;
+	devToolsVisible: boolean;
 }
 
 export interface AppState extends State, AppWindowState {
@@ -50,7 +51,6 @@ export interface AppState extends State, AppWindowState {
 	windowContentSize: any;
 	watchedNoteFiles: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
-	devToolsVisible: boolean;
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
@@ -70,6 +70,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		visibleDialogs: {},
 		noteVisiblePanes: ['editor', 'viewer'],
 		editorCodeView: true,
+		devToolsVisible: false,
 	};
 };
 
@@ -87,7 +88,6 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		windowContentSize, // bridge().windowContentSize(),
 		watchedNoteFiles: [],
 		lastEditorScrollPercents: {},
-		devToolsVisible: false,
 		visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 		focusedField: null,
 		layoutMoveMode: false,
