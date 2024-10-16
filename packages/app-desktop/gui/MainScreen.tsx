@@ -10,7 +10,7 @@ import Sidebar from './Sidebar/Sidebar';
 import UserWebview from '../services/plugins/UserWebview';
 import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
 import { AppState } from '../app.reducer';
@@ -766,6 +766,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
+	const windowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		themeId: state.settings.theme,
@@ -791,7 +792,7 @@ const mapStateToProps = (state: AppState) => {
 		listRendererId: state.settings['notes.listRendererId'],
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
-		selectedFolderId: state.selectedFolderId,
+		selectedFolderId: windowState.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],

@@ -1,6 +1,6 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useContext } from 'react';
 import NoteList2 from '../NoteList/NoteList2';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
@@ -17,6 +17,7 @@ import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import usePrevious from '../hooks/usePrevious';
+import { WindowIdContext } from '../NewWindowOrIFrame';
 
 const logger = Logger.create('NoteListWrapper');
 
@@ -174,6 +175,8 @@ export default function NoteListWrapper(props: Props) {
 		/>;
 	};
 
+	const windowId = useContext(WindowIdContext);
+
 	return (
 		<StyledRoot>
 			<NoteListControls
@@ -186,6 +189,7 @@ export default function NoteListWrapper(props: Props) {
 				buttonSize={noteListControlsButtonSize}
 				padding={noteListControlsPadding}
 				buttonVerticalGap={noteListControlsButtonVerticalGap}
+				windowId={windowId}
 			/>
 			{renderHeader()}
 			{renderNoteList()}
