@@ -93,7 +93,7 @@ export interface WindowState {
 }
 
 export const defaultWindowId = 'default';
-const defaultWindowState: WindowState = {
+export const defaultWindowState: WindowState = {
 	windowId: defaultWindowId,
 	searchQuery: '',
 	notes: [],
@@ -346,7 +346,7 @@ class StateUtils {
 		return false;
 	}
 
-	public parentItem(state: State) {
+	public parentItem(state: WindowState) {
 		const t = state.notesParentType;
 		let id = null;
 		if (t === 'Folder') id = state.selectedFolderId;
@@ -356,7 +356,7 @@ class StateUtils {
 		return { type: t, id: id };
 	}
 
-	public lastSelectedNoteIds(state: State): string[] {
+	public lastSelectedNoteIds(state: WindowState): string[] {
 		const parent = this.parentItem(state);
 		if (!parent) return [];
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -381,14 +381,18 @@ class StateUtils {
 		return [state.windowId, ...Object.keys(state.backgroundWindows)];
 	}
 
-	public allWindowStates<T extends State|Draft<State>>(state: T) {
+	public allWindowStates<T extends State>(state: T) {
 		return this.allWindowIds(state).map(id => this.windowStateById(state, id));
 	}
 
-	public windowStateById<T extends State|Draft<State>>(
-		state: T, id: string,
-	): T extends State ? WindowState : Draft<WindowState> {
-		return id === state.windowId ? state : state.backgroundWindows[id];
+	public windowStateById<StateType extends State>(
+		state: StateType, id: string,
+	) {
+		// States for the different Joplin apps can have different types for backgroundWindows -- this
+		// makes sure that the correct type is returned.
+		type AppWindowState = StateType['backgroundWindows'][keyof StateType['backgroundWindows']];
+		const result = id === state.windowId ? state : state.backgroundWindows[id];
+		return result as AppWindowState;
 	}
 
 	public mainWindowState(state: State) {
@@ -868,6 +872,7 @@ type WindowAction = {
 	windowId: string;
 	folderId: string;
 	noteId: string;
+	defaultAppWindowState: Record<string, unknown>;
 }|{
 	type: 'WINDOW_FOCUS'|'WINDOW_CLOSE';
 	windowId: string;
@@ -883,6 +888,7 @@ const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
 
 		draft.backgroundWindows[action.windowId] = {
 			...defaultWindowState,
+			...action.defaultAppWindowState,
 			notesParentType: 'Folder',
 			selectedFolderId: action.folderId,
 			windowId: action.windowId,
@@ -891,19 +897,20 @@ const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
 		break;
 	}
 	case 'WINDOW_FOCUS': {
+		// Only allow bringing a background window to the foreground
 		if (draft.windowId !== action.windowId) {
 			const windowId = action.windowId;
 			const previousWindowId = draft.windowId;
 
-			const focusedWindowState = stateUtils.windowStateById(draft, windowId);
+			const focusingWindowState = draft.backgroundWindows[windowId];
 			const previousWindowState = { ...defaultWindowState };
 
-			for (const key of Object.keys(defaultWindowState)) {
+			for (const key of Object.keys(focusingWindowState)) {
 				const stateKey = key as keyof WindowState;
 
 				type AssignableWindowState = Record<keyof WindowState, unknown>;
 				(previousWindowState as AssignableWindowState)[stateKey] = draft[stateKey];
-				(draft as AssignableWindowState)[stateKey] = focusedWindowState[stateKey];
+				(draft as AssignableWindowState)[stateKey] = focusingWindowState[stateKey];
 			}
 
 			delete draft.backgroundWindows[windowId];

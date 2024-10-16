@@ -63,7 +63,6 @@ interface Props {
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
-	settingEditorCodeView: boolean;
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
@@ -770,7 +769,6 @@ const mapStateToProps = (state: AppState) => {
 
 	return {
 		themeId: state.settings.theme,
-		settingEditorCodeView: state.settings['editor.codeView'],
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),

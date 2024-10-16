@@ -2,6 +2,8 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
+import { createAppDefaultWindowState } from '../app.reducer';
+import Setting from '@joplin/lib/models/Setting';
 
 export const declaration: CommandDeclaration = {
 	name: 'openNoteInNewWindow',
@@ -21,6 +23,11 @@ export const runtime = (): CommandRuntime => {
 				noteId,
 				folderId: note.parent_id,
 				windowId: `window-${noteId}-${idCounter++}`,
+				defaultAppWindowState: {
+					...createAppDefaultWindowState(),
+					noteVisiblePanes: Setting.value('noteVisiblePanes'),
+					editorCodeView: Setting.value('editor.codeView'),
+				},
 			});
 		},
 		enabledCondition: 'oneNoteSelected',

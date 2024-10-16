@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import NoteEditorContent from './NoteEditorContent';
 import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
@@ -7,18 +7,12 @@ import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
 import NewWindowOrIFrame, { WindowMode } from '../NewWindowOrIFrame';
 import WindowCommandHandler from '../WindowCommandHandler/WindowCommandHandler';
-import useNowEffect from '@joplin/lib/hooks/useNowEffect';
-
-import * as toggleEditors from './commands/toggleEditors';
 
 const { StyleSheetManager } = require('styled-components');
 // Note: Transitive dependencies used only by react-select. Remove if react-select is removed.
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { stateUtils } from '@joplin/lib/reducer';
-import CommandService from '@joplin/lib/services/CommandService';
-import getWindowCommandPriority from './utils/getWindowCommandPriority';
-import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	dispatch: Dispatch;
@@ -40,45 +34,24 @@ interface UseToggleEditorsProps {
 	containerRef: RefObject<HTMLDivElement>;
 }
 
-const useToggleEditors = (props: UseToggleEditorsProps) => {
-	const [codeView, setCodeView] = useState(props.codeView);
-
-	// useLayoutEffect: Run the effect as soon as possible -- renders of child components (toolbar buttons)
-	// expect the command to have a registered runtime.
-	useNowEffect(() => {
-		const runtime = toggleEditors.runtime(setCodeView);
-		const registeredRuntime = CommandService.instance().registerRuntime(
-			toggleEditors.declaration.name,
-			{ ...runtime, getPriority: () => getWindowCommandPriority(props.containerRef) },
-			true,
-		);
-
-		return () => {
-			registeredRuntime.deregister();
-		};
-	}, [props.containerRef]);
-
-	useEffect(() => {
-		Setting.setValue('editor.codeView', codeView);
-	}, [codeView]);
-
+const useEditorKey = (props: UseToggleEditorsProps) => {
 	return useMemo(() => {
-		let bodyEditor = codeView ? 'CodeMirror6' : 'TinyMCE';
+		let bodyEditor = props.codeView ? 'CodeMirror6' : 'TinyMCE';
 
 		if (props.isSafeMode) {
 			bodyEditor = 'PlainText';
-		} else if (codeView && props.legacyMarkdown) {
+		} else if (props.codeView && props.legacyMarkdown) {
 			bodyEditor = 'CodeMirror5';
 		}
 
 		return bodyEditor;
-	}, [codeView, props.isSafeMode, props.legacyMarkdown]);
+	}, [props.codeView, props.isSafeMode, props.legacyMarkdown]);
 };
 
 const NoteEditorWrapper: React.FC<Props> = props => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const bodyEditor = useToggleEditors({
+	const bodyEditor = useEditorKey({
 		isSafeMode: props.isSafeMode, codeView: props.codeView, legacyMarkdown: props.legacyMarkdown, containerRef: containerRef,
 	});
 	const editor = <div className='note-editor-wrapper' ref={containerRef}>
@@ -140,11 +113,18 @@ const LibraryStyleRoot: React.FC<StyleProviderProps> = props => {
 	</>;
 };
 
-export default connect((state: AppState) => {
+interface ConnectProps {
+	windowId: string;
+}
+
+export default connect((state: AppState, ownProps: ConnectProps) => {
+	// May be undefined if the window hasn't opened
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+
 	return {
 		themeId: state.settings.theme,
 		isSafeMode: state.settings.isSafeMode,
-		codeView: state.settings['editor.codeView'],
+		codeView: windowState?.editorCodeView ?? state.settings['editor.codeView'],
 		legacyMarkdown: state.settings['editor.legacyMarkdown'],
 		activeWindowId: stateUtils.activeWindowId(state),
 	};

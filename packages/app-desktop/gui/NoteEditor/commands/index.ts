@@ -4,7 +4,6 @@ import * as focusElementNoteTitle from './focusElementNoteTitle';
 import * as pasteAsText from './pasteAsText';
 import * as showLocalSearch from './showLocalSearch';
 import * as showRevisions from './showRevisions';
-import * as toggleEditors from './toggleEditors';
 
 const index: any[] = [
 	focusElementNoteBody,
@@ -12,7 +11,6 @@ const index: any[] = [
 	pasteAsText,
 	showLocalSearch,
 	showRevisions,
-	toggleEditors,
 ];
 
 export default index;

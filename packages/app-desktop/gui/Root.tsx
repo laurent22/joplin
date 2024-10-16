@@ -127,6 +127,11 @@ async function initialize() {
 	});
 
 	store.dispatch({
+		type: 'EDITOR_CODE_VIEW_CHANGE',
+		value: Setting.value('editor.codeView'),
+	});
+
+	store.dispatch({
 		type: 'NOTE_VISIBLE_PANES_SET',
 		panes: Setting.value('noteVisiblePanes'),
 	});
