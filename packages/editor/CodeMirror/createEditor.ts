@@ -33,6 +33,16 @@ import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
 import searchExtension from './utils/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
 
+// Newer versions of CodeMirror by default use Chrome's EditContext API.
+// While this might be stable enough for desktop use, it causes significant
+// problems on Android:
+// - https://github.com/codemirror/dev/issues/1450
+// - https://github.com/codemirror/dev/issues/1451
+// For now, CodeMirror allows disabling EditContext to work around these issues:
+// https://discuss.codemirror.net/t/experimental-support-for-editcontext/8144/3
+type ExtendedEditorView = typeof EditorView & { EDIT_CONTEXT: boolean };
+(EditorView as ExtendedEditorView).EDIT_CONTEXT = false;
+
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
 ): CodeMirrorControl => {
