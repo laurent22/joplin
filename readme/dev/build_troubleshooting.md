@@ -50,6 +50,10 @@ This is an indication that there's an early initialisation error. Try this:
 
 So everything should be done from a Windows Command prompt or Windows PowerShell running as Administrator. All build and start commands are designed to work cross-platform, including on Windows.
 
+> Error when building the application
+
+If you find a error when building the application, [verify that you have all the requirements](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md), including Rust. 
+
 ## Mobile application
 
 ### iOS

@@ -67,6 +67,7 @@ echo "IS_MACOS=$IS_MACOS"
 echo "Node $( node -v )"
 echo "Npm $( npm -v )"
 echo "Yarn $( yarn -v )"
+echo "Rust $( rustc --version )"
 
 # =============================================================================
 # Install packages
