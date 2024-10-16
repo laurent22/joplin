@@ -809,25 +809,6 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		break;
-	case 'NOTE_UPDATE_ONE': {
-		const modNote = action.note;
-
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.map(note => {
-			if (note.id === modNote.id) {
-				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
-			}
-			return note;
-		});
-
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.map(note => {
-			if (note.id === modNote.id) {
-				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
-			}
-			return note;
-		});
-
-		break;
-	}
 	case 'SEARCH_UPDATE':
 		if (currentNote && (draft.backwardHistoryNotes.length === 0 ||
 						draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id !== currentNote.id)) {
@@ -839,31 +820,60 @@ function handleHistory(draft: Draft<State>, action: any) {
 	case 'SEARCH_RESULTS_SET':
 		draft.searchResults = action.value;
 		break;
-
-	case 'FOLDER_DELETE':
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);
-
-		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
-		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
-		break;
-	case 'NOTE_DELETE': {
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.id !== action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.id !== action.id);
-
-		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
-		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
-
-		// Fix the case where after deletion the currently selected note is also the latest in history
-		const selectedNoteIds = draft.selectedNoteIds;
-		if (selectedNoteIds.length && draft.backwardHistoryNotes.length && draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
-			draft.backwardHistoryNotes = draft.backwardHistoryNotes.slice(0, draft.backwardHistoryNotes.length - 1);
-		}
-		if (selectedNoteIds.length && draft.forwardHistoryNotes.length && draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
-			draft.forwardHistoryNotes = draft.forwardHistoryNotes.slice(0, draft.forwardHistoryNotes.length - 1);
-		}
-		break;
 	}
+
+	const updateWindowHistory = (windowDraft: Draft<WindowState>) => {
+		switch (action.type) {
+		case 'NOTE_UPDATE_ONE': {
+			const modNote = action.note;
+
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.map(note => {
+				if (note.id === modNote.id) {
+					return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
+				}
+				return note;
+			});
+
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.map(note => {
+				if (note.id === modNote.id) {
+					return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
+				}
+				return note;
+			});
+
+			break;
+		}
+
+		case 'FOLDER_DELETE':
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);
+
+			windowDraft.backwardHistoryNotes = removeAdjacentDuplicates(windowDraft.backwardHistoryNotes);
+			windowDraft.forwardHistoryNotes = removeAdjacentDuplicates(windowDraft.forwardHistoryNotes);
+			break;
+		case 'NOTE_DELETE': {
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.filter(note => note.id !== action.id);
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.filter(note => note.id !== action.id);
+
+			windowDraft.backwardHistoryNotes = removeAdjacentDuplicates(windowDraft.backwardHistoryNotes);
+			windowDraft.forwardHistoryNotes = removeAdjacentDuplicates(windowDraft.forwardHistoryNotes);
+
+			// Fix the case where after deletion the currently selected note is also the latest in history
+			const selectedNoteIds = windowDraft.selectedNoteIds;
+			if (selectedNoteIds.length && windowDraft.backwardHistoryNotes.length && windowDraft.backwardHistoryNotes[windowDraft.backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+				windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.slice(0, windowDraft.backwardHistoryNotes.length - 1);
+			}
+			if (selectedNoteIds.length && windowDraft.forwardHistoryNotes.length && windowDraft.forwardHistoryNotes[windowDraft.forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+				windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.slice(0, windowDraft.forwardHistoryNotes.length - 1);
+			}
+			break;
+		}
+		}
+	};
+
+	updateWindowHistory(draft);
+	for (const id in draft.backgroundWindows) {
+		updateWindowHistory(draft.backgroundWindows[id]);
 	}
 }
 

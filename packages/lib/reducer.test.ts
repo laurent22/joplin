@@ -439,6 +439,30 @@ describe('reducer', () => {
 		expect(getIds(state.backwardHistoryNotes)).not.toContain(notes[2].id);
 	}));
 
+	it('should remove deleted note from history in background window', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const windowId1 = 'window1';
+		state = createBackgroundWindow(state, windowId1, notes[0], notes);
+
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [4], state);
+
+		expect(getIds(state.backwardHistoryNotes)).toEqual([notes[0].id, notes[1].id, notes[2].id, notes[3].id]);
+
+		// Remove a note in another window
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: windowId1 });
+		state = reducer(state, { type: 'NOTE_DELETE', id: notes[2].id });
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		// should have removed the note from history in the unfocused window
+		expect(getIds(state.backwardHistoryNotes)).toEqual([notes[0].id, notes[1].id, notes[3].id]);
+	});
+
 	it('should remove all notes of a deleted notebook from history', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
