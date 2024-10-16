@@ -889,6 +889,13 @@ const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
 		draft.backgroundWindows[action.windowId] = {
 			...defaultWindowState,
 			...action.defaultAppWindowState,
+
+			lastSelectedNotesIds: {
+				...defaultWindowState.lastSelectedNotesIds,
+				Folder: {
+					[action.folderId]: [action.noteId],
+				},
+			},
 			notesParentType: 'Folder',
 			selectedFolderId: action.folderId,
 			windowId: action.windowId,

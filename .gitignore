@@ -958,8 +958,6 @@ packages/lib/geolocation-node.js
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js
-packages/lib/hooks/useNowEffect.test.js
-packages/lib/hooks/useNowEffect.js
 packages/lib/hooks/usePlugin.js
 packages/lib/hooks/usePrevious.js
 packages/lib/hooks/useQueuedAsyncEffect.test.js
