@@ -17,6 +17,7 @@ import commands from './commands';
 import CommandService, { CommandRuntime, ComponentCommandSpec } from '@joplin/lib/services/CommandService';
 import { Dispatch } from 'redux';
 import ModalMessageOverlay from './ModalMessageOverlay';
+import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 import { stateUtils } from '@joplin/lib/reducer';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
@@ -95,7 +96,7 @@ const WindowCommandHandler: React.FC<Props> = props => {
 	const windowControl = useWindowControl(setDialogState, onPrintCallback);
 
 	const documentRef = useRef<Document|null>(null);
-	useEffect(() => {
+	useNowEffect(() => {
 		const runtimeHandles = commands.map((command: ComponentCommandSpec<WindowControl>) => {
 			const runtime: CommandRuntime = {
 				getPriority: () => {
