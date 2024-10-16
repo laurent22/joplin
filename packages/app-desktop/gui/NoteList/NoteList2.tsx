@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { Props } from './utils/types';
@@ -275,6 +275,12 @@ const NoteList = (props: Props) => {
 		return output;
 	}, [listRenderer.flow]);
 
+	const onContainerContextMenu = useCallback((event: React.MouseEvent) => {
+		const isFromKeyboard = event.button === -1;
+		if (event.isDefaultPrevented() || !isFromKeyboard) return;
+		onItemContextMenu({ itemId: activeNoteId });
+	}, [onItemContextMenu, activeNoteId]);
+
 	return (
 		<div
 			role='listbox'
@@ -293,6 +299,7 @@ const NoteList = (props: Props) => {
 			onKeyDown={onKeyDown}
 			onKeyUp={onKeyUp}
 			onDrop={onDrop}
+			onContextMenu={onContainerContextMenu}
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}

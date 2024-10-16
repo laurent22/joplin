@@ -453,7 +453,7 @@ export function isUniqueConstraintError(error: any): boolean {
 
 const parsePostgresVersionString = (versionString: string) => {
 	// PostgreSQL 16.1 (Debian 16.1-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-	const matches = versionString.match('PostgreSQL (.*?) ');
+	const matches = versionString.match(/PostgreSQL ([0-9.]+)/);
 	if (!matches || matches.length !== 2) throw new Error(`Cannot parse Postgres version string: ${versionString}`);
 	return matches[1];
 };

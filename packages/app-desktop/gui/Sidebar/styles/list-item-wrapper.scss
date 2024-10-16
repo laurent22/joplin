@@ -1,0 +1,25 @@
+
+.list-item-wrapper {
+	box-sizing: border-box;
+	height: 30px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: calc(var(--joplin-main-padding) + (var(--depth) * 16px) - 16px);
+	background: none;
+	transition: 0.1s;
+
+	// Show the toggle button first, even if it's markup is included later for a better screen reader
+	// experience.
+	> .toggle {
+		order: -1;
+	}
+
+	&.-selected {
+		background: var(--joplin-selected-color2);
+	}
+
+	&.-highlight-on-hover:hover {
+		background-color: var(--joplin-background-color-hover2);
+	}
+}

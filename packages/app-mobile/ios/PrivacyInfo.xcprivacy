@@ -6,10 +6,10 @@
 	<array>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
-				<string>C617.1</string>
+				<string>35F9.1</string>
 			</array>
 		</dict>
 		<dict>
@@ -22,10 +22,10 @@
 		</dict>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
-				<string>35F9.1</string>
+				<string>C617.1</string>
 			</array>
 		</dict>
 		<dict>
@@ -33,6 +33,7 @@
 			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
+				<string>85F4.1</string>
 				<string>E174.1</string>
 			</array>
 		</dict>

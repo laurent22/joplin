@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, userEvent } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
 import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
 import { MenuProvider } from 'react-native-popup-menu';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, waitFor } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { waitFor as waitForWithRealTimers } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -26,6 +27,8 @@ import { LayoutChangeEvent } from 'react-native';
 import shim from '@joplin/lib/shim';
 import getWebViewWindowById from '../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import Setting from '@joplin/lib/models/Setting';
+import Resource from '@joplin/lib/models/Resource';
 
 interface WrapperProps {
 }
@@ -61,18 +64,14 @@ const getNoteEditorControl = async () => {
 };
 
 const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => {
-	await act(() => waitFor(async () => {
+	await act(() => waitForWithRealTimers(async () => {
 		const loadedNote = await Note.load(noteId);
 		expect(loadedNote).toMatchObject(note);
 	}));
 };
 
-const openNewNote = async (noteProperties: NoteEntity) => {
-	const note = await Note.save({
-		parent_id: (await Folder.defaultFolder()).id,
-		...noteProperties,
-	});
-
+const openExistingNote = async (noteId: string) => {
+	const note = await Note.load(noteId);
 	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
 
 	store.dispatch({
@@ -85,7 +84,15 @@ const openNewNote = async (noteProperties: NoteEntity) => {
 		id: note.id,
 		folderId: displayParentId,
 	});
+};
 
+const openNewNote = async (noteProperties: NoteEntity) => {
+	const note = await Note.save({
+		parent_id: (await Folder.defaultFolder()).id,
+		...noteProperties,
+	});
+
+	await openExistingNote(note.id);
 	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
 
 	return note.id;
@@ -106,21 +113,33 @@ const openNoteActionsMenu = async () => {
 		cursor = cursor.parent;
 	}
 
-	await userEvent.press(actionMenuButton);
+	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
+	// warnings).
+	await act(async () => {
+		await runWithFakeTimers(async () => {
+			await userEvent.press(actionMenuButton);
+		});
+
+		// State can update until the menu content is marked as in the process of refocusing (part of the
+		// menu transition).
+		await waitFor(async () => {
+			expect(await screen.findByTestId('menu-content-refocusing')).toBeVisible();
+		});
+	});
 };
 
 const openEditor = async () => {
 	const editButton = await screen.findByLabelText('Edit');
-	await userEvent.press(editButton);
+
+	fireEvent.press(editButton);
+	await waitFor(() => {
+		expect(screen.queryByLabelText('Edit')).toBeNull();
+	});
 };
 
 describe('screens/Note', () => {
-	beforeAll(() => {
-		// advanceTimers: Needed by internal note save logic
-		jest.useFakeTimers({ advanceTimers: true });
-	});
-
 	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 
@@ -160,20 +179,23 @@ describe('screens/Note', () => {
 
 		await waitForNoteToMatch(noteId, { title: 'New title', body: 'Unchanged body' });
 
-		let expectedTitle = 'New title';
-		for (let i = 0; i <= 10; i++) {
-			for (const chunk of ['!', ' test', '!!!', ' Testing']) {
-				jest.advanceTimersByTime(i % 5);
-				await user.type(titleInput, chunk);
-				expectedTitle += chunk;
+		// Use fake timers to allow advancing timers without pausing the test
+		await runWithFakeTimers(async () => {
+			let expectedTitle = 'New title';
+			for (let i = 0; i <= 10; i++) {
+				for (const chunk of ['!', ' test', '!!!', ' Testing']) {
+					jest.advanceTimersByTime(i % 5);
+					await user.type(titleInput, chunk);
+					expectedTitle += chunk;
 
-				// Don't verify after each input event -- this allows the save action queue to fill.
-				if (i % 4 === 0) {
-					await waitForNoteToMatch(noteId, { title: expectedTitle });
+					// Don't verify after each input event -- this allows the save action queue to fill.
+					if (i % 4 === 0) {
+						await waitForNoteToMatch(noteId, { title: expectedTitle });
+					}
 				}
+				await waitForNoteToMatch(noteId, { title: expectedTitle });
 			}
-			await waitForNoteToMatch(noteId, { title: expectedTitle });
-		}
+		});
 	});
 
 	it('changing the note body in the editor should update the note\'s body', async () => {
@@ -181,27 +203,27 @@ describe('screens/Note', () => {
 		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });
 
 		const noteScreen = render(<WrappedNoteScreen />);
+		await act(async () => await runWithFakeTimers(async () => {
+			await openEditor();
+			const editor = await getNoteEditorControl();
+			editor.select(defaultBody.length, defaultBody.length);
 
-		await openEditor();
-		const editor = await getNoteEditorControl();
-		editor.select(defaultBody.length, defaultBody.length);
+			editor.insertText(' Testing!!!');
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
 
-		editor.insertText(' Testing!!!');
-		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
+			editor.insertText(' This is a test.');
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test.' });
 
-		editor.insertText(' This is a test.');
-		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test.' });
+			// should also save changes made shortly before unmounting
+			editor.insertText(' Test!');
 
-		// should also save changes made shortly before unmounting
-		editor.insertText(' Test!');
+			// TODO: Decreasing this below 100 causes the test to fail.
+			//       See issue #11125.
+			await jest.advanceTimersByTimeAsync(450);
 
-		// TODO: Decreasing this below 100 causes the test to fail.
-		//       See issue #11125.
-		await jest.advanceTimersByTimeAsync(150);
-
-		noteScreen.unmount();
-		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
-
+			noteScreen.unmount();
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
+		}));
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {
@@ -212,9 +234,9 @@ describe('screens/Note', () => {
 		const deleteButton = await screen.findByText('Delete');
 		fireEvent.press(deleteButton);
 
-		await act(() => waitFor(async () => {
+		await waitFor(async () => {
 			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
-		}));
+		});
 	});
 
 	it('pressing "delete permanently" should permanently delete a note', async () => {
@@ -229,9 +251,9 @@ describe('screens/Note', () => {
 		const deleteButton = await screen.findByText('Permanently delete note');
 		fireEvent.press(deleteButton);
 
-		await act(() => waitFor(async () => {
+		await waitFor(async () => {
 			expect(await Note.load(noteId)).toBeUndefined();
-		}));
+		});
 		expect(shim.showMessageBox).toHaveBeenCalled();
 	});
 
@@ -264,5 +286,49 @@ describe('screens/Note', () => {
 		expect(deleteButton).toBeDisabled();
 
 		cleanup();
+	});
+
+	it.each([
+		'auto',
+		'manual',
+	])('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
+		let note = await Note.save({ title: 'Note 1', parent_id: (await Folder.defaultFolder()).id });
+		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		await synchronizerStart();
+		await switchClient(1);
+		Setting.setValue('sync.resourceDownloadMode', downloadMode);
+		await synchronizerStart();
+
+		// Before opening the note, the resource should not be marked for download
+		const allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		const resource = allResources[0];
+		expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+
+		await openExistingNote(note.id);
+
+		render(<WrappedNoteScreen />);
+
+		// Note should render
+		const titleInput = await screen.findByDisplayValue('Note 1');
+		expect(titleInput).toBeVisible();
+
+		// Wrap in act() -- the component may update in the background during this.
+		await act(async () => {
+			await resourceFetcher().waitForAllFinished();
+
+			// After opening the note, the resource should be marked for download only in automatic mode
+			if (downloadMode === 'auto') {
+				await waitFor(async () => {
+					expect(await Resource.localState(resource.id)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_DONE });
+				});
+			} else if (downloadMode === 'manual') {
+				// In manual mode, should not mark for download
+				expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+			} else {
+				throw new Error(`Should not be testing downloadMode: ${downloadMode}.`);
+			}
+		});
 	});
 });

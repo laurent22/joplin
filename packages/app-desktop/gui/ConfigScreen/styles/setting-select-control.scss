@@ -1,0 +1,20 @@
+
+.setting-select-control {
+	display: inline-block;
+	color: var(--joplin-color);
+	font-family: var(--joplin-font-family);
+	background-color: var(--joplin-background-color);
+
+	padding-left: 6px;
+	padding-right: 6px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-radius: 3px;
+
+	border-color: var(--joplin-border-color4);
+
+	&:focus-visible {
+		border-color: var(--joplin-focus-outline-color);
+		outline: none;
+	}
+}

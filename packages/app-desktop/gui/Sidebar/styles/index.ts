@@ -49,22 +49,6 @@ export const StyledHeaderLabel = styled.span`
 	font-weight: bold;
 `;
 
-export const StyledListItem = styled.div`
-	box-sizing: border-box;
-	height: 30px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	padding-left: ${(props: StyleProps) => props.theme.mainPadding + ('depth' in props ? props.depth : 0) * 16}px;
-	background: ${(props: StyleProps) => props.selected ? props.theme.selectedColor2 : 'none'};
-	/*text-transform: ${(props: StyleProps) => props.isSpecialItem ? 'uppercase' : 'none'};*/
-	transition: 0.1s;
-
-	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
-	}
-`;
-
 function listItemTextColor(props: StyleProps) {
 	if (props.isConflictFolder) return props.theme.colorError2;
 	if (props.isSpecialItem) return props.theme.colorFaded2;

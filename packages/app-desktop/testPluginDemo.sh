@@ -16,9 +16,13 @@ if [[ $NEED_COMPILING == 1 ]]; then
 	echo "Copying from: $PLUGIN_PATH"
 	echo "To: $TEMP_PLUGIN_PATH"
 
-	rsync -a --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
+	rsync -a --exclude "cache/" --exclude "node_modules" --delete "$PLUGIN_PATH/" "$TEMP_PLUGIN_PATH/" 
 
-	NODE_OPTIONS=--openssl-legacy-provider npm install --prefix="$TEMP_PLUGIN_PATH" && yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
+	cd "$TEMP_PLUGIN_PATH/"
+	NODE_OPTIONS=--openssl-legacy-provider npm install
+	
+	cd "$SCRIPT_DIR"
+	yarn start --dev-plugins "$TEMP_PLUGIN_PATH"
 else
 	yarn start --dev-plugins "$PLUGIN_PATH"
 fi
