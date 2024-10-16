@@ -97,10 +97,6 @@ export const fileUriToPath = (path: string, platform = 'linux') => {
 	return output;
 };
 
-export const isDataUrl = (path: string) => {
-	return path.startsWith('data:');
-};
-
 export const hasProtocol = (url: string, protocol: string | string[]) => {
 	if (!url) return false;
 
