@@ -28,11 +28,21 @@ const configFromSettings = (settings: EditorSettings) => {
 						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
 					codeLanguages: lookUpLanguage,
+
+					...(settings.autocompleteMarkup ? {
+						// Most Markup completion is enabled by default
+					} : {
+						addKeymap: false,
+						completeHTMLTags: false,
+						htmlTagLanguage: html({ matchClosingTags: false, autoCloseTags: false }),
+					}),
 				}),
-				markdownLanguage.data.of({ closeBrackets: openingBrackets }),
+				markdownLanguage.data.of({
+					closeBrackets: openingBrackets,
+				}),
 			];
 		} else if (language === EditorLanguageType.Html) {
-			return html();
+			return html({ autoCloseTags: settings.autocompleteMarkup });
 		} else {
 			const exhaustivenessCheck: never = language;
 			return exhaustivenessCheck;
