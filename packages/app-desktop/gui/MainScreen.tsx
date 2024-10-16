@@ -634,7 +634,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 			editor: () => {
 				return <NoteEditorWrapper
-					windowId='default'
+					windowId={defaultWindowId}
 					key={key}
 					newWindow={false}
 				/>;
