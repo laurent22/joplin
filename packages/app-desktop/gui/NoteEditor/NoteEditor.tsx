@@ -79,7 +79,7 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 		onFocus={onWindowFocus}
 	>
 		<LibraryStyleRoot>
-			<WindowCommandHandler />
+			<WindowCommandHandler windowId={props.windowId} />
 			{editor}
 		</LibraryStyleRoot>
 		<StyleSheetContainer />

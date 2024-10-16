@@ -30,9 +30,14 @@ export interface EditorScrollPercents {
 	[noteId: string]: number;
 }
 
+export interface VisibleDialogs {
+	[dialogKey: string]: boolean;
+}
+
 export interface AppWindowState extends WindowState {
 	noteVisiblePanes: string[];
 	editorCodeView: boolean;
+	visibleDialogs: VisibleDialogs;
 }
 
 export interface AppState extends State, AppWindowState {
@@ -46,8 +51,6 @@ export interface AppState extends State, AppWindowState {
 	watchedNoteFiles: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
 	devToolsVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
@@ -64,6 +67,7 @@ export interface AppState extends State, AppWindowState {
 export const createAppDefaultWindowState = (): AppWindowState => {
 	return {
 		...defaultWindowState,
+		visibleDialogs: {},
 		noteVisiblePanes: ['editor', 'viewer'],
 		editorCodeView: true,
 	};

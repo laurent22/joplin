@@ -1,3 +1,4 @@
+import { defaultWindowId } from '@joplin/lib/reducer';
 import shim from '@joplin/lib/shim';
 import * as React from 'react';
 import { useState, useEffect, useRef, createContext } from 'react';
@@ -7,7 +8,7 @@ export enum WindowMode {
 	Iframe, NewWindow,
 }
 
-export const WindowIdContext = createContext('default');
+export const WindowIdContext = createContext(defaultWindowId);
 
 interface Props {
 	// Note: children will be rendered in a different DOM from this node. Avoid using document.* methods

@@ -11,12 +11,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DialogState } from './types';
 import usePrintToCallback from './utils/usePrintToCallback';
 import { connect } from 'react-redux';
-import { AppState } from '../../app.reducer';
+import { AppState, VisibleDialogs } from '../../app.reducer';
 import useWindowControl, { WindowControl } from './utils/useWindowControl';
 import commands from './commands';
 import CommandService, { CommandRuntime, ComponentCommandSpec } from '@joplin/lib/services/CommandService';
 import { Dispatch } from 'redux';
 import ModalMessageOverlay from './ModalMessageOverlay';
+import { stateUtils } from '@joplin/lib/reducer';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 
@@ -25,6 +26,7 @@ interface Props {
 	themeId: number;
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
+	currentWindowDialogs: VisibleDialogs;
 	pluginsLegacy: unknown;
 	modalMessage: string|null;
 
@@ -138,7 +140,7 @@ const WindowCommandHandler: React.FC<Props> = props => {
 		for (const info of infos) {
 			const { plugin, view } = info;
 			if (view.containerType !== ContainerType.Dialog) continue;
-			if (!view.opened) continue;
+			if (!props.currentWindowDialogs[view.id]) continue;
 			const html = props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
 
 			output.push(<UserWebviewDialog
@@ -230,12 +232,21 @@ const WindowCommandHandler: React.FC<Props> = props => {
 	</>;
 };
 
-export default connect((state: AppState) => ({
-	themeId: state.settings.theme,
-	plugins: state.pluginService.plugins,
-	pluginHtmlContents: state.pluginService.pluginHtmlContents,
-	customCss: state.customCss,
-	editorNoteStatuses: state.editorNoteStatuses,
-	pluginsLegacy: state.pluginsLegacy,
-	modalMessage: state.modalOverlayMessage,
-}))(WindowCommandHandler);
+interface ConnectProps {
+	windowId: string;
+}
+
+export default connect((state: AppState, ownProps: ConnectProps) => {
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+
+	return {
+		themeId: state.settings.theme,
+		plugins: state.pluginService.plugins,
+		currentWindowDialogs: windowState.visibleDialogs,
+		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		customCss: state.customCss,
+		editorNoteStatuses: state.editorNoteStatuses,
+		pluginsLegacy: state.pluginsLegacy,
+		modalMessage: state.modalOverlayMessage,
+	};
+})(WindowCommandHandler);

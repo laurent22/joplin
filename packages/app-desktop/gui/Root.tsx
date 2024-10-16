@@ -31,7 +31,7 @@ import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
 import NoteEditorWrapper from './NoteEditor/NoteEditor';
-import { stateUtils, WindowState } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
 import bridge from '../services/bridge';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
@@ -259,7 +259,7 @@ class RootComponent extends React.Component<Props, any> {
 					<StyleSheetContainer/>
 					<MenuBar/>
 					<GlobalStyle/>
-					<WindowCommandHandler />
+					<WindowCommandHandler windowId={defaultWindowId} />
 					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 					{this.renderSecondaryWindows()}
 					{this.renderModalMessage(this.modalDialogProps())}
