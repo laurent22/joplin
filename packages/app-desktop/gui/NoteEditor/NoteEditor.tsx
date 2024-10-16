@@ -69,8 +69,12 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 	}, [props.dispatch, props.windowId, newWindow]);
 
 	const onWindowFocus = useCallback(() => {
-		props.dispatch({ type: 'WINDOW_FOCUS', windowId: props.windowId });
-	}, [props.dispatch, props.windowId]);
+		props.dispatch({
+			type: 'WINDOW_FOCUS',
+			windowId: props.windowId,
+			lastWindowId: props.activeWindowId,
+		});
+	}, [props.dispatch, props.windowId, props.activeWindowId]);
 
 	const windowContent = <NewWindowOrIFrame
 		mode={newWindow ? WindowMode.NewWindow : WindowMode.Iframe}

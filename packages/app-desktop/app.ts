@@ -662,9 +662,11 @@ class Application extends BaseApplication {
 		});
 
 		window.addEventListener('focus', () => {
+			const currentWindowId = this.store().getState().windowId;
 			this.dispatch({
 				type: 'WINDOW_FOCUS',
 				windowId: 'default',
+				lastWindowId: currentWindowId,
 			});
 		});
 
