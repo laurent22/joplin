@@ -1,8 +1,7 @@
-import { EditorState } from '@codemirror/state';
 import { _ } from '@joplin/lib/locale';
 
 // See https://codemirror.net/examples/translate/
-const phrases = () => ({
+export default () => ({
 	// @codemirror/view
 	'Control character': _('Control character'),
 
@@ -27,6 +26,3 @@ const phrases = () => ({
 	'replaced match on line $': _('replaced match on line $'),
 	'on line': _('on line'),
 });
-
-const localisation = () => EditorState.phrases.of(phrases());
-export default localisation;

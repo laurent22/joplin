@@ -32,7 +32,6 @@ import handlePasteEvent from './utils/handlePasteEvent';
 import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
 import searchExtension from './utils/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
-import localisation from './utils/localisation';
 
 const createEditor = (
 	parentElement: HTMLElement, props: EditorProps,
@@ -256,7 +255,7 @@ const createEditor = (
 				decoratorExtension,
 				biDirectionalTextExtension,
 
-				localisation(),
+				props.localisations ? EditorState.phrases.of(props.localisations) : [],
 
 				// Adds additional CSS classes to tokens (the default CSS classes are
 				// auto-generated and thus unstable).

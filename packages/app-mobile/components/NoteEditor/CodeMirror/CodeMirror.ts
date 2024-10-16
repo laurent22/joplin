@@ -15,16 +15,12 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import { WebViewToEditorApi } from '../types';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import { setLocale } from '@joplin/lib/locale';
 
 export const initCodeMirror = (
 	parentElement: HTMLElement,
 	initialText: string,
 	settings: EditorSettings,
-	locale: string,
 ): CodeMirrorControl => {
-	setLocale(locale);
-
 	const messenger = new WebViewToRNMessenger<CodeMirrorControl, WebViewToEditorApi>('editor', null);
 
 	const control = createEditor(parentElement, {

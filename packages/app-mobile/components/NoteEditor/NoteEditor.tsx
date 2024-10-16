@@ -15,7 +15,7 @@ import { editorFont } from '../global-style';
 
 import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
 import { EditorControl, EditorSettings, SelectionRange, WebViewToEditorApi } from './types';
-import { _, currentLocale } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import MarkdownToolbar from './MarkdownToolbar/MarkdownToolbar';
 import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from '@joplin/editor/types';
@@ -374,10 +374,7 @@ function NoteEditor(props: Props, ref: any) {
 				const initialText = ${JSON.stringify(props.initialText)};
 				const settings = ${JSON.stringify(editorSettings)};
 
-				const locale = ${JSON.stringify(currentLocale())};
-				window.cm = codeMirrorBundle.initCodeMirror(
-					parentElement, initialText, settings, locale,
-				);
+				window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
 
 				${setInitialSelectionJS}
 
