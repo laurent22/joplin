@@ -1,0 +1,1 @@
+<table style="border-collapse: collapse; width: 100%;"><tbody><tr><td>First column, and an inner table:<table><tbody><tr><td>One</td><td>Two</td></tr><tr><td>One</td><td>Two</td></tr></tbody></table></td><td>Second column</td></tr></tbody></table>
