@@ -13,6 +13,14 @@ const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 	// Re-numbers ordered lists and sublists with numbers on each line in [linesToHandle]
 	const handleLines = (linesToHandle: Line[]) => {
 		const changes: ChangeSpec[] = [];
+		if (linesToHandle.length === 0) {
+			return changes;
+		}
+
+		let firstListNumber = Number(listItemRegex.exec(linesToHandle[0].text)?.[2]);
+		if (!isFinite(firstListNumber) || firstListNumber < 1) {
+			firstListNumber = 1;
+		}
 
 		type ListItemRecord = {
 			nextListNumber: number;
@@ -20,7 +28,7 @@ const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 		};
 		const listNumberStack: ListItemRecord[] = [];
 		let currentGroupIndentation = '';
-		let nextListNumber = 1;
+		let nextListNumber = firstListNumber;
 		let prevLineNumber;
 
 		for (const line of linesToHandle) {
