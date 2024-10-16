@@ -15,6 +15,7 @@ interface Props {
 	// Note: children will be rendered in a different DOM from this node. Avoid using document.* methods
 	// in child components.
 	children: React.ReactNode[]|React.ReactNode;
+	title: string;
 	mode: WindowMode;
 	windowId: string;
 	onClose: ()=> void;
@@ -110,6 +111,12 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 
 		setLoaded(true);
 	}, [doc]);
+
+	useEffect(() => {
+		if (!doc) return;
+		doc.title = props.title;
+	}, [doc, props.title]);
+
 	const parentNode = loaded ? doc?.body : null;
 	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;
 

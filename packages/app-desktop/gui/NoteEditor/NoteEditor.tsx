@@ -48,16 +48,32 @@ const useEditorKey = (props: UseToggleEditorsProps) => {
 	}, [props.codeView, props.isSafeMode, props.legacyMarkdown]);
 };
 
+const emptyCallback = () => {};
+const useWindowTitle = (isNewWindow: boolean) => {
+	const [title, setTitle] = useState('Untitled');
+
+	if (!isNewWindow) {
+		return {
+			windowTitle: 'Editor',
+			onNoteTitleChange: emptyCallback,
+		};
+	}
+
+	return { windowTitle: `Joplin - ${title}`, onNoteTitleChange: setTitle };
+};
+
 const NoteEditorWrapper: React.FC<Props> = props => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const bodyEditor = useEditorKey({
 		isSafeMode: props.isSafeMode, codeView: props.codeView, legacyMarkdown: props.legacyMarkdown, containerRef: containerRef,
 	});
+	const { windowTitle, onNoteTitleChange } = useWindowTitle(props.newWindow);
 	const editor = <div className='note-editor-wrapper' ref={containerRef}>
 		<NoteEditorContent
 			bodyEditor={bodyEditor}
 			windowId={props.windowId}
+			onTitleChange={onNoteTitleChange}
 		/>
 	</div>;
 
@@ -81,6 +97,7 @@ const NoteEditorWrapper: React.FC<Props> = props => {
 		windowId={props.windowId}
 		onClose={onWindowClose}
 		onFocus={onWindowFocus}
+		title={windowTitle}
 	>
 		<LibraryStyleRoot>
 			<WindowCommandHandler windowId={props.windowId} />

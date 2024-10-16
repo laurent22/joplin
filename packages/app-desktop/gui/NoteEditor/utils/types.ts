@@ -32,7 +32,6 @@ export interface NoteEditorProps {
 	editorNoteStatuses: any;
 	syncStarted: boolean;
 	decryptionStarted: boolean;
-	bodyEditor: string;
 	notesParentType: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	selectedNoteTags: any[];
@@ -57,6 +56,9 @@ export interface NoteEditorProps {
 	shareCacheSetting: string;
 	syncUserId: string;
 	searchResults: ProcessResultsRow[];
+
+	onTitleChange: (title: string)=> void;
+	bodyEditor: string;
 }
 
 export interface NoteBodyEditorRef {

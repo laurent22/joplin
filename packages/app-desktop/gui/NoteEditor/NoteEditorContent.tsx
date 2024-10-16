@@ -169,6 +169,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}, 100);
 	}, [props.dispatch]);
 
+	useEffect(() => {
+		props.onTitleChange(formNote.title);
+	}, [formNote.title, props.onTitleChange]);
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFieldChange = useCallback(async (field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
