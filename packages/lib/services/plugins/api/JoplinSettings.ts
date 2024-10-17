@@ -147,6 +147,20 @@ export default class JoplinSettings {
 	}
 
 	/**
+	 * Gets setting values (only applies to setting you registered from your plugin)
+	 */
+	public async values(keys: string[] | string): Promise<Record<string, unknown>> {
+		if (typeof keys === 'string') keys = [keys];
+		const output: Record<string, unknown> = {};
+		for (const key of keys) {
+			output[key] = Setting.value(getPluginNamespacedSettingKey(this.plugin_.id, key));
+		}
+		return output;
+	}
+
+	/**
+	 * @deprecated Use joplin.settings.values()
+	 *
 	 * Gets a setting value (only applies to setting you registered from your plugin)
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

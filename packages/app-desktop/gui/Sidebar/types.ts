@@ -21,10 +21,10 @@ interface BaseListItem {
 export interface HeaderListItem extends BaseListItem {
 	kind: ListItemType.Header;
 	label: string;
+	expanded: boolean;
 	iconName: string;
 	id: HeaderId;
 	onClick: ((headerId: HeaderId, event: ReactMouseEvent<HTMLElement>)=> void)|null;
-	onPlusButtonClick: MouseEventHandler<HTMLElement>|null;
 	extraProps: Record<string, string>;
 	supportsFolderDrop: boolean;
 }
