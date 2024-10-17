@@ -9,7 +9,7 @@ import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { DialogContext } from '../DialogManager';
 import { AppState } from '../../utils/types';
-import ActionBar from './ActionBar';
+import ActionButtons from './ActionButtons';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import Setting from '@joplin/lib/models/Setting';
 import { LinkButton, PrimaryButton } from '../buttons';
@@ -38,7 +38,7 @@ interface UseStyleProps {
 
 const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 	const { width: screenWidth, height: screenHeight } = useWindowDimensions();
-	const outputPositioning = useMemo(() => {
+	const outputPositioning = useMemo((): ViewStyle => {
 		const ratioMatch = cameraRatio.match(/^(\d+):(\d+)$/);
 		if (!ratioMatch) {
 			return { left: 0, top: 0 };
@@ -62,6 +62,9 @@ const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 			top: (screenHeight - output.height) / 2,
 			width: output.width,
 			height: output.height,
+			flexBasis: output.height,
+			flexGrow: 0,
+			alignContent: 'center',
 		};
 	}, [cameraRatio, screenWidth, screenHeight]);
 
@@ -168,14 +171,15 @@ const CameraViewComponent: React.FC<Props> = props => {
 			<PrimaryButton onPress={props.onCancel}>{_('Go back')}</PrimaryButton>
 		</View>;
 	} else {
-		content = <CameraView
-			ref={cameraRef}
-			style={styles.camera}
-			facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
-			ratio={availableRatios.includes(props.cameraRatio) ? (props.cameraRatio as CameraRatio) : undefined}
-			onCameraReady={onCameraReady}
-		>
-			<ActionBar
+		content = <>
+			<CameraView
+				ref={cameraRef}
+				style={styles.camera}
+				facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
+				ratio={availableRatios.includes(props.cameraRatio) ? (props.cameraRatio as CameraRatio) : undefined}
+				onCameraReady={onCameraReady}
+			/>
+			<ActionButtons
 				themeId={props.themeId}
 				onCameraReverse={onCameraReverse}
 				cameraDirection={props.cameraType}
@@ -186,7 +190,7 @@ const CameraViewComponent: React.FC<Props> = props => {
 				onCancelPhoto={props.onCancel}
 				cameraReady={cameraReady}
 			/>
-		</CameraView>;
+		</>;
 	}
 
 	return (
