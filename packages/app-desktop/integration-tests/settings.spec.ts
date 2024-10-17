@@ -3,9 +3,10 @@ import MainScreen from './models/MainScreen';
 import SettingsScreen from './models/SettingsScreen';
 
 test.describe('settings', () => {
-	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
+	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {
 		const mainScreen = new MainScreen(mainWindow);
 		await mainScreen.waitFor();
+		await startupPluginsLoaded;
 
 		// Sort order buttons should be visible by default
 		const sortOrderLocator = mainScreen.noteList.sortOrderButton;
