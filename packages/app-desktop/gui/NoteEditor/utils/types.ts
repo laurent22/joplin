@@ -57,7 +57,7 @@ export interface NoteEditorProps {
 	syncUserId: string;
 	searchResults: ProcessResultsRow[];
 
-	onTitleChange: (title: string)=> void;
+	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 }
 

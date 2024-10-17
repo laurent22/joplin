@@ -40,7 +40,7 @@ import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './NoteListHeader/utils/validateColumns';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
-import NoteEditorWrapper from './NoteEditor/NoteEditor';
+import NoteEditor from './NoteEditor/NoteEditor';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -633,10 +633,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				return <NoteEditorWrapper
+				return <NoteEditor
 					windowId={defaultWindowId}
 					key={key}
-					newWindow={false}
 				/>;
 			},
 		};

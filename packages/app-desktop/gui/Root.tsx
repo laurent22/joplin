@@ -30,9 +30,9 @@ import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
-import NoteEditorWrapper from './NoteEditor/NoteEditor';
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
 import bridge from '../services/bridge';
+import EditorWindow from './NoteEditor/EditorWindow';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
 interface Props {
@@ -226,7 +226,7 @@ class RootComponent extends React.Component<Props, any> {
 
 	private renderSecondaryWindows() {
 		return this.props.secondaryWindowStates.map((windowState: WindowState) => {
-			return <NoteEditorWrapper
+			return <EditorWindow
 				key={`new-window-note-${windowState.windowId}`}
 				windowId={windowState.windowId}
 				newWindow={true}
