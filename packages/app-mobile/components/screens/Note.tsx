@@ -681,6 +681,39 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		return await saveOriginalImage();
 	}
 
+	private async insertText(text: string) {
+		const newNote = { ...this.state.note };
+
+		if (this.state.mode === 'edit') {
+			let newText = '';
+
+			if (this.selection) {
+				newText = `\n${text}\n`;
+				const prefix = newNote.body.substring(0, this.selection.start);
+				const suffix = newNote.body.substring(this.selection.end);
+				newNote.body = `${prefix}${newText}${suffix}`;
+			} else {
+				newText = `\n${text}`;
+				newNote.body = `${newNote.body}\n${newText}`;
+			}
+
+			if (this.useEditorBeta()) {
+				// The beta editor needs to be explicitly informed of changes
+				// to the note's body
+				if (this.editorRef.current) {
+					this.editorRef.current.insertText(newText);
+				} else {
+					logger.info(`Tried to insert text ${text} to the note when the editor is not visible -- updating the note body instead.`);
+				}
+			}
+		} else {
+			newNote.body += `\n${text}`;
+		}
+
+		this.setState({ note: newNote });
+		return newNote;
+	}
+
 	public async attachFile(pickerResponse: Asset, fileType: string): Promise<ResourceEntity|null> {
 		if (!pickerResponse) {
 			// User has cancelled
@@ -754,36 +787,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		resource = await Resource.save(resource, { isNew: true });
 
 		const resourceTag = Resource.markupTag(resource);
-
-		const newNote = { ...this.state.note };
-
-		if (this.state.mode === 'edit') {
-			let newText = '';
-
-			if (this.selection) {
-				newText = `\n${resourceTag}\n`;
-				const prefix = newNote.body.substring(0, this.selection.start);
-				const suffix = newNote.body.substring(this.selection.end);
-				newNote.body = `${prefix}${newText}${suffix}`;
-			} else {
-				newText = `\n${resourceTag}`;
-				newNote.body = `${newNote.body}\n${newText}`;
-			}
-
-			if (this.useEditorBeta()) {
-				// The beta editor needs to be explicitly informed of changes
-				// to the note's body
-				if (this.editorRef.current) {
-					this.editorRef.current.insertText(newText);
-				} else {
-					logger.info(`Tried to attach resource ${resource.id} to the note when the editor is not visible -- updating the note body instead.`);
-				}
-			}
-		} else {
-			newNote.body += `\n${resourceTag}`;
-		}
-
-		this.setState({ note: newNote });
+		const newNote = await this.insertText(resourceTag);
 
 		void this.refreshResource(resource, newNote.body);
 
@@ -834,6 +838,11 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 
 		this.setState({ showCamera: false });
 	}
+
+	private cameraView_onBarcode = (data: string) => {
+		this.setState({ showCamera: false });
+		void this.insertText(data);
+	};
 
 	private cameraView_onCancel() {
 		this.setState({ showCamera: false });
@@ -1441,7 +1450,12 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
-			return <CameraView style={{ flex: 1 }} onPhoto={this.cameraView_onPhoto} onCancel={this.cameraView_onCancel} />;
+			return <CameraView
+				style={{ flex: 1 }}
+				onPhoto={this.cameraView_onPhoto}
+				onBarcodeSelected={this.cameraView_onBarcode}
+				onCancel={this.cameraView_onCancel}
+			/>;
 		} else if (this.state.showImageEditor) {
 			return <ImageEditor
 				resourceFilename={this.state.imageEditorResourceFilepath}

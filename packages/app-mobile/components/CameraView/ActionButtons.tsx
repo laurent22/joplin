@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { ActivityIndicator } from 'react-native-paper';
+import { LinkButton } from '../buttons';
 
 interface Props {
 	themeId: number;
@@ -13,6 +14,11 @@ interface Props {
 
 	onSetCameraRatio: ()=> void;
 	cameraRatio: string;
+
+	onToggleCodeScanner: ()=> void;
+	codeScannerEnabled: boolean;
+	currentBarcode: string;
+	onBarcodeSelected: (barcodeText: string)=> void;
 
 	onCancelPhoto: ()=> void;
 	onTakePicture: ()=> void;
@@ -57,6 +63,12 @@ const useStyles = () => {
 			buttonContent: {
 				color: 'black',
 				fontSize: 40,
+			},
+
+			qrCodeButtonDimmed: {
+				...buttonContainer,
+				backgroundColor: '#ffffff44',
+				borderWidth: 0,
 			},
 
 			takePhotoButtonContainer: {
@@ -115,14 +127,23 @@ const ActionButtons: React.FC<Props> = props => {
 			description={_('Change ratio')}
 		/>
 	);
+
+	const onBarcodeClick = useCallback(() => {
+		props.onBarcodeSelected(props.currentBarcode);
+	}, [props.currentBarcode, props.onBarcodeSelected]);
+	const barcodeLink = <LinkButton onPress={onBarcodeClick}>{_('Barcode: %s', props.currentBarcode)}</LinkButton>;
+	// TODO: Refactor!
 	const cameraActions = (
-		<View style={styles.buttonRowContainerBottom}>
-			{reverseButton}
-			{takePhotoButton}
-			{
-				// Changing ratio is only supported on Android:
-				Platform.OS === 'android' ? ratioButton : <View style={{ flex: 1 }}/>
-			}
+		<View style={[styles.buttonRowContainerBottom, { flexDirection: 'column' }]}>
+			{props.currentBarcode && props.codeScannerEnabled ? barcodeLink : null}
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+				{reverseButton}
+				{takePhotoButton}
+				{
+					// Changing ratio is only supported on Android:
+					Platform.OS === 'android' ? ratioButton : <View style={{ flex: 1 }}/>
+				}
+			</View>
 		</View>
 	);
 
@@ -136,6 +157,18 @@ const ActionButtons: React.FC<Props> = props => {
 				iconStyle={styles.buttonContent}
 				onPress={props.onCancelPhoto}
 				description={_('Back')}
+			/>
+
+			<IconButton
+				themeId={props.themeId}
+				iconName='ionicon qr-code'
+				containerStyle={props.codeScannerEnabled ? styles.buttonContainer : styles.qrCodeButtonDimmed}
+				iconStyle={styles.buttonContent}
+				onPress={props.onToggleCodeScanner}
+				description={_('QR code scanner')}
+
+				accessibilityRole='togglebutton'
+				accessibilityState={{ checked: props.codeScannerEnabled }}
 			/>
 		</View>
 		{props.cameraReady ? cameraActions : <ActivityIndicator/>}
