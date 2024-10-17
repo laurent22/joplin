@@ -234,7 +234,7 @@ export default function(props: Props) {
 			return (
 				<CellFooter>
 					<NeedUpgradeMessage>
-						{PluginService.instance().describeIncompatibility(props.manifest)}
+						{PluginService.instance().describeIncompatibility(item.manifest)}
 					</NeedUpgradeMessage>
 				</CellFooter>
 			);
