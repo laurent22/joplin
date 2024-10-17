@@ -102,21 +102,27 @@ const CameraViewComponent: React.FC<Props> = props => {
 	const styles = useStyles(props);
 	const cameraRef = useRef<CameraView|null>(null);
 	const [hasPermission, requestPermission] = useCameraPermissions();
+	const [requestingPermission, setRequestingPermission] = useState(true);
 	const [cameraReady, setCameraReady] = useState(false);
 	const dialogs = useContext(DialogContext);
 
 	useAsyncEffect(async (event) => {
-		if (!hasPermission?.granted) {
-			const success = await requestPermission();
-			if (event.cancelled) return;
+		try {
+			if (!hasPermission?.granted) {
+				setRequestingPermission(true);
+				const success = await requestPermission();
+				if (event.cancelled) return;
 
-			if (!success) {
-				dialogs.prompt(
-					_('Missing camera permission'),
-					_('The camera permission is required to take pictures.'),
-					[{ text: _('Open settings'), onPress: () => Linking.openSettings() }],
-				);
+				if (!success) {
+					dialogs.prompt(
+						_('Missing camera permission'),
+						_('The camera permission is required to take pictures.'),
+						[{ text: _('Open settings'), onPress: () => Linking.openSettings() }],
+					);
+				}
 			}
+		} finally {
+			setRequestingPermission(false);
 		}
 	}, [hasPermission, requestPermission, dialogs]);
 
@@ -164,7 +170,7 @@ const CameraViewComponent: React.FC<Props> = props => {
 	}, [props.onPhoto]);
 
 	let content;
-	if (!hasPermission?.canAskAgain && !hasPermission?.granted) {
+	if (!hasPermission?.canAskAgain && !hasPermission?.granted && !requestingPermission) {
 		content = <View style={styles.errorContainer}>
 			<Text>{_('Missing camera permission')}</Text>
 			<LinkButton onPress={() => Linking.openSettings()}>{_('Open settings')}</LinkButton>
