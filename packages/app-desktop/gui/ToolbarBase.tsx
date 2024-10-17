@@ -7,6 +7,7 @@ import { AppState } from '../app.reducer';
 import { connect } from 'react-redux';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import useDom from './hooks/useDom';
 
 interface ToolbarItemInfo extends ToolbarButtonInfo {
 	type?: string;
@@ -105,8 +106,11 @@ const ToolbarBaseComponent: React.FC<Props> = props => {
 	const focusableItems = useMemo(() => {
 		return allItems.filter(isFocusable);
 	}, [allItems]);
-	const containerRef = useRef<HTMLDivElement|null>(null);
-	const containerHasFocus = !!containerRef.current?.contains(document.activeElement);
+	const [containerNode, setContainerNode] = useState<HTMLDivElement|null>(null);
+	const containerRef = useRef<HTMLDivElement|null>(containerNode);
+	containerRef.current = containerNode;
+	const doc = useDom(containerNode);
+	const containerHasFocus = !!containerRef.current?.contains(doc.activeElement);
 
 	let keyCounter = 0;
 	const renderItem = (o: ToolbarItemInfo, indexInFocusable: number) => {
@@ -180,7 +184,7 @@ const ToolbarBaseComponent: React.FC<Props> = props => {
 
 	return (
 		<div
-			ref={containerRef}
+			ref={setContainerNode}
 			className='editor-toolbar'
 			style={props.style}
 

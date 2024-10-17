@@ -30,4 +30,18 @@
 	&::backdrop {
 		background-color: rgba(0,0,0,0.5);
 	}
+
+	&.-fullscreen {
+		&::backdrop {
+			background-color: var(--joplin-background-color);
+		}
+
+		> .content {
+			width: calc(100% - 20px);
+			padding: 10px;
+			border-radius: 0;
+			box-shadow: none;
+			background-color: transparent;
+		}
+	}
 }

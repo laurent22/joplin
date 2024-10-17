@@ -14,6 +14,7 @@ import useFocusHandler from './hooks/useFocusHandler';
 import useOnRenderItem from './hooks/useOnRenderItem';
 import { ListItem } from './types';
 import useSidebarCommandHandler from './hooks/useSidebarCommandHandler';
+import { stateUtils } from '@joplin/lib/reducer';
 import useOnRenderListWrapper from './hooks/useOnRenderListWrapper';
 
 interface Props {
@@ -94,15 +95,17 @@ const FolderAndTagList: React.FC<Props> = props => {
 };
 
 const mapStateToProps = (state: AppState) => {
+	const mainWindowState = stateUtils.mainWindowState(state);
+
 	return {
 		themeId: state.settings.theme,
 		tags: state.tags,
 		folders: state.folders,
-		notesParentType: state.notesParentType,
-		selectedFolderId: state.selectedFolderId,
-		selectedTagId: state.selectedTagId,
+		notesParentType: mainWindowState.notesParentType,
+		selectedFolderId: mainWindowState.selectedFolderId,
+		selectedTagId: mainWindowState.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,
-		selectedSmartFilterId: state.selectedSmartFilterId,
+		selectedSmartFilterId: mainWindowState.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,
 		tagHeaderIsExpanded: state.settings.tagHeaderIsExpanded,
 		folderHeaderIsExpanded: state.settings.folderHeaderIsExpanded,

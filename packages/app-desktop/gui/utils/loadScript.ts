@@ -9,7 +9,7 @@ export interface Script {
 	attrs?: Record<string, any>;
 }
 
-export const loadScript = async (script: Script) => {
+export const loadScript = async (script: Script, document: Document) => {
 	return new Promise((resolve) => {
 		// eslint-disable-next-line no-console
 		console.info('Loading script:', script);

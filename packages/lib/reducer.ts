@@ -7,7 +7,7 @@ import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
-import { FolderEntity, NoteEntity } from './services/database/types';
+import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
@@ -70,20 +70,15 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
-export interface State {
+export interface WindowState {
+	windowId: string;
 	notes: NoteEntity[];
 	noteSelectionEnabled?: boolean;
 	notesSource: string;
 	notesParentType: string;
-	folders: FolderEntity[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	tags: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	masterKeys: any[];
-	notLoadedMasterKeys: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	searches: any[];
-	highlightedWords: string[];
+	selectedNoteTags: NoteTagEntity[];
+	searchQuery: string;
+
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
 	selectedFolderId: string;
@@ -91,7 +86,47 @@ export interface State {
 	selectedSearchId: string;
 	selectedItemType: string;
 	selectedSmartFilterId: string;
+
+	backwardHistoryNotes: NoteEntity[];
+	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
+}
+
+export const defaultWindowId = 'default';
+export const defaultWindowState: WindowState = {
+	windowId: defaultWindowId,
+	searchQuery: '',
+	notes: [],
+	notesSource: '',
+	notesParentType: null,
+	selectedNoteIds: [],
+	selectedNoteHash: '',
+	selectedFolderId: null,
+	selectedTagId: null,
+	selectedSearchId: null,
+	selectedSmartFilterId: null,
+	selectedItemType: 'note',
+	selectedNoteTags: [],
+	backwardHistoryNotes: [],
+	forwardHistoryNotes: [],
+	lastSelectedNotesIds: {
+		Folder: {},
+		Tag: {},
+		Search: {},
+	},
+};
+
+export interface State extends WindowState {
+	backgroundWindows: Record<string, WindowState>;
+
+	folders: FolderEntity[];
+	tags: NoteTagEntity[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	masterKeys: any[];
+	notLoadedMasterKeys: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	searches: any[];
+	highlightedWords: string[];
 	showSideMenu: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	screens: any;
@@ -99,7 +134,6 @@ export interface State {
 	syncStarted: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
-	searchQuery: string;
 	searchResults: ProcessResultsRow[];
 	settings: Partial<SettingsRecord>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -112,13 +146,7 @@ export interface State {
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	selectedNoteTags: any[];
 	resourceFetcher: StateResourceFetcher;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	backwardHistoryNotes: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	forwardHistoryNotes: any[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginsLegacy: any;
 	provisionalNoteIds: string[];
@@ -141,27 +169,14 @@ export interface State {
 }
 
 export const defaultState: State = {
-	notes: [],
-	notesSource: '',
-	notesParentType: null,
+	...defaultWindowState,
+	backgroundWindows: {},
 	folders: [],
 	tags: [],
 	masterKeys: [],
 	notLoadedMasterKeys: [],
 	searches: [],
 	highlightedWords: [],
-	selectedNoteIds: [],
-	selectedNoteHash: '',
-	selectedFolderId: null,
-	selectedTagId: null,
-	selectedSearchId: null,
-	selectedSmartFilterId: null,
-	selectedItemType: 'note',
-	lastSelectedNotesIds: {
-		Folder: {},
-		Tag: {},
-		Search: {},
-	},
 	showSideMenu: false,
 	screens: {},
 	historyCanGoBack: false,
@@ -189,13 +204,10 @@ export const defaultState: State = {
 		decryptedItemCount: 0,
 		skippedItemCount: 0,
 	},
-	selectedNoteTags: [],
 	resourceFetcher: {
 		toFetchCount: 0,
 		fetchingCount: 0,
 	},
-	backwardHistoryNotes: [],
-	forwardHistoryNotes: [],
 	// pluginsLegacy is the original plugin system, which eventually was used only for GotoAnything.
 	// GotoAnything should be refactored to part of core and when it's done the pluginsLegacy key can
 	// be removed. It was originally named "plugins", then renamed "pluginsLegacy" so as not to conflict
@@ -290,7 +302,7 @@ class StateUtils {
 		return selectArrayShallow(props, cacheKey);
 	}
 
-	public oneNoteSelected(state: State): boolean {
+	public oneNoteSelected(state: WindowState): boolean {
 		return state.selectedNoteIds.length === 1;
 	}
 
@@ -334,7 +346,7 @@ class StateUtils {
 		return false;
 	}
 
-	public parentItem(state: State) {
+	public parentItem(state: WindowState) {
 		const t = state.notesParentType;
 		let id = null;
 		if (t === 'Folder') id = state.selectedFolderId;
@@ -344,7 +356,7 @@ class StateUtils {
 		return { type: t, id: id };
 	}
 
-	public lastSelectedNoteIds(state: State): string[] {
+	public lastSelectedNoteIds(state: WindowState): string[] {
 		const parent = this.parentItem(state);
 		if (!parent) return [];
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -352,17 +364,55 @@ class StateUtils {
 		return output ? output : [];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedNote(state: State): any {
+	public selectedNote(state: WindowState): NoteEntity {
 		const noteId = this.selectedNoteId(state);
 		return noteId ? BaseModel.byId(state.notes, noteId) : null;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedNoteId(state: State): any {
+	public selectedNoteId(state: WindowState): string|null {
 		return state.selectedNoteIds.length ? state.selectedNoteIds[0] : null;
 	}
 
+	public activeWindowId(state: State) {
+		return state.windowId;
+	}
+
+	private allWindowIds(state: State) {
+		return [state.windowId, ...Object.keys(state.backgroundWindows)];
+	}
+
+	public allWindowStates<T extends State>(state: T) {
+		return this.allWindowIds(state).map(id => this.windowStateById(state, id));
+	}
+
+	public windowStateById<StateType extends State>(
+		state: StateType, id: string,
+	) {
+		// States for the different Joplin apps can have different types for backgroundWindows -- this
+		// makes sure that the correct type is returned.
+		type AppWindowState = StateType['backgroundWindows'][keyof StateType['backgroundWindows']];
+		const result = id === state.windowId ? state : state.backgroundWindows[id];
+		return result as AppWindowState;
+	}
+
+	public mainWindowState(state: State) {
+		return this.windowStateById(state, defaultWindowId);
+	}
+
+	public secondaryWindowStates(state: State) {
+		const windowIds = [state.windowId, ...Object.keys(state.backgroundWindows)];
+		return windowIds
+			.filter(id => (id !== defaultWindowId))
+			.map(id => this.windowStateById(state, id));
+	}
+
+	public windowIdToSelectedNoteIds(state: State) {
+		const result: Record<string, string[]> = {};
+		for (const id of this.allWindowIds(state)) {
+			result[id] = this.windowStateById(state, id).selectedNoteIds;
+		}
+		return result;
+	}
 }
 
 export const stateUtils: StateUtils = new StateUtils();
@@ -407,8 +457,8 @@ function removeAdjacentDuplicates(items: any[]) {
 // When deleting a note, tag or folder
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function handleItemDelete(draft: Draft<State>, action: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const map: any = {
+	type SelectionKey = 'selectedFolderId'|'selectedNoteIds'|'selectedTagId'|'selectedSearchId';
+	const map: Record<string, [keyof State, SelectionKey, boolean]> = {
 		FOLDER_DELETE: ['folders', 'selectedFolderId', true],
 		NOTE_DELETE: ['notes', 'selectedNoteIds', false],
 		TAG_DELETE: ['tags', 'selectedTagId', true],
@@ -419,68 +469,70 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	const selectedItemKey = map[action.type][1];
 	const isSingular = map[action.type][2];
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const selectedItemKeys = isSingular ? [(draft as any)[selectedItemKey]] : (draft as any)[selectedItemKey];
-	const isSelected = selectedItemKeys.includes(action.id);
+	for (const windowDraft of stateUtils.allWindowStates(draft)) {
+		const selectedItemKeys = isSingular ? [windowDraft[selectedItemKey]] : windowDraft[selectedItemKey];
+		const isSelected = selectedItemKeys.includes(action.id);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const items = (draft as any)[listKey];
-	const newItems = [];
-	let newSelectedIndexes: number[] = [];
+		const items = listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey];
+		const newItems = [];
+		let newSelectedIndexes: number[] = [];
 
-	for (let i = 0; i < items.length; i++) {
-		const item = items[i];
-		if (isSelected) {
-			// the selected item is deleted so select the following item
-			// if multiple items are selected then just use the first one
-			if (selectedItemKeys[0] === item.id) {
-				newSelectedIndexes.push(newItems.length);
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			if (isSelected) {
+				// the selected item is deleted so select the following item
+				// if multiple items are selected then just use the first one
+				if (selectedItemKeys[0] === item.id) {
+					newSelectedIndexes.push(newItems.length);
+				}
+			} else {
+				// the selected item/s is not deleted so keep it selected
+				if (selectedItemKeys.includes(item.id)) {
+					newSelectedIndexes.push(newItems.length);
+				}
 			}
+			if (item.id === action.id) {
+				continue;
+			}
+			newItems.push(item);
+		}
+
+		if (newItems.length === 0) {
+			newSelectedIndexes = []; // no remaining items so no selection
+
+		} else if (newSelectedIndexes.length === 0) {
+			newSelectedIndexes.push(0); // no selection exists so select the top
+
 		} else {
-			// the selected item/s is not deleted so keep it selected
-			if (selectedItemKeys.includes(item.id)) {
-				newSelectedIndexes.push(newItems.length);
+			// when the items at end of list are deleted then select the end
+			for (let i = 0; i < newSelectedIndexes.length; i++) {
+				if (newSelectedIndexes[i] >= newItems.length) {
+					newSelectedIndexes = [newItems.length - 1];
+					break;
+				}
 			}
 		}
-		if (item.id === action.id) {
-			continue;
+
+		if (listKey in windowDraft) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			(windowDraft as any)[listKey] = newItems;
 		}
-		newItems.push(item);
-	}
 
-	if (newItems.length === 0) {
-		newSelectedIndexes = []; // no remaining items so no selection
-
-	} else if (newSelectedIndexes.length === 0) {
-		newSelectedIndexes.push(0); // no selection exists so select the top
-
-	} else {
-		// when the items at end of list are deleted then select the end
+		const newIds = [];
 		for (let i = 0; i < newSelectedIndexes.length; i++) {
-			if (newSelectedIndexes[i] >= newItems.length) {
-				newSelectedIndexes = [newItems.length - 1];
-				break;
-			}
+			newIds.push(newItems[newSelectedIndexes[i]].id);
 		}
-	}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		(windowDraft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(draft as any)[listKey] = newItems;
-
-	const newIds = [];
-	for (let i = 0; i < newSelectedIndexes.length; i++) {
-		newIds.push(newItems[newSelectedIndexes[i]].id);
-	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(draft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
-
-	if ((newIds.length === 0) && draft.notesParentType !== 'Folder') {
-		draft.notesParentType = 'Folder';
+		if ((newIds.length === 0) && windowDraft.notesParentType !== 'Folder') {
+			windowDraft.notesParentType = 'Folder';
+		}
 	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function updateOneItem(draft: Draft<State>, action: any, keyName = '') {
+function updateOneItem(draft: Draft<State|WindowState>, action: any, keyName = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
 		if (action.type === 'TAG_UPDATE_ONE') itemsKey = 'tags';
@@ -757,25 +809,6 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 		break;
-	case 'NOTE_UPDATE_ONE': {
-		const modNote = action.note;
-
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.map(note => {
-			if (note.id === modNote.id) {
-				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
-			}
-			return note;
-		});
-
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.map(note => {
-			if (note.id === modNote.id) {
-				return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
-			}
-			return note;
-		});
-
-		break;
-	}
 	case 'SEARCH_UPDATE':
 		if (currentNote && (draft.backwardHistoryNotes.length === 0 ||
 						draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id !== currentNote.id)) {
@@ -787,33 +820,127 @@ function handleHistory(draft: Draft<State>, action: any) {
 	case 'SEARCH_RESULTS_SET':
 		draft.searchResults = action.value;
 		break;
-
-	case 'FOLDER_DELETE':
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);
-
-		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
-		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
-		break;
-	case 'NOTE_DELETE': {
-		draft.backwardHistoryNotes = draft.backwardHistoryNotes.filter(note => note.id !== action.id);
-		draft.forwardHistoryNotes = draft.forwardHistoryNotes.filter(note => note.id !== action.id);
-
-		draft.backwardHistoryNotes = removeAdjacentDuplicates(draft.backwardHistoryNotes);
-		draft.forwardHistoryNotes = removeAdjacentDuplicates(draft.forwardHistoryNotes);
-
-		// Fix the case where after deletion the currently selected note is also the latest in history
-		const selectedNoteIds = draft.selectedNoteIds;
-		if (selectedNoteIds.length && draft.backwardHistoryNotes.length && draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
-			draft.backwardHistoryNotes = draft.backwardHistoryNotes.slice(0, draft.backwardHistoryNotes.length - 1);
-		}
-		if (selectedNoteIds.length && draft.forwardHistoryNotes.length && draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
-			draft.forwardHistoryNotes = draft.forwardHistoryNotes.slice(0, draft.forwardHistoryNotes.length - 1);
-		}
-		break;
 	}
+
+	const updateWindowHistory = (windowDraft: Draft<WindowState>) => {
+		switch (action.type) {
+		case 'NOTE_UPDATE_ONE': {
+			const modNote = action.note;
+
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.map(note => {
+				if (note.id === modNote.id) {
+					return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
+				}
+				return note;
+			});
+
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.map(note => {
+				if (note.id === modNote.id) {
+					return { ...note, parent_id: modNote.parent_id, selectedFolderId: modNote.parent_id };
+				}
+				return note;
+			});
+
+			break;
+		}
+
+		case 'FOLDER_DELETE':
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.filter(note => note.parent_id !== action.id);
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.filter(note => note.parent_id !== action.id);
+
+			windowDraft.backwardHistoryNotes = removeAdjacentDuplicates(windowDraft.backwardHistoryNotes);
+			windowDraft.forwardHistoryNotes = removeAdjacentDuplicates(windowDraft.forwardHistoryNotes);
+			break;
+		case 'NOTE_DELETE': {
+			windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.filter(note => note.id !== action.id);
+			windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.filter(note => note.id !== action.id);
+
+			windowDraft.backwardHistoryNotes = removeAdjacentDuplicates(windowDraft.backwardHistoryNotes);
+			windowDraft.forwardHistoryNotes = removeAdjacentDuplicates(windowDraft.forwardHistoryNotes);
+
+			// Fix the case where after deletion the currently selected note is also the latest in history
+			const selectedNoteIds = windowDraft.selectedNoteIds;
+			if (selectedNoteIds.length && windowDraft.backwardHistoryNotes.length && windowDraft.backwardHistoryNotes[windowDraft.backwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+				windowDraft.backwardHistoryNotes = windowDraft.backwardHistoryNotes.slice(0, windowDraft.backwardHistoryNotes.length - 1);
+			}
+			if (selectedNoteIds.length && windowDraft.forwardHistoryNotes.length && windowDraft.forwardHistoryNotes[windowDraft.forwardHistoryNotes.length - 1].id === selectedNoteIds[0]) {
+				windowDraft.forwardHistoryNotes = windowDraft.forwardHistoryNotes.slice(0, windowDraft.forwardHistoryNotes.length - 1);
+			}
+			break;
+		}
+		}
+	};
+
+	updateWindowHistory(draft);
+	for (const id in draft.backgroundWindows) {
+		updateWindowHistory(draft.backgroundWindows[id]);
 	}
 }
+
+type WindowAction = {
+	type: 'WINDOW_OPEN';
+	windowId: string;
+	folderId: string;
+	noteId: string;
+	defaultAppWindowState: Record<string, unknown>;
+}|{
+	type: 'WINDOW_FOCUS'|'WINDOW_CLOSE';
+	windowId: string;
+};
+
+const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
+	switch (action.type) {
+
+	case 'WINDOW_OPEN': {
+		if (action.windowId in draft.backgroundWindows) {
+			throw new Error(`Window with id ${action.windowId} is already open!`);
+		}
+
+		draft.backgroundWindows[action.windowId] = {
+			...defaultWindowState,
+			...action.defaultAppWindowState,
+
+			lastSelectedNotesIds: {
+				...defaultWindowState.lastSelectedNotesIds,
+				Folder: {
+					[action.folderId]: [action.noteId],
+				},
+			},
+			notesParentType: 'Folder',
+			selectedFolderId: action.folderId,
+			windowId: action.windowId,
+			selectedNoteIds: [action.noteId],
+		};
+		break;
+	}
+	case 'WINDOW_FOCUS': {
+		// Only allow bringing a background window to the foreground
+		if (draft.windowId !== action.windowId) {
+			const windowId = action.windowId;
+			const previousWindowId = draft.windowId;
+
+			const focusingWindowState = draft.backgroundWindows[windowId];
+			const previousWindowState = { ...defaultWindowState };
+
+			for (const key of Object.keys(focusingWindowState)) {
+				const stateKey = key as keyof WindowState;
+
+				type AssignableWindowState = Record<keyof WindowState, unknown>;
+				(previousWindowState as AssignableWindowState)[stateKey] = draft[stateKey];
+				(draft as AssignableWindowState)[stateKey] = focusingWindowState[stateKey];
+			}
+
+			delete draft.backgroundWindows[windowId];
+			draft.backgroundWindows[previousWindowId] = previousWindowState;
+		}
+		break;
+	}
+	case 'WINDOW_CLOSE': {
+		delete draft.backgroundWindows[action.windowId];
+		break;
+	}
+	}
+};
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -828,6 +955,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 	if (action.type !== 'NOTE_DELETE') {
 		handleHistory(draft, action);
 	}
+
+	handleWindowActions(draft, action);
 
 	try {
 		switch (action.type) {
@@ -952,87 +1081,94 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const isViewingAllNotes = (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
-				const isViewingConflictFolder = draft.notesParentType === 'Folder' && draft.selectedFolderId === Folder.conflictFolderId();
+				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
+					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
-				const noteIsInFolder = function(note: NoteEntity, folderId: string) {
-					if (note.is_conflict && isViewingConflictFolder) return true;
-					const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
-					return folderId === noteDisplayParentId;
-				};
+					const noteIsInFolder = function(note: NoteEntity, folderId: string) {
+						if (note.is_conflict && isViewingConflictFolder) return true;
+						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
+						return folderId === noteDisplayParentId;
+					};
 
-				let movedNotePreviousIndex = 0;
-				let noteFolderHasChanged = false;
-				const newNotes = draft.notes.slice();
-				let found = false;
-				for (let i = 0; i < newNotes.length; i++) {
-					const n = newNotes[i];
-					if (n.id === modNote.id) {
-						const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
-						if (n.is_conflict && !modNote.is_conflict) {
-							// Note was a conflict but was moved outside of
-							// the conflict folder
-							newNotes.splice(i, 1);
-							noteFolderHasChanged = true;
-							movedNotePreviousIndex = i;
-						} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
-							// Note is still in the same folder
-							// Merge the properties that have changed (in modNote) into
-							// the object we already have.
-							newNotes[i] = { ...newNotes[i] };
+					let movedNotePreviousIndex = 0;
+					let noteFolderHasChanged = false;
+					const newNotes = windowDraft.notes.slice();
+					let found = false;
+					for (let i = 0; i < newNotes.length; i++) {
+						const n = newNotes[i];
+						if (n.id === modNote.id) {
+							const previousDisplayParentId = ('parent_id' in n) ? getDisplayParentId(n, draft.folders.find(f => f.id === n.parent_id)) : '';
+							if (n.is_conflict && !modNote.is_conflict) {
+								// Note was a conflict but was moved outside of
+								// the conflict folder
+								newNotes.splice(i, 1);
+								noteFolderHasChanged = true;
+								movedNotePreviousIndex = i;
+							} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
+								// Note is still in the same folder
+								// Merge the properties that have changed (in modNote) into
+								// the object we already have.
+								newNotes[i] = { ...newNotes[i] };
 
-							for (const n in modNote) {
-								if (!modNote.hasOwnProperty(n)) continue;
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								(newNotes[i] as any)[n] = (modNote as any)[n];
+								for (const n in modNote) {
+									if (!modNote.hasOwnProperty(n)) continue;
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									(newNotes[i] as any)[n] = (modNote as any)[n];
+								}
+							} else {
+								// Note has moved to a different folder
+								newNotes.splice(i, 1);
+								noteFolderHasChanged = true;
+								movedNotePreviousIndex = i;
 							}
-						} else {
-							// Note has moved to a different folder
-							newNotes.splice(i, 1);
-							noteFolderHasChanged = true;
-							movedNotePreviousIndex = i;
+							found = true;
+							break;
 						}
-						found = true;
-						break;
 					}
-				}
 
-				// Note was not found - if the current folder is the same as the note folder,
-				// add it to it.
-				if (!found) {
-					if (isViewingAllNotes || noteIsInFolder(modNote, draft.selectedFolderId)) {
-						newNotes.push(modNote);
+					// Note was not found - if the current folder is the same as the note folder,
+					// add it to it.
+					if (!found) {
+						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
+							newNotes.push(modNote);
+						}
 					}
-				}
 
-				draft.notes = newNotes;
+					windowDraft.notes = newNotes;
 
-				// Ensure that the selected note is still in the current folder.
-				// For example, if the user drags the current note to a different folder,
-				// a new note should be selected.
-				// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
-				if (noteFolderHasChanged && !action.preserveSelection) {
-					let newIndex = movedNotePreviousIndex;
-					if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
-					if (!newNotes.length) newIndex = -1;
-					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
-				}
+					// Ensure that the selected note is still in the current folder.
+					// For example, if the user drags the current note to a different folder,
+					// a new note should be selected.
+					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+					if (noteFolderHasChanged && !action.preserveSelection) {
+						let newIndex = movedNotePreviousIndex;
+						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
+						if (!newNotes.length) newIndex = -1;
+						windowDraft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
+					}
 
-				if (!action.ignoreProvisionalFlag) {
-					let newProvisionalNoteIds = draft.provisionalNoteIds;
+					if (!action.ignoreProvisionalFlag) {
+						let newProvisionalNoteIds = draft.provisionalNoteIds;
 
-					if (action.provisional) {
-						newProvisionalNoteIds = newProvisionalNoteIds.slice();
-						newProvisionalNoteIds.push(modNote.id);
-					} else {
 						const idx = newProvisionalNoteIds.indexOf(modNote.id);
-						if (idx >= 0) {
+						if (action.provisional) {
+							if (idx < 0) {
+								newProvisionalNoteIds = newProvisionalNoteIds.slice();
+								newProvisionalNoteIds.push(modNote.id);
+							}
+						} else if (idx >= 0) {
 							newProvisionalNoteIds = newProvisionalNoteIds.slice();
 							newProvisionalNoteIds.splice(idx, 1);
 						}
-					}
 
-					draft.provisionalNoteIds = newProvisionalNoteIds;
+						draft.provisionalNoteIds = newProvisionalNoteIds;
+					}
+				};
+
+				handleWindowState(draft);
+				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
+					handleWindowState(backgroundWindow);
 				}
 			}
 			break;
@@ -1116,10 +1252,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'TAG_UPDATE_ONE':
 			{
-				// We only want to update the selected note tags if the tag belongs to the currently open note
-				const selectedNoteHasTag = !!draft.selectedNoteTags.find(tag => tag.id === action.item.id);
 				updateOneItem(draft, action);
-				if (selectedNoteHasTag) updateOneItem(draft, action, 'selectedNoteTags');
+
+				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
+					// We only want to update the selected note tags if the tag belongs to the currently open note
+					const selectedNoteHasTag = !!windowStateDraft.selectedNoteTags.find(tag => tag.id === action.item.id);
+					if (selectedNoteHasTag) {
+						updateOneItem(windowStateDraft, action, 'selectedNoteTags');
+					}
+				}
 			}
 			break;
 
@@ -1127,7 +1268,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				updateOneItem(draft, action, 'tags');
 				const tagRemoved = action.item;
-				draft.selectedNoteTags = removeItemFromArray(draft.selectedNoteTags, 'id', tagRemoved.id);
+				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
+					windowStateDraft.selectedNoteTags = removeItemFromArray(windowStateDraft.selectedNoteTags, 'id', tagRemoved.id);
+				}
 			}
 			break;
 

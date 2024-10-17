@@ -35,7 +35,7 @@ export const IconSelector = (props: Props) => {
 				attrs: {
 					type: 'module',
 				},
-			});
+			}, document);
 
 			if (event.cancelled) return;
 
@@ -45,7 +45,7 @@ export const IconSelector = (props: Props) => {
 				attrs: {
 					type: 'module',
 				},
-			});
+			}, document);
 
 			if (event.cancelled) return;
 

@@ -118,7 +118,7 @@ const useOnRenderItem = (props: Props) => {
 			menu.append(
 				new MenuItem(menuUtils.commandToStatefulMenuItem('emptyTrash')),
 			);
-			menu.popup({ window: bridge().window() });
+			menu.popup({ window: bridge().mainWindow() });
 			return;
 		}
 
@@ -268,7 +268,7 @@ const useOnRenderItem = (props: Props) => {
 			}
 		}
 
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().mainWindow() });
 	}, [props.dispatch, pluginsRef]);
 
 
