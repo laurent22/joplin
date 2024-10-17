@@ -1576,6 +1576,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'featureFlag.linuxKeychain': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Enable keychain support',
+			description: () => 'This is an experimental setting to enable keychain support on Linux',
+			show: () => shim.isLinux(),
+			section: 'general',
+			isGlobal: true,
+			advanced: true,
+		},
+
 
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,

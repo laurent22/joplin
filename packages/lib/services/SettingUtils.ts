@@ -34,6 +34,13 @@ export async function loadKeychainServiceAndSettings(keychainServiceDrivers: Key
 	Setting.setKeychainService(KeychainService.instance());
 	await Setting.load();
 
+	// Using Linux with the keychain has been observed to cause all secure settings to be lost
+	// on Fedora 40 + GNOME. (This may have been related to running multiple Joplin instances).
+	// For now, make saving to the keychain opt-in until more feedback is received.
+	if (shim.isLinux() && !Setting.value('featureFlag.linuxKeychain')) {
+		KeychainService.instance().readOnly = true;
+	}
+
 	// This is part of the migration to the new sync target info. It needs to be
 	// set as early as possible since it's used to tell if E2EE is enabled, it
 	// contains the master keys, etc. Once it has been set, it becomes a noop
