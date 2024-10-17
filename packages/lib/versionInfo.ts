@@ -76,6 +76,7 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 
 	let keychainSupported = false;
 	try {
+		// To allow old keys to be read, certain apps allow read-only keychain access:
 		keychainSupported = Setting.value('keychain.supported') >= 1 && !KeychainService.instance().readOnly;
 	} catch (error) {
 		logger.error('Failed to determine if keychain is supported', error);
@@ -87,8 +88,6 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),
 		_('Profile Version: %s', reg.db().version()),
-		// The portable app temporarily supports read-only keychain access (but disallows
-		// write).
 		_('Keychain Supported: %s', keychainSupported ? _('Yes') : _('No')),
 	];
 
