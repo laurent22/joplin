@@ -1,7 +1,6 @@
 
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
@@ -26,10 +25,6 @@ const getDeletionLines = async (filePath: string) => {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async () => {
-			if (!Logger.globalLogger) {
-				throw new Error('Could not find global logger');
-			}
-
 			const files = await shim.fsDriver().readDirStats(Setting.value('profileDir'));
 			// Get all log.txt and log-{timestamp}.txt files but ignore deletion_log.txt
 			const logFiles = files.filter(f => f.path.match(/^log(-\d+)?\.txt$/gi));
