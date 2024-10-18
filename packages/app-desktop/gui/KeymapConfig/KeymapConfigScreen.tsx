@@ -94,15 +94,14 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const renderStatus = (commandName: string) => {
-		if (editing[commandName]) {
-			if (recorderError) {
-				return <i className="fa fa-exclamation-triangle" role='img' aria-label={recorderError.message} title={recorderError.message} />;
-			}
-			return null;
-		} else {
+		if (!editing[commandName]) {
 			const editLabel = _('Change shortcut for "%s"', getLabel(commandName));
 			return <i className="fa fa-pen" role='img' aria-label={editLabel} title={editLabel}/>;
+		} else if (recorderError) {
+			return <i className="fa fa-exclamation-triangle" role='img' aria-label={recorderError.message} title={recorderError.message} />;
 		}
+
+		return null;
 	};
 
 	const renderError = (error: Error) => {
