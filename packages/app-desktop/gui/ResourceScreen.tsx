@@ -89,7 +89,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 
 	const renderSortableHeader = (title: string, order: SortingOrder) => {
 		const sortedDescending = props.sorting.order === order && props.sorting.type === 'desc';
-		const sortButtonLabel = sortedDescending ? _('Change %s sort order to ascending', title) : _('Change %s sort order to descending', title);
+		const sortButtonLabel = sortedDescending ? _('Sort "%s" in ascending order', title) : _('Sort "%s" in descending order', title);
 		const reverseSortButton = (
 			<a
 				href="#"
