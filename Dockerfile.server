@@ -35,6 +35,9 @@ COPY packages/utils ./packages/utils
 COPY packages/lib ./packages/lib
 COPY packages/server ./packages/server
 
+# We don't want to build onenote-converter since it is not used by the server
+RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
+
 # For some reason there's both a .yarn/cache and .yarn/berry/cache that are
 # being generated, and both have the same content. Not clear why it does this
 # but we can delete it anyway. We can delete the cache because we use

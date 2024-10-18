@@ -218,6 +218,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@asamuzakjp/dom-selector@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "@asamuzakjp/dom-selector@npm:2.0.2"
+  dependencies:
+    bidi-js: ^1.0.3
+    css-tree: ^2.3.1
+    is-potential-custom-element-name: ^1.0.1
+  checksum: a454537fcba4f241d3c1303f6068944462fc0ba9cd2c5e3ad639c0acb58ffb7809e5d4cbdac805c8c2525b2450d53a992ff98f07a323c5246044e8e3de3561fe
+  languageName: node
+  linkType: hard
+
 "@aws-crypto/crc32@npm:3.0.0":
   version: 3.0.0
   resolution: "@aws-crypto/crc32@npm:3.0.0"
@@ -7708,14 +7719,17 @@ __metadata:
     "@joplin/fork-sax": ^1.2.56
     "@joplin/fork-uslug": ^1.0.17
     "@joplin/htmlpack": ~3.1
+    "@joplin/onenote-converter": 0.0.1
     "@joplin/renderer": ~3.1
     "@joplin/turndown": ^4.0.74
     "@joplin/turndown-plugin-gfm": ^1.0.56
     "@joplin/utils": ~3.1
     "@testing-library/react-hooks": 8.0.1
+    "@types/adm-zip": 0.5.5
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
+    "@types/jsdom": 21.1.6
     "@types/markdown-it": 13.0.8
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
@@ -7723,6 +7737,7 @@ __metadata:
     "@types/node-rsa": 1.1.4
     "@types/react": 18.3.3
     "@types/uuid": 9.0.7
+    adm-zip: 0.5.12
     async-mutex: 0.5.0
     base-64: 1.0.0
     base64-stream: 1.0.0
@@ -7746,6 +7761,7 @@ __metadata:
     immer: 7.0.15
     jest: 29.7.0
     js-yaml: 4.1.0
+    jsdom: 23.2.0
     markdown-it: 13.0.2
     md5: 2.3.0
     md5-file: 5.0.0
@@ -7782,6 +7798,15 @@ __metadata:
     uuid: 9.0.1
     word-wrap: 1.2.5
     xml2js: 0.4.23
+  languageName: unknown
+  linkType: soft
+
+"@joplin/onenote-converter@0.0.1, @joplin/onenote-converter@workspace:packages/onenote-converter":
+  version: 0.0.0-use.local
+  resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
+  dependencies:
+    wasm-pack: 0.13.0
+    yargs: 17.7.2
   languageName: unknown
   linkType: soft
 
@@ -11521,6 +11546,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/adm-zip@npm:0.5.5":
+  version: 0.5.5
+  resolution: "@types/adm-zip@npm:0.5.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 808c25b8a1c2e1c594cf9b1514e7953105cf96e19e38aa7dc109ff2537bda7345b950ef1f4e54a6e824e5503e29d24b0ff6d0aa1ff9bd4afb79ef0ef2df9ebab
+  languageName: node
+  linkType: hard
+
 "@types/asn1@npm:>=0.2.4":
   version: 0.2.4
   resolution: "@types/asn1@npm:0.2.4"
@@ -11966,6 +12000,17 @@ __metadata:
   version: 4.0.9
   resolution: "@types/js-yaml@npm:4.0.9"
   checksum: e5e5e49b5789a29fdb1f7d204f82de11cb9e8f6cb24ab064c616da5d6e1b3ccfbf95aa5d1498a9fbd3b9e745564e69b4a20b6c530b5a8bbb2d4eb830cda9bc69
+  languageName: node
+  linkType: hard
+
+"@types/jsdom@npm:21.1.6":
+  version: 21.1.6
+  resolution: "@types/jsdom@npm:21.1.6"
+  dependencies:
+    "@types/node": "*"
+    "@types/tough-cookie": "*"
+    parse5: ^7.0.0
+  checksum: d6fbaab3065ec0bc5b54ae2f15eb18f28045ffa5cece438f96f4bc86819fc8c547e96cede650d14516429dfdc45075b36a46c135849f868b1ae8281717c8e591
   languageName: node
   linkType: hard
 
@@ -13774,6 +13819,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"adm-zip@npm:0.5.12":
+  version: 0.5.12
+  resolution: "adm-zip@npm:0.5.12"
+  checksum: 299bd727c5275f6f6d30f2540aad1c7d6e5671613ff5b720201d04fc69bb3ab00fa0770f922da38b26654381cbc5043113fb3458dd0d1aff8fede542493921f5
+  languageName: node
+  linkType: hard
+
 "agent-base@npm:4, agent-base@npm:^4.3.0":
   version: 4.3.0
   resolution: "agent-base@npm:4.3.0"
@@ -15103,6 +15155,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^0.26.1":
+  version: 0.26.1
+  resolution: "axios@npm:0.26.1"
+  dependencies:
+    follow-redirects: ^1.14.8
+  checksum: d9eb58ff4bc0b36a04783fc9ff760e9245c829a5a1052ee7ca6013410d427036b1d10d04e7380c02f3508c5eaf3485b1ae67bd2adbfec3683704745c8d7a6e1a
+  languageName: node
+  linkType: hard
+
 "axios@npm:^1.7.7":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
@@ -15635,6 +15696,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bidi-js@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "bidi-js@npm:1.0.3"
+  dependencies:
+    require-from-string: ^2.0.2
+  checksum: 877c5dcfd69a35fd30fee9e49a03faf205a7a4cd04a38af7648974a659cab7b1cd51fa881d7957c07bd1fc5adf22b90a56da3617bb0885ee69d58ff41117658c
+  languageName: node
+  linkType: hard
+
 "big-integer@npm:^1.6.44":
   version: 1.6.51
   resolution: "big-integer@npm:1.6.51"
@@ -15653,6 +15723,17 @@ __metadata:
   version: 2.2.0
   resolution: "binary-extensions@npm:2.2.0"
   checksum: ccd267956c58d2315f5d3ea6757cf09863c5fc703e50fbeb13a7dc849b812ef76e3cf9ca8f35a0c48498776a7478d7b4a0418e1e2b8cb9cb9731f2922aaad7f8
+  languageName: node
+  linkType: hard
+
+"binary-install@npm:^1.0.1":
+  version: 1.1.0
+  resolution: "binary-install@npm:1.1.0"
+  dependencies:
+    axios: ^0.26.1
+    rimraf: ^3.0.2
+    tar: ^6.1.11
+  checksum: 271344b49f42460f5e3ec29d681cd4b749aaf9592040d49f6ae86d267b997b5fd094fd7a710df4d477fc299a51833b8cb94206595db6c46edea3f1603266a0d2
   languageName: node
   linkType: hard
 
@@ -18863,6 +18944,16 @@ __metadata:
     mdn-data: 2.0.14
     source-map: ^0.6.1
   checksum: 79f9b81803991b6977b7fcb1588799270438274d89066ce08f117f5cdb5e20019b446d766c61506dd772c839df84caa16042d6076f20c97187f5abe3b50e7d1f
+  languageName: node
+  linkType: hard
+
+"css-tree@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "css-tree@npm:2.3.1"
+  dependencies:
+    mdn-data: 2.0.30
+    source-map-js: ^1.0.1
+  checksum: 493cc24b5c22b05ee5314b8a0d72d8a5869491c1458017ae5ed75aeb6c3596637dbe1b11dac2548974624adec9f7a1f3a6cf40593dc1f9185eb0e8279543fbc0
   languageName: node
   linkType: hard
 
@@ -23674,7 +23765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:1.15.6":
+"follow-redirects@npm:1.15.6, follow-redirects@npm:^1.14.8":
   version: 1.15.6
   resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
@@ -29216,6 +29307,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsdom@npm:23.2.0":
+  version: 23.2.0
+  resolution: "jsdom@npm:23.2.0"
+  dependencies:
+    "@asamuzakjp/dom-selector": ^2.0.1
+    cssstyle: ^4.0.1
+    data-urls: ^5.0.0
+    decimal.js: ^10.4.3
+    form-data: ^4.0.0
+    html-encoding-sniffer: ^4.0.0
+    http-proxy-agent: ^7.0.0
+    https-proxy-agent: ^7.0.2
+    is-potential-custom-element-name: ^1.0.1
+    parse5: ^7.1.2
+    rrweb-cssom: ^0.6.0
+    saxes: ^6.0.0
+    symbol-tree: ^3.2.4
+    tough-cookie: ^4.1.3
+    w3c-xmlserializer: ^5.0.0
+    webidl-conversions: ^7.0.0
+    whatwg-encoding: ^3.1.1
+    whatwg-mimetype: ^4.0.0
+    whatwg-url: ^14.0.0
+    ws: ^8.16.0
+    xml-name-validator: ^5.0.0
+  peerDependencies:
+    canvas: ^2.11.2
+  peerDependenciesMeta:
+    canvas:
+      optional: true
+  checksum: 3ba97e6ac56c38d92d0ce2d0fac5de4042f7dec40d127872e1aa88dd379980f8ea2108a008319ceac54dc07a784078ed4b4401bf9109a76276ca2cace229c8df
+  languageName: node
+  linkType: hard
+
 "jsdom@npm:24.1.0":
   version: 24.1.0
   resolution: "jsdom@npm:24.1.0"
@@ -31238,6 +31363,13 @@ __metadata:
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
   checksum: 9d0128ed425a89f4cba8f787dca27ad9408b5cb1b220af2d938e2a0629d17d879a34d2cb19318bdb26c3f14c77dd5dfbae67211f5caaf07b61b1f2c5c8c7dc16
+  languageName: node
+  linkType: hard
+
+"mdn-data@npm:2.0.30":
+  version: 2.0.30
+  resolution: "mdn-data@npm:2.0.30"
+  checksum: d6ac5ac7439a1607df44b22738ecf83f48e66a0874e4482d6424a61c52da5cde5750f1d1229b6f5fa1b80a492be89465390da685b11f97d62b8adcc6e88189aa
   languageName: node
   linkType: hard
 
@@ -43678,7 +43810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:^4.1.4":
+"tough-cookie@npm:^4.1.3, tough-cookie@npm:^4.1.4":
   version: 4.1.4
   resolution: "tough-cookie@npm:4.1.4"
   dependencies:
@@ -45792,6 +45924,17 @@ __metadata:
   version: 1.5.1
   resolution: "wasm-feature-detect@npm:1.5.1"
   checksum: a99be305a83530271e47212ef138644c75bc65bcf2b2c094b22fe4e13b9ca1a2c00fdd8a01d663b338e189459a5e1f27d9cbd71c8adca3c71957beea51606193
+  languageName: node
+  linkType: hard
+
+"wasm-pack@npm:0.13.0":
+  version: 0.13.0
+  resolution: "wasm-pack@npm:0.13.0"
+  dependencies:
+    binary-install: ^1.0.1
+  bin:
+    wasm-pack: run.js
+  checksum: 63e50a7ff7036d967a0aae857cea8dba6b5a953e8bc0856bed645ab6487ece556c66bc1fdc84da96c0d1b4c231db245fa5b93617aa21196ccfc2b031a0028912
   languageName: node
   linkType: hard
 

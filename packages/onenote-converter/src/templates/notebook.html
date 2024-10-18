@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% macro render(section, grouped) %}
+    <li {% match section.color -%}
+        {%- when Some with (color) -%}
+        style="border-left-color: rgba({{ color.color.red }}, {{ color.color.green }}, {{ color.color.blue }}, {{ color.alpha }}); {% if _bool(grouped) %} margin-left: 20px; {% endif %}"
+        {%- when None -%}
+        {%- endmatch -%}
+    >
+        <a href="{{ section.path|encode }}.html" target="section" title="{{ section.name }}">{{ section.name }}</a>
+    </li>
+{% endmacro %}
+
+{% block content %}
+<nav>
+    <ul>
+        {% for entry in toc -%}
+            {% match entry %}
+                {%- when Toc::Section with (section) -%}
+                    {% call render(section, false) %}
+                {%- when Toc::SectionGroup with (name, entries) -%}
+                    <li>{{ name }}</li>
+                    {% for section in entries %}
+                        {% call render(section, true) %}
+                    {% endfor %}
+            {%- endmatch -%}
+        {% endfor %}
+    </ul>
+</nav>
+<iframe frameborder="0" name="section" class="content"></iframe>
+
+<style>
+    nav li {
+        padding-left: 10px;
+        border-left: 10px solid transparent;
+    }
+</style>
+<script>
+    document.addEventListener('click', function (event) {
+        // If the clicked element doesn't have the right selector, bail
+        if (!event.target.matches('nav a')) return;
+        for (const child of event.target.parentElement.parentElement.children) {
+            child.classList.remove('active');
+        }
+        event.target.parentElement.classList.add('active');
+
+    }, false);
+
+    window.addEventListener('message', (event) => {
+        const activeTarget = event.data;
+
+        for (const link of document.querySelectorAll('nav ul li a')) {
+            if (link.href === activeTarget) {
+                link.parentElement.classList.add('active');
+            }
+        }
+    });
+</script>
+{% endblock %}
