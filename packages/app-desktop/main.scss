@@ -289,22 +289,9 @@ Component-specific classes
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-
-	> .password-valid-icon {
-		margin-left: 10px;
-	}
 }
 
 // .master-password-dialog .current-password-wrapper input {
 // 	flex: 1;
 // 	margin-right: 10px;
 // }
-
-.master-password-dialog .fa-check {
-	color: var(--joplin-color-correct);
-}
-
-.master-password-dialog .fa-times {
-	color: var(--joplin-color-error);
-	margin-left: 5px;
-}
