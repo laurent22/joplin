@@ -138,7 +138,15 @@ export default function(props: Props) {
 
 	function renderCurrentPasswordIcon() {
 		if (!currentPassword || status === MasterPasswordStatus.NotSet) return null;
-		return currentPasswordIsValid ? <i className="fas fa-check password-valid-icon"></i> : <i className="fas fa-times"></i>;
+		let title, icon;
+		if (currentPasswordIsValid) {
+			title = _('Valid');
+			icon = 'fas fa-check password-valid-icon';
+		} else {
+			title = _('Invalid');
+			icon = 'fas fa-times';
+		}
+		return <i className={icon} role='img' aria-label={title} title={title}></i>;
 	}
 
 	function renderPasswordForm() {
