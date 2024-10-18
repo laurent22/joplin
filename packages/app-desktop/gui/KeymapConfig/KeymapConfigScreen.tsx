@@ -9,8 +9,8 @@ import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 import { _ } from '@joplin/lib/locale';
 
-const bridge = require('@electron/remote').require('./bridge').default;
 import shim from '@joplin/lib/shim';
+import bridge from '../../services/bridge';
 
 const keymapService = KeymapService.instance();
 
@@ -118,9 +118,15 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
-		const handleClick = () => enableEditing(command);
+		const handleClick = () => {
+			if (!editing[command]) {
+				enableEditing(command);
+			} else if (recorderError) {
+				void bridge().showErrorMessageBox(recorderError.message);
+			}
+		};
 		const cellContent =
-			<div style={styles.tableCell} className='keymap-shortcut-row-content'>
+			<div className='keymap-shortcut-row-content'>
 				{editing[command] ?
 					<ShortcutRecorder
 						onSave={handleSave}

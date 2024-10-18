@@ -14,20 +14,11 @@ export default function styles(themeId: number) {
 				display: 'flex',
 				flexDirection: 'row',
 			},
-			recorderContainer: {
-				padding: 2,
-				flexGrow: 1,
-			},
 			filterInput: {
 				...theme.inputStyle,
 				flexGrow: 1,
 				minHeight: 29,
 				alignSelf: 'center',
-			},
-			recorderInput: {
-				...theme.inputStyle,
-				minHeight: 29,
-				width: '200px',
 			},
 			label: {
 				...theme.textStyle,
@@ -47,10 +38,6 @@ export default function styles(themeId: number) {
 			tableCommandColumn: {
 				...theme.textStyle,
 				width: 'auto',
-			},
-			tableCell: {
-				display: 'flex',
-				flexDirection: 'row',
 			},
 			tableCellContent: {
 				flexGrow: 1,

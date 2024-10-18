@@ -70,8 +70,10 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 	const placeholderText = _('Press the shortcut');
 
 	return (
-		<div style={styles.recorderContainer}>
+		<div className='shortcut-recorder' style={styles.recorderContainer}>
 			<input
+				className='shortcut text-input'
+
 				value={accelerator}
 				aria-label={accelerator ? accelerator : placeholderText}
 				placeholder={placeholderText}
@@ -81,7 +83,6 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 				aria-live='polite'
 
 				onKeyDown={handleKeyDown}
-				style={styles.recorderInput}
 				readOnly
 				autoFocus
 			/>

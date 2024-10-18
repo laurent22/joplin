@@ -1,5 +1,8 @@
 
 .keymap-shortcut-row-content {
+	display: flex;
+	flex-direction: row;
+
 	> .edit {
 		opacity: 0;
 
