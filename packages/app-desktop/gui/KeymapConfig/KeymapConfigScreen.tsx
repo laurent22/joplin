@@ -124,6 +124,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 				void bridge().showErrorMessageBox(recorderError.message);
 			}
 		};
+		const statusContent = renderStatus(command);
 		const cellContent =
 			<div className='keymap-shortcut-row-content'>
 				{editing[command] ?
@@ -147,9 +148,10 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 					className={`flat-button edit ${editing[command] ? '-editing' : ''}`}
 					style={styles.tableCellStatus}
 					aria-live={recorderError ? 'polite' : null}
+					tabIndex={statusContent ? 0 : -1}
 					onClick={handleClick}
 				>
-					{renderStatus(command)}
+					{statusContent}
 				</button>
 			</div>;
 
