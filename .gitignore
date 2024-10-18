@@ -362,7 +362,9 @@ packages/app-desktop/gui/NoteTextViewer.js
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js
 packages/app-desktop/gui/NotyfContext.js
 packages/app-desktop/gui/OneDriveLoginScreen.js
+packages/app-desktop/gui/PasswordInput/LabelledPasswordInput.js
 packages/app-desktop/gui/PasswordInput/PasswordInput.js
+packages/app-desktop/gui/PasswordInput/types.js
 packages/app-desktop/gui/PdfViewer.js
 packages/app-desktop/gui/PromptDialog.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
