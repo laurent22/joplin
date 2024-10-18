@@ -59,6 +59,8 @@ export default function styles(themeId: number) {
 			tableCellStatus: {
 				height: '100%',
 				alignSelf: 'center',
+				border: 'none',
+				background: 'transparent',
 			},
 			kbd: {
 				fontFamily: 'sans-serif',

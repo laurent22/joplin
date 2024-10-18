@@ -25,7 +25,6 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	const [keymapItems, keymapError, overrideKeymapItems, setAccelerator, resetAccelerator] = useKeymap();
 	const [recorderError, setRecorderError] = useState<Error>(null);
 	const [editing, enableEditing, disableEditing] = useCommandStatus();
-	const [hovering, enableHovering, disableHovering] = useCommandStatus();
 
 	const handleSave = (event: { commandName: string; accelerator: string }) => {
 		const { commandName, accelerator } = event;
@@ -96,11 +95,13 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const renderStatus = (commandName: string) => {
 		if (editing[commandName]) {
-			return (recorderError && <i className="fa fa-exclamation-triangle" title={recorderError.message} />);
-		} else if (hovering[commandName]) {
-			return (<i className="fa fa-pen" />);
-		} else {
+			if (recorderError) {
+				return <i className="fa fa-exclamation-triangle" role='img' aria-label={recorderError.message} title={recorderError.message} />;
+			}
 			return null;
+		} else {
+			const editLabel = _('Change shortcut for "%s"', getLabel(commandName));
+			return <i className="fa fa-pen" role='img' aria-label={editLabel} title={editLabel}/>;
 		}
 	};
 
@@ -118,10 +119,8 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 
 	const renderKeymapRow = ({ command, accelerator }: KeymapItem) => {
 		const handleClick = () => enableEditing(command);
-		const handleMouseEnter = () => enableHovering(command);
-		const handleMouseLeave = () => disableHovering(command);
 		const cellContent =
-			<div style={styles.tableCell} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+			<div style={styles.tableCell} className='keymap-shortcut-row-content'>
 				{editing[command] ?
 					<ShortcutRecorder
 						onSave={handleSave}
@@ -139,9 +138,15 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 						}
 					</div>
 				}
-				<div style={styles.tableCellStatus} onClick={handleClick}>
+				<button
+					className={`flat-button edit ${recorderError ? '-error' : ''} ${editing[command] ? '-editing' : ''}`}
+					style={styles.tableCellStatus}
+					aria-live={recorderError ? 'polite' : null}
+					data-tip={recorderError?.message}
+					onClick={handleClick}
+				>
 					{renderStatus(command)}
-				</div>
+				</button>
 			</div>;
 
 		return (
