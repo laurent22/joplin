@@ -229,7 +229,7 @@ export default function(props: Props) {
 		];
 
 		const menu = bridge().Menu.buildFromTemplate(template);
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().mainWindow() });
 	}, [onInstall, onBrowsePlugins]);
 
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {

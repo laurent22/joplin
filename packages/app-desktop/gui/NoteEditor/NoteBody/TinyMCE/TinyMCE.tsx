@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml, attachedResources } from '../../utils/resourceHandling';
 import useScroll from './utils/useScroll';
@@ -40,6 +40,7 @@ const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
 import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
+import useDom from '../../../hooks/useDom';
 
 const logger = Logger.create('TinyMCE');
 
@@ -98,6 +99,8 @@ let changeId_ = 1;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
+	const [editorContainer, setEditorContainer] = useState<HTMLDivElement|null>(null);
+	const editorContainerDom = useDom(editorContainer);
 	const [editor, setEditor] = useState<Editor|null>(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
@@ -118,9 +121,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		contentKey: null,
 	});
 
-	const rootIdRef = useRef<string>(`tinymce-${Date.now()}${Math.round(Math.random() * 10000)}`);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const editorRef = useRef<any>(null);
+	const editorRef = useRef<Editor>(null);
 	editorRef.current = editor;
 
 	const styles = styles_(props);
@@ -332,6 +333,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// };
 
 	useEffect(() => {
+		if (!editorContainerDom) return () => {};
+
 		let cancelled = false;
 
 		async function loadScripts() {
@@ -350,7 +353,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			];
 
 			for (const s of scriptsToLoad) {
-				if (document.getElementById(s.id)) {
+				if (editorContainerDom.getElementById(s.id)) {
 					s.loaded = true;
 					continue;
 				}
@@ -358,7 +361,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// eslint-disable-next-line no-console
 				console.info('Loading script', s.src);
 
-				await loadScript(s);
+				await loadScript(s, editorContainerDom);
 				if (cancelled) return;
 
 				s.loaded = true;
@@ -372,19 +375,20 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return () => {
 			cancelled = true;
 		};
-	}, []);
+	}, [editorContainerDom]);
 
-	useWebViewApi(editor);
+	useWebViewApi(editor, editorContainerDom?.defaultView);
 	const { resetModifiedTitles: resetLinkTooltips } = useLinkTooltips(editor);
 
 	useEffect(() => {
+		if (!editorContainerDom) return () => {};
 		const theme = themeStyle(props.themeId);
 		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
 
-		const element = document.createElement('style');
+		const element = editorContainerDom.createElement('style');
 		element.setAttribute('id', 'tinyMceStyle');
-		document.head.appendChild(element);
-		element.appendChild(document.createTextNode(`
+		editorContainerDom.head.appendChild(element);
+		element.appendChild(editorContainerDom.createTextNode(`
 			.joplin-tinymce .tox-editor-header {
 				padding-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
 				padding-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
@@ -581,7 +585,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		`));
 
 		return () => {
-			document.head.removeChild(element);
+			editorContainerDom.head.removeChild(element);
 		};
 		// editorReady is here because TinyMCE starts by initializing a blank iframe, which needs to be
 		// styled by us, otherwise users in dark mode get a bright white flash. During initialization
@@ -593,7 +597,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		//
 		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editorReady, props.themeId, lightTheme, props.whiteBackgroundNoteRendering, props.watchedNoteFiles]);
+	}, [editorReady, editorContainerDom, props.themeId, lightTheme, props.whiteBackgroundNoteRendering, props.watchedNoteFiles]);
 
 	// -----------------------------------------------------------------------------------------
 	// Enable or disable the editor
@@ -610,6 +614,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 	useEffect(() => {
 		if (!scriptLoaded) return;
+		if (!editorContainer) return;
 
 		const loadEditor = async () => {
 			const language = closestSupportedLocale(props.locale, true, supportedLocales);
@@ -644,8 +649,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			];
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const editors = await (window as any).tinymce.init({
-				selector: `#${rootIdRef.current}`,
+			const containerWindow = editorContainerDom.defaultView as any;
+			const editors = await containerWindow.tinymce.init({
+				selector: `#${editorContainer.id}`,
 				width: '100%',
 				body_class: 'jop-tinymce',
 				height: '100%',
@@ -830,7 +836,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		void loadEditor();
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [scriptLoaded]);
+	}, [scriptLoaded, editorContainer]);
 
 	// -----------------------------------------------------------------------------------------
 	// Set the initial content and load the plugin CSS and JS files
@@ -1420,12 +1426,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		);
 	}
 
+	const containerId = useMemo(() => {
+		return `tinymce-container-${Math.ceil(Math.random() * 1000)}-${Date.now()}`;
+	}, []);
 	return (
 		<div style={styles.rootStyle} className="joplin-tinymce">
 			{renderDisabledOverlay()}
 			{renderLeftExtraToolbarButtons()}
 			{renderRightExtraToolbarButtons()}
-			<div style={{ width: '100%', height: '100%' }} id={rootIdRef.current}/>
+			<div style={{ width: '100%', height: '100%' }} id={containerId} ref={setEditorContainer}/>
 		</div>
 	);
 };

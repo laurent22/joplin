@@ -8,11 +8,12 @@ import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { Breakpoints } from '../NoteList/utils/types';
+import { stateUtils } from '@joplin/lib/reducer';
 
 interface Props {
 	showNewNoteButtons: boolean;
@@ -274,17 +275,22 @@ function NoteListControls(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: AppState) => {
-	const whenClauseContext = stateToWhenClauseContext(state);
+interface ConnectProps {
+	windowId: string;
+}
+
+const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
+	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 
 	return {
-		showNewNoteButtons: state.selectedFolderId !== getTrashFolderId(),
+		showNewNoteButtons: windowState.selectedFolderId !== getTrashFolderId(),
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],
-		notesParentType: state.notesParentType,
+		notesParentType: windowState.notesParentType,
 	};
 };
 

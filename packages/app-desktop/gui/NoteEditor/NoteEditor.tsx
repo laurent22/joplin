@@ -51,6 +51,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
 import useScheduleSaveCallbacks from './utils/useScheduleSaveCallbacks';
 import WarningBanner from './WarningBanner/WarningBanner';
+import { stateUtils } from '@joplin/lib/reducer';
 const debounce = require('debounce');
 
 const commands = [
@@ -59,7 +60,9 @@ const commands = [
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
-function NoteEditor(props: NoteEditorProps) {
+const onDragOver: React.DragEventHandler = event => event.preventDefault();
+
+function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
@@ -166,6 +169,10 @@ function NoteEditor(props: NoteEditorProps) {
 		}, 100);
 	}, [props.dispatch]);
 
+	useEffect(() => {
+		props.onTitleChange?.(formNote.title);
+	}, [formNote.title, props.onTitleChange]);
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onFieldChange = useCallback(async (field: string, value: any, changeId = 0) => {
 		if (!isMountedRef.current) {
@@ -225,6 +232,7 @@ function NoteEditor(props: NoteEditorProps) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
 
+	const containerRef = useRef<HTMLDivElement>(null);
 	useWindowCommandHandler({
 		dispatch: props.dispatch,
 		setShowLocalSearch,
@@ -232,6 +240,7 @@ function NoteEditor(props: NoteEditorProps) {
 		editorRef,
 		titleInputRef,
 		onBodyChange,
+		containerRef,
 	});
 
 	// const onTitleKeydown = useCallback((event:any) => {
@@ -575,7 +584,7 @@ function NoteEditor(props: NoteEditorProps) {
 	const theme = themeStyle(props.themeId);
 
 	return (
-		<div style={styles.root} onDrop={onDrop}>
+		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
@@ -606,33 +615,42 @@ function NoteEditor(props: NoteEditorProps) {
 	);
 }
 
-export {
-	NoteEditor as NoteEditorComponent,
-};
+interface OwnProps {
+	windowId: string;
+}
 
-const mapStateToProps = (state: AppState) => {
-	const noteId = state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null;
-	const whenClauseContext = stateToWhenClauseContext(state);
+const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
+	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+	const noteId = stateUtils.selectedNoteId(windowState);
+
+	let bodyEditor = windowState.editorCodeView ? 'CodeMirror6' : 'TinyMCE';
+	if (state.settings.isSafeMode) {
+		bodyEditor = 'PlainText';
+	} else if (windowState.editorCodeView && state.settings.legacyMarkdown) {
+		bodyEditor = 'CodeMirror5';
+	}
 
 	return {
-		noteId: noteId,
-		notes: state.notes,
-		selectedNoteIds: state.selectedNoteIds,
-		selectedFolderId: state.selectedFolderId,
+		noteId,
+		bodyEditor,
 		isProvisional: state.provisionalNoteIds.includes(noteId),
+		notes: windowState.notes,
+		selectedNoteIds: windowState.selectedNoteIds,
+		selectedFolderId: windowState.selectedFolderId,
 		editorNoteStatuses: state.editorNoteStatuses,
 		syncStarted: state.syncStarted,
 		decryptionStarted: state.decryptionWorker?.state !== 'idle',
 		themeId: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
-		notesParentType: state.notesParentType,
-		selectedNoteTags: state.selectedNoteTags,
+		notesParentType: windowState.notesParentType,
+		selectedNoteTags: windowState.selectedNoteTags,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
-		selectedNoteHash: state.selectedNoteHash,
+		selectedNoteHash: windowState.selectedNoteHash,
 		searches: state.searches,
-		selectedSearchId: state.selectedSearchId,
+		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customCss,
-		noteVisiblePanes: state.noteVisiblePanes,
+		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: state.watchedResources,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
@@ -654,4 +672,4 @@ const mapStateToProps = (state: AppState) => {
 	};
 };
 
-export default connect(mapStateToProps)(NoteEditor);
+export default connect(mapStateToProps)(NoteEditorContent);

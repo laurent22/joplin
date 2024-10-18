@@ -25,6 +25,7 @@ interface ContextMenuProps {
 	editorPaste: ()=> void;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorClassName: string;
+	containerRef: RefObject<HTMLDivElement|null>;
 }
 
 const useContextMenu = (props: ContextMenuProps) => {
@@ -51,12 +52,13 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		function pointerInsideEditor(params: ContextMenuParams) {
 			const x = params.x, y = params.y, isEditable = params.isEditable;
-			const elements = document.getElementsByClassName(props.editorClassName);
+			const containerDoc = props.containerRef.current?.ownerDocument;
+			const elements = containerDoc?.getElementsByClassName(props.editorClassName);
 
 			// Note: We can't check inputFieldType here. When spellcheck is enabled,
 			// params.inputFieldType is "none". When spellcheck is disabled,
 			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
-			if (!elements.length || !isEditable) return false;
+			if (!elements?.length || !isEditable) return false;
 
 			// Checks whether the element the pointer clicked on is inside the editor.
 			// This logic will need to be changed if the editor is eventually wrapped
@@ -65,7 +67,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const zoom = Setting.value('windowContentZoomFactor');
 			const xScreen = convertFromScreenCoordinates(zoom, x);
 			const yScreen = convertFromScreenCoordinates(zoom, y);
-			const intersectingElement = document.elementFromPoint(xScreen, yScreen);
+			const intersectingElement = containerDoc.elementFromPoint(xScreen, yScreen);
 			return intersectingElement && isAncestorOfCodeMirrorEditor(intersectingElement);
 		}
 
@@ -155,13 +157,13 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		bridge().window().webContents.prependListener('context-menu', onContextMenu);
+		bridge().activeWindow().webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
-			bridge().window().webContents.off('context-menu', onContextMenu);
+			bridge().activeWindow().webContents.off('context-menu', onContextMenu);
 		};
 	}, [
-		props.plugins, props.editorClassName, editorRef,
+		props.plugins, props.editorClassName, editorRef, props.containerRef,
 		props.editorCutText, props.editorCopyText, props.editorPaste,
 	]);
 };
