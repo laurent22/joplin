@@ -145,10 +145,9 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 					</div>
 				}
 				<button
-					className={`flat-button edit ${recorderError ? '-error' : ''} ${editing[command] ? '-editing' : ''}`}
+					className={`flat-button edit ${editing[command] ? '-editing' : ''}`}
 					style={styles.tableCellStatus}
 					aria-live={recorderError ? 'polite' : null}
-					data-tip={recorderError?.message}
 					onClick={handleClick}
 				>
 					{renderStatus(command)}

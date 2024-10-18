@@ -80,6 +80,8 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 				title={hintText}
 				aria-description={hintText}
 				aria-invalid={accelerator && !saveAllowed}
+				// With readOnly, aria-live polite seems necessary for screen readers to read
+				// the shortcut as it updates.
 				aria-live='polite'
 
 				onKeyDown={handleKeyDown}
