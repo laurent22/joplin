@@ -1,0 +1,13 @@
+.shortcut-recorder {
+	padding: 2px;
+	flex-grow: 1;
+	
+	> .shortcut {
+		min-height: 29px;
+		width: 200px;
+	}
+
+	> .shortcut:focus-visible {
+		border-color: var(--joplin-focus-outline-color);
+	}
+}

@@ -1,0 +1,17 @@
+
+.keymap-shortcut-row-content {
+	display: flex;
+	flex-direction: row;
+
+	> .edit {
+		opacity: 0;
+
+		&:focus-visible, &.-editing {
+			opacity: 1;
+		}
+	}
+
+	&:hover > .edit {
+		opacity: 1;
+	}
+}
