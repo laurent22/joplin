@@ -1,14 +1,18 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
-import { Banner, ActivityIndicator } from 'react-native-paper';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { Banner, ActivityIndicator, Text } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import { getVosk, Recorder, startRecording, Vosk } from '../../services/voiceTyping/vosk';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
-import { modelIsDownloaded } from '../../services/voiceTyping/vosk';
+import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
+import whisper from '../../services/voiceTyping/whisper';
+import vosk from '../../services/voiceTyping/vosk';
+import { AppState } from '../../utils/types';
+import { connect } from 'react-redux';
 
 interface Props {
 	locale: string;
+	provider: string;
 	onDismiss: ()=> void;
 	onText: (text: string)=> void;
 }
@@ -21,44 +25,77 @@ enum RecorderState {
 	Downloading = 5,
 }
 
-const useVosk = (locale: string): [Error | null, boolean, Vosk|null] => {
-	const [vosk, setVosk] = useState<Vosk>(null);
+interface UseVoiceTypingProps {
+	locale: string;
+	provider: string;
+	onSetPreview: OnTextCallback;
+	onText: OnTextCallback;
+}
+
+const useWhisper = ({ locale, provider, onSetPreview, onText }: UseVoiceTypingProps): [Error | null, boolean, VoiceTypingSession|null] => {
+	const [voiceTyping, setVoiceTyping] = useState<VoiceTypingSession>(null);
 	const [error, setError] = useState<Error>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
 
-	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		if (mustDownloadModel === null) return;
+	const onTextRef = useRef(onText);
+	onTextRef.current = onText;
+	const onSetPreviewRef = useRef(onSetPreview);
+	onSetPreviewRef.current = onSetPreview;
 
+	const voiceTypingRef = useRef(voiceTyping);
+	voiceTypingRef.current = voiceTyping;
+
+	const builder = useMemo(() => {
+		return new VoiceTyping(locale, provider?.startsWith('whisper') ? [whisper] : [vosk]);
+	}, [locale, provider]);
+
+	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		try {
-			const v = await getVosk(locale);
+			await voiceTypingRef.current?.stop();
+
+			if (!await builder.isDownloaded()) {
+				if (event.cancelled) return;
+				await builder.download();
+			}
 			if (event.cancelled) return;
-			setVosk(v);
+
+			const voiceTyping = await builder.build({
+				onPreview: (text) => onSetPreviewRef.current(text),
+				onFinalize: (text) => onTextRef.current(text),
+			});
+			if (event.cancelled) return;
+			setVoiceTyping(voiceTyping);
 		} catch (error) {
 			setError(error);
 		} finally {
 			setMustDownloadModel(false);
 		}
-	}, [locale, mustDownloadModel]);
+	}, [builder]);
 
 	useAsyncEffect(async (_event: AsyncEffectEvent) => {
-		setMustDownloadModel(!(await modelIsDownloaded(locale)));
-	}, [locale]);
+		setMustDownloadModel(!(await builder.isDownloaded()));
+	}, [builder]);
 
-	return [error, mustDownloadModel, vosk];
+	return [error, mustDownloadModel, voiceTyping];
 };
 
-export default (props: Props) => {
-	const [recorder, setRecorder] = useState<Recorder>(null);
+const VoiceTypingDialog: React.FC<Props> = props => {
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
-	const [voskError, mustDownloadModel, vosk] = useVosk(props.locale);
+	const [preview, setPreview] = useState<string>('');
+	const [modelError, mustDownloadModel, voiceTyping] = useWhisper({
+		locale: props.locale,
+		onSetPreview: setPreview,
+		onText: props.onText,
+		provider: props.provider,
+	});
 
 	useEffect(() => {
-		if (voskError) {
+		if (modelError) {
 			setRecorderState(RecorderState.Error);
-		} else if (vosk) {
+		} else if (voiceTyping) {
 			setRecorderState(RecorderState.Recording);
 		}
-	}, [vosk, voskError]);
+	}, [voiceTyping, modelError]);
 
 	useEffect(() => {
 		if (mustDownloadModel) {
@@ -68,27 +105,22 @@ export default (props: Props) => {
 
 	useEffect(() => {
 		if (recorderState === RecorderState.Recording) {
-			setRecorder(startRecording(vosk, {
-				onResult: (text: string) => {
-					props.onText(text);
-				},
-			}));
+			void voiceTyping.start();
 		}
-	}, [recorderState, vosk, props.onText]);
+	}, [recorderState, voiceTyping, props.onText]);
 
 	const onDismiss = useCallback(() => {
-		if (recorder) recorder.cleanup();
+		void voiceTyping?.stop();
 		props.onDismiss();
-	}, [recorder, props.onDismiss]);
+	}, [voiceTyping, props.onDismiss]);
 
 	const renderContent = () => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const components: Record<RecorderState, Function> = {
+		const components: Record<RecorderState, ()=> string> = {
 			[RecorderState.Loading]: () => _('Loading...'),
 			[RecorderState.Recording]: () => _('Please record your voice...'),
 			[RecorderState.Processing]: () => _('Converting speech to text...'),
 			[RecorderState.Downloading]: () => _('Downloading %s language files...', languageName(props.locale)),
-			[RecorderState.Error]: () => _('Error: %s', voskError.message),
+			[RecorderState.Error]: () => _('Error: %s', modelError.message),
 		};
 
 		return components[recorderState]();
@@ -106,6 +138,11 @@ export default (props: Props) => {
 		return components[recorderState];
 	};
 
+	const renderPreview = () => {
+		return <Text variant='labelSmall'>{preview}</Text>;
+	};
+
+	const headerAndStatus = <Text variant='bodyMedium'>{`${_('Voice typing...')}\n${renderContent()}`}</Text>;
 	return (
 		<Banner
 			visible={true}
@@ -115,8 +152,15 @@ export default (props: Props) => {
 					label: _('Done'),
 					onPress: onDismiss,
 				},
-			]}>
-			{`${_('Voice typing...')}\n${renderContent()}`}
+			]}
+		>
+			{headerAndStatus}
+			<Text>{'\n'}</Text>
+			{renderPreview()}
 		</Banner>
 	);
 };
+
+export default connect((state: AppState) => ({
+	provider: state.settings['voiceTyping.preferredProvider'],
+}))(VoiceTypingDialog);
