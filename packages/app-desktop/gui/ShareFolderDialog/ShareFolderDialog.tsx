@@ -326,7 +326,7 @@ function ShareFolderDialog(props: Props) {
 					size={ButtonSize.Small}
 					iconName="far fa-times-circle"
 					onClick={() => recipient_delete({ shareUserId: shareUser.id })}
-					tooltip={_('Remove user from share: %s', shareUser.user.email)}
+					tooltip={_('Remove %s from share', shareUser.user.email)}
 				/>
 			</StyledRecipient>
 		);
