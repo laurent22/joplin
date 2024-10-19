@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useEffect, useCallback, useContext } from 'react';
-import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image } from 'react-native';
+import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
 const { connect } = require('react-redux');
 const IonIcon = require('react-native-vector-icons/Ionicons').default;
 import Icon from './Icon';
@@ -87,6 +87,10 @@ const SideMenuContentComponent = (props: Props) => {
 			textAlign: 'center',
 			textAlignVertical: 'center',
 		};
+		const folderIconBase: ViewStyle&ImageStyle = {
+			marginRight: folderIconRightMargin,
+			width: 27,
+		};
 		const folderButtonStyle: ViewStyle = {
 			...buttonStyle,
 			paddingLeft: 0,
@@ -132,14 +136,17 @@ const SideMenuContentComponent = (props: Props) => {
 			sideButtonText: {
 				...buttonTextStyle,
 			},
-			folderTextIcon: {
+			folderBaseIcon: {
 				...sidebarIconStyle,
-				marginRight: folderIconRightMargin,
-				width: 26,
+				...folderIconBase,
+			},
+			folderEmojiIcon: {
+				...sidebarIconStyle,
+				...folderIconBase,
+				fontSize: theme.fontSize,
 			},
 			folderImageIcon: {
-				marginRight: folderIconRightMargin,
-				width: 27,
+				...folderIconBase,
 				height: 20,
 				resizeMode: 'contain',
 			},
@@ -409,18 +416,18 @@ const SideMenuContentComponent = (props: Props) => {
 			if (folderId === getTrashFolderId()) {
 				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
 			} else if (alwaysShowFolderIcons) {
-				return <IonIcon name="folder-outline" style={styles_.folderTextIcon} />;
+				return <IonIcon name="folder-outline" style={styles_.folderBaseIcon} />;
 			} else {
 				return null;
 			}
 		}
 
 		if (folderIcon.type === FolderIconType.Emoji) {
-			return <Text style={styles_.folderTextIcon}>{folderIcon.emoji}</Text>;
+			return <Text style={styles_.folderEmojiIcon}>{folderIcon.emoji}</Text>;
 		} else if (folderIcon.type === FolderIconType.DataUrl) {
 			return <Image style={styles_.folderImageIcon} source={{ uri: folderIcon.dataUrl }}/>;
 		} else if (folderIcon.type === FolderIconType.FontAwesome) {
-			return <Icon style={styles_.folderTextIcon} name={folderIcon.name} accessibilityLabel={''}/>;
+			return <Icon style={styles_.folderBaseIcon} name={folderIcon.name} accessibilityLabel={''}/>;
 		} else {
 			throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 		}
