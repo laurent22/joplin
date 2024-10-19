@@ -256,6 +256,7 @@ const Button = React.forwardRef((props: Props, ref: any) => {
 			iconOnly={iconOnly}
 			onClick={onClick}
 
+			aria-label={props.title ? undefined : props.tooltip}
 			aria-disabled={props.disabled}
 			aria-expanded={props['aria-expanded']}
 			aria-controls={props['aria-controls']}
