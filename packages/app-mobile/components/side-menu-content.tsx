@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useMemo, useEffect, useCallback, useContext } from 'react';
 import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
-const { connect } = require('react-redux');
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 const IonIcon = require('react-native-vector-icons/Ionicons').default;
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
@@ -21,21 +22,19 @@ import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
 import { TextStyle, ViewStyle } from 'react-native';
+import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer';
 const { TouchableRipple } = require('react-native-paper');
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
 	syncStarted: boolean;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	collapsedFolderIds: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	decryptionWorker: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resourceFetcher: any;
+	decryptionWorker: StateDecryptionWorker;
+	resourceFetcher: StateResourceFetcher;
 	syncOnlyOverWifi: boolean;
 	isOnMobileData: boolean;
 	notesParentType: string;
@@ -56,8 +55,7 @@ const syncIconRotation = syncIconRotationValue.interpolate({
 
 const folderIconRightMargin = 10;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let syncIconAnimation: any;
+let syncIconAnimation: Animated.CompositeAnimation|null = null;
 
 const SideMenuContentComponent = (props: Props) => {
 	const alwaysShowFolderIcons = useMemo(() => Folder.shouldShowFolderIcons(props.folders), [props.folders]);
@@ -414,7 +412,7 @@ const SideMenuContentComponent = (props: Props) => {
 	const renderFolderIcon = (folderId: string, folderIcon: FolderIcon) => {
 		if (!folderIcon) {
 			if (folderId === getTrashFolderId()) {
-				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
+				folderIcon = getTrashFolderIcon(FolderIconType.Emoji);
 			} else if (alwaysShowFolderIcons) {
 				return <IonIcon name="folder-outline" style={styles_.folderBaseIcon} />;
 			} else {
@@ -436,8 +434,7 @@ const SideMenuContentComponent = (props: Props) => {
 	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
 		const theme = themeStyle(props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const folderButtonStyle: any = {
+		const folderButtonStyle: ViewStyle = {
 			flex: 1,
 			flexDirection: 'row',
 			flexBasis: 'auto',
@@ -450,8 +447,7 @@ const SideMenuContentComponent = (props: Props) => {
 		if (selected) folderButtonStyle.backgroundColor = theme.selectedColor;
 		folderButtonStyle.paddingLeft = depth * 10 + theme.marginLeft;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const iconWrapperStyle: any = { paddingLeft: 10, paddingRight: 10 };
+		const iconWrapperStyle: ViewStyle = { paddingLeft: 10, paddingRight: 10 };
 		if (selected) iconWrapperStyle.backgroundColor = theme.selectedColor;
 
 		let iconWrapper = null;
@@ -504,7 +500,6 @@ const SideMenuContentComponent = (props: Props) => {
 		);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: ()=> void = null, selected = false) => {
 		let icon = <IonIcon name={iconName} style={styles_.sidebarIcon} aria-hidden={true} />;
 
