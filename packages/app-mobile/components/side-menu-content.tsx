@@ -141,6 +141,7 @@ const SideMenuContentComponent = (props: Props) => {
 			folderEmojiIcon: {
 				...sidebarIconStyle,
 				...folderIconBase,
+				textAlign: undefined,
 				fontSize: theme.fontSize,
 			},
 			folderImageIcon: {
