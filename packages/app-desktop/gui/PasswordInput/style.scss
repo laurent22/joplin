@@ -1,19 +1,3 @@
-.password-input {
-	display: flex;
-	position: relative;
-	flex: 1;
-
-	> .field {
-		display: flex;
-		flex: 1;
-		width: 100%;
-	}
-
-	> .showpasswordbutton {
-		position: absolute;
-		right: 5px;
-		top: 4px;
-		border: none;
-		background: none;
-	}
-}
+@use "styles/password-input.scss";
+@use "styles/labelled-password-input.scss";
+@use "styles/password-status-icon.scss";
