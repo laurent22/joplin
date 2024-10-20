@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { UpdateSettingValueCallback } from './types';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
@@ -90,6 +90,11 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		const unitLabel = md.unitLabel ? md.unitLabel(props.value) : props.value;
 		const minimum = 'minimum' in md ? md.minimum : 0;
 		const maximum = 'maximum' in md ? md.maximum : 10;
+		const incrementValue = () => {
+			if (props.value < maximum) {
+				void props.updateSettingValue(props.settingId, props.value + 1);
+			}
+		};
 
 		// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
 		// on the Slider as they are buggy and can crash the app on certain devices.
@@ -101,7 +106,12 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					{md.label()}
 				</Text>
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-					<Text style={styleSheet.sliderUnits}>{unitLabel}</Text>
+					<TouchableWithoutFeedback
+						accessibilityRole="button"
+						onPress={() => void incrementValue()}
+					>
+						<Text style={styleSheet.sliderUnits}>{unitLabel}</Text>
+					</TouchableWithoutFeedback>
 					<Slider
 						key="control"
 						style={{ flex: 1 }}
