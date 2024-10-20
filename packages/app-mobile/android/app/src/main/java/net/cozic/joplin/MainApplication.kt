@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
+import net.cozic.joplin.audio.SpeechToTextPackage
 import net.cozic.joplin.versioninfo.SystemVersionInformationPackage
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
@@ -25,6 +26,7 @@ class MainApplication : Application(), ReactApplication {
                     add(SslPackage())
                     add(TextInputPackage())
                     add(SystemVersionInformationPackage())
+                    add(SpeechToTextPackage())
                 }
 
         override fun getJSMainModuleName(): String = "index"

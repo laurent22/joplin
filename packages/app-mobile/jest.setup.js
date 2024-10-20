@@ -80,6 +80,10 @@ jest.mock('react-native-image-picker', () => {
 	return { default: { } };
 });
 
+jest.mock('react-native-zip-archive', () => {
+	return { default: { } };
+});
+
 jest.mock('react-native-document-picker', () => ({ default: { } }));
 
 // Used by the renderer

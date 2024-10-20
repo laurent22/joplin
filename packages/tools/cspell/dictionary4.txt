@@ -132,4 +132,6 @@ Famegear
 rcompare
 tabindex
 Backblaze
+onnx
+onnxruntime
 treeitem
