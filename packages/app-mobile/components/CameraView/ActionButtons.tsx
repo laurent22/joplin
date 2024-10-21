@@ -58,6 +58,9 @@ const useStyles = () => {
 				color: 'black',
 				fontSize: 40,
 			},
+			buttonPlaceHolder: {
+				width: 60,
+			},
 
 			qrCodeButtonDimmed: {
 				...buttonContainer,
@@ -128,7 +131,7 @@ const ActionButtons: React.FC<Props> = props => {
 			{takePhotoButton}
 			{
 				// Changing ratio is only supported on Android:
-				Platform.OS === 'android' ? ratioButton : <View style={{ flex: 1 }}/>
+				Platform.OS === 'android' ? ratioButton : <View style={styles.buttonPlaceHolder}/>
 			}
 		</View>
 	);
