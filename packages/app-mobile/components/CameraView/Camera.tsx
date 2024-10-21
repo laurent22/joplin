@@ -1,7 +1,7 @@
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
 import * as React from 'react';
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { ViewStyle } from 'react-native';
 import { BarcodeScanner } from './utils/useBarcodeScanner';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -11,8 +11,10 @@ interface Props {
 	cameraType: CameraDirection;
 	ratio: string|undefined;
 	codeScanner: BarcodeScanner;
+
 	onCameraReady: ()=> void;
 	onPermissionRequestFailure: ()=> void;
+	onHasPermission: ()=> void;
 }
 
 interface Picture {
@@ -32,7 +34,6 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 		},
 	}));
 
-
 	const [hasPermission, requestPermission] = useCameraPermissions();
 	useAsyncEffect(async () => {
 		try {
@@ -45,6 +46,12 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 			}
 		}
 	}, [hasPermission, requestPermission, props.onPermissionRequestFailure]);
+
+	useEffect(() => {
+		if (hasPermission?.granted) {
+			props.onHasPermission();
+		}
+	}, [hasPermission, props.onHasPermission]);
 
 	return <CameraView
 		ref={cameraRef}

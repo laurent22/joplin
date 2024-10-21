@@ -154,6 +154,9 @@ const CameraViewComponent: React.FC<Props> = props => {
 	const onPermissionRequestFailure = useCallback(() => {
 		setPermissionRequestFailed(true);
 	}, []);
+	const onHasPermission = useCallback(() => {
+		setPermissionRequestFailed(false);
+	}, []);
 
 	let content;
 	if (permissionRequestFailed) {
@@ -172,6 +175,7 @@ const CameraViewComponent: React.FC<Props> = props => {
 				onCameraReady={onCameraReady}
 				codeScanner={codeScanner}
 				onPermissionRequestFailure={onPermissionRequestFailure}
+				onHasPermission={onHasPermission}
 			/>
 			<ActionButtons
 				themeId={props.themeId}
