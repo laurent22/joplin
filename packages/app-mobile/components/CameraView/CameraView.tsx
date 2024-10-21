@@ -194,8 +194,6 @@ const CameraViewComponent: React.FC<Props> = props => {
 				cameraRatio={props.cameraRatio}
 				onSetCameraRatio={onNextCameraRatio}
 
-				codeScanner={codeScanner}
-
 				onTakePicture={onTakePicture}
 				takingPicture={takingPicture}
 				onCancelPhoto={props.onCancel}

@@ -5,7 +5,6 @@ import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { ActivityIndicator } from 'react-native-paper';
-import { BarcodeScanner } from './utils/useBarcodeScanner';
 
 interface Props {
 	themeId: number;
@@ -14,8 +13,6 @@ interface Props {
 
 	onSetCameraRatio: ()=> void;
 	cameraRatio: string;
-
-	codeScanner: BarcodeScanner;
 
 	onCancelPhoto: ()=> void;
 	onTakePicture: ()=> void;
@@ -146,18 +143,6 @@ const ActionButtons: React.FC<Props> = props => {
 				iconStyle={styles.buttonContent}
 				onPress={props.onCancelPhoto}
 				description={_('Back')}
-			/>
-
-			<IconButton
-				themeId={props.themeId}
-				iconName='ionicon qr-code'
-				containerStyle={props.codeScanner.enabled ? styles.buttonContainer : styles.qrCodeButtonDimmed}
-				iconStyle={styles.buttonContent}
-				onPress={props.codeScanner.onToggleEnabled}
-				description={_('QR code scanner')}
-
-				accessibilityRole='togglebutton'
-				accessibilityState={{ checked: props.codeScanner.enabled }}
 			/>
 		</View>
 		{props.cameraReady ? cameraActions : <ActivityIndicator/>}
