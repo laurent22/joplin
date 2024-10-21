@@ -3,6 +3,10 @@ import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel'
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
 import { Knex } from 'knex';
+import { PerformanceTimer } from '../utils/time';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('UserItemModel');
 
 interface DeleteByShare {
 	id: Uuid;
@@ -121,10 +125,16 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
+		const perfTimer = new PerformanceTimer(logger, 'addMulti');
+
+		perfTimer.push('Main');
+
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
 		if (!items.length) return;
 
 		await this.withTransaction(async () => {
+			perfTimer.push(`Processing ${items.length} items`);
+
 			for (const item of items) {
 				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
 
@@ -144,7 +154,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 					});
 				}
 			}
+
+			perfTimer.pop();
 		}, 'UserItemModel::addMulti');
+
+		perfTimer.pop();
 	}
 
 	public async save(_userItem: UserItem, _options: SaveOptions = {}): Promise<UserItem> {
