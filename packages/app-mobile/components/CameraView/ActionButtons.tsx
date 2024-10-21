@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { ActivityIndicator } from 'react-native-paper';
-import { LinkButton } from '../buttons';
+import { BarcodeScanner } from './utils/useBarcodeScanner';
 
 interface Props {
 	themeId: number;
@@ -15,10 +15,7 @@ interface Props {
 	onSetCameraRatio: ()=> void;
 	cameraRatio: string;
 
-	onToggleCodeScanner: ()=> void;
-	codeScannerEnabled: boolean;
-	currentBarcode: string;
-	onBarcodeSelected: (barcodeText: string)=> void;
+	codeScanner: BarcodeScanner;
 
 	onCancelPhoto: ()=> void;
 	onTakePicture: ()=> void;
@@ -128,22 +125,14 @@ const ActionButtons: React.FC<Props> = props => {
 		/>
 	);
 
-	const onBarcodeClick = useCallback(() => {
-		props.onBarcodeSelected(props.currentBarcode);
-	}, [props.currentBarcode, props.onBarcodeSelected]);
-	const barcodeLink = <LinkButton onPress={onBarcodeClick}>{_('Barcode: %s', props.currentBarcode)}</LinkButton>;
-	// TODO: Refactor!
 	const cameraActions = (
-		<View style={[styles.buttonRowContainerBottom, { flexDirection: 'column' }]}>
-			{props.currentBarcode && props.codeScannerEnabled ? barcodeLink : null}
-			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-				{reverseButton}
-				{takePhotoButton}
-				{
-					// Changing ratio is only supported on Android:
-					Platform.OS === 'android' ? ratioButton : <View style={{ flex: 1 }}/>
-				}
-			</View>
+		<View style={styles.buttonRowContainerBottom}>
+			{reverseButton}
+			{takePhotoButton}
+			{
+				// Changing ratio is only supported on Android:
+				Platform.OS === 'android' ? ratioButton : <View style={{ flex: 1 }}/>
+			}
 		</View>
 	);
 
@@ -162,13 +151,13 @@ const ActionButtons: React.FC<Props> = props => {
 			<IconButton
 				themeId={props.themeId}
 				iconName='ionicon qr-code'
-				containerStyle={props.codeScannerEnabled ? styles.buttonContainer : styles.qrCodeButtonDimmed}
+				containerStyle={props.codeScanner.enabled ? styles.buttonContainer : styles.qrCodeButtonDimmed}
 				iconStyle={styles.buttonContent}
-				onPress={props.onToggleCodeScanner}
+				onPress={props.codeScanner.onToggleEnabled}
 				description={_('QR code scanner')}
 
 				accessibilityRole='togglebutton'
-				accessibilityState={{ checked: props.codeScannerEnabled }}
+				accessibilityState={{ checked: props.codeScanner.enabled }}
 			/>
 		</View>
 		{props.cameraReady ? cameraActions : <ActivityIndicator/>}

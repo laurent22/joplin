@@ -133,3 +133,6 @@ rcompare
 tabindex
 Backblaze
 treeitem
+qrcode
+Rocketbook
+datamatrix

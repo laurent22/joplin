@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Text, StyleSheet, Linking, View, Platform, useWindowDimensions } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { ViewStyle } from 'react-native';
-import { BarcodeScanningResult, BarcodeSettings, CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { DialogContext } from '../DialogManager';
 import { AppState } from '../../utils/types';
@@ -16,6 +16,8 @@ import { LinkButton, PrimaryButton } from '../buttons';
 import BackButtonService from '../../services/BackButtonService';
 import { themeStyle } from '../global-style';
 import fitRectIntoBounds from './utils/fitRectIntoBounds';
+import useBarcodeScanner from './utils/useBarcodeScanner';
+import ScannedBarcodes from './ScannedBarcodes';
 
 interface CameraData {
 	uri: string;
@@ -28,7 +30,7 @@ interface Props {
 	cameraRatio: string;
 	onPhoto: (data: CameraData)=> void;
 	onCancel: ()=> void;
-	onBarcodeSelected: (barcodeText: string)=> void;
+	onInsertBarcode: (barcodeText: string)=> void;
 }
 
 interface UseStyleProps {
@@ -99,9 +101,6 @@ const useAvailableRatios = (): string[] => {
 	return Platform.OS === 'android' ? androidRatios : iOSRatios;
 };
 
-const barcodeScannerSettings: BarcodeSettings = {
-	barcodeTypes: ['qr'],
-};
 
 const CameraViewComponent: React.FC<Props> = props => {
 	const styles = useStyles(props);
@@ -111,20 +110,11 @@ const CameraViewComponent: React.FC<Props> = props => {
 	const [cameraReady, setCameraReady] = useState(false);
 	const dialogs = useContext(DialogContext);
 
-	useAsyncEffect(async (event) => {
+	useAsyncEffect(async () => {
 		try {
 			if (!hasPermission?.granted) {
 				setRequestingPermission(true);
-				const success = await requestPermission();
-				if (event.cancelled) return;
-
-				if (!success) {
-					dialogs.prompt(
-						_('Missing camera permission'),
-						_('The camera permission is required to take pictures.'),
-						[{ text: _('Open settings'), onPress: () => Linking.openSettings() }],
-					);
-				}
+				await requestPermission();
 			}
 		} finally {
 			setRequestingPermission(false);
@@ -154,15 +144,7 @@ const CameraViewComponent: React.FC<Props> = props => {
 		Setting.setValue('camera.ratio', availableRatios[(ratioIndex + 1) % availableRatios.length]);
 	}, [props.cameraRatio, availableRatios]);
 
-	const [codeScannerEnabled, setCodeScannerEnabled] = useState(false);
-	const onToggleCodeScanner = useCallback(() => {
-		setCodeScannerEnabled(enabled => !enabled);
-	}, []);
-
-	const [barcodeData, setBarcodeData] = useState<BarcodeScanningResult>(null);
-	const onBarcodeScanned = useCallback(async (scanningResult: BarcodeScanningResult) => {
-		setBarcodeData(scanningResult);
-	}, []);
+	const codeScanner = useBarcodeScanner();
 
 	const onCameraReady = useCallback(() => {
 		setCameraReady(true);
@@ -192,20 +174,6 @@ const CameraViewComponent: React.FC<Props> = props => {
 			<PrimaryButton onPress={props.onCancel}>{_('Go back')}</PrimaryButton>
 		</View>;
 	} else {
-		// TODO: This is broken in landscape mode. See https://github.com/expo/expo/issues/29762
-		const barcodePreview = barcodeData?.cornerPoints?.length ? barcodeData.cornerPoints.map((p, i) => {
-			return <View key={`corner-${i}`} style={{
-				position: 'absolute',
-				top: p.y,
-				right: p.x,
-				width: 10,
-				height: 10,
-				borderColor: 'red',
-				borderWidth: 5,
-				borderRadius: 3,
-			}}/>;
-		}) : null;
-
 		content = <>
 			<CameraView
 				ref={cameraRef}
@@ -213,10 +181,10 @@ const CameraViewComponent: React.FC<Props> = props => {
 				facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
 				ratio={availableRatios.includes(props.cameraRatio) ? (props.cameraRatio as CameraRatio) : undefined}
 				onCameraReady={onCameraReady}
-				barcodeScannerSettings={codeScannerEnabled ? barcodeScannerSettings : null}
-				onBarcodeScanned={codeScannerEnabled ? onBarcodeScanned : null}
+				animateShutter={false}
+				barcodeScannerSettings={codeScanner.scannerSettings}
+				onBarcodeScanned={codeScanner.onBarcodeScanned}
 			>
-				{barcodePreview}
 			</CameraView>
 			<ActionButtons
 				themeId={props.themeId}
@@ -226,16 +194,18 @@ const CameraViewComponent: React.FC<Props> = props => {
 				cameraRatio={props.cameraRatio}
 				onSetCameraRatio={onNextCameraRatio}
 
-				codeScannerEnabled={codeScannerEnabled}
-				onToggleCodeScanner={onToggleCodeScanner}
-				currentBarcode={barcodeData?.data}
-				onBarcodeSelected={props.onBarcodeSelected}
+				codeScanner={codeScanner}
 
 				onTakePicture={onTakePicture}
 				takingPicture={takingPicture}
 				onCancelPhoto={props.onCancel}
 
 				cameraReady={cameraReady}
+			/>
+			<ScannedBarcodes
+				themeId={props.themeId}
+				codeScanner={codeScanner}
+				onInsertCode={props.onInsertBarcode}
 			/>
 		</>;
 	}

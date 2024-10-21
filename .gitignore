@@ -528,7 +528,9 @@ packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/CameraView/ActionButtons.js
 packages/app-mobile/components/CameraView/CameraView.js
+packages/app-mobile/components/CameraView/ScannedBarcodes.js
 packages/app-mobile/components/CameraView/utils/fitRectIntoBounds.js
+packages/app-mobile/components/CameraView/utils/useBarcodeScanner.js
 packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager.js
 packages/app-mobile/components/DismissibleDialog.js
@@ -610,6 +612,7 @@ packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
 packages/app-mobile/components/accessibility/AccessibleView.js
+packages/app-mobile/components/animation/FadeOut.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js

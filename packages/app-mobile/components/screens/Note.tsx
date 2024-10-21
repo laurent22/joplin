@@ -839,7 +839,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		this.setState({ showCamera: false });
 	}
 
-	private cameraView_onBarcode = (data: string) => {
+	private cameraView_onInsertBarcode = (data: string) => {
 		this.setState({ showCamera: false });
 		void this.insertText(data);
 	};
@@ -1453,7 +1453,7 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 			return <CameraView
 				style={{ flex: 1 }}
 				onPhoto={this.cameraView_onPhoto}
-				onBarcodeSelected={this.cameraView_onBarcode}
+				onInsertBarcode={this.cameraView_onInsertBarcode}
 				onCancel={this.cameraView_onCancel}
 			/>;
 		} else if (this.state.showImageEditor) {
