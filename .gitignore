@@ -617,7 +617,6 @@ packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
 packages/app-mobile/components/accessibility/AccessibleView.js
-packages/app-mobile/components/animation/FadeOut.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js

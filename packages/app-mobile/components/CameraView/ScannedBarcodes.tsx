@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { BarcodeScanner } from './utils/useBarcodeScanner';
 import { LinkButton, PrimaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
-import { Text } from 'react-native-paper';
+import { Chip, Text } from 'react-native-paper';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import FadeOut from '../animation/FadeOut';
 
 interface Props {
 	themeId: number;
@@ -43,41 +42,57 @@ const ScannedBarcodes: React.FC<Props> = props => {
 	const styles = useStyles();
 	const [dialogVisible, setDialogVisible] = useState(false);
 
-	const onShowDialog = useCallback(() => setDialogVisible(true), []);
-	const onHideDialog = useCallback(() => setDialogVisible(false), []);
+	const [dismissedAtTime, setDismissedAtTime] = useState(0);
+	const onHideCodeNotification = useCallback(() => {
+		setDismissedAtTime(performance.now());
+	}, []);
+
+	const onShowDialog = useCallback(() => {
+		setDialogVisible(true);
+	}, []);
+	const onHideDialog = useCallback(() => {
+		setDialogVisible(false);
+		onHideCodeNotification();
+	}, [onHideCodeNotification]);
 
 	const codeScanner = props.codeScanner;
 	const scannedText = codeScanner.lastScan?.text;
+
 	const isLink = useMemo(() => {
 		return scannedText && isCallbackUrl(scannedText);
 	}, [scannedText]);
 	const onFollowLink = useCallback(() => {
 		setDialogVisible(false);
 		const data = parseCallbackUrl(scannedText);
-		void CommandService.instance().execute('openItem', `:/${data.params.id}`);
+		if (data && data.params.id) {
+			void CommandService.instance().execute('openItem', `:/${data.params.id}`);
+		}
 	}, [scannedText]);
 	const onInsertText = useCallback(() => {
 		setDialogVisible(false);
 		props.onInsertCode(scannedText);
 	}, [scannedText, props.onInsertCode]);
 
-	if (!scannedText) return null;
+	const codeChipHidden = !scannedText || dialogVisible || codeScanner.lastScan.timestamp < dismissedAtTime;
+	const dialogOpenButton = <Chip icon='qrcode' onPress={onShowDialog} onClose={onHideCodeNotification}>
+		{_('QR Code')}
+	</Chip>;
 	return <View style={styles.container}>
-		<FadeOut hideAfter={codeScanner.lastScan.timestamp + 5_000}>
-			<PrimaryButton icon='qrcode' onPress={onShowDialog}>
-				{_('QR Code')}
-			</PrimaryButton>
-		</FadeOut>
+		{codeChipHidden ? null : dialogOpenButton}
 		<DismissibleDialog
 			visible={dialogVisible}
 			onDismiss={onHideDialog}
 			themeId={props.themeId}
 			size={DialogSize.Small}
 		>
-			<Text variant='titleMedium' role='heading'>{_('Scanned code')}</Text>
-			<Text style={styles.scannedCode} variant='labelLarge' selectable={true}>{
-				scannedText
-			}</Text>
+			<ScrollView>
+				<Text variant='titleMedium' role='heading'>{_('Scanned code')}</Text>
+				<Text
+					style={styles.scannedCode}
+					variant='labelLarge'
+					selectable={true}
+				>{scannedText}</Text>
+			</ScrollView>
 			<View style={styles.spacer}/>
 			{isLink ? <LinkButton onPress={onFollowLink}>{_('Follow link')}</LinkButton> : null}
 			<PrimaryButton onPress={onInsertText}>{_('Add to note')}</PrimaryButton>
