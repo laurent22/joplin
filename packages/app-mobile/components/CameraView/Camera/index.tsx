@@ -1,36 +1,21 @@
+import * as React from 'react';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
-import * as React from 'react';
 import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { ViewStyle } from 'react-native';
-import { BarcodeScanner } from './utils/useBarcodeScanner';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { CameraRef, Props } from './types';
 
-interface Props {
-	style: ViewStyle;
-	cameraType: CameraDirection;
-	ratio: string|undefined;
-	codeScanner: BarcodeScanner;
-
-	onCameraReady: ()=> void;
-	onPermissionRequestFailure: ()=> void;
-	onHasPermission: ()=> void;
-}
-
-interface Picture {
-	uri: string;
-}
-
-export interface CameraRef {
-	takePictureAsync(): Promise<Picture>;
-}
 
 const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 	const cameraRef = useRef<CameraView>(null);
 
 	useImperativeHandle(ref, () => ({
 		takePictureAsync: async () => {
-			return cameraRef.current.takePictureAsync();
+			const result = await cameraRef.current.takePictureAsync();
+			return {
+				uri: result.uri,
+				type: 'image/jpg',
+			};
 		},
 	}));
 

@@ -64,6 +64,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { ResourceInfo } from '../NoteBodyViewer/hooks/useRerenderHandler';
 import getImageDimensions from '../../utils/image/getImageDimensions';
 import resizeImage from '../../utils/image/resizeImage';
+import { CameraResult } from '../CameraView/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -826,13 +827,9 @@ class NoteScreenComponent extends BaseScreenComponent<Props, State> implements B
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cameraView_onPhoto(data: any) {
+	private cameraView_onPhoto(data: CameraResult) {
 		void this.attachFile(
-			{
-				uri: data.uri,
-				type: 'image/jpg',
-			},
+			data,
 			'image',
 		);
 

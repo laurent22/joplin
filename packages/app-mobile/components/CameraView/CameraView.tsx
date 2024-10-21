@@ -15,18 +15,16 @@ import { themeStyle } from '../global-style';
 import fitRectIntoBounds from './utils/fitRectIntoBounds';
 import useBarcodeScanner from './utils/useBarcodeScanner';
 import ScannedBarcodes from './ScannedBarcodes';
-import Camera, { CameraRef } from './Camera';
-
-interface CameraData {
-	uri: string;
-}
+import { CameraRef } from './Camera/types';
+import Camera from './Camera';
+import { CameraResult } from './types';
 
 interface Props {
 	themeId: number;
 	style: ViewStyle;
 	cameraType: CameraDirection;
 	cameraRatio: string;
-	onPhoto: (data: CameraData)=> void;
+	onPhoto: (data: CameraResult)=> void;
 	onCancel: ()=> void;
 	onInsertBarcode: (barcodeText: string)=> void;
 }
@@ -40,7 +38,7 @@ interface UseStyleProps {
 const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 	const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 	const outputPositioning = useMemo((): ViewStyle => {
-		const ratioMatch = cameraRatio.match(/^(\d+):(\d+)$/);
+		const ratioMatch = cameraRatio?.match(/^(\d+):(\d+)$/);
 		if (!ratioMatch) {
 			return { left: 0, top: 0 };
 		}
@@ -82,10 +80,11 @@ const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 				...style,
 			},
 			errorContainer: {
+				position: 'absolute',
+				top: 0,
+				alignSelf: 'center',
 				backgroundColor: theme.backgroundColor,
 				maxWidth: 600,
-				marginLeft: 'auto',
-				marginRight: 'auto',
 				padding: 28,
 				borderRadius: 28,
 			},
@@ -158,25 +157,15 @@ const CameraViewComponent: React.FC<Props> = props => {
 		setPermissionRequestFailed(false);
 	}, []);
 
-	let content;
+	let overlay;
 	if (permissionRequestFailed) {
-		content = <View style={styles.errorContainer}>
+		overlay = <View style={styles.errorContainer}>
 			<Text>{_('Missing camera permission')}</Text>
 			<LinkButton onPress={() => Linking.openSettings()}>{_('Open settings')}</LinkButton>
 			<PrimaryButton onPress={props.onCancel}>{_('Go back')}</PrimaryButton>
 		</View>;
 	} else {
-		content = <>
-			<Camera
-				ref={cameraRef}
-				style={styles.camera}
-				cameraType={props.cameraType}
-				ratio={availableRatios.includes(props.cameraRatio) ? props.cameraRatio : undefined}
-				onCameraReady={onCameraReady}
-				codeScanner={codeScanner}
-				onPermissionRequestFailure={onPermissionRequestFailure}
-				onHasPermission={onHasPermission}
-			/>
+		overlay = <>
 			<ActionButtons
 				themeId={props.themeId}
 				onCameraReverse={onCameraReverse}
@@ -201,7 +190,17 @@ const CameraViewComponent: React.FC<Props> = props => {
 
 	return (
 		<View style={styles.container}>
-			{content}
+			<Camera
+				ref={cameraRef}
+				style={styles.camera}
+				cameraType={props.cameraType}
+				ratio={availableRatios.includes(props.cameraRatio) ? props.cameraRatio : undefined}
+				onCameraReady={onCameraReady}
+				codeScanner={codeScanner}
+				onPermissionRequestFailure={onPermissionRequestFailure}
+				onHasPermission={onHasPermission}
+			/>
+			{overlay}
 		</View>
 	);
 };
