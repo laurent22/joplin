@@ -1,10 +1,15 @@
-import { BarcodeScanningResult, BarcodeSettings } from 'expo-camera';
+import { BarcodeSettings } from 'expo-camera';
 import { useMemo, useState } from 'react';
 
 
 interface ScannedData {
 	text: string;
 	timestamp: number;
+}
+
+interface BarcodeScanningResult {
+	type: string;
+	data: string;
 }
 
 export interface BarcodeScanner {

@@ -40,9 +40,14 @@ const startCamera = () => {
 	fireEvent.press(startCameraButton);
 };
 
+const setQrCodeData = (data: string) => {
+	const qrCodeDataInput = screen.getByPlaceholderText('QR code data');
+	fireEvent.changeText(qrCodeDataInput, data);
+};
+
 describe('CameraView', () => {
 	test('should hide permissions error if camera permission is granted', async () => {
-		render(<CameraViewWrapper/>);
+		const view = render(<CameraViewWrapper/>);
 
 		const queryPermissionsError = () => screen.queryByText('Missing camera permission');
 
@@ -55,5 +60,29 @@ describe('CameraView', () => {
 		expect(await screen.findByRole('button', { name: 'Back' })).toBeVisible();
 		startCamera();
 		expect(await screen.findByRole('button', { name: 'Take picture' })).toBeVisible();
+
+		view.unmount();
+	});
+
+	test('should allow adding QR code text to a note', async () => {
+		const onInsertBarcode = jest.fn();
+		const view = render(<CameraViewWrapper onInsertBarcode={onInsertBarcode}/>);
+		acceptCameraPermission();
+		startCamera();
+
+		const qrCodeData = 'Test!';
+		setQrCodeData(qrCodeData);
+
+		const qrCodeButton = await screen.findByRole('button', { name: 'QR Code' });
+		expect(qrCodeButton).toBeVisible();
+		fireEvent.press(qrCodeButton);
+
+		const addToNoteButton = await screen.findByRole('button', { name: 'Add to note' });
+		fireEvent.press(addToNoteButton);
+
+		expect(onInsertBarcode).toHaveBeenCalledTimes(1);
+		expect(onInsertBarcode).toHaveBeenCalledWith(qrCodeData);
+
+		view.unmount();
 	});
 });

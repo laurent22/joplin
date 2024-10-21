@@ -17,7 +17,7 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 				type: 'image/jpg',
 			};
 		},
-	}));
+	}), []);
 
 	const [hasPermission, requestPermission] = useCameraPermissions();
 	useAsyncEffect(async () => {
