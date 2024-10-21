@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-import { ChangeEvent, useCallback, useRef } from 'react';
+import { ChangeEvent, useCallback, useContext, useRef } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
+import { WindowIdContext } from '../../NewWindowOrIFrame';
 
 interface Props {
 	themeId: number;
@@ -97,11 +98,14 @@ export default function NoteTitleBar(props: Props) {
 		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
 	}
 
+	const windowId = useContext(WindowIdContext);
+
 	function renderNoteToolbar() {
 		return <NoteToolbar
 			themeId={props.themeId}
 			style={styles.toolbarStyle}
 			disabled={props.disabled}
+			windowId={windowId}
 		/>;
 	}
 

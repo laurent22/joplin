@@ -40,8 +40,12 @@ function Toolbar(props: ToolbarProps) {
 	);
 }
 
-const mapStateToProps = (state: AppState) => {
-	const whenClauseContext = stateToWhenClauseContext(state);
+interface ConnectProps {
+	windowId: string;
+}
+
+const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
+	const whenClauseContext = stateToWhenClauseContext(state, { windowId: connectProps.windowId });
 
 	const commandNames = [
 		'historyBackward',

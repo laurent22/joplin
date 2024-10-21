@@ -11,7 +11,7 @@ import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
 import { createStore, applyMiddleware, Store } from 'redux';
-const { defaultState, stateUtils } = require('./reducer');
+import { defaultState, stateUtils } from './reducer';
 import JoplinDatabase from './JoplinDatabase';
 import { cancelTimers as folderScreenUtilsCancelTimers, refreshFolders, scheduleRefreshFolders } from './folders-screen-utils';
 const { DatabaseDriverNode } = require('./database-driver-node.js');
@@ -98,8 +98,7 @@ export default class BaseApplication {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected currentFolder_: any = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected store_: Store<any> = null;
+	protected store_: Store<State> = null;
 
 	private rotatingLogs: RotatingLogs;
 
@@ -507,6 +506,11 @@ export default class BaseApplication {
 		}
 
 		if (action.type === 'SMART_FILTER_SELECT') {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
+		if (action.type === 'WINDOW_FOCUS' && action.lastWindowId !== action.windowId) {
 			refreshNotes = true;
 			refreshNotesUseSelectedNoteId = true;
 		}

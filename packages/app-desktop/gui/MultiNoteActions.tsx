@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { ThemeStyle } from '@joplin/lib/theme';
 
 import { buildStyle } from '@joplin/lib/theme';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../services/bridge';
 
 interface MultiNoteActionsProps {
 	themeId: number;
@@ -46,7 +46,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const multiNotesButton_click = (item: any) => {
 		if (item.submenu) {
-			item.submenu.popup({ window: bridge().window() });
+			item.submenu.popup({ window: bridge().activeWindow() });
 		} else {
 			item.click();
 		}
