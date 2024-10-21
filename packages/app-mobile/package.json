@@ -135,5 +135,13 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "expo": {
+    "autolinking": {
+      "exclude": [
+        "expo-application",
+        "expo-keep-awake"
+      ]
+    }
   }
 }
