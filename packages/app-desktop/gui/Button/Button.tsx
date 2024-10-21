@@ -256,6 +256,9 @@ const Button = React.forwardRef((props: Props, ref: any) => {
 			iconOnly={iconOnly}
 			onClick={onClick}
 
+			// When there's no title, the button needs a label. In this case, fall back
+			// to the tooltip.
+			aria-label={props.title ? undefined : props.tooltip}
 			aria-disabled={props.disabled}
 			aria-expanded={props['aria-expanded']}
 			aria-controls={props['aria-controls']}
