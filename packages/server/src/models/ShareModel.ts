@@ -315,18 +315,30 @@ export default class ShareModel extends BaseModel<Share> {
 		perfTimer.push('Main');
 
 		while (true) {
+			perfTimer.push('Get latestProcessedChange');
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
+			perfTimer.pop();
 
+			perfTimer.push('Get paginated changes');
 			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
+			perfTimer.pop();
 			const changes = paginatedChanges.items;
 
 			if (!changes.length) {
+				perfTimer.push('Set latestProcessedChange');
 				await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
+				perfTimer.pop();
 			} else {
+				perfTimer.push(`Load items for ${changes.length} changes`);
 				const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+				perfTimer.pop();
 				const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
-				const shares = await this.models().share().loadByIds(shareIds);
 
+				perfTimer.push(`Load ${shareIds.length} shares`);
+				const shares = await this.models().share().loadByIds(shareIds);
+				perfTimer.pop();
+
+				perfTimer.push('Change processing transaction');
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
@@ -358,6 +370,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 					perfTimer.pop();
 				}, 'ShareService::updateSharedItems3');
+				perfTimer.pop();
 			}
 
 			if (!paginatedChanges.has_more) break;
