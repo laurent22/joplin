@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { connect } from 'react-redux';
 import { Text, StyleSheet, Linking, View, Platform, useWindowDimensions } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { ViewStyle } from 'react-native';
-import { CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import { DialogContext } from '../DialogManager';
 import { AppState } from '../../utils/types';
 import ActionButtons from './ActionButtons';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
@@ -18,6 +15,7 @@ import { themeStyle } from '../global-style';
 import fitRectIntoBounds from './utils/fitRectIntoBounds';
 import useBarcodeScanner from './utils/useBarcodeScanner';
 import ScannedBarcodes from './ScannedBarcodes';
+import Camera, { CameraRef } from './Camera';
 
 interface CameraData {
 	uri: string;
@@ -95,8 +93,8 @@ const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 	}, [themeId, style, outputPositioning]);
 };
 
-const androidRatios: CameraRatio[] = ['1:1', '4:3', '16:9'];
-const iOSRatios: CameraRatio[] = [];
+const androidRatios = ['1:1', '4:3', '16:9'];
+const iOSRatios: string[] = [];
 const useAvailableRatios = (): string[] => {
 	return Platform.OS === 'android' ? androidRatios : iOSRatios;
 };
@@ -104,22 +102,8 @@ const useAvailableRatios = (): string[] => {
 
 const CameraViewComponent: React.FC<Props> = props => {
 	const styles = useStyles(props);
-	const cameraRef = useRef<CameraView|null>(null);
-	const [hasPermission, requestPermission] = useCameraPermissions();
-	const [requestingPermission, setRequestingPermission] = useState(true);
+	const cameraRef = useRef<CameraRef|null>(null);
 	const [cameraReady, setCameraReady] = useState(false);
-	const dialogs = useContext(DialogContext);
-
-	useAsyncEffect(async () => {
-		try {
-			if (!hasPermission?.granted) {
-				setRequestingPermission(true);
-				await requestPermission();
-			}
-		} finally {
-			setRequestingPermission(false);
-		}
-	}, [hasPermission, requestPermission, dialogs]);
 
 	useEffect(() => {
 		const handler = () => {
@@ -166,8 +150,13 @@ const CameraViewComponent: React.FC<Props> = props => {
 		}
 	}, [props.onPhoto]);
 
+	const [permissionRequestFailed, setPermissionRequestFailed] = useState(false);
+	const onPermissionRequestFailure = useCallback(() => {
+		setPermissionRequestFailed(true);
+	}, []);
+
 	let content;
-	if (!hasPermission?.canAskAgain && !hasPermission?.granted && !requestingPermission) {
+	if (permissionRequestFailed) {
 		content = <View style={styles.errorContainer}>
 			<Text>{_('Missing camera permission')}</Text>
 			<LinkButton onPress={() => Linking.openSettings()}>{_('Open settings')}</LinkButton>
@@ -175,17 +164,15 @@ const CameraViewComponent: React.FC<Props> = props => {
 		</View>;
 	} else {
 		content = <>
-			<CameraView
+			<Camera
 				ref={cameraRef}
 				style={styles.camera}
-				facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
-				ratio={availableRatios.includes(props.cameraRatio) ? (props.cameraRatio as CameraRatio) : undefined}
+				cameraType={props.cameraType}
+				ratio={availableRatios.includes(props.cameraRatio) ? props.cameraRatio : undefined}
 				onCameraReady={onCameraReady}
-				animateShutter={false}
-				barcodeScannerSettings={codeScanner.scannerSettings}
-				onBarcodeScanned={codeScanner.onBarcodeScanned}
-			>
-			</CameraView>
+				codeScanner={codeScanner}
+				onPermissionRequestFailure={onPermissionRequestFailure}
+			/>
 			<ActionButtons
 				themeId={props.themeId}
 				onCameraReverse={onCameraReverse}

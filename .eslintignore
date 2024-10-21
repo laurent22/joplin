@@ -550,6 +550,7 @@ packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/CameraView/ActionButtons.js
+packages/app-mobile/components/CameraView/Camera.js
 packages/app-mobile/components/CameraView/CameraView.js
 packages/app-mobile/components/CameraView/ScannedBarcodes.js
 packages/app-mobile/components/CameraView/utils/fitRectIntoBounds.js
