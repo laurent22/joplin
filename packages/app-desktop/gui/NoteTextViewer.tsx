@@ -3,6 +3,8 @@ import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { createSecureRandom } from '@joplin/lib/uuid';
+import { AccessController } from '../utils/customProtocols/handleCustomProtocols';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -30,6 +32,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
+	private mediaAccessController_: AccessController|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(props: any) {
@@ -126,6 +129,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.domReady_ = false;
 
 		this.removePluginAssetsCallback_?.();
+		this.mediaAccessController_?.remove();
 	}
 
 	public focus() {
@@ -196,11 +200,11 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setHtml(html: string, options: SetHtmlOptions) {
+		const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+
 		// Grant & remove asset access.
 		if (options.pluginAssets) {
 			this.removePluginAssetsCallback_?.();
-
-			const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
 
 			const pluginAssetPaths: string[] = options.pluginAssets.map((asset) => asset.path);
 			const assetAccesses = pluginAssetPaths.map(
@@ -216,7 +220,14 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			};
 		}
 
-		this.send('setHtml', html, options);
+		this.mediaAccessController_?.remove();
+		const mediaKey = createSecureRandom();
+		this.mediaAccessController_ = protocolHandler.allowMediaAccessWithKey(mediaKey);
+
+		this.send('setHtml', html, {
+			...options,
+			mediaAccessKey: mediaKey,
+		});
 	}
 
 	// ----------------------------------------------------------------

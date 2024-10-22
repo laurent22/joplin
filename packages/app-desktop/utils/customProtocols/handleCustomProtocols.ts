@@ -8,9 +8,14 @@ import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
 
+export interface AccessController {
+	remove(): void;
+}
+
 export interface CustomProtocolHandler {
 	allowReadAccessToDirectory(path: string): void;
-	allowReadAccessToFile(path: string): { remove(): void };
+	allowReadAccessToFile(path: string): AccessController;
+	allowMediaAccessWithKey(key: string): AccessController;
 }
 
 
@@ -132,6 +137,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
+	const allowedMediaAccessKeys = new Set<string>();
 
 	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 	protocol.handle(contentProtocolName, async request => {
@@ -163,12 +169,19 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 			mediaOnly = false;
 		} else if (host === 'file-media') {
+			// ://file-media/ is intended only for <img, <video and similar tags. As such, the file extensions it
+			// can access may be restricted:
 			const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.mp4', '.webm', '.mov', '.mp3', '.wav', '.ogg'];
+
 			for (const ext of allowedExtensions) {
 				canRead ||= pathname.toLowerCase().endsWith(ext);
 			}
-
 			mediaOnly = true;
+
+			const accessKey = url.searchParams.get('access-key');
+			if (!allowedMediaAccessKeys.has(accessKey)) {
+				throw new Error(`Invalid or missing media access key (was ${accessKey}). An allow-listed ?access-key= parameter must be provided.`);
+			}
 		} else {
 			throw new Error(`Invalid URL ${request.url}`);
 		}
@@ -192,10 +205,11 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			// Tells the browser to avoid MIME confusion attacks. See
 			// https://blog.mozilla.org/security/2016/08/26/mitigating-mime-confusion-attacks-in-firefox/
 			response.headers.set('X-Content-Type-Options', 'nosniff');
-			response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 
-			if (response.headers.get('Content-Type')?.includes('text')) {
-				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only.`);
+			// This is an extra check to prevent loading text/html and arbitrary non-media content from the URL.
+			const contentType = response.headers.get('Content-Type');
+			if (contentType?.includes('text')) {
+				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
 			}
 		}
 
@@ -228,6 +242,17 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 					} else {
 						readableFiles.set(path, readableFiles.get(path) - 1);
 					}
+				},
+			};
+		},
+		// Allows access to all local media files, provided a matching ?access-key=<key> is added
+		// to the request URL.
+		allowMediaAccessWithKey: (key: string) => {
+			allowedMediaAccessKeys.add(key);
+
+			return {
+				remove: () => {
+					allowedMediaAccessKeys.delete(key);
 				},
 			};
 		},

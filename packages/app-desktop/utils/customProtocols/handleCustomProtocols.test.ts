@@ -42,21 +42,29 @@ const setUpProtocolHandler = () => {
 	return { protocolHandler, onRequestListener };
 };
 
+interface ExpectBlockedOptions {
+	host?: string;
+}
+
 // Although none of the paths in this test suite point to real files, file paths must be in
 // a certain format on Windows to avoid invalid path exceptions.
 const toPlatformPath = (path: string) => process.platform === 'win32' ? `C:/${path}` : path;
 
-const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
-	const url = `joplin-content://note-viewer/${toPlatformPath(filePath)}`;
-
-	await expect(
-		async () => await onRequestListener(new Request(url)),
-	).rejects.toThrowError('Read access not granted for URL');
+const toAccessUrl = (path: string, { host = 'note-viewer' }: ExpectBlockedOptions = {}) => {
+	return `joplin-content://${host}/${toPlatformPath(path)}`;
 };
 
-const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string) => {
+const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePath: string, options?: ExpectBlockedOptions) => {
+	const url = toAccessUrl(filePath, options);
+	await expect(
+		async () => await onRequestListener(new Request(url)),
+	).rejects.toThrow(/Read access not granted for URL|Invalid or missing media access key/);
+};
+
+const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string, options?: ExpectBlockedOptions) => {
+	const url = toAccessUrl(filePath, options);
 	const handleRequestResult = await onRequestListener(
-		new Request(`joplin-content://note-viewer/${toPlatformPath(filePath)}`),
+		new Request(url),
 	);
 	expect(handleRequestResult.body).toBeTruthy();
 };
@@ -105,6 +113,31 @@ describe('handleCustomProtocols', () => {
 		handle2.remove();
 
 		await expectPathToBeBlocked(onRequestListener, '/test/path/a.txt');
+	});
+
+	test('should only allow access to file-media/ URLs when given the correct access key', async () => {
+		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		const expectBlocked = (path: string) => {
+			return expectPathToBeBlocked(onRequestListener, path, { host: 'file-media' });
+		};
+		const expectUnblocked = (path: string) => {
+			return expectPathToBeUnblocked(onRequestListener, path, { host: 'file-media' });
+		};
+
+		fetchMock.mockImplementation(async (_url: string) => {
+			return new Response('', { headers: { 'Content-Type': 'image/jpeg' } });
+		});
+
+		const testPath = join(supportDir, 'photo.jpg');
+		await expectBlocked(testPath);
+		await expectBlocked(`${testPath}?access-key=test`);
+
+		const handle = protocolHandler.allowMediaAccessWithKey('test');
+		await expectUnblocked(`${testPath}?access-key=test`);
+		await expectBlocked(`${testPath}?access-key=test2`);
+
+		handle.remove();
+		await expectBlocked(`${testPath}?access-key=test`);
 	});
 
 	test('should allow requesting part of a file', async () => {

@@ -377,13 +377,14 @@
 			contentElement.scrollTop = scrollTop;
 		}
 
-		const rewriteFileUrls = () => {
+		const rewriteFileUrls = (accessKey) => {
 			// To allow accessing local files from the viewer's non-file URL, file:// URLs are re-written
 			// to joplin-content:// URLs:
 			const mediaElements = document.querySelectorAll('video[src], audio[src], source[src], img[src]');
 			for (const element of mediaElements) {
 				if (element.src?.startsWith('file:')) {
-					element.src = element.src.replace(/^file:\/\//, 'joplin-content://file-media/')
+					const newUrl = element.src.replace(/^file:\/\//, 'joplin-content://file-media/');
+					element.src = `${newUrl}?access-key=${accessKey}`;
 				}
 			}
 		};
@@ -399,7 +400,7 @@
 
 			contentElement.innerHTML = html;
 
-			rewriteFileUrls();
+			rewriteFileUrls(event.options.mediaAccessKey);
 
 			scrollmap.create(event.options.markupLineCount);
 			if (typeof event.options.percent !== 'number') {
