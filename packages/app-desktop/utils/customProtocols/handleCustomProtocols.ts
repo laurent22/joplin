@@ -135,8 +135,10 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 		debug: () => {},
 	};
 
+	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
+	// Access keys for joplin-content://file-media/
 	const allowedMediaAccessKeys = new Set<string>();
 
 	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
