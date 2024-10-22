@@ -147,10 +147,9 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 		pathname = resolve(appBundleDirectory, pathname);
 
-		const allowedHosts = ['note-viewer'];
-
 		let canRead = false;
-		if (allowedHosts.includes(host)) {
+		let mediaOnly = true;
+		if (host === 'note-viewer') {
 			if (readableFiles.has(pathname)) {
 				canRead = true;
 			} else {
@@ -161,6 +160,15 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 					}
 				}
 			}
+
+			mediaOnly = false;
+		} else if (host === 'file-media') {
+			const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.mp4', '.webm', '.mov', '.mp3', '.wav', '.ogg'];
+			for (const ext of allowedExtensions) {
+				canRead ||= pathname.toLowerCase().endsWith(ext);
+			}
+
+			mediaOnly = true;
 		} else {
 			throw new Error(`Invalid URL ${request.url}`);
 		}
@@ -173,12 +181,25 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 		logger.debug('protocol handler: Fetch file URL', asFileUrl);
 
 		const rangeHeader = request.headers.get('Range');
+		let response;
 		if (!rangeHeader) {
-			const response = await net.fetch(asFileUrl);
-			return response;
+			response = await net.fetch(asFileUrl);
 		} else {
-			return handleRangeRequest(request, pathname);
+			response = await handleRangeRequest(request, pathname);
 		}
+
+		if (mediaOnly) {
+			// Tells the browser to avoid MIME confusion attacks. See
+			// https://blog.mozilla.org/security/2016/08/26/mitigating-mime-confusion-attacks-in-firefox/
+			response.headers.set('X-Content-Type-Options', 'nosniff');
+			response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
+
+			if (response.headers.get('Content-Type')?.includes('text')) {
+				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only.`);
+			}
+		}
+
+		return response;
 	});
 
 	const appBundleDirectory = dirname(dirname(__dirname));
