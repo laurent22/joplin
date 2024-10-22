@@ -22,12 +22,10 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 	}), []);
 
 	const onCodeChange = useCallback((data: string) => {
-		if (props.codeScanner.scannerSettings.barcodeTypes.includes('qr')) {
-			props.codeScanner.onBarcodeScanned?.({
-				data,
-				type: 'qr',
-			});
-		}
+		props.codeScanner.onBarcodeScanned?.({
+			data,
+			type: 'qr',
+		});
 	}, [props.codeScanner]);
 
 	return <Surface elevation={1}>

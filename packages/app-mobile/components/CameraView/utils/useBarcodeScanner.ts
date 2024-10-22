@@ -1,4 +1,3 @@
-import { BarcodeSettings } from 'expo-camera';
 import { useMemo, useState } from 'react';
 
 
@@ -16,15 +15,9 @@ export interface BarcodeScanner {
 	enabled: boolean;
 	onToggleEnabled: ()=> void;
 	onBarcodeScanned: (scan: BarcodeScanningResult)=> void;
-	scannerSettings: BarcodeSettings|null;
 	lastScan: ScannedData|null;
 }
 
-
-const barcodeScannerSettings: BarcodeSettings = {
-	// Rocketbook pages use both QR and datamatrix
-	barcodeTypes: ['qr', 'datamatrix'],
-};
 
 const useBarcodeScanner = (): BarcodeScanner => {
 	const [lastScan, setLastScan] = useState<ScannedData|null>(null);
@@ -41,7 +34,6 @@ const useBarcodeScanner = (): BarcodeScanner => {
 					timestamp: performance.now(),
 				});
 			} : null,
-			scannerSettings: barcodeScannerSettings,
 			lastScan,
 		};
 	}, [lastScan, enabled]);
