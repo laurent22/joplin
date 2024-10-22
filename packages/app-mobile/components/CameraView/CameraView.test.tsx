@@ -64,7 +64,7 @@ describe('CameraView', () => {
 		view.unmount();
 	});
 
-	test('should allow adding QR code text to a note', async () => {
+	test('should allow inserting QR code text', async () => {
 		const onInsertBarcode = jest.fn();
 		const view = render(<CameraViewWrapper onInsertBarcode={onInsertBarcode}/>);
 		acceptCameraPermission();
