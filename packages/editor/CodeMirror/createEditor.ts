@@ -255,6 +255,8 @@ const createEditor = (
 				decoratorExtension,
 				biDirectionalTextExtension,
 
+				props.localisations ? EditorState.phrases.of(props.localisations) : [],
+
 				// Adds additional CSS classes to tokens (the default CSS classes are
 				// auto-generated and thus unstable).
 				syntaxHighlighting(classHighlighter),
