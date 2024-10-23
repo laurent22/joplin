@@ -1,0 +1,7 @@
+/target
+/output
+
+/.idea
+*.iml
+
+/pkg

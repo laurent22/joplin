@@ -1,0 +1,22 @@
+[advisories]
+vulnerability = "deny"
+unmaintained = "warn"
+yanked = "warn"
+notice = "deny"
+
+[licenses]
+unlicensed = "deny"
+allow-osi-fsf-free = "either"
+copyleft = "allow"
+default = "deny"
+
+[bans]
+multiple-versions = "deny"
+wildcards = "warn"
+skip = [
+    { name = "cfg-if" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

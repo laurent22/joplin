@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    {% for entry in global_styles -%}
+    {{ entry.0 }} { {{ entry.1 }} }
+    {% endfor %}
+    </style>
+</head>
+<body>
+
+{{ content }}
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>

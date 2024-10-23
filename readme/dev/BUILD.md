@@ -20,6 +20,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 - Install Node 18+. On Windows, also install the build tools - https://nodejs.org/en/
   - [Enable Yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
+- Install Rust 1.80+. Follow the instructions on [Rust toolchain website](https://rustup.rs/)
 - macOS: Install Cocoapods - `brew install cocoapods`. Apple Silicon [may require libvips](https://github.com/laurent22/joplin/pull/5966#issuecomment-1007158597) - `brew install vips`.
 - Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync libgbm-dev libatk-bridge2.0-0 libgtk-3.0 libasound2`
 

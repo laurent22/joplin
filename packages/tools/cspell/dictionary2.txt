@@ -325,6 +325,8 @@ ondoctype
 onedrive
 onelink
 onend
+onetoc2
+onenote
 onfoo
 onformat
 onmatch
