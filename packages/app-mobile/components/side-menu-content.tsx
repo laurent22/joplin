@@ -39,7 +39,6 @@ interface Props {
 	isOnMobileData: boolean;
 	notesParentType: string;
 	folders: FolderEntity[];
-	opacity: number;
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
 	selectedFolderId: string;
@@ -624,7 +623,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 	return (
 		<View style={style}>
-			<View style={{ flex: 1, opacity: props.opacity }}>
+			<View style={{ flex: 1 }}>
 				<ScrollView scrollsToTop={false} style={styles_.menu}>
 					{items}
 				</ScrollView>
