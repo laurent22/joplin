@@ -31,8 +31,10 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	private webviewRef_: React.RefObject<HTMLIFrameElement>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
+
+	private localMediaAccessController_: AccessController|null = null;
+	private localMediaAccessKey_: string|null = null;
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
-	private mediaAccessController_: AccessController|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(props: any) {
@@ -113,7 +115,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		window.addEventListener('message', this.webview_message);
 	}
 
-	public destroyWebview() {
+	private destroyWebview() {
 		const wv = this.webviewRef_.current;
 		if (!wv || !this.initialized_) return;
 
@@ -129,7 +131,8 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.domReady_ = false;
 
 		this.removePluginAssetsCallback_?.();
-		this.mediaAccessController_?.remove();
+		this.localMediaAccessController_?.remove();
+		this.localMediaAccessKey_ = null;
 	}
 
 	public focus() {
@@ -198,7 +201,6 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setHtml(html: string, options: SetHtmlOptions) {
 		const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
 
@@ -220,13 +222,15 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			};
 		}
 
-		this.mediaAccessController_?.remove();
-		const mediaKey = createSecureRandom();
-		this.mediaAccessController_ = protocolHandler.allowMediaAccessWithKey(mediaKey);
+		if (!this.localMediaAccessKey_) {
+			this.localMediaAccessController_?.remove();
+			this.localMediaAccessKey_ = createSecureRandom();
+			this.localMediaAccessController_ = protocolHandler.allowMediaAccessWithKey(this.localMediaAccessKey_);
+		}
 
 		this.send('setHtml', html, {
 			...options,
-			mediaAccessKey: mediaKey,
+			mediaAccessKey: this.localMediaAccessKey_,
 		});
 	}
 
