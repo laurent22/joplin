@@ -17,7 +17,7 @@ export default function(props: Props) {
 	} else if (folderIcon.type === FolderIconType.DataUrl) {
 		return <img style={{ width, height, opacity }} src={folderIcon.dataUrl} />;
 	} else if (folderIcon.type === FolderIconType.FontAwesome) {
-		return <i style={{ fontSize: 18, width, opacity }} className={folderIcon.name} role='img'></i>;
+		return <i style={{ fontSize: 18, width, opacity }} className={folderIcon.name} role='img' aria-hidden={true}></i>;
 	} else {
 		throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 	}

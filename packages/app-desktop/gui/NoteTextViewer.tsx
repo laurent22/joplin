@@ -3,6 +3,7 @@ import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -234,6 +235,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 				style={viewerStyle}
 				allow='fullscreen=* autoplay=* local-fonts=* encrypted-media=*'
 				allowFullScreen={true}
+				aria-label={_('Rendered note')}
 				src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
 			></iframe>
 		);

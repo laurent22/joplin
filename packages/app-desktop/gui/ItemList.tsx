@@ -211,7 +211,6 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 				id={this.props.id}
 				role={this.props.role}
 				aria-label={this.props['aria-label']}
-				aria-setsize={items.length}
 
 				onScroll={this.onScroll}
 				onKeyDown={this.onKeyDown}

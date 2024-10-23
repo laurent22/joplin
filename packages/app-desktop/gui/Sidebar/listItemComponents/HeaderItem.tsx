@@ -59,7 +59,7 @@ const HeaderItem: React.FC<Props> = props => {
 			onDrop={props.onDrop}
 		>
 			<StyledHeader onClick={onClick}>
-				<StyledHeaderIcon aria-label='' role='img' className={item.iconName}/>
+				<StyledHeaderIcon aria-hidden='true' role='img' className={item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
 		</ListItemWrapper>

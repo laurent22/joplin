@@ -133,3 +133,4 @@ rcompare
 tabindex
 Backblaze
 treeitem
+WCAG

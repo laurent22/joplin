@@ -4,9 +4,11 @@ import { ElectronApplication, Locator, Page } from '@playwright/test';
 
 export default class Sidebar {
 	public readonly container: Locator;
+	public readonly allNotes: Locator;
 
 	public constructor(page: Page, private mainScreen: MainScreen) {
 		this.container = page.locator('.rli-sideBar');
+		this.allNotes = this.container.getByText('All notes');
 	}
 
 	public async createNewFolder(title: string) {

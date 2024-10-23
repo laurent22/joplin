@@ -6,7 +6,7 @@ interface Props {
 }
 
 const SettingDescription: React.FC<Props> = props => {
-	return props.text ? <div className='setting-description' id={props.id}>{props.text}</div> : null;
+	return <div className={`setting-description ${!props.text ? '-empty' : ''}`} id={props.id}>{props.text}</div>;
 };
 
 export default SettingDescription;
