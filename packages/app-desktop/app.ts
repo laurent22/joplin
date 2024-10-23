@@ -118,13 +118,23 @@ class Application extends BaseApplication {
 		}
 	}
 
+	private updateLanguage() {
+		setLocale(Setting.value('locale'));
+		// The bridge runs within the main process, with its own instance of locale.js
+		// so it needs to be set too here.
+		bridge().setLocale(Setting.value('locale'));
+
+		const htmlContainer = document.querySelector('html');
+		// HTML expects the lang attribute to be in BCP47 format, with a dash rather than
+		// an underscore:
+		const htmlLang = Setting.value('locale').replace(/_/g, '-');
+		htmlContainer.setAttribute('lang', htmlLang);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
-			setLocale(Setting.value('locale'));
-			// The bridge runs within the main process, with its own instance of locale.js
-			// so it needs to be set too here.
-			bridge().setLocale(Setting.value('locale'));
+			this.updateLanguage();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'showTrayIcon' || action.type === 'SETTING_UPDATE_ALL') {
