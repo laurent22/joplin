@@ -127,6 +127,8 @@ packages/app-desktop/checkForUpdates.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/editProfileConfig.js
 packages/app-desktop/commands/emptyTrash.js
+packages/app-desktop/commands/exportDeletionLog.test.js
+packages/app-desktop/commands/exportDeletionLog.js
 packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js

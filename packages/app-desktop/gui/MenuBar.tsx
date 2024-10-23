@@ -927,6 +927,7 @@ function useMenu(props: Props) {
 					separator(),
 					syncStatusItem,
 					separator(),
+					menuItemDic.exportDeletionLog,
 					{
 						id: 'help:toggleDevTools',
 						label: _('Toggle development tools'),
