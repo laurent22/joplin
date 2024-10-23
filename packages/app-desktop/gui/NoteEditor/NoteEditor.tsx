@@ -625,7 +625,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	let bodyEditor = windowState.editorCodeView ? 'CodeMirror6' : 'TinyMCE';
 	if (state.settings.isSafeMode) {
 		bodyEditor = 'PlainText';
-	} else if (windowState.editorCodeView && state.settings.legacyMarkdown) {
+	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
 		bodyEditor = 'CodeMirror5';
 	}
 

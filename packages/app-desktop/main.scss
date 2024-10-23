@@ -340,3 +340,9 @@ mark {
 .CodeMirror-line  {
 	unicode-bidi: plaintext;
 }
+
+// Legacy CodeMirror editor overrides
+.CodeMirror5 > .CodeMirror {
+	height: 100%;
+	width: 100%;
+}
