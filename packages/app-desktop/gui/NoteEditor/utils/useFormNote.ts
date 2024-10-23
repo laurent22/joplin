@@ -24,8 +24,6 @@ export interface OnLoadEvent {
 }
 
 export interface HookDependencies {
-	syncStarted: boolean;
-	decryptionStarted: boolean;
 	noteId: string;
 	isProvisional: boolean;
 	titleInputRef: RefObject<HTMLInputElement>;

@@ -8,8 +8,6 @@ import { join } from 'path';
 import { formNoteToNote } from '.';
 
 const defaultFormNoteProps: HookDependencies = {
-	syncStarted: false,
-	decryptionStarted: false,
 	noteId: '',
 	isProvisional: false,
 	titleInputRef: null,
@@ -27,17 +25,15 @@ describe('useFormNote', () => {
 	it('should update note when decryption completes', async () => {
 		const testNote = await Note.save({ title: 'Test Note!' });
 
-		const makeFormNoteProps = (syncStarted: boolean, decryptionStarted: boolean): HookDependencies => {
+		const makeFormNoteProps = (): HookDependencies => {
 			return {
 				...defaultFormNoteProps,
-				syncStarted,
-				decryptionStarted,
 				noteId: testNote.id,
 			};
 		};
 
 		const formNote = renderHook(props => useFormNote(props), {
-			initialProps: makeFormNoteProps(true, false),
+			initialProps: makeFormNoteProps(),
 		});
 		await formNote.waitFor(() => {
 			expect(formNote.result.current.formNote).toMatchObject({
@@ -54,9 +50,7 @@ describe('useFormNote', () => {
 			});
 		});
 
-		// Sync starting should cause a re-render
-		formNote.rerender(makeFormNoteProps(false, false));
-
+		// Changing encryption_applied should cause a re-render
 		await act(async () => {
 			await formNote.waitFor(() => {
 				expect(formNote.result.current.formNote).toMatchObject({
@@ -64,9 +58,6 @@ describe('useFormNote', () => {
 				});
 			});
 		});
-
-
-		formNote.rerender(makeFormNoteProps(false, true));
 
 		await act(async () => {
 			await Note.save({
@@ -77,8 +68,6 @@ describe('useFormNote', () => {
 		});
 
 		// Ending decryption should also cause a re-render
-		formNote.rerender(makeFormNoteProps(false, false));
-
 		await formNote.waitFor(() => {
 			expect(formNote.result.current.formNote).toMatchObject({
 				encryption_applied: 0,
@@ -156,17 +145,15 @@ describe('useFormNote', () => {
 		const resourceIds = Note.linkedItemIds(note.body);
 		const resource = await Resource.load(resourceIds[0]);
 
-		const makeFormNoteProps = (syncStarted: boolean, decryptionStarted: boolean): HookDependencies => {
+		const makeFormNoteProps = (): HookDependencies => {
 			return {
 				...defaultFormNoteProps,
-				syncStarted,
-				decryptionStarted,
 				noteId: note.id,
 			};
 		};
 
 		const formNote = renderHook(props => useFormNote(props), {
-			initialProps: makeFormNoteProps(true, false),
+			initialProps: makeFormNoteProps(),
 		});
 
 		await formNote.waitFor(() => {

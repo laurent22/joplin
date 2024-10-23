@@ -88,8 +88,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const effectiveNoteId = useEffectiveNoteId(props);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
-		syncStarted: props.syncStarted,
-		decryptionStarted: props.decryptionStarted,
 		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
@@ -639,8 +637,6 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 		selectedNoteIds: windowState.selectedNoteIds,
 		selectedFolderId: windowState.selectedFolderId,
 		editorNoteStatuses: state.editorNoteStatuses,
-		syncStarted: state.syncStarted,
-		decryptionStarted: state.decryptionWorker?.state !== 'idle',
 		themeId: state.settings.theme,
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: windowState.notesParentType,
