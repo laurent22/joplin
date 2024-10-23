@@ -4,6 +4,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 import shim from '@joplin/lib/shim';
 import { RenderOptions } from '@joplin/renderer/types';
 import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
+import HtmlToMd from '@joplin/lib/HtmlToMd';
 const { themeStyle } = require('@joplin/lib/theme');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -351,5 +352,23 @@ describe('MdToHtml', () => {
 		// Should have rendered the inline and block content without errors
 		expect(html).toContain('Inline</span>');
 		expect(html).toContain('Block</span>');
+	});
+
+	it('should render preserved table converted from HTML to Markdown', async () => {
+		const htmlToMd = new HtmlToMd();
+		const mdToHtml = new MdToHtml({
+			fsDriver: shim.fsDriver(),
+		});
+		const modifiedTable = '<table border="1" height="241" data-mce-style="border-collapse: collapse; width: 62.9053%; background-color: #fbeeb8;" style="border-collapse: collapse; width: 62.9053%; background-color: rgb(251, 238, 184);"><thead><tr><th scope="col" style="width: 50%;">1</th><th scope="col" style="width: 50%;">2</th></tr></thead><tbody><tr><td style="width: 50%;">3</td><td style="width: 50%;">4</td></tr></tbody></table>';
+		const modifiedTableWithNoMdConv = '<table border="1" height="241" data-mce-style="border-collapse: collapse; width: 62.9053%; background-color: #fbeeb8;" style="border-collapse: collapse; width: 62.9053%; background-color: rgb(251, 238, 184);" class="jop-noMdConv"><thead class="jop-noMdConv"><tr class="jop-noMdConv"><th scope="col" style="width: 50%;" class="jop-noMdConv">1</th><th scope="col" style="width: 50%;" class="jop-noMdConv">2</th></tr></thead><tbody class="jop-noMdConv"><tr class="jop-noMdConv"><td style="width: 50%;" class="jop-noMdConv">3</td><td style="width: 50%;" class="jop-noMdConv">4</td></tr></tbody></table>';
+
+		// should be the same html with added class
+		expect(modifiedTable).toEqual(modifiedTableWithNoMdConv.split(' class="jop-noMdConv"').join(''));
+
+		const { html } = await mdToHtml.render(modifiedTable);
+
+		expect(await htmlToMd.parse(html, {
+			preserveNestedTables: true,
+		})).toBe(modifiedTableWithNoMdConv);
 	});
 });
