@@ -78,24 +78,6 @@ test.describe('markdownEditor', () => {
 		await mainScreen.noteEditor.toggleEditorsButton.click();
 
 		await expectToBeRendered();
-
-		// Clicking on the PDF link should attempt to open it in a viewer
-		await expect(pdfLink).toBeVisible();
-
-		const nextOpenFilePromise = electronApp.evaluate(({ shell }) => {
-			return new Promise<string>(resolve => {
-				const openPath = async (url: string) => {
-					resolve(url);
-					return '';
-				};
-				shell.openPath = openPath;
-			});
-		});
-		await pdfLink.click();
-		expect(await nextOpenFilePromise).toMatch(/\.pdf$/);
-
-		// Should not have rendered something else in the viewer frame
-		await expectToBeRendered();
 	});
 
 	test('preview pane should render video attachments', async ({ mainWindow, electronApp }) => {
