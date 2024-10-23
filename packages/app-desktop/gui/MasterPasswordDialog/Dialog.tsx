@@ -10,7 +10,7 @@ import { reg } from '@joplin/lib/registry';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
-import { PasswordInput } from '../PasswordInput/PasswordInput';
+import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
 
 interface Props {
 	themeId: number;
@@ -136,11 +136,6 @@ export default function(props: Props) {
 		setCurrentPasswordIsValid(isValid);
 	}, [currentPassword]);
 
-	function renderCurrentPasswordIcon() {
-		if (!currentPassword || status === MasterPasswordStatus.NotSet) return null;
-		return currentPasswordIsValid ? <i className="fas fa-check password-valid-icon"></i> : <i className="fas fa-times"></i>;
-	}
-
 	function renderPasswordForm() {
 		const renderCurrentPassword = () => {
 			if (!showCurrentPassword) return null;
@@ -151,14 +146,14 @@ export default function(props: Props) {
 			// having to reset the password (and lose access to any data that's
 			// been encrypted with it).
 
+			const showValidIcon = currentPassword && status !== MasterPasswordStatus.NotSet;
 			return (
-				<div className="form-input-group">
-					<label>{'Current password'}</label>
-					<div className="current-password-wrapper">
-						<PasswordInput value={currentPassword} onChange={onCurrentPasswordChange}/>
-						{renderCurrentPasswordIcon()}
-					</div>
-				</div>
+				<LabelledPasswordInput
+					labelText={_('Current password')}
+					value={currentPassword}
+					onChange={onCurrentPasswordChange}
+					valid={showValidIcon ? currentPasswordIsValid : undefined}
+				/>
 			);
 		};
 
@@ -175,15 +170,17 @@ export default function(props: Props) {
 				<div>
 					<div className="form">
 						{renderCurrentPassword()}
-						<div className="form-input-group">
-							<label>{enterPasswordLabel}</label>
-							<PasswordInput value={password1} onChange={onPasswordChange1}/>
-						</div>
+						<LabelledPasswordInput
+							labelText={enterPasswordLabel}
+							value={password1}
+							onChange={onPasswordChange1}
+						/>
 						{needToRepeatPassword && (
-							<div className="form-input-group">
-								<label>{'Re-enter password'}</label>
-								<PasswordInput value={password2} onChange={onPasswordChange2}/>
-							</div>
+							<LabelledPasswordInput
+								labelText={_('Re-enter password')}
+								value={password2}
+								onChange={onPasswordChange2}
+							/>
 						)}
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>

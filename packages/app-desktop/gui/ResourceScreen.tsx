@@ -60,15 +60,6 @@ interface ActiveSorting {
 const ResourceTableComp = (props: ResourceTable) => {
 	const theme = themeStyle(props.themeId);
 
-	const sortOrderEngagedMarker = (s: SortingOrder) => {
-		return (
-			<a href="#"
-				style={{ color: theme.urlColor }}
-				onClick={() => props.onToggleSorting(s)}>{
-					(props.sorting.order === s && props.sorting.type === 'desc') ? '▾' : '▴'}</a>
-		);
-	};
-
 	const titleCellStyle = {
 		...theme.textStyle,
 		textOverflow: 'ellipsis',
@@ -96,12 +87,28 @@ const ResourceTableComp = (props: ResourceTable) => {
 		(resource: InnerResource) => !props.filter || resource.title?.includes(props.filter) || resource.id.includes(props.filter),
 	);
 
+	const renderSortableHeader = (title: string, order: SortingOrder) => {
+		const sortedDescending = props.sorting.order === order && props.sorting.type === 'desc';
+		const sortButtonLabel = sortedDescending ? _('Sort "%s" in ascending order', title) : _('Sort "%s" in descending order', title);
+		const reverseSortButton = (
+			<a
+				href="#"
+				style={{ color: theme.urlColor }}
+				onClick={() => props.onToggleSorting(order)}
+				aria-label={sortButtonLabel}
+				title={sortButtonLabel}
+				role='button'
+			>{sortedDescending ? '▾' : '▴'}</a>
+		);
+		return <th key={`header-${title}`} style={headerStyle}>{title} {reverseSortButton}</th>;
+	};
+
 	return (
 		<table style={{ width: '100%' }}>
 			<thead>
 				<tr>
-					<th style={headerStyle}>{_('Title')} {sortOrderEngagedMarker('name')}</th>
-					<th style={headerStyle}>{_('Size')} {sortOrderEngagedMarker('size')}</th>
+					{renderSortableHeader(_('Title'), 'name')}
+					{renderSortableHeader(_('Size'), 'size')}
 					<th style={headerStyle}>{_('ID')}</th>
 					<th style={headerStyle}>{_('Action')}</th>
 				</tr>
