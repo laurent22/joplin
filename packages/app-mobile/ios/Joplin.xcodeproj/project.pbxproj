@@ -11,6 +11,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */; };
+		4C036D13E81D8DB9640B0DC1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */; };
 		4D122473270878D700DE23E8 /* wtf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D122472270878D700DE23E8 /* wtf.swift */; };
 		5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -79,6 +80,7 @@
 		AE82E4B02599FA3A0013551B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B61798F36B3BC123BF8EA4D9 /* libPods-Joplin-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD33BAC2BE9A08300E9F46A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Joplin/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F69B873C692CE22F1C4C9264 /* libPods-Joplin-JoplinTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-JoplinTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,6 +155,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		336B5BD29D5BD1737E707672 /* Joplin */ = {
+			isa = PBXGroup;
+			children = (
+				CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */,
+			);
+			name = Joplin;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +181,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				9CDB1D9DB6483D893504BFCB /* Pods */,
+				E67B064D6F5F7E8B1080FDB0 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -215,6 +226,14 @@
 			path = ShareExtension;
 			sourceTree = "<group>";
 		};
+		E67B064D6F5F7E8B1080FDB0 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				336B5BD29D5BD1737E707672 /* Joplin */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -223,6 +242,7 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Joplin" */;
 			buildPhases = (
 				335ACF4DE85695BEBB18D8A3 /* [CP] Check Pods Manifest.lock */,
+				EB61CD887618E406C80EBC43 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -404,6 +424,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo/RNDeviceInfoPrivacyInfo.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -428,6 +451,9 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNDeviceInfoPrivacyInfo.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
@@ -455,6 +481,25 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		EB61CD887618E406C80EBC43 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Joplin/expo-configure-project.sh\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -465,6 +510,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				4D122473270878D700DE23E8 /* wtf.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				4C036D13E81D8DB9640B0DC1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +565,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
@@ -549,6 +596,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
@@ -743,6 +791,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -780,6 +829,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

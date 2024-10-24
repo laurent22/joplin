@@ -3,10 +3,8 @@ import * as React from 'react';
 import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
-import { Provider } from 'react-redux';
 
 import NoteScreen from './Note';
-import { MenuProvider } from 'react-native-popup-menu';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
 import { waitFor as waitForWithRealTimers } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
@@ -14,7 +12,6 @@ import { AppState } from '../../utils/types';
 import { Store } from 'redux';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import initializeCommandService from '../../utils/initializeCommandService';
-import { PaperProvider } from 'react-native-paper';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
@@ -29,6 +26,7 @@ import getWebViewWindowById from '../../utils/testing/getWebViewWindowById';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
+import TestProviderStack from '../testing/TestProviderStack';
 
 interface WrapperProps {
 }
@@ -36,13 +34,9 @@ interface WrapperProps {
 let store: Store<AppState>;
 
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
-	return <MenuProvider>
-		<PaperProvider>
-			<Provider store={store}>
-				<NoteScreen />
-			</Provider>
-		</PaperProvider>
-	</MenuProvider>;
+	return <TestProviderStack store={store}>
+		<NoteScreen />
+	</TestProviderStack>;
 };
 
 const getNoteViewerDom = async () => {

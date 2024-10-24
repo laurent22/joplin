@@ -55,6 +55,10 @@ jest.mock('./components/ExtendedWebView', () => {
 	return require('./components/ExtendedWebView/index.jest.js');
 });
 
+jest.mock('./components/CameraView/Camera', () => {
+	return require('./components/CameraView/Camera/index.jest');
+});
+
 jest.mock('@react-native-clipboard/clipboard', () => {
 	return { default: { getString: jest.fn(), setString: jest.fn() } };
 });

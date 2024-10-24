@@ -526,7 +526,16 @@ packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BackButtonDialogBox.js
 packages/app-mobile/components/BetaChip.js
-packages/app-mobile/components/CameraView.js
+packages/app-mobile/components/CameraView/ActionButtons.js
+packages/app-mobile/components/CameraView/Camera/index.jest.js
+packages/app-mobile/components/CameraView/Camera/index.js
+packages/app-mobile/components/CameraView/Camera/types.js
+packages/app-mobile/components/CameraView/CameraView.test.js
+packages/app-mobile/components/CameraView/CameraView.js
+packages/app-mobile/components/CameraView/ScannedBarcodes.js
+packages/app-mobile/components/CameraView/types.js
+packages/app-mobile/components/CameraView/utils/fitRectIntoBounds.js
+packages/app-mobile/components/CameraView/utils/useBarcodeScanner.js
 packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager.js
 packages/app-mobile/components/DismissibleDialog.js
@@ -703,6 +712,7 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/testing/TestProviderStack.js
 packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/index.web.js

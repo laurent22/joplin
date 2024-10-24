@@ -14,6 +14,11 @@ const customCssFilePath = (Setting: typeof SettingType, filename: string): strin
 	return `${Setting.value('rootProfileDir')}/${filename}`;
 };
 
+export enum CameraDirection {
+	Back,
+	Front,
+}
+
 const builtInMetadata = (Setting: typeof SettingType) => {
 	const platform = shim.platformName();
 	const mobilePlatform = shim.mobilePlatform();
@@ -1424,7 +1429,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'welcome.wasBuilt': { value: false, type: SettingItemType.Bool, public: false },
 		'welcome.enabled': { value: true, type: SettingItemType.Bool, public: false },
 
-		'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: [AppType.Mobile] },
+		'camera.type': { value: CameraDirection.Back, type: SettingItemType.Int, public: false, appTypes: [AppType.Mobile] },
 		'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: [AppType.Mobile] },
 
 		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
