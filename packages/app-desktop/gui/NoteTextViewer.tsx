@@ -29,6 +29,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	private webviewRef_: React.RefObject<HTMLIFrameElement>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
+
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -110,7 +111,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		window.addEventListener('message', this.webview_message);
 	}
 
-	public destroyWebview() {
+	private destroyWebview() {
 		const wv = this.webviewRef_.current;
 		if (!wv || !this.initialized_) return;
 
@@ -194,13 +195,12 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public setHtml(html: string, options: SetHtmlOptions) {
+		const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+
 		// Grant & remove asset access.
 		if (options.pluginAssets) {
 			this.removePluginAssetsCallback_?.();
-
-			const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
 
 			const pluginAssetPaths: string[] = options.pluginAssets.map((asset) => asset.path);
 			const assetAccesses = pluginAssetPaths.map(
@@ -216,7 +216,10 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			};
 		}
 
-		this.send('setHtml', html, options);
+		this.send('setHtml', html, {
+			...options,
+			mediaAccessKey: protocolHandler.getMediaAccessKey(),
+		});
 	}
 
 	// ----------------------------------------------------------------

@@ -7,10 +7,20 @@ import { LoggerWrapper } from '@joplin/utils/Logger';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
+import { createSecureRandom } from '@joplin/lib/uuid';
+
+export interface AccessController {
+	remove(): void;
+}
 
 export interface CustomProtocolHandler {
+	// note-viewer/ URLs
 	allowReadAccessToDirectory(path: string): void;
-	allowReadAccessToFile(path: string): { remove(): void };
+	allowReadAccessToFile(path: string): AccessController;
+
+	// file-media/ URLs
+	setMediaAccessEnabled(enabled: boolean): void;
+	getMediaAccessKey(): string;
 }
 
 
@@ -130,8 +140,11 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 		debug: () => {},
 	};
 
+	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
+	// Access for joplin-content://file-media/
+	let mediaAccessKey: string|false = false;
 
 	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 	protocol.handle(contentProtocolName, async request => {
@@ -147,10 +160,9 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 		pathname = resolve(appBundleDirectory, pathname);
 
-		const allowedHosts = ['note-viewer'];
-
 		let canRead = false;
-		if (allowedHosts.includes(host)) {
+		let mediaOnly = true;
+		if (host === 'note-viewer') {
 			if (readableFiles.has(pathname)) {
 				canRead = true;
 			} else {
@@ -160,6 +172,20 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 						break;
 					}
 				}
+			}
+
+			mediaOnly = false;
+		} else if (host === 'file-media') {
+			if (!mediaAccessKey) {
+				throw new Error('Media access denied. This must be enabled with .setMediaAccessEnabled');
+			}
+
+			canRead = true;
+			mediaOnly = true;
+
+			const accessKey = url.searchParams.get('access-key');
+			if (accessKey !== mediaAccessKey) {
+				throw new Error(`Invalid or missing media access key (was ${accessKey}). An allow-listed ?access-key= parameter must be provided.`);
 			}
 		} else {
 			throw new Error(`Invalid URL ${request.url}`);
@@ -173,12 +199,26 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 		logger.debug('protocol handler: Fetch file URL', asFileUrl);
 
 		const rangeHeader = request.headers.get('Range');
+		let response;
 		if (!rangeHeader) {
-			const response = await net.fetch(asFileUrl);
-			return response;
+			response = await net.fetch(asFileUrl);
 		} else {
-			return handleRangeRequest(request, pathname);
+			response = await handleRangeRequest(request, pathname);
 		}
+
+		if (mediaOnly) {
+			// Tells the browser to avoid MIME confusion attacks. See
+			// https://blog.mozilla.org/security/2016/08/26/mitigating-mime-confusion-attacks-in-firefox/
+			response.headers.set('X-Content-Type-Options', 'nosniff');
+
+			// This is an extra check to prevent loading text/html and arbitrary non-media content from the URL.
+			const contentType = response.headers.get('Content-Type');
+			if (!contentType || !contentType.match(/^(image|video|audio)\//)) {
+				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
+			}
+		}
+
+		return response;
 	});
 
 	const appBundleDirectory = dirname(dirname(__dirname));
@@ -209,6 +249,18 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 					}
 				},
 			};
+		},
+		setMediaAccessEnabled: (enabled: boolean) => {
+			if (enabled) {
+				mediaAccessKey ||= createSecureRandom();
+			} else {
+				mediaAccessKey = false;
+			}
+		},
+		// Allows access to all local media files, provided a matching ?access-key=<key> is added
+		// to the request URL.
+		getMediaAccessKey: () => {
+			return mediaAccessKey || null;
 		},
 	};
 };

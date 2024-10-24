@@ -132,3 +132,4 @@ Famegear
 rcompare
 tabindex
 Backblaze
+nosniff

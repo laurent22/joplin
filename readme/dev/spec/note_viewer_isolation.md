@@ -31,7 +31,7 @@ Here's an example:
 - Joplin checks to make sure the `joplin-content://` protocol has access to `/home/user/.config/joplin-desktop/path/here.css`. If it does, it fetches and returns the file.
 
 
-## `joplin-content://` only has access to specific directories
+## `joplin-content://note-viewer/` only has access to specific directories
 
 When `handleCustomProtocols` creates a handler for the `joplin-content://` protocol, it returns an object that allows certain directories to be marked as readable.
 
@@ -41,6 +41,13 @@ By default, the list of readable directories includes:
 - The resource directory
 - The profile directory
 
+## `joplin-content://file-media/` can only load specific file types
+
+To allow images and videos with `file://` URLs, Joplin maps `file://` URIs to `joplin-content://file-media/`. The `file-media/` host has the following restrictions:
+- Only files with certain extensions/content-types can be loaded.
+   - For example, `text/html` is disallowed but `image/png` is allowed.
+- A valid `?access-key=<...>` parameter must be provided with the request.
+   - A new access key is created for each render and old access keys are revoked.
 
 ## Why not the [`sandbox`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox) property?
 
