@@ -1591,6 +1591,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		// 	storage: SettingStorage.File,
 		// },
 
+		'featureFlag.useBetaEncryptionMethod': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			label: () => 'Use beta encryption',
+			description: () => 'Set beta encryption methods as the default methods. This applies to all clients and takes effect after restarting the app.',
+			section: 'sync',
+			isGlobal: true,
+		},
+
 		'sync.allowUnsupportedProviders': {
 			value: -1,
 			type: SettingItemType.Int,

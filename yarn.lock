@@ -5159,6 +5159,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@craftzdog/react-native-buffer@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "@craftzdog/react-native-buffer@npm:6.0.5"
+  dependencies:
+    ieee754: ^1.2.1
+    react-native-quick-base64: ^2.0.5
+  checksum: 921b8bc7f84778e355e81e475792399276d611a346a7e51b6266a45cf4aa82194beb3a8106af796ed143d958c8476070c59e3720c0eec0a3c31e368fbb08b350
+  languageName: node
+  linkType: hard
+
 "@cronvel/get-pixels@npm:^3.4.0":
   version: 3.4.0
   resolution: "@cronvel/get-pixels@npm:3.4.0"
@@ -7539,6 +7549,7 @@ __metadata:
     react-native-paper: 5.12.3
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
+    react-native-quick-crypto: 0.7.1
     react-native-rsa-native: 2.0.5
     react-native-safe-area-context: 4.10.8
     react-native-securerandom: 1.0.1
@@ -12227,7 +12238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.42":
+"@types/node@npm:18.19.42, @types/node@npm:^18.0.0":
   version: 18.19.42
   resolution: "@types/node@npm:18.19.42"
   dependencies:
@@ -12240,15 +12251,6 @@ __metadata:
   version: 17.0.45
   resolution: "@types/node@npm:17.0.45"
   checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^18.0.0":
-  version: 18.19.33
-  resolution: "@types/node@npm:18.19.33"
-  dependencies:
-    undici-types: ~5.26.4
-  checksum: b6db87d095bc541d64a410fa323a35c22c6113220b71b608bbe810b2397932d0f0a51c3c0f3ef90c20d8180a1502d950a7c5314b907e182d9cc10b36efd2a44e
   languageName: node
   linkType: hard
 
@@ -37890,6 +37892,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-quick-base64@npm:^2.0.5":
+  version: 2.1.2
+  resolution: "react-native-quick-base64@npm:2.1.2"
+  dependencies:
+    base64-js: ^1.5.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 46f3b26f48b26978686b0c043336220d681e6a02af5abcf3eb4ab7b9216251d1eb2fac5c559e984d963e93f54bd9f323651daac09762196815558abbd551729b
+  languageName: node
+  linkType: hard
+
+"react-native-quick-crypto@npm:0.7.1":
+  version: 0.7.1
+  resolution: "react-native-quick-crypto@npm:0.7.1"
+  dependencies:
+    "@craftzdog/react-native-buffer": ^6.0.5
+    events: ^3.3.0
+    readable-stream: ^4.5.2
+    string_decoder: ^1.3.0
+    util: ^0.12.5
+  checksum: 9a7a1fb1456410db30f062078f570bc566cac36fbc165e7d8ee8677bec09fcc96923de3cf7a0464804142af242a822bf66ea22460951399b9247e4a03fcfe059
+  languageName: node
+  linkType: hard
+
 "react-native-rsa-native@npm:2.0.5":
   version: 2.0.5
   resolution: "react-native-rsa-native@npm:2.0.5"
@@ -38641,6 +38668,19 @@ __metadata:
     process: ^0.11.10
     string_decoder: ^1.3.0
   checksum: 6f4063763dbdb52658d22d3f49ca976420e1fbe16bbd241f744383715845350b196a2f08b8d6330f8e219153dff34b140aeefd6296da828e1041a7eab1f20d5e
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "readable-stream@npm:4.5.2"
+  dependencies:
+    abort-controller: ^3.0.0
+    buffer: ^6.0.3
+    events: ^3.3.0
+    process: ^0.11.10
+    string_decoder: ^1.3.0
+  checksum: c4030ccff010b83e4f33289c535f7830190773e274b3fcb6e2541475070bdfd69c98001c3b0cb78763fc00c8b62f514d96c2b10a8bd35d5ce45203a25fa1d33a
   languageName: node
   linkType: hard
 
@@ -45373,7 +45413,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"util@npm:^0.12.4":
+"util@npm:^0.12.4, util@npm:^0.12.5":
   version: 0.12.5
   resolution: "util@npm:0.12.5"
   dependencies:

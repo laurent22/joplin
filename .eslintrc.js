@@ -287,6 +287,14 @@ module.exports = {
 							'match': true,
 						},
 					},
+					{
+						selector: 'enumMember',
+						format: null,
+						'filter': {
+							'regex': '^(sha1|sha256|sha384|sha512|AES_128_GCM|AES_192_GCM|AES_256_GCM)$',
+							'match': true,
+						},
+					},
 
 					// -----------------------------------
 					// INTERFACE
