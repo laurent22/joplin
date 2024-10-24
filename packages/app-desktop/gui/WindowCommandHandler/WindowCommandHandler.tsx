@@ -221,8 +221,6 @@ const WindowCommandHandler: React.FC<Props> = props => {
 			autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null}
 			defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''}
 			themeId={props.themeId}
-			// TODO: Don't hardcode. Instead, use CSS.
-			style={{ width: window.innerWidth, height: window.innerHeight }}
 			onClose={promptOnClose}
 			label={promptOptions ? promptOptions.label : ''}
 			description={promptOptions ? promptOptions.description : null}
