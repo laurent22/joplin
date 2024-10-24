@@ -7716,7 +7716,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
-    "@types/markdown-it": 13.0.8
+    "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
     "@types/node": 18.19.42
@@ -7879,7 +7879,7 @@ __metadata:
     "@joplin/fork-uslug": ^1.0.17
     "@joplin/utils": ~3.1
     "@types/jest": 29.5.12
-    "@types/markdown-it": 13.0.8
+    "@types/markdown-it": 13.0.9
     "@types/node": 18.19.42
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
@@ -7928,7 +7928,7 @@ __metadata:
     "@types/jest-expect-message": 1.1.0
     "@types/jsdom": 21.1.7
     "@types/koa": 2.15.0
-    "@types/markdown-it": 13.0.8
+    "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/node-os-utils": 1.3.4
     "@types/nodemailer": 6.4.15
@@ -7988,7 +7988,7 @@ __metadata:
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
-    "@types/markdown-it": 13.0.8
+    "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/node": 18.19.42
     "@types/node-fetch": 2.6.11
@@ -8076,7 +8076,7 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.52
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/markdown-it": 13.0.8
+    "@types/markdown-it": 13.0.9
     "@types/node-fetch": 2.6.11
     async-mutex: 0.5.0
     dayjs: 1.11.11
@@ -12108,13 +12108,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:13.0.8":
-  version: 13.0.8
-  resolution: "@types/markdown-it@npm:13.0.8"
+"@types/markdown-it@npm:13.0.9":
+  version: 13.0.9
+  resolution: "@types/markdown-it@npm:13.0.9"
   dependencies:
     "@types/linkify-it": ^3
     "@types/mdurl": ^1
-  checksum: b94bb5e057207ace36b0b59bc0e9ce494ec7547769ca72dd0829b380fbeb791cbe4e96cb578252ca1c9f1b72e6bc09e9485aa417343edf1c3cef050d16a4e0ee
+  checksum: 4413860c1e595ad23b5bc500d485774eec1b8ab4339aad4e52b2761460db99915fa7754a7e85d6d7cd8d4a04e501d7097f7d7571776b3e025a3a01f0f5decf4f
   languageName: node
   linkType: hard
 
