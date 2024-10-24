@@ -737,8 +737,12 @@ packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/VoiceTyping.js
+packages/app-mobile/services/voiceTyping/utils/splitWhisperText.test.js
+packages/app-mobile/services/voiceTyping/utils/splitWhisperText.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.js
+packages/app-mobile/services/voiceTyping/whisper.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
 packages/app-mobile/tools/buildInjectedJs/constants.js

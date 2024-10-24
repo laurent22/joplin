@@ -4,9 +4,9 @@ import Setting from '@joplin/lib/models/Setting';
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import shim from '@joplin/lib/shim';
 import Vosk from 'react-native-vosk';
-import { unzip } from 'react-native-zip-archive';
 import RNFetchBlob from 'rn-fetch-blob';
-const md5 = require('md5');
+import { VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
+import { join } from 'path';
 
 const logger = Logger.create('voiceTyping/vosk');
 
@@ -23,15 +23,6 @@ interface StartOptions {
 let vosk_: Record<string, Vosk> = {};
 
 let state_: State = State.Idle;
-
-export const voskEnabled = true;
-
-export { Vosk };
-
-export interface Recorder {
-	stop: ()=> Promise<string>;
-	cleanup: ()=> void;
-}
 
 const defaultSupportedLanguages = {
 	'en': 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip',
@@ -74,7 +65,7 @@ const getModelDir = (locale: string) => {
 	return `${getUnzipDir(locale)}/model`;
 };
 
-const languageModelUrl = (locale: string) => {
+const languageModelUrl = (locale: string): string => {
 	const lang = languageCodeOnly(locale).toLowerCase();
 	if (!(lang in defaultSupportedLanguages)) throw new Error(`No language file for: ${locale}`);
 
@@ -90,16 +81,11 @@ const languageModelUrl = (locale: string) => {
 	}
 };
 
-export const modelIsDownloaded = async (locale: string) => {
-	const uuidFile = `${getModelDir(locale)}/uuid`;
-	return shim.fsDriver().exists(uuidFile);
-};
 
-export const getVosk = async (locale: string) => {
+export const getVosk = async (modelDir: string, locale: string) => {
 	if (vosk_[locale]) return vosk_[locale];
 
 	const vosk = new Vosk();
-	const modelDir = await downloadModel(locale);
 	logger.info(`Loading model from ${modelDir}`);
 	await shim.fsDriver().readDirStats(modelDir);
 	const result = await vosk.loadModel(modelDir);
@@ -110,51 +96,7 @@ export const getVosk = async (locale: string) => {
 	return vosk;
 };
 
-const downloadModel = async (locale: string) => {
-	const modelUrl = languageModelUrl(locale);
-	const unzipDir = getUnzipDir(locale);
-	const zipFilePath = `${unzipDir}.zip`;
-	const modelDir = getModelDir(locale);
-	const uuidFile = `${modelDir}/uuid`;
-
-	if (await modelIsDownloaded(locale)) {
-		logger.info(`Model for ${locale} already exists at ${modelDir}`);
-		return modelDir;
-	}
-
-	await shim.fsDriver().remove(unzipDir);
-
-	logger.info(`Downloading model from: ${modelUrl}`);
-
-	const response = await shim.fetchBlob(modelUrl, {
-		path: zipFilePath,
-	});
-
-	if (!response.ok || response.status >= 400) throw new Error(`Could not download from ${modelUrl}: Error ${response.status}`);
-
-	logger.info(`Unzipping ${zipFilePath} => ${unzipDir}`);
-
-	await unzip(zipFilePath, unzipDir);
-
-	const dirs = await shim.fsDriver().readDirStats(unzipDir);
-	if (dirs.length !== 1) {
-		logger.error('Expected 1 directory but got', dirs);
-		throw new Error(`Expected 1 directory, but got ${dirs.length}`);
-	}
-
-	const fullUnzipPath = `${unzipDir}/${dirs[0].path}`;
-
-	logger.info(`Moving ${fullUnzipPath} =>  ${modelDir}`);
-	await shim.fsDriver().rename(fullUnzipPath, modelDir);
-
-	await shim.fsDriver().writeFile(uuidFile, md5(modelUrl));
-
-	await shim.fsDriver().remove(zipFilePath);
-
-	return modelDir;
-};
-
-export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
+export const startRecording = (vosk: Vosk, options: StartOptions): VoiceTypingSession => {
 	if (state_ !== State.Idle) throw new Error('Vosk is already recording');
 
 	state_ = State.Recording;
@@ -163,10 +105,10 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const eventHandlers: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	let finalResultPromiseResolve: Function = null;
+	const finalResultPromiseResolve: Function = null;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	let finalResultPromiseReject: Function = null;
-	let finalResultTimeout = false;
+	const finalResultPromiseReject: Function = null;
+	const finalResultTimeout = false;
 
 	const completeRecording = (finalResult: string, error: Error) => {
 		logger.info(`Complete recording. Final result: ${finalResult}. Error:`, error);
@@ -212,31 +154,13 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 		completeRecording(e.data, null);
 	}));
 
-	logger.info('Starting recording...');
-
-	void vosk.start();
 
 	return {
-		stop: (): Promise<string> => {
-			logger.info('Stopping recording...');
-
-			vosk.stopOnly();
-
-			logger.info('Waiting for final result...');
-
-			setTimeout(() => {
-				finalResultTimeout = true;
-				logger.warn('Timed out waiting for finalResult event');
-				completeRecording('', new Error('Could not process your message. Please try again.'));
-			}, 5000);
-
-			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-			return new Promise((resolve: Function, reject: Function) => {
-				finalResultPromiseResolve = resolve;
-				finalResultPromiseReject = reject;
-			});
+		start: async () => {
+			logger.info('Starting recording...');
+			await vosk.start();
 		},
-		cleanup: () => {
+		stop: async () => {
 			if (state_ === State.Recording) {
 				logger.info('Cancelling...');
 				state_ = State.Completing;
@@ -246,3 +170,18 @@ export const startRecording = (vosk: Vosk, options: StartOptions): Recorder => {
 		},
 	};
 };
+
+
+const vosk: VoiceTypingProvider = {
+	supported: () => true,
+	modelLocalFilepath: (locale: string) => getModelDir(locale),
+	getDownloadUrl: (locale) => languageModelUrl(locale),
+	getUuidPath: (locale: string) => join(getModelDir(locale), 'uuid'),
+	build: async ({ callbacks, locale, modelPath }) => {
+		const vosk = await getVosk(modelPath, locale);
+		return startRecording(vosk, { onResult: callbacks.onFinalize });
+	},
+	modelName: 'vosk',
+};
+
+export default vosk;
