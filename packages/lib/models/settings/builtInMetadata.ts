@@ -926,6 +926,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'markdown.plugin.insert': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ++insert++ syntax')}${wysiwygYes}` },
 		'markdown.plugin.multitable': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
+		// For now, applies only to the Markdown viewer
+		'renderer.fileUrls': {
+			storage: SettingStorage.File,
+			isGlobal: true,
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'markdownPlugins',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => `${_('Enable file:// URLs for images and videos')}${wysiwygYes}`,
+		},
+
 		// Tray icon (called AppIndicator) doesn't work in Ubuntu
 		// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
 		// Might be fixed in Electron 18.x but no non-beta release yet. So for now

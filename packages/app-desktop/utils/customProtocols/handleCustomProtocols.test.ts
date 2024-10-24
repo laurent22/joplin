@@ -58,7 +58,7 @@ const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePat
 	const url = toAccessUrl(filePath, options);
 	await expect(
 		async () => await onRequestListener(new Request(url)),
-	).rejects.toThrow(/Read access not granted for URL|Invalid or missing media access key/);
+	).rejects.toThrow(/Read access not granted for URL|Invalid or missing media access key|Media access denied/);
 };
 
 const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string, options?: ExpectBlockedOptions) => {
@@ -128,16 +128,19 @@ describe('handleCustomProtocols', () => {
 			return new Response('', { headers: { 'Content-Type': 'image/jpeg' } });
 		});
 
+
 		const testPath = join(supportDir, 'photo.jpg');
 		await expectBlocked(testPath);
-		await expectBlocked(`${testPath}?access-key=test`);
+		await expectBlocked(`${testPath}?access-key=wrongKey`);
+		await expectBlocked(`${testPath}?access-key=false`);
 
-		const handle = protocolHandler.allowMediaAccessWithKey('test');
-		await expectUnblocked(`${testPath}?access-key=test`);
-		await expectBlocked(`${testPath}?access-key=test2`);
+		protocolHandler.setMediaAccessEnabled(true);
+		const key = protocolHandler.getMediaAccessKey();
+		await expectUnblocked(`${testPath}?access-key=${key}`);
+		await expectBlocked(`${testPath}?access-key=null`);
+		protocolHandler.setMediaAccessEnabled(false);
 
-		handle.remove();
-		await expectBlocked(`${testPath}?access-key=test`);
+		await expectBlocked(`${testPath}?access-key=${key}`);
 	});
 
 	test('should allow requesting part of a file', async () => {

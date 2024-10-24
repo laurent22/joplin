@@ -378,6 +378,8 @@
 		}
 
 		const rewriteFileUrls = (accessKey) => {
+			if (!accessKey) return;
+
 			// To allow accessing local files from the viewer's non-file URL, file:// URLs are re-written
 			// to joplin-content:// URLs:
 			const mediaElements = document.querySelectorAll('video[src], audio[src], source[src], img[src]');

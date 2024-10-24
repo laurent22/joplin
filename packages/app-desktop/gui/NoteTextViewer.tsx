@@ -3,8 +3,6 @@ import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import { createSecureRandom } from '@joplin/lib/uuid';
-import { AccessController } from '../utils/customProtocols/handleCustomProtocols';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -32,8 +30,6 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private webviewListeners_: any = null;
 
-	private localMediaAccessController_: AccessController|null = null;
-	private localMediaAccessKey_: string|null = null;
 	private removePluginAssetsCallback_: RemovePluginAssetsCallback|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -131,8 +127,6 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		this.domReady_ = false;
 
 		this.removePluginAssetsCallback_?.();
-		this.localMediaAccessController_?.remove();
-		this.localMediaAccessKey_ = null;
 	}
 
 	public focus() {
@@ -222,15 +216,9 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			};
 		}
 
-		if (!this.localMediaAccessKey_) {
-			this.localMediaAccessController_?.remove();
-			this.localMediaAccessKey_ = createSecureRandom();
-			this.localMediaAccessController_ = protocolHandler.allowMediaAccessWithKey(this.localMediaAccessKey_);
-		}
-
 		this.send('setHtml', html, {
 			...options,
-			mediaAccessKey: this.localMediaAccessKey_,
+			mediaAccessKey: protocolHandler.getMediaAccessKey(),
 		});
 	}
 

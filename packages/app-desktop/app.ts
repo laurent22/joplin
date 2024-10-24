@@ -127,6 +127,12 @@ class Application extends BaseApplication {
 			bridge().setLocale(Setting.value('locale'));
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'markdown.plugin.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
+			bridge().electronApp().getCustomProtocolHandler().setMediaAccessEnabled(
+				Setting.value('markdown.plugin.fileUrls'),
+			);
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'showTrayIcon' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateTray();
 		}

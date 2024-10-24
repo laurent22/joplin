@@ -7,15 +7,20 @@ import { LoggerWrapper } from '@joplin/utils/Logger';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
+import { createSecureRandom } from '@joplin/lib/uuid';
 
 export interface AccessController {
 	remove(): void;
 }
 
 export interface CustomProtocolHandler {
+	// note-viewer/ URLs
 	allowReadAccessToDirectory(path: string): void;
 	allowReadAccessToFile(path: string): AccessController;
-	allowMediaAccessWithKey(key: string): AccessController;
+
+	// file-media/ URLs
+	setMediaAccessEnabled(enabled: boolean): void;
+	getMediaAccessKey(): string;
 }
 
 
@@ -138,8 +143,8 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
-	// Access keys for joplin-content://file-media/
-	const allowedMediaAccessKeys = new Set<string>();
+	// Access for joplin-content://file-media/
+	let mediaAccessKey: string|false = false;
 
 	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 	protocol.handle(contentProtocolName, async request => {
@@ -171,17 +176,15 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 			mediaOnly = false;
 		} else if (host === 'file-media') {
-			// ://file-media/ is intended only for <img, <video and similar tags. As such, the file extensions it
-			// can access may be restricted:
-			const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.mp4', '.webm', '.mov', '.mp3', '.wav', '.ogg'];
-
-			for (const ext of allowedExtensions) {
-				canRead ||= pathname.toLowerCase().endsWith(ext);
+			if (!mediaAccessKey) {
+				throw new Error('Media access denied. This must be enabled with .setMediaAccessEnabled');
 			}
+
+			canRead = true;
 			mediaOnly = true;
 
 			const accessKey = url.searchParams.get('access-key');
-			if (!allowedMediaAccessKeys.has(accessKey)) {
+			if (accessKey !== mediaAccessKey) {
 				throw new Error(`Invalid or missing media access key (was ${accessKey}). An allow-listed ?access-key= parameter must be provided.`);
 			}
 		} else {
@@ -210,7 +213,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 			// This is an extra check to prevent loading text/html and arbitrary non-media content from the URL.
 			const contentType = response.headers.get('Content-Type');
-			if (contentType?.includes('text')) {
+			if (!contentType || !contentType.match(/^(image|video|audio)\//)) {
 				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
 			}
 		}
@@ -247,16 +250,17 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 				},
 			};
 		},
+		setMediaAccessEnabled: (enabled: boolean) => {
+			if (enabled) {
+				mediaAccessKey ||= createSecureRandom();
+			} else {
+				mediaAccessKey = false;
+			}
+		},
 		// Allows access to all local media files, provided a matching ?access-key=<key> is added
 		// to the request URL.
-		allowMediaAccessWithKey: (key: string) => {
-			allowedMediaAccessKeys.add(key);
-
-			return {
-				remove: () => {
-					allowedMediaAccessKeys.delete(key);
-				},
-			};
+		getMediaAccessKey: () => {
+			return mediaAccessKey || null;
 		},
 	};
 };
