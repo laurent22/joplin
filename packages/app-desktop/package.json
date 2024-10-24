@@ -137,7 +137,7 @@
     "@types/styled-components": "5.1.32",
     "@types/tesseract.js": "2.0.0",
     "axios": "^1.7.7",
-    "electron": "29.4.5",
+    "electron": "32.2.0",
     "electron-builder": "24.13.3",
     "glob": "10.4.5",
     "gulp": "4.0.2",
