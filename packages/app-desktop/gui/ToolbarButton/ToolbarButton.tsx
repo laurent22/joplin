@@ -36,7 +36,7 @@ export default function ToolbarButton(props: Props) {
 	const iconName = getProp(props, 'iconName');
 	if (iconName) {
 		const iconProps: React.HTMLProps<HTMLDivElement> = {
-			'aria-label': '',
+			'aria-hidden': true,
 			role: 'img',
 			className: `toolbar-icon ${title ? '-has-title' : ''} ${iconName}`,
 		};

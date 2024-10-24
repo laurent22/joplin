@@ -6,4 +6,9 @@
 	font-style: italic;
 	max-width: 70em;
 	margin-top: 5px;
+
+	&.-empty {
+		margin: 0;
+		padding: 0;
+	}
 }

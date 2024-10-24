@@ -347,6 +347,8 @@ function NoteEditor(props: Props, ref: any) {
 		ignoreModifiers: false,
 
 		indentWithTabs: true,
+
+		editorLabel: _('Markdown editor'),
 	}), [props.themeId, props.readOnly]);
 
 	const injectedJavaScript = `

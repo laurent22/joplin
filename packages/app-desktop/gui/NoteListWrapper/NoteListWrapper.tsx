@@ -175,7 +175,7 @@ export default function NoteListWrapper(props: Props) {
 	};
 
 	return (
-		<StyledRoot>
+		<StyledRoot role='navigation' aria-label={_('Note list')}>
 			<NoteListControls
 				height={controlHeight}
 				width={noteListSize.width}

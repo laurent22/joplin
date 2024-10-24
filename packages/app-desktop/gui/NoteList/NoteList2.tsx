@@ -281,12 +281,13 @@ const NoteList = (props: Props) => {
 		onItemContextMenu({ itemId: activeNoteId });
 	}, [onItemContextMenu, activeNoteId]);
 
+	const hasNotes = !!props.notes.length;
 	return (
 		<div
-			role='listbox'
-			aria-label={_('Notes')}
-			aria-activedescendant={getNoteElementIdFromJoplinId(activeNoteId)}
-			aria-multiselectable={true}
+			role={hasNotes ? 'listbox' : 'group'}
+			aria-label={hasNotes ? _('Notes') : null}
+			aria-activedescendant={activeNoteId ? getNoteElementIdFromJoplinId(activeNoteId) : undefined}
+			aria-multiselectable={hasNotes ? true : undefined}
 			tabIndex={0}
 
 			onFocus={onFocus}

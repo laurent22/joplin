@@ -14,7 +14,7 @@ const theme: Theme = {
 	colorCorrect: 'green', // Opposite of colorError
 	colorWarn: 'rgb(228,86,0)',
 	colorWarnUrl: '#155BDA',
-	colorFaded: '#7C8B9E', // For less important text
+	colorFaded: '#627184', // For less important text
 	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
@@ -32,7 +32,7 @@ const theme: Theme = {
 	// It's dark text over gray background.
 	backgroundColor3: '#F4F5F6',
 	backgroundColorHover3: '#CBDAF1',
-	color3: '#738598',
+	color3: '#627284',
 
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.

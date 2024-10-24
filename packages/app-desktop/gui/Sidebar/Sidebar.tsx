@@ -74,7 +74,7 @@ const SidebarComponent = (props: Props) => {
 	);
 
 	return (
-		<StyledRoot className="sidebar">
+		<StyledRoot className="sidebar" role='navigation' aria-label={_('Sidebar')}>
 			<div style={{ flex: 1 }}><FolderAndTagList/></div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
 				{syncReportComp}

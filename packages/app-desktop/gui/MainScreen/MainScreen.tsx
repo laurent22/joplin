@@ -791,7 +791,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
 					bodyEditor = 'CodeMirror5';
 				}
-				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+				return <div className='note-editor-wrapper' role='main' aria-label={_('Note')}>
+					<NoteEditor key={key} bodyEditor={bodyEditor} />
+				</div>;
 			},
 		};
 

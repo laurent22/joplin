@@ -224,7 +224,8 @@ const Button = React.forwardRef((props: Props, ref: any) => {
 	function renderIcon() {
 		if (!props.iconName) return null;
 		return <StyledIcon
-			aria-label={props.iconLabel ?? ''}
+			aria-label={props.iconLabel ?? undefined}
+			aria-hidden={!props.iconLabel}
 			animation={props.iconAnimation}
 			mr={iconOnly ? '0' : '6px'}
 			color={props.color}

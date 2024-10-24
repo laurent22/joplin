@@ -438,7 +438,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 
 		return (
-			<div className="config-screen" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}

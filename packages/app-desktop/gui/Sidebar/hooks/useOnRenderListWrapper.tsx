@@ -33,7 +33,6 @@ const useOnRenderListWrapper = ({ selectedIndex, onKeyDown }: Props) => {
 			<div
 				role='tree'
 				className='sidebar-list-items-wrapper'
-				aria-setsize={listItems.length}
 				tabIndex={allowContainerFocus ? 0 : undefined}
 				onKeyDown={onKeyDown}
 			>

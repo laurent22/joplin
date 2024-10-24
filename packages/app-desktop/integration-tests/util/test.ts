@@ -4,6 +4,7 @@ import { _electron as electron, Page, ElectronApplication, test as base } from '
 import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
 import firstNonDevToolsWindow from './firstNonDevToolsWindow';
+import setDarkMode from './setDarkMode';
 
 
 type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
@@ -53,6 +54,7 @@ export const test = base.extend<JoplinFixtures>({
 	electronApp: async ({ profileDirectory }, use) => {
 		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
+		await setDarkMode(electronApp, false);
 
 		await use(electronApp);
 

@@ -56,7 +56,7 @@ export const StyledDivider = styled.div`
 	border-bottom: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
 	background-color: ${(props: StyleProps) => props.theme.selectedColor2};
 	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize)}px;
-	opacity: 0.5;
+	opacity: 0.58;
 `;
 
 export const StyledListItemLabel = styled.span`
@@ -131,9 +131,9 @@ export default function Sidebar(props: Props) {
 				onKeyDown={onKeyDown}
 			>
 				<StyledListItemIcon
-					aria-label=''
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
 					role='img'
+					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
 					{Setting.sectionNameToLabel(section.name)}
