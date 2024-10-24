@@ -1,6 +1,6 @@
 # Joplin Desktop Changelog
 
-## [v3.1.20](https://github.com/laurent22/joplin/releases/tag/v3.1.20) (Pre-release) - 2024-10-22T12:21:32Z
+## [v3.1.20](https://github.com/laurent22/joplin/releases/tag/v3.1.20) - 2024-10-22T12:21:32Z
 
 - Fixed: Fix error screen shown on opening settings when an incompatible plugin is installed ([#11223](https://github.com/laurent22/joplin/issues/11223) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Security: Improve KaTeX error handling ([#11207](https://github.com/laurent22/joplin/issues/11207) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
