@@ -51,8 +51,10 @@ test.describe('settings', () => {
 		await expect(mainScreen.dialog).toBeVisible();
 	});
 
-	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow }) => {
+	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {
 		const mainScreen = new MainScreen(mainWindow);
+		await startupPluginsLoaded;
+
 		await mainScreen.waitFor();
 		await mainScreen.openSettings(electronApp);
 
