@@ -127,9 +127,9 @@ class Application extends BaseApplication {
 			bridge().setLocale(Setting.value('locale'));
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'markdown.plugin.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'renderer.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
 			bridge().electronApp().getCustomProtocolHandler().setMediaAccessEnabled(
-				Setting.value('markdown.plugin.fileUrls'),
+				Setting.value('renderer.fileUrls'),
 			);
 		}
 
