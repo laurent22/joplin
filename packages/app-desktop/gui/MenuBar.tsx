@@ -196,7 +196,7 @@ const applyMenuBarVisibility = (showMenuBar: boolean) => {
 	// The menu bar cannot be hidden on macOS
 	if (shim.isMac()) return;
 
-	const window = bridge().window();
+	const window = bridge().mainWindow();
 	window.setAutoHideMenuBar(!showMenuBar);
 	window.setMenuBarVisibility(showMenuBar);
 };
@@ -579,7 +579,7 @@ function useMenu(props: Props) {
 				if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
 					ipcRenderer.send('check-for-updates');
 				} else {
-					void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+					void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 				}
 
 			}

@@ -2,6 +2,8 @@
 .prompt-dialog {
 	> .content {
 		display: inline-block;
-		max-width: 450px;
+
+		--prompt-width: 100vw;
+		max-width: 100vw;
 	}
 }

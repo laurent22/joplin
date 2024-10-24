@@ -40,7 +40,7 @@ const HeaderItem: React.FC<Props> = props => {
 				new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder')),
 			);
 
-			menu.popup({ window: bridge().window() });
+			menu.popup({ window: bridge().mainWindow() });
 		}
 	}, [itemId]);
 

@@ -15,8 +15,6 @@ interface Props {
 	defaultValue: any;
 	visible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	buttons: any[];
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
@@ -82,8 +80,8 @@ export default class PromptDialog extends React.Component<Props, any> {
 		this.focusInput_ = false;
 	}
 
-	public styles(themeId: number, width: number, height: number, visible: boolean) {
-		const styleKey = `${themeId}_${width}_${height}_${visible}`;
+	public styles(themeId: number, visible: boolean) {
+		const styleKey = `${themeId}_${visible}`;
 		if (styleKey === this.styleKey_) return this.styles_;
 
 		const theme = themeStyle(themeId);
@@ -111,7 +109,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		};
 
 		this.styles_.input = {
-			width: 0.5 * width,
+			width: 'calc(0.5 * var(--prompt-width))',
 			maxWidth: 400,
 			color: theme.color,
 			backgroundColor: theme.backgroundColor,
@@ -123,8 +121,8 @@ export default class PromptDialog extends React.Component<Props, any> {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			control: (provided: any) => {
 				return { ...provided,
-					minWidth: width * 0.2,
-					maxWidth: width * 0.5,
+					minWidth: 'calc(var(--prompt-width) * 0.2)',
+					maxWidth: 'calc(var(--prompt-width) * 0.5)',
 					fontFamily: theme.fontFamily,
 				};
 			},
@@ -191,19 +189,16 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		this.styles_.desc = { ...theme.textStyle, marginTop: 10 };
 
-		this.styles_.dialog = { maxWidth: width };
-
 		return this.styles_;
 	}
 
 	public render() {
 		if (!this.state.visible) return null;
 
-		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 		const buttonTypes = this.props.buttons ? this.props.buttons : ['ok', 'cancel'];
 
-		const styles = this.styles(this.props.themeId, style.width, style.height, this.state.visible);
+		const styles = this.styles(this.props.themeId, this.state.visible);
 
 		const onClose = (accept: boolean, buttonType: string = null) => {
 			if (this.props.onClose) {

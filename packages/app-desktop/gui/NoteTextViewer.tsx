@@ -90,6 +90,12 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 		return this.domReady_;
 	}
 
+	private getContainerWindow() {
+		// Handles the case where this.webviewRef_ doesn't point to an element in the global Document.
+		const containerDoc = this.webviewRef_.current.getRootNode() as Document;
+		return containerDoc.defaultView;
+	}
+
 	public initWebview() {
 		const wv = this.webviewRef_.current;
 
@@ -107,7 +113,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			wv.addEventListener(n, fn);
 		}
 
-		window.addEventListener('message', this.webview_message);
+		this.getContainerWindow().addEventListener('message', this.webview_message);
 	}
 
 	public destroyWebview() {
@@ -120,7 +126,7 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 			wv.removeEventListener(n, fn);
 		}
 
-		window.removeEventListener('message', this.webview_message);
+		this.getContainerWindow()?.removeEventListener('message', this.webview_message);
 
 		this.initialized_ = false;
 		this.domReady_ = false;
@@ -171,6 +177,9 @@ export default class NoteTextViewerComponent extends React.Component<Props, any>
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
+
+		// Window may already be closed
+		if (!win) return;
 
 		if (channel === 'focus') {
 			win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');

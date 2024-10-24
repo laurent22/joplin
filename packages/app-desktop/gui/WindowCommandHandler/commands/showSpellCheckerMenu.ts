@@ -21,7 +21,7 @@ export const runtime = (): CommandRuntime => {
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const menu = Menu.buildFromTemplate(menuItems as any);
-			menu.popup({ window: bridge().window() });
+			menu.popup({ window: bridge().mainWindow() });
 		},
 
 		mapStateToTitle(state: AppState): string {

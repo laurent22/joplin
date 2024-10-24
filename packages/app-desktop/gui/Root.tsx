@@ -1,6 +1,6 @@
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
-import MainScreen from './MainScreen/MainScreen';
+import MainScreen from './MainScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';
 import OneDriveLoginScreen from './OneDriveLoginScreen';
@@ -29,8 +29,11 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
+import WindowCommandHandler from './WindowCommandHandler/WindowCommandHandler';
+import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
+import bridge from '../services/bridge';
+import EditorWindow from './NoteEditor/EditorWindow';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
-const bridge = require('@electron/remote').require('./bridge').default;
 
 interface Props {
 	themeId: number;
@@ -41,6 +44,7 @@ interface Props {
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
+	secondaryWindowStates: WindowState[];
 }
 
 interface ModalDialogProps {
@@ -101,7 +105,7 @@ const GlobalStyle = createGlobalStyle`
 let wcsTimeoutId_: any = null;
 
 async function initialize() {
-	bridge().window().on('resize', () => {
+	bridge().activeWindow().on('resize', () => {
 		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
 
 		wcsTimeoutId_ = shim.setTimeout(() => {
@@ -120,6 +124,11 @@ async function initialize() {
 	store.dispatch({
 		type: 'WINDOW_CONTENT_SIZE_SET',
 		size: bridge().windowContentSize(),
+	});
+
+	store.dispatch({
+		type: 'EDITOR_CODE_VIEW_CHANGE',
+		value: Setting.value('editor.codeView'),
 	});
 
 	store.dispatch({
@@ -215,6 +224,16 @@ class RootComponent extends React.Component<Props, any> {
 		return output;
 	}
 
+	private renderSecondaryWindows() {
+		return this.props.secondaryWindowStates.map((windowState: WindowState) => {
+			return <EditorWindow
+				key={`new-window-note-${windowState.windowId}`}
+				windowId={windowState.windowId}
+				newWindow={true}
+			/>;
+		});
+	}
+
 	public render() {
 		const navigatorStyle = {
 			width: this.props.size.width / this.props.zoomFactor,
@@ -237,10 +256,12 @@ class RootComponent extends React.Component<Props, any> {
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
-					<StyleSheetContainer themeId={this.props.themeId}></StyleSheetContainer>
+					<StyleSheetContainer/>
 					<MenuBar/>
 					<GlobalStyle/>
+					<WindowCommandHandler windowId={defaultWindowId} />
 					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
+					{this.renderSecondaryWindows()}
 					{this.renderModalMessage(this.modalDialogProps())}
 					{this.renderDialogs()}
 				</ThemeProvider>
@@ -258,6 +279,7 @@ const mapStateToProps = (state: AppState) => {
 		needApiAuth: state.needApiAuth,
 		dialogs: state.dialogs,
 		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
+		secondaryWindowStates: stateUtils.secondaryWindowStates(state),
 	};
 };
 

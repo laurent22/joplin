@@ -31,6 +31,7 @@ function createCommand(name: string, options: any): TestCommand {
 		execute: options.execute,
 	};
 
+	if (options.getPriority) runtime.getPriority = options.getPriority;
 	if (options.enabledCondition) runtime.enabledCondition = options.enabledCondition;
 
 	return { declaration, runtime };
@@ -38,8 +39,12 @@ function createCommand(name: string, options: any): TestCommand {
 
 function registerCommand(service: CommandService, cmd: TestCommand) {
 	service.registerDeclaration(cmd.declaration);
-	service.registerRuntime(cmd.declaration.name, cmd.runtime);
+	return service.registerRuntime(cmd.declaration.name, cmd.runtime);
 }
+
+const registerSecondaryRuntime = (service: CommandService, commandName: string, runtime: CommandRuntime) => {
+	return service.registerRuntime(commandName, runtime, true);
+};
 
 describe('services_CommandService', () => {
 
@@ -159,6 +164,35 @@ describe('services_CommandService', () => {
 			}));
 		}
 	}));
+
+	it('should support multiple runtimes for a command', async () => {
+		const service = newService();
+
+		const execute1 = jest.fn();
+		const execute2 = jest.fn();
+
+		const firstRuntime = registerCommand(service, createCommand('test1', {
+			execute: execute1,
+			getPriority: () => 1,
+		}));
+
+		registerSecondaryRuntime(service, 'test1', {
+			execute: execute2,
+		});
+
+		await service.execute('test1');
+
+		// Should prefer commands with a positive specified priority
+		expect(execute2).not.toHaveBeenCalled();
+		expect(execute1).toHaveBeenCalledTimes(1);
+
+		// Should be possible to deregister just one runtime
+		firstRuntime.deregister();
+
+		await service.execute('test1');
+		expect(execute1).toHaveBeenCalledTimes(1);
+		expect(execute2).toHaveBeenCalledTimes(1);
+	});
 
 	it('should create menu items from commands', (async () => {
 		const service = newService();

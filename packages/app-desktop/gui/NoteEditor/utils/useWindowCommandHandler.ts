@@ -1,9 +1,10 @@
 import { RefObject, useEffect } from 'react';
 import { NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
-import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
+import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';
+import getWindowCommandPriority from './getWindowCommandPriority';
 
 const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
@@ -24,6 +25,7 @@ interface HookDependencies {
 	editorRef: RefObject<NoteBodyEditorRef>;
 	titleInputRef: RefObject<HTMLInputElement>;
 	onBodyChange: OnBodyChange;
+	containerRef: RefObject<HTMLDivElement|null>;
 }
 
 function editorCommandRuntime(
@@ -76,11 +78,19 @@ function editorCommandRuntime(
 }
 
 export default function useWindowCommandHandler(dependencies: HookDependencies) {
-	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, onBodyChange } = dependencies;
+	const { setShowLocalSearch, noteSearchBarRef, editorRef, titleInputRef, onBodyChange, containerRef } = dependencies;
 
 	useEffect(() => {
+		const getRuntimePriority = () => getWindowCommandPriority(containerRef);
+
+		const deregisterCallbacks: RegisteredRuntime[] = [];
 		for (const declaration of editorCommandDeclarations) {
-			CommandService.instance().registerRuntime(declaration.name, editorCommandRuntime(declaration, editorRef, onBodyChange));
+			const runtime = editorCommandRuntime(declaration, editorRef, onBodyChange);
+			deregisterCallbacks.push(CommandService.instance().registerRuntime(
+				declaration.name,
+				{ ...runtime, getPriority: getRuntimePriority },
+				true,
+			));
 		}
 
 		const dependencies = {
@@ -91,17 +101,18 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 		};
 
 		for (const command of commandsWithDependencies) {
-			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(dependencies));
+			const runtime = command.runtime(dependencies);
+			deregisterCallbacks.push(CommandService.instance().registerRuntime(
+				command.declaration.name,
+				{ ...runtime, getPriority: getRuntimePriority },
+				true,
+			));
 		}
 
 		return () => {
-			for (const declaration of editorCommandDeclarations) {
-				CommandService.instance().unregisterRuntime(declaration.name);
-			}
-
-			for (const command of commandsWithDependencies) {
-				CommandService.instance().unregisterRuntime(command.declaration.name);
+			for (const runtime of deregisterCallbacks) {
+				runtime.deregister();
 			}
 		};
-	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef, onBodyChange]);
+	}, [editorRef, setShowLocalSearch, noteSearchBarRef, titleInputRef, onBodyChange, containerRef]);
 }

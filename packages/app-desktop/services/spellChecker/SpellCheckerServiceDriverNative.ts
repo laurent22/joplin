@@ -11,7 +11,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private session(): any {
-		return bridge().window().webContents.session;
+		return bridge().mainWindow().webContents.session;
 	}
 
 	public get availableLanguages(): string[] {

@@ -1,62 +1,48 @@
 import * as React from 'react';
-import ResizableLayout from '../ResizableLayout/ResizableLayout';
-import findItemByKey from '../ResizableLayout/utils/findItemByKey';
-import { MoveButtonClickEvent } from '../ResizableLayout/MoveButtons';
-import { move } from '../ResizableLayout/utils/movements';
-import { LayoutItem } from '../ResizableLayout/utils/types';
-import NoteEditor from '../NoteEditor/NoteEditor';
-import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
-import ShareNoteDialog from '../ShareNoteDialog';
+import ResizableLayout from './ResizableLayout/ResizableLayout';
+import findItemByKey from './ResizableLayout/utils/findItemByKey';
+import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
+import { move } from './ResizableLayout/utils/movements';
+import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import Sidebar from '../Sidebar/Sidebar';
-import UserWebview from '../../services/plugins/UserWebview';
-import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
+import Sidebar from './Sidebar/Sidebar';
+import UserWebview from '../services/plugins/UserWebview';
+import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
-import { StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
-import InteropServiceHelper from '../../InteropServiceHelper';
+import { defaultWindowId, StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
-import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app.reducer';
-import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
+import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
+import { AppState } from '../app.reducer';
+import { saveLayout, loadLayout } from './ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
 import produce from 'immer';
 import shim from '@joplin/lib/shim';
-import bridge from '../../services/bridge';
-import time from '@joplin/lib/time';
+import bridge from '../services/bridge';
 import styled from 'styled-components';
 import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
-import validateLayout from '../ResizableLayout/utils/validateLayout';
-import iterateItems from '../ResizableLayout/utils/iterateItems';
-import removeItem from '../ResizableLayout/utils/removeItem';
+import validateLayout from './ResizableLayout/utils/validateLayout';
+import iterateItems from './ResizableLayout/utils/iterateItems';
+import removeItem from './ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
-import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
-import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
+import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-import ElectronAppWrapper from '../../ElectronAppWrapper';
+import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
-import commands from './commands/index';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
-import restart from '../../services/restart';
-const { connect } = require('react-redux');
-import PromptDialog from '../PromptDialog';
-import NotePropertiesDialog from '../NotePropertiesDialog';
+import restart from '../services/restart';
+import { connect } from 'react-redux';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
-import validateColumns from '../NoteListHeader/utils/validateColumns';
-import TrashNotification from '../TrashNotification/TrashNotification';
-import UpdateNotification from '../UpdateNotification/UpdateNotification';
+import validateColumns from './NoteListHeader/utils/validateColumns';
+import TrashNotification from './TrashNotification/TrashNotification';
+import UpdateNotification from './UpdateNotification/UpdateNotification';
+import NoteEditor from './NoteEditor/NoteEditor';
 
-const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
-
-interface LayerModalState {
-	visible: boolean;
-	message: string;
-}
 
 interface Props {
 	plugins: PluginStates;
@@ -69,9 +55,6 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
 	layoutMoveMode: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorNoteStatuses: any;
-	customCss: string;
 	shouldUpgradeSyncTarget: boolean;
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
@@ -80,9 +63,6 @@ interface Props {
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
-	settingEditorCodeView: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
@@ -109,7 +89,6 @@ interface ShareFolderDialogOptions {
 interface State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	promptOptions: any;
-	modalLayer: LayerModalState;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	notePropertiesDialogOptions: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -143,22 +122,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private waitForNotesSavedIID_: any;
-	private isPrinting_: boolean;
 	private styleKey_: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private promptOnClose_: Function;
 
 	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			promptOptions: null,
-			modalLayer: {
-				visible: false,
-				message: '',
-			},
 			notePropertiesDialogOptions: {},
 			noteContentPropertiesDialogOptions: {},
 			shareNoteDialogOptions: {},
@@ -170,14 +142,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
 
-		this.registerCommands();
-
 		this.setupAppCloseHandling();
 
-		this.notePropertiesDialog_close = this.notePropertiesDialog_close.bind(this);
-		this.noteContentPropertiesDialog_close = this.noteContentPropertiesDialog_close.bind(this);
-		this.shareNoteDialog_close = this.shareNoteDialog_close.bind(this);
-		this.shareFolderDialog_close = this.shareFolderDialog_close.bind(this);
 		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
 		this.resizableLayout_moveButtonClick = this.resizableLayout_moveButtonClick.bind(this);
@@ -318,22 +284,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 		});
 	}
 
-	private notePropertiesDialog_close() {
-		this.setState({ notePropertiesDialogOptions: {} });
-	}
-
-	private noteContentPropertiesDialog_close() {
-		this.setState({ noteContentPropertiesDialogOptions: {} });
-	}
-
-	private shareNoteDialog_close() {
-		this.setState({ shareNoteDialogOptions: {} });
-	}
-
-	private shareFolderDialog_close() {
-		this.setState({ shareFolderDialogOptions: { visible: false, folderId: '' } });
-	}
-
 	public updateMainLayout(layout: LayoutItem) {
 		this.props.dispatch({
 			type: 'MAIN_LAYOUT_SET',
@@ -361,34 +311,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 		if (prevProps.plugins !== this.props.plugins) {
 			this.updateMainLayout(this.updateLayoutPluginViews(this.props.mainLayout, this.props.plugins));
 			// this.setState({ layout: this.buildLayout(this.props.plugins) });
-		}
-
-		if (this.state.notePropertiesDialogOptions !== prevState.notePropertiesDialogOptions) {
-			this.props.dispatch({
-				type: this.state.notePropertiesDialogOptions && this.state.notePropertiesDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
-				name: 'noteProperties',
-			});
-		}
-
-		if (this.state.noteContentPropertiesDialogOptions !== prevState.noteContentPropertiesDialogOptions) {
-			this.props.dispatch({
-				type: this.state.noteContentPropertiesDialogOptions && this.state.noteContentPropertiesDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
-				name: 'noteContentProperties',
-			});
-		}
-
-		if (this.state.shareNoteDialogOptions !== prevState.shareNoteDialogOptions) {
-			this.props.dispatch({
-				type: this.state.shareNoteDialogOptions && this.state.shareNoteDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
-				name: 'shareNote',
-			});
-		}
-
-		if (this.state.shareFolderDialogOptions !== prevState.shareFolderDialogOptions) {
-			this.props.dispatch({
-				type: this.state.shareFolderDialogOptions && this.state.shareFolderDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
-				name: 'shareFolder',
-			});
 		}
 
 		if (this.props.mainLayout !== prevProps.mainLayout) {
@@ -425,60 +347,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public componentWillUnmount() {
-		this.unregisterCommands();
-
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
-	}
-
-	public async waitForNoteToSaved(noteId: string) {
-		while (noteId && this.props.editorNoteStatuses[noteId] === 'saving') {
-			// eslint-disable-next-line no-console
-			console.info('Waiting for note to be saved...', this.props.editorNoteStatuses);
-			await time.msleep(100);
-		}
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async printTo_(target: string, options: any) {
-		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
-		if (this.isPrinting_) {
-			// eslint-disable-next-line no-console
-			console.info(`Printing ${options.path} to ${target} disallowed, already printing.`);
-			return;
-		}
-
-		this.isPrinting_ = true;
-
-		// Need to wait for save because the interop service reloads the note from the database
-		await this.waitForNoteToSaved(options.noteId);
-
-		if (target === 'pdf') {
-			try {
-				const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
-					printBackground: true,
-					pageSize: Setting.value('export.pdfPageSize'),
-					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
-					customCss: this.props.customCss,
-					plugins: this.props.plugins,
-				});
-				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
-			} catch (error) {
-				console.error(error);
-				bridge().showErrorMessageBox(error.message);
-			}
-		} else if (target === 'printer') {
-			try {
-				await InteropServiceHelper.printNote(options.noteId, {
-					printBackground: true,
-					customCss: this.props.customCss,
-				});
-			} catch (error) {
-				console.error(error);
-				bridge().showErrorMessageBox(error.message);
-			}
-		}
-		this.isPrinting_ = false;
 	}
 
 	public rootLayoutSize() {
@@ -532,15 +402,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			width: width,
 			height: height,
 		};
-
-		this.styles_.modalLayer = { ...theme.textStyle, zIndex: 10000,
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			backgroundColor: theme.backgroundColor,
-			width: width - 20,
-			height: height - 20,
-			padding: 10 };
 
 		return this.styles_;
 	}
@@ -724,18 +585,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 			props.showInvalidJoplinCloudCredential;
 	}
 
-	public registerCommands() {
-		for (const command of commands) {
-			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(this));
-		}
-	}
-
-	public unregisterCommands() {
-		for (const command of commands) {
-			CommandService.instance().unregisterRuntime(command.declaration.name);
-		}
-	}
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_resize(event: any) {
 		this.updateMainLayout(event.layout);
@@ -784,14 +633,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			},
 
 			editor: () => {
-				let bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror6' : 'TinyMCE';
-
-				if (this.props.isSafeMode) {
-					bodyEditor = 'PlainText';
-				} else if (this.props.settingEditorCodeView && this.props.enableLegacyMarkdownEditor) {
-					bodyEditor = 'CodeMirror5';
-				}
-				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
+				return <NoteEditor
+					windowId={defaultWindowId}
+					key={key}
+				/>;
 			},
 		};
 
@@ -884,27 +729,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			backgroundColor: theme.backgroundColor,
 			...this.props.style,
 		};
-		const promptOptions = this.state.promptOptions;
 		const styles = this.styles(this.props.themeId, style.width, style.height, this.messageBoxVisible());
 
-		if (!this.promptOnClose_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			this.promptOnClose_ = (answer: any, buttonType: any) => {
-				return this.state.promptOptions.onClose(answer, buttonType);
-			};
-		}
-
 		const messageComp = this.renderNotification(theme, styles);
-
-		const dialogInfo = PluginManager.instance().pluginDialogToShow(this.props.pluginsLegacy);
-		const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
-
-		const modalLayerStyle = { ...styles.modalLayer, display: this.state.modalLayer.visible ? 'block' : 'none' };
-
-		const notePropertiesDialogOptions = this.state.notePropertiesDialogOptions;
-		const noteContentPropertiesDialogOptions = this.state.noteContentPropertiesDialogOptions;
-		const shareNoteDialogOptions = this.state.shareNoteDialogOptions;
-		const shareFolderDialogOptions = this.state.shareFolderDialogOptions;
 
 		const layoutComp = this.props.mainLayout ? (
 			<ResizableLayout
@@ -920,15 +747,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={style}>
-				<div style={modalLayerStyle}>{this.state.modalLayer.message}</div>
-				{this.renderPluginDialogs()}
-				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
-				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
-				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
-				{shareFolderDialogOptions.visible && <ShareFolderDialog themeId={this.props.themeId} folderId={shareFolderDialogOptions.folderId} onClose={this.shareFolderDialog_close} />}
-
-				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
-
 				<TrashNotification
 					lastDeletion={this.props.lastDeletion}
 					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}
@@ -939,7 +757,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 				<UpdateNotification themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
-				{pluginDialog}
 			</div>
 		);
 	}
@@ -948,10 +765,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
+	const windowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		themeId: state.settings.theme,
-		settingEditorCodeView: state.settings['editor.codeView'],
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
@@ -959,11 +776,8 @@ const mapStateToProps = (state: AppState) => {
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		hasMissingSyncCredentials: shouldShowMissingPasswordWarning(state.settings['sync.target'], state.settings),
-		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
-		customCss: state.customCss,
-		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
@@ -977,7 +791,7 @@ const mapStateToProps = (state: AppState) => {
 		listRendererId: state.settings['notes.listRendererId'],
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
-		selectedFolderId: state.selectedFolderId,
+		selectedFolderId: windowState.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
 		notesSortOrderField: state.settings['notes.sortOrder.field'],
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],

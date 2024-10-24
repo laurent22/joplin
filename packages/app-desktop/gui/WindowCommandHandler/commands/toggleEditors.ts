@@ -1,7 +1,7 @@
 import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
-import Setting from '@joplin/lib/models/Setting';
 import { stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleEditors',
@@ -17,7 +17,10 @@ export const runtime = (): CommandRuntime => {
 			// TinyMCE because it won't have time to send its content before
 			// being switch to Ace Editor.
 			if (stateUtils.hasNotesBeingSaved(context.state)) return;
-			Setting.toggle('editor.codeView');
+
+			const newValue = !Setting.value('editor.codeView');
+			Setting.setValue('editor.codeView', newValue);
+			context.dispatch({ type: 'EDITOR_CODE_VIEW_CHANGE', value: newValue });
 		},
 		enabledCondition: '!notesAreBeingSaved && oneNoteSelected',
 	};

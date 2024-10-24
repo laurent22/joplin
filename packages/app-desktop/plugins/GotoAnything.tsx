@@ -636,7 +636,9 @@ class DialogComponent extends React.PureComponent<Props, State> {
 	}
 
 	private calculateMaxHeight(itemHeight: number) {
-		const maxItemCount = Math.floor((0.7 * window.innerHeight) / itemHeight);
+		const listContainer: HTMLElement|null = this.itemListRef.current?.container;
+		const containerWindow = listContainer?.ownerDocument?.defaultView ?? window;
+		const maxItemCount = Math.floor((0.7 * containerWindow.innerHeight) / itemHeight);
 		return maxItemCount * itemHeight;
 	}
 

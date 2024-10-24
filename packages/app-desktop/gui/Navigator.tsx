@@ -2,7 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import { AppState } from '../app.reducer';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../services/bridge';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -24,7 +24,7 @@ class NavigatorComponent extends React.Component<Props> {
 
 	public updateWindowTitle(title: string) {
 		try {
-			if (bridge().window()) bridge().window().setTitle(title);
+			if (bridge().mainWindow()) bridge().mainWindow().setTitle(title);
 		} catch (error) {
 			console.warn('updateWindowTitle', error);
 		}

@@ -2,13 +2,14 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { useEffect } from 'react';
 import { Editor } from 'tinymce';
 
-const useWebViewApi = (editor: Editor) => {
+const useWebViewApi = (editor: Editor, window: Window) => {
 	useEffect(() => {
 		if (!editor) return ()=>{};
+		if (!window) return ()=>{};
 
-		const scriptElement = document.createElement('script');
+		const scriptElement = window.document.createElement('script');
 		const channelId = `plugin-post-message-${Math.random()}`;
-		scriptElement.appendChild(document.createTextNode(`
+		scriptElement.appendChild(window.document.createTextNode(`
 			window.webviewApi = {
 				postMessage: (contentScriptId, message) => {
 					const channelId = ${JSON.stringify(channelId)};
@@ -66,7 +67,7 @@ const useWebViewApi = (editor: Editor) => {
 			window.removeEventListener('message', onMessageHandler);
 			scriptElement.remove();
 		};
-	}, [editor]);
+	}, [editor, window]);
 };
 
 export default useWebViewApi;
