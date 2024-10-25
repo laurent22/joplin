@@ -97,6 +97,9 @@ const useDragAndDrop = (
 		const targetNoteIndex = dragTargetNoteIndex(event);
 		const noteIds: string[] = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
+		// Prevent dropping notes outside the valid range
+		if (targetNoteIndex < 0 || targetNoteIndex > selectedNoteIds.length) return;
+
 		await Note.insertNotesAt(selectedFolderId, noteIds, targetNoteIndex, uncompletedTodosOnTop, showCompletedTodos);
 	}, [notesParentType, dragTargetNoteIndex, noteSortOrder, selectedFolderId, uncompletedTodosOnTop, showCompletedTodos, selectedFolderInTrash]);
 
