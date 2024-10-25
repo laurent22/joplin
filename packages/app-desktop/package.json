@@ -127,7 +127,7 @@
     "@electron/rebuild": "3.6.0",
     "@joplin/default-plugins": "~3.1",
     "@joplin/tools": "~3.1",
-    "@playwright/test": "1.44.1",
+    "@playwright/test": "1.45.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.42",
