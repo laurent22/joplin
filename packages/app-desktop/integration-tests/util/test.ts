@@ -25,7 +25,7 @@ const getAndResizeMainWindow = async (electronApp: ElectronApplication) => {
 
 	// Setting the viewport size helps keep test environments consistent.
 	await mainWindow.setViewportSize({
-		width: 1200,
+		width: 1300,
 		height: 800,
 	});
 
