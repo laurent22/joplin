@@ -432,7 +432,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		dstResourcePath: string,
 		noteFilePath: string): cheerio.Root {
 
-		const imgs = $('img[src^="joplin_resource://"]');
+		const imgs = $('[src^="joplin_resource://"]');
 
 		for (let i = 0; i < imgs.length; i++) {
 			const img: cheerio.TagElement = imgs[i] as cheerio.TagElement;
