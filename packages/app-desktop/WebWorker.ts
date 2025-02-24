@@ -29,22 +29,13 @@ const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: string) 
 		anchor.attribs.href = newHref;
 	}
 
-	const imgs = [...$(`img[src^="file://${resourceDir}"]`), ...$(`img[src^="${resourceDir}"]`)];
+	const imgs = [...$(`[src^="file://${resourceDir}"]`), ...$(`[src^="${resourceDir}"]`)];
 	for (let i = 0; i < imgs.length; i++) {
 		const img = imgs[i] as cheerio.TagElement;
 		const src = img.attribs.src;
 		const filename = PATH.basename(src);
 		const newSrc = `joplin_resource://${filename}`;
 		img.attribs.src = newSrc;
-	}
-
-	const videos = [...$(`video[src^="file://${resourceDir}"]`), ...$(`video[src^="${resourceDir}"]`)];
-	for (let i = 0; i < videos.length; i++) {
-		const video = videos[i] as cheerio.TagElement;
-		const src = video.attribs.src;
-		const filename = PATH.basename(src);
-		const newSrc = `joplin_resource://${filename}`;
-		video.attribs.src = newSrc;
 	}
 	return $;
 };

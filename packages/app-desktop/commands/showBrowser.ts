@@ -58,7 +58,7 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 		anchor.attribs.href = newHref;
 	}
 
-	const imgs = [...$(`img[src^="file://${resourceDir}"]`), ...$(`img[src^="${resourceDir}"]`)];
+	const imgs = [...$(`[src^="file://${resourceDir}"]`), ...$(`[src^="${resourceDir}"]`)];
 	for (let i = 0; i < imgs.length; i++) {
 		const img = imgs[i] as cheerio.TagElement;
 		const src = img.attribs.src;
@@ -66,16 +66,25 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 		const newSrc = `joplin_resource://${filename}`;
 		img.attribs.src = newSrc;
 	}
-
-	const videos = [...$(`video[src^="file://${resourceDir}"]`), ...$(`video[src^="${resourceDir}"]`)];
-	for (let i = 0; i < videos.length; i++) {
-		const video = videos[i] as cheerio.TagElement;
-		const src = video.attribs.src;
-		const filename = PATH.basename(src);
-		const newSrc = `joplin_resource://${filename}`;
-		video.attribs.src = newSrc;
-	}
 	return $;
+};
+
+export const isAudio = (ext: string): boolean => {
+	const audioExtList = [
+		'.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', // Audio formats
+	];
+	return audioExtList.includes(ext.toLowerCase());
+};
+
+export const isVideo = (ext: string): boolean => {
+	const videoExtList = [
+		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
+	];
+	return videoExtList.includes(ext.toLowerCase());
+};
+
+export const isVideoAudio = (ext: string): boolean => {
+	return isAudio(ext) || isVideo(ext);
 };
 
 
@@ -87,12 +96,7 @@ export const convertATagVideoToVideoTag = (anchorTag: string): string => {
 	// get extension
 	const ext = PATH.extname(href);
 	// create video extension list and whether it is video or not
-	const mediaExtList = [
-		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
-		'.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', // Audio formats
-	];
-	const isVideo = mediaExtList.includes(ext);
-	if (!isVideo) {
+	if (!isVideoAudio(ext)) {
 		return anchorTag;
 	}
 

@@ -12,7 +12,7 @@ import * as cheerio from 'cheerio';
 import * as PATH from 'path';
 import * as URL from 'url';
 import NoteListUtils from '../../../app-desktop/gui/utils/NoteListUtils';
-import { copyPluginAssetsIfNotExit, revertResourceDirToJoplinScheme } from '../../../app-desktop/commands/showBrowser';
+import { copyPluginAssetsIfNotExit, isAudio, isVideoAudio, revertResourceDirToJoplinScheme } from '../../../app-desktop/commands/showBrowser';
 
 import * as fs from 'fs';
 import { RenderResult } from '@joplin/renderer/MarkupToHtml';
@@ -432,7 +432,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		dstResourcePath: string,
 		noteFilePath: string): cheerio.Root {
 
-		const imgs = $('img[src^="joplin_resource://"]');
+		const imgs = $('[src^="joplin_resource://"]');
 
 		for (let i = 0; i < imgs.length; i++) {
 			const img: cheerio.TagElement = imgs[i] as cheerio.TagElement;
@@ -471,9 +471,15 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		try {
 			// reomove /xxx/xxx.png?t=yyyy --> /xxx/xxx.png
 			const pathWithoutQuery = imgPath.split('?')[0];
-			const format = PATH.extname(pathWithoutQuery).toLocaleLowerCase().split('.')[1];
+			const ext = PATH.extname(pathWithoutQuery).toLocaleLowerCase();
+			const format = ext.split('.')[1];
 			const base64Img = fs.readFileSync(pathWithoutQuery, { encoding: 'base64' });
-			const result = `data:image/${format};base64, ${base64Img}`;
+			let result = `data:image/${format};base64, ${base64Img}`;
+			if (isAudio(ext)) {
+				result = `data:audio/${format};base64, ${base64Img}`;
+			} else if (isVideoAudio(ext)) {
+				result = `data:video/${format};base64, ${base64Img}`;
+			}
 			return result;
 		} catch (e) {
 			console.log(`cannot read img: ${imgPath}, error: ${e.toString()}`);
