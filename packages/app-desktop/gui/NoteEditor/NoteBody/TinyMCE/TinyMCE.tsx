@@ -28,7 +28,7 @@ import NoteListUtils from '../../../utils/NoteListUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
-import { modifyJoplinResource } from '../../../../commands/showBrowser';
+import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../commands/showBrowser';
 
 let gWorker: Worker = undefined;
 
@@ -188,7 +188,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
-		editor.insertContent(result.html);
+		const htmlElem = convertATagVideoToVideoTag(result.html);
+		editor.insertContent(htmlElem);
 		// editor.fire('joplinChange');
 		// dispatchDidUpdate(editor);
 	}, [props.markupToHtml, editor]);
@@ -1870,7 +1871,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		async function onPaste(_event: any) {
-			console.log(`onPaste`);
+			console.log('onPaste');
 			onChangeHandler();
 		}
 

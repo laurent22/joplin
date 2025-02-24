@@ -36,6 +36,14 @@ export const modifyJoplinResource = ($: cheerio.Root, resourceDir: string): chee
 		const newSrc = src.replace(regex, resourceDir);
 		img.attribs.src = newSrc;
 	}
+
+	const videos = $('video[src^="joplin_resource://"]');
+	for (let i = 0; i < videos.length; i++) {
+		const video = videos[i] as cheerio.TagElement;
+		const src = video.attribs.src;
+		const newSrc = src.replace(regex, resourceDir);
+		video.attribs.src = newSrc;
+	}
 	return $;
 };
 
@@ -58,9 +66,47 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 		const newSrc = `joplin_resource://${filename}`;
 		img.attribs.src = newSrc;
 	}
+
+	const videos = [...$(`video[src^="file://${resourceDir}"]`), ...$(`video[src^="${resourceDir}"]`)];
+	for (let i = 0; i < videos.length; i++) {
+		const video = videos[i] as cheerio.TagElement;
+		const src = video.attribs.src;
+		const filename = PATH.basename(src);
+		const newSrc = `joplin_resource://${filename}`;
+		video.attribs.src = newSrc;
+	}
 	return $;
 };
 
+
+export const convertATagVideoToVideoTag = (anchorTag: string): string => {
+	const $ = cheerio.load(anchorTag);
+	const anchor = $('a');
+	const href = anchor.attr('href');
+	const text = anchor.text();
+	// get extension
+	const ext = PATH.extname(href);
+	// create video extension list and whether it is video or not
+	const mediaExtList = [
+		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
+		'.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', // Audio formats
+	];
+	const isVideo = mediaExtList.includes(ext);
+	if (!isVideo) {
+		return anchorTag;
+	}
+
+	// escape href
+	// create video tag text via cheerio
+
+	const parent = cheerio.load('<div>');
+	const video = $('<video>')
+		.attr('controls', 'controls')
+		.attr('src', href).attr('title', text);
+	parent('div').append(video);
+	const videoText = parent('video').parent().html();
+	return videoText;
+};
 
 
 export const declaration: CommandDeclaration = {
