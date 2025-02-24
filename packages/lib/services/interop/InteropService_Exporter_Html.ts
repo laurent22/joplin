@@ -471,10 +471,11 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		try {
 			// reomove /xxx/xxx.png?t=yyyy --> /xxx/xxx.png
 			const pathWithoutQuery = imgPath.split('?')[0];
-			const format = PATH.extname(pathWithoutQuery).toLocaleLowerCase().split('.')[1];
+			const ext = PATH.extname(pathWithoutQuery).toLocaleLowerCase();
+			const format = ext.split('.')[1];
 			const base64Img = fs.readFileSync(pathWithoutQuery, { encoding: 'base64' });
 			let result = `data:image/${format};base64, ${base64Img}`;
-			if (isVideoAudio(format)) {
+			if (isVideoAudio(ext)) {
 				result = `data:video/${format};base64, ${base64Img}`;
 			}
 			return result;
