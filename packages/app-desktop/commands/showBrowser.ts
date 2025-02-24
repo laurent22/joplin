@@ -37,7 +37,7 @@ export const modifyJoplinResource = ($: cheerio.Root, resourceDir: string): chee
 		img.attribs.src = newSrc;
 	}
 
-	const videos = $('videos[src^="joplin_resource://"]');
+	const videos = $('video[src^="joplin_resource://"]');
 	for (let i = 0; i < videos.length; i++) {
 		const video = videos[i] as cheerio.TagElement;
 		const src = video.attribs.src;
@@ -65,6 +65,15 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 		const filename = PATH.basename(src);
 		const newSrc = `joplin_resource://${filename}`;
 		img.attribs.src = newSrc;
+	}
+
+	const videos = [...$(`video[src^="file://${resourceDir}"]`), ...$(`video[src^="${resourceDir}"]`)];
+	for (let i = 0; i < videos.length; i++) {
+		const video = videos[i] as cheerio.TagElement;
+		const src = video.attribs.src;
+		const filename = PATH.basename(src);
+		const newSrc = `joplin_resource://${filename}`;
+		video.attribs.src = newSrc;
 	}
 	return $;
 };
