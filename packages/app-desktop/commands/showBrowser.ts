@@ -81,10 +81,10 @@ export const convertATagVideoToVideoTag = (anchorTag: string): string => {
 
 	const parent = cheerio.load('<div>');
 	const video = $('<video>')
-		.attr('controls', 'controls').attr('width', '100%')
-		.attr('height', 'auto').attr('src', href).attr('title', text);
+		.attr('controls', 'controls')
+		.attr('src', href).attr('title', text);
 	parent('div').append(video);
-	const videoText = parent.html();
+	const videoText = parent('video').parent().html();
 	return videoText;
 };
 
