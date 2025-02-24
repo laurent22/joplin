@@ -62,6 +62,32 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 };
 
 
+export const convertATagVideoToVideoTag = (anchorTag: string): string => {
+	const $ = cheerio.load(anchorTag);
+	const anchor = $('a');
+	const href = anchor.attr('href');
+	const text = anchor.text();
+	// get extension
+	const ext = PATH.extname(href);
+	// create video extension list and whether it is video or not
+	const videoExtList = ['.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv'];
+	const isVideo = videoExtList.includes(ext);
+	if (!isVideo) {
+		return anchorTag;
+	}
+
+	// escape href
+	// create video tag text via cheerio
+
+	const parent = cheerio.load('<div>');
+	const video = $('<video>')
+		.attr('controls', 'controls').attr('width', '100%')
+		.attr('height', 'auto').attr('src', href).attr('title', text);
+	parent('div').append(video);
+	const videoText = parent.html();
+	return videoText;
+};
+
 
 export const declaration: CommandDeclaration = {
 	name: 'ShowBrowser',
