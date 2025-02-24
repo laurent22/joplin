@@ -69,12 +69,22 @@ export const revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: s
 	return $;
 };
 
-export const isVideoAudio = (ext: string): boolean => {
-	const mediaExtList = [
-		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
+export const isAudio = (ext: string): boolean => {
+	const audioExtList = [
 		'.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', // Audio formats
 	];
-	return mediaExtList.includes(ext.toLowerCase());
+	return audioExtList.includes(ext.toLowerCase());
+};
+
+export const isVideo = (ext: string): boolean => {
+	const videoExtList = [
+		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
+	];
+	return videoExtList.includes(ext.toLowerCase());
+};
+
+export const isVideoAudio = (ext: string): boolean => {
+	return isAudio(ext) || isVideo(ext);
 };
 
 
