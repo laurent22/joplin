@@ -70,8 +70,11 @@ export const convertATagVideoToVideoTag = (anchorTag: string): string => {
 	// get extension
 	const ext = PATH.extname(href);
 	// create video extension list and whether it is video or not
-	const videoExtList = ['.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv'];
-	const isVideo = videoExtList.includes(ext);
+	const mediaExtList = [
+		'.mp4', '.webm', '.ogg', '.ogv', '.m4v', '.mov', '.mkv', // Video formats
+		'.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', // Audio formats
+	];
+	const isVideo = mediaExtList.includes(ext);
 	if (!isVideo) {
 		return anchorTag;
 	}
