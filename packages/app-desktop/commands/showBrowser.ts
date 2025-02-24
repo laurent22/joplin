@@ -36,6 +36,14 @@ export const modifyJoplinResource = ($: cheerio.Root, resourceDir: string): chee
 		const newSrc = src.replace(regex, resourceDir);
 		img.attribs.src = newSrc;
 	}
+
+	const videos = $('videos[src^="joplin_resource://"]');
+	for (let i = 0; i < videos.length; i++) {
+		const video = videos[i] as cheerio.TagElement;
+		const src = video.attribs.src;
+		const newSrc = src.replace(regex, resourceDir);
+		video.attribs.src = newSrc;
+	}
 	return $;
 };
 
