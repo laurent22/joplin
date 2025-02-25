@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as cheerio from 'cheerio';
 import * as PATH from 'path';
 import * as fsext from 'fs-extra';
+import uuid from '@joplin/lib/uuid';
 
 const bridge = require('@electron/remote').require('./bridge').default;
 
@@ -88,7 +89,7 @@ export const isVideoAudio = (ext: string): boolean => {
 };
 
 
-export const convertATagVideoToVideoTag = (anchorTag: string): string => {
+export const convertATagVideoToVideoTag = (anchorTag: string) => {
 	const $ = cheerio.load(anchorTag);
 	const anchor = $('a');
 	const href = anchor.attr('href');
@@ -100,19 +101,21 @@ export const convertATagVideoToVideoTag = (anchorTag: string): string => {
 	const ext = PATH.extname(href);
 	// create video extension list and whether it is video or not
 	if (!isVideoAudio(ext)) {
-		return anchorTag;
+		return { videoText: anchorTag, videoId: '' };
 	}
 
 	// escape href
 	// create video tag text via cheerio
 
 	const parent = cheerio.load('<div>');
+	const videoId = `video-${uuid.create()}`;
 	const video = $('<video>')
 		.attr('controls', 'controls')
-		.attr('src', href).attr('title', text);
+		.attr('src', href).attr('title', text)
+		.attr('id', `${videoId}`);
 	parent('div').append(video);
 	const videoText = parent('video').parent().html();
-	return videoText;
+	return { videoText, videoId };
 };
 
 

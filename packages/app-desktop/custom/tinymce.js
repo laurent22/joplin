@@ -13481,6 +13481,8 @@
         each(dom.select('img[data-mce-selected],hr[data-mce-selected],video[data-mce-selected]'), function (img) {
           img.removeAttribute('data-mce-selected');
         });
+        // show e.target element name by console.log
+        console.log(e.target);
         controlElm = e.type === 'mousedown' ? e.target : selection.getNode();
         controlElm = dom.$(controlElm).closest('table,img,figure.image,hr,video')[0];
         if (isChildOrEqual(controlElm, rootElement)) {
@@ -28586,6 +28588,7 @@
       isMac: Env.mac
     };
     var tinymce = Tools.extend(EditorManager, publicApi);
+    tinymce.resizeAPI = ControlSelection;
 
     var exportToModuleLoaders = function (tinymce) {
       if (typeof module === 'object') {

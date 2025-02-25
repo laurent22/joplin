@@ -189,7 +189,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		const htmlElem = convertATagVideoToVideoTag(result.html);
-		editor.insertContent(htmlElem);
+		editor.insertContent(htmlElem.videoText);
+		if (htmlElem.videoId) {
+			setTimeout(() => {
+				const video = editor.getDoc().getElementById(htmlElem.videoId);
+				video.addEventListener('click', (event: Event) => {
+					const target = event.target;
+					(window as any).tinymceResizeAPI.showResizeRect(target);
+				});
+			}, 1000);
+		}
 		// editor.fire('joplinChange');
 		// dispatchDidUpdate(editor);
 	}, [props.markupToHtml, editor]);
@@ -1514,6 +1523,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			});
 
 			setEditor(editors[0]);
+
+			const resizeAPItemp = (window as any).tinymce?.resizeAPI;
+			const resizeAPI = resizeAPItemp(window.getSelection(), editors[0]);
+			console.log('resizeAPI', resizeAPI);
+			(window as any).tinymceResizeAPI = resizeAPI;
 		};
 
 		void loadEditor();
