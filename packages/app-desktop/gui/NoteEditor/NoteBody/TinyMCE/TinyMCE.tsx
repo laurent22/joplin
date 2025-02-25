@@ -193,16 +193,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		if (htmlElem.videoId) {
 			setTimeout(() => {
 				const video = editor.getDoc().getElementById(htmlElem.videoId) as HTMLVideoElement;
-				video.setAttribute('onclick', 'window.tinymceResizeAPI.showResizeRect(event.target)');
-				// video.onclick = (event: Event) => {
-				// 	const target = event.target;
-				// 	(window as any).tinymceResizeAPI.showResizeRect(target);
-				// };
 
-				// video.addEventListener('click', (event: Event) => {
-				// 	const target = event.target;
-				// 	(window as any).tinymceResizeAPI.showResizeRect(target);
-				// });
+				video.addEventListener('click', (event: Event) => {
+					const target = event.target;
+					(window as any).tinymceResizeAPI.showResizeRect(target);
+				});
 			}, 1000);
 		}
 		// editor.fire('joplinChange');
