@@ -13478,11 +13478,11 @@
         if (resizeStarted || editor.removed) {
           return;
         }
-        each(dom.select('img[data-mce-selected],hr[data-mce-selected]'), function (img) {
+        each(dom.select('img[data-mce-selected],hr[data-mce-selected],video[data-mce-selected]'), function (img) {
           img.removeAttribute('data-mce-selected');
         });
         controlElm = e.type === 'mousedown' ? e.target : selection.getNode();
-        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr')[0];
+        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr,video')[0];
         if (isChildOrEqual(controlElm, rootElement)) {
           disableGeckoResize();
           startElm = selection.getStart(true);
