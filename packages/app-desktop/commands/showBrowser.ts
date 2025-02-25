@@ -94,7 +94,7 @@ export const convertATagVideoToVideoTag = (anchorTag: string) => {
 	const anchor = $('a');
 	const href = anchor.attr('href');
 	if (!href) {
-		return anchorTag;
+		return { videoText: anchorTag, videoId: undefined };
 	}
 	const text = anchor.text();
 	// get extension
