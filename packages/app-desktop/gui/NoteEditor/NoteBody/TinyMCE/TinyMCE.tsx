@@ -196,7 +196,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 				video.addEventListener('click', (event: Event) => {
 					const target = event.target;
-					(window as any).tinymceResizeAPI.showResizeRect(target);
+					(window as any).tinymceResizeAPI.showResizeRect(target, true);
 				});
 			}, 1000);
 		}
@@ -1718,7 +1718,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				const video = videos[i];
 				video.addEventListener('click', (event: Event) => {
 					const target = event.target;
-					(window as any).tinymceResizeAPI.showResizeRect(target);
+					(window as any).tinymceResizeAPI.showResizeRect(target, true);
 				});
 
 			}

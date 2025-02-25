@@ -8,7 +8,7 @@
  */
 (function (domGlobals) {
     'use strict';
-
+    var videoResizeMode = false;
     var noop = function () {
     };
     var compose = function (fa, fb) {
@@ -13366,10 +13366,13 @@
         dom.setAttrib(selectedElm, 'style', dom.getAttrib(selectedElm, 'style'));
         editor.nodeChanged();
       };
-      var showResizeRect = function (targetElm) {
+      var showResizeRect = function (targetElm, isVideo) {
         var position, targetWidth, targetHeight, e, rect;
         hideResizeRect();
         unbindResizeHandleEvents();
+        if (isVideo) {
+          videoResizeMode = true;
+        }
         position = dom.getPos(targetElm, rootElement);
         selectedElmX = position.x;
         selectedElmY = position.y;
@@ -13451,7 +13454,11 @@
         selectedElm.setAttribute('data-mce-selected', '1');
       };
       var hideResizeRect = function () {
+        // return;
         var name, handleElm;
+        if (videoResizeMode) {
+          return;
+        }
         unbindResizeHandleEvents();
         if (selectedElm) {
           selectedElm.removeAttribute('data-mce-selected');
