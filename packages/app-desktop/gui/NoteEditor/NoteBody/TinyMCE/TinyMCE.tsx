@@ -1930,7 +1930,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.off('keyup', onKeyUp);
 				editor.off('keydown', onKeyDown);
 				editor.off('keypress', onKeypress);
-				// editor.off('paste', onPaste);
+				editor.off('paste', onPaste);
 				// editor.off('copy', onCopy);
 				editor.off('compositionend', onChangeHandler);
 				// editor.off('cut', onCut);
