@@ -101,7 +101,7 @@ export const convertATagVideoToVideoTag = (anchorTag: string) => {
 	const ext = PATH.extname(href);
 	// create video extension list and whether it is video or not
 	if (!isVideoAudio(ext)) {
-		return { videoText: anchorTag, videoId: '' };
+		return { videoText: anchorTag, videoId: undefined };
 	}
 
 	// escape href

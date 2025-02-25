@@ -13274,7 +13274,7 @@
           return false;
         }
         if (typeof selector !== 'string') {
-          selector = 'table,img,figure.image,div';
+          selector = 'table,img,figure.image,div,video';
         }
         if (elm.getAttribute('data-mce-resize') === 'false') {
           return false;
