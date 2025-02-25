@@ -16,9 +16,9 @@ You can search your notes by keyword, tag, or even text within the images. Thank
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/search.png"  max-width="500px" />
 
-## 3\. Add variety of resources to your research
+## 3\. Add a variety of resources to your research
 
-Add visual aids to your notes such as photos, documents or even hand written notes or drawings. You may also take photos of interesting articles or inspirational materials and store them in Joplin notes. You can also use voice to speech feature to create written notes.
+Add visual aids to your notes such as photos, documents or even hand-written notes or drawings. You may also take photos of interesting articles or inspirational materials and store them in Joplin notes. You can also use the speech-to-text feature to dictate notes.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/resources.png"  max-width="500px" />
 
