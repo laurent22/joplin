@@ -92,6 +92,9 @@ export const convertATagVideoToVideoTag = (anchorTag: string): string => {
 	const $ = cheerio.load(anchorTag);
 	const anchor = $('a');
 	const href = anchor.attr('href');
+	if (!href) {
+		return anchorTag;
+	}
 	const text = anchor.text();
 	// get extension
 	const ext = PATH.extname(href);
