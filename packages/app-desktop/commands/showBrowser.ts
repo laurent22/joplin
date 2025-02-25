@@ -113,6 +113,7 @@ export const convertATagVideoToVideoTag = (anchorTag: string) => {
 		.attr('controls', 'controls')
 		.attr('src', href).attr('title', text)
 		.attr('id', `${videoId}`);
+		// .attr('onclick', 'window.tinymceResizeAPI.showResizeRect(event.target)');
 	parent('div').append(video);
 	const videoText = parent('video').parent().html();
 	return { videoText, videoId };

@@ -192,11 +192,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.insertContent(htmlElem.videoText);
 		if (htmlElem.videoId) {
 			setTimeout(() => {
-				const video = editor.getDoc().getElementById(htmlElem.videoId);
-				video.addEventListener('click', (event: Event) => {
-					const target = event.target;
-					(window as any).tinymceResizeAPI.showResizeRect(target);
-				});
+				const video = editor.getDoc().getElementById(htmlElem.videoId) as HTMLVideoElement;
+				video.setAttribute('onclick', 'window.tinymceResizeAPI.showResizeRect(event.target)');
+				// video.onclick = (event: Event) => {
+				// 	const target = event.target;
+				// 	(window as any).tinymceResizeAPI.showResizeRect(target);
+				// };
+
+				// video.addEventListener('click', (event: Event) => {
+				// 	const target = event.target;
+				// 	(window as any).tinymceResizeAPI.showResizeRect(target);
+				// });
 			}, 1000);
 		}
 		// editor.fire('joplinChange');
@@ -1712,6 +1718,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
 
+			const videos = editor.getDoc().getElementsByTagName('video');
+			for (let i = 0; i < videos.length; i++) {
+				const video = videos[i];
+				video.addEventListener('click', (event: Event) => {
+					const target = event.target;
+					(window as any).tinymceResizeAPI.showResizeRect(target);
+				});
+
+			}
 			dispatchDidUpdate(editor);
 		};
 
