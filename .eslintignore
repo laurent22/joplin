@@ -46,6 +46,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 packages/app-desktop/locales
 packages/app-desktop/node_modules
 packages/app-desktop/packageInfo.js
+packages/app-desktop/custom/tinymce.js
 packages/app-mobile/android
 packages/app-mobile/ios
 packages/app-mobile/locales
@@ -178,6 +179,9 @@ packages/app-desktop/ElectronAppWrapper.js.map
 packages/app-desktop/InteropServiceHelper.d.ts
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/InteropServiceHelper.js.map
+packages/app-desktop/WebWorker.d.ts
+packages/app-desktop/WebWorker.js
+packages/app-desktop/WebWorker.js.map
 packages/app-desktop/app.d.ts
 packages/app-desktop/app.js
 packages/app-desktop/app.js.map
