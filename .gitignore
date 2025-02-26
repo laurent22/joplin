@@ -165,6 +165,9 @@ packages/app-desktop/ElectronAppWrapper.js.map
 packages/app-desktop/InteropServiceHelper.d.ts
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/InteropServiceHelper.js.map
+packages/app-desktop/WebWorker.d.ts
+packages/app-desktop/WebWorker.js
+packages/app-desktop/WebWorker.js.map
 packages/app-desktop/app.d.ts
 packages/app-desktop/app.js
 packages/app-desktop/app.js.map

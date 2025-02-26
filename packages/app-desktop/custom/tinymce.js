@@ -8,7 +8,7 @@
  */
 (function (domGlobals) {
     'use strict';
-
+    var videoResizeMode = false;
     var noop = function () {
     };
     var compose = function (fa, fb) {
@@ -13274,7 +13274,7 @@
           return false;
         }
         if (typeof selector !== 'string') {
-          selector = 'table,img,figure.image,div';
+          selector = 'table,img,figure.image,div,video';
         }
         if (elm.getAttribute('data-mce-resize') === 'false') {
           return false;
@@ -13366,10 +13366,13 @@
         dom.setAttrib(selectedElm, 'style', dom.getAttrib(selectedElm, 'style'));
         editor.nodeChanged();
       };
-      var showResizeRect = function (targetElm) {
+      var showResizeRect = function (targetElm, isVideo) {
         var position, targetWidth, targetHeight, e, rect;
         hideResizeRect();
         unbindResizeHandleEvents();
+        if (isVideo) {
+          videoResizeMode = true;
+        }
         position = dom.getPos(targetElm, rootElement);
         selectedElmX = position.x;
         selectedElmY = position.y;
@@ -13450,8 +13453,16 @@
         }
         selectedElm.setAttribute('data-mce-selected', '1');
       };
-      var hideResizeRect = function () {
+      var hideResizeRect = function (isFinishVideoMode) {
+        // return;
         var name, handleElm;
+        if (isFinishVideoMode) {
+          videoResizeMode = false;
+          endGhostResize();
+        }
+        if (videoResizeMode) {
+          return;
+        }
         unbindResizeHandleEvents();
         if (selectedElm) {
           selectedElm.removeAttribute('data-mce-selected');
@@ -13481,8 +13492,10 @@
         each(dom.select('img[data-mce-selected],hr[data-mce-selected]'), function (img) {
           img.removeAttribute('data-mce-selected');
         });
+        // show e.target element name by console.log
+        console.log(e.target);
         controlElm = e.type === 'mousedown' ? e.target : selection.getNode();
-        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr')[0];
+        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr,video')[0];
         if (isChildOrEqual(controlElm, rootElement)) {
           disableGeckoResize();
           startElm = selection.getStart(true);
@@ -28586,6 +28599,7 @@
       isMac: Env.mac
     };
     var tinymce = Tools.extend(EditorManager, publicApi);
+    tinymce.resizeAPI = ControlSelection;
 
     var exportToModuleLoaders = function (tinymce) {
       if (typeof module === 'object') {
