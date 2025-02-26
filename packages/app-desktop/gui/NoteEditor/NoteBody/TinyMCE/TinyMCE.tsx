@@ -31,6 +31,7 @@ const supportedLocales = require('./supportedLocales');
 import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../commands/showBrowser';
 
 let gWorker: Worker = undefined;
+let gSettingRect = false;
 
 function markupRenderOptions(override: any = null) {
 	return {
@@ -196,6 +197,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 				video.addEventListener('click', (event: Event) => {
 					const target = event.target;
+					gSettingRect = true;
 					(window as any).tinymceResizeAPI.showResizeRect(target, true);
 				});
 			}, 1000);
@@ -1713,6 +1715,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
 
+
 			const videos = editor.getDoc().getElementsByTagName('video');
 			for (let i = 0; i < videos.length; i++) {
 				const video = videos[i];
@@ -1727,7 +1730,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				(window as any).tinymceResizeAPI.hideResizeRect(true);
 			});
 
-			editor.getDoc().addEventListener('click', (event: MouseEvent) => {
+			// eslint-disable-next-line complexity
+			editor.getDoc().addEventListener('mouseup', (event: MouseEvent) => {
+				if (gSettingRect) {
+					gSettingRect = false;
+					return;
+				}
 				const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
 				// get click coordinates
 				const x = event.clientX;
@@ -1736,12 +1744,20 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				for (let i = 0; i < videos.length; i++) {
 					const video = videos[i];
 					const rect = video.getBoundingClientRect();
-					const isOutsideBoundary =
-							x < rect.left - offset || // 左境界より左
-							x > rect.right + offset || // 右境界より右
-							y < rect.top - offset || // 上境界より上
-							y > rect.bottom + offset; // 下境界より下
-					if (isOutsideBoundary) {
+					// const isOutsideBoundary =
+					// 		x < rect.left - offset || // 左境界より左
+					// 		x > rect.right + offset || // 右境界より右
+					// 		y < rect.top - offset || // 上境界より上
+					// 		y > rect.bottom + offset; // 下境界より下
+
+					const isOutsideCorners =
+							!(
+								(x >= rect.left - offset && x <= rect.left + offset && y >= rect.top - offset && y <= rect.top + offset) || // 左上
+							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.top - offset && y <= rect.top + offset) || // 右上
+							(x >= rect.left - offset && x <= rect.left + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) || // 左下
+							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) // 右下
+							);
+					if (isOutsideCorners) {
 					// クリックした座標がvideoの四隅ではない場合、選択を解除する
 						video.setAttribute('data-mce-selected', '0');
 						(window as any).tinymceResizeAPI.hideResizeRect(true);
