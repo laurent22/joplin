@@ -29,6 +29,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../commands/showBrowser';
+import * as htmlEntity from 'html-entities';
 
 let gWorker: Worker = undefined;
 
@@ -1982,7 +1983,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 					const pastedText = clipboard.readText();
 					if (pastedText) {
-						editor.insertContent(pastedText);
+						const escapedText = htmlEntity.encode(pastedText)
+						editor.insertContent(escapedText);
 						// execOnChangeEvent();
 					}
 				}

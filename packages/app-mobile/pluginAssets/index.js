@@ -1,7 +1,8 @@
 module.exports = {
-hash:"f727c83719b9a31c1eb32323d3be79cd", files: {
+hash:"23a87770b37e8206e16ed9b8bc50d61d", files: {
 'highlight.js/atom-one-dark-reasonable.css': { data: require('./highlight.js/atom-one-dark-reasonable.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'highlight.js/atom-one-light.css': { data: require('./highlight.js/atom-one-light.css.base64.js'), mime: 'text/css', encoding: 'base64' },
+'katex/contrib/auto-render.min.js': { data: require('./katex/contrib/auto-render.min.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'katex/fonts/KaTeX_AMS-Regular.woff2': { data: require('./katex/fonts/KaTeX_AMS-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
 'katex/fonts/KaTeX_Caligraphic-Bold.woff2': { data: require('./katex/fonts/KaTeX_Caligraphic-Bold.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
 'katex/fonts/KaTeX_Caligraphic-Regular.woff2': { data: require('./katex/fonts/KaTeX_Caligraphic-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
@@ -23,6 +24,8 @@ hash:"f727c83719b9a31c1eb32323d3be79cd", files: {
 'katex/fonts/KaTeX_Size4-Regular.woff2': { data: require('./katex/fonts/KaTeX_Size4-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
 'katex/fonts/KaTeX_Typewriter-Regular.woff2': { data: require('./katex/fonts/KaTeX_Typewriter-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },
 'katex/katex.css': { data: require('./katex/katex.css.base64.js'), mime: 'text/css', encoding: 'base64' },
+'katex/katex.min.js': { data: require('./katex/katex.min.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
+'katex/katex_rendrer.js': { data: require('./katex/katex_rendrer.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'mathjax/mathjax_render.js': { data: require('./mathjax/mathjax_render.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'mathjax/tex-mml-chtml.js': { data: require('./mathjax/tex-mml-chtml.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'mathjax/tex-svg.js': { data: require('./mathjax/tex-svg.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
