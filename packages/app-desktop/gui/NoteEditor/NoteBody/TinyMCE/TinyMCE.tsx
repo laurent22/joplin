@@ -31,7 +31,7 @@ const supportedLocales = require('./supportedLocales');
 import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../commands/showBrowser';
 
 let gWorker: Worker = undefined;
-let gSettingRect = false;
+
 
 function markupRenderOptions(override: any = null) {
 	return {
@@ -197,7 +197,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 				video.addEventListener('click', (event: Event) => {
 					const target = event.target;
-					gSettingRect = true;
 					(window as any).tinymceResizeAPI.showResizeRect(target, true);
 				});
 			}, 1000);
@@ -1748,10 +1747,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			// eslint-disable-next-line complexity
 			editor.getDoc().addEventListener('mouseup', (event: MouseEvent) => {
-				if (gSettingRect) {
-					gSettingRect = false;
-					return;
-				}
 				const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
 				// get click coordinates
 				const x = event.clientX;
