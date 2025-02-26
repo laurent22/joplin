@@ -1529,6 +1529,60 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const resizeAPItemp = (window as any).tinymce?.resizeAPI;
 			const resizeAPI = resizeAPItemp(window.getSelection(), editors[0]);
 			console.log('resizeAPI', resizeAPI);
+			const editor = editors[0];
+
+			editor.getDoc().addEventListener('dblclick', () => {
+				(window as any).tinymceResizeAPI.hideResizeRect(true);
+			});
+
+			editor.getDoc().addEventListener('keydown', (event: KeyboardEvent) => {
+				if (event.key === 'Escape') {
+
+					const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
+					// get click coordinates
+					for (let i = 0; i < videos.length; i++) {
+						const video = videos[i];
+						// クリックした座標がvideoの四隅ではない場合、選択を解除する
+						video.setAttribute('data-mce-selected', '0');
+						(window as any).tinymceResizeAPI.hideResizeRect(true);
+
+					}
+
+				}
+			});
+
+			// eslint-disable-next-line complexity
+			editor.getDoc().addEventListener('mouseup', (event: MouseEvent) => {
+				const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
+				// get click coordinates
+				const x = event.clientX;
+				const y = event.clientY;
+				const offset = 10;
+				for (let i = 0; i < videos.length; i++) {
+					const video = videos[i];
+					const rect = video.getBoundingClientRect();
+					// const isOutsideBoundary =
+					// 		x < rect.left - offset || // 左境界より左
+					// 		x > rect.right + offset || // 右境界より右
+					// 		y < rect.top - offset || // 上境界より上
+					// 		y > rect.bottom + offset; // 下境界より下
+
+					const isOutsideCorners =
+							!(
+								(x >= rect.left - offset && x <= rect.left + offset && y >= rect.top - offset && y <= rect.top + offset) || // 左上
+							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.top - offset && y <= rect.top + offset) || // 右上
+							(x >= rect.left - offset && x <= rect.left + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) || // 左下
+							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) // 右下
+							);
+					if (isOutsideCorners) {
+					// クリックした座標がvideoの四隅ではない場合、選択を解除する
+						video.setAttribute('data-mce-selected', '0');
+						(window as any).tinymceResizeAPI.hideResizeRect(true);
+
+					}
+				}
+
+			});
 			(window as any).tinymceResizeAPI = resizeAPI;
 		};
 
@@ -1724,59 +1778,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				});
 
 			}
-
-			editor.getDoc().addEventListener('dblclick', () => {
-				(window as any).tinymceResizeAPI.hideResizeRect(true);
-			});
-
-			editor.getDoc().addEventListener('keydown', (event: KeyboardEvent) => {
-				if (event.key === 'Escape') {
-
-					const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
-					// get click coordinates
-					for (let i = 0; i < videos.length; i++) {
-						const video = videos[i];
-						// クリックした座標がvideoの四隅ではない場合、選択を解除する
-						video.setAttribute('data-mce-selected', '0');
-						(window as any).tinymceResizeAPI.hideResizeRect(true);
-
-					}
-
-				}
-			});
-
-			// eslint-disable-next-line complexity
-			editor.getDoc().addEventListener('mouseup', (event: MouseEvent) => {
-				const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
-				// get click coordinates
-				const x = event.clientX;
-				const y = event.clientY;
-				const offset = 10;
-				for (let i = 0; i < videos.length; i++) {
-					const video = videos[i];
-					const rect = video.getBoundingClientRect();
-					// const isOutsideBoundary =
-					// 		x < rect.left - offset || // 左境界より左
-					// 		x > rect.right + offset || // 右境界より右
-					// 		y < rect.top - offset || // 上境界より上
-					// 		y > rect.bottom + offset; // 下境界より下
-
-					const isOutsideCorners =
-							!(
-								(x >= rect.left - offset && x <= rect.left + offset && y >= rect.top - offset && y <= rect.top + offset) || // 左上
-							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.top - offset && y <= rect.top + offset) || // 右上
-							(x >= rect.left - offset && x <= rect.left + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) || // 左下
-							(x >= rect.right - offset && x <= rect.right + offset && y >= rect.bottom - offset && y <= rect.bottom + offset) // 右下
-							);
-					if (isOutsideCorners) {
-					// クリックした座標がvideoの四隅ではない場合、選択を解除する
-						video.setAttribute('data-mce-selected', '0');
-						(window as any).tinymceResizeAPI.hideResizeRect(true);
-
-					}
-				}
-
-			});
 			dispatchDidUpdate(editor);
 		};
 
