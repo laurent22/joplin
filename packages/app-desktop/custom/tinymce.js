@@ -13453,9 +13453,12 @@
         }
         selectedElm.setAttribute('data-mce-selected', '1');
       };
-      var hideResizeRect = function () {
+      var hideResizeRect = function (isFinishVideoMode) {
         // return;
         var name, handleElm;
+        if (isFinishVideoMode) {
+          videoResizeMode = false;
+        }
         if (videoResizeMode) {
           return;
         }
@@ -13485,7 +13488,7 @@
         if (resizeStarted || editor.removed) {
           return;
         }
-        each(dom.select('img[data-mce-selected],hr[data-mce-selected],video[data-mce-selected]'), function (img) {
+        each(dom.select('img[data-mce-selected],hr[data-mce-selected]'), function (img) {
           img.removeAttribute('data-mce-selected');
         });
         // show e.target element name by console.log
