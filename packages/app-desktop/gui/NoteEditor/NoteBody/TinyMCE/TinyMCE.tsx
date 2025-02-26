@@ -32,7 +32,6 @@ import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../co
 
 let gWorker: Worker = undefined;
 
-
 function markupRenderOptions(override: any = null) {
 	return {
 		plugins: {
@@ -1813,7 +1812,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		function onDragEnd() {
 			setDraggingStarted(false);
-			console.log('dragend');
 		}
 
 		document.addEventListener('dragstart', onDragStart);
