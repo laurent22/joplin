@@ -1730,6 +1730,22 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				(window as any).tinymceResizeAPI.hideResizeRect(true);
 			});
 
+			editor.getDoc().addEventListener('keydown', (event: KeyboardEvent) => {
+				if (event.key === 'Escape') {
+
+					const videos = (editor.getDoc() as Document).querySelectorAll('video[data-mce-selected="1"]');
+					// get click coordinates
+					for (let i = 0; i < videos.length; i++) {
+						const video = videos[i];
+						// クリックした座標がvideoの四隅ではない場合、選択を解除する
+						video.setAttribute('data-mce-selected', '0');
+						(window as any).tinymceResizeAPI.hideResizeRect(true);
+
+					}
+
+				}
+			});
+
 			// eslint-disable-next-line complexity
 			editor.getDoc().addEventListener('mouseup', (event: MouseEvent) => {
 				if (gSettingRect) {
@@ -1801,6 +1817,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		function onDragEnd() {
 			setDraggingStarted(false);
+			console.log('dragend');
 		}
 
 		document.addEventListener('dragstart', onDragStart);

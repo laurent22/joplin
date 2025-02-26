@@ -13458,6 +13458,7 @@
         var name, handleElm;
         if (isFinishVideoMode) {
           videoResizeMode = false;
+          endGhostResize();
         }
         if (videoResizeMode) {
           return;
