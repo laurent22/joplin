@@ -8,6 +8,7 @@ import * as exportPdf from './exportPdf';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
 import * as leaveSharedFolder from './leaveSharedFolder';
+import * as linkToNote from './linkToNote';
 import * as moveToFolder from './moveToFolder';
 import * as newFolder from './newFolder';
 import * as newNote from './newNote';
@@ -56,6 +57,7 @@ const index: any[] = [
 	gotoAnything,
 	hideModalMessage,
 	leaveSharedFolder,
+	linkToNote,
 	moveToFolder,
 	newFolder,
 	newNote,
