@@ -1528,6 +1528,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const resizeAPItemp = (window as any).tinymce?.resizeAPI;
 			const resizeAPI = resizeAPItemp(window.getSelection(), editors[0]);
 			console.log('resizeAPI', resizeAPI);
+			(window as any).tinymceResizeAPI = resizeAPI;
 			const editor = editors[0];
 
 			editor.getDoc().addEventListener('dblclick', () => {
@@ -1582,7 +1583,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				}
 
 			});
-			(window as any).tinymceResizeAPI = resizeAPI;
 		};
 
 		void loadEditor();

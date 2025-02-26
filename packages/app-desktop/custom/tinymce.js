@@ -13492,10 +13492,8 @@
         each(dom.select('img[data-mce-selected],hr[data-mce-selected]'), function (img) {
           img.removeAttribute('data-mce-selected');
         });
-        // show e.target element name by console.log
-        console.log(e.target);
         controlElm = e.type === 'mousedown' ? e.target : selection.getNode();
-        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr,video')[0];
+        controlElm = dom.$(controlElm).closest('table,img,figure.image,hr')[0];
         if (isChildOrEqual(controlElm, rootElement)) {
           disableGeckoResize();
           startElm = selection.getStart(true);
