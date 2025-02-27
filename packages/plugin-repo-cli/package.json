@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",
-    "@types/node": "18.19.65",
+    "@types/node": "18.19.67",
     "jest": "29.7.0",
     "source-map-loader": "5.0.0",
     "typescript": "5.4.5",
