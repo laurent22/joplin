@@ -762,12 +762,16 @@ packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
+packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/testing/TestProviderStack.js
-packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
+packages/app-mobile/components/voiceTyping/AudioRecordingBanner.js
+packages/app-mobile/components/voiceTyping/RecordingControls.js
+packages/app-mobile/components/voiceTyping/SpeechToTextBanner.js
+packages/app-mobile/components/voiceTyping/types.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/index.web.js
 packages/app-mobile/root.js

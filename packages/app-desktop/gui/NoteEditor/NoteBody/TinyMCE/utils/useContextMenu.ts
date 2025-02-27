@@ -8,7 +8,7 @@ import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import Setting from '@joplin/lib/models/Setting';
-import type { Event as ElectronEvent } from 'electron';
+import type { Event as ElectronEvent, MenuItemConstructorOptions } from 'electron';
 
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
@@ -17,6 +17,7 @@ import { Editor } from 'tinymce';
 import { EditDialogControl } from './useEditDialog';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
+import type { MenuItem as MenuItemType } from 'electron';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -137,13 +138,20 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			event.preventDefault();
 
 			const menu = new Menu();
-			const menuItems = [];
+			const menuItems: MenuItemType[] = [];
+			const toMenuItems = (specs: MenuItemConstructorOptions[]) => {
+				return specs.map(spec => new MenuItem(spec));
+			};
 
 			menuItems.push(...makeEditableMenuItems(element));
 			menuItems.push(...makeMainMenuItems(element));
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
-			menuItems.push(...spellCheckerMenuItems);
-			menuItems.push(...menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu));
+			menuItems.push(
+				...toMenuItems(spellCheckerMenuItems),
+			);
+			menuItems.push(
+				...toMenuItems(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu)),
+			);
 
 			for (const item of menuItems) {
 				menu.append(item);

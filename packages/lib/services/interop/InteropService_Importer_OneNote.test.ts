@@ -207,4 +207,17 @@ describe('InteropService_Importer_OneNote', () => {
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
+
+	skipIfNotCI('should be able to create notes from corrupted attachment', async () => {
+		let idx = 0;
+		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
+		const notes = await importNote(`${supportDir}/onenote/corrupted_attachment.zip`);
+
+		expect(notes.length).toBe(2);
+
+		for (const note of notes) {
+			expect(note.body).toMatchSnapshot(note.title);
+		}
+		BaseModel.setIdGenerator(originalIdGenerator);
+	});
 });

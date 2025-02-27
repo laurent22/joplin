@@ -69,6 +69,8 @@ const emptyMockPackages = [
 	'react-native-image-picker',
 	'react-native-document-picker',
 	'@joplin/react-native-saf-x',
+	'expo-av',
+	'expo-av/build/Audio',
 ];
 for (const packageName of emptyMockPackages) {
 	jest.doMock(packageName, () => {

@@ -6,7 +6,6 @@ import { ToolbarButtonInfo, ToolbarItem } from '@joplin/lib/services/commands/To
 import toolbarButtonsFromState from './utils/toolbarButtonsFromState';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { themeStyle } from '../global-style';
-import ToggleSpaceButton from '../ToggleSpaceButton';
 import ToolbarEditorDialog from './ToolbarEditorDialog';
 import { EditorState } from './types';
 import ToolbarButton from './ToolbarButton';
@@ -127,19 +126,17 @@ const EditorToolbar: React.FC<Props> = props => {
 	/>;
 
 	return <>
-		<ToggleSpaceButton themeId={props.themeId}>
-			<ScrollView
-				ref={scrollViewRef}
-				horizontal={true}
-				style={styles.content}
-				contentContainerStyle={styles.contentContainer}
-				onLayout={onContainerLayout}
-			>
-				{buttonInfos.map(renderButton)}
-				<View style={styles.spacer}/>
-				{settingsButton}
-			</ScrollView>
-		</ToggleSpaceButton>
+		<ScrollView
+			ref={scrollViewRef}
+			horizontal={true}
+			style={styles.content}
+			contentContainerStyle={styles.contentContainer}
+			onLayout={onContainerLayout}
+		>
+			{buttonInfos.map(renderButton)}
+			<View style={styles.spacer}/>
+			{settingsButton}
+		</ScrollView>
 		<ToolbarEditorDialog visible={settingsVisible} onDismiss={onDismissSettingsDialog} />
 	</>;
 };

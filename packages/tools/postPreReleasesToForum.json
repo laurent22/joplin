@@ -130,6 +130,9 @@
 		"android-v3.2.7": true,
 		"ios-v13.2.5": true,
 		"v3.2.12": true,
-		"v3.3.1": true
+		"v3.3.1": true,
+		"v3.3.2": true,
+		"android-v3.3.1": true,
+		"ios-v13.3.1": true
 	}
 }

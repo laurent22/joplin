@@ -5,7 +5,9 @@
 # Jozef Gaal <preklady@mayday.sk>, 2024,2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.2.7\n"
+"Project-Id-Version: Joplin v3.3.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk >\n"
 "Language: sk_SK\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1526,6 +1528,8 @@ msgid ""
 "Delete model and re-download?\n"
 "This cannot be undone."
 msgstr ""
+"Odstrániť model a znovu stiahnuť?\n"
+"Toto sa nedá vrátiť späť."
 
 #: packages/lib/commands/deleteNote.ts:7
 msgid "Delete note"
@@ -1623,9 +1627,8 @@ msgid "Detailed"
 msgstr "Podrobné"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:99
-#, fuzzy
 msgid "Dev"
-msgstr "Termín"
+msgstr "Vývoj"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1773,9 +1776,8 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr "Stiahnite a nainštalujte príslušné rozšírenie pre váš prehliadač:"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:206
-#, fuzzy
 msgid "Download updated model"
-msgstr "Stiahnuté"
+msgstr "Stiahnuť aktualizovaný model"
 
 #: packages/lib/models/Resource.ts:409
 msgid "Downloaded"
@@ -4265,7 +4267,7 @@ msgstr "Ukončiť"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:206
 msgid "Re-download model"
-msgstr ""
+msgstr "Opätovne stiahnuť model"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -6120,11 +6122,12 @@ msgid "Unsupported link or message: %s"
 msgstr "Nepodporovaný odkaz alebo správa: %s"
 
 #: packages/app-mobile/commands/openItem.ts:60
-#, fuzzy
 msgid ""
 "Unsupported link or message: %s.\n"
 "Error: %s"
-msgstr "Nepodporovaný odkaz alebo správa: %s"
+msgstr ""
+"Nepodporovaný odkaz alebo správa: %s.\n"
+"Chyba: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
 #: packages/lib/models/BaseItem.ts:921 packages/lib/path-utils.ts:27

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { Icon, ActivityIndicator, Text, Surface, Button } from 'react-native-paper';
+import { Text, Button } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
-import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
 import whisper from '../../services/voiceTyping/whisper';
 import vosk from '../../services/voiceTyping/vosk';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
-import AccessibleView from '../accessibility/AccessibleView';
 import Logger from '@joplin/utils/Logger';
+import { RecorderState } from './types';
+import RecordingControls from './RecordingControls';
+import { PrimaryButton } from '../buttons';
 
 const logger = Logger.create('VoiceTypingDialog');
 
@@ -20,14 +20,6 @@ interface Props {
 	provider: string;
 	onDismiss: ()=> void;
 	onText: (text: string)=> void;
-}
-
-enum RecorderState {
-	Loading = 1,
-	Recording = 2,
-	Processing = 3,
-	Error = 4,
-	Downloading = 5,
 }
 
 interface UseVoiceTypingProps {
@@ -109,31 +101,7 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 	};
 };
 
-const styles = StyleSheet.create({
-	container: {
-		marginHorizontal: 1,
-		width: '100%',
-		maxWidth: 680,
-		alignSelf: 'center',
-	},
-	contentWrapper: {
-		flexDirection: 'row',
-	},
-	iconWrapper: {
-		margin: 8,
-		marginTop: 16,
-	},
-	content: {
-		marginTop: 16,
-		marginHorizontal: 8,
-	},
-	actionContainer: {
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
-	},
-});
-
-const VoiceTypingDialog: React.FC<Props> = props => {
+const SpeechToTextComponent: React.FC<Props> = props => {
 	const [recorderState, setRecorderState] = useState<RecorderState>(RecorderState.Loading);
 	const [preview, setPreview] = useState<string>('');
 	const {
@@ -177,6 +145,7 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 	const renderContent = () => {
 		const components: Record<RecorderState, ()=> string> = {
 			[RecorderState.Loading]: () => _('Loading...'),
+			[RecorderState.Idle]: () => 'Waiting...', // Not used for now
 			[RecorderState.Recording]: () => _('Please record your voice...'),
 			[RecorderState.Processing]: () => _('Converting speech to text...'),
 			[RecorderState.Downloading]: () => _('Downloading %s language files...', languageName(props.locale)),
@@ -184,18 +153,6 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 		};
 
 		return components[recorderState]();
-	};
-
-	const renderIcon = () => {
-		const components: Record<RecorderState, IconSource> = {
-			[RecorderState.Loading]: ({ size }: { size: number }) => <ActivityIndicator animating={true} style={{ width: size, height: size }} />,
-			[RecorderState.Recording]: 'microphone',
-			[RecorderState.Processing]: 'microphone',
-			[RecorderState.Downloading]: ({ size }: { size: number }) => <ActivityIndicator animating={true} style={{ width: size, height: size }} />,
-			[RecorderState.Error]: 'alert-circle-outline',
-		};
-
-		return components[recorderState];
 	};
 
 	const renderPreview = () => {
@@ -207,48 +164,23 @@ const VoiceTypingDialog: React.FC<Props> = props => {
 	</Button>;
 	const allowReDownload = recorderState === RecorderState.Error || modelIsOutdated;
 
-	return (
-		<Surface>
-			<View style={styles.container}>
-				<View style={styles.contentWrapper}>
-					<View style={styles.iconWrapper}>
-						<Icon source={renderIcon()} size={40}/>
-					</View>
-					<View style={styles.content}>
-						<AccessibleView
-							// Auto-focus
-							refocusCounter={1}
-							aria-live='polite'
-							role='heading'
-						>
-							<Text variant='bodyMedium'>
-								{_('Voice typing...')}
-							</Text>
-						</AccessibleView>
-						<Text
-							variant='bodyMedium'
-							// role="status" might fit better here. However, react-native
-							// doesn't seem to support it.
-							role='alert'
-							// Although on web, role=alert should imply aria-live=polite,
-							// this does not seem to be the case for React Native:
-							accessibilityLiveRegion='polite'
-						>{renderContent()}</Text>
-						{renderPreview()}
-					</View>
-				</View>
-				<View style={styles.actionContainer}>
-					{allowReDownload ? reDownloadButton : null}
-					<Button
-						onPress={onDismiss}
-						accessibilityHint={_('Ends voice typing')}
-					>{_('Done')}</Button>
-				</View>
-			</View>
-		</Surface>
-	);
+	const actions = <>
+		{allowReDownload ? reDownloadButton : null}
+		<PrimaryButton
+			onPress={onDismiss}
+			accessibilityHint={_('Ends voice typing')}
+		>{_('Done')}</PrimaryButton>
+	</>;
+
+	return <RecordingControls
+		recorderState={recorderState}
+		heading={_('Voice typing...')}
+		content={renderContent()}
+		preview={renderPreview()}
+		actions={actions}
+	/>;
 };
 
 export default connect((state: AppState) => ({
 	provider: state.settings['voiceTyping.preferredProvider'],
-}))(VoiceTypingDialog);
+}))(SpeechToTextComponent);

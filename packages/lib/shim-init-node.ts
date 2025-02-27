@@ -344,7 +344,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const detectedType = await fileTypeFromFile(filePath);
 
 			if (detectedType) {
-				fileExt = detectedType.ext;
+				fileExt = fileExt ? fileExt : detectedType.ext;
 				resource.mime = detectedType.mime;
 			} else {
 				resource.mime = 'application/octet-stream';

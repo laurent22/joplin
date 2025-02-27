@@ -1,5 +1,35 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.1) - 2025-02-19T16:04:34Z
+
+- New: Add support for plugin editor views (#11831)
+- Improved: Accessibility: Improve contrast of faded URLs in Markdown editor (#11635 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Make it possible to create and edit profiles with a screen reader (#11797 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow adjusting the default note viewer font size (#11633) (#10824 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow internal links to target elements using the name attribute (#11671 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Do not add double newlines around attached files (#11690)
+- Improved: Harden failsafe logic to check for the presence of info.json, rather than just the item count (#11750 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Highlight `==marked==` text in the Markdown editor (#11794 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve Welcome Notes with clearer instructions (#11656) (#11647 by [@pedr](https://github.com/pedr))
+- Improved: Logging: Log less information at level `warn` when a decryption error occurs (#11771 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move S3 sync target out of beta (798e1b8)
+- Improved: Plugins: Legacy editor API: Fix delayed crash caused by out-of-bounds inputs (#11714 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Simplify getting the ID of the note open in an editor (#11841 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Support the showToast API (#11787 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Render strikethrough text in the editor (#11795) (#11790 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support attaching audio recordings (#11836 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Toolbar: Show only half of last button to indicate scroll (#11772 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update js-draw to version 1.27.2 (#11788 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.1), @react-native-clipboard/clipboard (v1.14.3), @react-native-community/slider (v4.5.5)
+- Fixed: Adjust how items are queried by ID (#11734) (#11630 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Allow attaching videos to notes (#11840) (#11835 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Cancelling dev plugin path setup shows error (#11828) (#11827 by [@rathoreSahil](https://github.com/rathoreSahil))
+- Fixed: Fix "attach file" doesn't work the first time after startup (#11839 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix home screen new-note shortcuts are re-applied after switching notes (#11779 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Sync: Fix share not marked as readonly if the recipient has an outgoing share (#11770 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Use alternative fix to set the sqlite CursorWindow size to 50mb (#11726) (#11571 by [@mrjo118](https://github.com/mrjo118))
+- Security: Improve comment escaping (#11706 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.2.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.2.5) - 2025-01-13T17:19:06Z
 
 - Fixed: Clicking on an external note link from within a note logs an error (#11619) (#11455 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

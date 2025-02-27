@@ -262,15 +262,25 @@ export default class ElectronAppWrapper {
 		// the easiest is to use a timeout. Keep in mind that if you get a white window on Windows it might be due
 		// to this line though.
 		if (debugEarlyBugs) {
-			setTimeout(() => {
+			// Since a recent release of Electron (v34?), calling openDevTools() here does nothing
+			// if a plugin devtool window is already opened. Maybe because they do a check on
+			// `isDevToolsOpened` which indeed returns `true` (but shouldn't since it's for a
+			// different window). However, if you open the dev tools twice from the Help menu it
+			// works. So instead we do that here and call openDevTool() three times.
+			let openDevToolCount = 0;
+			const openDevToolInterval = setInterval(() => {
 				try {
 					this.win_.webContents.openDevTools();
+					openDevToolCount++;
+					if (openDevToolCount >= 3) {
+						clearInterval(openDevToolInterval);
+					}
 				} catch (error) {
-				// This will throw an exception "Object has been destroyed" if the app is closed
-				// in less that the timeout interval. It can be ignored.
+					// This will throw an exception "Object has been destroyed" if the app is closed
+					// in less that the timeout interval. It can be ignored.
 					console.warn('Error opening dev tools', error);
 				}
-			}, 3000);
+			}, 1000);
 		}
 
 		const addWindowEventHandlers = (webContents: WebContents) => {

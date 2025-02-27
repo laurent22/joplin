@@ -1,9 +1,8 @@
 import type { Theme } from '@joplin/lib/themes/type';
 import type { EditorEvent } from './events';
 
-// Editor commands. For compatibility, the string values of these commands
-// should correspond with the CodeMirror 5 commands:
-// https://codemirror.net/5/doc/manual.html#commands
+// Editor commands. Plugins can access these commands using editor.execCommand
+// or, in some cases, by prefixing the command name with `editor.`.
 export enum EditorCommandType {
 	Undo = 'undo',
 	Redo = 'redo',

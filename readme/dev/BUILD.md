@@ -104,6 +104,8 @@ To make changes to the application, you'll need to rebuild any TypeScript file y
 
 Running `yarn tsc` would have the same effect, but without watching.
 
+**Mobile-specific note**: If making changes to the note editor, viewer, or other WebView content, run `yarn watchInjectedJs` from `packages/app-mobile` to rebuild the WebView JavaScript files on change.
+
 ## Running an application with additional parameters
 
 You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `yarn start` command, followed by your flags. For example:

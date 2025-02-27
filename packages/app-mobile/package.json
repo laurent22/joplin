@@ -21,7 +21,7 @@
     "postinstall": "jetify"
   },
   "dependencies": {
-    "@bam.tech/react-native-image-resizer": "3.0.10",
+    "@bam.tech/react-native-image-resizer": "3.0.11",
     "@joplin/editor": "~3.3",
     "@joplin/lib": "~3.3",
     "@joplin/react-native-alarm-notification": "~3.3",
@@ -42,6 +42,7 @@
     "deprecated-react-native-prop-types": "5.0.0",
     "events": "3.3.0",
     "expo": "51.0.26",
+    "expo-av": "14.0.7",
     "expo-camera": "15.0.16",
     "lodash": "4.17.21",
     "md5": "2.3.0",
@@ -102,7 +103,7 @@
     "@tsconfig/react-native": "2.0.2",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",
-    "@types/node": "18.19.64",
+    "@types/node": "18.19.67",
     "@types/react": "18.3.3",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.33",
