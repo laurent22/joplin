@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@testing-library/react-hooks": "8.0.1",
-    "@types/adm-zip": "0.5.6",
+    "@types/adm-zip": "0.5.7",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
