@@ -42,10 +42,14 @@ interface GotoAnythingSearchResult {
 }
 
 // GotoAnything supports several modes:
+//
 // - Default: Search in note title, body. Can search for folders, tags, etc. This is the full
 //   featured GotoAnything.
-// - TitleOnly; Search in note titles only. These different mode can be set from the `gotoAnything`
-//   command.
+//
+// - TitleOnly: Search in note titles only.
+//
+// These different modes can be set from the `gotoAnything` command.
+
 export enum Mode {
 	Default = 0,
 	TitleOnly,
@@ -708,6 +712,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		);
 	}
 
+	private helpText() {
+		if (this.mode_ === Mode.TitleOnly) {
+			return _('Type a note title to search for it.');
+		} else {
+			return _('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.');
+		}
+	}
+
 	public render() {
 		const style = this.style();
 		const helpTextId = 'goto-anything-help-text';
@@ -718,7 +730,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				id={helpTextId}
 				style={style.help}
 				hidden={!this.state.showHelp}
-			>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>
+			>{this.helpText()}</div>
 		);
 
 		return (
