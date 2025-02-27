@@ -3,6 +3,36 @@ import createTestEditor from '../../testUtil/createTestEditor';
 import renumberSelectedLists from './renumberSelectedLists';
 
 describe('renumberSelectedLists', () => {
+	it('should correctly renumber deeply nested lists', async () => {
+		const listText = [
+			'1. Level 1',
+			'	1. Level 2',
+			'		1. Level 3',
+			'		2. Level 3 again',
+			'	2. Back to level 2',
+			'2. Back to level 1',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			`${listText}\n\n# End`,
+			EditorSelection.range(0, listText.length),
+			['OrderedList', 'ATXHeading1'],
+		);
+
+		editor.dispatch(renumberSelectedLists(editor.state));
+
+		expect(editor.state.doc.toString()).toBe([
+			'1. Level 1',
+			'	1. Level 2',
+			'		1. Level 3',
+			'		2. Level 3 again',
+			'	2. Back to level 2',
+			'2. Back to level 1',
+			'',
+			'# End',
+		].join('\n'));
+	});
+
 	it('should correctly renumber a list with multiple selections in that list', async () => {
 		const listText = [
 			'1. This',
