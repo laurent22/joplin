@@ -1952,7 +1952,31 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		async function onPaste(_event: any) {
 			console.log('onPaste');
-			onChangeHandler();
+			const pastedString = clipboard.readHTML();
+			const $ = cheerio.load(pastedString);
+			const mermaidElements = $('[mermaidTxt]');
+
+			if (mermaidElements.length <= 0) {
+				onChangeHandler();
+				return;
+			}
+
+			setTimeout(() => {
+				for (let i = 0; i < mermaidElements.length; i++) {
+					const element = mermaidElements[i];
+					const id = (element as cheerio.TagElement).attribs.id;
+					console.log(`found mermaid element: ${id}`);
+					const mermaidElem = editor.getDoc().getElementById(id);
+					if (mermaidElem === null) {
+						continue;
+					}
+					const txt = mermaidElem.getAttribute('mermaidTxt');
+					// const mermaidElem = document.getElementById(id);
+					updateMermaidDiv(editor, txt, mermaidElem);
+				}
+
+				onChangeHandler();
+			}, 1000);
 		}
 
 		// async function onCopy(event: any) {
@@ -1983,7 +2007,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 					const pastedText = clipboard.readText();
 					if (pastedText) {
-						const escapedText = htmlEntity.encode(pastedText)
+						const escapedText = htmlEntity.encode(pastedText);
 						editor.insertContent(escapedText);
 						// execOnChangeEvent();
 					}
