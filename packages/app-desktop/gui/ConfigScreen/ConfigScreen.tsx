@@ -148,6 +148,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				const ok = await shim.showConfirmationDialog(_('This will open a new screen. Save your current changes?'));
 				if (ok) {
 					await shared.saveSettings(this);
+				} else {
+					return;
 				}
 			}
 		}
