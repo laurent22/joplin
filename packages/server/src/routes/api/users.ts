@@ -73,8 +73,11 @@ router.del('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await fetchUser(path, ctx);
-	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, user);
-	const postedUser = await postedUserFromContext(ctx);
+	const postedUser = {
+		...await postedUserFromContext(ctx),
+		id: user.id,
+	};
+	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, postedUser);
 	await ctx.joplin.models.user().save({ id: user.id, ...postedUser });
 });
 

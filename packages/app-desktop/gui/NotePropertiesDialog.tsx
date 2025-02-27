@@ -37,6 +37,9 @@ interface State {
 	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editedValue: any;
+	isValid: {
+		location: boolean;
+	};
 }
 
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
@@ -60,6 +63,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.buttonRow_click = this.buttonRow_click.bind(this);
+		this.locationOnChange = this.locationOnChange.bind(this);
 		this.okButton = React.createRef();
 		this.inputRef = React.createRef();
 
@@ -67,6 +71,9 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			formNote: null,
 			editedKey: null,
 			editedValue: null,
+			isValid: {
+				location: true,
+			},
 		};
 
 		this.keyToLabel_ = {
@@ -195,6 +202,17 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			borderColor: theme.dividerColor,
 		};
 
+		this.styles_.invalidInput = {
+			border: '1px solid',
+			borderColor: theme.colorWarn,
+		};
+
+		this.styles_.invalidMessage = {
+			marginTop: '0.3em',
+			color: theme.color,
+			fontSize: theme.fontSize * 0.9,
+		};
+
 		return this.styles_;
 	}
 
@@ -276,6 +294,24 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		});
 	}
 
+	public async locationOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({ editedValue: event.target.value });
+		if (!event.target.value) {
+			this.setState({ isValid: { ...this.state.isValid, location: true } });
+			return;
+		}
+
+		if (event.target.value.includes(',')) {
+			const [lat, log] = event.target.value.split(',');
+			if (parseFloat(lat) < 90 && parseFloat(lat) > -90 && parseFloat(log) < 180 && parseFloat(log) > -180) {
+				this.setState({ isValid: { ...this.state.isValid, location: true } });
+				return;
+			}
+		}
+
+		this.setState({ isValid: { ...this.state.isValid, location: false } });
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public createNoteField(key: keyof FormNote, value: any) {
 		const styles = this.styles(this.props.themeId);
@@ -288,8 +324,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		let editCompIcon = null;
 		let editComDescription = null;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const onKeyDown = (event: any) => {
+		const onKeyDown = (event: React.KeyboardEvent) => {
 			if (event.keyCode === 13) {
 				void this.saveProperty();
 			} else if (event.keyCode === 27) {
@@ -315,6 +350,30 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				};
 				editCompIcon = 'fa-save';
 				editComDescription = _('Save changes');
+			} else if (this.state.editedKey === 'location') {
+				controlComp = (
+					<React.Fragment>
+						<input
+							defaultValue={value}
+							type="text"
+							ref={this.inputRef}
+							onChange={this.locationOnChange}
+							onKeyDown={event => onKeyDown(event)}
+							style={this.state.isValid.location ? styles.input : { ...styles.input, ...styles.invalidInput }}
+							id={uniqueId(key)}
+							name={uniqueId(key)}
+							aria-invalid={!this.state.isValid.location}
+						/>
+						{
+							this.state.isValid.location ? null
+								: <React.Fragment>
+									<div aria-live='polite' style={styles.invalidMessage}>
+										{_('Invalid format. E.g.: 48.8581372, 2.2926735')}
+									</div>
+								</React.Fragment>
+						}
+					</React.Fragment>
+				);
 			} else {
 				controlComp = (
 					<input

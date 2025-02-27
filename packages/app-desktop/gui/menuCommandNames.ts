@@ -59,6 +59,7 @@ export default function() {
 		'editor.sortSelectedLines',
 		'editor.swapLineUp',
 		'editor.swapLineDown',
+		'linkToNote',
 		'exportDeletionLog',
 		'toggleSafeMode',
 		'showShareNoteDialog',

@@ -5150,13 +5150,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.10":
-  version: 3.0.10
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.10"
+"@bam.tech/react-native-image-resizer@npm:3.0.11":
+  version: 3.0.11
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.11"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 34cb129d421939ae2937f876986088a5ff25480a008f17c17651bae16e8a4a87882f0803137221d3e28423f343e77008cfb10062bf171db1bc230678b57d865e
+  checksum: 0d9e95c625f8ef3a5d7195721d8ac6463a08468c9474f2627a1a85cefa509efc06bd160bd9108d1cce1fa05751a4b69871dce975659571009149d258cf9ddd8b
   languageName: node
   linkType: hard
 
@@ -8284,7 +8284,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.12
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-dom": 18.3.0
     "@types/react-redux": 7.1.33
@@ -8354,7 +8354,7 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": 7.24.7
     "@babel/preset-env": 7.24.7
     "@babel/runtime": 7.24.7
-    "@bam.tech/react-native-image-resizer": 3.0.10
+    "@bam.tech/react-native-image-resizer": 3.0.11
     "@joplin/editor": ~3.3
     "@joplin/lib": ~3.3
     "@joplin/react-native-alarm-notification": ~3.3
@@ -8377,7 +8377,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
@@ -8395,6 +8395,7 @@ __metadata:
     deprecated-react-native-prop-types: 5.0.0
     events: 3.3.0
     expo: 51.0.26
+    expo-av: 14.0.7
     expo-camera: 15.0.16
     fast-deep-equal: 3.1.3
     fs-extra: 11.2.0
@@ -8538,7 +8539,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@typescript-eslint/eslint-plugin": 6.21.0
     "@typescript-eslint/parser": 6.21.0
     coveralls: 3.1.1
@@ -8603,7 +8604,7 @@ __metadata:
     "@joplin/turndown-plugin-gfm": ^1.0.61
     "@joplin/utils": ~3.3
     "@testing-library/react-hooks": 8.0.1
-    "@types/adm-zip": 0.5.6
+    "@types/adm-zip": 0.5.7
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
@@ -8611,7 +8612,7 @@ __metadata:
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-rsa": 1.1.4
     "@types/react": 18.3.3
     "@types/uuid": 9.0.7
@@ -8727,7 +8728,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -8782,7 +8783,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/jest": 29.5.12
     "@types/markdown-it": 13.0.9
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.10.0
@@ -8892,7 +8893,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-fetch": 2.6.12
     "@types/yargs": 17.0.33
     compare-versions: 6.1.1
@@ -8992,6 +8993,7 @@ __metadata:
     node-fetch: 2.6.7
     sprintf-js: 1.1.3
     ts-jest: 29.1.5
+    typescript: 5.4.5
   languageName: unknown
   linkType: soft
 
@@ -12593,12 +12595,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/adm-zip@npm:0.5.6":
-  version: 0.5.6
-  resolution: "@types/adm-zip@npm:0.5.6"
+"@types/adm-zip@npm:0.5.7":
+  version: 0.5.7
+  resolution: "@types/adm-zip@npm:0.5.7"
   dependencies:
     "@types/node": "*"
-  checksum: f4ff999cef5030dfea1252727f94647a63eee7438844c7a477b3859dd2971cce3542123ebaafa507ad4304a4a4f0f8553b7034d6ea8132c941c54ccba76bac65
+  checksum: 57fe73622e38234bc76786354237e8545eefa05d55e34aa3c7c51b33588bb9e80787f163fdb4fa3afc2c123cfd17e1619e37f6be57cde2e58b7949f30a8b093c
   languageName: node
   linkType: hard
 
@@ -13590,12 +13592,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.64":
-  version: 18.19.64
-  resolution: "@types/node@npm:18.19.64"
+"@types/node@npm:18.19.67":
+  version: 18.19.67
+  resolution: "@types/node@npm:18.19.67"
   dependencies:
     undici-types: ~5.26.4
-  checksum: e7680215b03c9bee8a33947f03d06048e8e460f23b1b7b29c45350cf437faa5f8fcb7d8c3eb8dfec8427923e7a184df42bc710c1b6252b4852e3ed7064c6228f
+  checksum: 700f92c6a0b63352ce6327286392adab30bb17623c2a788811e9cf092c4dc2fb5e36ca4727247a981b3f44185fdceef20950a3b7a8ab72721e514ac037022a08
   languageName: node
   linkType: hard
 
@@ -24686,6 +24688,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-av@npm:14.0.7":
+  version: 14.0.7
+  resolution: "expo-av@npm:14.0.7"
+  peerDependencies:
+    expo: "*"
+  checksum: 7518a8972b0d1b3b362d4dc9c4d21a39c7cf98b46abbdbb2349451115f4edf6e97fb6c723674fd3c62fa037fc77e00172955082d21b1c3fdf5273f33781ce78d
+  languageName: node
+  linkType: hard
+
 "expo-camera@npm:15.0.16":
   version: 15.0.16
   resolution: "expo-camera@npm:15.0.16"
@@ -31060,7 +31071,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2

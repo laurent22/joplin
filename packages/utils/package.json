@@ -50,7 +50,8 @@
     "@types/markdown-it": "13.0.9",
     "@types/node-fetch": "2.6.12",
     "jest": "29.7.0",
-    "ts-jest": "29.1.5"
+    "ts-jest": "29.1.5",
+    "typescript": "5.4.5"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

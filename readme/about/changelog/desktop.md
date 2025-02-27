@@ -1,5 +1,16 @@
 # Joplin Desktop Changelog
 
+## [v3.3.2](https://github.com/laurent22/joplin/releases/tag/v3.3.2) (Pre-release) - 2025-02-19T17:34:26Z
+
+- Improved: Accessibility: Make click outside of dialog content be cancellable  ([#11765](https://github.com/laurent22/joplin/issues/11765) by [@pedr](https://github.com/pedr))
+- Improved: Improve behaviour of note list to-dos when ticking a checkbox using the keyboard ([44c735a](https://github.com/laurent22/joplin/commit/44c735a))
+- Improved: Improve usability of note list when ticking to-dos using the Space key ([#11855](https://github.com/laurent22/joplin/issues/11855))
+- Improved: Plugins: Simplify getting the ID of the note open in an editor ([#11841](https://github.com/laurent22/joplin/issues/11841) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix OneNote importer not being able to handle corrupted attachments ([#11859](https://github.com/laurent22/joplin/issues/11859)) ([#11844](https://github.com/laurent22/joplin/issues/11844) by [@pedr](https://github.com/pedr))
+- Fixed: Fix Rich Text right-click and paste regressions ([#11850](https://github.com/laurent22/joplin/issues/11850) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Hide extra clear button in search field ([#11851](https://github.com/laurent22/joplin/issues/11851)) ([#11847](https://github.com/laurent22/joplin/issues/11847) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Preserve attachment file extensions regardless of the mime type  ([#11852](https://github.com/laurent22/joplin/issues/11852)) ([#11759](https://github.com/laurent22/joplin/issues/11759) by [@pedr](https://github.com/pedr))
+
 ## [v3.3.1](https://github.com/laurent22/joplin/releases/tag/v3.3.1) (Pre-release) - 2025-02-16T17:06:26Z
 
 - New: Accessibility: Add a new shortcut to set focus to editor toolbar ([#11764](https://github.com/laurent22/joplin/issues/11764) by [@pedr](https://github.com/pedr))
