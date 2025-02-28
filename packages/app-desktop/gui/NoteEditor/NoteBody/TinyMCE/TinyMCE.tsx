@@ -1291,6 +1291,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				icons: 'Joplin',
 				icons_url: 'gui/NoteEditor/NoteBody/TinyMCE/icons.js',
 				plugins: 'noneditable link, lists, hr, searchreplace, codesample table toc example, text_color_plug',
+				link_attributes_postprocess: (attrs: any) => {
+					console.log(`link changed: ${attrs}`);
+				},
 				noneditable_noneditable_class: 'joplin-editable', // Can be a regex too
 				valid_elements: '*[*]', // We already filter in sanitize_html
 				menubar: false,
@@ -1313,6 +1316,20 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				},
 				setup: (editor: any) => {
 
+					editor.on('ExecCommand', function(e: any) {
+						if (e.command === 'mceInsertLink') {
+							console.log('リンクが作成されました');
+							// ここで任意の後処理を実行
+						}
+					});
+
+					editor.on('SetContent', function(e: any) {
+						console.log('SetContent event:', e);
+						if (e.content.includes('<a href=')) {
+							console.log('リンクが作成されました:', e.content);
+							// ここで任意の後処理を実行
+						}
+					});
 					function openEditDialog(editable: any) {
 						const source = editable ? findBlockSource(editable) : newBlockSource();
 
@@ -1524,6 +1541,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				},
 			});
 
+			editors[0].onLinkSubmit = (changedData: any) => {
+				console.log('onLinkSubmit', changedData);
+			}
 			setEditor(editors[0]);
 
 			const resizeAPItemp = (window as any).tinymce?.resizeAPI;

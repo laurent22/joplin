@@ -1447,6 +1447,7 @@
 			DialogConfirms.preprocess(editor, changedData).get(function(pData) {
 				Utils.link(editor, attachState, pData);
 			});
+			editor?.onLinkSubmit?.(changedData);
 			api.close();
 		};
 	};

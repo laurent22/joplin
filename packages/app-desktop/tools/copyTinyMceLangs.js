@@ -11,7 +11,7 @@ async function main() {
 	await utils.copyFile(`${__dirname}/../custom/tinymce.js`, `${__dirname}/../node_modules/tinymce/tinymce.js`);
 	await utils.copyFile(`${__dirname}/../custom/searchreplace_plugin.js`, `${__dirname}/../node_modules/tinymce/plugins/searchreplace/plugin.js`);
 	await utils.copyFile(`${__dirname}/../custom/lists_plugin.js`, `${__dirname}/../node_modules/tinymce/plugins/lists/plugin.js`);
-
+	await utils.copyFile(`${__dirname}/../custom/link_plugin.js`, `${__dirname}/../node_modules/tinymce/plugins/link/plugin.js`);
 
 	const supportedLocales = glob.sync(`${sourceDir}/*.js`).map(s => {
 		s = s.split('/');
