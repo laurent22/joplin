@@ -1966,13 +1966,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const element = mermaidElements[i];
 					const id = (element as cheerio.TagElement).attribs.id;
 					console.log(`found mermaid element: ${id}`);
-					const mermaidElem = editor.getDoc().getElementById(id);
-					if (mermaidElem === null) {
+					// when duplicated id is found, it is necessary to update all elements with the same id
+					const mermaidElems = editor.getDoc().querySelectorAll(`[id="${id}"]`);
+					if (mermaidElems.length <= 0) {
 						continue;
 					}
-					const txt = mermaidElem.getAttribute('mermaidTxt');
-					// const mermaidElem = document.getElementById(id);
-					updateMermaidDiv(editor, txt, mermaidElem);
+					for (let j = 0; j < mermaidElems.length; j++) {
+						const mermaidElem = mermaidElems[j];
+						const txt = mermaidElem.getAttribute('mermaidTxt');
+						updateMermaidDiv(editor, txt, mermaidElem);
+					}
 				}
 
 				onChangeHandler();
