@@ -1874,6 +1874,38 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, []);
 
+	const collectMemaidElemFromClipboard = useCallback((): string[] => {
+		const pastedString = clipboard.readHTML();
+		const $ = cheerio.load(pastedString);
+		const mermaidElements = $('[mermaidTxt]');
+
+		const ids = [];
+		for (let i = 0; i < mermaidElements.length; i++) {
+			const element = mermaidElements[i];
+			const id = (element as cheerio.TagElement).attribs.id;
+			ids.push(id);
+		}
+		return ids;
+	}, []);
+
+	const updateMermaidDivs = useCallback((editor: any, mermaidIds: string[]) => {
+		for (let i = 0; i < mermaidIds.length; i++) {
+			const id = mermaidIds[i];
+			console.log(`found mermaid element: ${id}`);
+			// when duplicated id is found, it is necessary to update all elements with the same id
+			const mermaidElems = editor.getDoc().querySelectorAll(`[id="${id}"]`);
+			if (mermaidElems.length <= 0) {
+				continue;
+			}
+			for (let j = 0; j < mermaidElems.length; j++) {
+				const mermaidElem = mermaidElems[j];
+				const txt = mermaidElem.getAttribute('mermaidTxt');
+				updateMermaidDiv(editor, txt, mermaidElem);
+			}
+		}
+	},[]);
+
+
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
 
 	useEffect(() => {
@@ -1952,32 +1984,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		async function onPaste(_event: any) {
 			console.log('onPaste');
-			const pastedString = clipboard.readHTML();
-			const $ = cheerio.load(pastedString);
-			const mermaidElements = $('[mermaidTxt]');
-
-			if (mermaidElements.length <= 0) {
+			const mermaidIds = collectMemaidElemFromClipboard();
+			if (mermaidIds.length <= 0) {
 				onChangeHandler();
 				return;
 			}
 
 			setTimeout(() => {
-				for (let i = 0; i < mermaidElements.length; i++) {
-					const element = mermaidElements[i];
-					const id = (element as cheerio.TagElement).attribs.id;
-					console.log(`found mermaid element: ${id}`);
-					// when duplicated id is found, it is necessary to update all elements with the same id
-					const mermaidElems = editor.getDoc().querySelectorAll(`[id="${id}"]`);
-					if (mermaidElems.length <= 0) {
-						continue;
-					}
-					for (let j = 0; j < mermaidElems.length; j++) {
-						const mermaidElem = mermaidElems[j];
-						const txt = mermaidElem.getAttribute('mermaidTxt');
-						updateMermaidDiv(editor, txt, mermaidElem);
-					}
-				}
-
+				updateMermaidDivs(editor, mermaidIds);
 				onChangeHandler();
 			}, 1000);
 		}
