@@ -1888,7 +1888,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return ids;
 	}, []);
 
-	const updateMermaidDivs = useCallback((editor: any, mermaidIds: string[]) => {
+	const updateMermaidDivs = useCallback(async (editor: any, mermaidIds: string[]) => {
 		for (let i = 0; i < mermaidIds.length; i++) {
 			const id = mermaidIds[i];
 			console.log(`found mermaid element: ${id}`);
@@ -1901,6 +1901,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				const mermaidElem = mermaidElems[j];
 				const txt = mermaidElem.getAttribute('mermaidTxt');
 				updateMermaidDiv(editor, txt, mermaidElem);
+				// wait 10ms
+				await new Promise((resolve) => setTimeout(resolve, 10));
 			}
 		}
 	},[]);
@@ -1990,8 +1992,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				return;
 			}
 
-			setTimeout(() => {
-				updateMermaidDivs(editor, mermaidIds);
+			setTimeout(async () => {
+				await updateMermaidDivs(editor, mermaidIds);
 				onChangeHandler();
 			}, 1000);
 		}
