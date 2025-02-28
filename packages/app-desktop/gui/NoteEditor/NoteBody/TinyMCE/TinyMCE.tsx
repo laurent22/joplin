@@ -1874,6 +1874,40 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, []);
 
+	const collectMemaidElemFromClipboard = useCallback((): string[] => {
+		const pastedString = clipboard.readHTML();
+		const $ = cheerio.load(pastedString);
+		const mermaidElements = $('[mermaidTxt]');
+
+		const ids = [];
+		for (let i = 0; i < mermaidElements.length; i++) {
+			const element = mermaidElements[i];
+			const id = (element as cheerio.TagElement).attribs.id;
+			ids.push(id);
+		}
+		return ids;
+	}, []);
+
+	const updateMermaidDivs = useCallback(async (editor: any, mermaidIds: string[]) => {
+		for (let i = 0; i < mermaidIds.length; i++) {
+			const id = mermaidIds[i];
+			console.log(`found mermaid element: ${id}`);
+			// when duplicated id is found, it is necessary to update all elements with the same id
+			const mermaidElems = editor.getDoc().querySelectorAll(`[id="${id}"]`);
+			if (mermaidElems.length <= 0) {
+				continue;
+			}
+			for (let j = 0; j < mermaidElems.length; j++) {
+				const mermaidElem = mermaidElems[j];
+				const txt = mermaidElem.getAttribute('mermaidTxt');
+				updateMermaidDiv(editor, txt, mermaidElem);
+				// wait 10ms
+				await new Promise((resolve) => setTimeout(resolve, 10));
+			}
+		}
+	},[]);
+
+
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
 
 	useEffect(() => {
@@ -1952,7 +1986,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 		async function onPaste(_event: any) {
 			console.log('onPaste');
-			onChangeHandler();
+			const mermaidIds = collectMemaidElemFromClipboard();
+			if (mermaidIds.length <= 0) {
+				onChangeHandler();
+				return;
+			}
+
+			setTimeout(async () => {
+				await updateMermaidDivs(editor, mermaidIds);
+				onChangeHandler();
+			}, 1000);
 		}
 
 		// async function onCopy(event: any) {
@@ -1983,7 +2026,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 					const pastedText = clipboard.readText();
 					if (pastedText) {
-						const escapedText = htmlEntity.encode(pastedText)
+						const escapedText = htmlEntity.encode(pastedText);
 						editor.insertContent(escapedText);
 						// execOnChangeEvent();
 					}
