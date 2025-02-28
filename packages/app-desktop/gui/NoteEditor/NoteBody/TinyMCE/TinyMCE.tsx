@@ -32,6 +32,7 @@ import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../co
 import * as htmlEntity from 'html-entities';
 
 let gWorker: Worker = undefined;
+let gOnChangeHandler: ()=>void | undefined = undefined;
 
 function markupRenderOptions(override: any = null) {
 	return {
@@ -1543,6 +1544,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			editors[0].onLinkSubmit = (changedData: any) => {
 				console.log('onLinkSubmit', changedData);
+				gOnChangeHandler?.();
 			}
 			setEditor(editors[0]);
 
@@ -1955,6 +1957,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				void execOnChangeEvent();
 			}, 1000);
 		}
+		gOnChangeHandler = onChangeHandler;
 
 		function onExecCommand(event: any) {
 			const c: string = event.command;
