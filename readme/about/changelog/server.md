@@ -1,5 +1,20 @@
 # Joplin Server Changelog
 
+## [server-v3.3.3](https://github.com/laurent22/joplin/releases/tag/server-v3.3.3) - 2025-02-23T19:06:59Z
+
+- Security: Fixed patching user properties (12baa98)
+
+## [server-v3.3.2](https://github.com/laurent22/joplin/releases/tag/server-v3.3.2) - 2025-02-19T22:00:04Z
+
+- New: Add logging statement to evaluate the performance of the sharing service (1d6c1e4)
+- New: Added more logging for sharing (2779a9c)
+- Improved: Add task to delete events older than a week (#11372) (#9931 by Adrien Poupa)
+- Improved: Allow self-signed certificate for ldap auth (#11531 by Ryan Crisanti)
+- Improved: Optimise delta sync queries by optimising the underlying SQL query (4df0b9f)
+- Improved: Updated packages @adobe/css-tools (v4.4.1), @rollup/plugin-commonjs (v25.0.8), @rollup/plugin-node-resolve (v15.2.4), @rollup/plugin-replace (v5.0.7), adm-zip (v0.5.16), async-mutex (v0.5.0), bulma (v1.0.2), compare-versions (v6.1.1), dayjs (v1.11.12), glob (v10.4.5), highlight.js (v11.10.0), jsdom (v24.1.1), katex (v0.16.11), koa (v2.15.3), ldapts (v7.1.0), markdown-it-ins (v4), markdown-it-sup (v2), node-mocks-http (v1.15.1), nodemailer (v6.9.14), pg (v8.12.0), pm2 (v5.4.2), rate-limiter-flexible (v5.0.3), react, sass (v1.77.8), sharp (v0.33.4), tesseract.js (v5.1.0), turndown (v7.2.0)
+- Improved: Use node: 18 (bookworm) instead node:18-bullseye (#11554 by [@redrathnure](https://github.com/redrathnure))
+- Fixed: Fix PostgreSQL version check failing on Windows Server because wrong regex (#11038) (#10532 by [@pedr](https://github.com/pedr))
+
 ## [server-v3.0.1](https://github.com/laurent22/joplin/releases/tag/server-v3.0.1) - 2024-07-25T15:21:56Z
 
 - New: Add support for Postgres replication (a90e3e0)

@@ -41,6 +41,7 @@ const logger = Logger.create('NoteEditor');
 interface Props {
 	themeId: number;
 	initialText: string;
+	noteId: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	toolbarEnabled: boolean;
@@ -383,7 +384,12 @@ function NoteEditor(props: Props, ref: any) {
 					const initialText = ${JSON.stringify(props.initialText)};
 					const settings = ${JSON.stringify(editorSettings)};
 
-					window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+					window.cm = codeMirrorBundle.initCodeMirror(
+						parentElement,
+						initialText,
+						${JSON.stringify(props.noteId)},
+						settings
+					);
 
 					${setInitialSelectionJS}
 

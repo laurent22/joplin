@@ -288,7 +288,14 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 				inert={accessibilityHidden}
 			>
-				<ScreenHeader title={iconString + title} showBackButton={false} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader
+					title={iconString + title}
+					showBackButton={false}
+					sortButton_press={this.sortButton_press}
+					folderPickerOptions={this.folderPickerOptions()}
+					showSearchButton={true}
+					showSideMenuButton={true}
+				/>
 				<NoteList />
 				{actionButtonComp}
 			</AccessibleView>

@@ -1,9 +1,8 @@
 import type { Theme } from '@joplin/lib/themes/type';
 import type { EditorEvent } from './events';
 
-// Editor commands. For compatibility, the string values of these commands
-// should correspond with the CodeMirror 5 commands:
-// https://codemirror.net/5/doc/manual.html#commands
+// Editor commands. Plugins can access these commands using editor.execCommand
+// or, in some cases, by prefixing the command name with `editor.`.
 export enum EditorCommandType {
 	Undo = 'undo',
 	Redo = 'redo',
@@ -96,6 +95,10 @@ export enum UserEventSource {
 	Drop = 'input.drop',
 }
 
+export interface UpdateBodyOptions {
+	noteId?: string;
+}
+
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -110,7 +113,7 @@ export interface EditorControl {
 	setScrollPercent(fraction: number): void;
 
 	insertText(text: string, source?: UserEventSource): void;
-	updateBody(newBody: string): void;
+	updateBody(newBody: string, UpdateBodyOptions?: UpdateBodyOptions): void;
 
 	updateSettings(newSettings: EditorSettings): void;
 
@@ -189,6 +192,7 @@ interface Localisations {
 export interface EditorProps {
 	settings: EditorSettings;
 	initialText: string;
+	initialNoteId: string;
 	// Used mostly for internal editor library strings
 	localisations?: Localisations;
 

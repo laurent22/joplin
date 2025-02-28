@@ -170,6 +170,7 @@ export interface State extends WindowState {
 	mustUpgradeAppMessage: string;
 	mustAuthenticate: boolean;
 	toast: Toast | null;
+	editorNoteReloadTimeRequest: number;
 
 	allowSelectionInOtherFolders: boolean;
 
@@ -241,6 +242,7 @@ export const defaultState: State = {
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
 	allowSelectionInOtherFolders: false,
+	editorNoteReloadTimeRequest: 0,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1509,6 +1511,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				if (noteListRendererIds.includes(action.value)) throw new Error(`Note list renderer is already registered: ${action.value}`);
 				noteListRendererIds.push(action.value);
 				draft.noteListRendererIds = noteListRendererIds;
+			}
+			break;
+
+		case 'EDITOR_NOTE_NEEDS_RELOAD':
+			{
+				draft.editorNoteReloadTimeRequest = Date.now();
 			}
 			break;
 

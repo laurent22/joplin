@@ -166,7 +166,7 @@ By default the server supports SQLite for development, so nothing needs to be se
 
 ### PostgreSQL
 
-To use Postgres, from the monorepo root, run `docker compose --file docker-compose.server-dev.yml up`, which will start the PostgreSQL database.
+To use Postgres, from the monorepo root, run `docker compose --file docker-compose.db-dev.yml up`, which will start the PostgreSQL database.
 
 ## Starting the server
 

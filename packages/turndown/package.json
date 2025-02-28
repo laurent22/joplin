@@ -11,7 +11,7 @@
     "jsdom": false
   },
   "dependencies": {
-    "@adobe/css-tools": "4.4.0",
+    "@adobe/css-tools": "4.4.1",
     "html-entities": "1.4.0",
     "jsdom": "24.1.1"
   },

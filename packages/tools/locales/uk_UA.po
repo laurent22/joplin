@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Vyacheslav Andreykiv <vandreykiv@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -19,9 +21,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
-"- Камера: щоб надати доступ до камери була можливість додавати фто до "
-"нотатки."
+msgstr "- Камера: дозволяє зробити знімок і додати його до примітки."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:596
 msgid "- Location: to allow attaching geo-location information to a note."
@@ -51,7 +51,7 @@ msgstr "(У плагіні: %s)"
 
 #: packages/app-mobile/components/side-menu-content.tsx:265
 msgid "(level %d)"
-msgstr ""
+msgstr "(Рівень %d)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -265,9 +265,8 @@ msgstr ""
 "“clear”, щоб перетворити завдання назад на звичайну нотатку."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:62
-#, fuzzy
 msgid "A new update (%s) is available"
-msgstr "Доступне оновлення"
+msgstr "Доступне нове оновлення (%s)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1253
 msgid "A3"
@@ -378,7 +377,7 @@ msgstr "Додати одержувача:"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:94
 msgid "Add tag %s to note"
-msgstr ""
+msgstr "Додати тег %s до примітки"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1574
 msgid "Add title"
@@ -389,9 +388,8 @@ msgid "Add to dictionary"
 msgstr "Додати до словника"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
-#, fuzzy
 msgid "Add to note"
-msgstr "Додати заголовок"
+msgstr "Додати до примітки"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -415,9 +413,8 @@ msgid "Advanced tools"
 msgstr "Розширені інструменти"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:18
-#, fuzzy
 msgid "all"
-msgstr "Встановити"
+msgstr "все"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:109
 msgid ""
@@ -525,13 +522,13 @@ msgid "Apply"
 msgstr "Застосувати"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:146
-#, fuzzy
 msgid ""
 "Are you sure that you want to restore the default toolbar layout?\n"
 "This cannot be undone."
 msgstr ""
-"Ви впевнені, що хочете повернутися до макета за замовчуванням? Поточну "
-"конфігурацію макета буде втрачено."
+"Ви впевнені, що бажаєте відновити макет панелі інструментів за "
+"замовчуванням?\n"
+"Це неможливо скасувати."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:38
 msgid "Are you sure you want to renew the authorisation token?"
@@ -558,6 +555,8 @@ msgid ""
 "At present, Joplin Web can only be open in one tab at a time. Please close "
 "the other instance of Joplin."
 msgstr ""
+"Наразі Joplin Web можна відкрити лише в одній вкладці одночасно. Будь ласка, "
+"закрийте інший екземпляр Joplin."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 msgid "Attach"
@@ -643,7 +642,7 @@ msgstr "Автоматичне закриття дужок, лапок тощо.
 
 #: packages/lib/models/settings/builtInMetadata.ts:656
 msgid "Autocomplete Markdown and HTML"
-msgstr ""
+msgstr "Автопідказки для Markdown та HTML"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1198
 msgid "Automatically check for updates"
@@ -705,7 +704,7 @@ msgstr "від %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:20
 msgid "by word"
-msgstr ""
+msgstr "по словах"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -877,13 +876,12 @@ msgid "Change language"
 msgstr "Змінити мову"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
-#, fuzzy
 msgid "Change ratio"
-msgstr "Налаштування"
+msgstr "Зміна співвідношення"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:98
 msgid "Change shortcut for \"%s\""
-msgstr ""
+msgstr "Змінити скорочення для \"%s\""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:106
 msgid "Characters"
@@ -895,7 +893,7 @@ msgstr "Символи виключаючи пробіли"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
-msgstr ""
+msgstr "Виберіть елементи для відображення на панелі інструментів"
 
 #: packages/app-desktop/gui/MenuBar.tsx:634
 #: packages/app-desktop/gui/MenuBar.tsx:929
@@ -960,9 +958,8 @@ msgid "Client ID: %s"
 msgstr "ID клієнта: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:23
-#, fuzzy
 msgid "close"
-msgstr "Закрити"
+msgstr "закрити"
 
 #: packages/app-desktop/gui/MenuBar.tsx:359
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
@@ -982,13 +979,12 @@ msgid "Close dropdown"
 msgstr "Закрити випадаючий список"
 
 #: packages/app-mobile/components/accessibility/AccessibleModalMenu.tsx:46
-#, fuzzy
 msgid "Close menu"
-msgstr "Закрити"
+msgstr "Закрити меню"
 
 #: packages/app-mobile/components/SideMenu.tsx:300
 msgid "Close side menu"
-msgstr ""
+msgstr "Закрити бокове меню"
 
 #: packages/lib/models/settings/settingValidations.ts:33
 msgid ""
@@ -1036,7 +1032,7 @@ msgstr "Співпрацюйте над нотатками з іншими"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:28
 msgid "Collapsed, press space to expand."
-msgstr ""
+msgstr "Згорнутий, натисніть пробіл, щоб розгорнути."
 
 #: packages/lib/services/ReportService.ts:351
 msgid "Coming alarms"
@@ -1045,9 +1041,9 @@ msgstr "Найближчі будильники"
 #: packages/lib/models/settings/builtInMetadata.ts:1379
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Розділений комами список шляхів до каталогів, з яких завантажуються "
 "сертифікати, або шлях до окремих файлів сертифіката. Наприклад: /my/"
@@ -1076,14 +1072,13 @@ msgid "Compact"
 msgstr "Компактно"
 
 #: packages/app-desktop/gui/NoteList/utils/useOnKeyDown.ts:153
-#, fuzzy
 msgid "Complete"
 msgstr "Завершено"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
 #, fuzzy
 msgid "Complete to-do"
-msgstr "Завершено"
+msgstr "Завдання завершено"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:70
@@ -1156,12 +1151,11 @@ msgid "Consolidated billing"
 msgstr "Консолідована оплата"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.tsx:11
-#, fuzzy
 msgid "Contains %d note"
 msgid_plural "Contains %d notes"
-msgstr[0] "Перетворити на нотатку"
-msgstr[1] "Перетворити на нотатку"
-msgstr[2] "Перетворити на нотатку"
+msgstr[0] "Містить %d примітку"
+msgstr[1] "Містить %d примітки"
+msgstr[2] "Містить %d приміток"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:106
 msgid "Content provided by %s"
@@ -1178,7 +1172,7 @@ msgstr "Продовжити"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 #, fuzzy
 msgid "Control character"
-msgstr "Символи"
+msgstr "Символ контролю"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Convert to note"
@@ -1417,14 +1411,12 @@ msgid "Ctrl-click to open: %s"
 msgstr "Ctrl-клік, щоб відкрити: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:24
-#, fuzzy
 msgid "current match"
-msgstr "Наступне співпадіння"
+msgstr "поточне співпадіння"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:153
-#, fuzzy
 msgid "Current password"
-msgstr "Введіть пароль"
+msgstr "Поточний пароль"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
@@ -1546,6 +1538,8 @@ msgid ""
 "Delete model and re-download?\n"
 "This cannot be undone."
 msgstr ""
+"Видалити модель і завантажити заново?\n"
+"Це не можна скасувати."
 
 #: packages/lib/commands/deleteNote.ts:7
 msgid "Delete note"
@@ -1626,14 +1620,12 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "Видаляє нотатки, не вимагаючи підтвердження."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:551
-#, fuzzy
 msgid "Deletion log"
-msgstr "Видалити лінію"
+msgstr "Журнал видалення"
 
 #: packages/app-mobile/components/NoteItem.tsx:144
-#, fuzzy
 msgid "Deselect"
-msgstr "Виберіть"
+msgstr "Зняти вибір"
 
 #: packages/app-cli/app/command-export.ts:24
 msgid "Destination format: %s"
@@ -1645,9 +1637,8 @@ msgid "Detailed"
 msgstr "Детально"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:99
-#, fuzzy
 msgid "Dev"
-msgstr "До"
+msgstr "Розробка"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1684,9 +1675,8 @@ msgid "Disabled"
 msgstr "Відключено"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:323
-#, fuzzy
 msgid "Disabled keys"
-msgstr "Приховати вимкнені клавіші"
+msgstr "Вимкнені клавіші"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:200
 #: packages/app-mobile/components/screens/encryption-config.tsx:251
@@ -1796,9 +1786,8 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr "Завантажте та встановіть відповідне розширення для вашого браузера:"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:206
-#, fuzzy
 msgid "Download updated model"
-msgstr "Завантажено"
+msgstr "Завантажити оновлені моделі"
 
 #: packages/lib/models/Resource.ts:409
 msgid "Downloaded"
@@ -1895,12 +1884,11 @@ msgstr "Радктувати в зовнішньому редакторі"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
 msgid "Edit in new window"
-msgstr ""
+msgstr "Редагувати в новому вікні"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:70
-#, fuzzy
 msgid "Edit in..."
-msgstr "Редагувати посилання"
+msgstr "Редагувати в..."
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:143
 msgid "Edit link"
@@ -1931,9 +1919,8 @@ msgid "Editor"
 msgstr "Редактор"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx:38
-#, fuzzy
 msgid "Editor actions"
-msgstr "Шрифт редактора"
+msgstr "Дії редактора"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1074
 msgid "Editor font"
@@ -2048,8 +2035,9 @@ msgid "Enable encryption"
 msgstr "Ввімкнути шифрування"
 
 #: packages/lib/models/settings/builtInMetadata.ts:994
+#, fuzzy
 msgid "Enable file:// URLs for images and videos"
-msgstr ""
+msgstr "Увімкнути файл:// Посилання на зображення та відео"
 
 #: packages/lib/models/settings/builtInMetadata.ts:975
 msgid "Enable footnotes"
@@ -2105,9 +2093,8 @@ msgid "Enable soft breaks"
 msgstr "Увімкнути м’які переходи"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1303
-#, fuzzy
 msgid "Enable spell checking in Markdown editor"
-msgstr "Увімкніть перевірку правопису в текстовому редакторі"
+msgstr "Увімкнути перевірку правопису в редакторі Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:789
 msgid "Enable spellcheck in the text editor"
@@ -2146,6 +2133,8 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
+"Вмикає продовження списку Markdown, автоматичне закриття тегів HTML та інші "
+"автозавершення розмітки."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2192,9 +2181,8 @@ msgid "End-to-end encryption"
 msgstr "Наскрізне шифрування"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:244
-#, fuzzy
 msgid "Ends voice typing"
-msgstr "Голосовий набір..."
+msgstr "Завершення голосового введення"
 
 #: packages/app-mobile/components/screens/dropbox-login.tsx:70
 msgid "Enter code here"
@@ -2214,9 +2202,8 @@ msgid "Enter password"
 msgstr "Введіть пароль"
 
 #: packages/app-mobile/components/NoteItem.tsx:120
-#, fuzzy
 msgid "Entering selection mode"
-msgstr "Початковий розділ %s"
+msgstr "Вхід у режим виділення"
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -2283,7 +2270,7 @@ msgstr "Розгорнути %s"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:26
 msgid "Expanded, press space to collapse."
-msgstr ""
+msgstr "Розгорнуто, натисніть пробіл, щоб згорнути."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:182
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:213
@@ -2309,9 +2296,8 @@ msgid "Export Debug Report"
 msgstr "Експортувати розширений звіт"
 
 #: packages/app-desktop/commands/exportDeletionLog.ts:11
-#, fuzzy
 msgid "Export deletion log"
-msgstr "Експортувати все"
+msgstr "Експорт журналу видалень"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:16
 msgid "Export profile"
@@ -2397,9 +2383,8 @@ msgid "Filter tags"
 msgstr "Фільтри тегів"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:14
-#, fuzzy
 msgid "Find"
-msgstr "Знайти: "
+msgstr "Знайти"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:253
 msgid "Find: "
@@ -2437,7 +2422,7 @@ msgstr "Фокус на залоговку"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:97
 msgid "Follow link"
-msgstr ""
+msgstr "Перейти за посиланням"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
@@ -2521,7 +2506,7 @@ msgstr "Отримати зараз:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1199
 msgid "Get pre-releases when checking for updates"
-msgstr "Отримуйте ntcnjdb випуски, перевіряючи наявність оновлень"
+msgstr "Отримувати попередні випуски під час перевірки оновлень"
 
 #: packages/app-cli/app/command-config.ts:14
 msgid ""
@@ -2539,7 +2524,7 @@ msgstr ""
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:165
 msgid "Go back"
-msgstr ""
+msgstr "Повернутись назад"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -2548,7 +2533,7 @@ msgstr "Перейти до профілю Joplin Cloud"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:12
 msgid "Go to line"
-msgstr ""
+msgstr "Перейти до рядка"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1051
 msgid "Go to source URL"
@@ -2615,9 +2600,8 @@ msgid "Hide keyboard"
 msgstr "Сховати клавіатуру"
 
 #: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
-#, fuzzy
 msgid "Hide password"
-msgstr "Невірний пароль"
+msgstr "Приховати пароль"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2837,14 +2821,12 @@ msgid "Incompatible"
 msgstr "Несумісний"
 
 #: packages/app-desktop/gui/NoteList/utils/useOnKeyDown.ts:153
-#, fuzzy
 msgid "Incomplete"
-msgstr "Завершено"
+msgstr "Не завершено"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
-#, fuzzy
 msgid "Incomplete to-do"
-msgstr "Показувати завершені списки справ"
+msgstr "Не завершені завдання"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:97
 msgid "Increase indent level"
@@ -2860,7 +2842,7 @@ msgstr "Збільшити відступ"
 
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:21
 msgid "Info"
-msgstr ""
+msgstr "Інформація"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:223
 msgid "Information"
@@ -2883,7 +2865,7 @@ msgstr "Вставити Посилання"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:779
 #: packages/app-mobile/components/screens/Note/commands/insertDateTime.ts:8
 msgid "Insert time"
-msgstr "Введіть час"
+msgstr "Вставити час"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:18
@@ -2962,9 +2944,8 @@ msgid "Items that cannot be synchronised"
 msgstr "Елементи, які неможливо синхронізувати"
 
 #: packages/app-desktop/gui/MenuBar.tsx:923
-#, fuzzy
 msgid "Join us on %s"
-msgstr "Приєднуйтесь до нас у Twitter"
+msgstr "Приєднуйтесь до нас у %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:267
 msgid ""
@@ -3020,9 +3001,8 @@ msgid "Joplin Forum"
 msgstr "Форум Joplin"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:16
-#, fuzzy
 msgid "Joplin is already running."
-msgstr "Сервер вже працює на порту %d"
+msgstr "Joplin вже запущено."
 
 #: packages/lib/services/plugins/PluginService.ts:523
 msgid "Joplin Mobile"
@@ -3275,9 +3255,8 @@ msgid "Manage shared notebooks"
 msgstr "Керування спільними блокнотами"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:165
-#, fuzzy
 msgid "Manage toolbar options"
-msgstr "Керування розширеннями"
+msgstr "Керуйте параметрами панелі інструментів"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:331
 msgid "Manage your plugins"
@@ -3310,9 +3289,8 @@ msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:375
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:352
-#, fuzzy
 msgid "Markdown editor"
-msgstr "Markdown"
+msgstr "Редактор Markdown"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3347,7 +3325,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:72
 msgid "Math"
-msgstr ""
+msgstr "Математика"
 
 #: packages/lib/models/settings/builtInMetadata.ts:421
 msgid "Max concurrent connections"
@@ -3374,9 +3352,8 @@ msgid "Minimise"
 msgstr "Мінімізувати"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:163
-#, fuzzy
 msgid "Missing camera permission"
-msgstr "Не знайдено мастер ключ"
+msgstr "Відсутній дозвіл камери"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:320
 msgid "Missing keys"
@@ -3465,14 +3442,12 @@ msgid "Never resize"
 msgstr "Ніколи не змінюйте розмір"
 
 #: packages/app-mobile/setupQuickActions.ts:33
-#, fuzzy
 msgid "New attachment"
-msgstr "Вкладення нотатки"
+msgstr "Нове вкладення"
 
 #: packages/app-mobile/setupQuickActions.ts:34
-#, fuzzy
 msgid "New drawing"
-msgstr "Малюнок"
+msgstr "Новий малюнок"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
 msgid "New invitations"
@@ -3501,13 +3476,12 @@ msgid ""
 msgstr "Новий блокнот “%s” буде створено і файл “%s” буде імпортовано в нього"
 
 #: packages/app-mobile/setupQuickActions.ts:32
-#, fuzzy
 msgid "New photo"
-msgstr "Зробити фото"
+msgstr "Нове зображення"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
-msgstr "Повий вкладений блокнот"
+msgstr "Новий вкладений блокнот"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:206
 msgid "New tags:"
@@ -3527,7 +3501,7 @@ msgstr "Нова версія: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:16
 msgid "next"
-msgstr ""
+msgstr "далі"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:271
 msgid "Next match"
@@ -3577,7 +3551,7 @@ msgstr "Не вибрано жодного блокнота."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:15
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Тут немає нотаток. Створіть його, натиснувши “Нова нотатка”."
+msgstr "Тут немає нотаток. Створіть її, натиснувши «Нова нотатка»."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:202
 msgid "No plugins are installed."
@@ -3611,14 +3585,12 @@ msgstr ""
 "допомогою `config editor <editor-path>`"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:93
-#, fuzzy
 msgid "No updates available"
-msgstr "Доступне оновлення"
+msgstr "Немає доступних оновлень"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
-#, fuzzy
 msgid "None"
-msgstr "(Жодного)"
+msgstr "Нічого"
 
 #: packages/lib/models/settings/builtInMetadata.ts:47
 msgid "Nord"
@@ -3779,12 +3751,11 @@ msgstr "Нумерований список"
 
 #: packages/lib/models/settings/builtInMetadata.ts:531
 msgid "OCR: Clear cache and re-download language data files"
-msgstr ""
+msgstr "OCR: Очистити кеш та перезавантажити файли мов"
 
 #: packages/lib/models/settings/builtInMetadata.ts:512
-#, fuzzy
 msgid "OCR: Language data URL or path"
-msgstr "Мова, формат дати"
+msgstr "OCR: Посилання або шлях до мовних даних"
 
 #: packages/app-desktop/bridge.ts:360 packages/app-desktop/bridge.ts:373
 #: packages/app-desktop/bridge.ts:387 packages/app-desktop/bridge.ts:403
@@ -3820,7 +3791,7 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:27
 msgid "on line"
-msgstr ""
+msgstr "на рядку"
 
 #: packages/app-desktop/gui/MainScreen.tsx:525
 msgid "One of your master keys use an obsolete encryption method."
@@ -3851,9 +3822,8 @@ msgid "OneDrive Login"
 msgstr "OneDrive логін"
 
 #: packages/lib/services/interop/InteropService.ts:144
-#, fuzzy
 msgid "OneNote Notebook"
-msgstr "Новий блокнот"
+msgstr "Блокнот OneNote"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.ts:18
 msgid "Only one note can be printed at a time."
@@ -3880,9 +3850,8 @@ msgid "Open profile directory"
 msgstr "Відкрити каталог профілю"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
-#, fuzzy
 msgid "Open settings"
-msgstr "Початковий розділ %s"
+msgstr "Відкрити налаштування"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid "Open Source"
@@ -3901,19 +3870,16 @@ msgid "Opening section %s"
 msgstr "Початковий розділ %s"
 
 #: packages/app-mobile/components/Dropdown.tsx:215
-#, fuzzy
 msgid "Opens dropdown"
-msgstr "Закрити випадаючий список"
+msgstr "Відкрити випадаючий список"
 
 #: packages/app-mobile/components/NoteItem.tsx:162
-#, fuzzy
 msgid "Opens note"
-msgstr "Відкрити"
+msgstr "Відкрити примітку"
 
 #: packages/app-mobile/components/side-menu-content.tsx:273
-#, fuzzy
 msgid "Opens notebook"
-msgstr "Новий блокнот"
+msgstr "Відкрити блокнот"
 
 #: packages/app-cli/app/command-e2ee.ts:41
 #: packages/app-cli/app/command-e2ee.ts:87
@@ -4180,11 +4146,13 @@ msgstr "Улюблена світла тема"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1704
 msgid "Preferred voice typing provider"
-msgstr ""
+msgstr "Бажаний постачальник послуг голосового введення"
 
 #: packages/lib/models/settings/builtInMetadata.ts:667
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
+"Зберігайте кольори під час вставлення тексту в форматованому текстовому "
+"редакторі"
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -4207,9 +4175,8 @@ msgid "Press to set the decryption password."
 msgstr "Натисніть, щоб встановити пароль розшифровки."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:17
-#, fuzzy
 msgid "previous"
-msgstr "Попереднє співпадіння"
+msgstr "попереднє"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Previous match"
@@ -4252,9 +4219,8 @@ msgid "Processing"
 msgstr "В обробці"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
-#, fuzzy
 msgid "Processing photo..."
-msgstr "В обробці"
+msgstr "Обробка зображення..."
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4310,9 +4276,8 @@ msgid "Publish notes to the internet"
 msgstr "Публікуйте нотатки в Інтернеті"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:78
-#, fuzzy
 msgid "QR Code"
-msgstr "Код"
+msgstr "QR код"
 
 #: packages/app-desktop/app.ts:219
 #: packages/app-desktop/ElectronAppWrapper.ts:123
@@ -4323,7 +4288,7 @@ msgstr "Вихід"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:206
 msgid "Re-download model"
-msgstr ""
+msgstr "Перезавантажити моделі"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -4334,9 +4299,8 @@ msgid "Re-encryption"
 msgstr "Перешифрування"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:181
-#, fuzzy
 msgid "Re-enter password"
-msgstr "Введіть пароль"
+msgstr "Повторно введіть пароль"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1180
 msgid "Re-upload local data to sync target"
@@ -4379,7 +4343,7 @@ msgstr "Рекомендовані плагіни"
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:168
 #: packages/app-mobile/components/ScreenHeader/index.tsx:351
 msgid "Redo"
-msgstr "Відмінити"
+msgstr "Повторити"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:229
 #: packages/app-mobile/components/screens/onedrive-login.js:121
@@ -4402,9 +4366,8 @@ msgid "Remove"
 msgstr "Видалити"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
-#, fuzzy
 msgid "Remove %s from share"
-msgstr "Видалити тег “%s” з усіх нотаток?"
+msgstr "Видалити %s із спільного доступу"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:111
 msgid "Remove tag \"%s\" from all notes?"
@@ -4436,9 +4399,8 @@ msgid "Renew token"
 msgstr "Оновити токен"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:21
-#, fuzzy
 msgid "replace"
-msgstr "Замінити"
+msgstr "замінити"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
@@ -4446,9 +4408,8 @@ msgid "Replace"
 msgstr "Замінити"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:22
-#, fuzzy
 msgid "replace all"
-msgstr "Замінити все"
+msgstr "замінити все"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace all"
@@ -4464,11 +4425,11 @@ msgstr "Замінити: "
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:25
 msgid "replaced $ matches"
-msgstr ""
+msgstr "замінено $ збігів"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:26
 msgid "replaced match on line $"
-msgstr ""
+msgstr "замінено збігів у рядку $"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
@@ -4533,7 +4494,7 @@ msgstr "Відновити"
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:156
 #, fuzzy
 msgid "Restore defaults"
-msgstr "Відновити нотатки"
+msgstr "Відновити стандартні"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.ts:10
 msgid "Restore note"
@@ -4591,11 +4552,12 @@ msgstr "Ревізія: %s (%s)"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
 msgid "Rich Text"
-msgstr ""
+msgstr "Розширений текст"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:686
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
 msgstr ""
+"Редактор розширеного тексту. Натисніть Esc, а потім Tab, щоб вийти з фокусу."
 
 #: packages/app-cli/app/command-batch.js:10
 msgid ""
@@ -4677,7 +4639,7 @@ msgstr "Збережіть геолокацію з нотатками"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:89
 msgid "Scanned code"
-msgstr ""
+msgstr "Відсканований код"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:62
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:102
@@ -4710,9 +4672,8 @@ msgid "Search in current note"
 msgstr "Пошук в поточній нотатці"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:665
-#, fuzzy
 msgid "Search results"
-msgstr "Немає результатів"
+msgstr "Результати пошуку"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:170
 msgid "Search shown"
@@ -4735,9 +4696,8 @@ msgid "Searches for the given <pattern> in all the notes."
 msgstr "Шукає заданий <pattern> у всіх примітках."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:63
-#, fuzzy
 msgid "See changelog"
-msgstr "Повний журнал змін"
+msgstr "Переглянути журнал змін"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1199
 msgid "See the pre-release page for more details: %s"
@@ -4766,14 +4726,12 @@ msgid "Select parent notebook"
 msgstr "Виберіть батьківський блокнот"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
-#, fuzzy
 msgid "Selection deleted"
-msgstr "дата завершення"
+msgstr "Вибір видалено"
 
 #: packages/app-mobile/components/FolderPicker.tsx:68
-#, fuzzy
 msgid "Selects a notebook"
-msgstr "Виберіть батьківський блокнот"
+msgstr "Виберіть блокнот"
 
 #: packages/app-desktop/gui/MenuBar.tsx:359
 msgid "Send bug report"
@@ -4829,7 +4787,7 @@ msgstr ""
 
 #: packages/app-mobile/components/EditorToolbar/EditorToolbar.tsx:47
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:281
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
@@ -4870,7 +4828,7 @@ msgstr "Дозволи на спільний доступ"
 #: packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.tsx:56
 #, fuzzy
 msgid "Shared"
-msgstr "Поділитися"
+msgstr "Надіслано"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
 msgid "Shares"
@@ -4917,14 +4875,12 @@ msgid "Show note counts"
 msgstr "Показати лічильники нотатки"
 
 #: packages/app-mobile/components/side-menu-content.tsx:258
-#, fuzzy
 msgid "Show notebook options"
-msgstr "Показати лічильники нотатки"
+msgstr "Показати налаштування блокноту"
 
 #: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
-#, fuzzy
 msgid "Show password"
-msgstr "Встановити пароль"
+msgstr "Показати пароль"
 
 #: packages/lib/models/settings/builtInMetadata.ts:698
 msgid "Show sort order buttons"
@@ -4939,9 +4895,8 @@ msgid "Show/hide the sidebar"
 msgstr "Показати/приховати бічну панель"
 
 #: packages/app-mobile/components/screens/tags.tsx:76
-#, fuzzy
 msgid "Shows notes for tag"
-msgstr "Показати лічильники нотатки"
+msgstr "Показує примітки для тегу"
 
 #: packages/lib/models/settings/builtInMetadata.ts:863
 msgid "Shrink large images before adding them to notes."
@@ -5027,11 +4982,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Sort \"%s\" in ascending order"
-msgstr ""
+msgstr "Сортувати \"%s\" у порядку зростання"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Sort \"%s\" in descending order"
-msgstr ""
+msgstr "Сортувати \"%s\" у порядку спадання"
 
 #: packages/lib/models/settings/builtInMetadata.ts:754
 msgid "Sort notebooks by"
@@ -5217,12 +5172,11 @@ msgstr "Змінити профіль"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
 msgid "Switch to back-facing camera"
-msgstr ""
+msgstr "Переключитися на задню камеру"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
-#, fuzzy
 msgid "Switch to front-facing camera"
-msgstr "Перейти до профілю %d"
+msgstr "Переключитися на передню камеру"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:93
 msgid "Switch to note type"
@@ -5235,14 +5189,12 @@ msgid "Switch to profile %d"
 msgstr "Перейти до профілю %d"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
-#, fuzzy
 msgid "Switch to the %s Editor"
-msgstr "Переключити до нотатки"
+msgstr "Переключитись на Редактор %s"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:78
-#, fuzzy
 msgid "Switch to the legacy editor"
-msgstr "Переключити до нотатки"
+msgstr "Перейти в застарілий редактор"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:102
 msgid "Switch to to-do type"
@@ -5524,7 +5476,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:83
 msgid "The following plugins may not support the current markdown editor:"
-msgstr ""
+msgstr "Наступні розширення можуть не підтримувати поточний редактор Markdown:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:257
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:49
@@ -5641,8 +5593,8 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Ціль синхронізації. Кожна ціль може мати додаткові параметри іменовані "
-"`sync.NUM.NAME` (задокументовані нижче)."
+"Ціль синхронізації. Кожна ціль може мати додаткові параметри іменовані `sync."
+"NUM.NAME` (задокументовані нижче)."
 
 #: packages/lib/services/share/invitationRespond.ts:22
 msgid ""
@@ -5651,6 +5603,11 @@ msgid ""
 "\n"
 "Error: \"%s\""
 msgstr ""
+"Веб-клієнт не підтримує прийом зашифрованих спільних блокнотів. Будь ласка, "
+"перейдіть на настільний або мобільний додаток, перш ніж прийняти спільний "
+"доступ.\n"
+"\n"
+"Помилка: \"%s\""
 
 #: packages/app-desktop/gui/Root.tsx:150
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -6011,9 +5968,8 @@ msgid "Toggle editor layout"
 msgstr "Переключити макет редактора"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditorPlugin.ts:11
-#, fuzzy
 msgid "Toggle editor plugin"
-msgstr "Переключити макет редактора"
+msgstr "Перемкнути розширення редактора"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6129,7 +6085,7 @@ msgstr "Незавершені списки справ на горі"
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:167
 #: packages/app-mobile/components/ScreenHeader/index.tsx:341
 msgid "Undo"
-msgstr "Сказувати"
+msgstr "Відмінити"
 
 #: packages/lib/models/settings/settingValidations.ts:32
 msgid ""
@@ -6141,9 +6097,8 @@ msgstr ""
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
-#, fuzzy
 msgid "Unknown"
-msgstr "Невідомий прапорець: %s"
+msgstr "Невідомий"
 
 #: packages/app-desktop/bridge.ts:446
 msgid "Unknown file type"
@@ -6160,9 +6115,8 @@ msgstr ""
 "Завантажено невідомий тип елементу - оновіть Joplin до останньої версії"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
-#, fuzzy
 msgid "Unknown platform"
-msgstr "Невідомий прапорець: %s"
+msgstr "Невідома платформа"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:82
 msgid "Unordered list"
@@ -6194,11 +6148,12 @@ msgid "Unsupported link or message: %s"
 msgstr "Непідтримуване посилання або повідомлення: %s"
 
 #: packages/app-mobile/commands/openItem.ts:60
-#, fuzzy
 msgid ""
 "Unsupported link or message: %s.\n"
 "Error: %s"
-msgstr "Непідтримуване посилання або повідомлення: %s"
+msgstr ""
+"Непідтримуване посилання або повідомлення: %s\n"
+"Помилка: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
 #: packages/lib/models/BaseItem.ts:921 packages/lib/path-utils.ts:27
@@ -6216,9 +6171,8 @@ msgid "Update available"
 msgstr "Доступне оновлення"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:65
-#, fuzzy
 msgid "Update later"
-msgstr "оновлена дата"
+msgstr "Оновити пізніше"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -6318,9 +6272,8 @@ msgstr ""
 "щоб вийти."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1347
-#, fuzzy
 msgid "Use the legacy Markdown editor"
-msgstr "Увімкніть панель інструментів Markdown"
+msgstr "Використовувати застарілий редактор Markdown"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:552
 msgid ""

@@ -118,6 +118,8 @@ export class Bridge {
 					return event;
 				}
 			},
+
+			integrations: [Sentry.electronMinidumpIntegration()],
 		};
 
 		if (this.autoUploadCrashDumps_) options.dsn = 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296';

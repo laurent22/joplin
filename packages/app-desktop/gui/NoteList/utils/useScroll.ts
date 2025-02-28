@@ -1,7 +1,6 @@
 import * as React from 'react';
-import shim from '@joplin/lib/shim';
 import { Size } from '@joplin/utils/types';
-import { useCallback, useState, useRef, useEffect, useMemo } from 'react';
+import { useCallback, useState, useRef, useMemo } from 'react';
 
 const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, listSize: Size, listRef: React.MutableRefObject<HTMLDivElement>) => {
 	const [scrollTop, setScrollTop] = useState(0);
@@ -29,36 +28,36 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 	// but still fails now and then. Setting it after 500ms would probably work
 	// reliably but it's too slow so it makes sense to do it in an interval.
 
-	const setScrollTopLikeYouMeanItTimer = useRef(null);
-	const setScrollTopLikeYouMeanItStartTime = useRef(0);
-	const setScrollTopLikeYouMeanIt = useCallback((newScrollTop: number) => {
-		if (setScrollTopLikeYouMeanItTimer.current) shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
-		setScrollTopLikeYouMeanItStartTime.current = Date.now();
+	// const setScrollTopLikeYouMeanItTimer = useRef(null);
+	// const setScrollTopLikeYouMeanItStartTime = useRef(0);
+	// const setScrollTopLikeYouMeanIt = useCallback((newScrollTop: number) => {
+	// 	if (setScrollTopLikeYouMeanItTimer.current) shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
+	// 	setScrollTopLikeYouMeanItStartTime.current = Date.now();
 
-		listRef.current.scrollTop = newScrollTop;
-		lastScrollSetTime.current = Date.now();
+	// 	listRef.current.scrollTop = newScrollTop;
+	// 	lastScrollSetTime.current = Date.now();
 
-		setScrollTopLikeYouMeanItTimer.current = shim.setInterval(() => {
-			if (!listRef.current) {
-				shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
-				setScrollTopLikeYouMeanItTimer.current = null;
-				return;
-			}
+	// 	setScrollTopLikeYouMeanItTimer.current = shim.setInterval(() => {
+	// 		if (!listRef.current) {
+	// 			shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
+	// 			setScrollTopLikeYouMeanItTimer.current = null;
+	// 			return;
+	// 		}
 
-			listRef.current.scrollTop = newScrollTop;
-			lastScrollSetTime.current = Date.now();
+	// 		listRef.current.scrollTop = newScrollTop;
+	// 		lastScrollSetTime.current = Date.now();
 
-			if (Date.now() - setScrollTopLikeYouMeanItStartTime.current > 1000) {
-				shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
-				setScrollTopLikeYouMeanItTimer.current = null;
-			}
-		}, 10);
-	}, [listRef]);
+	// 		if (Date.now() - setScrollTopLikeYouMeanItStartTime.current > 1000) {
+	// 			shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
+	// 			setScrollTopLikeYouMeanItTimer.current = null;
+	// 		}
+	// 	}, 10);
+	// }, [listRef]);
 
-	useEffect(() => {
-		if (setScrollTopLikeYouMeanItTimer.current) shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
-		setScrollTopLikeYouMeanItTimer.current = null;
-	}, []);
+	// useEffect(() => {
+	// 	if (setScrollTopLikeYouMeanItTimer.current) shim.clearInterval(setScrollTopLikeYouMeanItTimer.current);
+	// 	setScrollTopLikeYouMeanItTimer.current = null;
+	// }, []);
 
 	const makeItemIndexVisible = useCallback((itemIndex: number) => {
 		const lineTopFloat = scrollTop / itemSize.height;
@@ -83,13 +82,17 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		if (newScrollTop > maxScrollTop) newScrollTop = maxScrollTop;
 
 		setScrollTop(newScrollTop);
-		setScrollTopLikeYouMeanIt(newScrollTop);
-	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, setScrollTopLikeYouMeanIt]);
+		listRef.current.scrollTop = newScrollTop;
+		lastScrollSetTime.current = Date.now();
+		// setScrollTopLikeYouMeanIt(newScrollTop);
+	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, listRef]); // , setScrollTopLikeYouMeanIt]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onScroll = useCallback((event: any) => {
+		// console.info('ON SCROLL', event.target.scrollTop, 'Ignore:', Date.now() - lastScrollSetTime.current < 500);
+
 		// Ignore the scroll event if it has just been set programmatically.
-		if (Date.now() - lastScrollSetTime.current < 500) return;
+		if (Date.now() - lastScrollSetTime.current < 10) return;
 		setScrollTop(event.target.scrollTop);
 	}, []);
 

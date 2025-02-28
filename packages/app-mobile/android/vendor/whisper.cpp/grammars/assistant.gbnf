@@ -1,0 +1,57 @@
+# - "turn on lights."
+# - "set thermostat to 22."
+# - "increase TV by 10."
+# - "decrease oven by 50."
+# - "play music."
+# - "stop podcast."
+# - "schedule cleaning at 3pm."
+# - "cancel cleaning."
+# - "remind me to buy milk at 5pm."
+# - "show me security system."
+# - "hide washing machine."
+# - "what is the lights status?"
+# - "what is the current thermostat value?"
+# - "what is the security system status?"
+# - "what is the door lock status?"
+# - "what is the camera battery level?"
+# - "what is the weather like today?"
+# - "what is the forecast for tomorrow?"
+# - "what is the time?"
+# - "what is my schedule for today?"
+# - "what tasks do I have?"
+# - "what reminders do I have?"
+#
+# example:
+#
+#   ./command -m ./models/ggml-tiny.en.bin -t 8 --grammar ./grammars/assistant.gbnf --prompt "Ok Whisper, start listening for commands." --context "Whisper is a home assistant. It recognizes voice commands. Time is 11pm." --grammar-penalty 10
+#
+
+root   ::= init " " (command | question) "."
+prompt ::= init
+
+# leading space is very important!
+init ::= " Ok Whisper, start listening for commands."
+
+command ::= "Turn " ("on" | "off") " " device | "Set " device " to " value |
+            "Increase " device " by " value | "Decrease " device " by " value |
+            "Play " media | "Stop " media | "Schedule " task " at " time | "Cancel " task |
+            "Remind me to " task " at " time | "Show me " device | "Hide " device
+
+question ::= "What is the " device " status?" | "What is the current " device " value?" |
+             "What is the " device " temperature?" | "What is the " device " humidity?" |
+             "What is the " device " power consumption?" | "What is the " device " battery level?" |
+             "What is the weather like today?" | "What is the forecast for tomorrow?" |
+             "What is the time?" | "What is my schedule for today?" | "What tasks do I have?" |
+             "What reminders do I have?"
+
+device ::= "lights" | "thermostat" | "security system" | "door lock" | "camera" | "speaker" | "TV" |
+           "music player" | "coffee machine" | "oven" | "refrigerator" | "washing machine" |
+           "vacuum cleaner"
+
+value ::= [0-9]+
+
+media ::= "music" | "radio" | "podcast" | "audiobook" | "TV show" | "movie"
+
+task ::= [a-zA-Z]+ (" " [a-zA-Z]+)?
+
+time ::= [0-9] [0-9]? ("am" | "pm")?

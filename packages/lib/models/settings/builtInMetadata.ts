@@ -499,7 +499,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'ocr.enabled': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop],

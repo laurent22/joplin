@@ -31,10 +31,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adobe/css-tools@npm:4.4.0":
-  version: 4.4.0
-  resolution: "@adobe/css-tools@npm:4.4.0"
-  checksum: 1f08fb49bf17fc7f2d1a86d3e739f29ca80063d28168307f1b0a962ef37501c5667271f6771966578897f2e94e43c4770fd802728a6e6495b812da54112d506a
+"@adobe/css-tools@npm:4.4.1":
+  version: 4.4.1
+  resolution: "@adobe/css-tools@npm:4.4.1"
+  checksum: bbded8a03c314afee0fb0b42922f664f437e0e2f0b86eeeb06dee9d02cd8fc958cf87aa3314952b00074e0b22fc5b8da23f45b61b6f8291c8aaa7cffc56a76e9
   languageName: node
   linkType: hard
 
@@ -5150,13 +5150,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.10":
-  version: 3.0.10
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.10"
+"@bam.tech/react-native-image-resizer@npm:3.0.11":
+  version: 3.0.11
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.11"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 34cb129d421939ae2937f876986088a5ff25480a008f17c17651bae16e8a4a87882f0803137221d3e28423f343e77008cfb10062bf171db1bc230678b57d865e
+  checksum: 0d9e95c625f8ef3a5d7195721d8ac6463a08468c9474f2627a1a85cefa509efc06bd160bd9108d1cce1fa05751a4b69871dce975659571009149d258cf9ddd8b
   languageName: node
   linkType: hard
 
@@ -8284,7 +8284,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.12
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-dom": 18.3.0
     "@types/react-redux": 7.1.33
@@ -8354,7 +8354,7 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": 7.24.7
     "@babel/preset-env": 7.24.7
     "@babel/runtime": 7.24.7
-    "@bam.tech/react-native-image-resizer": 3.0.10
+    "@bam.tech/react-native-image-resizer": 3.0.11
     "@joplin/editor": ~3.3
     "@joplin/lib": ~3.3
     "@joplin/react-native-alarm-notification": ~3.3
@@ -8363,6 +8363,7 @@ __metadata:
     "@joplin/tools": ~3.3
     "@joplin/utils": ~3.3
     "@js-draw/material-icons": 1.27.2
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.15
     "@react-native-clipboard/clipboard": 1.14.3
     "@react-native-community/datetimepicker": 8.2.0
     "@react-native-community/geolocation": 3.3.0
@@ -8377,7 +8378,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
@@ -8395,6 +8396,7 @@ __metadata:
     deprecated-react-native-prop-types: 5.0.0
     events: 3.3.0
     expo: 51.0.26
+    expo-av: 14.0.7
     expo-camera: 15.0.16
     fast-deep-equal: 3.1.3
     fs-extra: 11.2.0
@@ -8424,7 +8426,7 @@ __metadata:
     react-native-image-picker: 7.1.1
     react-native-localize: 3.2.1
     react-native-modal-datetime-picker: 17.1.0
-    react-native-paper: 5.12.5
+    react-native-paper: 5.13.1
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-quick-crypto: 0.7.5
@@ -8441,6 +8443,7 @@ __metadata:
     react-native-webview: 13.10.5
     react-native-zip-archive: 6.1.2
     react-redux: 8.1.3
+    react-refresh: 0.16.0
     react-test-renderer: 18.3.1
     redux: 4.2.1
     rn-fetch-blob: 0.12.0
@@ -8537,7 +8540,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@typescript-eslint/eslint-plugin": 6.21.0
     "@typescript-eslint/parser": 6.21.0
     coveralls: 3.1.1
@@ -8576,7 +8579,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@adobe/css-tools": 4.4.0
+    "@adobe/css-tools": 4.4.1
     "@joplin/fork-htmlparser2": ^4.1.57
     "@types/fs-extra": 11.0.4
     datauri: 4.1.0
@@ -8589,7 +8592,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@adobe/css-tools": 4.4.0
+    "@adobe/css-tools": 4.4.1
     "@aws-sdk/client-s3": 3.296.0
     "@aws-sdk/s3-request-presigner": 3.296.0
     "@joplin/fork-htmlparser2": ^4.1.57
@@ -8602,7 +8605,7 @@ __metadata:
     "@joplin/turndown-plugin-gfm": ^1.0.61
     "@joplin/utils": ~3.3
     "@testing-library/react-hooks": 8.0.1
-    "@types/adm-zip": 0.5.6
+    "@types/adm-zip": 0.5.7
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
@@ -8610,7 +8613,7 @@ __metadata:
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-rsa": 1.1.4
     "@types/react": 18.3.3
     "@types/uuid": 9.0.7
@@ -8726,7 +8729,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -8781,7 +8784,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/jest": 29.5.12
     "@types/markdown-it": 13.0.9
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.10.0
@@ -8891,7 +8894,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-fetch": 2.6.12
     "@types/yargs": 17.0.33
     compare-versions: 6.1.1
@@ -8942,7 +8945,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
-    "@adobe/css-tools": 4.4.0
+    "@adobe/css-tools": 4.4.1
     "@rollup/plugin-commonjs": 25.0.8
     "@rollup/plugin-node-resolve": 15.2.4
     "@rollup/plugin-replace": 5.0.7
@@ -8991,6 +8994,7 @@ __metadata:
     node-fetch: 2.6.7
     sprintf-js: 1.1.3
     ts-jest: 29.1.5
+    typescript: 5.4.5
   languageName: unknown
   linkType: soft
 
@@ -10738,6 +10742,43 @@ __metadata:
   dependencies:
     debug: ^4.3.1
   checksum: 663438d9154db3c11bc7d41a4838162542db9cb4cf989fe8936e9bd9e5b99e3a58d73c8888afa1180a8cb93375c1d165bb397939de8a5ab8507d13d2aed2a086
+  languageName: node
+  linkType: hard
+
+"@pmmmwh/react-refresh-webpack-plugin@npm:^0.5.15":
+  version: 0.5.15
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.15"
+  dependencies:
+    ansi-html: ^0.0.9
+    core-js-pure: ^3.23.3
+    error-stack-parser: ^2.0.6
+    html-entities: ^2.1.0
+    loader-utils: ^2.0.4
+    schema-utils: ^4.2.0
+    source-map: ^0.7.3
+  peerDependencies:
+    "@types/webpack": 4.x || 5.x
+    react-refresh: ">=0.10.0 <1.0.0"
+    sockjs-client: ^1.4.0
+    type-fest: ">=0.17.0 <5.0.0"
+    webpack: ">=4.43.0 <6.0.0"
+    webpack-dev-server: 3.x || 4.x || 5.x
+    webpack-hot-middleware: 2.x
+    webpack-plugin-serve: 0.x || 1.x
+  peerDependenciesMeta:
+    "@types/webpack":
+      optional: true
+    sockjs-client:
+      optional: true
+    type-fest:
+      optional: true
+    webpack-dev-server:
+      optional: true
+    webpack-hot-middleware:
+      optional: true
+    webpack-plugin-serve:
+      optional: true
+  checksum: 82df6244146209d63a12f0ca2e70b05274ee058c7e6d6eb4ced1228afde3b039a7f3f3cc0c76f1bb4b28deadbcf08bc2821c814f0bfee06979128578300fff3d
   languageName: node
   linkType: hard
 
@@ -12569,12 +12610,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/adm-zip@npm:0.5.6":
-  version: 0.5.6
-  resolution: "@types/adm-zip@npm:0.5.6"
+"@types/adm-zip@npm:0.5.7":
+  version: 0.5.7
+  resolution: "@types/adm-zip@npm:0.5.7"
   dependencies:
     "@types/node": "*"
-  checksum: f4ff999cef5030dfea1252727f94647a63eee7438844c7a477b3859dd2971cce3542123ebaafa507ad4304a4a4f0f8553b7034d6ea8132c941c54ccba76bac65
+  checksum: 57fe73622e38234bc76786354237e8545eefa05d55e34aa3c7c51b33588bb9e80787f163fdb4fa3afc2c123cfd17e1619e37f6be57cde2e58b7949f30a8b093c
   languageName: node
   linkType: hard
 
@@ -13566,12 +13607,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.64":
-  version: 18.19.64
-  resolution: "@types/node@npm:18.19.64"
+"@types/node@npm:18.19.67":
+  version: 18.19.67
+  resolution: "@types/node@npm:18.19.67"
   dependencies:
     undici-types: ~5.26.4
-  checksum: e7680215b03c9bee8a33947f03d06048e8e460f23b1b7b29c45350cf437faa5f8fcb7d8c3eb8dfec8427923e7a184df42bc710c1b6252b4852e3ed7064c6228f
+  checksum: 700f92c6a0b63352ce6327286392adab30bb17623c2a788811e9cf092c4dc2fb5e36ca4727247a981b3f44185fdceef20950a3b7a8ab72721e514ac037022a08
   languageName: node
   linkType: hard
 
@@ -15592,6 +15633,15 @@ __metadata:
   bin:
     ansi-html: bin/ansi-html
   checksum: 04c568e8348a636963f915e48eaa3e01218322e1169acafdd79c384f22e5558c003f79bbc480c1563865497482817c7eed025f0653ebc17642fededa5cb42089
+  languageName: node
+  linkType: hard
+
+"ansi-html@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "ansi-html@npm:0.0.9"
+  bin:
+    ansi-html: bin/ansi-html
+  checksum: a03754d6f66bae33938ed8bb3dd98174b7f4895ebe45226185036ed4a1388a7aaf2f2b9581608f0626432ba7add92cfc590aa6475a78bbb90d9d1e1d1af8cbe6
   languageName: node
   linkType: hard
 
@@ -20104,6 +20154,13 @@ __metadata:
   dependencies:
     browserslist: ^4.23.0
   checksum: 5e7430329358bced08c30950512d2081aea0a5652b4c5892cbb3c4a6db05b0d3893a191a955162a07fdb5f4fe74e61b6429fdb503f54e062336d76e43c9555d9
+  languageName: node
+  linkType: hard
+
+"core-js-pure@npm:^3.23.3":
+  version: 3.40.0
+  resolution: "core-js-pure@npm:3.40.0"
+  checksum: 14e7bd3ef1d39bbeb079b820b0f15f699a0f1589c640818c17679e00ae8c2baf1e0fe8e2734e04562d89b648626d4bc52660e5c44b216107160dbf2fe7e36c5a
   languageName: node
   linkType: hard
 
@@ -24646,6 +24703,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-av@npm:14.0.7":
+  version: 14.0.7
+  resolution: "expo-av@npm:14.0.7"
+  peerDependencies:
+    expo: "*"
+  checksum: 7518a8972b0d1b3b362d4dc9c4d21a39c7cf98b46abbdbb2349451115f4edf6e97fb6c723674fd3c62fa037fc77e00172955082d21b1c3fdf5273f33781ce78d
+  languageName: node
+  linkType: hard
+
 "expo-camera@npm:15.0.16":
   version: 15.0.16
   resolution: "expo-camera@npm:15.0.16"
@@ -27835,17 +27901,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-entities@npm:^2.1.0, html-entities@npm:^2.4.0":
+  version: 2.5.2
+  resolution: "html-entities@npm:2.5.2"
+  checksum: b23f4a07d33d49ade1994069af4e13d31650e3fb62621e92ae10ecdf01d1a98065c78fd20fdc92b4c7881612210b37c275f2c9fba9777650ab0d6f2ceb3b99b6
+  languageName: node
+  linkType: hard
+
 "html-entities@npm:^2.3.2":
   version: 2.4.0
   resolution: "html-entities@npm:2.4.0"
   checksum: 25bea32642ce9ebd0eedc4d24381883ecb0335ccb8ac26379a0958b9b16652fdbaa725d70207ce54a51db24103436a698a8e454397d3ba8ad81460224751f1dc
-  languageName: node
-  linkType: hard
-
-"html-entities@npm:^2.4.0":
-  version: 2.5.2
-  resolution: "html-entities@npm:2.5.2"
-  checksum: b23f4a07d33d49ade1994069af4e13d31650e3fb62621e92ae10ecdf01d1a98065c78fd20fdc92b4c7881612210b37c275f2c9fba9777650ab0d6f2ceb3b99b6
   languageName: node
   linkType: hard
 
@@ -31020,7 +31086,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -32405,7 +32471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0":
+"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.4":
   version: 2.0.4
   resolution: "loader-utils@npm:2.0.4"
   dependencies:
@@ -39917,9 +39983,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.12.5":
-  version: 5.12.5
-  resolution: "react-native-paper@npm:5.12.5"
+"react-native-paper@npm:5.13.1":
+  version: 5.13.1
+  resolution: "react-native-paper@npm:5.13.1"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
@@ -39929,7 +39995,23 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 35ce56e0bb19c46ce85adc47a504527b7ec455d1a15f3ace0d6fd438abd51b1fe30e1b44351950e16d6376ddbc18ecc94b558e267767d0a9fd886a5f66a4c322
+  checksum: ef16fbb57986f09f2080e98ddb7977c494d6accb36767101de32199849bba8764e2bcd528a5d1c08940f4430cb86dabb6baaf5b33a539670221cbbfcc01f2d5e
+  languageName: node
+  linkType: hard
+
+"react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::locator=root%40workspace%3A.":
+  version: 5.13.1
+  resolution: "react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::version=5.13.1&hash=3fecbb&locator=root%40workspace%3A."
+  dependencies:
+    "@callstack/react-theme-provider": ^3.0.9
+    color: ^3.1.2
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: "*"
+    react-native-vector-icons: "*"
+  checksum: 381a35e3b26a177e2299fd0ce597e5b7bd0626276dc0116cc3eb1e0217634977c2f957c1985bb5938b1c88b4f1566273fa494c8a6bb6eb2a05c18f9a963e2743
   languageName: node
   linkType: hard
 
@@ -40317,6 +40399,13 @@ __metadata:
     redux:
       optional: true
   checksum: 192ea6f6053148ec80a4148ec607bc259403b937e515f616a1104ca5ab357e97e98b8245ed505a17afee67a72341d4a559eaca9607968b4a422aa9b44ba7eb89
+  languageName: node
+  linkType: hard
+
+"react-refresh@npm:0.16.0":
+  version: 0.16.0
+  resolution: "react-refresh@npm:0.16.0"
+  checksum: becff1ced3c9eb3631e06e038d7238c1badb329c1232a34694cc9983b1d176b6ffb74560d2dc4cc5e3353aa0041503ae2e71d5043ac82a2bcfb1fdf529dbe8b0
   languageName: node
   linkType: hard
 

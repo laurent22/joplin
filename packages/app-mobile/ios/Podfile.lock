@@ -1,6 +1,9 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
+  - EXAV (14.0.7):
+    - ExpoModulesCore
+    - ReactCommon/turbomodule/core
   - EXConstants (16.0.2):
     - ExpoModulesCore
   - Expo (51.0.26):
@@ -977,7 +980,7 @@ PODS:
   - React-Mapbuffer (0.74.1):
     - glog
     - React-debug
-  - react-native-alarm-notification (3.2.0):
+  - react-native-alarm-notification (3.3.0):
     - React
   - react-native-document-picker (9.3.0):
     - React-Core
@@ -1056,7 +1059,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.2.4):
+  - react-native-saf-x (3.3.0):
     - React-Core
   - react-native-safe-area-context (4.10.8):
     - React-Core
@@ -1337,7 +1340,7 @@ PODS:
     - React-utils (= 0.74.1)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCClipboard (1.14.2):
+  - RNCClipboard (1.14.3):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -1391,6 +1394,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXAV (from `../node_modules/expo-av/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - Expo (from `../node_modules/expo`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
@@ -1495,6 +1499,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  EXAV:
+    :path: "../node_modules/expo-av/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   Expo:
@@ -1680,6 +1686,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  EXAV: afa491e598334bbbb92a92a2f4dd33d7149ad37f
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   Expo: f3e39cddde295c79d206e972a59693cbb329ef46
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
@@ -1718,7 +1725,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 233d1a798fe0ff33b8e630b8f00f62c4a8115fbc
   React-logger: 7e7403a2b14c97f847d90763af76b84b152b6fce
   React-Mapbuffer: 11029dcd47c5c9e057a4092ab9c2a8d10a496a33
-  react-native-alarm-notification: a36e11891970bfda3e64c5b87c7a39ea3e3d0e1b
+  react-native-alarm-notification: 0c7c6b84a4b73da3cd594c2008bd289fdda4296c
   react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 5c5dd5de4571c55014e9e98214b273eed854f293
@@ -1728,7 +1735,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 9af975c142e5673d643093aa5afdfa26f46b71b4
   react-native-quick-crypto: 7085e4e4607e7e8fa57f4193f994d5262d351e45
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
-  react-native-saf-x: 2b561a9a31413dc594cf2b56a3a8736836b0cf9f
+  react-native-saf-x: b868b5334ba23684a89a5b86749ee359c8bb6932
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-slider: 03f213d3ffbf919b16298c7896c1b60101d8e137
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
@@ -1758,7 +1765,7 @@ SPEC CHECKSUMS:
   React-utils: 3285151c9d1e3a28a9586571fc81d521678c196d
   ReactCommon: f42444e384d82ab89184aed5d6f3142748b54768
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCClipboard: 5e503962f0719ace8f7fdfe9c60282b526305c85
+  RNCClipboard: 2821ac938ef46f736a8de0c8814845dde2dcbdfb
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba

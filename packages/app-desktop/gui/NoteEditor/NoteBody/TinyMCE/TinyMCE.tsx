@@ -617,6 +617,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
 			}
+
+			.tox .tox-tbtn,
+			.tox .tox-tbtn button,
+			.tox .tox-split-button,
+			.tox .tox-split-button button {
+				margin: 0 !important;
+			}
 		`));
 
 		return () => {
@@ -673,7 +680,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// we create small groups of just one button towards the end.
 
 			const toolbar = [
-				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', '|',
+				'joplinInsert', 'joplinSup', 'joplinSub', 'forecolor', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', '|',
@@ -1344,7 +1352,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);
 		editor.on(TinyMceEditorEvents.KeyDown, onKeyDown);
 		editor.on(TinyMceEditorEvents.KeyPress, onKeypress);
-		editor.on(TinyMceEditorEvents.Paste, onPaste);
+		// Passing `true` adds the listener to the front of the listener list.
+		// This allows overriding TinyMCE's built-in paste handler with .preventDefault.
+		editor.on(TinyMceEditorEvents.Paste, onPaste, true);
 		editor.on(TinyMceEditorEvents.PasteAsText, onPasteAsText);
 		editor.on(TinyMceEditorEvents.Copy, onCopy);
 		// `compositionend` means that a user has finished entering a Chinese

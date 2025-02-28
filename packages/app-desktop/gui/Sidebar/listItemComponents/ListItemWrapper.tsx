@@ -40,8 +40,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			aria-setsize={props.itemCount}
 			aria-selected={props.selected}
 			aria-expanded={props.expanded}
-			// aria-level is 1-based, where depth is zero-based
-			aria-level={props.depth + 1}
+			aria-level={props.depth}
 			tabIndex={props.selected ? 0 : -1}
 
 			onContextMenu={props.onContextMenu}

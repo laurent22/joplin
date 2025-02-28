@@ -115,6 +115,7 @@
     "rn-fetch-blob@0.12.0": "patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch",
     "app-builder-lib@26.0.0-alpha.7": "patch:app-builder-lib@npm%3A26.0.0-alpha.7#./.yarn/patches/app-builder-lib-npm-26.0.0-alpha.7-e1b3dca119.patch",
     "app-builder-lib@24.13.3": "patch:app-builder-lib@npm%3A24.13.3#./.yarn/patches/app-builder-lib-npm-24.13.3-86a66c0bf3.patch",
-    "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch"
+    "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch",
+    "react-native-paper@5.13.1": "patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch"
   }
 }

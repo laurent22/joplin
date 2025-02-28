@@ -35,6 +35,7 @@ import searchExtension from './utils/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
 import overwriteModeExtension from './utils/overwriteModeExtension';
 import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
+import selectedNoteIdExtension, { setNoteIdEffect } from './utils/selectedNoteIdExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -276,6 +277,8 @@ const createEditor = (
 				biDirectionalTextExtension,
 				overwriteModeExtension,
 
+				selectedNoteIdExtension,
+
 				props.localisations ? EditorState.phrases.of(props.localisations) : [],
 
 				// Adds additional CSS classes to tokens (the default CSS classes are
@@ -299,6 +302,10 @@ const createEditor = (
 		}),
 		parent: parentElement,
 	});
+
+	editor.dispatch(editor.state.update({
+		effects: setNoteIdEffect.of(props.initialNoteId),
+	}));
 
 	const editorControls = new CodeMirrorControl(editor, {
 		onClearHistory: () => {
