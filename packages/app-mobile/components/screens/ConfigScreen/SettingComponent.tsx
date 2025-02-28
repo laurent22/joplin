@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { UpdateSettingValueCallback } from './types';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
 import Slider from '@react-native-community/slider';
 import SettingsToggle from './SettingsToggle';
 import FileSystemPathSelector from './FileSystemPathSelector';
+import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
 import { useId } from 'react';
@@ -136,27 +137,15 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		}
 
 		return (
-			<View key={props.settingId} style={containerStyles.outerContainer}>
-				<View key={props.settingId} style={containerStyles.innerContainer}>
-					<Text key="label" style={styleSheet.settingText} nativeID={labelId}>
-						{md.label()}
-					</Text>
-					<TextInput
-						autoCorrect={false}
-						autoComplete="off"
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-						autoCapitalize="none"
-						key="control"
-						style={styleSheet.settingControl}
-						defaultValue={props.value}
-						onChangeText={(newValue: string) => void props.updateSettingValue(props.settingId, newValue)}
-						secureTextEntry={!!md.secure}
-						aria-labelledby={labelId}
-					/>
-				</View>
-				{descriptionComp}
-			</View>
+			<SettingTextInput
+				settingId={props.settingId}
+				value={props.value}
+				themeId={props.themeId}
+				styles={props.styles}
+				label={md.label()}
+				updateSettingValue={props.updateSettingValue}
+				description={descriptionComp}
+			/>
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
 		// TODO: Not yet supported
