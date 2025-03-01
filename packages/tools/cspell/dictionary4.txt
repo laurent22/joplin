@@ -171,3 +171,5 @@ millis
 sideloading
 ggml
 Minidump
+collapseall
+newfolder

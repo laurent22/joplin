@@ -1120,6 +1120,7 @@ packages/lib/models/settings/builtInMetadata.js
 packages/lib/models/settings/settingValidations.test.js
 packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
+packages/lib/models/utils/allFoldersCollapsed.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
