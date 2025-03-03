@@ -2,7 +2,7 @@
 const { shimInit } = require('./shim-init-node');
 import shim from './shim';
 import { setupDatabaseAndSynchronizer, supportDir } from './testing/test-utils';
-import { copyFile } from 'fs-extra';
+import { copyFile, remove } from 'fs-extra';
 
 describe('shim-init-node', () => {
 
@@ -26,6 +26,8 @@ describe('shim-init-node', () => {
 		const resource = await shim.createResourceFromPath(fileWithDifferentExtension);
 
 		expect(resource.file_extension).toBe('mscz');
+
+		await remove(fileWithDifferentExtension);
 	});
 
 });
