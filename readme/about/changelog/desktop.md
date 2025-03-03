@@ -1,5 +1,10 @@
 # Joplin Desktop Changelog
 
+## [v3.2.13](https://github.com/laurent22/joplin/releases/tag/v3.2.13) - 2025-02-28T14:38:21Z
+
+- Improved: Plugins: Mark the LanguageTool Integration plugin as incompatible ([#11715](https://github.com/laurent22/joplin/issues/11715)) ([#11710](https://github.com/laurent22/joplin/issues/11710) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Preserve attachment file extensions regardless of the mime type  ([#11852](https://github.com/laurent22/joplin/issues/11852)) ([#11759](https://github.com/laurent22/joplin/issues/11759) by [@pedr](https://github.com/pedr))
+
 ## [v3.3.2](https://github.com/laurent22/joplin/releases/tag/v3.3.2) (Pre-release) - 2025-02-19T17:34:26Z
 
 - Improved: Accessibility: Make click outside of dialog content be cancellable  ([#11765](https://github.com/laurent22/joplin/issues/11765) by [@pedr](https://github.com/pedr))

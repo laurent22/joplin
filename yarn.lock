@@ -8425,7 +8425,7 @@ __metadata:
     react-native-image-picker: 7.1.1
     react-native-localize: 3.2.1
     react-native-modal-datetime-picker: 17.1.0
-    react-native-paper: 5.12.5
+    react-native-paper: 5.13.1
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-quick-crypto: 0.7.5
@@ -39968,9 +39968,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.12.5":
-  version: 5.12.5
-  resolution: "react-native-paper@npm:5.12.5"
+"react-native-paper@npm:5.13.1":
+  version: 5.13.1
+  resolution: "react-native-paper@npm:5.13.1"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
@@ -39980,7 +39980,23 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 35ce56e0bb19c46ce85adc47a504527b7ec455d1a15f3ace0d6fd438abd51b1fe30e1b44351950e16d6376ddbc18ecc94b558e267767d0a9fd886a5f66a4c322
+  checksum: ef16fbb57986f09f2080e98ddb7977c494d6accb36767101de32199849bba8764e2bcd528a5d1c08940f4430cb86dabb6baaf5b33a539670221cbbfcc01f2d5e
+  languageName: node
+  linkType: hard
+
+"react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::locator=root%40workspace%3A.":
+  version: 5.13.1
+  resolution: "react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::version=5.13.1&hash=3fecbb&locator=root%40workspace%3A."
+  dependencies:
+    "@callstack/react-theme-provider": ^3.0.9
+    color: ^3.1.2
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: "*"
+    react-native-vector-icons: "*"
+  checksum: 381a35e3b26a177e2299fd0ce597e5b7bd0626276dc0116cc3eb1e0217634977c2f957c1985bb5938b1c88b4f1566273fa494c8a6bb6eb2a05c18f9a963e2743
   languageName: node
   linkType: hard
 
