@@ -6343,3 +6343,219 @@ msgstr "放大"
 msgid "Zoom Out"
 msgstr "缩小"
 
+#, fuzzy
+#~ msgid "Take picture"
+#~ msgstr "添加绘图"
+
+#~ msgid ""
+#~ "Biometric unlock is not setup on the device. Please set it up in order to "
+#~ "unlock Joplin. If the device is on lockout, consider switching it off and "
+#~ "on to reset biometrics scanning."
+#~ msgstr ""
+#~ "设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请"
+#~ "考虑将其关闭和打开以重置生物特征扫描。"
+
+#~ msgid "Collapse"
+#~ msgstr "折叠"
+
+#~ msgid "Collapse %s"
+#~ msgstr "折叠 %s"
+
+#~ msgid "Expand"
+#~ msgstr "展开"
+
+#~ msgid "Find and replace"
+#~ msgstr "查找和替换"
+
+#~ msgid "Formatting"
+#~ msgstr "格式"
+
+#~ msgid "Headers"
+#~ msgstr "Headers"
+
+#~ msgid "Hide more actions"
+#~ msgstr "隐藏更多操作"
+
+#~ msgid "KaTeX"
+#~ msgstr "KaTeX"
+
+#~ msgid "Links with protocol \"%s\" are not supported"
+#~ msgstr "不支持 “%s” 协议的链接"
+
+#~ msgid "Lists"
+#~ msgstr "列表"
+
+#~ msgid "New"
+#~ msgstr "新建"
+
+#~ msgid "No item with ID %s"
+#~ msgstr "没有 ID 为 %s 的项"
+
+#~ msgid "Permission to use camera"
+#~ msgstr "使用相机的权限"
+
+#~ msgid "Show more actions"
+#~ msgstr "显示更多操作"
+
+#~ msgid ""
+#~ "The Joplin mobile app does not currently support this type of link: %s"
+#~ msgstr "Joplin 移动应用目前不支持这种类型的链接：%s"
+
+#~ msgid "This attachment is not downloaded or not decrypted yet."
+#~ msgstr "该附件没有下载或者尚未解密。"
+
+#~ msgid "Your permission to use your camera is required."
+#~ msgstr "您需要授予相机权限。"
+
+#~ msgid "From a plugin"
+#~ msgstr "从一个插件"
+
+#, fuzzy
+#~ msgid "Browse and install community plugins."
+#~ msgstr "浏览所有插件"
+
+#, fuzzy
+#~ msgid "Install new plugins"
+#~ msgstr "浏览所有插件"
+
+#, fuzzy
+#~ msgid "Installed plugins"
+#~ msgstr "已安装"
+
+#, fuzzy
+#~ msgid "Search plugins"
+#~ msgstr "搜索插件..."
+
+#, fuzzy
+#~ msgid "You currently have %d plugin installed."
+#~ msgid_plural "You currently have %d plugins installed."
+#~ msgstr[0] "您当前没有笔记本。"
+
+#~ msgid "Accepted shares"
+#~ msgstr "接受共享"
+
+#~ msgid ""
+#~ "Failed to leave share. Please verify that Joplin is connected to the "
+#~ "internet and able to sync.\n"
+#~ "Error: %s"
+#~ msgstr ""
+#~ "离开共享失败。请确认 Joplin 已连接到互联网并能够同步。\n"
+#~ "错误：%s"
+
+#~ msgid "Incoming shares"
+#~ msgstr "传入的共享"
+
+#~ msgid "Leave share"
+#~ msgstr "离开共享"
+
+#~ msgid "Loading plugin repository..."
+#~ msgstr "正在加载插件库..."
+
+#~ msgid "No description"
+#~ msgstr "无描述"
+
+#~ msgid "No incoming shares"
+#~ msgstr "无传入的共享"
+
+#~ msgid "Folders"
+#~ msgstr "文件夹"
+
+#~ msgid "Database v%s"
+#~ msgstr "数据库 v%s"
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on \"New "
+#~ "notebook\"."
+#~ msgstr "当前没有笔记本。点击 “新建笔记本” 创建。"
+
+#~ msgid "Unable to export or share data. Reason: %s"
+#~ msgstr "无法导出或共享数据。 原因：%s"
+
+#~ msgid ""
+#~ "Warnings:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "警告:\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid ""
+#~ "To allow Joplin to synchronise with Joplin Cloud, open this URL in your "
+#~ "browser to authorise the application:"
+#~ msgstr "步骤一：在浏览器中打开此 URL 来授权应用程序："
+
+#~ msgid "Delete note?"
+#~ msgstr "是否删除笔记？"
+
+#~ msgid "Joplin Cloud email"
+#~ msgstr "Joplin Cloud 邮箱"
+
+#~ msgid "Joplin Cloud password"
+#~ msgstr "Joplin Cloud 密码"
+
+#~ msgid "Login"
+#~ msgstr "登录"
+
+#~ msgid "Login below."
+#~ msgstr "在下方登录。"
+
+#~ msgid "Or create an account."
+#~ msgstr "创建帐号。"
+
+#~ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
+#~ msgstr "感谢！您的 Joplin Cloud 帐号已经设置完毕。"
+
+#~ msgid "Logs"
+#~ msgstr "日志"
+
+#, fuzzy
+#~ msgid "%s: Missing password"
+#~ msgstr "主密码"
+
+#~ msgid "Share and collaborate on a notebook"
+#~ msgstr "在笔记本上分享和协作"
+
+#~ msgid "Sharing access control"
+#~ msgstr "共享访问控制"
+
+#~ msgid "Encrypted notebooks cannot be renamed"
+#~ msgstr "无法重命名已加密的笔记本"
+
+#, fuzzy
+#~ msgid "Changes have been saved"
+#~ msgstr "笔记已被保存。"
+
+#, fuzzy
+#~ msgid "Create KaTeX region"
+#~ msgstr "创建用户"
+
+#, fuzzy
+#~ msgid "Create link"
+#~ msgstr "创建"
+
+#, fuzzy
+#~ msgid "Create task list"
+#~ msgstr "新建一个笔记本"
+
+#, fuzzy
+#~ msgid "Remove KaTeX region"
+#~ msgstr "创建用户"
+
+#, fuzzy
+#~ msgid "Unitalic"
+#~ msgstr "斜体"
+
+#, fuzzy
+#~ msgid "Bold text"
+#~ msgstr "加粗"
+
+#, fuzzy
+#~ msgid "Edit Link"
+#~ msgstr "编辑笔记本"
+
+#~ msgid "Insert Date Time"
+#~ msgstr "插入时间"
+
+#, fuzzy
+#~ msgid "Italicize"
+#~ msgstr "斜体"
