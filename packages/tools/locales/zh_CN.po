@@ -624,7 +624,7 @@ msgstr "自动检查更新"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1722
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "一段时间后自动删除回收站中的笔记"
+msgstr "几天后自动删除回收站中的笔记"
 
 #: packages/lib/models/settings/builtInMetadata.ts:556
 msgid "Automatically switch theme to match system theme"
@@ -4754,7 +4754,7 @@ msgstr "显示密码"
 
 #: packages/lib/models/settings/builtInMetadata.ts:698
 msgid "Show sort order buttons"
-msgstr "显示排序方法按钮"
+msgstr "显示排序按钮"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1007
 msgid "Show tray icon"
