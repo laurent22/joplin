@@ -366,7 +366,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				marginLeft: 0,
 				marginRight: 0,
 				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
-				listTabSize: themeStyle(props.themeId).listTabSize,
 			},
 			automatchBraces: Setting.value('editor.autoMatchingBraces'),
 			autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
