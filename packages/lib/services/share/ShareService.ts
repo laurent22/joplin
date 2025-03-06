@@ -329,8 +329,7 @@ export default class ShareService {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
-			if(!recipientEmail) throw new Error(_('Kindly provide proper recipient address'));
-			
+			if (!recipientEmail) throw new Error(_('Kindly provide proper recipient address'));
 			const syncInfo = localSyncInfo();
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
