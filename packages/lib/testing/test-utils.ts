@@ -11,7 +11,7 @@ import uuid from '../uuid';
 import ResourceService from '../services/ResourceService';
 import KeymapService from '../services/KeymapService';
 import KvStore from '../services/KvStore';
-import KeychainServiceDriver from '../services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverNode from '../services/keychain/KeychainServiceDriver.node';
 import KeychainServiceDriverDummy from '../services/keychain/KeychainServiceDriver.dummy';
 import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
@@ -67,6 +67,7 @@ import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
+import { Store } from 'redux';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -280,10 +281,12 @@ async function switchClient(id: number, options: any = null) {
 
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
+	KvStore.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
+	ResourceFetcher.instance_ = resourceFetchers_[id];
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -295,7 +298,7 @@ async function switchClient(id: number, options: any = null) {
 	Setting.setConstant('pluginDir', pluginDir(id));
 	Setting.setConstant('isSubProfile', false);
 
-	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+	await loadKeychainServiceAndSettings(options.keychainEnabled ? [KeychainServiceDriverNode] : []);
 
 	Setting.setValue('sync.target', syncTargetId());
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitly set in the test itself
@@ -359,7 +362,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
 		await clearDatabase(id);
-		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? [KeychainServiceDriverNode] : []);
 		Setting.setValue('sync.target', syncTargetId());
 		return;
 	}
@@ -378,7 +381,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 
 	BaseModel.setDb(databases_[id]);
 	await clearSettingFile(id);
-	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+	await loadKeychainServiceAndSettings([options.keychainEnabled ? KeychainServiceDriverNode : KeychainServiceDriverDummy]);
 
 	reg.setDb(databases_[id]);
 	Setting.setValue('sync.target', syncTargetId());
@@ -1020,21 +1023,23 @@ class TestApp extends BaseApplication {
 }
 
 const createTestShareData = (shareId: string): ShareState => {
+	const share = {
+		id: shareId,
+		folder_id: '',
+		master_key_id: '',
+		note_id: '',
+		type: 1,
+	};
+
 	return {
 		processingShareInvitationResponse: false,
-		shares: [],
+		shares: [share],
 		shareInvitations: [
 			{
 				id: '',
 				master_key: {},
 				status: 0,
-				share: {
-					id: shareId,
-					folder_id: '',
-					master_key_id: '',
-					note_id: '',
-					type: 1,
-				},
+				share,
 				can_read: 1,
 				can_write: 0,
 			},
@@ -1043,10 +1048,56 @@ const createTestShareData = (shareId: string): ShareState => {
 	};
 };
 
-const simulateReadOnlyShareEnv = (shareId: string) => {
+const mergeShareData = (state1: ShareState, state2: ShareState) => {
+	return {
+		...state1,
+		shares: [...state1.shares, ...state2.shares],
+		shareInvitations: [
+			...state1.shareInvitations,
+			...state2.shareInvitations,
+		],
+		shareUsers: {
+			...state1.shareUsers,
+			...state2.shareUsers,
+		},
+	};
+};
+
+const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
+	if (!Array.isArray(shareIds)) {
+		shareIds = [shareIds];
+	}
+
 	Setting.setValue('sync.target', 10);
 	Setting.setValue('sync.userId', 'abcd');
-	BaseItem.syncShareCache = createTestShareData(shareId);
+
+	// Create all shares
+	let shareData: ShareState|null = null;
+	for (const shareId of shareIds) {
+		const newShareData = createTestShareData(shareId);
+		if (!shareData) {
+			shareData = newShareData;
+		} else {
+			shareData = mergeShareData(shareData, newShareData);
+		}
+	}
+
+	BaseItem.syncShareCache = shareData;
+
+	if (store) {
+		store.dispatch({
+			type: 'SHARE_SET',
+			shares: shareData.shares,
+		});
+		store.dispatch({
+			type: 'SHARE_INVITATION_SET',
+			shareInvitations: shareData.shareInvitations,
+		});
+		store.dispatch({
+			type: 'SHARE_USER_SET',
+			shareUsers: shareData.shareUsers,
+		});
+	}
 
 	return () => {
 		BaseItem.syncShareCache = null;
@@ -1055,7 +1106,7 @@ const simulateReadOnlyShareEnv = (shareId: string) => {
 };
 
 export const newOcrService = () => {
-	const driver = new OcrDriverTesseract({ createWorker });
+	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
 	return new OcrService(driver);
 };
 
@@ -1072,6 +1123,65 @@ export const mockMobilePlatform = (platform: string) => {
 			shim.isNode = originalIsNode;
 		},
 	};
+};
+
+// Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
+// with Joplin's mix of real and fake Jest timers.
+const realSetTimeout = setTimeout;
+export const waitFor = async (callback: ()=> Promise<void>) => {
+	const timeout = 10_000;
+	const startTime = performance.now();
+	let passed = false;
+	let lastError: Error|null = null;
+
+	while (!passed && performance.now() - startTime < timeout) {
+		try {
+			await callback();
+			passed = true;
+			lastError = null;
+		} catch (error) {
+			lastError = error;
+
+			await new Promise<void>(resolve => {
+				realSetTimeout(() => resolve(), 10);
+			});
+		}
+	}
+
+	if (lastError) {
+		throw lastError;
+	}
+};
+
+export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
+	if (typeof jest === 'undefined') {
+		throw new Error('Fake timers are only supported in jest.');
+	}
+
+	// advanceTimers: Needed by Joplin's database driver
+	jest.useFakeTimers({ advanceTimers: true });
+
+	// The shim.setTimeout and similar functions need to be changed to
+	// use fake timers.
+	const originalSetTimeout = shim.setTimeout;
+	const originalSetInterval = shim.setInterval;
+	const originalClearTimeout = shim.clearTimeout;
+	const originalClearInterval = shim.clearInterval;
+	shim.setTimeout = setTimeout;
+	shim.setInterval = setInterval;
+	shim.clearInterval = clearInterval;
+	shim.clearTimeout = clearTimeout;
+
+	try {
+		return await callback();
+	} finally {
+		jest.runOnlyPendingTimers();
+		shim.setTimeout = originalSetTimeout;
+		shim.setInterval = originalSetInterval;
+		shim.clearTimeout = originalClearTimeout;
+		shim.clearInterval = originalClearInterval;
+		jest.useRealTimers();
+	}
 };
 
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

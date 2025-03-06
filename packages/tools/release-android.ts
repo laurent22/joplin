@@ -56,6 +56,12 @@ class Patcher {
 
 }
 
+interface ReleaseConfig {
+	name: string;
+	patch?: (patcher: Patcher, rnDir: string)=> Promise<void>;
+	disabled?: boolean;
+}
+
 function increaseGradleVersionCode(content: string) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, (_a, versionCode: string) => {
 		const n = Number(versionCode);
@@ -94,39 +100,15 @@ function gradleVersionName(content: string) {
 	return matches[1];
 }
 
-async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
+async function createRelease(projectName: string, releaseConfig: ReleaseConfig, tagName: string, version: string): Promise<Release> {
+	const name = releaseConfig.name;
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
 	const patcher = new Patcher(`${rnDir}/patcher-work`);
 
 	console.info(`Creating release: ${suffix}`);
 
-	// if (name === '32bit') {
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
-	// 		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
-	// 		return content;
-	// 	});
-	// }
-
-	// if (name !== 'vosk') {
-	// 	await patcher.updateFileContent(`${rnDir}/services/voiceTyping/vosk.android.ts`, async (_content: string) => {
-	// 		return readFile(`${rnDir}/services/voiceTyping/vosk.ios.ts`, 'utf8');
-	// 	});
-
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-	// 		return content;
-	// 	});
-	// }
-
-	// if (name === 'vosk') {
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/(\s+)applicationId "net.cozic.joplin"/, '$1applicationId "net.cozic.joplin.mod"');
-	// 		content = content.replace(/(\s+)versionName "(\d+\.\d+\.\d+)"/, '$1versionName "$2-mod"');
-	// 		return content;
-	// 	});
-	// }
+	if (releaseConfig.patch) await releaseConfig.patch(patcher, rnDir);
 
 	const apkFilename = `joplin-v${suffix}.apk`;
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
@@ -138,6 +120,7 @@ async function createRelease(projectName: string, name: string, tagName: string,
 
 	await execCommand('yarn install', { showStdout: false });
 	await execCommand('yarn tsc', { showStdout: false });
+	await execCommand('yarn buildParallel', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 
@@ -241,16 +224,66 @@ async function main() {
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
-	// const releaseNames = ['main', '32bit', 'vosk'];
-	const releaseNames = ['main'];
+
+	const releaseConfigs: ReleaseConfig[] = [
+		{
+			name: 'main',
+		},
+
+		{
+			name: 'armeabi-v7a',
+			disabled: true,
+			patch: async (patcher, rnDir) => {
+				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a"');
+					return content;
+				});
+			},
+		},
+
+		{
+			name: 'x86',
+			disabled: true,
+			patch: async (patcher, rnDir) => {
+				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86"');
+					return content;
+				});
+			},
+		},
+
+		{
+			name: 'arm64-v8a',
+			disabled: true,
+			patch: async (patcher, rnDir) => {
+				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "arm64-v8a"');
+					return content;
+				});
+			},
+		},
+
+		{
+			name: 'x86_64',
+			disabled: true,
+			patch: async (patcher, rnDir) => {
+				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
+					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86_64"');
+					return content;
+				});
+			},
+		},
+	];
+
 	const releaseFiles: Record<string, Release> = {};
 	const mainProjectName = 'joplin-android';
 	const modProjectName = 'joplin-android-mod';
 
-	for (const releaseName of releaseNames) {
-		if (releaseNameOnly && releaseName !== releaseNameOnly) continue;
-		const projectName = releaseName === 'vosk' ? modProjectName : mainProjectName;
-		releaseFiles[releaseName] = await createRelease(projectName, releaseName, tagName, version);
+	for (const releaseConfig of releaseConfigs) {
+		if (releaseNameOnly && releaseConfig.name !== releaseNameOnly) continue;
+		if (releaseConfig.disabled) continue;
+		const projectName = releaseConfig.name === 'vosk' ? modProjectName : mainProjectName;
+		releaseFiles[releaseConfig.name] = await createRelease(projectName, releaseConfig, tagName, version);
 	}
 
 	console.info('Created releases:');

@@ -14,7 +14,7 @@ It's also possible to convert notes to to-dos and to-dos to notes.
 
 **On desktop**, right-click a note, then click "Switch between note and to-do type":
 
-**On mobile**, open a note, open the note action menu (opened by clicking thee "︙" button), and finally click "convert to todo" or "convert to note":
+**On mobile**, open a note, open the note action menu (opened by clicking the "︙" button), and finally click "convert to todo" or "convert to note":
 
 ## Ordering to-dos
 

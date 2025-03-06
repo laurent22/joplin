@@ -37,10 +37,6 @@ class ModalDialog extends React.Component<Props, State> {
 		this.styles_ = {};
 
 		const styles: Record<string, ViewStyle|TextStyle> = {
-			modalWrapper: {
-				flex: 1,
-				justifyContent: 'center',
-			},
 			modalContentWrapper: {
 				flex: 1,
 				flexDirection: 'column',
@@ -76,20 +72,18 @@ class ModalDialog extends React.Component<Props, State> {
 		const buttonBarEnabled = this.props.buttonBarEnabled !== false;
 
 		return (
-			<View style={this.styles().modalWrapper}>
-				<Modal transparent={true} visible={true} onRequestClose={() => {}} containerStyle={this.styles().modalContentWrapper}>
-					<Text style={this.styles().title}>{this.props.title}</Text>
-					<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
-					<View style={this.styles().buttonRow}>
-						<View style={{ flex: 1 }}>
-							<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
-						</View>
-						<View style={{ flex: 1, marginLeft: 5 }}>
-							<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
-						</View>
+			<Modal transparent={true} visible={true} onRequestClose={() => {}} containerStyle={this.styles().modalContentWrapper}>
+				<Text style={this.styles().title}>{this.props.title}</Text>
+				<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
+				<View style={this.styles().buttonRow}>
+					<View style={{ flex: 1 }}>
+						<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
 					</View>
-				</Modal>
-			</View>
+					<View style={{ flex: 1, marginLeft: 5 }}>
+						<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
+					</View>
+				</View>
+			</Modal>
 		);
 	}
 }

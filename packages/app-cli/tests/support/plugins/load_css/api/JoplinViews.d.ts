@@ -5,6 +5,7 @@ import JoplinViewsMenus from './JoplinViewsMenus';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 import JoplinViewsNoteList from './JoplinViewsNoteList';
+import JoplinViewsEditors from './JoplinViewsEditor';
 /**
  * This namespace provides access to view-related services.
  *
@@ -19,11 +20,13 @@ export default class JoplinViews {
     private menus_;
     private toolbarButtons_;
     private dialogs_;
+    private editors_;
     private noteList_;
     private implementation_;
     constructor(implementation: any, plugin: Plugin, store: any);
     get dialogs(): JoplinViewsDialogs;
     get panels(): JoplinViewsPanels;
+    get editors(): JoplinViewsEditors;
     get menuItems(): JoplinViewsMenuItems;
     get menus(): JoplinViewsMenus;
     get toolbarButtons(): JoplinViewsToolbarButtons;

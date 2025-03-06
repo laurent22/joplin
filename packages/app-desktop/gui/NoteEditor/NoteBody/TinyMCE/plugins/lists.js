@@ -886,7 +886,7 @@
         var parentLi = editor.dom.getParent(elm, 'li,dd,dt', getClosestListRootElm(editor, elm));
         return parentLi ? parentLi : elm;
       });
-      return DomQuery.unique(listItemsElms);
+      return [...new Set(listItemsElms)];
     };
     var getSelectedListItems = function (editor) {
       var selectedBlocks = editor.selection.getSelectedBlocks();
@@ -919,7 +919,7 @@
       var listRoots = map(lists, function (list) {
         return findLastParentListNode(editor, list).getOr(list);
       });
-      return DomQuery.unique(listRoots);
+      return [...new Set(listRoots)];
     };
 
     var shouldIndentOnTab = function (editor) {
@@ -2119,8 +2119,7 @@
     };
     var register$1 = function (editor) {
       var hasPlugin = function (editor, plugin) {
-        var plugins = editor.settings.plugins ? editor.settings.plugins : '';
-        return Tools.inArray(plugins.split(/[ ,]/), plugin) !== -1;
+        return editor.hasPlugin(plugin);
       };
       var _ = getLocalizationFunction(editor);
       var exec = function (command) {

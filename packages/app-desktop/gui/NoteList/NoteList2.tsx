@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { Props } from './utils/types';
@@ -23,14 +23,20 @@ import useDragAndDrop from './utils/useDragAndDrop';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
 import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
-const { connect } = require('react-redux');
+import { _ } from '@joplin/lib/locale';
+import useActiveDescendantId from './utils/useActiveDescendantId';
+import getNoteElementIdFromJoplinId from '../NoteListItem/utils/getNoteElementIdFromJoplinId';
+import useFocusVisible from './utils/useFocusVisible';
+import { stateUtils } from '@joplin/lib/reducer';
+import { connect } from 'react-redux';
+import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
 
 const commands = {
 	focusElementNoteList,
 };
 
 const NoteList = (props: Props) => {
-	const listRef = useRef(null);
+	const listRef = useRef<HTMLDivElement>(null);
 	const itemRefs = useRef<Record<string, HTMLDivElement>>({});
 	const listRenderer = props.listRenderer;
 
@@ -65,7 +71,8 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 	);
 
-	const focusNote = useFocusNote(itemRefs, props.notes, makeItemIndexVisible);
+	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
+	const focusNote = useFocusNote(listRef, props.notes, makeItemIndexVisible, setActiveNoteId);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
@@ -97,7 +104,10 @@ const NoteList = (props: Props) => {
 
 	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
+	const onNoteDoubleClick = useOnNoteDoubleClick();
+
 	const onKeyDown = useOnKeyDown(
+		activeNoteId,
 		props.selectedNoteIds,
 		moveNote,
 		makeItemIndexVisible,
@@ -108,6 +118,8 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 		listRenderer.flow,
 		itemsPerLine,
+		props.showCompletedTodos,
+		props.uncompletedTodosOnTop,
 	);
 
 	useItemCss(listRenderer.itemCss);
@@ -177,6 +189,10 @@ const NoteList = (props: Props) => {
 	// 	}
 	// }, [makeItemIndexVisible, previousSelectedNoteIds, previousNoteCount, previousVisible, props.selectedNoteIds, props.notes, props.focusedField, props.visible]);
 
+	const { focusVisible, onFocus, onBlur, onKeyUp } = useFocusVisible(listRef, () => {
+		focusNote(activeNoteId);
+	});
+
 	const highlightedWords = useMemo(() => {
 		if (props.notesParentType === 'Search') {
 			const query = BaseModel.byId(props.searches, props.selectedSearchId);
@@ -187,7 +203,9 @@ const NoteList = (props: Props) => {
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
-		return <div className="emptylist">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
+		// Role status is necessary for the screenreader to announce that the list is empty, since when there are
+		// zero items there is not list to render
+		return <div className="emptylist" role="status">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
 	};
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {
@@ -197,12 +215,13 @@ const NoteList = (props: Props) => {
 	};
 
 	const renderNotes = () => {
-		if (!props.notes.length) return null;
+		if (!props.notes.length) return [];
 
 		const output: JSX.Element[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
+			const isSelected = props.selectedNoteIds.includes(note.id);
 
 			output.push(
 				<NoteListItem
@@ -214,6 +233,7 @@ const NoteList = (props: Props) => {
 					itemSize={itemSize}
 					onChange={listRenderer.onChange}
 					onClick={onNoteClick}
+					onDoubleClick={onNoteDoubleClick}
 					onContextMenu={onItemContextMenu}
 					onDragStart={onDragStart}
 					onDragOver={onDragOver}
@@ -222,7 +242,9 @@ const NoteList = (props: Props) => {
 					isProvisional={props.provisionalNoteIds.includes(note.id)}
 					flow={listRenderer.flow}
 					note={note}
-					isSelected={props.selectedNoteIds.includes(note.id)}
+					tabIndex={-1}
+					focusVisible={focusVisible && activeNoteId === note.id}
+					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
@@ -262,18 +284,37 @@ const NoteList = (props: Props) => {
 		return output;
 	}, [listRenderer.flow]);
 
+	const onContainerContextMenu = useCallback((event: React.MouseEvent) => {
+		const isFromKeyboard = event.button === -1;
+		if (event.isDefaultPrevented() || !isFromKeyboard) return;
+		onItemContextMenu({ itemId: activeNoteId });
+	}, [onItemContextMenu, activeNoteId]);
+
+	const hasNotes = !!props.notes.length;
 	return (
 		<div
+			role={hasNotes ? 'listbox' : 'group'}
+			aria-label={hasNotes ? _('Notes') : null}
+			aria-activedescendant={activeNoteId ? getNoteElementIdFromJoplinId(activeNoteId) : undefined}
+			aria-multiselectable={hasNotes ? true : undefined}
+			tabIndex={0}
+
+			onFocus={onFocus}
+			onBlur={onBlur}
+
 			className="note-list"
 			style={noteListStyle}
 			ref={listRef}
 			onScroll={onScroll}
 			onKeyDown={onKeyDown}
+			onKeyUp={onKeyUp}
 			onDrop={onDrop}
+			onContextMenu={onContainerContextMenu}
+			id='notes-list'
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
-			<div className="notes" style={notesStyle}>
+			<div className='notes' role='presentation' style={notesStyle}>
 				{renderNotes()}
 			</div>
 			{renderFiller('bottom', bottomFillerStyle)}
@@ -281,19 +322,24 @@ const NoteList = (props: Props) => {
 	);
 };
 
-const mapStateToProps = (state: AppState) => {
+interface ConnectProps {
+	windowId: string;
+}
+
+const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const selectedFolder: FolderEntity = state.notesParentType === 'Folder' ? Folder.byId(state.folders, state.selectedFolderId) : null;
 	const userId = state.settings['sync.userId'];
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 
 	return {
-		notes: state.notes,
+		notes: windowState.notes,
 		folders: state.folders,
-		selectedNoteIds: state.selectedNoteIds,
-		selectedFolderId: state.selectedFolderId,
+		selectedNoteIds: windowState.selectedNoteIds,
+		selectedFolderId: windowState.selectedFolderId,
 		themeId: state.settings.theme,
 		notesParentType: state.notesParentType,
 		searches: state.searches,
-		selectedSearchId: state.selectedSearchId,
+		selectedSearchId: windowState.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
@@ -302,7 +348,7 @@ const mapStateToProps = (state: AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
-		customCss: state.customCss,
+		customCss: state.customViewerCss,
 		focusedField: state.focusedField,
 		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
 		selectedFolderInTrash: itemIsInTrash(selectedFolder),

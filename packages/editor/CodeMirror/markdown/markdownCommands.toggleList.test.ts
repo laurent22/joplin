@@ -232,4 +232,19 @@ describe('markdownCommands.toggleList', () => {
 		);
 		expect(editor.state.selection.main.from).toBe(preSubListText.length);
 	});
+
+	it('should not treat a list of IP addresses as a numbered list', async () => {
+		const initialDocText = '192.168.1.1. This\n127.0.0.1. is\n0.0.0.0. a list';
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			[],
+		);
+
+		toggleList(ListType.UnorderedList)(editor);
+		expect(editor.state.doc.toString()).toBe(
+			'- 192.168.1.1. This\n- 127.0.0.1. is\n- 0.0.0.0. a list',
+		);
+	});
 });

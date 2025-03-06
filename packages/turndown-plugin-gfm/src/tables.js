@@ -4,6 +4,7 @@ var rules = {}
 var alignMap = { left: ':---', right: '---:', center: ':---:' };
 
 let isCodeBlock_ = null;
+let options_ = null;
 
 // We need to cache the result of tableShouldBeSkipped() as it is expensive.
 // Caching it means we went from about 9000 ms for rendering down to 90 ms.
@@ -72,36 +73,57 @@ rules.tableRow = {
 }
 
 rules.table = {
-  // Only convert tables that can result in valid Markdown
-  // Other tables are kept as HTML using `keep` (see below).
   filter: function (node, options) {
-    return node.nodeName === 'TABLE' && !tableShouldBeHtml(node, options);
+    return node.nodeName === 'TABLE';
   },
 
   replacement: function (content, node) {
-    if (tableShouldBeSkipped(node)) return content;
-
-    // Ensure there are no blank lines
-    content = content.replace(/\n+/g, '\n')
-
-    // If table has no heading, add an empty one so as to get a valid Markdown table
-    var secondLine = content.trim().split('\n');
-    if (secondLine.length >= 2) secondLine = secondLine[1]
-    var secondLineIsDivider = /\| :?---/.test(secondLine);
-
-    var columnCount = tableColCount(node);
-    var emptyHeader = ''
-    if (columnCount && !secondLineIsDivider) {
-      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
-      for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
-        emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
+    // Only convert tables that can result in valid Markdown
+    // Other tables are kept as HTML using `keep` (see below).
+    if (tableShouldBeHtml(node, options_)) {
+      let html = node.outerHTML;
+      let divParent = nodeParentDiv(node)
+      // Make table in HTML format horizontally scrollable by give table a div parent, so the width of the table is limited to the screen width.
+	    // see https://github.com/laurent22/joplin/pull/10161
+      // test cases:
+      // packages/app-cli/tests/html_to_md/preserve_nested_tables.html
+      // packages/app-cli/tests/html_to_md/table_with_blockquote.html
+      // packages/app-cli/tests/html_to_md/table_with_code_1.html
+      // packages/app-cli/tests/html_to_md/table_with_code_2.html
+      // packages/app-cli/tests/html_to_md/table_with_code_3.html
+      // packages/app-cli/tests/html_to_md/table_with_heading.html
+      // packages/app-cli/tests/html_to_md/table_with_hr.html
+      // packages/app-cli/tests/html_to_md/table_with_list.html
+      if (divParent === null || !divParent.classList.contains('joplin-table-wrapper')){
+        return `\n\n<div class="joplin-table-wrapper">${html}</div>\n\n`;
+      } else {
+        return html
       }
-    }
+    } else {
+      if (tableShouldBeSkipped(node)) return content;
 
-    const captionContent = node.caption ? node.caption.textContent || '' : '';
-    const caption = captionContent ? `${captionContent}\n\n` : '';
-    const tableContent = `${emptyHeader}${content}`.trimStart();
-    return `\n\n${caption}${tableContent}\n\n`;
+      // Ensure there are no blank lines
+      content = content.replace(/\n+/g, '\n')
+
+      // If table has no heading, add an empty one so as to get a valid Markdown table
+      var secondLine = content.trim().split('\n');
+      if (secondLine.length >= 2) secondLine = secondLine[1]
+      var secondLineIsDivider = /\| :?---/.test(secondLine);
+
+      var columnCount = tableColCount(node);
+      var emptyHeader = ''
+      if (columnCount && !secondLineIsDivider) {
+        emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
+        for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
+          emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
+        }
+      }
+
+      const captionContent = node.caption ? node.caption.textContent || '' : '';
+      const caption = captionContent ? `${captionContent}\n\n` : '';
+      const tableContent = `${emptyHeader}${content}`.trimStart();
+      return `\n\n${caption}${tableContent}\n\n`;
+    }
   }
 }
 
@@ -179,7 +201,7 @@ const nodeContains = (node, types) => {
 
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes[i];
-    if (types === 'code' && isCodeBlock_(child)) return true;
+    if (types === 'code' && isCodeBlock_ && isCodeBlock_(child)) return true;
     if (types.includes(child.nodeName)) return true;
     if (nodeContains(child, types)) return true;
   }
@@ -232,6 +254,15 @@ function tableShouldBeSkipped_(tableNode) {
   return false;
 }
 
+function nodeParentDiv(node) {
+  let parent = node.parentNode;
+  while (parent.nodeName !== 'DIV') {
+    parent = parent.parentNode;
+    if (!parent) return null;
+  }
+  return parent;
+}
+
 function nodeParentTable(node) {
   let parent = node.parentNode;
   while (parent.nodeName !== 'TABLE') {
@@ -261,6 +292,7 @@ function tableColCount(node) {
 
 export default function tables (turndownService) {
   isCodeBlock_ = turndownService.isCodeBlock;
+  options_ = turndownService.options;
 
   turndownService.keep(function (node) {
     if (node.nodeName === 'TABLE' && tableShouldBeHtml(node, turndownService.options)) return true;

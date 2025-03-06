@@ -116,6 +116,9 @@
 	"(In plugin: %s)": [
 		"(Şu eklentide: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(Hiçbiri)"
 	],
@@ -208,6 +211,9 @@
 	],
 	"Add recipient:": [
 		"Alıcı ekle:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Başlık ekle"
@@ -305,6 +311,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"Ekle"
 	],
@@ -356,6 +365,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Parantez, çift tırnak gibi değerlerin çiftlerini otomatik ekle."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"Otomatik olarak güncellemeleri denetle"
 	],
@@ -374,9 +386,6 @@
 	"Beta": [
 		"Beta"
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"Bu cihazda biyometrik kilit açma etkineltirilmemiş. Lütfen Joplin'i açmak için bunu ayarlayın. Eğer cihazda bunu yapamıyorsanız ayarı açıp kapatarak biyometrik doğrulamayı sıfırlayabilirsiniz."
-	],
 	"Bold": [
 		"Kalın"
 	],
@@ -394,6 +403,9 @@
 	],
 	"by %s": [
 		"%s tarafından"
+	],
+	"by word": [
+		""
 	],
 	"Can Share": [
 		"Paylaşılabilir"
@@ -470,11 +482,17 @@
 	"Change language": [
 		"Dil değiştir"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Karakter"
 	],
 	"Characters excluding spaces": [
 		"Karakter (boşluklar hariç)"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Güncellemeleri kontrol et..."
@@ -521,6 +539,9 @@
 	"Close dropdown": [
 		"Açılır menüyü kapat"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"Uygulamayı kapatın, ardından \"%s\" klasöründeki profilinizi silin, ve de uygulamayı yeniden başlatın. Bunları yapmadan once tüm notlarınızı JEX biçiminde dışları aktarmayı unutmayın."
 	],
@@ -548,11 +569,8 @@
 	"Collaborate on notebooks with others": [
 		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 	],
-	"Collapse": [
-		"Daralt"
-	],
-	"Collapse %s": [
-		"Daralt %s"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"Yaklaşan alarmlar"
@@ -846,6 +864,9 @@
 	"Delete local data and re-download from sync target": [
 		"Yerel veriyi silip senkronizasyon sunucusundan yeniden indir"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete note": [
 		"Notu sil"
 	],
@@ -1018,7 +1039,7 @@
 		"Dropbox Girişi"
 	],
 	"Due": [
-		"Şu tarihe kadar:"
+		"Şu tarihe kadar: "
 	],
 	"due date": [
 		"şu tarihe kadar"
@@ -1040,6 +1061,9 @@
 	],
 	"Edit in external editor": [
 		"Harici editörde düzenle"
+	],
+	"Edit in new window": [
+		""
 	],
 	"Edit link": [
 		"Link'i düzenle"
@@ -1131,6 +1155,9 @@
 	"Enable encryption": [
 		"Şifrelemeyi etkinleştir"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Dip notları etkinleştir"
 	],
@@ -1193,6 +1220,9 @@
 	],
 	"Enabled": [
 		"Etkin"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Şifrelemeyi devre devreye alırsanız *tüm* notlarınızın ve eklerinizin yeniden senkronize edileceği ve senkronizasyon hedefine şifrelenmemiş olarak gönderileceği anlamına gelir."
@@ -1266,11 +1296,11 @@
 	"Exits the application.": [
 		"Uygulamadan çıkar."
 	],
-	"Expand": [
-		"Genişlet"
-	],
 	"Expand %s": [
 		"Genişlet %s"
+	],
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"Dışa aktar"
@@ -1341,9 +1371,6 @@
 	"Filter tags": [
 		"Etikerleri filtrele"
 	],
-	"Find and replace": [
-		"Bul ve değiştir"
-	],
 	"Find: ": [
 		"Ara: "
 	],
@@ -1365,6 +1392,9 @@
 	"Focus title": [
 		"Başlığa odaklan"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Sadece hata ayıklama amacıyla için: Profilinizi harici SD kart'a çıktı alın."
 	],
@@ -1382,9 +1412,6 @@
 	],
 	"Force path style": [
 		"Zorlanan yol biçimi"
-	],
-	"Formatting": [
-		"Biçimlendirme"
 	],
 	"Forward": [
 		"İleri"
@@ -1423,8 +1450,17 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Ayar değeri alınır veya ayarlanır. Eğer [değer] sağlanmamışsa, [isim] kısmı gözükecektir. Eğer [isim] ve [değer] bilgilerinin ikisi de mevcut değilse, mevcut olan yapılandırmayı listeleyecek."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
 	"Go to Joplin Cloud profile": [
 		"Joplin Cloud profiline git"
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"URL kaynağına git"
@@ -1440,9 +1476,6 @@
 	],
 	"Header %d": [
 		"Başlık %d"
-	],
-	"Headers": [
-		"Başlıklar"
 	],
 	"Heading": [
 		"Başlık"
@@ -1473,9 +1506,6 @@
 	],
 	"Hide keyboard": [
 		"Klavyeyi gizle"
-	],
-	"Hide more actions": [
-		"Daha fazla seçenekler kısmını gizle"
 	],
 	"Highlight": [
 		"Vurgula"
@@ -1594,6 +1624,9 @@
 	"Indent more": [
 		"Daha çok girintile"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Bilgi"
 	],
@@ -1660,9 +1693,6 @@
 	"Items that cannot be synchronised": [
 		"Senkronize edilemeyen öğeler"
 	],
-	"Join us on Twitter": [
-		"Twitter'da bize katılın"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin notlarınızı pek çok sağlayıcıyı kullanarak senkron edebilir. Lütfen aşağıdan bunlardan birini seçin."
 	],
@@ -1714,14 +1744,11 @@
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin’in kendi senkronizasyon servisi. Bu servis ayrıca Joplin’e özel, notları paylaşma veya başkalarıyla işbirliği yaparak ortak yönetmenizi sağlar."
 	],
-	"KaTeX": [
-		"KaTeX"
-	],
 	"Keep note history for": [
 		"Not tarihçesini şu kadar süre tut"
 	],
 	"Keep notes in the trash for": [
-		"Çöp kutusunda notları şu kadar süre tut:"
+		"Çöp kutusunda notları şu kadar süre tut: "
 	],
 	"Keyboard Mode": [
 		"Klavye modu"
@@ -1802,14 +1829,8 @@
 	"Link text": [
 		"Bağlantı metni"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"“%s” formatlı linkler desteklenmiyor"
-	],
 	"List item": [
 		"Öğeyi listele"
-	],
-	"Lists": [
-		"Listeler"
 	],
 	"Loaded": [
 		"Yüklenme"
@@ -1825,6 +1846,9 @@
 	],
 	"Log": [
 		"Log"
+	],
+	"Login to Joplin Cloud.": [
+		"Joplin Cloud'a giriş yap."
 	],
 	"Login with Dropbox": [
 		"Dropbox ile giriş yap"
@@ -1891,6 +1915,12 @@
 	],
 	"Master password:": [
 		"Ana parola:"
+	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
 	],
 	"Max concurrent connections": [
 		"Maksimum aynı anda bağlantı"
@@ -1964,9 +1994,6 @@
 	"Never resize": [
 		"Asla yeniden boyutlandırma"
 	],
-	"New": [
-		"Yeni"
-	],
 	"New invitations": [
 		"Yeni davetiyeler"
 	],
@@ -1994,6 +2021,9 @@
 	"New version: %s": [
 		"Yeni sürüm: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"Sonraki eşleşen"
 	],
@@ -2017,9 +2047,6 @@
 	],
 	"No active notebook.": [
 		"Aktif not defteri yok."
-	],
-	"No item with ID %s": [
-		"Bu kimlikte öğe yok : %s"
 	],
 	"No new invitations": [
 		"Yeni davetiye bulunamadı"
@@ -2156,6 +2183,9 @@
 	"Numbered List": [
 		"Numaralı liste"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2164,6 +2194,9 @@
 	],
 	"On %s: %s": [
 		"%s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Ana şifreleme anahtarlarınızdan biri eski bir şifreleme yolunu kullanıyor."
@@ -2276,9 +2309,6 @@
 	"Permission needed": [
 		"İzin gerekmekte"
 	],
-	"Permission to use camera": [
-		"Kamera kullanımı için izin"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Devam etmek için lütfen \"%s\" butonuna basın, ya da aşağıdaki \"%s\" listesinden parola belirleyin."
 	],
@@ -2369,6 +2399,12 @@
 	"Preferred light theme": [
 		"Tercih edilen açık renk tema"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Uygulamadan çıkmak için Ctrl + D tuşlarına basın veya \"exit\" yazın"
 	],
@@ -2453,6 +2489,9 @@
 	"Quit": [
 		"Çıkış"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"Verini yeniden şifrele"
 	],
@@ -2534,6 +2573,12 @@
 	"Replace: ": [
 		"Değiştir: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		"Hata bildir"
 	],
@@ -2609,6 +2654,12 @@
 	"Revision: %s (%s)": [
 		"Sürüm: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Metin dosyasındaki komutları çalıştırır. Her bir komut ayrı satırda olmalıdır."
 	],
@@ -2653,6 +2704,9 @@
 	],
 	"Save geo-location with notes": [
 		"Coğrafi konumu notlarla kaydedin"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Arama"
@@ -2729,6 +2783,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"<name> özelliğini verilen <note> içinde verilen [value] ile değiştirir. Olası özellikler şunlardır:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"Paylaş"
 	],
@@ -2779,9 +2836,6 @@
 	],
 	"Show monospace fonts only.": [
 		"Sadece monospace (sabit genişlikteki) yazı tiplerini göster."
-	],
-	"Show more actions": [
-		"Daha fazla seçenekler kısmını göster"
 	],
 	"Show note counts": [
 		"Not sayacını göster"
@@ -2842,6 +2896,12 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"Bazı öğeler senkronize edilemiyor. Lütfen ilk olarak bunları senkronize etmeyi deneyin."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Notları şuna göre sırala"
@@ -2956,6 +3016,9 @@
 	],
 	"Switch profile": [
 		"Profili değiştir"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Not tipine dönüştür"
@@ -3120,8 +3183,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"Mevcut anahtarlarınız eski bir şifreleme algoritmasını kullanıyor, bu sebeple güncellenmesi gerekir. Güncellenen şifreleme ahatarları eskisi gibi verinizi şifreleme ve şifre çözmede kullanılacaktır."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin mobil uygulaması şu anda bu tür bir bağlantıyı desteklemiyor: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin ekibi bu eklentinin güvenlik ve performans konusunda standartlarını sağladığını beyan eder."
@@ -3174,6 +3237,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Senkronize edilecek hedef. Her senkronizasyon hedefi, `sync.NUM.NAME` olarak adlandırılan ek parametrelere sahip olabilir (tümü aşağıda belgelenmiştir)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Alıntılayıcısı’nın verinize erişebilmesi için izninize ihtiyacı var."
@@ -3228,9 +3294,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Bu ek henüz indirilmedi veya şifresi çözülmedi"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Bu ek henüz indirilmedi veya şifrelenmedi."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Bu yetkilendirme yalnızca üçüncü taraf uygulamaların Joplin'e erişmesine izin vermek için gereklidir."
@@ -3436,6 +3499,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"Programı kaldırıp yeniden kurun. Bunu yapmadan önce tüm notlarınızı masaüstü uygulamasından JEX biçiminde dışarı aktardığınızdan emin olun."
 	],
+	"Unknown": [
+		"Bilinmeyen"
+	],
 	"Unknown file type": [
 		"Bilinmeyen dosya tipi"
 	],
@@ -3577,6 +3643,9 @@
 	"Voice typing...": [
 		"Sesle yazılıyor..."
 	],
+	"Vosk": [
+		""
+	],
 	"Waiting for authorisation...": [
 		"Yetkilendirme için bekleniyor..."
 	],
@@ -3634,6 +3703,9 @@
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de arama yapabileceksiniz."
 	],
+	"Whisper": [
+		""
+	],
 	"Window unresponsive.": [
 		"Pencere tepkisiz, cevap vermiyor."
 	],
@@ -3683,16 +3755,13 @@
 		"Veriniz yeniden şifrelenecek ve senkron edilecek."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"Joplin Cloud giriş bilgileriniz geçersiz, lütfen giriş yapın."
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Verilerinizin bir kısmının şifrelemesinin çözülmesi için parolanız gerekmektedir."
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Verilerinizin bir kısmının şifrelelemesinin çözülmesi için ana parolanız gerekmektedir. `:e2ee decrypt` yazarak ayarlayabilirsiniz."
-	],
-	"Your permission to use your camera is required.": [
-		"Kamera kullanımı için izniniz gerekmektedir."
 	],
 	"Your version: %s": [
 		"Sürümünüz: %s"

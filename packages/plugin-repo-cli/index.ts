@@ -245,7 +245,7 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
+	const searchResults = (await execCommand('npm search keywords:joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
@@ -302,6 +302,7 @@ async function main() {
 		selectedCommandArgs = args;
 	}
 
+	// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 	require('yargs')
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')

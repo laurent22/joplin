@@ -1,34 +1,11 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useContext, useRef } from 'react';
 import NoteToolbar from '../../NoteToolbar/NoteToolbar';
 import { buildStyle } from '@joplin/lib/theme';
 import time from '@joplin/lib/time';
-import styled from 'styled-components';
-
-const StyledRoot = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	padding-left: ${props => props.theme.editorPaddingLeft}px;
-
-	@media (max-width: 800px) {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-`;
-
-const InfoGroup = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-
-	@media (max-width: 800px) {
-		border-top: 1px solid ${props => props.theme.dividerColor};
-		width: 100%;
-	}
-`;
+import { WindowIdContext } from '../../NewWindowOrIFrame';
 
 interface Props {
 	themeId: number;
@@ -75,53 +52,88 @@ function styles_(props: Props) {
 	});
 }
 
-export default function NoteTitleBar(props: Props) {
-	const styles = styles_(props);
+const useReselectHandlers = () => {
+	const lastTitleFocus = useRef([0, 0]);
+	const lastTitleValue = useRef('');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTitleKeydown = useCallback((event: any) => {
-		const keyCode = event.keyCode;
+	const onTitleBlur: React.FocusEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		lastTitleFocus.current = [titleElement.selectionStart, titleElement.selectionEnd];
+		lastTitleValue.current = titleElement.value;
+	}, []);
 
-		if (keyCode === 9) { // TAB
-			event.preventDefault();
-
-			if (event.shiftKey) {
-				void CommandService.instance().execute('focusElement', 'noteList');
+	const onTitleFocus: React.FocusEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		// By default, focusing the note title bar can cause its content to become selected. We override
+		// this with a more reasonable default:
+		if (titleElement.selectionStart === 0 && titleElement.selectionEnd === titleElement.value.length) {
+			if (lastTitleValue.current !== titleElement.value) {
+				titleElement.selectionStart = titleElement.value.length;
 			} else {
-				void CommandService.instance().execute('focusElement', 'noteBody');
+				titleElement.selectionStart = lastTitleFocus.current[0];
+				titleElement.selectionEnd = lastTitleFocus.current[1];
 			}
 		}
 	}, []);
 
+	return { onTitleBlur, onTitleFocus };
+};
+
+export default function NoteTitleBar(props: Props) {
+	const styles = styles_(props);
+
+	const onTitleKeydown: React.KeyboardEventHandler<HTMLInputElement> = useCallback((event) => {
+		const titleElement = event.currentTarget;
+		const selectionAtEnd = titleElement.selectionEnd === titleElement.value.length;
+		const isNavigationShortcut = (event.key === 'ArrowDown' && selectionAtEnd) || (event.key === 'Enter' && !event.shiftKey);
+		const composing = event.nativeEvent.isComposing;
+
+		// Don't change focus if the navigation shortcut is fired during composition. See
+		// https://github.com/laurent22/joplin/issues/11485.
+		if (!composing && isNavigationShortcut) {
+			event.preventDefault();
+			const moveCursorToStart = event.key === 'ArrowDown';
+			void CommandService.instance().execute('focusElement', 'noteBody', { moveCursorToStart });
+		}
+	}, []);
+
+	const { onTitleFocus, onTitleBlur } = useReselectHandlers();
+
 	function renderTitleBarDate() {
 		return <span className="updated-time-label" style={styles.titleDate}>{time.formatMsToLocal(props.noteUserUpdatedTime)}</span>;
 	}
+
+	const windowId = useContext(WindowIdContext);
 
 	function renderNoteToolbar() {
 		return <NoteToolbar
 			themeId={props.themeId}
 			style={styles.toolbarStyle}
 			disabled={props.disabled}
+			windowId={windowId}
 		/>;
 	}
 
 	return (
-		<StyledRoot>
+		<div className='note-title-wrapper'>
 			<input
 				className="title-input"
 				type="text"
 				ref={props.titleInputRef}
 				placeholder={props.isProvisional ? (props.noteIsTodo ? _('Creating new to-do...') : _('Creating new note...')) : ''}
+				aria-label={props.isProvisional ? undefined : _('Note title')}
 				style={styles.titleInput}
 				readOnly={props.disabled}
 				onChange={props.onTitleChange}
 				onKeyDown={onTitleKeydown}
+				onFocus={onTitleFocus}
+				onBlur={onTitleBlur}
 				value={props.noteTitle}
 			/>
-			<InfoGroup>
+			<div className='note-title-info-group'>
 				{renderTitleBarDate()}
 				{renderNoteToolbar()}
-			</InfoGroup>
-		</StyledRoot>
+			</div>
+		</div>
 	);
 }

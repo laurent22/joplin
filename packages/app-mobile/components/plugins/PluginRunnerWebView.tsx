@@ -1,12 +1,12 @@
 import * as React from 'react';
-import ExtendedWebView, { WebViewControl } from '../../components/ExtendedWebView';
+import ExtendedWebView from '../ExtendedWebView';
+import { WebViewControl } from '../ExtendedWebView/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginRunner from './PluginRunner';
 import loadPlugins from '@joplin/lib/services/plugins/loadPlugins';
 import { connect, useStore } from 'react-redux';
 import Logger from '@joplin/utils/Logger';
-import { View } from 'react-native';
 import PluginService, { PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -14,6 +14,8 @@ import PluginDialogManager from './dialogs/PluginDialogManager';
 import { AppState } from '../../utils/types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 import PlatformImplementation from '../../services/plugins/PlatformImplementation';
+import AccessibleView from '../accessibility/AccessibleView';
+import useOnDevPluginsUpdated from './utils/useOnDevPluginsUpdated';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -28,18 +30,31 @@ const usePlugins = (
 	pluginRunner: PluginRunner,
 	webviewLoaded: boolean,
 	pluginSettings: PluginSettings,
+	pluginSupportEnabled: boolean,
+	devPluginPath: string,
 ) => {
 	const store = useStore<AppState>();
 	const lastPluginRunner = usePrevious(pluginRunner);
+	const [reloadCounter, setReloadCounter] = useState(0);
 
 	// Only set reloadAll to true here -- this ensures that all plugins are reloaded,
 	// even if loadPlugins is cancelled and re-run.
 	const reloadAllRef = useRef(false);
 	reloadAllRef.current ||= pluginRunner !== lastPluginRunner;
 
+	useOnDevPluginsUpdated(async (pluginId: string) => {
+		logger.info(`Dev plugin ${pluginId} updated. Reloading...`);
+		await PluginService.instance().unloadPlugin(pluginId);
+		setReloadCounter(counter => counter + 1);
+	}, devPluginPath, pluginSupportEnabled);
+
 	useAsyncEffect(async (event) => {
 		if (!webviewLoaded) {
 			return;
+		}
+
+		if (reloadCounter > 0) {
+			logger.debug('Reloading with counter set to', reloadCounter);
 		}
 
 		await loadPlugins({
@@ -55,7 +70,7 @@ const usePlugins = (
 		if (!event.cancelled) {
 			reloadAllRef.current = false;
 		}
-	}, [pluginRunner, store, webviewLoaded, pluginSettings]);
+	}, [pluginRunner, store, webviewLoaded, pluginSettings, reloadCounter]);
 };
 
 const useUnloadPluginsOnGlobalDisable = (
@@ -78,6 +93,7 @@ interface Props {
 	serializedPluginSettings: SerializedPluginSettings;
 	pluginSupportEnabled: boolean;
 	pluginStates: PluginStates;
+	devPluginPath: string;
 	pluginHtmlContents: PluginHtmlContents;
 	themeId: number;
 }
@@ -97,7 +113,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	}, [webviewReloadCounter]);
 
 	const pluginSettings = usePluginSettings(props.serializedPluginSettings);
-	usePlugins(pluginRunner, webviewLoaded, pluginSettings);
+	usePlugins(pluginRunner, webviewLoaded, pluginSettings, props.pluginSupportEnabled, props.devPluginPath);
 	useUnloadPluginsOnGlobalDisable(props.pluginStates, props.pluginSupportEnabled);
 
 	const onLoadStart = useCallback(() => {
@@ -172,9 +188,9 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	};
 
 	return (
-		<View style={{ display: 'none' }}>
+		<AccessibleView style={{ display: 'none' }} inert={true}>
 			{renderWebView()}
-		</View>
+		</AccessibleView>
 	);
 };
 
@@ -182,6 +198,7 @@ export default connect((state: AppState) => {
 	const result: Props = {
 		serializedPluginSettings: state.settings['plugins.states'],
 		pluginSupportEnabled: state.settings['plugins.pluginSupportEnabled'],
+		devPluginPath: state.settings['plugins.devPluginPaths'],
 		pluginStates: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		themeId: state.settings.theme,

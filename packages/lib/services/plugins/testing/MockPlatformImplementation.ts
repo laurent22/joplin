@@ -22,10 +22,6 @@ export default class MockPlatformImplementation extends BasePlatformImplementati
 		return null;
 	}
 
-	public override get window(): null {
-		return null;
-	}
-
 	public override get joplin() {
 		return { views: { dialogs: { showMessageBox: jest.fn(), showOpenDialog: jest.fn() } } };
 	}

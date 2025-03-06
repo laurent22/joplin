@@ -44,6 +44,10 @@ const htmlTagNameDecoration = Decoration.mark({
 	attributes: { class: 'cm-htmlTag', ...noSpellCheckAttrs },
 });
 
+const markDecoration = Decoration.mark({
+	attributes: { class: 'cm-highlighted' },
+});
+
 const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
@@ -84,6 +88,18 @@ const tableDelimiterDecoration = Decoration.line({
 	attributes: { class: 'cm-tableDelimiter' },
 });
 
+const orderedListDecoration = Decoration.line({
+	attributes: { class: 'cm-orderedList' },
+});
+
+const unorderedListDecoration = Decoration.line({
+	attributes: { class: 'cm-unorderedList' },
+});
+
+const listItemDecoration = Decoration.line({
+	attributes: { class: 'cm-listItem' },
+});
+
 const horizontalRuleDecoration = Decoration.mark({
 	attributes: { class: 'cm-hr' },
 });
@@ -92,11 +108,19 @@ const taskMarkerDecoration = Decoration.mark({
 	attributes: { class: 'cm-taskMarker' },
 });
 
+const strikethroughDecoration = Decoration.mark({
+	attributes: { class: 'cm-strike' },
+});
+
 const nodeNameToLineDecoration: Record<string, Decoration> = {
 	'FencedCode': codeBlockDecoration,
 	'CodeBlock': codeBlockDecoration,
 	'BlockMath': mathBlockDecoration,
 	'Blockquote': blockQuoteDecoration,
+	'OrderedList': orderedListDecoration,
+	'BulletList': unorderedListDecoration,
+
+	'ListItem': listItemDecoration,
 
 	'SetextHeading1': header1LineDecoration,
 	'ATXHeading1': header1LineDecoration,
@@ -120,8 +144,18 @@ const nodeNameToMarkDecoration: Record<string, Decoration> = {
 	'TagName': htmlTagNameDecoration,
 	'HorizontalRule': horizontalRuleDecoration,
 	'TaskMarker': taskMarkerDecoration,
+	'Strikethrough': strikethroughDecoration,
+	'Highlight': markDecoration,
 };
 
+const multilineNodes = {
+	'FencedCode': true,
+	'CodeBlock': true,
+	'BlockMath': true,
+	'Blockquote': true,
+	'OrderedList': true,
+	'BulletList': true,
+};
 
 type DecorationDescription = { pos: number; length: number; decoration: Decoration };
 
@@ -179,8 +213,8 @@ const computeDecorations = (view: EditorView) => {
 					addDecorationToRange(viewFrom, viewTo, decoration);
 				}
 
-				// Only block decorations will have differing first and last lines
-				if (blockDecorated) {
+				// Only certain block decorations will have differing first and last lines
+				if (blockDecorated && multilineNodes.hasOwnProperty(node.name)) {
 					// Allow different styles for the first, last lines in a block.
 					if (viewFrom === node.from) {
 						addDecorationToLines(viewFrom, viewFrom, regionStartDecoration);

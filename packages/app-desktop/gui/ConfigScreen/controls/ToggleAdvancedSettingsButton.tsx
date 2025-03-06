@@ -6,6 +6,7 @@ import { _ } from '@joplin/lib/locale';
 interface Props {
 	onClick: ()=> void;
 	advancedSettingsVisible: boolean;
+	'aria-controls': string;
 }
 
 const ToggleAdvancedSettingsButton: React.FunctionComponent<Props> = props => {
@@ -16,6 +17,10 @@ const ToggleAdvancedSettingsButton: React.FunctionComponent<Props> = props => {
 				level={ButtonLevel.Secondary}
 				onClick={props.onClick}
 				iconName={iconName}
+
+				aria-controls={props['aria-controls']}
+				aria-expanded={props.advancedSettingsVisible}
+
 				title={_('Show Advanced Settings')}
 			/>
 		</div>

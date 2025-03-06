@@ -110,6 +110,9 @@
 	"(In plugin: %s)": [
 		"(플러그: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(없음)"
 	],
@@ -193,6 +196,9 @@
 	],
 	"Add recipient:": [
 		"받는 사람 추가:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"제목 추가"
@@ -287,6 +293,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"첨부"
 	],
@@ -338,6 +347,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"괄호, 중괄호, 인용 부호 등의 자동 완성."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"자동으로 업데이트를 확인"
 	],
@@ -356,9 +368,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"장치에 생체 인식 잠금 해제가 설정되어 있지 않습니다. Joplin 잠금해제를 위해 설정해주세요. 장치가 잠겨 있는 경우 장치를 껐다가 켜서 생체 인식 스캔을 재설정하는 것이 좋습니다."
-	],
 	"Bold": [
 		"굵게"
 	],
@@ -375,6 +384,9 @@
 		"글머리 기호 목록"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can Share": [
@@ -452,11 +464,17 @@
 	"Change language": [
 		"언어 전환"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"문자"
 	],
 	"Characters excluding spaces": [
 		"공백을 제외한 문자"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"업데이트 확인..."
@@ -500,6 +518,9 @@
 	"Close dropdown": [
 		"드롭다운 닫기"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"프로그램을 닫은 다음 \"%s\"에서 프로필을 삭제하고 프로그램을 다시 시작하십시오. 먼저 모든 메모를 JEX로 내보내 백업을 생성하세요."
 	],
@@ -527,8 +548,8 @@
 	"Collaborate on notebooks with others": [
 		"다른 사람과 노트북들에서 협업하기"
 	],
-	"Collapse": [
-		"무너지다"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"예정된 알람"
@@ -815,6 +836,9 @@
 	"Delete local data and re-download from sync target": [
 		"로컬 데이터를 지우고 동기화 대상의 데이터를 다시 내려받기"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete note": [
 		"메모 삭제"
 	],
@@ -1007,6 +1031,9 @@
 	"Edit in external editor": [
 		"외부 편집기에서 편집하기"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit link": [
 		"링크 편집"
 	],
@@ -1097,6 +1124,9 @@
 	"Enable encryption": [
 		"암호화 사용"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"각주 활성화"
 	],
@@ -1156,6 +1186,9 @@
 	],
 	"Enabled": [
 		"활성화됨"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암호화되어 전송됩니다."
@@ -1229,8 +1262,8 @@
 	"Exits the application.": [
 		"애플리케이션을 종료합니다."
 	],
-	"Expand": [
-		"확장"
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"내보내기"
@@ -1301,9 +1334,6 @@
 	"Filter tags": [
 		"태그 필터"
 	],
-	"Find and replace": [
-		"찾기 및 바꾸기"
-	],
 	"Find: ": [
 		"찾기: "
 	],
@@ -1325,6 +1355,9 @@
 	"Focus title": [
 		"제목에 포커스"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 내보냅니다."
 	],
@@ -1342,9 +1375,6 @@
 	],
 	"Force path style": [
 		"경로 스타일을 강제"
-	],
-	"Formatting": [
-		"포맷"
 	],
 	"Forward": [
 		"앞으로 가기"
@@ -1382,6 +1412,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 표시할 것입니다."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"소스 URL로 이동"
 	],
@@ -1396,9 +1435,6 @@
 	],
 	"Header %d": [
 		"헤더 %d"
-	],
-	"Headers": [
-		"헤더"
 	],
 	"Heading": [
 		"표제"
@@ -1429,9 +1465,6 @@
 	],
 	"Hide keyboard": [
 		"키보드 숨기기"
-	],
-	"Hide more actions": [
-		"더 많은 작업 숨기기"
 	],
 	"Highlight": [
 		"하이라이트"
@@ -1535,6 +1568,9 @@
 	"Indent more": [
 		"들여쓰기 추가"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"정보"
 	],
@@ -1595,9 +1631,6 @@
 	"Items that cannot be synchronised": [
 		"동기화 할 수 없는 항목"
 	],
-	"Join us on Twitter": [
-		"트위터에 참여하기"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin은 다양한 서비스 제공자들을 통해 노트를 동기화할 수 있습니다. 아래의 목록에서 하나를 선택하세요."
 	],
@@ -1642,9 +1675,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin의 자체 동기화 서비스. 노트 발행이나 노트북 협업과 같은 Joplin에서만 지원하는 기능들을 제공합니다."
-	],
-	"KaTeX": [
-		"KaTeX"
 	],
 	"Keep note history for": [
 		"다음 기간 동안 노트 변경 이력을 유지"
@@ -1724,14 +1754,8 @@
 	"Link text": [
 		"텍스트 링크"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
-	],
 	"List item": [
 		"아이템 리스트"
-	],
-	"Lists": [
-		"목록"
 	],
 	"Loaded": [
 		"로딩됨"
@@ -1811,6 +1835,12 @@
 	"Master password:": [
 		"마스터 비밀번호:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"최대 동시 연결수"
 	],
@@ -1883,9 +1913,6 @@
 	"Never resize": [
 		"크기 조정 안 함"
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"새 노트"
 	],
@@ -1910,6 +1937,9 @@
 	"New version: %s": [
 		"새 버전: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"다음 매치"
 	],
@@ -1933,9 +1963,6 @@
 	],
 	"No active notebook.": [
 		"활성화된 노트북이 없습니다."
-	],
-	"No item with ID %s": [
-		"식별자 %s에 해당하는 항목이 없습니다"
 	],
 	"No new invitations": [
 		""
@@ -2066,6 +2093,9 @@
 	"Numbered List": [
 		"번호 매기기 목록"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"확인"
 	],
@@ -2074,6 +2104,9 @@
 	],
 	"On %s: %s": [
 		"%s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"마스터 키 중 하나가 오래된 암호화 방식을 사용합니다."
@@ -2174,9 +2207,6 @@
 	"Permission needed": [
 		"권한 요구"
 	],
-	"Permission to use camera": [
-		"카메라 사용 허가"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"계속하려면 \"%s\"(을)를 클릭하거나 아래 \"%s\" 목록에서 비밀번호를 설정하세요."
 	],
@@ -2257,6 +2287,12 @@
 	],
 	"Preferred light theme": [
 		"선호하는 밝은 테마"
+	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Ctrl+D 키를 누르거나 혹은 \"exit\"를 입력해서 종료해주세요"
@@ -2342,6 +2378,9 @@
 	"Quit": [
 		"종료"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"데이터를 다시 암호화"
 	],
@@ -2420,6 +2459,12 @@
 	"Replace: ": [
 		"바꾸기: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2489,6 +2534,12 @@
 	"Revision: %s (%s)": [
 		"개정판: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"텍스트 파일에 포함된 명령들을 실행합니다. 한 줄에 하나씩 명령이 실행됩니다."
 	],
@@ -2533,6 +2584,9 @@
 	],
 	"Save geo-location with notes": [
 		"노트에 지리적 위치 정보 포함시키기"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"검색"
@@ -2609,6 +2663,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음과 같습니다:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"공유"
 	],
@@ -2650,9 +2707,6 @@
 	],
 	"Show disabled keys": [
 		"비활성화된 키 보기"
-	],
-	"Show more actions": [
-		"더 많은 작업 표시"
 	],
 	"Show note counts": [
 		"노트 수 보이기"
@@ -2713,6 +2767,12 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"일부 항목들을 동기화할 수 없습니다. 먼저 동기화를 시도해 보세요."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"노트북을 다음 기준으로 정렬"
@@ -2827,6 +2887,9 @@
 	],
 	"Switch profile": [
 		"프로파일 전환"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"노트 형식으로 전환합니다"
@@ -2990,8 +3053,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"다음 키들이 오래된 암호화 알고리즘을 사용하고 있기 때문에 업그레이드를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대로 사용될 수 있습니다."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin 팀은 이 플러그인을 검사했으며 보안 및 성능에 대한 표준을 충족합니다."
@@ -3044,6 +3107,9 @@
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
 	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
+	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"웹 클리퍼가 데이터에 접근하기 위해 승인이 필요합니다."
 	],
@@ -3094,9 +3160,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"이 인증 토큰은 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니다."
@@ -3293,6 +3356,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"애플리케이션을 삭제했다가 다시 설치합니다. 데스크톱 애플리케이션에서 모든 노트를 JEX로 내보내 백업을 먼저 만드세요."
 	],
+	"Unknown": [
+		"알 수 없음"
+	],
 	"Unknown flag: %s": [
 		"알 수 없는 플래그: %s"
 	],
@@ -3428,6 +3494,9 @@
 	"Voice typing...": [
 		"음성 입력 중..."
 	],
+	"Vosk": [
+		""
+	],
 	"Waiting for authorisation...": [
 		"승인을 기다리는 중..."
 	],
@@ -3478,6 +3547,9 @@
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
+	],
+	"Whisper": [
+		""
 	],
 	"Window unresponsive.": [
 		"창이 응답하지 않습니다."
@@ -3535,9 +3607,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"일부 데이터를 복호화하려면 암호가 필요합니다. `:e2ee decrypt` 를 입력하여 설정합니다."
-	],
-	"Your permission to use your camera is required.": [
-		"카메라 사용 허가가 필요합니다."
 	],
 	"Your version: %s": [
 		"현재 버전: %s"

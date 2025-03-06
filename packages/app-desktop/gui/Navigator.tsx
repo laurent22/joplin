@@ -1,55 +1,83 @@
-const React = require('react');
-const { connect } = require('react-redux');
+import * as React from 'react';
+import { connect } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
-import { AppState } from '../app.reducer';
-const bridge = require('@electron/remote').require('./bridge').default;
+import { AppState, AppStateRoute } from '../app.reducer';
+import bridge from '../services/bridge';
+import { useContext, useEffect, useMemo, useRef } from 'react';
+import { WindowIdContext } from './NewWindowOrIFrame';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of code from before rule was applied
+type ScreenProps = any;
+
+interface AppScreen {
+	screen: React.ComponentType<ScreenProps>;
+	title?: ()=> string;
+}
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	route: any;
+	route: AppStateRoute;
+	screens: Record<string, AppScreen>;
+
+	style: React.CSSProperties;
+	className?: string;
 }
 
-class NavigatorComponent extends React.Component<Props> {
-	public UNSAFE_componentWillReceiveProps(newProps: Props) {
-		if (newProps.route) {
-			const screenInfo = this.props.screens[newProps.route.routeName];
-			const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
-			const windowTitle = [`Joplin${devMarker}`];
-			if (screenInfo.title) {
-				windowTitle.push(screenInfo.title());
-			}
-			this.updateWindowTitle(windowTitle.join(' - '));
+const useWindowTitleManager = (screenInfo: AppScreen) => {
+	const windowTitle = useMemo(() => {
+		const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
+		const windowTitle = [`Joplin${devMarker}`];
+		if (screenInfo?.title) {
+			windowTitle.push(screenInfo.title());
 		}
-	}
+		return windowTitle.join(' - ');
+	}, [screenInfo]);
 
-	public updateWindowTitle(title: string) {
-		try {
-			if (bridge().window()) bridge().window().setTitle(title);
-		} catch (error) {
-			console.warn('updateWindowTitle', error);
+	const windowId = useContext(WindowIdContext);
+	useEffect(() => {
+		bridge().windowById(windowId)?.setTitle(windowTitle);
+	}, [windowTitle, windowId]);
+};
+
+const useWindowRefocusManager = (route: AppStateRoute) => {
+	const windowId = useContext(WindowIdContext);
+
+	const prevRouteName = useRef<string|null>(null);
+	const routeName = route?.routeName;
+	useEffect(() => {
+		// When a navigation happens in an unfocused window, show the window to the user.
+		// This might happen if, for example, a secondary window triggers a navigation in
+		// the main window.
+		if (routeName && routeName !== prevRouteName.current) {
+			bridge().switchToWindow(windowId);
 		}
-	}
 
-	public render() {
-		if (!this.props.route) throw new Error('Route must not be null');
+		prevRouteName.current = routeName;
+	}, [routeName, windowId]);
+};
 
-		const route = this.props.route;
-		const screenProps = route.props ? route.props : {};
-		const screenInfo = this.props.screens[route.routeName];
-		const Screen = screenInfo.screen;
+const NavigatorComponent: React.FC<Props> = props => {
+	const route = props.route;
+	const screenInfo = props.screens[route?.routeName];
 
-		const screenStyle = {
-			width: this.props.style.width,
-			height: this.props.style.height,
-		};
+	useWindowTitleManager(screenInfo);
+	useWindowRefocusManager(route);
 
-		return (
-			<div style={this.props.style} className={this.props.className}>
-				<Screen style={screenStyle} {...screenProps} />
-			</div>
-		);
-	}
-}
+	if (!route) throw new Error('Route must not be null');
+
+	const screenProps = route.props ? route.props : {};
+	const Screen = screenInfo.screen;
+
+	const screenStyle = {
+		width: props.style.width,
+		height: props.style.height,
+	};
+
+	return (
+		<div style={props.style} className={props.className}>
+			<Screen style={screenStyle} {...screenProps} />
+		</div>
+	);
+};
 
 const Navigator = connect((state: AppState) => {
 	return {

@@ -17,7 +17,8 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 		if (!Resource.isResourceUrl(src) || ruleOptions.plainResourceRendering) return defaultRender(tokens, idx, options, env, self);
 
-		const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
+		const alt = token.content;
+		const r = utils.imageReplacement(ruleOptions.ResourceModel, { src, alt, title }, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
 		if (typeof r === 'string') return r;
 		if (r) {
 			const id = r['data-resource-id'];
@@ -35,7 +36,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 				destroyEditPopupSyntax: ruleOptions.destroyEditPopupSyntax,
 			}, null);
 
-			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt: token.content })} ${js}/>`;
+			return `<img data-from-md ${attributesHtml({ ...r, title: title, alt })} ${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

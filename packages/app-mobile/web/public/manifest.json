@@ -1,0 +1,49 @@
+{
+    "short_name": "Joplin",
+    "name": "Joplin Web",
+    "icons": [
+        {
+            "src": "./icons/icon-vector-large.svg",
+            "type": "image/svg+xml",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        },
+        {
+            "src": "./icons/icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "./icons/icon-256.png",
+            "type": "image/png",
+            "sizes": "256x256"
+        },
+        {
+            "src": "./icons/icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "./icons/icon-64.png",
+            "type": "image/png",
+            "sizes": "64x64"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "./screenshots/tall.png",
+            "sizes": "1442x3090",
+            "form_factor": "narrow",
+            "label": "Welcome to Joplin note open in Joplin on a small-screened device"
+        },
+        {
+            "src": "./screenshots/wide.png",
+            "sizes": "2476x2022",
+            "form_factor": "wide",
+            "label": "Welcome to Joplin note open in Joplin on a wide-screened device"
+        }
+    ],
+    "start_url": "./",
+    "background_color": "#3333a5",
+    "display": "standalone"
+}

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import Logger from '@joplin/utils/Logger';
 
 export type HandleMessageCallback = (message: string)=> void;
 export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;
@@ -11,6 +12,8 @@ interface MessageCallbacks {
 	onRequestEditResource?: HandleMessageCallback;
 	onCheckboxChange: HandleMessageCallback;
 }
+
+const logger = Logger.create('useOnMessage');
 
 export default function useOnMessage(
 	noteBody: string,
@@ -29,10 +32,10 @@ export default function useOnMessage(
 	return useCallback((msg: string) => {
 		const isScrollMessage = msg.startsWith('onscroll:');
 
-		// Scroll messages are very frequent so we avoid logging them.
+		// Scroll messages are very frequent so we avoid logging them, even
+		// in debug mode
 		if (!isScrollMessage) {
-			// eslint-disable-next-line no-console
-			console.info('Got IPC message: ', msg);
+			logger.debug('Got IPC message: ', msg);
 		}
 
 		if (msg.indexOf('checkboxclick:') === 0) {

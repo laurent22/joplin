@@ -28,18 +28,12 @@ export const StyledMoveOverlay = styled.div`
 	height: 100%;
 `;
 
-export const MoveModeRootWrapper = styled.div`
-	position:relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`;
-
-export const MoveModeRootMessage = styled.div`
-	position:absolute;
+export const MoveModeRootMessage = styled.h1`
+	position: absolute;
 	bottom: 10px;
+	font-size: 1em;
+
 	z-index:200;
 	background-color: ${props => props.theme.backgroundColor};
 	padding: 10px;
-	border-radius: 5;
 `;

@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
-const Icon = require('react-native-vector-icons/Ionicons').default;
 import ModalDialog from '../ModalDialog';
 import { AppState } from '../../utils/types';
 import { TagEntity } from '@joplin/lib/services/database/types';
+import Icon from '../Icon';
 const naturalCompare = require('string-natural-compare');
 
 interface Props {
@@ -33,9 +33,12 @@ interface State {
 	tagFilter: string;
 }
 
+let idCounter = 0;
+
 class NoteTagsDialogComponent extends React.Component<Props, State> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	private labelId_ = `tag-input-${idCounter++}`;
 
 	public constructor(props: Props) {
 		super(props);
@@ -81,11 +84,19 @@ class NoteTagsDialogComponent extends React.Component<Props, State> {
 
 	private renderTag = (data: { item: TagListRecord }) => {
 		const tag = data.item;
-		const iconName = this.noteHasTag(tag.id) ? 'checkbox-outline' : 'square-outline';
+		const hasTag = this.noteHasTag(tag.id);
+		const iconName = hasTag ? 'ionicon checkbox-outline' : 'ionicon square-outline';
 		return (
-			<TouchableOpacity key={tag.id} onPress={() => this.tag_press(tag.id)} style={this.styles().tag}>
+			<TouchableOpacity
+				key={tag.id} onPress={() => this.tag_press(tag.id)}
+				style={this.styles().tag}
+				accessibilityRole='checkbox'
+				accessibilityHint={_('Add tag %s to note', tag.title)}
+				aria-checked={hasTag}
+				accessibilityState={{ checked: hasTag }}
+			>
 				<View style={this.styles().tagIconText}>
-					<Icon name={iconName} style={this.styles().tagCheckbox} />
+					<Icon name={iconName} style={this.styles().tagCheckbox} accessibilityLabel={null} />
 					<Text style={this.styles().tagText}>{tag.title}</Text>
 				</View>
 			</TouchableOpacity>
@@ -192,7 +203,7 @@ class NoteTagsDialogComponent extends React.Component<Props, State> {
 		const dialogContent = (
 			<View style={{ flex: 1 }}>
 				<View style={this.styles().tagBox}>
-					<Text style={this.styles().newTagBoxLabel}>{_('New tags:')}</Text>
+					<Text style={this.styles().newTagBoxLabel} nativeID={this.labelId_}>{_('New tags:')}</Text>
 					<TextInput
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -202,6 +213,7 @@ class NoteTagsDialogComponent extends React.Component<Props, State> {
 						}}
 						style={this.styles().tagBoxInput}
 						placeholder={_('tag1, tag2, ...')}
+						accessibilityLabelledBy={this.labelId_}
 					/>
 				</View>
 				<View style={this.styles().tagBox}>

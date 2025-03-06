@@ -6,6 +6,7 @@
 // whenever the update() function is called, and in mobile it's called for
 // example on the Redux action middleware or when the app gets focus.
 
+import { Hour } from '@joplin/utils/time';
 import time from './time';
 
 type IntervalId = number;
@@ -25,7 +26,12 @@ interface Intervals {
 
 export default class PoorManIntervals {
 
-	private static maxNativeTimerDuration_ = 10 * 1000;
+	// We disable the custom logic since React Native no longer emit a warning for long timer, and
+	// using long timers is fine as long as we are fine with it not being triggered while the app is
+	// in the background:
+	// https://github.com/facebook/react-native/issues/12981#issuecomment-652745831
+
+	private static maxNativeTimerDuration_ = 24 * Hour; // 10 * 1000;
 	private static lastUpdateTime_ = 0;
 	private static intervalId_: IntervalId = 0;
 	private static intervals_: Intervals = {};

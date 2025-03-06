@@ -1,0 +1,37 @@
+
+.note-editor-viewer-row {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	padding-top: 10px;
+
+	// Allow the editor container to shrink (allowing the editor to scroll)
+	min-height: 0;
+
+	> .editor, > .viewer {
+		position: relative;
+		display: flex;
+		flex: 1;
+	}
+
+	> .viewer {
+		border-left-width: 1px;
+		border-left-color: var(--joplin-divider-color);
+		border-left-style: solid;
+	}
+
+	&:not(.-show-viewer) > .viewer {
+		display: none;
+	}
+
+	&:not(.-show-editor) {
+		> .editor {
+			display: none;
+		}
+
+		> .viewer {
+			border-left: none;
+		}
+	}
+}

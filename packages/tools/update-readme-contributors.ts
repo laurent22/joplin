@@ -8,8 +8,6 @@ interface Contributor {
 	html_url: string;
 }
 
-rootDir;
-
 const readmePath = `${rootDir}/README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 

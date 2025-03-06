@@ -1,8 +1,25 @@
 import * as fs from 'fs-extra';
 import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { unique } from '@joplin/lib/ArrayUtils';
+import * as readline from 'readline';
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
+
+const warningMessage = async () => {
+	return new Promise((resolve) => {
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout,
+		});
+
+		console.log('IMPORTANT: Before releasing the iOS app, run `yarn install && yarn buildParallel`. Press Ctrl+C if it has not been done. Press Enter to continue...');
+
+		rl.on('line', () => {
+			rl.close();
+			resolve(null);
+		});
+	});
+};
 
 // Note that it will update all the MARKETING_VERSION and
 // CURRENT_PROJECT_VERSION fields, including for extensions (such as the
@@ -60,6 +77,8 @@ async function checkDeploymentTargets(filePath: string) {
 
 async function main() {
 	await gitPullTry();
+
+	await warningMessage();
 
 	const pbxprojFilePath = `${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`;
 	await checkDeploymentTargets(pbxprojFilePath);

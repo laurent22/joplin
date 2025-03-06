@@ -3,21 +3,13 @@
 import shim from '../../../shim';
 import Plugin from '../Plugin';
 
-export interface Implementation {
-	injectCustomStyles(elementId: string, cssFilePath: string): Promise<void>;
-}
-
 export default class JoplinWindow {
 
-	private plugin_: Plugin;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: any;
-	private implementation_: Implementation;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(implementation: Implementation, plugin: Plugin, store: any) {
-		this.implementation_ = implementation;
-		this.plugin_ = plugin;
+	public constructor(_plugin: Plugin, store: any) {
 		this.store_ = store;
 	}
 
@@ -30,7 +22,10 @@ export default class JoplinWindow {
 	 * <span class="platform-desktop">desktop</span>
 	 */
 	public async loadChromeCssFile(filePath: string) {
-		await this.implementation_.injectCustomStyles(`pluginStyles_${this.plugin_.id}`, filePath);
+		this.store_.dispatch({
+			type: 'CUSTOM_CHROME_CSS_ADD',
+			filePath,
+		});
 	}
 
 	/**
@@ -45,7 +40,7 @@ export default class JoplinWindow {
 		const cssString = await shim.fsDriver().readFile(filePath, 'utf8');
 
 		this.store_.dispatch({
-			type: 'CUSTOM_CSS_APPEND',
+			type: 'CUSTOM_VIEWER_CSS_APPEND',
 			css: cssString,
 		});
 	}

@@ -36,15 +36,15 @@ const PluginUploadButton: React.FC<Props> = props => {
 	const onInstallFromFile = useCallback(async () => {
 		const pluginService = PluginService.instance();
 
-		const pluginFiles = await pickDocument(false);
+		const pluginFiles = await pickDocument({ multiple: false });
 		if (pluginFiles.length === 0) {
 			return;
 		}
 		const selectedFile = pluginFiles[0];
 
 		const localFilePath = Platform.select({
-			android: selectedFile.uri,
 			ios: decodeURI(selectedFile.uri),
+			default: selectedFile.uri,
 		});
 		logger.info('Installing plugin from file', localFilePath);
 
@@ -73,6 +73,8 @@ const PluginUploadButton: React.FC<Props> = props => {
 			logger.info('Copying to', targetFile);
 
 			await fsDriver.copy(localFilePath, targetFile);
+			logger.debug('Copied. Now installing.');
+
 			const plugin = await pluginService.installPlugin(targetFile);
 
 			const pluginSettings = pluginService.unserializePluginSettings(props.pluginSettings);
@@ -89,7 +91,7 @@ const PluginUploadButton: React.FC<Props> = props => {
 	}, [props.pluginSettings, props.updatePluginStates]);
 
 	return (
-		<View style={props.styles.getContainerStyle(false)}>
+		<View style={props.styles.getContainerStyle(false).innerContainer}>
 			<TextButton
 				type={ButtonType.Primary}
 				onPress={onInstallFromFile}

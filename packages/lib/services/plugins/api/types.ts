@@ -372,6 +372,19 @@ export interface DialogResult {
 	formData?: any;
 }
 
+export enum ToastType {
+	Info = 'info',
+	Success = 'success',
+	Error = 'error',
+}
+
+export interface Toast {
+	message: string;
+	type?: ToastType;
+	duration?: number;
+	timestamp?: number;
+}
+
 export interface Size {
 	width?: number;
 	height?: number;
@@ -383,6 +396,26 @@ export interface Rectangle {
 	width?: number;
 	height?: number;
 }
+
+export type ActivationCheckCallback = ()=> Promise<boolean>;
+
+export type UpdateCallback = ()=> Promise<void>;
+
+export type VisibleHandler = ()=> Promise<void>;
+
+export interface EditContextMenuFilterObject {
+	items: MenuItem[];
+}
+
+export interface EditorActivationCheckFilterObject {
+	activatedEditors: {
+		pluginId: string;
+		viewId: string;
+		isActive: boolean;
+	}[];
+}
+
+export type FilterHandler<T> = (object: T)=> Promise<T>;
 
 // =================================================================
 // Settings types
@@ -589,6 +622,27 @@ export interface CodeMirrorControl {
 		 */
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
+
+		/**
+		 * A CodeMirror [facet](https://codemirror.net/docs/ref/#state.EditorState.facet) that contains
+		 * the ID of the note currently open in the editor.
+		 *
+		 * Access the value of this facet using
+		 * ```ts
+		 * const noteIdFacet = editorControl.joplinExtensions.noteIdFacet;
+		 * const editorState = editorControl.editor.state;
+		 * const noteId = editorState.facet(noteIdFacet);
+		 * ```
+		 */
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No better type available
+		noteIdFacet: any;
+		/**
+		 * A CodeMirror [StateEffect](https://codemirror.net/docs/ref/#state.StateEffect) that is
+		 * included in a [Transaction](https://codemirror.net/docs/ref/#state.Transaction) when the
+		 * note ID changes.
+		 */
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No better type available
+		setNoteIdEffect: any;
 	};
 }
 

@@ -24,6 +24,10 @@ export enum EventName {
 interface ItemChangeEvent {
 	itemType: ModelType;
 	itemId: string;
+	// Passing a changeId to Note.save causes that changeId to be included
+	// in the corresponding ItemChangeEvent. This allows determining which
+	// call to Note.save triggered the event.
+	changeId: string;
 	eventType: number;
 }
 
@@ -133,7 +137,13 @@ export class EventManager {
 			// deep equality check to see if it's been changed. Normally the
 			// filter objects should be relatively small so there shouldn't be
 			// much of a performance hit.
-			const newOutput = await listener(output);
+			let newOutput = null;
+			try {
+				newOutput = await listener(output);
+			} catch (error) {
+				error.message = `Error in listener when calling: ${filterName}: ${error.message}`;
+				throw error;
+			}
 
 			// Plugin didn't return anything - so we leave the object as it is.
 			if (newOutput === undefined) continue;

@@ -6,7 +6,7 @@ const Folder = require('@joplin/lib/models/Folder').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const { ScreenHeader } = require('../ScreenHeader');
 const { BaseScreenComponent } = require('../base-screen');
-const { dialogs } = require('../../utils/dialogs.js');
+const shim = require('@joplin/lib/shim').default;
 const { _ } = require('@joplin/lib/locale');
 const { default: FolderPicker } = require('../FolderPicker');
 const TextInput = require('../TextInput').default;
@@ -73,7 +73,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 			if (folder.id && !(await Folder.canNestUnder(folder.id, folder.parent_id))) throw new Error(_('Cannot move notebook to this location'));
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
-			dialogs.error(this, _('The notebook could not be saved: %s', error.message));
+			shim.showErrorDialog(_('The notebook could not be saved: %s', error.message));
 			return;
 		}
 
@@ -115,11 +115,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 					/>
 				</View>
 				<View style={{ flex: 1 }} />
-				<dialogs.DialogBox
-					ref={dialogbox => {
-						this.dialogbox = dialogbox;
-					}}
-				/>
 			</View>
 		);
 	}

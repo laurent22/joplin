@@ -1,6 +1,4 @@
 import bridge from '../bridge';
-import { Implementation as WindowImplementation } from '@joplin/lib/services/plugins/api/JoplinWindow';
-import { injectCustomStyles } from '@joplin/lib/CssUtils';
 import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
@@ -48,12 +46,6 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 
 	public get nativeImage() {
 		return nativeImage;
-	}
-
-	public get window(): WindowImplementation {
-		return {
-			injectCustomStyles: injectCustomStyles,
-		};
 	}
 
 	public constructor() {

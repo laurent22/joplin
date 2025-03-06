@@ -8,6 +8,22 @@
 @use 'gui/NoteList/style.scss' as note-list;
 @use 'gui/JoplinCloudLoginScreen.scss' as joplin-cloud-login-screen;
 @use 'gui/NoteListHeader/style.scss' as note-list-header;
+@use 'gui/UpdateNotification/style.scss' as update-notification;
 @use 'gui/TrashNotification/style.scss' as trash-notification;
 @use 'gui/Sidebar/style.scss' as sidebar-styles;
+@use 'gui/NoteEditor/style.scss' as note-editor-styles;
+@use 'gui/KeymapConfig/style.scss' as keymap-styles;
+@use 'services/plugins/styles/index.scss' as plugins-styles;
+@use 'gui/styles/index.scss' as gui-styles;
 @use 'main.scss' as main;
+
+// These dynamic imports will be compiled to CSS imports in the output file.
+// Prefer importing new CSS files here to linking them in index.html because
+// this allows the CSS files to be included in secondary windows.
+//
+// See https://sasscss.org/documentation/at-rules/import#plain-css-imports.
+@import url('style/icons/style.css');
+@import url('vendor/lib/@fortawesome/fontawesome-free/css/all.min.css');
+@import url('vendor/lib/smalltalk/css/smalltalk.css');
+@import url('vendor/lib/roboto-fontface/css/roboto/roboto-fontface.css');
+@import url('vendor/lib/codemirror/lib/codemirror.css');

@@ -1,0 +1,12 @@
+
+.help-text {
+	color: var(--joplin-color);
+	line-height: var(--joplin-line-height);
+	font-family: var(--joplin-font-family);
+	font-size: var(--joplin-font-size);
+	margin-bottom: 10px;
+
+	&[hidden] {
+		display: none;
+	}
+}

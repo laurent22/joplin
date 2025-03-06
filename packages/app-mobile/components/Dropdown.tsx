@@ -23,6 +23,7 @@ interface DropdownProps {
 	headerStyle?: TextStyle;
 	itemStyle?: TextStyle;
 	disabled?: boolean;
+	accessibilityHint?: string;
 
 	labelTransform?: 'trim';
 	items: DropdownListItem[];
@@ -78,6 +79,17 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 	private onCloseList = () => {
 		this.setState({ listVisible: false });
 	};
+	private onListLoad = (listRef: FlatList|null) => {
+		if (!listRef) return;
+
+		for (let i = 0; i < this.props.items.length; i++) {
+			const item = this.props.items[i];
+			if (item.value === this.props.selectedValue) {
+				listRef.scrollToIndex({ index: i, animated: false });
+				break;
+			}
+		}
+	};
 
 	public render() {
 		const items = this.props.items;
@@ -115,6 +127,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		const itemWrapperStyle: ViewStyle = {
 			...(this.props.itemWrapperStyle ? this.props.itemWrapperStyle : {}),
 			flex: 1,
+			flexBasis: 'auto',
 			justifyContent: 'center',
 			height: itemHeight,
 			paddingLeft: 20,
@@ -157,6 +170,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 				<TouchableOpacity
 					style={itemWrapperStyle}
 					accessibilityRole="menuitem"
+					accessibilityState={{ selected: item.value === this.props.selectedValue }}
 					key={key}
 					onPress={() => {
 						this.onCloseList();
@@ -197,11 +211,19 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 						style={headerWrapperStyle}
 						disabled={this.props.disabled}
 						onPress={this.onOpenList}
+						accessibilityRole='button'
+						accessibilityHint={[this.props.accessibilityHint, _('Opens dropdown')].join(' ')}
 					>
 						<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
 							{headerLabel}
 						</Text>
-						<Text style={headerArrowStyle}>{'▼'}</Text>
+						<Text
+							style={headerArrowStyle}
+							aria-hidden={true}
+							importantForAccessibility='no'
+							accessibilityElementsHidden={true}
+							accessibilityRole='image'
+						>{'▼'}</Text>
 					</TouchableOpacity>
 					{this.state.listVisible ? null : this.props.coverableChildrenRight}
 				</View>
@@ -215,6 +237,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					<TouchableWithoutFeedback
 						accessibilityElementsHidden={true}
 						importantForAccessibility='no-hide-descendants'
+						aria-hidden={true}
 						onPress={this.onCloseList}
 						style={backgroundCloseButtonStyle}
 					>
@@ -223,10 +246,13 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 					<View
 						accessibilityRole='menu'
-						style={wrapperStyle}>
+						style={wrapperStyle}
+					>
 						<FlatList
+							ref={this.onListLoad}
 							style={itemListStyle}
 							data={this.props.items}
+							extraData={this.props.selectedValue}
 							renderItem={itemRenderer}
 							getItemLayout={(_data, index) => ({
 								length: itemHeight,

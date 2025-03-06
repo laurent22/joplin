@@ -160,7 +160,7 @@ export default function useKeymap(CodeMirror: any) {
 		keymapService.on(EventName.KeymapChange, registerKeymap);
 
 		setupEmacs();
-		setupVim(CodeMirror);
+		setupVim(CodeMirror, null);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 }

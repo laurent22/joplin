@@ -141,6 +141,7 @@ export interface LdapConfig {
 	baseDN: string;
 	bindDN: string;
 	bindPW: string;
+	tlsCaFile: string;
 }
 
 export interface Config extends EnvVariables {

@@ -2,26 +2,10 @@ import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import * as React from 'react';
 import IconButton from '../../../../IconButton';
-import { Alert, Linking, StyleSheet } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import { themeStyle } from '../../../../global-style';
-import { useMemo } from 'react';
-
-const onRecommendedPress = () => {
-	Alert.alert(
-		'',
-		_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
-		[
-			{
-				text: _('Learn more'),
-				onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
-			},
-			{
-				text: _('OK'),
-			},
-		],
-		{ cancelable: true },
-	);
-};
+import { useCallback, useContext, useMemo } from 'react';
+import { DialogContext } from '../../../../DialogManager';
 
 interface Props {
 	themeId: number;
@@ -57,6 +41,24 @@ const useStyles = (themeId: number) => {
 
 const RecommendedBadge: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
+
+	const dialogs = useContext(DialogContext);
+	const onRecommendedPress = useCallback(() => {
+		dialogs.prompt(
+			'',
+			_('The Joplin team has vetted this plugin and it meets our standards for security and performance.'),
+			[
+				{
+					text: _('Learn more'),
+					onPress: () => Linking.openURL('https://github.com/joplin/plugins/blob/master/readme/recommended.md'),
+				},
+				{
+					text: _('OK'),
+				},
+			],
+			{ cancelable: true },
+		);
+	}, [dialogs]);
 
 	if (!props.manifest._recommended || !props.isCompatible) return null;
 

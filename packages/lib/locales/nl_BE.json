@@ -101,6 +101,9 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(None)"
 	],
@@ -181,6 +184,9 @@
 	],
 	"Add recipient:": [
 		"Ontvanger toevoegen:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Titel toevoegen"
@@ -263,6 +269,9 @@
 	"Aritim Dark": [
 		"Aritim donker"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach file": [
 		"Voeg bestand toe"
 	],
@@ -305,6 +314,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Haakjes, aanhalingstekens, etc. automatisch aanvullen"
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
@@ -318,9 +330,6 @@
 		""
 	],
 	"Beta": [
-		""
-	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
 	"Bold": [
@@ -339,6 +348,9 @@
 		"Opsommingstekens"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can view": [
@@ -407,11 +419,17 @@
 	"Change language": [
 		"Taal wijzigen"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Tekens"
 	],
 	"Characters excluding spaces": [
 		"Tekens zonder spaties"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Controleren op updates ..."
@@ -452,6 +470,9 @@
 	"Close": [
 		"Sluit"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -473,10 +494,7 @@
 	"Code View": [
 		"Code-weergave"
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed, press space to expand.": [
 		""
 	],
 	"Coming alarms": [
@@ -621,6 +639,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Actuele versie is up-to-date."
 	],
@@ -690,6 +711,9 @@
 	"Delete local data and re-download from sync target": [
 		"Verwijder lokale gegevens en download opnieuw van synchronisatie locatie"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete plugin \"%s\"?": [
 		"Plugin \"%s\" verwijderen?"
 	],
@@ -724,6 +748,9 @@
 		"Doelformaat: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -843,6 +870,9 @@
 	"Edit in external editor": [
 		"Bewerken in externe editor"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit note.": [
 		"Bewerk notitie."
 	],
@@ -915,6 +945,9 @@
 	"Enable encryption": [
 		"Schakel encryptie in"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Voetnoten inschakelen"
 	],
@@ -969,6 +1002,9 @@
 	"Enabled": [
 		"Ingeschakeld"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Encrypted": [
 		"Versleuteld"
 	],
@@ -984,6 +1020,9 @@
 	"Encryption is: %s": [
 		"Encryptie is: %s"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Code hier ingeven"
 	],
@@ -992,6 +1031,9 @@
 	],
 	"Enter notebook title": [
 		"Geef titel van notitieboek in"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Enum"
@@ -1017,10 +1059,10 @@
 	"Exits the application.": [
 		"Sluit de applicatie."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded, press space to collapse.": [
 		""
 	],
 	"Export": [
@@ -1077,9 +1119,6 @@
 	"File system": [
 		"Bestandssysteem"
 	],
-	"Find and replace": [
-		""
-	],
 	"Firefox Extension": [
 		"Firefox extensie"
 	],
@@ -1097,6 +1136,9 @@
 	],
 	"Focus title": [
 		"Focus titel"
+	],
+	"Follow link": [
+		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Enkel met het oog op debugging: exporteer je profiel naar een externe SD card."
@@ -1144,6 +1186,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Haalt een configuratie waarde op of stelt een waarde in. Als [value] niet opgegeven is, zal de waarde van [name] getoond worden. Als noch de [name] of [waarde] opgegeven zijn, zal de huidige configuratie opgelijst worden."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Ga naar bron-URL"
 	],
@@ -1154,9 +1205,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1279,6 +1327,9 @@
 	"Indent more": [
 		"Insprong vergroten"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Informatie"
 	],
@@ -1333,7 +1384,7 @@
 	"Items that cannot be synchronised": [
 		"Items die niet gesynchroniseerd kunnen worden"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1371,9 +1422,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplins eigen synchronisatie service. Geeft ook toegang tot specifieke features zoals het publiceren van notities of samenwerken aan notitieboeken met anderen."
-	],
-	"KaTeX": [
-		""
 	],
 	"Keep note history for": [
 		"Bewaar notitiehistoriek gedurende"
@@ -1433,14 +1481,8 @@
 		"Koppeling is gekopieerd naar klembord!",
 		"Koppelingen zijn gekopieerd naar klembord!"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Koppelingen met protocol \"%s\" worden niet ondersteund"
-	],
 	"List item": [
 		"Lijst item"
-	],
-	"Lists": [
-		""
 	],
 	"Location": [
 		"Locatie"
@@ -1492,6 +1534,12 @@
 	],
 	"Master Key %s": [
 		"Hoofdsleutel: %s"
+	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
 	],
 	"Max concurrent connections": [
 		"Maximum aantal gelijktijdige connecties"
@@ -1547,9 +1595,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Nieuwe notitie"
 	],
@@ -1574,6 +1619,9 @@
 	"New version: %s": [
 		"Nieuwe versie: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		""
 	],
@@ -1597,9 +1645,6 @@
 	],
 	"No active notebook.": [
 		"Geen actief notitieboek."
-	],
-	"No item with ID %s": [
-		"Geen item met ID %s"
 	],
 	"No new invitations": [
 		""
@@ -1712,6 +1757,9 @@
 	"Numbered List": [
 		"Nummering"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -1720,6 +1768,9 @@
 	],
 	"On %s: %s": [
 		"Op %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Eén van uw hoofdsleutels gebruikt een verouderde encryptiemethode."
@@ -1802,9 +1853,6 @@
 	"Permission needed": [
 		"Toestemming vereist"
 	],
-	"Permission to use camera": [
-		"Toestemming camera te gebruiken"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -1880,6 +1928,12 @@
 	"Preferred light theme": [
 		"Voorkeurthema licht"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Typ Ctrl+D of \"exit\" om de applicatie te sluiten"
 	],
@@ -1891,6 +1945,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Klik om het decryptie wachtwoord in te stellen"
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1948,6 +2005,9 @@
 	],
 	"Quit": [
 		"Stop"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"Herencrypteer de gegevens"
@@ -2018,6 +2078,12 @@
 	"Replace: ": [
 		""
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2066,6 +2132,12 @@
 	"Revision: %s (%s)": [
 		"Revisie: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Voert de commandos in het tekstbestand uit. Er zou een commando per lijn moeten zijn."
 	],
@@ -2092,6 +2164,9 @@
 	],
 	"Save geo-location with notes": [
 		"Sla geo-locatie op bij notities"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Zoeken"
@@ -2143,6 +2218,9 @@
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Zet de eigenschap <name> van de opgegeven <note> naar de opgegeven [value]. Mogelijke eigenschappen zijn:\n\n%s"
+	],
+	"Settings": [
+		""
 	],
 	"Share": [
 		"Delen"
@@ -2212,6 +2290,12 @@
 	],
 	"Some items cannot be synchronised.": [
 		"Sommige items kunnen niet gesynchroniseerd worden."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Rangschik notitieboeken volgens"
@@ -2320,6 +2404,9 @@
 	],
 	"Switch between note and to-do type": [
 		"Wissel tussen notitie en to-do"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Wissel naar notitie"
@@ -2456,8 +2543,8 @@
 	"The following attachments are being watched for changes:": [
 		"Van volgende bijlagen wordt het wijzigen opgevolgd:"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"De mobiele Joplin app ondersteunt momenteel dit type koppeling niet: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Het Joplin-team heeft deze plugin geaudit en het voldoet aan de standaarden voor performantie en veiligheid."
@@ -2494,6 +2581,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Het doel waarnaartoe gesynchroniseerd wordt. Elk synchronisatiedoel kan bijkomende parameters hebben die benoemd worden als 'sync.NUM.NAME' (hieronder gedocumenteerd)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"De Web Clipper plugin heeft jouw authorisatie nodig om je gegevens te raadplegen."
@@ -2542,9 +2632,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Deze bijlage is nog niet opgehaald of nog niet gedecrypteerd"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Deze bijlage is nog niet opgehaald of nog niet gedecrypteerd."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Dit autorisatietoken is enkel vereist om applicaties van derden toegang tot Joplin te verlenen."
@@ -2816,6 +2903,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Waarschuwing"
 	],
@@ -2859,6 +2949,9 @@
 		"Wanneer u een nieuwe to-do aanmaakt:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -2911,9 +3004,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Je wachtwoord is nodig om een deel van je gegevens te decrypteren. Typ :e2ee decrypt` om je wachtwoord in te stellen."
-	],
-	"Your permission to use your camera is required.": [
-		"Uw toestemming om de camera te gebruiken is vereist."
 	],
 	"Your version: %s": [
 		"Uw versie: %s"

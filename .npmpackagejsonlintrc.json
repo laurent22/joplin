@@ -3,23 +3,23 @@
 		"prefer-absolute-version-dependencies": ["error",
 			{
 				"exceptions": [
-					"@joplin/lib",
-					"@joplin/renderer",
 					"@joplin/editor",
-					"@joplin/pdf-viewer",
 					"@joplin/fork-htmlparser2",
 					"@joplin/fork-sax",
 					"@joplin/fork-uslug",
 					"@joplin/htmlpack",
-					"@joplin/turndown",
-					"@joplin/turndown-plugin-gfm",
-					"@joplin/tools",
-					"@joplin/react-native-saf-x",
+					"@joplin/lib",
+					"@joplin/onenote-converter",
+					"@joplin/pdf-viewer",
 					"@joplin/react-native-alarm-notification",
+					"@joplin/react-native-saf-x",
+					"@joplin/renderer",
+					"@joplin/tools",
+					"@joplin/turndown-plugin-gfm",
+					"@joplin/turndown",
 					"@joplin/utils"
 				]
 		  	}
 		]
 	}
 }
-  

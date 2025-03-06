@@ -1,0 +1,6 @@
+{
+	"extraScripts": [ "worker.ts" ],
+	"webpackOverrides": {
+		"target": "web"
+	}
+}

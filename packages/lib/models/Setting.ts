@@ -17,7 +17,7 @@ const logger = Logger.create('models/Setting');
 
 export * from './settings/types';
 
-type SettingValueType<T extends string> = (
+export type SettingValueType<T extends string> = (
 	T extends BuiltInMetadataKeys
 		? BuiltInMetadataValues[T]
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
@@ -113,6 +113,10 @@ const defaultMigrations: DefaultMigration[] = [
 		name: 'style.editor.contentMaxWidth',
 		previousDefault: 600,
 	},
+	{
+		name: 'themeAutoDetect',
+		previousDefault: false,
+	},
 ];
 
 // "UserSettingMigration" are used to migrate existing user setting to a new setting. With a way
@@ -142,7 +146,6 @@ export type SettingMetadataSection = {
 export type MetadataBySection = SettingMetadataSection[];
 
 class Setting extends BaseModel {
-
 	public static schemaUrl = 'https://joplinapp.org/schema/settings.json';
 
 	// For backward compatibility
@@ -545,20 +548,6 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
 
-		this.cache_ = [];
-
-		const pushItemsToCache = (items: CacheItem[]) => {
-			for (let i = 0; i < items.length; i++) {
-				const c = items[i];
-
-				if (!this.keyExists(c.key)) continue;
-
-				c.value = this.formatValue(c.key, c.value);
-				c.value = this.filterValue(c.key, c.value);
-
-				this.cache_.push(c);
-			}
-		};
 
 		// Keys in the database takes precedence over keys in the keychain because
 		// they are more likely to be up to date (saving to keychain can fail, but
@@ -598,6 +587,25 @@ class Setting extends BaseModel {
 				});
 			}
 		}
+
+
+		this.cache_ = [];
+		const cachedKeys = new Set();
+		const pushItemsToCache = (items: CacheItem[]) => {
+			for (let i = 0; i < items.length; i++) {
+				const c = items[i];
+
+				// Avoid duplicating keys -- doing so causes save issues.
+				if (cachedKeys.has(c.key)) continue;
+				if (!this.keyExists(c.key)) continue;
+
+				c.value = this.formatValue(c.key, c.value);
+				c.value = this.filterValue(c.key, c.value);
+
+				cachedKeys.add(c.key);
+				this.cache_.push(c);
+			}
+		};
 
 		pushItemsToCache(rows);
 		pushItemsToCache(secureItems);
@@ -758,6 +766,8 @@ class Setting extends BaseModel {
 		const output = [];
 
 		for (const value of order) {
+			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
+
 			output.push({
 				[options.valueKey]: value,
 				[options.labelKey]: enumOptions[value],
@@ -957,7 +967,7 @@ class Setting extends BaseModel {
 		}
 
 		const queries = [];
-		queries.push(`DELETE FROM settings WHERE key IN ("${keys.join('","')}")`);
+		queries.push(`DELETE FROM settings WHERE key IN ('${keys.join('\',\'')}')`);
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			const s = { ...this.cache_[i] };
@@ -974,19 +984,10 @@ class Setting extends BaseModel {
 				// Also we don't control what happens on the keychain - the values can be edited or deleted
 				// outside the application. For that reason, we rewrite it every time the values are saved,
 				// even if, internally, they haven't changed.
-				// As an optimisation, we check if the value exists on the keychain before writing it again.
 				try {
 					const passwordName = `setting.${s.key}`;
-					const currentValue = await this.keychainService().password(passwordName);
-					if (currentValue !== valueAsString) {
-						const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
-						if (wasSet) continue;
-					} else {
-						// The value is already in the keychain - so nothing to do
-						// Make sure to `continue` here otherwise it will save the password
-						// in clear text in the database.
-						continue;
-					}
+					const wasSet = await this.keychainService().setPassword(passwordName, valueAsString);
+					if (wasSet) continue;
 				} catch (error) {
 					logger.error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
 				}

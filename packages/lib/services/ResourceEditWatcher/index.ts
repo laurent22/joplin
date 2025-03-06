@@ -9,10 +9,14 @@ import { ResourceEntity } from '../database/types';
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
 
+type WindowId = string;
+
 interface WatchedItem {
 	resourceId: string;
+	title: string;
 	lastFileUpdatedTime: number;
 	lastResourceUpdatedTime: number;
+	watchedByWindows: WindowId[];
 	path: string;
 	asyncSaveQueue: AsyncActionQueue;
 	size: number;
@@ -23,6 +27,7 @@ interface WatchedItems {
 }
 
 type OpenItemFn = (path: string)=> void;
+type GetWindowIdFn = ()=> string;
 
 export default class ResourceEditWatcher {
 
@@ -41,6 +46,7 @@ export default class ResourceEditWatcher {
 	private eventEmitter_: any;
 	private tempDir_ = '';
 	private openItem_: OpenItemFn;
+	private getActiveWindowId_: GetWindowIdFn;
 
 	public constructor() {
 		this.logger_ = new Logger();
@@ -51,10 +57,11 @@ export default class ResourceEditWatcher {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public initialize(logger: any, dispatch: Function, openItem: OpenItemFn) {
+	public initialize(logger: any, dispatch: Function, openItem: OpenItemFn, getWindowId: GetWindowIdFn) {
 		this.logger_ = logger;
 		this.dispatch = dispatch;
 		this.openItem_ = openItem;
+		this.getActiveWindowId_ = getWindowId;
 	}
 
 	public static instance() {
@@ -239,6 +246,7 @@ export default class ResourceEditWatcher {
 	}
 
 	private async watch(resourceId: string): Promise<WatchedItem> {
+		const sourceWindowId = this.getActiveWindowId_();
 		let watchedItem = this.watchedItemByResourceId(resourceId);
 
 		if (!watchedItem) {
@@ -246,8 +254,10 @@ export default class ResourceEditWatcher {
 
 			watchedItem = {
 				resourceId: resourceId,
+				title: '',
 				lastFileUpdatedTime: 0,
 				lastResourceUpdatedTime: 0,
+				watchedByWindows: [sourceWindowId],
 				asyncSaveQueue: new AsyncActionQueue(1000),
 				path: '',
 				size: -1,
@@ -261,6 +271,10 @@ export default class ResourceEditWatcher {
 			watchedItem.lastFileUpdatedTime = stat.mtime.getTime();
 			watchedItem.lastResourceUpdatedTime = resource.updated_time;
 			watchedItem.size = stat.size;
+			watchedItem.title = resource.title;
+			// Reset the watching window list to handle the case where the active window
+			// was changed while loading the resource.
+			watchedItem.watchedByWindows = [this.getActiveWindowId_()];
 
 			this.watchFile(editFilePath);
 
@@ -268,6 +282,18 @@ export default class ResourceEditWatcher {
 				type: 'RESOURCE_EDIT_WATCHER_SET',
 				id: resource.id,
 				title: resource.title,
+			});
+		} else if (!watchedItem.watchedByWindows.includes(sourceWindowId)) {
+			watchedItem = {
+				...this.watchedItems_[resourceId],
+				watchedByWindows: [...watchedItem.watchedByWindows, sourceWindowId],
+			};
+			this.watchedItems_[resourceId] = watchedItem;
+
+			this.dispatch({
+				type: 'RESOURCE_EDIT_WATCHER_SET',
+				id: watchedItem.resourceId,
+				title: watchedItem.title,
 			});
 		}
 
@@ -318,16 +344,26 @@ export default class ResourceEditWatcher {
 		this.logger().info(`ResourceEditWatcher: Stopped watching ${item.path}`);
 	}
 
-	public async stopWatchingAll() {
+	public async stopWatchingAll(sourceWindow: string) {
 		const promises = [];
 		for (const resourceId in this.watchedItems_) {
-			const item = this.watchedItems_[resourceId];
-			promises.push(this.stopWatching(item.resourceId));
+			let item = this.watchedItems_[resourceId];
+
+			if (item.watchedByWindows.includes(sourceWindow)) {
+				const otherWatchingWindows = item.watchedByWindows.filter(id => id !== sourceWindow);
+				item = { ...item, watchedByWindows: otherWatchingWindows };
+				this.watchedItems_[resourceId] = item;
+			}
+
+			if (item.watchedByWindows.length === 0) {
+				promises.push(this.stopWatching(item.resourceId));
+			}
 		}
 		await Promise.all(promises);
 
 		this.dispatch({
 			type: 'RESOURCE_EDIT_WATCHER_CLEAR',
+			windowId: sourceWindow,
 		});
 	}
 

@@ -140,6 +140,43 @@ rules.foregroundColor = {
   },
 }
 
+// Converts placeholders for not-loaded resources.
+rules.resourcePlaceholder = {
+  filter: function (node, options) {
+    if (!options.allowResourcePlaceholders) return false;
+    if (!node.classList || !node.classList.contains('not-loaded-resource')) return false;
+    const isImage = node.classList.contains('not-loaded-image-resource');
+    if (!isImage) return false;
+
+    const resourceId = node.getAttribute('data-resource-id');
+    return resourceId && resourceId.match(/^[a-z0-9]{32}$/);
+  },
+
+  replacement: function (_content, node) {
+    const htmlBefore = node.getAttribute('data-original-before') || '';
+    const htmlAfter = node.getAttribute('data-original-after') || '';
+    const isHtml = htmlBefore || htmlAfter;
+    const resourceId = node.getAttribute('data-resource-id');
+    if (isHtml) {
+      const attrs = [
+        htmlBefore.trim(),
+        `src=":/${resourceId}"`,
+        htmlAfter.trim(),
+      ].filter(a => !!a);
+
+      return `<img ${attrs.join(' ')}>`;
+    } else {
+      const originalAltText = node.getAttribute('data-original-alt') || '';
+      const title = node.getAttribute('data-original-title');
+      return imageMarkdownFromAttributes({
+        alt: originalAltText,
+        title,
+        src: `:/${resourceId}`,
+      });
+    }
+  }
+}
+
 // ==============================
 // END Joplin format support
 // ==============================
@@ -510,20 +547,61 @@ rules.code = {
   }
 }
 
+function imageMarkdownFromAttributes(attributes) {
+  var alt = attributes.alt || ''
+  var src = filterLinkHref(attributes.src || '')
+  var title = attributes.title || ''
+  var titlePart = title ? ' "' + filterImageTitle(title) + '"' : ''
+  return src ? '![' + alt.replace(/([[\]])/g, '\\$1') + ']' + '(' + src + titlePart + ')' : ''
+}
+
 function imageMarkdownFromNode(node, options = null) {
   options = Object.assign({}, {
     preserveImageTagsWithSize: false,
   }, options);
 
   if (options.preserveImageTagsWithSize && (node.getAttribute('width') || node.getAttribute('height'))) {
-    return node.outerHTML;
+    let html = node.outerHTML;
+
+    // To prevent markup immediately after the image from being interpreted as HTML, a closing tag
+    // is sometimes necessary.
+    const needsClosingTag = () => {
+      const parent = node.parentElement;
+      if (!parent || parent.nodeName !== 'LI') return false;
+      const hasClosingTag = html.match(/<\/[a-z]+\/>$/ig);
+      if (hasClosingTag) {
+        return false;
+      }
+
+      const allChildren = [...parent.childNodes];
+      const nonEmptyChildren = allChildren.filter(item => {
+        // Even if surrounded by #text nodes that only contain whitespace, Markdown after
+        // an <img> can still be incorrectly interpreted as HTML. Only non-empty #texts seem
+        // to prevent this.
+        return item.nodeName !== '#text' || item.textContent.trim() !== '';
+      });
+
+      const imageIndex = nonEmptyChildren.indexOf(node);
+      const hasNextSibling = imageIndex + 1 < nonEmptyChildren.length;
+      const nextSiblingName = hasNextSibling ? (
+        nonEmptyChildren[imageIndex + 1].nodeName
+      ) : null;
+
+      const nextSiblingIsNewLine = nextSiblingName === 'UL' || nextSiblingName === 'OL' || nextSiblingName === 'BR';
+      return imageIndex === 0 && nextSiblingIsNewLine;
+    };
+
+    if (needsClosingTag()) {
+      html = html.replace(/[/]?>$/, `></${node.nodeName.toLowerCase()}>`);
+    }
+    return html;
   }
 
-  var alt = node.alt || ''
-  var src = filterLinkHref(node.getAttribute('src') || '')
-  var title = node.title || ''
-  var titlePart = title ? ' "' + filterImageTitle(title) + '"' : ''
-  return src ? '![' + alt.replace(/([[\]])/g, '\\$1') + ']' + '(' + src + titlePart + ')' : ''
+  return imageMarkdownFromAttributes({
+    alt: node.alt,
+    src: node.getAttribute('src'),
+    title: node.title,
+  });
 }
 
 function imageUrlFromSource(node) {

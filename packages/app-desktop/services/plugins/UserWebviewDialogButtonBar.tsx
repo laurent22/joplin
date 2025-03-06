@@ -5,20 +5,10 @@ import { ButtonSpec } from '@joplin/lib/services/plugins/api/types';
 const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
-
 interface Props {
 	buttons: ButtonSpec[];
 }
 
-const StyledRoot = styled.div`
-	display: flex;
-	width: 100%;
-	box-sizing: border-box;
-	justify-content: flex-end;
-	padding-top: ${(props: StyleProps) => props.theme.mainPadding}px;
-`;
 
 const StyledButton = styled(Button)`${space}`;
 
@@ -48,8 +38,8 @@ export default function UserWebviewDialogButtonBar(props: Props) {
 	}
 
 	return (
-		<StyledRoot>
+		<div className='user-dialog-button-bar'>
 			{renderButtons()}
-		</StyledRoot>
+		</div>
 	);
 }

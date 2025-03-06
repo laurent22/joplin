@@ -12,7 +12,7 @@ module.exports = {
 		'\\.(ts|tsx)$': 'ts-jest',
 	},
 
-	testEnvironment: 'jsdom',
+	testEnvironment: 'node',
 	testMatch: ['**/*.test.(ts|tsx)'],
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
@@ -20,7 +20,7 @@ module.exports = {
 
 	// Do transform most packages in node_modules (transformations correct unrecognized
 	// import syntax)
-	transformIgnorePatterns: ['<rootDir>/node_modules/jest', '<rootDir>/node_modules/js-draw'],
+	transformIgnorePatterns: ['<rootDir>/node_modules/jest', '<rootDir>/node_modules/js-draw', 'node_modules/jsdom'],
 
 	slowTestThreshold: 40,
 };

@@ -29,6 +29,9 @@ import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
 import AllNotesItem from '../listItemComponents/AllNotesItem';
+import ListItemWrapper from '../listItemComponents/ListItemWrapper';
+import { focus } from '@joplin/lib/utils/focusHandler';
+import shim from '@joplin/lib/shim';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -41,14 +44,26 @@ interface Props {
 	plugins: PluginStates;
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
+	containerRef: React.RefObject<HTMLDivElement>;
 
 	selectedIndex: number;
-	onSelectedElementShown: (element: HTMLElement)=> void;
+	listItems: ListItem[];
 }
 
 type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
+
+const focusListItem = (item: HTMLElement|null) => {
+	if (item) {
+		// Avoid scrolling to the selected item when refocusing the note list. Such a refocus
+		// can happen if the note list rerenders and the selection is scrolled out of view and
+		// can cause scroll to change unexpectedly.
+		focus('useOnRenderItem', item, { preventScroll: true });
+	}
+};
+
+const noFocusListItem = () => {};
 
 const useOnRenderItem = (props: Props) => {
 
@@ -104,7 +119,7 @@ const useOnRenderItem = (props: Props) => {
 			menu.append(
 				new MenuItem(menuUtils.commandToStatefulMenuItem('emptyTrash')),
 			);
-			menu.popup({ window: bridge().window() });
+			menu.popup({ window: bridge().activeWindow() });
 			return;
 		}
 
@@ -151,6 +166,13 @@ const useOnRenderItem = (props: Props) => {
 			}
 
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+				menu.append(new MenuItem({
+					...menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId]),
+					// By default, enabled is based on the selected folder. However, the right-click
+					// menu can be shown for unselected folders.
+					enabled: true,
+				}));
+
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
 				menu.append(new MenuItem({ type: 'separator' }));
@@ -247,7 +269,7 @@ const useOnRenderItem = (props: Props) => {
 			}
 		}
 
-		menu.popup({ window: bridge().window() });
+		menu.popup({ window: bridge().activeWindow() });
 	}, [props.dispatch, pluginsRef]);
 
 
@@ -288,7 +310,7 @@ const useOnRenderItem = (props: Props) => {
 			}
 		} catch (error) {
 			logger.error(error);
-			alert(error.message);
+			await shim.showErrorDialog(error.message);
 		}
 	}, []);
 
@@ -319,26 +341,24 @@ const useOnRenderItem = (props: Props) => {
 	const selectedIndexRef = useRef(props.selectedIndex);
 	selectedIndexRef.current = props.selectedIndex;
 
+	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
 		const selected = props.selectedIndex === index;
-		const anchorRefCallback = selected ? (
-			(element: HTMLElement) => {
-				if (selectedIndexRef.current === index) {
-					props.onSelectedElementShown(element);
-				}
-			}
-		) : null;
+		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
+		const anchorRef = (focusInList && selected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
 			return <TagItem
 				key={item.key}
-				anchorRef={anchorRefCallback}
+				anchorRef={anchorRef}
 				selected={selected}
 				onClick={tagItem_click}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
 				tag={tag}
+				itemCount={itemCount}
+				index={index}
 			/>;
 		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
@@ -361,7 +381,7 @@ const useOnRenderItem = (props: Props) => {
 			}
 			return <FolderItem
 				key={item.key}
-				anchorRef={anchorRefCallback}
+				anchorRef={anchorRef}
 				selected={selected}
 				folderId={folder.id}
 				folderTitle={Folder.displayTitle(folder)}
@@ -379,23 +399,42 @@ const useOnRenderItem = (props: Props) => {
 				shareId={folder.share_id}
 				parentId={folder.parent_id}
 				showFolderIcon={showFolderIcons}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.Header) {
 			return <HeaderItem
 				key={item.id}
+				anchorRef={anchorRef}
 				item={item}
-				anchorRef={anchorRefCallback}
+				isSelected={selected}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.AllNotes) {
 			return <AllNotesItem
 				key={item.key}
+				anchorRef={anchorRef}
 				selected={selected}
-				anchorRef={anchorRefCallback}
+				item={item}
+				index={index}
+				itemCount={itemCount}
 			/>;
 		} else if (item.kind === ListItemType.Spacer) {
 			return (
-				<a key={item.key} className='sidebar-spacer-item' ref={anchorRefCallback} aria-label={_('Spacer')}></a>
+				<ListItemWrapper
+					key={item.key}
+					containerRef={anchorRef}
+					depth={1}
+					selected={selected}
+					itemIndex={index}
+					itemCount={itemCount}
+					highlightOnHover={false}
+					className='sidebar-spacer-item'
+				>
+					<div aria-label={_('Spacer')}></div>
+				</ListItemWrapper>
 			);
 		} else {
 			const exhaustivenessCheck: never = item;
@@ -414,7 +453,8 @@ const useOnRenderItem = (props: Props) => {
 		showFolderIcons,
 		tagItem_click,
 		props.selectedIndex,
-		props.onSelectedElementShown,
+		props.containerRef,
+		itemCount,
 	]);
 };
 

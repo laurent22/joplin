@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+import { pathExistsSync } from 'fs-extra';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlparser2 = require('@joplin/fork-htmlparser2');
 const Datauri = require('datauri/sync');
@@ -102,6 +103,7 @@ const processLinkTag = (baseDir: string, _name: string, attrs: any): string => {
 
 	const filePath = `${baseDir}/${href}`;
 
+	if (!pathExistsSync(filePath)) return null;
 	const content = fs.readFileSync(filePath, 'utf8');
 	return `<style>${processCssContent(dirname(filePath), content)}</style>`;
 };

@@ -1,17 +1,18 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, ListType } from '../../types';
-import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine } from '@codemirror/commands';
+import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine, moveLineUp, moveLineDown } from '@codemirror/commands';
 import {
 	decreaseIndent, increaseIndent,
+	insertHorizontalRule,
 	toggleBolded, toggleCode,
 	toggleHeaderLevel, toggleItalicized,
 	toggleList, toggleMath,
 } from '../markdown/markdownCommands';
-import swapLine, { SwapLineDirection } from './swapLine';
 import duplicateLine from './duplicateLine';
 import sortSelectedLines from './sortSelectedLines';
-import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext } from '@codemirror/search';
+import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext, searchPanelOpen } from '@codemirror/search';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { showLinkEditor } from '../utils/handleLinkEditRequests';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
@@ -42,6 +43,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleHeading3]: toggleHeaderLevel(3),
 	[EditorCommandType.ToggleHeading4]: toggleHeaderLevel(4),
 	[EditorCommandType.ToggleHeading5]: toggleHeaderLevel(5),
+	[EditorCommandType.InsertHorizontalRule]: insertHorizontalRule,
 
 	[EditorCommandType.ScrollSelectionIntoView]: editor => {
 		editor.dispatch(editor.state.update({
@@ -55,8 +57,8 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.IndentLess]: decreaseIndent,
 	[EditorCommandType.IndentAuto]: indentSelection,
 	[EditorCommandType.InsertNewlineAndIndent]: insertNewlineAndIndent,
-	[EditorCommandType.SwapLineUp]: swapLine(SwapLineDirection.Up),
-	[EditorCommandType.SwapLineDown]: swapLine(SwapLineDirection.Down),
+	[EditorCommandType.SwapLineUp]: moveLineUp,
+	[EditorCommandType.SwapLineDown]: moveLineDown,
 	[EditorCommandType.GoDocEnd]: cursorDocEnd,
 	[EditorCommandType.GoDocStart]: cursorDocStart,
 	[EditorCommandType.GoLineStart]: cursorLineStart,
@@ -70,6 +72,15 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.UndoSelection]: undoSelection,
 	[EditorCommandType.RedoSelection]: redoSelection,
 
+	[EditorCommandType.EditLink]: showLinkEditor,
+
+	[EditorCommandType.ToggleSearch]: (view) => {
+		if (searchPanelOpen(view.state)) {
+			return closeSearchPanel(view);
+		} else {
+			return openSearchPanel(view);
+		}
+	},
 	[EditorCommandType.ShowSearch]: openSearchPanel,
 	[EditorCommandType.HideSearch]: closeSearchPanel,
 	[EditorCommandType.FindNext]: findNext,

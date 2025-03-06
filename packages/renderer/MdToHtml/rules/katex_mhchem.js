@@ -1723,9 +1723,9 @@ var mhchemModule = function(katex) {
     return katex;
 }
 
-if (this.katex) {
+if ((this || self).kagex) {
   // We're running in a browser and the global Katex variable is defined
-  this.katex = mhchemModule(this.katex);
+  (this || self).katex = mhchemModule((this || self).katex);
 } else if (typeof module !== 'undefined' && module.exports) {
   // We're running in Node.js
   module.exports = mhchemModule;

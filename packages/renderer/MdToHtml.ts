@@ -4,7 +4,7 @@ import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset } from './types';
+import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, ResourceInfos } from './types';
 import hljs from './highlight';
 import * as MarkdownIt from 'markdown-it';
 
@@ -146,6 +146,14 @@ interface PluginContext {
 	};
 }
 
+export enum LinkRenderingType {
+	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
+	JavaScriptHandler = 1,
+
+	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
+	HrefHandler = 2,
+}
+
 export interface RuleOptions {
 	context: PluginContext;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -153,8 +161,7 @@ export interface RuleOptions {
 	postMessageSyntax: string;
 	ResourceModel: OptionsResourceModel;
 	resourceBaseUrl: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resources: any; // resourceId: Resource
+	resources: ResourceInfos; // resourceId: Resource
 
 	// Used by checkboxes to specify how it should be rendered
 	checkboxRenderingType?: number;
@@ -174,9 +181,7 @@ export interface RuleOptions {
 	enableLongPress?: boolean;
 
 	// Use by `link_open` rule.
-	// linkRenderingType = 1 is the regular rendering and clicking on it is handled via embedded JS (in onclick attribute)
-	// linkRenderingType = 2 gives a plain link with no JS. Caller needs to handle clicking on the link.
-	linkRenderingType?: number;
+	linkRenderingType?: LinkRenderingType;
 
 	// A list of MIME types for which an edit button appears on tap/hover.
 	// Used by the image editor in the mobile app.
@@ -637,6 +642,7 @@ export default class MdToHtml implements MarkupRenderer {
 		const renderedBody = markdownIt.render(body, context);
 
 		let cssStrings = noteStyle(options.theme, {
+			scrollbarSize: options.scrollbarSize,
 			contentMaxWidth: options.contentMaxWidth,
 		});
 

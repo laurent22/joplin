@@ -15,6 +15,10 @@ const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 			// we disable it in Joplin Portable.
 			enabled: !shim.isPortable(),
 		},
+
+		'io.github.personalizedrefrigerator.js-draw': {
+
+		},
 	};
 	return defaultPlugins;
 };

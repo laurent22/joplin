@@ -117,7 +117,7 @@ describe('synchronizer/ItemUploader', () => {
 		expect(callRecorder.length).toBe(0);
 
 		await time.msleep(1);
-		notes[1] = await Note.save({ title: '22' }),
+		notes[1] = await Note.save({ title: '22' });
 		await itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]);
 		expect(callRecorder.length).toBe(1);
 	}));

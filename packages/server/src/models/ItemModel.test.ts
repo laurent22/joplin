@@ -203,6 +203,55 @@ describe('ItemModel', () => {
 		expect((await models().user().load(user3.id)).total_item_size).toBe(totalSize3);
 	});
 
+	test('should not fail when a user account has been deleted', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		await createItemTree3(user2.id, '', '', [
+			{
+				id: '000000000000000000000000000000F2',
+				children: [
+					{
+						id: '00000000000000000000000000000002',
+					},
+					{
+						id: '00000000000000000000000000000003',
+					},
+				],
+			},
+		]);
+
+		await createItemTree3(user3.id, '', '', [
+			{
+				id: '000000000000000000000000000000F3',
+				children: [
+					{
+						id: '00000000000000000000000000000004',
+					},
+					{
+						id: '00000000000000000000000000000005',
+					},
+				],
+			},
+		]);
+
+		await models().user().delete(user3.id);
+
+		await expectNotThrow(async () => models().item().updateTotalSizes());
+	});
+
 	test('should update total size when an item is deleted', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 

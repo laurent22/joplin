@@ -1,0 +1,13 @@
+
+.editor-status-bar {
+	display: flex;
+	flex-direction: row;
+
+	> .spacer {
+		flex-grow: 1;
+	}
+
+	> .status {
+		align-self: end;
+	}
+}

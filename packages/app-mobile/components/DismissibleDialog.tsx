@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
-import { IconButton, Surface } from 'react-native-paper';
+import { IconButton, Surface, Text } from 'react-native-paper';
 import { themeStyle } from './global-style';
 import Modal from './Modal';
 import { _ } from '@joplin/lib/locale';
@@ -19,6 +19,7 @@ interface Props {
 	onDismiss: ()=> void;
 	containerStyle?: ViewStyle;
 	children: React.ReactNode;
+	heading?: string;
 
 	size: DialogSize;
 }
@@ -33,17 +34,13 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 		const maxHeight = size === DialogSize.Large ? windowSize.height : 700;
 
 		return StyleSheet.create({
-			webView: {
-				backgroundColor: 'transparent',
-				display: 'flex',
-			},
-			webViewContainer: {
-				flexGrow: 1,
-				flexShrink: 1,
-			},
 			closeButtonContainer: {
 				flexDirection: 'row',
-				justifyContent: 'flex-end',
+				justifyContent: 'space-between',
+				alignContent: 'center',
+			},
+			heading: {
+				alignSelf: 'center',
 			},
 			dialogContainer: {
 				maxHeight,
@@ -74,8 +71,12 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 const DismissibleDialog: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.containerStyle, props.size);
 
-	const closeButton = (
+	const heading = props.heading ? (
+		<Text variant='headlineSmall' role='heading' style={styles.heading}>{props.heading}</Text>
+	) : null;
+	const closeButtonRow = (
 		<View style={styles.closeButtonContainer}>
+			{heading ?? <View/>}
 			<IconButton
 				icon='close'
 				accessibilityLabel={_('Close')}
@@ -95,7 +96,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			transparent={true}
 		>
 			<Surface style={styles.dialogSurface} elevation={1}>
-				{closeButton}
+				{closeButtonRow}
 				{props.children}
 			</Surface>
 		</Modal>

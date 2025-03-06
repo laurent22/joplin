@@ -238,7 +238,9 @@ const create = (win, options) => {
 			// When this is being called from a web view, we can't use `win` as this
 			// would refer to the web view which is not allowed to render a popup menu.
 			//
-			menu.popup({ window: electronRemote ? electronRemote.getCurrentWindow() : win });
+			// Joplin change: Do not use electronRemote to get the current window -- this causes
+			// the menu to be shown on the wrong window in MacOS.
+			menu.popup({ window: win });
 		}
 	});
 };

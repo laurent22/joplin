@@ -1,10 +1,11 @@
 import CommandService from '../CommandService';
 import { stateUtils } from '../../reducer';
 import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
+import { WhenClauseContext } from './stateToWhenClauseContext';
 
-const separatorItem = { type: 'separator' };
 
 export interface ToolbarButtonInfo {
+	type: 'button';
 	name: string;
 	tooltip: string;
 	iconName: string;
@@ -12,6 +13,16 @@ export interface ToolbarButtonInfo {
 	onClick(): void;
 	title: string;
 }
+
+interface SeparatorItem extends Omit<Partial<ToolbarButtonInfo>, 'type'> {
+	type: 'separator';
+}
+
+export const separatorItem: SeparatorItem = {
+	type: 'separator',
+};
+
+export type ToolbarItem = ToolbarButtonInfo|SeparatorItem;
 
 interface ToolbarButtonCacheItem {
 	info: ToolbarButtonInfo;
@@ -34,28 +45,30 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private commandToToolbarButton(commandName: string, whenClauseContext: any): ToolbarButtonInfo {
+	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
+		const newIcon = this.service.iconName(commandName);
+		const newLabel = this.service.label(commandName);
 
 		if (
 			this.toolbarButtonCache_[commandName] &&
 			this.toolbarButtonCache_[commandName].info.enabled === newEnabled &&
-			this.toolbarButtonCache_[commandName].info.title === newTitle
+			this.toolbarButtonCache_[commandName].info.title === newTitle &&
+			this.toolbarButtonCache_[commandName].info.iconName === newIcon &&
+			this.toolbarButtonCache_[commandName].info.tooltip === newLabel
 		) {
 			return this.toolbarButtonCache_[commandName].info;
 		}
 
-		const command = this.service.commandByName(commandName, { runtimeMustBeRegistered: true });
-
-		const output = {
+		const output: ToolbarButtonInfo = {
+			type: 'button',
 			name: commandName,
-			tooltip: this.service.label(commandName),
-			iconName: command.declaration.iconName,
+			tooltip: newLabel,
+			iconName: newIcon,
 			enabled: newEnabled,
 			onClick: async () => {
-				void this.service.execute(commandName);
+				await this.service.execute(commandName);
 				void focusEditorIfEditorCommand(commandName, this.service);
 			},
 			title: newTitle,
@@ -72,13 +85,12 @@ export default class ToolbarButtonUtils {
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any): ToolbarButtonInfo[] {
-		const output: ToolbarButtonInfo[] = [];
+	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any): ToolbarItem[] {
+		const output: ToolbarItem[] = [];
 
 		for (const commandName of commandNames) {
 			if (commandName === '-') {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				output.push(separatorItem as any);
+				output.push(separatorItem);
 				continue;
 			}
 

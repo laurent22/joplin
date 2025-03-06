@@ -7,9 +7,11 @@ const createEditorControl = (initialText: string) => {
 
 	return createEditor(document.body, {
 		initialText,
+		initialNoteId: '',
 		settings: editorSettings,
 		onEvent: _event => {},
 		onLogMessage: _message => {},
+		onPasteFile: null,
 	});
 };
 

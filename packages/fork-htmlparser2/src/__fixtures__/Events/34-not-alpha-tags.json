@@ -1,0 +1,12 @@
+{
+  "name": "tag names are not ASCII alpha",
+  "options": {
+      "parser": {}
+  },
+  "html": "<12>text</12>",
+  "expected": [
+      { "event": "text", "data": ["<12>text"] },
+      { "event": "comment", "data": ["12"] },
+      { "event": "commentend", "data": [] }
+  ]
+}

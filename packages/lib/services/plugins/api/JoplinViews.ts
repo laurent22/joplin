@@ -7,6 +7,7 @@ import JoplinViewsMenus from './JoplinViewsMenus';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 import JoplinViewsNoteList from './JoplinViewsNoteList';
+import JoplinViewsEditors from './JoplinViewsEditor';
 
 /**
  * This namespace provides access to view-related services.
@@ -25,6 +26,7 @@ export default class JoplinViews {
 	private menus_: JoplinViewsMenus = null;
 	private toolbarButtons_: JoplinViewsToolbarButtons = null;
 	private dialogs_: JoplinViewsDialogs = null;
+	private editors_: JoplinViewsEditors = null;
 	private noteList_: JoplinViewsNoteList = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private implementation_: any = null;
@@ -44,6 +46,11 @@ export default class JoplinViews {
 	public get panels() {
 		if (!this.panels_) this.panels_ = new JoplinViewsPanels(this.plugin, this.store);
 		return this.panels_;
+	}
+
+	public get editors() {
+		if (!this.editors_) this.editors_ = new JoplinViewsEditors(this.plugin, this.store);
+		return this.editors_;
 	}
 
 	public get menuItems() {

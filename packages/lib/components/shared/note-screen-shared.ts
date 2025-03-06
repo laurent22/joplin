@@ -1,4 +1,4 @@
-import { NoteEntity } from '../../services/database/types';
+import { FolderEntity, NoteEntity } from '../../services/database/types';
 import { reg } from '../../registry';
 import Folder from '../../models/Folder';
 import BaseModel, { ModelType } from '../../BaseModel';
@@ -12,9 +12,27 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
+interface SharedResource {
+	uri: string;
+	mimeType: string;
+	name: string;
+}
+
+interface SharedData {
+	title: string;
+	text: string;
+	resources: SharedResource[];
+}
+
+export interface Props {
+	provisionalNoteIds: string[];
+	noteId: string;
+	folders: FolderEntity[];
+	sharedData: SharedData|undefined;
+}
+
 export interface BaseNoteScreenComponent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: any;
+	props: Props;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	state: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -49,6 +67,8 @@ interface Shared {
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
+
+	reloadNote?: (comp: BaseNoteScreenComponent)=> Promise<NoteEntity>;
 }
 
 const shared: Shared = {};
@@ -135,7 +155,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const newState: any = {
-		lastSavedNote: { ...note },
+		lastSavedNote: { ...note, ...savedNote },
 		note: note,
 	};
 
@@ -250,7 +270,7 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.initState = async function(comp: BaseNoteScreenComponent) {
+shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -262,19 +282,40 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		comp.scheduleFocusUpdate();
 	}
 
-	const folder = Folder.byId(comp.props.folders, note.parent_id);
+	const fromShare = !!comp.props.sharedData;
+	if (note) {
+		const folder = Folder.byId(comp.props.folders, note.parent_id);
+		comp.setState({
+			lastSavedNote: { ...note },
+			note: note,
+			mode: mode,
+			folder: folder,
+			isLoading: false,
+			fromShare: !!comp.props.sharedData,
+			noteResources: await shared.attachedResources(note ? note.body : ''),
+			readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+			noteLastLoadTime: Date.now(),
+		});
+	} else {
+		// Handle the case where a non-existent note is loaded. This can happen briefly after deleting a note.
+		comp.setState({
+			lastSavedNote: {},
+			note: {},
+			mode,
+			folder: null,
+			isLoading: true,
+			fromShare,
+			noteResources: [],
+			readOnly: true,
+			noteLastLoadTime: Date.now(),
+		});
+	}
 
-	comp.setState({
-		lastSavedNote: { ...note },
-		note: note,
-		mode: mode,
-		folder: folder,
-		isLoading: false,
-		fromShare: !!comp.props.sharedData,
-		noteResources: await shared.attachedResources(note ? note.body : ''),
-		readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
-	});
+	return note;
+};
 
+shared.initState = async function(comp: BaseNoteScreenComponent) {
+	const note = await shared.reloadNote(comp);
 
 	if (comp.props.sharedData) {
 		if (comp.props.sharedData.title) {
@@ -297,7 +338,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 	}
 
 	// eslint-disable-next-line require-atomic-updates
-	comp.lastLoadedNoteId_ = note.id;
+	comp.lastLoadedNoteId_ = note?.id;
 };
 
 shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {

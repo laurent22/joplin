@@ -203,7 +203,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 			item={item}
 			type={ButtonType.Delete}
 			onPress={props.pluginCallbacks.onDelete}
-			disabled={item.builtIn || (item?.deleted ?? true)}
+			disabled={item.builtIn || item.devMode || (item?.deleted ?? true)}
 			title={item?.deleted ? _('Deleted') : _('Delete')}
 		/>
 	);

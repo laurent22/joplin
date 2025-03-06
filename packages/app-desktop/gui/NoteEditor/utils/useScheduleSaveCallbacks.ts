@@ -12,6 +12,7 @@ const logger = Logger.create('useScheduleSaveCallbacks');
 
 interface Props {
 	setFormNote: RefObject<OnSetFormNote>;
+	editorId: string;
 	dispatch: Dispatch;
 	editorRef: RefObject<NoteBodyEditorRef>;
 }
@@ -26,7 +27,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				logger.debug('Saving note...', note);
-				const savedNote = await Note.save(note);
+				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}` });
 
 				props.setFormNote.current((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
@@ -45,7 +46,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 
 		formNote.saveActionQueue.push(makeAction(formNote));
 		return formNote.saveActionQueue.waitForAllDone();
-	}, [props.dispatch, props.setFormNote]);
+	}, [props.dispatch, props.editorId, props.setFormNote]);
 
 	const saveNoteIfWillChange = useCallback(async (formNote: FormNote) => {
 		if (!formNote.id || !formNote.bodyWillChangeId) return;

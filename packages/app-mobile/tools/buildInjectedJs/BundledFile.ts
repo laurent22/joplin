@@ -58,18 +58,18 @@ export default class BundledFile {
 							// Some libraries don't work with older browsers/WebViews.
 							// Because Babel transpilation can be slow, we only transpile
 							// these libraries.
-							// For now, it's just Replit's CodeMirror-vim library. This library
-							// uses `a?.b` syntax, which seems to be unsupported in iOS 12 Safari.
-							const moduleNeedsTranspilation = !!(/.*node_modules.*replit.*\.[mc]?js$/.exec(value));
+							const moduleNeedsTranspilation = !!(
+								// Replit's CodeMirror-vim library uses a?.b syntax which seems to be unsupported in iOS 12 Safari.
+								/.*node_modules.*replit.*\.[mc]?js$/.exec(value) ||
+								// js-draw uses a ??= b syntax, which is unsupported in old Android WebView versions
+								/.*node_modules.*js-draw.*\.[mc]?js$/.exec(value)
+							);
 
 							if (isModuleFile && !moduleNeedsTranspilation) {
 								return false;
 							}
 
 							const isJsFile = !!(/\.[cm]?js$/.exec(value));
-							if (isJsFile) {
-								console.log('Compiling with Babel:', value);
-							}
 							return isJsFile;
 						},
 						use: {

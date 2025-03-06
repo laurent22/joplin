@@ -30,7 +30,7 @@ const defaultEnvValues: EnvVariables = {
 	IS_ADMIN_INSTANCE: true,
 	INSTANCE_NAME: '',
 
-	// Maxiumm allowed drift between NTP time and server time. A few
+	// Maximum allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
 	// the same note at the exact same time. But past a certain limit, it might
 	// mean the server clock is incorrect and should be fixed, as that could
@@ -119,6 +119,13 @@ const defaultEnvValues: EnvVariables = {
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
 
 	// ==================================================
+	// Events deletion
+	// ==================================================
+
+	EVENTS_AUTO_DELETE_ENABLED: false,
+	EVENTS_AUTO_DELETE_AFTER_DAYS: 30,
+
+	// ==================================================
 	// LDAP configuration
 	// ==================================================
 
@@ -130,6 +137,7 @@ const defaultEnvValues: EnvVariables = {
 	LDAP_1_BASE_DN: '',
 	LDAP_1_BIND_DN: '', // used for user search - leave empty if ldap server allows anonymous bind
 	LDAP_1_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
+	LDAP_1_TLS_CA_FILE: '', // used for self-signed certificate with ldaps - leave empty if using ldap or server uses CA-issued certificate
 
 	LDAP_2_ENABLED: false,
 	LDAP_2_USER_AUTO_CREATION: true, // if set to true, users will be created on the fly after ldap authentication
@@ -139,6 +147,7 @@ const defaultEnvValues: EnvVariables = {
 	LDAP_2_BASE_DN: '',
 	LDAP_2_BIND_DN: '', // used for user search - leave empty if ldap server allows anonymous bind
 	LDAP_2_BIND_PW: '', // used for user search - leave empty if ldap server allows anonymous bind
+	LDAP_2_TLS_CA_FILE: '', // used for self-signed certificate with ldaps - leave empty if using ldap or server uses CA-issued certificate
 
 };
 
@@ -210,6 +219,9 @@ export interface EnvVariables {
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
 
+	EVENTS_AUTO_DELETE_ENABLED: boolean;
+	EVENTS_AUTO_DELETE_AFTER_DAYS: number;
+
 	LDAP_1_ENABLED: boolean;
 	LDAP_1_USER_AUTO_CREATION: boolean;
 	LDAP_1_HOST: string;
@@ -218,6 +230,7 @@ export interface EnvVariables {
 	LDAP_1_BASE_DN: string;
 	LDAP_1_BIND_DN: string;
 	LDAP_1_BIND_PW: string;
+	LDAP_1_TLS_CA_FILE: string;
 
 	LDAP_2_ENABLED: boolean;
 	LDAP_2_USER_AUTO_CREATION: boolean;
@@ -227,6 +240,7 @@ export interface EnvVariables {
 	LDAP_2_BASE_DN: string;
 	LDAP_2_BIND_DN: string;
 	LDAP_2_BIND_PW: string;
+	LDAP_2_TLS_CA_FILE: string;
 }
 
 const parseBoolean = (s: string): boolean => {

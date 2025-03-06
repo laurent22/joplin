@@ -18,6 +18,12 @@
 		background-color: var(--joplin-background-color);
 		font-family: var(--joplin-font-family);
 	}
+
+	// focus-visible is communicated by displaying the active item in a different style.
+	// As such, an outline is unnecessary.
+	&:focus-visible {
+		outline: unset;
+	}
 }
 
 .note-list-item {

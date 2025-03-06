@@ -65,6 +65,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	return (
 		<Dropdown
 			items={titlePickerItems(!!mustSelect)}
+			accessibilityHint={_('Selects a notebook')}
 			disabled={disabled}
 			labelTransform="trim"
 			selectedValue={selectedFolderId || ''}

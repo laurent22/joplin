@@ -1,4 +1,6 @@
 import { RSA } from '@joplin/lib/services/e2ee/types';
+import shim from '@joplin/lib/shim';
+import Logger from '@joplin/utils/Logger';
 const RnRSA = require('react-native-rsa-native').RSA;
 
 interface RSAKeyPair {
@@ -7,9 +9,18 @@ interface RSAKeyPair {
 	keySizeBits: number;
 }
 
+const logger = Logger.create('RSA');
+
 const rsa: RSA = {
 
 	generateKeyPair: async (keySize: number): Promise<RSAKeyPair> => {
+		if (shim.mobilePlatform() === 'web') {
+			// TODO: Try to implement with SubtleCrypto. May require migrating the RSA algorithm used on
+			// desktop and mobile (which is not supported on web). See commit 12adcd9dbc3f723bac36ff4447701573084c4694.
+			logger.warn('RSA on web is not yet supported.');
+			return null;
+		}
+
 		const keys: RSAKeyPair = await RnRSA.generateKeys(keySize);
 
 		// Sanity check

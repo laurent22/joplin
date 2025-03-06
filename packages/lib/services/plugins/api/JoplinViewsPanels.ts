@@ -130,4 +130,8 @@ export default class JoplinViewsPanels {
 		return this.controller(handle).visible;
 	}
 
+	public async isActive(handle: ViewHandle): Promise<boolean> {
+		return this.controller(handle).isActive();
+	}
+
 }

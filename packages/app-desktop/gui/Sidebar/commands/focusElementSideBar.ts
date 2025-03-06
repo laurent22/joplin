@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
 import { SidebarCommandRuntimeProps } from '../types';
+import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementSideBar',
@@ -17,6 +18,8 @@ export const runtime = (props: SidebarCommandRuntimeProps): CommandRuntime => {
 
 			if (sidebarVisible) {
 				props.focusSidebar();
+				// The sidebar is only present in the main window:
+				bridge().switchToMainWindow();
 			}
 		},
 

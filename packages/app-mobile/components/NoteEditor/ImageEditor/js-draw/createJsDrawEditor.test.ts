@@ -21,10 +21,15 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 	const locale = 'en';
 
 	const allCallbacks: ImageEditorCallbacks = {
-		saveDrawing: () => {},
+		save: () => {},
+		saveThenClose: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
 		updateEditorTemplate: ()=> {},
+		updateToolbarState: ()=> {},
+		onLoadedEditor: ()=> {},
+		writeClipboardText: async ()=>{},
+		readClipboardText: async ()=> '',
 
 		...callbacks,
 	};
@@ -50,7 +55,7 @@ describe('createJsDrawEditor', () => {
 
 		jest.useFakeTimers();
 		const editorControl = createEditorWithCallbacks({
-			saveDrawing: (_drawing: SVGElement, isAutosave: boolean) => {
+			save: (_drawing: string, isAutosave: boolean) => {
 				if (isAutosave) {
 					calledAutosaveCount ++;
 				}
@@ -58,7 +63,7 @@ describe('createJsDrawEditor', () => {
 		});
 
 		// Load no image and an empty template so that autosave can start
-		await editorControl.loadImageOrTemplate('', '{}');
+		await editorControl.loadImageOrTemplate('', '{}', undefined);
 
 		expect(calledAutosaveCount).toBe(0);
 

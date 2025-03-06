@@ -9,7 +9,10 @@ import { ExportModule, ImportModule } from './types';
  *
  * See the documentation of the [[ExportModule]] and [[ImportModule]] for more information.
  *
- * You may also want to refer to the Joplin API documentation to see the list of properties for each item (note, notebook, etc.) - https://joplinapp.org/api/references/rest_api/
+ * You may also want to refer to the Joplin API documentation to see the list of properties for each item (note, notebook, etc.) - https://joplinapp.org/help/api/references/rest_api
+ *
+ * <span class="platform-desktop">desktop</span>: While it is possible to register import and export
+ * modules on mobile, there is no GUI to activate them.
  */
 export default class JoplinInterop {
     registerExportModule(module: ExportModule): Promise<void>;

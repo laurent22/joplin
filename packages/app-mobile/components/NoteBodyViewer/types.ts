@@ -1,4 +1,4 @@
-import { WebViewMessageEvent } from 'react-native-webview';
+import { OnMessageEvent } from '../ExtendedWebView/types';
 
 export type OnScrollCallback = (scrollTop: number)=> void;
-export type OnWebViewMessageHandler = (event: WebViewMessageEvent)=> void;
+export type OnWebViewMessageHandler = (event: OnMessageEvent)=> void;

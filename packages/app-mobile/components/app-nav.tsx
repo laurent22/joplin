@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import NotesScreen from './screens/Notes';
-const { SearchScreen } = require('./screens/search.js');
+import SearchScreen from './screens/SearchScreen';
 import { Component } from 'react';
 import { KeyboardAvoidingView, Keyboard, Platform, View, KeyboardEvent, Dimensions, EmitterSubscription } from 'react-native';
 import { AppState } from '../utils/types';
@@ -115,8 +115,8 @@ class AppNavComponent extends Component<Props, State> {
 				behavior={Platform.OS === 'ios' ? 'padding' : null}
 				style={style}
 			>
-				<NotesScreen visible={notesScreenVisible} navigation={{ state: route }} />
-				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} navigation={{ state: route }} />}
+				<NotesScreen visible={notesScreenVisible} />
+				{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}
 				{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={this.props.themeId} dispatch={this.props.dispatch} />}
 				<View style={{ height: this.state.autoCompletionBarExtraHeight }} />
 			</KeyboardAvoidingView>

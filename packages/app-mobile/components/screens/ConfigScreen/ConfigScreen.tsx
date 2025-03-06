@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, Linking, View, Switch, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
+import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -7,12 +7,11 @@ import checkPermissions from '../../../utils/checkPermissions';
 import setIgnoreTlsErrors from '../../../utils/TlsUtils';
 import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
-const { BackButtonService } = require('../../../services/back-button.js');
+import BackButtonService from '../../../services/BackButtonService';
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
-import { themeStyle } from '../../global-style';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
@@ -35,6 +34,9 @@ import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import shim from '@joplin/lib/shim';
+import SettingsToggle from './SettingsToggle';
+import { UpdateSettingValueCallback } from './types';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -154,6 +156,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('Log');
 	};
 
+	private deletionLogButtonPress_ = () => {
+		void NavService.go('Log', { defaultFilter: 'DeleteAction' });
+	};
+
 	private manageSharesPress_ = () => {
 		void NavService.go('ShareManager');
 	};
@@ -257,29 +263,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.state.changedSettingKeys.length > 0;
 	}
 
-	private promptSaveChanges(): Promise<void> {
-		return new Promise(resolve => {
-			if (this.hasUnsavedChanges()) {
-				const dialogTitle: string|null = null;
-				Alert.alert(
-					dialogTitle,
-					_('There are unsaved changes.'),
-					[{
-						text: _('Save changes'),
-						onPress: async () => {
-							await this.saveButton_press();
-							resolve();
-						},
-					},
-					{
-						text: _('Discard changes'),
-						onPress: () => resolve(),
-					}],
-				);
-			} else {
-				resolve();
+	private async promptSaveChanges(): Promise<void> {
+		if (this.hasUnsavedChanges()) {
+			const response = await shim.showMessageBox(_('There are unsaved changes.'), {
+				buttons: [_('Save changes'), _('Discard changes')],
+			});
+			if (response === 0) {
+				await this.saveButton_press();
 			}
-		});
+		}
 	}
 
 	private handleNavigateToNewScreen = async (): Promise<boolean> => {
@@ -556,6 +548,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
+			addSettingButton('deletion_log_button', _('Deletion log'), this.deletionLogButtonPress_);
 			addSettingButton('fix_search_engine_index', this.state.fixingSearchIndex ? _('Fixing search index...') : _('Fix search index'), this.fixSearchEngineIndexButtonPress_, { disabled: this.state.fixingSearchIndex, description: _('Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.') });
 			const syncTargetInfo = SyncTargetRegistry.infoById(this.state.settings['sync.target']);
 			if (syncTargetInfo.supportsShare) {
@@ -681,22 +674,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	private renderToggle(key: string, label: string, value: any, updateSettingValue: Function, descriptionComp: any = null) {
-		const theme = themeStyle(this.props.themeId);
-
-		return (
-			<View key={key}>
-				<View style={this.styles().getContainerStyle(false)}>
-					<Text key="label" style={this.styles().styleSheet.switchSettingText}>
-						{label}
-					</Text>
-					{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
-					<Switch key="control" style={this.styles().styleSheet.switchSettingControl} trackColor={{ false: theme.dividerColor }} value={value} onValueChange={(value: any) => void updateSettingValue(key, value)} />
-				</View>
-				{descriptionComp}
-			</View>
-		);
+	private renderToggle(key: string, label: string, value: unknown, updateSettingValue: UpdateSettingValueCallback) {
+		return <SettingsToggle
+			key={key}
+			settingId={key}
+			value={value}
+			label={label}
+			updateSettingValue={updateSettingValue}
+			styles={this.styles()}
+			themeId={this.props.themeId}
+		/>;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

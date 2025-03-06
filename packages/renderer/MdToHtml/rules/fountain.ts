@@ -38,6 +38,10 @@ const pluginAssets = function() {
 					font-weight: bold;
 				}
 
+				.fountain .italic {
+					font-style: italic;
+				}
+
 				.fountain .underline {
 					text-decoration: underline;
 				}

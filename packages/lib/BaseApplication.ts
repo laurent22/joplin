@@ -4,14 +4,14 @@ import shim from './shim';
 const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
-import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
-import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
+import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDriver.electron';
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
 import { createStore, applyMiddleware, Store } from 'redux';
-const { defaultState, stateUtils } = require('./reducer');
+import { defaultState, stateUtils } from './reducer';
 import JoplinDatabase from './JoplinDatabase';
 import { cancelTimers as folderScreenUtilsCancelTimers, refreshFolders, scheduleRefreshFolders } from './folders-screen-utils';
 const { DatabaseDriverNode } = require('./database-driver-node.js');
@@ -39,7 +39,7 @@ const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/search/SearchEngineUtils';
-import SearchEngine, { ProcessResultsRow } from './services/search/SearchEngine';
+import SearchEngine, { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
@@ -64,6 +64,7 @@ import { join } from 'path';
 import processStartFlags from './utils/processStartFlags';
 import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
+import NavService from './services/NavService';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -98,8 +99,7 @@ export default class BaseApplication {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	protected currentFolder_: any = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected store_: Store<any> = null;
+	protected store_: Store<State> = null;
 
 	private rotatingLogs: RotatingLogs;
 
@@ -240,7 +240,7 @@ export default class BaseApplication {
 		});
 
 		let notes: NoteEntity[] = [];
-		let highlightedWords: string[] = [];
+		let highlightedWords: (ComplexTerm | string)[] = [];
 		let searchResults: ProcessResultsRow[] = [];
 
 		if (parentId) {
@@ -511,6 +511,14 @@ export default class BaseApplication {
 			refreshNotesUseSelectedNoteId = true;
 		}
 
+		// Switching windows can also change which note(s) and which note parent type is selected.
+		// Refreshing notes after switching windows helps ensure that the selected note/tags/other state
+		// is correct for the current window.
+		if (action.type === 'WINDOW_FOCUS' && action.lastWindowId !== action.windowId) {
+			refreshNotes = true;
+			refreshNotesUseSelectedNoteId = true;
+		}
+
 		// Should refresh the notes when:
 		// - A tag is selected, to show the notes for that tag
 		// - When a tag is updated so that when searching by tags, the search results are updated
@@ -610,6 +618,7 @@ export default class BaseApplication {
 
 		BaseModel.dispatch = this.store().dispatch;
 		BaseSyncTarget.dispatch = this.store().dispatch;
+		NavService.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
 		ShareService.instance().initialize(this.store(), EncryptionService.instance());
@@ -754,10 +763,13 @@ export default class BaseApplication {
 
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
+		KvStore.instance().setDb(reg.db());
 
 		setRSA(RSA);
 
-		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await loadKeychainServiceAndSettings(
+			options.keychainEnabled ? [KeychainServiceDriverElectron, KeychainServiceDriverNode] : [],
+		);
 		await migrateMasterPassword();
 		await handleSyncStartupOperation();
 
@@ -841,7 +853,6 @@ export default class BaseApplication {
 
 		BaseItem.revisionService_ = RevisionService.instance();
 
-		KvStore.instance().setDb(reg.db());
 
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();

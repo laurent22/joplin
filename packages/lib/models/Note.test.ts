@@ -125,6 +125,8 @@ describe('models/Note', () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
 
+		await msleep(1);
+
 		const duplicatedNote = await Note.duplicate(note1.id);
 
 		expect(duplicatedNote !== note1).toBe(true);
@@ -385,7 +387,7 @@ describe('models/Note', () => {
 		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
 		expect(conflictedNote.parent_id).toBe(folder.id);
 		expect(conflictedNote.is_shared).toBeUndefined();
-		expect(conflictedNote.share_id).toBeUndefined();
+		expect(conflictedNote.share_id).toBe('');
 	});
 
 	it('should copy conflicted note to target folder and cancel conflict', (async () => {

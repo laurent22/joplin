@@ -68,7 +68,7 @@ export default class JoplinPlugins {
 	 * will be persisted.
 	 */
 	public async dataDir(): Promise<string> {
-		return this.plugin.dataDir();
+		return this.plugin.createAndGetDataDir();
 	}
 
 	/**

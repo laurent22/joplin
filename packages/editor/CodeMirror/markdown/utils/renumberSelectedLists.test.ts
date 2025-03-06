@@ -38,4 +38,30 @@ describe('renumberSelectedLists', () => {
 			'# End',
 		].join('\n'));
 	});
+
+	it('should preserve the first list number if not 1', async () => {
+		const listText = [
+			'2. This',
+			'4. is',
+			'5. a',
+			'6. test',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			`${listText}\n\n# End`,
+			EditorSelection.range(0, listText.length),
+			['OrderedList', 'ATXHeading1'],
+		);
+
+		editor.dispatch(renumberSelectedLists(editor.state));
+
+		expect(editor.state.doc.toString()).toBe([
+			'2. This',
+			'3. is',
+			'4. a',
+			'5. test',
+			'',
+			'# End',
+		].join('\n'));
+	});
 });

@@ -116,6 +116,9 @@
 	"(In plugin: %s)": [
 		"(在插件%s中)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"（无）"
 	],
@@ -135,10 +138,10 @@
 		"- 存储权限：允许将文件添加到笔记中并启用文件系统同步。"
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，用于从 [note] 中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用于列出所有的标签（对于过长选项请使用 -l 参数）。"
+		"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，分别用于从 [note] 中赋值或删除 [tag]，列出与 [tag] 相关的笔记，列出与[note]相关的tag。`tag list` 命令可以用于列出所有的标签（对于过长选项请使用 -l 参数）。"
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
-		"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办事项的完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命令来把待办事项转换到普通笔记。"
+		"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办事项的完成/未完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命令来把待办事项转换到普通笔记。"
 	],
 	"A3": [
 		"A3"
@@ -209,6 +212,9 @@
 	"Add recipient:": [
 		"添加收件人："
 	],
+	"Add tag %s to note": [
+		""
+	],
 	"Add title": [
 		"添加标题"
 	],
@@ -234,7 +240,7 @@
 		"包含笔记，笔记本和标签在内的所有数据将会被永久删除。"
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		"所有同步失败的条目都被标记为 \"忽略\"。"
+		"所有同步失败的条目都被标记为 \"已忽略\"。"
 	],
 	"All notes": [
 		"全部笔记"
@@ -305,6 +311,9 @@
 	"Aritim Dark": [
 		"暗黑 (Aritim)"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"添加附件"
 	],
@@ -356,6 +365,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"自动配对花括号、圆括号、引号等。"
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"自动检查更新"
 	],
@@ -374,9 +386,6 @@
 	"Beta": [
 		"Beta"
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"设备上未设置生物识别解锁。请设置它以解锁 Joplin。如果设备处于锁定状态，请考虑将其关闭和打开以重置生物特征扫描。"
-	],
 	"Bold": [
 		"加粗"
 	],
@@ -394,6 +403,9 @@
 	],
 	"by %s": [
 		"由 %s"
+	],
+	"by word": [
+		""
 	],
 	"Can Share": [
 		"可以共享"
@@ -470,11 +482,17 @@
 	"Change language": [
 		"更改语言"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"字符数"
 	],
 	"Characters excluding spaces": [
 		"字符数（不计空格）"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"检查更新..."
@@ -521,6 +539,9 @@
 	"Close dropdown": [
 		"关闭下拉列表"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"关闭应用程序，然后删除“%s”中您的配置文件，然后再次启动应用程序。 请确保您已事先将所有笔记以 JEX 格式导出来创建备份。"
 	],
@@ -548,11 +569,8 @@
 	"Collaborate on notebooks with others": [
 		"与他人共同协作笔记本"
 	],
-	"Collapse": [
-		"折叠"
-	],
-	"Collapse %s": [
-		"折叠 %s"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"临近提醒"
@@ -756,10 +774,10 @@
 		"新建待办事项。"
 	],
 	"Creating new note...": [
-		"新建笔记 %s..."
+		"新建笔记..."
 	],
 	"Creating new to-do...": [
-		"新建待办 %s..."
+		"新建待办..."
 	],
 	"Creating report...": [
 		"新建报告..."
@@ -844,6 +862,9 @@
 	],
 	"Delete local data and re-download from sync target": [
 		"删除本地数据并从同步目标导入数据"
+	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
 	],
 	"Delete note": [
 		"删除笔记"
@@ -1040,6 +1061,9 @@
 	"Edit in external editor": [
 		"在外部编辑器中编辑"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit link": [
 		"编辑链接"
 	],
@@ -1130,6 +1154,9 @@
 	"Enable encryption": [
 		"启用加密"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"启用脚注"
 	],
@@ -1137,7 +1164,7 @@
 		"启用 Fountain 语法支持"
 	],
 	"Enable Linkify": [
-		"启用自动链接"
+		"启用自动链接（Linkify）"
 	],
 	"Enable markdown emoji": [
 		"启用 Markdown Emoji"
@@ -1192,6 +1219,9 @@
 	],
 	"Enabled": [
 		"已启用"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"启用加密意味着您的*所有*笔记与附件都将被重新同步，并被加密发送到同步目标。"
@@ -1265,11 +1295,11 @@
 	"Exits the application.": [
 		"退出应用。"
 	],
-	"Expand": [
-		"展开"
-	],
 	"Expand %s": [
 		"展开 %s"
+	],
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"导出"
@@ -1340,9 +1370,6 @@
 	"Filter tags": [
 		"筛选标签"
 	],
-	"Find and replace": [
-		"查找和替换"
-	],
 	"Find: ": [
 		"查找： "
 	],
@@ -1364,6 +1391,9 @@
 	"Focus title": [
 		"聚焦标题"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 	],
@@ -1381,9 +1411,6 @@
 	],
 	"Force path style": [
 		"强制路径风格"
-	],
-	"Formatting": [
-		"格式"
 	],
 	"Forward": [
 		"前进"
@@ -1421,8 +1448,17 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。如果没有提供 [name] 或 [value] 值，它将列出当前配置。"
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
 	"Go to Joplin Cloud profile": [
 		"转到 Joplin Cloud 简介"
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"转到源 URL"
@@ -1438,9 +1474,6 @@
 	],
 	"Header %d": [
 		"Header %d"
-	],
-	"Headers": [
-		"Headers"
 	],
 	"Heading": [
 		"标题"
@@ -1471,9 +1504,6 @@
 	],
 	"Hide keyboard": [
 		"隐藏键盘"
-	],
-	"Hide more actions": [
-		"隐藏更多操作"
 	],
 	"Highlight": [
 		"突出显示"
@@ -1578,7 +1608,7 @@
 		"正在处理"
 	],
 	"In: %s": [
-		"已处理：%s"
+		"归属于：%s"
 	],
 	"Incompatible": [
 		"不兼容"
@@ -1591,6 +1621,9 @@
 	],
 	"Indent more": [
 		"增加缩进"
+	],
+	"Info": [
+		""
 	],
 	"Information": [
 		"说明"
@@ -1658,9 +1691,6 @@
 	"Items that cannot be synchronised": [
 		"无法同步的条目"
 	],
-	"Join us on Twitter": [
-		"在Twitter上加入我们"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin 可以使用多种途径来同步您的笔记。可以从下列选项中选择一种方式。"
 	],
@@ -1712,9 +1742,6 @@
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin 自己的同步服务。还可以访问 Joplin 的特定功能，比如发布笔记或者与他人协作笔记本。"
 	],
-	"KaTeX": [
-		"KaTeX"
-	],
 	"Keep note history for": [
 		"保留笔记历史"
 	],
@@ -1737,7 +1764,7 @@
 		"需要升级的密钥"
 	],
 	"Landscape": [
-		"横板"
+		"横版"
 	],
 	"Language": [
 		"语言"
@@ -1799,14 +1826,8 @@
 	"Link text": [
 		"链接文本"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"不支持 “%s” 协议的链接"
-	],
 	"List item": [
 		"列表项"
-	],
-	"Lists": [
-		"列表"
 	],
 	"Loaded": [
 		"已加载"
@@ -1822,6 +1843,9 @@
 	],
 	"Log": [
 		"日志"
+	],
+	"Login to Joplin Cloud.": [
+		"登录Joplin Cloud"
 	],
 	"Login with Dropbox": [
 		"通过 Dropbox 登录"
@@ -1888,6 +1912,12 @@
 	],
 	"Master password:": [
 		"主密码(Master password)："
+	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
 	],
 	"Max concurrent connections": [
 		"最大并发连接数"
@@ -1961,9 +1991,6 @@
 	"Never resize": [
 		"从不缩放"
 	],
-	"New": [
-		"新建"
-	],
 	"New invitations": [
 		"新邀请"
 	],
@@ -1991,6 +2018,9 @@
 	"New version: %s": [
 		"新版本：%s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"下次匹配"
 	],
@@ -2014,9 +2044,6 @@
 	],
 	"No active notebook.": [
 		"无有效的笔记本。"
-	],
-	"No item with ID %s": [
-		"没有 ID 为 %s 的项"
 	],
 	"No new invitations": [
 		"没有新的邀请"
@@ -2153,6 +2180,9 @@
 	"Numbered List": [
 		"有序列表"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"确认"
 	],
@@ -2161,6 +2191,9 @@
 	],
 	"On %s: %s": [
 		"位于 %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"您的主密钥(Master Key)之一使用了过时的加密方法。"
@@ -2273,9 +2306,6 @@
 	"Permission needed": [
 		"需要权限"
 	],
-	"Permission to use camera": [
-		"使用相机的权限"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"请单击 “%s” 继续，或在下面的 “%s” 列表中设置密码。"
 	],
@@ -2366,6 +2396,12 @@
 	"Preferred light theme": [
 		"首选亮色主题"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"按 Ctrl+D 或输入 “exit” 退出程序"
 	],
@@ -2450,6 +2486,9 @@
 	"Quit": [
 		"退出"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"重新加密数据"
 	],
@@ -2531,6 +2570,12 @@
 	"Replace: ": [
 		"替换: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		"报告问题"
 	],
@@ -2577,7 +2622,7 @@
 		"恢复笔记本"
 	],
 	"Restore the items matching <pattern> from the trash.": [
-		"恢复符合 <note-pattern> 的笔记。"
+		"从回收站恢复符合 <pattern> 的笔记。"
 	],
 	"Restored items": [
 		"已恢复的条目"
@@ -2605,6 +2650,12 @@
 	],
 	"Revision: %s (%s)": [
 		"修订：%s (%s)"
+	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"执行文本文件中包含的命令。每个命令占一行。"
@@ -2650,6 +2701,9 @@
 	],
 	"Save geo-location with notes": [
 		"保存地理位置信息到笔记中"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"搜索"
@@ -2726,6 +2780,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"共享"
 	],
@@ -2776,9 +2833,6 @@
 	],
 	"Show monospace fonts only.": [
 		"只显示等宽字体。"
-	],
-	"Show more actions": [
-		"显示更多操作"
 	],
 	"Show note counts": [
 		"显示笔记数"
@@ -2839,6 +2893,12 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"某些条目无法被同步。请先尝试同步它们。"
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"笔记本排序方式"
@@ -2953,6 +3013,9 @@
 	],
 	"Switch profile": [
 		"切换配置文件"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"切换为笔记类型"
@@ -3116,8 +3179,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"以下密钥使用了过时的加密算法，建议对其进行升级。升级后的密钥仍将能够照常解密和加密您的数据。"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin 移动应用目前不支持这种类型的链接：%s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin 团队已经核准了该插件，它符合我们对于安全和性能的要求。"
@@ -3169,6 +3232,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下文）。"
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"网页剪藏器需要您的授权才能访问您的数据。"
@@ -3223,9 +3289,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"该附件没有下载或者尚未解密"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"该附件没有下载或者尚未解密。"
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"该授权令牌仅用于允许第三方应用程序访问 Joplin。"
@@ -3569,6 +3632,9 @@
 	"Voice typing...": [
 		"使用语音输入..."
 	],
+	"Vosk": [
+		""
+	],
 	"Waiting for authorisation...": [
 		"正在等待授权..."
 	],
@@ -3626,6 +3692,9 @@
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"启用后，应用程序将扫描您的附件并从中提取文本。 这将允许您搜索这些附件中的文本。"
 	],
+	"Whisper": [
+		""
+	],
 	"Window unresponsive.": [
 		"窗口没有响应。"
 	],
@@ -3675,16 +3744,13 @@
 		"您的数据将被重新加密并再次同步。"
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"您的 Joplin Cloud 认证无效，请登录。"
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"要解密您的某些数据，需要使用您的密码。"
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"要解密您的某些数据，需要使用您的密码。输入`:e2ee decrypt`来设置。"
-	],
-	"Your permission to use your camera is required.": [
-		"您需要授予相机权限。"
 	],
 	"Your version: %s": [
 		"您的版本：%s"

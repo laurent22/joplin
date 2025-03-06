@@ -10,5 +10,8 @@ export const runtime = (comp: any): CommandRuntime => {
 		execute: async () => {
 			comp.setShowRevisions(true);
 		},
+		getPriority: () => {
+			return comp.isInFocusedDocument() ? 1 : 0;
+		},
 	};
 };

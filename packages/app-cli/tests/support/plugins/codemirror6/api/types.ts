@@ -26,6 +26,7 @@ export interface Command {
 	/**
 	 * Code to be ran when the command is executed. It may return a result.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	execute(...args: any[]): Promise<any | void>;
 
 	/**
@@ -115,11 +116,13 @@ export interface ExportModule {
 	/**
 	 * Called when an item needs to be processed. An "item" can be any Joplin object, such as a note, a folder, a notebook, etc.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onProcessItem(context: ExportContext, itemType: number, item: any): Promise<void>;
 
 	/**
 	 * Called when a resource file needs to be exported.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onProcessResource(context: ExportContext, resource: any, filePath: string): Promise<void>;
 
 	/**
@@ -181,13 +184,15 @@ export interface ExportContext {
 	options: ExportOptions;
 
 	/**
-	 * You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.
+	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	userData?: any;
 }
 
 export interface ImportContext {
 	sourcePath: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	options: any;
 	warnings: string[];
 }
@@ -197,6 +202,7 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onStart?(event: any): Promise<void>;
 }
 
@@ -227,6 +233,8 @@ export interface VersionInfo {
 	version: string;
 	profileVersion: number;
 	syncVersion: number;
+
+	platform: 'desktop'|'mobile';
 }
 
 // =================================================================
@@ -300,6 +308,7 @@ export interface MenuItem {
 	 * Arguments that should be passed to the command. They will be as rest
 	 * parameters.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	commandArgs?: any[];
 
 	/**
@@ -338,6 +347,8 @@ export type ButtonId = string;
 export enum ToolbarButtonLocation {
 	/**
 	 * This toolbar in the top right corner of the application. It applies to the note as a whole, including its metadata.
+	 *
+	 * <span class="platform-desktop">desktop</span>
 	 */
 	NoteToolbar = 'noteToolbar',
 
@@ -351,11 +362,13 @@ export type ViewHandle = string;
 
 export interface EditorCommand {
 	name: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value?: any;
 }
 
 export interface DialogResult {
 	id: ButtonId;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	formData?: any;
 }
 
@@ -370,6 +383,26 @@ export interface Rectangle {
 	width?: number;
 	height?: number;
 }
+
+export type ActivationCheckCallback = ()=> Promise<boolean>;
+
+export type UpdateCallback = ()=> Promise<void>;
+
+export type VisibleHandler = ()=> Promise<void>;
+
+export interface EditContextMenuFilterObject {
+	items: MenuItem[];
+}
+
+export interface EditorActivationCheckFilterObject {
+	activatedEditors: {
+		pluginId: string;
+		viewId: string;
+		isActive: boolean;
+	}[];
+}
+
+export type FilterHandler<T> = (object: T)=> Promise<T>;
 
 // =================================================================
 // Settings types
@@ -404,6 +437,7 @@ export enum SettingStorage {
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	type: SettingItemType;
 
@@ -440,6 +474,7 @@ export interface SettingItem {
 	 * This property is required when `isEnum` is `true`. In which case, it
 	 * should contain a map of value => label.
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	options?: Record<any, any>;
 
 	/**
@@ -497,6 +532,7 @@ export type Path = string[];
 // Content Script types
 // =================================================================
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type PostMessageHandler = (message: any)=> Promise<any>;
 
 /**
@@ -520,30 +556,38 @@ export interface ContentScriptContext {
 }
 
 export interface ContentScriptModuleLoadedEvent {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	userData?: any;
 }
 
 export interface ContentScriptModule {
 	onLoaded?: (event: ContentScriptModuleLoadedEvent)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: ()=> any;
 	assets?: ()=> void;
 }
 
 export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type EditorCommandCallback = (...args: any[])=> any;
 
 export interface CodeMirrorControl {
 	/** Points to a CodeMirror 6 EditorView instance. */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editor: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	cm6: any;
 
 	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	addExtension(extension: any|any[]): void;
 
 	supportsCommand(name: string): boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	execCommand(name: string, ...args: any[]): any;
 	registerCommand(name: string, callback: EditorCommandCallback): void;
 
@@ -553,15 +597,17 @@ export interface CodeMirrorControl {
 		 * registers the given [CompletionSource](https://codemirror.net/docs/ref/#autocomplete.CompletionSource).
 		 *
 		 * Use this extension rather than the built-in CodeMirror [`autocompletion`](https://codemirror.net/docs/ref/#autocomplete.autocompletion)
-		 * if you don't want to use [langaugeData-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
+		 * if you don't want to use [languageData-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 *
 		 * Using `autocompletion({ override: [ ... ]})` causes errors when done by multiple plugins.
 		 */
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		completionSource(completionSource: any): any;
 
 		/**
 		 * Creates an extension that enables or disables [`languageData`-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 */
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
 	};
 }
@@ -609,6 +655,45 @@ export enum ContentScriptType {
 	 *   example the Joplin [Mermaid
 	 *   plugin](https://github.com/laurent22/joplin/blob/dev/packages/renderer/MdToHtml/rules/mermaid.ts)
 	 *   to see how the data should be structured.
+	 *
+	 * ## Supporting the Rich Text Editor
+	 *
+	 * Joplin's Rich Text Editor works with rendered HTML, which is converted back
+	 * to markdown when saving. To prevent the original markdown for your plugin from
+	 * being lost, Joplin needs additional metadata.
+	 *
+	 * To provide this,
+	 * 1. Wrap the HTML generated by your plugin in an element with class `joplin-editable`.
+	 *    For example,
+	 *    ```html
+	 *    <div class="joplin-editable">
+	 *        ...your html...
+	 *    </div>
+	 *    ```
+	 * 2. Add a child with class `joplin-source` that contains the original markdown that
+	 *    was rendered by your plugin. Include `data-joplin-source-open`, `data-joplin-source-close`,
+	 *    and `data-joplin-language` attributes.
+	 *    For example, if your plugin rendered the following code block,
+	 *    ````
+	 *    ```foo
+	 *    ... original source here ...
+	 *    ```
+	 *    ````
+	 *    then it should render to
+	 *    ```html
+	 *    <div class="joplin-editable">
+	 *        <pre
+	 *            class="joplin-source"
+	 *            data-joplin-language="foo"
+	 *            data-joplin-source-open="```foo&NewLine;"
+	 *            data-joplin-source-close="```"
+	 *        > ... original source here ... </pre>
+	 *        ... rendered HTML here ...
+	 *    </div>
+	 *    ```
+	 *
+	 * See [the demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
+	 * for a complete example.
 	 *
 	 * ## Getting the settings from the renderer
 	 *
@@ -684,21 +769,21 @@ export enum ContentScriptType {
 	 * }
 	 * ```
 	 *
-	 * - The `context` argument is currently unused but could be used later on
-	 *   to provide access to your own plugin so that the content script and
-	 *   plugin can communicate.
+	 * - The `context` argument allows communicating with other parts of
+	 *   your plugin (see below).
 	 *
 	 * - The `plugin` key is your CodeMirror plugin. This is where you can
 	 *   register new commands with CodeMirror or interact with the CodeMirror
 	 *   instance as needed.
 	 *
-	 * - The `codeMirrorResources` key is an array of CodeMirror resources that
+	 * - **CodeMirror 5 only**: The `codeMirrorResources` key is an array of CodeMirror resources that
 	 *   will be loaded and attached to the CodeMirror module. These are made up
 	 *   of addons, keymaps, and modes. For example, for a plugin that want's to
 	 *   enable clojure highlighting in code blocks. `codeMirrorResources` would
 	 *   be set to `['mode/clojure/clojure']`.
+	 *   This field is ignored on mobile and when the desktop beta editor is enabled.
 	 *
-	 * - The `codeMirrorOptions` key contains all the
+	 * - **CodeMirror 5 only**: The `codeMirrorOptions` key contains all the
 	 *   [CodeMirror](https://codemirror.net/doc/manual.html#config) options
 	 *   that will be set or changed by this plugin. New options can alse be
 	 *   declared via
@@ -716,9 +801,11 @@ export enum ContentScriptType {
 	 * must be provided for the plugin to be valid. Having multiple or all
 	 * provided is also okay.
 	 *
-	 * See also the [demo
-	 * plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
-	 * for an example of all these keys being used in one plugin.
+	 * See also:
+	 * - The [demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
+	 *   for an example of all these keys being used in one plugin.
+	 * - See [the editor plugin tutorial](https://joplinapp.org/help/api/tutorials/cm6_plugin)
+	 *   for how to develop a plugin for the mobile editor and the desktop beta markdown editor.
 	 *
 	 * ## Posting messages from the content script to your plugin
 	 *

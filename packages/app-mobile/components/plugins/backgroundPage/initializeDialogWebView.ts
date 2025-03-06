@@ -47,6 +47,22 @@ const initializeDialogWebView = (messageChannelId: string) => {
 		includeJsFiles: async (paths: string[]) => {
 			return includeScriptsOrStyles('js', paths);
 		},
+		runScript: async (key: string, scriptData: string) => {
+			if (loadedPaths.has(key)) {
+				return;
+			}
+			loadedPaths.add(key);
+
+			if (key.endsWith('.css')) {
+				const stylesheetLink = document.createElement('style');
+				stylesheetLink.appendChild(document.createTextNode(scriptData));
+				document.head.appendChild(stylesheetLink);
+			} else {
+				const script = document.createElement('script');
+				script.appendChild(document.createTextNode(scriptData));
+				document.head.appendChild(script);
+			}
+		},
 		getFormData: async () => {
 			return getFormData();
 		},

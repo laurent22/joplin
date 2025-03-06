@@ -2,9 +2,6 @@
 const webviewApiPromises_ = {};
 let viewMessageHandler_ = () => {};
 
-// This silences a warning when running plugins generated with Webpack.
-window.exports ??= {};
-
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const webviewApi = {
 	postMessage: function(message) {
@@ -54,6 +51,7 @@ const webviewApi = {
 
 	docReady(() => {
 		const rootElement = document.createElement('div');
+		rootElement.setAttribute('id', 'joplin-plugin-content-root');
 		document.getElementsByTagName('body')[0].appendChild(rootElement);
 
 		const contentElement = document.createElement('div');

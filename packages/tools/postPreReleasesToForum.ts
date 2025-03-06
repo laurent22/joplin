@@ -1,7 +1,7 @@
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
 import { GitHubRelease, gitHubLatestReleases, gitHubLinkify } from './tool-utils';
-import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, updatePost } from './utils/discourse';
+import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, trimPostToMaximumLength, updatePost } from './utils/discourse';
 import { compareVersions } from 'compare-versions';
 import dayjs = require('dayjs');
 import { getRootDir } from '@joplin/utils';
@@ -135,7 +135,11 @@ const processReleases = async (releases: GitHubRelease[], platform: Platform, st
 
 				await updatePost(topPost.id, {
 					title: topicTitle,
-					raw: `${topPost.raw}\n\n${postBody}`,
+					// With a large number of pre-releases, the top post can get very long
+					// and needs to be trimmed.
+					raw: trimPostToMaximumLength(
+						`${topPost.raw}\n\n${postBody}`,
+					),
 					edit_reason: 'Auto-updated by script',
 				});
 

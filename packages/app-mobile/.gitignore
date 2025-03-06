@@ -70,6 +70,9 @@ components/**/*.bundle.js
 components/**/*.bundle.js.LICENSE.txt
 components/**/*.bundle.js.md5
 components/**/*.bundle.min.js
+web/public/pluginAssets/*
 
 utils/fs-driver-android.js
 android/app/build-*
+
+packageInfo.js

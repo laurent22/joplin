@@ -50,6 +50,11 @@ export interface SaveOptions {
 	ignoreProvisionalFlag?: boolean;
 	dispatchUpdateAction?: boolean;
 	dispatchOptions?: { preserveSelection: boolean };
-	changeSource?: number;
 	disableReadOnlyCheck?: boolean;
+
+	changeSource?: number;
+
+	// The changeId is included in events emitted by some .save calls. Use this to pair a call
+	// to Item.save(...) with events emitted by that call.
+	changeId?: string;
 }

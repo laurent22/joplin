@@ -33,6 +33,10 @@ export const SearchInput = styled(StyledInput)`
 	padding-right: 20px;
 	flex: 1;
 	width: 10px;
+
+	&::-webkit-search-cancel-button {
+		display: none;
+	}
 `;
 
 interface Props {
@@ -51,6 +55,7 @@ interface Props {
 	searchStarted: boolean;
 	placeholder?: string;
 	disabled?: boolean;
+	'aria-controls'?: string;
 }
 
 export interface OnChangeEvent {
@@ -59,6 +64,7 @@ export interface OnChangeEvent {
 
 export default function(props: Props) {
 	const iconName = !props.searchStarted ? CommandService.instance().iconName('search') : 'fa fa-times';
+	const iconLabel = !props.searchStarted ? _('Search') : _('Clear search');
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onChange = useCallback((event: any) => {
@@ -70,7 +76,7 @@ export default function(props: Props) {
 			<SearchInput
 				ref={props.inputRef}
 				value={props.value}
-				type="text"
+				type="search"
 				placeholder={props.placeholder || _('Search...')}
 				onChange={onChange}
 				onFocus={props.onFocus}
@@ -78,8 +84,12 @@ export default function(props: Props) {
 				onKeyDown={props.onKeyDown}
 				spellCheck={false}
 				disabled={props.disabled}
+				aria-controls={props['aria-controls']}
 			/>
-			<SearchButton onClick={props.onSearchButtonClick}>
+			<SearchButton
+				aria-label={iconLabel}
+				onClick={props.onSearchButtonClick}
+			>
 				<SearchButtonIcon className={iconName}/>
 			</SearchButton>
 		</Root>

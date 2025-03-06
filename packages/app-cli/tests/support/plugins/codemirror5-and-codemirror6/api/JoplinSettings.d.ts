@@ -7,7 +7,6 @@ export interface ChangeEvent {
     keys: string[];
 }
 export type ChangeHandler = (event: ChangeEvent) => void;
-export declare const namespacedKey: (pluginId: string, key: string) => string;
 /**
  * This API allows registering new settings and setting sections, as well as getting and setting settings. Once a setting has been registered it will appear in the config screen and be editable by the user.
  *
@@ -39,6 +38,12 @@ export default class JoplinSettings {
      */
     registerSection(name: string, section: SettingSection): Promise<void>;
     /**
+     * Gets setting values (only applies to setting you registered from your plugin)
+     */
+    values(keys: string[] | string): Promise<Record<string, unknown>>;
+    /**
+     * @deprecated Use joplin.settings.values()
+     *
      * Gets a setting value (only applies to setting you registered from your plugin)
      */
     value(key: string): Promise<any>;

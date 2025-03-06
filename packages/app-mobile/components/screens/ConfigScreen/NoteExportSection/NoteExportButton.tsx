@@ -4,12 +4,12 @@ import Logger from '@joplin/utils/Logger';
 import { FunctionComponent } from 'react';
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
-import Share from 'react-native-share';
 import exportAllFolders from './utils/exportAllFolders';
 import { ExportProgressState } from '@joplin/lib/services/interop/types';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirectory';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
+import shareFile from '../../../../utils/shareFile';
 
 const logger = Logger.create('NoteExportButton');
 
@@ -37,12 +37,7 @@ const runExportTask = async (
 
 	setAfterCompleteListener(async (success: boolean) => {
 		if (success) {
-			await Share.open({
-				type: 'application/jex',
-				filename: 'export.jex',
-				url: `file://${exportTargetPath}`,
-				failOnCancel: false,
-			});
+			await shareFile(exportTargetPath, 'application/jex');
 		}
 		await shim.fsDriver().remove(exportTargetPath);
 	});

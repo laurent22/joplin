@@ -56,14 +56,31 @@ export const isSelfClosingTag = (tagName: string) => {
 	return selfClosingElements.includes(tagName.toLowerCase());
 };
 
+type ProcessImageResult = {
+	type: 'replaceElement';
+	html: string;
+}|{
+	type: 'replaceSource';
+	src: string;
+}|{
+	type: 'setAttributes';
+	attrs: Record<string, string>;
+};
+interface ProcessImageEvent {
+	src: string;
+	before: string;
+	after: string;
+}
+type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
+
 class HtmlUtils {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public processImageTags(html: string, callback: Function) {
+	public processImageTags(html: string, callback: ProcessImageCallback) {
 		if (!html) return '';
 
 		return html.replace(imageRegex, (_v, before, src, after) => {
-			const action = callback({ src: src });
+			const action = callback({ src, before, after });
 
 			if (!action) return `<img${before}src="${src}"${after}>`;
 
@@ -80,7 +97,7 @@ class HtmlUtils {
 				return `<img${before}${attrHtml}${after}>`;
 			}
 
-			throw new Error(`Invalid action: ${action.type}`);
+			throw new Error(`Invalid action: ${(action as Record<string, string>).type}`);
 		});
 	}
 
@@ -243,6 +260,12 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
+			oncomment: (data: string) => {
+				// Ensure that <s and >s are escaped within comments. In some cases,
+				// these characters can end a comment early (e.g. <style><!--</style>-->)
+				output.push(`<!--${htmlentities(data)}-->`);
+			},
+
 			onopentag: (name: string, attrs: Record<string, string>) => {
 				// Note: "name" and attribute names are always lowercase even
 				// when the input is not. So there is no need to call
@@ -263,6 +286,20 @@ class HtmlUtils {
 				}
 
 				attrs = { ...attrs };
+
+				// Allowing the 'name' attribute allows an attacker to overwrite
+				// DOM methods (e.g. getElementById) with elements.
+				if ('name' in attrs) {
+					const oldName = attrs['name'];
+					delete attrs['name'];
+
+					// For compatibility reasons, support rewriting name= as id=.
+					// This allows internal links specified with name="target" to continue
+					// to work.
+					if (!('id' in attrs)) {
+						attrs['id'] = oldName;
+					}
+				}
 
 				// Remove all the attributes that start with "on", which
 				// normally should be JavaScript events. A better solution

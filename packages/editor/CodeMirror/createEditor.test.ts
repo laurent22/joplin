@@ -36,9 +36,11 @@ describe('createEditor', () => {
 		await loadLanguages();
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		// Force the generation of the syntax tree now.
@@ -63,9 +65,11 @@ describe('createEditor', () => {
 
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
@@ -130,9 +134,11 @@ describe('createEditor', () => {
 
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onPasteFile: null,
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
@@ -170,5 +176,22 @@ describe('createEditor', () => {
 
 		// Should be one script container for each plugin
 		expect(document.querySelectorAll('#joplin-plugin-scripts-container script')).toHaveLength(2);
+	});
+
+	it('should be possible to access the initial note ID', () => {
+		const initialText = '# Test\nThis is a test.';
+		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
+
+		const editor = createEditor(document.body, {
+			initialText,
+			initialNoteId: 'Initial note ID',
+			settings: editorSettings,
+			onEvent: () => {},
+			onLogMessage: () => {},
+			onPasteFile: null,
+		});
+		const editorState = editor.editor.state;
+		const idFacet = editor.joplinExtensions.noteIdFacet;
+		expect(editorState.facet(idFacet)).toBe('Initial note ID');
 	});
 });

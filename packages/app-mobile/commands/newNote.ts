@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import Logger from '@joplin/utils/Logger';
-import goToNote from './util/goToNote';
+import goToNote, { GotoNoteOptions } from './util/goToNote';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 
@@ -12,7 +12,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, body = '', todo = false) => {
+		execute: async (_context: CommandContext, body = '', todo = false, options: GotoNoteOptions = null) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) {
 				logger.warn('Not creating new note -- no active folder ID.');
@@ -26,7 +26,7 @@ export const runtime = (): CommandRuntime => {
 			}, { provisional: true });
 
 			logger.info(`Navigating to note ${note.id}`);
-			await goToNote(note.id, '');
+			await goToNote(note.id, '', options);
 		},
 	};
 };

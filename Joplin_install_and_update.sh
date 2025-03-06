@@ -28,6 +28,7 @@ SILENT=false
 ALLOW_ROOT=false
 SHOW_CHANGELOG=false
 INCLUDE_PRE_RELEASE=false
+INSTALL_DIR="${HOME}/.joplin"   # default installation directory
 
 print() {
   if [[ "${SILENT}" == false ]]; then
@@ -57,6 +58,7 @@ showHelp() {
   print "\t" "--force" "\t" "Always download the latest version"
   print "\t" "--silent" "\t" "Don't print any output"
   print "\t" "--prerelease" "\t" "Check for new Versions including Pre-Releases"
+  print "\t" "--install-dir" "\t" "Set installation directory; default: \"${INSTALL_DIR}\""
 
   if [[ ! -z $1 ]]; then
     print "\n" "${COLOR_RED}ERROR: " "$*" "${COLOR_RESET}" "\n"
@@ -66,9 +68,22 @@ showHelp() {
 }
 
 #-----------------------------------------------------
+# Setup Download Helper: DL
+#-----------------------------------------------------
+if [[ `command -v wget2` ]]; then
+  DL='wget2 -qO'
+elif [[ `command -v wget` ]]; then
+  DL='wget -qO'
+elif [[ `command -v curl` ]]; then
+  DL='curl -sLo'
+else
+  print "${COLOR_RED}Error: wget2, wget, and curl not found. Please install one of these tools.${COLOR_RESET}"
+  exit 1
+fi
+
+#-----------------------------------------------------
 # PARSE ARGUMENTS
 #-----------------------------------------------------
-
 optspec=":h-:"
 while getopts "${optspec}" OPT; do
   [ "${OPT}" = " " ] && continue
@@ -84,6 +99,7 @@ while getopts "${optspec}" OPT; do
     force )        FORCE=true ;;
     changelog )    SHOW_CHANGELOG=true ;;
     prerelease )   INCLUDE_PRE_RELEASE=true ;;
+    install-dir )  INSTALL_DIR="$OPTARG" ;;
     [^\?]* )       showHelp "Illegal option --${OPT}"; exit 2 ;;
     \? )           showHelp "Illegal option -${OPTARG}"; exit 2 ;;
   esac
@@ -120,9 +136,10 @@ fi
 print "Checking dependencies..."
 ## Check if libfuse2 is present.
 if [[ $(command -v ldconfig) ]]; then
-	LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
-else
-	LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
+  LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
+fi
+if [[ $LIBFUSE == "" ]]; then
+  LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
 fi
 if [[ $LIBFUSE == "" ]]; then
   print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
@@ -136,45 +153,45 @@ fi
 
 # Get the latest version to download
 if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
 else
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 fi
 
 # Check if it's in the latest version
-if [[ -e ~/.joplin/VERSION ]] && [[ $(< ~/.joplin/VERSION) == "${RELEASE_VERSION}" ]]; then
+if [[ -e "${INSTALL_DIR}/VERSION" ]] && [[ $(< "${INSTALL_DIR}/VERSION") == "${RELEASE_VERSION}" ]]; then
   print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
   ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
 else
-  [[ -e ~/.joplin/VERSION ]] && CURRENT_VERSION=$(< ~/.joplin/VERSION)
+  [[ -e "${INSTALL_DIR}/VERSION" ]] && CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
   print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
 fi
 
 # Check if it's an update or a new install
 DOWNLOAD_TYPE="New"
-if [[ -f ~/.joplin/Joplin.AppImage ]]; then
+if [[ -f "${INSTALL_DIR}/Joplin.AppImage" ]]; then
   DOWNLOAD_TYPE="Update"
 fi
 
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
-wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
+$DL "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
+$DL "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
 # Delete previous version (in future versions joplin.desktop shouldn't exist)
-rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/VERSION
+rm -f "${INSTALL_DIR}"/*.AppImage ~/.local/share/applications/joplin.desktop "${INSTALL_DIR}/VERSION"
 
 # Creates the folder where the binary will be stored
-mkdir -p ~/.joplin/
+mkdir -p "${INSTALL_DIR}/"
 
 # Download the latest version
-mv "${TEMP_DIR}/Joplin.AppImage" ~/.joplin/Joplin.AppImage
+mv "${TEMP_DIR}/Joplin.AppImage" "${INSTALL_DIR}/Joplin.AppImage"
 
 # Gives execution privileges
-chmod +x ~/.joplin/Joplin.AppImage
+chmod +x "${INSTALL_DIR}/Joplin.AppImage"
 
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
@@ -253,13 +270,14 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
 Encoding=UTF-8
 Name=Joplin
 Comment=Joplin for Desktop
-Exec=env APPIMAGELAUNCHER_DISABLE=TRUE ${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM} %u
+Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
 Icon=joplin
 StartupWMClass=Joplin
 Type=Application
 Categories=Office;
 MimeType=x-scheme-handler/joplin;
-X-GNOME-SingleWindow=true // should be removed eventually as it was upstream to be an XDG specification
+# should be removed eventually as it was upstream to be an XDG specification
+X-GNOME-SingleWindow=true
 SingleMainWindow=true
 EOF
 
@@ -278,11 +296,11 @@ fi
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo "$RELEASE_VERSION" > ~/.joplin/VERSION
+echo "$RELEASE_VERSION" > "${INSTALL_DIR}/VERSION"
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
-  NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
+  NOTES=$($DL - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
   print "${COLOR_BLUE}Changelog:${COLOR_RESET}\n${NOTES}"
 fi
 

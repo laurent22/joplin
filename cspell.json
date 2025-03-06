@@ -33,6 +33,7 @@
 		"/packages/app-desktop/build/",
 		"/packages/app-desktop/utils/checkForUpdatesUtilsTestData.ts",
 		"/packages/app-desktop/vendor/",
+		"/packages/app-mobile/android/vendor/",
 		"/packages/app-mobile/ios/Pods/",
 		"/packages/app-mobile/lib/rnInjectedJs",
 		"/packages/app-mobile/pluginAssets",
@@ -61,6 +62,7 @@
 		"/packages/turndown/config",
 		"/readme/_i18n",
 		"/readme/about/changelog/desktop.md",
+		"/readme/licenses.md",
 		"/readme/i18n",
 		"cspell.json",
 		"node_modules"

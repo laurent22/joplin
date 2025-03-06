@@ -195,4 +195,13 @@ describe('InteropService_Importer_Md', () => {
 		// The invalid image is imported as-is
 		expect(resource.title).toBe('invalid-image.jpg');
 	});
+
+	it('should not fail to import file that contains a malformed URI', async () => {
+		// The first implicit test is that the below call doesn't throw due to the malformed URI
+		const note = await importNote(`${supportDir}/test_notes/md/sample-malformed-uri.md`);
+		const itemIds = Note.linkedItemIds(note.body);
+		expect(itemIds.length).toBe(0);
+		// The malformed link is imported as-is
+		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
+	});
 });

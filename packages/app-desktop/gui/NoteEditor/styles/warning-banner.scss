@@ -1,0 +1,13 @@
+
+.warning-banner {
+	background: var(--joplin-warning-background-color);
+	font-family: var(--joplin-font-family);
+	padding: 10px;
+	font-size: var(--joplin-font-size);
+	line-height: 1.6em;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+	max-height: 25vh;
+	overflow-y: auto;
+}

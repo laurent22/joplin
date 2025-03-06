@@ -1,0 +1,37 @@
+diff --git a/platforms/android/src/main/java/org/pgsqlite/SQLitePlugin.java b/platforms/android/src/main/java/org/pgsqlite/SQLitePlugin.java
+index 4f2391b..f7cc433 100644
+--- a/platforms/android/src/main/java/org/pgsqlite/SQLitePlugin.java
++++ b/platforms/android/src/main/java/org/pgsqlite/SQLitePlugin.java
+@@ -8,11 +8,14 @@
+ package org.pgsqlite;
+ 
+ import android.annotation.SuppressLint;
++import android.database.AbstractWindowedCursor;
+ import android.database.Cursor;
++import android.database.CursorWindow;
+ import android.database.sqlite.SQLiteDatabase;
+ import android.database.sqlite.SQLiteException;
+ import android.database.sqlite.SQLiteStatement;
+ import android.content.Context;
++import android.os.Build;
+ import android.util.Base64;
+ 
+ import java.io.Closeable;
+@@ -808,6 +811,17 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
+                 throw ex;
+             }
+ 
++            // To try to fix the error "Row too big to fit into CursorWindow" when using sqlite binary bundled with the device
++            // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
++            // https://github.com/laurent22/joplin/issues/1767#issuecomment-515617991
++
++            if (cur != null && Build.VERSION.SDK_INT >= 28) {
++                CursorWindow cw = new CursorWindow(null, 50 * 1024 * 1024);
++                AbstractWindowedCursor ac = (AbstractWindowedCursor) cur;
++                ac.setWindow(cw);
++                cur = ac;
++            }
++
+             // If query result has rows
+             if (cur != null && cur.moveToFirst()) {
+                 WritableArray rowsArrayResult = Arguments.createArray();

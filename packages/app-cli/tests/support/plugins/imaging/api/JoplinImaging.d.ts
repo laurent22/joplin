@@ -24,10 +24,8 @@ export interface PdfInfo {
     pageCount: number;
 }
 export interface Implementation {
-    nativeImage: {
-        createFromPath: (path: string) => Promise<any>;
-        createFromPdf: (path: string, options: CreateFromPdfOptions) => Promise<any[]>;
-    };
+    createFromPath: (path: string) => Promise<unknown>;
+    createFromPdf: (path: string, options: CreateFromPdfOptions) => Promise<unknown[]>;
     getPdfInfo: (path: string) => Promise<PdfInfo>;
 }
 export interface ResizeOptions {
@@ -47,6 +45,7 @@ export type Handle = string;
  * [View the
  * example](https://github.com/laurent22/joplin/blob/dev/packages/app-cli/tests/support/plugins/imaging/src/index.ts)
  *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinImaging {
     private implementation_;
@@ -55,6 +54,11 @@ export default class JoplinImaging {
     private createImageHandle;
     private imageByHandle;
     private cacheImage;
+    /**
+     * Creates an image from the provided path. Note that images and PDFs are supported. If you
+     * provide a URL instead of a local path, the file will be downloaded first then converted to an
+     * image.
+     */
     createFromPath(filePath: string): Promise<Handle>;
     createFromResource(resourceId: string): Promise<Handle>;
     createFromPdfPath(path: string, options?: CreateFromPdfOptions): Promise<Handle[]>;

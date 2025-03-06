@@ -4,6 +4,7 @@ import Folder from '../../models/Folder';
 import { reg } from '../../registry';
 import { _ } from '../../locale';
 import { MasterKeyEntity } from '../e2ee/types';
+import shim from '../../shim';
 
 const logger = Logger.create('invitationRespond');
 
@@ -17,7 +18,11 @@ export default async function(shareUserId: string, folderId: string, masterKey: 
 		await ShareService.instance().respondInvitation(shareUserId, masterKey, accept);
 	} catch (error) {
 		logger.error(error);
-		alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));
+		if (shim.mobilePlatform() === 'web' && masterKey) {
+			alert(_('The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: "%s"', error.message));
+		} else {
+			alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));
+		}
 	}
 
 	// This is to handle an edge case that can happen if:

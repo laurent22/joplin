@@ -1,0 +1,58 @@
+body, :root {
+	height: 100%;
+	overflow: hidden;
+}
+
+#root {
+	height: 100%;
+	display: flex;
+	overflow: hidden;
+}
+
+
+/* Scrollbar styling */
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(100, 100, 100, 0.7) rgba(0, 0, 0, 0.1);
+}
+
+@supports selector(::-webkit-scrollbar) {
+	*::-webkit-scrollbar {
+		width: 7px;
+		height: 7px;
+	}
+
+	*::-webkit-scrollbar-corner {
+		background: none;
+	}
+
+	*::-webkit-scrollbar-track {
+		border: none;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background: rgba(100, 100, 100, 0.3);
+		border-radius: 5px;
+	}
+
+	*::-webkit-scrollbar-track:hover {
+		background: rgba(0, 0, 0, 0.1);
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background: rgba(100, 100, 100, 0.7);
+	}
+
+	* {
+		scrollbar-width: unset;
+		scrollbar-color: unset;
+	}
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	:root {
+		background-color: #222;
+		color: white;
+	}
+}

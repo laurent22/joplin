@@ -28,7 +28,10 @@ const distDir = path.resolve(rootDir, 'dist');
 const srcDir = path.resolve(rootDir, 'src');
 const publishDir = path.resolve(rootDir, 'publish');
 
-const userConfig = { extraScripts: [], ...(fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {}) };
+const userConfig = {
+	extraScripts: [],
+	...(fs.pathExistsSync(userConfigPath) ? require(userConfigFilename) : {}),
+};
 
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
@@ -182,6 +185,7 @@ const baseConfig = {
 			},
 		],
 	},
+	...userConfig.webpackOverrides,
 };
 
 const pluginConfig = { ...baseConfig, entry: './src/index.ts',
@@ -334,6 +338,8 @@ const updateVersion = () => {
 
 	if (packageJson.version !== manifest.version) {
 		console.warn(chalk.yellow(`Version numbers have been updated but they do not match: package.json (${packageJson.version}), manifest.json (${manifest.version}). Set them to the required values to get them in sync.`));
+	} else {
+		console.info(packageJson.version);
 	}
 };
 

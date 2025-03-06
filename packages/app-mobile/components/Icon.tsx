@@ -34,8 +34,9 @@ const Icon: React.FC<Props> = props => {
 	const importantForAccessibility = accessibilityHidden ? 'no-hide-descendants' : 'yes';
 
 	const sharedProps = {
-		importantForAccessibility,
-		'aria-hidden': accessibilityHidden,
+		importantForAccessibility, // Android
+		accessibilityElementsHidden: accessibilityHidden, // iOS
+		'aria-hidden': accessibilityHidden, // Web
 		accessibilityLabel: props.accessibilityLabel,
 		style: props.style,
 		allowFontScaling: props.allowFontScaling,
@@ -62,6 +63,7 @@ const Icon: React.FC<Props> = props => {
 				style={props.style}
 				aria-hidden={accessibilityHidden}
 				importantForAccessibility={importantForAccessibility}
+				accessibilityElementsHidden={accessibilityHidden}
 			>
 				{nameSuffix}
 			</Text>

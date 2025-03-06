@@ -1,0 +1,13 @@
+A <strong>Joplin</strong> egy ingyenes, nyílt forráskódú jegyzetkészítő és teendők készítésére szolgáló alkalmazás, amely számos jegyzetfüzetbe rendezett jegyzet kezelésére képes. A jegyzetek kereshetők, másolhatók, címkézhetők és módosíthatók akár közvetlenül az alkalmazásokból, akár saját szövegszerkesztőből.
+
+A jegyzetek <a href="https://joplinapp.org/help/apps/markdown">Markdown formátumban</a> vannak.
+
+Az Evernote-ból exportált jegyzetek <a href="https://joplinapp.org/help/apps/import_export">importálhatók</a> a Joplinba, beleértve a formázott tartalmat (amelyet Markdown-ba konvertálunk), az erőforrásokat (képeket, mellékletek stb.) és teljes metaadatok (földrajzi hely, frissített idő, létrehozási idő stb.). Sima Markdown fájlok is importálhatók.
+
+A Joplin „offline elszobb”, ami azt jelenti, hogy mindig minden adata a telefonján vagy a számítógépén van. Ez biztosítja, hogy jegyzetei mindig elérhetőek legyenek, akár van internetkapcsolata, akár nem.</p>
+
+A jegyzetek biztonságosan <a href="https://joplinapp.org/help/apps/sync">összehangolhatók</a> a <a href="https://joplinapp.org/help/apps/sync/e2ee">végpontok közötti titkosítás</a> segítségével különféle felhőszolgáltatásokkal, köztük a Nextcloud, a Dropbox, a OneDrive és a <a href="https://joplinapp.org/plans/">Joplin Cloud</a> segítségével.
+
+A teljes szöveges keresés minden platformon elérhető, hogy gyorsan megtalálja a szükséges információkat. Az alkalmazás beépülő modulok és témák segítségével testreszabható, és könnyedén létrehozhatja sajátját is.
+
+Az alkalmazás elérhető Android, iOS, Linux, macOS és Windows rendszeren. Egy <a href="https://joplinapp.org/help/apps/clipper">Web Clipper</a>, amely weboldalakat és képernyőképeket menthet a böngészőből, szintén elérhető a <a href="https://addons.mozilla.org/firefox/addon/joplin-web-clipper/">Firefox</a> és <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek">Chrome</a>.

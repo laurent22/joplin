@@ -24,9 +24,11 @@ const SettingsToggle: FunctionComponent<Props> = props => {
 	const theme = themeStyle(props.themeId);
 	const styleSheet = props.styles.styleSheet;
 
+	const containerStyles = props.styles.getContainerStyle(!!props.description);
+
 	return (
-		<View>
-			<View style={props.styles.getContainerStyle(false)}>
+		<View style={containerStyles.outerContainer}>
+			<View style={containerStyles.innerContainer}>
 				<Text key="label" style={styleSheet.switchSettingText}>
 					{props.label}
 				</Text>
@@ -36,6 +38,7 @@ const SettingsToggle: FunctionComponent<Props> = props => {
 					trackColor={{ false: theme.dividerColor }}
 					value={props.value}
 					onValueChange={(value: boolean) => void props.updateSettingValue(props.settingId, value)}
+					accessibilityHint={props.label}
 				/>
 			</View>
 			{props.description}

@@ -3,14 +3,14 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
@@ -47,7 +47,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const onUpgradeMasterKey = useCallback(async (mk: MasterKeyEntity) => {
 		const password = determineKeyPassword(mk.id, masterPasswordKeys, props.masterPassword, props.passwords);
 		const result = await upgradeMasterKey(mk, password);
-		alert(result);
+		await shim.showMessageBox(result, { type: MessageBoxType.Info });
 	}, [props.passwords, masterPasswordKeys, props.masterPassword]);
 
 	const renderNeedUpgradeSection = () => {
@@ -116,7 +116,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				);
 			} else {
 				return (
-					<td style={missingPasswordCellStyle}>
+					<td style={passwordChecks[masterKeyId] ? theme.textStyle : missingPasswordCellStyle}>
 						<input
 							type="password"
 							placeholder={_('Enter password')}
@@ -206,7 +206,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		if (hasMasterPassword && newEnabled) {
 			if (!(await masterPasswordIsValid(newPassword))) {
-				alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
+				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
 				return;
 			}
 		}
@@ -350,7 +350,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		t = `<p>${t}</p>`;
 
 		return (
-			<div>
+			<>
 				<h2>{_('Re-encryption')}</h2>
 				<p style={theme.textStyle} dangerouslySetInnerHTML={{ __html: t }}></p>
 				<span style={{ marginRight: 10 }}>
@@ -358,7 +358,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				</span>
 
 				{ !props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button> }
-			</div>
+			</>
 		);
 	};
 
@@ -368,6 +368,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		setShowAdvanced(!showAdvanced);
 	}, [showAdvanced]);
 
+	const advancedSettingsId = useId();
 	const renderAdvancedSection = () => {
 		const reEncryptSection = renderReencryptData();
 
@@ -378,8 +379,12 @@ const EncryptionConfigScreen = (props: Props) => {
 			<div>
 				<ToggleAdvancedSettingsButton
 					onClick={toggleAdvanced}
-					advancedSettingsVisible={showAdvanced}/>
-				{ showAdvanced ? reEncryptSection : null }
+					advancedSettingsVisible={showAdvanced}
+					aria-controls={advancedSettingsId}
+				/>
+				<div id={advancedSettingsId}>
+					{ showAdvanced ? reEncryptSection : null }
+				</div>
 			</div>
 		);
 	};

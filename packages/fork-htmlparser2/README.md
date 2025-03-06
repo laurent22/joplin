@@ -54,6 +54,8 @@ index 44b4371..bcd7cc2 100644
          if (this._cbs.onend)
 ```
 
+To fix an HTML parsing issue (tags were allowed to start with non-alphanumeric characters), [this upstream commit](https://github.com/fb55/htmlparser2/commit/bc010de9df09f2d730a69734e05e5175ea8bd2d7) has also been applied.
+
 * * *
 
 # htmlparser2

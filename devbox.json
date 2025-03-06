@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.4/.schema/devbox.schema.json",
+  "packages": {
+    "cocoapods": {
+      "version":   "latest",
+      "platforms": ["aarch64-darwin", "x86_64-darwin"],
+    },
+    "yarn": "latest",
+    "vips.dev": {
+      "platforms": ["aarch64-darwin"],
+    },
+    "nodejs":     "latest",
+    "pkg-config": "latest",
+    "pixman":     "latest",
+    "cairo.dev":  "",
+    "pango.dev":  "",
+    "darwin.apple_sdk.frameworks.Foundation": { // satisfies missing CoreText/CoreText.h
+      // https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/default.nix
+      "version":   "",
+      "platforms": ["aarch64-darwin", "x86_64-darwin"],
+    },
+    "python": "latest",
+    "bat":    "latest",
+    "electron": {
+      "version":            "latest",
+      "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
+    },
+    "git": "latest",
+  },
+  "shell": {
+    "init_hook": [
+      "export COLOR_BLACK='\\e[0;30m' COLOR_GRAY='\\e[1;30m' COLOR_RED='\\e[0;31m' COLOR_LIGHT_RED='\\e[1;31m' COLOR_GREEN='\\e[0;32m' COLOR_LIGHT_GREEN='\\e[1;32m' COLOR_BROWN='\\e[0;33m' COLOR_YELLOW='\\e[1;33m' COLOR_BLUE='\\e[0;34m' COLOR_LIGHT_BLUE='\\e[1;34m' COLOR_PURPLE='\\e[0;35m' COLOR_LIGHT_PURPLE='\\e[1;35m' COLOR_CYAN='\\e[0;36m'; export COLOR_LIGHT_CYAN='\\e[1;36m'; export COLOR_LIGHT_GRAY='\\e[0;37m'; export COLOR_WHITE='\\e[1;37m'",
+      ". $VENV_DIR/bin/activate",
+      "pip -q install -U pip setuptools wheel", // Newer Pythons are missing distutils
+      "echo -e \"${COLOR_LIGHT_PURPLE}Build ${COLOR_LIGHT_BLUE}Joplin${COLOR_LIGHT_PURPLE}: ${COLOR_LIGHT_GREEN}yarn install ${COLOR_GRAY}\"",
+      "echo -e \"${COLOR_LIGHT_PURPLE}Run ${COLOR_LIGHT_BLUE}Joplin Desktop${COLOR_LIGHT_PURPLE}: ${COLOR_LIGHT_GREEN}cd packages/app-desktop && ${COLOR_YELLOW}$(grep -q '^ID=nixos$' /etc/os-release 2>/dev/null && echo 'ELECTRON_OVERRIDE_DIST_PATH=$(dirname $(which electron)) ')${COLOR_LIGHT_GREEN}yarn start ${COLOR_GRAY}\"",
+      "echo -e \"${COLOR_LIGHT_PURPLE}Run ${COLOR_LIGHT_BLUE}Joplin CLI${COLOR_LIGHT_PURPLE}: ${COLOR_LIGHT_GREEN}cd packages/app-cli && yarn start ${COLOR_GRAY}\"",
+      "echo -e \"${COLOR_LIGHT_PURPLE}Read ${COLOR_LIGHT_BLUE}Full Build Instructions${COLOR_LIGHT_PURPLE}: ${COLOR_LIGHT_GREEN}bat readme/dev/BUILD.md ${COLOR_GRAY}\"",
+    ],
+  },
+}

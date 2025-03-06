@@ -4,10 +4,16 @@ import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
 import PostMessageService, { MessageParticipant } from '../PostMessageService';
 import { PluginViewState } from './reducer';
+import { defaultWindowId } from '../../reducer';
+import Logger from '@joplin/utils/Logger';
+import CommandService from '../CommandService';
+
+const logger = Logger.create('WebviewController');
 
 export enum ContainerType {
 	Panel = 'panel',
 	Dialog = 'dialog',
+	Editor = 'editor',
 }
 
 export interface Options {
@@ -48,12 +54,15 @@ export default class WebviewController extends ViewController {
 	private baseDir_: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private messageListener_: Function = null;
+	private updateListener_: ()=> void = null;
 	private closeResponse_: CloseResponse = null;
+	private containerType_: ContainerType = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
+		this.containerType_ = containerType;
 
 		const view: PluginViewState = {
 			id: this.handle,
@@ -124,6 +133,7 @@ export default class WebviewController extends ViewController {
 		void PostMessageService.instance().postMessage({
 			pluginId: this.pluginId,
 			viewId: this.handle,
+			windowId: defaultWindowId,
 			contentScriptId: null,
 			from: MessageParticipant.Plugin,
 			to: MessageParticipant.UserWebview,
@@ -133,16 +143,36 @@ export default class WebviewController extends ViewController {
 
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async emitMessage(event: EmitMessageEvent): Promise<any> {
-
+	public async emitMessage(event: EmitMessageEvent) {
 		if (!this.messageListener_) return;
+
+		if (this.containerType_ === ContainerType.Editor && !this.isActive()) {
+			logger.info('emitMessage: Not emitting message because editor is disabled:', this.pluginId, this.handle);
+			return;
+		}
+
 		return this.messageListener_(event.message);
+	}
+
+	public emitUpdate() {
+		if (!this.updateListener_) return;
+
+		if (this.containerType_ === ContainerType.Editor && (!this.isActive() || !this.isVisible())) {
+			logger.info('emitMessage: Not emitting update because editor is disabled or hidden:', this.pluginId, this.handle, this.isActive(), this.isVisible());
+			return;
+		}
+
+		this.updateListener_();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public onMessage(callback: any) {
 		this.messageListener_ = callback;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public onUpdate(callback: any) {
+		this.updateListener_ = callback;
 	}
 
 	// ---------------------------------------------
@@ -188,6 +218,11 @@ export default class WebviewController extends ViewController {
 	// ---------------------------------------------
 
 	public async open(): Promise<DialogResult> {
+		if (this.closeResponse_) {
+			this.closeResponse_.resolve(null);
+			this.closeResponse_ = null;
+		}
+
 		this.store.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: this.handle,
@@ -213,6 +248,7 @@ export default class WebviewController extends ViewController {
 	public closeWithResponse(result: DialogResult) {
 		this.close();
 		this.closeResponse_.resolve(result);
+		this.closeResponse_ = null;
 	}
 
 	public get buttons(): ButtonSpec[] {
@@ -230,4 +266,27 @@ export default class WebviewController extends ViewController {
 	public set fitToContent(fitToContent: boolean) {
 		this.setStoreProp('fitToContent', fitToContent);
 	}
+
+	// ---------------------------------------------
+	// Specific to editors
+	// ---------------------------------------------
+
+	public setActive(active: boolean) {
+		this.setStoreProp('opened', active);
+	}
+
+	public isActive(): boolean {
+		return this.storeView.opened;
+	}
+
+	public isVisible(): boolean {
+		if (!this.storeView.opened) return false;
+		const shownEditorViewIds: string[] = this.store.getState().settings['plugins.shownEditorViewIds'];
+		return shownEditorViewIds.includes(this.handle);
+	}
+
+	public async setVisible(visible: boolean) {
+		await CommandService.instance().execute('showEditorPlugin', this.handle, visible);
+	}
+
 }

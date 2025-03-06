@@ -3,11 +3,10 @@ import { ContextMenuParams, Event } from 'electron';
 import { useEffect, RefObject } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { EditContextMenuFilterObject, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import eventManager from '@joplin/lib/eventManager';
 import bridge from '../../../../../services/bridge';
@@ -25,6 +24,7 @@ interface ContextMenuProps {
 	editorPaste: ()=> void;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorClassName: string;
+	containerRef: RefObject<HTMLDivElement|null>;
 }
 
 const useContextMenu = (props: ContextMenuProps) => {
@@ -51,12 +51,13 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		function pointerInsideEditor(params: ContextMenuParams) {
 			const x = params.x, y = params.y, isEditable = params.isEditable;
-			const elements = document.getElementsByClassName(props.editorClassName);
+			const containerDoc = props.containerRef.current?.ownerDocument;
+			const elements = containerDoc?.getElementsByClassName(props.editorClassName);
 
 			// Note: We can't check inputFieldType here. When spellcheck is enabled,
 			// params.inputFieldType is "none". When spellcheck is disabled,
 			// params.inputFieldType is "plainText". Thus, such a check would be inconsistent.
-			if (!elements.length || !isEditable) return false;
+			if (!elements?.length || !isEditable) return false;
 
 			// Checks whether the element the pointer clicked on is inside the editor.
 			// This logic will need to be changed if the editor is eventually wrapped
@@ -65,7 +66,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const zoom = Setting.value('windowContentZoomFactor');
 			const xScreen = convertFromScreenCoordinates(zoom, x);
 			const yScreen = convertFromScreenCoordinates(zoom, y);
-			const intersectingElement = document.elementFromPoint(xScreen, yScreen);
+			const intersectingElement = containerDoc.elementFromPoint(xScreen, yScreen);
 			return intersectingElement && isAncestorOfCodeMirrorEditor(intersectingElement);
 		}
 
@@ -150,18 +151,21 @@ const useContextMenu = (props: ContextMenuProps) => {
 				menu.append(new MenuItem(item));
 			});
 
-			menu.popup();
+			menu.popup({ window: bridge().activeWindow() });
 		}
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		bridge().window().webContents.prependListener('context-menu', onContextMenu);
+		const targetWindow = bridge().activeWindow();
+		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
-			bridge().window().webContents.off('context-menu', onContextMenu);
+			if (!targetWindow.isDestroyed()) {
+				targetWindow.webContents.off('context-menu', onContextMenu);
+			}
 		};
 	}, [
-		props.plugins, props.editorClassName, editorRef,
+		props.plugins, props.editorClassName, editorRef, props.containerRef,
 		props.editorCutText, props.editorCopyText, props.editorPaste,
 	]);
 };

@@ -92,7 +92,7 @@ Joplin does not have a background sync on mobile devices. When Joplin is closed,
 
 ## How can I check the sync status?
 
-Go to the synchronisation page. You can find it on the desktop application under `Help > Synchronisation Status` and on the mobile app under `Configuration > SYNC STATUS`.
+Go to the synchronisation page. You can find it on the desktop application under `Help > Synchronisation Status` and on the mobile app under `Configuration > Tools > SYNC STATUS`.
 
 `total items` = How many items there are in total to sync.  
 `synced items` = How many items have already been uploaded or downloaded.
@@ -105,13 +105,7 @@ Unfortunately it is not possible. Joplin synchronises with file systems using an
 
 ## Could there be a password to restrict access to Joplin?
 
-The end to end encryption that Joplin implements is to protect the data during transmission and on the cloud service so that only you can access it.
-
-On the local device it is assumed that the data is safe due to the OS built-in security features. If additional security is needed it's always possible to put the notes on an encrypted VeraCrypt drive for instance.
-
-For these reasons, because the OS or yourself can easily protect the local data, no PIN or password is currently supported to access Joplin.
-
-There is however an issue open about it, so pull requests are welcome: https://github.com/laurent22/joplin/issues/289
+On mobile, you may enable the biometric lock to protect the access to the Joplin application. On desktop we do not currently support this. There is however an issue open about it: https://github.com/laurent22/joplin/issues/289
 
 ## Why is my WebDAV host not working?
 
@@ -159,6 +153,10 @@ If `Show tray icon` is enabled, closing the Joplin window does not quit the appl
 
 Additionally the Windows Task Manager can be used to verify whether Joplin is still around.
 
+## Are notebooks and notes backed up during an iOS backup to your Mac?
+
+Notebooks and notes on iOS are not backed up when [backing up to your Mac](https://support.apple.com/guide/mac-help/back-up-and-restore-your-device-mchla3c8ed03/mac).
+
 ## Why is it named Joplin?
 
-The name comes from the composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), which I often listen to. His name is also easy to remember and type so it felt like a good choice.
+The application is named in honour of composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), whose music I frequently listen to. His name is also easy to remember and type, making it a fitting choice.

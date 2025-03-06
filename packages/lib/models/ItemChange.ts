@@ -9,6 +9,19 @@ export interface ChangeSinceIdOptions {
 	fields?: string[];
 }
 
+interface BaseAddOptions {
+	changeSource?: number|null;
+	changeId?: string|null;
+}
+
+interface AddOneOptions extends BaseAddOptions {
+	beforeChangeItemJson?: string|null;
+}
+
+interface AddMultiOptions extends BaseAddOptions {
+	beforeChangeItemJsons?: string[]|null;
+}
+
 export default class ItemChange extends BaseModel {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -33,8 +46,12 @@ export default class ItemChange extends BaseModel {
 		return BaseModel.TYPE_ITEM_CHANGE;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async addMulti(itemType: ModelType, itemIds: string[], type: number, changeSource: any = null, beforeChangeItemJsons: string[] = null) {
+	public static async addMulti(
+		itemType: ModelType,
+		itemIds: string[],
+		type: number,
+		{ changeSource = null, changeId = null, beforeChangeItemJsons = null }: AddMultiOptions = {},
+	) {
 		if (!itemIds.length) return;
 
 		if (changeSource === null) changeSource = ItemChange.SOURCE_UNSPECIFIED;
@@ -72,16 +89,19 @@ export default class ItemChange extends BaseModel {
 			for (const itemId of itemIds) {
 				eventManager.emit(EventName.ItemChange, {
 					itemType: itemType,
-					itemId: itemId,
+					itemId,
+					changeId,
 					eventType: type,
 				});
 			}
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async add(itemType: ModelType, itemId: string, type: number, changeSource: any = null, beforeChangeItemJson: string = null) {
-		await this.addMulti(itemType, [itemId], type, changeSource, beforeChangeItemJson ? [beforeChangeItemJson] : null);
+	public static async add(itemType: ModelType, itemId: string, type: number, options: AddOneOptions = {}) {
+		await this.addMulti(itemType, [itemId], type, {
+			...options,
+			beforeChangeItemJsons: options?.beforeChangeItemJson ? [options.beforeChangeItemJson] : null,
+		});
 	}
 
 	public static async lastChangeId() {

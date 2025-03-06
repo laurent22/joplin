@@ -1,3 +1,4 @@
+import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 import { MarkupToHtmlOptions } from './types';
 
 export default (override: MarkupToHtmlOptions = null): MarkupToHtmlOptions => {
@@ -7,7 +8,7 @@ export default (override: MarkupToHtmlOptions = null): MarkupToHtmlOptions => {
 				checkboxRenderingType: 2,
 			},
 			link_open: {
-				linkRenderingType: 2,
+				linkRenderingType: LinkRenderingType.HrefHandler,
 			},
 		},
 		replaceResourceInternalToExternalLinks: true,

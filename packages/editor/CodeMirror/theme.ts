@@ -8,7 +8,7 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
+import { inlineMathTag, mathTag } from './markdown/MarkdownMathExtension';
 import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
@@ -79,6 +79,10 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 	// be at least this specific.
 	const selectionBackgroundSelector = '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground';
 
+	// Matches the editor only when there are no gutters (e.g. line numbers) added by
+	// plugins
+	const editorNoGuttersSelector = '&:not(:has(> .cm-scroller > .cm-gutters))';
+
 	const baseHeadingStyle = {
 		fontWeight: 'bold',
 		fontFamily: theme.fontFamily,
@@ -88,6 +92,11 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		// Include &.CodeMirror to handle the case where additional CodeMirror 5 styles
 		// need to be overridden.
 		'&, &.CodeMirror': baseGlobalStyle,
+
+		'& .cm-dropCursor': {
+			backgroundColor: isDarkTheme ? 'white' : 'black',
+			width: '1px',
+		},
 
 		// These must be !important or more specific than CodeMirror's built-ins
 		'& .cm-content': {
@@ -180,9 +189,20 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			marginRight: 'auto',
 		} : undefined,
 
+		// Allows editor content to be left-aligned with the toolbar on desktop.
+		// See https://github.com/laurent22/joplin/issues/11279
+		[`${editorNoGuttersSelector} .cm-line`]: theme.isDesktop ? {
+			// Note: This cannot be zero:
+			paddingLeft: '1px',
+		} : undefined,
+
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {
-			opacity: 0.6,
+			opacity: 0.661,
+		},
+
+		'& .cm-strike': {
+			textDecoration: 'line-through',
 		},
 
 		// Applying font size changes with CSS rather than the theme below works
@@ -211,6 +231,11 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-h6': {
 			...baseHeadingStyle,
 			fontSize: '1.0em',
+		},
+
+		'& .cm-highlighted': {
+			color: theme.searchMarkerColor,
+			backgroundColor: theme.searchMarkerBackgroundColor,
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence

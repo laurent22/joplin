@@ -6,8 +6,11 @@ type SidebarButtonStyle = ViewStyle & { height: number };
 export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
 
+	settingOuterContainer: ViewStyle;
+	settingOuterContainerNoBorder: ViewStyle;
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
+
 	headerWrapperStyle: ViewStyle;
 
 	headerTextStyle: TextStyle;
@@ -39,12 +42,17 @@ export interface ConfigScreenStyleSheet {
 	settingControl: TextStyle;
 }
 
+interface ContainerStyles {
+	outerContainer: ViewStyle;
+	innerContainer: ViewStyle;
+}
+
 export interface ConfigScreenStyles {
 	styleSheet: ConfigScreenStyleSheet;
 
 	selectedSectionButtonColor: string;
 	keyboardAppearance: 'default'|'light'|'dark';
-	getContainerStyle(hasDescription: boolean): ViewStyle;
+	getContainerStyle(hasDescription: boolean): ContainerStyles;
 }
 
 const configScreenStyles = (themeId: number): ConfigScreenStyles => {
@@ -53,6 +61,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 	const settingContainerStyle: ViewStyle = {
 		flex: 1,
 		flexDirection: 'row',
+		flexBasis: 'auto',
 		alignItems: 'center',
 		borderBottomWidth: 1,
 		borderBottomColor: theme.dividerColor,
@@ -80,6 +89,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 	const sidebarButton: SidebarButtonStyle = {
 		height: sidebarButtonHeight,
 		flex: 1,
+		flexBasis: 'auto',
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingEnd: theme.marginRight,
@@ -103,6 +113,14 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
+			flexDirection: 'column',
+		},
+		settingOuterContainer: {
+			flexDirection: 'column',
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+		},
+		settingOuterContainerNoBorder: {
 			flexDirection: 'column',
 		},
 		settingContainer: settingContainerStyle,
@@ -184,6 +202,7 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			...settingControlStyle,
 			color: undefined,
 			flex: 0,
+			flexBasis: 'auto',
 		},
 
 
@@ -226,7 +245,9 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		selectedSectionButtonColor: theme.selectedColor,
 		keyboardAppearance: theme.keyboardAppearance,
 		getContainerStyle: (hasDescription) => {
-			return !hasDescription ? styleSheet.settingContainer : styleSheet.settingContainerNoBottomBorder;
+			const outerContainer = hasDescription ? styleSheet.settingOuterContainer : styleSheet.settingOuterContainerNoBorder;
+			const innerContainer = hasDescription ? styleSheet.settingContainerNoBottomBorder : styleSheet.settingContainer;
+			return { outerContainer, innerContainer };
 		},
 	};
 };

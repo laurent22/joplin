@@ -408,6 +408,8 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
+		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
+
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {

@@ -12,9 +12,13 @@ import { ResourceEntity } from './services/database/types';
 import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
+import { fromFile as fileTypeFromFile } from 'file-type';
+import crypto from './services/e2ee/crypto';
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
+import BaseItem from './models/BaseItem';
+import { Size } from '@joplin/utils/types';
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
@@ -135,11 +139,16 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
+	shim.crypto = crypto;
 	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
+	};
+
+	shim.sharpEnabled = () => {
+		return !!sharp;
 	};
 
 	shim.dgram = () => {
@@ -266,10 +275,17 @@ function shimInit(options: ShimInitOptions = null) {
 			return await saveOriginalImage();
 		} else {
 			// For the CLI tool
-			const image = sharp(filePath);
-			const md = await image.metadata();
 
-			if (md.width <= maxDim && md.height <= maxDim) {
+			let md: Size = null;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			let image: any = null;
+
+			if (sharp) {
+				image = sharp(filePath);
+				md = await image.metadata();
+			}
+
+			if (!md || (md.width <= maxDim && md.height <= maxDim)) {
 				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
@@ -304,18 +320,13 @@ function shimInit(options: ShimInitOptions = null) {
 			...options,
 		};
 
-		const readChunk = require('read-chunk');
-		const imageType = require('image-type');
-
 		const isUpdate = !!options.destinationResourceId;
-
-		const uuid = require('./uuid').default;
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
 		defaultProps = defaultProps ? defaultProps : {};
 
-		let resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		let resourceId = defaultProps.id ? defaultProps.id : BaseItem.generateUuid();
 		if (isUpdate) resourceId = options.destinationResourceId;
 
 		let resource = isUpdate ? {} : Resource.new();
@@ -330,11 +341,10 @@ function shimInit(options: ShimInitOptions = null) {
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
 		if (!resource.mime) {
-			const buffer = await readChunk(filePath, 0, 64);
-			const detectedType = imageType(buffer);
+			const detectedType = await fileTypeFromFile(filePath);
 
 			if (detectedType) {
-				fileExt = detectedType.ext;
+				fileExt = fileExt ? fileExt : detectedType.ext;
 				resource.mime = detectedType.mime;
 			} else {
 				resource.mime = 'application/octet-stream';
@@ -381,7 +391,13 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
-		options = { createFileURL: false, markupLanguage: 1, ...options };
+		options = {
+			createFileURL: false,
+			markupLanguage: 1,
+			resourcePrefix: '',
+			resourceSuffix: '',
+			...options,
+		};
 
 		const { basename } = require('path');
 		const { escapeTitleText } = require('./markdownUtils').default;
@@ -402,23 +418,22 @@ function shimInit(options: ShimInitOptions = null) {
 		if (noteBody && position) newBody.push(noteBody.substr(0, position));
 
 		if (!options.createFileURL) {
-			newBody.push(Resource.markupTag(resource, options.markupLanguage));
+			newBody.push(options.resourcePrefix + Resource.markupTag(resource, options.markupLanguage) + options.resourceSuffix);
 		} else {
 			const filename = escapeTitleText(basename(filePath)); // to get same filename as standard drag and drop
 			const fileURL = `[${filename}](${toFileProtocolPath(filePath)})`;
-			newBody.push(fileURL);
+			newBody.push(options.resourcePrefix + fileURL + options.resourceSuffix);
 		}
 
 		if (noteBody) newBody.push(noteBody.substr(position));
 
-		return newBody.join('\n\n');
+		return newBody.join('');
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	shim.attachFileToNote = async function(note, filePath, position: number = null, options: any = null) {
+	shim.attachFileToNote = async function(note, filePath, options = {}) {
 		if (!options) options = {};
 		if (note.markup_language) options.markupLanguage = note.markup_language;
-		const newBody = await shim.attachFileToNoteBody(note.body, filePath, position, options);
+		const newBody = await shim.attachFileToNoteBody(note.body, filePath, options.position ?? 0, options);
 		if (!newBody) return null;
 
 		const newNote = { ...note, body: newBody };
@@ -456,7 +471,7 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			throw new Error('Unsupported method');
 		}
-	},
+	};
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};
@@ -590,6 +605,7 @@ function shimInit(options: ShimInitOptions = null) {
 						cleanUpOnError(error);
 					});
 
+					const requestStart = new Date();
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					const request = http.request(requestOptions, (response: any) => {
 
@@ -629,7 +645,10 @@ function shimInit(options: ShimInitOptions = null) {
 					});
 
 					request.on('timeout', () => {
-						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms.`));
+						// We choose to not destroy the request when a timeout value is not specified to keep
+						// the behavior we had before the addition of this event handler.
+						if (!requestOptions.timeout) return;
+						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms. Actual connection time: ${new Date().getTime() - requestStart.getTime()}ms`));
 					});
 
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

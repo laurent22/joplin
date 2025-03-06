@@ -98,7 +98,6 @@ const SectionSelector: FunctionComponent<Props> = props => {
 	return (
 		<View style={containerStyle}>
 			<FlatList
-				role='tablist'
 				ref={setFlatListRef}
 				data={sections}
 				renderItem={onRenderButton}

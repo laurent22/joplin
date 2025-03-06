@@ -25,3 +25,46 @@ export interface RSA {
 	publicKey(rsaKeyPair: RSAKeyPair): string;
 	privateKey(rsaKeyPair: RSAKeyPair): string;
 }
+
+export interface Crypto {
+	randomBytes(size: number): Promise<CryptoBuffer>;
+	digest(algorithm: Digest, data: Uint8Array): Promise<CryptoBuffer>;
+	generateNonce(nonce: Uint8Array): Promise<Uint8Array>;
+	increaseNonce(nonce: Uint8Array): Promise<Uint8Array>;
+	encrypt(password: string, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionParameters): Promise<EncryptionResult>;
+	decrypt(password: string, data: EncryptionResult, options: EncryptionParameters): Promise<Buffer>;
+	encryptString(password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionParameters): Promise<EncryptionResult>;
+}
+
+export interface CryptoBuffer extends Uint8Array {
+	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
+}
+
+// A subset of react-native-quick-crypto.HashAlgorithm, supported by Web Crypto API
+export enum Digest {
+	sha1 = 'SHA-1',
+	sha256 = 'SHA-256',
+	sha384 = 'SHA-384',
+	sha512 = 'SHA-512',
+}
+
+export enum CipherAlgorithm {
+	AES_128_GCM = 'aes-128-gcm',
+	AES_192_GCM = 'aes-192-gcm',
+	AES_256_GCM = 'aes-256-gcm',
+}
+
+export interface EncryptionResult {
+	salt: string; // base64 encoded
+	iv: string; // base64 encoded
+	ct: string; // cipherText, base64 encoded
+}
+
+export interface EncryptionParameters {
+	cipherAlgorithm: CipherAlgorithm;
+	authTagLength: number; // in bytes
+	digestAlgorithm: Digest;
+	keyLength: number; // in bytes
+	associatedData: Uint8Array;
+	iterationCount: number;
+}

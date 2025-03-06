@@ -8,53 +8,17 @@
 		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
 		-->
 		<title>Joplin</title>
+		<!-- Note: Add new dynamic CSS imports to style.scss to allow them to be included in secondary windows. -->
 		<link rel="stylesheet" href="style.min.css">
-		<link rel="stylesheet" href="style/icons/style.css">
-		<link rel="stylesheet" href="vendor/lib/@fortawesome/fontawesome-free/css/all.min.css">
-		<link rel="stylesheet" href="vendor/lib/react-datetime/css/react-datetime.css">
-		<link rel="stylesheet" href="vendor/lib/smalltalk/css/smalltalk.css">
-		<link rel="stylesheet" href="vendor/lib/roboto-fontface/css/roboto/roboto-fontface.css">
-		<link rel="stylesheet" href="vendor/lib/codemirror/lib/codemirror.css">
-
 		<link rel="stylesheet" href="./node_modules/notyf/notyf.min.css">
 
-
+		<script src="vendor/lib/smalltalk/dist/smalltalk.min.js"></script>
 		<script src="./node_modules/tesseract.js/dist/tesseract.min.js"></script>
-
-		<style>
-			.smalltalk {
-				background-color: rgba(0,0,0,.5);
-			}
-			.smalltalk input {
-				margin-top: 1em;
-			}
-			.smalltalk .page {
-				max-width: 30em;
-			}
-			mark {
-				background: #CF3F00;
-				color: white;
-			}
-			
-			/*
-				Adds support for RTL text in the note body. It automatically detects the direction using the content.
-				Issue: https://github.com/laurent22/joplin/issues/3991
-			*/
-			.CodeMirror-line  {
-				unicode-bidi: plaintext;
-			}
-		</style>
 	</head>
 	<body>
 		<div id="react-root"></div>
+		<script src="./utils/window/eventHandlerOverrides.js"></script>
 		<script src="main-html.js"></script>
-		<style>
-			/* Disable dragging of links (which are often buttons) */
-			a:not([draggable=true]), img:not([draggable=true]) {
-				-webkit-user-drag: none;
-			}
-		</style>
-
 		<script src="./node_modules/notyf/notyf.min.js"></script>
 	</body>
 </html>

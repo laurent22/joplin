@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
 		"module": "commonjs",
-		"target": "es2015",
+		"target": "es2017",
 		//"lib": ["es2015", "es2020.string", "dom", "dom.iterable"],
 		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,

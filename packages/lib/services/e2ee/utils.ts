@@ -142,14 +142,10 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 		const mk = masterKeys[i];
 		if (service.isMasterKeyLoaded(mk)) continue;
 
-		const password = await findMasterKeyPassword(service, mk);
-		if (!password) continue;
-
-		try {
-			await service.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
-		} catch (error) {
-			logger.warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
-		}
+		await service.loadMasterKey(mk, async () => {
+			const password = await findMasterKeyPassword(service, mk);
+			return password;
+		}, activeMasterKeyId === mk.id);
 	}
 
 	logger.info(`Loaded master keys: ${service.loadedMasterKeysCount()}`);

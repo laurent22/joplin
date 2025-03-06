@@ -1,4 +1,63 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 01 Jul 2024 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 01 Jul 2024 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.0]]></title><description><![CDATA[<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Tue, 14 Jan 2025 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Tue, 14 Jan 2025 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.2]]></title><description><![CDATA[<h2>Import OneNote Archives<a name="import-onenote-archives" href="#import-onenote-archives" class="heading-anchor">🔗</a></h2>
+<p>Joplin now supports importing OneNote archives, a significant step for users transitioning from OneNote. Microsoft has long made it challenging to leave OneNote, offering limited export options and complex formats that make it difficult for app developers to support it. Despite these hurdles, @pedr tackled these issues head-on, developing an import tool that simplifies the process. This addition makes Joplin a practical choice for those looking to move away from OneNote's ecosystem.</p>
+<p>To use this feature, select <strong>File</strong> =&gt; <strong>Import</strong> =&gt; <strong>ZIP - OneNote Notebook</strong></p>
+<h2>Multi-window support<a name="multi-window-support" href="#multi-window-support" class="heading-anchor">🔗</a></h2>
+<p>We're excited to introduce Multi-Window Support, a highly requested feature that makes managing multiple notes easier than ever. With this update, you can open notes in different windows and each window operates independently, allowing you to compare notes, reference content, and organise projects with greater flexibility.</p>
+<p>To use this feature, right-click on a note, select <strong>Open in...</strong> and select <strong>Edit in new window</strong></p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20250114-multi-window.png" alt=""></p>
+<h2>Customisable toolbar on mobile<a name="customisable-toolbar-on-mobile" href="#customisable-toolbar-on-mobile" class="heading-anchor">🔗</a></h2>
+<p>The new customisable toolbar on mobile is now draggable, making it easier to access the buttons you need. You can also choose which buttons to display by tapping the Cog button, allowing for a more personalised and efficient note-editing experience!</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20250114-mobile-toolbar.png" alt=""></p>
+<h2>Enhanced Accessibility<a name="enhanced-accessibility" href="#enhanced-accessibility" class="heading-anchor">🔗</a></h2>
+<p>In order to implement the <a href="https://www.w3.org/TR/WCAG20/">WCAG 2.0 guidelines</a>, accessibility has seen a substantial upgrade thanks to the efforts of @personalizedrefrigerator. The desktop and mobile apps now offer better keyboard navigation, including improved functionality in dropdown menus and settings. Focus indicators have been made more visible, while ARIA labels have been added to boost compatibility with screen readers. Specific areas like note attachments, sidebars, and dialogs have also been optimised to ensure accessibility for all users.</p>
+<h2>Refined Drawing and Markdown Editing<a name="refined-drawing-and-markdown-editing" href="#refined-drawing-and-markdown-editing" class="heading-anchor">🔗</a></h2>
+<p>Joplin's drawing and editing features have been fine-tuned for a smoother experience. Freehand Drawing on mobile and desktop has been updated to version 2.14.0, addressing several usability issues and bugs. Additionally, the Freehand Drawing plugin is now part of the desktop app by default. These changes enhance the reliability and integration of the drawing tool.</p>
+<h2>Faster and more secure encryption<a name="faster-and-more-secure-encryption" href="#faster-and-more-secure-encryption" class="heading-anchor">🔗</a></h2>
+<p>For GSoC 2024, @wh201906 worked on optimising the encryption and decryption processes, boosting speed for mobile devices in particular (but desktop too). Additionally, the encryption security was improved by transitioning to a more robust 256-bit key.</p>
+<p>As of now this feature is optional and can be enabled by going to the <strong>Configuration Screen</strong>, then <strong>Synchronisation</strong> =&gt; <strong>Advanced options</strong> =&gt; <strong>Use beta encryption</strong>.</p>
+<h2>Expanded Plugin Support<a name="expanded-plugin-support" href="#expanded-plugin-support" class="heading-anchor">🔗</a></h2>
+<p>Developers will appreciate the updates to Joplin's plugin ecosystem. A new API has been introduced to create <a href="https://joplinapp.org/api/references/plugin_api/classes/joplinviewsdialogs.html#showtoast">toast notifications</a>, alongside updates to CodeMirror packages. A new <a href="https://github.com/laurent22/joplin/blob/5ee8a9a45493683c72a36b52e1460b5acdd4f1ac/packages/lib/commands/renderMarkup.ts#L23"><code>renderMarkup</code></a> command has been introduced to allow you to render Markdown content to HTML using the Joplin built-in API.</p>
+<h1>Full changelogs<a name="full-changelogs" href="#full-changelogs" class="heading-anchor">🔗</a></h1>
+<p>This is just an overview of the main features. The full changelogs are available there:</p>
+<ul>
+<li>Desktop: <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></li>
+<li>Android: <a href="https://joplinapp.org/help/about/changelog/android/">https://joplinapp.org/help/about/changelog/android/</a></li>
+<li>iOS: <a href="https://joplinapp.org/help/about/changelog/ios/">https://joplinapp.org/help/about/changelog/ios/</a></li>
+</ul>
+]]></description><link>https://joplinapp.org/news/20250114-release-3-2</link><guid isPermaLink="false">20250114-release-3-2</guid><pubDate>Tue, 14 Jan 2025 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 3.2</twitter-text></item><item><title><![CDATA[Project 4: Handwritten Text Recognition (HTR) for Joplin]]></title><description><![CDATA[<p>Joplin is partnering with a French government institution to bring you innovative new features! We will work on accessibility, voice typing, HTR and add Rocketbook integration. Today we'll present the planned HTR integration:</p>
+<p>Currently, Joplin’s OCR (Optical Character Recognition) feature is designed to recognise printed text, which works great for scanning documents with standard fonts. However, we’re looking to expand this functionality to support handwritten text recognition (HTR), which would be beneficial to handle scanned, handwritten documents, as well as for the upcoming Rocketbook integration.</p>
+<p>Handwritten text recognition is complex task, requiring significant processing power and large machine learning models. Because of this, we plan to implement HTR via a server, possibly integrated with Joplin Cloud or Joplin Server. The beauty of this approach is that handwritten text recognition is a rapidly evolving field, so we can continuously improve the server-side model. This means that every Joplin app can benefit from these updates without needing to redeploy or update the app itself.</p>
+<p>For the Rocketbook integration, this integration will make a significant difference. Right now, your handwritten documents would be scanned as images, but with HTR, Joplin will be able to recognise the actual text you’ve written. Not only will your handwritten notes become searchable, but you’ll also be able to copy and paste the text into other documents.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20241217-htr.jpg" alt="HTR illustration"></p>
+]]></description><link>https://joplinapp.org/news/20241217-project-4-htr</link><guid isPermaLink="false">20241217-project-4-htr</guid><pubDate>Tue, 17 Dec 2024 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Project 3: Rocketbook integration with Joplin]]></title><description><![CDATA[<p>Joplin is partnering with a French government institution to bring you innovative new features! We will work on accessibility, voice typing, HTR and add Rocketbook integration. Today we'll present the planned Rocketbook integration:</p>
+<p><a href="https://getrocketbook.com/pages/how-rocketbook-works">Rocketbook</a> is a popular brand of smart notebooks designed to make note-taking more efficient and sustainable. These notebooks feature special erasable pages that you can write on with specific pens and then wipe clean with a damp cloth. What makes Rocketbook even more appealing is its ability to scan and upload your notes to cloud services for easy storage and sharing.</p>
+<p>We plan to create an integration between Rocketbook and Joplin, designed to make the note-taking process even smoother. While Rocketbook typically works through its own official app, we plan to integrate it directly into Joplin without relying on third-party apps or APIs. This means that you can enjoy the benefits of Rocketbook’s smart features while using Joplin as your primary note-taking platform.</p>
+<p>The great thing about this integration is that it’s not limited to just Rocketbook. As long as the smart notebook uses QR codes to identify pages, the same functionality will work. This means you can use Joplin with a wide variety of smart notebooks, making it a versatile tool for all your note-taking needs.</p>
+<p>With this integration, we’re making it easier than ever to combine the power of smart notebooks with the flexibility of Joplin’s open-source platform. Whether you're using Rocketbook or another smart notebook, Joplin will be ready to help you organise and access your notes in the cloud!</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20241216-rocketbook.jpg" alt="Rocketbook notebook"></p>
+]]></description><link>https://joplinapp.org/news/20241216-project-3-rocketbook</link><guid isPermaLink="false">20241216-project-3-rocketbook</guid><pubDate>Mon, 16 Dec 2024 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Project 2: Making Joplin more accessible with WCAG-2 compliance]]></title><description><![CDATA[<p>We're always looking for ways to make Joplin better for everyone, and one of the key steps in improving accessibility is implementing the <a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility Guidelines</a> (WCAG 2). These guidelines help ensure that our app is usable for all users, including those with disabilities, while also enhancing the overall user experience for everyone.</p>
+<p>To get started with WCAG 2 support, we’ll run an accessibility audit with a tool such as <a href="https://wave.webaim.org">Web Accessibility Evaluation Tools</a> (WAVE). This will help us spot any accessibility issues in the app that we need to address.</p>
+<p>Once the audit is complete, we'll take action on the issues we find. Here's a look at some of the things we'll focus on:</p>
+<ul>
+<li>
+<p><strong>Making content easier to perceive</strong>: We’ll make sure there are text alternatives for non-text content, provide captions for multimedia, and check that colour contrast is strong enough for easy reading.</p>
+</li>
+<li>
+<p><strong>Improving operability</strong>: Every feature will be accessible through the keyboard, ensuring that users who can't rely on a mouse can still navigate easily.</p>
+</li>
+<li>
+<p><strong>Enhancing comprehension</strong>: We’ll ensure that the text is readable, the layout is predictable, and input assistance is available for those who need it.</p>
+</li>
+</ul>
+<p>We’ll also use ARIA standards and test for compatibility with assistive technologies to make sure everything works well with tools like screen readers.</p>
+<p>To ensure we're on the right track, we’ll invite users with disabilities to test the app and help us identify any remaining barriers. Accessibility is something we’ll keep working on, so we'll continue testing, refining, and making improvements to ensure Joplin stays accessible to everyone. It’s a journey, and we’re committed to making the experience better for all our users.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20241207-wcag2.jpg" alt="WCAG 2 logo"></p>
+]]></description><link>https://joplinapp.org/news/20241207-project-2-wcag2</link><guid isPermaLink="false">20241207-project-2-wcag2</guid><pubDate>Sat, 07 Dec 2024 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Project 1: Making voice typing even better for everyone]]></title><description><![CDATA[<p>Joplin is partnering with a French government institution to bring you innovative new features! We will work on accessibility, voice typing, HTR and add Rocketbook integration. Today we'll present the planned improvements to voice typing:</p>
+<p>Right now, voice input works pretty well, but there’s one thing that still needs improvement: punctuation. Our current system is accurate, but it doesn’t pick up on things like commas or periods, which can make spoken text harder to understand. That’s why we’re looking into other voice recognition engines that can handle punctuation better while keeping the accuracy we need.</p>
+<p>Improving voice input like this isn’t just about convenience – it’s about making our app more accessible to everyone. For people with visual impairments, being able to use voice input means they don’t have to rely on typing. Those with motor difficulties can control the app without needing to use their hands. And for users with dyslexia or other learning challenges, voice input can be much easier and more natural than typing out words.</p>
+<p>We’re excited to experiment with this new feature, knowing it could make a real difference for people who rely on voice technology to get things done.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20241128-voice-typing.jpg" alt=""></p>
+]]></description><link>https://joplinapp.org/news/20241128-project-1-voice-input</link><guid isPermaLink="false">20241128-project-1-voice-input</guid><pubDate>Thu, 28 Nov 2024 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[What's new in Joplin 3.0]]></title><description><![CDATA[<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
 <h3>Trash folder<a name="trash-folder" href="#trash-folder" class="heading-anchor">🔗</a></h3>
 <p>Joplin now support a trash folder - any deleted notes or notebooks will be moved to that folder. You can also choose to have these notes permanently deleted after a number of days.</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20240701-trash.png" alt=""></p>
@@ -360,81 +419,4 @@ sys 0m38.013s</p>
 <p>Renovate on the other hand upgrades packages one at a time, and run our test units to ensure everything is still working as expected. It also upgrades multiple instances of the same package across the monorepo, which is convenient to keep our code consistent. It also has a number of options to make our life easier, such as the ability to automatically merge a pull request for patch releases since this is usually safe (when a package is, for example upgraded from 1.0.1 to 1.0.3).</p>
 <p>Although Renovate automates the package upgrades it doesn't mean all upgrades are straightforward - our tests won't catch all issues, so the apps might end up being broken or cannot be compiled anymore. So there's manual work involved to get everything working after certain upgrades - for the most part this has been done and the apps appear to be stable so far.</p>
 <p>This will however be an important part of pre-release 2.10 (or should it be 3.0?) - we hope that everything works but we may need your support to try this version and report any glitch you may have found. As always pre-release regressions have the highest priority so we aim to fix them as quickly as possible.</p>
-]]></description><link>https://joplinapp.org/news/20221115-renovate</link><guid isPermaLink="false">20221115-renovate</guid><pubDate>Tue, 15 Nov 2022 00:00:00 GMT</pubDate><twitter-text>Modernising and securing Joplin, one package at a time</twitter-text></item><item><title><![CDATA[Joplin Cloud is now part of the Joplin company]]></title><description><![CDATA[<p>As some of you may know Joplin Cloud so far has been operating under my own single-person limited company in the UK. This was mostly for convenience since it meant I could get things going quickly without having to setup a special structure for it.</p>
-<p>Now that Joplin Cloud is becoming more mature however a proper company, simply called Joplin, has been created. This company will be based in France, and will be used mainly to handle the commercial part of the project, which currently is mostly Joplin Cloud. I'm still heading the company so there won't be any major change to the way the project is managed.</p>
-<h2>What does it mean for Joplin Cloud?<a name="what-does-it-mean-for-joplin-cloud" href="#what-does-it-mean-for-joplin-cloud" class="heading-anchor">🔗</a></h2>
-<p>There will be no significant change - the website ownership simply moves from one company in the UK to one in France. The new company is still owned by myself so I will keep following the same roadmap.</p>
-<h2>What does it mean for the open source apps?<a name="what-does-it-mean-for-the-open-source-apps" href="#what-does-it-mean-for-the-open-source-apps" class="heading-anchor">🔗</a></h2>
-<p>On the short term, the only visible change will be moving the non-open source assets, such as logo or trademark from the UK company to the French one. So expect a few changes in copyright notices here and there.</p>
-<p>In the medium to long term, I would like to hire one or two software developers to help me with the Joplin Cloud development, because we reached a point where managing the whole project is difficult for a single person, so some help is needed. Some of their work might also touch the open source apps since both are quite related - but of course that work will remain open source too.</p>
-<p>As a general rule, there will be a permanent commitment to keep the apps open source and to derive value from Joplin Cloud/Server.</p>
-<p>Longer term I would like to create a non-profit organisation to handle the open source applications and to make decisions about the project, as well as to decide how to allocate any funding we receive (for example from GSoC).</p>
-<h2>Looking forward<a name="looking-forward" href="#looking-forward" class="heading-anchor">🔗</a></h2>
-<p>Those past 6 years of developing Joplin have been an exciting and rewarding experience, thank you to all of you of the friendly and vibrant Joplin community for your contribution toward making Joplin the software it is today, and looking forward to continuing the journey together!</p>
-]]></description><link>https://joplinapp.org/news/20221012-Joplin-Company</link><guid isPermaLink="false">20221012-Joplin-Company</guid><pubDate>Wed, 12 Oct 2022 00:00:00 GMT</pubDate><twitter-text>Joplin Cloud is now operated by the Joplin company! More info on the announcement post.</twitter-text></item><item><title><![CDATA[Joplin interview on Website Planet]]></title><description><![CDATA[<p>Website Planet has recently conducted an interview about Joplin - it may give you some insight on the current status of the project, our priorities, and future plans! More on the article page - <a href="https://www.websiteplanet.com/blog/interview-joplin/">Organise Your Thoughts with Open Source Note-Taking App, Joplin</a></p>
-]]></description><link>https://joplinapp.org/news/20220906-interview-websiteplanet</link><guid isPermaLink="false">20220906-interview-websiteplanet</guid><pubDate>Tue, 06 Sep 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin first meetup on 30 August!]]></title><description><![CDATA[<p>We are glad to announce <a href="https://www.meetup.com/joplin/events/287611873/">the first Joplin Meetup</a> that will take place on 30 August 2022 in London!</p>
-<p>This is an opportunity to meet other Joplin users as well as some of the main contributors, to discuss the apps, or to ask questions and exchange tips and tricks on how to use the app, develop plugins or contribute to the application. Everybody, technical or not, is welcome!</p>
-<p>We will meet at the Old Thameside Inn next to London Bridge. If the weather allows we will be on the terrace outside, if not inside.</p>
-<p>More information on the official Meetup page:</p>
-<p><a href="https://www.meetup.com/joplin/events/287611873/">https://www.meetup.com/joplin/events/287611873/</a></p>
-]]></description><link>https://joplinapp.org/news/20220808-first-meetup</link><guid isPermaLink="false">20220808-first-meetup</guid><pubDate>Mon, 08 Aug 2022 00:00:00 GMT</pubDate><twitter-text>Joplin will have its first Meetup on 30 August! Come and join us at the Old Thameside Inn next to London Bridge! https://www.meetup.com/joplin/events/287611873/</twitter-text></item><item><title><![CDATA[Joplin 2.8 is available!]]></title><description><![CDATA[<p>As always a lot of changes and new features in this new version available on both desktop and mobile.</p>
-<h2>Multiple profile support<a name="multiple-profile-support" href="#multiple-profile-support" class="heading-anchor">🔗</a></h2>
-<p>Perhaps the most visible change in this version is the support for multiple profiles. You can now create as many application profile as you wish, each with their own settings, and easily switch from one to another. The main use case is to support for example a &quot;work&quot; profile and a &quot;personal&quot; profile, to allow you to keep things independent, and each profile can sync with a different sync target.</p>
-<p>To create a new profile, open <strong>File &gt; Switch profile</strong> and select <strong>Create new profile</strong>, enter the profile name and press OK. The app will automatically switch to this new profile, which you can now configure.</p>
-<p>To switch back to the previous profile, again open <strong>File &gt; Switch profile</strong> and select <strong>Default</strong>.</p>
-<p>Note that profiles all share certain settings, such as language, font size, theme, etc. This is done so that you don't have reconfigure every details when switching profiles. Other settings such as sync configuration is per profile.</p>
-<p>The feature is available on desktop only for now, and should be ported to mobile relatively soon.</p>
-<h2>Save Mermaid graph as PNG/SVG<a name="save-mermaid-graph-as-png-svg" href="#save-mermaid-graph-as-png-svg" class="heading-anchor">🔗</a></h2>
-<p>This convenient feature allows exporting a Mermaid graph as a PNG or SVG image, or allows copying the image as a DataUrl, which can then be pasted in any compatible text editor. Thanks Asrient for implementing this!</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-mermaid-as-png.png" alt=""></p>
-<h2>Publish a mini-website using Joplin Cloud<a name="publish-a-mini-website-using-joplin-cloud" href="#publish-a-mini-website-using-joplin-cloud" class="heading-anchor">🔗</a></h2>
-<p>Joplin Cloud now supports publishing a note &quot;recursively&quot;, which means the notes and all the notes it is linked to. This allows easily publishing a simple website made of multiples and images.</p>
-<p>To make use of this feature, simply select <strong>Also publish linked notes</strong> when publishing a note.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-publish-website.png" alt=""></p>
-<h2>And more!<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h2>
-<p>In total there are 38 changes to improve the app reliability, security and usability. Full changelog is at <a href="https://joplinapp.org/help/about/changelog/desktop">https://joplinapp.org/help/about/changelog/desktop</a></p>
-]]></description><link>https://joplinapp.org/news/20220606-release-2-8</link><guid isPermaLink="false">20220606-release-2-8</guid><pubDate>Mon, 06 Jun 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin received 6 Contributor Projects for GSoC 2022!]]></title><description><![CDATA[<p>We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.</p>
-<p>Over the next few weeks, till 13 June, will be the Community Bonding Period during which GSoC contributors get to know mentors, read documentation, and get up to speed to begin working on their projects.</p>
-<p>Here's the full list of projects, contributors and mentors.</p>
-<table class="table">
-<thead>
-<tr>
-<th>Project Title</th>
-<th>Contributor</th>
-<th>Assigned Mentor(s)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Improve PDF previewer of Joplin</td>
-<td>asrient</td>
-<td>Roman, JackGruber</td>
-</tr>
-<tr>
-<td>Implement default plugins on desktop application</td>
-<td>mak2002</td>
-<td>CalebJohn, Laurent</td>
-</tr>
-<tr>
-<td>Mobile — Easier Editing</td>
-<td>Henry H</td>
-<td>Daeraxa, CalebJohn</td>
-</tr>
-<tr>
-<td>Improve plugin search and discoverability</td>
-<td>Retr0ve</td>
-<td>JackGruber, Stefan</td>
-</tr>
-<tr>
-<td>Tablet Layout Project</td>
-<td>Tolu-Mals</td>
-<td>Laurent, Daeraxa</td>
-</tr>
-<tr>
-<td>Email Plugin</td>
-<td>Bishoy Magdy Adeeb</td>
-<td>Stefan, Roman</td>
-</tr>
-</tbody>
-</table>
-]]></description><link>https://joplinapp.org/news/20220522-gsoc-contributors</link><guid isPermaLink="false">20220522-gsoc-contributors</guid><pubDate>Sun, 22 May 2022 00:00:00 GMT</pubDate><twitter-text>Joplin received 6 Contributor Projects for GSoC 2022! Welcome to our new contributors who will be working on these projects over summer!</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20221115-renovate</link><guid isPermaLink="false">20221115-renovate</guid><pubDate>Tue, 15 Nov 2022 00:00:00 GMT</pubDate><twitter-text>Modernising and securing Joplin, one package at a time</twitter-text></item></channel></rss>

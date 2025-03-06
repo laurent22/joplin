@@ -40,7 +40,7 @@ const runImportTask = async (
 		await shim.fsDriver().remove(importTargetPath);
 	});
 
-	const importFiles = await pickDocument(false);
+	const importFiles = await pickDocument({ multiple: false });
 	if (importFiles.length === 0) {
 		logger.info('Canceled.');
 		return { success: false, warnings: [] };
@@ -48,7 +48,7 @@ const runImportTask = async (
 
 	const sourceFileUri = importFiles[0].uri;
 	const sourceFilePath = Platform.select({
-		android: sourceFileUri,
+		default: sourceFileUri,
 		ios: decodeURI(sourceFileUri),
 	});
 	await shim.fsDriver().copy(sourceFilePath, importTargetPath);

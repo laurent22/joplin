@@ -2,14 +2,14 @@ import PostMessageService, { MessageResponse, ResponderComponentType } from '@jo
 import { useEffect } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(frameWindow: any, isReady: boolean, pluginId: string, viewId: string, postMessage: Function) {
+export default function(frameWindow: any, isReady: boolean, pluginId: string, viewId: string, windowId: string, postMessage: Function) {
 	useEffect(() => {
-		PostMessageService.instance().registerResponder(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
+		PostMessageService.instance().registerResponder(ResponderComponentType.UserWebview, viewId, windowId, (message: MessageResponse) => {
 			postMessage('postMessageService.response', { message });
 		});
 
 		return () => {
-			PostMessageService.instance().unregisterResponder(ResponderComponentType.UserWebview, viewId);
+			PostMessageService.instance().unregisterResponder(ResponderComponentType.UserWebview, viewId, windowId);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [viewId]);
@@ -32,6 +32,7 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 				void PostMessageService.instance().postMessage({
 					pluginId,
 					viewId,
+					windowId,
 					...event.data.message,
 				});
 			}
@@ -43,5 +44,5 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 			if (frameWindow?.removeEventListener) frameWindow.removeEventListener('message', onMessage_);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [frameWindow, isReady, pluginId, viewId]);
+	}, [frameWindow, isReady, pluginId, windowId, viewId]);
 }

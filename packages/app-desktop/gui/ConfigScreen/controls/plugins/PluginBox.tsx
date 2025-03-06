@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useId, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import ToggleButton from '../../../lib/ToggleButton/ToggleButton';
@@ -173,6 +173,7 @@ export default function(props: Props) {
 			themeId={props.themeId}
 			value={item.enabled}
 			onToggle={() => props.onToggle({ item })}
+			aria-label={_('Enabled')}
 		/>;
 	}
 
@@ -233,7 +234,7 @@ export default function(props: Props) {
 			return (
 				<CellFooter>
 					<NeedUpgradeMessage>
-						{PluginService.instance().describeIncompatibility(props.manifest)}
+						{PluginService.instance().describeIncompatibility(item.manifest)}
 					</NeedUpgradeMessage>
 				</CellFooter>
 			);
@@ -256,10 +257,17 @@ export default function(props: Props) {
 		return <RecommendedBadge href="#" title={_('The Joplin team has vetted this plugin and it meets our standards for security and performance.')} onClick={onRecommendedClick}><i className="fas fa-crown"></i></RecommendedBadge>;
 	}
 
+	const nameLabelId = useId();
+
 	return (
-		<CellRoot isCompatible={props.isCompatible}>
+		<CellRoot isCompatible={props.isCompatible} role='group' aria-labelledby={nameLabelId}>
 			<CellTop>
-				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.manifest.version}</StyledVersion></StyledNameAndVersion>
+				<StyledNameAndVersion mb={'5px'}>
+					<StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }} id={nameLabelId}>
+						{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}
+					</StyledName>
+					<StyledVersion>v{item.manifest.version}</StyledVersion>
+				</StyledNameAndVersion>
 				{renderToggleButton()}
 				{renderRecommendedBadge()}
 			</CellTop>

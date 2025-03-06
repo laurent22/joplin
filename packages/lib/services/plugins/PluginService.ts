@@ -14,6 +14,7 @@ import isCompatible from './utils/isCompatible';
 import { AppType } from './api/types';
 import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
 import { _ } from '../../locale';
+import ViewController from './ViewController';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
@@ -200,6 +201,21 @@ export default class PluginService extends BaseService {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
 		return this.plugins_[id];
+	}
+
+	public safePluginNameById(id: string) {
+		if (!this.plugins_[id]) {
+			return id;
+		}
+
+		return this.pluginById(id).manifest?.name ?? 'Unknown';
+	}
+
+	public viewControllerByViewId(id: string): ViewController|null {
+		for (const [, plugin] of Object.entries(this.plugins_)) {
+			if (plugin.hasViewController(id)) return plugin.viewController(id);
+		}
+		return null;
 	}
 
 	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
@@ -576,7 +592,17 @@ export default class PluginService extends BaseService {
 		// from where it is now to check that it is valid and to retrieve
 		// the plugin ID.
 		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
-		await this.deletePluginFiles(preloadedPlugin);
+		try {
+			await this.deletePluginFiles(preloadedPlugin);
+		} catch (error) {
+			// Deleting the plugin appears to occasionally fail on Windows (maybe because the files
+			// are still loaded?), and it prevents the plugin from being installed. Because of this
+			// we just ignore the error - it means that there will be unnecessary files in the cache
+			// directory, which is not a big issue.
+			//
+			// Ref: https://discourse.joplinapp.org/t/math-mode-plugin-no-longer-works-in-windows-v3-1-23/41853
+			logger.warn('Could not delete plugin temp directory:', error);
+		}
 
 		// On mobile, it's necessary to create the plugin directory before we can copy
 		// into it.

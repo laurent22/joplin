@@ -149,4 +149,16 @@ three line \\n no escape`)).toBe(0);
 		expect(await syncTime(note1.id)).toBe(newTime);
 	});
 
+	it.each([
+		'test-test!',
+		'This ID has    spaces\ttabs\nand newlines',
+		'Test`;',
+		'Test"',
+		'Test\'',
+		'Test\'\'\'a\'\'',
+		'% test',
+	])('should support querying items with IDs containing special characters (id: %j)', async (id) => {
+		const note = await Note.save({ id }, { isNew: true });
+		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
+	});
 });

@@ -40,6 +40,12 @@ const useVisibleRange = (itemsPerLine: number, scrollTop: number, listSize: Size
 		return Math.ceil(noteCount / itemsPerLine);
 	}, [noteCount, itemsPerLine]);
 
+	// Note: Leave this here to test the note list scroll behaviour. Also add "item.index" to the
+	// rows in defaultListRenderer to check whether the value here matches what's being displayed.
+	// `useScroll` can also be changed to display the effective scroll value.
+
+	// console.info('=======================================');
+	// console.info('scrollTop', scrollTop);
 	// console.info('itemsPerLine', itemsPerLine);
 	// console.info('listSize.height', listSize.height);
 	// console.info('itemSize.height', itemSize.height);
@@ -52,6 +58,7 @@ const useVisibleRange = (itemsPerLine: number, scrollTop: number, listSize: Size
 	// console.info('endLineIndex', endLineIndex);
 	// console.info('totalLineCount', totalLineCount);
 	// console.info('visibleItemCount', visibleItemCount);
+	// console.info('=======================================');
 
 	return [startNoteIndex, endNoteIndex, startLineIndex, endLineIndex, totalLineCount, visibleItemCount];
 };

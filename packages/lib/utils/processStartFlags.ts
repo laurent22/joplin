@@ -174,6 +174,13 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg === '--updated') {
+			// Electron-specific flag - ignore it
+			// Allows to restart with the updated application after the update option is selected by the user
+			argv.splice(0, 1);
+			continue;
+		}
+
 		if (arg.length && arg[0] === '-') {
 			throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 		} else {

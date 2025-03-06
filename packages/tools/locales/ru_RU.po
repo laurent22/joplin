@@ -390,6 +390,7 @@ msgstr "Добавить в словарь"
 msgid "Add to note"
 msgstr "Добавить к заметке"
 
+
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
 msgid "Admin"
@@ -2035,7 +2036,7 @@ msgstr "Включить шифрование"
 
 #: packages/lib/models/settings/builtInMetadata.ts:994
 msgid "Enable file:// URLs for images and videos"
-msgstr "Включите URL-адреса file:// для изображений и видео"
+msgstr "Включить URL-адреса file:// для изображений и видео"
 
 #: packages/lib/models/settings/builtInMetadata.ts:975
 msgid "Enable footnotes"
@@ -2529,7 +2530,7 @@ msgstr "Перейти в профиль Joplin Cloud"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:12
 msgid "Go to line"
-msgstr "Перейти к линии"
+msgstr "Перейти к строке"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1051
 msgid "Go to source URL"
@@ -2821,7 +2822,7 @@ msgstr "Незавершенный"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
 msgid "Incomplete to-do"
-msgstr "Незавершенные дела"
+msgstr "Незавершенные задачи"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:97
 msgid "Increase indent level"
@@ -3349,7 +3350,7 @@ msgstr "Минимизировать"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:163
 msgid "Missing camera permission"
-msgstr "Отсутствует разрешение на съемку"
+msgstr "Отсутствует разрешение для камеры"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:320
 msgid "Missing keys"
@@ -3499,7 +3500,7 @@ msgstr "Новая версия: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:16
 msgid "next"
-msgstr "следующий"
+msgstr "далее"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:271
 msgid "Next match"
@@ -3751,7 +3752,7 @@ msgstr "Нумерованный список"
 
 #: packages/lib/models/settings/builtInMetadata.ts:531
 msgid "OCR: Clear cache and re-download language data files"
-msgstr "OCR: очистите кэш и заново загрузите файлы языковых данных"
+msgstr "OCR: очистите кэш и заново загрузите языковые файлы"
 
 #: packages/lib/models/settings/builtInMetadata.ts:512
 msgid "OCR: Language data URL or path"
@@ -4288,7 +4289,7 @@ msgstr "Выход"
 
 #: packages/app-mobile/components/voiceTyping/VoiceTypingDialog.tsx:206
 msgid "Re-download model"
-msgstr "Перезагрузить модель"
+msgstr "Скачать модель заново"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -4367,7 +4368,7 @@ msgstr "Удалить"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Remove %s from share"
-msgstr "Удалите %s из общего ресурса"
+msgstr "Удалить %s из общего ресурса"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:111
 msgid "Remove tag \"%s\" from all notes?"
@@ -6152,6 +6153,7 @@ msgid ""
 msgstr ""
 "Неподдерживаемая ссылка или сообщение: %s\n"
 "Ошибка: %s"
+ dev
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
 #: packages/lib/models/BaseItem.ts:921 packages/lib/path-utils.ts:27

@@ -1,14 +1,17 @@
-import MdToHtml from '@joplin/renderer/MdToHtml';
+import MdToHtml, { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 const { filename } = require('@joplin/lib/path-utils');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
+import { RenderOptions } from '@joplin/renderer/types';
+import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function newTestMdToHtml(options: any = null) {
 	options = {
 		ResourceModel: {
-			isResourceUrl: () => false,
+			isResourceUrl: isResourceUrl,
+			urlToId: resourceUrlToId,
 		},
 		fsDriver: shim.fsDriver(),
 		...options,
@@ -39,7 +42,7 @@ describe('MdToHtml', () => {
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const mdToHtmlOptions: any = {
+			const mdToHtmlOptions: RenderOptions = {
 				bodyOnly: true,
 			};
 
@@ -51,6 +54,8 @@ describe('MdToHtml', () => {
 				};
 			} else if (mdFilename.startsWith('sourcemap_')) {
 				mdToHtmlOptions.mapsToLine = true;
+			} else if (mdFilename.startsWith('resource_')) {
+				mdToHtmlOptions.resources = {};
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);
@@ -213,6 +218,9 @@ describe('MdToHtml', () => {
 		const mdToHtmlLinkifyOn = newTestMdToHtml({
 			pluginOptions: {
 				linkify: { enabled: true },
+				link_open: {
+					linkRenderingType: LinkRenderingType.HrefHandler,
+				},
 			},
 		});
 
@@ -222,28 +230,51 @@ describe('MdToHtml', () => {
 			},
 		});
 
+		const renderOptions = {
+			bodyOnly: true,
+			plainResourceRendering: true,
+			linkRenderingType: LinkRenderingType.HrefHandler,
+		};
+
 		for (const testCase of testCases) {
 			const [input, expectedLinkifyOff, expectedLinkifyOn] = testCase;
 
 			{
-				const actual = await mdToHtmlLinkifyOn.render(input, null, {
-					bodyOnly: true,
-					plainResourceRendering: true,
-				});
+				const actual = await mdToHtmlLinkifyOn.render(input, null, renderOptions);
 
 				expect(actual.html).toBe(expectedLinkifyOn);
 			}
 
 			{
-				const actual = await mdToHtmlLinkifyOff.render(input, null, {
-					bodyOnly: true,
-					plainResourceRendering: true,
-				});
+				const actual = await mdToHtmlLinkifyOff.render(input, null, renderOptions);
 
 				expect(actual.html).toBe(expectedLinkifyOff);
 			}
 		}
 	}));
+
+	it.each([
+		'[test](http://example.com/)',
+		'[test](mailto:test@example.com)',
+	])('should add onclick handlers to links when linkRenderingType is JavaScriptHandler (%j)', async (markdown) => {
+		const mdToHtml = newTestMdToHtml();
+
+		const renderWithoutOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.HrefHandler,
+		};
+		expect(
+			(await mdToHtml.render(markdown, undefined, renderWithoutOnClickOptions)).html,
+		).not.toContain('onclick');
+
+		const renderWithOnClickOptions = {
+			bodyOnly: true,
+			linkRenderingType: LinkRenderingType.JavaScriptHandler,
+		};
+		expect(
+			(await mdToHtml.render(markdown, undefined, renderWithOnClickOptions)).html,
+		).toMatch(/<a data-from-md .*onclick=['"].*['"].*>/);
+	});
 
 	it('should return attributes of line numbers', (async () => {
 		const mdToHtml = newTestMdToHtml();
@@ -320,5 +351,13 @@ describe('MdToHtml', () => {
 		// Should have rendered the inline and block content without errors
 		expect(html).toContain('Inline</span>');
 		expect(html).toContain('Block</span>');
+	});
+
+	it('should sanitize KaTeX errors', async () => {
+		const markdown = '$\\a<svg>$';
+		const renderResult = await newTestMdToHtml().render(markdown, null, { bodyOnly: true });
+
+		// Should not contain the HTML in unsanitized form
+		expect(renderResult.html).not.toContain('<svg>');
 	});
 });

@@ -1,6 +1,6 @@
 import CommandService, { CommandContext, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { EditorControl } from '@joplin/editor/types';
-import { useEffect } from 'react';
+import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 import commandDeclarations, { enabledCondition } from '../commandDeclarations';
 import Logger from '@joplin/utils/Logger';
 
@@ -34,7 +34,9 @@ const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) 
 };
 
 const useEditorCommandHandler = (editorControl: EditorControl) => {
-	useEffect(() => {
+	// useNowEffect: The command runtimes need to be registered before child components
+	// can render.
+	useNowEffect(() => {
 		const commandService = CommandService.instance();
 		for (const declaration of commandDeclarations) {
 			commandService.registerRuntime(declaration.name, commandRuntime(declaration, editorControl));
@@ -45,7 +47,7 @@ const useEditorCommandHandler = (editorControl: EditorControl) => {
 				commandService.unregisterRuntime(declaration.name);
 			}
 		};
-	});
+	}, []);
 };
 
 export default useEditorCommandHandler;

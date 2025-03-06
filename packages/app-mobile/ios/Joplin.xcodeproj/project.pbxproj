@@ -10,15 +10,16 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */; };
+		4C036D13E81D8DB9640B0DC1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */; };
 		4D122473270878D700DE23E8 /* wtf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D122472270878D700DE23E8 /* wtf.swift */; };
-		5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */; };
+		57317DBFCCF429AEF0A019CB /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F257EEF9EAC998DCD8BDEC /* libPods-ShareExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AE152142260F770400217DCB /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE152141260F770400217DCB /* ShareViewController.m */; };
 		AE82E4AF2599FA3A0013551B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE82E4AD2599FA3A0013551B /* MainInterface.storyboard */; };
 		AE82E4B32599FA3A0013551B /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AE82E4A82599FA3A0013551B /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BAD33BAD2BE9A08300E9F46A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BAD33BAC2BE9A08300E9F46A /* PrivacyInfo.xcprivacy */; };
 		BAD33BAE2BE9A08300E9F46A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BAD33BAC2BE9A08300E9F46A /* PrivacyInfo.xcprivacy */; };
+		D1BE6938B03F0BC60F98041F /* libPods-Joplin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 800581C1ADC9CA9A7AC1BB75 /* libPods-Joplin.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,27 +50,19 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* JoplinTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JoplinTests.m; sourceTree = "<group>"; };
-		0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.release.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.release.xcconfig"; sourceTree = "<group>"; };
-		09056573D4C040FBD5FEB93A /* Pods-Joplin-JoplinTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-JoplinTests.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-JoplinTests/Pods-Joplin-JoplinTests.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Joplin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joplin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Joplin/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.mm; path = Joplin/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Joplin/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Joplin/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Joplin/main.m; sourceTree = "<group>"; };
-		14868D674CC065C7BF1C9944 /* Pods-Joplin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.release.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.release.xcconfig"; sourceTree = "<group>"; };
-		245A6EBAE2E874DB706B16DB /* Pods-Joplin-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOS/Pods-Joplin-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		258F823D616BE3D6A52BC900 /* libPods-Joplin-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C91CD1424C7137D07789148 /* Pods-Joplin-JoplinTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-JoplinTests.release.xcconfig"; path = "Target Support Files/Pods-Joplin-JoplinTests/Pods-Joplin-JoplinTests.release.xcconfig"; sourceTree = "<group>"; };
-		2DA44D9A347489A29B995F73 /* Pods-Joplin-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		37DBC181C4AD99CBE0D07EEB /* Pods-Joplin-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOSTests/Pods-Joplin-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		4281BC1941ED8712A952DC60 /* Pods-ShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.debug.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		4D122471270878D600DE23E8 /* Joplin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Joplin-Bridging-Header.h"; sourceTree = "<group>"; };
 		4D122472270878D700DE23E8 /* wtf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtf.swift; sourceTree = "<group>"; };
-		505CB61090817F4453631957 /* Pods-Joplin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.debug.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig"; sourceTree = "<group>"; };
-		5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.debug.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		78131A70125DE0AE4D6BF72E /* Pods-Joplin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.debug.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig"; sourceTree = "<group>"; };
+		800581C1ADC9CA9A7AC1BB75 /* libPods-Joplin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Joplin/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		A3FEB746EE7F1B0FF28528E1 /* Pods-Joplin-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Joplin-tvOS/Pods-Joplin-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85EA9E81E151B08B5FFD2044 /* Pods-Joplin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.release.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.release.xcconfig"; sourceTree = "<group>"; };
 		AE152140260F770400217DCB /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Source/ShareExtension/ShareViewController.h; sourceTree = "<group>"; };
 		AE152141260F770400217DCB /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Source/ShareExtension/ShareViewController.m; sourceTree = "<group>"; };
 		AE7945DB259C9A2500051BE2 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
@@ -77,12 +70,12 @@
 		AE82E4A82599FA3A0013551B /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE82E4AE2599FA3A0013551B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		AE82E4B02599FA3A0013551B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B61798F36B3BC123BF8EA4D9 /* libPods-Joplin-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD33BAC2BE9A08300E9F46A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		BEC9B285DDBCEBB2D7A812DE /* Pods-ShareExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.release.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.release.xcconfig"; sourceTree = "<group>"; };
+		C9F257EEF9EAC998DCD8BDEC /* libPods-ShareExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ShareExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Joplin/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F69B873C692CE22F1C4C9264 /* libPods-Joplin-JoplinTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin-JoplinTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ShareExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46E31F54C547C341F605BB66 /* libPods-Joplin.a in Frameworks */,
+				D1BE6938B03F0BC60F98041F /* libPods-Joplin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E556FC75AECECB13464A724 /* libPods-ShareExtension.a in Frameworks */,
+				57317DBFCCF429AEF0A019CB /* libPods-ShareExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,13 +137,18 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				B61798F36B3BC123BF8EA4D9 /* libPods-Joplin-tvOS.a */,
-				258F823D616BE3D6A52BC900 /* libPods-Joplin-tvOSTests.a */,
-				A5E1CD825FABD6C4E704EA54 /* libPods-Joplin.a */,
-				F69B873C692CE22F1C4C9264 /* libPods-Joplin-JoplinTests.a */,
-				FAC957496DFD2368FFE3C360 /* libPods-ShareExtension.a */,
+				800581C1ADC9CA9A7AC1BB75 /* libPods-Joplin.a */,
+				C9F257EEF9EAC998DCD8BDEC /* libPods-ShareExtension.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		336B5BD29D5BD1737E707672 /* Joplin */ = {
+			isa = PBXGroup;
+			children = (
+				CF14612B39CE1556A9A31631 /* ExpoModulesProvider.swift */,
+			);
+			name = Joplin;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -171,6 +169,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				9CDB1D9DB6483D893504BFCB /* Pods */,
+				E67B064D6F5F7E8B1080FDB0 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -189,16 +188,10 @@
 		9CDB1D9DB6483D893504BFCB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				505CB61090817F4453631957 /* Pods-Joplin.debug.xcconfig */,
-				14868D674CC065C7BF1C9944 /* Pods-Joplin.release.xcconfig */,
-				09056573D4C040FBD5FEB93A /* Pods-Joplin-JoplinTests.debug.xcconfig */,
-				2C91CD1424C7137D07789148 /* Pods-Joplin-JoplinTests.release.xcconfig */,
-				A3FEB746EE7F1B0FF28528E1 /* Pods-Joplin-tvOS.debug.xcconfig */,
-				245A6EBAE2E874DB706B16DB /* Pods-Joplin-tvOS.release.xcconfig */,
-				2DA44D9A347489A29B995F73 /* Pods-Joplin-tvOSTests.debug.xcconfig */,
-				37DBC181C4AD99CBE0D07EEB /* Pods-Joplin-tvOSTests.release.xcconfig */,
-				5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */,
-				0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */,
+				78131A70125DE0AE4D6BF72E /* Pods-Joplin.debug.xcconfig */,
+				85EA9E81E151B08B5FFD2044 /* Pods-Joplin.release.xcconfig */,
+				4281BC1941ED8712A952DC60 /* Pods-ShareExtension.debug.xcconfig */,
+				BEC9B285DDBCEBB2D7A812DE /* Pods-ShareExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -215,6 +208,14 @@
 			path = ShareExtension;
 			sourceTree = "<group>";
 		};
+		E67B064D6F5F7E8B1080FDB0 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				336B5BD29D5BD1737E707672 /* Joplin */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -222,14 +223,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Joplin" */;
 			buildPhases = (
-				335ACF4DE85695BEBB18D8A3 /* [CP] Check Pods Manifest.lock */,
+				E76772393095384E60C0D95F /* [CP] Check Pods Manifest.lock */,
+				EB61CD887618E406C80EBC43 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				CBC8354E4CF5CF4E15F2FCDE /* [CP] Copy Pods Resources */,
 				AE82E4B42599FA3A0013551B /* Embed App Extensions */,
-				C8F2067658ACF12DF7A17513 /* [CP] Embed Pods Frameworks */,
+				E6849A86F6866D5E0DC90A55 /* [CP] Embed Pods Frameworks */,
+				63951A9079A5D0302FB331B7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -245,7 +247,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AE82E4B72599FA3A0013551B /* Build configuration list for PBXNativeTarget "ShareExtension" */;
 			buildPhases = (
-				027E2AA6B101F8CFCA582EC1 /* [CP] Check Pods Manifest.lock */,
+				8B87E13D9DB3F38C8DC6F227 /* [CP] Check Pods Manifest.lock */,
 				AE82E4A42599FA3A0013551B /* Sources */,
 				AE82E4A52599FA3A0013551B /* Frameworks */,
 				AE82E4A62599FA3A0013551B /* Resources */,
@@ -335,75 +337,17 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		027E2AA6B101F8CFCA582EC1 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ShareExtension-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		335ACF4DE85695BEBB18D8A3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Joplin-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C8F2067658ACF12DF7A17513 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CBC8354E4CF5CF4E15F2FCDE /* [CP] Copy Pods Resources */ = {
+		63951A9079A5D0302FB331B7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo/RNDeviceInfoPrivacyInfo.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -427,6 +371,10 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNDeviceInfoPrivacyInfo.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -453,6 +401,89 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8B87E13D9DB3F38C8DC6F227 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ShareExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6849A86F6866D5E0DC90A55 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Joplin/Pods-Joplin-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E76772393095384E60C0D95F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Joplin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB61CD887618E406C80EBC43 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Joplin/expo-configure-project.sh\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -463,6 +494,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				4D122473270878D700DE23E8 /* wtf.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				4C036D13E81D8DB9640B0DC1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,18 +530,18 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 505CB61090817F4453631957 /* Pods-Joplin.debug.xcconfig */;
+			baseConfigurationReference = 78131A70125DE0AE4D6BF72E /* Pods-Joplin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 134;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joplin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 13.0.6;
+				MARKETING_VERSION = 13.3.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -517,6 +549,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
@@ -529,17 +562,17 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 14868D674CC065C7BF1C9944 /* Pods-Joplin.release.xcconfig */;
+			baseConfigurationReference = 85EA9E81E151B08B5FFD2044 /* Pods-Joplin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Joplin/Joplin.entitlements;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 134;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				INFOPLIST_FILE = Joplin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 13.0.6;
+				MARKETING_VERSION = 13.3.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -547,6 +580,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin;
 				PRODUCT_NAME = Joplin;
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
@@ -713,7 +747,7 @@
 		};
 		AE82E4B52599FA3A0013551B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5DE39012F71F18423C665C57 /* Pods-ShareExtension.debug.xcconfig */;
+			baseConfigurationReference = 4281BC1941ED8712A952DC60 /* Pods-ShareExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -724,14 +758,14 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 134;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 13.0.6;
+				MARKETING_VERSION = 13.3.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
@@ -741,6 +775,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -750,7 +785,7 @@
 		};
 		AE82E4B62599FA3A0013551B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0473A2D469A3555053E69327 /* Pods-ShareExtension.release.xcconfig */;
+			baseConfigurationReference = BEC9B285DDBCEBB2D7A812DE /* Pods-ShareExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -762,14 +797,14 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 120;
+				CURRENT_PROJECT_VERSION = 134;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 13.0.6;
+				MARKETING_VERSION = 13.3.1;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -778,6 +813,7 @@
 					"-weak_framework",
 					SwiftUI,
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = net.cozic.joplin.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

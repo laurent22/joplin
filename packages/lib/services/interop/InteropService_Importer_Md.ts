@@ -110,11 +110,18 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		for (const encodedLink of fileLinks) {
-			const link = decodeURI(encodedLink);
+			let link = '';
+			try {
+				link = decodeURI(encodedLink);
+			} catch (error) {
+				// If the URI cannot be decoded, leave it as it is.
+				continue;
+			}
 
 			if (isDataUrl(link)) {
 				// Just leave it as it is. We could potentially import
 				// it as a resource but for now that's good enough.
+				continue;
 			} else {
 				// Handle anchor links appropriately
 				const trimmedLink = this.trimAnchorLink(link);

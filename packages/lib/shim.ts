@@ -2,6 +2,8 @@ import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
+import { Crypto } from './services/e2ee/types';
+import { MarkupLanguage } from '@joplin/renderer';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -17,6 +19,39 @@ export interface CreatePdfFromImagesOptions {
 
 export interface PdfInfo {
 	pageCount: number;
+}
+
+export interface Keytar {
+	setPassword(key: string, client: string, password: string): Promise<void>;
+	getPassword(key: string, client: string): Promise<string|null>;
+	deletePassword(key: string, client: string): Promise<void>;
+}
+
+interface FetchOptions {
+	method?: string;
+	headers?: Record<string, string>;
+	body?: string;
+	agent?: unknown;
+}
+
+interface AttachFileToNoteOptions {
+	resizeLargeImages?: 'always'|'never';
+	position?: number;
+	markupLanguage?: MarkupLanguage;
+}
+
+export enum MessageBoxType {
+	Confirm = 'question',
+	Error = 'error',
+	Info = 'info',
+}
+
+export interface ShowMessageBoxOptions {
+	title?: string;
+	buttons?: string[];
+	type?: MessageBoxType;
+	defaultId?: number;
+	cancelId?: number;
 }
 
 let isTestingEnv_ = false;
@@ -83,7 +118,7 @@ const shim = {
 	},
 
 	isLinux: () => {
-		return process && process.platform === 'linux';
+		return typeof process !== 'undefined' && process.platform === 'linux';
 	},
 
 	isGNOME: () => {
@@ -110,15 +145,15 @@ const shim = {
 	},
 
 	isFreeBSD: () => {
-		return process && process.platform === 'freebsd';
+		return typeof process !== 'undefined' && process.platform === 'freebsd';
 	},
 
 	isWindows: () => {
-		return process && process.platform === 'win32';
+		return typeof process !== 'undefined' && process.platform === 'win32';
 	},
 
 	isMac: () => {
-		return process && process.platform === 'darwin';
+		return typeof process !== 'undefined' && process.platform === 'darwin';
 	},
 
 	platformName: () => {
@@ -127,7 +162,7 @@ const shim = {
 		if (shim.isWindows()) return 'win32';
 		if (shim.isLinux()) return 'linux';
 		if (shim.isFreeBSD()) return 'freebsd';
-		if (process && process.platform) return process.platform;
+		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
 	},
 
@@ -239,9 +274,12 @@ const shim = {
 		}
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	fetch: (_url: string, _options: any = null): any => {
+	fetch: (_url: string, _options: FetchOptions|null = null): Promise<Response> => {
 		throw new Error('Not implemented: fetch');
+	},
+
+	debugFetch: (_url: string, _options: FetchOptions|null): Promise<unknown> => {
+		throw new Error('Not implemented: debugFetch');
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -261,6 +299,10 @@ const shim = {
 		throw new Error('Not implemented: fsDriver');
 	},
 
+	sharpEnabled: (): boolean => {
+		return true;
+	},
+
 	FileApiDriverLocal: null as typeof FileApiDriverLocal,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -276,6 +318,8 @@ const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sjclModule: null as any,
 
+	crypto: null as Crypto,
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	randomBytes: async (_count: number): Promise<any> => {
 		throw new Error('Not implemented: randomBytes');
@@ -289,8 +333,7 @@ const shim = {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	detectAndSetLocale: null as Function,
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	attachFileToNote: async (_note: any, _filePath: string): Promise<NoteEntity> => {
+	attachFileToNote: async (_note: NoteEntity, _filePath: string, _options?: AttachFileToNoteOptions): Promise<NoteEntity> => {
 		throw new Error('Not implemented: attachFileToNote');
 	},
 
@@ -372,17 +415,24 @@ const shim = {
 	// Returns the index of the button that was clicked. By default,
 	// 0 -> OK
 	// 1 -> Cancel
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	showMessageBox: (_message: string, _options: any = null): Promise<number> => {
+	showMessageBox: (_message: string, _options: ShowMessageBoxOptions = null): Promise<number> => {
 		throw new Error('Not implemented');
 	},
 
+	showErrorDialog: async (message: string): Promise<void> => {
+		await shim.showMessageBox(message, { type: MessageBoxType.Error });
+	},
+
 	showConfirmationDialog: async (message: string): Promise<boolean> => {
-		return await shim.showMessageBox(message) === 0;
+		return await shim.showMessageBox(message, { type: MessageBoxType.Confirm }) === 0;
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {
+		throw new Error('Not implemented');
+	},
+
+	restartApp: (): void => {
 		throw new Error('Not implemented');
 	},
 
@@ -471,8 +521,7 @@ const shim = {
 		return (shim.isWindows() || shim.isMac()) && !shim.isPortable();
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keytar: (): any => {
+	keytar: (): Keytar => {
 		throw new Error('Not implemented');
 	},
 

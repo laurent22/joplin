@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "com.example.worker",
+	"app_min_version": "3.0",
+	"version": "1.0.0",
+	"name": "Web Worker",
+	"description": "Shows how to load a web worker from a plugin.",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}

@@ -107,6 +107,9 @@
 	"(In plugin: %s)": [
 		"(プラグイン: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(なし)"
 	],
@@ -141,7 +144,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"詳細"
 	],
 	"About Joplin": [
 		"Joplinについて"
@@ -191,6 +194,9 @@
 	"Add recipient:": [
 		"受信者を追加:"
 	],
+	"Add tag %s to note": [
+		""
+	],
 	"Add title": [
 		"題名を追加"
 	],
@@ -205,6 +211,9 @@
 	],
 	"Advanced options": [
 		"詳細な設定"
+	],
+	"Advanced settings": [
+		"詳細設定"
 	],
 	"Advanced tools": [
 		"高度なツール"
@@ -284,6 +293,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"添付"
 	],
@@ -332,6 +344,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"アップデートを自動的に確認する"
 	],
@@ -350,9 +365,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"ご使用のデバイスでは生体認証が未設定です。Joplinのロックを解除するには生体認証の設定を行ってください。デバイスがロックされている場合は、電源を入れ直して生体認証の設定をリセットしてみてください。"
-	],
 	"Bold": [
 		"太字"
 	],
@@ -369,6 +381,9 @@
 		"箇条書きリスト"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can Share": [
@@ -446,11 +461,17 @@
 	"Change language": [
 		"言語の切り替え"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"文字数"
 	],
 	"Characters excluding spaces": [
 		"文字数(空白を除く)"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"アップデートのチェック..."
@@ -494,6 +515,9 @@
 	"Close dropdown": [
 		"ドロップダウンを閉じる"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -518,8 +542,8 @@
 	"Collaborate on notebooks with others": [
 		"ノートブック上で共同作業を行う"
 	],
-	"Collapse": [
-		"折りたたむ"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"直近のアラーム"
@@ -539,8 +563,11 @@
 	"Command palette...": [
 		"コマンドパレット..."
 	],
+	"Compact": [
+		"コンパクト"
+	],
 	"Completed": [
-		"完了"
+		"完了日時"
 	],
 	"Completed decryption.": [
 		"復号が完了しました。"
@@ -625,6 +652,9 @@
 	],
 	"Copy token": [
 		"トークンのコピー"
+	],
+	"Copy version info": [
+		"バージョン情報をコピー"
 	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"アプリケーションが認証できません:\n\n%s\n\nやり直してください。"
@@ -797,6 +827,9 @@
 	"Delete local data and re-download from sync target": [
 		"ローカルデータを削除して同期先から再ダウンロードする"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete note": [
 		"ノートを削除"
 	],
@@ -846,7 +879,7 @@
 		"場所の形式: %s"
 	],
 	"Detailed": [
-		""
+		"詳細"
 	],
 	"Directory": [
 		"ディレクトリ"
@@ -963,7 +996,10 @@
 		"Dropboxログイン"
 	],
 	"Due": [
-		""
+		"締切日"
+	],
+	"due date": [
+		"締切日"
 	],
 	"Duplicate": [
 		"複製"
@@ -982,6 +1018,9 @@
 	],
 	"Edit in external editor": [
 		"外部エディターで編集"
+	],
+	"Edit in new window": [
+		""
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1041,7 +1080,7 @@
 		"強調したいテキスト"
 	],
 	"Empty trash": [
-		""
+		"ごみ箱を空にする"
 	],
 	"Enable": [
 		"有効"
@@ -1070,6 +1109,9 @@
 	"Enable encryption": [
 		"暗号化を有効にする"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"脚注を有効にする"
 	],
@@ -1097,8 +1139,14 @@
 	"Enable optical character recognition (OCR)": [
 		""
 	],
+	"Enable or disable plugins": [
+		"プラグインの有効化/無効化"
+	],
 	"Enable PDF viewer": [
 		"PDFビューアーを有効にする"
+	],
+	"Enable plugin support": [
+		"プラグイン機能を有効化する"
 	],
 	"Enable soft breaks": [
 		"ソフトブレークを有効にする"
@@ -1126,6 +1174,9 @@
 	],
 	"Enabled": [
 		"有効"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗号化した状態で送ることを意味します。"
@@ -1163,6 +1214,9 @@
 	"Enter notebook title": [
 		"ノートブックの題名を入力"
 	],
+	"Entering selection mode": [
+		""
+	],
 	"Enum": [
 		"列挙"
 	],
@@ -1190,8 +1244,8 @@
 	"Exits the application.": [
 		"アプリケーションの終了。"
 	],
-	"Expand": [
-		"展開する"
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"エクスポート"
@@ -1259,9 +1313,6 @@
 	"Filter tags": [
 		"フィルタータグ"
 	],
-	"Find and replace": [
-		"検索と置換"
-	],
 	"Find: ": [
 		"検索文字列: "
 	],
@@ -1283,6 +1334,9 @@
 	"Focus title": [
 		"題名にフォーカス"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
 	],
@@ -1300,9 +1354,6 @@
 	],
 	"Force path style": [
 		"パス形式を強制する"
-	],
-	"Formatting": [
-		"フォーマッティング"
 	],
 	"Forward": [
 		"進む"
@@ -1340,6 +1391,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示します。両方とも指定されていない場合は、現在の設定のリストを表示します。"
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"ソースURLに行く"
 	],
@@ -1355,9 +1415,6 @@
 	"Header %d": [
 		"見出し %d"
 	],
-	"Headers": [
-		"見出し"
-	],
 	"Heading": [
 		"見出し"
 	],
@@ -1365,7 +1422,7 @@
 		"ヘルプ"
 	],
 	"Here's what we do to make plugins safer:": [
-		""
+		"プラグインを安全にするために次のことを行っています:"
 	],
 	"Hermes enabled: %d": [
 		"Hermes有効: %d"
@@ -1387,9 +1444,6 @@
 	],
 	"Hide keyboard": [
 		"キーボードを隠す"
-	],
-	"Hide more actions": [
-		"より多くのアクションを非表示にする"
 	],
 	"Highlight": [
 		"ハイライト"
@@ -1436,20 +1490,29 @@
 	"Import": [
 		"インポート"
 	],
+	"Import and Export": [
+		"インポートとエクスポート"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
 		""
 	],
 	"Import from JEX": [
-		""
+		"JEX形式のファイルをインポート"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"JEX(Joplin エクスポート)ファイルからノートをインポートします。"
+	],
+	"Imported successfully!": [
+		"インポート成功!"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
 	],
 	"Importing notes...": [
 		"ノートのインポート中..."
+	],
+	"Importing...": [
+		"インポート中..."
 	],
 	"Imports data into Joplin.": [
 		"Joplinにデータをインポートします。"
@@ -1492,6 +1555,9 @@
 	],
 	"Indent more": [
 		"インデントを増やす"
+	],
+	"Info": [
+		""
 	],
 	"Information": [
 		"情報"
@@ -1553,9 +1619,6 @@
 	"Items that cannot be synchronised": [
 		"同期ができなかったアイテム"
 	],
-	"Join us on Twitter": [
-		"X (Twitter)"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplinではノートの同期先としてさまざまなクラウドプロバイダーを利用できます。下の一覧から1つお選びください。"
 	],
@@ -1598,9 +1661,6 @@
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin独自の同期サービスです。特定ノートの公開や共有ノートブック上での共同作業などJoplin固有の機能も利用可能です。"
 	],
-	"KaTeX": [
-		"KaTeX"
-	],
 	"Keep note history for": [
 		"ノート履歴の保存期間"
 	],
@@ -1635,13 +1695,16 @@
 		"あとで"
 	],
 	"Latitude": [
-		""
+		"緯度"
 	],
 	"Layout": [
 		"レイアウト"
 	],
 	"Layout button sequence": [
 		"レイアウトボタンによる切り替え順"
+	],
+	"Learn more": [
+		"さらに詳しく"
 	],
 	"Leave it blank to download the language files from the default website": [
 		"デフォルトのWebサイトから言語ファイルをダウンロードする場合は空欄のままにしてください"
@@ -1659,7 +1722,7 @@
 		"明るい"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"あなたがインストールする他のソフトウェアと同様に、プラグインはセキュリティー上の問題やデータの損失を引き起こす可能性があります。"
 	],
 	"Lines": [
 		"行数"
@@ -1676,14 +1739,8 @@
 	"Link text": [
 		"リンクテキスト"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"プロトコル \"%s\" でのリンクはサポートされていません"
-	],
 	"List item": [
 		"リストアイテム"
-	],
-	"Lists": [
-		"リスト"
 	],
 	"Loaded": [
 		"読み込み済み"
@@ -1713,7 +1770,7 @@
 		"ログ、プロファイル、同期の状態"
 	],
 	"Longitude": [
-		""
+		"経度"
 	],
 	"Make a donation": [
 		"寄付する"
@@ -1763,6 +1820,12 @@
 	"Master password:": [
 		"マスターパスワード:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"最大同時接続数"
 	],
@@ -1806,7 +1869,7 @@
 		"一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
 	],
 	"Most plugins have source code available for review on the plugin website.": [
-		""
+		"ほとんどのプラグインはソースコードをプラグインのウェブサイトで公開しています。"
 	],
 	"Move %d notes to notebook \"%s\"?": [
 		"%d 個のノートを \"%s\" ノートブックに移動しますか？"
@@ -1832,9 +1895,6 @@
 	"Never resize": [
 		"リサイズしない"
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"新しいノート"
 	],
@@ -1858,6 +1918,9 @@
 	],
 	"New version: %s": [
 		"新バージョン: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		"次を検索"
@@ -1883,9 +1946,6 @@
 	"No active notebook.": [
 		"有効なノートブックがありません。"
 	],
-	"No item with ID %s": [
-		"ID %s のアイテムはありません"
-	],
 	"No new invitations": [
 		""
 	],
@@ -1899,7 +1959,7 @@
 		"ノートがありません。新しいノートを作成して下さい。"
 	],
 	"No plugins are installed.": [
-		""
+		"プラグインはインストールされていません。"
 	],
 	"No resources!": [
 		"リソースがありません!"
@@ -1970,6 +2030,9 @@
 	"Note list growth factor": [
 		"ノート一覧のストレッチ係数"
 	],
+	"Note list style": [
+		"ノート一覧のスタイル"
+	],
 	"Note properties": [
 		"ノートのプロパティ"
 	],
@@ -2012,6 +2075,9 @@
 	"Numbered List": [
 		"番号つきリスト"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2020,6 +2086,9 @@
 	],
 	"On %s: %s": [
 		"日時 %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"古い暗号化方式を使っているマスターキーがあります。"
@@ -2050,6 +2119,9 @@
 	],
 	"Open profile directory": [
 		"プロファイルディレクトリを開く"
+	],
+	"Open Source": [
+		"オープンソース"
 	],
 	"Open Sync Wizard...": [
 		"同期ウィザードを開く..."
@@ -2111,9 +2183,6 @@
 	"Permission needed": [
 		"許可が必要"
 	],
-	"Permission to use camera": [
-		"カメラ使用の許可"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"\"%s\"をクリックして続行するか、以下の\"%s\"リストでパスワードを設定してください。"
 	],
@@ -2147,6 +2216,9 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"ノートをどのノートブックにインポートするのか指定してください。"
 	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"このプラグインを使うにはJoplinを %s 以上にバージョンアップしてください。"
+	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り替えてノートを編集することはできます。"
 	],
@@ -2155,6 +2227,9 @@
 	],
 	"Plugin repository failed to load": [
 		""
+	],
+	"Plugin security": [
+		"プラグインの安全性"
 	],
 	"Plugin tools": [
 		"プラグインツール"
@@ -2166,7 +2241,7 @@
 		"プラグイン"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"プラグインはJoplinを標準にはない機能によって拡張するものです。プラグインではJoplinのエディターやビューアーなどを拡張できます。"
 	],
 	"Portrait": [
 		"縦"
@@ -2188,6 +2263,12 @@
 	],
 	"Preferred light theme": [
 		"優先ライトテーマ"
+	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"アプリケーションを終了するには、Ctrl+Dまたは\"exit\"と入力してください"
@@ -2273,6 +2354,9 @@
 	"Quit": [
 		"終了"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"データを再暗号化する"
 	],
@@ -2299,6 +2383,12 @@
 	],
 	"Recipients:": [
 		"受信者:"
+	],
+	"Recommended": [
+		"おすすめ"
+	],
+	"Recommended plugins": [
+		"おすすめのプラグイン"
 	],
 	"Redo": [
 		"やり直す"
@@ -2348,14 +2438,23 @@
 	"Replace: ": [
 		"置換文字列: "
 	],
-	"Report an issue": [
+	"replaced $ matches": [
 		""
+	],
+	"replaced match on line $": [
+		""
+	],
+	"Report an issue": [
+		"問題を報告"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"プラグインに関する問題を報告する。"
 	],
 	"Report fraudulent plugin": [
-		""
+		"不正なプラグインを報告"
+	],
+	"Report system": [
+		"報告システム"
 	],
 	"Reset application layout": [
 		"画面レイアウトをリセット"
@@ -2385,7 +2484,7 @@
 		"復元されたノート"
 	],
 	"Results (%d):": [
-		""
+		"結果 (%d 件):"
 	],
 	"Retry": [
 		"再実行"
@@ -2404,6 +2503,12 @@
 	],
 	"Revision: %s (%s)": [
 		"リビジョン: %s (%s)"
+	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"テキストファイルに含まれるコマンドを実行します。テキストファイルには1行1コマンドで記述する必要があります。"
@@ -2447,6 +2552,9 @@
 	"Save geo-location with notes": [
 		"ノートに位置情報を保存"
 	],
+	"Scanned code": [
+		""
+	],
 	"Search": [
 		"検索"
 	],
@@ -2489,6 +2597,9 @@
 	"Select parent notebook": [
 		"親ノートブックを選択"
 	],
+	"Send bug report": [
+		"デバッグレポートの送信"
+	],
 	"Server is already running on port %d": [
 		"サーバーはすでにポート %d で実行中です"
 	],
@@ -2513,6 +2624,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"<note>のプロパティ<name> を、指示された[value]に設定します。有効なプロパティは：\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"共有"
 	],
@@ -2527,6 +2641,9 @@
 	],
 	"Share permissions": [
 		""
+	],
+	"Shares": [
+		"共有"
 	],
 	"Sharing notebook...": [
 		"ノートブックを共有中..."
@@ -2551,9 +2668,6 @@
 	],
 	"Show disabled keys": [
 		"無効化したキーを表示する"
-	],
-	"Show more actions": [
-		"より多くのアクションを表示する"
 	],
 	"Show note counts": [
 		"ノートの数を表示"
@@ -2608,6 +2722,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"いくつかのアイテムは同期されませんでした。詳細はクリック。"
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"ノートブックのソート方法"
@@ -2722,6 +2842,9 @@
 	],
 	"Switch profile": [
 		"プロファイルを切り替え"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"ノートに切り替え"
@@ -2876,8 +2999,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"以下のキーは旧式の暗号化アルゴリズムを使用しているため、アップグレードをおすすめします。キーをアップグレードしても既存データはこれまでどおり復号化/暗号化が可能です。"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplinモバイルアプリは次のタイプのリンクをまだサポートしていません: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplinチームによる審査済み。このプラグインはJoplinのセキュリティーおよび性能基準を満たしています。"
@@ -2920,6 +3043,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを持つことができるでしょう（すべてのドキュメントは下にあります）。"
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Webクリッパーがデータにアクセスすることについてあなたの許可が必要です。"
@@ -2971,9 +3097,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"この添付ファイルはダウンロードされていないか、まだ復号されていません"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"この添付ファイルはダウンロードされていないか、まだ復号されていません。"
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可するときにだけ使用します。"
@@ -3072,7 +3195,10 @@
 		"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin > 権限 で有効にしてください"
 	],
 	"to-do": [
-		"to-do"
+		"ToDo"
+	],
+	"To-do": [
+		"ToDo"
 	],
 	"to-do: %s": [
 		"ToDo: %s"
@@ -3091,6 +3217,9 @@
 	],
 	"Toggle external editing": [
 		"外部エディターでの編集を開始・終了"
+	],
+	"Toggle menu bar": [
+		"メニューバーの表示切り替え"
 	],
 	"Toggle note history, keep notes for": [
 		"履歴の有効化/無効化、保存期間"
@@ -3123,7 +3252,7 @@
 		"総数: %d/%d"
 	],
 	"Trash": [
-		""
+		"ごみ箱"
 	],
 	"Try again": [
 		"再試行"
@@ -3157,6 +3286,9 @@
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
+	],
+	"Unknown": [
+		"不明"
 	],
 	"Unknown flag: %s": [
 		"不明なフラグ: %s"
@@ -3293,6 +3425,9 @@
 	"Voice typing...": [
 		"音声入力…"
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"警告"
 	],
@@ -3300,10 +3435,10 @@
 		"注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"問題のあるプラグインの報告と削除を行う仕組みがあります。"
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"信頼できるJoplinコミュニティーのメンバーが開発したプラグインを\"おすすめ\"としています。"
 	],
 	"Web Clipper": [
 		"Webクリッパー"
@@ -3332,6 +3467,9 @@
 	"Welcome!": [
 		"ようこそ!"
 	],
+	"What are plugins?": [
+		"プラグインとは？"
+	],
 	"When creating a new note:": [
 		"新しいノートを作成した際:"
 	],
@@ -3339,6 +3477,9 @@
 		"新しいToDoを作成した場合:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -3394,9 +3535,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"一部のデータを復号化するためにあなたのパスワードが必要です。`:e2ee decrypt`と入力し設定してください。"
-	],
-	"Your permission to use your camera is required.": [
-		"カメラを使用するには権限が必要です。"
 	],
 	"Your version: %s": [
 		"あなたのバージョン: %s"

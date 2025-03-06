@@ -11,13 +11,14 @@ const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');
 const { isCallbackUrl } = require('@joplin/lib/callbackUrlUtils');
 const determineBaseAppDirs = require('@joplin/lib/determineBaseAppDirs').default;
+const registerCustomProtocols = require('./utils/customProtocols/registerCustomProtocols.js').default;
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in
 // our case it's a string like "@joplin/app-desktop". It's also supposed to
 // check the productName key but is not doing it, so here set the
 // application name to the right string.
-electronApp.name = packageInfo.name;
+electronApp.setName(packageInfo.name);
 
 process.on('unhandledRejection', (reason, p) => {
 	console.error('Unhandled promise rejection', p, 'reason:', reason);
@@ -60,6 +61,7 @@ if (pathExistsSync(settingsPath)) {
 }
 
 electronApp.setAsDefaultProtocolClient('joplin');
+void registerCustomProtocols();
 
 const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 

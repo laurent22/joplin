@@ -2,7 +2,6 @@
 // such as the clipboard, message dialog, etc. It allows having the same plugin
 
 import { VersionInfo } from './api/types';
-import { Implementation as WindowImplementation } from './api/JoplinWindow';
 import { Implementation as ImagingImplementation } from './api/JoplinImaging';
 
 export interface JoplinViewsDialogs {
@@ -34,10 +33,6 @@ export default class BasePlatformImplementation {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public get nativeImage(): any {
 		throw new Error('Not implemented: nativeImage');
-	}
-
-	public get window(): WindowImplementation {
-		throw new Error('Not implemented: window');
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

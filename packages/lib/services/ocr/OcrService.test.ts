@@ -7,6 +7,8 @@ import Logger from '@joplin/utils/Logger';
 
 describe('OcrService', () => {
 
+	jest.retryTimes(2);
+
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);

@@ -17,7 +17,7 @@ interface Props {
 	onApplyClick?: Function;
 }
 
-export const StyledRoot = styled.div`
+const StyledRoot = styled.nav`
 	display: flex;
 	align-items: center;
 	padding: 10px;

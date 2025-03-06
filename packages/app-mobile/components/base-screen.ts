@@ -11,10 +11,7 @@ class BaseScreenComponent<Props, State> extends React.Component<Props, State> {
 		const theme = themeStyle(themeId);
 		if (rootStyles_[themeId]) return rootStyles_[themeId];
 		rootStyles_[themeId] = StyleSheet.create({
-			root: {
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
-			},
+			root: theme.rootStyle,
 		});
 		return rootStyles_[themeId];
 	}

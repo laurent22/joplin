@@ -28,7 +28,7 @@ const PluginDialogManager: React.FC<Props> = props => {
 
 	const dialogs: ReactElement[] = [];
 	for (const viewInfo of viewInfos) {
-		if (viewInfo.view.containerType === ContainerType.Panel || !viewInfo.view.opened) {
+		if (viewInfo.view.containerType !== ContainerType.Dialog || !viewInfo.view.opened) {
 			continue;
 		}
 

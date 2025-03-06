@@ -11,9 +11,31 @@ function formatCssSize(v: any): string {
 export interface Options {
 	contentMaxWidth?: number;
 	contentMaxWidthTarget?: string;
+	scrollbarSize?: number;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
 }
+
+const notLoadedCss = `
+	.not-loaded-resource img {
+		width: 1.15em;
+		height: 1.15em;
+		background: white;
+		padding: 2px !important;
+		border-radius: 2px;
+		box-shadow: 0 1px 3px #000000aa;
+	}
+
+	a.not-loaded-resource img {
+		margin-right: .2em;
+	}
+
+	a.not-loaded-resource {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+`;
 
 // If we are viewing an HTML note, it means it comes from the web clipper or
 // emil-to-note, in which case we don't apply any specific theme. We just need
@@ -24,6 +46,8 @@ export const whiteBackgroundNoteStyle = () => {
 		body {
 			background-color: #ffffff;
 		}
+
+		${notLoadedCss}
 
 		/* TinyMCE adds a dashed border for tables that have no borders
 		to make it easier to view where the cells are and edit them.
@@ -94,9 +118,17 @@ export default function(theme: any, options: Options = null) {
 			border-radius: 3px;
 			background-color: ${theme.codeBackgroundColor};
 		}
+
+		:root {
+			--scrollbar-size: ${Number(options.scrollbarSize ?? 7)}px;
+		}
+
 		::-webkit-scrollbar {
-			width: 7px;
-			height: 7px;
+			width: var(--scrollbar-size);
+			height: var(--scrollbar-size);
+		}
+		::-webkit-scrollbar-thumb {
+			border-radius: calc(var(--scrollbar-size) / 2);
 		}
 		::-webkit-scrollbar-corner {
 			background: none;
@@ -105,14 +137,13 @@ export default function(theme: any, options: Options = null) {
 			border: none;
 		}
 		::-webkit-scrollbar-thumb {
-			background: rgba(100, 100, 100, 0.3); 
-			border-radius: 5px;
+			background: ${theme.scrollbarThumbColor}; 
 		}
 		::-webkit-scrollbar-track:hover {
 			background: rgba(0, 0, 0, 0.1); 
 		}
 		::-webkit-scrollbar-thumb:hover {
-			background: rgba(100, 100, 100, 0.7); 
+			background: ${theme.scrollbarThumbColorHover}; 
 		}
 
 		${maxWidthCss}
@@ -334,24 +365,7 @@ export default function(theme: any, options: Options = null) {
 			color: black;
 		}
 
-		.not-loaded-resource img {
-			width: 1.15em;
-			height: 1.15em;
-			background: white;
-			padding: 2px !important;
-			border-radius: 2px;
-			box-shadow: 0 1px 3px #000000aa;
-		}
-
-		a.not-loaded-resource img {
-			margin-right: .2em;
-		}
-
-		a.not-loaded-resource {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-		}
+		${notLoadedCss}
 
 		.md-checkbox input[type=checkbox]:checked {
 			opacity: 0.7;
@@ -371,8 +385,8 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		mark {
-			background: #F7D26E;
-			color: black;
+			background: ${theme.markHighlightBackgroundColor};
+			color: ${theme.searchMarkerColor};
 		}
 
 		/* =============================================== */

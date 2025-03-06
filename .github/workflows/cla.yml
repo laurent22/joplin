@@ -22,7 +22,7 @@ jobs:
           path-to-signatures: 'readme/cla_signatures.json'
           path-to-document: 'https://github.com/laurent22/joplin/blob/dev/readme/cla.md' # e.g. a CLA or a DCO document
           # branch should not be protected
-          branch: 'dev'
+          branch: 'cla_signatures'
           allowlist: joplinbot,renovate[bot]
 
          # the followings are the optional inputs - If the optional inputs are not given, then default values will be taken

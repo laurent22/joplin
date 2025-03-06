@@ -101,6 +101,9 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		""
 	],
@@ -181,6 +184,9 @@
 	],
 	"Add recipient:": [
 		"Thêm người nhận:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Điền tiêu đề"
@@ -266,6 +272,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach file": [
 		"Đính kèm"
 	],
@@ -311,6 +320,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
@@ -324,9 +336,6 @@
 		""
 	],
 	"Beta": [
-		""
-	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
 	"Bold": [
@@ -345,6 +354,9 @@
 		"Danh sách"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can view": [
@@ -410,11 +422,17 @@
 	"Change language": [
 		"Thay đổi ngôn ngữ"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Số chữ"
 	],
 	"Characters excluding spaces": [
 		"Số chữ ngoại trừ dấu cách"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Đang kiểm tra cập nhật..."
@@ -455,6 +473,9 @@
 	"Close": [
 		"Đóng"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -476,10 +497,7 @@
 	"Code View": [
 		"Xem Code"
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed, press space to expand.": [
 		""
 	],
 	"Coming alarms": [
@@ -629,6 +647,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Phiên bản hiện tại đã được cập nhật mới nhất."
 	],
@@ -698,6 +719,9 @@
 	"Delete local data and re-download from sync target": [
 		"Xóa dữ liệu cục bộ và tải xuống lại từ mục tiêu đồng bộ hóa"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete plugin \"%s\"?": [
 		"Xoá phần mở rộng “%s”?"
 	],
@@ -732,6 +756,9 @@
 		"Định dạng của điểm đến: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -854,6 +881,9 @@
 	"Edit in external editor": [
 		"Chỉnh sửa trên trình chỉnh sửa văn bản khác"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit note.": [
 		"Sửa ghi chú."
 	],
@@ -929,6 +959,9 @@
 	"Enable encryption": [
 		"Bật chức năng mã hóa"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Bật footnotes"
 	],
@@ -983,6 +1016,9 @@
 	"Enabled": [
 		"Đã bật"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Encrypted": [
 		"Đã mã hóa"
 	],
@@ -998,6 +1034,9 @@
 	"Encryption is: %s": [
 		"Mã hóa là: %s"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Ấn mã vào đây"
 	],
@@ -1006,6 +1045,9 @@
 	],
 	"Enter notebook title": [
 		"Điền tiêu đề notebook"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Enum"
@@ -1034,10 +1076,10 @@
 	"Exits the application.": [
 		"Thoát ứng dụng."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded, press space to collapse.": [
 		""
 	],
 	"Export": [
@@ -1097,9 +1139,6 @@
 	"File system": [
 		"Tập tin hệ thống"
 	],
-	"Find and replace": [
-		""
-	],
 	"Firefox Extension": [
 		"Firefox Extension"
 	],
@@ -1117,6 +1156,9 @@
 	],
 	"Focus title": [
 		"Đặt dấu trỏ tại tiêu đề"
+	],
+	"Follow link": [
+		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Dành riêng cho mục đích debugging: export hồ sơ của bạn tới thẻ SD."
@@ -1166,6 +1208,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Lấy hoặc cài đặt cấu hình. Nếu [cấu hình] không được cung cấp, cấu hình của [tên] sẽ được hiển thị. Nếu cả [tên] và [cấu hình] đều không được cung cấp, danh cách các cấu hình hiện tại sẽ được hiển thị."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Đi tới URL nguồn"
 	],
@@ -1179,9 +1230,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1206,9 +1254,6 @@
 		"Ẩn Joplin"
 	],
 	"Hide keyboard": [
-		""
-	],
-	"Hide more actions": [
 		""
 	],
 	"Highlight": [
@@ -1316,6 +1361,9 @@
 	"Indent more": [
 		"Bớt thụt dòng"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Thông tin"
 	],
@@ -1370,7 +1418,7 @@
 	"Items that cannot be synchronised": [
 		"Những mục không thể đồng bộ"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1413,9 +1461,6 @@
 		"Website của Joplin"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1475,14 +1520,8 @@
 	"Link has been copied to clipboard!": [
 		"Đường dẫn đã được sao chép!"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Links sử dụng protocol \"%s\" không được hỗ trợ"
-	],
 	"List item": [
 		"Danh mục"
-	],
-	"Lists": [
-		""
 	],
 	"Location": [
 		"Vị trí"
@@ -1534,6 +1573,12 @@
 	],
 	"Master Key %s": [
 		"Master Key %s"
+	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
 	],
 	"Max concurrent connections": [
 		"Số lượng kết nối tối đa"
@@ -1589,9 +1634,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Ghi chú mới"
 	],
@@ -1616,6 +1658,9 @@
 	"New version: %s": [
 		"Phiên bản mới: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		""
 	],
@@ -1639,9 +1684,6 @@
 	],
 	"No active notebook.": [
 		"Không có ghi chú nào đang được sử dụng."
-	],
-	"No item with ID %s": [
-		"Không có mục nào có ID %s"
 	],
 	"No new invitations": [
 		""
@@ -1672,6 +1714,9 @@
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Chưa có trình biên tập văn bản nào được lựa chon. Vui lòng lựa chọn trình biên tập văn bản sử dụng `config editor <editor-path>`"
+	],
+	"None": [
+		""
 	],
 	"Nord": [
 		"Nord"
@@ -1757,6 +1802,9 @@
 	"Numbered List": [
 		"Danh sách theo thứ tự"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -1765,6 +1813,9 @@
 	],
 	"On %s: %s": [
 		"On %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Một trong số các khoá chính của bạn đang sử dụng phương thức mã hoá bị lỗi thời."
@@ -1847,9 +1898,6 @@
 	"Permission needed": [
 		"Cần được cấp quyền"
 	],
-	"Permission to use camera": [
-		"Quyền sử dụng camera"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -1925,6 +1973,12 @@
 	"Preferred light theme": [
 		"Ưu tiên giao diện sáng"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Vui lòng nhấn Ctrl+D hoặc gõ \"exit\" để thoát khỏi ứng dụng"
 	],
@@ -1936,6 +1990,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Ấn để đặt mật khẩu giải mã."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1996,6 +2053,9 @@
 	],
 	"Quit": [
 		"Thoát"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"Mã hoá lại dữ liệu"
@@ -2066,6 +2126,12 @@
 	"Replace: ": [
 		""
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2114,6 +2180,12 @@
 	"Revision: %s (%s)": [
 		"Duyệt lại: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Thực thi các lệnh trong tập tin văn bản. Mỗi dòng chỉ nên chứa một lệnh."
 	],
@@ -2140,6 +2212,9 @@
 	],
 	"Save geo-location with notes": [
 		"Lưu dữ liệu định vị của notes này"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Tìm kiếm"
@@ -2191,6 +2266,9 @@
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Thay đổi đặc tính <name> của note hiện tại thành giá trị [value]. Những đặc tính có thể thay đổi là:\n\n%s"
+	],
+	"Settings": [
+		""
 	],
 	"Share": [
 		"Chia sẻ"
@@ -2275,6 +2353,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Một số mục không thể đồng bộ hóa. Ấn để xem them chi tiết."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Sắp xếp notebooks theo"
@@ -2383,6 +2467,9 @@
 	],
 	"Switch between note and to-do type": [
 		"Chuyển đổi giữa dạng note và to-do"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Chuyển tới dạng note"
@@ -2522,8 +2609,8 @@
 	"The following attachments are being watched for changes:": [
 		"Những đính kèm sau đây đang được theo dõi thay đổi:"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Ứng dụng di động Joplin hiện tại không hỗ trỡ link này: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		""
@@ -2560,6 +2647,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM.NAME` (xem bên dưới)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper cần sự uỷ quyền của bạn để truy cập dữ liệu."
@@ -2608,9 +2698,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Tệp đính kèm này chưa được tải xuống hoặc chưa được mã hoá"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Đính kèm này chưa được tải về và giải mã."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Mã ủy quyền này chỉ cần sử dụng để cho phép ứng dụng bên thứ ba truy cập Joplin."
@@ -2768,6 +2855,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Không biết"
+	],
 	"Unknown flag: %s": [
 		"Không tìm thấy flag này: %s"
 	],
@@ -2888,6 +2978,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Cảnh báo"
 	],
@@ -2934,6 +3027,9 @@
 		"Khi tạo một to-do mới:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -2992,9 +3088,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		""
-	],
-	"Your permission to use your camera is required.": [
-		"Bạn cần phải có phép sử dụng camera."
 	],
 	"Your version: %s": [
 		"Phiên bản hiện tại: %s"

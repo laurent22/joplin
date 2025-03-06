@@ -3,7 +3,7 @@
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
-import { ButtonSpec, ViewHandle, DialogResult } from './types';
+import { ButtonSpec, ViewHandle, DialogResult, Toast } from './types';
 import { _ } from '../../../locale';
 import { JoplinViewsDialogs as JoplinViewsDialogsImplementation } from '../BasePlatformImplementation';
 
@@ -77,6 +77,16 @@ export default class JoplinViewsDialogs {
 	}
 
 	/**
+	 * Displays a Toast notification in the corner of the application screen.
+	 */
+	public async showToast(toast: Toast) {
+		this.store.dispatch({
+			type: 'TOAST_SHOW',
+			value: toast,
+		});
+	}
+
+	/**
 	 * Displays a dialog to select a file or a directory. Same options and
 	 * output as
 	 * https://www.electronjs.org/docs/latest/api/dialog#dialogshowopendialogbrowserwindow-options
@@ -110,7 +120,9 @@ export default class JoplinViewsDialogs {
 	}
 
 	/**
-	 * Opens the dialog
+	 * Opens the dialog.
+	 *
+	 * On desktop, this closes any copies of the dialog open in different windows.
 	 */
 	public async open(handle: ViewHandle): Promise<DialogResult> {
 		return this.controller(handle).open();

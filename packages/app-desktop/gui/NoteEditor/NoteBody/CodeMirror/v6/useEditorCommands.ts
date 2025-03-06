@@ -1,14 +1,15 @@
 
 import { RefObject, useMemo } from 'react';
-import { CommandValue } from '../../../utils/types';
+import { CommandValue, DropCommandValue, ScrollToTextValue } from '../../../utils/types';
 import { commandAttachFileToBody } from '../../../utils/resourceHandling';
 import { _ } from '@joplin/lib/locale';
 import dialogs from '../../../../dialogs';
-import { EditorCommandType } from '@joplin/editor/types';
+import { EditorCommandType, UserEventSource } from '@joplin/editor/types';
 import Logger from '@joplin/utils/Logger';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { FocusElementOptions } from '../../../../../commands/focusElement';
 
 const logger = Logger.create('CodeMirror 6 commands');
 
@@ -37,13 +38,22 @@ const useEditorCommands = (props: Props) => {
 		};
 
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			dropItems: async (cmd: any) => {
+			dropItems: async (cmd: DropCommandValue) => {
+				let pos = cmd.pos && editorRef.current.editor.posAtCoords({ x: cmd.pos.clientX, y: cmd.pos.clientY });
 				if (cmd.type === 'notes') {
-					editorRef.current.insertText(cmd.markdownTags.join('\n'));
+					const text = cmd.markdownTags.join('\n');
+					if ((pos ?? null) !== null) {
+						editorRef.current.select(pos, pos);
+					}
+
+					editorRef.current.insertText(text, UserEventSource.Drop);
 				} else if (cmd.type === 'files') {
-					const pos = props.selectionRange.from;
-					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, { createFileURL: !!cmd.createFileURL, position: pos, markupLanguage: props.contentMarkupLanguage });
+					pos ??= props.selectionRange.from;
+					const newBody = await commandAttachFileToBody(props.editorContent, cmd.paths, {
+						createFileURL: !!cmd.createFileURL,
+						position: pos,
+						markupLanguage: props.contentMarkupLanguage,
+					});
 					editorRef.current.updateBody(newBody);
 				} else {
 					logger.warn('CodeMirror: unsupported drop item: ', cmd);
@@ -87,7 +97,7 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.updateBody(newBody);
 				}
 			},
-			textHorizontalRule: () => editorRef.current.insertText('* * *'),
+			textHorizontalRule: () => editorRef.current.execCommand(EditorCommandType.InsertHorizontalRule),
 			'editor.execCommand': (value: CommandValue) => {
 				if (!('args' in value)) value.args = [];
 
@@ -103,9 +113,15 @@ const useEditorCommands = (props: Props) => {
 					logger.warn('CodeMirror execCommand: unsupported command: ', value.name);
 				}
 			},
-			'editor.focus': () => {
+			'editor.focus': (options?: FocusElementOptions) => {
 				if (props.visiblePanes.indexOf('editor') >= 0) {
 					focus('useEditorCommands::editor.focus', editorRef.current.editor);
+					if (options?.moveCursorToStart) {
+						editorRef.current.editor.dispatch({
+							selection: { anchor: 0 },
+							scrollIntoView: true,
+						});
+					}
 				} else {
 					// If we just call focus() then the iframe is focused,
 					// but not its content, such that scrolling up / down
@@ -115,6 +131,28 @@ const useEditorCommands = (props: Props) => {
 			},
 			search: () => {
 				return editorRef.current.execCommand(EditorCommandType.ShowSearch);
+			},
+			'editor.scrollToText': (value: ScrollToTextValue) => {
+				value = {
+					scrollStrategy: 'start',
+					...value,
+				};
+
+				const valueToMarkdown = (value: ScrollToTextValue) => {
+					const conv: Record<typeof value.element, (text: string)=> string> = {
+						h1: text => `# ${text}`,
+						h2: text => `## ${text}`,
+						h3: text => `### ${text}`,
+						h4: text => `#### ${text}`,
+						h5: text => `##### ${text}`,
+						strong: text => `**${text}**`,
+						ul: text => `- ${text}`,
+					};
+
+					return conv[value.element](value.text);
+				};
+
+				return editorRef.current.scrollToText(valueToMarkdown(value), value.scrollStrategy);
 			},
 		};
 	}, [

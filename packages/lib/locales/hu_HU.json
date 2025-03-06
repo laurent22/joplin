@@ -101,6 +101,9 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		""
 	],
@@ -182,6 +185,9 @@
 	"Add recipient:": [
 		""
 	],
+	"Add tag %s to note": [
+		""
+	],
 	"Add title": [
 		"Cím hozzáadása"
 	],
@@ -254,6 +260,9 @@
 	"Apply": [
 		"Alkalmaz"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -265,6 +274,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim sötét"
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
 	],
 	"Attach file": [
 		"Fájl csatolása"
@@ -311,6 +323,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"Automatikus frissítés keresés"
 	],
@@ -329,9 +344,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		""
-	],
 	"Bold": [
 		"Félkövér"
 	],
@@ -348,6 +360,9 @@
 		"Felsorolás"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can view": [
@@ -416,11 +431,17 @@
 	"Change language": [
 		"Nyelv váltása"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Karakterek"
 	],
 	"Characters excluding spaces": [
 		"Karaktere szóköz kivételével"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Frissítés keresése..."
@@ -461,6 +482,9 @@
 	"Close": [
 		"Bezár"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -485,10 +509,7 @@
 	"Collaborate on notebooks with others": [
 		""
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed, press space to expand.": [
 		""
 	],
 	"Coming alarms": [
@@ -672,6 +693,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Aktuális verzió a legfrissebb."
 	],
@@ -747,6 +771,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete plugin \"%s\"?": [
 		"\"%s\" bővítmény törlése?"
 	],
@@ -781,6 +808,9 @@
 		"Cél formátum: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -906,6 +936,9 @@
 	"Edit in external editor": [
 		"Szerkesztés külső szerkesztőben"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit note.": [
 		"Jegyzet szerkesztése."
 	],
@@ -981,6 +1014,9 @@
 	"Enable encryption": [
 		"Titkosítás engedélyezése"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Lábjegyzetek engedélyezése"
 	],
@@ -1035,6 +1071,9 @@
 	"Enabled": [
 		"Engedélyezve"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Encrypted": [
 		"Titkosítva"
 	],
@@ -1059,6 +1098,9 @@
 	"End-to-end encryption": [
 		"End-to-end titkosítás"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"A kódot írja ide"
 	],
@@ -1067,6 +1109,9 @@
 	],
 	"Enter notebook title": [
 		"Adja meg a jegyzetfüzet címét"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Felsorolás"
@@ -1095,10 +1140,10 @@
 	"Exits the application.": [
 		"Kilép a programból."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded, press space to collapse.": [
 		""
 	],
 	"Export": [
@@ -1158,9 +1203,6 @@
 	"File system": [
 		"Fájl-rendszer"
 	],
-	"Find and replace": [
-		""
-	],
 	"Firefox Extension": [
 		"Firefox Bővítmény"
 	],
@@ -1178,6 +1220,9 @@
 	],
 	"Focus title": [
 		"Cím legyen a fókusz"
+	],
+	"Follow link": [
+		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		""
@@ -1231,6 +1276,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		""
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Ugrás forrás URL-re"
 	],
@@ -1244,9 +1298,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1268,9 +1319,6 @@
 		"Joplin elrejtése"
 	],
 	"Hide keyboard": [
-		""
-	],
-	"Hide more actions": [
 		""
 	],
 	"Highlight": [
@@ -1375,6 +1423,9 @@
 	"Indent more": [
 		"Behúzás növelése"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Információ"
 	],
@@ -1432,7 +1483,7 @@
 	"Items that cannot be synchronised": [
 		"Elemeket nem lehet szinkronizálni"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1475,9 +1526,6 @@
 		"Joplin weboldal"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1538,14 +1586,8 @@
 		"Hivatkozás a vágólapra másolva!",
 		"Hivatkozások a vágólapra másolva!"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Hivatkozások a \"%s\" protokollal nem támogatottak"
-	],
 	"List item": [
 		"Felsorolás elem"
-	],
-	"Lists": [
-		""
 	],
 	"Location": [
 		"Hely"
@@ -1610,6 +1652,12 @@
 	"Master password:": [
 		"Mester jelszó:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"Maximális konkurrens kapcsolat"
 	],
@@ -1667,9 +1715,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Új jegyzet"
 	],
@@ -1694,6 +1739,9 @@
 	"New version: %s": [
 		"Új verzió: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		""
 	],
@@ -1717,9 +1765,6 @@
 	],
 	"No active notebook.": [
 		"Nincs aktív jegyzetfüzet."
-	],
-	"No item with ID %s": [
-		"Nincs ID %s azonosítójú elem"
 	],
 	"No new invitations": [
 		""
@@ -1750,6 +1795,9 @@
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nincs szövegszerkesztő megadva. Kérem állítson be egyet a `config editor <editor-path>`-al"
+	],
+	"None": [
+		""
 	],
 	"Nord": [
 		"Nord"
@@ -1841,6 +1889,9 @@
 	"Numbered List": [
 		"Számozott lista"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -1849,6 +1900,9 @@
 	],
 	"On %s: %s": [
 		"%s-on: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Az egyik mester kulcsa egy elavult titkosítási módot használ."
@@ -1934,9 +1988,6 @@
 	"Permission needed": [
 		"Hozzáférés szükséges"
 	],
-	"Permission to use camera": [
-		"Engedély a kamera használatához"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -2012,6 +2063,12 @@
 	"Preferred light theme": [
 		"Javasolt világos téma"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Nyomja le Ctrl+D vagy írja be \"exit\" a programból való kilépéshez"
 	],
@@ -2022,6 +2079,9 @@
 		"Nyomja le a gyorsbillentyűt, majd az ENTER-t. Vagy nyomja le a BACKSPACE-t a gyorsbillentyű törléséhez."
 	],
 	"Press to set the decryption password.": [
+		""
+	],
+	"previous": [
 		""
 	],
 	"Previous match": [
@@ -2083,6 +2143,9 @@
 	],
 	"Quit": [
 		"Kilépés"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"Adat újratitkosítása"
@@ -2153,6 +2216,12 @@
 	"Replace: ": [
 		""
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2204,6 +2273,12 @@
 	"Revision: %s (%s)": [
 		"Revízió: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		""
 	],
@@ -2242,6 +2317,9 @@
 	],
 	"Save geo-location with notes": [
 		"Geo-lokáció mentése jegyzetekkel"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Keresés"
@@ -2301,6 +2379,9 @@
 		"Jelszó beállítása"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		""
+	],
+	"Settings": [
 		""
 	],
 	"Share": [
@@ -2386,6 +2467,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Néhány elemet nem lehet szinkronizálni. Kattintson több információért."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Jegyzetfüzetek rendezése"
@@ -2500,6 +2587,9 @@
 	],
 	"Switch profile": [
 		"Profil váltása"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Váltás jegyzet típusra"
@@ -2645,7 +2735,7 @@
 	"The following attachments are being watched for changes:": [
 		"A következő csatolmányok változása figyelve van:"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
+	"The following plugins may not support the current markdown editor:": [
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
@@ -2685,6 +2775,9 @@
 		"A tag “%s” már létezik. Kérem válasszon másik nevet."
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		""
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
@@ -2734,9 +2827,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Ez a csatolmány még nincs letöltve és dekódolva"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Ez a csatolmány nincs letöltve vagy nincs dekódolva még."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Ez a hitelesítő token csak ahhoz kell, hogy 3. fél alkalmazásai hozzáférjenek Joplin-hoz."
@@ -2897,6 +2987,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Ismeretlen"
+	],
 	"Unknown flag: %s": [
 		"Ismeretlen jelző %s"
 	],
@@ -3020,6 +3113,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Figyelmeztetés"
 	],
@@ -3066,6 +3162,9 @@
 		"Amikor egy új to-do-t hoz létre:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -3124,9 +3223,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		""
-	],
-	"Your permission to use your camera is required.": [
-		"A kamera használatához engedélyre van szükség."
 	],
 	"Your version: %s": [
 		"Verziója: %s"

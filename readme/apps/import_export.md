@@ -37,6 +37,15 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 Type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
+### Importing from OneNote
+
+Joplin can also import OneNote notebooks. To do this:
+
+- Visit [OneNote Web](https://www.onenote.com/notebooks). 
+- Right-click the desired notebook and choose *Export notebook*.
+- Follow the instructions to download the backup. It should be a ZIP file.
+- Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+
 ### Importing from other applications
 
 In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:

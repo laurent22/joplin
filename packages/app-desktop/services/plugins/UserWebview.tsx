@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
+import { useRef, useImperativeHandle, forwardRef, useEffect, useMemo, useContext } from 'react';
 import useViewIsReady from './hooks/useViewIsReady';
 import useThemeCss from './hooks/useThemeCss';
 import useContentSize from './hooks/useContentSize';
@@ -8,13 +8,10 @@ import useHtmlLoader from './hooks/useHtmlLoader';
 import useWebviewToPluginMessages from './hooks/useWebviewToPluginMessages';
 import useScriptLoader from './hooks/useScriptLoader';
 import Logger from '@joplin/utils/Logger';
-import styled from 'styled-components';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { WindowIdContext } from '../../gui/NewWindowOrIFrame';
 
 const logger = Logger.create('UserWebview');
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
 
 export interface Props {
 	html: string;
@@ -35,15 +32,6 @@ export interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onReady?: Function;
 }
-
-const StyledFrame = styled.iframe<{ fitToContent: boolean; borderBottom: boolean }>`
-	padding: 0;
-	margin: 0;
-	width: ${(props: StyleProps) => props.fitToContent ? `${props.width}px` : '100%'};
-	height: ${(props: StyleProps) => props.fitToContent ? `${props.height}px` : '100%'};
-	border: none;
-	border-bottom: ${(props: StyleProps) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
-`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function serializeForm(form: any) {
@@ -138,11 +126,13 @@ function UserWebview(props: Props, ref: any) {
 		htmlHash,
 	);
 
+	const windowId = useContext(WindowIdContext);
 	useWebviewToPluginMessages(
 		frameWindow(),
 		isReady,
 		props.pluginId,
 		props.viewId,
+		windowId,
 		postMessage,
 	);
 
@@ -153,15 +143,18 @@ function UserWebview(props: Props, ref: any) {
 		cssFilePath,
 	);
 
-	return <StyledFrame
+	const style = useMemo(() => ({
+		'--content-width': `${contentSize.width}px`,
+		'--content-height': `${contentSize.height}px`,
+	} as React.CSSProperties), [contentSize.width, contentSize.height]);
+
+	return <iframe
 		id={props.viewId}
-		width={contentSize.width}
-		height={contentSize.height}
-		fitToContent={props.fitToContent}
+		style={style}
+		className={`plugin-user-webview ${props.fitToContent ? '-fit-to-content' : ''} ${props.borderBottom ? '-border-bottom' : ''}`}
 		ref={viewRef}
 		src="services/plugins/UserWebviewIndex.html"
-		borderBottom={props.borderBottom}
-	></StyledFrame>;
+	></iframe>;
 }
 
 export default forwardRef(UserWebview);

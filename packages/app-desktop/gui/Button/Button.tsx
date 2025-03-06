@@ -18,20 +18,17 @@ export enum ButtonSize {
 	Normal = 2,
 }
 
-interface Props {
+type ReactButtonProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+interface Props extends Omit<ReactButtonProps, 'onClick'> {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
 	iconLabel?: string;
-	className?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClick?: Function;
+	onClick?: ()=> void;
 	color?: string;
 	iconAnimation?: string;
 	tooltip?: string;
 	disabled?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-	style?: any;
 	size?: ButtonSize;
 	isSquare?: boolean;
 	iconOnly?: boolean;
@@ -212,29 +209,53 @@ function buttonClass(level: ButtonLevel) {
 	return StyledButtonSecondary;
 }
 
+const Button = React.forwardRef(({
+	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, disabled, onClick: propsOnClick, ...unusedProps
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-const Button = React.forwardRef((props: Props, ref: any) => {
-	const iconOnly = props.iconName && !props.title;
+}: Props, ref: any) => {
+	const iconOnly = iconName && !title;
 
-	const StyledButton = buttonClass(props.level);
+	const StyledButton = buttonClass(level);
 
 	function renderIcon() {
-		if (!props.iconName) return null;
-		return <StyledIcon aria-label={props.iconLabel} animation={props.iconAnimation} mr={iconOnly ? '0' : '6px'} color={props.color} className={props.iconName}/>;
+		if (!iconName) return null;
+		return <StyledIcon
+			aria-label={iconLabel ?? undefined}
+			aria-hidden={!iconLabel}
+			animation={iconAnimation}
+			mr={iconOnly ? '0' : '6px'}
+			color={color}
+			className={iconName}
+			role='img'
+		/>;
 	}
 
 	function renderTitle() {
-		if (!props.title) return null;
-		return <StyledTitle color={props.color}>{props.title}</StyledTitle>;
+		if (!title) return null;
+		return <StyledTitle color={color}>{title}</StyledTitle>;
 	}
 
 	function onClick() {
-		if (props.disabled) return;
-		props.onClick();
+		if (disabled) return;
+		propsOnClick();
 	}
 
 	return (
-		<StyledButton ref={ref} fontSize={props.fontSize} isSquare={props.isSquare} size={props.size} style={props.style} disabled={props.disabled} title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={onClick}>
+		<StyledButton
+			ref={ref}
+			fontSize={fontSize}
+			isSquare={isSquare}
+			disabled={disabled}
+			title={tooltip}
+			iconOnly={iconOnly}
+			onClick={onClick}
+
+			// When there's no title, the button needs a label. In this case, fall back
+			// to the tooltip.
+			aria-label={title ? undefined : tooltip}
+			aria-disabled={disabled}
+			{...unusedProps}
+		>
 			{renderIcon()}
 			{renderTitle()}
 		</StyledButton>

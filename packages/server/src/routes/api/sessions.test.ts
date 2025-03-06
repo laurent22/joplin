@@ -86,6 +86,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			tlsCaFile: '',
 		};
 
 		{
@@ -123,6 +124,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			tlsCaFile: '',
 		};
 
 		const context = await postSession(user.email, password);
@@ -151,6 +153,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			tlsCaFile: '',
 		};
 
 		(ldapLogin as jest.Mock).mockResolvedValue(user);
@@ -179,6 +182,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			tlsCaFile: '',
 		};
 
 		(ldapLogin as jest.Mock).mockImplementationOnce(() => {
@@ -203,6 +207,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			tlsCaFile: '',
 		};
 
 		(ldapLogin as jest.Mock).mockImplementationOnce(() => {

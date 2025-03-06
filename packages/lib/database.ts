@@ -59,7 +59,7 @@ export default class Database {
 		try {
 			await this.driver().open(options);
 		} catch (error) {
-			throw new Error(`Cannot open database: ${error.message}: ${JSON.stringify(options)}`);
+			throw new Error(`Cannot open database: ${error.message ?? error}: ${JSON.stringify(options)}`);
 		}
 
 		this.logger().info('Database was open successfully');
@@ -82,6 +82,13 @@ export default class Database {
 			output.push(this.escapeField(fields[i]));
 		}
 		return output;
+	}
+
+	public escapeValues(values: string[]) {
+		return values.map(value => {
+			// See https://www.sqlite.org/printf.html#percentq
+			return `'${value.replace(/[']/g, '\'\'')}'`;
+		});
 	}
 
 	public escapeFieldsToString(fields: string[] | string): string {

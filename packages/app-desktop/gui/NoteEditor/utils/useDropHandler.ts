@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import Note from '@joplin/lib/models/Note';
 import { DragEvent as ReactDragEvent } from 'react';
+import { DropCommandValue } from './types';
+import { webUtils } from 'electron';
 
 interface HookDependencies {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -19,6 +21,11 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 		const dt = event.dataTransfer;
 		const createFileURL = event.altKey;
 
+		const eventPosition = {
+			clientX: event.clientX,
+			clientY: event.clientY,
+		};
+
 		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
 			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
 
@@ -29,12 +36,15 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 					noteMarkdownTags.push(Note.markdownTag(note));
 				}
 
+				const props: DropCommandValue = {
+					type: 'notes',
+					pos: eventPosition,
+					markdownTags: noteMarkdownTags,
+				};
+
 				editorRef.current.execCommand({
 					name: 'dropItems',
-					value: {
-						type: 'notes',
-						markdownTags: noteMarkdownTags,
-					},
+					value: props,
 				});
 			};
 			void dropNotes();
@@ -47,17 +57,21 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 			const paths = [];
 			for (let i = 0; i < files.length; i++) {
 				const file = files[i];
-				if (!file.path) continue;
-				paths.push(file.path);
+				const path = webUtils.getPathForFile(file);
+				if (!path) continue;
+				paths.push(path);
 			}
+
+			const props: DropCommandValue = {
+				type: 'files',
+				pos: eventPosition,
+				paths: paths,
+				createFileURL: createFileURL,
+			};
 
 			editorRef.current.execCommand({
 				name: 'dropItems',
-				value: {
-					type: 'files',
-					paths: paths,
-					createFileURL: createFileURL,
-				},
+				value: props,
 			});
 			return true;
 		}

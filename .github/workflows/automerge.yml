@@ -1,0 +1,25 @@
+name: automerge
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+jobs:
+
+  # This job will make the action fail if any of the checks hasn't passed
+  # https://github.com/marketplace/actions/allcheckspassed
+  # allchecks:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: wechuli/allcheckspassed@v1
+
+  automerge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - id: automerge
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.16.3"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_METHOD: "squash"
+          LOG: "DEBUG"

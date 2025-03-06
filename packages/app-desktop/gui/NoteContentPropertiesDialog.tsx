@@ -4,14 +4,14 @@ import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from './DialogButtonRow';
 const { themeStyle } = require('@joplin/lib/theme');
 const Countable = require('@joplin/lib/countable/Countable');
-import markupLanguageUtils from '../utils/markupLanguageUtils';
+import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
+import Dialog from './Dialog';
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number;
 	text: string;
 	markupLanguage: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
+	onClose: ()=> void;
 }
 
 interface TextPropertiesMap {
@@ -38,7 +38,7 @@ function countElements(text: string, wordSetter: Function, characterSetter: Func
 		characterSetter(counter.all);
 		characterNoSpaceSetter(counter.characters);
 	});
-	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
+	lineSetter(text === '' ? 0 : text.split('\n').length);
 }
 
 function formatReadTime(readTimeMinutes: number) {
@@ -159,22 +159,20 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	const readTimeLabel = _('Read time: %s min', formatReadTime(strippedReadTime));
 
 	return (
-		<div style={theme.dialogModalLayer}>
-			<div style={theme.dialogBox}>
-				<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
-				<table>
-					<thead>
-						{tableHeader}
-					</thead>
-					<tbody>
-						{tableBodyComps}
-					</tbody>
-				</table>
-				<div style={{ ...labelCompStyle, marginTop: 10 }}>
-					{readTimeLabel}
-				</div>
-				<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+		<Dialog onCancel={props.onClose}>
+			<div style={dialogBoxHeadingStyle}>{_('Statistics')}</div>
+			<table>
+				<thead>
+					{tableHeader}
+				</thead>
+				<tbody>
+					{tableBodyComps}
+				</tbody>
+			</table>
+			<div style={{ ...labelCompStyle, marginTop: 10 }}>
+				{readTimeLabel}
 			</div>
-		</div>
+			<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+		</Dialog>
 	);
 }

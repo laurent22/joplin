@@ -1,0 +1,7 @@
+# -- local sever
+# provider: generic
+# url: http://localhost:8080
+# -- github releases
+provider: github
+owner: laurent22
+repo: joplin

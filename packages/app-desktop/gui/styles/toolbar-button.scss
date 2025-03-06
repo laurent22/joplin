@@ -1,0 +1,45 @@
+
+.toolbar-button {
+	border: none;
+	background: transparent;
+	color: inherit;
+	padding: 0;
+	opacity: 1;
+	height: var(--joplin-toolbar-height);
+	min-height: var(--joplin-toolbar-height);
+	width: var(--joplin-toolbar-height);
+	max-width: var(--joplin-toolbar-height);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: default;
+	border-radius: 3px;
+	box-sizing: border-box;
+	color: var(--joplin-color3);
+	font-size: calc(var(--joplin-toolbar-icon-size) * 0.8);
+	padding-left: 5px;
+	padding-right: 5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	> .toolbar-icon {
+		font-size: 16px;
+	}
+
+	&.-has-title {
+		width: auto;
+		max-width: unset;
+	}
+
+	&:disabled {
+		opacity: 0.3;
+	}
+
+	&:not(:disabled) {
+		&:hover, &:focus-visible {
+			background-color: var(--joplin-background-color-hover3);
+		}
+	}
+}

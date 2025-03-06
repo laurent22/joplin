@@ -68,7 +68,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	};
 
 	const view: View = defaultView('items', 'Items');
-	view.content.itemTable = makeTableView(table),
+	view.content.itemTable = makeTableView(table);
 	view.content.postUrl = `${config().baseUrl}/items`;
 	view.cssFiles = ['index/items'];
 	return view;

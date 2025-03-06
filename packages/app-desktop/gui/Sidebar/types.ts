@@ -16,15 +16,21 @@ export enum ListItemType {
 
 interface BaseListItem {
 	key: string;
+	depth: number;
+	hasChildren: boolean;
 }
 
-export interface HeaderListItem extends BaseListItem {
+interface ToplevelListItem extends BaseListItem {
+	depth: 1;
+}
+
+export interface HeaderListItem extends ToplevelListItem {
 	kind: ListItemType.Header;
 	label: string;
+	expanded: boolean;
 	iconName: string;
 	id: HeaderId;
 	onClick: ((headerId: HeaderId, event: ReactMouseEvent<HTMLElement>)=> void)|null;
-	onPlusButtonClick: MouseEventHandler<HTMLElement>|null;
 	extraProps: Record<string, string>;
 	supportsFolderDrop: boolean;
 }
@@ -42,10 +48,9 @@ export interface FolderListItem extends BaseListItem {
 	kind: ListItemType.Folder;
 	folder: FolderEntity;
 	hasChildren: boolean;
-	depth: number;
 }
 
-export interface SpacerListItem extends BaseListItem {
+export interface SpacerListItem extends ToplevelListItem {
 	kind: ListItemType.Spacer;
 }
 

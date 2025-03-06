@@ -5,6 +5,10 @@ import { ButtonSpec } from './api/types';
 export interface PluginViewState {
 	id: string;
 	type: string;
+	// Note that this property will mean different thing depending on the `containerType`. If it's a
+	// dialog, it means that the dialog is opened. If it's a panel, it means it's visible/opened. If
+	// it's an editor, it means the editor is currently active (but it may not be visible - see
+	// JoplinViewsEditor).
 	opened: boolean;
 	buttons: ButtonSpec[];
 	fitToContent?: boolean;
@@ -28,7 +32,7 @@ interface PluginContentScriptStates {
 	[type: string]: PluginContentScriptState[];
 }
 
-interface PluginState {
+export interface PluginState {
 	id: string;
 	contentScripts: PluginContentScriptStates;
 	views: PluginViewStates;
@@ -198,6 +202,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_UNLOAD':
 			delete draft.plugins[action.pluginId];
+			delete draft.pluginHtmlContents[action.pluginId];
 			break;
 
 		}

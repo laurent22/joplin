@@ -1,6 +1,6 @@
 import produce from 'immer';
 import Setting from '@joplin/lib/models/Setting';
-import { defaultState, State } from '@joplin/lib/reducer';
+import { defaultState, defaultWindowState, State, WindowState } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
@@ -30,55 +30,89 @@ export interface EditorScrollPercents {
 	[noteId: string]: number;
 }
 
-export interface AppState extends State {
+export interface VisibleDialogs {
+	[dialogKey: string]: boolean;
+}
+
+export interface AppWindowState extends WindowState {
+	noteVisiblePanes: string[];
+	editorCodeView: boolean;
+	visibleDialogs: VisibleDialogs;
+	dialogs: AppStateDialog[];
+	devToolsVisible: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	watchedResources: any;
+}
+
+interface BackgroundWindowStates {
+	[windowId: string]: AppWindowState;
+}
+
+export interface AppState extends State, AppWindowState {
+	backgroundWindows: BackgroundWindowStates;
+
 	route: AppStateRoute;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navHistory: any[];
-	noteVisiblePanes: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	windowContentSize: any;
 	watchedNoteFiles: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
-	devToolsVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
+	modalOverlayMessage: string|null;
 
 	// Extra reducer keys go here
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	watchedResources: any;
 	mainLayout: LayoutItem;
-	dialogs: AppStateDialog[];
 	isResettingLayout: boolean;
 }
+
+export const createAppDefaultWindowState = (): AppWindowState => {
+	return {
+		...defaultWindowState,
+		visibleDialogs: {},
+		dialogs: [],
+		noteVisiblePanes: ['editor', 'viewer'],
+		editorCodeView: true,
+		devToolsVisible: false,
+		watchedResources: {},
+	};
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
 	return {
 		...defaultState,
+		...createAppDefaultWindowState(),
 		route: {
 			type: 'NAV_GO',
 			routeName: 'Main',
 			props: {},
 		},
 		navHistory: [],
-		noteVisiblePanes: ['editor', 'viewer'],
 		windowContentSize, // bridge().windowContentSize(),
 		watchedNoteFiles: [],
 		lastEditorScrollPercents: {},
-		devToolsVisible: false,
 		visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 		focusedField: null,
 		layoutMoveMode: false,
 		mainLayout: null,
 		startupPluginsLoaded: false,
-		dialogs: [],
 		isResettingLayout: false,
+		modalOverlayMessage: null,
 		...resourceEditWatcherDefaultState,
 	};
 }
+
+const hideBackgroundDialogsWithId = produce((state: AppState, id: string) => {
+	for (const windowId of Object.keys(state.backgroundWindows)) {
+		const win = state.backgroundWindows[windowId];
+		if (id in win.visibleDialogs) {
+			delete win.visibleDialogs[id];
+		}
+	}
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function(state: AppState, action: any) {
@@ -171,9 +205,17 @@ export default function(state: AppState, action: any) {
 			break;
 
 		case 'NOTE_VISIBLE_PANES_SET':
+			newState = {
+				...state,
+				noteVisiblePanes: action.panes,
+			};
+			break;
 
-			newState = { ...state };
-			newState.noteVisiblePanes = action.panes;
+		case 'EDITOR_CODE_VIEW_CHANGE':
+			newState = {
+				...state,
+				editorCodeView: action.value,
+			};
 			break;
 
 		case 'MAIN_LAYOUT_SET':
@@ -215,6 +257,14 @@ export default function(state: AppState, action: any) {
 				}
 			}
 
+			break;
+
+		case 'SHOW_MODAL_MESSAGE':
+			newState = { ...newState, modalOverlayMessage: action.message };
+			break;
+
+		case 'HIDE_MODAL_MESSAGE':
+			newState = { ...newState, modalOverlayMessage: null };
 			break;
 
 		case 'NOTE_FILE_WATCHER_ADD':
@@ -272,12 +322,14 @@ export default function(state: AppState, action: any) {
 			newState = { ...state };
 			newState.visibleDialogs = { ...newState.visibleDialogs };
 			newState.visibleDialogs[action.name] = true;
+			newState = hideBackgroundDialogsWithId(newState, action.name);
 			break;
 
 		case 'VISIBLE_DIALOGS_REMOVE':
 			newState = { ...state };
 			newState.visibleDialogs = { ...newState.visibleDialogs };
 			delete newState.visibleDialogs[action.name];
+			newState = hideBackgroundDialogsWithId(newState, action.name);
 			break;
 
 		case 'FOCUS_SET':

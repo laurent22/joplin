@@ -34,6 +34,7 @@ let reduxStore: Store<AppState>;
 
 describe('PluginStates.search', () => {
 	beforeEach(async () => {
+		jest.useRealTimers();
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 		reduxStore = createMockReduxStore();
@@ -42,6 +43,7 @@ describe('PluginStates.search', () => {
 		resetRepoApi();
 
 		await mockRepositoryApiConstructor();
+		jest.useFakeTimers();
 	});
 
 	it('should find results', async () => {

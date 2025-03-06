@@ -12,12 +12,17 @@ import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
 import useEditorSearch from '../utils/useEditorSearchExtension';
+import CommandService from '@joplin/lib/services/CommandService';
+import { SearchMarkers } from '../../../utils/useSearchMarkers';
+import localisation from './utils/localisation';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;
 
 	onEditorPaste: (event: Event)=> void;
+	externalSearch: SearchMarkers;
+	useLocalSearch: boolean;
 }
 
 const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
@@ -94,6 +99,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 
 		const editorProps: EditorProps = {
 			...props,
+			localisations: localisation(),
 			onEvent: event => onEventRef.current(event),
 			onLogMessage: message => onLogMessageRef.current(message),
 		};
@@ -115,6 +121,25 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		};
 	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Should run just once
 	}, []);
+
+	useEffect(() => {
+		if (!editor) {
+			return;
+		}
+
+		const searchState = editor.getSearchState();
+		const externalSearchText = props.externalSearch.keywords.map(k => k.value).join(' ') || searchState.searchText;
+
+		if (externalSearchText === searchState.searchText && searchState.dialogVisible === props.useLocalSearch) {
+			return;
+		}
+
+		editor.setSearchState({
+			...searchState,
+			dialogVisible: props.useLocalSearch,
+			searchText: externalSearchText,
+		});
+	}, [editor, props.externalSearch, props.useLocalSearch]);
 
 	const theme = props.settings.themeData;
 	useEffect(() => {
@@ -145,7 +170,11 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			return;
 		}
 
-		setupVim(editor);
+		setupVim(editor, {
+			sync: () => {
+				void CommandService.instance().execute('synchronize');
+			},
+		});
 	}, [editor]);
 
 	useKeymap(editor);

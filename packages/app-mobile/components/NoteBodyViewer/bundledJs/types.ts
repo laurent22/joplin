@@ -8,6 +8,7 @@ export interface RendererWebViewOptions {
 		resourceDir: string;
 		resourceDownloadMode: string;
 	};
+	useTransferredFiles: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	pluginOptions: Record<string, any>;
 }
@@ -31,3 +32,8 @@ export interface NoteViewerRemoteApi {
 	onPostPluginMessage(contentScriptId: string, message: any): Promise<any>;
 	fsDriver: RendererFsDriver;
 }
+
+export interface WebViewLib {
+	initialize(config: unknown): void;
+}
+

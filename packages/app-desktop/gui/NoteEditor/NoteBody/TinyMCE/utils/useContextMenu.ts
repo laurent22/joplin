@@ -8,21 +8,29 @@ import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import Setting from '@joplin/lib/models/Setting';
+import type { Event as ElectronEvent, MenuItemConstructorOptions } from 'electron';
 
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
+import { Editor } from 'tinymce';
+import { EditDialogControl } from './useEditDialog';
+import { Dispatch } from 'redux';
+import { _ } from '@joplin/lib/locale';
+import type { MenuItem as MenuItemType } from 'electron';
 
+const Menu = bridge().Menu;
+const MenuItem = bridge().MenuItem;
 const menuUtils = new MenuUtils(CommandService.instance());
 
 // x and y are the absolute coordinates, as returned by the context-menu event
 // handler on the webContent. This function will return null if the point is
 // not within the TinyMCE editor.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function contextMenuElement(editor: any, x: number, y: number) {
+function contextMenuElement(editor: Editor, x: number, y: number) {
 	if (!editor || !editor.getDoc()) return null;
 
-	const iframes = document.getElementsByClassName('tox-edit-area__iframe');
+	const containerDoc = editor.getContainer().ownerDocument;
+	const iframes = containerDoc.getElementsByClassName('tox-edit-area__iframe');
 	if (!iframes.length) return null;
 
 	const zoom = Setting.value('windowContentZoomFactor') / 100;
@@ -31,7 +39,7 @@ function contextMenuElement(editor: any, x: number, y: number) {
 
 	// We use .elementFromPoint to handle the case where a dialog is covering
 	// part of the editor.
-	const targetElement = document.elementFromPoint(xScreen, yScreen);
+	const targetElement = containerDoc.elementFromPoint(xScreen, yScreen);
 	if (targetElement !== iframes[0]) {
 		return null;
 	}
@@ -48,27 +56,23 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(editor: any, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
+export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatch, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler, editDialog: EditDialogControl) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
 		const contextMenuItems = menuItems(dispatch, htmlToMd, mdToHtml);
+		const targetWindow = bridge().activeWindow();
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onContextMenu(_event: any, params: any) {
-			const element = contextMenuElement(editor, params.x, params.y);
-			if (!element) return;
-
+		const makeMainMenuItems = (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
 			let linkToCopy = null;
 
 			if (element.nodeName === 'IMG') {
 				itemType = ContextMenuItemType.Image;
-				resourceId = Resource.pathToId(element.src);
+				resourceId = Resource.pathToId((element as HTMLImageElement).src);
 			} else if (element.nodeName === 'A') {
-				resourceId = Resource.pathToId(element.href);
+				resourceId = Resource.pathToId((element as HTMLAnchorElement).href);
 				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
 				linkToCopy = element.getAttribute('href') || '';
 			} else {
@@ -94,39 +98,73 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function, 
 				mdToHtml,
 			};
 
-			let template = [];
-
+			const result = [];
 			for (const itemName in contextMenuItems) {
 				const item = contextMenuItems[itemName];
 
 				if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
 
-				template.push({
+				result.push(new MenuItem({
 					label: item.label,
 					click: () => {
 						item.onAction(contextMenuActionOptions.current);
 					},
-				});
+				}));
 			}
+			return result;
+		};
 
+		const makeEditableMenuItems = (element: Element) => {
+			if (editDialog.isEditable(element)) {
+				return [
+					new MenuItem({
+						type: 'normal',
+						label: _('Edit'),
+						click: () => {
+							editDialog.editExisting(element);
+						},
+					}),
+					new MenuItem({ type: 'separator' }),
+				];
+			}
+			return [];
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		function onContextMenu(event: ElectronEvent, params: any) {
+			const element = contextMenuElement(editor, params.x, params.y);
+			if (!element) return;
+
+			event.preventDefault();
+
+			const menu = new Menu();
+			const menuItems: MenuItemType[] = [];
+			const toMenuItems = (specs: MenuItemConstructorOptions[]) => {
+				return specs.map(spec => new MenuItem(spec));
+			};
+
+			menuItems.push(...makeEditableMenuItems(element));
+			menuItems.push(...makeMainMenuItems(element));
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
+			menuItems.push(
+				...toMenuItems(spellCheckerMenuItems),
+			);
+			menuItems.push(
+				...toMenuItems(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu)),
+			);
 
-			for (const item of spellCheckerMenuItems) {
-				template.push(item);
+			for (const item of menuItems) {
+				menu.append(item);
 			}
-
-			template = template.concat(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu));
-
-			const menu = bridge().Menu.buildFromTemplate(template);
-			menu.popup({ window: bridge().window() });
+			menu.popup({ window: targetWindow });
 		}
 
-		bridge().window().webContents.on('context-menu', onContextMenu);
+		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
-			if (bridge().window()?.webContents?.off) {
-				bridge().window().webContents.off('context-menu', onContextMenu);
+			if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
+				targetWindow.webContents.off('context-menu', onContextMenu);
 			}
 		};
-	}, [editor, plugins, dispatch, htmlToMd, mdToHtml]);
+	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog]);
 }

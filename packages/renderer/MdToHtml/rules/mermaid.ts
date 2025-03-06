@@ -23,7 +23,7 @@ export default {
 				inline: true,
 				// Override the default pre styles. Using the default `white-space: pre`
 				// can cause math expressions to be too tall and break some diagrams.
-				text: 'pre.mermaid > svg { white-space: unset; }',
+				text: 'pre.mermaid[data-processed=true] { white-space: unset; }',
 				mime: 'text/css',
 			},
 			{

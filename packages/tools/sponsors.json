@@ -1,31 +1,19 @@
 {
 	"github": [
 		{
-			"name": "tateisu"
-		},
-		{
-			"name": "matmoly"
+			"name": "felixstorm"
 		},
 		{
 			"name": "KentBrockman"
 		},
 		{
-			"name": "CyberXZT"
-		},
-		{
 			"name": "avanderberg"
-		},
-		{
-			"name": "dbrandonjohnson"
 		},
 		{
 			"name": "chr15m"
 		},
 		{
 			"name": "maxtruxa"
-		},
-		{
-			"name": "konishi-t"
 		},
 		{
 			"name": "marcdw1289"
@@ -37,31 +25,13 @@
 			"name": "sif"
 		},
 		{
-			"name": "saarantras"
-		},
-		{
 			"name": "Hegghammer"
-		},
-		{
-			"name": "jknowles"
-		},
-		{
-			"name": "fats"
-		},
-		{
-			"name": "dchecks"
 		},
 		{
 			"name": "Galliver7"
 		},
 		{
-			"name": "mu88"
-		},
-		{
 			"name": "andypiper"
-		},
-		{
-			"name": "jamesandariese"
 		},
 		{
 			"name": "Akhil-CM"
@@ -79,12 +49,6 @@
 			"urlWebsite": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-webseite&mtm_medium=banner",
 			"title": "Hosting.de",
 			"imageName": "HostingDe.png"
-		},
-		{
-			"url": "https://grundstueckspreise.info/",
-			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png",
-			"githubUser": "PeterSchumacher22"
 		},
 		{
 			"url": "https://citricsheep.com",
@@ -121,6 +85,52 @@
 			"title": "Stormlikes",
 			"imageName": "Stormlikes.png",
 			"githubUser": "Stormlikes"
+		},
+		{
+			"url": "https://route4me.com",
+			"title": "Route4Me",
+			"imageName": "Route4Me.png",
+			"githubUser": "route4me"
+		},
+		{
+			"url": "https://casinoreviews.net",
+			"title": "Casino Reviews",
+			"imageName": "CasinoReviews.png"
+		},
+		{
+			"url": "https://useviral.com.br/",
+			"title": "Comprar seguidores Instagram",
+			"imageName": "Useviral.png"
+		},
+		{
+			"url": "https://ca.edubirdie.com/",
+			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
+			"imageName": "Edubirdie.png",
+			"alt": "EduBirdie"
+		},
+		{
+			"url": "https://topagency.webflow.io",
+			"title": "WebDesignAgency",
+			"imageName": "WebDesignAgency.png",
+			"alt": "web design agency"
+		},
+		{
+			"url": "https://realgambling.ca/",
+			"title": "RealGambling.ca",
+			"imageName": "RealGambling.png",
+			"alt": "RealGambling.ca"
+		},
+		{
+			"url": "https://essaypro.com/",
+			"title": "write an essay online with EssayPro",
+			"imageName": "EssayPro.png",
+			"alt": "write an essay online with EssayPro"
+		},
+		{
+			"url": "https://www.slotozilla.com/nz/no-deposit-bonus",
+			"title": "casino without making any upfront cost",
+			"imageName": "Slotozilla.png",
+			"alt": "casino without making any upfront cost"
 		}
 	],
 	"orgsOld": [
@@ -138,6 +148,24 @@
 			"url": "https://tranio.com/spain/",
 			"title": "Property for sale in Spain",
 			"imageName": "TranioOverseasProperty.jpg"
+		},
+		{
+			"url": "https://grundstueckspreise.info/",
+			"title": "SP Software GmbH",
+			"imageName": "Grundstueckspreise.png",
+			"githubUser": "PeterSchumacher22"
+		},
+		{
+			"url": "https://www.famegear.com",
+			"title": "Famegear",
+			"imageName": "Famegear.png",
+			"githubUser": "rankmediateknologi"
+		},
+		{
+			"url": "https://buyyoutubviews.com",
+			"title": "BYTV",
+			"imageName": "BYTV.png",
+			"githubUser": "bytv1"
 		}
 	]
 }

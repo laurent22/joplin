@@ -11,7 +11,7 @@ import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 
 const createMockReduxStore = () => {
-	return createStore((state: State = defaultState, action: Action<unknown>) => {
+	return createStore((state: State = defaultState, action: Action<string>) => {
 		return reducer(state, action);
 	});
 };

@@ -4,9 +4,11 @@ import { ElectronApplication, Locator, Page } from '@playwright/test';
 
 export default class Sidebar {
 	public readonly container: Locator;
+	public readonly allNotes: Locator;
 
 	public constructor(page: Page, private mainScreen: MainScreen) {
 		this.container = page.locator('.rli-sideBar');
+		this.allNotes = this.container.getByText('All notes');
 	}
 
 	public async createNewFolder(title: string) {
@@ -19,14 +21,11 @@ export default class Sidebar {
 		const submitButton = this.mainScreen.dialog.getByRole('button', { name: 'OK' });
 		await submitButton.click();
 
-		return this.container.getByText(title);
+		return this.container.getByRole('treeitem', { name: title });
 	}
 
 	private async sortBy(electronApp: ElectronApplication, option: string) {
-		const success = await activateMainMenuItem(electronApp, option, 'Sort notebooks by');
-		if (!success) {
-			throw new Error(`Failed to find menu item: ${option}`);
-		}
+		await activateMainMenuItem(electronApp, option, 'Sort notebooks by');
 	}
 
 	public async sortByDate(electronApp: ElectronApplication) {

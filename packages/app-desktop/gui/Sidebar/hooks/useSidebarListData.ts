@@ -3,8 +3,7 @@ import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagLi
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
-import CommandService from '@joplin/lib/services/CommandService';
-import Setting from '@joplin/lib/models/Setting';
+import toggleHeader from './utils/toggleHeader';
 
 interface Props {
 	tags: TagsWithNoteCountEntity[];
@@ -14,16 +13,6 @@ interface Props {
 	tagHeaderIsExpanded: boolean;
 }
 
-const onAddFolderButtonClick = () => {
-	void CommandService.instance().execute('newFolder');
-};
-
-const onHeaderClick = (headerId: HeaderId) => {
-	const settingKey = headerId === HeaderId.TagHeader ? 'tagHeaderIsExpanded' : 'folderHeaderIsExpanded';
-	const current = Setting.value(settingKey);
-	Setting.setValue(settingKey, !current);
-};
-
 const useSidebarListData = (props: Props): ListItem[] => {
 	const tagItems = useMemo(() => {
 		return renderTags<ListItem>(props.tags, (tag): TagListItem => {
@@ -31,6 +20,8 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				kind: ListItemType.Tag,
 				tag,
 				key: tag.id,
+				depth: 1,
+				hasChildren: false,
 			};
 		});
 	}, [props.tags]);
@@ -49,7 +40,9 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				kind: ListItemType.Folder,
 				folder,
 				hasChildren,
-				depth,
+				// The toplevel headers have depth 1, so the toplevel notebook needs
+				// depth 2.
+				depth: depth + 1,
 				key: folder.id,
 			};
 		});
@@ -60,31 +53,35 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			kind: ListItemType.Header,
 			label: _('Notebooks'),
 			iconName: 'icon-notebooks',
+			expanded: props.folderHeaderIsExpanded,
 			id: HeaderId.FolderHeader,
 			key: HeaderId.FolderHeader,
-			onClick: onHeaderClick,
-			onPlusButtonClick: onAddFolderButtonClick,
+			onClick: toggleHeader,
 			extraProps: {
 				['data-folder-id']: '',
 			},
 			supportsFolderDrop: true,
+			depth: 1,
+			hasChildren: folderItems.items.length > 0,
 		};
 		const foldersSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
-			{ kind: ListItemType.AllNotes, key: 'all-notes' },
+			{ kind: ListItemType.AllNotes, key: 'all-notes', depth: 2, hasChildren: false },
 			...folderItems.items,
-			{ kind: ListItemType.Spacer, key: 'after-folders-spacer' },
+			{ kind: ListItemType.Spacer, key: 'after-folders-spacer', depth: 1, hasChildren: false },
 		] : [];
 
 		const tagsHeader: HeaderListItem = {
 			kind: ListItemType.Header,
 			label: _('Tags'),
 			iconName: 'icon-tags',
+			expanded: props.tagHeaderIsExpanded,
 			id: HeaderId.TagHeader,
 			key: HeaderId.TagHeader,
-			onClick: onHeaderClick,
-			onPlusButtonClick: null,
+			onClick: toggleHeader,
 			extraProps: { },
 			supportsFolderDrop: false,
+			depth: 1,
+			hasChildren: tagItems.items.length > 0,
 		};
 		const tagsSectionContent: ListItem[] = props.tagHeaderIsExpanded ? tagItems.items : [];
 

@@ -2,6 +2,7 @@ import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteLis
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
+import { _ } from '@joplin/lib/locale';
 
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
@@ -33,6 +34,12 @@ const prepareViewProps = async (
 			} else if (dep === 'note.folder.title') {
 				if (!output.note.folder) output.note.folder = {};
 				output.note.folder[propName] = folder.title;
+			} else if (dep === 'note.todoStatusText') {
+				let taskStatus = '';
+				if (note.is_todo) {
+					taskStatus = note.todo_completed ? _('Complete to-do') : _('Incomplete to-do');
+				}
+				output.note[propName] = taskStatus;
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a

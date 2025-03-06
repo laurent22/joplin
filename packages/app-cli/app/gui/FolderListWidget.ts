@@ -165,18 +165,14 @@ export default class FolderListWidget extends ListWidget {
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
-			this.logger().info('FFFFFFFFFFFFF', JSON.stringify(this.folders, null, 4));
-
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let newItems: any[] = [];
 			const orderFolders = (parentId: string) => {
-				this.logger().info('PARENT', parentId);
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
 					const originalParent = this.folders_.find(f => f.id === f.parent_id);
 
 					const folderParentId = getDisplayParentId(f, originalParent); // f.parent_id ? f.parent_id : '';
-					this.logger().info('FFF', f.title, folderParentId);
 					if (folderParentId === parentId) {
 						newItems.push(f);
 						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);

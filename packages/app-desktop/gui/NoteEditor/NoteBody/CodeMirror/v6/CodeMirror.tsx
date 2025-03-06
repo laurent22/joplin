@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef, useContext } from 'react';
 
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
 import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
@@ -16,7 +16,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 const { clipboard } = require('electron');
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings, UserEventSource } from '@joplin/editor/types';
+import { EditorKeymap, EditorLanguageType, EditorSettings, SearchState, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -27,6 +27,9 @@ import useContextMenu from '../utils/useContextMenu';
 import useWebviewIpcMessage from '../utils/useWebviewIpcMessage';
 import Toolbar from '../Toolbar';
 import useEditorSearchHandler from '../utils/useEditorSearchHandler';
+import CommandService from '@joplin/lib/services/CommandService';
+import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
+import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -175,6 +178,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				}
 			},
 			supportsCommand: (name: string) => {
+				if (name === 'search' && !props.visiblePanes.includes('editor')) {
+					return false;
+				}
 				return name in commands || editorRef.current.supportsCommand(name);
 			},
 			execCommand: async (cmd: EditorCommand) => {
@@ -197,7 +203,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				return commandOutput;
 			},
 		};
-	}, [props.content, commands, resetScroll, setEditorPercentScroll, setViewerPercentScroll]);
+	}, [props.content, props.visiblePanes, commands, resetScroll, setEditorPercentScroll, setViewerPercentScroll]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -289,30 +295,13 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			const percent = getLineScrollPercent();
 			setEditorPercentScroll(percent);
 			options.percent = percent;
-			webviewRef.current.send('setHtml', renderedBody.html, options);
+			webviewRef.current.setHtml(renderedBody.html, options);
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}
 	}, [renderedBody, webviewReady, getLineScrollPercent, setEditorPercentScroll]);
 
-	const cellEditorStyle = useMemo(() => {
-		const output = { ...styles.cellEditor };
-		if (!props.visiblePanes.includes('editor')) {
-			output.display = 'none'; // Seems to work fine since the refactoring
-		}
-
-		return output;
-	}, [styles.cellEditor, props.visiblePanes]);
-
-	const cellViewerStyle = useMemo(() => {
-		const output = { ...styles.cellViewer };
-		if (!props.visiblePanes.includes('viewer')) {
-			output.display = 'none';
-		} else if (!props.visiblePanes.includes('editor')) {
-			output.borderLeftStyle = 'none';
-		}
-		return output;
-	}, [styles.cellViewer, props.visiblePanes]);
+	useRefocusOnVisiblePaneChange({ editorRef, webviewRef, visiblePanes: props.visiblePanes });
 
 	useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,
@@ -321,6 +310,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorRef,
 		noteContent: props.content,
 		renderedBody,
+		showEditorMarkers: !props.useLocalSearch,
 	});
 
 	useContextMenu({
@@ -328,8 +318,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'cm-editor',
+		containerRef: rootRef,
 	});
 
+	const lastSearchState = useRef<SearchState|null>(null);
 	const onEditorEvent = useCallback((event: EditorEvent) => {
 		if (event.kind === EditorEventType.Scroll) {
 			editor_scroll();
@@ -337,8 +329,21 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			codeMirror_change(event.value);
 		} else if (event.kind === EditorEventType.SelectionRangeChange) {
 			setSelectionRange({ from: event.from, to: event.to });
+		} else if (event.kind === EditorEventType.UpdateSearchDialog) {
+			if (lastSearchState.current?.searchText !== event.searchState.searchText) {
+				props.setLocalSearch(event.searchState.searchText);
+			}
+
+			if (lastSearchState.current?.dialogVisible !== event.searchState.dialogVisible) {
+				props.setShowLocalSearch(event.searchState.dialogVisible);
+			}
+			lastSearchState.current = event.searchState;
 		}
-	}, [editor_scroll, codeMirror_change]);
+	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
+
+	const onSelectPastBeginning = useCallback(() => {
+		void CommandService.instance().execute('focusElement', 'noteTitle');
+	}, []);
 
 	const editorSettings = useMemo((): EditorSettings => {
 		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
@@ -353,41 +358,56 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled,
+			markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
 			katexEnabled: Setting.value('markdown.plugin.katex'),
 			themeData: {
 				...styles.globalTheme,
+				marginLeft: 0,
+				marginRight: 0,
 				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
 			},
 			automatchBraces: Setting.value('editor.autoMatchingBraces'),
+			autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
 			useExternalSearch: false,
 			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
 			keymap: keyboardMode,
 			indentWithTabs: true,
+			tabMovesFocus: props.tabMovesFocus,
+			editorLabel: _('Markdown editor'),
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
+		props.tabMovesFocus,
 	]);
 
 	// Update the editor's value
 	useEffect(() => {
-		if (editorRef.current?.updateBody(props.content)) {
+		// Include the noteId in the update props to give plugins access
+		// to the current note ID.
+		const updateProps = { noteId: props.noteId };
+		if (editorRef.current?.updateBody(props.content, updateProps)) {
 			editorRef.current?.clearHistory();
 		}
-	}, [props.content]);
+	}, [props.content, props.noteId]);
 
 	const renderEditor = () => {
 		return (
-			<div style={cellEditorStyle}>
+			<div className='editor'>
 				<Editor
 					style={styles.editor}
 					initialText={props.content}
+					initialNoteId={props.noteId}
 					ref={editorRef}
 					settings={editorSettings}
 					pluginStates={props.plugins}
+					onPasteFile={null}
 					onEvent={onEditorEvent}
 					onLogMessage={logDebug}
 					onEditorPaste={onEditorPaste}
+					onSelectPastBeginning={onSelectPastBeginning}
+					externalSearch={props.searchMarkers}
+					useLocalSearch={props.useLocalSearch}
 				/>
 			</div>
 		);
@@ -395,7 +415,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const renderViewer = () => {
 		return (
-			<div style={cellViewerStyle}>
+			<div className='viewer'>
 				<NoteTextViewer
 					ref={webviewRef}
 					themeId={props.themeId}
@@ -408,17 +428,26 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		);
 	};
 
+	const editorViewerRow = (
+		<div className={[
+			'note-editor-viewer-row',
+			props.visiblePanes.includes('editor') ? '-show-editor' : '',
+			props.visiblePanes.includes('viewer') ? '-show-viewer' : '',
+		].join(' ')}>
+			{renderEditor()}
+			{renderViewer()}
+		</div>
+	);
+
+	const windowId = useContext(WindowIdContext);
 	return (
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={rootRef}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId}/>
 					{props.noteToolbar}
 				</div>
-				<div style={styles.rowEditorViewer}>
-					{renderEditor()}
-					{renderViewer()}
-				</div>
+				{editorViewerRow}
 			</div>
 		</ErrorBoundary>
 	);

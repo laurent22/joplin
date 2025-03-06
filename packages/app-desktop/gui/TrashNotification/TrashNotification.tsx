@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo } from 'react';
+import { useContext, useCallback, useMemo, useRef } from 'react';
 import { StateLastDeletion } from '@joplin/lib/reducer';
 import { _, _n } from '@joplin/lib/locale';
 import NotyfContext from '../NotyfContext';
@@ -9,6 +9,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
+import { NotyfNotification } from 'notyf';
 
 interface Props {
 	lastDeletion: StateLastDeletion;
@@ -19,6 +20,7 @@ interface Props {
 
 export default (props: Props) => {
 	const notyfContext = useContext(NotyfContext);
+	const notificationRef = useRef<NotyfNotification | null>(null);
 
 	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
@@ -39,7 +41,8 @@ export default (props: Props) => {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCancelClick = useCallback(async (event: any) => {
-		notyf.dismissAll();
+		notyf.dismiss(notificationRef.current);
+		notificationRef.current = null;
 
 		const lastDeletion: StateLastDeletion = JSON.parse(event.currentTarget.getAttribute('data-lastDeletion'));
 
@@ -70,7 +73,8 @@ export default (props: Props) => {
 		const linkId = `deletion-notification-cancel-${Math.floor(Math.random() * 1000000)}`;
 		const cancelLabel = _('Cancel');
 
-		notyf.success(`${msg} <a href="#" class="cancel" data-lastDeletion="${htmlentities(JSON.stringify(props.lastDeletion))}" id="${linkId}">${cancelLabel}</a>`);
+		const notification = notyf.success(`${msg} <a href="#" class="cancel" data-lastDeletion="${htmlentities(JSON.stringify(props.lastDeletion))}" id="${linkId}">${cancelLabel}</a>`);
+		notificationRef.current = notification;
 
 		const element: HTMLAnchorElement = await waitForElement(document, linkId);
 		if (event.cancelled) return;

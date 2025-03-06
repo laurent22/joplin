@@ -11,7 +11,7 @@ const startAutosaveLoop = async (
 
 	const createAutosave = async () => {
 		const savedSVG = await editor.toSVGAsync();
-		saveDrawing(savedSVG, true);
+		saveDrawing(savedSVG.outerHTML, true);
 	};
 
 	while (true) {

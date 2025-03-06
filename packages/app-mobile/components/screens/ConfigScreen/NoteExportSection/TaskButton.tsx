@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Alert, Text } from 'react-native';
+import { Text } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { ProgressBar } from 'react-native-paper';
 import { FunctionComponent, useCallback, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import SettingsButton from '../SettingsButton';
 import Logger from '@joplin/utils/Logger';
+import shim from '@joplin/lib/shim';
 
 // Undefined = indeterminate progress
 export type OnProgressCallback = (progressFraction: number|undefined)=> void;
@@ -69,7 +70,10 @@ const TaskButton: FunctionComponent<Props> = props => {
 			}
 		} catch (error) {
 			logger.error(`Task ${props.taskName} failed`, error);
-			Alert.alert(_('Error'), _('Task "%s" failed with error: %s', props.taskName, error.toString()));
+			await shim.showMessageBox(_('Task "%s" failed with error: %s', props.taskName, error.toString()), {
+				title: _('Error'),
+				buttons: [_('OK')],
+			});
 		} finally {
 			if (!completedSuccessfully) {
 				setTaskStatus(TaskStatus.NotStarted);

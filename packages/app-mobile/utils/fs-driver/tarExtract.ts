@@ -3,7 +3,7 @@ import { resolve, dirname } from 'path';
 import shim from '@joplin/lib/shim';
 import { chunkSize } from './constants';
 
-interface TarExtractOptions {
+export interface TarExtractOptions {
 	cwd: string;
 	file: string;
 }
@@ -68,8 +68,7 @@ const tarExtract = async (options: TarExtractOptions) => {
 
 	const fileHandle = await fsDriver.open(filePath, 'r');
 	const readChunk = async () => {
-		const base64 = await fsDriver.readFileChunk(fileHandle, chunkSize, 'base64');
-		return base64 && Buffer.from(base64, 'base64');
+		return await fsDriver.readFileChunkAsBuffer(fileHandle, chunkSize);
 	};
 
 	try {

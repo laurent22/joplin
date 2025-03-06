@@ -16,7 +16,7 @@ import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
-const { pregQuote, scriptType, removeDiacritics } = require('../../string-utils.js');
+import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 
 enum SearchType {
 	Auto = 'auto',
@@ -59,13 +59,24 @@ export interface ComplexTerm {
 	value: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	scriptType: any;
-	valueRegex?: RegExp;
+	valueRegex?: string;
 }
 
 export interface Terms {
+	// This `string | ComplexTerm` type that ends up propagating throughout the app is a bit of a
+	// mess, but it reflects how it was originally done in plain JS. Ideally it should be refactor
+	// to use a simple type.
 	_: (string | ComplexTerm)[];
 	title: (string | ComplexTerm)[];
 	body: (string | ComplexTerm)[];
+}
+
+export interface ParsedQuery {
+	termCount: number;
+	keys: string[];
+	terms: Terms; // text terms
+	allTerms: Term[];
+	any: boolean;
 }
 
 export default class SearchEngine {
@@ -136,7 +147,7 @@ export default class SearchEngine {
 			const notes = await Note.modelSelectAll(`
 				SELECT ${SearchEngine.relevantFields}
 				FROM notes
-				WHERE id IN ('${currentIds.join('\',\'')}') AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
+				WHERE id IN (${BaseModel.escapeIdsForSql(currentIds)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
@@ -219,7 +230,7 @@ export default class SearchEngine {
 				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN ('${noteIds.join('\',\'')}') AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`,
+					FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`,
 				);
 
 				for (let i = 0; i < changes.length; i++) {
@@ -521,7 +532,7 @@ export default class SearchEngine {
 		return regexString;
 	}
 
-	public async parseQuery(query: string) {
+	public async parseQuery(query: string): Promise<ParsedQuery> {
 
 		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
@@ -606,14 +617,11 @@ export default class SearchEngine {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public allParsedQueryTerms(parsedQuery: any) {
+	public allParsedQueryTerms(parsedQuery: ParsedQuery) {
 		if (!parsedQuery || !parsedQuery.termCount) return [];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let output: any[] = [];
-		for (const col in parsedQuery.terms) {
-			if (!parsedQuery.terms.hasOwnProperty(col)) continue;
+		let output: typeof parsedQuery.terms._ = [];
+		for (const col of Object.keys(parsedQuery.terms) as (keyof Terms)[]) {
 			output = output.concat(parsedQuery.terms[col]);
 		}
 		return output;

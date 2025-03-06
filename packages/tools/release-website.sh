@@ -93,12 +93,6 @@ else
 	exit 1
 fi
 
+# Note: Do not commit changes to the website -- website updates are handled by the CI
+# script.
 
-cd "$JOPLIN_WEBSITE_ROOT_DIR"
-git add -A
-git commit -m "Updated website
-
-Auto-updated using $SCRIPT_NAME" || true
-
-git pull --rebase
-git push

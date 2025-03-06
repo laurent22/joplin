@@ -136,6 +136,7 @@ export enum TaskId {
 	ProcessShares,
 	ProcessEmails,
 	LogHeartbeatMessage,
+	DeleteOldEvents,
 }
 
 // AUTO-GENERATED-TYPES

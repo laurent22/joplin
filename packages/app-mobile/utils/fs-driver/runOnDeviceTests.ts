@@ -167,7 +167,7 @@ const testReadFileChunkUtf8 = async (tempDir: string) => {
 			await fsDriver.readFileChunk(handle, 1, encoding), null,
 		);
 
-		await fsDriver.close(filePath);
+		await fsDriver.close(handle);
 	}
 
 	// Should throw when the file doesn't exist
@@ -261,6 +261,7 @@ const runOnDeviceTests = async () => {
 	if (await shim.fsDriver().exists(tempDir)) {
 		await shim.fsDriver().remove(tempDir);
 	}
+	await shim.fsDriver().mkdir(tempDir);
 
 	try {
 		await testExpect();

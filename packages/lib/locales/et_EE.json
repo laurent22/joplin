@@ -95,6 +95,9 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		""
 	],
@@ -167,6 +170,9 @@
 	"Add recipient:": [
 		""
 	],
+	"Add tag %s to note": [
+		""
+	],
 	"Add title": [
 		"Pealkirja lisamine"
 	],
@@ -181,6 +187,9 @@
 	],
 	"Advanced options": [
 		"Täpsemad suvandid"
+	],
+	"all": [
+		""
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
@@ -236,6 +245,9 @@
 	"Apply": [
 		"Rakenda"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -246,6 +258,9 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
 	],
 	"Attach file": [
@@ -281,6 +296,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaatne sidumine traksid, sulg, noteeringud jne."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
@@ -294,9 +312,6 @@
 		""
 	],
 	"Beta": [
-		""
-	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
 		""
 	],
 	"Bold": [
@@ -315,6 +330,9 @@
 		"Täpp-loend"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can view": [
@@ -359,10 +377,16 @@
 	"Change application layout": [
 		""
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		""
 	],
 	"Characters excluding spaces": [
+		""
+	],
+	"Check elements to display in the toolbar": [
 		""
 	],
 	"Check for updates...": [
@@ -392,6 +416,9 @@
 	"Close": [
 		"Sulge"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -410,10 +437,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed, press space to expand.": [
 		""
 	],
 	"command": [
@@ -462,6 +486,9 @@
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Control character": [
 		""
 	],
 	"Convert to note": [
@@ -546,6 +573,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Praegune versioon on ajakohane."
 	],
@@ -600,6 +630,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -628,6 +661,9 @@
 		"Sihtkoha Formaat: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -732,6 +768,9 @@
 	"Edit in external editor": [
 		"Redigeeri välisredaktoris"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit note.": [
 		"Redigeeri märkust."
 	],
@@ -783,6 +822,9 @@
 	"Enable encryption": [
 		"Luba krüptimine"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable optical character recognition (OCR)": [
 		""
 	],
@@ -804,6 +846,9 @@
 	"Enabled": [
 		"Lubatud"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Encrypted": [
 		"Krüpteeritud"
 	],
@@ -819,6 +864,9 @@
 	"Encryption is: %s": [
 		"Krüpteerimine on: %s"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Sisestage kood siia"
 	],
@@ -827,6 +875,9 @@
 	],
 	"Enter notebook title": [
 		"Sisestage märkmiku tiitel"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Error": [
 		"Viga"
@@ -840,10 +891,10 @@
 	"Exits the application.": [
 		"Väljub rakendusest."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded, press space to collapse.": [
 		""
 	],
 	"Export": [
@@ -885,9 +936,6 @@
 	"File system": [
 		"Failisüsteem"
 	],
-	"Find and replace": [
-		""
-	],
 	"Firefox Extension": [
 		"Firefoxi laiendus"
 	],
@@ -899,6 +947,9 @@
 	],
 	"Focus": [
 		"Fookus"
+	],
+	"Follow link": [
+		""
 	],
 	"For example \"%s\"": [
 		""
@@ -943,6 +994,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], loetatakse praegune konfiguratsioon."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Mine Allika URL-ile"
 	],
@@ -950,9 +1010,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -974,9 +1031,6 @@
 		""
 	],
 	"Hide keyboard": [
-		""
-	],
-	"Hide more actions": [
 		""
 	],
 	"Highlight": [
@@ -1078,6 +1132,9 @@
 	"Indent more": [
 		""
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Informatsioon"
 	],
@@ -1123,7 +1180,7 @@
 	"Items that cannot be synchronised": [
 		"Üksused, mida ei saa sünkrooniseerida"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1145,9 +1202,6 @@
 		"Joplini veebisait"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1205,12 +1259,6 @@
 		"Link on kopeeritud lõikelauale!",
 		"Lingid on kopeeritud lõikelauale!"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Linke protokolliga \"%s\" ei toetata"
-	],
-	"Lists": [
-		""
-	],
 	"Location": [
 		"Asukoht"
 	],
@@ -1252,6 +1300,12 @@
 	],
 	"Master Key %s": [
 		"Põhivõti %s"
+	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
 	],
 	"Max concurrent connections": [
 		"Maksimaalsed samaaegsed ühendused"
@@ -1298,9 +1352,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Uus Märkus"
 	],
@@ -1318,6 +1369,9 @@
 	],
 	"New version: %s": [
 		"Uus versioon: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		""
@@ -1339,9 +1393,6 @@
 	],
 	"No active notebook.": [
 		"Aktiivset märkmikku pole."
-	],
-	"No item with ID %s": [
-		"Üksust ID-ga %s ei ole"
 	],
 	"No new invitations": [
 		""
@@ -1372,6 +1423,9 @@
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Tekstiredaktorit pole määratletud. Seadistage see kasutades konfiguratsiooniredaktorit <editor-path>"
+	],
+	"None": [
+		""
 	],
 	"Nord": [
 		"Nord"
@@ -1430,11 +1484,17 @@
 	"Numbered List": [
 		"Nummerdatud loend"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
 	"On %s: %s": [
 		"%s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One or more master keys need a password.": [
 		"Üks või mitu Põhivõtit vajavad parooli."
@@ -1499,9 +1559,6 @@
 	"Per user. Minimum of %d users.": [
 		""
 	],
-	"Permission to use camera": [
-		"Kaamera kasutamise õigus"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -1562,6 +1619,12 @@
 	"Preferred light theme": [
 		""
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
 	],
@@ -1573,6 +1636,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Vajutage, et määrata dekrüptimisparool."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1627,6 +1693,9 @@
 	],
 	"Quit": [
 		"Lõpeta"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-upload local data to sync target": [
 		""
@@ -1697,6 +1766,12 @@
 	"Replace: ": [
 		""
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -1736,6 +1811,12 @@
 	"Reverses the sorting order.": [
 		"Pöörab sorteerimis järjestuse ümber."
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		""
 	],
@@ -1771,6 +1852,9 @@
 	],
 	"Save geo-location with notes": [
 		"Salvesta geograafilise asukoha märkmed"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Otsi"
@@ -1813,6 +1897,9 @@
 	],
 	"Set the password": [
 		"Parooli seadmine"
+	],
+	"Settings": [
+		""
 	],
 	"Share": [
 		"Jaga"
@@ -1885,6 +1972,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Mõnda üksust ei saa sünkroonida. Lisateabe saamiseks vajutage."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Sorteeri märkmikud"
@@ -1968,6 +2061,9 @@
 		""
 	],
 	"Swap line up": [
+		""
+	],
+	"Switch to back-facing camera": [
 		""
 	],
 	"Switch to note type": [
@@ -2073,8 +2169,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		""
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin mobiilirakendus ei toeta praegu seda tüüpi linki: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		""
@@ -2104,6 +2200,9 @@
 		""
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		""
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
@@ -2147,9 +2246,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Seda manust ei laadita alla või pole veel dekrüpteeritud"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Seda manust ei ole laetud ega dekrüpteeritud veel."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"See luba on vajalik ainult selleks, et lubada kolmanda osapoole rakendustele juurdepääsu Joplini."
@@ -2283,6 +2379,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Tundmatu"
+	],
 	"Unknown flag: %s": [
 		"Tundmatu lipp: %s"
 	],
@@ -2379,6 +2478,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Hoiatus"
 	],
@@ -2419,6 +2521,9 @@
 		"Uue märkme loomisel:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -2471,9 +2576,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		""
-	],
-	"Your permission to use your camera is required.": [
-		"Teie luba kaamera kasutamiseks on vajalik."
 	],
 	"Your version: %s": [
 		"Teie versioon: %s"
