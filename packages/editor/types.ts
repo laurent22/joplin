@@ -146,6 +146,7 @@ export interface EditorTheme extends Theme {
 	contentMaxWidth?: number;
 	marginLeft?: number;
 	marginRight?: number;
+	listTabSize?: string;
 }
 
 export interface EditorSettings {

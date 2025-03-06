@@ -52,6 +52,7 @@ const globalStyle = (() => {
 		mainPadding: 12,
 		topRowHeight: 50,
 		editorPaddingLeft: 8,
+		listTabSize: '1.7em',
 
 		margin: margin,
 		marginRight: margin,

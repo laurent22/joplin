@@ -30,6 +30,7 @@ import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 import CommandService from '@joplin/lib/services/CommandService';
 import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import { themeStyle } from '@joplin/lib/theme';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -365,6 +366,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				marginLeft: 0,
 				marginRight: 0,
 				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
+				listTabSize: themeStyle(props.themeId).listTabSize,
 			},
 			automatchBraces: Setting.value('editor.autoMatchingBraces'),
 			autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
@@ -378,7 +380,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
-		props.tabMovesFocus,
+		props.tabMovesFocus, props.themeId,
 	]);
 
 	// Update the editor's value
