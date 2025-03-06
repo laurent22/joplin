@@ -107,7 +107,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			marginRight: `${theme.marginRight}px`,
 		},
 
-		'& .cm-content ': {
+		'& .cm-listItem': {
 			// Needs to be !important because the tab-size is directly set on the element style
 			// attribute by CodeMirror. And the `EditorState.tabSize` function only accepts a
 			// number, while we need a "em" value to make it match the viewer tab size.
