@@ -504,6 +504,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 			await invitationRespond(shareUserId, folderId, masterKey, accept);
 		};
 
+		const onDisableSynchronization = async () => {
+			Setting.setValue('sync.target', 0); // set sync.target to (None)
+			await Setting.saveAll();
+		};
+
 		let msg = null;
 
 		// When adding something here, don't forget to update the condition in
@@ -573,8 +578,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
 				_('Your Joplin Cloud credentials are invalid, please login.'),
-				_('Login to Joplin Cloud.'),
+				_('Login to Joplin Cloud'),
 				onViewJoplinCloudLoginScreen,
+				_('Disable synchronization'),
+				onDisableSynchronization,
 			);
 		}
 
