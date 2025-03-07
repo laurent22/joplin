@@ -6153,7 +6153,6 @@ msgid ""
 msgstr ""
 "Неподдерживаемая ссылка или сообщение: %s\n"
 "Ошибка: %s"
- dev
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
 #: packages/lib/models/BaseItem.ts:921 packages/lib/path-utils.ts:27
