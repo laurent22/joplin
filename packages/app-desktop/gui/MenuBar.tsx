@@ -789,6 +789,7 @@ function useMenu(props: Props) {
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
+						menuItemDic.toggleEditorPlugin,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,

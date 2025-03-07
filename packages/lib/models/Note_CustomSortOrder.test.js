@@ -1,5 +1,5 @@
 const time = require('../time').default;
-const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
+const { setupDatabaseAndSynchronizer, switchClient, msleep } = require('../testing/test-utils.js');
 const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 
@@ -94,6 +94,8 @@ describe('models/Note_CustomSortOrder', () => {
 		expect(sortedNotes1[2].id).toBe(note2.id);
 
 		const timeBefore = time.unixMs();
+
+		await msleep(10);
 
 		await Note.insertNotesAt(folder1.id, [note2.id], 0);
 		await Note.insertNotesAt(folder1.id, [note1.id], 1);

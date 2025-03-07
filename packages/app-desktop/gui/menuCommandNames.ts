@@ -43,6 +43,7 @@ export default function() {
 		'togglePerFolderSortOrder',
 		'toggleSideBar',
 		'toggleVisiblePanes',
+		'toggleEditorPlugin',
 		'toggleTabMovesFocus',
 		'editor.deleteLine',
 		'editor.duplicateLine',

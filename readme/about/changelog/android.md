@@ -1,5 +1,14 @@
 # Joplin Android Changelog
 
+## [android-v3.3.2](https://github.com/laurent22/joplin/releases/tag/android-v3.3.2) (Pre-release) - 2025-03-03T22:35:08Z
+
+- Improved: Improve encryption config screen accessibility (#11874) (#11846 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Switch default library used for Whisper voice typing (#11881 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.11)
+- Fixed: Accessibility: Fix "new note" and "new to-do" buttons are focusable even while invisible (#11899 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix disabled encryption keys list showing enabled keys (#11861) (#11858 by [@pedr](https://github.com/pedr))
+- Fixed: Fix voice recorder crash (#11876) (#11864 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.3.1](https://github.com/laurent22/joplin/releases/tag/android-v3.3.1) (Pre-release) - 2025-02-19T16:01:54Z
 
 - New: Add support for plugin editor views (#11831)

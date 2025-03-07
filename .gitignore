@@ -1001,6 +1001,8 @@ packages/lib/commands/renderMarkup.test.js
 packages/lib/commands/renderMarkup.js
 packages/lib/commands/showEditorPlugin.js
 packages/lib/commands/synchronize.js
+packages/lib/commands/toggleAllFolders.test.js
+packages/lib/commands/toggleAllFolders.js
 packages/lib/commands/toggleEditorPlugin.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
@@ -1095,6 +1097,9 @@ packages/lib/models/settings/builtInMetadata.js
 packages/lib/models/settings/settingValidations.test.js
 packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
+packages/lib/models/utils/areAllFoldersCollapsed.test.js
+packages/lib/models/utils/areAllFoldersCollapsed.js
+packages/lib/models/utils/getCanBeCollapsedFolderIds.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
