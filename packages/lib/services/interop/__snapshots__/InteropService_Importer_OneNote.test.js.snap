@@ -1166,7 +1166,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render audio resources as links: My title 1`] = `
+exports[`InteropService_Importer_OneNote should render audio as links to resource: My title 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1211,7 +1211,7 @@ exports[`InteropService_Importer_OneNote should render audio resources as links:
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render audio resources as links: Quick Notes 1`] = `
+exports[`InteropService_Importer_OneNote should render audio as links to resource: Quick Notes 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
