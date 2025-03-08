@@ -114,7 +114,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			// allow-popups-to-escape-sandbox: Allows PDF previews to work on target="_blank" links.
 			// allow-popups: Allows links to open in a new tab.
 			permissions: 'allow-scripts allow-modals allow-popups allow-popups-to-escape-sandbox',
-			allow: 'clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=* encrypted-media=*',
+			allow: 'clipboard-write; clipboard-read; fullscreen \'self\'; autoplay \'self\'; local-fonts \'self\'; encrypted-media \'self\'',
 		});
 
 		if (containerRef.current) {

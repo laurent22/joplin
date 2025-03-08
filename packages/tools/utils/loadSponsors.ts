@@ -18,6 +18,7 @@ export interface OrgSponsor {
 	urlWebsite?: string;
 	title: string;
 	imageName: string;
+	alt?: string;
 }
 
 export const loadSponsors = async (): Promise<Sponsors> => {

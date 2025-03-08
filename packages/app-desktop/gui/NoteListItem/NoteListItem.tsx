@@ -22,6 +22,7 @@ interface NoteItemProps {
 	noteCount: number;
 	onChange: OnChangeHandler;
 	onClick: MouseEventHandler<HTMLDivElement>;
+	onDoubleClick: MouseEventHandler<HTMLDivElement>;
 	onContextMenu: MouseEventHandler;
 	onDragOver: DragEventHandler;
 	onDragStart: DragEventHandler;
@@ -79,6 +80,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.style,
 		props.itemSize,
 		props.onClick,
+		props.onDoubleClick,
 		props.flow,
 	);
 

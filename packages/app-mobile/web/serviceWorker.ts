@@ -99,7 +99,8 @@ if (typeof window === 'undefined') {
 					if (!(client instanceof WindowClient)) continue;
 
 					const clientUrl = new URL(client.url);
-					if (mainPagePaths.includes(clientUrl.pathname) && event.resultingClientId !== client.id && !client.focused) {
+					const isRefresh = event.clientId === client.id || event.resultingClientId === client.id;
+					if (mainPagePaths.includes(clientUrl.pathname) && !isRefresh) {
 						hasLockingClient = true;
 					}
 				}
@@ -207,6 +208,16 @@ if (typeof window === 'undefined') {
 			quiet: false,
 		};
 
+		const consoleLog = (...args: unknown[]) => {
+			if (coi.quiet) return;
+			console.log(...args);
+		};
+
+		const consoleError = (...args: unknown[]) => {
+			if (coi.quiet) return;
+			console.error(...args);
+		};
+
 		const n = navigator;
 		const controlling = n.serviceWorker && n.serviceWorker.controller;
 
@@ -228,7 +239,7 @@ if (typeof window === 'undefined') {
 					: coi.coepCredentialless(),
 			});
 			if (reloadToDegrade) {
-				!coi.quiet && console.log('Reloading page to degrade COEP.');
+				consoleLog('Reloading page to degrade COEP.');
 				window.sessionStorage.setItem('coiReloadedBySelf', 'coepDegrade');
 				coi.doReload();
 			}
@@ -245,28 +256,28 @@ if (typeof window === 'undefined') {
 		// if (window.crossOriginIsolated !== false || !coi.shouldRegister()) return;
 
 		if (!window.isSecureContext) {
-			!coi.quiet && console.log('COOP/COEP Service Worker not registered, a secure context is required.');
+			consoleLog('COOP/COEP Service Worker not registered, a secure context is required.');
 			return;
 		}
 
 		// In some environments (e.g. Firefox private mode) this won't be available
 		if (!n.serviceWorker) {
-			!coi.quiet && console.error('COOP/COEP Service Worker not registered, perhaps due to private mode.');
+			consoleError('COOP/COEP Service Worker not registered, perhaps due to private mode.');
 			return;
 		}
 
 		const registration = await n.serviceWorker.register(window.document.currentScript.getAttribute('src'));
-		!coi.quiet && console.log('COOP/COEP Service Worker registered', registration.scope);
+		consoleLog('COOP/COEP Service Worker registered', registration.scope);
 
 		registration.addEventListener('updatefound', () => {
-			!coi.quiet && console.log('Reloading page to make use of updated COOP/COEP Service Worker.');
+			consoleLog('Reloading page to make use of updated COOP/COEP Service Worker.');
 			window.sessionStorage.setItem('coiReloadedBySelf', 'updatefound');
 			coi.doReload();
 		});
 
 		// If the registration is active, but it's not controlling the page
 		if (registration.active && !n.serviceWorker.controller) {
-			!coi.quiet && console.log('Reloading page to make use of COOP/COEP Service Worker.');
+			consoleLog('Reloading page to make use of COOP/COEP Service Worker.');
 			window.sessionStorage.setItem('coiReloadedBySelf', 'notControlling');
 			coi.doReload();
 		}

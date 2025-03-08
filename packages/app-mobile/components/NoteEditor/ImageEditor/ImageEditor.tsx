@@ -8,12 +8,11 @@ import { Theme } from '@joplin/lib/themes/type';
 import { MutableRefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { BackHandler, Platform } from 'react-native';
 import ExtendedWebView from '../../ExtendedWebView';
-import { WebViewControl } from '../../ExtendedWebView/types';
-import { clearAutosave, writeAutosave } from './autosave';
+import { OnMessageEvent, WebViewControl } from '../../ExtendedWebView/types';
+import { clearAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
-import VersionInfo from 'react-native-version-info';
 import { DialogContext } from '../../DialogManager';
-import { OnMessageEvent } from '../../ExtendedWebView/types';
+import useEditorMessenger from './utils/useEditorMessenger';
 
 
 const logger = Logger.create('ImageEditor');
@@ -172,7 +171,7 @@ const ImageEditor = (props: Props) => {
 	const appInfo = useMemo(() => {
 		return {
 			name: 'Joplin',
-			description: `v${VersionInfo.appVersion}`,
+			description: `v${shim.appVersion()}`,
 		};
 	}, []);
 
@@ -189,79 +188,23 @@ const ImageEditor = (props: Props) => {
 			);
 		};
 
-		const setImageHasChanges = (hasChanges) => {
-			window.ReactNativeWebView.postMessage(
-				JSON.stringify({
-					action: 'set-image-has-changes',
-					data: hasChanges,
-				}),
-			);
-		};
-
-		window.updateEditorTemplate = (templateData) => {
-			window.ReactNativeWebView.postMessage(
-				JSON.stringify({
-					action: 'set-image-template-data',
-					data: templateData,
-				}),
-			);
-		};
-
-		const notifyReadyToLoadSVG = () => {
-			window.ReactNativeWebView.postMessage(
-				JSON.stringify({
-					action: 'ready-to-load-data',
-				})
-			);
-		};
-
-		const saveDrawing = async (drawing, isAutosave) => {
-			window.ReactNativeWebView.postMessage(
-				JSON.stringify({
-					action: isAutosave ? 'autosave' : 'save',
-					data: drawing.outerHTML,
-				}),
-			);
-		};
-
-		const closeEditor = (promptIfUnsaved) => {
-			window.ReactNativeWebView.postMessage(JSON.stringify({
-				action: 'close',
-				promptIfUnsaved,
-			}));
-		};
-
-		const saveThenClose = (drawing) => {
-			window.ReactNativeWebView.postMessage(
-				JSON.stringify({
-					action: 'save-and-close',
-					data: drawing.outerHTML,
-				}),
-			);
-		};
-
 		try {
 			if (window.editorControl === undefined) {
 				${shim.injectedJs('svgEditorBundle')}
 
 				window.editorControl = svgEditorBundle.createJsDrawEditor(
-					{
-						saveDrawing,
-						closeEditor,
-						saveThenClose,
-						updateEditorTemplate,
-						setImageHasChanges,
-					},
+					svgEditorBundle.createMessenger().remoteApi,
 					${JSON.stringify(Setting.value('imageeditor.jsdrawToolbar'))},
 					${JSON.stringify(Setting.value('locale'))},
 					${JSON.stringify(localizedStrings)},
-					${JSON.stringify({ appInfo })},
+					${JSON.stringify({
+		appInfo,
+		...(shim.mobilePlatform() === 'web' ? {
+			// Use the browser-default clipboard API on web.
+			clipboardApi: null,
+		} : {}),
+	})},
 				);
-
-				// Start loading the SVG file (if present) after loading the editor.
-				// This shows the user that progress is being made (loading large SVGs
-				// from disk into memory can take several seconds).
-				notifyReadyToLoadSVG();
 			}
 		} catch(e) {
 			window.ReactNativeWebView.postMessage(
@@ -273,7 +216,7 @@ const ImageEditor = (props: Props) => {
 
 	useEffect(() => {
 		webviewRef.current?.injectJS(`
-			document.querySelector('#main-style').innerText = ${JSON.stringify(css)};
+			document.querySelector('#main-style').textContent = ${JSON.stringify(css)};
 
 			if (window.editorControl) {
 				window.editorControl.onThemeUpdate();
@@ -308,41 +251,28 @@ const ImageEditor = (props: Props) => {
 		})();`);
 	}, [webviewRef, props.resourceFilename]);
 
-	const onMessage = useCallback(async (event: OnMessageEvent) => {
-		const data = event.nativeEvent.data;
-		if (data.startsWith('error:')) {
-			logger.error('ImageEditor:', data);
-			return;
-		}
-
-		const json = JSON.parse(data);
-		if (json.action === 'save') {
-			await clearAutosave();
-			await props.onSave(json.data);
-		} else if (json.action === 'autosave') {
-			await writeAutosave(json.data);
-		} else if (json.action === 'save-toolbar') {
-			Setting.setValue('imageeditor.jsdrawToolbar', json.data);
-		} else if (json.action === 'close') {
-			onRequestCloseEditor(json.promptIfUnsaved);
-		} else if (json.action === 'save-and-close') {
-			await props.onSave(json.data);
-			onRequestCloseEditor(json.promptIfUnsaved);
-		} else if (json.action === 'ready-to-load-data') {
-			void onReadyToLoadData();
-		} else if (json.action === 'set-image-has-changes') {
-			setImageChanged(json.data);
-		} else if (json.action === 'set-image-template-data') {
-			Setting.setValue('imageeditor.imageTemplate', json.data);
-		} else {
-			logger.error('Unknown action,', json.action);
-		}
-	}, [props.onSave, onRequestCloseEditor, onReadyToLoadData]);
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onError = useCallback((event: any) => {
 		logger.error('ImageEditor: WebView error: ', event);
 	}, []);
+
+	const messenger = useEditorMessenger({
+		webviewRef,
+		setImageChanged,
+		onReadyToLoadData,
+		onSave: props.onSave,
+		onRequestCloseEditor,
+	});
+
+	const onMessage = useCallback((event: OnMessageEvent) => {
+		const data = event.nativeEvent.data;
+		if (typeof data === 'string' && data.startsWith('error:')) {
+			logger.error(data);
+			return;
+		}
+
+		messenger.onWebViewMessage(event);
+	}, [messenger]);
 
 	return (
 		<ExtendedWebView
@@ -350,6 +280,7 @@ const ImageEditor = (props: Props) => {
 			injectedJavaScript={injectedJavaScript}
 			allowFileAccessFromJs={true}
 			onMessage={onMessage}
+			onLoadEnd={messenger.onWebViewLoaded}
 			onError={onError}
 			ref={webviewRef}
 			webviewInstanceId={'image-editor-js-draw'}

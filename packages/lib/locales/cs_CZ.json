@@ -107,6 +107,9 @@
 	"(In plugin: %s)": [
 		"(V pluginu: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(Žádné)"
 	],
@@ -190,6 +193,9 @@
 	],
 	"Add recipient:": [
 		"Přidat příjemce:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Přidejte nadpis"
@@ -278,6 +284,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"Připojit"
 	],
@@ -326,6 +335,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaticky zdvojit uvozovky, závorky, apod."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"Automatická kontrola aktualizací"
 	],
@@ -344,9 +356,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		""
-	],
 	"Bold": [
 		"Tučně"
 	],
@@ -363,6 +372,9 @@
 		"Seznam s odrážkami"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can Share": [
@@ -437,11 +449,17 @@
 	"Change language": [
 		"Změnit jazyk"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Znaky"
 	],
 	"Characters excluding spaces": [
 		"Znaky bez mezer"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Zkontrolovat aktualizace..."
@@ -485,6 +503,9 @@
 	"Close dropdown": [
 		"Zavřít rozevírací seznam"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -509,8 +530,8 @@
 	"Collaborate on notebooks with others": [
 		"Spolupracujte na zápisnících s ostatními"
 	],
-	"Collapse": [
-		"Sbalit"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"Nadcházející alarmy"
@@ -775,6 +796,9 @@
 	"Delete local data and re-download from sync target": [
 		"Smazat místní data a stáhnout je z cíle synchronizace"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete plugin \"%s\"?": [
 		"Smazat rozšíření \"%s\"?"
 	],
@@ -818,6 +842,9 @@
 		"Cílový formát: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -949,6 +976,9 @@
 	"Edit in external editor": [
 		"Upravit externím editorem"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit link": [
 		"Upravit odkaz"
 	],
@@ -1033,6 +1063,9 @@
 	"Enable encryption": [
 		"Zapnout šifrování"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Povolit poznámky pod čarou"
 	],
@@ -1087,6 +1120,9 @@
 	"Enabled": [
 		"Zapnuto"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Povolení šifrování znamená, že *všechny* vaše poznámky a přílohy budou znovu synchronizovány a odeslány do cíle synchronizace šifrovaně. Přejete si pokračovat?"
 	],
@@ -1114,6 +1150,9 @@
 	"End-to-end encryption": [
 		"Koncové šifrování"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Zde vložte kód"
 	],
@@ -1122,6 +1161,9 @@
 	],
 	"Enter notebook title": [
 		"Vložte název zápisníku"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Enum"
@@ -1150,8 +1192,8 @@
 	"Exits the application.": [
 		"Ukončí aplikaci."
 	],
-	"Expand": [
-		"Rozšířit"
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"Exportovat"
@@ -1213,9 +1255,6 @@
 	"Filter tags": [
 		"Filtrovat štítky"
 	],
-	"Find and replace": [
-		"Najít a nahradit"
-	],
 	"Find: ": [
 		"Najít: "
 	],
@@ -1237,6 +1276,9 @@
 	"Focus title": [
 		"Kurzor v názvu"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Pouze pro účely ladění: exportovat profil na externí SD kartu."
 	],
@@ -1254,9 +1296,6 @@
 	],
 	"Force path style": [
 		"Vynutit styl cesty"
-	],
-	"Formatting": [
-		"Formátování"
 	],
 	"Forward": [
 		"Vpřed"
@@ -1296,6 +1335,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Získá nebo nastaví konfigurační hodnotu. Pokud není [hodnota] specifikována, zobrazí hodnotu položky [jméno]. Pokud není specifikována [hodnota] ani [jméno], je zobrazena současná konfigurace."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Jít na zdrojovou URL"
 	],
@@ -1310,9 +1358,6 @@
 	],
 	"Header %d": [
 		"Záhlaví %d"
-	],
-	"Headers": [
-		"Záhlaví"
 	],
 	"Heading": [
 		"Nadpis"
@@ -1340,9 +1385,6 @@
 	],
 	"Hide keyboard": [
 		"Skrytí klávesnice"
-	],
-	"Hide more actions": [
-		"Skrýt další akce"
 	],
 	"Highlight": [
 		"Zvýraznění"
@@ -1449,6 +1491,9 @@
 	"Indent more": [
 		"Zvětšit odsazení"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Informace"
 	],
@@ -1509,9 +1554,6 @@
 	"Items that cannot be synchronised": [
 		"Položky jež nelze synchronizovat"
 	],
-	"Join us on Twitter": [
-		"Připojte se k nám na Twitteru"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin dokáže synchronizovat vaše poznámky pomocí různých poskytovatelů. Vyberte si některého z nich z níže uvedeného seznamu."
 	],
@@ -1553,9 +1595,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplinova vlastní synchronizační služba. Umožňuje také přístup k funkcím specifickým pro Joplin, jako je publikování poznámek nebo spolupráce na zápisnících s ostatními."
-	],
-	"KaTeX": [
-		"KaTeX"
 	],
 	"Keep note history for": [
 		"Uchovat historii poznámky"
@@ -1631,14 +1670,8 @@
 	"Link text": [
 		"Text odkazu"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Odkazy s protokolem \"%s\" nejsou podporovány"
-	],
 	"List item": [
 		"Seznam položek"
-	],
-	"Lists": [
-		"Seznamy"
 	],
 	"Loaded": [
 		"Načteno"
@@ -1715,6 +1748,12 @@
 	"Master password:": [
 		"Hlavní heslo:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"Maximální počet souběžných spojení"
 	],
@@ -1784,9 +1823,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Nová poznámka"
 	],
@@ -1811,6 +1847,9 @@
 	"New version: %s": [
 		"Nová verze: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"Další zápas"
 	],
@@ -1834,9 +1873,6 @@
 	],
 	"No active notebook.": [
 		"Není vybrán žádný zápisník."
-	],
-	"No item with ID %s": [
-		"Nenalezena položka s ID %s"
 	],
 	"No new invitations": [
 		""
@@ -1964,6 +2000,9 @@
 	"Numbered List": [
 		"Číslovaný seznam"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -1972,6 +2011,9 @@
 	],
 	"On %s: %s": [
 		"Na %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Jeden z vašich hlavních klíčů používá zastaralou metodu šifrování."
@@ -2063,9 +2105,6 @@
 	"Permission needed": [
 		"Vyžadováno oprávnění"
 	],
-	"Permission to use camera": [
-		"Oprávnění použít kameru"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Pro pokračování klikněte na \"%s\" nebo nastavte hesla v seznamu \"%s\" níže."
 	],
@@ -2140,6 +2179,12 @@
 	],
 	"Preferred light theme": [
 		"Preferovaný světlý vzhled"
+	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Stiskněte Ctrl+D nebo napište \"exit\" pro ukončení aplikace"
@@ -2225,6 +2270,9 @@
 	"Quit": [
 		"Ukončit"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"Znovu zašifrovat data"
 	],
@@ -2300,6 +2348,12 @@
 	"Replace: ": [
 		"Nahradit: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2354,6 +2408,12 @@
 	"Revision: %s (%s)": [
 		"Revize: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Spustí příkazy z textového souboru. Každý příkaz by měl být na vlastním řádku."
 	],
@@ -2395,6 +2455,9 @@
 	],
 	"Save geo-location with notes": [
 		"Ukládat k poznámkám informace o zeměpisné poloze"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Hledání"
@@ -2459,6 +2522,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"Sdílet"
 	],
@@ -2497,9 +2563,6 @@
 	],
 	"Show disabled keys": [
 		"Zobrazit vypnuté klávesy"
-	],
-	"Show more actions": [
-		"Zobrazit další akce"
 	],
 	"Show note counts": [
 		"Zobrazit počty poznámek"
@@ -2554,6 +2617,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Některé položky nelze synchronizovat. Zmáčkněte pro více informací."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Řadit zápisníky podle"
@@ -2668,6 +2737,9 @@
 	],
 	"Switch profile": [
 		"Přepnout profil"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Přepnout na poznámku"
@@ -2819,8 +2891,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"Následující klíče používají zastaralý šifrovací algoritmus a doporučujeme je aktualizovat. Aktualizovaný klíč bude stále schopen dešifrovat a šifrovat vaše data jako obvykle."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Mobilní aplikace Joplin aktuálně nepodporuje tento typ odkazu: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Tým Joplin tento plugin prověřil a splňuje naše standardy zabezpečení a výkonu."
@@ -2863,6 +2935,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Cíl synchronizace. Každý cíl může mít další parametry ve formátu `sync.NUM.NAME` (dokumentace níže)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper potřebuje k přístupu k vašim údajům vaše oprávnění."
@@ -2911,9 +2986,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Tato příloha ještě není stažena nebo dešifrována"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Tato příloha není ještě stažena nebo dešifrována."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Tento autorizační token je potřeba pouze pro povolení komunikace Joplin s aplikacemi třetích stran."
@@ -3089,6 +3161,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Neznámý/á"
+	],
 	"Unknown flag: %s": [
 		"Neznámý flag: %s"
 	],
@@ -3224,6 +3299,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Upozornění"
 	],
@@ -3267,6 +3345,9 @@
 		"Při vytváření nového úkolu:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -3322,9 +3403,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"K dešifrování některých dat je potřeba vaše heslo. Zadejte `:e2ee decrypt` pro jeho nastavení."
-	],
-	"Your permission to use your camera is required.": [
-		"Je vyžadováno oprávnění použít vaši kameru."
 	],
 	"Your version: %s": [
 		"Vaše verze: %s"

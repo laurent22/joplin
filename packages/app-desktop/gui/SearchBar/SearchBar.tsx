@@ -174,6 +174,7 @@ function SearchBar(props: Props) {
 				onKeyDown={onKeyDown}
 				onSearchButtonClick={onSearchButtonClick}
 				searchStarted={searchStarted}
+				aria-controls='notes-list'
 			/>
 		</Root>
 	);

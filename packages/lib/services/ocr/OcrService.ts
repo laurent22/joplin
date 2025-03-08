@@ -135,7 +135,7 @@ export default class OcrService {
 					const result = await this.recognize(language, resource);
 					toSave.ocr_status = ResourceOcrStatus.Done;
 					toSave.ocr_text = filterOcrText(result.text);
-					toSave.ocr_details = Resource.serializeOcrDetails(result.lines),
+					toSave.ocr_details = Resource.serializeOcrDetails(result.lines);
 					toSave.ocr_error = '';
 				} catch (error) {
 					const errorMessage = typeof error === 'string' ? error : error?.message;

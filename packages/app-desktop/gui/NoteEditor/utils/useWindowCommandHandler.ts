@@ -1,5 +1,5 @@
-import { RefObject, useEffect } from 'react';
-import { NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
+import { RefObject, Dispatch, SetStateAction, useEffect } from 'react';
+import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
@@ -10,14 +10,14 @@ const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
 	require('../commands/focusElementNoteTitle'),
 	require('../commands/focusElementNoteBody'),
+	require('../commands/focusElementToolbar'),
 	require('../commands/pasteAsText'),
 ];
 
 type OnBodyChange = (event: OnChangeEvent)=> void;
 
 interface HookDependencies {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	setShowLocalSearch: Function;
+	setShowLocalSearch: Dispatch<SetStateAction<boolean>>;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -93,11 +93,12 @@ export default function useWindowCommandHandler(dependencies: HookDependencies) 
 			));
 		}
 
-		const dependencies = {
+		const dependencies: WindowCommandDependencies = {
 			editorRef,
 			setShowLocalSearch,
 			noteSearchBarRef,
 			titleInputRef,
+			containerRef,
 		};
 
 		for (const command of commandsWithDependencies) {

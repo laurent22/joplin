@@ -11,6 +11,7 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	themeId: number;
@@ -80,7 +81,7 @@ export default function(props: Props) {
 				void reg.waitForSyncFinishedThenSync();
 				onClose();
 			} catch (error) {
-				alert(error.message);
+				void shim.showErrorDialog(error.message);
 			} finally {
 				setUpdatingPassword(false);
 			}

@@ -378,6 +378,15 @@ class WebDavApi {
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
 		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors();
+		if (shim.mobilePlatform() === 'android') {
+			// Using credentials = 'omit' prevents authentication cookies from
+			// being stored. React Native has issues related to cookie authentication:
+			// https://github.com/facebook/react-native/issues/23185
+			//
+			// Auth tokens are passed through the "Authorization" header, so
+			// these cookies should not be necessary.
+			fetchOptions.credentials = 'omit';
+		}
 		const url = `${this.baseUrl()}/${ltrimSlashes(path)}`;
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);

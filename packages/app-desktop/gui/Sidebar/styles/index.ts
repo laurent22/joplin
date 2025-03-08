@@ -61,7 +61,12 @@ export const StyledListItemAnchor = styled.a`
 	text-decoration: none;
 	color: ${(props: StyleProps) => listItemTextColor(props)};
 	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected || props.shareId ? 1 : 0.8};
+	opacity: ${(props: StyleProps) => {
+		// So that the conflicts folder and shared folders have sufficient contrast,
+		// use an opacity of 1 even when unselected.
+		const needsHigherContrast = props.isConflictFolder || props.isSpecialItem;
+		return (props.selected || props.shareId || needsHigherContrast) ? 1 : 0.8;
+	}};
 	white-space: nowrap;
 	display: flex;
 	flex: 1;

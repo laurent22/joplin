@@ -1,5 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 const app = require('@electron/remote').app;
 const { clipboard } = require('electron');
 
@@ -14,7 +15,7 @@ export const runtime = (): CommandRuntime => {
 			const appPath = app.getPath('exe');
 			const cmd = `${appPath} --env dev`;
 			clipboard.writeText(cmd);
-			alert(`The dev mode command has been copied to clipboard:\n\n${cmd}`);
+			await shim.showMessageBox(`The dev mode command has been copied to clipboard:\n\n${cmd}`, { type: MessageBoxType.Info });
 		},
 	};
 };

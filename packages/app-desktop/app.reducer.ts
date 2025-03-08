@@ -40,6 +40,8 @@ export interface AppWindowState extends WindowState {
 	visibleDialogs: VisibleDialogs;
 	dialogs: AppStateDialog[];
 	devToolsVisible: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	watchedResources: any;
 }
 
 interface BackgroundWindowStates {
@@ -62,8 +64,6 @@ export interface AppState extends State, AppWindowState {
 	modalOverlayMessage: string|null;
 
 	// Extra reducer keys go here
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	watchedResources: any;
 	mainLayout: LayoutItem;
 	isResettingLayout: boolean;
 }
@@ -76,6 +76,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		noteVisiblePanes: ['editor', 'viewer'],
 		editorCodeView: true,
 		devToolsVisible: false,
+		watchedResources: {},
 	};
 };
 

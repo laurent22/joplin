@@ -15,6 +15,9 @@ interface LogEntry {
 enum Platform {
 	Unknown = 'unknown',
 	Android = 'android',
+	Windows = 'windows',
+	MacOs = 'macos',
+	Linux = 'linux',
 	Ios = 'ios',
 	Desktop = 'desktop',
 	Clipper = 'clipper',
@@ -94,6 +97,9 @@ async function gitTags() {
 function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('v') === 0) return Platform.Desktop;
 	if (tagName.indexOf('android') >= 0) return Platform.Android;
+	if (tagName.indexOf('windows') >= 0) return Platform.Windows;
+	if (tagName.indexOf('linux') >= 0) return Platform.Linux;
+	if (tagName.indexOf('macos') >= 0) return Platform.MacOs;
 	if (tagName.indexOf('ios') >= 0) return Platform.Ios;
 	if (tagName.indexOf('clipper') === 0) return Platform.Clipper;
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
@@ -106,7 +112,7 @@ function platformFromTag(tagName: string): Platform {
 }
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
-	const isMainApp = ['android', 'ios', 'desktop', 'cli', 'server'].includes(platform);
+	const isMainApp = ['android', 'ios', 'windows', 'linux', 'macos', 'desktop', 'cli', 'server'].includes(platform);
 	const isMobile = ['android', 'ios'].includes(platform);
 
 	for (const file of files) {
@@ -254,7 +260,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
-		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0)) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0 || prefix.indexOf('windows') >= 0 || prefix.indexOf('linux') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
@@ -312,7 +318,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 	const isPlatformPrefix = (prefixString: string) => {
 		const prefix = prefixString.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'cloud'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'cloud'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};

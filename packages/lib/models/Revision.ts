@@ -214,7 +214,7 @@ export default class Revision extends BaseItem {
 
 	public static async itemsWithRevisions(itemType: ModelType, itemIds: string[]) {
 		if (!itemIds.length) return [];
-		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN ('${itemIds.join('\',\'')}')`, [itemType]);
+		const rows = await this.db().selectAll(`SELECT distinct item_id FROM revisions WHERE item_type = ? AND item_id IN (${this.escapeIdsForSql(itemIds)})`, [itemType]);
 
 		return rows.map((r: RevisionEntity) => r.item_id);
 	}

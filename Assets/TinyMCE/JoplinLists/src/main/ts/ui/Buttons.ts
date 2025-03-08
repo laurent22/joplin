@@ -48,8 +48,7 @@ const listState = function (editor: Editor, listName, options:any = {}) {
 
 const register = function (editor: Editor) {
   const hasPlugin = function (editor, plugin) {
-    const plugins = editor.settings.plugins ? editor.settings.plugins : '';
-    return Tools.inArray(plugins.split(/[ ,]/), plugin) !== -1;
+    return editor.hasPlugin(plugin);
   };
 
   const _ = Settings.getLocalizationFunction(editor);

@@ -1,5 +1,5 @@
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
-import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState, UserEventSource } from '../types';
+import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState, UserEventSource, UpdateBodyOptions } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
 import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
@@ -11,6 +11,7 @@ import { CompletionSource } from '@codemirror/autocomplete';
 import { RegionSpec } from './utils/formatting/RegionSpec';
 import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 import getSearchState from './utils/getSearchState';
+import { noteIdFacet, setNoteIdEffect } from './utils/selectedNoteIdExtension';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -118,32 +119,44 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		);
 	}
 
-	public updateBody(newBody: string) {
+	public updateBody(newBody: string, { noteId: newNoteId }: UpdateBodyOptions = {}) {
+		const state = this.editor.state;
+		const noteIdChanged = newNoteId && newNoteId !== state.facet(noteIdFacet);
+		const updateNoteIdEffects = noteIdChanged ? [setNoteIdEffect.of(newNoteId)] : [];
+
 		// TODO: doc.toString() can be slow for large documents.
-		const currentBody = this.editor.state.doc.toString();
+		const currentBody = state.doc.toString();
 
 		if (newBody !== currentBody) {
 			// For now, collapse the selection to a single cursor
 			// to ensure that the selection stays within the document
 			// (and thus avoids an exception).
-			const mainCursorPosition = this.editor.state.selection.main.anchor;
+			const mainCursorPosition = state.selection.main.anchor;
 
 			// The maximum cursor position needs to be calculated using the EditorState,
 			// to correctly account for line endings.
-			const maxCursorPosition = this.editor.state.toText(newBody).length;
+			const maxCursorPosition = state.toText(newBody).length;
 			const newCursorPosition = Math.min(mainCursorPosition, maxCursorPosition);
 
-			this.editor.dispatch(this.editor.state.update({
+			this.editor.dispatch(state.update({
 				changes: {
 					from: 0,
-					to: this.editor.state.doc.length,
+					to: state.doc.length,
 					insert: newBody,
 				},
 				selection: EditorSelection.cursor(newCursorPosition),
 				scrollIntoView: true,
+				effects: [...updateNoteIdEffects],
 			}));
 
 			return true;
+		} else if (updateNoteIdEffects.length) {
+			this.editor.dispatch(state.update({
+				effects: updateNoteIdEffects,
+			}));
+
+			// Although the note ID field changed, the body is the same:
+			return false;
 		}
 
 		return false;
@@ -249,6 +262,11 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		// See https://discuss.codemirror.net/t/autocompletion-merging-override-in-config/7853
 		completionSource: (completionSource: CompletionSource) => editorCompletionSource.of(completionSource),
 		enableLanguageDataAutocomplete: enableLanguageDataAutocomplete,
+
+		// Allow accessing the current note ID
+		noteIdFacet: noteIdFacet.reader,
+		// Allows watching the note ID for changes
+		setNoteIdEffect,
 	};
 
 	public addExtension(extension: Extension) {

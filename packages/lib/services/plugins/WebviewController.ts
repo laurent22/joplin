@@ -279,7 +279,7 @@ export default class WebviewController extends ViewController {
 		return this.storeView.opened;
 	}
 
-	public async isVisible(): Promise<boolean> {
+	public isVisible(): boolean {
 		if (!this.storeView.opened) return false;
 		const shownEditorViewIds: string[] = this.store.getState().settings['plugins.shownEditorViewIds'];
 		return shownEditorViewIds.includes(this.handle);

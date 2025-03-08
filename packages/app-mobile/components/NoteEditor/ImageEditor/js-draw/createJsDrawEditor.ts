@@ -4,13 +4,11 @@ import { MaterialIconProvider } from '@js-draw/material-icons';
 import 'js-draw/bundledStyles';
 import applyTemplateToEditor from './applyTemplateToEditor';
 import watchEditorForTemplateChanges from './watchEditorForTemplateChanges';
-import { ImageEditorCallbacks, LocalizedStrings } from './types';
+import { ImageEditorCallbacks, ImageEditorControl, LocalizedStrings } from './types';
 import startAutosaveLoop from './startAutosaveLoop';
+import WebViewToRNMessenger from '../../../../utils/ipc/WebViewToRNMessenger';
+import './polyfills';
 
-declare namespace ReactNativeWebView {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const postMessage: (data: any)=> void;
-}
 
 const restoreToolbarState = (toolbar: AbstractToolbar, state: string) => {
 	if (state) {
@@ -23,18 +21,12 @@ const restoreToolbarState = (toolbar: AbstractToolbar, state: string) => {
 	}
 };
 
-const listenToolbarState = (editor: Editor, toolbar: AbstractToolbar) => {
-	editor.notifier.on(EditorEventType.ToolUpdated, () => {
-		const state = toolbar.serializeState();
-		ReactNativeWebView.postMessage(
-			JSON.stringify({
-				action: 'save-toolbar',
-				data: state,
-			}),
-		);
-	});
+export const createMessenger = () => {
+	const messenger = new WebViewToRNMessenger<ImageEditorControl, ImageEditorCallbacks>(
+		'image-editor', {},
+	);
+	return messenger;
 };
-
 
 export const createJsDrawEditor = (
 	callbacks: ImageEditorCallbacks,
@@ -54,6 +46,38 @@ export const createJsDrawEditor = (
 			...defaultLocalizations,
 		},
 		iconProvider: new MaterialIconProvider(),
+		clipboardApi: {
+			read: async () => {
+				const result = new Map<string, string>();
+
+				const clipboardText = await callbacks.readClipboardText();
+				if (clipboardText) {
+					result.set('text/plain', clipboardText);
+				}
+
+				return result;
+			},
+			write: async (data) => {
+				const getTextForMime = async (mime: string) => {
+					const text = data.get(mime);
+					if (typeof text === 'string') {
+						return text;
+					}
+					if (text) {
+						return await (await text).text();
+					}
+					return null;
+				};
+
+				const svgData = await getTextForMime('image/svg+xml');
+				if (svgData) {
+					return callbacks.writeClipboardText(svgData);
+				}
+
+				const textData = await getTextForMime('text/plain');
+				return callbacks.writeClipboardText(textData);
+			},
+		},
 		...editorSettings,
 	});
 
@@ -95,11 +119,11 @@ export const createJsDrawEditor = (
 		return editor.toSVG({
 			// Grow small images to this minimum size
 			minDimension: 50,
-		});
+		}).outerHTML;
 	};
 
 	const saveNow = () => {
-		callbacks.saveDrawing(getEditorSVG(), false);
+		callbacks.save(getEditorSVG(), false);
 
 		// The image is now up-to-date with the resource
 		setImageHasChanges(false);
@@ -109,7 +133,9 @@ export const createJsDrawEditor = (
 
 	// Load and save toolbar-related state (e.g. pen sizes/colors).
 	restoreToolbarState(toolbar, initialToolbarState);
-	listenToolbarState(editor, toolbar);
+	editor.notifier.on(EditorEventType.ToolUpdated, () => {
+		callbacks.updateToolbarState(toolbar.serializeState());
+	});
 
 	setImageHasChanges(false);
 
@@ -171,7 +197,7 @@ export const createJsDrawEditor = (
 			// We can now edit and save safely (without data loss).
 			editor.setReadOnly(false);
 
-			void startAutosaveLoop(editor, callbacks.saveDrawing);
+			void startAutosaveLoop(editor, callbacks.save);
 			watchEditorForTemplateChanges(editor, templateData, callbacks.updateEditorTemplate);
 		},
 		onThemeUpdate: () => {
@@ -186,6 +212,8 @@ export const createJsDrawEditor = (
 	};
 
 	editorControl.onThemeUpdate();
+
+	callbacks.onLoadedEditor();
 
 	return editorControl;
 };

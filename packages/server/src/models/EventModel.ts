@@ -33,4 +33,11 @@ export default class EventModel extends BaseModel<Event> {
 			.first();
 	}
 
+	public async deleteOldEvents(ttl: number): Promise<void> {
+		const cutOffDate = Date.now() - ttl;
+		await this.db(this.tableName)
+			.where('created_time', '<', cutOffDate)
+			.delete();
+	}
+
 }

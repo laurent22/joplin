@@ -1,5 +1,5 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
+import { ToolbarButtonInfo, ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
@@ -9,6 +9,10 @@ import { DropHandler } from './useDropHandler';
 import { SearchMarkers } from './useSearchMarkers';
 import { ParseOptions } from '@joplin/lib/HtmlToMd';
 import { ScrollStrategy } from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import { MarkupToHtmlOptions } from '../../hooks/useMarkupToHtml';
+import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
+import { RefObject, SetStateAction } from 'react';
+import * as React from 'react';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -47,10 +51,12 @@ export interface NoteEditorProps {
 	watchedResources: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	highlightedWords: any[];
+	tabMovesFocus: boolean;
 	plugins: PluginStates;
-	toolbarButtonInfos: ToolbarButtonInfo[];
+	toolbarButtonInfos: ToolbarItem[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	contentMaxWidth: number;
+	scrollbarSize: ScrollbarSize;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;
@@ -72,22 +78,7 @@ export interface NoteBodyEditorRef {
 	execCommand(command: CommandValue): Promise<void>;
 }
 
-export interface MarkupToHtmlOptions {
-	replaceResourceInternalToExternalLinks?: boolean;
-	resourceInfos?: ResourceInfos;
-	contentMaxWidth?: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugins?: Record<string, any>;
-	bodyOnly?: boolean;
-	mapsToLine?: boolean;
-	useCustomPdfViewer?: boolean;
-	noteId?: string;
-	vendorDir?: string;
-	platformName?: string;
-	allowedFilePrefixes?: string[];
-	whiteBackgroundNoteRendering?: boolean;
-}
-
+export { MarkupToHtmlOptions };
 export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string, parseOptions?: ParseOptions)=> Promise<string>;
 
@@ -105,6 +96,8 @@ export interface NoteBodyEditorProps {
 	// avoid cases where black text is rendered over a dark background.
 	whiteBackgroundNoteRendering: boolean;
 
+	scrollbarSize: ScrollbarSize;
+
 	content: string;
 	contentKey: string;
 	contentMarkupLanguage: number;
@@ -119,8 +112,7 @@ export interface NoteBodyEditorProps {
 	htmlToMarkdown: HtmlToMarkdownHandler;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
@@ -131,12 +123,13 @@ export interface NoteBodyEditorProps {
 	searchMarkers: SearchMarkers;
 	visiblePanes: string[];
 	keyboardMode: string;
+	tabMovesFocus: boolean;
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	locale: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDrop: DropHandler;
-	noteToolbarButtonInfos: ToolbarButtonInfo[];
+	noteToolbarButtonInfos: ToolbarItem[];
 	plugins: PluginStates;
 	fontSize: number;
 	contentMaxWidth: number;
@@ -280,4 +273,12 @@ export interface ScrollToTextValue {
 	text: string;
 	element: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'strong' | 'ul';
 	scrollStrategy?: ScrollStrategy;
+}
+
+export interface WindowCommandDependencies {
+	setShowLocalSearch: React.Dispatch<SetStateAction<boolean>>;
+	noteSearchBarRef: RefObject<HTMLInputElement>;
+	editorRef: RefObject<NoteBodyEditorRef>;
+	titleInputRef: RefObject<HTMLInputElement>;
+	containerRef: RefObject<HTMLDivElement|null>;
 }

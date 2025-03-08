@@ -202,6 +202,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_UNLOAD':
 			delete draft.plugins[action.pluginId];
+			delete draft.pluginHtmlContents[action.pluginId];
 			break;
 
 		}

@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
 import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import shim from '@joplin/lib/shim';
 const { clipboard } = require('electron');
 
 interface Props {
@@ -146,7 +147,7 @@ export function ShareNoteDialog(props: Props) {
 				reg.logger().error('ShareNoteDialog: Cannot publish note:', error);
 
 				setSharesState('idle');
-				alert(JoplinServerApi.connectionErrorMessage(error));
+				void shim.showErrorDialog(JoplinServerApi.connectionErrorMessage(error));
 			}
 
 			break;

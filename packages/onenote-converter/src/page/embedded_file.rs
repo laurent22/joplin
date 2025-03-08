@@ -70,18 +70,16 @@ impl<'a> Renderer<'a> {
             let path = PathBuf::from(filename);
             let ext = path
                 .extension()
-                .wrap_err("Embedded file has no extension")?
-                .to_str()
-                .wrap_err("Embedded file name is non utf-8")?;
+                .unwrap_or_default();
             let base = path
                 .as_os_str()
                 .to_str()
                 .wrap_err("Embedded file name is non utf-8")?
-                .strip_suffix(ext)
+                .strip_suffix(ext.to_string_lossy().as_ref())
                 .wrap_err("Failed to strip extension from file name")?
                 .trim_matches('.');
 
-            current_filename = format!("{}-{}.{}", base, i, ext);
+            current_filename = format!("{}-{}.{}", base, i, ext.to_string_lossy());
 
             i += 1;
         }

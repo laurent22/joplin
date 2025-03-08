@@ -74,9 +74,23 @@ impl<'a> Renderer<'a> {
         // all the styles to be shifted by minus one.
         // A better solution would be to look if there isn't anything wrong with the parser,
         // but I haven't found what could be causing this yet.
-        if text.starts_with("\u{000B}") && !indices.is_empty(){
+        if text.starts_with("\u{000B}") && !indices.is_empty() {
             indices.remove(0);
             styles.pop();
+        }
+
+        // Probably the best solution here would be to rewrite the render_hyperlink to take this
+        // case in account, backtracking if necessary, but this will do for now
+        // https://github.com/laurent22/joplin/issues/11617
+        if text.starts_with("\u{fddf}") {
+            let first_indice = match indices.get(0) {
+                Some(i) => *i,
+                None => 0,
+            };
+            if first_indice == 1 {
+                indices.remove(0);
+                styles.pop();
+            }
         }
 
         if indices.is_empty() {
@@ -100,6 +114,7 @@ impl<'a> Renderer<'a> {
         }
 
         let mut in_hyperlink = false;
+        let mut is_href_finished = true;
 
         let content = parts
             .into_iter()
@@ -107,12 +122,18 @@ impl<'a> Renderer<'a> {
             .zip(styles.iter())
             .map(|(text, style)| {
                 if style.hyperlink() {
-                    let text = self.render_hyperlink(text, style, in_hyperlink);
-                    in_hyperlink = true;
-
-                    text
+                    let result =
+                        self.render_hyperlink(text.clone(), style, in_hyperlink, is_href_finished);
+                    if result.is_ok() {
+                        in_hyperlink = true;
+                        is_href_finished = result.as_ref().unwrap().1;
+                        Ok(result.unwrap().0)
+                    } else {
+                        Ok(text)
+                    }
                 } else {
                     in_hyperlink = false;
+                    is_href_finished = true;
 
                     let style = self.parse_style(style);
 
@@ -128,12 +149,17 @@ impl<'a> Renderer<'a> {
         Ok(fix_newlines(&content))
     }
 
+    /// The hyperlink is delimited by the HYPERLINK_MARKER until the closing double quote
+    /// In some cases the hyperlink is broken in more than one style (e.g.: when there are
+    /// chinese characters on the url path), so we must keep track of the href status
+    /// https://github.com/laurent22/joplin/issues/11600
     fn render_hyperlink(
         &self,
         text: String,
         style: &ParagraphStyling,
         in_hyperlink: bool,
-    ) -> Result<String> {
+        is_href_finished: bool,
+    ) -> Result<(String, bool)> {
         const HYPERLINK_MARKER: &str = "\u{fddf}HYPERLINK \"";
 
         let style = self.parse_style(style);
@@ -141,17 +167,32 @@ impl<'a> Renderer<'a> {
         if text.starts_with(HYPERLINK_MARKER) {
             let url = text
                 .strip_prefix(HYPERLINK_MARKER)
-                .wrap_err("Hyperlink has no start marker")?
-                .strip_suffix('"')
-                .wrap_err("Hyperlink has no end marker")?;
+                .wrap_err("Hyperlink has no start marker")?;
 
-            Ok(format!("<a href=\"{}\" style=\"{}\">", url, style))
-        } else if in_hyperlink {
-            Ok(text + "</a>")
+            let url_2 = url.strip_suffix('"');
+
+            if url_2.is_some() {
+                return Ok((
+                    format!("<a href=\"{}\" style=\"{}\">", url_2.unwrap(), style),
+                    true,
+                ));
+            } else {
+                // If we didn't find the double quotes means that href still has content in following styles
+                Ok((format!("<a href=\"{}", url), false))
+            }
+        } else if in_hyperlink && is_href_finished {
+            Ok((text + "</a>", true))
+        } else if in_hyperlink && !is_href_finished {
+            let url = text.strip_suffix('"');
+            if url.is_some() {
+                return Ok((format!("{}\" style=\"{}\">", url.unwrap(), style), true));
+            } else {
+                Ok((text, false))
+            }
         } else {
-            Ok(format!(
-                "<a href=\"{}\" style=\"{}\">{}</a>",
-                text, style, text
+            Ok((
+                format!("<a href=\"{}\" style=\"{}\">{}</a>", text, style, text),
+                true,
             ))
         }
     }

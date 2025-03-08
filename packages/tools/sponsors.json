@@ -1,7 +1,7 @@
 {
 	"github": [
 		{
-			"name": "matmoly"
+			"name": "felixstorm"
 		},
 		{
 			"name": "KentBrockman"
@@ -93,12 +93,6 @@
 			"githubUser": "route4me"
 		},
 		{
-			"url": "https://buyyoutubviews.com",
-			"title": "BYTV",
-			"imageName": "BYTV.png",
-			"githubUser": "bytv1"
-		},
-		{
 			"url": "https://casinoreviews.net",
 			"title": "Casino Reviews",
 			"imageName": "CasinoReviews.png"
@@ -107,6 +101,36 @@
 			"url": "https://useviral.com.br/",
 			"title": "Comprar seguidores Instagram",
 			"imageName": "Useviral.png"
+		},
+		{
+			"url": "https://ca.edubirdie.com/",
+			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
+			"imageName": "Edubirdie.png",
+			"alt": "EduBirdie"
+		},
+		{
+			"url": "https://topagency.webflow.io",
+			"title": "WebDesignAgency",
+			"imageName": "WebDesignAgency.png",
+			"alt": "web design agency"
+		},
+		{
+			"url": "https://realgambling.ca/",
+			"title": "RealGambling.ca",
+			"imageName": "RealGambling.png",
+			"alt": "RealGambling.ca"
+		},
+		{
+			"url": "https://essaypro.com/",
+			"title": "write an essay online with EssayPro",
+			"imageName": "EssayPro.png",
+			"alt": "write an essay online with EssayPro"
+		},
+		{
+			"url": "https://www.slotozilla.com/nz/no-deposit-bonus",
+			"title": "casino without making any upfront cost",
+			"imageName": "Slotozilla.png",
+			"alt": "casino without making any upfront cost"
 		}
 	],
 	"orgsOld": [
@@ -136,6 +160,12 @@
 			"title": "Famegear",
 			"imageName": "Famegear.png",
 			"githubUser": "rankmediateknologi"
+		},
+		{
+			"url": "https://buyyoutubviews.com",
+			"title": "BYTV",
+			"imageName": "BYTV.png",
+			"githubUser": "bytv1"
 		}
 	]
 }

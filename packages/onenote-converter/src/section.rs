@@ -64,7 +64,7 @@ impl Renderer {
                 let _ = unsafe { write_file(&page_path, page_html.as_bytes()) };
 
                 let page_path_without_basedir =
-                    unsafe { remove_prefix(page_path.as_str(), output_dir.as_str()) }
+                    unsafe { remove_prefix(page_path, output_dir.as_str()) }
                         .unwrap()
                         .as_string()
                         .unwrap();
@@ -72,7 +72,6 @@ impl Renderer {
             }
         }
 
-        log!("Section finished rendering: {:?}", section.display_name());
         let toc_html = templates::section::render(section.display_name(), toc)?;
         let toc_file = unsafe {
             join_path(

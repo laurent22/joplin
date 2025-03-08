@@ -203,6 +203,14 @@ export default class PluginService extends BaseService {
 		return this.plugins_[id];
 	}
 
+	public safePluginNameById(id: string) {
+		if (!this.plugins_[id]) {
+			return id;
+		}
+
+		return this.pluginById(id).manifest?.name ?? 'Unknown';
+	}
+
 	public viewControllerByViewId(id: string): ViewController|null {
 		for (const [, plugin] of Object.entries(this.plugins_)) {
 			if (plugin.hasViewController(id)) return plugin.viewController(id);

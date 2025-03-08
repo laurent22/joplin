@@ -14,6 +14,10 @@ export default class SettingsScreen {
 		return this.page.getByRole('tab', { name: tabName });
 	}
 
+	public getLastTab() {
+		return this.page.getByRole('tablist').getByRole('tab').last();
+	}
+
 	public async waitFor() {
 		await this.okayButton.waitFor();
 		await this.appearanceTabButton.waitFor();

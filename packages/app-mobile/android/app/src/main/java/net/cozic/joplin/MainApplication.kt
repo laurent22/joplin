@@ -4,7 +4,6 @@ import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
 import android.app.Application
-import android.database.CursorWindow
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -45,17 +44,6 @@ class MainApplication : Application(), ReactApplication {
 
     override fun onCreate() {
         super.onCreate()
-
-        // To try to fix the error "Row too big to fit into CursorWindow"
-        // https://github.com/andpor/react-native-sqlite-storage/issues/364#issuecomment-526423153
-        // https://github.com/laurent22/joplin/issues/1767#issuecomment-515617991
-        try {
-            val field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
-            field.isAccessible = true
-            field[null] = 50 * 1024 * 1024 //the 102400 is the new size added
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
         SoLoader.init(this,  /* native exopackage */false)
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {

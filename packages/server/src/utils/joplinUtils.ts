@@ -26,6 +26,7 @@ import MustacheService from '../services/MustacheService';
 import Logger from '@joplin/utils/Logger';
 import config from '../config';
 import { TreeItem } from '../models/ItemResourceModel';
+import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 const logger = Logger.create('JoplinUtils');
@@ -116,11 +117,26 @@ export function isJoplinResourceBlobPath(path: string): boolean {
 	return path.indexOf(resourceDirName) === 0;
 }
 
-export async function localFileFromUrl(url: string): Promise<string> {
+const resolveUnsafeAssetPath = (relativeAssetPath: string) => {
+	const resolvedPath = resolvePathWithinDir(pluginAssetRootDir_, relativeAssetPath);
+	if (resolvedPath === null) {
+		throw new ErrorForbidden('Disallowed access: Item is not in the plugin asset directory');
+	}
+	return resolvedPath;
+};
+
+export async function localFileFromUrl(urlPath: string): Promise<string> {
 	const cssPluginAssets = 'css/pluginAssets/';
 	const jsPluginAssets = 'js/pluginAssets/';
-	if (url.indexOf(cssPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(cssPluginAssets.length)}`;
-	if (url.indexOf(jsPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(jsPluginAssets.length)}`;
+	const baseUrls = [cssPluginAssets, jsPluginAssets];
+
+	for (const baseUrl of baseUrls) {
+		if (urlPath.startsWith(baseUrl)) {
+			const pluginAssetPath = urlPath.substring(baseUrl.length);
+			return resolveUnsafeAssetPath(pluginAssetPath);
+		}
+	}
+
 	return null;
 }
 

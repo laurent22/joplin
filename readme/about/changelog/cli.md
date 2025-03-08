@@ -1,5 +1,36 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.3) - 2025-01-16T01:14:35Z
+
+- Improved: Updated packages @rollup/plugin-node-resolve (v15.2.4), adm-zip (v0.5.16)
+- Fixed: Revert deprecation warning suppression (#11620) (#11577 by [@pedr](https://github.com/pedr))
+
+## [cli-v3.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.2) - 2024-12-12T15:44:50Z
+
+- Improved: Make Sharp package optional (388d124)
+
+## [cli-v3.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.1) - 2024-12-12T14:16:34Z
+
+- New: Add new encryption methods based on native crypto libraries (#10696 by Self Not Found)
+- Improved: Added feature flag to disable sync lock support (#10925) (#10407)
+- Improved: Deprecated OneDrive sync method (e36f377)
+- Improved: Make feature flags advanced settings by default (700ffa2)
+- Improved: Mermaid version update (#11367 by [@LEVIII007](https://github.com/LEVIII007))
+- Improved: Prevent PDF and HTML export from failing when a plugin references a non-existent file (d1fc69f)
+- Improved: Reactivate pCloud synchronisation (23032b9)
+- Improved: Remove the need for sync locks (#11377)
+- Improved: Removed deprecation notice on OneDrive sync method (ceea0bc)
+- Improved: Set min version for synchronising to 3.0.0 (a1f9c9c)
+- Improved: Updated packages @adobe/css-tools (v4.4.0), @rollup/plugin-commonjs (v25.0.8), @rollup/plugin-replace (v5.0.7), async-mutex (v0.5.0), compare-versions (v6.1.1), dayjs (v1.11.12), glob (v10.4.5), highlight.js (v11.10.0), jsdom (v24.1.1), katex (v0.16.11), markdown-it-ins (v4), markdown-it-sup (v2), react, sass (v1.77.8), sharp (v0.33.4), style-to-js (v1.1.12), tar (v6.2.1), terminal-kit (v3.1.1), tesseract.js (v5.1.0), turndown (v7.2.0)
+- Fixed: Change Resource filetype detecting strategy (#10907) (#10653 by [@pedr](https://github.com/pedr))
+- Fixed: Decrypt master keys only as needed (#10990) (#10856 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Delete revisions on the sync target when deleted locally (#11035) (#11017 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Disable deprecation warning when running Joplin from CLI (#11074) (#10992 by [@pedr](https://github.com/pedr))
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms (#10897) (#10896 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix `undefined` errors in translations (#11407 by Self Not Found)
+- Fixed: Fix the error caused by undefined isCodeBlock_ (turndown-plugin-gfm) (#11471 by Manabu Nakazawa)
+- Fixed: WebDAV synchronisation not working because of URL encoding differences (#11076) (#10608 by [@pedr](https://github.com/pedr))
+
 ## [cli-v3.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.0.1) - 2024-07-02T18:42:44Z
 
 - Improved: Add trash folder (#9671) (#483)

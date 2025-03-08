@@ -42,34 +42,24 @@ export default class NoteListUtils {
 		const menu = new Menu();
 
 		if (!includeEncryptedNotes && !includeDeletedNotes) {
+			if (singleNoteId) {
+				menu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem('openNoteInNewWindow', singleNoteId)),
+				);
+
+				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
+
+				menu.append(new MenuItem({ type: 'separator' }));
+			}
+
 			menu.append(
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
 			);
 
-			menu.append(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
-			);
-
-			menu.append(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
-			);
-
-			if (singleNoteId) {
-				const editInMenu = new Menu();
-
-				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				editInMenu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
-				editInMenu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('openNoteInNewWindow', singleNoteId)),
-				);
-
-				menu.append(new MenuItem({ label: _('Edit in...'), submenu: editInMenu }));
-			}
-
+			menu.append(new MenuItem({ type: 'separator' }));
 
 			if (noteIds.length <= 1) {
 				menu.append(
@@ -108,6 +98,25 @@ export default class NoteListUtils {
 			}
 
 			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
+			);
+
+			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
+			);
+
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+				),
+			);
+
+			menu.append(new MenuItem({ type: 'separator' }));
+
+			menu.append(
 				new MenuItem({
 					label: _('Copy Markdown link'),
 					click: async () => {
@@ -131,6 +140,8 @@ export default class NoteListUtils {
 					}),
 				);
 			}
+
+			menu.append(new MenuItem({ type: 'separator' }));
 
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
@@ -191,14 +202,8 @@ export default class NoteListUtils {
 					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
 				),
 			);
-		} else {
-			menu.append(
-				new MenuItem(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
-				),
-			);
 		}
+
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 

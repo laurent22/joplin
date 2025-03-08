@@ -7,6 +7,7 @@ import { FolderEntity, NoteEntity } from '../database/types';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
+import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
 
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
@@ -43,6 +44,7 @@ export interface WhenClauseContext {
 	oneNoteSelected: boolean;
 	someNotesSelected: boolean;
 	syncStarted: boolean;
+	hasActivePluginEditor: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -60,6 +62,8 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 	const commandFolderId = options.commandFolderId || windowState.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
+
+	const { editorPlugin } = state.pluginService ? getActivePluginEditorView(state.pluginService.plugins) : { editorPlugin: null };
 
 	const settings = state.settings || {};
 
@@ -108,5 +112,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		joplinServerConnected: [9, 10].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,
 		hasMultiProfiles: state.profileConfig && state.profileConfig.profiles.length > 1,
+
+		hasActivePluginEditor: !!editorPlugin,
 	};
 }

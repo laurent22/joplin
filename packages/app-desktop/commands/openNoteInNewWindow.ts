@@ -7,7 +7,7 @@ import Setting from '@joplin/lib/models/Setting';
 
 export const declaration: CommandDeclaration = {
 	name: 'openNoteInNewWindow',
-	label: () => _('Edit in new window'),
+	label: () => _('Open in new window'),
 	iconName: 'icon-share',
 };
 

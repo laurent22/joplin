@@ -28,7 +28,7 @@ describe('linkReplacement', () => {
 			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
-					item: {},
+					item: { id: 'test' },
 					localState: {
 						fetch_status: 2, // FETCH_STATUS_DONE
 					},
@@ -46,7 +46,7 @@ describe('linkReplacement', () => {
 			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
-					item: {},
+					item: { id: 'test' },
 					localState: {
 						fetch_status: 0, // FETCH_STATUS_IDLE
 					},
@@ -66,7 +66,7 @@ describe('linkReplacement', () => {
 			ResourceModel: defaultResourceModel,
 			resources: {
 				[resourceId]: {
-					item: {},
+					item: { id: 'test' },
 					localState: {
 						fetch_status: 2, // FETCH_STATUS_DONE
 					},

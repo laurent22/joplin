@@ -6,6 +6,7 @@ import GoToAnything from './GoToAnything';
 import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
+import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -14,6 +15,7 @@ export default class MainScreen {
 	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
 	public readonly goToAnything: GoToAnything;
+	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -22,6 +24,7 @@ export default class MainScreen {
 		this.dialog = page.locator('.dialog-modal-layer');
 		this.noteEditor = new NoteEditorScreen(page);
 		this.goToAnything = new GoToAnything(page, this);
+		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
 	}
 
 	public async setup() {

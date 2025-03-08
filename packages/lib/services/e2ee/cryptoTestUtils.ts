@@ -113,6 +113,7 @@ export async function testStringPerformance(method: EncryptionMethod, dataSize: 
 			const deserialized = await Note.unserialize(serialized);
 			const decryptedNote = await Note.decrypt(deserialized);
 			const tick3 = performance.now();
+			// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 			(decryptedNote.title === note.title);
 			encryptTime += tick2 - tick1;
 			decryptTime += tick3 - tick2;

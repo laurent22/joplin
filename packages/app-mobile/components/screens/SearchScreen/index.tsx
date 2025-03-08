@@ -86,7 +86,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 			<ScreenHeader
 				title={_('Search')}
 				folderPickerOptions={{
-					enabled: props.noteSelectionEnabled,
+					visible: props.noteSelectionEnabled,
 					mustSelect: true,
 				}}
 				showSideMenuButton={false}

@@ -1,5 +1,5 @@
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import type { MarkupToHtmlConverter, RenderResultPluginAsset, FsDriver as RendererFsDriver } from '@joplin/renderer/types';
+import type { MarkupToHtmlConverter, RenderOptions, RenderResultPluginAsset, FsDriver as RendererFsDriver } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
 import addPluginAssets from './utils/addPluginAssets';
 import { ExtraContentScriptSource } from './types';
@@ -115,7 +115,7 @@ export default class Renderer {
 		this.lastSettings = settings;
 		this.lastRenderMarkup = markup;
 
-		const options = {
+		const options: RenderOptions = {
 			onResourceLoaded: settings.onResourceLoaded,
 			highlightedKeywords: settings.highlightedKeywords,
 			resources: settings.resources,
@@ -140,6 +140,7 @@ export default class Renderer {
 
 				return settings.pluginSettings[settingKey];
 			},
+			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
 		};
 
 		this.markupToHtml.clearCache(markup.language);

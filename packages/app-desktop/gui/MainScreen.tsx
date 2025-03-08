@@ -41,6 +41,9 @@ import validateColumns from './NoteListHeader/utils/validateColumns';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
 import NoteEditor from './NoteEditor/NoteEditor';
+import PluginNotification from './PluginNotification/PluginNotification';
+import { Toast } from '@joplin/lib/services/plugins/api/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -79,6 +82,7 @@ interface Props {
 	notesSortOrderReverse: boolean;
 	notesColumns: NoteListColumns;
 	showInvalidJoplinCloudCredential: boolean;
+	toast: Toast;
 }
 
 interface ShareFolderDialogOptions {
@@ -116,6 +120,18 @@ const defaultLayout: LayoutItem = {
 		{ key: 'noteList', width: 250 },
 		{ key: 'editor' },
 	],
+};
+
+const layoutKeyToLabel = (key: string, plugins: PluginStates) => {
+	if (key === 'sideBar') return _('Sidebar');
+	if (key === 'noteList') return _('Note list');
+	if (key === 'editor') return _('Editor');
+
+	const viewInfo = pluginUtils.viewInfoByViewId(plugins, key);
+	if (viewInfo) {
+		return PluginService.instance().safePluginNameById(viewInfo.plugin.id);
+	}
+	return key;
 };
 
 class MainScreenComponent extends React.Component<Props, State> {
@@ -564,7 +580,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={styles.messageBox}>
-				<span style={theme.textStyle}>{msg}</span>
+				<span
+					style={theme.textStyle}
+					role='alert'
+					// role='alert' has an implicit aria-live='assertive', which tells screen readers that changes
+					// to the warning's content should be announced as soon as possible. However, since it's generally
+					// okay for announcements related to these notifications to be delayed, use aria-live='polite'.
+					aria-live='polite'
+				>{msg}</span>
 			</div>
 		);
 	}
@@ -725,6 +748,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		);
 	}
 
+	private layoutKeyToLabel = (key: string) => {
+		return layoutKeyToLabel(key, this.props.plugins);
+	};
+
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = {
@@ -743,6 +770,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				onResize={this.resizableLayout_resize}
 				onMoveButtonClick={this.resizableLayout_moveButtonClick}
 				renderItem={this.resizableLayout_renderItem}
+				layoutKeyToLabel={this.layoutKeyToLabel}
 				moveMode={this.props.layoutMoveMode}
 				moveModeMessage={_('Use the arrows to move the layout items. Press "Escape" to exit.')}
 			/>
@@ -758,6 +786,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 					dispatch={this.props.dispatch as any}
 				/>
 				<UpdateNotification themeId={this.props.themeId} />
+				<PluginNotification
+					themeId={this.props.themeId}
+					toast={this.props.toast}
+				/>
 				{messageComp}
 				{layoutComp}
 			</div>
@@ -800,6 +832,7 @@ const mapStateToProps = (state: AppState) => {
 		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
+		toast: state.toast,
 	};
 };
 

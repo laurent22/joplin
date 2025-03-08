@@ -122,6 +122,7 @@ export default class JoplinCommands {
 		CommandService.instance().registerRuntime(declaration.name, runtime);
 		this.plugin_.addOnUnloadListener(() => {
 			CommandService.instance().unregisterRuntime(declaration.name);
+			CommandService.instance().unregisterDeclaration(declaration.name);
 		});
 	}
 

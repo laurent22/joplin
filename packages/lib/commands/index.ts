@@ -4,7 +4,11 @@ import * as historyBackward from './historyBackward';
 import * as historyForward from './historyForward';
 import * as openMasterPasswordDialog from './openMasterPasswordDialog';
 import * as permanentlyDeleteNote from './permanentlyDeleteNote';
+import * as renderMarkup from './renderMarkup';
+import * as showEditorPlugin from './showEditorPlugin';
 import * as synchronize from './synchronize';
+import * as toggleAllFolders from './toggleAllFolders';
+import * as toggleEditorPlugin from './toggleEditorPlugin';
 
 const index: any[] = [
 	deleteNote,
@@ -12,7 +16,11 @@ const index: any[] = [
 	historyForward,
 	openMasterPasswordDialog,
 	permanentlyDeleteNote,
+	renderMarkup,
+	showEditorPlugin,
 	synchronize,
+	toggleAllFolders,
+	toggleEditorPlugin,
 ];
 
 export default index;

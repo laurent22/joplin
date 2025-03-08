@@ -2,7 +2,7 @@ import * as React from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
+import ToolbarButtonUtils, { ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { connect } from 'react-redux';
 import { buildStyle } from '@joplin/lib/theme';
@@ -14,7 +14,7 @@ interface NoteToolbarProps {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
-	toolbarButtonInfos: ToolbarButtonInfo[];
+	toolbarButtonInfos: ToolbarItem[];
 	disabled: boolean;
 }
 
@@ -35,6 +35,7 @@ function NoteToolbar(props: NoteToolbarProps) {
 	return (
 		<ToolbarBase
 			style={styles.root}
+			scrollable={false}
 			items={props.toolbarButtonInfos}
 			disabled={props.disabled}
 			aria-label={_('Note')}

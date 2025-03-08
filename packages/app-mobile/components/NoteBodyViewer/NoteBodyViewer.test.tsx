@@ -43,6 +43,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 		<NoteBodyViewer
 			themeId={Setting.THEME_LIGHT}
 			style={emptyObject}
+			fontSize={12}
 			noteBody={noteBody}
 			noteMarkupLanguage={MarkupLanguage.Markdown}
 			highlightedKeywords={highlightedKeywords}

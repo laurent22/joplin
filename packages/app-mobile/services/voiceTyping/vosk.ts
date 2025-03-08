@@ -5,6 +5,7 @@ const vosk: VoiceTypingProvider = {
 	modelLocalFilepath: () => null,
 	getDownloadUrl: () => null,
 	getUuidPath: () => null,
+	deleteCachedModels: () => null,
 	build: async () => {
 		throw new Error('Unsupported!');
 	},

@@ -1,17 +1,25 @@
-
-import { Locator, Page } from '@playwright/test';
+import { ElectronApplication, Locator, Page } from '@playwright/test';
 import { expect } from '../util/test';
+import activateMainMenuItem from '../util/activateMainMenuItem';
+import EditorCodeDialog from './EditorCodeDialog';
 
 export default class NoteEditorPage {
 	public readonly codeMirrorEditor: Locator;
 	public readonly noteViewerContainer: Locator;
 	public readonly richTextEditor: Locator;
 	public readonly noteTitleInput: Locator;
+
+	public readonly richTextCodeEditor: EditorCodeDialog;
+
 	public readonly attachFileButton: Locator;
+	public readonly toggleCodeBlockButton: Locator;
 	public readonly toggleEditorsButton: Locator;
 	public readonly toggleEditorLayoutButton: Locator;
+	private readonly disableTabNavigationButton: Locator;
+
 	public readonly editorSearchInput: Locator;
 	public readonly viewerSearchInput: Locator;
+
 	private readonly containerLocator: Locator;
 
 	public constructor(page: Page) {
@@ -20,12 +28,16 @@ export default class NoteEditorPage {
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.noteTitleInput = this.containerLocator.locator('.title-input');
 		this.attachFileButton = this.containerLocator.getByRole('button', { name: 'Attach file' });
+		this.toggleCodeBlockButton = this.containerLocator.getByRole('button', { name: 'Code Block' });
 		this.toggleEditorsButton = this.containerLocator.getByRole('button', { name: 'Toggle editors' });
 		this.toggleEditorLayoutButton = this.containerLocator.getByRole('button', { name: 'Toggle editor layout' });
 		this.noteViewerContainer = this.containerLocator.locator('iframe[src$="note-viewer/index.html"]');
 		// The editor and viewer have slightly different search UI
 		this.editorSearchInput = this.containerLocator.getByPlaceholder('Find');
 		this.viewerSearchInput = this.containerLocator.getByPlaceholder('Search...');
+		this.disableTabNavigationButton = this.containerLocator.getByRole('button', { name: 'Tab moves focus' });
+
+		this.richTextCodeEditor = new EditorCodeDialog(page);
 	}
 
 	public toolbarButtonLocator(title: string) {
@@ -73,6 +85,18 @@ export default class NoteEditorPage {
 
 	public focusCodeMirrorEditor() {
 		return this.codeMirrorEditor.click();
+	}
+
+	public async enableTabNavigation(electronApp: ElectronApplication) {
+		await expect(this.disableTabNavigationButton).not.toBeVisible();
+		await activateMainMenuItem(electronApp, 'Tab moves focus');
+		await expect(this.disableTabNavigationButton).toBeVisible();
+	}
+
+	public async disableTabNavigation(electronApp: ElectronApplication) {
+		await expect(this.disableTabNavigationButton).toBeVisible();
+		await activateMainMenuItem(electronApp, 'Tab moves focus');
+		await expect(this.disableTabNavigationButton).not.toBeVisible();
 	}
 
 	public async waitFor() {

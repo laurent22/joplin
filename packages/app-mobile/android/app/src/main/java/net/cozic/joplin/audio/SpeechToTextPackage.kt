@@ -1,6 +1,5 @@
 package net.cozic.joplin.audio
 
-import ai.onnxruntime.OrtEnvironment
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.NativeModule
@@ -24,7 +23,6 @@ class SpeechToTextPackage : ReactPackage {
 	class SpeechToTextModule(
 		private var context: ReactApplicationContext,
 	) : ReactContextBaseJavaModule(context), LifecycleEventListener {
-		private var environment: OrtEnvironment? = null
 		private val executorService: ExecutorService = Executors.newFixedThreadPool(1)
 		private val sessionManager = SpeechToTextSessionManager(executorService)
 
@@ -32,21 +30,24 @@ class SpeechToTextPackage : ReactPackage {
 
 		override fun onHostResume() { }
 		override fun onHostPause() { }
-		override fun onHostDestroy() {
-			environment?.close()
+		override fun onHostDestroy() { }
+
+		@ReactMethod
+		fun runTests(promise: Promise) {
+			try {
+				NativeWhisperLib.runTests()
+				promise.resolve(true)
+			} catch (exception: Throwable) {
+				promise.reject(exception)
+			}
 		}
 
 		@ReactMethod
-		fun openSession(modelPath: String, locale: String, promise: Promise) {
+		fun openSession(modelPath: String, locale: String, prompt: String, promise: Promise) {
 			val appContext = context.applicationContext
-			// Initialize environment as late as possible:
-			val ortEnvironment = environment ?: OrtEnvironment.getEnvironment()
-			if (environment != null) {
-				environment = ortEnvironment
-			}
 
 			try {
-				val sessionId = sessionManager.openSession(modelPath, locale, ortEnvironment, appContext)
+				val sessionId = sessionManager.openSession(modelPath, locale, prompt, appContext)
 				promise.resolve(sessionId)
 			} catch (exception: Throwable) {
 				promise.reject(exception)
@@ -69,13 +70,18 @@ class SpeechToTextPackage : ReactPackage {
 		}
 
 		@ReactMethod
-		fun expandBufferAndConvert(sessionId: Int, duration: Double, promise: Promise) {
-			sessionManager.expandBufferAndConvert(sessionId, duration, promise)
+		fun convertNext(sessionId: Int, duration: Double, promise: Promise) {
+			sessionManager.convertNext(sessionId, duration, promise)
 		}
 
 		@ReactMethod
 		fun convertAvailable(sessionId: Int, promise: Promise) {
 			sessionManager.convertAvailable(sessionId, promise)
+		}
+
+		@ReactMethod
+		fun getPreview(sessionId: Int, promise: Promise) {
+			sessionManager.getPreview(sessionId, promise)
 		}
 
 		@ReactMethod

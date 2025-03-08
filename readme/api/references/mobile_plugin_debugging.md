@@ -32,6 +32,20 @@ After loading, plugins are run in an `<iframe>` with an `about:srcdoc` URL. To v
    - The JavaScript context will be named `about:srcdoc`.
    - If using Chrome's DevTools, the [`debug`](https://developer.chrome.com/docs/devtools/console/utilities#debug-function) and other console utility function may be helpful.
 
+## Web: Automatic reloading
+
+In some browsers, the web version of the mobile app supports development plugins. Development plugins automatically reload when changed on disk. Non-development plugins must be re-installed when changed.
+
+To add a development plugin:
+1. Open the web version of Joplin mobile in a Chromium-based browser.
+   - Development plugins are loaded with `showOpenFilePicker`. As of early 2025, [only Chrome and several Chromium-based browsers support this API](https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker#browser_compatibility).
+2. Open Configuration > Plugins > Advanced.
+3. Click "Development plugins".
+4. Select a plugin folder.
+   - This folder should contain the `publish`, `dist`, and `src` folders for the plugin.
+5. Click "save".
+
+**Note**: Markdown editor plugins may not fully reload unless either the page is reloaded or the Markdown editor is closed and re-opened.
 
 ## Android: Inspecting a WebView
 

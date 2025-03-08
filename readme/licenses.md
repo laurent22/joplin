@@ -24875,6 +24875,16 @@ This package's copy of the Apache 2 license includes the following appendix:
    limitations under the License.
 ```
 
+### whisper.cpp
+
+From https://github.com/ggerganov/whisper.cpp/blob/master/LICENSE
+
+**MIT**:
+
+Copyright (c) 2023-2024 The ggml authors
+
+See [Appendix B](#appendix-b-the-mit-license) for the full MIT license.
+
 ### tkwidgets
 
 From https://github.com/laurent22/tkwidgets.

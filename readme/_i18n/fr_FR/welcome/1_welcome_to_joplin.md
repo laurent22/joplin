@@ -52,7 +52,7 @@ Beaucoup plus est possible, y compris l'ajout d'exemples de code informatique, d
 
 Les notes de Joplin sont organisées en une arborescence de carnets et de sous-carnets.
 
-- Sur l'appli de **bureau**, vous pouvez créer un carnet en cliquant sur "Nouveau carnet", puis vous pouvez les faire glisser et les déposer dans d'autres carnets pour les organiser comme vous le souhaitez.
+- Sur l'appli de **bureau**, vous pouvez créer un carnet en cliquant sur "Nouveau carnet", puis vous pouvez les organiser à votre guise en les faisant glisser-déposer dans d'autres carnets ou en cliquant droit et sélectionnant "Déplacer vers le carnet". Vous pouvez également déplacer un sous-carnet vers la racine en le faisant glisser sur l'intitulé "Carnets".
 - Sur **mobile**, appuyez sur l'icône "+" et sélectionnez "Nouveau carnet".
 - Sur le **terminal**, appuyez sur `:mn`
 

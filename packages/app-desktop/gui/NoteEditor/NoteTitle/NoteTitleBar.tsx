@@ -85,7 +85,12 @@ export default function NoteTitleBar(props: Props) {
 	const onTitleKeydown: React.KeyboardEventHandler<HTMLInputElement> = useCallback((event) => {
 		const titleElement = event.currentTarget;
 		const selectionAtEnd = titleElement.selectionEnd === titleElement.value.length;
-		if ((event.key === 'ArrowDown' && selectionAtEnd) || (event.key === 'Enter' && !event.shiftKey)) {
+		const isNavigationShortcut = (event.key === 'ArrowDown' && selectionAtEnd) || (event.key === 'Enter' && !event.shiftKey);
+		const composing = event.nativeEvent.isComposing;
+
+		// Don't change focus if the navigation shortcut is fired during composition. See
+		// https://github.com/laurent22/joplin/issues/11485.
+		if (!composing && isNavigationShortcut) {
 			event.preventDefault();
 			const moveCursorToStart = event.key === 'ArrowDown';
 			void CommandService.instance().execute('focusElement', 'noteBody', { moveCursorToStart });

@@ -59,6 +59,7 @@ class Patcher {
 interface ReleaseConfig {
 	name: string;
 	patch?: (patcher: Patcher, rnDir: string)=> Promise<void>;
+	disabled?: boolean;
 }
 
 function increaseGradleVersionCode(content: string) {
@@ -119,6 +120,7 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 
 	await execCommand('yarn install', { showStdout: false });
 	await execCommand('yarn tsc', { showStdout: false });
+	await execCommand('yarn buildParallel', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 
@@ -230,6 +232,7 @@ async function main() {
 
 		{
 			name: 'armeabi-v7a',
+			disabled: true,
 			patch: async (patcher, rnDir) => {
 				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
 					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a"');
@@ -240,6 +243,7 @@ async function main() {
 
 		{
 			name: 'x86',
+			disabled: true,
 			patch: async (patcher, rnDir) => {
 				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
 					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86"');
@@ -250,6 +254,7 @@ async function main() {
 
 		{
 			name: 'arm64-v8a',
+			disabled: true,
 			patch: async (patcher, rnDir) => {
 				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
 					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "arm64-v8a"');
@@ -260,6 +265,7 @@ async function main() {
 
 		{
 			name: 'x86_64',
+			disabled: true,
 			patch: async (patcher, rnDir) => {
 				await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
 					content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86_64"');
@@ -275,6 +281,7 @@ async function main() {
 
 	for (const releaseConfig of releaseConfigs) {
 		if (releaseNameOnly && releaseConfig.name !== releaseNameOnly) continue;
+		if (releaseConfig.disabled) continue;
 		const projectName = releaseConfig.name === 'vosk' ? modProjectName : mainProjectName;
 		releaseFiles[releaseConfig.name] = await createRelease(projectName, releaseConfig, tagName, version);
 	}

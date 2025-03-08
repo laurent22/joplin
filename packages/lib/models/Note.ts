@@ -29,7 +29,7 @@ export interface PreviewsOrder {
 	dir: string;
 }
 
-interface PreviewsOptions {
+export interface PreviewsOptions {
 	order?: PreviewsOrder[];
 	conditions?: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -893,8 +893,7 @@ export default class Note extends BaseItem {
 					'updated_time = ?',
 				];
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const params: any[] = [
+				const params: (string|number)[] = [
 					now,
 					now,
 				];
@@ -907,7 +906,7 @@ export default class Note extends BaseItem {
 				const sql = `
 					UPDATE notes
 					SET	${updateSql.join(', ')}						
-					WHERE id IN ('${processIds.join('\',\'')}')
+					WHERE id IN (${this.escapeIdsForSql(processIds)})
 				`;
 
 				await this.db().exec({ sql, params });
@@ -1030,6 +1029,7 @@ export default class Note extends BaseItem {
 					FROM notes
 					WHERE
 						is_conflict = 0
+						AND deleted_time = 0
 						${showCompletedTodos ? '' : 'AND todo_completed = 0'}
 					AND parent_id = ?
 				`;

@@ -3,6 +3,7 @@ import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State } from './re
 import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
 import Note from './models/Note';
 import BaseModel from './BaseModel';
+import Folder from './models/Folder';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -709,13 +710,19 @@ describe('reducer', () => {
 
 	// Regression test for #10589.
 	it.each([
-		true, false,
-	])('should preserve note selection if specified while moving a note (preserveSelection: %j)', async (preserveSelection) => {
+		[true, false],
+		[undefined, false],
+		[undefined, true],
+		[false, true],
+	])('should preserve note selection if specified with an option (preserveSelection: %j, allowSelectionInOtherFolders: %j)', async (
+		preserveSelectionOption, allowSelectionInOtherFolders,
+	) => {
 		const folders = await createNTestFolders(3);
 		const notes = await createNTestNotes(5, folders[0]);
 
 		// select the 1st folder and the 1st note
 		let state = initTestState(folders, 0, notes, [0]);
+		state = { ...state, allowSelectionInOtherFolders };
 		state = goToNote(notes, [0], state);
 
 		expect(state.selectedNoteIds).toHaveLength(1);
@@ -729,11 +736,15 @@ describe('reducer', () => {
 		await Note.moveToFolder(
 			state.selectedNoteIds[0],
 			folders[1].id,
-			preserveSelection ? { dispatchOptions: { preserveSelection: true } } : undefined,
+			{ dispatchOptions: { preserveSelection: preserveSelectionOption } },
 		);
 
 		expect(BaseModel.dispatch).toHaveBeenCalled();
-		if (preserveSelection) {
+
+		// preserveSelectionOption takes precedence over allowSelectionInOtherFolders
+		const shouldPreserveSelection = preserveSelectionOption ?? allowSelectionInOtherFolders;
+
+		if (shouldPreserveSelection) {
 			expect(state.selectedNoteIds).toMatchObject([notes[0].id]);
 		} else {
 			expect(state.selectedNoteIds).toMatchObject([notes[1].id]);
@@ -741,6 +752,27 @@ describe('reducer', () => {
 		// Original note should no longer be present in the sidebar
 		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
 		expect(state.selectedFolderId).toBe(folders[0].id);
+	});
+
+	test('when selection is allowed in unselected folders, NOTE_UPDATE_ALL should not remove items from the selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(2, folders[0]);
+
+		// select the 1st folder and the 1st note
+		let state = initTestState(folders, 0, notes, [0]);
+		state = { ...state, allowSelectionInOtherFolders: true };
+		state = goToNote(notes, [0], state);
+
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+		expect(state.notes).toHaveLength(2);
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ALL',
+			notes: [],
+		});
+
+		expect(state.notes).toHaveLength(0);
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
 	});
 
 	// window tests
@@ -782,5 +814,36 @@ describe('reducer', () => {
 			});
 			checkCurrentState(windowId);
 		}
+	});
+
+	test('closing the focused window should set the focus to a different window', async () => {
+		const folder = await Folder.save({ title: 'Test' });
+		const notes = await createNTestNotes(3, folder);
+		let state = initTestState([folder], 0, notes, [0]);
+
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		state = reducer(state, {
+			type: 'WINDOW_FOCUS',
+			windowId: secondaryWindowId,
+		});
+
+		expect(state.windowId).toBe(secondaryWindowId);
+		expect(state.selectedNoteIds).toEqual([notes[2].id]);
+
+
+		// Closing the focused window should set focus to the other window
+		state = reducer(state, {
+			type: 'WINDOW_CLOSE',
+			windowId: secondaryWindowId,
+		});
+
+		// There should be no background windows
+		expect(state.backgroundWindows).toEqual({});
+
+		// The other window should be focused
+		expect(state.windowId).toBe(defaultWindowId);
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
 	});
 });

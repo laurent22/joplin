@@ -117,7 +117,7 @@ export const startRecording = (vosk: Vosk, options: StartOptions): VoiceTypingSe
 			eventHandler.remove();
 		}
 
-		vosk.cleanup(),
+		vosk.cleanup();
 
 		state_ = State.Idle;
 
@@ -175,6 +175,10 @@ export const startRecording = (vosk: Vosk, options: StartOptions): VoiceTypingSe
 const vosk: VoiceTypingProvider = {
 	supported: () => true,
 	modelLocalFilepath: (locale: string) => getModelDir(locale),
+	deleteCachedModels: async (locale: string) => {
+		const path = getModelDir(locale);
+		await shim.fsDriver().remove(path, { recursive: true });
+	},
 	getDownloadUrl: (locale) => languageModelUrl(locale),
 	getUuidPath: (locale: string) => join(getModelDir(locale), 'uuid'),
 	build: async ({ callbacks, locale, modelPath }) => {

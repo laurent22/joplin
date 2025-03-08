@@ -1,5 +1,5 @@
 import { attributesHtml } from './htmlUtils';
-import { ItemIdToUrlHandler, OptionsResourceModel } from './types';
+import { ItemIdToUrlHandler, OptionsResourceModel, ResourceInfo, ResourceInfos } from './types';
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -98,8 +98,7 @@ export const resourceStatusName = function(index: number) {
 	throw new Error(`Unknown index: ${index}`);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const resourceStatus = function(ResourceModel: OptionsResourceModel, resourceInfo: any) {
+export const resourceStatus = function(ResourceModel: OptionsResourceModel, resourceInfo: ResourceInfo) {
 	if (!ResourceModel) return 'ready';
 
 	let status = 'ready';
@@ -130,8 +129,7 @@ type ImageMarkupData = {
 	title: string;
 }|{ src: string; before: string; after: string };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const imageReplacement = function(ResourceModel: OptionsResourceModel, markup: ImageMarkupData, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
+export const imageReplacement = function(ResourceModel: OptionsResourceModel, markup: ImageMarkupData, resources: ResourceInfos, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
 
 	const src = markup.src;

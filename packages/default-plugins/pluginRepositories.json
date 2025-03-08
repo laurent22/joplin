@@ -3,5 +3,10 @@
 		"cloneUrl": "https://github.com/JackGruber/joplin-plugin-backup.git",
 		"branch": "master",
 		"commit": "5ba57c18ac0f24f20832f012e015a080b138f0c4"
+	},
+	"io.github.personalizedrefrigerator.js-draw": {
+		"cloneUrl": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing.git",
+		"branch": "main",
+		"commit": "94a78496fac0b3bc7b0f6a896a982480adad3994"
 	}
 }

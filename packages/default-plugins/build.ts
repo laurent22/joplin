@@ -4,6 +4,7 @@ const yargs = require('yargs');
 
 
 const build = () => {
+	// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 	yargs
 		.usage('$0 <cmd> [args]')
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

@@ -84,7 +84,7 @@ impl Renderer {
         let section_path = renderer.render(section, notebook_dir)?;
         log!("section_path: {:?}", section_path);
 
-        let path_from_base_dir = unsafe { remove_prefix(section_path.as_str(), base_dir.as_str()) }
+        let path_from_base_dir = unsafe { remove_prefix(section_path, base_dir.as_str()) }
             .unwrap()
             .as_string()
             .unwrap();

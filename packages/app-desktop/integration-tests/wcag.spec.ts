@@ -7,6 +7,7 @@ import { Page } from '@playwright/test';
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
 		.disableRules(['page-has-heading-one'])
+		// Needed because we're using Electron. See https://github.com/dequelabs/axe-core-npm/issues/1141
 		.setLegacyMode(true);
 };
 
@@ -55,13 +56,21 @@ test.describe('wcag', () => {
 
 		await mainScreen.createNewNote('Test');
 
-		// For now, activate all notes to make it active. When inactive, it causes a contrast warning.
-		// This seems to be allowed under WCAG 2.2 SC 1.4.3 under the "Incidental" exception.
-		await mainScreen.sidebar.allNotes.click();
-
 		// Ensure that `:hover` styling is consistent between tests:
 		await mainScreen.noteEditor.noteTitleInput.hover();
 
+		await expectNoViolations(mainWindow);
+
+		// Should not find issues with the Rich Text Editor
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.richTextEditor.click();
+
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.changeLayoutScreen.open(electronApp);
 		await expectNoViolations(mainWindow);
 	});
 });

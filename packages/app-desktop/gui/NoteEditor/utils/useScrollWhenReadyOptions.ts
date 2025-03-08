@@ -1,7 +1,6 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { NoteBodyEditorRef, ScrollOptions, ScrollOptionTypes } from './types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher';
 import type { EditorScrollPercents } from '../../../app.reducer';
 
 interface Props {
@@ -30,8 +29,6 @@ const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollP
 			type: selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
 			value: selectedNoteHash ? selectedNoteHash : lastScrollPercent,
 		});
-
-		void ResourceEditWatcher.instance().stopWatchingAll();
 	}, [noteId, previousNoteId, selectedNoteHash, editorRef]);
 
 	const clearScrollWhenReady = useCallback(() => {

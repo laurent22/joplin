@@ -12,7 +12,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
-import NoteScreen from './components/screens/Note';
+import NoteScreen from './components/screens/Note/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { AppType, Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
@@ -27,7 +27,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-const { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } = require('react-native');
+import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -139,6 +139,7 @@ import DialogManager from './components/DialogManager';
 import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
+import PluginNotification from './components/plugins/PluginNotification';
 
 const logger = Logger.create('root');
 
@@ -443,6 +444,9 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.isOnMobileData = action.isOnMobileData;
 			break;
 
+		case 'KEYBOARD_VISIBLE_CHANGE':
+			newState = { ...state, keyboardVisible: action.visible };
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -853,6 +857,8 @@ class AppComponent extends React.Component {
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
 	private themeChangeListener_: NativeEventSubscription|null = null;
+	private keyboardShowListener_: EmitterSubscription|null = null;
+	private keyboardHideListener_: EmitterSubscription|null = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 	private callbackUrl: string|null = null;
@@ -1038,6 +1044,19 @@ class AppComponent extends React.Component {
 
 		await setupNotifications(this.props.dispatch);
 
+		this.keyboardShowListener_ = Keyboard.addListener('keyboardDidShow', () => {
+			this.props.dispatch({
+				type: 'KEYBOARD_VISIBLE_CHANGE',
+				visible: true,
+			});
+		});
+		this.keyboardHideListener_ = Keyboard.addListener('keyboardDidHide', () => {
+			this.props.dispatch({
+				type: 'KEYBOARD_VISIBLE_CHANGE',
+				visible: false,
+			});
+		});
+
 		// Setting.setValue('encryption.masterPassword', 'WRONG');
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
@@ -1073,6 +1092,15 @@ class AppComponent extends React.Component {
 		if (this.quickActionShortcutListener_) {
 			this.quickActionShortcutListener_.remove();
 			this.quickActionShortcutListener_ = undefined;
+		}
+
+		if (this.keyboardShowListener_) {
+			this.keyboardShowListener_.remove();
+			this.keyboardShowListener_ = undefined;
+		}
+		if (this.keyboardHideListener_) {
+			this.keyboardHideListener_.remove();
+			this.keyboardHideListener_ = undefined;
 		}
 	}
 
@@ -1301,6 +1329,7 @@ class AppComponent extends React.Component {
 					</MenuProvider>
 				</SideMenu>
 				<PluginRunnerWebView />
+				<PluginNotification/>
 			</View>
 		);
 

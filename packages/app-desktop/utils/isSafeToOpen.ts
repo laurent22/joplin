@@ -176,6 +176,29 @@ const isSafeToOpen = async (path: string) => {
 		}
 	}
 
+
+	// The check `extname(path) === ''` is present to prevent the following security issue:
+	//
+	// Suppose that an attacker can rapidly change the type of a file (e.g. on a network drive or shared folder).
+	//
+	// - **Example 1**: On a network drive, if:
+	// 		1. In a loop,
+	// 			- A folder `test.exe\\` is created, replacing the file `test.exe` if it exists.
+	// 			- After a brief delay, the folder is replaced the **file** `test.exe`.
+	// 		4. Joplin calls `stat('network-drive/path/here/test.exe')` and gets **isDirectory: true**.
+	// 		5. The folder is replaced with a file.
+	// 		6. Joplin calls `openPath('network-drive/path/here/test.exe')` and executes `test.exe`.
+	// - **Example 2**: An example that doesn't rely on timings (but whether it works depends on how network drives are implemented):
+	// 		1. An attacker creates a custom network file server where:
+	// 			- It's logged when a client calls `stat` on a particular path.
+	// 			- The first time `stat` is called on the path, it returns `directory`.
+	// 			- Subsequent times, `stat` returns `file`.
+	// 		2. Joplin calls `stat('network-drive/path/here/file.exe')`.
+	// 		3. The network drive returns `isDirectory: true`.
+	// 		4. The network drive replaces the directory `file.exe` with an executable with the same name.
+	// 		5. Joplin marks the path as safe to open.
+	// 		6. Joplin calls `openPath('network-drive/path/here/file.exe')`.
+	// 		7. This executes the executable from step 4.
 	if (extname(path) === '' && (await stat(path)).isDirectory()) {
 		return true;
 	}

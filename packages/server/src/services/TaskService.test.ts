@@ -65,7 +65,7 @@ describe('TaskService', () => {
 		const tasks = createDemoTasks();
 		tasks[0].run = async (_models: Models) => {
 			taskHasRan = true;
-		},
+		};
 		await service.registerTasks(tasks);
 		const taskId = tasks[0].id;
 

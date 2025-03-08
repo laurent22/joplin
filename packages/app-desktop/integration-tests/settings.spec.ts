@@ -75,7 +75,7 @@ test.describe('settings', () => {
 
 		// Pressing Up when the first item is focused should focus the last item
 		await mainWindow.keyboard.press('ArrowUp');
-		await expect(focusedItem).toHaveText('Backup');
+		await expect(settingsScreen.getLastTab()).toBeFocused();
 
 		await mainWindow.keyboard.press('ArrowDown');
 		await mainWindow.keyboard.press('ArrowDown');

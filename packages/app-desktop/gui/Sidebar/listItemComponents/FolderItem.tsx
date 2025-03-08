@@ -91,6 +91,7 @@ function FolderItem(props: FolderItemProps) {
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				selected={selected}
 				shareId={shareId}
+				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
 				onClick={() => {

@@ -38,9 +38,11 @@ const defaultKeymapItems = {
 		{ accelerator: 'Shift+Cmd+L', command: 'focusElementNoteList' },
 		{ accelerator: 'Shift+Cmd+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Shift+Cmd+B', command: 'focusElementNoteBody' },
+		{ accelerator: 'Shift+Cmd+O', command: 'focusElementToolbar' },
 		{ accelerator: 'Option+Cmd+S', command: 'toggleSideBar' },
 		{ accelerator: 'Option+Cmd+L', command: 'toggleNoteList' },
 		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
+		{ accelerator: 'Option+Cmd+V', command: 'toggleEditorPlugin' },
 		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
 		{ accelerator: 'Cmd+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Option+Cmd+T', command: 'setTags' },
@@ -61,6 +63,9 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+2', command: 'switchProfile2' },
 		{ accelerator: 'Option+Cmd+3', command: 'switchProfile3' },
 		{ accelerator: 'Option+Cmd+Backspace', command: 'permanentlyDeleteNote' },
+		{ accelerator: 'Option+Cmd+N', command: 'openNoteInNewWindow' },
+		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
+		{ accelerator: 'Shift+Option+L', command: 'linkToNote' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -84,10 +89,12 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+L', command: 'focusElementNoteList' },
 		{ accelerator: 'Ctrl+Shift+N', command: 'focusElementNoteTitle' },
 		{ accelerator: 'Ctrl+Shift+B', command: 'focusElementNoteBody' },
+		{ accelerator: 'Ctrl+Shift+O', command: 'focusElementToolbar' },
 		{ accelerator: 'F10', command: 'toggleSideBar' },
 		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
+		{ accelerator: 'Alt+Ctrl+V', command: 'toggleEditorPlugin' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
 		{ accelerator: 'Ctrl+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Ctrl+Alt+T', command: 'setTags' },
@@ -108,6 +115,9 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+1', command: 'switchProfile1' },
 		{ accelerator: 'Ctrl+Alt+2', command: 'switchProfile2' },
 		{ accelerator: 'Ctrl+Alt+3', command: 'switchProfile3' },
+		{ accelerator: 'Ctrl+Alt+N', command: 'openNoteInNewWindow' },
+		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
+		{ accelerator: 'Shift+Alt+L', command: 'linkToNote' },
 	],
 };
 
@@ -413,6 +423,13 @@ export default class KeymapService extends BaseService {
 		if (electronKey && keysRegExp.test(electronKey)) parts.push(electronKey);
 
 		return parts.join('+');
+	}
+
+	// Electron and aria-keyshortcuts have slightly different formats for accelerators.
+	// See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts
+	public getAriaKeyShortcuts(commandName: string) {
+		const electronAccelerator = this.getAccelerator(commandName);
+		return electronAccelerator.replace('Ctrl', 'Control');
 	}
 
 	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {

@@ -51,6 +51,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 				createFileURL: options.createFileURL,
 				resizeLargeImages: Setting.value('imageResizing'),
 				markupLanguage: options.markupLanguage,
+				resourceSuffix: i > 0 ? ' ' : '',
 			});
 
 			if (!newBody) {

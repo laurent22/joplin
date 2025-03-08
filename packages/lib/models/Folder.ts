@@ -433,7 +433,7 @@ export default class Folder extends BaseItem {
 
 		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != \'\''];
 		if (sharedFolderIds.length) {
-			sql.push(` AND id NOT IN ('${sharedFolderIds.join('\',\'')}')`);
+			sql.push(` AND id NOT IN (${Folder.escapeIdsForSql(sharedFolderIds)})`);
 		}
 
 		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
@@ -544,7 +544,7 @@ export default class Folder extends BaseItem {
 				SELECT resource_id, note_id, notes.share_id
 				FROM note_resources
 				LEFT JOIN notes ON notes.id = note_resources.note_id
-				WHERE resource_id IN ('${resourceIds.join('\',\'')}')
+				WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})
 				AND is_associated = 1
 			`) as NoteResourceRow[];
 
@@ -650,7 +650,7 @@ export default class Folder extends BaseItem {
 
 			const query = activeShareIds.length ? `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
-				WHERE share_id != '' AND share_id NOT IN ('${activeShareIds.join('\',\'')}')
+				WHERE share_id != '' AND share_id NOT IN (${this.escapeIdsForSql(activeShareIds)})
 			` : `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != ''

@@ -1,5 +1,5 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
@@ -118,6 +118,8 @@ export class Bridge {
 					return event;
 				}
 			},
+
+			integrations: [Sentry.electronMinidumpIntegration()],
 		};
 
 		if (this.autoUploadCrashDumps_) options.dsn = 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296';
@@ -285,6 +287,13 @@ export class Bridge {
 		this.switchToWindow(defaultWindowId);
 	}
 
+	// zoom should be in the range [0..1]
+	public setZoomFactor(zoom: number) {
+		for (const window of this.electronWrapper_.allAppWindows()) {
+			window.webContents.setZoomFactor(zoom);
+		}
+	}
+
 	public showItemInFolder(fullPath: string) {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
@@ -377,9 +386,14 @@ export class Bridge {
 
 	/* returns the index of the clicked button */
 	public showMessageBox(message: string, options: MessageDialogOptions = {}) {
+		const defaultButtons = [_('OK')];
+		if (options.type !== MessageBoxType.Error && options.type !== MessageBoxType.Info) {
+			defaultButtons.push(_('Cancel'));
+		}
+
 		const result = this.showMessageBox_(this.activeWindow(), { type: 'question',
 			message: message,
-			buttons: [_('OK'), _('Cancel')], ...options });
+			buttons: defaultButtons, ...options });
 
 		return result;
 	}

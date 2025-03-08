@@ -1,0 +1,31 @@
+{
+  "name": "joplin_plugin",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dist": "webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
+    "prepare": "npm run dist",
+    "update": "npm install -g generator-joplin && yo joplin --update"
+  },
+  "keywords": [
+    "joplin-plugin"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.0.14",
+    "copy-webpack-plugin": "^6.1.0",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6",
+    "on-build-webpack": "^0.1.0",
+    "tar": "^6.0.5",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "chalk": "^4.1.0",
+    "yargs": "^16.2.0"
+  },
+  "files": [
+    "publish"
+  ]
+}

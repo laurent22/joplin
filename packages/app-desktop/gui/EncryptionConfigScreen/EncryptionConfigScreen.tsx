@@ -3,7 +3,7 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
@@ -47,7 +47,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const onUpgradeMasterKey = useCallback(async (mk: MasterKeyEntity) => {
 		const password = determineKeyPassword(mk.id, masterPasswordKeys, props.masterPassword, props.passwords);
 		const result = await upgradeMasterKey(mk, password);
-		alert(result);
+		await shim.showMessageBox(result, { type: MessageBoxType.Info });
 	}, [props.passwords, masterPasswordKeys, props.masterPassword]);
 
 	const renderNeedUpgradeSection = () => {

@@ -561,7 +561,40 @@ function imageMarkdownFromNode(node, options = null) {
   }, options);
 
   if (options.preserveImageTagsWithSize && (node.getAttribute('width') || node.getAttribute('height'))) {
-    return node.outerHTML;
+    let html = node.outerHTML;
+
+    // To prevent markup immediately after the image from being interpreted as HTML, a closing tag
+    // is sometimes necessary.
+    const needsClosingTag = () => {
+      const parent = node.parentElement;
+      if (!parent || parent.nodeName !== 'LI') return false;
+      const hasClosingTag = html.match(/<\/[a-z]+\/>$/ig);
+      if (hasClosingTag) {
+        return false;
+      }
+
+      const allChildren = [...parent.childNodes];
+      const nonEmptyChildren = allChildren.filter(item => {
+        // Even if surrounded by #text nodes that only contain whitespace, Markdown after
+        // an <img> can still be incorrectly interpreted as HTML. Only non-empty #texts seem
+        // to prevent this.
+        return item.nodeName !== '#text' || item.textContent.trim() !== '';
+      });
+
+      const imageIndex = nonEmptyChildren.indexOf(node);
+      const hasNextSibling = imageIndex + 1 < nonEmptyChildren.length;
+      const nextSiblingName = hasNextSibling ? (
+        nonEmptyChildren[imageIndex + 1].nodeName
+      ) : null;
+
+      const nextSiblingIsNewLine = nextSiblingName === 'UL' || nextSiblingName === 'OL' || nextSiblingName === 'BR';
+      return imageIndex === 0 && nextSiblingIsNewLine;
+    };
+
+    if (needsClosingTag()) {
+      html = html.replace(/[/]?>$/, `></${node.nodeName.toLowerCase()}>`);
+    }
+    return html;
   }
 
   return imageMarkdownFromAttributes({

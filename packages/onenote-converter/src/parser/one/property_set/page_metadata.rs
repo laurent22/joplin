@@ -32,10 +32,13 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
 
     let entity_guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object)?
         .ok_or_else(|| ErrorKind::MalformedOneNoteFileData("page metadata has no guid".into()))?;
-    let cached_title =
-        simple::parse_string(PropertyType::CachedTitleString, object)?.ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("page metadata has no cached title".into())
-        })?;
+    // The page might not have a title but we can use the first Section outline from the body as the fallback later
+    let cached_title = simple::parse_string(PropertyType::CachedTitleString, object)?
+        .ok_or_else(|| {
+            let guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object);
+            return guid.map(|g| g.unwrap().to_string());
+        })
+        .unwrap_or("Untitled Page".to_string());
     let schema_revision_in_order_to_read =
         simple::parse_u32(PropertyType::SchemaRevisionInOrderToRead, object)?;
     let schema_revision_in_order_to_write =

@@ -185,4 +185,29 @@ describe('CodeMirror5Emulation', () => {
 
 		expect(lastThis).toBe(codeMirror);
 	});
+
+	it('.markText should support specifying ranges outside the document', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+
+		const testClassName = 'out-of-range-test-mark';
+		codeMirror.markText(
+			// In range
+			{ line: 0, ch: 4 },
+			// Out of range
+			{ line: 0, ch: 1002 },
+			{ className: testClassName },
+		);
+
+		const dom = codeMirror.editor.dom;
+		expect(dom.querySelectorAll(`.${testClassName}`)).toHaveLength(1);
+	});
+
+	it('.markText should throw when given non-integer boundaries', () => {
+		const codeMirror = makeCodeMirrorEmulation('Test...');
+
+		expect(() => codeMirror.markText(
+			{ line: 0, ch: 4.2 },
+			{ line: 0, ch: 5 },
+		)).toThrow(/is not an integer/i);
+	});
 });

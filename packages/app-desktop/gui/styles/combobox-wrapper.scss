@@ -1,0 +1,16 @@
+
+.combobox-wrapper {
+	> .suggestions {
+		background-color: var(--joplin-background-color);
+		width: 50%;
+		min-width: 20em;
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 5px;
+		margin-top: 10px;
+		display: none;
+	}
+
+	&.-expanded > .suggestions {
+		display: block;
+	}
+}

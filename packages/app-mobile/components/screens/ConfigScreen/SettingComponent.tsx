@@ -38,7 +38,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 	const styleSheet = props.styles.styleSheet;
 
 	const descriptionComp = !settingDescription ? null : <Text style={styleSheet.settingDescriptionText}>{settingDescription}</Text>;
-	const containerStyle = props.styles.getContainerStyle(!!settingDescription);
+	const containerStyles = props.styles.getContainerStyle(!!settingDescription);
 
 	const labelId = useId();
 
@@ -49,8 +49,8 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		const label = md.label();
 
 		return (
-			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-				<View style={containerStyle}>
+			<View key={props.settingId} style={containerStyles.outerContainer}>
+				<View style={containerStyles.innerContainer}>
 					<Text key="label" style={styleSheet.settingText}>
 						{label}
 					</Text>
@@ -125,17 +125,19 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		if (['sync.2.path', 'plugins.devPluginPaths'].includes(md.key) && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
 			return (
 				<FileSystemPathSelector
+					themeId={props.themeId}
 					mode={md.key === 'sync.2.path' ? 'readwrite' : 'read'}
 					styles={props.styles}
 					settingMetadata={md}
 					updateSettingValue={props.updateSettingValue}
+					description={descriptionComp}
 				/>
 			);
 		}
 
 		return (
-			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-				<View key={props.settingId} style={containerStyle}>
+			<View key={props.settingId} style={containerStyles.outerContainer}>
+				<View key={props.settingId} style={containerStyles.innerContainer}>
 					<Text key="label" style={styleSheet.settingText} nativeID={labelId}>
 						{md.label()}
 					</Text>

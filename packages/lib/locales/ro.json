@@ -110,6 +110,9 @@
 	"(In plugin: %s)": [
 		"(În plugin: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(Nimic)"
 	],
@@ -193,6 +196,9 @@
 	],
 	"Add recipient:": [
 		"Adăugați destinatar:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Adăugați titlu"
@@ -287,6 +293,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"Atașati"
 	],
@@ -335,6 +344,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-perechere de paranteze, paranteze, ghilimele etc."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"Verificarea automată a actualizărilor"
 	],
@@ -353,9 +365,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"Deblocarea biometrică nu este configurată pe dispozitiv. Vă rugăm să îl configurați pentru a debloca Joplin. Dacă dispozitivul este blocat, luați în considerare oprirea și pornirea acestuia pentru a reseta scanarea biometrică."
-	],
 	"Bold": [
 		"Bold"
 	],
@@ -369,6 +378,9 @@
 		"Listă cu puncte"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can Share": [
@@ -446,11 +458,17 @@
 	"Change language": [
 		"Schimbați limba"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Caractere"
 	],
 	"Characters excluding spaces": [
 		"Caractere cu excepția spațiilor libere"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Verificați actualizările..."
@@ -494,6 +512,9 @@
 	"Close dropdown": [
 		"Închideți meniul derulant"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -521,8 +542,8 @@
 	"Collaborate on notebooks with others": [
 		"Colaborați cu alte persoane la notebook-uri"
 	],
-	"Collapse": [
-		"Restrânge"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"Alarmele următoare"
@@ -805,6 +826,9 @@
 	"Delete local data and re-download from sync target": [
 		"Ștergeți datele locale și descărcați din nou de la destinația de sincronizare"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete note": [
 		"Ștergeți notița"
 	],
@@ -855,6 +879,9 @@
 	],
 	"Detailed": [
 		"Detaliat"
+	],
+	"Dev": [
+		""
 	],
 	"Directory": [
 		"Directoriu"
@@ -994,6 +1021,9 @@
 	"Edit in external editor": [
 		"Editați într-un editor extern"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit link": [
 		"Editați link-ul"
 	],
@@ -1084,6 +1114,9 @@
 	"Enable encryption": [
 		"Activați criptarea"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Activați notele de subsol"
 	],
@@ -1140,6 +1173,9 @@
 	],
 	"Enabled": [
 		"Activat"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi resincronizate și trimise criptate către ținta de sincronizare."
@@ -1207,8 +1243,8 @@
 	"Exits the application.": [
 		"Ieșire din aplicație."
 	],
-	"Expand": [
-		"Extindeți"
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"Exportați"
@@ -1276,9 +1312,6 @@
 	"Filter tags": [
 		"Filtrează etichetele"
 	],
-	"Find and replace": [
-		"Găsiți și înlocuiți"
-	],
 	"Find: ": [
 		"Găsiți: "
 	],
@@ -1300,6 +1333,9 @@
 	"Focus title": [
 		"Focus titlu"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Numai în scop de depanare: exportați profilul pe un card SD extern."
 	],
@@ -1317,9 +1353,6 @@
 	],
 	"Force path style": [
 		"Forțați path style"
-	],
-	"Formatting": [
-		"Formatare"
 	],
 	"Forward": [
 		"Forward"
@@ -1359,6 +1392,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obține sau setează o valoare de configurare. Dacă [valoare] nu este furnizată, va afișa valoarea [nume]. Dacă nu este furnizat nici [nume], nici [valoare], va afișa configurația curentă."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Accesați sursa URL"
 	],
@@ -1373,9 +1415,6 @@
 	],
 	"Header %d": [
 		"Header %d"
-	],
-	"Headers": [
-		"Headers"
 	],
 	"Heading": [
 		"Titlu"
@@ -1406,9 +1445,6 @@
 	],
 	"Hide keyboard": [
 		"Ascundeți tastatura"
-	],
-	"Hide more actions": [
-		"Ascundeți mai multe acțiuni"
 	],
 	"Highlight": [
 		"Highlight"
@@ -1512,6 +1548,9 @@
 	"Indent more": [
 		"Indentați mai mult"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Informație"
 	],
@@ -1572,9 +1611,6 @@
 	"Items that cannot be synchronised": [
 		"Elementele nu pot fi sincronizați"
 	],
-	"Join us on Twitter": [
-		"Alăturați-vă nouă pe Twitter"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin vă poate sincroniza notițele folosind diverși furnizori. Selectați unul din lista de mai jos."
 	],
@@ -1616,9 +1652,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Serviciu de sincronizare al lui Joplin. Oferă, de asemenea, acces la caracteristici specifice Joplin, cum ar fi publicarea de notițe sau colaborarea cu alte persoane pe notebook-uri."
-	],
-	"KaTeX": [
-		"KaTeX"
 	],
 	"Keep note history for": [
 		"Păstrați istoricul notițelor pentru"
@@ -1697,14 +1730,8 @@
 	"Link text": [
 		"Link text"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Legăturile cu protocolul “%s” nu sunt acceptate"
-	],
 	"List item": [
 		"Listați item"
-	],
-	"Lists": [
-		"Liste"
 	],
 	"Loaded": [
 		"Încărcat"
@@ -1784,6 +1811,12 @@
 	"Master password:": [
 		"Parola master:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"Conexiuni maxime simultane"
 	],
@@ -1853,9 +1886,6 @@
 	"Never resize": [
 		"Nu redimensionați niciodată"
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Adăugați o nouă notiță"
 	],
@@ -1880,6 +1910,9 @@
 	"New version: %s": [
 		"Versiune nouă:% s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"Next match"
 	],
@@ -1903,9 +1936,6 @@
 	],
 	"No active notebook.": [
 		"Niciun caiet de notițe activ."
-	],
-	"No item with ID %s": [
-		"Niciun item cu ID-ul %s"
 	],
 	"No new invitations": [
 		""
@@ -2036,6 +2066,9 @@
 	"Numbered List": [
 		"Listă numerotată"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2044,6 +2077,9 @@
 	],
 	"On %s: %s": [
 		"Pe %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Una dintre cheile dvs. master utilizează o metodă de criptare învechită."
@@ -2135,9 +2171,6 @@
 	"Permission needed": [
 		"Permisiune necesară"
 	],
-	"Permission to use camera": [
-		"Permisiunea de a utliza camera"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Vă rugăm să faceți clic pe “%s” pentru a continua, sau să setați parolele din lista “%s” de mai jos."
 	],
@@ -2213,6 +2246,12 @@
 	"Preferred light theme": [
 		"Tema light preferată"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Apăsați Ctrl+D ori scrieți \"exit\" pentru a ieși din aplicație"
 	],
@@ -2224,6 +2263,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Apăsați pentru a seta parola de decriptare."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -2296,6 +2338,9 @@
 	],
 	"Quit": [
 		"Ieșiți"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"Re-criptați datele"
@@ -2372,6 +2417,12 @@
 	"Replace: ": [
 		"Înlocuiți: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2429,6 +2480,12 @@
 	"Revision: %s (%s)": [
 		"Revizuire:% s (% s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Execută comenzile conținute în fișierul text. Ar trebui să existe câte o comandă pe linie."
 	],
@@ -2473,6 +2530,9 @@
 	],
 	"Save geo-location with notes": [
 		"Salvați geo-locația în  notițe"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Caută"
@@ -2549,6 +2609,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Setează proprietatea <name>a <note> date la [valoarea] dată. Proprietățile posibile sunt: % s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"Distribuie"
 	],
@@ -2590,9 +2653,6 @@
 	],
 	"Show disabled keys": [
 		"Afișare taste dezactivate"
-	],
-	"Show more actions": [
-		"Afișare mai multe acțiuni"
 	],
 	"Show note counts": [
 		"Afișare numărul de notițe"
@@ -2650,6 +2710,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Unele elemente nu pot fi sincronizate. Apăsați pentru mai multe informații."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Sortați notițele după"
@@ -2764,6 +2830,9 @@
 	],
 	"Switch profile": [
 		"Comutați profilul"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Comutați la tipul de notiță"
@@ -2926,8 +2995,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"Următoarele chei utilizează un algoritm de criptare depășit și se recomandă actualizarea lor. Cheia actualizată va fi în continuare capabilă să decripteze și să cripteze datele dumneavoastră ca de obicei."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Aplicația mobilă Joplin nu acceptă în prezent acest tip de link: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Echipa Joplin a verificat acest plugin și acesta îndeplinește standardele noastre de securitate și performanță."
@@ -2973,6 +3042,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Ținta la care se sincronizează. Fiecare țintă de sincronizare poate avea parametri suplimentari care sunt numiți `sync.NUM.NAME` (toți documentați mai jos)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper are nevoie de autorizația dumneavoastră pentru a vă accesa datele."
@@ -3024,9 +3096,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Acest atașament nu este descărcat sau nu este încă decriptat"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Acest atașament nu este descărcat sau nu este încă decriptat."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Acest token de autorizare este necesar doar pentru a permite aplicațiilor terțe părți să acceseze Joplin."
@@ -3223,6 +3292,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Necunoscut"
+	],
 	"Unknown flag: %s": [
 		"Unknown flag: %s"
 	],
@@ -3358,6 +3430,9 @@
 	"Voice typing...": [
 		"Tastarea vocală…"
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Avertizare"
 	],
@@ -3405,6 +3480,9 @@
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Atunci când este activată, aplicația va scana atașamentele și va extrage textul din ele. Acest lucru vă va permite să căutați text în aceste atașamente."
+	],
+	"Whisper": [
+		""
 	],
 	"Window unresponsive.": [
 		"Fereastra nu răspunde."
@@ -3459,9 +3537,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Parola dvs. este necesară pentru a decripta unele dintre datele dvs. Introduceți `:e2ee decrypt` pentru a o seta."
-	],
-	"Your permission to use your camera is required.": [
-		"Este necesară permisiunea dumnevoastră de a utiliza camera."
 	],
 	"Your version: %s": [
 		"Versiunea dvs.:% s"

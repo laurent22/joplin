@@ -33,7 +33,7 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 	}
 
 	public static label() {
-		return `${_('OneDrive')} (Deprecated)`;
+		return _('OneDrive');
 	}
 
 	public static description() {
@@ -108,7 +108,11 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 
 		if (!accountProperties) {
 			accountProperties = await api.execAccountPropertiesRequest();
-			context ? context.accountProperties = accountProperties : context = { accountProperties: accountProperties };
+			if (context) {
+				context.accountProperties = accountProperties;
+			} else {
+				context = { accountProperties: accountProperties };
+			}
 			Setting.setValue(`sync.${this.syncTargetId()}.context`, JSON.stringify(context));
 		}
 		api.setAccountProperties(accountProperties);

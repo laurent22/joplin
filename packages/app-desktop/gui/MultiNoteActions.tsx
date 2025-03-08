@@ -32,6 +32,14 @@ function styles_(props: MultiNoteActionsProps) {
 				display: 'flex',
 				flexDirection: 'column',
 			},
+			divider: {
+				borderTopWidth: 1,
+				borderTopStyle: 'solid',
+				borderTopColor: theme.dividerColor,
+				width: '100%',
+				height: 1,
+				marginBottom: 10,
+			},
 			button: {
 				...theme.buttonStyle,
 				marginBottom: 10,
@@ -68,11 +76,17 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 		const item = menuItems[i];
 		if (!item.enabled) continue;
 
-		itemComps.push(
-			<button key={item.label} style={styles.button} onClick={() => multiNotesButton_click(item)}>
-				{item.label}
-			</button>,
-		);
+		if (item.type === 'separator') {
+			itemComps.push(
+				<div key={`divider${i}`} style={styles.divider}/>,
+			);
+		} else {
+			itemComps.push(
+				<button key={item.label} style={styles.button} onClick={() => multiNotesButton_click(item)}>
+					{item.label}
+				</button>,
+			);
+		}
 	}
 
 	return (

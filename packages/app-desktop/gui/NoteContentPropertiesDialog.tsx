@@ -38,7 +38,7 @@ function countElements(text: string, wordSetter: Function, characterSetter: Func
 		characterSetter(counter.all);
 		characterNoSpaceSetter(counter.characters);
 	});
-	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
+	lineSetter(text === '' ? 0 : text.split('\n').length);
 }
 
 function formatReadTime(readTimeMinutes: number) {

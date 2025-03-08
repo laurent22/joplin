@@ -139,4 +139,5 @@ export function getStyleSheets(doc: Document) {
 
 // Required to run in Firefox with tabs.executeScript. See
 // https://stackoverflow.com/a/44774834
+// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 undefined;

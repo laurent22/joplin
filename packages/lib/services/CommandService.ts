@@ -209,6 +209,10 @@ export default class CommandService extends BaseService {
 		};
 	}
 
+	public unregisterDeclaration(name: string) {
+		delete this.commands_[name];
+	}
+
 	public registerRuntime(commandName: string, runtime: CommandRuntime, allowMultiple = false): RegisteredRuntime {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
@@ -257,7 +261,7 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public componentRegisterCommands<ComponentType>(component: ComponentType, commands: ComponentCommandSpec<ComponentType>[], allowMultiple?: boolean) {
+	public componentRegisterCommands<ComponentType>(component: ComponentType, commands: ComponentCommandSpec<ComponentType>[], allowMultiple?: boolean): RegisteredRuntime {
 		const runtimeHandles: RegisteredRuntime[] = [];
 		for (const command of commands) {
 			runtimeHandles.push(

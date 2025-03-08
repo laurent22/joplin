@@ -19,6 +19,7 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
+import shim from '@joplin/lib/shim';
 
 
 interface Font {
@@ -144,7 +145,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName = section.name;
 
 			if (this.hasChanges()) {
-				const ok = confirm(_('This will open a new screen. Save your current changes?'));
+				const ok = await shim.showConfirmationDialog(_('This will open a new screen. Save your current changes?'));
 				if (ok) {
 					await shared.saveSettings(this);
 				}

@@ -35,7 +35,7 @@ impl<'a> Renderer<'a> {
     }
 
     pub(crate) fn render_page(&mut self, page: &Page) -> Result<String> {
-        let title_text = page.title_text().unwrap_or("Untitled Page");
+        let title_text = page.title_text().unwrap_or("Untitled Page".to_string());
 
         let mut content = String::new();
 
@@ -70,7 +70,7 @@ impl<'a> Renderer<'a> {
 
         content.push_str(&page_content);
 
-        crate::templates::page::render(title_text, &content, &self.global_styles)
+        crate::templates::page::render(&title_text, &content, &self.global_styles)
     }
 
     pub(crate) fn gen_class(&mut self, prefix: &str) -> String {

@@ -101,6 +101,9 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(Ingen)"
 	],
@@ -184,6 +187,9 @@
 	],
 	"Add recipient:": [
 		"Legg til mottaker:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"Legg til tittel"
@@ -269,6 +275,9 @@
 	"Aritim Dark": [
 		"Aritim mørk"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach file": [
 		"Legg ved en fil"
 	],
@@ -314,6 +323,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatisk lukk klammer, paranteser, fnutter, etc."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"Se etter oppdateringer automatisk"
 	],
@@ -332,9 +344,6 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		""
-	],
 	"Bold": [
 		"Fet"
 	],
@@ -351,6 +360,9 @@
 		"Kulepunktliste"
 	],
 	"by %s": [
+		""
+	],
+	"by word": [
 		""
 	],
 	"Can view": [
@@ -419,11 +431,17 @@
 	"Change language": [
 		"Endre språk"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"Tegn"
 	],
 	"Characters excluding spaces": [
 		"Tegn uten mellomrom"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"Se etter oppdateringer…"
@@ -464,6 +482,9 @@
 	"Close": [
 		"Lukk"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
@@ -488,10 +509,7 @@
 	"Collaborate on notebooks with others": [
 		"Samarbeid på notatbøker med andre"
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed, press space to expand.": [
 		""
 	],
 	"Coming alarms": [
@@ -669,6 +687,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Nåværende versjon er den siste tilgjengelige."
 	],
@@ -744,6 +765,9 @@
 	"Delete local data and re-download from sync target": [
 		"Slett lokale date og last ned på nytt fra synkroniseringsmålet"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete plugin \"%s\"?": [
 		"Slett utvidelse \"%s\"?"
 	],
@@ -778,6 +802,9 @@
 		"Målformat: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
 		""
 	],
 	"Directory": [
@@ -906,6 +933,9 @@
 	"Edit in external editor": [
 		"Rediger i ekstern editor"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit note.": [
 		"Rediger notat."
 	],
@@ -981,6 +1011,9 @@
 	"Enable encryption": [
 		"Aktiver kryptering"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Aktiver fotnoter"
 	],
@@ -1035,6 +1068,9 @@
 	"Enabled": [
 		"Aktivert"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Aktivering av kryptering betyr at *alle* dine notater og vedlegg synkroniseres på nytt og sendes kryptert til synkroniseringsmålet."
 	],
@@ -1062,6 +1098,9 @@
 	"End-to-end encryption": [
 		"Ende-til-ende-kryptering"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Skriv inn kode her"
 	],
@@ -1070,6 +1109,9 @@
 	],
 	"Enter notebook title": [
 		"Angi tittel på notatbok"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Enum"
@@ -1098,10 +1140,10 @@
 	"Exits the application.": [
 		"Avslutter programmet."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded, press space to collapse.": [
 		""
 	],
 	"Export": [
@@ -1161,9 +1203,6 @@
 	"File system": [
 		"Filsystem"
 	],
-	"Find and replace": [
-		""
-	],
 	"Firefox Extension": [
 		"Firefox-utvidelse"
 	],
@@ -1181,6 +1220,9 @@
 	],
 	"Focus title": [
 		"Fokuser på tittel"
+	],
+	"Follow link": [
+		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Kun av hensyn til feilsøking: eksporter din profil til et eksternt SD-kort."
@@ -1234,6 +1276,15 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Skaffer eller setter en konfigurasjonsverdi. Hvis [value] ikke er angitt vil den vise verdien av [name]. Hvis hverken [name] eller [value] er angitt, vil den vise den gjeldende konfigurasjonen."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
+	],
 	"Go to source URL": [
 		"Gå til kilde-URL"
 	],
@@ -1247,9 +1298,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1375,6 +1423,9 @@
 	"Indent more": [
 		"Innrykk mer"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"Informasjon"
 	],
@@ -1432,7 +1483,7 @@
 	"Items that cannot be synchronised": [
 		"Elementer som ikke vil synkronisere"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1476,9 +1527,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplins egen synkroniseringstjeneste. Gir også tilgang til Joplin-spesifikke funksjoner som å publisere notater eller samarbeide om notatbøker med andre."
-	],
-	"KaTeX": [
-		""
 	],
 	"Keep note history for": [
 		"Behold notathistorikk i"
@@ -1544,14 +1592,8 @@
 		"Lenken har blitt kopiert til utklippstavlen!",
 		"Lenkene har blitt kopiert til utklippstavlen!"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"Lenker med protokoll \"%s\" er ikke støttet"
-	],
 	"List item": [
 		"Listeelement"
-	],
-	"Lists": [
-		""
 	],
 	"Loaded": [
 		"Lastet inn"
@@ -1622,6 +1664,12 @@
 	"Master password:": [
 		"Masterpassord:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"Maksimalt samtidige tilkoblinger"
 	],
@@ -1679,9 +1727,6 @@
 	"Never resize": [
 		""
 	],
-	"New": [
-		""
-	],
 	"New note": [
 		"Nytt notat"
 	],
@@ -1706,6 +1751,9 @@
 	"New version: %s": [
 		"Ny versjon: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		""
 	],
@@ -1729,9 +1777,6 @@
 	],
 	"No active notebook.": [
 		"Ingen aktiv notatbok."
-	],
-	"No item with ID %s": [
-		"Ingen elementer med ID %s"
 	],
 	"No new invitations": [
 		""
@@ -1853,6 +1898,9 @@
 	"Numbered List": [
 		"Nummerert liste"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"Ok"
 	],
@@ -1861,6 +1909,9 @@
 	],
 	"On %s: %s": [
 		"På %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"En eller flere masternøkler bruker en utdatert krypteringsmetode."
@@ -1946,9 +1997,6 @@
 	"Permission needed": [
 		"Tillatelse kreves"
 	],
-	"Permission to use camera": [
-		"Tillatelse til å bruke kamera"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -2024,6 +2072,12 @@
 	"Preferred light theme": [
 		"Foretrukket lyst tema"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Trykk Ctrl+D eller skriv \"exit\" for å avslutte programmet"
 	],
@@ -2035,6 +2089,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Trykk for å sette dekrypteringspassordet."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -2092,6 +2149,9 @@
 	],
 	"Quit": [
 		"Avslutt"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"Rekrypter data"
@@ -2162,6 +2222,12 @@
 	"Replace: ": [
 		""
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		""
 	],
@@ -2213,6 +2279,12 @@
 	"Revision: %s (%s)": [
 		"Revisjon: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Kjør kommandoene som finnes i denne tekstfilen. En kommando per linje."
 	],
@@ -2251,6 +2323,9 @@
 	],
 	"Save geo-location with notes": [
 		"Lagre stedsinformasjon med notater"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"Søk"
@@ -2311,6 +2386,9 @@
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Setter egenskapen <name> for angitt <note> til angitt [verdi]. Mulige valg er: \n\n%s"
+	],
+	"Settings": [
+		""
 	],
 	"Share": [
 		"Del"
@@ -2398,6 +2476,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"Noen elementer kan ikke synkroniseres. Press for mer info."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Sorter notatbøker etter"
@@ -2509,6 +2593,9 @@
 	],
 	"Switch between note and to-do type": [
 		"Bytt mellom notat og gjøremål"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"Bytt til notatmodus"
@@ -2654,8 +2741,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"De følgende mesternøklene bruker en utdatert krypteringsalgoritme. Det er anbefalt å oppgradere dem. Den oppgraderte nøkkelen vil fortsatt la deg dekryptere og kryptere ditt innhold som vanlig."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplins mobilapp støtter for tiden ikke denne type lenker: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin-teamet har kontrollert denne plugin-en og den oppfyller våre standarder for sikkerhet og ytelse."
@@ -2698,6 +2785,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Målet å synkronisere til. Hvert synkroniseringsmål kan ha tilleggsparametere som er navngitt som `sync.NUM.NAME` (dokumentert nedenfor)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Webklipperen trenger din autorisasjon for å få tilgang til dine data."
@@ -2746,9 +2836,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Dette vedlegget er ikke lastet ned eller dekryptert enda"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Dette vedlegget er enda ikke lastet ned eller dekryptert."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Denne autoriseringsbeviset er det eneste nødvendige for å gi tredjepartsapplikasjoner tilgang til Joplin."
@@ -2918,6 +3005,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		""
 	],
+	"Unknown": [
+		"Ukjent"
+	],
 	"Unknown flag: %s": [
 		"Ukjent flagg: %s"
 	],
@@ -3050,6 +3140,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Vosk": [
+		""
+	],
 	"Warning": [
 		"Advarsel"
 	],
@@ -3093,6 +3186,9 @@
 		"Når et nytt gjøremål opprettes:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		""
+	],
+	"Whisper": [
 		""
 	],
 	"Window unresponsive.": [
@@ -3145,9 +3241,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"Passordet ditt er nødvendig for å dekryptere noen av dataene dine. Skriv `:e2ee decrypt` for å angi den."
-	],
-	"Your permission to use your camera is required.": [
-		"Tillatelse til å bruke kamera er nødvendig."
 	],
 	"Your version: %s": [
 		"Din versjon: %s"

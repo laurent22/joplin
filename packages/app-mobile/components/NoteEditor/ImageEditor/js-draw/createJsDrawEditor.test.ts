@@ -21,11 +21,15 @@ const createEditorWithCallbacks = (callbacks: Partial<ImageEditorCallbacks>) => 
 	const locale = 'en';
 
 	const allCallbacks: ImageEditorCallbacks = {
-		saveDrawing: () => {},
+		save: () => {},
 		saveThenClose: ()=> {},
 		closeEditor: ()=> {},
 		setImageHasChanges: ()=> {},
 		updateEditorTemplate: ()=> {},
+		updateToolbarState: ()=> {},
+		onLoadedEditor: ()=> {},
+		writeClipboardText: async ()=>{},
+		readClipboardText: async ()=> '',
 
 		...callbacks,
 	};
@@ -51,7 +55,7 @@ describe('createJsDrawEditor', () => {
 
 		jest.useFakeTimers();
 		const editorControl = createEditorWithCallbacks({
-			saveDrawing: (_drawing: SVGElement, isAutosave: boolean) => {
+			save: (_drawing: string, isAutosave: boolean) => {
 				if (isAutosave) {
 					calledAutosaveCount ++;
 				}

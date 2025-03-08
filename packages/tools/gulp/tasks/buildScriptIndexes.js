@@ -68,6 +68,7 @@ module.exports = {
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/NoteListControls/commands`);
 		await processDirectory(`${rootDir}/packages/app-desktop/gui/Sidebar/commands`);
 		await processDirectory(`${rootDir}/packages/app-mobile/commands`);
+		await processDirectory(`${rootDir}/packages/app-mobile/components/screens/Note/commands`);
 		await processDirectory(`${rootDir}/packages/lib/commands`);
 
 		await processDirectory(

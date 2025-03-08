@@ -415,6 +415,12 @@
 
 			addPluginAssets(event.options.pluginAssets);
 
+			if (event.options.increaseControlSize) {
+				document.documentElement.classList.add('-larger-controls');
+			} else {
+				document.documentElement.classList.remove('-larger-controls');
+			}
+
 			if (event.options.downloadResources === 'manual') {
 				webviewLib.setupResourceManualDownload();
 			}

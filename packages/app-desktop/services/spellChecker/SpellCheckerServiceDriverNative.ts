@@ -52,12 +52,9 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 
 		// If we pass an empty array, it disables spell checking
 		// https://github.com/electron/electron/issues/25228
-		if (effectiveLanguages.length === 0) {
-			this.session().setSpellCheckerLanguages([]);
-			return;
-		}
 
 		this.session().setSpellCheckerLanguages(effectiveLanguages);
+		this.session().setSpellCheckerEnabled(effectiveLanguages.length > 0);
 		logger.info(`Set effective languages to "${effectiveLanguages}"`);
 	}
 

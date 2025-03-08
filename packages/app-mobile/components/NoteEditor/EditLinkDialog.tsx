@@ -84,6 +84,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	const onSubmit = useCallback(() => {
 		props.editorControl.updateLink(linkLabel, linkURL);
 		props.editorControl.hideLinkDialog();
+		focus('EditLinkDialog::onSubmit', props.editorControl);
 	}, [props.editorControl, linkLabel, linkURL]);
 
 	// See https://www.hingehealth.com/engineering-blog/accessible-react-native-textinput/

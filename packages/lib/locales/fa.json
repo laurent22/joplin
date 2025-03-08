@@ -116,6 +116,9 @@
 	"(In plugin: %s)": [
 		"(در افزونه: %s )"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(هیچ کدام)"
 	],
@@ -208,6 +211,9 @@
 	],
 	"Add recipient:": [
 		"افزودن دریافت کننده:"
+	],
+	"Add tag %s to note": [
+		""
 	],
 	"Add title": [
 		"افزودن عنوان"
@@ -305,6 +311,9 @@
 	"Aritim Dark": [
 		"Aritim Dark"
 	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
+	],
 	"Attach": [
 		"پیوست"
 	],
@@ -356,6 +365,9 @@
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
 	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically check for updates": [
 		"بررسی خودکار برای بروزرسانی"
 	],
@@ -374,9 +386,6 @@
 	"Beta": [
 		"بتا"
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"باز کردن قفل بیومتریک روی دستگاه تنظیم نشده است. لطفاً از آن را برای باز کردن قفل joplin تنظیم کنید. اگر دستگاه در حالت قفل است، برای بازنشانی اسکن بیومتریک، آن را خاموش و روشن کنید."
-	],
 	"Bold": [
 		"پررنگ"
 	],
@@ -394,6 +403,9 @@
 	],
 	"by %s": [
 		"توسط %s"
+	],
+	"by word": [
+		""
 	],
 	"Can Share": [
 		"می‌توانید به اشتراک بگذارید"
@@ -470,11 +482,17 @@
 	"Change language": [
 		"ویرایش زبان"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"کاراکترها"
 	],
 	"Characters excluding spaces": [
 		"کاراکترها به غیر از فاصله‌ها"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"بررسی برای بروزرسانی..."
@@ -521,6 +539,9 @@
 	"Close dropdown": [
 		"بستن حالت کشویی"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"برنامه را ببندید، سپس نمایه خود را در \"%s\" حذف کنید و برنامه را دوباره شروع کنید. اطمینان حاصل کنید که ابتدا با صادرات تمام یادداشت های خود به عنوان JEX یک نسخه پشتیبان ایجاد کرده اید."
 	],
@@ -548,11 +569,8 @@
 	"Collaborate on notebooks with others": [
 		"همکاری با دیگران در دفترچه‌ها"
 	],
-	"Collapse": [
-		"بستن"
-	],
-	"Collapse %s": [
-		"کوچک کردن %s"
+	"Collapsed, press space to expand.": [
+		""
 	],
 	"Coming alarms": [
 		"هشدار‌های آینده"
@@ -846,6 +864,9 @@
 	"Delete local data and re-download from sync target": [
 		"حذف داده‌های محلی و دانلود مجدد از هدف همگام‌سازی"
 	],
+	"Delete model and re-download?\nThis cannot be undone.": [
+		""
+	],
 	"Delete note": [
 		"حذف یادداشت"
 	],
@@ -1041,6 +1062,9 @@
 	"Edit in external editor": [
 		"ویرایش در ویرایشگر خارجی"
 	],
+	"Edit in new window": [
+		""
+	],
 	"Edit link": [
 		"ویرایش لینک"
 	],
@@ -1131,6 +1155,9 @@
 	"Enable encryption": [
 		"فعال‌سازی رمزنگاری"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"فعال‌سازی پاورقی"
 	],
@@ -1193,6 +1220,9 @@
 	],
 	"Enabled": [
 		"فعال‌شده"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"فعال‌سازی رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی می‌شوند و به صورت رمزنگاری شده به هدف همگام‌سازی ارسال می‌شوند."
@@ -1266,11 +1296,11 @@
 	"Exits the application.": [
 		"خروح از نرم‌افزار."
 	],
-	"Expand": [
-		"منبسط"
-	],
 	"Expand %s": [
 		"گسترش %s"
+	],
+	"Expanded, press space to collapse.": [
+		""
 	],
 	"Export": [
 		"صدور"
@@ -1341,9 +1371,6 @@
 	"Filter tags": [
 		"فیلتر برچسب‌ها"
 	],
-	"Find and replace": [
-		"جستجو و جایگزینی"
-	],
 	"Find: ": [
 		"یافت‌شده: "
 	],
@@ -1365,6 +1392,9 @@
 	"Focus title": [
 		"عنوان تمرکز"
 	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"تنها به منظور اشکال‌زدایی: صدور حساب‌کاربری شما به یک حافظه خارجی SD."
 	],
@@ -1382,9 +1412,6 @@
 	],
 	"Force path style": [
 		"استایل مسیر اجباری"
-	],
-	"Formatting": [
-		"قالب بندی"
 	],
 	"Forward": [
 		"رو به جلو"
@@ -1423,8 +1450,17 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
 	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
 	"Go to Joplin Cloud profile": [
 		"ورود به حساب سرویس ابری joplin"
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"رفتن به آدرس منبع"
@@ -1440,9 +1476,6 @@
 	],
 	"Header %d": [
 		"سرصفحه %d"
-	],
-	"Headers": [
-		"سرصفحه ها"
 	],
 	"Heading": [
 		"سرفصل"
@@ -1473,9 +1506,6 @@
 	],
 	"Hide keyboard": [
 		"پنهان‌سازی صفحه‌کلید"
-	],
-	"Hide more actions": [
-		"پنهان‌سازی اقدامات بیشتر"
 	],
 	"Highlight": [
 		"برجسته"
@@ -1594,6 +1624,9 @@
 	"Indent more": [
 		"تورفتگی بیشتر"
 	],
+	"Info": [
+		""
+	],
 	"Information": [
 		"اطلاعات"
 	],
@@ -1660,9 +1693,6 @@
 	"Items that cannot be synchronised": [
 		"مواردی که نمی‌توانند همگام‌سازی شوند"
 	],
-	"Join us on Twitter": [
-		"به توئیتر ما بپیوندید"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"جاپلین می تواند یادداشت های شما را با استفاده از ارائه دهندگان مختلف همگام سازی کند. از لیست زیر یکی را انتخاب کنید."
 	],
@@ -1713,9 +1743,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"سرویس همگام‌سازی اختصاصی joplin. همچنین به ویژگی‌های خاص joplin مانند انتشار یادداشت‌ها یا همکاری در دفترچه‌ها با دیگران دسترسی می‌دهد."
-	],
-	"KaTeX": [
-		"KaTeX"
 	],
 	"Keep note history for": [
 		"تاریخچه ی یادداشت را نگه دار به مدت"
@@ -1802,14 +1829,8 @@
 	"Link text": [
 		"متن لینک"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"پیوند‌های دارای پروتکل «%s» پشتیبانی نمی‌شوند"
-	],
 	"List item": [
 		"آیتم فهرست"
-	],
-	"Lists": [
-		"فهرست‌ها"
 	],
 	"Loaded": [
 		"دانلود‌شده"
@@ -1892,6 +1913,12 @@
 	"Master password:": [
 		"گذرواژه اصلی:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"حداکثر اتصالات همزمان"
 	],
@@ -1964,9 +1991,6 @@
 	"Never resize": [
 		"هرگز بدون تغییر اندازه"
 	],
-	"New": [
-		"جدید"
-	],
 	"New invitations": [
 		"دعوت نامه های جدید"
 	],
@@ -1994,6 +2018,9 @@
 	"New version: %s": [
 		"نسخه جدید: %s"
 	],
+	"next": [
+		""
+	],
 	"Next match": [
 		"تطابق بعدی"
 	],
@@ -2017,9 +2044,6 @@
 	],
 	"No active notebook.": [
 		"دفترچه‌ی فعالی وجود ندارد."
-	],
-	"No item with ID %s": [
-		"هیچ موردی با شناسه %s وجود ندارد"
 	],
 	"No new invitations": [
 		"دعوتنامه جدیدی وجود ندارد"
@@ -2156,6 +2180,9 @@
 	"Numbered List": [
 		"لیست شماره گذاری شده"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"باشه"
 	],
@@ -2164,6 +2191,9 @@
 	],
 	"On %s: %s": [
 		"در %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"یکی از کلید‌های اصلی شما از یک روش رمزنگاری منسوخ شده استفاده می‌کند."
@@ -2276,9 +2306,6 @@
 	"Permission needed": [
 		"مجوز استفاده مورد نیاز است"
 	],
-	"Permission to use camera": [
-		"اجازه برای استفاده از دوربین"
-	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
 	],
@@ -2369,6 +2396,12 @@
 	"Preferred light theme": [
 		"تم روشن ترجیحی"
 	],
+	"Preferred voice typing provider": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
+	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"برای خروج Ctrl+D را فشار دهید یا «exit» را تایپ نمایید"
 	],
@@ -2453,6 +2486,9 @@
 	"Quit": [
 		"خروج"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-encrypt data": [
 		"رمزنگاری دوباره داده"
 	],
@@ -2534,6 +2570,12 @@
 	"Replace: ": [
 		"جایگزین کردن: "
 	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
+	],
 	"Report an issue": [
 		"گزارش مشکل"
 	],
@@ -2609,6 +2651,12 @@
 	"Revision: %s (%s)": [
 		"تجدید نظر: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"دستورات موجود در فایل متنی را اجرا می کند. در هر خط باید یک دستور وجود داشته باشد."
 	],
@@ -2653,6 +2701,9 @@
 	],
 	"Save geo-location with notes": [
 		"ذخیره موقعیت مکانی با یادداشت‌ها"
+	],
+	"Scanned code": [
+		""
 	],
 	"Search": [
 		"جستجو"
@@ -2729,6 +2780,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"ویژگی <name> از <note> داده شده را به [value] (مقدار) داده شده تغییر می‌دهد. ویژگی‌های احتمالی شامل:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"اشتراک گذاری"
 	],
@@ -2779,9 +2833,6 @@
 	],
 	"Show monospace fonts only.": [
 		"فقط فونت های monospace نمایش داده شود."
-	],
-	"Show more actions": [
-		"نمایش اقدامات بیشتر"
 	],
 	"Show note counts": [
 		"نمایش تعداد یادداشت‌ها"
@@ -2842,6 +2893,12 @@
 	],
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"برخی از موارد را نمی توان همگام سازی کرد. لطفا ابتدا سعی کنید آنها را همگام سازی کنید."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"مرتب‌سازی دفترچه‌ها بر اساس"
@@ -2956,6 +3013,9 @@
 	],
 	"Switch profile": [
 		"تغییر حساب کاربری"
+	],
+	"Switch to back-facing camera": [
+		""
 	],
 	"Switch to note type": [
 		"تغییر به نوع یادداشت"
@@ -3120,8 +3180,8 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"کلیدهای زیر از یک الگوریتم رمزنگاری قدیمی استفاده می کنند و توصیه می شود آنها را ارتقا دهید. کلید ارتقا یافته همچنان می‌تواند مانند همیشه داده‌های شما را رمزگشایی و رمزنگاری کند."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"برنامه موبایل joplin در حال حاضر از این نوع لینک پشتیبانی نمی‌کند: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"تیم joplin این افزونه را بررسی کرده است و استانداردهای ما را برای امنیت و عملکرد مطابقت دارد."
@@ -3174,6 +3234,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"هدف برای همگام سازی. هر هدف همگام‌سازی ممکن است پارامترهای دیگری داشته باشد که به‌عنوان «sync.NUM.NAME» نام‌گذاری شده‌اند (همه در زیر مستند شده‌اند)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper برای دسترسی به داده های شما به مجوز شما نیاز دارد."
@@ -3228,9 +3291,6 @@
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"این پیوست هنوز دانلود یا رمزگشایی نشده"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"این پیوست هنوز دانلود یا رمزگشایی نشده."
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"این توکن مجوز تنها برای اجازه دادن به برنامه‌های شخص ثالث برای دسترسی به joplin مورد نیاز است."
@@ -3436,6 +3496,9 @@
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"برنامه را حذف و دوباره نصب کنید. اطمینان حاصل کنید که ابتدا با صادر کردن تمام یادداشت های خود به عنوان JEX از برنامه دسکتاپ، یک نسخه پشتیبان ایجاد کرده اید."
 	],
+	"Unknown": [
+		"ناشناس"
+	],
 	"Unknown file type": [
 		"نوع فایل نامشخص"
 	],
@@ -3577,6 +3640,9 @@
 	"Voice typing...": [
 		"تایپ صوتی..."
 	],
+	"Vosk": [
+		""
+	],
 	"Waiting for authorisation...": [
 		"در انتظار احراز هویت..."
 	],
@@ -3634,6 +3700,9 @@
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"وقتی فعال باشد، برنامه پیوست های شما را اسکن کرده و متن را از آن استخراج می کند. این به شما امکان می دهد متن را در این پیوست ها جستجو کنید."
 	],
+	"Whisper": [
+		""
+	],
 	"Window unresponsive.": [
 		"صفحه پاسخگو نیست."
 	],
@@ -3690,9 +3759,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"گذرواژه شما برای رمزگشایی برخی از داده‌های شما مورد نیاز است. «:e2ee decrypt» را تایپ کنید تا آن را تنظیم کنید."
-	],
-	"Your permission to use your camera is required.": [
-		"اجازه ی شما برای استفاده از دوربین دستگاه شما مورد نیاز است."
 	],
 	"Your version: %s": [
 		"نسخه شما: %s"

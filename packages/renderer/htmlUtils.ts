@@ -260,6 +260,12 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
+			oncomment: (data: string) => {
+				// Ensure that <s and >s are escaped within comments. In some cases,
+				// these characters can end a comment early (e.g. <style><!--</style>-->)
+				output.push(`<!--${htmlentities(data)}-->`);
+			},
+
 			onopentag: (name: string, attrs: Record<string, string>) => {
 				// Note: "name" and attribute names are always lowercase even
 				// when the input is not. So there is no need to call
@@ -280,6 +286,20 @@ class HtmlUtils {
 				}
 
 				attrs = { ...attrs };
+
+				// Allowing the 'name' attribute allows an attacker to overwrite
+				// DOM methods (e.g. getElementById) with elements.
+				if ('name' in attrs) {
+					const oldName = attrs['name'];
+					delete attrs['name'];
+
+					// For compatibility reasons, support rewriting name= as id=.
+					// This allows internal links specified with name="target" to continue
+					// to work.
+					if (!('id' in attrs)) {
+						attrs['id'] = oldName;
+					}
+				}
 
 				// Remove all the attributes that start with "on", which
 				// normally should be JavaScript events. A better solution

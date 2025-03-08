@@ -159,13 +159,13 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		context.inFence = true;
 		content.push(`\`\`\`${token.info || ''}\n`);
 	} else if (type === 'html_block') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(parseHtml(token.content.trim()));
 	} else if (type === 'html_inline') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(parseHtml(token.content.trim()));
 	} else if (type === 'code_inline') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(`\`${token.content}\``);
 	} else if (type === 'code_block') {
 		contentProcessed = true;

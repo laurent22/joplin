@@ -108,7 +108,7 @@ const ActionButtons: React.FC<Props> = props => {
 		<IconButton
 			iconName={props.takingPicture ? 'ionicon checkmark' : 'ionicon camera'}
 			onPress={props.onTakePicture}
-			description={props.takingPicture ? _('Processing photo...') : _('Take picture')}
+			description={props.takingPicture ? _('Processing photo...') : _('Take photo')}
 			themeId={props.themeId}
 			iconStyle={styles.takePhotoButtonContent}
 			containerStyle={styles.takePhotoButtonContainer}

@@ -25,6 +25,7 @@ interface Props {
 	noteBody: string;
 	noteMarkupLanguage: MarkupLanguage;
 	themeId: number;
+	fontSize: number;
 
 	highlightedKeywords: string[];
 	noteResources: Record<string, ResourceInfo>;
@@ -82,7 +83,7 @@ const useRerenderHandler = (props: Props) => {
 	const effectDependencies = [
 		props.noteBody, props.noteMarkupLanguage, props.renderer, props.highlightedKeywords,
 		props.noteHash, props.noteResources, props.themeId, props.paddingBottom, lastResourceLoadCounter,
-		createEditPopupSyntax, destroyEditPopupSyntax, pluginSettingKeys,
+		createEditPopupSyntax, destroyEditPopupSyntax, pluginSettingKeys, props.fontSize,
 	];
 	const previousDeps = usePrevious(effectDependencies, []);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -149,8 +150,9 @@ const useRerenderHandler = (props: Props) => {
 			theme: JSON.stringify({
 				bodyPaddingTop: '0.8em',
 				bodyPaddingBottom: props.paddingBottom,
-
 				...theme,
+
+				noteViewerFontSize: props.fontSize,
 			}),
 			codeTheme: theme.codeThemeCss,
 

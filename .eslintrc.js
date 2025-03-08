@@ -87,6 +87,7 @@ module.exports = {
 			allowEmptyReject: true,
 		}],
 		'no-throw-literal': ['error'],
+		'no-unused-expressions': ['error'],
 
 		// This rule should not be enabled since it matters in what order
 		// imports are done, in particular in relation to the shim.setReact

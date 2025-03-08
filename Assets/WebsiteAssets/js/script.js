@@ -80,7 +80,7 @@ async function setupDownloadPage() {
 		
 		if (href.indexOf('-Setup') > 0) downloadLinks['windows'] = href;
 		if (href.indexOf('.dmg') > 0) downloadLinks['macOs'] = href;
-		if (href.endsWith('arm64.DMG')) downloadLinks['macOsM1'] = href;
+		if (href.indexOf('arm64.DMG') > 0) downloadLinks['macOsM1'] = href;
 		if (href.indexOf('.AppImage') > 0) downloadLinks['linux'] = href;
 	});
 
@@ -97,6 +97,8 @@ async function setupDownloadPage() {
 		$('.page-download .intro').hide();
 	} else {
 		const os = await getOs();
+
+		console.info('Found OS: ' + os);
 
 		if (os === 'macOsUndefined') {
 			// If we don't know which macOS version it is, we let the user choose.

@@ -1,0 +1,11 @@
+- <img src=":/0123456789abcdef0123456789abcdef" width="10" height="11"></img>
+    - HTML images just before a sublist should have a closing &lt;img&gt; tag added.
+    - Otherwise, when rendered to Markdown again, the subsequent list items will be rendered as HTML.
+- <img src=":/0123456789abcdef0123456789abcdef" width="10" height="11"></img>  
+    **A closing tag is also necessary if the image is followed by content on a new line.**
+- ![](:/0123456789abcdef0123456789abcdef)
+    - Similar logic isn't necessary for images converted to Markdown.
+- <img src=":/0123456789abcdef0123456789abcdef" width="10" height="11">
+- It also isn't necessary if the next item is at the same level as the image...
+- ...or if the image has text just before it. <img src=":/0123456789abcdef0123456789abcdef" width="10" height="11">
+    - See [this issue](https://github.com/laurent22/joplin/issues/11382) for details.

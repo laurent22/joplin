@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import dialogs from '../../dialogs';
+import shim from '@joplin/lib/shim';
 
 export const declaration: CommandDeclaration = {
 	name: 'resetLayout',
@@ -12,7 +12,7 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext) => {
 
 			const message = _('Are you sure you want to return to the default layout? The current layout configuration will be lost.');
-			const isConfirmed = await dialogs.confirm(message);
+			const isConfirmed = await shim.showConfirmationDialog(message);
 
 			if (!isConfirmed) return;
 

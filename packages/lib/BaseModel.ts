@@ -345,13 +345,17 @@ class BaseModel {
 		return this.modelSelectAll(q.sql, q.params);
 	}
 
+	public static escapeIdsForSql(ids: string[]) {
+		return this.db().escapeValues(ids).join(', ');
+	}
+
 	public static async byIds(ids: string[], options: LoadOptions = null) {
 		if (!ids.length) return [];
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
-		sql += ` WHERE id IN ('${ids.join('\',\'')}')`;
+		sql += ` WHERE id IN (${this.escapeIdsForSql(ids)})`;
 		const q = this.applySqlOptions(options, sql);
 		return this.modelSelectAll(q.sql);
 	}
@@ -750,7 +754,7 @@ class BaseModel {
 
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';
-		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN ('${ids.join('\',\'')}')`;
+		const sql = `DELETE FROM ${this.tableName()} WHERE ${idFieldName} IN (${this.escapeIdsForSql(ids)})`;
 		await this.db().exec(sql);
 	}
 

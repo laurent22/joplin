@@ -13,6 +13,7 @@ import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
+import { Toast, ToastType } from './services/plugins/api/types';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -168,6 +169,10 @@ export interface State extends WindowState {
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
 	mustAuthenticate: boolean;
+	toast: Toast | null;
+	editorNoteReloadTimeRequest: number;
+
+	allowSelectionInOtherFolders: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -236,9 +241,12 @@ export const defaultState: State = {
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
+	allowSelectionInOtherFolders: false,
+	editorNoteReloadTimeRequest: 0,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
+	toast: null,
 };
 
 for (const additionalReducer of additionalReducers) {
@@ -441,6 +449,11 @@ function stateHasEncryptedItems(state: State) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function folderSetCollapsed(draft: Draft<State>, action: any) {
+	if (action.ids) {
+		draft.collapsedFolderIds = action.ids;
+		return;
+	}
+
 	const collapsedFolderIds = draft.collapsedFolderIds.slice();
 	const idx = collapsedFolderIds.indexOf(action.id);
 
@@ -896,6 +909,27 @@ type WindowAction = {
 };
 
 const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
+	const handleFocus = (windowId: string) => {
+		// Only allow bringing a background window to the foreground
+		if (draft.windowId !== windowId) {
+			const previousWindowId = draft.windowId;
+
+			const focusingWindowState = draft.backgroundWindows[windowId];
+			const previousWindowState = { ...defaultWindowState };
+
+			for (const key of Object.keys(focusingWindowState)) {
+				const stateKey = key as keyof WindowState;
+
+				type AssignableWindowState = Record<keyof WindowState, unknown>;
+				(previousWindowState as AssignableWindowState)[stateKey] = draft[stateKey];
+				(draft as AssignableWindowState)[stateKey] = focusingWindowState[stateKey];
+			}
+
+			delete draft.backgroundWindows[windowId];
+			draft.backgroundWindows[previousWindowId] = previousWindowState;
+		}
+	};
+
 	switch (action.type) {
 
 	case 'WINDOW_OPEN': {
@@ -920,29 +954,15 @@ const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
 		};
 		break;
 	}
-	case 'WINDOW_FOCUS': {
-		// Only allow bringing a background window to the foreground
-		if (draft.windowId !== action.windowId) {
-			const windowId = action.windowId;
-			const previousWindowId = draft.windowId;
-
-			const focusingWindowState = draft.backgroundWindows[windowId];
-			const previousWindowState = { ...defaultWindowState };
-
-			for (const key of Object.keys(focusingWindowState)) {
-				const stateKey = key as keyof WindowState;
-
-				type AssignableWindowState = Record<keyof WindowState, unknown>;
-				(previousWindowState as AssignableWindowState)[stateKey] = draft[stateKey];
-				(draft as AssignableWindowState)[stateKey] = focusingWindowState[stateKey];
-			}
-
-			delete draft.backgroundWindows[windowId];
-			draft.backgroundWindows[previousWindowId] = previousWindowState;
-		}
+	case 'WINDOW_FOCUS':
+		handleFocus(action.windowId);
 		break;
-	}
 	case 'WINDOW_CLOSE': {
+		const isFocusedWindow = draft.windowId === action.windowId;
+		if (isFocusedWindow) {
+			const firstBackgroundWindow = Object.keys(draft.backgroundWindows)[0];
+			handleFocus(firstBackgroundWindow);
+		}
 		delete draft.backgroundWindows[action.windowId];
 		break;
 	}
@@ -1080,7 +1100,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			draft.notes = action.notes;
 			draft.notesSource = action.notesSource;
 			draft.noteListLastSortTime = Date.now(); // Notes are already sorted when they are set this way.
-			updateSelectedNotesFromExistingNotes(draft);
+			if (!draft.allowSelectionInOtherFolders) {
+				updateSelectedNotesFromExistingNotes(draft);
+			}
 			break;
 
 			// Insert the note into the note list if it's new, or
@@ -1148,7 +1170,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// For example, if the user drags the current note to a different folder,
 					// a new note should be selected.
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
-					if (noteFolderHasChanged && !action.preserveSelection) {
+					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
+					if (noteFolderHasChanged && !preserveSelection) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1494,6 +1517,24 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				noteListRendererIds.push(action.value);
 				draft.noteListRendererIds = noteListRendererIds;
 			}
+			break;
+
+		case 'EDITOR_NOTE_NEEDS_RELOAD':
+			{
+				draft.editorNoteReloadTimeRequest = Date.now();
+			}
+			break;
+
+		case 'TOAST_SHOW':
+			draft.toast = {
+				duration: 6000,
+				type: ToastType.Info,
+				...action.value,
+				timestamp: Date.now(),
+			};
+			break;
+		case 'TOAST_HIDE':
+			draft.toast = null;
 			break;
 
 		}

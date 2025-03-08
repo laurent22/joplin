@@ -19,6 +19,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 interface Props {
 	themeId: number;
 	style: ViewStyle;
+	fontSize: number;
 	noteBody: string;
 	noteMarkupLanguage: MarkupLanguage;
 	highlightedKeywords: string[];
@@ -80,6 +81,7 @@ export default function NoteBodyViewer(props: Props) {
 
 	useRerenderHandler({
 		renderer,
+		fontSize: props.fontSize,
 		noteBody: props.noteBody,
 		noteMarkupLanguage: props.noteMarkupLanguage,
 		themeId: props.themeId,

@@ -1,163 +1,127 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
-import NoteTextViewer from './NoteTextViewer';
+import NoteTextViewer, { NoteViewerControl } from './NoteTextViewer';
 import HelpButton from './HelpButton';
 import BaseModel from '@joplin/lib/BaseModel';
 import Revision from '@joplin/lib/models/Revision';
-import Setting from '@joplin/lib/models/Setting';
 import RevisionService from '@joplin/lib/services/RevisionService';
-import { MarkupToHtml } from '@joplin/renderer';
+import { MarkupLanguage } from '@joplin/renderer';
 import time from '@joplin/lib/time';
 import bridge from '../services/bridge';
-import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
 const urlUtils = require('@joplin/lib/urlUtils');
 const ReactTooltip = require('react-tooltip');
 const { connect } = require('react-redux');
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
+import { RefObject, useCallback, useRef, useState } from 'react';
+import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
+import useMarkupToHtml from './hooks/useMarkupToHtml';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
 	noteId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onBack: Function;
+	onBack: ()=> void;
 	customCss: string;
+	scrollbarSize: ScrollbarSize;
 }
 
-interface State {
-	note: NoteEntity;
-	revisions: RevisionEntity[];
-	currentRevId: string;
-	restoring: boolean;
-}
+const useNoteContent = (
+	viewerRef: RefObject<NoteViewerControl>,
+	currentRevId: string,
+	revisions: RevisionEntity[],
+	themeId: number,
+	customCss: string,
+	scrollbarSize: ScrollbarSize,
+) => {
+	const [note, setNote] = useState<NoteEntity>(null);
 
-class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
+	const markupToHtml = useMarkupToHtml({
+		themeId,
+		customCss,
+		plugins: {},
+		whiteBackgroundNoteRendering: false,
+		scrollbarSize,
+	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private viewerRef_: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private helpButton_onClick: Function;
+	useAsyncEffect(async (event) => {
+		if (!revisions.length || !currentRevId) {
+			setNote(null);
+		} else {
+			const revIndex = BaseModel.modelIndexById(revisions, currentRevId);
+			const note = await RevisionService.instance().revisionNote(revisions, revIndex);
+			if (!note || event.cancelled) return;
+			setNote(note);
+		}
+	}, [revisions, currentRevId, themeId, customCss, viewerRef]);
 
-	public constructor(props: Props) {
-		super(props);
+	useQueuedAsyncEffect(async () => {
+		const noteBody = note?.body ?? _('This note has no history');
+		const markupLanguage = note?.markup_language ?? MarkupLanguage.Markdown;
+		const result = await markupToHtml(markupLanguage, noteBody, {
+			resources: await shared.attachedResources(noteBody),
+			whiteBackgroundNoteRendering: markupLanguage === MarkupLanguage.Html,
+		});
 
-		this.state = {
-			revisions: [],
-			currentRevId: '',
-			note: null,
-			restoring: false,
-		};
+		viewerRef.current.setHtml(result.html, {
+			pluginAssets: result.pluginAssets,
+		});
+	}, [note, viewerRef]);
 
-		this.viewerRef_ = React.createRef();
+	return note;
+};
 
-		this.viewer_domReady = this.viewer_domReady.bind(this);
-		this.revisionList_onChange = this.revisionList_onChange.bind(this);
-		this.importButton_onClick = this.importButton_onClick.bind(this);
-		this.backButton_click = this.backButton_click.bind(this);
-		this.webview_ipcMessage = this.webview_ipcMessage.bind(this);
-	}
+const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize }) => {
+	const helpButton_onClick = useCallback(() => {}, []);
+	const viewerRef = useRef<NoteViewerControl|null>(null);
+	const revisionListRef = useRef<HTMLSelectElement|null>(null);
 
-	public style() {
-		const theme = themeStyle(this.props.themeId);
+	const [revisions, setRevisions] = useState<RevisionEntity[]>([]);
+	const [currentRevId, setCurrentRevId] = useState('');
+	const [restoring, setRestoring] = useState(false);
 
-		const style = {
-			root: {
-				backgroundColor: theme.backgroundColor,
-				display: 'flex',
-				flex: 1,
-				flexDirection: 'column',
-			},
-			titleInput: { ...theme.inputStyle, flex: 1 },
-			revisionList: { ...theme.dropdownList, marginLeft: 10, flex: 0.5 },
-		};
+	const note = useNoteContent(viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize);
 
-		return style;
-	}
-
-	private async viewer_domReady() {
+	const viewer_domReady = useCallback(async () => {
 		// this.viewerRef_.current.openDevTools();
 
-		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, this.props.noteId);
+		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 
-		this.setState(
-			{
-				revisions: revisions,
-				currentRevId: revisions.length ? revisions[revisions.length - 1].id : '',
-			},
-			() => {
-				void this.reloadNote();
-			},
-		);
-	}
+		setRevisions(revisions);
+		setCurrentRevId(revisions.length ? revisions[revisions.length - 1].id : '');
+	}, [noteId]);
 
-	private async importButton_onClick() {
-		if (!this.state.note) return;
-		this.setState({ restoring: true });
-		await RevisionService.instance().importRevisionNote(this.state.note);
-		this.setState({ restoring: false });
-		alert(RevisionService.instance().restoreSuccessMessage(this.state.note));
-	}
+	const importButton_onClick = useCallback(async () => {
+		if (!note) return;
+		setRestoring(true);
+		await RevisionService.instance().importRevisionNote(note);
+		setRestoring(false);
+		await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
+	}, [note]);
 
-	private backButton_click() {
-		if (this.props.onBack) this.props.onBack();
-	}
+	const backButton_click = useCallback(() => {
+		if (onBack) onBack();
+	}, [onBack]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private revisionList_onChange(event: any) {
+	const revisionList_onChange: React.ChangeEventHandler<HTMLSelectElement> = useCallback((event) => {
 		const value = event.target.value;
 
 		if (!value) {
-			if (this.props.onBack) this.props.onBack();
+			if (onBack) onBack();
 		} else {
-			this.setState(
-				{
-					currentRevId: value,
-				},
-				() => {
-					void this.reloadNote();
-				},
-			);
+			setCurrentRevId(value);
 		}
-	}
-
-	public async reloadNote() {
-		let noteBody = '';
-		let markupLanguage = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
-		if (!this.state.revisions.length || !this.state.currentRevId) {
-			noteBody = _('This note has no history');
-			this.setState({ note: null });
-		} else {
-			const revIndex = BaseModel.modelIndexById(this.state.revisions, this.state.currentRevId);
-			const note = await RevisionService.instance().revisionNote(this.state.revisions, revIndex);
-			if (!note) return;
-			noteBody = note.body;
-			markupLanguage = note.markup_language;
-			this.setState({ note: note });
-		}
-
-		const theme = themeStyle(this.props.themeId);
-
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
-			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
-			customCss: this.props.customCss ? this.props.customCss : '',
-		});
-
-		const result = await markupToHtml.render(markupLanguage, noteBody, theme, {
-			codeTheme: theme.codeThemeCss,
-			resources: await shared.attachedResources(noteBody),
-			postMessageSyntax: 'ipcProxySendToHost',
-		});
-
-		this.viewerRef_.current.setHtml(result.html, {
-			// cssFiles: result.cssFiles,
-			pluginAssets: result.pluginAssets,
-		});
-	}
+	}, [onBack]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async webview_ipcMessage(event: any) {
+	const webview_ipcMessage = useCallback(async (event: any) => {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
@@ -181,60 +145,63 @@ class NoteRevisionViewerComponent extends React.PureComponent<Props, State> {
 			console.warn(error);
 			bridge().showErrorMessageBox(error.message);
 		}
-	}
+	}, []);
 
-	public render() {
-		const theme = themeStyle(this.props.themeId);
-		const style = this.style();
+	const theme = themeStyle(themeId);
 
-		const revisionListItems = [];
-		const revs = this.state.revisions.slice().reverse();
-		for (let i = 0; i < revs.length; i++) {
-			const rev = revs[i];
-			const stats = Revision.revisionPatchStatsText(rev);
+	const revisionListItems = [];
+	const revs = revisions.slice().reverse();
+	for (let i = 0; i < revs.length; i++) {
+		const rev = revs[i];
+		const stats = Revision.revisionPatchStatsText(rev);
 
-			revisionListItems.push(
-				<option key={rev.id} value={rev.id}>
-					{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
-				</option>,
-			);
-		}
-
-		const restoreButtonTitle = _('Restore');
-		const helpMessage = _('Click "%s" to restore the note. It will be copied in the notebook named "%s". The current version of the note will not be replaced or modified.', restoreButtonTitle, RevisionService.instance().restoreFolderTitle());
-
-		const titleInput = (
-			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderWidth: 1, borderBottomStyle: 'solid', borderColor: theme.dividerColor, paddingBottom: 10 }}>
-				<button onClick={this.backButton_click} style={{ ...theme.buttonStyle, marginRight: 10, height: theme.inputStyle.height }}>
-					<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>{_('Back')}
-				</button>
-				<input readOnly type="text" style={style.titleInput} value={this.state.note ? this.state.note.title : ''} />
-				<select disabled={!this.state.revisions.length} value={this.state.currentRevId} style={style.revisionList} onChange={this.revisionList_onChange}>
-					{revisionListItems}
-				</select>
-				<button disabled={!this.state.revisions.length || this.state.restoring} onClick={this.importButton_onClick} style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
-					{restoreButtonTitle}
-				</button>
-				<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={this.helpButton_onClick} />
-			</div>
-		);
-
-		const viewer = <NoteTextViewer themeId={this.props.themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={this.viewerRef_} onDomReady={this.viewer_domReady} onIpcMessage={this.webview_ipcMessage} />;
-
-		return (
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			<div style={style.root as any}>
-				{titleInput}
-				{viewer}
-				<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
-			</div>
+		revisionListItems.push(
+			<option key={rev.id} value={rev.id}>
+				{`${time.formatMsToLocal(rev.item_updated_time)} (${stats})`}
+			</option>,
 		);
 	}
-}
+
+	const restoreButtonTitle = _('Restore');
+	const helpMessage = _('Click "%s" to restore the note. It will be copied in the notebook named "%s". The current version of the note will not be replaced or modified.', restoreButtonTitle, RevisionService.instance().restoreFolderTitle());
+
+	const titleInput = (
+		<div className='revision-viewer-title'>
+			<button onClick={backButton_click} style={{ ...theme.buttonStyle, marginRight: 10, height: theme.inputStyle.height }}>
+				<i style={theme.buttonIconStyle} className={'fa fa-chevron-left'}></i>{_('Back')}
+			</button>
+			<input readOnly type="text" className='title' style={theme.inputStyle} value={note?.title ?? ''} />
+			<select disabled={!revisions.length} value={currentRevId} className='revisions' style={theme.dropdownList} onChange={revisionList_onChange} ref={revisionListRef}>
+				{revisionListItems}
+			</select>
+			<button disabled={!revisions.length || restoring} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+				{restoreButtonTitle}
+			</button>
+			<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={helpButton_onClick} />
+		</div>
+	);
+
+	const viewer = <NoteTextViewer themeId={themeId} viewerStyle={{ display: 'flex', flex: 1, borderLeft: 'none' }} ref={viewerRef} onDomReady={viewer_domReady} onIpcMessage={webview_ipcMessage} />;
+
+	useEffect(() => {
+		// We need to force focus here because otherwise the focus is lost and goes back
+		// to the start of the document. See https://github.com/laurent22/joplin/pull/11769
+		focus('NoteRevisionViewer', revisionListRef.current);
+	}, [revisionListRef, revisions]);
+
+	return (
+		<div className='revision-viewer-root'>
+			{titleInput}
+			{viewer}
+			<ReactTooltip place="bottom" delayShow={300} className="help-tooltip" />
+		</div>
+	);
+};
 
 const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
+		scrollbarSize: state.settings['style.scrollbarSize'],
 	};
 };
 

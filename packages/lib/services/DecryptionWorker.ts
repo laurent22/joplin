@@ -254,7 +254,8 @@ export default class DecryptionWorker {
 						}
 
 						if (options.errorHandler === 'log') {
-							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error, item);
+							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error);
+							this.logger().debug('Item with error:', item);
 						} else {
 							throw error;
 						}

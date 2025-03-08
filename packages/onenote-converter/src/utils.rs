@@ -82,7 +82,7 @@ extern "C" {
 
     #[wasm_bindgen(js_name = removePrefix, catch)]
     pub unsafe fn remove_prefix(
-        base_path: &str,
+        base_path: String,
         prefix: &str,
     ) -> std::result::Result<JsValue, JsValue>;
 

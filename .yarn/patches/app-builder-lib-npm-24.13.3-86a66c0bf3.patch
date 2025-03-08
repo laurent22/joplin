@@ -1,0 +1,90 @@
+# This patch's goal is to work around an issue in the NSIS uninstaller on Windows:
+# - For future uninstallers, this patch backports an upstream commit that changes how
+#   running copies of the app are found.
+#  - See https://github.com/electron-userland/electron-builder/pull/8133
+# - If an existing uninstaller fails, gives an option to continue with the installation
+#   despite the failure.
+# - Updates "uninstall failed" error messages to state that uninstallation failed (rather
+#   than incorrectly stating that the issue was with closing the app).
+#
+# See https://github.com/laurent22/joplin/pull/11541
+diff --git a/templates/nsis/include/allowOnlyOneInstallerInstance.nsh b/templates/nsis/include/allowOnlyOneInstallerInstance.nsh
+index fe5d45c730f36c9fe8d8cfea12e242e501b67139..97b27fce6798e30e3e631221435f09b3579e77c3 100644
+--- a/templates/nsis/include/allowOnlyOneInstallerInstance.nsh
++++ b/templates/nsis/include/allowOnlyOneInstallerInstance.nsh
+@@ -42,7 +42,7 @@
+     ${nsProcess::FindProcess} "${_FILE}" ${_ERR}
+   !else
+     # find process owned by current user
+-    nsExec::Exec `%SYSTEMROOT%\System32\cmd.exe /c tasklist /FI "USERNAME eq %USERNAME%" /FI "IMAGENAME eq ${_FILE}" /FO csv | %SYSTEMROOT%\System32\find.exe "${_FILE}"`
++    nsExec::Exec `"$SYSDIR\cmd.exe" /c tasklist /FI "USERNAME eq %USERNAME%" /FI "IMAGENAME eq ${_FILE}" /FO csv | "$SYSDIR\find.exe" "${_FILE}"`
+     Pop ${_ERR}
+   !endif
+ !macroend
+@@ -73,7 +73,7 @@
+       !ifdef INSTALL_MODE_PER_ALL_USERS
+         nsExec::Exec `taskkill /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid"`
+       !else
+-        nsExec::Exec `%SYSTEMROOT%\System32\cmd.exe /c taskkill /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid" /fi "USERNAME eq %USERNAME%"`
++        nsExec::Exec `"$SYSDIR\cmd.exe" /c taskkill /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid" /fi "USERNAME eq %USERNAME%"`
+       !endif
+       # to ensure that files are not "in-use"
+       Sleep 300
+@@ -91,7 +91,7 @@
+           !ifdef INSTALL_MODE_PER_ALL_USERS
+             nsExec::Exec `taskkill /f /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid"`
+           !else
+-            nsExec::Exec `%SYSTEMROOT%\System32\cmd.exe /c taskkill /f /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid" /fi "USERNAME eq %USERNAME%"`
++            nsExec::Exec `"$SYSDIR\cmd.exe" /c taskkill /f /im "${APP_EXECUTABLE_FILENAME}" /fi "PID ne $pid" /fi "USERNAME eq %USERNAME%"`
+           !endif
+           !insertmacro FIND_PROCESS "${APP_EXECUTABLE_FILENAME}" $R0
+           ${If} $R0 == 0
+diff --git a/templates/nsis/include/installUtil.nsh b/templates/nsis/include/installUtil.nsh
+index 47367741632726ba0886ac516461dbe98b7aea58..675965762375925a505ca6d8bbb67507ef696c2e 100644
+--- a/templates/nsis/include/installUtil.nsh
++++ b/templates/nsis/include/installUtil.nsh
+@@ -126,10 +126,11 @@ Function handleUninstallResult
+   Return
+ 
+   ${if} $R0 != 0
+-    MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
++    # MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
+     DetailPrint `Uninstall was not successful. Uninstaller error code: $R0.`
+-    SetErrorLevel 2
+-    Quit
++    DetailPrint `Continuing anyway. See https://github.com/laurent22/joplin/pull/11612.`
++    # SetErrorLevel 2
++    # Quit
+   ${endif}
+ FunctionEnd
+ 
+@@ -216,11 +217,13 @@ Function uninstallOldVersion
+     IntOp $R5 $R5 + 1
+ 
+     ${if} $R5 > 5
+-      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(appCannotBeClosed)" /SD IDCANCEL IDRETRY OneMoreAttempt
+-      Return
++      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(appCannotBeUninstalled)" /SD IDCANCEL IDRETRY ContinueWithoutUninstall
++        Abort ; Exit early
++      ContinueWithoutUninstall:
++        Return
+     ${endIf}
+ 
+-  OneMoreAttempt:
++#  OneMoreAttempt: ; Commented out because unused
+     ExecWait '"$uninstallerFileNameTemp" /S /KEEP_APP_DATA $0 _?=$installationDir' $R0
+     ifErrors TryInPlace CheckResult
+ 
+diff --git a/templates/nsis/messages.yml b/templates/nsis/messages.yml
+index a1c2847fa48d79f835b30b48e999ccaf3c818657..6884c18d1e77dbd6be114401d23cf5caf3e0dd94 100644
+--- a/templates/nsis/messages.yml
++++ b/templates/nsis/messages.yml
+@@ -235,3 +235,8 @@ uninstallFailed:
+   sv: Det gick inte att avinstallera gamla programfiler. Försök att köra installationsprogrammet igen.
+   uk: Не вдалось видалити старі файли застосунку. Будь ласка, спробуйте запустити встановлювач знов.
+   zh_TW: 無法俺安裝舊的應用程式檔案。 請嘗試再次執行安裝程式。
++
++
++appCannotBeUninstalled:
++  en: "The old version of ${PRODUCT_NAME} could not be removed. \nClick Retry to skip this step."
++

@@ -59,7 +59,7 @@ describe('CameraView', () => {
 
 		expect(await screen.findByRole('button', { name: 'Back' })).toBeVisible();
 		startCamera();
-		expect(await screen.findByRole('button', { name: 'Take picture' })).toBeVisible();
+		expect(await screen.findByRole('button', { name: 'Take photo' })).toBeVisible();
 
 		view.unmount();
 	});

@@ -17,9 +17,11 @@ import { themeStyle } from '@joplin/lib/theme';
 import useDocument from '../hooks/useDocument';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
+import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 
 interface Props {
 	themeId: number;
+	scrollbarSize: ScrollbarSize;
 	editorFontSetting: string;
 	customChromeCssPaths: string[];
 }
@@ -106,6 +108,11 @@ const StyleSheetContainer: React.FC<Props> = props => {
 		/* Theme CSS */
 		${themeCss}
 
+		/* Base scrollbar size */
+		:root {
+			--scrollbar-size: ${Number(props.scrollbarSize)}px;
+		}
+
 		/* Editor font CSS */
 		${editorCss}
 	`);
@@ -118,6 +125,7 @@ export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		editorFontSetting: state.settings['style.editor.fontFamily'] as string,
+		scrollbarSize: state.settings['style.scrollbarSize'],
 		customChromeCssPaths: state.customChromeCssPaths,
 	};
 })(StyleSheetContainer);

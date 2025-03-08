@@ -1,5 +1,142 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: new_section 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>new_section</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/3" target="content" title="title">title</a></li>
+        
+    </ul>
+</nav>
+<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+</style>
+<script>
+    document.addEventListener('click', function (event) {
+        // If the clicked element doesn't have the right selector, bail
+        if (!event.target.matches('nav a')) return;
+        for (const child of event.target.parentElement.parentElement.children) {
+            child.classList.remove('active');
+        }
+        event.target.parentElement.classList.add('active');
+
+    }, false);
+
+    window.addEventListener('message', (event) => {
+        const activeTarget = event.data;
+
+        for (const link of document.querySelectorAll('nav ul li a')) {
+            if (link.href === activeTarget) {
+                link.parentElement.classList.add('active');
+            }
+        }
+    });
+
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: title 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">title</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href="Untitled">Untitled</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled-0.</a></p></div>
+</div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
@@ -763,6 +900,407 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
         window.parent.postMessage(window.location.href, '*');
     }
 </script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Quick Notes 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/5" target="content" title="风景  (Web view)">风景  (Web view)</a></li>
+        
+        <li class="l1"><a href=":/4" target="content" title="wikipedia link">wikipedia link</a></li>
+        
+        <li class="l1"><a href=":/6" target="content" title="风景">风景</a></li>
+        
+        <li class="l1"><a href=":/3" target="content" title="Tips from a Pro: Using Trees for Dramatic Landscape Photography">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></li>
+        
+    </ul>
+</nav>
+<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+</style>
+<script>
+    document.addEventListener('click', function (event) {
+        // If the clicked element doesn't have the right selector, bail
+        if (!event.target.matches('nav a')) return;
+        for (const child of event.target.parentElement.parentElement.children) {
+            child.classList.remove('active');
+        }
+        event.target.parentElement.classList.add('active');
+
+    }, false);
+
+    window.addEventListener('message', (event) => {
+        const activeTarget = event.data;
+
+        for (const link of document.querySelectorAll('nav ul li a')) {
+            if (link.href === activeTarget) {
+                link.parentElement.classList.add('active');
+            }
+        }
+    });
+
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Saturday, February 11, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">12:56 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/风景.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: wikipedia link 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wikipedia link</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:15 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href="https://zh.wikipedia.org/zh-hans/%E9%A3%8E%E6%99%AF" style="">wikipedia link</a></p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>风景  (Web view)</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Sunday, January 5, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">10:13 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href="onenote:#风景&section-id={75256889-9e75-4ec2-82ed-fc799557e1b9}&page-id={d099b6f3-7f5a-4c08-aed7-e8d42c59523f}&end" style="">风景</a><span style="font-family: Calibri; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&migratedtospo=true&wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&wdorigin=703&wdpreservelink=1" style="">Web view</a><span style="font-family: Calibri; font-size: 11pt;">)</span></p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>风景</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">风景</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:14 PM</span></div>
+</div></div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Is Mexico safe for shooting Street Photography?</title>
+    <style>
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+    .note-tag-icon { position: relative; }
+    .note-tag-icon > svg { position: absolute; }
+    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Monday, August 28, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">10:52 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;"><a href="https://www.youtube.com/watch?v=-U-uj1jaHtk" style="">Is Mexico safe for shooting Street Photography?</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: 200px; max-width: 356px;" /></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Quick Notes 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/3" target="content" title="Is Mexico safe for shooting Street Photography?">Is Mexico safe for shooting Street Photography?</a></li>
+        
+    </ul>
+</nav>
+<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+</style>
+<script>
+    document.addEventListener('click', function (event) {
+        // If the clicked element doesn't have the right selector, bail
+        if (!event.target.matches('nav a')) return;
+        for (const child of event.target.parentElement.parentElement.children) {
+            child.classList.remove('active');
+        }
+        event.target.parentElement.classList.add('active');
+
+    }, false);
+
+    window.addEventListener('message', (event) => {
+        const activeTarget = event.data;
+
+        for (const link of document.querySelectorAll('nav ul li a')) {
+            if (link.href === activeTarget) {
+                link.parentElement.classList.add('active');
+            }
+        }
+    });
+
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+
 </body>
 </html>"
 `;

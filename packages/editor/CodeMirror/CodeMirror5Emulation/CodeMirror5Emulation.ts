@@ -37,6 +37,10 @@ interface DocumentPositionRange {
 	to: DocumentPosition;
 }
 
+const clampPositionToDoc = (doc: Text, pos: number) => {
+	return Math.min(Math.max(0, pos), doc.length);
+};
+
 const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 	const line = doc.lineAt(pos);
 	return {
@@ -48,7 +52,12 @@ const documentPositionFromPos = (doc: Text, pos: number): DocumentPosition => {
 
 const posFromDocumentPosition = (doc: Text, pos: DocumentPosition) => {
 	const line = doc.line(pos.line + 1);
-	return line.from + pos.ch;
+	const result = line.from + pos.ch;
+
+	if (!Number.isInteger(result)) {
+		throw new Error(`Document position ${result} (${pos.line}:${pos.ch}) is not an integer`);
+	}
+	return result;
 };
 
 export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
@@ -420,8 +429,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const doc = this.editor.state.doc;
 
 		return this._decorator.markText(
-			posFromDocumentPosition(doc, from),
-			posFromDocumentPosition(doc, to),
+			clampPositionToDoc(doc, posFromDocumentPosition(doc, from)),
+			clampPositionToDoc(doc, posFromDocumentPosition(doc, to)),
 			options,
 		);
 	}

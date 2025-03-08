@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -49,7 +49,7 @@ const SyncTargetBoxes = styled.div`
 	justify-content: center;
 `;
 
-const SyncTargetTitle = styled.p`
+const SyncTargetTitle = styled.h2`
 	display: flex;
 	flex-direction: row;
 	font-weight: bold;
@@ -78,8 +78,11 @@ const SyncTargetBox = styled.div`
 	opacity: 1;
 `;
 
-const FeatureList = styled.div`
+const FeatureList = styled.ul`
 	margin-bottom: 1em;
+
+	list-style-type: none;
+	padding: 0;
 `;
 
 const FeatureIcon = styled.i`
@@ -90,7 +93,7 @@ const FeatureIcon = styled.i`
 	position: absolute;
 `;
 
-const FeatureLine = styled.div<{ enabled: boolean }>`
+const FeatureLine = styled.li<{ enabled: boolean }>`
 	margin-bottom: .5em;
 	opacity: ${props => props.enabled ? 1 : 0.5};
 	position: relative;
@@ -121,7 +124,7 @@ const SlowSyncWarning = styled.div`
 const syncTargetNames: string[] = [
 	'joplinCloud',
 	'dropbox',
-	// 'onedrive',
+	'onedrive',
 	'nextcloud',
 	'webdav',
 	'amazon_s3',
@@ -156,7 +159,10 @@ export default function(props: Props) {
 	function renderFeature(enabled: boolean, label: string) {
 		const className = enabled ? 'fas fa-check' : 'fas fa-times';
 		return (
-			<FeatureLine enabled={enabled} key={label}><FeatureIcon className={className}></FeatureIcon> <FeatureLabel>{label}</FeatureLabel></FeatureLine>
+			<FeatureLine enabled={enabled} key={label}>
+				<FeatureIcon className={className} role='img' aria-label={enabled ? _('Check') : _('Not checked')}/>
+				<FeatureLabel>{label}</FeatureLabel>
+			</FeatureLine>
 		);
 	}
 
@@ -190,13 +196,16 @@ export default function(props: Props) {
 		});
 	}, [props.dispatch, closeDialog]);
 
-	function renderSelectArea(info: SyncTargetInfo) {
+	const baseId = useId();
+
+	function renderSelectArea(info: SyncTargetInfo, describedById: string) {
 		return (
 			<SelectButton
 				level={ButtonLevel.Primary}
 				title={_('Select')}
 				onClick={() => onSelectButtonClick(info.name as SyncTargetInfoName)}
 				disabled={false}
+				aria-describedby={describedById}
 			/>
 		);
 	}
@@ -207,8 +216,14 @@ export default function(props: Props) {
 
 		const logoImageName = logosImageNames[info.name];
 		const logoImageSrc = logoImageName ? `${bridge().buildDir()}/images/${logoImageName}` : '';
-		const logo = logoImageSrc ? <SyncTargetLogo src={logoImageSrc}/> : null;
-		const descriptionComp = <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
+		const logo = logoImageSrc ? <SyncTargetLogo src={logoImageSrc} aria-hidden={true}/> : null;
+
+		const descriptionComp = (
+			<SyncTargetDescription
+				height={height}
+				ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}
+			>{info.description}</SyncTargetDescription>
+		);
 		const featuresComp = renderFeatures(info.name);
 
 		const renderSlowSyncWarning = () => {
@@ -216,12 +231,13 @@ export default function(props: Props) {
 			return <SlowSyncWarning>{`⚠️ ${_('%s is not optimised for synchronising many small files so your initial synchronisation will be slow.', info.label)}`}</SlowSyncWarning>;
 		};
 
+		const headerId = `${baseId}-${info.id}`;
 		return (
 			<SyncTargetBox id={key} key={key}>
-				<SyncTargetTitle>{logo}{info.label}</SyncTargetTitle>
+				<SyncTargetTitle id={headerId}>{logo}{info.label}</SyncTargetTitle>
 				{descriptionComp}
 				{featuresComp}
-				{renderSelectArea(info)}
+				{renderSelectArea(info, headerId)}
 				{renderSlowSyncWarning()}
 			</SyncTargetBox>
 		);
@@ -249,7 +265,26 @@ export default function(props: Props) {
 			boxes.push(renderSyncTarget(info));
 		}
 
-		const selfHostingMessage = <SelfHostingMessage>Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server. <a href="#" onClick={onSelfHostingClick}>Click here to select one</a>.</SelfHostingMessage>;
+		const selfHostingLabelId = `${baseId}-selfHosting`;
+		const selfHostingLinkId = `${baseId}-selfHostingLink`;
+		const selfHostingMessage = <SelfHostingMessage>
+			<span id={selfHostingLabelId}>
+				Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server.
+			</span>
+			{' '}
+			<a
+				href="#"
+				onClick={onSelfHostingClick}
+
+				// Include the link ID in aria-labelledby to include the link text in the
+				// description. See
+				// https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA7
+				id={selfHostingLinkId}
+				aria-labelledby={`${selfHostingLabelId} ${selfHostingLinkId}`}
+			>
+				Click here to select one
+			</a>.
+		</SelfHostingMessage>;
 
 		return (
 			<ContentRoot>
