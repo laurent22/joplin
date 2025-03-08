@@ -33,7 +33,7 @@ interface Results {
 	done: Record<string, boolean>;
 }
 
-interface AppIconContents {
+interface iOSAppIconContents {
 	images: {
 		appearances?: [
 			{
@@ -111,35 +111,35 @@ function sourceById(id: number) {
 	throw new Error(`Invalid source ID: ${id}`);
 }
 
-const readAppIcon = async (filePath: string): Promise<AppIconContents> => {
+const readAppIcon = async (filePath: string): Promise<iOSAppIconContents> => {
 	if (!(await pathExists(filePath))) return { images: [] };
 	const content = await readFile(filePath, 'utf8');
-	return JSON.parse(content) as AppIconContents;
+	return JSON.parse(content) as iOSAppIconContents;
 };
 
 const getOperations = async (rootDir: string): Promise<Operation[]> => {
-	const AppIconSet = 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset';
-	const AppIconSetContents = await readAppIcon(`${rootDir}/${AppIconSet}/Contents.json`);
+	const appIconSet = 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset';
+	const appIconSetContents = await readAppIcon(`${rootDir}/${appIconSet}/Contents.json`);
 
 	return [
 		// ============================================================================
 		// iOS icons
 		// ============================================================================
 
-		...(AppIconSetContents.images.map(icon => {
+		...(appIconSetContents.images.map(icon => {
 			const size = icon.size.split('x').map(Number),
 				scale = parseInt(icon.scale, 10) || 1;
 			if (!size || !icon.filename) return null;
 			return [
 				{
 					source: 1,
-					dest: `${AppIconSet}/ios${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
+					dest: `${appIconSet}/ios${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
 					width: size[0] * scale,
 					height: size[1] * scale,
 				},
 				{
 					source: 13,
-					dest: `${AppIconSet}/ios_dark${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
+					dest: `${appIconSet}/ios_dark${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
 					width: size[0] * scale,
 					height: size[1] * scale,
 				},
