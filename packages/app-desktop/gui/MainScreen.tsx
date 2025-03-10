@@ -478,6 +478,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onDisableSync = () => {
+			Setting.setValue('sync.target', null);
+		};
+
 		const onViewSyncSettingsScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -575,6 +579,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Your Joplin Cloud credentials are invalid, please login.'),
 				_('Login to Joplin Cloud.'),
 				onViewJoplinCloudLoginScreen,
+				_('Disable synchronisation'),
+				onDisableSync,
 			);
 		}
 

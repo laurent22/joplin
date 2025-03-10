@@ -1,7 +1,9 @@
 # Integration tests
 
-The integration tests in this directory can be run with `yarn playwright test`.
+The integration tests in this directory can be run with `yarn test-ui`.
 
+- To run all tests from a specific file, use `yarn test-ui testFileName`. For example, `yarn test-ui wcag` to run the tests in `wcag.ts`.
+- To run all tests matching a pattern, use `yarn test-ui -g "pattern here"`, where `-g` is short for "grep".
 - Tests use a `test-profile` directory that should be re-created before every test.
 - Only one Electron application should be instantiated per test file.
 - Files in the `models/` directory follow [the page object model](https://playwright.dev/docs/pom).

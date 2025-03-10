@@ -1105,6 +1105,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, [editor]);
 
+	useEffect(() => {
+		if (!editor) return;
+		// Meta+P is bound by default to print by TinyMCE. It can be unbound, but it seems necessary
+		// to do so after the editor loads. Meta+P should be able to trigger Joplin built-in shortcuts.
+		editor.shortcuts.remove('Meta+P');
+	}, [editor]);
+
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
 	// -----------------------------------------------------------------------------------------

@@ -67,6 +67,7 @@ const RecordingControls: React.FC<Props> = props => {
 						refocusCounter={1}
 						aria-live='polite'
 						role='heading'
+						testID='recording-controls-heading'
 					>
 						<Text variant='bodyMedium'>
 							{props.heading}

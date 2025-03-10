@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { RefObject, useCallback, useMemo, useRef } from 'react';
-import { GestureResponderEvent, Modal, ModalProps, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import { GestureResponderEvent, Modal, ModalProps, Platform, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
+import FocusControl from './accessibility/FocusControl/FocusControl';
+import { msleep, Second } from '@joplin/utils/time';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ModalState } from './accessibility/FocusControl/types';
 
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
@@ -67,6 +71,36 @@ const useBackgroundTouchListeners = (onRequestClose: (event: GestureResponderEve
 	return { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished };
 };
 
+const useModalStatus = (containerComponent: View|null, visible: boolean) => {
+	const contentMounted = !!containerComponent;
+	const [controlsFocus, setControlsFocus] = useState(false);
+	useAsyncEffect(async (event) => {
+		if (contentMounted) {
+			setControlsFocus(true);
+		} else {
+			// Accessibility: Work around Android's default focus-setting behavior.
+			// By default, React Native's Modal on Android sets focus about 0.8 seconds
+			// after the modal is dismissed. As a result, the Modal controls focus until
+			// roughly one second after the modal is dismissed.
+			if (Platform.OS === 'android') {
+				await msleep(Second);
+			}
+
+			if (!event.cancelled) {
+				setControlsFocus(false);
+			}
+		}
+	}, [contentMounted]);
+
+	let modalStatus = ModalState.Closed;
+	if (controlsFocus) {
+		modalStatus = visible ? ModalState.Open : ModalState.Closing;
+	} else if (visible) {
+		modalStatus = ModalState.Open;
+	}
+	return modalStatus;
+};
+
 const ModalElement: React.FC<ModalElementProps> = ({
 	children,
 	containerStyle,
@@ -84,29 +118,36 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		</View>
 	);
 
-	const backgroundRef = useRef<View>();
-	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, backgroundRef);
+
+	const [containerComponent, setContainerComponent] = useState<View|null>(null);
+	const modalStatus = useModalStatus(containerComponent, modalProps.visible);
+
+	const containerRef = useRef<View|null>(null);
+	containerRef.current = containerComponent;
+	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, containerRef);
 
 	const contentAndBackdrop = <View
-		ref={backgroundRef}
+		ref={setContainerComponent}
 		style={styles.modalBackground}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
 	>{content}</View>;
 
-	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
-		<Modal
-			supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-			{...modalProps}
-		>
-			{scrollOverflow ? (
-				<ScrollView
-					style={styles.modalScrollView}
-					contentContainerStyle={styles.modalScrollViewContent}
-				>{contentAndBackdrop}</ScrollView>
-			) : contentAndBackdrop}
-		</Modal>
+		<FocusControl.ModalWrapper state={modalStatus}>
+			<Modal
+				// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
+				supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+				{...modalProps}
+			>
+				{scrollOverflow ? (
+					<ScrollView
+						style={styles.modalScrollView}
+						contentContainerStyle={styles.modalScrollViewContent}
+					>{contentAndBackdrop}</ScrollView>
+				) : contentAndBackdrop}
+			</Modal>
+		</FocusControl.ModalWrapper>
 	);
 };
 

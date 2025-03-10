@@ -660,7 +660,14 @@ packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/ToggleSpaceButton.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
+packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
+packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControl.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControlProvider.js
+packages/app-mobile/components/accessibility/FocusControl/MainAppContent.js
+packages/app-mobile/components/accessibility/FocusControl/ModalWrapper.js
+packages/app-mobile/components/accessibility/FocusControl/types.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js

@@ -173,3 +173,4 @@ ggml
 Minidump
 collapseall
 newfolder
+unfocusable
