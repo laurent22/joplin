@@ -30,7 +30,7 @@ Screen readers usually support jumping between these different regions. Here's t
 
 ### Finding notes, tags, and notebooks
 
-It can sometimes be difficult to find a tag/note/notebook using Joplin's navigation sidebars. In these cases, the ["Go to Anything" dialog](./search.md#goto-anything) can simplify accessing an item.
+It can sometimes be difficult to find a tag/note/notebook using Joplin's navigation sidebars. In these cases, the ["Go to Anything" dialog](https://github.com/laurent22/joplin/blob/dev/readme/apps/search.md#goto-anything) can simplify accessing an item.
 
 It's also possible to find notes using the search in the sidebar. By default, pressing <kbd>F6</kbd> moves focus to this search entry.
 
@@ -57,5 +57,5 @@ An "add new" button is located near the end of the focus order in these cases:
 
 Clicking "add new" opens a menu with "new note" and "new to-do" menu items. These items are be located just before the toggle in the focus order.
 
-See [to-dos](./to-dos.md) for information about how notes and to-dos are different.
+See [to-dos](https://github.com/laurent22/joplin/blob/dev/readme/apps/to-dos.md) for information about how notes and to-dos are different.
 
