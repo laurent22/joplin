@@ -309,7 +309,7 @@ module.exports = {
 						selector: 'interface',
 						format: null,
 						'filter': {
-							'regex': '^(RSA|RSAKeyPair)$',
+							'regex': '^(RSA|RSAKeyPair|iOS.*)$',
 							'match': true,
 						},
 					},
