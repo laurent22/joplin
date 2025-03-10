@@ -14,6 +14,7 @@ WebDAV-compatible services that are known to work with Joplin:
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
 - [Stack](https://www.transip.nl/stack/)
+- [QNAP WebDAV Server](https://www.qnap.com/hu-hu/how-to/tutorial/article/accessing-your-qnap-nas-remotely-with-webdav)
 - [Synology WebDAV Server](https://www.synology.com/en-us/dsm/packages/WebDAVServer)
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
 - [Zimbra](https://www.zimbra.com/)
