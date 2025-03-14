@@ -57,6 +57,8 @@ module.exports = {
 		'tinymce': 'readonly',
 
 		'JSX': 'readonly',
+
+		'NodeJS': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,

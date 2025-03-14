@@ -4,8 +4,9 @@ import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from 
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
-
-import { BrowserWindow, Tray, WebContents, screen } from 'electron';
+import { FileLocker } from '@joplin/utils/fs';
+import { IpcServer, Message, newHttpError, sendMessage, startServer, stopServer } from '@joplin/utils/ipc';
+import { BrowserWindow, Tray, WebContents, screen, App } from 'electron';
 import bridge from './bridge';
 const url = require('url');
 const path = require('path');
@@ -36,8 +37,7 @@ interface SecondaryWindowData {
 
 export default class ElectronAppWrapper {
 	private logger_: Logger = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private electronApp_: any;
+	private electronApp_: App;
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
@@ -58,13 +58,17 @@ export default class ElectronAppWrapper {
 	private customProtocolHandler_: CustomProtocolHandler = null;
 	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(electronApp: any, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
+	private profileLocker_: FileLocker|null = null;
+	private ipcServer_: IpcServer|null = null;
+
+	public constructor(electronApp: App, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
 		this.initialCallbackUrl_ = initialCallbackUrl;
+
+		this.profileLocker_ = new FileLocker(`${this.profilePath_}/lock`);
 	}
 
 	public electronApp() {
@@ -465,12 +469,24 @@ export default class ElectronAppWrapper {
 		});
 	}
 
-	public quit() {
+	private onExit() {
 		this.stopPeriodicUpdateCheck();
+		this.profileLocker_.unlockSync();
+
+		// Probably doesn't matter if the server is not closed cleanly? Thus the lack of `await`
+		// eslint-disable-next-line promise/prefer-await-to-then -- Needed here because onExit() is not async
+		void stopServer(this.ipcServer_).catch(_error => {
+			// Ignore it since we're stopping, and to prevent unnecessary messages.
+		});
+	}
+
+	public quit() {
+		this.onExit();
 		this.electronApp_.quit();
 	}
 
 	public exit(errorCode = 0) {
+		this.onExit();
 		this.electronApp_.exit(errorCode);
 	}
 
@@ -536,20 +552,15 @@ export default class ElectronAppWrapper {
 		this.tray_ = null;
 	}
 
-	public ensureSingleInstance() {
-		if (this.env_ === 'dev') return false;
+	public async ensureSingleInstance() {
+		// if (this.env_ === 'dev') return false;
 
-		const gotTheLock = this.electronApp_.requestSingleInstanceLock();
-
-		if (!gotTheLock) {
-			// Another instance is already running - exit
-			this.quit();
-			return true;
+		interface NewApplicationStartingMessageData {
+			profilePath: string;
+			argv: string[];
 		}
 
-		// Someone tried to open a second instance - focus our window instead
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.electronApp_.on('second-instance', (_e: any, argv: string[]) => {
+		const activateWindow = (argv: string[]) => {
 			const win = this.mainWindow();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
@@ -562,9 +573,36 @@ export default class ElectronAppWrapper {
 					void this.openCallbackUrl(url);
 				}
 			}
+		};
+
+		const startPort = 41168;
+
+		this.ipcServer_ = await startServer(startPort, async (message) => {
+			if (message.action === 'onSecondInstance') {
+				const data = message.data as NewApplicationStartingMessageData;
+				if (data.profilePath === this.profilePath_) activateWindow(data.argv);
+			}
+
+			throw newHttpError(404);
 		});
 
-		return false;
+		// First check that no other app is running from that profile folder
+		const gotAppLock = await this.profileLocker_.lock();
+		if (gotAppLock) return false;
+
+		const message: Message = {
+			action: 'onSecondInstance',
+			data: {
+				senderPort: this.ipcServer_.port,
+				profilePath: this.profilePath_,
+				argv: process.argv,
+			},
+		};
+
+		await sendMessage(startPort, message);
+
+		this.quit();
+		return true;
 	}
 
 	public initializeCustomProtocolHandler(logger: LoggerWrapper) {
@@ -606,7 +644,7 @@ export default class ElectronAppWrapper {
 		// the "ready" event. So we use the function below to make sure that the app is ready.
 		await this.waitForElectronAppReady();
 
-		const alreadyRunning = this.ensureSingleInstance();
+		const alreadyRunning = await this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
 		this.createWindow();

@@ -174,3 +174,4 @@ Minidump
 collapseall
 newfolder
 unfocusable
+unlocker
