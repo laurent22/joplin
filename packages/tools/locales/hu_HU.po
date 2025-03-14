@@ -358,7 +358,7 @@ msgstr "Aktív"
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
 #: packages/app-desktop/gui/MenuBar.tsx:828
 msgid "Actual Size"
-msgstr "Aktív méret"
+msgstr "Tényleges méret"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1501
 msgid "Add body"
@@ -1721,7 +1721,7 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Csak a megadott típusú elemeket jeleníti meg. Lehet `n` a jegyzetekhez, `t` "
-"a teendőkhöz, vagy `nt` a jegyzetekhez és teendőkhöz (pl. `-tt` csak a "
+"a teendőkhöz, vagy `nt` a jegyzetekhez és teendőkhöz (például: `-tt` csak a "
 "teendőket jeleníti meg, míg a `-tnt` a jegyzeteket és teendőket is)."
 
 #: packages/app-cli/app/command-status.js:13
@@ -5017,7 +5017,7 @@ msgstr "A kijelölt sorok rendezése"
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Elem rendezése a(z) <field> minta szerint (pl. title, updated_time, "
+"Elem rendezése a(z) <field> minta szerint (például: title, updated_time, "
 "created_time)"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:9
@@ -6330,8 +6330,8 @@ msgid ""
 "font is used."
 msgstr ""
 "Ott használatos, ahol a szöveg olvasható elrendezéséhez fix szélességű "
-"betűtípusra van szükség (pl. táblázatok, jelölőnégyzetek, kódok). Ha nem "
-"található, akkor egy általános monospace (fix szélességű) betűtípus lesz "
+"betűtípusra van szükség (például: táblázatok, jelölőnégyzetek, kódok). Ha "
+"nem található, akkor egy általános monospace (fix szélességű) betűtípus lesz "
 "használva."
 
 #: packages/server/src/services/MustacheService.ts:125
