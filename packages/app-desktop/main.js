@@ -25,28 +25,27 @@ process.on('unhandledRejection', (reason, p) => {
 	process.exit(1);
 });
 
-// Likewise, we want to know if a profile is specified early, in particular
-// to save the window state data.
-function getProfileFromArgs(args) {
+const getFlagValueFromArgs = (args, flag, defaultValue) => {
 	if (!args) return null;
-	const profileIndex = args.indexOf('--profile');
-	if (profileIndex <= 0 || profileIndex >= args.length - 1) return null;
-	const profileValue = args[profileIndex + 1];
-	return profileValue ? profileValue : null;
-}
+	const index = args.indexOf(flag);
+	if (index <= 0 || index >= args.length - 1) return defaultValue;
+	const value = args[index + 1];
+	return value ? value : defaultValue;
+};
 
 Logger.fsDriver_ = new FsDriverNode();
 
 const env = envFromArgs(process.argv);
-const profileFromArgs = getProfileFromArgs(process.argv);
+const profileFromArgs = getFlagValueFromArgs(process.argv, '--profile', null);
 const isDebugMode = !!process.argv && process.argv.indexOf('--debug') >= 0;
+const altInstanceId = getFlagValueFromArgs(process.argv, '--alt-instance-id', '');
 
 // We initialize all these variables here because they are needed from the main process. They are
 // then passed to the renderer process via the bridge.
 const appId = `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-desktop`;
 let appName = env === 'dev' ? 'joplindev' : 'joplin';
 if (appId.indexOf('-desktop') >= 0) appName += '-desktop';
-const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName);
+const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName, altInstanceId);
 const settingsPath = `${rootProfileDir}/settings.json`;
 let autoUploadCrashDumps = false;
 

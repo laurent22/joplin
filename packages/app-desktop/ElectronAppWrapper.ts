@@ -555,7 +555,7 @@ export default class ElectronAppWrapper {
 	public async ensureSingleInstance() {
 		// if (this.env_ === 'dev') return false;
 
-		interface NewApplicationStartingMessageData {
+		interface OnSecondInstanceMessageData {
 			profilePath: string;
 			argv: string[];
 		}
@@ -579,7 +579,7 @@ export default class ElectronAppWrapper {
 
 		this.ipcServer_ = await startServer(startPort, async (message) => {
 			if (message.action === 'onSecondInstance') {
-				const data = message.data as NewApplicationStartingMessageData;
+				const data = message.data as OnSecondInstanceMessageData;
 				if (data.profilePath === this.profilePath_) activateWindow(data.argv);
 			}
 

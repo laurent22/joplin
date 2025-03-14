@@ -86,8 +86,9 @@ export const startServer = async (startPort: number, messageHandler: MessageHand
 					res.end(JSON.stringify(response));
 				} catch (error) {
 					const httpError = error as HttpError;
-					res.writeHead(httpError.httpCode, { 'Content-Type': 'text/plain' });
-					res.end(`Error ${httpError.httpCode}: ${httpError.message}`);
+					const httpCode = httpError.httpCode || 500;
+					res.writeHead(httpCode, { 'Content-Type': 'text/plain' });
+					res.end(`Error ${httpCode}: ${httpError.message}`);
 				}
 			});
 

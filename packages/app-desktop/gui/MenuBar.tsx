@@ -552,6 +552,7 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
+			const newAppInstance = menuItemDic.newAppInstance;
 			const switchProfileItem = {
 				label: _('Switch profile'),
 				submenu: switchProfileMenuItems,
@@ -717,6 +718,7 @@ function useMenu(props: Props) {
 					},
 					printItem,
 					switchProfileItem,
+					newAppInstance,
 				],
 			};
 
