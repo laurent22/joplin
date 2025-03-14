@@ -12,6 +12,15 @@ export const globSync = (pattern: string | string[], options: GlobOptionsWithFil
 	return output;
 };
 
+// ------------------------------------------------------------------------------------------------
+// This is a relatively crude system for "locking" files. It does so by regularly updating the
+// timestamp of a file. If the file hasn't been updated for more than x seconds, it means the lock
+// is stale and the file can be considered unlocked.
+//
+// This is good enough for our use case, to detect if a profile is already being used by a running
+// instance of Joplin.
+// ------------------------------------------------------------------------------------------------
+
 interface FileLockerOptions {
 	interval?: number;
 }

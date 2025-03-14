@@ -716,7 +716,9 @@ function useMenu(props: Props) {
 					}, {
 						type: 'separator',
 					},
-					printItem,
+					printItem, {
+						type: 'separator',
+					},
 					switchProfileItem,
 					newAppInstance,
 				],

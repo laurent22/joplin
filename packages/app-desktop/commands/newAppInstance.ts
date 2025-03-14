@@ -38,5 +38,7 @@ export const runtime = (): CommandRuntime => {
 
 			void execCommand(cmd, { detached: true });
 		},
+
+		enabledCondition: '!isAltInstance',
 	};
 };

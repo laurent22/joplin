@@ -41,23 +41,6 @@ describe('fs', () => {
 		expect(await locker3.lock()).toBe(true);
 
 		locker3.unlockSync();
-
-
-
-
-
-		// const dirPath = await createTempDir();
-		// const filePath = dirPath + '/test.lock';
-
-		// const unlocker = await lockFile(flock, filePath);
-
-		// expect(!!unlocker).toBe(true);
-
-		// expect(!!(await lockFile(flock, filePath))).toBe(false);
-
-		// if (unlocker) await unlockFile(flock, unlocker);
-
-		// expect(!!(await lockFile(flock, filePath))).toBe(true);
 	});
 
 });
