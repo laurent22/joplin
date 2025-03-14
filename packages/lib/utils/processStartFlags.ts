@@ -13,6 +13,7 @@ export interface MatchedStartFlags {
 	logLevel?: LogLevel;
 	allowOverridingDnsResultOrder?: boolean;
 	devPlugins?: string[];
+	altInstanceId?: string;
 }
 
 // Handles the initial flags passed to main script and
@@ -114,6 +115,12 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 		if (arg === '--dev-plugins') {
 			matched.devPlugins = nextArg.split(',').map(p => p.trim());
 			Setting.setConstant('startupDevPlugins', matched.devPlugins);
+			argv.splice(0, 2);
+			continue;
+		}
+
+		if (arg === '--alt-instance-id') {
+			matched.altInstanceId = nextArg;
 			argv.splice(0, 2);
 			continue;
 		}

@@ -24,6 +24,7 @@ class ClipperConfigScreenComponent extends React.Component {
 	}
 
 	private enableClipperServer_click() {
+		if (!ClipperServer.instance().enabled()) return;
 		Setting.setValue('clipperServer.autoStart', true);
 		void ClipperServer.instance().start();
 	}
@@ -70,6 +71,8 @@ class ClipperConfigScreenComponent extends React.Component {
 
 		const webClipperStatusComps = [];
 
+		const clipperEnabled = ClipperServer.instance().enabled();
+
 		if (this.props.clipperServerAutoStart) {
 			webClipperStatusComps.push(
 				<p key="text_1" style={theme.textStyle}>
@@ -95,13 +98,22 @@ class ClipperConfigScreenComponent extends React.Component {
 				</button>,
 			);
 		} else {
+			if (!clipperEnabled) {
+				webClipperStatusComps.push(
+					<p key="text_4" style={theme.textStyle}>
+						{_('The web clipper service cannot be enabled in this instance of Joplin.')}
+					</p>,
+				);
+			} else {
+				webClipperStatusComps.push(
+					<p key="text_4" style={theme.textStyle}>
+						{_('The web clipper service is not enabled.')}
+					</p>,
+				);
+			}
+
 			webClipperStatusComps.push(
-				<p key="text_4" style={theme.textStyle}>
-					{_('The web clipper service is not enabled.')}
-				</p>,
-			);
-			webClipperStatusComps.push(
-				<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click}>
+				<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click} disabled={!clipperEnabled}>
 					{_('Enable Web Clipper Service')}
 				</button>,
 			);

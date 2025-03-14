@@ -21,7 +21,7 @@ const restartInSafeModeFromMain = async () => {
 	shimInit({});
 
 	const startFlags = await processStartFlags(bridge().processArgv());
-	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName);
+	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName, Setting.value('altInstanceId'));
 	const { profileDir } = await initProfile(rootProfileDir);
 
 	// We can't access the database, so write to a file instead.

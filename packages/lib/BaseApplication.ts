@@ -687,7 +687,9 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName);
+		const altInstanceId = initArgs.altInstanceId || '';
+
+		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName, altInstanceId);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -780,6 +782,8 @@ export default class BaseApplication {
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);
 		}
+
+		Setting.setValue('altInstanceId', altInstanceId);
 
 		const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 		if (await fs.pathExists(safeModeFlagFile) && fs.readFileSync(safeModeFlagFile, 'utf8') === 'true') {
