@@ -15,6 +15,7 @@ import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { execCommand } from '@joplin/utils';
 
 interface LastSelectedPath {
 	file: string;
@@ -43,16 +44,18 @@ export class Bridge {
 	private appName_: string;
 	private appId_: string;
 	private logFilePath_ = '';
+	private altInstanceId_ = '';
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
 
-	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
 		this.appId_ = appId;
 		this.appName_ = appName;
 		this.rootProfileDir_ = rootProfileDir;
 		this.autoUploadCrashDumps_ = autoUploadCrashDumps;
+		this.altInstanceId_ = altInstanceId;
 		this.lastSelectedPaths_ = {
 			file: null,
 			directory: null,
@@ -217,6 +220,10 @@ export class Bridge {
 	public getLocale = () => {
 		return this.electronApp().electronApp().getLocale();
 	};
+
+	public altInstanceId() {
+		return this.altInstanceId_;
+	}
 
 	// Applies to electron-context-menu@3:
 	//
@@ -491,7 +498,38 @@ export class Bridge {
 		}
 	}
 
-	public restart(linuxSafeRestart = true) {
+	public appLaunchCommand(env: string, altInstanceId = '') {
+		const altInstanceArgs = altInstanceId ? ['--alt-instance-id', altInstanceId] : [];
+
+		if (env === 'dev') {
+			// This is convenient to quickly test on dev, but the path needs to be adjusted
+			// depending on how things are setup.
+
+			return {
+				execPath: `${homedir()}/.npm-global/bin/electron`,
+				args: [
+					`${homedir()}/src/joplin/packages/app-desktop`,
+					'--env', 'dev',
+					'--log-level', 'debug',
+					'--open-dev-tools',
+					'--no-welcome',
+				].concat(altInstanceArgs),
+			};
+		} else {
+			return {
+				execPath: bridge().electronApp().electronApp().getPath('exe'),
+				args: [].concat(altInstanceArgs),
+			};
+		}
+	}
+
+	public async launchNewAppInstance(env: string) {
+		const cmd = this.appLaunchCommand(env, 'alt1');
+
+		await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+	}
+
+	public async restart() {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
@@ -502,8 +540,34 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
-		} else if (shim.isLinux() && linuxSafeRestart) {
-			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+		} else if (this.altInstanceId_) {
+			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
+			// would still be open in the tray except unusable. Or maybe it reopens it quickly but
+			// in a broken state. It might be due to the way it is launched from the main instance.
+			// So here we ask the main instance to relaunch this app after a short delay.
+
+			const responses = await this.electronApp().sendCrossAppIpcMessage({
+				action: 'restartAltInstance',
+				data: null,
+			});
+
+			// However is the main instance is not running, we're stuck, so the user needs to
+			// manually restart. `relaunch()` doesn't appear to work even when the main instance is
+			// not running.
+			const r = responses.find(r => !!r.response);
+
+			if (!r || !r.response) {
+				this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+
+				// Note: this should work, but doesn't:
+
+				// const cmd = this.appLaunchCommand(this.env(), this.altInstanceId_);
+
+				// app.relaunch({
+				// 	execPath: cmd.execPath,
+				// 	args: cmd.args,
+				// });
+			}
 		} else {
 			app.relaunch();
 		}
@@ -534,9 +598,9 @@ export class Bridge {
 
 let bridge_: Bridge = null;
 
-export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 	if (bridge_) throw new Error('Bridge already initialized');
-	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps);
+	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 	return bridge_;
 }
 

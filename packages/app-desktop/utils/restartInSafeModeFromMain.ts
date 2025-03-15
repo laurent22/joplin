@@ -28,7 +28,7 @@ const restartInSafeModeFromMain = async () => {
 	const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 	await writeFile(safeModeFlagFile, 'true', 'utf8');
 
-	bridge().restart();
+	await bridge().restart();
 };
 
 export default restartInSafeModeFromMain;

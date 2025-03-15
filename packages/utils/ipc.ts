@@ -50,9 +50,10 @@ interface HttpError extends Error {
 export interface Message {
 	action: string;
 	data: object|number|string|null;
+	sourcePort?: number;
 }
 
-type Response = string|number|object;
+type Response = string|number|object|boolean;
 
 export const newHttpError = (httpCode: number, message = '') => {
 	const error = (new Error(message) as HttpError);
@@ -60,7 +61,7 @@ export const newHttpError = (httpCode: number, message = '') => {
 	return error;
 };
 
-type MessageHandler = (message: Message)=> Promise<Response>;
+export type IpcMessageHandler = (message: Message)=> Promise<Response|void>;
 
 export interface IpcServer {
 	port: number;
@@ -71,9 +72,9 @@ interface StartServerOptions {
 	logger?: Logger;
 }
 
-export const startServer = async (startPort: number, messageHandler: MessageHandler, options: StartServerOptions|null = null): Promise<IpcServer> => {
+export const startServer = async (startPort: number, messageHandler: IpcMessageHandler, options: StartServerOptions|null = null): Promise<IpcServer> => {
 	const port = await findAvailablePort(startPort);
-	const logger = options && options.logger ? options.logger : null;
+	const logger = options && options.logger ? options.logger : new Logger();
 
 	return new Promise<IpcServer>((resolve, reject) => {
 		try {
@@ -125,30 +126,44 @@ interface SendMessageOutput {
 	response: Response;
 }
 
-export const sendMessage = async (startPort: number, message: Message) => {
+export interface SendMessageOptions {
+	logger?: Logger;
+	sendToSpecificPortOnly?: boolean;
+}
+
+export const sendMessage = async (startPort: number, message: Message, options: SendMessageOptions|null = null) => {
 	const output: SendMessageOutput[] = [];
 	const ports = await findListenerPorts(startPort);
+	const logger = options && options.logger ? options.logger : new Logger();
+	const sendToSpecificPortOnly = !!options && !!options.sendToSpecificPortOnly;
 
 	for (const port of ports) {
-		const response = await fetch(`http://localhost:${port}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(message),
-		});
+		if (sendToSpecificPortOnly && port !== startPort) continue;
+		if (message.sourcePort === port) continue;
 
-		if (!response.ok) {
-			// It means the server doesn't support this particular message - so just skip it
-			if (response.status === 404) continue;
-			const text = await response.text();
-			throw new Error(`Request failed: on port ${port}: ${text}`);
+		try {
+			const response = await fetch(`http://localhost:${port}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(message),
+			});
+
+			if (!response.ok) {
+				// It means the server doesn't support this particular message - so just skip it
+				if (response.status === 404) continue;
+				const text = await response.text();
+				throw new Error(`Request failed: on port ${port}: ${text}`);
+			}
+
+			output.push({
+				port,
+				response: await response.json(),
+			});
+		} catch (error) {
+			logger.error(`Could not send message on port ${port}:`, error);
 		}
-
-		output.push({
-			port,
-			response: await response.json(),
-		});
 	}
 
 	return output;

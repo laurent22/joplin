@@ -56,6 +56,20 @@ describe('ipc', () => {
 			]);
 		}
 
+		{
+			const responses = await sendMessage(startPort, {
+				action: 'testing',
+				data: {
+					test: 1234,
+				},
+				sourcePort: 41168,
+			});
+
+			expect(responses).toEqual([
+				{ port: 41169, response: { text: 'hello2' } },
+			]);
+		}
+
 		await stopServer(server1);
 		await stopServer(server2);
 	});

@@ -66,7 +66,7 @@ const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 
 const wrapper = new ElectronAppWrapper(electronApp, env, rootProfileDir, isDebugMode, initialCallbackUrl);
 
-initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps);
+initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 
 wrapper.start().catch((error) => {
 	console.error('Electron App fatal error:');

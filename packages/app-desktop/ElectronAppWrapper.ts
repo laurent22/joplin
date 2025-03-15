@@ -1,11 +1,11 @@
-import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
-import { IpcServer, Message, newHttpError, sendMessage, startServer, stopServer } from '@joplin/utils/ipc';
+import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
 import { BrowserWindow, Tray, WebContents, screen, App } from 'electron';
 import bridge from './bridge';
 const url = require('url');
@@ -20,6 +20,7 @@ import handleCustomProtocols, { CustomProtocolHandler } from './utils/customProt
 import { clearTimeout, setTimeout } from 'timers';
 import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { msleep } from '@joplin/utils/time';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -60,6 +61,9 @@ export default class ElectronAppWrapper {
 
 	private profileLocker_: FileLocker|null = null;
 	private ipcServer_: IpcServer|null = null;
+	private ipcStartPort_ = 2658;
+
+	private ipcLogger_: Logger;
 
 	public constructor(electronApp: App, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
@@ -69,6 +73,14 @@ export default class ElectronAppWrapper {
 		this.initialCallbackUrl_ = initialCallbackUrl;
 
 		this.profileLocker_ = new FileLocker(`${this.profilePath_}/lock`);
+
+		// Note: in certain contexts `this.logger_` doesn't seem to be available, especially for IPC
+		// calls, either because it hasn't been set or other issue. So we set one here specifically
+		// for this.
+		this.ipcLogger_ = new Logger();
+		this.ipcLogger_.addTarget(TargetType.File, {
+			path: `${profilePath}/log-cross-app-ipc.txt`,
+		});
 	}
 
 	public electronApp() {
@@ -414,7 +426,7 @@ export default class ElectronAppWrapper {
 				if (message.target === 'plugin') {
 					const win = this.pluginWindows_[message.pluginId];
 					if (!win) {
-						this.logger().error(`Trying to send IPC message to non-existing plugin window: ${message.pluginId}`);
+						this.ipcLogger_.error(`Trying to send IPC message to non-existing plugin window: ${message.pluginId}`);
 						return;
 					}
 
@@ -552,6 +564,17 @@ export default class ElectronAppWrapper {
 		this.tray_ = null;
 	}
 
+	public async sendCrossAppIpcMessage(message: Message, port: number|null = null, options: SendMessageOptions = null) {
+		this.ipcLogger_.info('Sending message:', message);
+
+		if (port === null) port = this.ipcStartPort_;
+
+		return await sendMessage(port, { ...message, sourcePort: this.ipcServer_.port }, {
+			logger: this.ipcLogger_,
+			...options,
+		});
+	}
+
 	public async ensureSingleInstance() {
 		// if (this.env_ === 'dev') return false;
 
@@ -575,15 +598,64 @@ export default class ElectronAppWrapper {
 			}
 		};
 
-		const startPort = 41168;
-
-		this.ipcServer_ = await startServer(startPort, async (message) => {
-			if (message.action === 'onSecondInstance') {
+		const messageHandlers: Record<string, IpcMessageHandler> = {
+			'onSecondInstance': async (message) => {
 				const data = message.data as OnSecondInstanceMessageData;
 				if (data.profilePath === this.profilePath_) activateWindow(data.argv);
+			},
+
+			'restartAltInstance': async (message) => {
+				if (bridge().altInstanceId()) return false;
+
+				// We do this in a timeout after a short interval because we need this call to
+				// return the response immediately, so that the caller can call `quit()`
+				setTimeout(async () => {
+					const maxWait = 10000;
+					const interval = 300;
+					const loopCount = Math.ceil(maxWait / interval);
+					let callingAppGone = false;
+
+					for (let i = 0; i < loopCount; i++) {
+						const response = await this.sendCrossAppIpcMessage({
+							action: 'ping',
+							data: null,
+						}, message.sourcePort, {
+							sendToSpecificPortOnly: true,
+						});
+
+						if (!response.length) {
+							callingAppGone = true;
+							break;
+						}
+
+						await msleep(interval);
+					}
+
+					if (callingAppGone) {
+						this.ipcLogger_.warn('restartAltInstance: App is gone - restarting it');
+						void bridge().launchNewAppInstance(this.env());
+					} else {
+						this.ipcLogger_.warn('restartAltInstance: Could not restart calling app because it was still open');
+					}
+				}, 100);
+
+				return true;
+			},
+
+			'ping': async (_message) => {
+				return true;
+			},
+		};
+
+		this.ipcServer_ = await startServer(this.ipcStartPort_, async (message) => {
+			if (messageHandlers[message.action]) {
+				this.ipcLogger_.info('Got message:', message);
+				return messageHandlers[message.action](message);
 			}
 
 			throw newHttpError(404);
+		}, {
+			logger: this.ipcLogger_,
 		});
 
 		// First check that no other app is running from that profile folder
@@ -599,7 +671,7 @@ export default class ElectronAppWrapper {
 			},
 		};
 
-		await sendMessage(startPort, message);
+		await this.sendCrossAppIpcMessage(message);
 
 		this.quit();
 		return true;
