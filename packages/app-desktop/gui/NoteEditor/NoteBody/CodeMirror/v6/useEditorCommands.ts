@@ -129,6 +129,14 @@ const useEditorCommands = (props: Props) => {
 					props.webviewRef.current.send('focus');
 				}
 			},
+			'viewer.focus': () => {
+				if (props.visiblePanes.includes('viewer')) {
+					const editorCursorLine = editorRef.current.getCursor().line;
+					props.webviewRef.current.focusLine(editorCursorLine);
+				} else {
+					logger.info('Viewer not focused (not visible).');
+				}
+			},
 			search: () => {
 				return editorRef.current.execCommand(EditorCommandType.ShowSearch);
 			},

@@ -1375,7 +1375,10 @@ class AppComponent extends React.Component {
 					},
 				}}>
 					<DialogManager themeId={this.props.themeId}>
-						<MenuProvider style={{ flex: 1 }}>
+						<MenuProvider
+							style={{ flex: 1 }}
+							closeButtonLabel={_('Dismiss')}
+						>
 							<FocusControl.MainAppContent style={{ flex: 1 }}>
 								{mainContent}
 							</FocusControl.MainAppContent>

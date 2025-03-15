@@ -14,7 +14,7 @@ interface Props {
 const TestProviderStack: React.FC<Props> = props => {
 	return <Provider store={props.store}>
 		<FocusControl.Provider>
-			<MenuProvider>
+			<MenuProvider closeButtonLabel='Dismiss'>
 				<PaperProvider>
 					{props.children}
 				</PaperProvider>

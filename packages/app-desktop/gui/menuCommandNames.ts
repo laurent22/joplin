@@ -4,6 +4,7 @@ export default function() {
 		'copyDevCommand',
 		'exportPdf',
 		'focusElementNoteBody',
+		'focusElementNoteViewer',
 		'focusElementNoteList',
 		'focusElementNoteTitle',
 		'focusElementSideBar',

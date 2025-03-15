@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, TextStyle, View, Text, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, TextStyle, View, Text, ScrollView, useWindowDimensions, Platform } from 'react-native';
 import { themeStyle } from '../global-style';
 import { Menu, MenuOption as MenuOptionComponent, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import AccessibleView from '../accessibility/AccessibleView';
@@ -91,7 +91,10 @@ const MenuComponent: React.FC<Props> = props => {
 				<View key={`menuOption_divider_${keyCounter++}`} style={styles.divider} />,
 			);
 		} else {
-			const canAutoFocus = isFirst;
+			// Don't auto-focus on iOS -- as of RN 0.74, this causes focus to get stuck. However,
+			// the auto-focus seems to be necessary on web (and possibly Android) to avoid first focusing
+			// the dismiss button and other items not in the menu:
+			const canAutoFocus = isFirst && Platform.OS !== 'ios';
 			const key = `menuOption_${option.key ?? keyCounter++}`;
 			menuOptionComponents.push(
 				<MenuOptionComponent value={option.onPress} key={key} style={styles.contextMenuItem} disabled={!!option.disabled}>
