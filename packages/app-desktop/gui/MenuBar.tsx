@@ -172,6 +172,7 @@ interface Props {
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.languages']: string[];
+	markdownEditorVisible: boolean;
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
@@ -278,6 +279,7 @@ function useMenuStates(menu: any, props: Props) {
 		props['notes.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
+		props.markdownEditorVisible,
 		props.tabMovesFocus,
 		props.noteListRendererId,
 		props.showNoteCounts,
@@ -479,6 +481,7 @@ function useMenu(props: Props) {
 				menuItemDic.focusElementNoteList,
 				menuItemDic.focusElementNoteTitle,
 				menuItemDic.focusElementNoteBody,
+				menuItemDic.focusElementNoteViewer,
 				menuItemDic.focusElementToolbar,
 			];
 
@@ -1140,7 +1143,7 @@ function MenuBar(props: Props): any {
 
 
 const mapStateToProps = (state: AppState): Partial<Props> => {
-	const whenClauseContext = stateToWhenClauseContext(state);
+	const whenClauseContext = stateToWhenClauseContext(state, { windowId: state.windowId });
 
 	const secondaryWindowFocused = state.windowId !== defaultWindowId;
 
@@ -1166,6 +1169,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.languages']: state.settings['spellChecker.languages'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
+		markdownEditorVisible: whenClauseContext.markdownEditorVisible,
 		plugins: state.pluginService.plugins,
 		customCss: state.customViewerCss,
 		profileConfig: state.profileConfig,

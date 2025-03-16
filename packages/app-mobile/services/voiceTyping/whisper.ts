@@ -77,9 +77,6 @@ class WhisperConfig {
 class Whisper implements VoiceTypingSession {
 	private closeCounter = 0;
 	private isFirstParagraph = true;
-	// Voice typing output that hasn't been added to the document yet --
-	// this is usually the data last shown in the preview window.
-	private outputDraft = '';
 
 	public constructor(
 		private sessionId: number|null,
@@ -106,10 +103,6 @@ class Whisper implements VoiceTypingSession {
 			const prefix = this.isFirstParagraph ? '' : '\n\n';
 			this.callbacks.onFinalize(`${prefix}${data}`);
 			this.isFirstParagraph = false;
-			// The output draft usually contains some of the data being finalized.
-			// Clear it to prevent duplicate output should `outputDraft` be added
-			// to the note.
-			this.outputDraft = '';
 		}
 	}
 
@@ -130,21 +123,36 @@ class Whisper implements VoiceTypingSession {
 
 				logger.debug('done reading block. Length', data?.length);
 				if (this.sessionId !== null) {
-					this.outputDraft = await SpeechToTextModule.getPreview(this.sessionId);
-					this.callbacks.onPreview(this.postProcessSpeech(this.outputDraft));
+					const previewText = await SpeechToTextModule.getPreview(this.sessionId);
+					this.callbacks.onPreview(this.postProcessSpeech(previewText));
 				}
 			}
 		} catch (error) {
 			logger.error('Whisper error:', error);
-			this.outputDraft = '';
-			await this.stop();
+			await this.cancel();
 			throw error;
 		}
 	}
 
-	public stop() {
+	public async stop() {
 		if (this.sessionId === null) {
 			logger.debug('Session already closed.');
+			return;
+		}
+
+		try {
+			const data: string = await SpeechToTextModule.convertAvailable(this.sessionId);
+			this.onDataFinalize(data);
+		} catch (error) {
+			logger.error('Error stopping session: ', error);
+		}
+
+		return this.cancel();
+	}
+
+	public cancel() {
+		if (this.sessionId === null) {
+			logger.debug('No session to cancel.');
 			return;
 		}
 
@@ -152,10 +160,6 @@ class Whisper implements VoiceTypingSession {
 		const sessionId = this.sessionId;
 		this.sessionId = null;
 		this.closeCounter ++;
-
-		if (this.outputDraft) {
-			this.onDataFinalize(this.outputDraft);
-		}
 
 		return SpeechToTextModule.closeSession(sessionId);
 	}

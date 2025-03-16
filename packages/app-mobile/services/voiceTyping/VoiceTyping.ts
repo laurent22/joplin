@@ -19,6 +19,7 @@ export interface SpeechToTextCallbacks {
 export interface VoiceTypingSession {
 	start(): Promise<void>;
 	stop(): Promise<void>;
+	cancel(): Promise<void>;
 }
 
 export interface BuildProviderOptions {

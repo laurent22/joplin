@@ -247,6 +247,7 @@ packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
+packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js

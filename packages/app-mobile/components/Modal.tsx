@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { GestureResponderEvent, Modal, ModalProps, Platform, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ModalState } from './accessibility/FocusControl/types';
+import { _ } from '@joplin/lib/locale';
 
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
@@ -52,6 +53,13 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				// Make the scroll view's scrolling region at least as tall as its container.
 				// This makes it possible to vertically center the content of scrollable modals.
 				flexGrow: 1,
+			},
+			dismissButton: {
+				position: 'absolute',
+				bottom: 0,
+				height: 12,
+				width: '100%',
+				zIndex: -1,
 			},
 		});
 	}, [hasScrollView, isLandscape, backgroundColor]);
@@ -126,12 +134,24 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerRef.current = containerComponent;
 	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, containerRef);
 
+
+	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
+	// of the element on the screen, the close button is placed after the modal content, rather than behind.
+	const closeButton = modalProps.onRequestClose ? <Pressable
+		style={styles.dismissButton}
+		onPress={modalProps.onRequestClose}
+		accessibilityLabel={_('Close dialog')}
+		accessibilityRole='button'
+	/> : null;
 	const contentAndBackdrop = <View
 		ref={setContainerComponent}
 		style={styles.modalBackground}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
-	>{content}</View>;
+	>
+		{content}
+		{closeButton}
+	</View>;
 
 	return (
 		<FocusControl.ModalWrapper state={modalStatus}>

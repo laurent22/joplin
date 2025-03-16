@@ -62,7 +62,7 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 			// should be hidden (and voice typing should start).
 			setError(null);
 
-			await voiceTypingRef.current?.stop();
+			await voiceTypingRef.current?.cancel();
 			onSetPreviewRef.current?.('');
 
 			setModelIsOutdated(await builder.isDownloadedFromOutdatedUrl());
@@ -91,11 +91,11 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 	}, [builder]);
 
 	useEffect(() => () => {
-		void voiceTypingRef.current?.stop();
+		void voiceTypingRef.current?.cancel();
 	}, []);
 
 	const onRequestRedownload = useCallback(async () => {
-		await voiceTypingRef.current?.stop();
+		await voiceTypingRef.current?.cancel();
 		await builder.clearDownloads();
 		setMustDownloadModel(true);
 		setRedownloadCounter(value => value + 1);
@@ -142,8 +142,12 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 		}
 	}, [recorderState, voiceTyping, props.onText]);
 
-	const onDismiss = useCallback(() => {
-		void voiceTyping?.stop();
+	const onDismiss = useCallback(async () => {
+		if (voiceTyping) {
+			setRecorderState(RecorderState.Processing);
+			await voiceTyping.stop();
+			setRecorderState(RecorderState.Idle);
+		}
 		props.onDismiss();
 	}, [voiceTyping, props.onDismiss]);
 
@@ -173,6 +177,7 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 		{allowReDownload ? reDownloadButton : null}
 		<PrimaryButton
 			onPress={onDismiss}
+			disabled={recorderState === RecorderState.Processing}
 			accessibilityHint={_('Ends voice typing')}
 		>{_('Done')}</PrimaryButton>
 	</>;
