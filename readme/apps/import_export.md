@@ -48,7 +48,7 @@ Joplin can also import OneNote notebooks. To do this:
 
 ### Importing from other applications
 
-In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. For help about specific applications, see <https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425>.
+In general the way to import notes from other applications into Joplin is to convert the notes to ENEX files (Evernote format), HTML or Markdown, and to import these files into Joplin. For help about specific applications, see this wiki document: [Importing notes from other notebook applications](https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425).
 
 ## Exporting
 
