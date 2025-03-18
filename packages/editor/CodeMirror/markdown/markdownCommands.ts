@@ -192,7 +192,7 @@ export const toggleList = (listType: ListType): Command => {
 			// cursor is on an empty line, in which case, the user
 			// probably wants to add a list item (and not select the entire
 			// list).
-			if (sel.empty && fromLine.text.trim() == '') {
+			if (sel.empty && fromLine.text.trim() === '') {
 				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
 				computeSelectionProps();
 			}
