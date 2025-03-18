@@ -196,7 +196,7 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'- [ ] Foo\n2. Bar\3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo',
+			'- [ ] Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo',
 		);
 	});
 
