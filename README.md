@@ -50,9 +50,10 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 Name | Description
 --- | ---
 [Support Forum](https://discourse.joplinapp.org/) | This is the main place for general discussion about Joplin, user support, software development questions, and to discuss new features. Also where the latest beta versions are released and discussed.
+[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
 [Bluesky feed](https://bsky.app/profile/joplinapp.bsky.social) | Follow us on Bluesky
 [Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
-[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
+[YouTube](https://www.youtube.com/@joplinapp) | Discover information and tutorials on how to use the apps
 [Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
 [LinkedIn](https://www.linkedin.com/company/joplin) | Our LinkedIn page
 [Lemmy Community](https://sopuli.xyz/c/joplinapp) | Also a good place to get help
