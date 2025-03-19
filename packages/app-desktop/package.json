@@ -61,6 +61,18 @@
             "x64",
             "ia32"
           ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "ia32"
+          ]
         }
       ],
       "extraFiles": [
@@ -78,7 +90,7 @@
       "allowToChangeInstallationDirectory": false
     },
     "portable": {
-      "artifactName": "${productName}Portable.${ext}"
+      "artifactName": "${productName}Portable-${arch}.${ext}"
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
