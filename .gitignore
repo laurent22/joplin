@@ -1048,6 +1048,8 @@ packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
 packages/lib/fsDriver.test.js
 packages/lib/geolocation-node.js
+packages/lib/getAppName.test.js
+packages/lib/getAppName.js
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js

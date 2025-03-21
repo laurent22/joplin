@@ -65,6 +65,7 @@ import processStartFlags from './utils/processStartFlags';
 import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 import NavService from './services/NavService';
+import getAppName from './getAppName';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -679,8 +680,7 @@ export default class BaseApplication {
 
 		let appName = options.appName;
 		if (!appName) {
-			appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
-			if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+			appName = getAppName(Setting.value('appId').indexOf('-desktop') >= 0, initArgs.env === 'dev');
 		}
 		Setting.setConstant('appName', appName);
 
