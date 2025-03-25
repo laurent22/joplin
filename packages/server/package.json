@@ -31,7 +31,6 @@
     "@types/uuid": "9.0.7",
     "bcryptjs": "2.4.3",
     "bulma": "1.0.2",
-    "bulma-prefers-dark": "0.1.0-beta.1",
     "compare-versions": "6.1.1",
     "dayjs": "1.11.12",
     "formidable": "2.1.2",

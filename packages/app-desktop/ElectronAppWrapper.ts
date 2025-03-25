@@ -38,12 +38,21 @@ interface SecondaryWindowData {
 	electronId: number;
 }
 
+export interface Options {
+	env: string;
+	profilePath: string|null;
+	isDebugMode: boolean;
+	isEndToEndTesting: boolean;
+	initialCallbackUrl: string;
+}
+
 export default class ElectronAppWrapper {
 	private logger_: Logger = null;
 	private electronApp_: App;
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
+	private isEndToEndTesting_: boolean;
 
 	private win_: BrowserWindow = null;
 	private mainWindowHidden_ = true;
@@ -67,12 +76,13 @@ export default class ElectronAppWrapper {
 
 	private ipcLogger_: Logger;
 
-	public constructor(electronApp: App, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
+	public constructor(electronApp: App, { env, profilePath, isDebugMode, initialCallbackUrl, isEndToEndTesting }: Options) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
 		this.initialCallbackUrl_ = initialCallbackUrl;
+		this.isEndToEndTesting_ = isEndToEndTesting;
 
 		this.profileLocker_ = new FileLocker(`${this.profilePath_}/lock`);
 
@@ -582,7 +592,9 @@ export default class ElectronAppWrapper {
 	}
 
 	public async ensureSingleInstance() {
-		// if (this.env_ === 'dev') return false;
+		// When end-to-end testing, multiple instances of Joplin are intentionally created at the same time,
+		// or very close to one another. The single instance handling logic can interfere with this, so disable it.
+		if (this.isEndToEndTesting_) return false;
 
 		interface OnSecondInstanceMessageData {
 			profilePath: string;

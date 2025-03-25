@@ -188,6 +188,12 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg === '--running-tests') {
+			// Used by the desktop app to indicate that the app is running end-to-end tests.
+			argv.splice(0, 1);
+			continue;
+		}
+
 		if (arg.length && arg[0] === '-') {
 			throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 		} else {

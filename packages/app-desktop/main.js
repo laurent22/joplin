@@ -38,6 +38,7 @@ Logger.fsDriver_ = new FsDriverNode();
 const env = envFromArgs(process.argv);
 const profileFromArgs = getFlagValueFromArgs(process.argv, '--profile', null);
 const isDebugMode = !!process.argv && process.argv.indexOf('--debug') >= 0;
+const isEndToEndTesting = !!process.argv?.includes('--running-tests');
 const altInstanceId = getFlagValueFromArgs(process.argv, '--alt-instance-id', '');
 
 // We initialize all these variables here because they are needed from the main process. They are
@@ -64,7 +65,9 @@ void registerCustomProtocols();
 
 const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 
-const wrapper = new ElectronAppWrapper(electronApp, env, rootProfileDir, isDebugMode, initialCallbackUrl);
+const wrapper = new ElectronAppWrapper(electronApp, {
+	env, profilePath: rootProfileDir, isDebugMode, initialCallbackUrl, isEndToEndTesting,
+});
 
 initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 
