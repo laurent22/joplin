@@ -3,7 +3,7 @@
 const electronApp = require('electron').app;
 require('@electron/remote/main').initialize();
 const ElectronAppWrapper = require('./ElectronAppWrapper').default;
-const { pathExistsSync, readFileSync } = require('fs-extra');
+const { pathExistsSync, readFileSync, mkdirpSync } = require('fs-extra');
 const { initBridge } = require('./bridge');
 const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
@@ -38,6 +38,7 @@ Logger.fsDriver_ = new FsDriverNode();
 const env = envFromArgs(process.argv);
 const profileFromArgs = getFlagValueFromArgs(process.argv, '--profile', null);
 const isDebugMode = !!process.argv && process.argv.indexOf('--debug') >= 0;
+const isEndToEndTesting = !!process.argv?.includes('--running-tests');
 const altInstanceId = getFlagValueFromArgs(process.argv, '--alt-instance-id', '');
 
 // We initialize all these variables here because they are needed from the main process. They are
@@ -46,6 +47,11 @@ const appId = `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-desktop`;
 let appName = env === 'dev' ? 'joplindev' : 'joplin';
 if (appId.indexOf('-desktop') >= 0) appName += '-desktop';
 const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName, altInstanceId);
+
+// We create the profile dir as soon as we know where it's going to be located since it's used in
+// various places early in the initialisation code.
+mkdirpSync(rootProfileDir);
+
 const settingsPath = `${rootProfileDir}/settings.json`;
 let autoUploadCrashDumps = false;
 
@@ -64,7 +70,9 @@ void registerCustomProtocols();
 
 const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 
-const wrapper = new ElectronAppWrapper(electronApp, env, rootProfileDir, isDebugMode, initialCallbackUrl);
+const wrapper = new ElectronAppWrapper(electronApp, {
+	env, profilePath: rootProfileDir, isDebugMode, initialCallbackUrl, isEndToEndTesting,
+});
 
 initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 

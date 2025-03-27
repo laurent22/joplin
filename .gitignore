@@ -722,8 +722,11 @@ packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.j
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
 packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
+packages/app-mobile/components/screens/ConfigScreen/SettingTextInput.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
+packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.test.js
+packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/InstalledPluginBox.js
@@ -1048,6 +1051,8 @@ packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
 packages/lib/fsDriver.test.js
 packages/lib/geolocation-node.js
+packages/lib/getAppName.test.js
+packages/lib/getAppName.js
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js

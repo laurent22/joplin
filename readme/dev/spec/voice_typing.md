@@ -12,7 +12,7 @@ Whisper.cpp provides a number of pre-trained models for transcribing speech in d
 
 ### Downloading the models
 
-By default, Joplin downloads Whisper models from [this GitHub repository](https://github.com/personalizedrefrigerator/joplin-voice-typing-test/releases). It's possible to download models from a custom location by changing the **Voice typing language files (URL)** in from the "Note" tab of the configuration screen.
+By default, Joplin downloads Whisper models from [this GitHub repository](https://github.com/joplin/voice-typing-models). It's possible to download models from a custom location by changing the **Voice typing language files (URL)** in from the "Note" tab of the configuration screen.
 
 ### Customizing Whisper
 

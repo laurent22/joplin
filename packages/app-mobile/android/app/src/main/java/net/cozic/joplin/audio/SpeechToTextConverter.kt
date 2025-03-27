@@ -54,10 +54,6 @@ class SpeechToTextConverter(
 		return whisper.transcribeRemaining()
 	}
 
-	fun getPreview(): String {
-		return whisper.getPreview()
-	}
-
 	override fun close() {
 		Log.d("Whisper", "Close")
 		recorder.close()

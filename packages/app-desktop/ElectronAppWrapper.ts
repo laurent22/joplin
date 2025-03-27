@@ -21,6 +21,8 @@ import { clearTimeout, setTimeout } from 'timers';
 import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { msleep, Second } from '@joplin/utils/time';
+import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
+import getAppName from '@joplin/lib/getAppName';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -36,12 +38,21 @@ interface SecondaryWindowData {
 	electronId: number;
 }
 
+export interface Options {
+	env: string;
+	profilePath: string|null;
+	isDebugMode: boolean;
+	isEndToEndTesting: boolean;
+	initialCallbackUrl: string;
+}
+
 export default class ElectronAppWrapper {
 	private logger_: Logger = null;
 	private electronApp_: App;
 	private env_: string;
 	private isDebugMode_: boolean;
 	private profilePath_: string;
+	private isEndToEndTesting_: boolean;
 
 	private win_: BrowserWindow = null;
 	private mainWindowHidden_ = true;
@@ -65,12 +76,13 @@ export default class ElectronAppWrapper {
 
 	private ipcLogger_: Logger;
 
-	public constructor(electronApp: App, env: string, profilePath: string|null, isDebugMode: boolean, initialCallbackUrl: string) {
+	public constructor(electronApp: App, { env, profilePath, isDebugMode, initialCallbackUrl, isEndToEndTesting }: Options) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
 		this.initialCallbackUrl_ = initialCallbackUrl;
+		this.isEndToEndTesting_ = isEndToEndTesting;
 
 		this.profileLocker_ = new FileLocker(`${this.profilePath_}/lock`);
 
@@ -569,14 +581,20 @@ export default class ElectronAppWrapper {
 
 		if (port === null) port = this.ipcStartPort_;
 
-		return await sendMessage(port, { ...message, sourcePort: this.ipcServer_.port }, {
+		return await sendMessage(port, {
+			...message,
+			sourcePort: this.ipcServer_.port,
+			secretKey: this.ipcServer_.secretKey,
+		}, {
 			logger: this.ipcLogger_,
 			...options,
 		});
 	}
 
 	public async ensureSingleInstance() {
-		// if (this.env_ === 'dev') return false;
+		// When end-to-end testing, multiple instances of Joplin are intentionally created at the same time,
+		// or very close to one another. The single instance handling logic can interfere with this, so disable it.
+		if (this.isEndToEndTesting_) return false;
 
 		interface OnSecondInstanceMessageData {
 			profilePath: string;
@@ -619,6 +637,7 @@ export default class ElectronAppWrapper {
 						const response = await this.sendCrossAppIpcMessage({
 							action: 'ping',
 							data: null,
+							secretKey: this.ipcServer_.secretKey,
 						}, message.sourcePort, {
 							sendToSpecificPortOnly: true,
 						});
@@ -650,7 +669,12 @@ export default class ElectronAppWrapper {
 			},
 		};
 
-		this.ipcServer_ = await startServer(this.ipcStartPort_, async (message) => {
+		const defaultProfileDir = determineBaseAppDirs('', getAppName(true, this.env() === 'dev'), '').rootProfileDir;
+		const secretKeyFilePath = `${defaultProfileDir}/ipc_secret_key.txt`;
+
+		this.ipcLogger_.info('Starting server using secret key:', secretKeyFilePath);
+
+		this.ipcServer_ = await startServer(this.ipcStartPort_, secretKeyFilePath, async (message) => {
 			if (messageHandlers[message.action]) {
 				this.ipcLogger_.info('Got message:', message);
 				return messageHandlers[message.action](message);
@@ -672,6 +696,7 @@ export default class ElectronAppWrapper {
 				profilePath: this.profilePath_,
 				argv: process.argv,
 			},
+			secretKey: this.ipcServer_.secretKey,
 		};
 
 		await this.sendCrossAppIpcMessage(message);

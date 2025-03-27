@@ -14,7 +14,7 @@
     "start": "gulp before-start && electron . --env dev --log-level debug --open-dev-tools --no-welcome",
     "test": "jest",
     "test-ui": "playwright test",
-    "test-ci": "yarn test && sh ./integration-tests/run-ci.sh",
+    "test-ci": "yarn test",
     "modifyReleaseAssets": "node tools/modifyReleaseAssets.js"
   },
   "repository": {

@@ -2,6 +2,9 @@ import { createServer, IncomingMessage, ServerResponse } from 'http';
 import fetch from 'node-fetch';
 import { Server } from 'http';
 import Logger from './Logger';
+import { pathExists } from 'fs-extra';
+import { readFile, writeFile } from 'fs/promises';
+import { getSecureRandomString } from './crypto';
 
 const tcpPortUsed = require('tcp-port-used');
 const maxPorts = 10;
@@ -51,6 +54,7 @@ export interface Message {
 	action: string;
 	data: object|number|string|null;
 	sourcePort?: number;
+	secretKey?: string;
 }
 
 type Response = string|number|object|boolean;
@@ -66,21 +70,52 @@ export type IpcMessageHandler = (message: Message)=> Promise<Response|void>;
 export interface IpcServer {
 	port: number;
 	httpServer: Server;
+	secretKey: string;
 }
 
 interface StartServerOptions {
 	logger?: Logger;
 }
 
-export const startServer = async (startPort: number, messageHandler: IpcMessageHandler, options: StartServerOptions|null = null): Promise<IpcServer> => {
+const getSecretKey = async (filePath: string) => {
+	try {
+		const keyLength = 64;
+
+		const writeKeyToFile = async () => {
+			const key = getSecureRandomString(keyLength);
+			await writeFile(filePath, key, 'utf-8');
+			return key;
+		};
+
+		if (!(await pathExists(filePath))) {
+			return await writeKeyToFile();
+		}
+
+		const key = await readFile(filePath, 'utf-8');
+		if (key.length !== keyLength) return await writeKeyToFile();
+
+		return key;
+	} catch (error) {
+		const e = error as NodeJS.ErrnoException;
+		e.message = `Could not get secret key from file: ${filePath}`;
+		throw e;
+	}
+};
+
+// `secretKeyFilePath` must be the same for all the instances that can communicate with each others
+export const startServer = async (startPort: number, secretKeyFilePath: string, messageHandler: IpcMessageHandler, options: StartServerOptions|null = null): Promise<IpcServer> => {
 	const port = await findAvailablePort(startPort);
 	const logger = options && options.logger ? options.logger : new Logger();
+
+	const secretKey = await getSecretKey(secretKeyFilePath);
 
 	return new Promise<IpcServer>((resolve, reject) => {
 		try {
 			const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+				let message: Message|null = null;
 				try {
-					const message = await parseJson(req) as Message;
+					message = await parseJson(req) as Message;
+					if (message.secretKey !== secretKey) throw newHttpError(401, 'Invalid secret key');
 					if (!message.action) throw newHttpError(400, 'Missing "action" property in message');
 					const response = await messageHandler(message);
 					res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -88,6 +123,7 @@ export const startServer = async (startPort: number, messageHandler: IpcMessageH
 				} catch (error) {
 					const httpError = error as HttpError;
 					const httpCode = httpError.httpCode || 500;
+					logger.error('Could not response to request:', message, 'Error', httpCode, httpError.message);
 					res.writeHead(httpCode, { 'Content-Type': 'text/plain' });
 					res.end(`Error ${httpCode}: ${httpError.message}`);
 				}
@@ -101,6 +137,7 @@ export const startServer = async (startPort: number, messageHandler: IpcMessageH
 				resolve({
 					httpServer: server,
 					port,
+					secretKey,
 				});
 			});
 		} catch (error) {
