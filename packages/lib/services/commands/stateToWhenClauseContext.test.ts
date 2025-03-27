@@ -50,6 +50,7 @@ describe('stateToWhenClauseContext', () => {
 	it('should be in trash if command folder is deleted', async () => {
 		const applicationState = {
 			notes: [],
+			notesParentType: 'Folder',
 			folders: [
 				{ id: '1', deleted_time: 1722567036580, share_id: '', parent_id: '' },
 			],
@@ -67,6 +68,16 @@ describe('stateToWhenClauseContext', () => {
 			],
 		} as State;
 		const resultingState = stateToWhenClauseContext(applicationState, { commandFolderId: '1' });
+
+		expect(resultingState.inTrash).toBe(false);
+	});
+
+	it('should not be in trash if viewing all notes', async () => {
+		const applicationState = {
+			selectedFolderId: 'folder',
+			notesParentType: 'SmartFolder',
+		} as State;
+		const resultingState = stateToWhenClauseContext(applicationState);
 
 		expect(resultingState.inTrash).toBe(false);
 	});
