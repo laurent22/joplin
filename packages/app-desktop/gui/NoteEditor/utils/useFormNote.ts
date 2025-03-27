@@ -103,7 +103,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 				if (oldValue !== formNoteRefreshScheduled) {
 					return oldValue;
 				}
-				// Unschedule future refreshes
+				// A refresh is no longer scheduled
 				return 0;
 			});
 		};
