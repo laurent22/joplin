@@ -10,6 +10,7 @@ interface ExecCommandOptions {
 	quiet?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	env?: Record<string, any>;
+	detached?: boolean;
 }
 
 export default async (command: string | string[], options: ExecCommandOptions | null = null): Promise<string> => {
@@ -19,6 +20,7 @@ export default async (command: string | string[], options: ExecCommandOptions | 
 		showStderr: true,
 		quiet: false,
 		env: {},
+		detached: false,
 		...options,
 	};
 
@@ -39,7 +41,7 @@ export default async (command: string | string[], options: ExecCommandOptions | 
 	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
 	const executableName = args[0];
 	args.splice(0, 1);
-	const promise = execa(executableName, args, { env: options.env });
+	const promise = execa(executableName, args, { env: options.env, detached: options.detached });
 	if (options.showStdout && promise.stdout) promise.stdout.pipe(process.stdout);
 	if (options.showStderr && promise.stderr) promise.stderr.pipe(process.stderr);
 	const result = await promise;

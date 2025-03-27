@@ -22,13 +22,14 @@ interface CollapseExpandAllButtonProps {
 }
 
 const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
-	// To allow it to be accessed by accessibility tools, the new folder button
+	// To allow it to be accessed by accessibility tools, the toggle button
 	// is not included in the portion of the list with role='tree'.
 	const icon = props.allFoldersCollapsed ? 'far fa-caret-square-right' : 'far fa-caret-square-down';
+	const label = props.allFoldersCollapsed ? _('Expand all notebooks') : _('Collapse all notebooks');
 
 	return <button onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className='sidebar-header-button -collapseall'>
 		<i
-			aria-label={_('Collapse / Expand all notebooks')}
+			aria-label={label}
 			role='img'
 			className={icon}
 		/>

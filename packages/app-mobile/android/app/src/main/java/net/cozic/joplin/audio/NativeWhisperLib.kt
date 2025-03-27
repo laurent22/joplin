@@ -6,6 +6,7 @@ class NativeWhisperLib(
 	modelPath: String,
 	languageCode: String,
 	prompt: String,
+	shortAudioContext: Boolean,
 ) : Closeable {
 	companion object {
 		init {
@@ -16,22 +17,40 @@ class NativeWhisperLib(
 
 		// TODO: The example whisper.cpp project transfers pointers as Longs to the Kotlin code.
 		// This seems unsafe. Try changing how this is managed.
-		private external fun init(modelPath: String, languageCode: String, prompt: String): Long;
+		private external fun init(modelPath: String, languageCode: String, prompt: String, shortAudioContext: Boolean): Long;
 		private external fun free(pointer: Long): Unit;
 
-		private external fun fullTranscribe(pointer: Long, audioData: FloatArray): String;
+		private external fun addAudio(pointer: Long, audioData: FloatArray): Unit;
+		private external fun transcribeNextChunk(pointer: Long): String;
+		private external fun transcribeRemaining(pointer: Long): String;
 		private external fun getPreview(pointer: Long): String;
 	}
 
 	private var closed = false
-	private val pointer: Long = init(modelPath, languageCode, prompt)
+	private val pointer: Long = init(modelPath, languageCode, prompt, shortAudioContext)
 
-	fun transcribe(audioData: FloatArray): String {
+	fun addAudio(audioData: FloatArray) {
+		if (closed) {
+			throw Exception("Cannot add audio data to a closed session")
+		}
+
+		Companion.addAudio(pointer, audioData)
+	}
+
+	fun transcribeNextChunk(): String {
 		if (closed) {
 			throw Exception("Cannot transcribe using a closed session")
 		}
 
-		return fullTranscribe(pointer, audioData)
+		return Companion.transcribeNextChunk(pointer)
+	}
+
+	fun transcribeRemaining(): String {
+		if (closed) {
+			throw Exception("Cannot transcribeAll using a closed session")
+		}
+
+		return Companion.transcribeRemaining(pointer)
 	}
 
 	fun getPreview(): String {

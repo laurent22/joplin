@@ -1,5 +1,31 @@
 # Joplin Desktop Changelog
 
+## [v3.3.3](https://github.com/laurent22/joplin/releases/tag/v3.3.3) (Pre-release) - 2025-03-16T11:52:33Z
+
+- New: Accessibility: Add a menu item that moves focus to the note viewer ([#11967](https://github.com/laurent22/joplin/issues/11967) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Accessibility: Add error indication on Note properties ([#11784](https://github.com/laurent22/joplin/issues/11784) by [@pedr](https://github.com/pedr))
+- New: Accessibility: Add more standard keyboard shortcuts for the notebook sidebar ([#11892](https://github.com/laurent22/joplin/issues/11892) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add a button to collapse or expand all folders ([#11905](https://github.com/laurent22/joplin/issues/11905))
+- New: Add dialog to select a note and link to it ([#11891](https://github.com/laurent22/joplin/issues/11891))
+- New: Add setting migration for ocr.enabled ([ab86b95](https://github.com/laurent22/joplin/commit/ab86b95))
+- New: Add support for multiple instances ([#11963](https://github.com/laurent22/joplin/issues/11963))
+- New: Added keyboard shortcut and menu item for toggleEditorPlugin command ([7e8dee4](https://github.com/laurent22/joplin/commit/7e8dee4))
+- New: Plugins: Add support for `joplin.shouldUseDarkColors` API ([fe67a44](https://github.com/laurent22/joplin/commit/fe67a44))
+- Improved: Accessibility: Improve "toggle all notebooks" accessibility ([#11918](https://github.com/laurent22/joplin/issues/11918) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add "Disable synchronisation" to Joplin Cloud prompt message ([#11705](https://github.com/laurent22/joplin/issues/11705)) ([#11696](https://github.com/laurent22/joplin/issues/11696) by [@Vortrix5](https://github.com/Vortrix5))
+- Improved: Improve Rich Text Editor toolbar structure ([#11869](https://github.com/laurent22/joplin/issues/11869)) ([#11663](https://github.com/laurent22/joplin/issues/11663) by [@j-scheitler1](https://github.com/j-scheitler1))
+- Improved: Improve download in install script ([#11921](https://github.com/laurent22/joplin/issues/11921) by Helmut K. C. Tessarek)
+- Improved: Make "toggle all folders" button also expand the folder list ([#11917](https://github.com/laurent22/joplin/issues/11917) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Mark the LanguageTool Integration plugin as incompatible ([#11715](https://github.com/laurent22/joplin/issues/11715)) ([#11710](https://github.com/laurent22/joplin/issues/11710) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to Electron 35.0.1 ([#11968](https://github.com/laurent22/joplin/issues/11968) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix adding tags to a note through drag-and-drop ([#11911](https://github.com/laurent22/joplin/issues/11911) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ctrl-p doesn't open the goto anything dialog in the Rich Text Editor ([#11926](https://github.com/laurent22/joplin/issues/11926)) ([#11894](https://github.com/laurent22/joplin/issues/11894) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix issue with GotoAnything that would prevent it from highlighting search results in note titles ([#11888](https://github.com/laurent22/joplin/issues/11888))
+- Fixed: Import audio from OneNote as file links ([#11942](https://github.com/laurent22/joplin/issues/11942)) ([#11939](https://github.com/laurent22/joplin/issues/11939) by [@pedr](https://github.com/pedr))
+- Fixed: Make tab size consistent between Markdown editor and viewer (and RTE) ([#11940](https://github.com/laurent22/joplin/issues/11940)) ([#11673](https://github.com/laurent22/joplin/issues/11673))
+- Fixed: Preserve attachment file extensions regardless of the mime type  ([#11852](https://github.com/laurent22/joplin/issues/11852)) ([#11759](https://github.com/laurent22/joplin/issues/11759) by [@pedr](https://github.com/pedr))
+- Fixed: Sharing a notebook with nobody prints "No user with ID public_key" ([#11932](https://github.com/laurent22/joplin/issues/11932)) ([#11923](https://github.com/laurent22/joplin/issues/11923) by [@Paramesh-T-S](https://github.com/Paramesh-T-S))
+
 ## [v3.2.13](https://github.com/laurent22/joplin/releases/tag/v3.2.13) - 2025-02-28T14:38:21Z
 
 - Improved: Plugins: Mark the LanguageTool Integration plugin as incompatible ([#11715](https://github.com/laurent22/joplin/issues/11715)) ([#11710](https://github.com/laurent22/joplin/issues/11710) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

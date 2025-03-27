@@ -7,8 +7,8 @@
 #include "findLongestSilence.h"
 #include "androidUtil.h"
 
-WhisperSession::WhisperSession(const std::string& modelPath, std::string lang, std::string prompt)
-	: lang_ {std::move(lang)}, prompt_ {std::move(prompt)} {
+WhisperSession::WhisperSession(const std::string& modelPath, std::string lang, std::string prompt, bool shortAudioContext)
+	: lang_ {std::move(lang)}, prompt_ {std::move(prompt)}, shortAudioContext_ {shortAudioContext} {
 	whisper_context_params contextParams = whisper_context_default_params();
 
 	// Lifetime(pModelPath): Whisper.cpp creates a copy of pModelPath and stores it in a std::string.
@@ -34,9 +34,9 @@ WhisperSession::buildWhisperParams_() {
 	// WHISPER_SAMPLING_BEAM_SEARCH is an alternative to greedy:
 	// params.beam_search = { .beam_size = 2 };
 	params.print_realtime = false;
-    // Disable timestamps: They make creating custom Whisper models more difficult:
+	// Disable timestamps: They make creating custom Whisper models more difficult:
 	params.print_timestamps = false;
-    params.no_timestamps = true;
+	params.no_timestamps = true;
 
 	params.print_progress = false;
 	params.translate = false;
@@ -54,6 +54,7 @@ WhisperSession::buildWhisperParams_() {
 	params.initial_prompt = prompt_.c_str();
 	params.prompt_tokens = nullptr;
 	params.prompt_n_tokens = 0;
+    params.audio_ctx = 0;
 
 	// Lifetime: lifetime(params) < lifetime(lang_) = lifetime(this).
 	params.language = lang_.c_str();
@@ -68,7 +69,26 @@ WhisperSession::transcribe_(const std::vector<float>& audio, size_t transcribeCo
 		return "";
 	}
 
+    float seconds = static_cast<float>(audio.size()) / WHISPER_SAMPLE_RATE;
+    if (seconds > 30.0f) {
+        LOGW("Warning: Audio is longer than 30 seconds. Not all audio will be transcribed");
+    }
+
 	whisper_full_params params = buildWhisperParams_();
+
+    // If supported by the model, allow shortening the transcription. This can significantly
+    // improve performance, but requires a fine-tuned model.
+    // See https://github.com/futo-org/whisper-acft
+    if (this->shortAudioContext_) {
+        // audio_ctx: 1500 every 30 seconds (50 units in one second).
+        // See https://github.com/futo-org/whisper-acft/issues/6
+        float padding = 64.0f;
+        params.audio_ctx = static_cast<int>(seconds * (1500.0f / 30.0f) + padding);
+
+        if (params.audio_ctx > 1500) {
+            params.audio_ctx = 1500;
+        }
+    }
 	whisper_reset_timings(pContext_);
 
 	transcribeCount = std::min(audio.size(), transcribeCount);
@@ -104,49 +124,128 @@ WhisperSession::splitAndTranscribeBefore_(int transcribeUpTo, int trimTo) {
 	return result;
 }
 
-std::string
-WhisperSession::transcribeNextChunk(const float *pAudio, int sizeAudio) {
-	std::string finalizedContent;
+bool WhisperSession::isBufferSilent_() {
+	int toleranceSamples = WHISPER_SAMPLE_RATE / 8; // 0.125s
+	auto silence = findLongestSilence(
+			audioBuffer_,
+			LongestSilenceOptions {
+					.sampleRate = WHISPER_SAMPLE_RATE,
+					.minSilenceLengthSeconds = 0.0f,
+					.maximumSilenceStartSamples = toleranceSamples, // 0.5s
+					.returnFirstMatch = true
+			}
+	);
+	return silence.end >= audioBuffer_.size() - toleranceSamples;
+}
 
-	// Update the local audio buffer
-	for (int i = 0; i < sizeAudio; i++) {
-		audioBuffer_.push_back(pAudio[i]);
+std::string
+WhisperSession::transcribeNextChunkNoPreview_() {
+	std::stringstream result;
+
+	// Handles a silence detected between (splitStart, splitEnd).
+	auto splitAndProcess = [&] (int splitStart, int splitEnd) {
+		int tolerance = WHISPER_SAMPLE_RATE / 20; // 0.05s
+		bool isCompletelySilent = splitStart < tolerance && splitEnd > audioBuffer_.size() - tolerance;
+		LOGD("WhisperSession: Found silence range from %.2f -> %.2f", splitStart / (float) WHISPER_SAMPLE_RATE, splitEnd / (float) WHISPER_SAMPLE_RATE);
+
+		if (isCompletelySilent) {
+			audioBuffer_.clear();
+			return false;
+		} else if (splitEnd > tolerance) { // Anything to transcribe?
+			result << splitAndTranscribeBefore_(splitStart, splitEnd) << "\n\n";
+			return true;
+		}
+
+		return false;
+	};
+
+	int maximumSamples = WHISPER_SAMPLE_RATE * 25;
+
+	// Handle paragraph breaks indicated by long pauses
+	while (audioBuffer_.size() > WHISPER_SAMPLE_RATE * 3) {
+		LOGD("WhisperSession: Checking for a longer pauses.");
+		// Allow brief pauses to create new paragraphs:
+		float minSilenceSeconds = 1.5f;
+		auto splitPoint = findLongestSilence(
+			audioBuffer_,
+			LongestSilenceOptions {
+				.sampleRate = WHISPER_SAMPLE_RATE,
+				.minSilenceLengthSeconds = minSilenceSeconds,
+				.maximumSilenceStartSamples = maximumSamples,
+				.returnFirstMatch = true
+			}
+		);
+		if (!splitPoint.isValid) {
+			break;
+		}
+		if (!splitAndProcess(splitPoint.start, splitPoint.end)) {
+			break;
+		}
 	}
 
-	// Does the audio buffer need to be split somewhere?
-	int maximumSamples = WHISPER_SAMPLE_RATE * 25;
+	// If there are no long pauses, force a paragraph break somewhere
 	if (audioBuffer_.size() >= maximumSamples) {
+		LOGD("WhisperSession: Allowing shorter pauses to break.");
 		float minSilenceSeconds = 0.3f;
 		auto silenceRange = findLongestSilence(
-			audioBuffer_, WHISPER_SAMPLE_RATE, minSilenceSeconds, maximumSamples
+				audioBuffer_,
+				LongestSilenceOptions {
+						.sampleRate = WHISPER_SAMPLE_RATE,
+						.minSilenceLengthSeconds = minSilenceSeconds,
+						.maximumSilenceStartSamples = maximumSamples,
+						.returnFirstMatch = false
+				}
 		);
 
 		// In this case, the audio is long enough that it needs to be split somewhere. If there's
 		// no suitable pause available, default to splitting in the middle.
 		int halfBufferSize = audioBuffer_.size() / 2;
-		int transcribeTo = silenceRange.isValid ? silenceRange.start : halfBufferSize;
-		int trimTo = silenceRange.isValid ? silenceRange.end : halfBufferSize;
-
-		finalizedContent = splitAndTranscribeBefore_(transcribeTo, trimTo);
-	} else if (audioBuffer_.size() > WHISPER_SAMPLE_RATE * 3) {
-		// Allow brief pauses to create new paragraphs:
-		float minSilenceSeconds = 2.0f;
-		auto splitPoint = findLongestSilence(
-			audioBuffer_, WHISPER_SAMPLE_RATE, minSilenceSeconds, maximumSamples
-		);
-		if (splitPoint.isValid) {
-			int tolerance = WHISPER_SAMPLE_RATE / 20; // 0.05s
-			bool isCompletelySilent = splitPoint.start < tolerance && splitPoint.end > audioBuffer_.size() - tolerance;
-			if (isCompletelySilent) {
-				audioBuffer_.clear();
-			} else {
-				finalizedContent = splitAndTranscribeBefore_(splitPoint.start, splitPoint.end);
-			}
-		}
+		int splitStart = silenceRange.isValid ? silenceRange.start : halfBufferSize;
+		int splitEnd = silenceRange.isValid ? silenceRange.end : halfBufferSize;
+		splitAndProcess(splitStart, splitEnd);
 	}
 
+	return result.str();
+}
+
+
+void WhisperSession::addAudio(const float *pAudio, int sizeAudio) {
+	// Update the local audio buffer
+	for (int i = 0; i < sizeAudio; i++) {
+		audioBuffer_.push_back(pAudio[i]);
+	}
+}
+
+std::string WhisperSession::transcribeNextChunk() {
+	std::string finalizedContent = transcribeNextChunkNoPreview_();
 	previewText_ = transcribe_(audioBuffer_, audioBuffer_.size());
 	return finalizedContent;
+}
+
+std::string WhisperSession::transcribeAll() {
+	if (isBufferSilent_()) {
+		return "";
+	}
+
+	std::stringstream result;
+
+	std::string transcribed;
+	auto update_transcribed = [&] {
+		transcribed = transcribeNextChunkNoPreview_();
+		return !transcribed.empty();
+	};
+	while (update_transcribed()) {
+		result << transcribed << "\n\n";
+	}
+
+	// Transcribe content considered by transcribeNextChunk as partial:
+	if (!isBufferSilent_()) {
+		result << transcribe_(audioBuffer_, audioBuffer_.size());
+	}
+	audioBuffer_.clear();
+
+	previewText_ = "";
+	return result.str();
 }
 
 std::string WhisperSession::getPreview() {

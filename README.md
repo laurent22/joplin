@@ -42,7 +42,7 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 | <img width="50" src="https://avatars2.githubusercontent.com/u/97193607?s=96&v=4"/></br>[Akhil-CM](https://github.com/Akhil-CM) | <img width="50" src="https://avatars2.githubusercontent.com/u/552452?s=96&v=4"/></br>[andypiper](https://github.com/andypiper) | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[avanderberg](https://github.com/avanderberg) | <img width="50" src="https://avatars2.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/1177810?s=96&v=4"/></br>[felixstorm](https://github.com/felixstorm) | <img width="50" src="https://avatars2.githubusercontent.com/u/8030470?s=96&v=4"/></br>[Galliver7](https://github.com/Galliver7) | <img width="50" src="https://avatars2.githubusercontent.com/u/64712218?s=96&v=4"/></br>[Hegghammer](https://github.com/Hegghammer) | <img width="50" src="https://avatars2.githubusercontent.com/u/11947658?s=96&v=4"/></br>[KentBrockman](https://github.com/KentBrockman) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) | <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/327998?s=96&v=4"/></br>[sif](https://github.com/sif) | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) |
-|       |       |       |       |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/668977?s=96&v=4"/></br>[ugoertz](https://github.com/ugoertz) |       |       |       |
 <!-- SPONSORS-GITHUB -->
 	
 # Community
@@ -50,9 +50,10 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 Name | Description
 --- | ---
 [Support Forum](https://discourse.joplinapp.org/) | This is the main place for general discussion about Joplin, user support, software development questions, and to discuss new features. Also where the latest beta versions are released and discussed.
+[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
 [Bluesky feed](https://bsky.app/profile/joplinapp.bsky.social) | Follow us on Bluesky
 [Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
-[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
+[YouTube](https://www.youtube.com/@joplinapp) | Discover information and tutorials on how to use the apps
 [Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
 [LinkedIn](https://www.linkedin.com/company/joplin) | Our LinkedIn page
 [Lemmy Community](https://sopuli.xyz/c/joplinapp) | Also a good place to get help

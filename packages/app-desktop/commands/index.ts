@@ -6,6 +6,7 @@ import * as exportDeletionLog from './exportDeletionLog';
 import * as exportFolders from './exportFolders';
 import * as exportNotes from './exportNotes';
 import * as focusElement from './focusElement';
+import * as newAppInstance from './newAppInstance';
 import * as openNoteInNewWindow from './openNoteInNewWindow';
 import * as openProfileDirectory from './openProfileDirectory';
 import * as replaceMisspelling from './replaceMisspelling';
@@ -28,6 +29,7 @@ const index: any[] = [
 	exportFolders,
 	exportNotes,
 	focusElement,
+	newAppInstance,
 	openNoteInNewWindow,
 	openProfileDirectory,
 	replaceMisspelling,

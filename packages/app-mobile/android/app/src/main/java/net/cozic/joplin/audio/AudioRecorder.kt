@@ -15,7 +15,9 @@ typealias AudioRecorderFactory = (context: Context)->AudioRecorder;
 
 class AudioRecorder(context: Context) : Closeable {
 	private val sampleRate = 16_000
-	private val maxLengthSeconds = 30 // Whisper supports a maximum of 30s
+	// Don't allow the unprocessed audio buffer to grow indefinitely -- discard
+	// data if longer than this:
+	private val maxLengthSeconds = 120
 	private val maxBufferSize = sampleRate * maxLengthSeconds
 	private val buffer = FloatArray(maxBufferSize)
 	private var bufferWriteOffset = 0

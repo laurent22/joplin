@@ -19,6 +19,7 @@ import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
 import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
+import { arch } from 'os';
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
@@ -168,6 +169,14 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.randomBytes = async count => {
 		const buffer = require('crypto').randomBytes(count);
 		return Array.from(buffer);
+	};
+
+	shim.isAppleSilicon = () => {
+		return shim.isMac() && arch() === 'arm64';
+	};
+
+	shim.platformArch = () => {
+		return arch();
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

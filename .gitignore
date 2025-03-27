@@ -133,6 +133,7 @@ packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/index.js
+packages/app-desktop/commands/newAppInstance.js
 packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/replaceMisspelling.js
@@ -247,6 +248,7 @@ packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
+packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
@@ -660,7 +662,14 @@ packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
 packages/app-mobile/components/ToggleSpaceButton.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
+packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
+packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControl.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControlProvider.js
+packages/app-mobile/components/accessibility/FocusControl/MainAppContent.js
+packages/app-mobile/components/accessibility/FocusControl/ModalWrapper.js
+packages/app-mobile/components/accessibility/FocusControl/types.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
@@ -713,6 +722,7 @@ packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.j
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
 packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
+packages/app-mobile/components/screens/ConfigScreen/SettingTextInput.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
 packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.test.js
@@ -1003,6 +1013,7 @@ packages/lib/commands/renderMarkup.test.js
 packages/lib/commands/renderMarkup.js
 packages/lib/commands/showEditorPlugin.js
 packages/lib/commands/synchronize.js
+packages/lib/commands/toggleAllFolders.test.js
 packages/lib/commands/toggleAllFolders.js
 packages/lib/commands/toggleEditorPlugin.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
@@ -1040,6 +1051,8 @@ packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
 packages/lib/fsDriver.test.js
 packages/lib/geolocation-node.js
+packages/lib/getAppName.test.js
+packages/lib/getAppName.js
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js

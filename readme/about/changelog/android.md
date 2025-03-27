@@ -1,5 +1,29 @@
 # Joplin Android Changelog
 
+## [android-v3.3.4](https://github.com/laurent22/joplin/releases/tag/android-v3.3.4) (Pre-release) - 2025-03-21T18:07:00Z
+
+- Improved: Voice typing: Improve processing with larger models (#11983 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Improve re-download button UI (#11979) (#11955 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.3.3](https://github.com/laurent22/joplin/releases/tag/android-v3.3.3) (Pre-release) - 2025-03-16T10:29:52Z
+
+- New: Add setting migration for ocr.enabled (ab86b95)
+- Improved: Accessibility: Improve focus handling in the note actions menu and modal dialogs (#11929 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Make default modal close button accessible (#11957 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Transcribe more unprocessed audio after pressing "done" (#11960) (#11956 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix missing label on note actions menu dismiss button (#11954 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Make tab size consistent between Markdown editor and viewer (and RTE) (#11940) (#11673)
+- Fixed: Voice typing: Fix potential output duplication when finalizing voice typing (#11953 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.3.2](https://github.com/laurent22/joplin/releases/tag/android-v3.3.2) (Pre-release) - 2025-03-03T22:35:08Z
+
+- Improved: Improve encryption config screen accessibility (#11874) (#11846 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Switch default library used for Whisper voice typing (#11881 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.11)
+- Fixed: Accessibility: Fix "new note" and "new to-do" buttons are focusable even while invisible (#11899 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix disabled encryption keys list showing enabled keys (#11861) (#11858 by [@pedr](https://github.com/pedr))
+- Fixed: Fix voice recorder crash (#11876) (#11864 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.3.1](https://github.com/laurent22/joplin/releases/tag/android-v3.3.1) (Pre-release) - 2025-02-19T16:01:54Z
 
 - New: Add support for plugin editor views (#11831)

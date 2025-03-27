@@ -19,14 +19,18 @@ static void highpass(std::vector<float>& data, int sampleRate) {
 
 SilenceRange findLongestSilence(
 	const std::vector<float>& audioData,
-	int sampleRate,
-	float minSilenceLengthSeconds,
-	int maxSilencePosition
+	LongestSilenceOptions options
 ) {
+	// Options variables
+	int sampleRate = options.sampleRate;
+	int maxSilencePosition = options.maximumSilenceStartSamples;
+	float minSilenceLengthSeconds = options.minSilenceLengthSeconds;
+	bool returnFirstMatch = options.returnFirstMatch;
+
+	// State
 	int bestCandidateLength = 0;
 	int bestCandidateStart = -1;
 	int bestCandidateEnd = -1;
-
 	int currentCandidateStart = -1;
 
 	std::vector<float> processedAudio { audioData };
@@ -35,7 +39,7 @@ SilenceRange findLongestSilence(
 	// Break into windows of size `windowSize`:
 	int windowSize = 256;
 	int windowsPerSecond = sampleRate / windowSize;
-	int quietWindows = 0;
+	int quietWindows = 0; // Number of relatively quiet windows encountered
 
 	// Finishes the current candidate for longest silence
 	auto finalizeCandidate = [&] (int currentOffset) {
@@ -86,12 +90,20 @@ SilenceRange findLongestSilence(
 		}
 
 		int minQuietWindows = static_cast<int>(windowsPerSecond * minSilenceLengthSeconds);
-		if (quietWindows >= minQuietWindows && currentCandidateStart == -1) {
-			// Found a candidate. Start it.
-			currentCandidateStart = windowOffset;
-		} else if (quietWindows == 0) {
+		if (quietWindows >= minQuietWindows && currentCandidateStart == -1) { // Found silence
+			// Ignore the first window, which probably contains some of the start of the audio
+			// and the most recent window, which came after windowOffset.
+			int windowsToIgnore = 2;
+			int estimatedQuietSamples = std::max(0, quietWindows - windowsToIgnore) * windowSize;
+			currentCandidateStart = windowOffset - estimatedQuietSamples;
+		} else if (quietWindows == 0) { // Silence ended
 			// Ended a candidate. Is it better than the best?
 			finalizeCandidate(windowOffset);
+
+			// Search for more candidates or return now?
+			if (returnFirstMatch && bestCandidateLength > 0) {
+				break;
+			}
 		}
 	}
 

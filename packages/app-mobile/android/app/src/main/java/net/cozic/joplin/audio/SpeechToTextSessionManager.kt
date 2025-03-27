@@ -21,12 +21,13 @@ class SpeechToTextSessionManager(
 		modelPath: String,
 		locale: String,
 		prompt: String,
+		useShortAudioCtx: Boolean,
 		context: Context,
 	): Int {
 		val sessionId = nextSessionId++
 		sessions[sessionId] = SpeechToTextSession(
 			SpeechToTextConverter(
-				modelPath, locale, prompt, recorderFactory = AudioRecorder.factory, context,
+				modelPath, locale, prompt, useShortAudioCtx, recorderFactory = AudioRecorder.factory, context,
 			)
 		)
 		return sessionId

@@ -13,6 +13,7 @@ const { SpeechToTextModule } = NativeModules;
 
 class WhisperConfig {
 	public prompts: Map<string, string> = new Map();
+	public supportsShortAudioCtx = false;
 	public stringReplacements: [string, string][] = [];
 	public regexReplacements: [RegExp, string][] = [];
 
@@ -69,13 +70,18 @@ class WhisperConfig {
 			}
 		};
 
+		// Models fine-tuned as per https://github.com/futo-org/whisper-acft should have
+		// "shortAudioContext": true in their config.json.
+		if ('shortAudioContext' in json) {
+			this.supportsShortAudioCtx = !!json.shortAudioContext;
+		}
+
 		processPrompts();
 		processOutputSettings();
 	}
 }
 
 class Whisper implements VoiceTypingSession {
-	private lastPreviewData = '';
 	private closeCounter = 0;
 	private isFirstParagraph = true;
 
@@ -87,15 +93,25 @@ class Whisper implements VoiceTypingSession {
 	}
 
 	private postProcessSpeech(data: string) {
-		data = data.trim();
+		const paragraphs = data.split('\n\n');
 
-		for (const [key, value] of this.config.stringReplacements) {
-			data = data.split(key).join(value);
+		const result = [];
+		for (let paragraph of paragraphs) {
+			paragraph = paragraph.trim();
+
+			for (const [key, value] of this.config.stringReplacements) {
+				paragraph = paragraph.split(key).join(value);
+			}
+			for (const [key, value] of this.config.regexReplacements) {
+				paragraph = paragraph.replace(key, value);
+			}
+
+			if (paragraph) {
+				result.push(paragraph);
+			}
 		}
-		for (const [key, value] of this.config.regexReplacements) {
-			data = data.replace(key, value);
-		}
-		return data;
+
+		return result.join('\n\n');
 	}
 
 	private onDataFinalize(data: string) {
@@ -124,21 +140,36 @@ class Whisper implements VoiceTypingSession {
 
 				logger.debug('done reading block. Length', data?.length);
 				if (this.sessionId !== null) {
-					this.lastPreviewData = await SpeechToTextModule.getPreview(this.sessionId);
-					this.callbacks.onPreview(this.postProcessSpeech(this.lastPreviewData));
+					const previewText = await SpeechToTextModule.getPreview(this.sessionId);
+					this.callbacks.onPreview(this.postProcessSpeech(previewText));
 				}
 			}
 		} catch (error) {
 			logger.error('Whisper error:', error);
-			this.lastPreviewData = '';
-			await this.stop();
+			await this.cancel();
 			throw error;
 		}
 	}
 
-	public stop() {
+	public async stop() {
 		if (this.sessionId === null) {
 			logger.debug('Session already closed.');
+			return;
+		}
+
+		try {
+			const data: string = await SpeechToTextModule.convertAvailable(this.sessionId);
+			this.onDataFinalize(data);
+		} catch (error) {
+			logger.error('Error stopping session: ', error);
+		}
+
+		return this.cancel();
+	}
+
+	public cancel() {
+		if (this.sessionId === null) {
+			logger.debug('No session to cancel.');
 			return;
 		}
 
@@ -146,10 +177,6 @@ class Whisper implements VoiceTypingSession {
 		const sessionId = this.sessionId;
 		this.sessionId = null;
 		this.closeCounter ++;
-
-		if (this.lastPreviewData) {
-			this.onDataFinalize(this.lastPreviewData);
-		}
 
 		return SpeechToTextModule.closeSession(sessionId);
 	}
@@ -175,14 +202,14 @@ const whisper: VoiceTypingProvider = {
 		let urlTemplate = rtrimSlashes(Setting.value('voiceTypingBaseUrl').trim());
 
 		if (!urlTemplate) {
-			urlTemplate = 'https://github.com/personalizedrefrigerator/joplin-voice-typing-test/releases/download/v0.0.3/{task}.zip';
+			urlTemplate = 'https://github.com/joplin/voice-typing-models/releases/download/v0.2.0/{task}.zip';
 		}
 
-		// Note: whisper-base-q8_0 is also available and works on many Android devices. On some low
-		// resource devices, however, it will fail.
-		// TODO: Auto-select the model size?
+		// Note: whisper-base-q8_0.fr is also available and may have better performance on French-language
+		// input.
+		// TODO: Auto-select the model?
 		return urlTemplate
-			.replace(/\{task\}/g, 'whisper-tiny-q8_0')
+			.replace(/\{task\}/g, 'whisper-base-q8_0')
 			.replace(/\{lang\}/g, lang);
 	},
 	deleteCachedModels: async (locale) => {
@@ -225,8 +252,9 @@ const whisper: VoiceTypingProvider = {
 			throw new Error(`Model not found at path ${modelPath}`);
 		}
 
+		logger.debug('Starting whisper session', config.supportsShortAudioCtx ? '(short audio context)' : '');
 		const sessionId = await SpeechToTextModule.openSession(
-			modelPath, locale, getPrompt(locale, config.prompts),
+			modelPath, locale, getPrompt(locale, config.prompts), config.supportsShortAudioCtx,
 		);
 		return new Whisper(sessionId, callbacks, config);
 	},

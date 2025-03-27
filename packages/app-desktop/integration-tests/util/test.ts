@@ -1,6 +1,6 @@
 import { resolve, join, dirname } from 'path';
-import { remove, mkdirp } from 'fs-extra';
-import { _electron as electron, Page, ElectronApplication, test as base } from '@playwright/test';
+import { remove, mkdirp, readFile, pathExists } from 'fs-extra';
+import { _electron as electron, Page, ElectronApplication, test as base, TestInfo } from '@playwright/test';
 import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
 import firstNonDevToolsWindow from './firstNonDevToolsWindow';
@@ -20,7 +20,7 @@ type JoplinFixtures = {
 // A custom fixture that loads an electron app. See
 // https://playwright.dev/docs/test-fixtures
 
-const getAndResizeMainWindow = async (electronApp: ElectronApplication) => {
+const initializeMainWindow = async (electronApp: ElectronApplication) => {
 	const mainWindow = await firstNonDevToolsWindow(electronApp);
 
 	// Setting the viewport size helps keep test environments consistent.
@@ -48,6 +48,18 @@ const waitForStartupPlugins = async (electronApp: ElectronApplication) => {
 	await waitForMainMessage(electronApp, 'startup-plugins-loaded');
 };
 
+const attachJoplinLog = async (profileDirectory: string, testInfo: TestInfo) => {
+	const logFile = join(profileDirectory, 'log.txt');
+	if (await pathExists(logFile)) {
+		await testInfo.attach('log.txt', {
+			body: await readFile(logFile, 'utf8'),
+			contentType: 'text/plain',
+		});
+	} else {
+		console.warn('Missing log file');
+	}
+};
+
 const testDir = dirname(__dirname);
 
 export const test = base.extend<JoplinFixtures>({
@@ -67,7 +79,7 @@ export const test = base.extend<JoplinFixtures>({
 		await remove(profileSubdir);
 	},
 
-	electronApp: async ({ profileDirectory }, use) => {
+	electronApp: async ({ profileDirectory }, use, testInfo) => {
 		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
 		const startupPromise = waitForAppLoaded(electronApp);
@@ -75,6 +87,9 @@ export const test = base.extend<JoplinFixtures>({
 		await startupPromise;
 
 		await use(electronApp);
+
+		// For debugging purposes, attach the Joplin log file to the test:
+		await attachJoplinLog(profileDirectory, testInfo);
 
 		await electronApp.firstWindow();
 		await electronApp.close();
@@ -96,7 +111,7 @@ export const test = base.extend<JoplinFixtures>({
 				],
 			});
 			const startupPromise = waitForAppLoaded(electronApp);
-			const mainWindowPromise = getAndResizeMainWindow(electronApp);
+			const mainWindowPromise = initializeMainWindow(electronApp);
 			await waitForStartupPlugins(electronApp);
 			await startupPromise;
 
@@ -117,7 +132,7 @@ export const test = base.extend<JoplinFixtures>({
 	},
 
 	mainWindow: async ({ electronApp }, use) => {
-		await use(await getAndResizeMainWindow(electronApp));
+		await use(await initializeMainWindow(electronApp));
 	},
 });
 

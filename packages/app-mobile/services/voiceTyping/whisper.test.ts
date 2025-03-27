@@ -19,6 +19,7 @@ jest.mock('react-native', () => {
 		}),
 		closeSession: jest.fn(),
 		startRecording: jest.fn(),
+		convertAvailable: jest.fn(() => ''),
 	};
 
 	return reactNative;
