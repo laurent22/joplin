@@ -11,7 +11,6 @@ import ValidatedIntegerInput from './ValidatedIntegerInput';
 import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
-import { useId } from 'react';
 
 interface Props {
 	settingId: string;
@@ -40,8 +39,6 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 
 	const descriptionComp = !settingDescription ? null : <Text style={styleSheet.settingDescriptionText}>{settingDescription}</Text>;
 	const containerStyles = props.styles.getContainerStyle(!!settingDescription);
-
-	const labelId = useId();
 
 	if (md.isEnum) {
 		const value = props.value?.toString();
