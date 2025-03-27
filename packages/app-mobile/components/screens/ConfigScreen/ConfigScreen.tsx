@@ -101,6 +101,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		let link = Setting.value('sync.11.path');
 
 		if (link !== '') {
+			// 'sso-saml-app' indicates to Joplin Server that it should redirect the user to the app after authentication
 			link = `${httpPrefix(link)}/login/sso-saml-app`;
 
 			const canOpen = await Linking.canOpenURL(link);

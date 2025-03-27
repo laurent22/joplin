@@ -11,17 +11,11 @@ const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
 
-export enum AuthType {
-	Builtin,
-	Saml,
-}
-
 interface Options {
 	baseUrl(): string;
 	userContentBaseUrl(): string;
 	username(): string;
 	password(): string;
-	type(): AuthType;
 	session(): Session | null;
 	env?: Env;
 }

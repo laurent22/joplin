@@ -1,7 +1,7 @@
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import { _ } from './locale.js';
-import JoplinServerApi, { AuthType } from './JoplinServerApi';
+import JoplinServerApi from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
 import Logger from '@joplin/utils/Logger';
@@ -12,7 +12,6 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => '',
 		password: () => '',
-		type: () => AuthType.Saml,
 		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.user_id') }),
 		env: Setting.value('env'),
 	};
@@ -31,6 +30,9 @@ export async function initFileApi(syncTargetId: number, logger: Logger, options:
 	return fileApi;
 }
 
+// Saves authentication tokens to the settings.
+// @param id The ID
+// @param user_id The user ID
 export function saveTokens(id: string, user_id: string) {
 	if (id !== null && user_id !== null && id.trim() !== '' && user_id.trim() !== '') {
 		Setting.setValue('sync.11.id', id);
@@ -38,6 +40,9 @@ export function saveTokens(id: string, user_id: string) {
 	}
 }
 
+// A sync target for Joplin Server that uses SAML for authentication.
+//
+// Based on the regular Joplin Server sync target.
 export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	public static override id() {
 		return 11;

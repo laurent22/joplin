@@ -61,6 +61,7 @@ if (pathExistsSync(settingsPath)) {
 	}
 }
 
+// https://www.electronjs.org/docs/latest/tutorial/launch-app-from-url-in-another-app
 if (process.defaultApp) {
 	if (process.argv.length >= 2) {
 		electronApp.setAsDefaultProtocolClient('joplin', process.execPath, [path.resolve(process.argv[1])]);

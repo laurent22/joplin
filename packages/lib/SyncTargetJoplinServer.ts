@@ -2,7 +2,7 @@ import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
-import JoplinServerApi, { AuthType, Session } from './JoplinServerApi';
+import JoplinServerApi, { Session } from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
@@ -22,7 +22,6 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
-		type: () => AuthType.Builtin,
 		session: (): Session => null,
 		env: Setting.value('env'),
 	};

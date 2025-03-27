@@ -39,12 +39,13 @@ router.get('login', async (_path: SubPath, ctx: AppContext) => {
 	return makeView();
 });
 
+// Log in using external authentication.
 router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
-	if (ctx.joplin.owner) {
+	if (ctx.joplin.owner) { // Already logged-in
 		return redirect(ctx, homeUrl());
-	} else if (config().saml.enabled && path.id === 'sso-saml') {
+	} else if (config().saml.enabled && path.id === 'sso-saml') { // Server page, SAML
 		return await generateRedirectHtml('web-login');
-	} else if (config().saml.enabled && path.id === 'sso-saml-app') {
+	} else if (config().saml.enabled && path.id === 'sso-saml-app') { // Client, SAML
 		return await generateRedirectHtml('app-login');
 	} else {
 		return makeView();

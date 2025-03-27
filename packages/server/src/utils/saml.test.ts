@@ -3,6 +3,7 @@ import { createTempDir } from '@joplin/lib/testing/test-utils';
 import config from '../config';
 import { getLoginRequest } from './saml';
 import { afterAllTests, beforeAllDb, beforeEachDb } from './testing/testUtils';
+import { SamlRelayState } from './types';
 
 describe('getLoginRequest', () => {
 	let dir: string;
@@ -80,11 +81,7 @@ describe('getLoginRequest', () => {
 		await beforeEachDb();
 	});
 
-	it.each([
-		null,
-		'web-login',
-		'app-login',
-	])('should create a login request with the relay state: %', async (relayState) => {
+	it.each([null, 'web-login', 'app-login'] as SamlRelayState[])('should create a login request with the relay state: %', async (relayState) => {
 		const loginRequest = await getLoginRequest(relayState);
 
 		expect(loginRequest.entityEndpoint).toBe('http://localhost:7000/saml/sso');

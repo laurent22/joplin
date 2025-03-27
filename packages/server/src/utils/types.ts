@@ -211,12 +211,8 @@ export interface CommandContext {
 	models: Models;
 }
 
-export interface LoginFlow {
-	type: 'builtin' | 'sso-saml';
-	organizationName?: string;
-}
-
+export type SamlRelayState = 'web-login' | 'app-login' | null;
 export interface SamlPostResponse {
 	SAMLResponse: string;
-	RelayState?: 'web-login' | 'app-login';
+	RelayState?: SamlRelayState;
 }

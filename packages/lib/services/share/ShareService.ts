@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import JoplinServerApi, { AuthType } from '../../JoplinServerApi';
+import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
 import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
@@ -83,18 +83,6 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
-			type: () => {
-				switch (syncTargetId) {
-				case 11: {
-					return AuthType.Saml;
-				}
-
-				default:
-				case 9: {
-					return AuthType.Builtin;
-				}
-				}
-			},
 			session: () => {
 				if (syncTargetId === 11) {
 					return {

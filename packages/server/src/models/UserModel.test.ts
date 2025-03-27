@@ -463,44 +463,4 @@ describe('UserModel', () => {
 
 		expect(await models().user().login(user.email, '123456')).toBe(null);
 	});
-
-	test('should return only built-in login flow if SAML support is disabled', () => {
-		config().saml.enabled = false;
-		config().disableBuiltinLoginFlow = false;
-
-		const flows = models().user().getAllowedLoginFlows();
-
-		expect(flows.length).toBe(1);
-		expect(flows[0]).toMatchObject({ type: 'builtin' });
-	});
-
-	test('should return only the SAML login flow if the built-in login flow is disabled', () => {
-		config().saml.enabled = true;
-		config().disableBuiltinLoginFlow = true;
-
-		const flows = models().user().getAllowedLoginFlows();
-
-		expect(flows.length).toBe(1);
-		expect(flows[0]).toMatchObject({ type: 'sso-saml' });
-	});
-
-	test('should return both built-in and SAML login flows if both are enabled', () => {
-		config().saml.enabled = true;
-		config().disableBuiltinLoginFlow = false;
-
-		const flows = models().user().getAllowedLoginFlows();
-
-		expect(flows.length).toBe(2);
-		expect(flows.find(f => f.type === 'builtin')).toMatchObject({ type: 'builtin' });
-		expect(flows.find(f => f.type === 'sso-saml')).toMatchObject({ type: 'sso-saml' });
-	});
-
-	test('should return no login flow if they are both disabled', () => {
-		config().saml.enabled = false;
-		config().disableBuiltinLoginFlow = true;
-
-		const flows = models().user().getAllowedLoginFlows();
-
-		expect(flows.length).toBe(0);
-	});
 });

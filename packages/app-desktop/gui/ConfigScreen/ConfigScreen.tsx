@@ -264,6 +264,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					const server = settings['sync.11.path'] as string;
 
 					const goToSamlLogin = async () => {
+						// 'sso-saml-app' indicates to Joplin Server that it should redirect the user to the app after authentication
 						await shell.openExternal(`${httpPrefix(server)}/login/sso-saml-app`);
 					};
 

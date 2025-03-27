@@ -27,7 +27,7 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
-import { Config, Env, LdapConfig, LoginFlow, SamlConfig } from '../utils/types';
+import { Config, Env, LdapConfig } from '../utils/types';
 import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
@@ -117,14 +117,12 @@ export function accountTypeToString(accountType: AccountType): string {
 export default class UserModel extends BaseModel<User> {
 
 	private ldapConfig_: LdapConfig[];
-	private samlConfig_: SamlConfig;
 	private disableBuiltinLoginFlow_: boolean;
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
 
 		this.ldapConfig_ = config.ldap;
-		this.samlConfig_ = config.saml;
 		this.disableBuiltinLoginFlow_ = config.disableBuiltinLoginFlow;
 	}
 
@@ -163,20 +161,24 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async samlLogin(samlAttributes: any) {
-		const email: string = samlAttributes['email'];
-
+	// Log-in an user that successfully authenticated through a SSO solution.
+	//
+	// If the user doesn't currently exist, this also creates it.
+	//
+	// @param email The email included in the SSO response.
+	// @param displayName The display name to use, if the user needs to be created.
+	// @returns The user that matches the SSO response.
+	public async ssoLogin(email: string, displayName: string) {
 		if (!email) {
 			return null;
 		}
 
 		let user = await this.loadByEmail(email);
 
-		if (!user) {
+		if (!user) { // User does not exist
 			user = {
 				email: email,
-				full_name: samlAttributes['displayName'],
+				full_name: displayName,
 				must_set_password: 0,
 				email_confirmed: 1,
 				is_external: 1,
@@ -226,7 +228,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		if (action === AclAction.Update) {
-			if (user.is_external) {
+			if (user.is_external) { // Modifying users directly from Joplin may cause them to be out of sync with the data we got from the Identity Provider
 				throw new ErrorForbidden('users imported from an external source (such as SAML) cannot be modified');
 			}
 
@@ -744,24 +746,5 @@ export default class UserModel extends BaseModel<User> {
 				await this.save(user, options);
 			}
 		}, 'UserModel::saveMulti');
-	}
-
-	public getAllowedLoginFlows() {
-		const flows = [] as LoginFlow[];
-
-		if (this.samlConfig_.enabled) {
-			flows.push({
-				type: 'sso-saml',
-				organizationName: this.samlConfig_.organizationDisplayName ? this.samlConfig_.organizationDisplayName : undefined,
-			});
-		}
-
-		if (!this.disableBuiltinLoginFlow_) {
-			flows.push({
-				type: 'builtin',
-			});
-		}
-
-		return flows;
 	}
 }

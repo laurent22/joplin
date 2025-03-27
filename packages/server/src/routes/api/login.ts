@@ -13,15 +13,14 @@ export const router = new Router(RouteType.Api);
 
 router.public = true;
 
+// Set an error message saying that SAML is disabled.
+// @param ctx The AppContext.
 function samlNotAvailable(ctx: AppContext) {
 	ctx.status = 403;
 	ctx.body = { error: 'This server does not accept SAML authentication.' };
 }
 
-router.get('api/login_flows', async (_path: SubPath, ctx: AppContext) => {
-	return ctx.joplin.models.user().getAllowedLoginFlows();
-});
-
+// Redirect the user to the IdP login page, if they somehow get to this URL directly.
 router.get('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	if (config().saml.enabled) {
 		return await generateRedirectHtml();
@@ -30,13 +29,16 @@ router.get('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	}
 });
 
+// Called when a user successfully authenticated with the IdP, and was redirected to Joplin.
 router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	if (config().saml.enabled) {
+		// Load SAML configuration
 		const [sp, idp] = await Promise.all([
 			serviceProvider(),
 			identityProvider(),
 		]);
 
+		// Parse the login response
 		const fields = await bodyFields<SamlPostResponse>(ctx.req);
 
 		let result: FlowResult;
@@ -47,22 +49,29 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 			throw new InternalServerError('Failed to parse the SAML response! Please check server configuration.', { details: { originalError: error } });
 		}
 
-		const user = await ctx.joplin.models.user().samlLogin(result.extract.attributes);
+		// Extract attributes from the SAML response
+		const email = result.extract.attributes['email'];
+		const displayName = result.extract.attributes['displayName'];
 
-		if (!user) {
-			throw new InternalServerError('Failed to fetch an user account from the SAML response! Please check server configuration.', { details: result.extract });
+		// Validate the attributes
+		if (typeof email !== 'string' || email === '' || typeof displayName !== 'string' || displayName === '') {
+			throw new InternalServerError('Invalid SAML response. Either the email or the display name is invalid.');
 		}
 
+		// Load the user
+		const user = await ctx.joplin.models.user().ssoLogin(email, displayName);
+
+		// Create a new session
 		const session = await ctx.joplin.models.session().createUserSession(user.id);
 
 		if (fields.RelayState) {
 			switch (fields.RelayState) {
-			case 'web-login': {
+			case 'web-login': { // If the user wanted to load a page from Joplin Server, we set the cookie for this session
 				cookieSet(ctx, 'sessionId', session.id);
 				return redirect(ctx, `${config().baseUrl}/home`);
 			}
 
-			case 'app-login': {
+			case 'app-login': { // If the user came from a client, we load the redirect page.
 				const view = defaultView('samlAppRedirect', 'Login');
 				const redirectUrl = `joplin://x-callback-url/samlLogin?id=${session.id}&user_id=${session.user_id}`;
 
@@ -74,7 +83,7 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 				return view;
 			}
 			}
-		} else {
+		} else { // Otherwise, just return the tokens as a JSON object
 			return { id: session.id, user_id: session.user_id };
 		}
 	} else {

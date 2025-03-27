@@ -48,7 +48,7 @@ import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
 const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
-import JoplinServerApi, { AuthType, Session } from '../JoplinServerApi';
+import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
@@ -698,7 +698,6 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
-			type: () => AuthType.Builtin,
 			session: (): Session => null,
 		});
 

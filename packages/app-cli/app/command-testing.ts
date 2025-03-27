@@ -4,7 +4,7 @@ import Note from '@joplin/lib/models/Note';
 import uuid from '@joplin/lib/uuid';
 import populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
-import JoplinServerApi, { AuthType, Session } from '@joplin/lib/JoplinServerApi';
+import JoplinServerApi, { Session } from '@joplin/lib/JoplinServerApi';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function randomElement(array: any[]): any {
@@ -107,7 +107,6 @@ class Command extends BaseCommand {
 				userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 				username: () => joplinServerAuth.email,
 				password: () => joplinServerAuth.password,
-				type: () => AuthType.Builtin,
 				session: (): Session => null,
 			});
 

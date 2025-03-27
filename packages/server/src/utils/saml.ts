@@ -4,14 +4,21 @@ import { readFile } from 'fs-extra';
 import config from '../config';
 import { PostBindingContext } from 'samlify/types/src/entity';
 import { _ } from '@joplin/lib/locale';
+import { SamlRelayState } from './types';
 
+// Checks if SAML support is enabled.
+//
+// Throws an error otherwise.
 function checkIfSamlIsEnabled() {
 	if (!config().saml.enabled) {
 		throw new Error('SAML support is disabled for this server.');
 	}
 }
 
-export async function serviceProvider(relayState: string = null) {
+// Load configuration for the Service Provider.
+// @param relayState The relay state to use for any subsequent login requests.
+// @returns A ServiceProvider object.
+export async function serviceProvider(relayState: SamlRelayState = null) {
 	checkIfSamlIsEnabled();
 
 	return ServiceProvider({
@@ -20,6 +27,8 @@ export async function serviceProvider(relayState: string = null) {
 	});
 }
 
+// Load configuration for the Identity Provider.
+// @returns An IdentityProvider object.
 export async function identityProvider() {
 	checkIfSamlIsEnabled();
 
@@ -28,11 +37,17 @@ export async function identityProvider() {
 	});
 }
 
+// Set up SAML authentication.
+//
+// Should be called once when the server is starting.
 export function setupSamlAuthentication() {
 	setSchemaValidator(validator);
 }
 
-export async function getLoginRequest(relayState: string = null) {
+// Create a new login request.
+// @param relayState The relay state to use.
+// @returns A login request, with the proper attributes (such as the proper URL to the IdP).
+export async function getLoginRequest(relayState: SamlRelayState = null) {
 	const [sp, idp] = await Promise.all([
 		serviceProvider(relayState),
 		identityProvider(),
@@ -41,7 +56,12 @@ export async function getLoginRequest(relayState: string = null) {
 	return sp.createLoginRequest(idp, 'post') as PostBindingContext;
 }
 
-export async function generateRedirectHtml(relayState: string = null) {
+// Generate an HTML document that redirects the user to the Identity Provider's login page.
+//
+// This does not rely on the usual templates since the redirect should be fast, and shouldn't contain too much HTML code.
+// @param relayState The relay state to use.
+// @returns Plain HTML that redirect the browser to the IdP.
+export async function generateRedirectHtml(relayState: SamlRelayState = null) {
 	const loginRequest = await getLoginRequest(relayState);
 
 	return `<!DOCTYPE html>
