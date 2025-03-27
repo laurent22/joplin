@@ -116,7 +116,10 @@ test.describe('main', () => {
 		await editor.attachFileButton.click();
 
 		const viewerFrame = editor.getNoteViewerFrameLocator();
-		const renderedImage = viewerFrame.getByAltText(filename);
+		const renderedImage = viewerFrame
+			.getByAltText(filename)
+			// Work around occasional "resolved to 2 elements" errors in CI
+			.last();
 
 		const fullSize = await getImageSourceSize(renderedImage);
 

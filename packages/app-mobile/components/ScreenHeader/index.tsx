@@ -502,15 +502,15 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
+					themeId={themeId}
 
-					accessibilityLabel={_('Sort notes by')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="filter-outline" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					description={_('Sort notes by')}
+					iconName='ionicon filter-outline'
+					contentWrapperStyle={styles.iconButton}
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 

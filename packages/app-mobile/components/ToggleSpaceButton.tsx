@@ -12,7 +12,7 @@ import { themeStyle } from '@joplin/lib/theme';
 
 import * as React from 'react';
 import { ReactNode, useCallback, useState, useEffect } from 'react';
-import { Platform, View, ViewStyle } from 'react-native';
+import { Platform, useWindowDimensions, View, ViewStyle } from 'react-native';
 import IconButton from './IconButton';
 import useKeyboardVisible from '../utils/hooks/useKeyboardVisible';
 
@@ -77,7 +77,9 @@ const ToggleSpaceButton = (props: Props) => {
 	);
 
 	const { keyboardVisible } = useKeyboardVisible();
-	const spaceApplicable = keyboardVisible && Platform.OS === 'ios';
+	const windowSize = useWindowDimensions();
+	const isPortrait = windowSize.height > windowSize.width;
+	const spaceApplicable = keyboardVisible && Platform.OS === 'ios' && isPortrait;
 
 	const style: ViewStyle = {
 		marginBottom: spaceApplicable ? additionalSpace : 0,

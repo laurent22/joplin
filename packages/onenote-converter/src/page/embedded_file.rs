@@ -22,9 +22,10 @@ impl<'a> Renderer<'a> {
         let file_type = Self::guess_type(file);
 
         match file_type {
-            FileType::Audio => content = format!("<audio controls src=\"{}\"></audio>", filename),
+            // TODO: we still don't have support for the audio tag on html notes https://github.com/laurent22/joplin/issues/11939
+            // FileType::Audio => content = format!("<audio class=\"media-player media-audio\"controls><source src=\"{}\" type=\"audio/x-wav\"></source></audio>", filename),
             FileType::Video => content = format!("<video controls src=\"{}\"></video>", filename),
-            FileType::Unknown => {
+            FileType::Unknown | FileType::Audio => {
                 content = format!(
                     "<p style=\"font-size: 11pt; line-height: 17px;\"><a href=\"{}\">{}</a></p>",
                     filename, filename
@@ -70,18 +71,16 @@ impl<'a> Renderer<'a> {
             let path = PathBuf::from(filename);
             let ext = path
                 .extension()
-                .wrap_err("Embedded file has no extension")?
-                .to_str()
-                .wrap_err("Embedded file name is non utf-8")?;
+                .unwrap_or_default();
             let base = path
                 .as_os_str()
                 .to_str()
                 .wrap_err("Embedded file name is non utf-8")?
-                .strip_suffix(ext)
+                .strip_suffix(ext.to_string_lossy().as_ref())
                 .wrap_err("Failed to strip extension from file name")?
                 .trim_matches('.');
 
-            current_filename = format!("{}-{}.{}", base, i, ext);
+            current_filename = format!("{}-{}.{}", base, i, ext.to_string_lossy());
 
             i += 1;
         }

@@ -5170,13 +5170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.10":
-  version: 3.0.10
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.10"
+"@bam.tech/react-native-image-resizer@npm:3.0.11":
+  version: 3.0.11
+  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.11"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 34cb129d421939ae2937f876986088a5ff25480a008f17c17651bae16e8a4a87882f0803137221d3e28423f343e77008cfb10062bf171db1bc230678b57d865e
+  checksum: 0d9e95c625f8ef3a5d7195721d8ac6463a08468c9474f2627a1a85cefa509efc06bd160bd9108d1cce1fa05751a4b69871dce975659571009149d258cf9ddd8b
   languageName: node
   linkType: hard
 
@@ -8299,12 +8299,12 @@ __metadata:
     "@joplin/renderer": ~3.3
     "@joplin/tools": ~3.3
     "@joplin/utils": ~3.3
-    "@playwright/test": 1.45.3
+    "@playwright/test": 1.51.1
     "@sentry/electron": 4.24.0
     "@testing-library/react-hooks": 8.0.1
     "@types/jest": 29.5.12
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-dom": 18.3.0
     "@types/react-redux": 7.1.33
@@ -8317,7 +8317,7 @@ __metadata:
     compare-versions: 6.1.1
     countable: 3.0.1
     debounce: 1.2.1
-    electron: 34.0.0
+    electron: 35.0.1
     electron-builder: 24.13.3
     electron-updater: 6.2.1
     electron-window-state: 5.0.3
@@ -8374,7 +8374,7 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": 7.24.7
     "@babel/preset-env": 7.24.7
     "@babel/runtime": 7.24.7
-    "@bam.tech/react-native-image-resizer": 3.0.10
+    "@bam.tech/react-native-image-resizer": 3.0.11
     "@joplin/editor": ~3.3
     "@joplin/lib": ~3.3
     "@joplin/react-native-alarm-notification": ~3.3
@@ -8398,7 +8398,7 @@ __metadata:
     "@tsconfig/react-native": 2.0.2
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/react": 18.3.3
     "@types/react-native": 0.70.6
     "@types/react-redux": 7.1.33
@@ -8416,6 +8416,7 @@ __metadata:
     deprecated-react-native-prop-types: 5.0.0
     events: 3.3.0
     expo: 51.0.26
+    expo-av: 14.0.7
     expo-camera: 15.0.16
     fast-deep-equal: 3.1.3
     fs-extra: 11.2.0
@@ -8445,7 +8446,7 @@ __metadata:
     react-native-image-picker: 7.1.1
     react-native-localize: 3.2.1
     react-native-modal-datetime-picker: 17.1.0
-    react-native-paper: 5.12.5
+    react-native-paper: 5.13.1
     react-native-popup-menu: 0.16.1
     react-native-quick-actions: 0.3.13
     react-native-quick-crypto: 0.7.5
@@ -8559,7 +8560,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@typescript-eslint/eslint-plugin": 6.21.0
     "@typescript-eslint/parser": 6.21.0
     coveralls: 3.1.1
@@ -8624,7 +8625,7 @@ __metadata:
     "@joplin/turndown-plugin-gfm": ^1.0.61
     "@joplin/utils": ~3.3
     "@testing-library/react-hooks": 8.0.1
-    "@types/adm-zip": 0.5.6
+    "@types/adm-zip": 0.5.7
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
     "@types/js-yaml": 4.0.9
@@ -8632,7 +8633,7 @@ __metadata:
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
     "@types/nanoid": 3.0.0
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-rsa": 1.1.4
     "@types/react": 18.3.3
     "@types/uuid": 9.0.7
@@ -8748,7 +8749,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     fs-extra: 11.2.0
     gh-release-assets: 2.0.1
     jest: 29.7.0
@@ -8803,7 +8804,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/jest": 29.5.12
     "@types/markdown-it": 13.0.9
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     font-awesome-filetypes: 2.1.0
     fs-extra: 11.2.0
     highlight.js: 11.10.0
@@ -8861,7 +8862,6 @@ __metadata:
     "@types/zxcvbn": 4.4.5
     bcryptjs: 2.4.3
     bulma: 1.0.2
-    bulma-prefers-dark: 0.1.0-beta.1
     compare-versions: 6.1.1
     dayjs: 1.11.12
     formidable: 2.1.2
@@ -8915,7 +8915,7 @@ __metadata:
     "@types/js-yaml": 4.0.9
     "@types/markdown-it": 13.0.9
     "@types/mustache": 4.2.5
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/node-fetch": 2.6.12
     "@types/yargs": 17.0.33
     compare-versions: 6.1.1
@@ -9014,7 +9014,9 @@ __metadata:
     moment: 2.30.1
     node-fetch: 2.6.7
     sprintf-js: 1.1.3
+    tcp-port-used: 1.0.2
     ts-jest: 29.1.5
+    typescript: 5.4.5
   languageName: unknown
   linkType: soft
 
@@ -10695,14 +10697,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.45.3":
-  version: 1.45.3
-  resolution: "@playwright/test@npm:1.45.3"
+"@playwright/test@npm:1.51.1":
+  version: 1.51.1
+  resolution: "@playwright/test@npm:1.51.1"
   dependencies:
-    playwright: 1.45.3
+    playwright: 1.51.1
   bin:
     playwright: cli.js
-  checksum: 3e2c88d40f98cf94ab7947263804d1ee78c4bb21a35c8dbb64855eed5565ffc688509c5f07bda5438cba6c354374981448dcba3dbe326d1699b4fef75c9ce43d
+  checksum: c3c14f37451cc0323234e37fa559a075e5aee9f5e6ca06fa3b4a132ec6c809909b22877daca1fa48c95a1112d859346c10111e7003f44582a05100dd5385bbef
   languageName: node
   linkType: hard
 
@@ -12630,12 +12632,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/adm-zip@npm:0.5.6":
-  version: 0.5.6
-  resolution: "@types/adm-zip@npm:0.5.6"
+"@types/adm-zip@npm:0.5.7":
+  version: 0.5.7
+  resolution: "@types/adm-zip@npm:0.5.7"
   dependencies:
     "@types/node": "*"
-  checksum: f4ff999cef5030dfea1252727f94647a63eee7438844c7a477b3859dd2971cce3542123ebaafa507ad4304a4a4f0f8553b7034d6ea8132c941c54ccba76bac65
+  checksum: 57fe73622e38234bc76786354237e8545eefa05d55e34aa3c7c51b33588bb9e80787f163fdb4fa3afc2c123cfd17e1619e37f6be57cde2e58b7949f30a8b093c
   languageName: node
   linkType: hard
 
@@ -13627,12 +13629,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.64":
-  version: 18.19.64
-  resolution: "@types/node@npm:18.19.64"
+"@types/node@npm:18.19.67":
+  version: 18.19.67
+  resolution: "@types/node@npm:18.19.67"
   dependencies:
     undici-types: ~5.26.4
-  checksum: e7680215b03c9bee8a33947f03d06048e8e460f23b1b7b29c45350cf437faa5f8fcb7d8c3eb8dfec8427923e7a184df42bc710c1b6252b4852e3ed7064c6228f
+  checksum: 700f92c6a0b63352ce6327286392adab30bb17623c2a788811e9cf092c4dc2fb5e36ca4727247a981b3f44185fdceef20950a3b7a8ab72721e514ac037022a08
   languageName: node
   linkType: hard
 
@@ -13652,12 +13654,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.9.0":
-  version: 20.11.26
-  resolution: "@types/node@npm:20.11.26"
+"@types/node@npm:^22.7.7":
+  version: 22.13.10
+  resolution: "@types/node@npm:22.13.10"
   dependencies:
-    undici-types: ~5.26.4
-  checksum: 2cd5a373d2880b7f07ae65d4d23660cdcabddb12772ce631b6caad2f9283350b8a17c802590f67f0ccec5a9c7d43ae0ecd9637c5ad870b8f793328af8c61eae5
+    undici-types: ~6.20.0
+  checksum: 1cd6b899df728732c60c0defad63e26ca18d87a3b81bd75666fe9aed6cdf9e488433976b22ffcabfdeef9d351cf8ff94853b0686e6708ef62065482ccf5b0a6e
   languageName: node
   linkType: hard
 
@@ -18104,13 +18106,6 @@ __metadata:
   dependencies:
     semver: ^7.0.0
   checksum: 66d204657fe36522822a95b288943ad11b58f5eaede235b11d8c4edaa28ce4800087d44a2681524c340494aadb120a0068011acabe99d30e8f11a7d826d83515
-  languageName: node
-  linkType: hard
-
-"bulma-prefers-dark@npm:0.1.0-beta.1":
-  version: 0.1.0-beta.1
-  resolution: "bulma-prefers-dark@npm:0.1.0-beta.1"
-  checksum: 26a88776a97ed0b57307a1aee60380a1b484ebd27d101c9995b5d220ff79fe909b060577c42c674c2863c52d4de85396c6f36031b3f7828386e21c1eda1e4445
   languageName: node
   linkType: hard
 
@@ -23020,16 +23015,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:34.0.0":
-  version: 34.0.0
-  resolution: "electron@npm:34.0.0"
+"electron@npm:35.0.1":
+  version: 35.0.1
+  resolution: "electron@npm:35.0.1"
   dependencies:
     "@electron/get": ^2.0.0
-    "@types/node": ^20.9.0
+    "@types/node": ^22.7.7
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 0ee9a4bb3444cf13f8d0eeef928f9d8feee33d919c414672d794d6332d81fe3740c781060eba5374417742dd9f8159da2050c0fc14fac64d143be8ccb53e280c
+  checksum: 633bc35206e86f5166a4cefffc20bc2e7866eebdab50f78f1225ebbdd4219f50ce4a62f35d82982b26ab68a2c92e991437cf30379fc8147a59f33072b3ef873a
   languageName: node
   linkType: hard
 
@@ -24727,6 +24722,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: abf6afee29db1df356008b2260ecfd37eafdeeda989deeaf546d6c6857f82f71efe6d2f6e348d5bf0f077325f9ce2c8dad006ad5d8d2df35cdd9bf3dc15e714a
+  languageName: node
+  linkType: hard
+
+"expo-av@npm:14.0.7":
+  version: 14.0.7
+  resolution: "expo-av@npm:14.0.7"
+  peerDependencies:
+    expo: "*"
+  checksum: 7518a8972b0d1b3b362d4dc9c4d21a39c7cf98b46abbdbb2349451115f4edf6e97fb6c723674fd3c62fa037fc77e00172955082d21b1c3fdf5273f33781ce78d
   languageName: node
   linkType: hard
 
@@ -31104,7 +31108,7 @@ __metadata:
     "@joplin/utils": ~3.3
     "@types/fs-extra": 11.0.4
     "@types/jest": 29.5.12
-    "@types/node": 18.19.64
+    "@types/node": 18.19.67
     "@types/proper-lockfile": ^4.1.2
     aws-sdk: 2.1340.0
     chalk: 4.1.2
@@ -38018,27 +38022,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.45.3":
-  version: 1.45.3
-  resolution: "playwright-core@npm:1.45.3"
+"playwright-core@npm:1.51.1":
+  version: 1.51.1
+  resolution: "playwright-core@npm:1.51.1"
   bin:
     playwright-core: cli.js
-  checksum: cecb58877b2c643403d7a72c24a7aa0fdd087a3c7f9a5ea5403851336ea831d8e304b1f159aacbbabd12e5c47eaac054333746c9e5431ec07b13d64dbf3b50ec
+  checksum: 1eb37e22e97435a5ed6389b4caa666fbe618348861cae97e67586e20c8fed9ac3d3dc899ff3b9237d0ddfcf087d5b552b80be247e246fc45b75282f96be714bb
   languageName: node
   linkType: hard
 
-"playwright@npm:1.45.3":
-  version: 1.45.3
-  resolution: "playwright@npm:1.45.3"
+"playwright@npm:1.51.1":
+  version: 1.51.1
+  resolution: "playwright@npm:1.51.1"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.45.3
+    playwright-core: 1.51.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: d9d23b155ccd001553214f710561b01e48eb409676102f8ab94c0b4aa5ac5f398becc1a96528b0554944e07e34189503d891913e0e0a4aa58ad36b9c08747983
+  checksum: 2d78f53eed438d26df9743f98227d2e33bb5a378c8d0144a4ed75b4010c9c517d5a6ee6c1c9245ad61dc615054c5e19d2ded5a6e285e35d2bca39b05bc9c4a35
   languageName: node
   linkType: hard
 
@@ -40001,9 +40005,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.12.5":
-  version: 5.12.5
-  resolution: "react-native-paper@npm:5.12.5"
+"react-native-paper@npm:5.13.1":
+  version: 5.13.1
+  resolution: "react-native-paper@npm:5.13.1"
   dependencies:
     "@callstack/react-theme-provider": ^3.0.9
     color: ^3.1.2
@@ -40013,7 +40017,23 @@ __metadata:
     react-native: "*"
     react-native-safe-area-context: "*"
     react-native-vector-icons: "*"
-  checksum: 35ce56e0bb19c46ce85adc47a504527b7ec455d1a15f3ace0d6fd438abd51b1fe30e1b44351950e16d6376ddbc18ecc94b558e267767d0a9fd886a5f66a4c322
+  checksum: ef16fbb57986f09f2080e98ddb7977c494d6accb36767101de32199849bba8764e2bcd528a5d1c08940f4430cb86dabb6baaf5b33a539670221cbbfcc01f2d5e
+  languageName: node
+  linkType: hard
+
+"react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::locator=root%40workspace%3A.":
+  version: 5.13.1
+  resolution: "react-native-paper@patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch::version=5.13.1&hash=3fecbb&locator=root%40workspace%3A."
+  dependencies:
+    "@callstack/react-theme-provider": ^3.0.9
+    color: ^3.1.2
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: "*"
+    react-native-vector-icons: "*"
+  checksum: 381a35e3b26a177e2299fd0ce597e5b7bd0626276dc0116cc3eb1e0217634977c2f957c1985bb5938b1c88b4f1566273fa494c8a6bb6eb2a05c18f9a963e2743
   languageName: node
   linkType: hard
 
@@ -40021,6 +40041,13 @@ __metadata:
   version: 0.16.1
   resolution: "react-native-popup-menu@npm:0.16.1"
   checksum: 4a4cfdfdcd7ee0a2515dbd4fa427dd38af89121e375ea452a470091456ecb8fc35fd24d6a79936703ebc4a84905352e8df0de24d58b036f56d2a9ba61449a7d5
+  languageName: node
+  linkType: hard
+
+"react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.16.1#./.yarn/patches/react-native-popup-menu-npm-0.16.1-28fd66ecb5.patch::locator=root%40workspace%3A.":
+  version: 0.16.1
+  resolution: "react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.16.1#./.yarn/patches/react-native-popup-menu-npm-0.16.1-28fd66ecb5.patch::version=0.16.1&hash=42fb35&locator=root%40workspace%3A."
+  checksum: 50d91792b3f8cc2584ac22c537eebb8cf771ad1241843dd403395361f8465edb3628c5751671ad55c832a3a217a711dca72497b0bc34b21a3ce37ce1bd720d52
   languageName: node
   linkType: hard
 
@@ -47212,6 +47239,13 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: b7bc50f012dc6afbcce56c9fd62d7e86b20a62ff21f12b7b5cbf1973b9578d90f22a9c7fe50e638e96905d33893bf2f9f16d98929c4673c2480de05c6c96ea8b
   languageName: node
   linkType: hard
 

@@ -60,14 +60,12 @@ export default function(editor: any) {
 		});
 	}
 
-	const items: string[] = definitions.filter(d => !!d.grouped).map(d => d.name);
-
-	// Additional built-in buttons to show in the formatting sub-menu:
-	items.push('forecolor');
-
-	editor.ui.registry.addGroupToolbarButton('formattingExtras', {
-		icon: 'image-options',
-		tooltip: _('Formatting'),
-		items: items.join(' '),
-	});
+	// Old code to format a group of buttons into a dropdown
+	// const items: string[] = definitions.filter(d => !!d.grouped).map(d => d.name);
+	// items.push('forecolor');
+	// editor.ui.registry.addGroupToolbarButton('formattingExtras', {
+	// 	icon: 'image-options',
+	// 	tooltip: _('Formatting'),
+	// 	items: items.join(' '),
+	// });
 }

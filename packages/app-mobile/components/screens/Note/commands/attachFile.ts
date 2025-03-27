@@ -14,6 +14,7 @@ export enum AttachFileAction {
 	AttachFile = 'attachFile',
 	AttachPhoto = 'attachPhoto',
 	AttachDrawing = 'attachDrawing',
+	RecordAudio = 'attachRecording',
 }
 
 export interface AttachFileOptions {
@@ -68,6 +69,10 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 		}
 	};
 
+	const recordAudio = async () => {
+		props.setAudioRecorderVisible(true);
+	};
+
 	const showAttachMenu = async (action: AttachFileAction = null) => {
 		props.hideKeyboard();
 
@@ -83,6 +88,7 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 			//
 			// On Android, it will depend on the phone, but usually it will allow browsing all files and photos.
 			buttons.push({ text: _('Attach file'), id: AttachFileAction.AttachFile });
+			buttons.push({ text: _('Record audio'), id: AttachFileAction.RecordAudio });
 
 			// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
 			// because that's only way to browse photos from the camera roll.
@@ -102,6 +108,7 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 		if (buttonId === AttachFileAction.TakePhoto) await takePhoto();
 		if (buttonId === AttachFileAction.AttachFile) await attachFile();
 		if (buttonId === AttachFileAction.AttachPhoto) await attachPhoto();
+		if (buttonId === AttachFileAction.RecordAudio) await recordAudio();
 	};
 
 	return {

@@ -10,6 +10,7 @@ const commandsWithDependencies = [
 	require('../commands/showLocalSearch'),
 	require('../commands/focusElementNoteTitle'),
 	require('../commands/focusElementNoteBody'),
+	require('../commands/focusElementNoteViewer'),
 	require('../commands/focusElementToolbar'),
 	require('../commands/pasteAsText'),
 ];

@@ -23,6 +23,7 @@ interface Props {
 	draggable?: boolean;
 	'data-folder-id'?: string;
 	'data-id'?: string;
+	'data-tag-id'?: string;
 	'data-type'?: ModelType;
 }
 
@@ -40,8 +41,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			aria-setsize={props.itemCount}
 			aria-selected={props.selected}
 			aria-expanded={props.expanded}
-			// aria-level is 1-based, where depth is zero-based
-			aria-level={props.depth + 1}
+			aria-level={props.depth}
 			tabIndex={props.selected ? 0 : -1}
 
 			onContextMenu={props.onContextMenu}
@@ -56,6 +56,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			style={style}
 			data-folder-id={props['data-folder-id']}
 			data-id={props['data-id']}
+			data-tag-id={props['data-tag-id']}
 			data-type={props['data-type']}
 		>
 			{props.children}

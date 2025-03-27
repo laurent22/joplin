@@ -377,6 +377,53 @@
 			contentElement.scrollTop = scrollTop;
 		}
 
+		const getLineCorrespondingTo = (editorLineNumber) => {
+			const lineElements = document.getElementsByClassName('maps-to-line');
+			let lastLineElement;
+			let lastLine = 0;
+			for (const element of lineElements) {
+				// Stop just before the element that corresponds to a greater position
+				if (Number(element.getAttribute('source-line')) > editorLineNumber) {
+					break;
+				}
+				lastLineElement = element;
+			}
+			return lastLineElement;
+		};
+
+		const makeTemporarilyFocusable = (element) => {
+			const dataOriginalTabIndexAttr = 'data-original-tabindex';
+			const originalTabIndex = (
+				element.getAttribute(dataOriginalTabIndexAttr) ?? element.getAttribute('tabindex')
+			);
+			element.setAttribute(dataOriginalTabIndexAttr, originalTabIndex);
+			element.setAttribute('tabindex', '0');
+
+			return {
+				reset: () => {
+					element.setAttribute('tabindex', originalTabIndex);
+					element.removeAttribute(dataOriginalTabIndexAttr);
+				},
+			};
+		};
+
+		ipc.focusLine = (event) => {
+			const targetLine = event.line;
+			const lineElement = getLineCorrespondingTo(targetLine);
+			if (lineElement) {
+				// To allow focusing, the element needs to briefly have tabindex=0.
+				const { reset } = makeTemporarilyFocusable(lineElement);
+
+				lineElement.focus({ preventScroll: true });
+
+				// Reset the tabindex after the browser has had time to focus the element.
+				// When a screen reader is enabled, focus stays on the lineElement.
+				setTimeout(() => {
+					reset();
+				}, 50);
+			}
+		}
+
 		const rewriteFileUrls = (accessKey) => {
 			if (!accessKey) return;
 

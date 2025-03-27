@@ -617,6 +617,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
 			}
+
+			.tox .tox-tbtn,
+			.tox .tox-tbtn button,
+			.tox .tox-split-button,
+			.tox .tox-split-button button {
+				margin: 0 !important;
+			}
 		`));
 
 		return () => {
@@ -673,7 +680,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// we create small groups of just one button towards the end.
 
 			const toolbar = [
-				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', '|',
+				'joplinInsert', 'joplinSup', 'joplinSub', 'forecolor', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', '|',
@@ -1095,6 +1103,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			document.removeEventListener('drop', onDrop);
 			document.removeEventListener('dragend', onDragEnd);
 		};
+	}, [editor]);
+
+	useEffect(() => {
+		if (!editor) return;
+		// Meta+P is bound by default to print by TinyMCE. It can be unbound, but it seems necessary
+		// to do so after the editor loads. Meta+P should be able to trigger Joplin built-in shortcuts.
+		editor.shortcuts.remove('Meta+P');
 	}, [editor]);
 
 	// -----------------------------------------------------------------------------------------

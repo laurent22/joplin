@@ -33,6 +33,7 @@
 		"/packages/app-desktop/build/",
 		"/packages/app-desktop/utils/checkForUpdatesUtilsTestData.ts",
 		"/packages/app-desktop/vendor/",
+		"/packages/app-mobile/android/vendor/",
 		"/packages/app-mobile/ios/Pods/",
 		"/packages/app-mobile/lib/rnInjectedJs",
 		"/packages/app-mobile/pluginAssets",

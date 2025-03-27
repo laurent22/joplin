@@ -42,6 +42,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+S', command: 'toggleSideBar' },
 		{ accelerator: 'Option+Cmd+L', command: 'toggleNoteList' },
 		{ accelerator: 'Cmd+L', command: 'toggleVisiblePanes' },
+		{ accelerator: 'Option+Cmd+V', command: 'toggleEditorPlugin' },
 		{ accelerator: 'Cmd+0', command: 'zoomActualSize' },
 		{ accelerator: 'Cmd+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Option+Cmd+T', command: 'setTags' },
@@ -64,6 +65,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+Backspace', command: 'permanentlyDeleteNote' },
 		{ accelerator: 'Option+Cmd+N', command: 'openNoteInNewWindow' },
 		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
+		{ accelerator: 'Shift+Option+L', command: 'linkToNote' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -92,6 +94,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Shift+M', command: 'toggleMenuBar' },
 		{ accelerator: 'F11', command: 'toggleNoteList' },
 		{ accelerator: 'Ctrl+L', command: 'toggleVisiblePanes' },
+		{ accelerator: 'Alt+Ctrl+V', command: 'toggleEditorPlugin' },
 		{ accelerator: 'Ctrl+0', command: 'zoomActualSize' },
 		{ accelerator: 'Ctrl+E', command: 'toggleExternalEditing' },
 		{ accelerator: 'Ctrl+Alt+T', command: 'setTags' },
@@ -114,6 +117,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+3', command: 'switchProfile3' },
 		{ accelerator: 'Ctrl+Alt+N', command: 'openNoteInNewWindow' },
 		{ accelerator: 'Ctrl+M', command: 'toggleTabMovesFocus' },
+		{ accelerator: 'Shift+Alt+L', command: 'linkToNote' },
 	],
 };
 

@@ -106,6 +106,14 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			marginLeft: `${theme.marginLeft}px`,
 			marginRight: `${theme.marginRight}px`,
 		},
+
+		'& .cm-listItem': {
+			// Needs to be !important because the tab-size is directly set on the element style
+			// attribute by CodeMirror. And the `EditorState.tabSize` function only accepts a
+			// number, while we need a "em" value to make it match the viewer tab size.
+			tabSize: `${theme.listTabSize} !important`,
+		},
+
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
 		// The desktop app sets the font for these elements to a specific font.

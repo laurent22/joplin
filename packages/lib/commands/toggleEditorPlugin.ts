@@ -45,5 +45,7 @@ export const runtime = (): CommandRuntime => {
 				});
 			}
 		},
+
+		enabledCondition: 'hasActivePluginEditor',
 	};
 };
