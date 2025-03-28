@@ -26,7 +26,7 @@ const formatTesseractBoundingBox = (boundingBox: Tesseract.Bbox): RecognizeResul
 // Empirically, it seems anything below 70 is not usable. Between 70 and 75 it's
 // hit and miss, but often it's good enough that we should keep the result.
 // Above this is usually reliable.
-const minConfidence = 60;
+const minConfidence = 55;
 
 interface Options {
 	workerPath: string;
