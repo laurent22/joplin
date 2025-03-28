@@ -8,6 +8,7 @@ import bridge from '../services/bridge';
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 import { LoadOptions } from '@joplin/lib/models/utils/types';
+import * as fs from 'fs';
 
 interface Style {
 	width: number;
@@ -44,6 +45,7 @@ interface ResourceTable {
 	onResourceDelete: (resource: InnerResource)=> any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onToggleSorting: (order: SortingOrder)=> any;
+	setResourceSize: (id: string, newSize: number) => void;
 	filter: string;
 	themeId: number;
 	style: Style;
@@ -102,6 +104,26 @@ const ResourceTableComp = (props: ResourceTable) => {
 		);
 		return <th key={`header-${title}`} style={headerStyle}>{title} {reverseSortButton}</th>;
 	};
+	filteredResources.map(async (resource: InnerResource) => {
+		const resourcePath = Resource.fullPath(resource);
+		fs.watchFile(resourcePath, async (curr, prev) => {
+			if (curr.size !== prev.size) {
+				console.log(`Resource ${resource.id} modified. Updating size...`);
+				await Resource.save({
+					id: resource.id,
+					size: curr.size,
+				});
+				props.setResourceSize(resource.id, curr.size);
+			}
+		});
+		const stats = await fs.promises.stat(resourcePath);
+		if (resource.size !== stats.size) {
+			await Resource.save({
+				id: resource.id,
+				size: stats.size,
+			});
+		}
+	});
 
 	return (
 		<table style={{ width: '100%' }}>
@@ -324,6 +346,10 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 							onToggleSorting={(order) => this.onToggleSortOrder(order)}
 							onResourceClick={(resource) => this.openResource(resource)}
 							onResourceDelete={(resource) => this.onResourceDelete(resource)}
+							setResourceSize={(id, size) => {
+								const updated = this.state.resources!.map(r => r.id === id ? { ...r, size } : r);
+								this.setState({ resources: updated });
+							}}
 						/>}
 					</div>
 					}
