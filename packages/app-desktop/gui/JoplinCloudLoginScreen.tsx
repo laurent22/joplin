@@ -10,7 +10,7 @@ import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSu
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
-import JoplinCloudSignUpCallToAction from './JoplinCloudSingUpCallToAction';
+import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');

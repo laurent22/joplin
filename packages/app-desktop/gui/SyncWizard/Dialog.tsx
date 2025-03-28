@@ -10,7 +10,7 @@ import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
-import JoplinCloudSignUpCallToAction from '../JoplinCloudSingUpCallToAction';
+import JoplinCloudSignUpCallToAction from '../JoplinCloudSignUpCallToAction';
 
 interface Props {
 	themeId: number;
@@ -211,7 +211,7 @@ export default function(props: Props) {
 		);
 	}
 
-	function renderSingUpArea(info: SyncTargetInfo) {
+	function renderSignUpArea(info: SyncTargetInfo) {
 		if (info.name !== 'joplinCloud') return null;
 		return <JoplinCloudSignUpCallToAction/>;
 	}
@@ -244,7 +244,7 @@ export default function(props: Props) {
 				{descriptionComp}
 				{featuresComp}
 				{renderSelectArea(info, headerId)}
-				{renderSingUpArea(info)}
+				{renderSignUpArea(info)}
 				{renderSlowSyncWarning()}
 			</SyncTargetBox>
 		);
