@@ -45,7 +45,7 @@ fi
 
 if [ "$RUNNER_ARCH" == "ARM64" ]; then
 	# Canvas is only needed for tests and it doesn't build in ARM64 so remove it
-	RUN_TEST=0
+	RUN_TESTS=0
 	cd "$ROOT_DIR/packages/lib"
 	yarn remove canvas
 fi
