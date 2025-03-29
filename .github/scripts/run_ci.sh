@@ -43,12 +43,21 @@ if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
 	RUN_TESTS=1
 fi
 
+if [ "$RUNNER_ARCH" == "ARM64" && [ "$IS_SERVER_RELEASE" == "0" ]; then
+	# We exit now because nothing works properly with the ARM64 architecture.
+	# We only proceed  if building the server image.
+	echo "Running on ARM64 and not trying to build server image - early exit"
+	exit 0
+fi
+
 if [ "$RUNNER_ARCH" == "ARM64" ]; then
 	# Canvas is only needed for tests and it doesn't build in ARM64 so remove it
 	RUN_TESTS=0
 	cd "$ROOT_DIR/packages/lib"
 	yarn remove canvas
 	cd "$ROOT_DIR"
+
+	# Delete certain directories because `yarn install` will fail on ARM64.
 	rm -rf app-desktop
 	rm -rf app-mobile
 fi
