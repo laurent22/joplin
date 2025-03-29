@@ -48,6 +48,9 @@ if [ "$RUNNER_ARCH" == "ARM64" ]; then
 	RUN_TESTS=0
 	cd "$ROOT_DIR/packages/lib"
 	yarn remove canvas
+	cd "$ROOT_DIR"
+	rm -rf app-desktop
+	rm -rf app-mobile
 fi
 
 # =============================================================================
