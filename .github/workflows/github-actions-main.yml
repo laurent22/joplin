@@ -91,7 +91,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, ubuntu-22.04-arm]
     steps:
 
       - name: Install Docker Engine
@@ -124,6 +124,7 @@ jobs:
         env:
           BUILD_SEQUENCIAL: 1
         run: |
+          echo "RUNNER_OS=$RUNNER_OS"
           yarn install
           yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
 
