@@ -43,7 +43,7 @@ if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
 	RUN_TESTS=1
 fi
 
-if [ "$RUNNER_ARCH" == "ARM64" && [ "$IS_SERVER_RELEASE" == "0" ]; then
+if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_SERVER_RELEASE" == "0" ]; then
 	# We exit now because nothing works properly with the ARM64 architecture.
 	# We only proceed  if building the server image.
 	echo "Running on ARM64 and not trying to build server image - early exit"
