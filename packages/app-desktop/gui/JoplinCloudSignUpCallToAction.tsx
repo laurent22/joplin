@@ -4,7 +4,7 @@ import bridge from '../services/bridge';
 
 const JoplinCloudSignUpCallToAction = () => {
 
-	const onJoplinCloudSingUpClick = async () => {
+	const onJoplinCloudSignUpClick = async () => {
 		await bridge().openExternal('https://joplinapp.org/plans/');
 	};
 
@@ -12,7 +12,7 @@ const JoplinCloudSignUpCallToAction = () => {
 		<p>{_('Don\'t have a Joplin Cloud account? ')}
 			<a
 				href="#"
-				onClick={onJoplinCloudSingUpClick}
+				onClick={onJoplinCloudSignUpClick}
 			>{_('Sign-up here')}</a>
 		</p>
 	</div>;
