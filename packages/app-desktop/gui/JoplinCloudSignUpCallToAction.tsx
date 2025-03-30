@@ -13,7 +13,7 @@ const JoplinCloudSignUpCallToAction = () => {
 			<a
 				href="#"
 				onClick={onJoplinCloudSingUpClick}
-			>{_('Sign-up here')}</a>
+			>{_('Sign up here')}</a>
 		</p>
 	</div>;
 
