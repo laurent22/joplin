@@ -10,6 +10,7 @@ import SearchEngine from './search/SearchEngine';
 import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
 import eventManager, { EventName } from '../eventManager';
+import { ItemChangeEntity } from './database/types';
 const { sprintf } = require('sprintf-js');
 
 export default class ResourceService extends BaseService {
@@ -40,7 +41,7 @@ export default class ResourceService extends BaseService {
 			let foundNoteWithEncryption = false;
 
 			while (true) {
-				const changes = await ItemChange.modelSelectAll(`
+				const changes: ItemChangeEntity[] = await ItemChange.modelSelectAll(`
 					SELECT id, item_id, type
 					FROM item_changes
 					WHERE item_type = ?
@@ -52,8 +53,7 @@ export default class ResourceService extends BaseService {
 
 				if (!changes.length) break;
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const noteIds = changes.map((a: any) => a.item_id);
+				const noteIds = changes.map(a => a.item_id);
 				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)})`);
 
 				const noteById = (noteId: string) => {

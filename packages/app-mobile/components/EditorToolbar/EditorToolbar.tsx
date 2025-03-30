@@ -1,23 +1,50 @@
 import * as React from 'react';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, ScrollView, StyleSheet, View } from 'react-native';
 import { ToolbarButtonInfo, ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import toolbarButtonsFromState from './utils/toolbarButtonsFromState';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { themeStyle } from '../global-style';
-import ToggleSpaceButton from '../ToggleSpaceButton';
 import ToolbarEditorDialog from './ToolbarEditorDialog';
 import { EditorState } from './types';
 import ToolbarButton from './ToolbarButton';
 import isSelected from './utils/isSelected';
 import { _ } from '@joplin/lib/locale';
+import useButtonSize from './utils/useButtonSize';
 
 interface Props {
 	themeId: number;
 	toolbarButtonInfos: ToolbarItem[];
 	editorState: EditorState;
 }
+
+const useButtonPadding = (buttonCount: number) => {
+	const { buttonSize } = useButtonSize();
+	const [containerWidth, setContainerWidth] = useState(0);
+
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		setContainerWidth(event.nativeEvent.layout.width);
+	}, []);
+
+	const buttonPadding = useMemo(() => {
+		if (buttonCount <= 1) return 0;
+		// Number of offscreen buttons -- round up because we can't have negative padding
+		const overflowButtonCount = Math.max(0, Math.ceil((buttonCount * buttonSize - containerWidth) / buttonSize));
+		const visibleButtonCount = buttonCount - overflowButtonCount;
+		const allVisible = visibleButtonCount === buttonCount;
+		if (allVisible) return 0;
+
+		const targetContentWidth = containerWidth + buttonSize / 2;
+		const actualContentWidth = visibleButtonCount * buttonSize;
+		const widthDifference = targetContentWidth - actualContentWidth;
+		// Only half of the gap for the rightmost visible button is on the screen
+		const gapCount = visibleButtonCount - 1 / 2;
+		return widthDifference / gapCount;
+	}, [containerWidth, buttonCount, buttonSize]);
+
+	return { onContainerLayout, buttonPadding };
+};
 
 const useStyles = (themeId: number) => {
 	return useMemo(() => {
@@ -53,7 +80,6 @@ const useSettingButtonInfo = (setSettingsVisible: SetSettingsVisible) => {
 };
 
 const EditorToolbar: React.FC<Props> = props => {
-	const styles = useStyles(props.themeId);
 
 	const buttonInfos: ToolbarButtonInfo[] = [];
 
@@ -63,11 +89,17 @@ const EditorToolbar: React.FC<Props> = props => {
 		}
 	}
 
+	// Include setting button in the count
+	const buttonCount = buttonInfos.length + 1;
+	const { buttonPadding, onContainerLayout } = useButtonPadding(buttonCount);
+	const styles = useStyles(props.themeId);
+
 	const renderButton = (info: ToolbarButtonInfo) => {
 		return <ToolbarButton
 			key={`command-${info.name}`}
 			buttonInfo={info}
 			themeId={props.themeId}
+			extraPadding={buttonPadding}
 			selected={isSelected(info.name, props.editorState)}
 		/>;
 	};
@@ -89,22 +121,22 @@ const EditorToolbar: React.FC<Props> = props => {
 	const settingsButtonInfo = useSettingButtonInfo(setSettingsVisible);
 	const settingsButton = <ToolbarButton
 		buttonInfo={settingsButtonInfo}
+		extraPadding={buttonPadding}
 		themeId={props.themeId}
 	/>;
 
 	return <>
-		<ToggleSpaceButton themeId={props.themeId}>
-			<ScrollView
-				ref={scrollViewRef}
-				horizontal={true}
-				style={styles.content}
-				contentContainerStyle={styles.contentContainer}
-			>
-				{buttonInfos.map(renderButton)}
-				<View style={styles.spacer}/>
-				{settingsButton}
-			</ScrollView>
-		</ToggleSpaceButton>
+		<ScrollView
+			ref={scrollViewRef}
+			horizontal={true}
+			style={styles.content}
+			contentContainerStyle={styles.contentContainer}
+			onLayout={onContainerLayout}
+		>
+			{buttonInfos.map(renderButton)}
+			<View style={styles.spacer}/>
+			{settingsButton}
+		</ScrollView>
 		<ToolbarEditorDialog visible={settingsVisible} onDismiss={onDismissSettingsDialog} />
 	</>;
 };

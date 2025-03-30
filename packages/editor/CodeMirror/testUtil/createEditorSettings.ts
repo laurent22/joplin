@@ -4,6 +4,7 @@ import { EditorKeymap, EditorLanguageType, EditorSettings } from '../../types';
 const createEditorSettings = (themeId: number) => {
 	const themeData = themeStyle(themeId);
 	const editorSettings: EditorSettings = {
+		markdownMarkEnabled: true,
 		katexEnabled: true,
 		spellcheckEnabled: true,
 		useExternalSearch: true,

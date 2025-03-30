@@ -35,7 +35,10 @@ export default (props: Props) => {
 		};
 
 		notyfContext.open(options);
-	}, [toast.message, toast.duration, toast.type, notyfContext]);
+		// toast.timestamp needs to be included in the dependency list to allow
+		// showing multiple toasts with the same message, one after another.
+		// See https://github.com/laurent22/joplin/issues/11783
+	}, [toast.message, toast.duration, toast.type, toast.timestamp, notyfContext]);
 
 	return <div style={{ display: 'none' }}/>;
 };

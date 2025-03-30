@@ -11,6 +11,8 @@ import { ParseOptions } from '@joplin/lib/HtmlToMd';
 import { ScrollStrategy } from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupToHtmlOptions } from '../../hooks/useMarkupToHtml';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
+import { RefObject, SetStateAction } from 'react';
+import * as React from 'react';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -122,6 +124,7 @@ export interface NoteBodyEditorProps {
 	visiblePanes: string[];
 	keyboardMode: string;
 	tabMovesFocus: boolean;
+	enableTextPatterns: boolean;
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	locale: string;
@@ -271,4 +274,12 @@ export interface ScrollToTextValue {
 	text: string;
 	element: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'strong' | 'ul';
 	scrollStrategy?: ScrollStrategy;
+}
+
+export interface WindowCommandDependencies {
+	setShowLocalSearch: React.Dispatch<SetStateAction<boolean>>;
+	noteSearchBarRef: RefObject<HTMLInputElement>;
+	editorRef: RefObject<NoteBodyEditorRef>;
+	titleInputRef: RefObject<HTMLInputElement>;
+	containerRef: RefObject<HTMLDivElement|null>;
 }

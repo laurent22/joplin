@@ -9,7 +9,7 @@ describe('markdownCommands.toggleList', () => {
 
 	jest.retryTimes(2);
 
-	it('should remove the same type of list', async () => {
+	it('should remove the list only at the selected line', async () => {
 		const initialDocText = '- testing\n- this is a `test`\n';
 
 		const editor = await createTestEditor(
@@ -20,11 +20,11 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.UnorderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'testing\nthis is a `test`\n',
+			'testing\n- this is a `test`\n',
 		);
 	});
 
-	it('should insert a numbered list with correct numbering', async () => {
+	it('should insert a numbered list with correct numbering only at the selected line', async () => {
 		const initialDocText = 'Testing...\nThis is a test\nof list toggling...';
 		const editor = await createTestEditor(
 			initialDocText,
@@ -50,7 +50,7 @@ describe('markdownCommands.toggleList', () => {
 
 	const unorderedListText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
 
-	it('should correctly replace an unordered list with a numbered list', async () => {
+	it('should correctly replace an unordered list with a numbered list only at the selected line', async () => {
 		const editor = await createTestEditor(
 			unorderedListText,
 			EditorSelection.cursor(unorderedListText.length),
@@ -59,7 +59,7 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'1. 1\n2. 2\n3. 3\n4. 4\n5. 5\n6. 6\n7. 7',
+			'- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n1. 7',
 		);
 	});
 
@@ -180,7 +180,7 @@ describe('markdownCommands.toggleList', () => {
 	// 	);
 	// });
 
-	it('should toggle a numbered list without changing its sublists', async () => {
+	it('should toggle only a numbered list at selected line without changing its sublists', async () => {
 		const initialDocText = '1. Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo';
 
 		const editor = await createTestEditor(
@@ -191,7 +191,7 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'- [ ] Foo\n- [ ] Bar\n- [ ] Baz\n\t- Test\n\t- of\n\t- sublists\n- [ ] Foo',
+			'- [ ] Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo',
 		);
 	});
 
@@ -218,7 +218,7 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should toggle lists properly within block quotes', async () => {
+	it('should toggle only list on the selected line properly within block quotes', async () => {
 		const preSubListText = '> # List test\n> * This\n> * is\n';
 		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
 		const editor = await createTestEditor(
@@ -228,9 +228,9 @@ describe('markdownCommands.toggleList', () => {
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling',
+			'> # List test\n> * This\n> * is\n> \t1. a\n> \t* test\n> * of list toggling',
 		);
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+		expect(editor.state.selection.main.from).toBe(preSubListText.length + 7);
 	});
 
 	it('should not treat a list of IP addresses as a numbered list', async () => {

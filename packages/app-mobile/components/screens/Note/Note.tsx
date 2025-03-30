@@ -40,8 +40,6 @@ import Logger from '@joplin/utils/Logger';
 import ImageEditor from '../../NoteEditor/ImageEditor/ImageEditor';
 import promptRestoreAutosave from '../../NoteEditor/ImageEditor/promptRestoreAutosave';
 import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
-import VoiceTypingDialog from '../../voiceTyping/VoiceTypingDialog';
-import { isSupportedLanguage } from '../../../services/voiceTyping/vosk';
 import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { join } from 'path';
 import { Dispatch } from 'redux';
@@ -51,7 +49,7 @@ import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
-import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
@@ -63,6 +61,13 @@ import { DialogContext, DialogControl } from '../../DialogManager';
 import { CommandRuntimeProps, EditorMode, PickerResponse } from './types';
 import commands from './commands';
 import { AttachFileAction, AttachFileOptions } from './commands/attachFile';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginUserWebView from '../../plugins/dialogs/PluginUserWebView';
+import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
+import getActivePluginEditorView from '@joplin/lib/services/plugins/utils/getActivePluginEditorView';
+import EditorPluginHandler from '@joplin/lib/services/plugins/EditorPluginHandler';
+import AudioRecordingBanner from '../../voiceTyping/AudioRecordingBanner';
+import SpeechToTextBanner from '../../voiceTyping/SpeechToTextBanner';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -73,8 +78,16 @@ interface InsertTextOptions {
 	newLine?: boolean;
 }
 
+interface NoteNavigation {
+	// Arguments passed to the NAV_GO action
+	state: {
+		newNoteAttachFileAction?: AttachFileAction;
+	};
+}
+
 interface Props extends BaseProps {
 	provisionalNoteIds: string[];
+	navigation: NoteNavigation;
 	dispatch: Dispatch;
 	noteId: string;
 	useEditorBeta: boolean;
@@ -89,7 +102,9 @@ interface Props extends BaseProps {
 	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
-	newNoteAttachFileAction: AttachFileAction;
+	'plugins.shownEditorViewIds': string[];
+	pluginHtmlContents: PluginHtmlContents;
+	editorNoteReloadTimeRequest: number;
 }
 
 interface ComponentProps extends Props {
@@ -111,17 +126,19 @@ interface State {
 	fromShare: boolean;
 	showCamera: boolean;
 	showImageEditor: boolean;
+	showAudioRecorder: boolean;
 	imageEditorResource: ResourceEntity;
 	imageEditorResourceFilepath: string;
 	noteResources: Record<string, ResourceInfo>;
 	newAndNoTitleChangeNoteId: boolean|null;
+	noteLastLoadTime: number;
 
 	undoRedoButtonState: {
 		canUndo: boolean;
 		canRedo: boolean;
 	};
 
-	voiceTypingDialogShown: boolean;
+	showSpeechToTextDialog: boolean;
 }
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent {
@@ -155,6 +172,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
 	private commandRegistration_: RegisteredRuntime|null = null;
+	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance());
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
@@ -178,17 +196,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			fromShare: false,
 			showCamera: false,
 			showImageEditor: false,
+			showAudioRecorder: false,
 			imageEditorResource: null,
 			noteResources: {},
 			imageEditorResourceFilepath: null,
 			newAndNoTitleChangeNoteId: null,
+			noteLastLoadTime: Date.now(),
 
 			undoRedoButtonState: {
 				canUndo: false,
 				canRedo: false,
 			},
 
-			voiceTypingDialogShown: false,
+			showSpeechToTextDialog: false,
 		};
 
 		this.titleTextFieldRef = React.createRef();
@@ -305,8 +325,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
-		this.voiceTypingDialog_onText = this.voiceTypingDialog_onText.bind(this);
-		this.voiceTypingDialog_onDismiss = this.voiceTypingDialog_onDismiss.bind(this);
+		this.speechToTextDialog_onText = this.speechToTextDialog_onText.bind(this);
+		this.audioRecorderDialog_onDismiss = this.audioRecorderDialog_onDismiss.bind(this);
 	}
 
 	private registerCommands() {
@@ -334,6 +354,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					if (!this.state.note || !this.state.note.id) return;
 
 					this.setState({ noteTagDialogShown: visible });
+				},
+				setAudioRecorderVisible: (visible) => {
+					this.setState({ showAudioRecorder: visible });
 				},
 				getMode: () => this.state.mode,
 				setMode: (mode: 'view'|'edit') => {
@@ -442,6 +465,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			noteBodyViewer: {
 				flex: 1,
 			},
+			toggleSpaceButtonContent: {
+				flex: 1,
+			},
 			checkbox: {
 				color: theme.color,
 				paddingRight: 10,
@@ -531,18 +557,25 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		// been granted, the popup will open anyway.
 		void this.requestGeoLocationPermissions();
 
-		if (this.props.newNoteAttachFileAction) {
+		const action = this.props.navigation.state?.newNoteAttachFileAction;
+		if (action) {
 			setTimeout(async () => {
-				if (this.props.newNoteAttachFileAction === AttachFileAction.AttachDrawing) {
+				if (action === AttachFileAction.AttachDrawing) {
 					await this.drawPicture_onPress();
 				} else {
 					const options: AttachFileOptions = {
-						action: this.props.newNoteAttachFileAction,
+						action: action,
 					};
 					await CommandService.instance().execute('attachFile', '', options);
 				}
 			}, 100);
 		}
+
+		await this.editorPluginHandler_.emitActivationCheck();
+
+		setTimeout(() => {
+			this.editorPluginHandler_.emitUpdate(this.props['plugins.shownEditorViewIds']);
+		}, 300);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -601,6 +634,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				noteId: noteId,
 				noteHash: noteHash,
 			});
+		}
+
+		if (this.props['plugins.shownEditorViewIds'] !== prevProps['plugins.shownEditorViewIds']) {
+			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props['plugins.shownEditorViewIds']);
+			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
+				void shared.reloadNote(this);
+			}
+		}
+
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+			void this.editorPluginHandler_.emitActivationCheck();
 		}
 	}
 
@@ -1186,13 +1230,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		// Voice typing is enabled only on Android for now
-		if (shim.mobilePlatform() === 'android' && isSupportedLanguage(currentLocale())) {
+		const voiceTypingSupported = Platform.OS === 'android';
+		if (voiceTypingSupported) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
 					// this.voiceRecording_onPress();
-					this.setState({ voiceTypingDialogShown: true });
+					this.setState({ showSpeechToTextDialog: true });
 				},
 				disabled: readOnly,
 			});
@@ -1380,7 +1424,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		void this.saveOneProperty('body', newBody);
 	}
 
-	private voiceTypingDialog_onText(text: string) {
+	private speechToTextDialog_onText(text: string) {
 		if (this.state.mode === 'view') {
 			const newNote: NoteEntity = { ...this.state.note };
 			newNote.body = `${newNote.body} ${text}`;
@@ -1397,9 +1441,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
-	private voiceTypingDialog_onDismiss() {
-		this.setState({ voiceTypingDialogShown: false });
-	}
+	private audioRecordingDialog_onFile = (file: PickerResponse) => {
+		return this.attachFile(file, 'audio');
+	};
+
+	private audioRecorderDialog_onDismiss = () => {
+		this.setState({ showSpeechToTextDialog: false, showAudioRecorder: false });
+	};
+
+	private speechToTextDialog_onDismiss = () => {
+		this.setState({ showSpeechToTextDialog: false });
+	};
 
 	private noteEditorVisible() {
 		return !this.state.showCamera && !this.state.showImageEditor;
@@ -1411,6 +1463,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		// componentWillUnmount (which removes the commands) can be called
 		// multiple times.
 		this.registerCommands();
+
+		const { editorPlugin, editorView } = getShownPluginEditorView(this.props.plugins, this.props['plugins.shownEditorViewIds']);
 
 		if (this.state.isLoading) {
 			return (
@@ -1440,102 +1494,120 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 		}
 
+		const renderPluginEditor = () => {
+			return <PluginUserWebView
+				viewInfo={{ plugin: editorPlugin, view: editorView }}
+				themeId={this.props.themeId}
+				onLoadEnd={() => {}}
+				pluginHtmlContents={this.props.pluginHtmlContents}
+				setDialogControl={() => {}}
+				style={{}}
+			/>;
+		};
+
 		// Currently keyword highlighting is supported only when FTS is available.
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode === 'view') {
-			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
-			// to avoid the HACK_webviewLoadingState related bug.
-			bodyComponent =
-				!note || !note.body.trim() ? null : (
-					<NoteBodyViewer
-						onJoplinLinkClick={this.onJoplinLinkClick_}
-						style={this.styles().noteBodyViewer}
-						// Extra bottom padding to make it possible to scroll past the
-						// action button (so that it doesn't overlap the text)
-						paddingBottom={150}
-						noteBody={note.body}
-						noteMarkupLanguage={note.markup_language}
-						noteResources={this.state.noteResources}
-						highlightedKeywords={keywords}
-						themeId={this.props.themeId}
-						fontSize={this.props.viewerFontSize}
-						noteHash={this.props.noteHash}
-						onCheckboxChange={this.onBodyViewerCheckboxChange}
-						onMarkForDownload={this.onMarkForDownload}
-						onRequestEditResource={this.onEditResource}
-						onScroll={this.onBodyViewerScroll}
-						initialScroll={this.lastBodyScroll}
-						pluginStates={this.props.plugins}
-					/>
-				);
+
+		if (editorView) {
+			bodyComponent = renderPluginEditor();
 		} else {
-			// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
-			// However it causes memory or rendering issues on older Android devices, probably because
-			// the whole text input has to be in memory for the scrollview to work. So we keep it as
-			// a plain TextInput for now.
-			// See https://github.com/laurent22/joplin/issues/3041
-
-			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// context. In other words, the selection should be considered read-only. For example, if the selection
-			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
-			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
-			// later the real selection will be different from what is stored in the state, thus making
-			// the cursor jump around. Eg, when typing "abcdef", it will do this:
-			//     abcd|
-			//     abcde|
-			//     abcde|f
-
-			if (!this.useEditorBeta()) {
-				bodyComponent = (
-					<TextInput
-						autoCapitalize="sentences"
-						style={this.styles().bodyTextInput}
-						ref="noteBodyTextField"
-						multiline={true}
-						value={note.body}
-						onChangeText={this.onPlainEditorTextChange}
-						onSelectionChange={this.onPlainEditorSelectionChange}
-						blurOnSubmit={false}
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-						placeholder={_('Add body')}
-						placeholderTextColor={theme.colorFaded}
-						// need some extra padding for iOS so that the keyboard won't cover last line of the note
-						// see https://github.com/laurent22/joplin/issues/3607
-						// Property is gone as of RN 0.72?
-						// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
-					/>
-				);
+			if (this.state.mode === 'view') {
+				// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
+				// to avoid the HACK_webviewLoadingState related bug.
+				bodyComponent =
+					!note || !note.body.trim() ? null : (
+						<NoteBodyViewer
+							onJoplinLinkClick={this.onJoplinLinkClick_}
+							style={this.styles().noteBodyViewer}
+							// Extra bottom padding to make it possible to scroll past the
+							// action button (so that it doesn't overlap the text)
+							paddingBottom={150}
+							noteBody={note.body}
+							noteMarkupLanguage={note.markup_language}
+							noteResources={this.state.noteResources}
+							highlightedKeywords={keywords}
+							themeId={this.props.themeId}
+							fontSize={this.props.viewerFontSize}
+							noteHash={this.props.noteHash}
+							onCheckboxChange={this.onBodyViewerCheckboxChange}
+							onMarkForDownload={this.onMarkForDownload}
+							onRequestEditResource={this.onEditResource}
+							onScroll={this.onBodyViewerScroll}
+							initialScroll={this.lastBodyScroll}
+							pluginStates={this.props.plugins}
+						/>
+					);
 			} else {
-				const editorStyle = this.styles().bodyTextInput;
+				// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+				// However it causes memory or rendering issues on older Android devices, probably because
+				// the whole text input has to be in memory for the scrollview to work. So we keep it as
+				// a plain TextInput for now.
+				// See https://github.com/laurent22/joplin/issues/3041
 
-				bodyComponent = <NoteEditor
-					ref={this.editorRef}
-					toolbarEnabled={this.props.toolbarEnabled}
-					themeId={this.props.themeId}
-					initialText={note.body}
-					initialSelection={this.selection}
-					onChange={this.onMarkdownEditorTextChange}
-					onSelectionChange={this.onMarkdownEditorSelectionChange}
-					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-					onAttach={this.onAttach}
-					readOnly={this.state.readOnly}
-					plugins={this.props.plugins}
-					style={{
-						...editorStyle,
+				// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+				// context. In other words, the selection should be considered read-only. For example, if the selection
+				// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+				// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+				// later the real selection will be different from what is stored in the state, thus making
+				// the cursor jump around. Eg, when typing "abcdef", it will do this:
+				//     abcd|
+				//     abcde|
+				//     abcde|f
 
-						// Allow the editor to set its own padding
-						paddingLeft: 0,
-						paddingRight: 0,
-					}}
-				/>;
+				if (!this.useEditorBeta()) {
+					bodyComponent = (
+						<TextInput
+							autoCapitalize="sentences"
+							style={this.styles().bodyTextInput}
+							ref="noteBodyTextField"
+							multiline={true}
+							value={note.body}
+							onChangeText={this.onPlainEditorTextChange}
+							onSelectionChange={this.onPlainEditorSelectionChange}
+							blurOnSubmit={false}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							placeholder={_('Add body')}
+							placeholderTextColor={theme.colorFaded}
+							// need some extra padding for iOS so that the keyboard won't cover last line of the note
+							// see https://github.com/laurent22/joplin/issues/3607
+							// Property is gone as of RN 0.72?
+							// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
+						/>
+					);
+				} else {
+					const editorStyle = this.styles().bodyTextInput;
+
+					bodyComponent = <NoteEditor
+						ref={this.editorRef}
+						toolbarEnabled={this.props.toolbarEnabled}
+						themeId={this.props.themeId}
+						noteId={this.props.noteId}
+						initialText={note.body}
+						initialSelection={this.selection}
+						onChange={this.onMarkdownEditorTextChange}
+						onSelectionChange={this.onMarkdownEditorSelectionChange}
+						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						onAttach={this.onAttach}
+						readOnly={this.state.readOnly}
+						plugins={this.props.plugins}
+						style={{
+							...editorStyle,
+
+							// Allow the editor to set its own padding
+							paddingLeft: 0,
+							paddingRight: 0,
+						}}
+					/>;
+				}
 			}
 		}
 
+		const voiceTypingDialogShown = this.state.showSpeechToTextDialog || this.state.showAudioRecorder;
 		const renderActionButton = () => {
-			if (this.state.voiceTypingDialogShown) return null;
+			if (voiceTypingDialogShown) return null;
 			if (!this.state.note || !!this.state.note.deleted_time) return null;
 
 			const editButton = {
@@ -1582,10 +1654,27 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
-		const renderVoiceTypingDialog = () => {
-			if (!this.state.voiceTypingDialogShown) return null;
-			return <VoiceTypingDialog locale={currentLocale()} onText={this.voiceTypingDialog_onText} onDismiss={this.voiceTypingDialog_onDismiss}/>;
+		const renderVoiceTypingDialogs = () => {
+			const result = [];
+			if (this.state.showAudioRecorder) {
+				result.push(<AudioRecordingBanner
+					key='audio-recorder'
+					onFileSaved={this.audioRecordingDialog_onFile}
+					onDismiss={this.audioRecorderDialog_onDismiss}
+				/>);
+			}
+			if (this.state.showSpeechToTextDialog) {
+				result.push(<SpeechToTextBanner
+					key='speech-to-text'
+					locale={currentLocale()}
+					onText={this.speechToTextDialog_onText}
+					onDismiss={this.speechToTextDialog_onDismiss}
+				/>);
+			}
+			return result;
 		};
+
+		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins);
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
@@ -1599,6 +1688,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					showSearchButton={false}
 					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
 					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
+					showPluginEditorButton={!!activeEditorPlugin}
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
@@ -1606,8 +1696,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				/>
 				{titleComp}
 				{bodyComponent}
+				{renderVoiceTypingDialogs()}
 				{renderActionButton()}
-				{renderVoiceTypingDialog()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1632,7 +1722,6 @@ const NoteScreen = connect((state: AppState) => {
 	return {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
-		newNoteAttachFileAction: state.newNoteAttachFileAction,
 		itemType: state.selectedItemType,
 		folders: state.folders,
 		searchQuery: state.searchQuery,
@@ -1647,6 +1736,9 @@ const NoteScreen = connect((state: AppState) => {
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
+		'plugins.shownEditorViewIds': state.settings['plugins.shownEditorViewIds'] || [],
+		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
 
 		// What we call "beta editor" in this component is actually the (now
 		// default) CodeMirror editor. That should be refactored to make it less

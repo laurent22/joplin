@@ -43,10 +43,31 @@ if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
 	RUN_TESTS=1
 fi
 
+if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_SERVER_RELEASE" == "0" ]; then
+	# We exit now because nothing works properly with the ARM64 architecture.
+	# We only proceed  if building the server image.
+	echo "Running on ARM64 and not trying to build server image - early exit"
+	exit 0
+fi
+
+if [ "$RUNNER_ARCH" == "ARM64" ]; then
+	# Canvas is only needed for tests and it doesn't build in ARM64 so remove it
+	RUN_TESTS=0
+	cd "$ROOT_DIR/packages/lib"
+	yarn remove canvas
+	cd "$ROOT_DIR"
+
+	# Delete certain directories because `yarn install` will fail on ARM64.
+	rm -rf app-desktop
+	rm -rf app-mobile
+fi
+
 # =============================================================================
 # Print environment
 # =============================================================================
 
+echo "RUNNER_OS=$RUNNER_OS"
+echo "RUNNER_ARCH=$RUNNER_ARCH"
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 echo "GITHUB_REF=$GITHUB_REF"
@@ -276,7 +297,7 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 	fi	
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
-	cd "$ROOT_DIR"
+	cd "$ROOT_DIR"	
 	yarn buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."

@@ -35,6 +35,9 @@
 		},
 		{
 			"name": "Akhil-CM"
+		},
+		{
+			"name": "ugoertz"
 		}
 	],
 	"orgs": [
@@ -93,26 +96,9 @@
 			"githubUser": "route4me"
 		},
 		{
-			"url": "https://buyyoutubviews.com",
-			"title": "BYTV",
-			"imageName": "BYTV.png",
-			"githubUser": "bytv1"
-		},
-		{
 			"url": "https://casinoreviews.net",
 			"title": "Casino Reviews",
 			"imageName": "CasinoReviews.png"
-		},
-		{
-			"url": "https://useviral.com.br/",
-			"title": "Comprar seguidores Instagram",
-			"imageName": "Useviral.png"
-		},
-		{
-			"url": "https://ca.edubirdie.com/",
-			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
-			"imageName": "Edubirdie.png",
-			"alt": "EduBirdie"
 		},
 		{
 			"url": "https://topagency.webflow.io",
@@ -137,6 +123,13 @@
 			"title": "casino without making any upfront cost",
 			"imageName": "Slotozilla.png",
 			"alt": "casino without making any upfront cost"
+		},
+		{
+			"url": "https://www.reddit.com/r/tiktokRise/",
+			"title": "Tiktok Rise",
+			"imageName": "TiktokRise.jpg",
+			"alt": "Tiktok Rise",
+			"githubUser": "knickman"
 		}
 	],
 	"orgsOld": [
@@ -166,6 +159,18 @@
 			"title": "Famegear",
 			"imageName": "Famegear.png",
 			"githubUser": "rankmediateknologi"
+		},
+		{
+			"url": "https://buyyoutubviews.com",
+			"title": "BYTV",
+			"imageName": "BYTV.png",
+			"githubUser": "bytv1"
+		},
+		{
+			"url": "https://ca.edubirdie.com/",
+			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
+			"imageName": "Edubirdie.png",
+			"alt": "EduBirdie"
 		}
 	]
 }

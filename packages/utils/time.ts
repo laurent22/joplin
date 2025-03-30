@@ -157,3 +157,12 @@ export const isValidDate = (anything: string) => {
 export const formatDateTimeLocalToMs = (anything: string) => {
 	return dayjs(anything).unix() * 1000;
 };
+
+export const formatMsToDurationCompat = (ms: number) => {
+	// Avoid using dayjs (and @joplin/utils/time) for formatting here.
+	// See https://github.com/laurent22/joplin/issues/11864
+	const seconds = Math.floor(ms / Second) % 60;
+	const minutes = Math.floor(ms / Minute);
+	const paddedSeconds = `${seconds}`.padStart(2, '0');
+	return `${minutes}:${paddedSeconds}`;
+};

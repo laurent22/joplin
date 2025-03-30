@@ -8,7 +8,7 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './markdown/markdownMathParser';
+import { inlineMathTag, mathTag } from './markdown/MarkdownMathExtension';
 import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
@@ -106,6 +106,14 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			marginLeft: `${theme.marginLeft}px`,
 			marginRight: `${theme.marginRight}px`,
 		},
+
+		'& .cm-listItem': {
+			// Needs to be !important because the tab-size is directly set on the element style
+			// attribute by CodeMirror. And the `EditorState.tabSize` function only accepts a
+			// number, while we need a "em" value to make it match the viewer tab size.
+			tabSize: `${theme.listTabSize} !important`,
+		},
+
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
 		// The desktop app sets the font for these elements to a specific font.
@@ -201,6 +209,10 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			opacity: 0.661,
 		},
 
+		'& .cm-strike': {
+			textDecoration: 'line-through',
+		},
+
 		// Applying font size changes with CSS rather than the theme below works
 		// around an issue where the border for code blocks in headings was too
 		// small.
@@ -227,6 +239,11 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-h6': {
 			...baseHeadingStyle,
 			fontSize: '1.0em',
+		},
+
+		'& .cm-highlighted': {
+			color: theme.searchMarkerColor,
+			backgroundColor: theme.searchMarkerBackgroundColor,
 		},
 
 		// Style the search widget. Use ':root' to increase the selector's precedence

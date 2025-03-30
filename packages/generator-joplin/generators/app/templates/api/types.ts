@@ -622,6 +622,22 @@ export interface CodeMirrorControl {
 		 */
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
+
+		/**
+		 * A CodeMirror [facet](https://codemirror.net/docs/ref/#state.EditorState.facet) that contains
+		 * the ID of the note currently open in the editor.
+		 * 
+		 * Access the value of this facet using
+		 * ```ts
+		 * const noteIdFacet = editorControl.joplinExtensions.noteIdFacet;
+		 * const editorState = editorControl.editor.state;
+		 * const noteId = editorState.facet(noteIdFacet);
+		 * ```
+		 */
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No better type available
+		noteIdFacet: any;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No better type available
+		setNoteIdEffect: any;
 	};
 }
 

@@ -4,9 +4,11 @@ export default function() {
 		'copyDevCommand',
 		'exportPdf',
 		'focusElementNoteBody',
+		'focusElementNoteViewer',
 		'focusElementNoteList',
 		'focusElementNoteTitle',
 		'focusElementSideBar',
+		'focusElementToolbar',
 		'focusSearch',
 		'historyBackward',
 		'historyForward',
@@ -42,9 +44,11 @@ export default function() {
 		'togglePerFolderSortOrder',
 		'toggleSideBar',
 		'toggleVisiblePanes',
+		'toggleEditorPlugin',
 		'toggleTabMovesFocus',
 		'editor.deleteLine',
 		'editor.duplicateLine',
+		'newAppInstance',
 		// We cannot put the undo/redo commands in the menu because they are
 		// editor-specific commands. If we put them there it will break the
 		// undo/redo in regular text fields.
@@ -58,6 +62,7 @@ export default function() {
 		'editor.sortSelectedLines',
 		'editor.swapLineUp',
 		'editor.swapLineDown',
+		'linkToNote',
 		'exportDeletionLog',
 		'toggleSafeMode',
 		'showShareNoteDialog',

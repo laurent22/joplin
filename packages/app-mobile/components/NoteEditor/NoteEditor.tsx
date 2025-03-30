@@ -41,6 +41,7 @@ const logger = Logger.create('NoteEditor');
 interface Props {
 	themeId: number;
 	initialText: string;
+	noteId: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	toolbarEnabled: boolean;
@@ -335,6 +336,7 @@ function NoteEditor(props: Props, ref: any) {
 	const editorSettings: EditorSettings = useMemo(() => ({
 		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
+		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		language: EditorLanguageType.Markdown,
@@ -376,16 +378,27 @@ function NoteEditor(props: Props, ref: any) {
 				${shim.injectedJs('codeMirrorBundle')};
 
 				const parentElement = document.getElementsByClassName('CodeMirror')[0];
-				const initialText = ${JSON.stringify(props.initialText)};
-				const settings = ${JSON.stringify(editorSettings)};
+				// On Android, injectJavaScript is run twice -- once before the parent element exists.
+				// To avoid logging unnecessary errors to the console, skip setup in this case:
+				if (parentElement) {
+					const initialText = ${JSON.stringify(props.initialText)};
+					const settings = ${JSON.stringify(editorSettings)};
 
-				window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+					window.cm = codeMirrorBundle.initCodeMirror(
+						parentElement,
+						initialText,
+						${JSON.stringify(props.noteId)},
+						settings
+					);
 
-				${setInitialSelectionJS}
+					${setInitialSelectionJS}
 
-				window.onresize = () => {
-					cm.execCommand('scrollSelectionIntoView');
-				};
+					window.onresize = () => {
+						cm.execCommand('scrollSelectionIntoView');
+					};
+				} else {
+					console.warn('No parent element for the editor found. This may mean that the editor HTML is still loading.');
+				}
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}

@@ -91,8 +91,7 @@ interface SettingSections {
 
 interface DefaultMigration {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	previousDefault: any;
+	previousDefault: string | boolean | number;
 }
 
 // To create a default migration:
@@ -115,6 +114,10 @@ const defaultMigrations: DefaultMigration[] = [
 	},
 	{
 		name: 'themeAutoDetect',
+		previousDefault: false,
+	},
+	{
+		name: 'ocr.enabled',
 		previousDefault: false,
 	},
 ];

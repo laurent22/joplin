@@ -99,7 +99,8 @@ if (typeof window === 'undefined') {
 					if (!(client instanceof WindowClient)) continue;
 
 					const clientUrl = new URL(client.url);
-					if (mainPagePaths.includes(clientUrl.pathname) && event.resultingClientId !== client.id && !client.focused) {
+					const isRefresh = event.clientId === client.id || event.resultingClientId === client.id;
+					if (mainPagePaths.includes(clientUrl.pathname) && !isRefresh) {
 						hasLockingClient = true;
 					}
 				}

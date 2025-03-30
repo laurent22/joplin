@@ -133,6 +133,7 @@ packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/index.js
+packages/app-desktop/commands/newAppInstance.js
 packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/replaceMisspelling.js
@@ -177,6 +178,7 @@ packages/app-desktop/gui/FolderIconBox.js
 packages/app-desktop/gui/HelpButton.js
 packages/app-desktop/gui/IconButton.js
 packages/app-desktop/gui/ImportScreen.js
+packages/app-desktop/gui/InlineCombobox.js
 packages/app-desktop/gui/ItemList.js
 packages/app-desktop/gui/JoplinCloudConfigScreen.js
 packages/app-desktop/gui/JoplinCloudLoginScreen.js
@@ -246,6 +248,8 @@ packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.js
 packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
+packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.js
+packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
@@ -409,6 +413,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/hideModalMessage.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/leaveSharedFolder.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
@@ -429,7 +434,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/search.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.js
-packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showEditorPlugin.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showModalMessage.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteContentProperties.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.js
@@ -438,7 +442,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareFolderDialog
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.js
-packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditorPlugin.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.js
@@ -555,6 +558,7 @@ packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/window/types.js
 packages/app-mobile/PluginAssetsLoader.js
+packages/app-mobile/commands/dismissPluginPanels.js
 packages/app-mobile/commands/index.js
 packages/app-mobile/commands/newNote.test.js
 packages/app-mobile/commands/newNote.js
@@ -593,6 +597,7 @@ packages/app-mobile/components/EditorToolbar/utils/allToolbarCommandNamesFromSta
 packages/app-mobile/components/EditorToolbar/utils/isSelected.js
 packages/app-mobile/components/EditorToolbar/utils/selectedCommandNamesFromState.js
 packages/app-mobile/components/EditorToolbar/utils/toolbarButtonsFromState.js
+packages/app-mobile/components/EditorToolbar/utils/useButtonSize.js
 packages/app-mobile/components/ExtendedWebView/index.jest.js
 packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js
@@ -656,9 +661,15 @@ packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
-packages/app-mobile/components/ToggleSpaceButton.js
 packages/app-mobile/components/accessibility/AccessibleModalMenu.js
+packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
+packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControl.js
+packages/app-mobile/components/accessibility/FocusControl/FocusControlProvider.js
+packages/app-mobile/components/accessibility/FocusControl/MainAppContent.js
+packages/app-mobile/components/accessibility/FocusControl/ModalWrapper.js
+packages/app-mobile/components/accessibility/FocusControl/types.js
 packages/app-mobile/components/app-nav.js
 packages/app-mobile/components/base-screen.js
 packages/app-mobile/components/biometrics/BiometricPopup.js
@@ -670,6 +681,7 @@ packages/app-mobile/components/buttons/index.js
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/global-style.js
+packages/app-mobile/components/plugins/PluginNotification.js
 packages/app-mobile/components/plugins/PluginRunner.js
 packages/app-mobile/components/plugins/PluginRunnerWebView.js
 packages/app-mobile/components/plugins/backgroundPage/initializeDialogWebView.js
@@ -710,8 +722,11 @@ packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.j
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.js
 packages/app-mobile/components/screens/ConfigScreen/SettingComponent.js
 packages/app-mobile/components/screens/ConfigScreen/SettingItem.js
+packages/app-mobile/components/screens/ConfigScreen/SettingTextInput.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsButton.js
 packages/app-mobile/components/screens/ConfigScreen/SettingsToggle.js
+packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.test.js
+packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.js
 packages/app-mobile/components/screens/ConfigScreen/configScreenStyles.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/InstalledPluginBox.js
@@ -760,12 +775,16 @@ packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
+packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
 packages/app-mobile/components/testing/TestProviderStack.js
-packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
+packages/app-mobile/components/voiceTyping/AudioRecordingBanner.js
+packages/app-mobile/components/voiceTyping/RecordingControls.js
+packages/app-mobile/components/voiceTyping/SpeechToTextBanner.js
+packages/app-mobile/components/voiceTyping/types.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/index.web.js
 packages/app-mobile/root.js
@@ -779,12 +798,11 @@ packages/app-mobile/services/e2ee/crypto.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/VoiceTyping.js
-packages/app-mobile/services/voiceTyping/utils/splitWhisperText.test.js
-packages/app-mobile/services/voiceTyping/utils/splitWhisperText.js
 packages/app-mobile/services/voiceTyping/utils/unzip.android.js
 packages/app-mobile/services/voiceTyping/utils/unzip.js
 packages/app-mobile/services/voiceTyping/vosk.android.js
 packages/app-mobile/services/voiceTyping/vosk.js
+packages/app-mobile/services/voiceTyping/whisper.test.js
 packages/app-mobile/services/voiceTyping/whisper.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
@@ -815,7 +833,7 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
-packages/app-mobile/utils/hooks/useKeyboardVisible.js
+packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
 packages/app-mobile/utils/image/fileToImage.web.js
@@ -843,6 +861,7 @@ packages/app-mobile/utils/testing/getWebViewWindowById.js
 packages/app-mobile/utils/testing/setupGlobalStore.js
 packages/app-mobile/utils/types.js
 packages/app-mobile/web/serviceWorker.js
+packages/app-mobile/web/webpack.config.js
 packages/default-plugins/build.js
 packages/default-plugins/buildDefaultPlugins.js
 packages/default-plugins/commands/buildAll.js
@@ -869,6 +888,10 @@ packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/getScrollFraction.js
+packages/editor/CodeMirror/markdown/MarkdownHighlightExtension.test.js
+packages/editor/CodeMirror/markdown/MarkdownHighlightExtension.js
+packages/editor/CodeMirror/markdown/MarkdownMathExtension.test.js
+packages/editor/CodeMirror/markdown/MarkdownMathExtension.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/defaultLanguage.js
 packages/editor/CodeMirror/markdown/codeBlockLanguages/lookUpLanguage.js
@@ -880,8 +903,6 @@ packages/editor/CodeMirror/markdown/markdownCommands.bulletedVsChecklist.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.toggleList.test.js
 packages/editor/CodeMirror/markdown/markdownCommands.js
-packages/editor/CodeMirror/markdown/markdownMathParser.test.js
-packages/editor/CodeMirror/markdown/markdownMathParser.js
 packages/editor/CodeMirror/markdown/utils/renumberSelectedLists.test.js
 packages/editor/CodeMirror/markdown/utils/renumberSelectedLists.js
 packages/editor/CodeMirror/markdown/utils/stripBlockquote.js
@@ -892,6 +913,7 @@ packages/editor/CodeMirror/pluginApi/customEditorCompletion.js
 packages/editor/CodeMirror/testUtil/createEditorControl.js
 packages/editor/CodeMirror/testUtil/createEditorSettings.js
 packages/editor/CodeMirror/testUtil/createTestEditor.js
+packages/editor/CodeMirror/testUtil/findNodesWithName.js
 packages/editor/CodeMirror/testUtil/forceFullParse.js
 packages/editor/CodeMirror/testUtil/loadLanguages.js
 packages/editor/CodeMirror/testUtil/pressReleaseKey.js
@@ -921,6 +943,7 @@ packages/editor/CodeMirror/utils/keyUpHandlerExtension.js
 packages/editor/CodeMirror/utils/overwriteModeExtension.test.js
 packages/editor/CodeMirror/utils/overwriteModeExtension.js
 packages/editor/CodeMirror/utils/searchExtension.js
+packages/editor/CodeMirror/utils/selectedNoteIdExtension.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
@@ -988,7 +1011,11 @@ packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/permanentlyDeleteNote.js
 packages/lib/commands/renderMarkup.test.js
 packages/lib/commands/renderMarkup.js
+packages/lib/commands/showEditorPlugin.js
 packages/lib/commands/synchronize.js
+packages/lib/commands/toggleAllFolders.test.js
+packages/lib/commands/toggleAllFolders.js
+packages/lib/commands/toggleEditorPlugin.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
@@ -1024,6 +1051,8 @@ packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
 packages/lib/fsDriver.test.js
 packages/lib/geolocation-node.js
+packages/lib/getAppName.test.js
+packages/lib/getAppName.js
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useElementSize.js
 packages/lib/hooks/useEventListener.js
@@ -1082,6 +1111,9 @@ packages/lib/models/settings/builtInMetadata.js
 packages/lib/models/settings/settingValidations.test.js
 packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
+packages/lib/models/utils/areAllFoldersCollapsed.test.js
+packages/lib/models/utils/areAllFoldersCollapsed.js
+packages/lib/models/utils/getCanBeCollapsedFolderIds.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
 packages/lib/models/utils/isItemId.js
@@ -1224,6 +1256,7 @@ packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js
+packages/lib/services/plugins/EditorPluginHandler.js
 packages/lib/services/plugins/MenuController.js
 packages/lib/services/plugins/MenuItemController.js
 packages/lib/services/plugins/Plugin.js
@@ -1270,6 +1303,7 @@ packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
 packages/lib/services/plugins/utils/getPluginSettingKeyPrefix.js
 packages/lib/services/plugins/utils/getPluginSettingValue.js
+packages/lib/services/plugins/utils/getShownPluginEditorView.js
 packages/lib/services/plugins/utils/isCompatible/getDefaultPlatforms.js
 packages/lib/services/plugins/utils/isCompatible/index.test.js
 packages/lib/services/plugins/utils/isCompatible/index.js

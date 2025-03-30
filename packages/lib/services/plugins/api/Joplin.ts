@@ -14,6 +14,9 @@ import JoplinClipboard from './JoplinClipboard';
 import JoplinWindow from './JoplinWindow';
 import BasePlatformImplementation from '../BasePlatformImplementation';
 import JoplinImaging from './JoplinImaging';
+import { themeStyle } from '../../../theme';
+import Setting from '../../../models/Setting';
+import { ThemeAppearance } from '../../../themes/type';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -135,6 +138,14 @@ export default class Joplin {
 
 	public async versionInfo() {
 		return this.implementation_.versionInfo;
+	}
+
+	/**
+	 * Tells whether the current theme is a dark one or not.
+	 */
+	public async shouldUseDarkColors() {
+		const theme = themeStyle(Setting.value('theme'));
+		return theme.appearance === ThemeAppearance.Dark;
 	}
 
 }

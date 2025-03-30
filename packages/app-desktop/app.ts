@@ -556,6 +556,12 @@ class Application extends BaseApplication {
 			value: Setting.value('flagOpenDevTools'),
 		});
 
+		// Always disable on Mac for now - and disable too for the few apps that may have the flag enabled.
+		// At present, it only seems to work on Windows.
+		if (shim.isMac()) {
+			Setting.setValue('featureFlag.autoUpdaterServiceEnabled', false);
+		}
+
 		// Note: Auto-update is a misnomer in the code.
 		// The code below only checks, if a new version is available.
 		// We only allow Windows and macOS users to automatically check for updates
@@ -611,10 +617,11 @@ class Application extends BaseApplication {
 		clipperLogger.addTarget(TargetType.Console);
 
 		ClipperServer.instance().initialize(actionApi);
+		ClipperServer.instance().setEnabled(!Setting.value('altInstanceId'));
 		ClipperServer.instance().setLogger(clipperLogger);
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
-		if (Setting.value('clipperServer.autoStart')) {
+		if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
 			void ClipperServer.instance().start();
 		}
 

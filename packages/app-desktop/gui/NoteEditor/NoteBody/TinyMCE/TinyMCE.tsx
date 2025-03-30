@@ -617,6 +617,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
 			}
+
+			.tox .tox-tbtn,
+			.tox .tox-tbtn button,
+			.tox .tox-split-button,
+			.tox .tox-split-button button {
+				margin: 0 !important;
+			}
 		`));
 
 		return () => {
@@ -673,7 +680,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// we create small groups of just one button towards the end.
 
 			const toolbar = [
-				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', '|',
+				'joplinInsert', 'joplinSup', 'joplinSub', 'forecolor', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', '|',
@@ -730,6 +738,24 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
+				text_patterns: props.enableTextPatterns ? [
+					// See https://www.tiny.cloud/docs/tinymce/latest/content-behavior-options/#text_patterns
+					// for the default value
+					{ start: '==', end: '==', format: 'joplinHighlight' },
+					{ start: '`', end: '`', format: 'code' },
+					{ start: '*', end: '*', format: 'italic' },
+					{ start: '**', end: '**', format: 'bold' },
+					{ start: '#', format: 'h1' },
+					{ start: '##', format: 'h2' },
+					{ start: '###', format: 'h3' },
+					{ start: '####', format: 'h4' },
+					{ start: '#####', format: 'h5' },
+					{ start: '######', format: 'h6' },
+					{ start: '1.', cmd: 'InsertOrderedList' },
+					{ start: '*', cmd: 'InsertUnorderedList' },
+					{ start: '-', cmd: 'InsertUnorderedList' },
+				] : [],
+
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
@@ -1097,6 +1123,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, [editor]);
 
+	useEffect(() => {
+		if (!editor) return;
+		// Meta+P is bound by default to print by TinyMCE. It can be unbound, but it seems necessary
+		// to do so after the editor loads. Meta+P should be able to trigger Joplin built-in shortcuts.
+		editor.shortcuts.remove('Meta+P');
+	}, [editor]);
+
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
 	// -----------------------------------------------------------------------------------------
@@ -1344,7 +1377,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		editor.on(TinyMceEditorEvents.KeyUp, onKeyUp);
 		editor.on(TinyMceEditorEvents.KeyDown, onKeyDown);
 		editor.on(TinyMceEditorEvents.KeyPress, onKeypress);
-		editor.on(TinyMceEditorEvents.Paste, onPaste);
+		// Passing `true` adds the listener to the front of the listener list.
+		// This allows overriding TinyMCE's built-in paste handler with .preventDefault.
+		editor.on(TinyMceEditorEvents.Paste, onPaste, true);
 		editor.on(TinyMceEditorEvents.PasteAsText, onPasteAsText);
 		editor.on(TinyMceEditorEvents.Copy, onCopy);
 		// `compositionend` means that a user has finished entering a Chinese
@@ -1387,7 +1422,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 	useEffect(() => {
 		return () => {
-			if (editorRef.current) editorRef.current.remove();
+			if (!editorRef.current) return;
+
+			const ownerDocument = editorRef.current.getContainer().ownerDocument;
+			const parentWindow = ownerDocument.defaultView;
+
+			// Calling .remove after the parent window is closed throws an Error
+			// related to DOM API access. Since closing the window also removes the editor,
+			// it shouldn't be necessary to call .remove in this case:
+			if (parentWindow) {
+				editorRef.current.remove();
+			}
 		};
 	}, []);
 

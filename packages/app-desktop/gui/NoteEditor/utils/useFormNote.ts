@@ -97,7 +97,15 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 
 			await initNoteState(n, false);
 			if (event.cancelled) return;
-			setFormNoteRefreshScheduled(0);
+			setFormNoteRefreshScheduled(oldValue => {
+				// If a new refresh was scheduled between initNoteState
+				// and now:
+				if (oldValue !== formNoteRefreshScheduled) {
+					return oldValue;
+				}
+				// A refresh is no longer scheduled
+				return 0;
+			});
 		};
 
 		await loadNote();

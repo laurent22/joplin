@@ -5,7 +5,8 @@ import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
-import { MarkdownMathExtension } from './markdown/markdownMathParser';
+import MarkdownMathExtension from './markdown/MarkdownMathExtension';
+import MarkdownHighlightExtension from './markdown/MarkdownHighlightExtension';
 import lookUpLanguage from './markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
@@ -23,6 +24,8 @@ const configFromSettings = (settings: EditorSettings) => {
 				markdown({
 					extensions: [
 						GitHubFlavoredMarkdownExtension,
+
+						settings.markdownMarkEnabled ? MarkdownHighlightExtension : [],
 
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? MarkdownMathExtension : [],

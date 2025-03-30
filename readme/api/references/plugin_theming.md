@@ -18,29 +18,46 @@ Variables follow the naming convention `--joplin-{property}` and are used in you
 
 ## Icons
 
-In addition to variables, you have access to a set of standard font assets that ship with Joplin. These include:
+On desktop, your plugin view will have access to icons used by the app. It is however not recommended to use them because they may change in future versions. And it will also make your plugin incompatible with the mobile app (which does not expose any icon library).
 
-* [Roboto](https://fonts.google.com/specimen/Roboto?preview.text_type=custom) - (the standard UI font, `font-family` referenced above)
-* [Font Awesome](https://fontawesome.com/icons?d=gallery&p=2&m=free) - icon library
-* [icoMoon](https://icomoon.io/#preview-free) - icon library (subset, see [style.css](https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/style/icons/style.css))
+Instead a recommended approach is to add Font Awesome in your plugin project, and to import only the icons you'll need. To do so using React, follow these instructions:
 
-To display an icon, use CSS and HTML like the following.
+**Install Font Awesome:**
 
-```css
-/* style icons to match the theme */
-.toolbarIcon {
-    font-size: var(--joplin-toolbar-icon-size);
-}
-.primary {
-    color: var(--joplin-color);
-}
-.secondary {
-    color: var(--joplin-color2);
-}
+```shell
+npm install --save @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/react-fontawesome
 ```
 
-```html
-<i class="toolbarIcon primary fas fa-music"></i> Font Awesome music icon
-<br />
-<i class="toolbarIcon secondary icon-notebooks"></i> icoMoon notebook icon
+**Import and load the icons:**
+
+From one of your top TypeScript files:
+
+```typescript
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+// Import the specific icons you want to use
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+
+// Add the icons to the library
+library.add(faTimes, faCheckCircle);
 ```
+
+**Use Font Awesome React Components:**
+
+```JSX
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const App = () => {
+    return (
+        <div>
+            <FontAwesomeIcon icon="times" />
+            <FontAwesomeIcon icon={['far', 'check-circle']} />
+        </div>
+    );
+}
+
+export default App;
+```
+
+If you are not using React, just ask ChatGPT on how to do the above using you preferred JS framework.

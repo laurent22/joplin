@@ -2,6 +2,7 @@ import Logger from '@joplin/utils/Logger';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
+import BaseItem from '../../models/BaseItem';
 import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
@@ -96,10 +97,42 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 		// If info.json is not present, this might be an old sync target, in
 		// which case we can at least get the version number from version.txt
 		const oldVersion = await api.get('.sync/version.txt');
-		if (oldVersion) output = { version: 1 };
+
+		// Where info.json is missing, but .sync/version.txt is not, the sync target will be set as needing upgrade, and will be upgraded upon restarting the app
+		// If both info.json and .sync/version.txt are missing, it can be assumed that something has gone wrong with the sync target, so do not mark as needing upgrade and raise a failsafe error if not the initial sync
+		// When performing 'Delete local data and re-download from sync target' or 'Re-upload local data to sync target' actions, all sync_items are cleared down as if it were the initial sync
+		if (oldVersion) {
+			output = { version: 1 };
+		} else if (!(await isInitialSync(api.syncTargetId()))) {
+			throwFailsafeError();
+		}
 	}
 
 	return fixSyncInfo(new SyncInfo(JSON.stringify(output)));
+}
+
+export async function checkSyncTargetIsValid(api: FileApi): Promise<void> {
+	const syncTargetInfoText = await api.get('info.json');
+
+	if (!syncTargetInfoText) {
+		throwFailsafeError();
+	}
+}
+
+async function isInitialSync(syncTargetId: number) {
+	const syncedItems = await BaseItem.syncedItemIds(syncTargetId);
+	return syncedItems.length === 0;
+}
+
+// This failsafe validation producing this error will be performed regardless of which sync target is selected
+// Other failsafe validation is performed based on the percentage of items deleted in the "basicDelta" function
+// The basicDelta is not executed for all sync target types, but the validation in this function is superior at protecting against data loss
+// However it is still beneficial to keep the failsafe check which is driven by count of deleted items in place, as it can protect against deliberate deletion of all notes by the user,
+// where they are not aware of the implications of 2 way sync. This is just "nice to have" though, so would not be worth adding complexity to make it work for all sync target types
+function throwFailsafeError() {
+	if (Setting.value('sync.wipeOutFailSafe')) {
+		throw new JoplinError(_('Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.'), 'failSafe');
+	}
 }
 
 export function saveLocalSyncInfo(syncInfo: SyncInfo) {

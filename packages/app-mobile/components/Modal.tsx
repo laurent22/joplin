@@ -1,7 +1,12 @@
 import * as React from 'react';
-import { RefObject, useCallback, useMemo, useRef } from 'react';
-import { GestureResponderEvent, Modal, ModalProps, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
+import FocusControl from './accessibility/FocusControl/FocusControl';
+import { msleep, Second } from '@joplin/utils/time';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ModalState } from './accessibility/FocusControl/types';
+import { _ } from '@joplin/lib/locale';
 
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
@@ -49,6 +54,13 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				// This makes it possible to vertically center the content of scrollable modals.
 				flexGrow: 1,
 			},
+			dismissButton: {
+				position: 'absolute',
+				bottom: 0,
+				height: 12,
+				width: '100%',
+				zIndex: -1,
+			},
 		});
 	}, [hasScrollView, isLandscape, backgroundColor]);
 };
@@ -65,6 +77,36 @@ const useBackgroundTouchListeners = (onRequestClose: (event: GestureResponderEve
 	}, [onRequestClose, backdropRef]);
 
 	return { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished };
+};
+
+const useModalStatus = (containerComponent: View|null, visible: boolean) => {
+	const contentMounted = !!containerComponent;
+	const [controlsFocus, setControlsFocus] = useState(false);
+	useAsyncEffect(async (event) => {
+		if (contentMounted) {
+			setControlsFocus(true);
+		} else {
+			// Accessibility: Work around Android's default focus-setting behavior.
+			// By default, React Native's Modal on Android sets focus about 0.8 seconds
+			// after the modal is dismissed. As a result, the Modal controls focus until
+			// roughly one second after the modal is dismissed.
+			if (Platform.OS === 'android') {
+				await msleep(Second);
+			}
+
+			if (!event.cancelled) {
+				setControlsFocus(false);
+			}
+		}
+	}, [contentMounted]);
+
+	let modalStatus = ModalState.Closed;
+	if (controlsFocus) {
+		modalStatus = visible ? ModalState.Open : ModalState.Closing;
+	} else if (visible) {
+		modalStatus = ModalState.Open;
+	}
+	return modalStatus;
 };
 
 const ModalElement: React.FC<ModalElementProps> = ({
@@ -84,29 +126,48 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		</View>
 	);
 
-	const backgroundRef = useRef<View>();
-	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, backgroundRef);
 
+	const [containerComponent, setContainerComponent] = useState<View|null>(null);
+	const modalStatus = useModalStatus(containerComponent, modalProps.visible);
+
+	const containerRef = useRef<View|null>(null);
+	containerRef.current = containerComponent;
+	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, containerRef);
+
+
+	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
+	// of the element on the screen, the close button is placed after the modal content, rather than behind.
+	const closeButton = modalProps.onRequestClose ? <Pressable
+		style={styles.dismissButton}
+		onPress={modalProps.onRequestClose}
+		accessibilityLabel={_('Close dialog')}
+		accessibilityRole='button'
+	/> : null;
 	const contentAndBackdrop = <View
-		ref={backgroundRef}
+		ref={setContainerComponent}
 		style={styles.modalBackground}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
-	>{content}</View>;
+	>
+		{content}
+		{closeButton}
+	</View>;
 
-	// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 	return (
-		<Modal
-			supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-			{...modalProps}
-		>
-			{scrollOverflow ? (
-				<ScrollView
-					style={styles.modalScrollView}
-					contentContainerStyle={styles.modalScrollViewContent}
-				>{contentAndBackdrop}</ScrollView>
-			) : contentAndBackdrop}
-		</Modal>
+		<FocusControl.ModalWrapper state={modalStatus}>
+			<Modal
+				// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
+				supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+				{...modalProps}
+			>
+				{scrollOverflow ? (
+					<ScrollView
+						style={styles.modalScrollView}
+						contentContainerStyle={styles.modalScrollViewContent}
+					>{contentAndBackdrop}</ScrollView>
+				) : contentAndBackdrop}
+			</Modal>
+		</FocusControl.ModalWrapper>
 	);
 };
 
