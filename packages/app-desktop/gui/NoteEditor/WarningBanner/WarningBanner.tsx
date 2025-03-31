@@ -14,6 +14,7 @@ interface Props {
 	richTextBannerDismissed: boolean;
 	pluginCompatibilityBannerDismissedFor: string[];
 	plugins: PluginStates;
+	isLegacyEditor: boolean;
 }
 
 const onRichTextDismissLinkClick = () => {
@@ -24,21 +25,19 @@ const onRichTextReadMoreLinkClick = () => {
 	void bridge().openExternal('https://joplinapp.org/help/apps/rich_text_editor');
 };
 
-const onSwitchToLegacyEditor = () => {
-	Setting.setValue('editor.legacyMarkdown', true);
-};
-
-const onDismissLegacyEditorPrompt = () => {
-	Setting.setValue('editor.pluginCompatibilityBannerDismissedFor', [...PluginService.instance().pluginIds]);
-};
-
-const incompatiblePluginIds = [
+const codeMirror6IncompatiblePluginIds = [
 	// cSpell:disable
 	'com.septemberhx.Joplin.Enhancement',
 	'ylc395.noteLinkSystem',
 	'outline',
 	'joplin.plugin.cmoptions',
 	'com.asdibiase.joplin-languagetool',
+	// cSpell:enable
+];
+
+const codeMirror5IncompatiblePluginIds = [
+	// cSpell:disable
+	'nz.magnusso.zotero-link',
 	// cSpell:enable
 ];
 
@@ -54,30 +53,42 @@ const WarningBanner: React.FC<Props> = props => {
 		</BannerContent>
 	);
 
-	const incompatiblePluginNames = useMemo(() => {
-		if (props.bodyEditor !== 'CodeMirror6') {
-			return [];
-		}
+	const onSwitchEditor = () => {
+		Setting.setValue('editor.legacyMarkdown', !props.isLegacyEditor);
+	};
 
+	const onDismissLegacyEditorPrompt = () => {
+		const pluginIds = [...props.pluginCompatibilityBannerDismissedFor, ...incompatiblePluginIds];
+		Setting.setValue('editor.pluginCompatibilityBannerDismissedFor', pluginIds);
+	};
+
+	const incompatiblePluginIds = useMemo(() => {
 		const runningPluginIds = Object.keys(props.plugins);
 
 		return runningPluginIds.map((id): string|string[] => {
-			if (props.pluginCompatibilityBannerDismissedFor?.includes(id)) {
-				return [];
+			if (props.pluginCompatibilityBannerDismissedFor.includes(id)) return [];
+
+			if (props.bodyEditor === 'CodeMirror6') {
+				if (codeMirror6IncompatiblePluginIds.includes(id)) return id;
+				else return [];
+			} else {
+				if (codeMirror5IncompatiblePluginIds.includes(id)) return id;
+				else return [];
 			}
 
-			if (incompatiblePluginIds.includes(id)) {
-				return PluginService.instance().pluginById(id).manifest.name;
-			} else {
-				return [];
-			}
 		}).flat();
 	}, [props.bodyEditor, props.plugins, props.pluginCompatibilityBannerDismissedFor]);
 
+	const incompatiblePluginNames = useMemo(() => {
+		if (!incompatiblePluginIds || !incompatiblePluginIds.length) return [];
+
+		return incompatiblePluginIds.map(id => PluginService.instance().pluginById(id).manifest.name);
+	}, [incompatiblePluginIds]);
+
 	const markdownPluginBanner = (
 		<BannerContent
-			acceptMessage={_('Switch to the legacy editor')}
-			onAccept={onSwitchToLegacyEditor}
+			acceptMessage={props.isLegacyEditor ? _('Switch to the new editor') : _('Switch to the legacy editor')}
+			onAccept={onSwitchEditor}
 			onDismiss={onDismissLegacyEditorPrompt}
 			visible={incompatiblePluginNames.length > 0}
 		>
@@ -97,7 +108,8 @@ const WarningBanner: React.FC<Props> = props => {
 export default connect((state: AppState) => {
 	return {
 		richTextBannerDismissed: state.settings.richTextBannerDismissed,
-		pluginCompatibilityBannerDismissedFor: state.settings['editor.pluginCompatibilityBannerDismissedFor'],
+		pluginCompatibilityBannerDismissedFor: state.settings['editor.pluginCompatibilityBannerDismissedFor'] ?? [],
 		plugins: state.pluginService.plugins,
+		isLegacyEditor: state.settings['editor.legacyMarkdown'],
 	};
 })(WarningBanner);
