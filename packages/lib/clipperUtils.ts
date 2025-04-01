@@ -11,7 +11,7 @@ function absoluteUrl(url: string) {
 	} else if (url[0] === '/') {
 		return `${location.protocol}//${location.host}${url}`;
 	} else {
-		return `${baseUrl()}/${url}`;
+		return `${baseUrl()}${url}`;
 	}
 }
 
