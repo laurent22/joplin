@@ -7,6 +7,9 @@ FROM node:18 AS builder
 RUN apt-get update \
     && apt-get install -y \
     python3 tini \
+    # needed for node-canvas for ARM32 platform.
+    # See also https://github.com/Automattic/node-canvas/wiki/Installation:-Ubuntu-and-other-Debian-based-systems  
+    libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Enables Yarn
@@ -47,9 +50,9 @@ RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
 # Note that `yarn install` ignores `NODE_ENV=production` and will install dev
 # dependencies too, but this is fine because we need them to build the app.
 
-RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
-    && yarn cache clean \
-    && rm -rf .yarn/berry
+RUN --mount=type=cache,target=/build/.yarn/cache --mount=type=cache,target=/build/.yarn/berry/cache\
+    BUILD_SEQUENCIAL=1 yarn config set cacheFolder /build/.yarn/cache \
+    && yarn install --inline-builds
 
 # =============================================================================
 # Final stage - we copy only the relevant files from the build stage and start
@@ -81,10 +84,11 @@ CMD ["yarn", "start-prod"]
 ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
+ARG SOURCE
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.title="Joplin Server" \
       org.opencontainers.image.description="Docker image for Joplin Server" \
       org.opencontainers.image.url="https://joplinapp.org/" \
       org.opencontainers.image.revision="$REVISION" \
-      org.opencontainers.image.source="https://github.com/laurent22/joplin.git" \
-      org.opencontainers.image.version="${VERSION}"
+      org.opencontainers.image.source="$SOURCE" \
+      org.opencontainers.image.version="$VERSION"

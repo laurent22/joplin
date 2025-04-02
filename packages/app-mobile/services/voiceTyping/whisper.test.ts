@@ -11,7 +11,6 @@ jest.mock('react-native', () => {
 	// See https://github.com/facebook/react-native/issues/28839.
 	reactNative.NativeModules.SpeechToTextModule = {
 		convertNext: () => 'Test. This is test output. Test!',
-		getPreview: () => 'A preview of future output.',
 		runTests: ()=> {},
 		openSession: jest.fn(() => {
 			const someId = 1234;
@@ -84,6 +83,6 @@ describe('whisper', () => {
 		// Should have applied string, then regex replacements.
 		expect(
 			lastFinalizedText,
-		).toBe('replaced again!. This is test output. replaced again!!');
+		).toBe('\n\nreplaced again!. This is test output. replaced again!!');
 	});
 });

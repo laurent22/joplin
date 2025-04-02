@@ -101,17 +101,6 @@
 			"imageName": "CasinoReviews.png"
 		},
 		{
-			"url": "https://useviral.com.br/",
-			"title": "Comprar seguidores Instagram",
-			"imageName": "Useviral.png"
-		},
-		{
-			"url": "https://ca.edubirdie.com/",
-			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
-			"imageName": "Edubirdie.png",
-			"alt": "EduBirdie"
-		},
-		{
 			"url": "https://topagency.webflow.io",
 			"title": "WebDesignAgency",
 			"imageName": "WebDesignAgency.png",
@@ -134,6 +123,13 @@
 			"title": "casino without making any upfront cost",
 			"imageName": "Slotozilla.png",
 			"alt": "casino without making any upfront cost"
+		},
+		{
+			"url": "https://www.reddit.com/r/tiktokRise/",
+			"title": "Tiktok Rise",
+			"imageName": "TiktokRise.jpg",
+			"alt": "Tiktok Rise",
+			"githubUser": "knickman"
 		}
 	],
 	"orgsOld": [
@@ -169,6 +165,12 @@
 			"title": "BYTV",
 			"imageName": "BYTV.png",
 			"githubUser": "bytv1"
+		},
+		{
+			"url": "https://ca.edubirdie.com/",
+			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
+			"imageName": "Edubirdie.png",
+			"alt": "EduBirdie"
 		}
 	]
 }

@@ -9,7 +9,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-13, ubuntu-22.04, windows-2019]
+        os: [macos-13, ubuntu-22.04, windows-2019, ubuntu-22.04-arm]
     steps:
       - uses: actions/checkout@v4
 
@@ -27,10 +27,10 @@ jobs:
           sudo apt-get install -y lsb-release
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
           echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
@@ -84,6 +84,15 @@ jobs:
         run: |
           yarn install && cd packages/app-desktop && yarn dist --publish=never
 
+      - name: Publish Docker manifest
+        if: runner.os == 'Linux'
+        env:
+          SERVER_REPOSITORY: joplin/server
+          SERVER_TAG_PREFIX: server
+        run: |
+          chmod 700 "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
+          "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
+
   ServerDockerImage:
     if: github.repository == 'laurent22/joplin'
     runs-on: ${{ matrix.os }}
@@ -91,7 +100,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, ubuntu-22.04-arm]
     steps:
 
       - name: Install Docker Engine
@@ -103,10 +112,10 @@ jobs:
           sudo apt-get install -y lsb-release
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
           echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
       - uses: actions/checkout@v4
 
@@ -124,17 +133,30 @@ jobs:
         env:
           BUILD_SEQUENCIAL: 1
         run: |
+          if [ "$RUNNER_ARCH" == "ARM64" ]; then
+            DOCKER_IMAGE_PLATFORM="linux/arm64"
+          fi
+
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "RUNNER_ARCH=$RUNNER_ARCH"
+          echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
+
+          # Canvas is only needed for tests and it doesn't build in ARM64 so remove it
+          cd packages/lib
+          yarn remove canvas
+          cd ../..
+          
           yarn install
-          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
-          # code 0  if it works.
-          docker run joplin/server:0.0.0-beta node dist/app.js migrate list
+          # code 0 if it works.
+          docker run joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js migrate list
  
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 joplin/server:0.0.0-beta node dist/app.js --env dev &
+          docker run -p 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
 
           # Wait for server to start
           sleep 30

@@ -172,10 +172,6 @@ export default function shimInit() {
 		return false;
 	};
 
-	shim.platformArch = () => {
-		return ''; // Not supported
-	};
-
 	shim.appVersion = () => {
 		const p = require('react-native-version-info').default;
 		return p.appVersion;
