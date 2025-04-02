@@ -11,7 +11,7 @@ function absoluteUrl(url: string) {
 	} else if (url[0] === '/') {
 		return `${location.protocol}//${location.host}${url}`;
 	} else {
-		return `${baseUrl()}${url}`;
+		return `${baseUrl()}/${url}`;
 	}
 }
 
@@ -33,6 +33,9 @@ function baseUrl() {
 		const output2 = output.split('/');
 		output2.pop();
 		output = output2.join('/');
+	}
+	if (output.endsWith("/")){
+		output = output.slice(0, -1);
 	}
 	return output;
 }
