@@ -66,13 +66,15 @@ if (pathExistsSync(settingsPath)) {
 	}
 }
 
-// https://www.electronjs.org/docs/latest/tutorial/launch-app-from-url-in-another-app
-if (process.defaultApp) {
+// Properly register the joplin:// protocol
+// Based on https://www.electronjs.org/docs/latest/tutorial/launch-app-from-url-in-another-app
+if (process.defaultApp) { // Electron is running in unpackaged mode (likely a development environment)
 	if (process.argv.length >= 2) {
+		// The second argument points to the Electron executable, and the last one to a path to the main script.
 		electronApp.setAsDefaultProtocolClient('joplin', process.execPath, [path.resolve(process.argv[1])]);
 	}
-} else {
-	electronApp.setAsDefaultProtocolClient('joplin');
+} else { // Electron is packaged as a standalone application
+	electronApp.setAsDefaultProtocolClient('joplin'); // Default args are fine
 }
 
 void registerCustomProtocols();
