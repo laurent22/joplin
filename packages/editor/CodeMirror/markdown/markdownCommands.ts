@@ -153,6 +153,7 @@ export const toggleList = (listType: ListType): Command => {
 			const fromLine = doc.lineAt(sel.from);
 			const toLine = doc.lineAt(sel.to);
 
+
 			// Track the current list item number for ordered lists
 			let listItemCounter = 1;
 
