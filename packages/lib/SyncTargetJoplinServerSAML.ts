@@ -12,7 +12,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => '',
 		password: () => '',
-		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.user_id') }),
+		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.userId') }),
 		env: Setting.value('env'),
 	};
 
@@ -30,13 +30,10 @@ export async function initFileApi(syncTargetId: number, logger: Logger, options:
 	return fileApi;
 }
 
-// Saves authentication tokens to the settings.
-// @param id The ID
-// @param user_id The user ID
-export function saveTokens(id: string, user_id: string) {
-	if (id !== null && user_id !== null && id.trim() !== '' && user_id.trim() !== '') {
+export function saveTokens(id: string, userId: string) {
+	if (id !== null && userId !== null && id.trim() !== '' && userId.trim() !== '') {
 		Setting.setValue('sync.11.id', id);
-		Setting.setValue('sync.11.user_id', user_id);
+		Setting.setValue('sync.11.userId', userId);
 	}
 }
 

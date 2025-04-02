@@ -37,7 +37,7 @@ import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './J
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
-import httpPrefix from '@joplin/lib/utils/httpPrefix';
+import prefixWithHttps from '@joplin/lib/utils/prefixWithHttps';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -98,24 +98,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		// Save the settings to allow for sync when the user completes authentication
 
 		await this.saveButton_press();
-		let link = Setting.value('sync.11.path');
+		const link = Setting.value('sync.11.path');
 
 		if (link !== '') {
-			// 'sso-saml-app' indicates to Joplin Server that it should redirect the user to the app after authentication
-			link = `${httpPrefix(link)}/login/sso-saml-app`;
-
-			const canOpen = await Linking.canOpenURL(link);
-			if (canOpen) {
-				await Linking.openURL(link);
-			} else {
-				Alert.alert(_('Warning'), _('No web browser is installed on your device.'));
-			}
+			// 'sso-saml-app' is used to indicate to Joplin Server to specify the proper relay state to
+			// the Identity Provider to allow redirecting to the app after authentication is complete.
+			await Linking.openURL(`${prefixWithHttps(link)}/login/sso-saml-app`);
 		}
 	};
 
 	private logoutJoplinServerSaml_ = () => {
 		Setting.setValue('sync.11.id', '');
-		Setting.setValue('sync.11.user_id', '');
+		Setting.setValue('sync.11.userId', '');
 	};
 
 	private checkSyncConfig_ = async () => {
@@ -488,7 +482,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
-						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.user_id') !== '') {
+						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {
 							addSettingButton('logout_joplin_server_saml_button', _('Logout'), this.logoutJoplinServerSaml_);
 						}
 					}

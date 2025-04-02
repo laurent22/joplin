@@ -10,8 +10,8 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, id: string, user_id: string) => {
-			saveTokens(id, user_id);
+		execute: async (_context: CommandContext, id: string, userId: string) => {
+			saveTokens(id, userId);
 		},
 	};
 };

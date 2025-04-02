@@ -456,8 +456,8 @@ describe('UserModel', () => {
 		expect(error instanceof ErrorBadRequest).toBe(true);
 	});
 
-	test('should not log in an user using a email/password combo when the built-in login is disabled', async () => {
-		config().disableBuiltinLoginFlow = true;
+	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
+		config().LOCAL_AUTH_ENABLED = false;
 
 		const user = await createUser();
 

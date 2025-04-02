@@ -374,7 +374,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			storage: SettingStorage.Database,
 		},
-		'sync.11.user_id': {
+		'sync.11.userId': {
 			value: '',
 			type: SettingItemType.String,
 			public: false,

@@ -188,7 +188,6 @@ export interface Config extends EnvVariables {
 	maxTimeDrift: number;
 	ldap: LdapConfig[];
 	saml: SamlConfig;
-	disableBuiltinLoginFlow: boolean;
 }
 
 export enum HttpMethod {

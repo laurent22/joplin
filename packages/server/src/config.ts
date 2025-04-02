@@ -213,7 +213,6 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
 		saml: samlConfigFromEnv(env),
-		disableBuiltinLoginFlow: env.DISABLE_BUILTIN_LOGIN_FLOW,
 		...overrides,
 	};
 }

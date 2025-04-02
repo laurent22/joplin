@@ -42,8 +42,9 @@ const defaultEnvValues: EnvVariables = {
 
 	DELTA_INCLUDES_ITEMS: true,
 
-	// Disable the built-in login flow. Useful when Joplin is configured to use SAML.
-	DISABLE_BUILTIN_LOGIN_FLOW: false,
+	// Whether or not to allow users logging in with a username/password combo.
+	// If this is disabled, a SAML-based login flow must be configured.
+	LOCAL_AUTH_ENABLED: true,
 
 	// ==================================================
 	// URL config
@@ -258,7 +259,7 @@ export interface EnvVariables {
 	SAML_SP_CONFIG_FILE: string;
 	SAML_ORGANIZATION_DISPLAY_NAME: string;
 
-	DISABLE_BUILTIN_LOGIN_FLOW: boolean;
+	LOCAL_AUTH_ENABLED: boolean;
 }
 
 const parseBoolean = (s: string): boolean => {

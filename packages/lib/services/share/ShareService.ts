@@ -87,7 +87,7 @@ export default class ShareService {
 				if (syncTargetId === 11) {
 					return {
 						id: Setting.value('sync.11.id'),
-						user_id: Setting.value('sync.11.user_id'),
+						user_id: Setting.value('sync.11.userId'),
 					};
 				} else {
 					return null;

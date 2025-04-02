@@ -10,6 +10,7 @@ import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
 import { homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
+import { ErrorForbidden } from '../../utils/errors';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function makeView(error: any = null): View {
@@ -32,7 +33,7 @@ router.get('login', async (_path: SubPath, ctx: AppContext) => {
 		return redirect(ctx, homeUrl());
 	}
 
-	if (config().disableBuiltinLoginFlow) {
+	if (!config().LOCAL_AUTH_ENABLED) {
 		return await generateRedirectHtml('web-login');
 	}
 
@@ -41,6 +42,8 @@ router.get('login', async (_path: SubPath, ctx: AppContext) => {
 
 // Log in using external authentication.
 router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
+	if (!config().saml.enabled) throw new ErrorForbidden('SAML not enabled');
+
 	if (ctx.joplin.owner) { // Already logged-in
 		return redirect(ctx, homeUrl());
 	} else if (config().saml.enabled && path.id === 'sso-saml') { // Server page, SAML

@@ -142,15 +142,6 @@ export class ErrorTooManyRequests extends ApiError {
 	}
 }
 
-export class InternalServerError extends ApiError {
-	public static httpCode = 500;
-
-	public constructor(message = 'Internal Server Error', option: ErrorOptions = null) {
-		super(message, InternalServerError.httpCode, option);
-		Object.setPrototypeOf(this, InternalServerError.prototype);
-	}
-}
-
 export function errorToString(error: Error): string {
 	// const msg: string[] = [];
 	// msg.push(error.message ? error.message : 'Unknown error');

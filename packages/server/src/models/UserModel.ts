@@ -31,6 +31,7 @@ import { Config, Env, LdapConfig } from '../utils/types';
 import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
+import config from '../config';
 
 const logger = Logger.create('UserModel');
 
@@ -117,13 +118,10 @@ export function accountTypeToString(accountType: AccountType): string {
 export default class UserModel extends BaseModel<User> {
 
 	private ldapConfig_: LdapConfig[];
-	private disableBuiltinLoginFlow_: boolean;
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
-
 		this.ldapConfig_ = config.ldap;
-		this.disableBuiltinLoginFlow_ = config.disableBuiltinLoginFlow;
 	}
 
 	public get tableName(): string {
@@ -136,8 +134,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async login(email: string, password: string): Promise<User> {
-		// If the built-in login flow is disabled, we do nothing.
-		if (this.disableBuiltinLoginFlow_) {
+		if (!config().LOCAL_AUTH_ENABLED) {
 			return null;
 		}
 
@@ -156,20 +153,13 @@ export default class UserModel extends BaseModel<User> {
 			}
 		}
 
-		if (!user) return null;
+		if (!user || user.is_external) return null;
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
 	}
 
-	// Log-in an user that successfully authenticated through a SSO solution.
-	//
-	// If the user doesn't currently exist, this also creates it.
-	//
-	// @param email The email included in the SSO response.
-	// @param displayName The display name to use, if the user needs to be created.
-	// @returns The user that matches the SSO response.
 	public async ssoLogin(email: string, displayName: string) {
-		if (!email) {
+		if (!email || !displayName) {
 			return null;
 		}
 
