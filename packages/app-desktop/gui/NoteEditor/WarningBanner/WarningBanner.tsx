@@ -57,7 +57,7 @@ const WarningBanner: React.FC<Props> = props => {
 		Setting.setValue('editor.legacyMarkdown', !props.isLegacyEditor);
 	};
 
-	const onDismissEditorPrompt = () => {
+	const onDismissLegacyEditorPrompt = () => {
 		const pluginIds = [...props.pluginCompatibilityBannerDismissedFor, ...incompatiblePluginIds];
 		Setting.setValue('editor.pluginCompatibilityBannerDismissedFor', pluginIds);
 	};
@@ -89,7 +89,7 @@ const WarningBanner: React.FC<Props> = props => {
 		<BannerContent
 			acceptMessage={props.isLegacyEditor ? _('Switch to the new editor') : _('Switch to the legacy editor')}
 			onAccept={onSwitchEditor}
-			onDismiss={onDismissEditorPrompt}
+			onDismiss={onDismissLegacyEditorPrompt}
 			visible={incompatiblePluginNames.length > 0 && props.bodyEditor !== 'TinyMCE'}
 		>
 			{_('The following plugins may not support the current markdown editor:')}
