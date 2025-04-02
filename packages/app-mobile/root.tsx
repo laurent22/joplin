@@ -1201,7 +1201,7 @@ class AppComponent extends React.Component {
 
 		case CallbackUrlCommand.SamlLogin:
 			saveTokens(params.id, params.user_id);
-			Alert.alert(_('Synchronization'), _('You are now logged into your organization account.'));
+			Alert.alert(_('Synchronisation'), _('You are now logged into your organisation account.'));
 			break;
 		}
 	}

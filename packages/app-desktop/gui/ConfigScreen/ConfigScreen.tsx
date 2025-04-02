@@ -271,7 +271,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					settingComps.push(
 						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
 							<Button
-								title={_('Connect using your organization account')}
+								title={_('Connect using your organisation account')}
 								level={ButtonLevel.Primary}
 								onClick={goToSamlLogin}
 								disabled={!server || server?.trim().length === 0}

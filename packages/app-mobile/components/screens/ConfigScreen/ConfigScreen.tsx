@@ -486,10 +486,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
 					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
-						addSettingButton('login_joplin_server_saml_button', _('Connect using your organization account'), this.goToJoplinServerSamlLogin_);
+						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
 
 						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.user_id') !== '') {
-							addSettingButton('logout_joplin_server_saml_button', _('Log out of Joplin Server'), this.logoutJoplinServerSaml_);
+							addSettingButton('logout_joplin_server_saml_button', _('Logout'), this.logoutJoplinServerSaml_);
 						}
 					}
 
