@@ -90,7 +90,7 @@ const WarningBanner: React.FC<Props> = props => {
 			acceptMessage={props.isLegacyEditor ? _('Switch to the new editor') : _('Switch to the legacy editor')}
 			onAccept={onSwitchEditor}
 			onDismiss={onDismissLegacyEditorPrompt}
-			visible={incompatiblePluginNames.length > 0 && props.bodyEditor !== 'TinyMCE'}
+			visible={incompatiblePluginNames.length > 0}
 		>
 			{_('The following plugins may not support the current markdown editor:')}
 			<ul>
