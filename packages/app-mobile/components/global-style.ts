@@ -15,6 +15,7 @@ const baseStyle = {
 	fontSizeSmaller: 14,
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',
+	listTabSize: '1.7em',
 	// The default, may be overridden in settings:
 	noteViewerFontSize: 16,
 };

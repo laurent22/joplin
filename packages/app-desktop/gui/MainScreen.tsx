@@ -83,6 +83,7 @@ interface Props {
 	notesColumns: NoteListColumns;
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
+	shouldSwitchToAppleSiliconVersion: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -478,6 +479,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onDisableSync = () => {
+			Setting.setValue('sync.target', null);
+		};
+
 		const onViewSyncSettingsScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
@@ -486,6 +491,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 					defaultSection: 'sync',
 				},
 			});
+		};
+
+		const onDownloadAppleSiliconVersion = () => {
+			// The website should redirect to the correct version
+			shim.openUrl('https://joplinapp.org/download/');
 		};
 
 		const onRestartAndUpgrade = async () => {
@@ -570,11 +580,19 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
 			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
+			msg = this.renderNotificationMessage(
+				_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
+				_('Download it now'),
+				onDownloadAppleSiliconVersion,
+			);
 		} else if (this.props.showInvalidJoplinCloudCredential) {
 			msg = this.renderNotificationMessage(
 				_('Your Joplin Cloud credentials are invalid, please login.'),
 				_('Login to Joplin Cloud.'),
 				onViewJoplinCloudLoginScreen,
+				_('Disable synchronisation'),
+				onDisableSync,
 			);
 		}
 
@@ -605,7 +623,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			this.showShareInvitationNotification(props) ||
 			this.props.needApiAuth ||
 			!!this.props.mustUpgradeAppMessage ||
-			props.showInvalidJoplinCloudCredential;
+			props.showInvalidJoplinCloudCredential ||
+			props.shouldSwitchToAppleSiliconVersion;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -833,6 +852,7 @@ const mapStateToProps = (state: AppState) => {
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
+		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && process.arch !== 'arm64',
 	};
 };
 

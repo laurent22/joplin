@@ -124,6 +124,7 @@ export interface NoteBodyEditorProps {
 	visiblePanes: string[];
 	keyboardMode: string;
 	tabMovesFocus: boolean;
+	enableTextPatterns: boolean;
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	locale: string;

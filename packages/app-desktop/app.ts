@@ -617,10 +617,11 @@ class Application extends BaseApplication {
 		clipperLogger.addTarget(TargetType.Console);
 
 		ClipperServer.instance().initialize(actionApi);
+		ClipperServer.instance().setEnabled(!Setting.value('altInstanceId'));
 		ClipperServer.instance().setLogger(clipperLogger);
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
-		if (Setting.value('clipperServer.autoStart')) {
+		if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
 			void ClipperServer.instance().start();
 		}
 

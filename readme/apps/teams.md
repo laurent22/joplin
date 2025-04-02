@@ -25,3 +25,17 @@ To remove a member from your team click on the Profile icon (👤) for that user
 
 The team admin account is only for managing users and billing. To collaborate with the other members of your team, add yourself as a member using a different email address.
 
+## Migrating to a Team account
+
+If you already have a Basic or Pro account, it is not currently possible to migrate your data to a Team account, as they work very differently.
+
+You can however follow these steps to manually migrate your data to a Team account:
+
+- Open the Joplin desktop app
+- Click Synchronise and wait for it to complete
+- Export all your notes as JEX (File => Export => JEX)
+- Create a new profile (File => Switch profile)
+- Import your JEX file
+- Cancel your current Joplin Cloud subscription
+- Open a new Joplin Cloud Team subscription
+- Synchronise your new profile with this new subscription

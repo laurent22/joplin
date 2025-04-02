@@ -123,7 +123,7 @@ export const toggleList = (listType: ListType): Command => {
 		const state = view.state;
 		const doc = state.doc;
 
-		// RegExps for different list types
+
 		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\]\s)/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s/;
 		const numberedRegex = /^\s*\d+\.\s/;
@@ -150,8 +150,6 @@ export const toggleList = (listType: ListType): Command => {
 			const changes: ChangeSpec[] = [];
 			let charsAdded = 0;
 
-			const fromLine = doc.lineAt(sel.from);
-			const toLine = doc.lineAt(sel.to);
 
 			// Track the current list item number for ordered lists
 			let listItemCounter = 1;

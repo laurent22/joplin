@@ -1,7 +1,7 @@
 import { homedir } from 'os';
 import { toSystemSlashes } from './path-utils';
 
-export default (profileFromArgs: string, appName: string) => {
+export default (profileFromArgs: string, appName: string, altInstanceId: string) => {
 	let profileDir = '';
 	let homeDir = '';
 
@@ -12,7 +12,11 @@ export default (profileFromArgs: string, appName: string) => {
 		profileDir = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 		homeDir = process.env.PORTABLE_EXECUTABLE_DIR;
 	} else {
-		profileDir = `${homedir()}/.config/${appName}`;
+		if (!altInstanceId) {
+			profileDir = `${homedir()}/.config/${appName}`;
+		} else {
+			profileDir = `${homedir()}/.config/${appName}-${altInstanceId}`;
+		}
 		homeDir = homedir();
 	}
 

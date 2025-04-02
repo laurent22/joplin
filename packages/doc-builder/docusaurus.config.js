@@ -253,6 +253,10 @@ const config = {
 								href: 'https://www.patreon.com/joplin',
 							},
 							{
+								label: 'YouTube',
+								href: 'https://www.youtube.com/@joplinapp',
+							},
+							{
 								label: 'LinkedIn',
 								href: 'https://www.linkedin.com/company/joplin',
 							},

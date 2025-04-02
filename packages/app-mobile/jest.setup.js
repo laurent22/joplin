@@ -9,6 +9,7 @@ const path = require('path');
 const sharp = require('sharp');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const sqlite3 = require('sqlite3');
 const React = require('react');
 require('../../jest.base-setup.js')();
@@ -30,6 +31,12 @@ shim.injectedJs = (name) => {
 		throw new Error(`Cannot find injected JS with ID ${name}`);
 	}
 	return injectedJs[name];
+};
+shim.fsDriver().getAppDirectoryPath = () => {
+	// On mobile, the rootProfileDirectory and the app directory
+	// (RNFetchBlob's DocumentDir) match the root profile directory
+	// by default.
+	return Setting.value('rootProfileDir');
 };
 
 // This library has the following error when running within Jest:

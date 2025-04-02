@@ -22,12 +22,18 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, markupLanguage: MarkupLanguage, markup: string, _rendererOptions: Options = null, renderOptions: RenderOptions = null) => {
 			const markupToHtml = getMarkupToHtml();
-			const html = await markupToHtml.render(markupLanguage, markup, themeStyle(Setting.value('theme')), {
-				...renderOptions,
-				resources: await attachedResources(markup),
-				splitted: true,
-			});
-			return html;
+
+			try {
+				const html = await markupToHtml.render(markupLanguage, markup, themeStyle(Setting.value('theme')), {
+					...renderOptions,
+					resources: await attachedResources(markup),
+					splitted: true,
+				});
+				return html;
+			} catch (error) {
+				error.message = `Could not render markup: markupLanguage: ${markupLanguage} Markup: ${markup}: ${error.message}`;
+				throw error;
+			}
 		},
 	};
 };

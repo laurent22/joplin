@@ -177,11 +177,23 @@ export default class JoplinSettings {
 	}
 
 	/**
-	 * Gets a global setting value, including app-specific settings and those set by other plugins.
+	 * Gets global setting values, including app-specific settings and those set by other plugins.
 	 *
 	 * The list of available settings is not documented yet, but can be found by looking at the source code:
 	 *
-	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Setting.ts#L142
+	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/settings/builtInMetadata.ts
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async globalValues(keys: string[]): Promise<any[]> {
+		const output: (string|number|boolean)[] = [];
+		for (const key of keys) {
+			output.push(Setting.value(key));
+		}
+		return output;
+	}
+
+	/**
+	 * @deprecated Use joplin.settings.globalValues()
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async globalValue(key: string): Promise<any> {

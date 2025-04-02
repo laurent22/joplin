@@ -449,6 +449,11 @@ function stateHasEncryptedItems(state: State) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function folderSetCollapsed(draft: Draft<State>, action: any) {
+	if (action.ids) {
+		draft.collapsedFolderIds = action.ids;
+		return;
+	}
+
 	const collapsedFolderIds = draft.collapsedFolderIds.slice();
 	const idx = collapsedFolderIds.indexOf(action.id);
 
