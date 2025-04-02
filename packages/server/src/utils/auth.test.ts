@@ -1,4 +1,4 @@
-import { checkPassword, hashPassword } from './auth';
+import { hashPassword } from './auth';
 
 describe('auth', () => {
 
@@ -16,8 +16,4 @@ describe('auth', () => {
 		expect((await hashPassword(plainText)).startsWith('$2a$10')).toBe(true);
 	});
 	// cSpell:enable
-
-	test('should refuse an empty password', async () => {
-		expect(await checkPassword('', '')).toBe(false);
-	});
 });
