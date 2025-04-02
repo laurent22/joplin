@@ -2,10 +2,11 @@ import { EditorSelection } from '@codemirror/state';
 import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
-	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
+	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, updateLink,
 } from './markdownCommands';
 import createTestEditor from '../testUtil/createTestEditor';
 import { blockMathTagName } from './MarkdownMathExtension';
+import { ListType } from '../../types';
 
 describe('markdownCommands', () => {
 
@@ -323,6 +324,50 @@ describe('markdownCommands', () => {
 		insertHorizontalRule(editor);
 
 		expect(editor.state.doc.toString()).toBe('testing\n* * *\n* * *\n\n> this is a test\n> * * *\n> * * *');
+	});
+
+	it('should convert a nested bulleted list to an ordered list', async () => {
+		const initialDocText = `- Item 1
+			- Sub-item 1
+			- Sub-item 2
+		- Item 2`;
+
+		const expectedDocText = `1. Item 1
+			1. Sub-item 1
+			2. Sub-item 2
+		2. Item 2`;
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleList(ListType.OrderedList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
+	});
+
+	it('should convert a mixed nested list to a bulleted list', async () => {
+		const initialDocText = `1. Item 1
+			1. Sub-item 1
+			2. Sub-item 2
+		2. Item 2`;
+
+		const expectedDocText = `- Item 1
+			- Sub-item 1
+			- Sub-item 2
+		- Item 2`;
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['OrderedList'],
+		);
+
+		toggleList(ListType.UnorderedList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
 	});
 });
 
