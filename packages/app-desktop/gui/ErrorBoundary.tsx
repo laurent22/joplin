@@ -3,6 +3,8 @@ import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
+import BannerContent from './NoteEditor/WarningBanner/BannerContent';
+import { _ } from '@joplin/lib/locale';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -29,6 +31,19 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	children: any;
 }
+
+interface BannerProps {
+	isVisible: boolean;
+}
+
+const SwitchToNewEditorBanner = (props: BannerProps) => <BannerContent
+	acceptMessage={_('Switch to the new editor')}
+	onAccept={() => Setting.setValue('editor.legacyMarkdown', false)}
+	visible={props.isVisible}
+>
+	{_('The legacy Markdown editor might be incompatbile with a number of plugins. We recommend using the new editor.')}
+	<br/>
+</BannerContent>;
 
 export default class ErrorBoundary extends React.Component<Props, State> {
 
@@ -130,8 +145,11 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 					}
 				}
 
+				const isLegacyEditorError = !!this.state.error.stack.includes('CodeMirror/v5');
+
 				return (
 					<div style={{ overflow: 'auto', fontFamily: 'sans-serif', padding: '5px 20px' }}>
+						<SwitchToNewEditorBanner isVisible={isLegacyEditorError} />
 						<h1>Error</h1>
 						{this.renderMessage()}
 						<p>To report the error, please copy the *entire content* of this page and post it on Joplin forum or GitHub.</p>
