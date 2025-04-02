@@ -2,10 +2,13 @@ import * as React from 'react';
 import { useMemo, useRef } from 'react';
 import { DialogState } from '../types';
 import { PrintCallback } from './usePrintToCallback';
+import { _ } from '@joplin/lib/locale';
+import announceForAccessibility from '../../utils/announceForAccessibility';
 
 export interface WindowControl {
 	setState: (update: Partial<DialogState>)=> void;
 	printTo: PrintCallback;
+	announcePanelVisibility(panelName: string, visible: boolean): void;
 }
 
 export type OnSetDialogState = React.Dispatch<React.SetStateAction<DialogState>>;
@@ -24,6 +27,11 @@ const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallba
 				}));
 			},
 			printTo: (target, options) => onPrintRef.current(target, options),
+			announcePanelVisibility: (panelName, visible) => {
+				announceForAccessibility(
+					visible ? _('Panel "%s" is visible', panelName) : _('Panel %s is hidden', panelName),
+				);
+			},
 		};
 	}, [setDialogState]);
 };

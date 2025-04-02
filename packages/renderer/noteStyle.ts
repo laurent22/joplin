@@ -216,7 +216,7 @@ export default function(theme: any, options: Options = null) {
 		}
 		ul, ol {
 			padding-left: 0;
-			margin-left: 1.7em;
+			margin-left: ${theme.listTabSize};
 		}
 		li {
 			margin-bottom: .4em;

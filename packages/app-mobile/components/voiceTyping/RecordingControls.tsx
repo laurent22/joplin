@@ -43,12 +43,15 @@ const styles = StyleSheet.create({
 
 const RecordingControls: React.FC<Props> = props => {
 	const renderIcon = () => {
+		const loadingIcon: IconSource = ({ size }: { size: number }) => {
+			return <ActivityIndicator animating={true} style={{ width: size, height: size }} />;
+		};
 		const components: Record<RecorderState, IconSource> = {
-			[RecorderState.Loading]: ({ size }: { size: number }) => <ActivityIndicator animating={true} style={{ width: size, height: size }} />,
+			[RecorderState.Loading]: loadingIcon,
 			[RecorderState.Recording]: 'microphone',
 			[RecorderState.Idle]: 'microphone',
-			[RecorderState.Processing]: 'microphone',
-			[RecorderState.Downloading]: ({ size }: { size: number }) => <ActivityIndicator animating={true} style={{ width: size, height: size }} />,
+			[RecorderState.Processing]: loadingIcon,
+			[RecorderState.Downloading]: loadingIcon,
 			[RecorderState.Error]: 'alert-circle-outline',
 		};
 
@@ -67,6 +70,7 @@ const RecordingControls: React.FC<Props> = props => {
 						refocusCounter={1}
 						aria-live='polite'
 						role='heading'
+						testID='recording-controls-heading'
 					>
 						<Text variant='bodyMedium'>
 							{props.heading}

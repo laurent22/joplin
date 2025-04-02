@@ -139,11 +139,8 @@
 			const viewerPercent = scrollmap.translateL2V(percent);
 			const newScrollTop = viewerPercent * maxScrollTop();
 
-			// Even if the scroll position hasn't changed (percent is the same),
-			// we still ignore the next scroll event, so that it doesn't create
-			// undesired side effects.
-			// https://github.com/laurent22/joplin/issues/7617
-			ignoreNextScrollEvent();
+			// The next scroll event cannot be skipped in order to correctly
+			// scroll to the target section in a different note when follwing a link
 			
 			if (Math.floor(contentElement.scrollTop) !== Math.floor(newScrollTop)) {
 				percentScroll_ = percent;
@@ -375,6 +372,53 @@
 			const scrollTop = contentElement.scrollTop;
 			document.getElementById(dummyID).focus();
 			contentElement.scrollTop = scrollTop;
+		}
+
+		const getLineCorrespondingTo = (editorLineNumber) => {
+			const lineElements = document.getElementsByClassName('maps-to-line');
+			let lastLineElement;
+			let lastLine = 0;
+			for (const element of lineElements) {
+				// Stop just before the element that corresponds to a greater position
+				if (Number(element.getAttribute('source-line')) > editorLineNumber) {
+					break;
+				}
+				lastLineElement = element;
+			}
+			return lastLineElement;
+		};
+
+		const makeTemporarilyFocusable = (element) => {
+			const dataOriginalTabIndexAttr = 'data-original-tabindex';
+			const originalTabIndex = (
+				element.getAttribute(dataOriginalTabIndexAttr) ?? element.getAttribute('tabindex')
+			);
+			element.setAttribute(dataOriginalTabIndexAttr, originalTabIndex);
+			element.setAttribute('tabindex', '0');
+
+			return {
+				reset: () => {
+					element.setAttribute('tabindex', originalTabIndex);
+					element.removeAttribute(dataOriginalTabIndexAttr);
+				},
+			};
+		};
+
+		ipc.focusLine = (event) => {
+			const targetLine = event.line;
+			const lineElement = getLineCorrespondingTo(targetLine);
+			if (lineElement) {
+				// To allow focusing, the element needs to briefly have tabindex=0.
+				const { reset } = makeTemporarilyFocusable(lineElement);
+
+				lineElement.focus({ preventScroll: true });
+
+				// Reset the tabindex after the browser has had time to focus the element.
+				// When a screen reader is enabled, focus stays on the lineElement.
+				setTimeout(() => {
+					reset();
+				}, 50);
+			}
 		}
 
 		const rewriteFileUrls = (accessKey) => {

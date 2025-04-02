@@ -65,6 +65,7 @@ import processStartFlags from './utils/processStartFlags';
 import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 import NavService from './services/NavService';
+import getAppName from './getAppName';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -679,15 +680,16 @@ export default class BaseApplication {
 
 		let appName = options.appName;
 		if (!appName) {
-			appName = initArgs.env === 'dev' ? 'joplindev' : 'joplin';
-			if (Setting.value('appId').indexOf('-desktop') >= 0) appName += '-desktop';
+			appName = getAppName(Setting.value('appId').indexOf('-desktop') >= 0, initArgs.env === 'dev');
 		}
 		Setting.setConstant('appName', appName);
 
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName);
+		const altInstanceId = initArgs.altInstanceId || '';
+
+		const { rootProfileDir, homeDir } = determineProfileAndBaseDir(options.rootProfileDir ?? initArgs.profileDir, appName, altInstanceId);
 		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
@@ -780,6 +782,8 @@ export default class BaseApplication {
 		if (initArgs?.isSafeMode) {
 			Setting.setValue('isSafeMode', true);
 		}
+
+		Setting.setValue('altInstanceId', altInstanceId);
 
 		const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 		if (await fs.pathExists(safeModeFlagFile) && fs.readFileSync(safeModeFlagFile, 'utf8') === 'true') {

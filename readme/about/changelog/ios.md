@@ -1,5 +1,21 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.2) - 2025-03-16T11:47:05Z
+
+- New: Add setting migration for ocr.enabled (ab86b95)
+- Improved: Accessibility: Improve focus handling in the note actions menu and modal dialogs (#11929 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Make default modal close button accessible (#11957 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve encryption config screen accessibility (#11874) (#11846 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Re-Add iOS Dark Icon (#11943 by [@itzTheMeow](https://github.com/itzTheMeow))
+- Improved: Updated packages @bam.tech/react-native-image-resizer (v3.0.11)
+- Fixed: Accessibility: Fix "new note" and "new to-do" buttons are focusable even while invisible (#11899 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix focus gets stuck on "Attach" in the note actions menu (#11958 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix missing label on note actions menu dismiss button (#11954 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix plugins can't be installed using VoiceOver (#11931 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix disabled encryption keys list showing enabled keys (#11861) (#11858 by [@pedr](https://github.com/pedr))
+- Fixed: Fix voice recorder crash (#11876) (#11864 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Make tab size consistent between Markdown editor and viewer (and RTE) (#11940) (#11673)
+
 ## [ios-v13.3.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.1) - 2025-02-19T16:04:34Z
 
 - New: Add support for plugin editor views (#11831)

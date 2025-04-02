@@ -52,7 +52,7 @@ const HeaderItem: React.FC<Props> = props => {
 			itemCount={props.itemCount}
 			expanded={props.item.expanded}
 			onContextMenu={onContextMenu}
-			depth={0}
+			depth={item.depth}
 			highlightOnHover={false}
 			className='sidebar-header-container'
 			{...item.extraProps}

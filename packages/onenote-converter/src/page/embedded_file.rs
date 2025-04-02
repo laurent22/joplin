@@ -22,9 +22,10 @@ impl<'a> Renderer<'a> {
         let file_type = Self::guess_type(file);
 
         match file_type {
-            FileType::Audio => content = format!("<audio controls src=\"{}\"></audio>", filename),
+            // TODO: we still don't have support for the audio tag on html notes https://github.com/laurent22/joplin/issues/11939
+            // FileType::Audio => content = format!("<audio class=\"media-player media-audio\"controls><source src=\"{}\" type=\"audio/x-wav\"></source></audio>", filename),
             FileType::Video => content = format!("<video controls src=\"{}\"></video>", filename),
-            FileType::Unknown => {
+            FileType::Unknown | FileType::Audio => {
                 content = format!(
                     "<p style=\"font-size: 11pt; line-height: 17px;\"><a href=\"{}\">{}</a></p>",
                     filename, filename

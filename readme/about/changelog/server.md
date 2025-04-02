@@ -1,6 +1,21 @@
 # Joplin Server Changelog
 
-## [server-v3.3.1](https://github.com/laurent22/joplin/releases/tag/server-v3.3.1) - 2025-02-19T19:17:57Z
+## [server-v3.3.13](https://github.com/laurent22/joplin/releases/tag/server-v3.3.13) - 2025-03-30T18:28:47Z
+
+- Improved: Buildx support for Docker images (#11582 by [@redrathnure](https://github.com/redrathnure))
+- New: Added links to social networks (04fc634)
+- Improved: Joplin Server Docker image for ARM64 (#12030)
+- Fixed: Disable faulty dark theme to prevent published notes from being unreadable (#11910)
+
+## [server-v3.3.4](https://github.com/laurent22/joplin/releases/tag/server-v3.3.4) - 2025-03-03T22:29:29Z
+
+- Security: Improve request validation in default route (#11916 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [server-v3.3.3](https://github.com/laurent22/joplin/releases/tag/server-v3.3.3) - 2025-02-23T19:06:59Z
+
+- Security: Fixed patching user properties (12baa98)
+
+## [server-v3.3.2](https://github.com/laurent22/joplin/releases/tag/server-v3.3.2) - 2025-02-19T22:00:04Z
 
 - New: Add logging statement to evaluate the performance of the sharing service (1d6c1e4)
 - New: Added more logging for sharing (2779a9c)

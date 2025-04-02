@@ -1,0 +1,29 @@
+# - bishop to c3
+# - rook to d4
+# - knight to e5
+# - d4 d5 knight to c3
+# - c3 queen to d4 king b1
+# - pawn to a1 bishop to b2 knight to c3
+#
+# The prompt (--prompt) is the initial phrase that the user has to say.
+# This is used to prime Whisper with how the user is expected to speak.
+#
+# Provide long context (--context) with sample moves to help Whisper decode the correct sequence.
+# Longer context is better, but it slightly increases the processing time.
+#
+# example:
+#
+#   ./command -m ./models/ggml-tiny.en.bin -t 8 --grammar ./grammars/chess.gbnf --prompt "rook to b4, f3," --context "d4 d5 knight to c3, pawn to a1, bishop to b2 king e8," --grammar-penalty 100
+#
+
+root   ::= init move move? move? "."
+prompt ::= init "."
+
+# leading space is very important!
+init ::= " rook to b4, f3"
+
+move ::= ", " ((piece | pawn | king) " " "to "?)? [a-h] [1-8]
+
+piece ::= "bishop" | "rook" | "knight" | "queen"
+king  ::= "king"
+pawn  ::= "pawn"

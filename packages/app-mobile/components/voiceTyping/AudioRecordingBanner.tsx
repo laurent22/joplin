@@ -14,7 +14,7 @@ import { Text } from 'react-native-paper';
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
-import { formatMsToDurationLocal } from '@joplin/utils/time';
+import { formatMsToDurationCompat } from '@joplin/utils/time';
 
 const logger = Logger.create('AudioRecording');
 
@@ -212,7 +212,7 @@ const AudioRecordingBanner: React.FC<Props> = props => {
 	const renderDuration = () => {
 		if (recordingState !== RecorderState.Recording) return null;
 
-		const durationValue = formatMsToDurationLocal(duration);
+		const durationValue = formatMsToDurationCompat(duration);
 		return <Text
 			accessibilityLabel={_('Duration: %s', durationValue)}
 			accessibilityRole='timer'

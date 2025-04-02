@@ -70,6 +70,13 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -79,14 +86,19 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097764
-		versionName "3.3.1"
-		ndk {
-			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-		}
+		versionCode 2097767
+		versionName "3.3.4"
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
 
         // Needed to fix: The number of method references in a .dex file cannot exceed 64K
         multiDexEnabled true
+        externalNativeBuild {
+            cmake {
+                cppFlags '-DCMAKE_BUILD_TYPE=Release'
+            }
+        }
     }
     signingConfigs {
         debug {
@@ -95,14 +107,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-		release {
-			if (project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
-				storeFile file(JOPLIN_RELEASE_STORE_FILE)
-				storePassword JOPLIN_RELEASE_STORE_PASSWORD
-				keyAlias JOPLIN_RELEASE_KEY_ALIAS
-				keyPassword JOPLIN_RELEASE_KEY_PASSWORD
-			}
-		}
+        release {
+            if (project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
+                storeFile file(JOPLIN_RELEASE_STORE_FILE)
+                storePassword JOPLIN_RELEASE_STORE_PASSWORD
+                keyAlias JOPLIN_RELEASE_KEY_ALIAS
+                keyPassword JOPLIN_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -127,10 +139,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
-    // Needed for Whisper speech-to-text
-    implementation 'com.microsoft.onnxruntime:onnxruntime-android:latest.release'
-    implementation 'com.microsoft.onnxruntime:onnxruntime-extensions-android:latest.release'
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

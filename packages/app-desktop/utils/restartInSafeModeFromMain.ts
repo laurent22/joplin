@@ -21,14 +21,14 @@ const restartInSafeModeFromMain = async () => {
 	shimInit({});
 
 	const startFlags = await processStartFlags(bridge().processArgv());
-	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName);
+	const { rootProfileDir } = determineBaseAppDirs(startFlags.matched.profileDir, appName, Setting.value('altInstanceId'));
 	const { profileDir } = await initProfile(rootProfileDir);
 
 	// We can't access the database, so write to a file instead.
 	const safeModeFlagFile = join(profileDir, safeModeFlagFilename);
 	await writeFile(safeModeFlagFile, 'true', 'utf8');
 
-	bridge().restart();
+	await bridge().restart();
 };
 
 export default restartInSafeModeFromMain;

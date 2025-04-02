@@ -268,8 +268,6 @@ const createEditor = (
 					},
 				}),
 
-				EditorState.tabSize.of(4),
-
 				// Apply styles to entire lines (block-display decorations)
 				decoratorExtension,
 				dropCursor(),
