@@ -28316,7 +28316,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^9.1.7":
+"husky@npm:9.1.7":
   version: 9.1.7
   resolution: "husky@npm:9.1.7"
   bin:
@@ -42002,7 +42002,7 @@ __metadata:
     glob: 10.4.5
     gulp: 4.0.2
     http-server: 14.1.1
-    husky: ^9.1.7
+    husky: 9.1.7
     lerna: 3.22.1
     lint-staged: 15.2.8
     madge: 7.0.0

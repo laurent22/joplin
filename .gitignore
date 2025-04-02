@@ -1551,6 +1551,7 @@ packages/tools/build-translation.js
 packages/tools/build-welcome.js
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.js
+packages/tools/checkGitHooks.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js

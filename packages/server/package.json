@@ -19,7 +19,7 @@
     "clean": "gulp clean",
     "populateDatabase": "JOPLIN_TESTS_SERVER_DB=pg node dist/utils/testing/populateDatabase",
     "stripeListen": "stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
+    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.296.0",

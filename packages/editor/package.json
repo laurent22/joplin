@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json",
     "test": "jest",
     "test-ci": "yarn test"
   },

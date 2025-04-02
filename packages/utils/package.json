@@ -26,7 +26,7 @@
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "build": "yarn tsc",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "yarn test"
   },

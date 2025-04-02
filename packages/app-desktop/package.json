@@ -10,7 +10,7 @@
     "electronBuilder": "gulp electronBuilder",
     "electronRebuild": "gulp electronRebuild",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json",
     "start": "gulp before-start && electron . --env dev --log-level debug --open-dev-tools --no-welcome",
     "test": "jest",
     "test-ui": "playwright test",

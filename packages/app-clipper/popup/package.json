@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "watch": "webpack watch --mode=development",
+    "watch": "node ../tools/checkGitHooks.js && webpack watch --mode=development",
     "postinstall": "node postinstall.js && npm run build"
   },
   "devDependencies": {
