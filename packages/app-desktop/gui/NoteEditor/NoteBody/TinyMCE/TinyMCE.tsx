@@ -738,6 +738,24 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
 					forecolor: { inline: 'span', styles: { color: '%value' } },
 				},
+				text_patterns: props.enableTextPatterns ? [
+					// See https://www.tiny.cloud/docs/tinymce/latest/content-behavior-options/#text_patterns
+					// for the default value
+					{ start: '==', end: '==', format: 'joplinHighlight' },
+					{ start: '`', end: '`', format: 'code' },
+					{ start: '*', end: '*', format: 'italic' },
+					{ start: '**', end: '**', format: 'bold' },
+					{ start: '#', format: 'h1' },
+					{ start: '##', format: 'h2' },
+					{ start: '###', format: 'h3' },
+					{ start: '####', format: 'h4' },
+					{ start: '#####', format: 'h5' },
+					{ start: '######', format: 'h6' },
+					{ start: '1.', cmd: 'InsertOrderedList' },
+					{ start: '*', cmd: 'InsertUnorderedList' },
+					{ start: '-', cmd: 'InsertUnorderedList' },
+				] : [],
+
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
