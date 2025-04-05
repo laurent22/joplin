@@ -23,7 +23,6 @@ class NativeWhisperLib(
 		private external fun addAudio(pointer: Long, audioData: FloatArray): Unit;
 		private external fun transcribeNextChunk(pointer: Long): String;
 		private external fun transcribeRemaining(pointer: Long): String;
-		private external fun getPreview(pointer: Long): String;
 	}
 
 	private var closed = false
@@ -51,14 +50,6 @@ class NativeWhisperLib(
 		}
 
 		return Companion.transcribeRemaining(pointer)
-	}
-
-	fun getPreview(): String {
-		if (closed) {
-			throw Exception("Cannot get preview from a closed session")
-		}
-
-		return getPreview(pointer)
 	}
 
 	override fun close() {

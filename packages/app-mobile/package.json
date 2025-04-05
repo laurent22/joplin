@@ -33,7 +33,6 @@
     "@react-native-community/geolocation": "3.3.0",
     "@react-native-community/netinfo": "11.3.3",
     "@react-native-community/push-notification-ios": "1.11.0",
-    "@react-native-community/slider": "4.5.5",
     "assert-browserify": "2.0.0",
     "buffer": "6.0.3",
     "color": "3.2.1",

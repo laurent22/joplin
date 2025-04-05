@@ -186,7 +186,7 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 	const reDownloadButton = <Button
 		// Usually, stoppingSession is true because the re-download button has
 		// just been pressed.
-		disabled={stoppingSession}
+		disabled={stoppingSession || recorderState === RecorderState.Downloading}
 		onPress={onRequestRedownload}
 	>
 		{modelIsOutdated ? _('Download updated model') : _('Re-download model')}

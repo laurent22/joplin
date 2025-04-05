@@ -139,10 +139,6 @@ class Whisper implements VoiceTypingSession {
 				this.onDataFinalize(data);
 
 				logger.debug('done reading block. Length', data?.length);
-				if (this.sessionId !== null) {
-					const previewText = await SpeechToTextModule.getPreview(this.sessionId);
-					this.callbacks.onPreview(this.postProcessSpeech(previewText));
-				}
 			}
 		} catch (error) {
 			logger.error('Whisper error:', error);
@@ -202,14 +198,14 @@ const whisper: VoiceTypingProvider = {
 		let urlTemplate = rtrimSlashes(Setting.value('voiceTypingBaseUrl').trim());
 
 		if (!urlTemplate) {
-			urlTemplate = 'https://github.com/personalizedrefrigerator/joplin-voice-typing-test/releases/download/v0.0.3/{task}.zip';
+			urlTemplate = 'https://github.com/joplin/voice-typing-models/releases/download/v0.2.0/{task}.zip';
 		}
 
-		// Note: whisper-base-q8_0 is also available and works on many Android devices. On some low
-		// resource devices, however, it will fail.
-		// TODO: Auto-select the model size?
+		// Note: whisper-base-q8_0.fr is also available and may have better performance on French-language
+		// input.
+		// TODO: Auto-select the model?
 		return urlTemplate
-			.replace(/\{task\}/g, 'whisper-tiny-q8_0')
+			.replace(/\{task\}/g, 'whisper-base-q8_0')
 			.replace(/\{lang\}/g, lang);
 	},
 	deleteCachedModels: async (locale) => {

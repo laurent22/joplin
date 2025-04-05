@@ -54,7 +54,7 @@ WhisperSession::buildWhisperParams_() {
 	params.initial_prompt = prompt_.c_str();
 	params.prompt_tokens = nullptr;
 	params.prompt_n_tokens = 0;
-    params.audio_ctx = 0;
+	params.audio_ctx = 0;
 
 	// Lifetime: lifetime(params) < lifetime(lang_) = lifetime(this).
 	params.language = lang_.c_str();
@@ -64,31 +64,32 @@ WhisperSession::buildWhisperParams_() {
 
 std::string
 WhisperSession::transcribe_(const std::vector<float>& audio, size_t transcribeCount) {
-	int minTranscribeLength = WHISPER_SAMPLE_RATE / 2; // 0.5s
+	// Whisper won't transcribe anything shorter than 1s.
+	int minTranscribeLength = WHISPER_SAMPLE_RATE; // 1s
 	if (transcribeCount < minTranscribeLength) {
 		return "";
 	}
 
-    float seconds = static_cast<float>(audio.size()) / WHISPER_SAMPLE_RATE;
-    if (seconds > 30.0f) {
-        LOGW("Warning: Audio is longer than 30 seconds. Not all audio will be transcribed");
-    }
+	float seconds = static_cast<float>(transcribeCount) / WHISPER_SAMPLE_RATE;
+	if (seconds > 30.0f) {
+		LOGW("Warning: Audio is longer than 30 seconds. Not all audio will be transcribed");
+	}
 
 	whisper_full_params params = buildWhisperParams_();
 
-    // If supported by the model, allow shortening the transcription. This can significantly
-    // improve performance, but requires a fine-tuned model.
-    // See https://github.com/futo-org/whisper-acft
-    if (this->shortAudioContext_) {
-        // audio_ctx: 1500 every 30 seconds (50 units in one second).
-        // See https://github.com/futo-org/whisper-acft/issues/6
-        float padding = 64.0f;
-        params.audio_ctx = static_cast<int>(seconds * (1500.0f / 30.0f) + padding);
+	// If supported by the model, allow shortening the transcription. This can significantly
+	// improve performance, but requires a fine-tuned model.
+	// See https://github.com/futo-org/whisper-acft
+	if (this->shortAudioContext_) {
+		// audio_ctx: 1500 every 30 seconds (50 units in one second).
+		// See https://github.com/futo-org/whisper-acft/issues/6
+		float padding = 64.0f;
+		params.audio_ctx = static_cast<int>(seconds * (1500.0f / 30.0f) + padding);
 
-        if (params.audio_ctx > 1500) {
-            params.audio_ctx = 1500;
-        }
-    }
+		if (params.audio_ctx > 1500) {
+			params.audio_ctx = 1500;
+		}
+	}
 	whisper_reset_timings(pContext_);
 
 	transcribeCount = std::min(audio.size(), transcribeCount);
@@ -139,7 +140,7 @@ bool WhisperSession::isBufferSilent_() {
 }
 
 std::string
-WhisperSession::transcribeNextChunkNoPreview_() {
+WhisperSession::transcribeNextChunk() {
 	std::stringstream result;
 
 	// Handles a silence detected between (splitStart, splitEnd).
@@ -152,6 +153,12 @@ WhisperSession::transcribeNextChunkNoPreview_() {
 			audioBuffer_.clear();
 			return false;
 		} else if (splitEnd > tolerance) { // Anything to transcribe?
+			// Include some of the silence between the start and the end. Excluding it
+			// seems to make Whisper more likely to omit trailing punctuation.
+			int maximumSilentSamples = WHISPER_SAMPLE_RATE;
+			int silentSamplesToAdd = std::min(maximumSilentSamples, (splitEnd - splitStart) / 2);
+			splitStart += silentSamplesToAdd;
+
 			result << splitAndTranscribeBefore_(splitStart, splitEnd) << "\n\n";
 			return true;
 		}
@@ -216,12 +223,6 @@ void WhisperSession::addAudio(const float *pAudio, int sizeAudio) {
 	}
 }
 
-std::string WhisperSession::transcribeNextChunk() {
-	std::string finalizedContent = transcribeNextChunkNoPreview_();
-	previewText_ = transcribe_(audioBuffer_, audioBuffer_.size());
-	return finalizedContent;
-}
-
 std::string WhisperSession::transcribeAll() {
 	if (isBufferSilent_()) {
 		return "";
@@ -231,7 +232,7 @@ std::string WhisperSession::transcribeAll() {
 
 	std::string transcribed;
 	auto update_transcribed = [&] {
-		transcribed = transcribeNextChunkNoPreview_();
+		transcribed = transcribeNextChunk();
 		return !transcribed.empty();
 	};
 	while (update_transcribed()) {
@@ -244,10 +245,5 @@ std::string WhisperSession::transcribeAll() {
 	}
 	audioBuffer_.clear();
 
-	previewText_ = "";
 	return result.str();
-}
-
-std::string WhisperSession::getPreview() {
-	return previewText_;
 }
