@@ -45,7 +45,7 @@ interface ResourceTable {
 	onResourceDelete: (resource: InnerResource)=> any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onToggleSorting: (order: SortingOrder)=> any;
-	setResourceSize: (id: string, newSize: number) => void;
+	setResourceSize: (id: string, newSize: number)=> void;
 	filter: string;
 	themeId: number;
 	style: Style;
@@ -104,25 +104,27 @@ const ResourceTableComp = (props: ResourceTable) => {
 		);
 		return <th key={`header-${title}`} style={headerStyle}>{title} {reverseSortButton}</th>;
 	};
-	filteredResources.map(async (resource: InnerResource) => {
-		const resourcePath = Resource.fullPath(resource);
-		fs.watchFile(resourcePath, async (curr, prev) => {
-			if (curr.size !== prev.size) {
-				console.log(`Resource ${resource.id} modified. Updating size...`);
+	filteredResources.map((resource: InnerResource) => {
+		void (async () => {
+			const resourcePath = Resource.fullPath(resource);
+			fs.watchFile(resourcePath, async (curr, prev) => {
+				if (curr.size !== prev.size) {
+					await Resource.save({
+						id: resource.id,
+						size: curr.size,
+					});
+					props.setResourceSize(resource.id, curr.size);
+				}
+			});
+			// Atualizar o tamanho do recurso no banco de dados
+			const stats = await fs.promises.stat(resourcePath);
+			if (resource.size !== stats.size) {
 				await Resource.save({
 					id: resource.id,
-					size: curr.size,
+					size: stats.size,
 				});
-				props.setResourceSize(resource.id, curr.size);
 			}
-		});
-		const stats = await fs.promises.stat(resourcePath);
-		if (resource.size !== stats.size) {
-			await Resource.save({
-				id: resource.id,
-				size: stats.size,
-			});
-		}
+		})();
 	});
 
 	return (
