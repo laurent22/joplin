@@ -140,15 +140,6 @@ Java_net_cozic_joplin_audio_NativeWhisperLib_00024Companion_transcribeRemaining(
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_net_cozic_joplin_audio_NativeWhisperLib_00024Companion_getPreview(
-		JNIEnv *env, jobject thiz, jlong pointer
-) {
-	auto *pSession = reinterpret_cast<WhisperSession *> (pointer);
-	return stringToJava(env, pSession->getPreview());
-}
-
-extern "C"
 JNIEXPORT void JNICALL
 Java_net_cozic_joplin_audio_NativeWhisperLib_00024Companion_runTests(JNIEnv *env, jobject thiz) {
 	try {

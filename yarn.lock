@@ -8369,7 +8369,6 @@ __metadata:
     "@react-native-community/geolocation": 3.3.0
     "@react-native-community/netinfo": 11.3.3
     "@react-native-community/push-notification-ios": 1.11.0
-    "@react-native-community/slider": 4.5.5
     "@react-native/babel-preset": 0.74.86
     "@react-native/metro-config": 0.74.87
     "@sqlite.org/sqlite-wasm": 3.46.0-build2
@@ -11228,20 +11227,6 @@ __metadata:
     react: ">=16.6.3"
     react-native: ">=0.58.4"
   checksum: d8c8cdd0d4e8112752a13bf2c426618ec8edd91eacadf03f05375648b5f12ffa761e8676e9d6ac9e5bc5ded73c991ab2219c67fe02e110dfaf38f4cb59695868
-  languageName: node
-  linkType: hard
-
-"@react-native-community/slider@npm:4.4.4":
-  version: 4.4.4
-  resolution: "@react-native-community/slider@npm:4.4.4"
-  checksum: 65d79b72d100aab75e9051315798935a2419202e157f5e35dedb4e2843ccdd93816b553c9a7a41642f5140e5a05e20326a27ef65e9ed9c53efc59d8755a5d91f
-  languageName: node
-  linkType: hard
-
-"@react-native-community/slider@patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch::locator=root%40workspace%3A.":
-  version: 4.4.4
-  resolution: "@react-native-community/slider@patch:@react-native-community/slider@npm%3A4.4.4#./.yarn/patches/@react-native-community-slider-npm-4.4.4-d78e472f48.patch::version=4.4.4&hash=1120f2&locator=root%40workspace%3A."
-  checksum: c4397dd2e914f52e3d9b4058d3cf850e67d99c85a59492835647513af85ba62ba182c5c7655fd35d6f768155d45c0c8b5eb0adaad803165d9fec508b77b19a2b
   languageName: node
   linkType: hard
 

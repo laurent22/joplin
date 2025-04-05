@@ -54,6 +54,12 @@ test.describe('wcag', () => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
+		// Ensure that there is at least one sub-folder in the sidebar
+		const folder1 = await mainScreen.sidebar.createNewFolder('Test folder 1');
+		const folder2 = await mainScreen.sidebar.createNewFolder('Test folder 2');
+		await folder2.dragTo(folder1);
+		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
+
 		await mainScreen.createNewNote('Test');
 
 		// Ensure that `:hover` styling is consistent between tests:

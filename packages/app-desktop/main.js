@@ -3,7 +3,7 @@
 const electronApp = require('electron').app;
 require('@electron/remote/main').initialize();
 const ElectronAppWrapper = require('./ElectronAppWrapper').default;
-const { pathExistsSync, readFileSync } = require('fs-extra');
+const { pathExistsSync, readFileSync, mkdirpSync } = require('fs-extra');
 const { initBridge } = require('./bridge');
 const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
@@ -47,6 +47,11 @@ const appId = `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-desktop`;
 let appName = env === 'dev' ? 'joplindev' : 'joplin';
 if (appId.indexOf('-desktop') >= 0) appName += '-desktop';
 const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName, altInstanceId);
+
+// We create the profile dir as soon as we know where it's going to be located since it's used in
+// various places early in the initialisation code.
+mkdirpSync(rootProfileDir);
+
 const settingsPath = `${rootProfileDir}/settings.json`;
 let autoUploadCrashDumps = false;
 
