@@ -116,7 +116,6 @@ const ResourceTableComp = (props: ResourceTable) => {
 					props.setResourceSize(resource.id, curr.size);
 				}
 			});
-			// Atualizar o tamanho do recurso no banco de dados
 			const stats = await fs.promises.stat(resourcePath);
 			if (resource.size !== stats.size) {
 				await Resource.save({
