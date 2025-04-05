@@ -327,15 +327,19 @@ describe('markdownCommands', () => {
 	});
 
 	it('should convert a nested bulleted list to an ordered list', async () => {
-		const initialDocText = `- Item 1
-			- Sub-item 1
-			- Sub-item 2
-		- Item 2`;
+		const initialDocText = [
+			'- Item 1',
+			'    - Sub-item 1',
+			'    - Sub-item 2',
+			'- Item 2',
+		].join('\n');
 
-		const expectedDocText = `1. Item 1
-			1. Sub-item 1
-			2. Sub-item 2
-		2. Item 2`;
+		const expectedDocText = [
+			'1. Item 1',
+			'    1. Sub-item 1',
+			'    2. Sub-item 2',
+			'2. Item 2',
+		].join('\n');
 
 		const editor = await createTestEditor(
 			initialDocText,
@@ -370,4 +374,6 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe(expectedDocText);
 	});
 });
+
+
 

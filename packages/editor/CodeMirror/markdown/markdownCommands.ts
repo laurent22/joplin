@@ -15,7 +15,6 @@ import stripBlockquote from './utils/stripBlockquote';
 import renumberSelectedLists from './utils/renumberSelectedLists';
 import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
 
-const startingSpaceRegex = /^(\s*)/;
 
 export const toggleBolded: Command = (view: EditorView): boolean => {
 	const spec = RegionSpec.of({ template: '**', nodeName: 'StrongEmphasis' });
@@ -123,13 +122,12 @@ export const toggleList = (listType: ListType): Command => {
 		const state = view.state;
 		const doc = state.doc;
 
-		// RegExps for different list types
 		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\]\s)/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s/;
 		const numberedRegex = /^\s*\d+\.\s/;
+		const startingSpaceRegex = /^\s*/;
 
 		const listRegexes: Record<ListType, RegExp> = {
-
 			[ListType.OrderedList]: numberedRegex,
 			[ListType.CheckList]: checklistRegex,
 			[ListType.UnorderedList]: bulletedRegex,
@@ -137,54 +135,95 @@ export const toggleList = (listType: ListType): Command => {
 
 		const getContainerType = (line: Line): ListType | null => {
 			const lineContent = stripBlockquote(line);
-
-			// Determine the container's type
 			if (lineContent.match(checklistRegex)) return ListType.CheckList;
 			if (lineContent.match(bulletedRegex)) return ListType.UnorderedList;
 			if (lineContent.match(numberedRegex)) return ListType.OrderedList;
-
 			return null;
 		};
+
+		const fromLine = doc.lineAt(state.selection.main.from);
+		const toLine = doc.lineAt(state.selection.main.to);
+		let baselineIndent = Infinity;
+		for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
+			const line = doc.line(lineNum);
+			const content = stripBlockquote(line);
+			if (content.trim() !== '') {
+				const indent = (content.match(startingSpaceRegex)?.[0] || '').length;
+				baselineIndent = Math.min(baselineIndent, indent);
+			}
+		}
+		if (baselineIndent === Infinity) baselineIndent = 0;
+
+		let isEntirelyTargetList = true;
+		for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
+			const line = doc.line(lineNum);
+			const content = stripBlockquote(line);
+			if (content.trim() === '' && listType === ListType.CheckList) {
+				isEntirelyTargetList = false;
+				break;
+			}
+			if (content.trim() === '') continue;
+			if (getContainerType(line) !== listType) {
+				isEntirelyTargetList = false;
+				break;
+			}
+		}
+
+		let outerCounter = 1;
+		const stack: { indent: number; counter: number }[] = [];
 
 		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
 			const changes: ChangeSpec[] = [];
 			let charsAdded = 0;
 
-			const fromLine = doc.lineAt(sel.from);
-			const toLine = doc.lineAt(sel.to);
-
-			// Track the current list item number for ordered lists
-			let listItemCounter = 1;
-
 			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
 				const line = doc.line(lineNum);
-				const lineContent = stripBlockquote(line);
-				const lineContentFrom = line.to - lineContent.length;
-				const indentation = lineContent.match(startingSpaceRegex)[0];
+				const origLineContent = stripBlockquote(line);
+				if (origLineContent.trim() === '' && listType !== ListType.CheckList) {
+					continue;
+				}
 
-				// Determine the current list type
+				const lineContentFrom = line.to - origLineContent.length;
+				const indentation = origLineContent.match(startingSpaceRegex)?.[0] || '';
+				const currentIndent = indentation.length;
+				const normalizedIndent = currentIndent - baselineIndent;
+
 				const currentContainer = getContainerType(line);
-
-				// Remove the existing list marker
 				const deleteFrom = lineContentFrom;
 				let deleteTo = deleteFrom + indentation.length;
-
 				if (currentContainer !== null) {
 					const containerRegex = listRegexes[currentContainer];
-					const containerMatch = lineContent.match(containerRegex);
+					const containerMatch = origLineContent.match(containerRegex);
 					if (containerMatch) {
 						deleteTo = lineContentFrom + containerMatch[0].length;
 					}
 				}
 
-				// Add the new list marker
 				let replacementString = '';
-				if (listType === ListType.OrderedList) {
-					replacementString = `${indentation}${listItemCounter}. `;
-				} else if (listType === ListType.CheckList) {
-					replacementString = `${indentation}- [ ] `;
-				} else if (listType === ListType.UnorderedList) {
-					replacementString = `${indentation}- `;
+				if (!isEntirelyTargetList) {
+					if (listType === ListType.OrderedList) {
+						if (normalizedIndent <= 0) {
+							// Top-level item
+							stack.length = 0;
+							replacementString = `${indentation}${outerCounter}. `;
+							outerCounter++;
+						} else {
+							// Nested item
+							while (stack.length && stack[stack.length - 1].indent > currentIndent) {
+								stack.pop();
+							}
+							if (!stack.length || stack[stack.length - 1].indent < currentIndent) {
+								stack.push({ indent: currentIndent, counter: 1 });
+							}
+							const currentLevel = stack[stack.length - 1];
+							replacementString = `${indentation}${currentLevel.counter}. `;
+							currentLevel.counter++;
+						}
+					} else if (listType === ListType.CheckList) {
+						replacementString = `${indentation}- [ ] `;
+					} else if (listType === ListType.UnorderedList) {
+						replacementString = `${indentation}- `;
+					}
 				}
 
 				changes.push({
@@ -192,35 +231,17 @@ export const toggleList = (listType: ListType): Command => {
 					to: deleteTo,
 					insert: replacementString,
 				});
-
 				charsAdded -= deleteTo - deleteFrom;
 				charsAdded += replacementString.length;
-
-				// Increment the list item counter for ordered lists
-				if (listType === ListType.OrderedList) {
-					listItemCounter++;
-				}
 			}
 
-			// Adjust the selection range after applying changes
 			const newSelection = sel.empty
 				? EditorSelection.cursor(toLine.to + charsAdded)
 				: EditorSelection.range(sel.from, sel.to + charsAdded);
-
-			return {
-				changes,
-				range: newSelection,
-			};
+			return { changes, range: newSelection };
 		});
 
-		// Apply the changes
 		view.dispatch(changes);
-
-		// Renumber the list if it's an ordered list
-		if (listType === ListType.OrderedList) {
-			view.dispatch(renumberSelectedLists(view.state));
-		}
-
 		return true;
 	};
 };
