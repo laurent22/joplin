@@ -8,12 +8,13 @@
 # Nicolas Suzuki <nicolas.suzuki@pm.me>, 2021.
 # Felipe Viggiano <felipeviggiano@gmail.com>, 2021.
 # Renato Nunes Bastos <rnbastos@gmail.com>, 2023, 2024.
+# Túlio Simões Martins Padilha <wikigeolog@gmx.com>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Renato Nunes Bastos <rnbastos@gmail.com>\n"
+"Last-Translator: Túlio Simões Martins Padilha <wikigeolog@gmx.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
