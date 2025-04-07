@@ -28,8 +28,8 @@ describe('buildServerDocker', () => {
 		type TestCase = [string, boolean];
 
 		const testCases: TestCase[] = [
-			['server-v1.1.2-beta', true],
-			['server-v1.1.2', true], // For now, always returns true
+			['server-v1.1.2-beta', false], // For now, always returns false
+			['server-v1.1.2', false],
 		];
 
 		for (const testCase of testCases) {
