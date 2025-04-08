@@ -158,7 +158,7 @@ export const stopServer = async (server: IpcServer) => {
 	});
 };
 
-interface SendMessageOutput {
+export interface SendMessageOutput {
 	port: number;
 	response: Response;
 }

@@ -331,13 +331,16 @@ packages/app-desktop/gui/NoteSearchBar.js
 packages/app-desktop/gui/NoteStatusBar.js
 packages/app-desktop/gui/NoteTextViewer.js
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js
-packages/app-desktop/gui/NotyfContext.js
 packages/app-desktop/gui/OneDriveLoginScreen.js
 packages/app-desktop/gui/PasswordInput/LabelledPasswordInput.js
 packages/app-desktop/gui/PasswordInput/PasswordInput.js
 packages/app-desktop/gui/PasswordInput/types.js
 packages/app-desktop/gui/PdfViewer.js
 packages/app-desktop/gui/PluginNotification/PluginNotification.js
+packages/app-desktop/gui/PopupNotification/NotificationItem.js
+packages/app-desktop/gui/PopupNotification/PopupNotificationList.js
+packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.js
+packages/app-desktop/gui/PopupNotification/types.js
 packages/app-desktop/gui/PromptDialog.js
 packages/app-desktop/gui/ResizableLayout/LayoutItemContainer.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
@@ -399,6 +402,7 @@ packages/app-desktop/gui/ToolbarBase.js
 packages/app-desktop/gui/ToolbarButton/ToolbarButton.js
 packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/TrashNotification/TrashNotification.js
+packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.js
 packages/app-desktop/gui/UpdateNotification/UpdateNotification.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/AppDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/ModalMessageOverlay.js
@@ -569,6 +573,7 @@ packages/app-mobile/commands/scrollToHash.js
 packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BetaChip.js
+packages/app-mobile/components/BottomDrawer.js
 packages/app-mobile/components/CameraView/ActionButtons.js
 packages/app-mobile/components/CameraView/Camera/index.jest.js
 packages/app-mobile/components/CameraView/Camera/index.js
@@ -662,7 +667,6 @@ packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
-packages/app-mobile/components/accessibility/AccessibleModalMenu.js
 packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
 packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
@@ -677,6 +681,7 @@ packages/app-mobile/components/biometrics/BiometricPopup.js
 packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/buttons/FloatingActionButton.js
+packages/app-mobile/components/buttons/LabelledIconButton.js
 packages/app-mobile/components/buttons/TextButton.js
 packages/app-mobile/components/buttons/index.js
 packages/app-mobile/components/getResponsiveValue.test.js
@@ -767,7 +772,9 @@ packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
-packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
+packages/app-mobile/components/screens/Notes/NewNoteButton.js
+packages/app-mobile/components/screens/Notes/Notes.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
 packages/app-mobile/components/screens/SearchScreen/index.js
 packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
@@ -822,6 +829,7 @@ packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/database-driver-react-native.js
 packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
+packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
@@ -837,6 +845,7 @@ packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
+packages/app-mobile/utils/hooks/useSafeAreaPadding.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js

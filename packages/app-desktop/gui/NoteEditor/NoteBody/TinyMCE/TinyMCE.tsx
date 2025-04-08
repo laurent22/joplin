@@ -736,7 +736,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
-					forecolor: { inline: 'span', styles: { color: '%value' } },
+					// Foreground color: The remove_similar: true is necessary here for the "remove formatting"
+					// button to work. See https://github.com/tinymce/tinymce/issues/5026.
+					forecolor: { inline: 'span', styles: { color: '%value' }, remove_similar: true },
 				},
 				text_patterns: props.enableTextPatterns ? [
 					// See https://www.tiny.cloud/docs/tinymce/latest/content-behavior-options/#text_patterns

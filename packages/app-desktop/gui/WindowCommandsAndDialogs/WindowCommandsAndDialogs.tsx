@@ -18,6 +18,7 @@ import useWindowCommands from './utils/useWindowCommands';
 import PluginDialogs from './PluginDialogs';
 import useSyncDialogState from './utils/useSyncDialogState';
 import AppDialogs from './AppDialogs';
+import PopupNotificationList from '../PopupNotification/PopupNotificationList';
 
 const PluginManager = require('@joplin/lib/services/PluginManager');
 
@@ -113,7 +114,9 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	const dialogInfo = PluginManager.instance().pluginDialogToShow(props.pluginsLegacy);
 	const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
 
-	const { noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions } = dialogState;
+	const {
+		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions,
+	} = dialogState;
 
 
 	return <>
@@ -173,6 +176,8 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 			buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null}
 			inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null}
 		/>
+
+		<PopupNotificationList/>
 	</>;
 };
 

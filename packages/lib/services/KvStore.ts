@@ -6,6 +6,13 @@ enum ValueType {
 	Text = 2,
 }
 
+interface KvStoreKeyValue {
+	key: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactoring of old code from before rule was applied
+	value: any;
+	type: ValueType;
+}
+
 export default class KvStore extends BaseService {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -110,7 +117,7 @@ export default class KvStore extends BaseService {
 		}
 	}
 
-	public async searchByPrefix(prefix: string) {
+	public async searchByPrefix(prefix: string): Promise<KvStoreKeyValue[]> {
 		const results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
 		return this.formatValues_(results);
 	}
