@@ -9,7 +9,8 @@ const JoplinCloudSignUpCallToAction = () => {
 	};
 
 	return <div className="joplin-cloud-sign-up">
-		<p>{_('Don\'t have a Joplin Cloud account? ')}
+		<p>{_('Don\'t have a Joplin Cloud account?')}
+			&nbsp;
 			<a
 				href="#"
 				onClick={onJoplinCloudSignUpClick}
