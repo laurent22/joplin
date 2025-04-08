@@ -12,17 +12,11 @@ const checkGitHooks = async () => {
 		const gitHooksPath = await execCommand('git config --get core.hooksPath');
 
 		if (gitHooksPath.trim() !== '.husky/_') {
-			throw Error(`core.hooksPath is not set to .husky/_ folder: ${gitHooksPath}`);
-		}
-
-		const preCommit = await readFile(`${process.cwd()}/../../.husky/pre-commit`);
-
-		if (!preCommit) {
-			throw new Error('Empty pre-commit file');
+			throw Error(`git core.hooksPath is not set to '.husky/_' folder, but: '${gitHooksPath}'.`);
 		}
 
 	} catch (error) {
-		throw new Error(`Pre-commit hook probably does not exist. \n ${error.message}`);
+		throw new Error(`Pre-commit hook probably does not exist. \n\nTo fix this ensure that husky package was installed correctly by running "yarn add --exact husky" on the root folder. \n Error: ${error.message}`);
 	}
 };
 
