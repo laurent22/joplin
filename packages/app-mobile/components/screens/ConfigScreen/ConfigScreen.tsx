@@ -37,7 +37,6 @@ import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './J
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
-import prefixWithHttps from '@joplin/lib/utils/prefixWithHttps';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -96,15 +95,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private goToJoplinServerSamlLogin_ = async () => {
 		// Save the settings to allow for sync when the user completes authentication
-
 		await this.saveButton_press();
-		const link = Setting.value('sync.11.path');
 
-		if (link !== '') {
-			// 'sso-saml-app' is used to indicate to Joplin Server to specify the proper relay state to
-			// the Identity Provider to allow redirecting to the app after authentication is complete.
-			await Linking.openURL(`${prefixWithHttps(link)}/login/sso-saml-app`);
-		}
+		await NavService.go('JoplinServerSamlLogin');
 	};
 
 	private logoutJoplinServerSaml_ = () => {

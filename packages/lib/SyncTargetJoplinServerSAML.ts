@@ -1,7 +1,7 @@
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import { _ } from './locale.js';
-import JoplinServerApi from './JoplinServerApi';
+import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
 import Logger from '@joplin/utils/Logger';
@@ -30,12 +30,23 @@ export async function initFileApi(syncTargetId: number, logger: Logger, options:
 	return fileApi;
 }
 
-export function saveTokens(id: string, userId: string) {
-	if (id !== null && userId !== null && id.trim() !== '' && userId.trim() !== '') {
-		Setting.setValue('sync.11.id', id);
-		Setting.setValue('sync.11.userId', userId);
+export const authenticateWithCode = async (code: string) => {
+	try {
+		const response = await fetch(`${Setting.value('sync.11.path')}/api/login_with_code/${code}`);
+		if (response.status !== 200) {
+			return false;
+		}
+
+		const token: Session = await response.json();
+		Setting.setValue('sync.11.id', token.id);
+		Setting.setValue('sync.11.userId', token.user_id);
+
+	} catch (_e) {
+		return false;
 	}
-}
+
+	return true;
+};
 
 // A sync target for Joplin Server that uses SAML for authentication.
 //

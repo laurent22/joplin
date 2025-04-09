@@ -387,6 +387,7 @@ packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
 packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/Sidebar/types.js
+packages/app-desktop/gui/SsoLoginScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
 packages/app-desktop/gui/SyncWizard/Dialog.js
@@ -773,6 +774,7 @@ packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
 packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
 packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
+packages/app-mobile/components/screens/SsoLoginScreen.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
@@ -1012,7 +1014,6 @@ packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/permanentlyDeleteNote.js
 packages/lib/commands/renderMarkup.test.js
 packages/lib/commands/renderMarkup.js
-packages/lib/commands/samlLogin.js
 packages/lib/commands/showEditorPlugin.js
 packages/lib/commands/synchronize.js
 packages/lib/commands/toggleAllFolders.test.js
@@ -1021,6 +1022,8 @@ packages/lib/commands/toggleEditorPlugin.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
+packages/lib/components/shared/SamlShared.js
+packages/lib/components/shared/SsoScreenShared.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js

@@ -27,7 +27,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 const VersionInfo = require('react-native-version-info').default;
-import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions, Alert } from 'react-native';
+import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
@@ -82,7 +82,7 @@ const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
-import SyncTargetJoplinServerSAML, { saveTokens } from '@joplin/lib/SyncTargetJoplinServerSAML';
+import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
@@ -143,6 +143,8 @@ import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import PluginNotification from './components/plugins/PluginNotification';
 import FocusControl from './components/accessibility/FocusControl/FocusControl';
+import SsoLoginScreen from './components/screens/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
 
 const logger = Logger.create('root');
 
@@ -1198,11 +1200,6 @@ class AppComponent extends React.Component {
 				folderId: params.id,
 			});
 			break;
-
-		case CallbackUrlCommand.SamlLogin:
-			saveTokens(params.id, params.userId);
-			Alert.alert(_('Synchronisation'), _('You are now logged into your organisation account.'));
-			break;
 		}
 	}
 
@@ -1277,6 +1274,7 @@ class AppComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ShareManager: { screen: ShareManager },

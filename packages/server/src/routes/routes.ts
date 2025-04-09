@@ -47,6 +47,7 @@ const routes: Routers = {
 	'api/locks': apiLocks,
 	'api/ping': apiPing,
 	'api/saml': apiLogin,
+	'api/login_with_code': apiLogin,
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,

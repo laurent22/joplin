@@ -83,6 +83,13 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: config.HEARTBEAT_MESSAGE_SCHEDULE,
 			run: (_models: Models, _services: Services) => logHeartbeatMessage(),
 		},
+
+		{
+			id: TaskId.DeleteExpiredAuthCodes,
+			description: taskIdToLabel(TaskId.DeleteExpiredAuthCodes),
+			schedule: '*/15 * * * *',
+			run: (models: Models) => models.user().deleteExpiredAuthCodes(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {

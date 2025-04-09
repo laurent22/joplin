@@ -32,6 +32,7 @@ import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
 import config from '../config';
+import { randomInt } from 'node:crypto';
 
 const logger = Logger.create('UserModel');
 
@@ -116,6 +117,7 @@ export function accountTypeToString(accountType: AccountType): string {
 }
 
 export default class UserModel extends BaseModel<User> {
+	private authCodeTtl = 600000; // 10 minutes
 
 	private ldapConfig_: LdapConfig[];
 
@@ -130,6 +132,11 @@ export default class UserModel extends BaseModel<User> {
 
 	public async loadByEmail(email: string): Promise<User> {
 		const user: User = this.formatValues({ email: email });
+		return this.db<User>(this.tableName).where(user).first();
+	}
+
+	public async loadBySsoAuthCode(code: string): Promise<User> {
+		const user = this.formatValues({ sso_auth_code: code });
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
@@ -181,6 +188,46 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
+	public async generateSsoCode(user: User) {
+		let authCode;
+
+		// Make sure that the code is not already in use.
+		do {
+			authCode = randomInt(0, 999999999).toString().padStart(9, '0');
+		} while (await this.loadBySsoAuthCode(authCode) === null);
+
+		user.sso_auth_code = authCode;
+		user.sso_auth_code_expire_at = Date.now() + this.authCodeTtl;
+
+		await this.save(user, { skipValidation: true });
+	}
+
+	public async authCodeLogin(code: string) {
+		const user = await this.loadBySsoAuthCode(code);
+
+		if (!user) {
+			return null;
+		} else if (user.sso_auth_code_expire_at > Date.now()) {
+			// Clear the saved code
+			user.sso_auth_code = '';
+			user.sso_auth_code_expire_at = 0;
+
+			return await this.save(user, { skipValidation: true });
+		} else { // Code is expired. Clear the code but do not return the user.
+			user.sso_auth_code = '';
+			user.sso_auth_code_expire_at = 0;
+
+			await this.save(user, { skipValidation: true });
+			return null;
+		}
+	}
+
+	public async deleteExpiredAuthCodes() {
+		await this.db(this.tableName)
+			.where('sso_auth_code_expire_at', '<', Date.now())
+			.update({ sso_auth_code: '', sso_auth_code_expire_at: 0 });
+	}
+
 	public fromApiInput(object: User): User {
 		const user: User = {};
 
@@ -197,6 +244,8 @@ export default class UserModel extends BaseModel<User> {
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 		if ('is_external' in object) user.is_external = object.is_external;
+		if ('sso_auth_code' in object) user.sso_auth_code = object.sso_auth_code;
+		if ('sso_auth_code_expire_at' in object) user.sso_auth_code_expire_at = object.sso_auth_code_expire_at;
 
 		return user;
 	}

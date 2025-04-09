@@ -5,7 +5,6 @@ import * as historyForward from './historyForward';
 import * as openMasterPasswordDialog from './openMasterPasswordDialog';
 import * as permanentlyDeleteNote from './permanentlyDeleteNote';
 import * as renderMarkup from './renderMarkup';
-import * as samlLogin from './samlLogin';
 import * as showEditorPlugin from './showEditorPlugin';
 import * as synchronize from './synchronize';
 import * as toggleAllFolders from './toggleAllFolders';
@@ -18,7 +17,6 @@ const index: any[] = [
 	openMasterPasswordDialog,
 	permanentlyDeleteNote,
 	renderMarkup,
-	samlLogin,
 	showEditorPlugin,
 	synchronize,
 	toggleAllFolders,

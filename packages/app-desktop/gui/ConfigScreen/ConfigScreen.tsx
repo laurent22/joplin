@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { shell } from 'electron';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
@@ -21,7 +20,6 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim from '@joplin/lib/shim';
-import prefixWithHttps from '@joplin/lib/utils/prefixWithHttps';
 
 
 interface Font {
@@ -263,9 +261,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 					const server = settings['sync.11.path'] as string;
 
-					const goToSamlLogin = async () => {
-						// 'sso-saml-app' indicates to Joplin Server that it should redirect the user to the app after authentication
-						await shell.openExternal(`${prefixWithHttps(server)}/login/sso-saml-app`);
+					const goToSamlLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerSamlLogin',
+						});
 					};
 
 					settingComps.push(
