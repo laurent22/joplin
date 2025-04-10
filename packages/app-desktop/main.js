@@ -66,7 +66,6 @@ if (pathExistsSync(settingsPath)) {
 }
 
 electronApp.setAsDefaultProtocolClient('joplin');
-
 void registerCustomProtocols();
 
 const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
