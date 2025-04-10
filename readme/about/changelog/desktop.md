@@ -1,5 +1,24 @@
 # Joplin Desktop Changelog
 
+## [v3.3.4](https://github.com/laurent22/joplin/releases/tag/v3.3.4) (Pre-release) - 2025-04-07T20:23:35Z
+
+- New: Plugins: Add `setting.globalValues` and deprecate `setting.globalValue` ([ef51386](https://github.com/laurent22/joplin/commit/ef51386))
+- New: Rich Text Editor: Add setting to allow disabling auto-format ([#12022](https://github.com/laurent22/joplin/issues/12022) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Add screen reader announcements when toggling the note list and/or sidebar ([#11776](https://github.com/laurent22/joplin/issues/11776)) ([#11741](https://github.com/laurent22/joplin/issues/11741) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Remove redundant accessibility information from sidebar notebooks ([#12020](https://github.com/laurent22/joplin/issues/12020)) ([#11903](https://github.com/laurent22/joplin/issues/11903) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Explain why items could not be decrypted ([#12048](https://github.com/laurent22/joplin/issues/12048)) ([#11872](https://github.com/laurent22/joplin/issues/11872) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve notification accessibility ([#11752](https://github.com/laurent22/joplin/issues/11752) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Increase the likelihood of text generation from image recognition ([#12028](https://github.com/laurent22/joplin/issues/12028)) ([#11608](https://github.com/laurent22/joplin/issues/11608) by [@pedr](https://github.com/pedr))
+- Improved: Multiple instances: Secure local server ([#11999](https://github.com/laurent22/joplin/issues/11999)) ([#11992](https://github.com/laurent22/joplin/issues/11992))
+- Improved: Update Electron to v35.1.4 ([#12068](https://github.com/laurent22/joplin/issues/12068) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: A note scrolls to top if reached by following a link to a section ([#12038](https://github.com/laurent22/joplin/issues/12038)) ([#9291](https://github.com/laurent22/joplin/issues/9291) by [@Schmeilen](https://github.com/Schmeilen))
+- Fixed: App without a profile directory cannot start ([#12021](https://github.com/laurent22/joplin/issues/12021))
+- Fixed: Changing the type of one list changes it for all the lists ([#11986](https://github.com/laurent22/joplin/issues/11986)) ([#11971](https://github.com/laurent22/joplin/issues/11971) by [@Paramesh-T-S](https://github.com/Paramesh-T-S))
+- Fixed: Joplin became unusably slow on MacOS due to incorrect detection of architecture ([#11989](https://github.com/laurent22/joplin/issues/11989))
+- Fixed: Regression: Restarting app is broken ([#11975](https://github.com/laurent22/joplin/issues/11975))
+- Fixed: Restoring a note which was in a deleted notebook  ([#12016](https://github.com/laurent22/joplin/issues/12016)) ([#11934](https://github.com/laurent22/joplin/issues/11934))
+- Fixed: Rich Text Editor: Fix "Remove color" button doesn't work ([#12052](https://github.com/laurent22/joplin/issues/12052) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.3.3](https://github.com/laurent22/joplin/releases/tag/v3.3.3) (Pre-release) - 2025-03-16T11:52:33Z
 
 - New: Accessibility: Add a menu item that moves focus to the note viewer ([#11967](https://github.com/laurent22/joplin/issues/11967) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

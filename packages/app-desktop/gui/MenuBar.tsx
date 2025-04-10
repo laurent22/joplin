@@ -555,7 +555,8 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
-			const newAppInstance = menuItemDic.newAppInstance;
+			const openSecondaryAppInstance = menuItemDic.openSecondaryAppInstance;
+			const openPrimaryAppInstance = menuItemDic.openPrimaryAppInstance;
 			const switchProfileItem = {
 				label: _('Switch profile'),
 				submenu: switchProfileMenuItems,
@@ -723,7 +724,8 @@ function useMenu(props: Props) {
 						type: 'separator',
 					},
 					switchProfileItem,
-					newAppInstance,
+					openSecondaryAppInstance,
+					openPrimaryAppInstance,
 				],
 			};
 

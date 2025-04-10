@@ -32,6 +32,7 @@ import bridge from '../services/bridge';
 import EditorWindow from './NoteEditor/EditorWindow';
 import SsoLoginScreen from './SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
+import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
 interface Props {
@@ -200,13 +201,15 @@ class RootComponent extends React.Component<Props, any> {
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
-					<StyleSheetContainer/>
-					<MenuBar/>
-					<GlobalStyle/>
-					<WindowCommandsAndDialogs windowId={defaultWindowId} />
-					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
-					{this.renderSecondaryWindows()}
-					{this.renderModalMessage(this.modalDialogProps())}
+					<PopupNotificationProvider>
+						<StyleSheetContainer/>
+						<MenuBar/>
+						<GlobalStyle/>
+						<WindowCommandsAndDialogs windowId={defaultWindowId} />
+						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
+						{this.renderSecondaryWindows()}
+						{this.renderModalMessage(this.modalDialogProps())}
+					</PopupNotificationProvider>
 				</ThemeProvider>
 			</StyleSheetManager>
 		);
