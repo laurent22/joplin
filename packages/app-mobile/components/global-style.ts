@@ -8,6 +8,7 @@ const Color = require('color');
 const baseStyle = {
 	appearance: 'light',
 	fontSize: 16,
+	fontSizeLarger: 18,
 	fontSizeLarge: 20,
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,

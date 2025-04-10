@@ -27,6 +27,7 @@ const input: Theme = {
 	colorError2: '#ff6c6c',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ff7626',
+	backgroundColorTransparent2: 'rgba(0, 0, 0, 0.1)',
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
@@ -71,6 +72,7 @@ const expected = `
 	--joplin-background-color4: #ffffff;
 	--joplin-background-color-hover3: #CBDAF1;
 	--joplin-background-color-transparent: rgba(255,255,255,0.9);
+	--joplin-background-color-transparent2: rgba(0, 0, 0, 0.1);
 	--joplin-block-quote-opacity: 0.7;
 	--joplin-code-background-color: rgb(243, 243, 243);
 	--joplin-code-border-color: rgb(220, 220, 220);

@@ -1,5 +1,22 @@
 # Joplin Android Changelog
 
+## [android-v3.3.5](https://github.com/laurent22/joplin/releases/tag/android-v3.3.5) (Pre-release) - 2025-04-07T19:31:26Z
+
+- New: Add "swap line up" and "swap line down" to toolbar extended options (#12053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Plugins: Add command to hide the plugin panel viewer (#12018 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Explain why items could not be decrypted (#12048) (#11872 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement new note menu redesign (#11780 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove slider component module and replace integer settings with new validated component (#11822) (#10883 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Update react-native-quick-crypto (#12067 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Default to a larger model (#12009 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Disable "Download update" button while downloading an updated model (#12015 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Improve transcription at the end of paragraphs (#12013 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Performance: Disable preview generation logic (#12008 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Changing the type of one list changes it for all the lists (#11986) (#11971 by [@Paramesh-T-S](https://github.com/Paramesh-T-S))
+- Fixed: Fix cursor moves to incorrect position when revising TextInput value (#11821) (#11820 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Restoring a note which was in a deleted notebook  (#12016) (#11934)
+- Fixed: Voice typing: Fix incorrectly-calculated audio length (#12012 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.3.4](https://github.com/laurent22/joplin/releases/tag/android-v3.3.4) (Pre-release) - 2025-03-21T18:07:00Z
 
 - Improved: Voice typing: Improve processing with larger models (#11983 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

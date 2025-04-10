@@ -804,7 +804,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					dispatch={this.props.dispatch as any}
 				/>
-				<UpdateNotification themeId={this.props.themeId} />
+				<UpdateNotification />
 				<PluginNotification
 					themeId={this.props.themeId}
 					toast={this.props.toast}

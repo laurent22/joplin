@@ -523,8 +523,14 @@ export class Bridge {
 		}
 	}
 
-	public async launchNewAppInstance(env: string) {
+	public async launchAltAppInstance(env: string) {
 		const cmd = this.appLaunchCommand(env, 'alt1');
+
+		await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+	}
+
+	public async launchMainAppInstance(env: string) {
+		const cmd = this.appLaunchCommand(env, '');
 
 		await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
 	}

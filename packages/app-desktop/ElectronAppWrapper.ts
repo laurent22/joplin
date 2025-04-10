@@ -655,7 +655,7 @@ export default class ElectronAppWrapper {
 						// might still be there for a short while.
 						await msleep(1000);
 						this.ipcLogger_.warn('restartAltInstance: App is gone - restarting it');
-						void bridge().launchNewAppInstance(this.env());
+						void bridge().launchAltAppInstance(this.env());
 					} else {
 						this.ipcLogger_.warn('restartAltInstance: Could not restart calling app because it was still open');
 					}
