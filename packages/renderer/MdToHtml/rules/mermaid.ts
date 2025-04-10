@@ -1,4 +1,5 @@
 import { RuleOptions } from '../../MdToHtml';
+import Setting from '../../../lib/models/Setting';
 
 export default {
 
@@ -62,7 +63,7 @@ export default {
 			return self.renderToken(tokens, idx, options, env, self);
 		};
 
-		const exportButtonMarkup = (isDesktop(ruleOptions.platformName) && !document.querySelector('.tox-tinymce')) ? exportGraphButton(ruleOptions) : '';
+		const exportButtonMarkup = (isDesktop(ruleOptions.platformName) && Setting.value('editor.codeView')) ? exportGraphButton(ruleOptions) : '';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
