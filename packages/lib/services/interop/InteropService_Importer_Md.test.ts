@@ -204,4 +204,17 @@ describe('InteropService_Importer_Md', () => {
 		// The malformed link is imported as-is
 		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
 	});
+	it('should import linked files without extensions appropriately', async () => {
+		const note = await importNote(`${supportDir}/test_notes/md/sample-filter-extension.md`);
+
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(2);
+
+		const extensionLessLinkUnchanged = note.body.includes('.sample-extension-less');
+		expect(extensionLessLinkUnchanged).toBe(false);
+
+		const dotBackslashLink = '![sample](./sample-extension-less)';
+		const dotBackslashLinkUnchanged = note.body.includes(dotBackslashLink);
+		expect(dotBackslashLinkUnchanged).toBe(false);
+	});
 });
