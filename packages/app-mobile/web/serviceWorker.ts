@@ -129,8 +129,9 @@ if (typeof window === 'undefined') {
 					newHeaders.set('Cross-Origin-Resource-Policy', 'cross-origin');
 				}
 				newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
+				const body = (response.status == 101 || response.status == 204 || response.status == 205 || response.status == 304) ? null : response.body;
 
-				response = new Response(response.body, {
+				response = new Response(body, {
 					status: response.status,
 					statusText: response.statusText,
 					headers: newHeaders,
