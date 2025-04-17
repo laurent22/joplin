@@ -210,11 +210,10 @@ describe('InteropService_Importer_Md', () => {
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(2);
 
+		const dotBackslashLinkUnchanged = note.body.includes('./sample-extension-less');
+		expect(dotBackslashLinkUnchanged).toBe(false);
+
 		const extensionLessLinkUnchanged = note.body.includes('.sample-extension-less');
 		expect(extensionLessLinkUnchanged).toBe(false);
-
-		const dotBackslashLink = '![sample](./sample-extension-less)';
-		const dotBackslashLinkUnchanged = note.body.includes(dotBackslashLink);
-		expect(dotBackslashLinkUnchanged).toBe(false);
 	});
 });
