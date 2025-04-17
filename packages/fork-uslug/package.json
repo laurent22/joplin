@@ -1,25 +1,40 @@
 {
   "name": "@joplin/fork-uslug",
-  "version": "1.0.22",
+  "version": "2.0.0",
   "description": "A permissive slug generator that works with unicode.",
   "author": "Jeremy Selier <jerem.selier@gmail.com>",
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "test": "jest",
+    "build": "yarn tsc",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
+  },
   "dependencies": {
-    "node-emoji": "1.11.0",
-    "unorm": "1.6.0"
+    "node-emoji": "1.11.0"
   },
   "devDependencies": {
-    "should": "13.2.3"
+    "@types/jest": "29.5.12",
+    "@types/node": "18.19.67",
+    "jest": "29.7.0",
+    "typescript": "5.4.5"
   },
   "repository": {
     "type": "git",
     "url": "http://github.com/jeremys/uslug.git"
   },
   "main": "./index",
+  "exports": {
+    ".": "./index.js",
+    "./lib/uslug": {
+      "require": "./lib/uslug.js",
+      "types": "./lib/uslug.ts"
+    }
+  },
   "engines": {
-    "node": ">= 0.4.0"
+    "node": ">= 10.0.0"
   },
   "bugs": {
     "url": "http://github.com/jeremys/uslug/issues"

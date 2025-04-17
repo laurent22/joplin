@@ -43,6 +43,7 @@ import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
 import useDocument from '../../../hooks/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
+import Setting from '@joplin/lib/models/Setting';
 import useTextPatternsLookup from './utils/useTextPatternsLookup';
 
 const logger = Logger.create('TinyMCE');
@@ -728,6 +729,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
+				// See https://www.tiny.cloud/docs/tinymce/latest/tinymce-and-csp/#content_security_policy
+				content_security_policy: Setting.value('featureFlag.richText.useStrictContentSecurityPolicy') ? [
+					// Media: *: Allow users to include images and videos from the internet (e.g. ![](http://example.com/image.png)).
+					// Media: blob: Allow loading images/videos/audio from blob URLs. The Rich Text Editor
+					//      replaces certain base64 URLs with blob URLs.
+					// Media: data: Allow loading images and other media from data: URLs
+					'default-src \'self\'',
+					'img-src \'self\' blob: data: *', // Images
+					'media-src \'self\' blob: data: *', // Audio and video players
+
+					// Disallow certain unused features
+					'child-src \'none\'', // Should not contain sub-frames
+					'object-src \'none\'', // Objects can be used for script injection
+					'form-action \'none\'', // No submitting forms
+
+					// Styles: unsafe-inline: TinyMCE uses inline style="" styles.
+					// Styles: *: Allow users to include styles from the internet (e.g. <style src="https://example.com/style.css">)
+					'style-src \'self\' \'unsafe-inline\' * data:',
+				].join(' ; ') : undefined,
 				contextmenu: false,
 				browser_spellcheck: true,
 

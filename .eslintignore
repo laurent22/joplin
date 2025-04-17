@@ -62,6 +62,7 @@ packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
 packages/fork-*
+!packages/fork-uslug
 packages/default-plugins/plugin-base-repo/
 packages/default-plugins/plugin-sources/
 packages/htmlpack/dist/
@@ -924,6 +925,8 @@ packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.js
+packages/editor/CodeMirror/editorCommands/jumpToHash.test.js
+packages/editor/CodeMirror/editorCommands/jumpToHash.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
@@ -1002,6 +1005,8 @@ packages/fork-htmlparser2/src/__tests__/events.js
 packages/fork-htmlparser2/src/__tests__/stream.js
 packages/fork-htmlparser2/src/index.spec.js
 packages/fork-htmlparser2/src/index.js
+packages/fork-uslug/lib/uslug.test.js
+packages/fork-uslug/lib/uslug.js
 packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
