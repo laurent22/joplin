@@ -15,7 +15,8 @@ export function basename(path: string) {
 
 export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
-	const output = includeDir ? path : basename(path);
+	const cleanedPath = path.replace(/\/.\//i, '/');
+	const output = includeDir ? cleanedPath : basename(cleanedPath);
 	if (output.indexOf('.') < 0) return output;
 
 	const splitted = output.split('.');
@@ -26,7 +27,9 @@ export function filename(path: string, includeDir = false) {
 export function fileExtension(path: string) {
 	if (!path) throw new Error('Path is empty');
 
-	const output = path.split('.');
+	const locations = path.split('/');
+	const name = locations[locations.length - 1];
+	const output = name.split('.');
 	if (output.length <= 1) return '';
 	return output[output.length - 1];
 }
