@@ -387,7 +387,7 @@
 				"name": "Server",
 				"type": "node",
 				"request": "launch",
-				// "preLaunchTask": "transpile-server",
+				"preLaunchTask": "transpile-server",
 				"skipFiles": [
 					"<node_internals>/**"
 				],
