@@ -15,7 +15,7 @@ export function basename(path: string) {
 
 export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
-	const cleanedPath = path.replace(/\/.\//i, '/');
+	const cleanedPath = path.replace(/\/\.\//i, '/');
 	const output = includeDir ? cleanedPath : basename(cleanedPath);
 	if (output.indexOf('.') < 0) return output;
 
