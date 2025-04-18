@@ -72,7 +72,12 @@ const jumpToHash = (view: EditorView, hash: string) => {
 	if (targetLocation !== undefined) {
 		view.dispatch({
 			selection: EditorSelection.cursor(targetLocation),
-			scrollIntoView: true,
+			effects: [
+				// Scrolls the target header/anchor to the top of the editor --
+				// users are usually interested in the content just below a header
+				// when clicking on a header link.
+				EditorView.scrollIntoView(targetLocation, { y: 'start' }),
+			],
 		});
 		return true;
 	}
