@@ -210,7 +210,7 @@ msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
-"%s nu este optimizat pentru sincronizarea multor fișiere mici, astfel încât "
+"%s nu este optimizat pentru sincronizarea multor fișiere mici, așa că "
 "sincronizarea inițială va fi lentă."
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:75
@@ -253,7 +253,7 @@ msgstr ""
 "pentru a aloca sau a elimina [tag] dela [note], pentru a afișa lista de "
 "notițe asociate cu [tag], sau pentru a afișa lista de etichete asociate cu "
 "[note]. Comanda `tag list` poate fi utilizată pentru a afișa toată lista de "
-"etichete (utilizați -l pentru opțiunea long)."
+"etichete (folosește -l pentru opțiunea long)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -262,10 +262,10 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> poate fi \"toggle\" sau \"clear\". Utilizați \"toggle\" "
-"pentru a comuta între starea finalizată și cea nefinalizată (dacă ținta este "
-"o notă obișnuită, aceasta va fi transformată în to-do). Utilizați „clear\" "
-"pentru a converti to-do înapoi la o notă obișnuită."
+"<todo-command> poate fi \"toggle\" sau \"clear\". Folosește „toggle” pentru "
+"a comuta între starea finalizată și cea nefinalizată (dacă ținta este o "
+"notiță obișnuită, aceasta va fi transformată în listă de făcut). Folosește "
+"„clear” pentru a converti lista de făcut înapoi la o notiță obișnuită."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:62
 msgid "A new update (%s) is available"
@@ -595,7 +595,7 @@ msgstr "Conflict atașament: „%s”"
 
 #: packages/lib/models/settings/builtInMetadata.ts:392
 msgid "Attachment download behaviour"
-msgstr "Comportamentul de descărcare a atașamentului"
+msgstr "Comportamentul de descărcare ale atașamentelor"
 
 #: packages/lib/services/ReportService.ts:277
 msgid "Attachments"
@@ -642,7 +642,7 @@ msgstr "Adăugarea automată a conturilor dezactivate pentru ștergere"
 
 #: packages/lib/models/settings/builtInMetadata.ts:645
 msgid "Auto-pair braces, parentheses, quotations, etc."
-msgstr "Auto-perechere de paranteze, paranteze, ghilimele etc."
+msgstr "Împerechere automată de paranteze, ghilimele etc."
 
 #: packages/lib/models/settings/builtInMetadata.ts:656
 msgid "Autocomplete Markdown and HTML"
@@ -878,7 +878,7 @@ msgstr "Modifică aspectul aplicației"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:210
 msgid "Change language"
-msgstr "Schimbați limba"
+msgstr "Schimbă limba"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
 msgid "Change ratio"
@@ -912,7 +912,7 @@ msgstr "Verificați configurația de sincronizare"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:90
 msgid "Checkbox"
-msgstr "Căsuță de selecție"
+msgstr "Căsuțe de selecție"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2149
 msgid "Checkbox list"
@@ -1075,7 +1075,7 @@ msgstr "Paleta de comenzi…"
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
-msgstr "Compactează"
+msgstr "Compact"
 
 #: packages/app-desktop/gui/NoteList/utils/useOnKeyDown.ts:153
 msgid "Complete"
@@ -1457,7 +1457,7 @@ msgstr "Decupează"
 
 #: packages/lib/models/settings/builtInMetadata.ts:43
 msgid "Dark"
-msgstr "Dark"
+msgstr "Întunecat"
 
 #: packages/server/src/services/MustacheService.ts:117
 msgid "Dashboard"
@@ -1646,7 +1646,7 @@ msgstr "Dezvoltator"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
-msgstr "Directoriu"
+msgstr "dosar"
 
 #: packages/lib/models/settings/builtInMetadata.ts:126
 msgid "Directory to synchronise with (absolute path)"
@@ -1757,7 +1757,7 @@ msgstr "Afișează informații despre versiune"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:338
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 msgid "Do it now"
-msgstr "Faceți-o acum"
+msgstr "Fă-o acum"
 
 #: packages/app-cli/app/command-import.ts:28
 msgid "Do not ask for confirmation."
@@ -1855,11 +1855,11 @@ msgstr "data scadentă"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:470
 #: packages/app-mobile/components/ScreenHeader/index.tsx:514
 msgid "Duplicate"
-msgstr "Duplicați"
+msgstr "Duplică"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:114
 msgid "Duplicate line"
-msgstr "Duplicați liniile"
+msgstr "Duplică linia"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:472
 msgid "Duplicate selected notes"
@@ -2251,11 +2251,11 @@ msgstr "Doar erori"
 
 #: packages/lib/services/interop/InteropService.ts:76
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote Export File (ca HTML)"
+msgstr "Fișier export Evernote (ca HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:85
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote Export File (ca Markdown)"
+msgstr "Fișier export Evernote (ca Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:94
 msgid "Evernote Export Files (Directory, as HTML)"
@@ -2372,7 +2372,7 @@ msgstr "Încărcarea resurselor: %d/%d"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "File"
-msgstr "Fișier"
+msgstr "fișier"
 
 #: packages/lib/SyncTargetFilesystem.ts:18
 msgid "File system"
@@ -2454,8 +2454,8 @@ msgstr ""
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"Pentru lista de comenzi rapide de la tastatură și opțiuni de configurare, "
-"tastați `help keymap`"
+"Pentru lista de scurtături de la tastatură și opțiuni de configurare, "
+"tastează `help keymap`"
 
 #: packages/lib/models/settings/builtInMetadata.ts:290
 msgid "Force path style"
@@ -2736,10 +2736,10 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"În modul \"Manual\", atașamentele sunt descărcate numai atunci când faceți "
-"clic pe ele. În modul \"Auto\", acestea sunt descărcate când deschideți "
-"nota. În modul „Mereu”, toate atașamentele sunt descărcate indiferent dacă "
-"deschideți nota sau nu."
+"În modul „Manual”, atașamentele sunt descărcate numai atunci când faci clic "
+"pe ele. În modul „Auto”, acestea sunt descărcate când deschizi notița. În "
+"modul „Mereu”, toate atașamentele sunt descărcate indiferent dacă deschizi "
+"notița sau nu."
 
 #: packages/app-cli/app/command-help.ts:78
 msgid ""
@@ -2781,19 +2781,18 @@ msgid ""
 "Important: you only need to run this ONCE on one device."
 msgstr ""
 "Pentru a face acest lucru, întregul set de date va trebui să fie criptat și "
-"sincronizat, așa că cel mai bine este să îl executați peste noapte.\n"
+"sincronizat, așa că cel mai bine este să îl execuți peste noapte.\n"
 "\n"
-"Pentru a începe, te rog să urmați aceste instrucțiuni:\n"
+"Pentru a începe, te rog să urmezi aceste instrucțiuni:\n"
 "\n"
-"1. 1. Sincronizați toate dispozitivele dvs.\n"
-"2. Faceți clic pe „%s”.\n"
-"3. Lăsați-l să se execute până la finalizare. În timp ce se execută, evitați "
-"să modificați orice notă pe celelalte dispozitive, pentru a evita "
-"conflictele.\n"
-"4. Odată ce sincronizarea este finalizată pe acest dispozitiv, sincronizați "
-"toate celelalte dispozitive și lăsați-o să se execute până la finalizare.\n"
+"1. Sincronizează-ți toate dispozitivele.\n"
+"2. Fă clic pe „%s”.\n"
+"3. Lasă-l să se execute până la finalizare. În timp ce se execută, evită să "
+"modifici orice notiță pe celelalte dispozitive, pentru a evita conflictele.\n"
+"4. Odată ce sincronizarea este finalizată pe acest dispozitiv, sincronizează "
+"toate celelalte dispozitive și las-o să se execute până la finalizare.\n"
 "\n"
-"Important: nu trebuie să executați acest lucru decât O SINGURĂ dată pe un "
+"Important: nu trebuie să execuți acest lucru decât O SINGURĂ dată pe un "
 "singur dispozitiv."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:466
@@ -2813,7 +2812,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:121
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Pentru a utiliza web clipper, trebuie să faceți următoarele:"
+msgstr "Pentru a utiliza web clipper, trebuie să faci următoarele:"
 
 #: packages/lib/Synchronizer.ts:325
 msgid "In progress"
@@ -2959,7 +2958,7 @@ msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
-"Joplin vă poate sincroniza notițele folosind diverși furnizori. Selectează "
+"Joplin îți poate sincroniza notițele folosind diverși furnizori. Selectează "
 "unul din lista de mai jos."
 
 #: packages/lib/models/Setting.ts:1184 packages/lib/SyncTargetJoplinCloud.ts:30
@@ -3054,11 +3053,11 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1485
 msgid "Keep note history for"
-msgstr "Păstrați istoricul notițelor pentru"
+msgstr "Păstrează istoricul notițelor pentru"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1739
 msgid "Keep notes in the trash for"
-msgstr "Ține notițele în coș pentru"
+msgstr "Păstrează notițele în coș pentru"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1285
 msgid "Keyboard Mode"
@@ -3070,7 +3069,7 @@ msgstr "Scurtătură de la tastatură"
 
 #: packages/lib/models/Setting.ts:1183
 msgid "Keyboard Shortcuts"
-msgstr "Comenzi rapide de la tastatură"
+msgstr "Scurtături tastatură"
 
 #: packages/lib/versionInfo.ts:91
 msgid "Keychain Supported: %s"
@@ -3641,7 +3640,7 @@ msgstr "Factor de creștere zonă notiță"
 
 #: packages/app-desktop/gui/Root.tsx:193
 msgid "Note attachments"
-msgstr "Atașamente notițe"
+msgstr "Atașamente notiță"
 
 #: packages/app-desktop/gui/MenuBar.tsx:574
 msgid "Note attachments..."
@@ -3689,12 +3688,12 @@ msgstr "Stilul listei de notițe"
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:451
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
-msgstr "Titlul caietului de notițe"
+msgstr "Proprietăți notiță"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:124
 msgid "Note title"
-msgstr "Titlul caietului de notițe"
+msgstr "Titlul notiței"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1009
 msgid "Note: Does not work in all desktop environments."
@@ -4273,16 +4272,16 @@ msgstr "Pereche de chei publice-private:"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
-msgstr "Publicare notiței…"
+msgstr "Publică notița…"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:213
 msgid "Publish Notes"
-msgstr "Publicarea notițelor"
+msgstr "Publică notițele"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:168
 #: packages/lib/utils/joplinCloud/index.ts:153
 msgid "Publish notes to the internet"
-msgstr "Publicarea notițelor pe internet"
+msgstr "Publică notițele pe internet"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:78
 msgid "QR Code"
@@ -4384,7 +4383,7 @@ msgstr "Elimini eticheta „%s” din toate notițele?"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:113
 msgid "Remove this search from the sidebar?"
-msgstr "Elimini această căutare din bara laterală?"
+msgstr "Elimini această căutare din panoul lateral?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4899,7 +4898,7 @@ msgstr "Afișează pictograma în zona de notificări"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:263
 msgid "Show/hide the sidebar"
-msgstr "Afișează/Ascunde bara laterală"
+msgstr "Afișează/Ascunde panoul lateral"
 
 #: packages/app-mobile/components/screens/tags.tsx:76
 msgid "Shows notes for tag"
@@ -4921,7 +4920,7 @@ msgstr "Meniu lateral deschis"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:77
 #: packages/app-mobile/components/ScreenHeader/index.tsx:262
 msgid "Sidebar"
-msgstr "Bara laterală"
+msgstr "Panou lateral"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5127,7 +5126,7 @@ msgstr "Stop"
 
 #: packages/app-desktop/commands/stopExternalEditing.ts:8
 msgid "Stop external editing"
-msgstr "Faceți click pentru a opri editarea în aplicația externă"
+msgstr "Oprește editarea externă"
 
 #: packages/lib/utils/joplinCloud/index.ts:141
 msgid "Storage space"
@@ -5168,7 +5167,7 @@ msgstr "Interschimbă cu linia de sus"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:7
 msgid "Switch between note and to-do type"
-msgstr "Schimbați între notiță și sarcină"
+msgstr "Comută între notiță și listă de făcut"
 
 #: packages/app-desktop/gui/MenuBar.tsx:552
 #: packages/app-mobile/components/side-menu-content.tsx:625
@@ -5417,7 +5416,7 @@ msgid ""
 "now](%s)"
 msgstr ""
 "Parola implicită a administratorului este nesigură și nu a fost schimbată! "
-"[Schimbați-o acum](%s)"
+"[Change it now](%s)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
@@ -5586,7 +5585,7 @@ msgstr ""
 "Destinația de sincronizare trebuie să fie actualizată înainte ca Joplin să "
 "se poată sincroniza. Este posibil ca operațiunea să dureze câteva minute "
 "pentru a fi finalizată, iar aplicația trebuie repornită. Pentru a continua, "
-"te rog să faceți clic pe link."
+"te rog să faci clic pe legătură."
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
@@ -5716,11 +5715,11 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 "Aceste plugin-uri îmbunătățesc funcția de redare Markdown cu caracteristici "
-"suplimentare. Te rog să rețineți că, deși aceste caracteristici ar putea fi "
+"suplimentare. Te rog să reții că, deși aceste caracteristici ar putea fi "
 "utile, ele nu sunt Markdown standard și, prin urmare, cele mai multe dintre "
 "ele vor funcționa numai în Joplin. În plus, unele dintre ele sunt "
-"*incompatibile* cu editorul WYSIWYG. Dacă deschideți o notă care utilizează "
-"unul dintre aceste plugin-uri în acel editor, veți pierde formatarea plugin-"
+"*incompatibile* cu editorul WYSIWYG. Dacă deschizi o notiță care utilizează "
+"unul dintre aceste plugin-uri în acel editor, vei pierde formatarea plugin-"
 "ului. Mai jos este indicat ce plugin-uri sunt compatibile sau nu cu editorul "
 "WYSIWYG."
 
@@ -5981,7 +5980,7 @@ msgstr "de făcut: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
-msgstr "Comută comentariul"
+msgstr "Comută comentariu"
 
 #: packages/app-desktop/gui/MenuBar.tsx:939
 msgid "Toggle development tools"
@@ -6009,11 +6008,11 @@ msgstr "Comută bară meniu"
 
 #: packages/lib/models/Setting.ts:1216
 msgid "Toggle note history, keep notes for"
-msgstr "Comută istoricul notițelor, păstrați notițele pentru"
+msgstr "Comută istoricul notițelor, păstrează notițele pentru"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:9
 msgid "Toggle note list"
-msgstr "Comută lista de notițe"
+msgstr "Comută listă de notițe"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/togglePerFolderSortOrder.ts:7
 msgid "Toggle own sort order"
@@ -6025,7 +6024,7 @@ msgstr "Comută modul safe"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.ts:9
 msgid "Toggle sidebar"
-msgstr "Comută bara laterală"
+msgstr "Comută panou lateral"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"
@@ -6269,7 +6268,7 @@ msgstr "Utilizare: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1601
 msgid "Use biometrics to secure access to the app"
-msgstr "Utilizați date biometrice pentru a securiza accesul la aplicație"
+msgstr "Folosește date biometrice pentru a securiza accesul la aplicație"
 
 #: packages/app-cli/app/command-ls.ts:33 packages/app-cli/app/command-tag.js:18
 msgid ""
@@ -6281,15 +6280,15 @@ msgstr ""
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:185
 msgid "Use spell checker"
-msgstr "Utilizați corectorul ortografic"
+msgstr "Folosește corectorul ortografic"
 
 #: packages/app-cli/app/command-help.ts:81
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
 msgstr ""
-"Utilizați săgețile și pagina sus / jos pentru a derula listele și zonele de "
-"text (inclusiv această consolă)."
+"Folosește săgețile și tastele „page up/down” pentru a derula listele și "
+"zonele de text (inclusiv această consolă)."
 
 #: packages/app-desktop/gui/MainScreen.tsx:750
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
@@ -6306,8 +6305,9 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Utilizați această opțiune pentru a reconstrui indexul de căutare dacă există "
-"o problemă cu căutarea. Poate dura mult timp, în funcție de numărul de note."
+"Folosește această opțiune pentru a reconstrui indexul de căutare dacă există "
+"o problemă cu căutarea. Poate dura mult timp, în funcție de numărul de "
+"notițe."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
@@ -6491,7 +6491,7 @@ msgstr "Când este creată o nouă notiță:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:828
 msgid "When creating a new to-do:"
-msgstr "Când este creată o nouă sarcină:"
+msgstr "Când este creată o nouă listă de făcut:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:501
 msgid ""
