@@ -41,7 +41,7 @@ const SwitchToNewEditorBanner = (props: BannerProps) => <BannerContent
 	onAccept={() => Setting.setValue('editor.legacyMarkdown', false)}
 	visible={props.isVisible}
 >
-	{_('The legacy Markdown editor might be incompatible with a number of plugins. We recommend using the new editor.')}
+	{_('The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.')}
 	<br/>
 </BannerContent>;
 
