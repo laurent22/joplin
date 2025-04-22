@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
+import { PopupNotificationContext } from './PopupNotification/PopupNotificationProvider';
+import { NotificationType } from './PopupNotification/types';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -36,14 +39,26 @@ interface BannerProps {
 	isVisible: boolean;
 }
 
-const SwitchToNewEditorBanner = (props: BannerProps) => <BannerContent
-	acceptMessage={_('Switch to the new editor')}
-	onAccept={() => Setting.setValue('editor.legacyMarkdown', false)}
-	visible={props.isVisible}
->
-	{_('The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.')}
-	<br/>
-</BannerContent>;
+const SwitchToNewEditorBanner = (props: BannerProps) => {
+	const popupManager = useContext(PopupNotificationContext);
+
+	const handleSwitchToNewEditor = () => {
+		Setting.setValue('editor.legacyMarkdown', false);
+		const message = _('You are now using the latest version of the Markdown editor.');
+		popupManager.createPopup(() => message, {
+			type: NotificationType.Info,
+		}).scheduleDismiss(2000);
+	};
+
+	return <BannerContent
+		acceptMessage={_('Switch to the new editor')}
+		onAccept={handleSwitchToNewEditor}
+		visible={props.isVisible}
+	>
+		{_('The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.')}
+		<br/>
+	</BannerContent>;
+};
 
 export default class ErrorBoundary extends React.Component<Props, State> {
 
