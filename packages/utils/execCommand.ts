@@ -14,13 +14,17 @@ interface ExecCommandOptions {
 }
 
 export default async (command: string | string[], options: ExecCommandOptions | null = null): Promise<string> => {
+	const detached = options ? options.detached : false;
+
+	// When launching a detached executable it's better not to pipe the stdout and stderr, as this
+	// will most likely cause an EPIPE error.
+
 	options = {
-		showInput: true,
-		showStdout: true,
-		showStderr: true,
+		showInput: !detached,
+		showStdout: !detached,
+		showStderr: !detached,
 		quiet: false,
 		env: {},
-		detached: false,
 		...options,
 	};
 

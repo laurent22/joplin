@@ -248,4 +248,28 @@ describe('OcrService', () => {
 	// 	await service.dispose();
 	// });
 
+	it('should generate text even on cases of lower confidence', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/low_confidence_testing.png` });
+
+		const service = newOcrService();
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text.includes('1.')).toBe(true);
+		// cSpell:disable
+		expect(processedResource.ocr_text.includes('eback Mountain (2005)')).toBe(true);
+		// cSpell:enable
+
+		expect(processedResource.ocr_text.includes('2.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Havoc (2005)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('3.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Love & Other Drugs (2010)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('4.')).toBe(true);
+		expect(processedResource.ocr_text.includes('The Last Thing He Wanted (2020)')).toBe(true);
+
+		await service.dispose();
+	});
+
 });

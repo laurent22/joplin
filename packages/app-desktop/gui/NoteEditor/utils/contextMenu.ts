@@ -8,13 +8,11 @@ const MenuItem = bridge().MenuItem;
 import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity, ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import Setting from '@joplin/lib/models/Setting';
 import ItemChange from '@joplin/lib/models/ItemChange';
-import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import shim from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 const fs = require('fs-extra');
@@ -81,7 +79,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler): ContextMenuItems {
+export function menuItems(dispatch: Function): ContextMenuItems {
 	return {
 		open: {
 			label: _('Open...'),
@@ -195,17 +193,10 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 		},
 		paste: {
 			label: _('Paste'),
-			onAction: async (options: ContextMenuOptions) => {
-				const pastedHtml = clipboard.readHTML();
-				let content = pastedHtml ? pastedHtml : clipboard.readText();
-
-				if (pastedHtml) {
-					content = await processPastedHtml(pastedHtml, htmlToMd, mdToHtml);
-				}
-
-				options.insertContent(content);
+			onAction: async (_options: ContextMenuOptions) => {
+				bridge().activeWindow().webContents.paste();
 			},
-			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && clipboard.availableFormats().length > 0,
 		},
 		pasteAsText: {
 			label: _('Paste as text'),
@@ -228,7 +219,7 @@ export function menuItems(dispatch: Function, htmlToMd: HtmlToMarkdownHandler, m
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 
-	const items = menuItems(dispatch, options.htmlToMd, options.mdToHtml);
+	const items = menuItems(dispatch);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
 	for (const itemKey in items) {

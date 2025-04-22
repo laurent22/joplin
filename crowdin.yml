@@ -6,18 +6,19 @@ files:
   - source: /readme/**/*
     translation: /readme/i18n/%two_letters_code%/docusaurus-plugin-content-docs/current/**/%original_file_name%
     ignore: 
+      - /**/*.jpg
+      - /**/*.json
+      - /**/*.png
+      - /**/*.yml
       - /readme/_i18n
-      - /readme/i18n
       - /readme/about/changelog
       - /readme/about/stats.md
       - /readme/api
-      - /readme/dev
-      - /readme/news
       - /readme/cla.md
       - /readme/connection_check.md
+      - /readme/dev
+      - /readme/i18n
+      - /readme/licenses.md
+      - /readme/news
       - /readme/privacy.md
-      - /**/*.yml
-      - /**/*.json
-      - /**/*.png
-      - /**/*.jpg
     

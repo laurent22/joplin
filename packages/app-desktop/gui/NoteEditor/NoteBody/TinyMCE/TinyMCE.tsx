@@ -43,6 +43,8 @@ import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
 import useDocument from '../../../hooks/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
+import Setting from '@joplin/lib/models/Setting';
+import useTextPatternsLookup from './utils/useTextPatternsLookup';
 
 const logger = Logger.create('TinyMCE');
 
@@ -56,7 +58,7 @@ const logger = Logger.create('TinyMCE');
 //
 // The problem is that the list plugin was, unknown to me, relying on this <br/>
 // being present. Without it, trying to add a bullet point or checkbox on an
-// empty document, does nothing. The exact reason for this is unclear
+// empty document, adds an empty paragraph. The exact reason for this is unclear
 // so as a workaround we manually add this <br> for empty documents,
 // which fixes the issue.
 //
@@ -69,8 +71,8 @@ const logger = Logger.create('TinyMCE');
 //
 // Perhaps upgrading the list plugin (which is a fork of TinyMCE own list plugin)
 // would help?
-function awfulInitHack(html: string): string {
-	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><p></p></div>' : html;
+function preprocessHtml(html: string): string {
+	return html === '' ? '<p></p>' : html;
 }
 
 
@@ -654,6 +656,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Create and setup the editor
 	// -----------------------------------------------------------------------------------------
 
+	const textPatternsLookupRef = useTextPatternsLookup({ enabled: props.enableTextPatterns, enableMath: props.mathEnabled });
 	useEffect(() => {
 		if (!scriptLoaded) return;
 		if (!editorContainer) return;
@@ -726,6 +729,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
+				// See https://www.tiny.cloud/docs/tinymce/latest/tinymce-and-csp/#content_security_policy
+				content_security_policy: Setting.value('featureFlag.richText.useStrictContentSecurityPolicy') ? [
+					// Media: *: Allow users to include images and videos from the internet (e.g. ![](http://example.com/image.png)).
+					// Media: blob: Allow loading images/videos/audio from blob URLs. The Rich Text Editor
+					//      replaces certain base64 URLs with blob URLs.
+					// Media: data: Allow loading images and other media from data: URLs
+					'default-src \'self\'',
+					'img-src \'self\' blob: data: *', // Images
+					'media-src \'self\' blob: data: *', // Audio and video players
+
+					// Disallow certain unused features
+					'child-src \'none\'', // Should not contain sub-frames
+					'object-src \'none\'', // Objects can be used for script injection
+					'form-action \'none\'', // No submitting forms
+
+					// Styles: unsafe-inline: TinyMCE uses inline style="" styles.
+					// Styles: *: Allow users to include styles from the internet (e.g. <style src="https://example.com/style.css">)
+					'style-src \'self\' \'unsafe-inline\' * data:',
+				].join(' ; ') : undefined,
 				contextmenu: false,
 				browser_spellcheck: true,
 
@@ -736,27 +758,42 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
-					forecolor: { inline: 'span', styles: { color: '%value' } },
+					// Foreground color: The remove_similar: true is necessary here for the "remove formatting"
+					// button to work. See https://github.com/tinymce/tinymce/issues/5026.
+					forecolor: { inline: 'span', styles: { color: '%value' }, remove_similar: true },
 				},
-				text_patterns: props.enableTextPatterns ? [
-					// See https://www.tiny.cloud/docs/tinymce/latest/content-behavior-options/#text_patterns
-					// for the default value
-					{ start: '==', end: '==', format: 'joplinHighlight' },
-					{ start: '`', end: '`', format: 'code' },
-					{ start: '*', end: '*', format: 'italic' },
-					{ start: '**', end: '**', format: 'bold' },
-					{ start: '#', format: 'h1' },
-					{ start: '##', format: 'h2' },
-					{ start: '###', format: 'h3' },
-					{ start: '####', format: 'h4' },
-					{ start: '#####', format: 'h5' },
-					{ start: '######', format: 'h6' },
-					{ start: '1.', cmd: 'InsertOrderedList' },
-					{ start: '*', cmd: 'InsertUnorderedList' },
-					{ start: '-', cmd: 'InsertUnorderedList' },
-				] : [],
+				text_patterns: [],
+				text_patterns_lookup: () => textPatternsLookupRef.current(),
 
 				setup: (editor: Editor) => {
+					editor.addCommand('joplinMath', async () => {
+						const katex = editor.selection.getContent();
+						const md = `$${katex}$`;
+
+						// Save and clear the selection -- when this command is activated by a text pattern,
+						// TinyMCE:
+						// 1. Adjusts the selection just before calling the command to include the to-be-formatted text.
+						// 2. Calls the command.
+						// 3. Removes the "$" characters and restores the selection.
+						//
+						// As a result, the selection needs to be saved and restored.
+						const mathSelection = editor.selection.getBookmark();
+
+						const result = await markupToHtml.current(MarkupLanguage.Markdown, md, { bodyOnly: true });
+
+						// Replace the math...
+						const finalSelection = editor.selection.getBookmark();
+						editor.selection.moveToBookmark(mathSelection);
+						editor.selection.setContent(result.html);
+						editor.selection.moveToBookmark(finalSelection); // ...then move the selection back.
+
+						// Fire update events
+						editor.fire(TinyMceEditorEvents.JoplinChange);
+						dispatchDidUpdate(editor);
+						// The last replacement seems to need to be manually added to the undo history
+						editor.undoManager.add();
+					});
+
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
 					});
@@ -1000,6 +1037,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return true;
 	}
 
+	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -1013,7 +1051,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const loadContent = async () => {
 			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 
-			if (lastOnChangeEventInfo.current.content !== props.content || !resourcesEqual) {
+			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
+			const differentNoteId = lastNoteIdRef.current !== props.noteId;
+			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
+			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
 					props.content,
@@ -1024,6 +1065,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// This prevents HTML-style resource URLs (e.g. <a href="file://path/to/resource/.../"></a>)
 						// from being discarded.
 						allowedFilePrefixes: [props.resourceDirectory],
+
+						// Remove the wrapping <div id="rendered-md">...</div>, which can cause
+						// TinyMCE to crash in some cases.
+						// See https://github.com/tinymce/tinymce/issues/10276
+						bodyOnly: true,
 					}),
 				);
 				if (cancelled) return;
@@ -1035,7 +1081,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// when the note content is updated externally.
 				const offsetBookmarkId = 2;
 				const bookmark = editor.selection.getBookmark(offsetBookmarkId);
-				editor.setContent(awfulInitHack(result.html));
+				const htmlAndCss = [
+					`<style>${result.cssStrings?.join('\n')}</style>`,
+					preprocessHtml(result.html),
+				].join('\n');
+				editor.setContent(htmlAndCss);
+				lastNoteIdRef.current = props.noteId;
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
 					// Need to clear UndoManager to avoid this problem:
@@ -1067,6 +1118,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const allAssetsOptions: NoteStyleOptions = {
 				contentMaxWidthTarget: '.mce-content-body',
+				contentWrapperSelector: '.mce-content-body',
 				scrollbarSize: props.scrollbarSize,
 				themeId: props.contentMarkupLanguage === MarkupLanguage.Html ? 1 : null,
 				whiteBackgroundNoteRendering: props.whiteBackgroundNoteRendering,
@@ -1084,7 +1136,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			cancelled = true;
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editor, props.themeId, props.scrollbarSize, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
+	}, [editor, props.noteId, props.themeId, props.scrollbarSize, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
 
 	useEffect(() => {
 		if (!editor) return () => {};

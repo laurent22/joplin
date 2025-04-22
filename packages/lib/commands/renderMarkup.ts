@@ -1,6 +1,7 @@
 import markupLanguageUtils from '../markupLanguageUtils';
 import Setting from '../models/Setting';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
+import shim from '../shim';
 import { themeStyle } from '../theme';
 import attachedResources from '../utils/attachedResources';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -12,8 +13,13 @@ export const declaration: CommandDeclaration = {
 };
 
 const getMarkupToHtml = () => {
+	// In the desktop app, resources accessed with file:// URLs can't be displayed in certain places (e.g. the note
+	// viewer and plugin WebViews). On mobile, however, joplin-content:// URLs don't work. As such, use different
+	// protocols on different platforms:
+	const protocol = shim.isElectron() ? 'joplin-content://note-viewer/' : 'file://';
+
 	return markupLanguageUtils.newMarkupToHtml({}, {
-		resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+		resourceBaseUrl: `${protocol}${Setting.value('resourceDir')}/`,
 		customCss: '',
 	});
 };

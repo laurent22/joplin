@@ -1,40 +1,35 @@
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
-import { hasNotch } from 'react-native-device-info';
+import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ModalState } from './accessibility/FocusControl/types';
+import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { _ } from '@joplin/lib/locale';
 
 interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
 	containerStyle?: ViewStyle;
 	backgroundColor?: string;
+	modalBackgroundStyle?: ViewStyle;
+	// Extra styles for the accessibility tools dismiss button. For example,
+	// this might be used to display the dismiss button near the top of the
+	// screen (rather than the bottom).
+	dismissButtonStyle?: ViewStyle;
 
 	// If scrollOverflow is provided, the modal is wrapped in a vertical
 	// ScrollView. This allows the user to scroll parts of dialogs into
 	// view that would otherwise be clipped by the screen edge.
-	scrollOverflow?: boolean;
+	scrollOverflow?: boolean|ScrollViewProps;
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
-	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-	const isLandscape = windowWidth > windowHeight;
+	const safeAreaPadding = useSafeAreaPadding();
 	return useMemo(() => {
-		const backgroundPadding: ViewStyle = isLandscape ? {
-			paddingRight: hasNotch() ? 60 : 0,
-			paddingLeft: hasNotch() ? 60 : 0,
-			paddingTop: 15,
-			paddingBottom: 15,
-		} : {
-			paddingTop: hasNotch() ? 65 : 15,
-			paddingBottom: hasNotch() ? 35 : 15,
-		};
 		return StyleSheet.create({
 			modalBackground: {
-				...backgroundPadding,
+				...safeAreaPadding,
 				flexGrow: 1,
 				flexShrink: 1,
 
@@ -62,7 +57,7 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				zIndex: -1,
 			},
 		});
-	}, [hasScrollView, isLandscape, backgroundColor]);
+	}, [hasScrollView, safeAreaPadding, backgroundColor]);
 };
 
 const useBackgroundTouchListeners = (onRequestClose: (event: GestureResponderEvent)=> void, backdropRef: RefObject<View>) => {
@@ -114,9 +109,11 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerStyle,
 	backgroundColor,
 	scrollOverflow,
+	modalBackgroundStyle: extraModalBackgroundStyles,
+	dismissButtonStyle,
 	...modalProps
 }) => {
-	const styles = useStyles(scrollOverflow, backgroundColor);
+	const styles = useStyles(!!scrollOverflow, backgroundColor);
 
 	// contentWrapper adds padding. To allow styling the region outside of the modal
 	// (e.g. to add a background), the content is wrapped twice.
@@ -134,18 +131,18 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerRef.current = containerComponent;
 	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(modalProps.onRequestClose, containerRef);
 
-
 	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
 	// of the element on the screen, the close button is placed after the modal content, rather than behind.
 	const closeButton = modalProps.onRequestClose ? <Pressable
-		style={styles.dismissButton}
+		style={[styles.dismissButton, dismissButtonStyle]}
 		onPress={modalProps.onRequestClose}
 		accessibilityLabel={_('Close dialog')}
 		accessibilityRole='button'
 	/> : null;
+
 	const contentAndBackdrop = <View
 		ref={setContainerComponent}
-		style={styles.modalBackground}
+		style={[styles.modalBackground, extraModalBackgroundStyles]}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
 	>
@@ -153,6 +150,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		{closeButton}
 	</View>;
 
+	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
 	return (
 		<FocusControl.ModalWrapper state={modalStatus}>
 			<Modal
@@ -162,8 +160,9 @@ const ModalElement: React.FC<ModalElementProps> = ({
 			>
 				{scrollOverflow ? (
 					<ScrollView
-						style={styles.modalScrollView}
-						contentContainerStyle={styles.modalScrollViewContent}
+						{...extraScrollViewProps}
+						style={[styles.modalScrollView, extraScrollViewProps.style]}
+						contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
 					>{contentAndBackdrop}</ScrollView>
 				) : contentAndBackdrop}
 			</Modal>

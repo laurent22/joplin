@@ -114,8 +114,8 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	const refreshFormNote = useCallback(() => {
 		// Increase the counter to cancel any ongoing refresh attempts
 		// and start a new one.
-		setFormNoteRefreshScheduled(formNoteRefreshScheduled + 1);
-	}, [formNoteRefreshScheduled]);
+		setFormNoteRefreshScheduled(count => count + 1);
+	}, []);
 
 	// When switching from the plugin editor to the built-in editor, we refresh the note since the
 	// plugin may have modified it via the data API.

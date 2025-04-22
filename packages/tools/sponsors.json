@@ -104,7 +104,7 @@
 			"url": "https://topagency.webflow.io",
 			"title": "WebDesignAgency",
 			"imageName": "WebDesignAgency.png",
-			"alt": "web design agency"
+			"alt": "topagency"
 		},
 		{
 			"url": "https://realgambling.ca/",
@@ -130,6 +130,12 @@
 			"imageName": "TiktokRise.jpg",
 			"alt": "Tiktok Rise",
 			"githubUser": "knickman"
+		},
+		{
+			"url": "https://essaywriter.pro",
+			"title": "write my essay services by EssayWriter",
+			"imageName": "EssayWriterPro.png",
+			"alt": "write my essay services by EssayWriter"
 		}
 	],
 	"orgsOld": [

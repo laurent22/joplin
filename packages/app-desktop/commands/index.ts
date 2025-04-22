@@ -6,9 +6,10 @@ import * as exportDeletionLog from './exportDeletionLog';
 import * as exportFolders from './exportFolders';
 import * as exportNotes from './exportNotes';
 import * as focusElement from './focusElement';
-import * as newAppInstance from './newAppInstance';
 import * as openNoteInNewWindow from './openNoteInNewWindow';
+import * as openPrimaryAppInstance from './openPrimaryAppInstance';
 import * as openProfileDirectory from './openProfileDirectory';
+import * as openSecondaryAppInstance from './openSecondaryAppInstance';
 import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
 import * as startExternalEditing from './startExternalEditing';
@@ -29,9 +30,10 @@ const index: any[] = [
 	exportFolders,
 	exportNotes,
 	focusElement,
-	newAppInstance,
 	openNoteInNewWindow,
+	openPrimaryAppInstance,
 	openProfileDirectory,
+	openSecondaryAppInstance,
 	replaceMisspelling,
 	restoreNoteRevision,
 	startExternalEditing,

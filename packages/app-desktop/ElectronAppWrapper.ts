@@ -212,7 +212,6 @@ export default class ElectronAppWrapper {
 				spellcheck: true,
 				enableRemoteModule: true,
 			},
-			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
 			//
@@ -655,7 +654,7 @@ export default class ElectronAppWrapper {
 						// might still be there for a short while.
 						await msleep(1000);
 						this.ipcLogger_.warn('restartAltInstance: App is gone - restarting it');
-						void bridge().launchNewAppInstance(this.env());
+						void bridge().launchAltAppInstance(this.env());
 					} else {
 						this.ipcLogger_.warn('restartAltInstance: Could not restart calling app because it was still open');
 					}
@@ -706,10 +705,6 @@ export default class ElectronAppWrapper {
 		return true;
 	}
 
-	public initializeCustomProtocolHandler(logger: LoggerWrapper) {
-		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
-	}
-
 	// Electron's autoUpdater has to be init from the main process
 	public initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		if (shim.isWindows() || shim.isMac()) {
@@ -748,6 +743,7 @@ export default class ElectronAppWrapper {
 		const alreadyRunning = await this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
+		this.customProtocolHandler_ = handleCustomProtocols();
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {

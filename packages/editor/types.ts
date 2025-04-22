@@ -74,8 +74,9 @@ export enum EditorCommandType {
 	SelectedText = 'selectedText',
 	InsertText = 'insertText',
 	ReplaceSelection = 'replaceSelection',
-
 	SetText = 'setText',
+
+	JumpToHash = 'jumpToHash',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts

@@ -1,5 +1,18 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.3) - 2025-04-07T19:20:10Z
+
+- New: Add "swap line up" and "swap line down" to toolbar extended options (#12053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Plugins: Add command to hide the plugin panel viewer (#12018 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Explain why items could not be decrypted (#12048) (#11872 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement new note menu redesign (#11780 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove slider component module and replace integer settings with new validated component (#11822) (#10883 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Update react-native-quick-crypto (#12067 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Changing the type of one list changes it for all the lists (#11986) (#11971 by [@Paramesh-T-S](https://github.com/Paramesh-T-S))
+- Fixed: Fix Markdown toolbar partially covered by keyboard on some iOS devices (#12027) (#11711 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix cursor moves to incorrect position when revising TextInput value (#11821) (#11820 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Restoring a note which was in a deleted notebook  (#12016) (#11934)
+
 ## [ios-v13.3.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.2) - 2025-03-16T11:47:05Z
 
 - New: Add setting migration for ocr.enabled (ab86b95)
