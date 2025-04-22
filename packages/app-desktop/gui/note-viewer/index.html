@@ -139,8 +139,11 @@
 			const viewerPercent = scrollmap.translateL2V(percent);
 			const newScrollTop = viewerPercent * maxScrollTop();
 
-			// The next scroll event cannot be skipped in order to correctly
-			// scroll to the target section in a different note when follwing a link
+			// Even if the scroll position hasn't changed (percent is the same),
+			// we still ignore the next scroll event, so that it doesn't create
+			// undesired side effects.
+			// https://github.com/laurent22/joplin/issues/7617
+			ignoreNextScrollEvent();
 			
 			if (Math.floor(contentElement.scrollTop) !== Math.floor(newScrollTop)) {
 				percentScroll_ = percent;

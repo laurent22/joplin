@@ -133,9 +133,10 @@ packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/index.js
-packages/app-desktop/commands/newAppInstance.js
 packages/app-desktop/commands/openNoteInNewWindow.js
+packages/app-desktop/commands/openPrimaryAppInstance.js
 packages/app-desktop/commands/openProfileDirectory.js
+packages/app-desktop/commands/openSecondaryAppInstance.js
 packages/app-desktop/commands/replaceMisspelling.js
 packages/app-desktop/commands/restoreNoteRevision.js
 packages/app-desktop/commands/startExternalEditing.js
@@ -240,6 +241,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHan
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTextPatternsLookup.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
@@ -330,13 +332,16 @@ packages/app-desktop/gui/NoteSearchBar.js
 packages/app-desktop/gui/NoteStatusBar.js
 packages/app-desktop/gui/NoteTextViewer.js
 packages/app-desktop/gui/NoteToolbar/NoteToolbar.js
-packages/app-desktop/gui/NotyfContext.js
 packages/app-desktop/gui/OneDriveLoginScreen.js
 packages/app-desktop/gui/PasswordInput/LabelledPasswordInput.js
 packages/app-desktop/gui/PasswordInput/PasswordInput.js
 packages/app-desktop/gui/PasswordInput/types.js
 packages/app-desktop/gui/PdfViewer.js
 packages/app-desktop/gui/PluginNotification/PluginNotification.js
+packages/app-desktop/gui/PopupNotification/NotificationItem.js
+packages/app-desktop/gui/PopupNotification/PopupNotificationList.js
+packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.js
+packages/app-desktop/gui/PopupNotification/types.js
 packages/app-desktop/gui/PromptDialog.js
 packages/app-desktop/gui/ResizableLayout/LayoutItemContainer.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
@@ -398,6 +403,7 @@ packages/app-desktop/gui/ToolbarBase.js
 packages/app-desktop/gui/ToolbarButton/ToolbarButton.js
 packages/app-desktop/gui/ToolbarSpace.js
 packages/app-desktop/gui/TrashNotification/TrashNotification.js
+packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.js
 packages/app-desktop/gui/UpdateNotification/UpdateNotification.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/AppDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/ModalMessageOverlay.js
@@ -524,13 +530,16 @@ packages/app-desktop/services/plugins/UserWebview.js
 packages/app-desktop/services/plugins/UserWebviewDialog.js
 packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js
 packages/app-desktop/services/plugins/hooks/useContentSize.js
+packages/app-desktop/services/plugins/hooks/useFormData.js
 packages/app-desktop/services/plugins/hooks/useHtmlLoader.js
+packages/app-desktop/services/plugins/hooks/useMessageHandler.js
 packages/app-desktop/services/plugins/hooks/useScriptLoader.js
 packages/app-desktop/services/plugins/hooks/useSubmitHandler.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.test.js
 packages/app-desktop/services/plugins/hooks/useThemeCss.js
 packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
+packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
@@ -568,6 +577,7 @@ packages/app-mobile/commands/scrollToHash.js
 packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BetaChip.js
+packages/app-mobile/components/BottomDrawer.js
 packages/app-mobile/components/CameraView/ActionButtons.js
 packages/app-mobile/components/CameraView/Camera/index.jest.js
 packages/app-mobile/components/CameraView/Camera/index.js
@@ -661,7 +671,6 @@ packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SideMenu.js
 packages/app-mobile/components/SideMenuContentNote.js
 packages/app-mobile/components/TextInput.js
-packages/app-mobile/components/accessibility/AccessibleModalMenu.js
 packages/app-mobile/components/accessibility/AccessibleView.test.js
 packages/app-mobile/components/accessibility/AccessibleView.js
 packages/app-mobile/components/accessibility/FocusControl/AutoFocusProvider.js
@@ -676,6 +685,8 @@ packages/app-mobile/components/biometrics/BiometricPopup.js
 packages/app-mobile/components/biometrics/biometricAuthenticate.js
 packages/app-mobile/components/biometrics/sensorInfo.js
 packages/app-mobile/components/buttons/FloatingActionButton.js
+packages/app-mobile/components/buttons/LabelledIconButton.js
+packages/app-mobile/components/buttons/MultiTouchableOpacity.js
 packages/app-mobile/components/buttons/TextButton.js
 packages/app-mobile/components/buttons/index.js
 packages/app-mobile/components/getResponsiveValue.test.js
@@ -766,7 +777,9 @@ packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
-packages/app-mobile/components/screens/Notes.js
+packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
+packages/app-mobile/components/screens/Notes/NewNoteButton.js
+packages/app-mobile/components/screens/Notes/Notes.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
 packages/app-mobile/components/screens/SearchScreen/index.js
 packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
@@ -821,6 +834,7 @@ packages/app-mobile/utils/createRootStyle.js
 packages/app-mobile/utils/database-driver-react-native.js
 packages/app-mobile/utils/database-driver-react-native.web.js
 packages/app-mobile/utils/debounce.js
+packages/app-mobile/utils/focusView.js
 packages/app-mobile/utils/fs-driver/constants.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver/fs-driver-rn.web.js
@@ -836,6 +850,7 @@ packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
+packages/app-mobile/utils/hooks/useSafeAreaPadding.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
@@ -884,6 +899,8 @@ packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.js
+packages/editor/CodeMirror/editorCommands/jumpToHash.test.js
+packages/editor/CodeMirror/editorCommands/jumpToHash.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
@@ -962,6 +979,8 @@ packages/fork-htmlparser2/src/__tests__/events.js
 packages/fork-htmlparser2/src/__tests__/stream.js
 packages/fork-htmlparser2/src/index.spec.js
 packages/fork-htmlparser2/src/index.js
+packages/fork-uslug/lib/uslug.test.js
+packages/fork-uslug/lib/uslug.js
 packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js

@@ -11,6 +11,7 @@ function formatCssSize(v: any): string {
 export interface Options {
 	contentMaxWidth?: number;
 	contentMaxWidthTarget?: string;
+	contentWrapperSelector?: string;
 	scrollbarSize?: number;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
@@ -84,7 +85,8 @@ export default function(theme: any, options: Options = null) {
 
 	const fontFamily = '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
 
-	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : '#rendered-md';
+	const contentWrapperTarget = options.contentWrapperSelector ?? '#rendered-md';
+	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : contentWrapperTarget;
 	const maxWidthCss = options.contentMaxWidth ? `
 		${maxWidthTarget} {
 			max-width: ${options.contentMaxWidth}px;
@@ -150,16 +152,16 @@ export default function(theme: any, options: Options = null) {
 
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
 
-		#rendered-md > h1:first-child,
-		#rendered-md > h2:first-child,
-		#rendered-md > h3:first-child,
-		#rendered-md > h4:first-child,
-		#rendered-md > ul:first-child,
-		#rendered-md > ol:first-child,
-		#rendered-md > table:first-child,
-		#rendered-md > blockquote:first-child,
-		#rendered-md > img:first-child,
-		#rendered-md > p:first-child {
+		${contentWrapperTarget} > h1:first-child,
+		${contentWrapperTarget} > h2:first-child,
+		${contentWrapperTarget} > h3:first-child,
+		${contentWrapperTarget} > h4:first-child,
+		${contentWrapperTarget} > ul:first-child,
+		${contentWrapperTarget} > ol:first-child,
+		${contentWrapperTarget} > table:first-child,
+		${contentWrapperTarget} > blockquote:first-child,
+		${contentWrapperTarget} > img:first-child,
+		${contentWrapperTarget} > p:first-child {
 			margin-top: 0;
 			padding-top: 0;
 		}

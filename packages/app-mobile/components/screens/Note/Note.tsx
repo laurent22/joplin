@@ -1585,6 +1585,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						toolbarEnabled={this.props.toolbarEnabled}
 						themeId={this.props.themeId}
 						noteId={this.props.noteId}
+						noteHash={this.props.noteHash}
 						initialText={note.body}
 						initialSelection={this.selection}
 						onChange={this.onMarkdownEditorTextChange}
@@ -1622,7 +1623,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			if (this.state.mode === 'edit') return null;
 
-			return <FloatingActionButton mainButton={editButton} dispatch={this.props.dispatch} />;
+			return <FloatingActionButton mainButton={editButton} />;
 		};
 
 		// Save button is not really needed anymore with the improved save logic

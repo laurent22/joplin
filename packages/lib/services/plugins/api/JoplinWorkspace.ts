@@ -197,4 +197,14 @@ export default class JoplinWorkspace {
 		return this.store.getState().selectedNoteIds.slice();
 	}
 
+	/**
+	 * Gets the last hash (note section ID) from cross-note link targeting specific section.
+	 * New hash is available after `onNoteSelectionChange()` is triggered.
+	 * Example of cross-note link where `hello-world` is a hash: [Other Note Title](:/9bc9a5cb83f04554bf3fd3e41b4bb415#hello-world).
+	 * Method returns empty value when a note was navigated with method other than cross-note link containing valid hash.
+	 */
+	public async selectedNoteHash(): Promise<string> {
+		return this.store.getState().selectedNoteHash;
+	}
+
 }

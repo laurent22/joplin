@@ -152,10 +152,21 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
-		if (arg.indexOf('--enable-wayland-ime') === 0) {
+		if (
+			arg === '--enable-wayland-ime'
+			|| arg === '--disable-gtk-ime'
+			|| arg.startsWith('--wayland-text-input-version=')
+		) {
 			// Electron-specific flag - ignore it
-			// Enables input method support on Linux/Wayland
+			// Enables/configures input method support on Linux/Wayland
 			// See https://github.com/laurent22/joplin/issues/10345
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg.startsWith('--gtk-version=')) {
+			// Electron-specific flag. Allows forcing a different GTK version.
+			// See https://wiki.archlinux.org/title/Chromium#Native_Wayland_support
 			argv.splice(0, 1);
 			continue;
 		}

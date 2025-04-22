@@ -1,5 +1,7 @@
 # Localisation
 
+## Translating the applications
+
 Joplin is currently available in the languages below. If you would like to contribute a **new translation**, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
@@ -12,7 +14,13 @@ This translation will apply to the three applications - desktop, mobile and term
 
 To **update a translation**, follow the same steps as above but instead of getting the .pot file, get the .po file for your language from the table below.
 
-Current translations:
+## Translating the documentation
+
+The Joplin documentation translations are managed from [our project on Crowdin](https://crowdin.com/project/joplin-website). To participate simple create a Crowdin account and start translating.
+
+If you would like to add a new language or for any other issue, please contact us [on the forum](https://discourse.joplinapp.org/) or GitHub.
+
+## Current translations
 
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 &nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done

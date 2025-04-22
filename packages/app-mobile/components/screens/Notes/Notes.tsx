@@ -2,24 +2,24 @@ import * as React from 'react';
 import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, ViewStyle, TextStyle } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
-import NoteList from '../NoteList';
+import NoteList from '../../NoteList';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import Note, { PreviewsOrder } from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import { themeStyle } from '../global-style';
-import { FolderPickerOptions, ScreenHeader } from '../ScreenHeader';
+import { themeStyle } from '../../global-style';
+import { FolderPickerOptions, ScreenHeader } from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
-import ActionButton from '../buttons/FloatingActionButton';
-import { BaseScreenComponent } from '../base-screen';
-import { AppState } from '../../utils/types';
+import { BaseScreenComponent } from '../../base-screen';
+import { AppState } from '../../../utils/types';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { itemIsInTrash } from '@joplin/lib/services/trash';
-import AccessibleView from '../accessibility/AccessibleView';
+import AccessibleView from '../../accessibility/AccessibleView';
 import { Dispatch } from 'redux';
-import { DialogContext, DialogControl } from '../DialogManager';
+import { DialogContext, DialogControl } from '../../DialogManager';
 import { useContext } from 'react';
-import { MenuChoice } from '../DialogManager/types';
+import { MenuChoice } from '../../DialogManager/types';
+import NewNoteButton from './NewNoteButton';
 
 interface Props {
 	dispatch: Dispatch;
@@ -252,27 +252,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 			if ((this.props.notesParentType === 'Folder' && itemIsInTrash(parent)) || !Folder.atLeastOneRealFolderExists(this.props.folders)) return null;
 
 			if (addFolderNoteButtons && this.props.folders.length > 0) {
-				const buttons = [];
-				buttons.push({
-					label: _('New to-do'),
-					onPress: async () => {
-						const isTodo = true;
-						void this.newNoteNavigate(buttonFolderId, isTodo);
-					},
-					color: '#9b59b6',
-					icon: 'checkbox-outline',
-				});
-
-				buttons.push({
-					label: _('New note'),
-					onPress: async () => {
-						const isTodo = false;
-						void this.newNoteNavigate(buttonFolderId, isTodo);
-					},
-					color: '#9b59b6',
-					icon: 'document',
-				});
-				return <ActionButton buttons={buttons} dispatch={this.props.dispatch}/>;
+				return <NewNoteButton />;
 			}
 			return null;
 		};

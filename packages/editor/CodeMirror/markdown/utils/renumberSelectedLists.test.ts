@@ -64,4 +64,92 @@ describe('renumberSelectedLists', () => {
 			'# End',
 		].join('\n'));
 	});
+
+	it.each([
+		{
+			// Should handle the case where a single item is over-indented
+			before: [
+				'- This',
+				'- is',
+				'\t1. a',
+				'\t\t2. test',
+				'\t3. of',
+				'\t4. lists',
+			].join('\n'),
+			after: [
+				'- This',
+				'- is',
+				'\t1. a',
+				'\t\t1. test',
+				'\t2. of',
+				'\t3. lists',
+			].join('\n'),
+		},
+		{
+			// Should handle the case where multiple sublists need to be renumbered
+			before: [
+				'- This',
+				'- is',
+				'\t1. a',
+				'\t\t2. test',
+				'\t3. of',
+				'\t\t4. lists',
+				'\t\t5. lists',
+				'\t\t6. lists',
+				'\t7. lists',
+				'',
+				'',
+				'1. New list',
+				'\t3. Item',
+			].join('\n'),
+			after: [
+				'- This',
+				'- is',
+				'\t1. a',
+				'\t\t1. test',
+				'\t2. of',
+				'\t\t1. lists',
+				'\t\t2. lists',
+				'\t\t3. lists',
+				'\t3. lists',
+				'',
+				'',
+				'1. New list',
+				'\t1. Item',
+			].join('\n'),
+		},
+		{
+			before: [
+				'2. This',
+				'\t1. is',
+				'\t2. a',
+				'\t\t3. test',
+				'\t4. test',
+				'\t5. test',
+				'\t6. test',
+			].join('\n'),
+			after: [
+				'2. This',
+				'\t1. is',
+				'\t2. a',
+				'\t\t1. test',
+				'\t3. test',
+				'\t4. test',
+				'\t5. test',
+			].join('\n'),
+		},
+	])('should handle nested lists (case %#)', async ({ before, after }) => {
+		const suffix = '\n\n# End';
+		before += suffix;
+		after += suffix;
+		const editor = await createTestEditor(
+			before,
+			EditorSelection.range(0, before.length - suffix.length),
+			['OrderedList', 'ATXHeading1'],
+		);
+
+		editor.dispatch(renumberSelectedLists(editor.state));
+
+		expect(editor.state.doc.toString()).toBe(after);
+	});
 });
