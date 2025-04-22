@@ -9,7 +9,7 @@
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json"
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "author": "Laurent Cozic",
   "license": "MIT",

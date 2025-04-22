@@ -12,7 +12,7 @@
     "serve-web-hot-reload": "yarn serve-web --env HOT_RELOAD",
     "serve-web": "webpack serve --mode development --static ./web/public/ --config ./web/webpack.config.ts --progress",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
     "test": "jest",

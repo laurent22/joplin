@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "watch": "node ../tools/checkGitHooks.js && tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "linter-precommit": "yarn --cwd ../../ eslint --resolve-plugins-relative-to . --fix packages/react-native-saf-x/**/*.{js,ts,tsx}",
     "tsc": "tsc --project tsconfig.json"
   },
