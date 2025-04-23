@@ -1583,8 +1583,8 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
-"Ștergi această invitație? Destinatarul nu va mai avea acces la acest "
-"caiet partajat."
+"Ștergi această invitație? Destinatarul nu va mai avea acces la acest caiet "
+"partajat."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:108
 msgid "Delete this profile?"
@@ -3399,7 +3399,7 @@ msgid ""
 "Most plugins have source code available for review on the plugin website."
 msgstr ""
 "Majoritatea plugin-urilor au codul sursă disponibil pentru revizuire pe "
-"website-ul plugin-ului"
+"website-ul plugin-ului."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:546
 msgid "Move %d notes to notebook \"%s\"?"
