@@ -484,8 +484,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press "
 "\"ti\" to see the short notebook id"
 msgstr ""
-"Notebook ambiguu „%s”. Te rog să folosiți în schimb ID-ul scurt al caietului "
-"- apăsați “ti” pentru a vedea ID-ul scurt al caietului"
+"Caiet ambiguu „%s”. Te rog să folosiți în schimb ID-ul scurt al caietului - "
+"tastează „ti” pentru a vedea ID-ul scurt al caietului"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -1314,8 +1314,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
-"Nu s-a putut verifica starea de partajare a acestui notebook - întrerupere. "
-"Te rog să încercați din nou atunci când sunteți conectat la internet."
+"Nu s-a putut verifica starea de partajare a acestui caiet - se anulează. Te "
+"rog să încerci din nou când ești conectat la internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:30
 msgid "Could not verify your identity: %s"
@@ -1327,11 +1327,11 @@ msgstr "Create"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "Creează un nou notebook sub un notebook părinte."
+msgstr "Creează o nouă secțiune într-un caiet."
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
-msgstr "Creează un notebook"
+msgstr "Creează un caiet"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1551,7 +1551,7 @@ msgstr "Șterge notița"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:9
 msgid "Delete notebook"
-msgstr "Șterge notebook-ul"
+msgstr "Șterge caietul"
 
 #: packages/lib/components/shared/config/plugins/useOnDeleteHandler.ts:16
 msgid "Delete plugin \"%s\"?"
@@ -1583,8 +1583,8 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
-"Șterge această invitație? Destinatarul nu va mai avea acces la acest "
-"notebook partajat."
+"Șterge această invitație? Destinatarul nu va mai avea acces la acest caiet "
+"partajat."
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:108
 msgid "Delete this profile?"
@@ -3047,9 +3047,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
-"Serviciu de sincronizare al lui Joplin. Oferă, de asemenea, acces la "
+"Serviciul propriu de sincronizare al Joplin. Oferă de asemenea acces la "
 "caracteristici specifice Joplin, cum ar fi publicarea de notițe sau "
-"colaborarea cu alte persoane pe notebook-uri."
+"colaborarea la caiete cu alte persoane."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1485
 msgid "Keep note history for"
@@ -3061,7 +3061,7 @@ msgstr "Păstrează notițele în coș pentru"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1285
 msgid "Keyboard Mode"
-msgstr "Keyboard Mode"
+msgstr "Mod tastatură"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:189
 msgid "Keyboard Shortcut"
@@ -3073,11 +3073,11 @@ msgstr "Scurtături tastatură"
 
 #: packages/lib/versionInfo.ts:91
 msgid "Keychain Supported: %s"
-msgstr "Keychain Supported: %s"
+msgstr "Lanț de chei suportat: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
-msgstr "Chei care trebuie upgradate"
+msgstr "Chei care trebuie actualizate"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1262
 msgid "Landscape"
@@ -3089,7 +3089,7 @@ msgstr "Limbă"
 
 #: packages/lib/models/Setting.ts:1210
 msgid "Language, date format"
-msgstr "Limbă, Format dată"
+msgstr "Limbă, format dată"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3106,7 +3106,7 @@ msgstr "Latitudine"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:638
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:237
 msgid "Layout"
-msgstr "Layout"
+msgstr "Aspect"
 
 #: packages/app-desktop/gui/MenuBar.tsx:789
 msgid "Layout button sequence"
@@ -3157,22 +3157,22 @@ msgstr "Linii"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:107
 msgid "Link"
-msgstr "Link"
+msgstr "Legătură"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:97
 msgid "Link description"
-msgstr "Descriere link"
+msgstr "Descriere legătură"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:187
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Linkul a fost copiat în clipboard!"
-msgstr[1] "Link-urile au fost copiate în clipboard!"
-msgstr[2] "Link-urile au fost copiate în clipboard!"
+msgstr[0] "Legătura a fost copiată în clipboard!"
+msgstr[1] "Legăturile au fost copiate în clipboard!"
+msgstr[2] "Legăturile au fost copiate în clipboard!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:94
 msgid "Link text"
-msgstr "Link text"
+msgstr "Text legătură"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:231
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:233
@@ -3403,7 +3403,7 @@ msgstr ""
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:546
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Mutați %d notițe în caietul de notițe „%s”?"
+msgstr "Muți %d notițe în caietul „%s”?"
 
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3421,15 +3421,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
-msgstr "Mutați în notebook"
+msgstr "Mută în alt caiet..."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:67
 msgid "Move to notebook:"
-msgstr "Mutați în notebook:"
+msgstr "Mută în caietul:"
 
 #: packages/app-mobile/components/FolderPicker.tsx:59
 msgid "Move to notebook..."
-msgstr "Mutați în notebook…"
+msgstr "Mută în alt caiet…"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
@@ -4260,11 +4260,11 @@ msgstr "Proxy activat"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1435
 msgid "Proxy timeout (seconds)"
-msgstr "Proxy timeout (secunde)"
+msgstr "Timeout proxy (secunde)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1423
 msgid "Proxy URL"
-msgstr "Proxy URL"
+msgstr "URL proxy"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:240
 msgid "Public-private key pair:"
@@ -4336,7 +4336,7 @@ msgstr "Destinatarul a respins invitația"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:341
 msgid "Recipients:"
-msgstr "Destinatarii:"
+msgstr "Destinatari:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4730,7 +4730,7 @@ msgstr "Alege o imagine…"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
-msgstr "Selectează notebook-ul părinte"
+msgstr "Selectează caietul părinte"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -4813,7 +4813,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:125
 msgid "Share a notebook with others"
-msgstr "Partajați un notebook cu alții"
+msgstr "Partajează un caiet cu alții"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
@@ -5729,9 +5729,9 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
-"Acest lucru permite unui alt utilizator să partajeze un notebook cu dvs., "
-"iar apoi puteți colabora amândoi la el. Cu toate acestea, nu vă permite să "
-"partajați un notebook cu altcineva, cu excepția cazului în care aveți "
+"Acest lucru permite unui alt utilizator să partajeze un caiet cu tine, iar "
+"apoi veți putea colabora amândoi la el. Cu toate acestea, nu îți permite să "
+"partajezi un caiet cu altcineva, cu excepția cazului în care ai "
 "caracteristica „%s”."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
@@ -5866,8 +5866,8 @@ msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
-"Astfel, notebook-ul va fi eliminat din colecția dvs. și nu veți mai avea "
-"acces la conținutul său. Doriți să continuați?"
+"Aceasta va elimina caietul din colecția ta și nu vei mai avea acces la "
+"conținutul său. Dorești să continui?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:481
 msgid "Time format"
@@ -6160,7 +6160,7 @@ msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
-"Anulează partajarea acestui notebook? Destinatarii nu vor mai avea acces la "
+"Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la "
 "conținutul acestuia."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:811
