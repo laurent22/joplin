@@ -3097,7 +3097,7 @@ msgstr "语言与日期格式设置"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1169
 msgid "Large"
-msgstr "大型"
+msgstr "大"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3361,7 +3361,7 @@ msgstr "媒体播放器、数学公式、流程图、目录"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1168
 msgid "Medium"
-msgstr "中型"
+msgstr "中"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3799,7 +3799,7 @@ msgstr "笔记只能在笔记本内创建。"
 
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
 msgid "Notifications"
-msgstr "提醒"
+msgstr "通知"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:80
 msgid "Numbered List"
@@ -5008,7 +5008,7 @@ msgstr "已跳过：%d 条。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1167
 msgid "Small"
-msgstr "小型"
+msgstr "小"
 
 #: packages/lib/models/settings/builtInMetadata.ts:52
 msgid "Solarised Dark"
