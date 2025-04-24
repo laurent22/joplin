@@ -7,9 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
-"Language: ro\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -204,13 +206,12 @@ msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
-#, fuzzy
 msgid "%s cannot be greater than %s"
-msgstr "Nu se poate create o notiță nouă: %s"
+msgstr "%s nu poate fi mai mare decât %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr ""
+msgstr "%s nu poate fi mai mic decât %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:231
 msgid ""
@@ -222,7 +223,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr ""
+msgstr "%s trebuie să fie un număr întreg valid"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -466,9 +467,8 @@ msgid "Also publish linked notes"
 msgstr "Publică, de asemenea, notițele asociate"
 
 #: packages/lib/versionInfo.ts:93
-#, fuzzy
 msgid "Alternative instance ID: %s"
-msgstr "Client ID: %s"
+msgstr "ID instanță alternativ: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:412
 msgid "Always"
@@ -552,7 +552,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Sunteți sigur că doriți să reînnoiți token-ul de autorizare?"
+msgstr "Ești sigur că dorești să reînnoiești jetonul de autorizare?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:14
 msgid ""
@@ -607,7 +607,6 @@ msgid "attachment"
 msgstr "atașament"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
-#, fuzzy
 msgid "Attachment"
 msgstr "Atașament"
 
@@ -660,15 +659,15 @@ msgstr "Auto"
 
 #: packages/server/src/services/TaskService.ts:30
 msgid "Auto-add disabled accounts for deletion"
-msgstr "Adăugarea automată a conturilor dezactivate pentru ștergere"
+msgstr "Adaugă automat conturile dezactivate pentru ștergere"
 
 #: packages/lib/models/settings/builtInMetadata.ts:693
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr ""
+msgstr "Formatează automat Markdown în editorul de text îmbogățit"
 
 #: packages/lib/models/settings/builtInMetadata.ts:661
 msgid "Auto-pair braces, parentheses, quotations, etc."
-msgstr "Împerechere automată de paranteze, ghilimele etc."
+msgstr "Împerechează automat parantezele, ghilimelele etc."
 
 #: packages/lib/models/settings/builtInMetadata.ts:672
 msgid "Autocomplete Markdown and HTML"
@@ -739,7 +738,7 @@ msgstr "după cuvânt"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:74
 msgid "Camera"
-msgstr ""
+msgstr "Aparat foto"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -795,6 +794,8 @@ msgid ""
 "Cancelling will discard the recording. This cannot be undone. Are you sure "
 "you want to proceed?"
 msgstr ""
+"Anularea va duce la pierderea înregistrării. Acest lucru nu poate fi "
+"recuperat. Ești sigur că dorești să continui?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:206
@@ -935,9 +936,8 @@ msgid "Characters excluding spaces"
 msgstr "Caractere cu excepția spațiilor libere"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
-#, fuzzy
 msgid "Check"
-msgstr "Căsuțe de selecție"
+msgstr "Bifează"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
@@ -962,9 +962,8 @@ msgid "Checkbox list"
 msgstr "Listă cu căsuțe de selecție"
 
 #: packages/app-mobile/components/Checkbox.tsx:49
-#, fuzzy
 msgid "Checked"
-msgstr "Căsuțe de selecție"
+msgstr "Bifat"
 
 #: packages/lib/components/shared/config/config-shared.ts:97
 msgid "Checking... Please wait."
@@ -1004,7 +1003,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr ""
+msgstr "Apasă pe „start” pentru a atașa un memo vocal la notiță."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1033,9 +1032,8 @@ msgid "Close"
 msgstr "Închide"
 
 #: packages/app-mobile/components/Modal.tsx:139
-#, fuzzy
 msgid "Close dialog"
-msgstr "Închide fereastra"
+msgstr "Închide dialogul"
 
 #: packages/app-mobile/components/Dropdown.tsx:199
 msgid "Close dropdown"
@@ -1062,7 +1060,7 @@ msgstr "Închide fereastra"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr ""
+msgstr "Se închide sesiunea..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
@@ -1094,14 +1092,12 @@ msgid "Collaborate on notebooks with others"
 msgstr "Colaborează la caiete cu alte persoane"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Collapse all notebooks"
-msgstr "Creează un caiet"
+msgstr "Restrânge toate caietele"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
-#, fuzzy
 msgid "Collapsed"
-msgstr "Restrânge"
+msgstr "Restrâns"
 
 #: packages/lib/services/ReportService.ts:385
 msgid "Coming alarms"
@@ -1186,7 +1182,7 @@ msgstr "Configurare"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1173
 msgid "Configures the size of scrollbars used in the app."
-msgstr ""
+msgstr "Configurează mărimea barelor de derulare folosite în aplicație."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1450,9 +1446,8 @@ msgid "Created: %s"
 msgstr "Creat: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:65
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
-msgstr "Creează o nouă secțiune într-un caiet."
+msgstr "Creează o nouă notiță cu un atașament de tipul %s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1711,7 +1706,7 @@ msgstr "Dezvoltator"
 
 #: packages/lib/versionInfo.ts:88
 msgid "Device: %s"
-msgstr ""
+msgstr "Dispozitiv: %s"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1735,9 +1730,8 @@ msgid "Disable safe mode and restart"
 msgstr "Dezactivează modul de siguranță și repornește"
 
 #: packages/app-desktop/gui/MainScreen.tsx:594
-#, fuzzy
 msgid "Disable synchronisation"
-msgstr "Amânați sincronizarea"
+msgstr "Dezactivează sincronizarea"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
@@ -1868,9 +1862,8 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr "Descarcă și instalează extensia relevantă pentru navigatorul tău web:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:586
-#, fuzzy
 msgid "Download it now"
-msgstr "Descărcare"
+msgstr "Descarc-o acum"
 
 #: packages/lib/models/Resource.ts:409
 msgid "Downloaded"
@@ -1952,9 +1945,8 @@ msgstr ""
 "specificat niciun caiet, notița va fi duplicată în caietul curent."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:217
-#, fuzzy
 msgid "Duration: %s"
-msgstr "Versiunea ta: %s"
+msgstr "Durată: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:94
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
@@ -2220,6 +2212,8 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
+"Activează înlocuire cu șablon Markdown în editorul de text îmbogățit. De "
+"exemplu, dacă este activat, tastând **aldin** va crea text aldin."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2355,14 +2349,12 @@ msgid "Expand %s"
 msgstr "Extinde %s"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Expand all notebooks"
-msgstr "Editează caietul de notițe"
+msgstr "Extinde toate caietele"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
-#, fuzzy
 msgid "Expanded"
-msgstr "Extindeți"
+msgstr "Extins"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:182
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:213
@@ -2436,7 +2428,7 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Fail-safe: Nu ștergeți datele locale atunci când ținta de sincronizare este "
+"Fail-safe: Nu șterge datele locale atunci când ținta de sincronizare este "
 "goală (adesea rezultatul unei configurații greșite sau al unei erori)."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:134
@@ -2445,6 +2437,10 @@ msgid ""
 "target is empty or damaged. To override this behaviour disable the fail-safe "
 "in the sync settings."
 msgstr ""
+"Fail-safe: Sincronizarea a fost întreruptă pentru a preveni pierderea de "
+"date, deoarece ținta sincronizării este goală sau eronată. Pentru a anula "
+"acest comportament, dezactivează mecanismul de fail-safe din setările de "
+"sincronizare."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2491,7 +2487,7 @@ msgstr "Găsiți: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:208
 msgid "Finishes recording"
-msgstr ""
+msgstr "Finalizează înregistrarea"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
@@ -3018,7 +3014,7 @@ msgstr "Comandă invalidă: „%s”"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
-msgstr ""
+msgstr "Format invalid. ex.: 48.8581372, 2.2926735"
 
 #: packages/lib/models/Setting.ts:665
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -3056,9 +3052,8 @@ msgid "Items that cannot be synchronised"
 msgstr "Elementele nu pot fi sincronizați"
 
 #: packages/lib/services/ReportService.ts:294
-#, fuzzy
 msgid "Items with error: %s"
-msgstr "Ultima eroare: %s"
+msgstr "Elemente cu eroarea: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:945
 msgid "Join us on %s"
@@ -3204,7 +3199,7 @@ msgstr "Limbă, format dată"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1169
 msgid "Large"
-msgstr ""
+msgstr "Mare"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3290,9 +3285,8 @@ msgid "Link text"
 msgstr "Text legătură"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
-#, fuzzy
 msgid "Link to note..."
-msgstr "Mută în alt caiet…"
+msgstr "Leagă la notița..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3475,7 +3469,7 @@ msgstr "Media player, matematică, diagrame, cuprins"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1168
 msgid "Medium"
-msgstr ""
+msgstr "Medie"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3494,9 +3488,8 @@ msgid "Missing Master Keys"
 msgstr "Cheile master lipsă"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:120
-#, fuzzy
 msgid "Missing permission to record audio."
-msgstr "Permisiune cameră lipsă"
+msgstr "Permisiune lipsă pentru a înregistra audio."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3535,13 +3528,12 @@ msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Muți %d notițe în caietul „%s”?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
-#, fuzzy
 msgid "Move down"
-msgstr "Închideți meniul derulant"
+msgstr "Mută în jos"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:74
 msgid "Move left"
-msgstr ""
+msgstr "Mută la stânga"
 
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3559,7 +3551,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
-msgstr ""
+msgstr "Mută la dreapta"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
@@ -3575,7 +3567,7 @@ msgstr "Mută în alt caiet…"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:72
 msgid "Move up"
-msgstr ""
+msgstr "Mută în sus"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
@@ -3607,11 +3599,12 @@ msgid "New invitations"
 msgstr "Invitații noi"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
-#, fuzzy
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
-msgstr "Este disponibilă o nouă actualizare, dorești să o descarci acum?"
+msgstr ""
+"Este disponibil un nou model\n"
+"Un nou model de transcriere vocală este disponibil. Dorești să îl descarci?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:111
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -3641,9 +3634,8 @@ msgid "New photo"
 msgstr "Fotografie nouă"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
-#, fuzzy
 msgid "New profile"
-msgstr "Comută profilul"
+msgstr "Profil nou"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -3771,7 +3763,7 @@ msgstr "Neautentificat cu %s. Te rog să furnizezi orice acreditări lipsă."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
 msgid "Not checked"
-msgstr ""
+msgstr "Nebifat"
 
 #: packages/lib/models/Resource.ts:407
 msgid "Not downloaded"
@@ -3862,9 +3854,8 @@ msgstr "Titlul notiței"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:242
-#, fuzzy
 msgid "Note viewer"
-msgstr "Titlul notiței"
+msgstr "Vizualizator notiță"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1030
 msgid "Note: Does not work in all desktop environments."
@@ -3924,9 +3915,8 @@ msgid "Notes can only be created within a notebook."
 msgstr "Notițele pot fi create numai în cadrul unui caiet de notițe."
 
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
-#, fuzzy
 msgid "Notifications"
-msgstr "Locație"
+msgstr "Notificări"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:80
 msgid "Numbered List"
@@ -4023,14 +4013,12 @@ msgid "Open %s"
 msgstr "Deschide %s"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
-#, fuzzy
 msgid "Open in external editor"
-msgstr "Editează într-un editor extern"
+msgstr "Deschide într-un editor extern"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
-#, fuzzy
 msgid "Open in new window"
-msgstr "Editează într-o fereastră nouă"
+msgstr "Deschide într-o fereastră nouă"
 
 #: packages/app-desktop/bridge.ts:466
 msgid "Open it"
@@ -4042,7 +4030,7 @@ msgstr "Deschide vizualizator PDF"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Deschide instanța primară a aplicației..."
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4050,7 +4038,7 @@ msgstr "Deschide dosarul profilului"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Deschide instanța secundară a aplicației..."
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
 msgid "Open settings"
@@ -4118,11 +4106,11 @@ msgstr "Dimensiunea paginii pentru exportul PDF"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Panoul „%s” este vizibil"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Panoul „%s” este ascuns"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4244,7 +4232,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:332
 msgid "Please provide the recipient email"
-msgstr ""
+msgstr "Te rog furnizează adresa de e-mail a destinatarului"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4554,17 +4542,15 @@ msgstr "Plugin-uri recomandate"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Înregistrează audio"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
-#, fuzzy
 msgid "Recording"
-msgstr "Titlu"
+msgstr "Înregistrare"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
-#, fuzzy
 msgid "Recording..."
-msgstr "Se încarcă…"
+msgstr "Se înregistrează…"
 
 #: packages/app-desktop/gui/MenuBar.tsx:767
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4870,7 +4856,7 @@ msgstr "Cod scanat"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1172
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Mărime bară derulare"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -5169,7 +5155,7 @@ msgstr "Omise: %d."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1167
 msgid "Small"
-msgstr ""
+msgstr "Mică"
 
 #: packages/lib/models/settings/builtInMetadata.ts:52
 msgid "Solarised Dark"
@@ -5283,7 +5269,7 @@ msgstr "Pornește aplicația minimizat în zona de notificări a sistemului"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:199
 msgid "Start recording"
-msgstr ""
+msgstr "Începe înregistrarea"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -5384,18 +5370,16 @@ msgid "Subscript"
 msgstr "Subscripție"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:16
-#, fuzzy
 msgid "Success"
-msgstr "Cheie acces S3"
+msgstr "Succes"
 
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Succes! Configurația de sincronizare pare a fi corectă."
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:182
-#, fuzzy
 msgid "Suggestions"
-msgstr "Fără sugestii"
+msgstr "Sugestii"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
@@ -5547,12 +5531,12 @@ msgstr "Se sincronizează..."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 msgid "Tab indents"
-msgstr ""
+msgstr "Tasta tab indentează"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:713
 msgid "Tab moves focus"
-msgstr ""
+msgstr "Tasta tab mută focalizarea"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1310
 msgid "Tabloid"
@@ -5638,7 +5622,7 @@ msgstr "Aplicația nu s-a închis corect. Doriți să porniți în modul sigur?"
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr ""
-"Aplicația a fost autorizată - acum puteți închide această fereastră "
+"Aplicația a fost autorizată - acum poți închide această fereastră "
 "browserului."
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
@@ -5885,9 +5869,9 @@ msgstr ""
 "datele."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
-msgstr "Serviciul web clipper este activat și setat la pornire automată."
+msgstr ""
+"Serviciul web clipper nu poate fi activat în această instanță de Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
@@ -6239,9 +6223,8 @@ msgid "to-do: %s"
 msgstr "de făcut: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
-#, fuzzy
 msgid "Toggle all notebooks"
-msgstr "Selectează un caiet"
+msgstr "Comută toate caietele"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6260,9 +6243,8 @@ msgid "Toggle editor plugin"
 msgstr "Comută plugin editor"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
-msgstr "Comută aspect editor"
+msgstr "Comută navigarea în editor cu tasta tab"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6289,9 +6271,8 @@ msgid "Toggle own sort order"
 msgstr "Comută propria ordine de sortare"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:434
-#, fuzzy
 msgid "Toggle plugin editor"
-msgstr "Comută editoarele"
+msgstr "Comută editor plugin"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -6310,9 +6291,8 @@ msgid "Token has been copied to the clipboard!"
 msgstr "Token-ul a fost copiat în clipboard!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
-msgstr "Instrumente"
+msgstr "Bara de instrumente"
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Tools"
@@ -6364,9 +6344,8 @@ msgstr ""
 "numele unui caiet. Sau tastați : pentru a căuta comenzi."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:714
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Tastează etichete noi sau selectează din listă"
+msgstr "Tastează un titlu de notiță pentru a-l căuta."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:235
 msgid "Type new tags or select from list"
@@ -6386,7 +6365,7 @@ msgstr "Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr ""
+msgstr "Debifat"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "Uncompleted to-dos on top"
@@ -6671,9 +6650,8 @@ msgid "Viewer"
 msgstr "Vizualizator"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1083
-#, fuzzy
 msgid "Viewer font size"
-msgstr "Mărime font editor"
+msgstr "Mărime font vizualizator"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1346
 msgid "Vim"
@@ -6681,7 +6659,7 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Voice recorder"
-msgstr ""
+msgstr "Înregistrator vocal"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1772
 msgid "Voice typing language files (URL)"
@@ -6850,6 +6828,8 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Rulezi versiunea Intel a Joplin pe un procesor cu siliciu Apple. Descarcă "
+"versiunea pentru procesoare Apple pentru o performanță mai mare."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -6861,7 +6841,7 @@ msgstr "Nu aveți niciun plugin instalat."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "De asemenea, puteți introduce `status` pentru mai multe informații."
+msgstr "De asemenea, poți tasta `status` pentru mai multe informații."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
