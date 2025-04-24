@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { useContext } from 'react';
 import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
-import { PopupNotificationContext } from './PopupNotification/PopupNotificationProvider';
-import { NotificationType } from './PopupNotification/types';
+import dialogs from './dialogs';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -40,14 +38,11 @@ interface BannerProps {
 }
 
 const SwitchToNewEditorBanner = (props: BannerProps) => {
-	const popupManager = useContext(PopupNotificationContext);
 
-	const handleSwitchToNewEditor = () => {
+	const handleSwitchToNewEditor = async () => {
 		Setting.setValue('editor.legacyMarkdown', false);
 		const message = _('You are now using the latest version of the Markdown editor.');
-		popupManager.createPopup(() => message, {
-			type: NotificationType.Info,
-		}).scheduleDismiss(2000);
+		await dialogs.alert(message);
 	};
 
 	return <BannerContent
