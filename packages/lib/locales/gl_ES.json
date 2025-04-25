@@ -50,7 +50,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -275,6 +281,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		""
 	],
@@ -317,6 +326,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -331,6 +343,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Cancelando sincronización en segundo plano... Agarde."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Cancelando..."
@@ -395,6 +410,9 @@
 	"Checkbox list": [
 		""
 	],
+	"Checked": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -404,13 +422,13 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"close": [
 		""
 	],
 	"Close": [
-		""
-	],
-	"Close menu": [
 		""
 	],
 	"Close side menu": [
@@ -420,6 +438,9 @@
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Closing session...": [
 		""
 	],
 	"Cmd-click to open": [
@@ -434,7 +455,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -469,6 +490,9 @@
 	],
 	"Configuration": [
 		"Configuración"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Conflicted: %d": [
 		"En conflito: %d"
@@ -624,9 +648,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -661,6 +682,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -732,7 +756,7 @@
 	"Download and install the relevant extension for your browser:": [
 		""
 	],
-	"Download updated model": [
+	"Download it now": [
 		""
 	],
 	"Downloaded": [
@@ -779,12 +803,6 @@
 	],
 	"Edit": [
 		"Edtar"
-	],
-	"Edit in external editor": [
-		""
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit note.": [
 		"Editar nota."
@@ -909,6 +927,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Cifrado"
 	],
@@ -951,7 +972,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -981,6 +1002,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Erro fatal:"
 	],
@@ -995,6 +1019,9 @@
 	],
 	"File system": [
 		"Sistema de ficheiros"
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		""
@@ -1218,6 +1245,9 @@
 	"Invalid command: \"%s\"": [
 		"Orde incorrecta: «%s»"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Valor incorrecto de opción: «%s». Os valores posíbeis son: %s."
 	],
@@ -1289,6 +1319,9 @@
 	],
 	"Language": [
 		"Idioma"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Último erro: %s"
@@ -1402,6 +1435,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1422,6 +1458,15 @@
 	],
 	"Move %d notes to notebook \"%s\"?": [
 		"Mover %d notas para o caderno \"%s\"?"
+	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1516,6 +1561,9 @@
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Non está autenticado en %s. Proporcione as credencias que faltan."
 	],
+	"Not checked": [
+		""
+	],
 	"Not downloaded": [
 		""
 	],
@@ -1594,7 +1642,16 @@
 	"Open %s": [
 		"Abrir %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
 		""
 	],
 	"Open Sync Wizard...": [
@@ -1616,6 +1673,12 @@
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -1659,6 +1722,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Abra o seguinte URL no navegador para autenticar o aplicativo. O programa creará un cartafol en «Apps/Joplin» e só lerá e escribirá ficheiros neste cartafol. Non terá acceso a ningún ficheiro fóra deste directorio nin a ningún dato persoal. Non se compartirá ningún dato con terceiros."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -1843,6 +1909,12 @@
 	"Recommended plugins": [
 		""
 	],
+	"Record audio": [
+		""
+	],
+	"Recording": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1975,6 +2047,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Buscar"
 	],
@@ -2068,6 +2143,9 @@
 	"Skipped: %d.": [
 		"Ignorado: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		""
 	],
@@ -2122,6 +2200,9 @@
 	"Start application minimised in the tray icon": [
 		""
 	],
+	"Start recording": [
+		""
+	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
 	],
@@ -2174,6 +2255,12 @@
 		""
 	],
 	"Subscript": [
+		""
+	],
+	"Success": [
+		""
+	],
+	"Suggestions": [
 		""
 	],
 	"Superscript": [
@@ -2232,6 +2319,12 @@
 	],
 	"Synchronises with remote storage.": [
 		"Sincroniza sen almacenaxe remoto."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		""
@@ -2359,6 +2452,9 @@
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -2538,6 +2634,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Tarefas sen completar arriba"
 	],
@@ -2643,6 +2742,9 @@
 	"Vim": [
 		""
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -2719,6 +2821,9 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [

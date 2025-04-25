@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.57",
-    "@joplin/fork-uslug": "^1.0.22",
+    "@joplin/fork-uslug": "^2.0.0",
     "@joplin/utils": "~3.3",
     "font-awesome-filetypes": "2.1.0",
     "fs-extra": "11.2.0",

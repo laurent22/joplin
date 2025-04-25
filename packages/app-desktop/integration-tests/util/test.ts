@@ -3,7 +3,7 @@ import { remove, mkdirp, readFile, pathExists } from 'fs-extra';
 import { _electron as electron, Page, ElectronApplication, test as base, TestInfo } from '@playwright/test';
 import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
-import firstNonDevToolsWindow from './firstNonDevToolsWindow';
+import getMainWindow from './getMainWindow';
 import setDarkMode from './setDarkMode';
 
 
@@ -21,7 +21,7 @@ type JoplinFixtures = {
 // https://playwright.dev/docs/test-fixtures
 
 const initializeMainWindow = async (electronApp: ElectronApplication) => {
-	const mainWindow = await firstNonDevToolsWindow(electronApp);
+	const mainWindow = await getMainWindow(electronApp);
 
 	// Setting the viewport size helps keep test environments consistent.
 	await mainWindow.setViewportSize({

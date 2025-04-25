@@ -65,7 +65,16 @@
 	"%s = %s (%s)": [
 		""
 	],
+	"%s cannot be greater than %s": [
+		""
+	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -266,6 +275,9 @@
 	"Also publish linked notes": [
 		""
 	],
+	"Alternative instance ID: %s": [
+		""
+	],
 	"Always": [
 		""
 	],
@@ -344,6 +356,9 @@
 	"attachment": [
 		""
 	],
+	"Attachment": [
+		""
+	],
 	"Attachment conflict: \"%s\"": [
 		""
 	],
@@ -372,6 +387,9 @@
 		""
 	],
 	"Auto-add disabled accounts for deletion": [
+		""
+	],
+	"Auto-format Markdown in the Rich Text Editor": [
 		""
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
@@ -419,6 +437,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -432,6 +453,9 @@
 		""
 	],
 	"Cancelling background synchronisation... Please wait.": [
+		""
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
 		""
 	],
 	"Cancelling...": [
@@ -506,6 +530,9 @@
 	"Characters excluding spaces": [
 		""
 	],
+	"Check": [
+		""
+	],
 	"Check elements to display in the toolbar": [
 		""
 	],
@@ -519,6 +546,9 @@
 		""
 	],
 	"Checkbox list": [
+		""
+	],
+	"Checked": [
 		""
 	],
 	"Checking... Please wait.": [
@@ -542,6 +572,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		""
 	],
@@ -554,10 +587,10 @@
 	"Close": [
 		""
 	],
-	"Close dropdown": [
+	"Close dialog": [
 		""
 	],
-	"Close menu": [
+	"Close dropdown": [
 		""
 	],
 	"Close side menu": [
@@ -567,6 +600,9 @@
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Closing session...": [
 		""
 	],
 	"Cmd-click to open": [
@@ -590,7 +626,10 @@
 	"Collaborate on notebooks with others": [
 		""
 	],
-	"Collapsed, press space to expand.": [
+	"Collapse all notebooks": [
+		""
+	],
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -639,6 +678,9 @@
 		""
 	],
 	"Configuration": [
+		""
+	],
+	"Configures the size of scrollbars used in the app.": [
 		""
 	],
 	"Confirm password cannot be empty": [
@@ -799,6 +841,9 @@
 	"Created: %s": [
 		""
 	],
+	"Creates a new note with an attachment of type %s": [
+		""
+	],
 	"Creates a new note.": [
 		""
 	],
@@ -904,9 +949,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		""
 	],
@@ -970,6 +1012,9 @@
 	"Dev": [
 		""
 	],
+	"Device: %s": [
+		""
+	],
 	"Directory": [
 		""
 	],
@@ -983,6 +1028,9 @@
 		""
 	],
 	"Disable safe mode and restart": [
+		""
+	],
+	"Disable synchronisation": [
 		""
 	],
 	"Disable Web Clipper Service": [
@@ -1054,7 +1102,7 @@
 	"Download and install the relevant extension for your browser:": [
 		""
 	],
-	"Download updated model": [
+	"Download it now": [
 		""
 	],
 	"Downloaded": [
@@ -1111,16 +1159,10 @@
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		""
 	],
+	"Duration: %s": [
+		""
+	],
 	"Edit": [
-		""
-	],
-	"Edit in external editor": [
-		""
-	],
-	"Edit in new window": [
-		""
-	],
-	"Edit in...": [
 		""
 	],
 	"Edit link": [
@@ -1288,6 +1330,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		""
 	],
@@ -1369,7 +1414,10 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expand all notebooks": [
+		""
+	],
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -1420,6 +1468,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		""
 	],
@@ -1448,6 +1499,9 @@
 		""
 	],
 	"Find: ": [
+		""
+	],
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -1754,6 +1808,9 @@
 	"Invalid command: \"%s\"": [
 		""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		""
 	],
@@ -1776,6 +1833,9 @@
 		""
 	],
 	"Items that cannot be synchronised": [
+		""
+	],
+	"Items with error: %s": [
 		""
 	],
 	"Join us on %s": [
@@ -1865,6 +1925,9 @@
 	"Language, date format": [
 		""
 	],
+	"Large": [
+		""
+	],
 	"Last error: %s": [
 		""
 	],
@@ -1918,6 +1981,9 @@
 		""
 	],
 	"Link text": [
+		""
+	],
+	"Link to note...": [
 		""
 	],
 	"List item": [
@@ -2034,6 +2100,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -2044,6 +2113,9 @@
 		""
 	],
 	"Missing Master Keys": [
+		""
+	],
+	"Missing permission to record audio.": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -2070,7 +2142,16 @@
 	"Move %d notes to notebook \"%s\"?": [
 		""
 	],
+	"Move down": [
+		""
+	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		""
+	],
+	"Move right": [
 		""
 	],
 	"Move to notebook": [
@@ -2080,6 +2161,9 @@
 		""
 	],
 	"Move to notebook:": [
+		""
+	],
+	"Move up": [
 		""
 	],
 	"Moves the given <item> to [notebook]": [
@@ -2103,6 +2187,9 @@
 	"New invitations": [
 		""
 	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		""
+	],
 	"New note": [
 		""
 	],
@@ -2116,6 +2203,9 @@
 		""
 	],
 	"New photo": [
+		""
+	],
+	"New profile": [
 		""
 	],
 	"New sub-notebook": [
@@ -2202,6 +2292,9 @@
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		""
 	],
+	"Not checked": [
+		""
+	],
 	"Not downloaded": [
 		""
 	],
@@ -2259,6 +2352,9 @@
 	"Note title": [
 		""
 	],
+	"Note viewer": [
+		""
+	],
 	"Note&book": [
 		""
 	],
@@ -2293,6 +2389,9 @@
 		""
 	],
 	"Notes can only be created within a notebook.": [
+		""
+	],
+	"Notifications": [
 		""
 	],
 	"Numbered List": [
@@ -2343,13 +2442,25 @@
 	"Open %s": [
 		""
 	],
+	"Open in external editor": [
+		""
+	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
 		""
 	],
 	"Open PDF viewer": [
 		""
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
+		""
+	],
+	"Open secondary app instance...": [
 		""
 	],
 	"Open settings": [
@@ -2395,6 +2506,12 @@
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -2455,6 +2572,9 @@
 		""
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -2670,6 +2790,15 @@
 	"Recommended plugins": [
 		""
 	],
+	"Record audio": [
+		""
+	],
+	"Recording": [
+		""
+	],
+	"Recording...": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -2865,6 +2994,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		""
 	],
@@ -3054,6 +3186,9 @@
 	"Skipped: %d.": [
 		""
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		""
 	],
@@ -3120,6 +3255,9 @@
 	"Start application minimised in the tray icon": [
 		""
 	],
+	"Start recording": [
+		""
+	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
 	],
@@ -3180,7 +3318,13 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
+		""
+	],
+	"Suggestions": [
 		""
 	],
 	"Superscript": [
@@ -3280,6 +3424,12 @@
 		""
 	],
 	"Synchronizing...": [
+		""
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
 		""
 	],
 	"Tabloid": [
@@ -3432,6 +3582,9 @@
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -3602,6 +3755,9 @@
 	"to-do: %s": [
 		""
 	],
+	"Toggle all notebooks": [
+		""
+	],
 	"Toggle comment": [
 		""
 	],
@@ -3612,6 +3768,9 @@
 		""
 	],
 	"Toggle editor plugin": [
+		""
+	],
+	"Toggle editor tab key navigation": [
 		""
 	],
 	"Toggle editors": [
@@ -3632,6 +3791,9 @@
 	"Toggle own sort order": [
 		""
 	],
+	"Toggle plugin editor": [
+		""
+	],
 	"Toggle safe mode": [
 		""
 	],
@@ -3642,6 +3804,9 @@
 		""
 	],
 	"Token has been copied to the clipboard!": [
+		""
+	],
+	"Toolbar": [
 		""
 	],
 	"Tools": [
@@ -3671,6 +3836,9 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		""
 	],
+	"Type a note title to search for it.": [
+		""
+	],
 	"Type new tags or select from list": [
 		""
 	],
@@ -3681,6 +3849,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
 		""
 	],
 	"Uncompleted to-dos on top": [
@@ -3839,7 +4010,13 @@
 	"Viewer": [
 		""
 	],
+	"Viewer font size": [
+		""
+	],
 	"Vim": [
+		""
+	],
+	"Voice recorder": [
 		""
 	],
 	"Voice typing language files (URL)": [
@@ -3933,6 +4110,9 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

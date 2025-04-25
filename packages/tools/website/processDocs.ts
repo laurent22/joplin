@@ -95,7 +95,9 @@ const parseHtml = (html: string) => {
 				attrHtml.push(`${n}=${escapedValue}`);
 			}
 
-			output.push(`<${name} ${attrHtml.join(' ')}${closingSign}`);
+			const closingSpace = isSelfClosingTag(name) || !!attrHtml.length ? ' ' : '';
+
+			output.push(`<${name}${attrHtml.length ? ` ${attrHtml.join(' ')}` : ''}${closingSpace}${closingSign}`);
 		},
 
 		ontext: (decodedText: string) => {

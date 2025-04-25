@@ -1,5 +1,16 @@
 # Joplin Android Changelog
 
+## [android-v3.3.6](https://github.com/laurent22/joplin/releases/tag/android-v3.3.6) (Pre-release) - 2025-04-24T08:34:56Z
+
+- Improved: Improve UI for downloading updated models (#12145 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Note editor: Hash links: Move cursor to header or anchor associated with link target (#12129 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Print name of file when import fails (c3fe0ed)
+- Improved: Update to js-draw v1.29.2 (#12074 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix error when attempting to show message boxes in some cases (#12142 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Make list continuation logic more predictable (#11919) (#10226 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown Editor: Fix numbered sublist renumbering (#12091 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Settings: Fix desktop-specific setting visible in note &gt; advanced (#12146 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.3.5](https://github.com/laurent22/joplin/releases/tag/android-v3.3.5) (Pre-release) - 2025-04-07T19:31:26Z
 
 - New: Add "swap line up" and "swap line down" to toolbar extended options (#12053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

@@ -62,8 +62,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 는 많은 작은 파일을 동기화하는 데 최적화되어 있지 않으므로 초기 동기화 속도가 느려집니다."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		""
@@ -344,6 +350,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"삭제를 위해 비활성화된 계정을 자동으로 추가"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"괄호, 중괄호, 인용 부호 등의 자동 완성."
 	],
@@ -389,6 +398,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"공유 가능"
 	],
@@ -403,6 +415,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"취소하는 중..."
@@ -506,6 +521,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"\"%s\"를 클릭해서 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사됩니다. 노트의 현재 버전이 이동 혹은 수정되지는 않습니다."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"태그를 추가하려면 클릭하세요..."
 	],
@@ -527,6 +545,9 @@
 	"Close Window": [
 		"창 닫기"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -547,9 +568,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"다른 사람과 노트북들에서 협업하기"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"예정된 알람"
@@ -592,6 +610,9 @@
 	],
 	"Configuration": [
 		"설정"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"비밀번호 확인칸은 비어져 있으면 안됩니다"
@@ -836,9 +857,6 @@
 	"Delete local data and re-download from sync target": [
 		"로컬 데이터를 지우고 동기화 대상의 데이터를 다시 내려받기"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"메모 삭제"
 	],
@@ -892,6 +910,9 @@
 	],
 	"Detailed": [
 		"상세히 보기"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"폴더"
@@ -1027,12 +1048,6 @@
 	],
 	"Edit": [
 		"편집"
-	],
-	"Edit in external editor": [
-		"외부 편집기에서 편집하기"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"링크 편집"
@@ -1190,6 +1205,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암호화되어 전송됩니다."
 	],
@@ -1262,9 +1280,6 @@
 	"Exits the application.": [
 		"애플리케이션을 종료합니다."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"내보내기"
 	],
@@ -1310,6 +1325,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"치명적인 오류:"
 	],
@@ -1336,6 +1354,9 @@
 	],
 	"Find: ": [
 		"찾기: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox 확장"
@@ -1610,6 +1631,9 @@
 	"Invalid command: \"%s\"": [
 		"올바르지 않은 명령어: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: %s."
 	],
@@ -1705,6 +1729,9 @@
 	],
 	"Language, date format": [
 		"언어, 날짜 형식"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"최근 오류: %s"
@@ -1856,6 +1883,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"미디어 플레이어, 수학, 도표, 목차"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"최소화"
 	],
@@ -1889,8 +1919,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"\"%s\" 노트북을 휴지통으로 이동할까요?\n\n이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 휴지통으로 이동합니다."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"노트북으로 옮기기"
@@ -1900,6 +1936,9 @@
 	],
 	"Move to notebook:": [
 		"노트북으로 옮기기:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"주어진 <item>을 [notebook]으로 이동합니다."
@@ -1999,6 +2038,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s과 인증되지 않았습니다. 증명서를 제공해주세요."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"다운로드되지 않았습니다"
@@ -2132,11 +2174,20 @@
 	"Open %s": [
 		"%s 열기"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"PDF 뷰어 열기"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"프로파일 디렉터리 열기"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"동기화 마법사 열기..."
@@ -2167,6 +2218,12 @@
 	],
 	"Page size for PDF export": [
 		"PDF로 내보낼때 페이지 크기"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"비밀번호"
@@ -2221,6 +2278,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 \"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 데이터는 제3자와 공유되지 않습니다."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"목소리를 녹음하세요..."
@@ -2411,6 +2471,9 @@
 	"Recommended": [
 		"추천"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"다시 실행"
 	],
@@ -2588,6 +2651,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"검색"
 	],
@@ -2744,6 +2810,9 @@
 	"Skipped: %d.": [
 		"넘겨짐: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"부드러운 다크"
 	],
@@ -2809,6 +2878,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Joplin을 최소화된 상태로 트레이 아이콘에서 시작"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
@@ -2962,6 +3034,12 @@
 	],
 	"Synchronizing...": [
 		"동기화 중..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3347,6 +3425,9 @@
 	"Unable to share log data. Reason: %s": [
 		"로그 데이터를 공유할 수 없습니다. 이유: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"완료되지 않은 목록을 맨 위에"
 	],
@@ -3488,6 +3569,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"음성 입력 언어 파일(URL)"
 	],
@@ -3574,6 +3658,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Joplin Cloud에 로그인되어 있으므로 지금 이 화면을 종료해도 됩니다."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"현재 노트북이 없습니다."

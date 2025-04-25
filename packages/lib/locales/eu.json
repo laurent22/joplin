@@ -50,7 +50,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -278,6 +284,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		""
 	],
@@ -323,6 +332,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -337,6 +349,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Atzeko sinkronizazioa uzten... Mesedez itxaron."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Bertan behera uzten..."
@@ -404,6 +419,9 @@
 	"Checkbox list": [
 		""
 	],
+	"Checked": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -411,6 +429,9 @@
 		"Garbitu"
 	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		""
+	],
+	"Click \"start\" to attach a new voice memo to the note.": [
 		""
 	],
 	"Click to add tags...": [
@@ -422,9 +443,6 @@
 	"Close": [
 		""
 	],
-	"Close menu": [
-		""
-	],
 	"Close side menu": [
 		""
 	],
@@ -432,6 +450,9 @@
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Closing session...": [
 		""
 	],
 	"Cmd-click to open": [
@@ -449,7 +470,7 @@
 	"Code View": [
 		""
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -484,6 +505,9 @@
 	],
 	"Configuration": [
 		"Konfigurazioa"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Conflicted: %d": [
 		"Gatazkatsua: %d"
@@ -645,9 +669,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -679,6 +700,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -753,7 +777,7 @@
 	"Download and install the relevant extension for your browser:": [
 		""
 	],
-	"Download updated model": [
+	"Download it now": [
 		""
 	],
 	"Downloaded": [
@@ -800,12 +824,6 @@
 	],
 	"Edit": [
 		"Editatu"
-	],
-	"Edit in external editor": [
-		""
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit note.": [
 		"Oharra editatu."
@@ -930,6 +948,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Zifratuta"
 	],
@@ -969,7 +990,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export Debug Report": [
@@ -993,6 +1014,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Aio! Agur! :_( "
 	],
@@ -1012,6 +1036,9 @@
 		""
 	],
 	"Filter tags": [
+		""
+	],
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -1239,6 +1266,9 @@
 	"Invalid command: \"%s\"": [
 		"Komando baliogabea: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
 	],
@@ -1307,6 +1337,9 @@
 	],
 	"Language": [
 		"Hizkuntza"
+	],
+	"Large": [
+		""
 	],
 	"Later": [
 		""
@@ -1414,6 +1447,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1432,6 +1468,15 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Mugitu %d oharrak \"%s\" koadernora?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
+	"Move up": [
+		""
+	],
 	"n": [
 		"e"
 	],
@@ -1445,6 +1490,9 @@
 		""
 	],
 	"New invitations": [
+		""
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
 		""
 	],
 	"New note": [
@@ -1522,6 +1570,9 @@
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
 	],
+	"Not checked": [
+		""
+	],
 	"Not downloaded": [
 		""
 	],
@@ -1591,7 +1642,16 @@
 	"Only one note can be printed at a time.": [
 		""
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
 		""
 	],
 	"Open Sync Wizard...": [
@@ -1613,6 +1673,12 @@
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -1649,6 +1715,9 @@
 		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -1828,6 +1897,12 @@
 	"Recommended plugins": [
 		""
 	],
+	"Record audio": [
+		""
+	],
+	"Recording": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1948,6 +2023,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Bilatu"
 	],
@@ -2044,6 +2122,9 @@
 	"Skipped: %d.": [
 		"Saltatuta: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		""
 	],
@@ -2090,6 +2171,9 @@
 		""
 	],
 	"Start application minimised in the tray icon": [
+		""
+	],
+	"Start recording": [
 		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
@@ -2144,6 +2228,12 @@
 		""
 	],
 	"Subscript": [
+		""
+	],
+	"Success": [
+		""
+	],
+	"Suggestions": [
 		""
 	],
 	"Superscript": [
@@ -2202,6 +2292,12 @@
 	],
 	"Synchronises with remote storage.": [
 		"Urruneko biltegiarekin sinkronizatzen du."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		""
@@ -2332,6 +2428,9 @@
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -2490,6 +2589,9 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		""
 	],
+	"Type a note title to search for it.": [
+		""
+	],
 	"Type new tags or select from list": [
 		""
 	],
@@ -2500,6 +2602,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
 		""
 	],
 	"Undo": [
@@ -2610,6 +2715,9 @@
 	"Vim": [
 		""
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -2671,6 +2779,9 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [

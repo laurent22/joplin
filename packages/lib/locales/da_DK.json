@@ -65,8 +65,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s er ikke optimeret til at synkronisere mange små filer, så din første synkronisering vil være langsom."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"%s fane åbnet"
@@ -374,6 +380,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Føj automatisk deaktiverede konti til sletning"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-par klammer, parenteser, citater, etc."
 	],
@@ -419,6 +428,9 @@
 	"by word": [
 		"efter ord"
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Kan dele"
 	],
@@ -433,6 +445,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Annullerer baggrunds synkronisering... Vent venligst."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Annullerer..."
@@ -542,6 +557,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik på \"%s\" for at gendanne noten. Den vil blive kopieret til notesbogen \"%s\". Den nuværende version af noten vil ikke blive erstattet eller ændret."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Klik for at tilføje etiketter..."
 	],
@@ -557,9 +575,6 @@
 	"Close dropdown": [
 		"Luk rullelisten"
 	],
-	"Close menu": [
-		"Luk menu"
-	],
 	"Close side menu": [
 		"Luk sidemenu"
 	],
@@ -568,6 +583,9 @@
 	],
 	"Close Window": [
 		"Luk vindue"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		"Cmd-klik for at åbne"
@@ -589,9 +607,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Samarbejd med andre om notesbøger"
-	],
-	"Collapsed, press space to expand.": [
-		"Sammenklappet, tryk på mellemrum for at udvide."
 	],
 	"Coming alarms": [
 		"Kommende alarmer"
@@ -640,6 +655,9 @@
 	],
 	"Configuration": [
 		"Indstillinger"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Bekræftelsen af adgangskode må ikke være tom"
@@ -904,9 +922,6 @@
 	"Delete local data and re-download from sync target": [
 		"Slet lokal data og download igen fra synkroniseringsmål"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Slet note"
 	],
@@ -966,6 +981,12 @@
 	],
 	"Detailed": [
 		"Detailed"
+	],
+	"Dev": [
+		"Dev"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Indeks"
@@ -1107,15 +1128,6 @@
 	],
 	"Edit": [
 		"Redigér"
-	],
-	"Edit in external editor": [
-		"Rediger i ekstern editor"
-	],
-	"Edit in new window": [
-		"Redigér i nyt vindue"
-	],
-	"Edit in...": [
-		"Rediger i..."
 	],
 	"Edit link": [
 		"Rediger link"
@@ -1282,6 +1294,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		"Aktiverer Markdown-listefortsættelse, automatisk lukning af HTML-tags og andre markup-autoudførelser."
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-synkroniseret og sendt ukrypteret til synk-modtageren."
 	],
@@ -1363,9 +1378,6 @@
 	"Expand %s": [
 		"Udvid %s"
 	],
-	"Expanded, press space to collapse.": [
-		"Udvidet, tryk på mellemrum for at skjule."
-	],
 	"Export": [
 		"Eksportér"
 	],
@@ -1414,6 +1426,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sikring: Fjern ikke lokal data når målet for synkroniseringen er tom (ofte et resultat af fejlkonfigurering eller bugs)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Kritisk fejl:"
 	],
@@ -1443,6 +1458,9 @@
 	],
 	"Find: ": [
 		"Find: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox udvidelse"
@@ -1748,6 +1766,9 @@
 	"Invalid command: \"%s\"": [
 		"Ulovlig kommando: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Ulovlig indstillingsværdi: \"%s\".  Mulige valg er: %s."
 	],
@@ -1803,7 +1824,7 @@
 		"Joplin-forum"
 	],
 	"Joplin is already running.": [
-		"Joplin kører allerede"
+		"Joplin kører allerede."
 	],
 	"Joplin Mobile": [
 		"Joplin Mobil"
@@ -1858,6 +1879,9 @@
 	],
 	"Language, date format": [
 		"Sprog, datoformat"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Sidste fejl: %s"
@@ -2028,6 +2052,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Medieafspiller, matematik, diagrammer, indholdsfortegnelse"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Minimér"
 	],
@@ -2064,8 +2091,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Flyt %d noter til notesbogen \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Flytte notesbogen \"%s\" til papirkurven?\n\nAlle noter og undernoter i denne notesbog vil også blive flyttet til papirkurven."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Flyt til notesbog"
@@ -2075,6 +2108,9 @@
 	],
 	"Move to notebook:": [
 		"Flyt til notesbog:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Flytter det givne <item> til [notebook]."
@@ -2195,6 +2231,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ikke godkendt med %s. Angiv venligst eventuelle manglende legitimationsoplysninger."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Ikke downloadet"
@@ -2343,8 +2382,14 @@
 	"Open PDF viewer": [
 		"Åbn PDF-viser"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Åbn profilmappe"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open settings": [
 		"Åbn indstillinger"
@@ -2390,6 +2435,12 @@
 	],
 	"Page size for PDF export": [
 		"Sidestørrelse for PDF eksport"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Adgangskode"
@@ -2450,6 +2501,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Åben venligst flg. ULR i en browser for at bekræfte app'en. App'en vil oprette en mappe i \"Apps/Joplin\" og vil kun skrive/læse filer i denne mappe. Den får ingen adgang til filer udenfor denne mappe, heller ikke til andre persondata. Ingen data deles med nogen tredjepart."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Optag venligst din stemme..."
@@ -2626,7 +2680,7 @@
 		"Afslut"
 	],
 	"Re-download model": [
-		""
+		"Download model igen"
 	],
 	"Re-encrypt data": [
 		"Genkryptér data"
@@ -2663,6 +2717,9 @@
 	],
 	"Recommended plugins": [
 		"Anbefalede plugins"
+	],
+	"Record audio": [
+		""
 	],
 	"Redo": [
 		"Gentag"
@@ -2859,6 +2916,9 @@
 	"Scanned code": [
 		"Scannet kode"
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Søg"
 	],
@@ -3048,6 +3108,9 @@
 	"Skipped: %d.": [
 		"Droppet %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Mørk"
 	],
@@ -3113,6 +3176,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Start programmet minimeret i systembakkeikonet"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Start, stop eller tjek API serveren. Sæt api.port variablen for at vælge hvilken port den skal køre på. Kommandoerne er (%s)."
@@ -3275,6 +3341,12 @@
 	],
 	"Synchronizing...": [
 		"Synkroniserer..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"US Tabloid"
@@ -3677,6 +3749,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Kan ikke dele logdata. Årsag: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Ufærdige opgaver øverst"
 	],
@@ -3718,6 +3793,9 @@
 	],
 	"Unsupported link or message: %s": [
 		"Ugyldigt link eller besked: %s"
+	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Ikke-understøttet link eller besked: %s\nFejl: %s"
 	],
 	"Untitled": [
 		"Uden titel"
@@ -3833,6 +3911,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Sprogfiler til stemmeindtastning (URL)"
 	],
@@ -3925,6 +4006,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Du er logget ind på Joplin Cloud, du kan forlade dette skærmbillede nu."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Du har ingen notesbøger."

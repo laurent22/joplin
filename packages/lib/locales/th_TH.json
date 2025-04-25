@@ -50,7 +50,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -281,6 +287,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Autocomplete Markdown and HTML": [
 		""
 	],
@@ -311,6 +320,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -319,6 +331,9 @@
 	],
 	"Cancel": [
 		"ยกเลิก"
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"กำลังยกเลิก..."
@@ -392,6 +407,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Client ID: %s": [
 		"Client ID: %s"
 	],
@@ -407,6 +425,9 @@
 	"Close Window": [
 		"ปิดหน้าต่าง"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -419,7 +440,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -460,6 +481,9 @@
 	],
 	"Configuration": [
 		"การตั้งค่า"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"รหัสผ่านยืนยันไม่สามารถเว้นว่างได้"
@@ -614,9 +638,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -648,6 +669,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -754,9 +778,6 @@
 	],
 	"Edit": [
 		"แก้ไข"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit note.": [
 		"แก้ไขบันทึก"
@@ -878,6 +899,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		""
 	],
@@ -929,7 +953,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -956,6 +980,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"ผิดพลาดร้ายแรง:"
 	],
@@ -972,6 +999,9 @@
 		"ไฟล์"
 	],
 	"File system": [
+		""
+	],
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -1211,6 +1241,9 @@
 	"Invalid command: \"%s\"": [
 		"คำสั่งไม่ถูกต้อง: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Italic": [
 		"ตัวเอียง"
 	],
@@ -1267,6 +1300,9 @@
 	],
 	"Language": [
 		"ภาษา"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"ข้อผิดพลาดล่าสุด: %s"
@@ -1367,6 +1403,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1377,6 +1416,9 @@
 		""
 	],
 	"Missing Master Keys": [
+		""
+	],
+	"Missing permission to record audio.": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -1400,8 +1442,17 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook...": [
 		"ย้ายไปสมุดบันทึก..."
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1485,6 +1536,9 @@
 		"Nord"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
+		""
+	],
+	"Not checked": [
 		""
 	],
 	"Not downloaded": [
@@ -1574,7 +1628,16 @@
 	"Open %s": [
 		"เปิด %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
 		""
 	],
 	"Open Sync Wizard...": [
@@ -1594,6 +1657,12 @@
 	],
 	"Page size for PDF export": [
 		"ขนาดของหน้า สำหรับการส่งออก PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"รหัสผ่าน"
@@ -1632,6 +1701,9 @@
 		""
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -1796,6 +1868,9 @@
 	"Recommended plugins": [
 		""
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1925,6 +2000,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"ค้นหา"
 	],
@@ -2018,6 +2096,9 @@
 	"Skipped: %d.": [
 		"ข้าม: %d"
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2069,6 +2150,9 @@
 	"Start application minimised in the tray icon": [
 		"เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
 	],
+	"Start recording": [
+		""
+	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
 	],
@@ -2118,6 +2202,12 @@
 		""
 	],
 	"Subscript": [
+		""
+	],
+	"Success": [
+		""
+	],
+	"Suggestions": [
 		""
 	],
 	"Superscript": [
@@ -2182,6 +2272,12 @@
 	],
 	"Synchronising...": [
 		"กำลังซิงโครไนซ์..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -2322,6 +2418,9 @@
 		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -2477,6 +2576,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Undo": [
 		""
 	],
@@ -2573,6 +2675,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -2643,6 +2748,9 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [

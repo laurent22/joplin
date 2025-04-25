@@ -65,8 +65,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"Το %s δεν έχει βελτιστοποιηθεί για συγχρονισμό πολλών μικρών αρχείων, επομένως ο αρχικός συγχρονισμός θα καθυστερήσει."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"Ανοίχθηκε η καρτέλα %s"
@@ -362,6 +368,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Αυτόματη προσθήκη απενεργοποιημένων λογαριασμών για διαγραφή"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 	],
@@ -407,6 +416,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Μπορεί να μοιραστεί"
 	],
@@ -421,6 +433,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Ακύρωση συγχρονισμού ... Παρακαλώ περιμένετε."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Ακύρωση..."
@@ -527,6 +542,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Κάντε κλικ στο \"%s\" για να επαναφέρετε τη σημείωση. Θα αντιγραφεί στο σημειωματάριο που ονομάζεται \"%s\". Η τρέχουσα έκδοση της σημείωσης δεν αντικαθίσταται ή τροποποιείται."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Κάντε κλικ για να προσθέσετε ετικέτες..."
 	],
@@ -548,6 +566,9 @@
 	"Close Window": [
 		"Κλείσιμο παραθύρου"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		"Cmd-click για άνοιγμα"
 	],
@@ -568,9 +589,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Συνεργασία σε σημειωματάρια με άλλους"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Προσεχείς ειδοποιήσεις"
@@ -613,6 +631,9 @@
 	],
 	"Configuration": [
 		"Ρυθμίσεις"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Η επιβεβαίωση του κωδικού πρόσβασης δεν μπορεί να είναι κενή"
@@ -864,9 +885,6 @@
 	"Delete local data and re-download from sync target": [
 		"Διαγραφή τοπικών δεδομένων και εκ νέου λήψη από τον προορισμό"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Διαγραφή σημείωσης"
 	],
@@ -920,6 +938,9 @@
 	],
 	"Detailed": [
 		"Λεπτομερής"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Φάκελος"
@@ -1058,12 +1079,6 @@
 	],
 	"Edit": [
 		"Επεξεργασία"
-	],
-	"Edit in external editor": [
-		"Επεξεργασία σε εξωτερικό editor"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Επεξεργασία συνδέσμου"
@@ -1224,6 +1239,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Ενεργοποίηση κρυπτογράφησης σημαίνει *όλες* οι σημειώσεις και τα συνημμένα σας πρόκειται να συγχρονιστούν εκ νέου και να σταλούν κρυπτογραφημένα στο στόχο συγχρονισμού."
 	],
@@ -1299,9 +1317,6 @@
 	"Expand %s": [
 		"Επέκταση %s"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Εξαγωγή"
 	],
@@ -1347,6 +1362,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Δικλείδα ασφαλείας: Να μη διαγράφονται τα τοπικά δεδομένα όταν ο προορισμός συγχρονισμού είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός σφάλματος)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Ανεπανόρθωτο σφάλμα:"
 	],
@@ -1373,6 +1391,9 @@
 	],
 	"Find: ": [
 		"Εύρεση: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Επέκταση Firefox"
@@ -1669,6 +1690,9 @@
 	"Invalid command: \"%s\"": [
 		"Άκυρη εντολή: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
 	],
@@ -1773,6 +1797,9 @@
 	],
 	"Language, date format": [
 		"Γλώσσα, μορφή ημερομηνίας"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Τελευταίο σφάλμα: %s"
@@ -1937,6 +1964,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Πολυμέσα, μαθηματικές παραστάσεις, διαγράμματα, πίνακας περιεχομένων"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Ελαχιστοποίηση"
 	],
@@ -1970,8 +2000,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Να μετακινηθεί το σημειωματάριο \"%s\" στον κάδο;\n\nΌλες οι σημειώσεις και τα υποσημειωματάρια που περιέχει θα διαγραφούν."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Μετακίνηση σε σημειωματάριο"
@@ -1981,6 +2017,9 @@
 	],
 	"Move to notebook:": [
 		"Μετακίνηση σε σημειωματάριο:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Μετακινεί το συγκεκριμένο <item> στο [notebook]"
@@ -2086,6 +2125,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που λείπουν."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Δεν έγινε λήψη"
@@ -2222,14 +2264,23 @@
 	"Open %s": [
 		"Άνοιγμα %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
 		"Ανοίξτε το"
 	],
 	"Open PDF viewer": [
 		"Άνοιγμα προγράμματος προβολής PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Άνοιγμα φακέλου προφίλ"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Source": [
 		"Άνοιγμα Προέλευσης"
@@ -2263,6 +2314,12 @@
 	],
 	"Page size for PDF export": [
 		"Μέγεθος σελίδας για εξαγωγή PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Κωδικός"
@@ -2323,6 +2380,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Παρακαλώ ανοίξτε την ακόλουθη διεύθυνση URL στο πρόγραμμα περιήγησής σας για να πιστοποιήσετε την εφαρμογή. Η εφαρμογή θα δημιουργήσει έναν φάκελο στο \"Apps / Joplin\" και θα διαβάζει και θα γράφει μόνο αρχεία σε αυτόν. Δεν θα έχει πρόσβαση σε αρχεία εκτός αυτού του φακέλου ούτε σε άλλα προσωπικά δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Παρακαλώ καταγράψτε τη φωνή σας..."
@@ -2525,6 +2585,9 @@
 	"Recommended plugins": [
 		"Προτεινόμενα πρόσθετα"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Επανάληψη"
 	],
@@ -2708,6 +2771,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Αναζήτησή"
 	],
@@ -2873,6 +2939,9 @@
 	"Skipped: %d.": [
 		"Αγνοήθηκαν: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2938,6 +3007,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Η εφαρμογή να ανοίγει ελαχιστοποιημένη στη γραμμή εργασιών"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Ξεκινήστε, σταματήστε ή ελέγξτε τον διακομιστή API. Για να καθορίσετε σε ποια θύρα θα πρέπει να εκτελεστεί, ορίστε τη μεταβλητή api.port. Οι εντολές είναι (%s)."
@@ -3085,6 +3157,12 @@
 	],
 	"Synchronizing...": [
 		"Συγχρονισμός..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3484,6 +3562,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Αδύνατη η κοινοποίηση δεδομένων αρχείου καταγραφής. Αιτία: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Μη ολοκληρωμένες υπομνήσεις στην κορυφή"
 	],
@@ -3631,6 +3712,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Αρχεία γλώσσας φωνητικής πληκτρολόγησης (URL)"
 	],
@@ -3723,6 +3807,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Έχετε συνδεθεί στο Joplin Cloud, μπορείτε να κλείσετε αυτό το παράθυρο."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Αυτή τη στιγμή δεν υπάρχουν σημειωματάρια."

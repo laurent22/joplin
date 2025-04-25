@@ -1,0 +1,1 @@
+Press <kbd>Ctrl</kbd>+<kbd>A</kbd>

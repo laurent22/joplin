@@ -65,8 +65,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s non è ottimizzato per la sincronizzazione di molti file di piccole dimensioni quindi la sincronizzazione iniziale sarà lenta."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"scheda %s aperta"
@@ -362,6 +368,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Aggiungi automaticamente gli account disabilitati per la cancellazione"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto- accoppia parentesi graffe, parentesi, citazione, ecc."
 	],
@@ -407,6 +416,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Può condividere"
 	],
@@ -421,6 +433,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Annullamento della sincronizzazione in background... Attendere per favore."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Annullamento..."
@@ -527,6 +542,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Clicca \"%s\" per ripristinare la nota. Verrà copiata nel taccuino denominato \"%s\". La versione corrente della nota non verrà sostituita o modificata."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Clicca per aggiungere etichetta..."
 	],
@@ -548,6 +566,9 @@
 	"Close Window": [
 		"Chiudi finestra"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		"Cmd-clic per aprire"
 	],
@@ -568,9 +589,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Collabora su un taccuino con altri"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Prossimi avvisi"
@@ -613,6 +631,9 @@
 	],
 	"Configuration": [
 		"Configurazione"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"La password di conferma non può essere vuota"
@@ -864,9 +885,6 @@
 	"Delete local data and re-download from sync target": [
 		"Elimina i dati locali e riscaricali dalla destinazione di sincronizzazione"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Eliminare la nota"
 	],
@@ -920,6 +938,9 @@
 	],
 	"Detailed": [
 		"Dettagliato"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Cartella"
@@ -1058,12 +1079,6 @@
 	],
 	"Edit": [
 		"Modifica"
-	],
-	"Edit in external editor": [
-		"Modifica in un editor esterno"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Modifica collegamento"
@@ -1224,6 +1239,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Abilitare la crittografia significa che *tutte* le tue note e i tuoi allegati verranno ri-sincronizzati e inviati crittografati alla destinazione di sincronizzazione."
 	],
@@ -1299,9 +1317,6 @@
 	"Expand %s": [
 		"Espandi %s"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Esporta"
 	],
@@ -1347,6 +1362,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Fail-safe: Non rimuovere i dati locale quando la destinazione di sinc è vuota (spesso il risultato di una mal configurazione o di un bug)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Errore fatale:"
 	],
@@ -1373,6 +1391,9 @@
 	],
 	"Find: ": [
 		"Trovato: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Estensione Firefox"
@@ -1669,6 +1690,9 @@
 	"Invalid command: \"%s\"": [
 		"Comando non valido: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Opzione non valida: \"%s\". I valori possibili sono: %s."
 	],
@@ -1773,6 +1797,9 @@
 	],
 	"Language, date format": [
 		"Lingua, formato della data"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Ultimo errore: %s"
@@ -1937,6 +1964,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Lettore multimediale, matematica, diagrammi, indice"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Minimizza"
 	],
@@ -1970,8 +2000,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Spostare le note %d sul Taccuino \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Spostare il taccuino \"%s\" nel cestino?\n\nAnche tutte le note e cartelle di questo taccuino saranno spostate nel cestino."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Sposta sul taccuino"
@@ -1981,6 +2017,9 @@
 	],
 	"Move to notebook:": [
 		"Sposta sul taccuino:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Sposta la <item> selezionata in [notebook]."
@@ -2086,6 +2125,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Non autenticato con %s. Si prega di fornire le credenziali mancanti."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Non scaricato"
@@ -2222,14 +2264,23 @@
 	"Open %s": [
 		"Aprire %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
 		"Aprilo"
 	],
 	"Open PDF viewer": [
 		"Apri visualizzatore PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Apri cartella modelli"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Source": [
 		"Codice Sorgente disponibile"
@@ -2263,6 +2314,12 @@
 	],
 	"Page size for PDF export": [
 		"Dimensione pagina per l'esportazione in PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Password"
@@ -2323,6 +2380,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Per favore apri il seguente URL nel tuo browser per autenticare l'applicazione. L'applicazione creerà una cartella in \"Apps/Joplin\" e leggerà/scriverà file solo in questa cartella. Non avrà accesso a nessun file all'esterno di questa cartella o ad alcun dato personale. Nessun dato verrà condiviso con terze parti."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Per favore, registra la tua voce..."
@@ -2525,6 +2585,9 @@
 	"Recommended plugins": [
 		"Plugin raccomandato"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Ripristina"
 	],
@@ -2708,6 +2771,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Cerca"
 	],
@@ -2873,6 +2939,9 @@
 	"Skipped: %d.": [
 		"Saltato: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Scuro Solarizzato"
 	],
@@ -2938,6 +3007,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Avvia applicazione minimizzata nella barra delle applicazioni"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Avvia, ferma o controlla il server API. Per specificare su quale porta deve essere eseguito, setta la variabile api.config. I comandi sono (%s)."
@@ -3091,6 +3163,12 @@
 	],
 	"Synchronizing...": [
 		"Sincronizzazione..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3490,6 +3568,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Impossibile condividere i dati di registro. Motivi: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"\"Cose-da-fare\" incomplete in cima alla lista"
 	],
@@ -3637,6 +3718,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"File della lingua di digitazione vocale (URL)"
 	],
@@ -3729,6 +3813,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Hai effettuato l'accesso a Joplin Cloud, puoi lasciare questa schermata."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Al momento non hai taccuini."

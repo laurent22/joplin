@@ -456,9 +456,6 @@ class Application extends BaseApplication {
 			bridge().openDevTools();
 		}
 
-		bridge().electronApp().initializeCustomProtocolHandler(
-			Logger.create('handleCustomProtocols'),
-		);
 		this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
 		this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));

@@ -212,7 +212,6 @@ export default class ElectronAppWrapper {
 				spellcheck: true,
 				enableRemoteModule: true,
 			},
-			webviewTag: true,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
 			//
@@ -289,7 +288,9 @@ export default class ElectronAppWrapper {
 		// Waiting for one of the ready events might work but they might not be triggered if there's an error, so
 		// the easiest is to use a timeout. Keep in mind that if you get a white window on Windows it might be due
 		// to this line though.
-		if (debugEarlyBugs) {
+		//
+		// Don't show the dev tools while end-to-end testing to simplify the logic that finds the main window.
+		if (debugEarlyBugs && !this.isEndToEndTesting_) {
 			// Since a recent release of Electron (v34?), calling openDevTools() here does nothing
 			// if a plugin devtool window is already opened. Maybe because they do a check on
 			// `isDevToolsOpened` which indeed returns `true` (but shouldn't since it's for a
@@ -706,10 +707,6 @@ export default class ElectronAppWrapper {
 		return true;
 	}
 
-	public initializeCustomProtocolHandler(logger: LoggerWrapper) {
-		this.customProtocolHandler_ ??= handleCustomProtocols(logger);
-	}
-
 	// Electron's autoUpdater has to be init from the main process
 	public initializeAutoUpdaterService(logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		if (shim.isWindows() || shim.isMac()) {
@@ -748,6 +745,7 @@ export default class ElectronAppWrapper {
 		const alreadyRunning = await this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
+		this.customProtocolHandler_ = handleCustomProtocols();
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {

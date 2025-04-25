@@ -1760,6 +1760,30 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'featureFlag.richText.useStrictContentSecurityPolicy': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Security: Stronger security controls in the Rich Text Editor',
+			description: () => 'Improves Rich Text Editor security by applying a strict content security policy to the Rich Text Editor\'s content.',
+			section: 'note',
+			isGlobal: true,
+		},
+
+		'featureFlag.plugins.isolatePluginWebViews': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Security: Improve plugin panel, editor, and dialog security',
+			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
+			section: 'note',
+			isGlobal: true,
+		},
+
 		'sync.allowUnsupportedProviders': {
 			value: -1,
 			type: SettingItemType.Int,

@@ -62,7 +62,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -332,6 +338,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Afegeix automàticament per a eliminar els comptes deshabilitats"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Aparellament automàtic de claus, parèntesis, cites, etc."
 	],
@@ -377,6 +386,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Pot compartir"
 	],
@@ -391,6 +403,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"S'està cancel·lant la sincronització en segon pla... Espereu."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"S'està cancel·lant..."
@@ -494,6 +509,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Feu clic «%s» per a restaurar la nota. Aquesta serà copiada al bloc de notes anomenat «%s». La versió actual de la nota no serà substituïda o modificada."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Feu clic per a afegir etiquetes..."
 	],
@@ -515,6 +533,9 @@
 	"Close Window": [
 		"Tanca la finestra"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -533,7 +554,7 @@
 	"Collaborate on notebooks with others": [
 		"Col·laboreu en blocs de notes amb altres"
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -574,6 +595,9 @@
 	],
 	"Configuration": [
 		"Configuració"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"El camp *Confirma la contrasenya* no pot ser buit"
@@ -810,9 +834,6 @@
 	"Delete local data and re-download from sync target": [
 		"Suprimeix les dades locals i torna a baixar de la destinació de sincronització"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Suprimeix la nota"
 	],
@@ -865,6 +886,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -995,12 +1019,6 @@
 	],
 	"Edit": [
 		"Edita"
-	],
-	"Edit in external editor": [
-		"Edita en un editor extern"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Edita l'enllaç"
@@ -1152,6 +1170,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Habilitar el xifrat significa que totes les notes i adjunts es tornaran a sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització."
 	],
@@ -1224,7 +1245,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -1272,6 +1293,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"A prova d'errors: no esborreu les dades locals quan la destinació de sincronització estigui buida (sovint és el resultat d'una configuració errònia o d'algun altre error)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Error fatal:"
 	],
@@ -1295,6 +1319,9 @@
 	],
 	"Find: ": [
 		"S'ha trobat: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Extensió del Firefox"
@@ -1573,6 +1600,9 @@
 	"Invalid command: \"%s\"": [
 		"Ordre no vàlida: «%s»"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
 	],
@@ -1662,6 +1692,9 @@
 	],
 	"Language": [
 		"Llengua"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Últim error: %s"
@@ -1814,6 +1847,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1847,6 +1883,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Voleu moure %dnotes al bloc de notes \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Mou al bloc de notes"
 	],
@@ -1855,6 +1897,9 @@
 	],
 	"Move to notebook:": [
 		"Mou al bloc de notes:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Mou els elements marcats a [notebook]."
@@ -1954,6 +1999,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"No esteu autenticats amb %s. Proporcioneu les credencials que falten."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"No descarregat"
@@ -2084,11 +2132,20 @@
 	"Open %s": [
 		"Obre %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Obre el visor de PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Obre carpeta de perfil"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Obre l'assistent de sincronització..."
@@ -2119,6 +2176,12 @@
 	],
 	"Page size for PDF export": [
 		"Mida de la pàgina per exportació a PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Contrasenya"
@@ -2164,6 +2227,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Obriu l'URL següent al navegador per a autenticar l'aplicació. L'aplicació crearà un directori a «Aplicacions/Joplin» i només llegirà i escriurà fitxers en aquest directory. No tindrà accés a cap fitxer fora d'aquest directori ni a cap dada personal. No es compartirà cap dada amb terceres parts."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -2348,6 +2414,9 @@
 	"Recipients:": [
 		"Destinataris:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Refés"
 	],
@@ -2504,6 +2573,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Cerca"
 	],
@@ -2645,6 +2717,9 @@
 	"Skipped: %d.": [
 		"Omeses: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solaritzat fosc"
 	],
@@ -2707,6 +2782,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Inicieu l'aplicació minimitzada a la icona de la safata"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Arrenca, atura o verifica el servidor API. Per a especificar a quin port ha de córrer, estableix la variable api.port. Les ordres són (%s)."
@@ -2857,6 +2935,12 @@
 	],
 	"Synchronizing...": [
 		"S'està sincronitzant..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloide"
@@ -3215,6 +3299,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Les tasques pendents sense finalitzar a la part superior"
 	],
@@ -3356,6 +3443,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -3438,6 +3528,9 @@
 		"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d pixels abans d'adjuntar-la?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

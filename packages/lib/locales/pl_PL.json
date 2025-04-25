@@ -62,8 +62,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s nie jest zoptymalizowany pod kątem synchronizacji wielu małych plików, więc początkowa synchronizacja będzie powolna."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"Otwarto zakładkę %s"
@@ -341,6 +347,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatycznie dodaj wyłączone konta do usunięcia"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatycznie zamykaj klamry, nawiasy, cudzysłowy itd."
 	],
@@ -386,6 +395,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Może udostępniać"
 	],
@@ -400,6 +412,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Anulowanie synchronizacji w tle... Proszę czekać."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Anulowanie..."
@@ -503,6 +518,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Naciśnij \"%s\" aby przywrócić notatkę. Zostanie ona skopiowana do notatnika o nazwie \"%s\". Obecna wersja notatki nie zostanie nadpisana lub zmodyfikowana."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Kliknij aby dodać tagi..."
 	],
@@ -524,6 +542,9 @@
 	"Close Window": [
 		"Zamknij okno"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		"Cmd-click aby otworzyć"
 	],
@@ -544,9 +565,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Współpracuj z innymi przy notatnikach"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Przychodzące powiadomienia"
@@ -589,6 +607,9 @@
 	],
 	"Configuration": [
 		"Konfiguracja"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Hasło potwierdzające nie może być puste"
@@ -829,9 +850,6 @@
 	"Delete local data and re-download from sync target": [
 		"Usuń dane lokalne i pobierz je ponownie z miejsca docelowego synchronizacji"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Usuń notatkę"
 	],
@@ -882,6 +900,9 @@
 	],
 	"Detailed": [
 		"Szczegółowy"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Katalog"
@@ -1017,12 +1038,6 @@
 	],
 	"Edit": [
 		"Edytuj"
-	],
-	"Edit in external editor": [
-		"Edytuj w edytorze zewnętrznym"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Edytuj link"
@@ -1177,6 +1192,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Deaktywowanie szyfrowania oznacza, że *wszystkie* Twoje notatki i załączniki będą resynchronizowane i wysłane niezabezpieczone do serwisu synchonizacji."
 	],
@@ -1243,9 +1261,6 @@
 	"Exits the application.": [
 		"Wychodzi z aplikacji."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Eksportuj"
 	],
@@ -1291,6 +1306,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Bezpieczny: nie usuwaj lokalnych danych kiedy cel synchronizacji jest pusty (często w wyniku nieprawidłowej konfiguracji lub błędu)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Błąd krytyczny:"
 	],
@@ -1314,6 +1332,9 @@
 	],
 	"Find: ": [
 		"Znaleziono: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Rozszerzenie dla Firefoxa"
@@ -1590,6 +1611,9 @@
 	"Invalid command: \"%s\"": [
 		"Nieprawidłowa komenda: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Nieznana wartość opcji: \"%s\". Możliwa wartość opcji: %s."
 	],
@@ -1679,6 +1703,9 @@
 	],
 	"Language, date format": [
 		"Język, format daty"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Ostatni błąd: %s"
@@ -1832,6 +1859,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Odtwarzacz multimediów, matematyka, diagramy, spis treści"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Zminimalizuj"
 	],
@@ -1865,6 +1895,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Przenieść %d notatek do notatnika \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Przenieś do notatnika"
 	],
@@ -1873,6 +1909,9 @@
 	],
 	"Move to notebook:": [
 		"Przenieś do notatnika:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Przenosi podany <item> do [notebook]"
@@ -1972,6 +2011,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nie uwierzytelniono z %s. Proszę uzupełnij brakujące dane."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Nie pobrano"
@@ -2105,11 +2147,20 @@
 	"Open %s": [
 		"Otwórz %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Otwórz przeglądarkę plików PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Otwórz katalog profili"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Otwórz Menedżera Synchronizacji..."
@@ -2140,6 +2191,12 @@
 	],
 	"Page size for PDF export": [
 		"Wielkość strony do eksportu PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Hasło"
@@ -2185,6 +2242,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Proszę otworzyć następujący odnośnik w swojej przeglądarce, aby uwierzytelnić aplikację. Aplikacja utworzy katalog w lokalizacji \"Apps/Joplin\" i będzie jedynie odczytywać i zapisywać pliki w tej lokalizacji. Nie będzie ona miała dostępu do plików spoza tej lokalizacji, jak i innych danych osobowych. Dane nie zostaną udostępnione jakiejkolwiek firmie/organizacji."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Proszę nagrywać swój głos..."
@@ -2366,6 +2426,9 @@
 	"Recipients:": [
 		"Odbiorcy:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Przywróć"
 	],
@@ -2531,6 +2594,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Wyszukaj"
 	],
@@ -2681,6 +2747,9 @@
 	"Skipped: %d.": [
 		"Pominięto: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2743,6 +2812,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Uruchom aplikację zminimalizowaną w zasobniku systemowym"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Uruchom, zatrzymaj lub sprawdź serwer API. Aby określić port, na którym powinien działać ustaw zmienną api.port w konfiguracji. Polecenia to (%s)"
@@ -2896,6 +2968,12 @@
 	],
 	"Synchronizing...": [
 		"Synchronizacja..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3269,6 +3347,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Nie można udostępniać danych dziennika. Powód: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Nieukończone zadania na górze"
 	],
@@ -3410,6 +3491,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Pliki językowe do wpisywania głosowego (URL)"
 	],
@@ -3493,6 +3577,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Jesteś zalogowany do Joplin Cloud. Możesz teraz opuścić ten ekran."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Brak aktywnych notatników."

@@ -62,7 +62,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -332,6 +338,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatické přidání zakázaných účtů k odstranění"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaticky zdvojit uvozovky, závorky, apod."
 	],
@@ -377,6 +386,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Může se sdílet"
 	],
@@ -391,6 +403,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Zastavování synchronizace, počkejte prosím..."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Zastavování..."
@@ -491,6 +506,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Pro obnovení poznámky klepněte na \"%s\". Poznámka bude zkopírována do zápisníku \"%s\". Současná verze poznámky nebude nahrazena ani změněna."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Klepněte pro přidání štítku..."
 	],
@@ -512,6 +530,9 @@
 	"Close Window": [
 		"Zavřít okno"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -529,9 +550,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Spolupracujte na zápisnících s ostatními"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Nadcházející alarmy"
@@ -571,6 +589,9 @@
 	],
 	"Configuration": [
 		"Nastavení"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Heslo pro potvrzení nemůže být prázdné"
@@ -796,9 +817,6 @@
 	"Delete local data and re-download from sync target": [
 		"Smazat místní data a stáhnout je z cíle synchronizace"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete plugin \"%s\"?": [
 		"Smazat rozšíření \"%s\"?"
 	],
@@ -845,6 +863,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -972,12 +993,6 @@
 	],
 	"Edit": [
 		"Upravit"
-	],
-	"Edit in external editor": [
-		"Upravit externím editorem"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Upravit odkaz"
@@ -1123,6 +1138,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Povolení šifrování znamená, že *všechny* vaše poznámky a přílohy budou znovu synchronizovány a odeslány do cíle synchronizace šifrovaně. Přejete si pokračovat?"
 	],
@@ -1192,9 +1210,6 @@
 	"Exits the application.": [
 		"Ukončí aplikaci."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Exportovat"
 	],
@@ -1234,6 +1249,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Zabezpečení proti selhání: Nemazat místní data, pokud je cíl synchronizace prázdný (často v důsledku nesprávné konfigurace nebo chyby)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatální chyba:"
 	],
@@ -1257,6 +1275,9 @@
 	],
 	"Find: ": [
 		"Najít: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Doplněk pro Firefox"
@@ -1533,6 +1554,9 @@
 	"Invalid command: \"%s\"": [
 		"Neplatný příkaz: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Neplatná hodnota: \"%s\". Přípustné hodnoty jsou: %s."
 	],
@@ -1619,6 +1643,9 @@
 	],
 	"Language": [
 		"Jazyk"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Poslední chyba: %s"
@@ -1769,6 +1796,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1802,6 +1832,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Přesunout poznámky %d do zápisníku \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Přesunout do zápisníku"
 	],
@@ -1810,6 +1846,9 @@
 	],
 	"Move to notebook:": [
 		"Přesunout do zápisníku:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Přesune zadanou <item> do [notebook]"
@@ -1909,6 +1948,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nepřihlášeno k %s. Prosím vyplňte chybějící přihlašovací údaje."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Nestaženo"
@@ -2039,11 +2081,20 @@
 	"Open %s": [
 		"Otevřít %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Otevřít prohlížeč PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Otevřít složku s profilem"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Otevřete Průvodce synchronizací..."
@@ -2074,6 +2125,12 @@
 	],
 	"Page size for PDF export": [
 		"Velikost stránky pro PDF export"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Heslo"
@@ -2119,6 +2176,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Otevřete prosím následující URL ve vašem prohlížeči pro autentizaci aplikace. Joplin vytvoří a bude používat výhradně složku \"Apps/Joplin\" , nebude mít přístup k souborům mimo tuto složku ani k dalším osobním informacím. Žádná data nebudou sdílena s jakoukoliv třetí stranou."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -2300,6 +2360,9 @@
 	"Recipients:": [
 		"Příjemci:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Provést znovu"
 	],
@@ -2459,6 +2522,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Hledání"
 	],
@@ -2597,6 +2663,9 @@
 	"Skipped: %d.": [
 		"Přeskočeno: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2659,6 +2728,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Spouštět aplikaci minimalizovanou do lišty ikon"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Spustit, zastavit či zkontrolovat API server. Pro specifikování portu pro server nastavte api.port proměnnou v config. Příkazy jsou (%s)."
@@ -2809,6 +2881,12 @@
 	],
 	"Synchronizing...": [
 		"Probíhá synchronizace..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3152,6 +3230,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Nedokončené úkoly nahoře"
 	],
@@ -3293,6 +3374,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -3372,6 +3456,9 @@
 		"Chystáte se připojit velký obrázek (%dx%d pixelů). Chcete jej před připojením zmenšit na %d pixelů?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

@@ -8381,7 +8381,7 @@ __metadata:
     "@joplin/renderer": ~3.3
     "@joplin/tools": ~3.3
     "@joplin/utils": ~3.3
-    "@js-draw/material-icons": 1.27.2
+    "@js-draw/material-icons": 1.29.1
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.15
     "@react-native-clipboard/clipboard": 1.14.3
     "@react-native-community/datetimepicker": 8.2.0
@@ -8422,7 +8422,7 @@ __metadata:
     jest: 29.7.0
     jest-environment-jsdom: 29.7.0
     jetifier: 2.0.0
-    js-draw: 1.27.2
+    js-draw: 1.29.2
     jsdom: 24.1.1
     lodash: 4.17.21
     md5: 2.3.0
@@ -8536,6 +8536,7 @@ __metadata:
     "@codemirror/search": 6.5.8
     "@codemirror/state": 6.4.1
     "@codemirror/view": 6.35.0
+    "@joplin/fork-uslug": ^2.0.0
     "@joplin/lib": ~3.3
     "@lezer/common": 1.2.3
     "@lezer/highlight": 1.2.1
@@ -8583,13 +8584,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@^1.0.22, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@^2.0.0, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
+    "@types/jest": 29.5.12
+    "@types/node": 18.19.67
+    jest: 29.7.0
     node-emoji: 1.11.0
-    should: 13.2.3
-    unorm: 1.6.0
+    typescript: 5.4.5
   languageName: unknown
   linkType: soft
 
@@ -8615,7 +8618,7 @@ __metadata:
     "@aws-sdk/s3-request-presigner": 3.296.0
     "@joplin/fork-htmlparser2": ^4.1.57
     "@joplin/fork-sax": ^1.2.61
-    "@joplin/fork-uslug": ^1.0.22
+    "@joplin/fork-uslug": ^2.0.0
     "@joplin/htmlpack": ~3.3
     "@joplin/onenote-converter": ~3.3
     "@joplin/renderer": ~3.3
@@ -8798,7 +8801,7 @@ __metadata:
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.57
-    "@joplin/fork-uslug": ^1.0.22
+    "@joplin/fork-uslug": ^2.0.0
     "@joplin/utils": ~3.3
     "@types/jest": 29.5.12
     "@types/markdown-it": 13.0.9
@@ -9153,21 +9156,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.27.2":
-  version: 1.27.2
-  resolution: "@js-draw/material-icons@npm:1.27.2"
+"@js-draw/material-icons@npm:1.29.1":
+  version: 1.29.1
+  resolution: "@js-draw/material-icons@npm:1.29.1"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: dcaac6c45d20df6542fe874e0cd6f7a40f77faaebe494f4eb45c6b1c3595223a01b36067549159341a18af018253ea5c1c99bd82c47060a8b33596263ae83026
+  checksum: e3de5520b4154228ab3d593ae06d7310f3e1a100e5f2507e8b8b317a51cc3566d907c252e2cc92b89274059e05b0a57eb69b2f27483cab45fcbc1ccae7bac0d2
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.27.2":
-  version: 1.27.2
-  resolution: "@js-draw/math@npm:1.27.2"
+"@js-draw/math@npm:^1.29.2":
+  version: 1.29.2
+  resolution: "@js-draw/math@npm:1.29.2"
   dependencies:
     bezier-js: 6.1.3
-  checksum: 021dce0af104890312cf4eeb8a645d89bb2eaf0d3cdc181cdfcb6bb7b90deeeae484f5bec06bc96ac1ebc4f83918eff9a63239d8165a493b3794fd36e92bd330
+  checksum: e8c1fa984a06d3f80351363c10c63d3f648df0de14a9a37f92cd4c1670dbecc1840cf9c837fdd7d436deb13648132288ef2bd8926d389100e0dc82ad2ba448cf
   languageName: node
   linkType: hard
 
@@ -20223,7 +20226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^5.0.5, cosmiconfig@npm:^5.1.0, cosmiconfig@npm:^5.2.1":
+"cosmiconfig@npm:^5.0.5, cosmiconfig@npm:^5.1.0":
   version: 5.2.1
   resolution: "cosmiconfig@npm:5.2.1"
   dependencies:
@@ -26440,13 +26443,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-stdin@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "get-stdin@npm:7.0.0"
-  checksum: a24ab2cf8ee35bf5d3460c0d8145f2624715d864485789b7101a7cf1b6c1ce0a57319e25304872074121fa60e7104f1af3583a7014e9974c84c61d0702beae24
-  languageName: node
-  linkType: hard
-
 "get-stdin@npm:^8.0.0":
   version: 8.0.0
   resolution: "get-stdin@npm:8.0.0"
@@ -28351,47 +28347,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:3.1.0":
-  version: 3.1.0
-  resolution: "husky@npm:3.1.0"
-  dependencies:
-    chalk: ^2.4.2
-    ci-info: ^2.0.0
-    cosmiconfig: ^5.2.1
-    execa: ^1.0.0
-    get-stdin: ^7.0.0
-    opencollective-postinstall: ^2.0.2
-    pkg-dir: ^4.2.0
-    please-upgrade-node: ^3.2.0
-    read-pkg: ^5.2.0
-    run-node: ^1.0.0
-    slash: ^3.0.0
+"husky@npm:9.1.7":
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
   bin:
-    husky-run: ./run.js
-    husky-upgrade: ./lib/upgrader/bin.js
-  checksum: 15a8eeb5ca8286f4e1f64cbc55ffb2295c407ba9da84a88128471a886e6fb6cf7a2b5ea0db5f0715e185d7251fc09700baf3bc95f63cb80accc5d253d69c141f
-  languageName: node
-  linkType: hard
-
-"husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::locator=root%40workspace%3A.":
-  version: 3.1.0
-  resolution: "husky@patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch::version=3.1.0&hash=d9603f&locator=root%40workspace%3A."
-  dependencies:
-    chalk: ^2.4.2
-    ci-info: ^2.0.0
-    cosmiconfig: ^5.2.1
-    execa: ^1.0.0
-    get-stdin: ^7.0.0
-    opencollective-postinstall: ^2.0.2
-    pkg-dir: ^4.2.0
-    please-upgrade-node: ^3.2.0
-    read-pkg: ^5.2.0
-    run-node: ^1.0.0
-    slash: ^3.0.0
-  bin:
-    husky-run: ./run.js
-    husky-upgrade: ./lib/upgrader/bin.js
-  checksum: b29b08a1e9be6037d0eb3dd875c22ffba1f375532a89e4320d31cb5ea37ffca4b487ef903a8b867ccfb2ece6a1ca87c65bc202d932f92cfb7d6f017c76bb1294
+    husky: bin.js
+  checksum: c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
   languageName: node
   linkType: hard
 
@@ -31147,13 +31108,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.27.2":
-  version: 1.27.2
-  resolution: "js-draw@npm:1.27.2"
+"js-draw@npm:1.29.2":
+  version: 1.29.2
+  resolution: "js-draw@npm:1.29.2"
   dependencies:
-    "@js-draw/math": ^1.27.2
+    "@js-draw/math": ^1.29.2
     "@melloware/coloris": 0.22.0
-  checksum: 0dc5c1531ca7bd86dfe50817d00209d19836357fcdd58657cb83faa27a81d7f00327adcc5c668db17e026d7cec01c470a0da49d0163c2f83901bbcd3969adc74
+  checksum: 29937a44c048c3927f4851b8bac66ce71316ce36b2de2ab6bfa2d1a9c1f634f51a10126e3491a7de5559fc5af442822a6a66ebd892ac8d793923a9f9f958c8c9
   languageName: node
   linkType: hard
 
@@ -36643,7 +36604,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"opencollective-postinstall@npm:^2.0.2, opencollective-postinstall@npm:^2.0.3":
+"opencollective-postinstall@npm:^2.0.3":
   version: 2.0.3
   resolution: "opencollective-postinstall@npm:2.0.3"
   bin:
@@ -38020,15 +37981,6 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 2d78f53eed438d26df9743f98227d2e33bb5a378c8d0144a4ed75b4010c9c517d5a6ee6c1c9245ad61dc615054c5e19d2ded5a6e285e35d2bca39b05bc9c4a35
-  languageName: node
-  linkType: hard
-
-"please-upgrade-node@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "please-upgrade-node@npm:3.2.0"
-  dependencies:
-    semver-compare: ^1.0.0
-  checksum: d87c41581a2a022fbe25965a97006238cd9b8cbbf49b39f78d262548149a9d30bd2bdf35fec3d810e0001e630cd46ef13c7e19c389dea8de7e64db271a2381bb
   languageName: node
   linkType: hard
 
@@ -42071,7 +42023,7 @@ __metadata:
     glob: 10.4.5
     gulp: 4.0.2
     http-server: 14.1.1
-    husky: 3.1.0
+    husky: 9.1.7
     lerna: 3.22.1
     lint-staged: 15.2.8
     madge: 7.0.0
@@ -42159,15 +42111,6 @@ __metadata:
   version: 2.4.1
   resolution: "run-async@npm:2.4.1"
   checksum: a2c88aa15df176f091a2878eb840e68d0bdee319d8d97bbb89112223259cebecb94bc0defd735662b83c2f7a30bed8cddb7d1674eb48ae7322dc602b22d03797
-  languageName: node
-  linkType: hard
-
-"run-node@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "run-node@npm:1.0.0"
-  bin:
-    run-node: run-node
-  checksum: 99a0846de16d64c81e7cce487b8d7a77907d7ff69e229ad154cc7ee33ded6f82f71309f47de33cc4c206de6c7b7c37f641d7b6488bb85cc0bfe4da6d8b029242
   languageName: node
   linkType: hard
 
@@ -43115,62 +43058,6 @@ __metadata:
   version: 1.2.1
   resolution: "shimmer@npm:1.2.1"
   checksum: aa0d6252ad1c682a4fdfda69e541be987f7a265ac7b00b1208e5e48cc68dc55f293955346ea4c71a169b7324b82c70f8400b3d3d2d60b2a7519f0a3522423250
-  languageName: node
-  linkType: hard
-
-"should-equal@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "should-equal@npm:2.0.0"
-  dependencies:
-    should-type: ^1.4.0
-  checksum: 3f3580a223bf76f9309a4d957d2dcbd6059bda816f2e6656e822b7518218ef653c25e9271b2f5765ca6f5a72a217105ad343a8ceea831d15aff44dd691cc1dcd
-  languageName: node
-  linkType: hard
-
-"should-format@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "should-format@npm:3.0.3"
-  dependencies:
-    should-type: ^1.3.0
-    should-type-adaptors: ^1.0.1
-  checksum: 5304e89b4d4c42078c7f66232d13cca1d6a1c00c173f500f64160f57d4ecd7522a25106b313fe8f8694547e8a1ce4d975f1f09a3d1618f1dc054db48c0683d87
-  languageName: node
-  linkType: hard
-
-"should-type-adaptors@npm:^1.0.1":
-  version: 1.1.0
-  resolution: "should-type-adaptors@npm:1.1.0"
-  dependencies:
-    should-type: ^1.3.0
-    should-util: ^1.0.0
-  checksum: 94dd1d225c8f2590278f46689258a1df684ca1f26262459c4e2d64a09d06935ec1410a24fe7b5f98b9429093e48afef2ed1b370634e0444b930547df4943f70d
-  languageName: node
-  linkType: hard
-
-"should-type@npm:^1.3.0, should-type@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "should-type@npm:1.4.0"
-  checksum: 88d9324c6c0c2f94e71d2f8b11c84e44de81f16eeb6fafcba47f4af430c65e46bad18eb472827526cad22b4fe693aba8b022739d1c453672faf28860df223491
-  languageName: node
-  linkType: hard
-
-"should-util@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "should-util@npm:1.0.1"
-  checksum: c3be15e0fdc851f8338676b3f8b590d330bbea94ec41c1343cc9983dea295915073f69a215795454b6adda6579ec8927c7c0ab178b83f9f11a0247ccdba53381
-  languageName: node
-  linkType: hard
-
-"should@npm:13.2.3":
-  version: 13.2.3
-  resolution: "should@npm:13.2.3"
-  dependencies:
-    should-equal: ^2.0.0
-    should-format: ^3.0.3
-    should-type: ^1.4.0
-    should-type-adaptors: ^1.0.1
-    should-util: ^1.0.0
-  checksum: 74bcc0eb85e0a63a88e501ff9ca3b53dbc6d1ee47823c029a18a4b14b3ef4e2561733e161033df720599d2153283470e9647fdcb1bbc78903960ffb0363239c4
   languageName: node
   linkType: hard
 
@@ -47537,13 +47424,6 @@ __metadata:
   version: 2.0.0
   resolution: "universalify@npm:2.0.0"
   checksum: 2406a4edf4a8830aa6813278bab1f953a8e40f2f63a37873ffa9a3bc8f9745d06cc8e88f3572cb899b7e509013f7f6fcc3e37e8a6d914167a5381d8440518c44
-  languageName: node
-  linkType: hard
-
-"unorm@npm:1.6.0":
-  version: 1.6.0
-  resolution: "unorm@npm:1.6.0"
-  checksum: 9a86546256a45f855b6cfe719086785d6aada94f63778cecdecece8d814ac26af76cb6da70130da0a08b8803bbf0986e56c7ec4249038198f3de02607fffd811
   languageName: node
   linkType: hard
 

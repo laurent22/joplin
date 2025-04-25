@@ -45,7 +45,7 @@
     "@aws-sdk/s3-request-presigner": "3.296.0",
     "@joplin/fork-htmlparser2": "^4.1.57",
     "@joplin/fork-sax": "^1.2.61",
-    "@joplin/fork-uslug": "^1.0.22",
+    "@joplin/fork-uslug": "^2.0.0",
     "@joplin/htmlpack": "~3.3",
     "@joplin/onenote-converter": "~3.3",
     "@joplin/renderer": "~3.3",

@@ -62,7 +62,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -332,6 +338,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Voeg uitgeschakelde account automatisch toe voor verwijdering"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto-paar accolades, haakjes, citaten, enz."
 	],
@@ -377,6 +386,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Mag Delen"
 	],
@@ -391,6 +403,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Bezig met annuleren van achtergrondsynchronisatie... even geduld."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Bezig met annuleren..."
@@ -494,6 +509,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik “%s” om de notitie te herstellen. Het wordt gekopieerd naar het notitieboek genaamd “%s”. De huidige versie van de notitie wordt niet vervangen of aangepast."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Klik om labels toe te voegen…"
 	],
@@ -515,6 +533,9 @@
 	"Close Window": [
 		"Venster afsluiten"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -532,9 +553,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Samenwerken aan notitieblokken met anderen"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Aankomende alarmen"
@@ -574,6 +592,9 @@
 	],
 	"Configuration": [
 		"Configuratie"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Wachtwoord bevestigen mag niet blanco zijn"
@@ -807,9 +828,6 @@
 	"Delete local data and re-download from sync target": [
 		"Lokale gegevens verwijderen en opnieuw downloaden van het synchronisatiedoel"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Verwijder notitie"
 	],
@@ -862,6 +880,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -992,12 +1013,6 @@
 	],
 	"Edit": [
 		"Bewerken"
-	],
-	"Edit in external editor": [
-		"Bewerken in externe editor"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Link bewerken"
@@ -1149,6 +1164,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Het inschakelen van codering betekent dat * al uw * notities en bijlagen opnieuw worden gesynchroniseerd en gecodeerd naar het synchronisatiedoel worden verzonden."
 	],
@@ -1215,9 +1233,6 @@
 	"Exits the application.": [
 		"Sluit de applicatie af."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Exporteren"
 	],
@@ -1263,6 +1278,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Fail-safe: Wis lokale gegevens niet wanneer synchronisatiedoel leeg is (vaak het gevolg van een misconfiguratie of softwarefout)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatale fout:"
 	],
@@ -1286,6 +1304,9 @@
 	],
 	"Find: ": [
 		"Gevonden: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox-extensie"
@@ -1561,6 +1582,9 @@
 	"Invalid command: \"%s\"": [
 		"Ongeldige opdracht: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
 	],
@@ -1647,6 +1671,9 @@
 	],
 	"Language": [
 		"Taal"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Laatst gemelde fout: %s"
@@ -1799,6 +1826,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1832,6 +1862,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"%d notities verplaatsen naar notitieboek \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Verplaatsen naar notitieboek"
 	],
@@ -1840,6 +1876,9 @@
 	],
 	"Move to notebook:": [
 		"Verplaatsen naar notitieboek:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Verplaatst het <item>  naar [notebook]."
@@ -1939,6 +1978,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Niet geauthenticeerd met %s. Voer ontbrekende inloggegevens in."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Niet gedownload"
@@ -2069,11 +2111,20 @@
 	"Open %s": [
 		"Open %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Open de PDF weergave"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Open profiel map"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Open Sync Wizard..."
@@ -2104,6 +2155,12 @@
 	],
 	"Page size for PDF export": [
 		"Paginaformaat voor PDF-export"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Wachtwoord"
@@ -2149,6 +2206,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Open de volgende URL in uw browser om de applicatie te verifiëren. De applicatie creëert een map in \"Apps/Joplin\" en zal alleen bestanden lezen uit en wegschrijven naar deze map. Er is geen toegang tot bestanden buiten deze map, noch tot persoonlijke gegevens. Er worden geen gegevens gedeeld met een derde partij."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Neem je stem op..."
@@ -2330,6 +2390,9 @@
 	"Recipients:": [
 		"Ontvangers:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Herhalen"
 	],
@@ -2489,6 +2552,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Zoeken"
 	],
@@ -2630,6 +2696,9 @@
 	"Skipped: %d.": [
 		"Overgeslagen: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2692,6 +2761,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Start applicatie geminimaliseerd in het systeemvak"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Start, stop of controleer de API-server. Stel de api.port configuratievariabele in om te specificeren op welke poort deze draait. Commando's zijn (%s)."
@@ -2842,6 +2914,12 @@
 	],
 	"Synchronizing...": [
 		"Synchroniseren..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3191,6 +3269,9 @@
 	"Type: %s.": [
 		"Type: %s."
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Niet-afgeronde taken bovenaan"
 	],
@@ -3332,6 +3413,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Taalbestanden voor steminvoer (URL)"
 	],
@@ -3414,6 +3498,9 @@
 		"U staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wilt u dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

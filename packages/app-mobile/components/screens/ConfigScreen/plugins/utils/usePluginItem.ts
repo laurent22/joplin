@@ -9,7 +9,7 @@ import usePlugin from '@joplin/lib/hooks/usePlugin';
 const usePluginItem = (id: string, pluginSettings: PluginSettings, initialItem: PluginItem|null): PluginItem => {
 	const plugin = usePlugin(id);
 
-	const lastManifest = useRef<PluginManifest>();
+	const lastManifest = useRef<PluginManifest|null>(null);
 	if (plugin) {
 		lastManifest.current = plugin.manifest;
 	} else if (!lastManifest.current) {

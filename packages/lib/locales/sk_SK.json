@@ -65,8 +65,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s nie je optimalizovaný na synchronizáciu mnohých malých súborov, takže počiatočná synchronizácia bude pomalá."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"%s karta otvorená"
@@ -374,6 +380,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automaticky pridávať zakázané účty na vymazanie"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatické párovanie zložených zátvoriek, zátvoriek, úvodzoviek atď."
 	],
@@ -419,6 +428,9 @@
 	"by word": [
 		"podľa slova"
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Môže zdieľať"
 	],
@@ -433,6 +445,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Prebieha rušenie synchronizácie na pozadí... Čakajte prosím."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Prebieha rušenie..."
@@ -542,6 +557,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Kliknutím na „%s“ obnovíte poznámku. Bude skopírovaná do zápisníka s názvom „%s“. Aktuálna verzia poznámky nebude nahradená ani upravená."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Kliknutím pridáte štítky..."
 	],
@@ -557,9 +575,6 @@
 	"Close dropdown": [
 		"Zavrieť rozbaľovaciu ponuku"
 	],
-	"Close menu": [
-		"Zavrieť ponuku"
-	],
 	"Close side menu": [
 		"Zatvoriť bočné menu"
 	],
@@ -568,6 +583,9 @@
 	],
 	"Close Window": [
 		"Zavrieť okno"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		"Otvorte kliknutím a stlačením tlačidla Cmd"
@@ -589,9 +607,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Spolupracujte na zápisníkoch s ostatnými"
-	],
-	"Collapsed, press space to expand.": [
-		"Zbalené, stlačte medzerník na rozbalenie."
 	],
 	"Coming alarms": [
 		"Blížiace sa budíky"
@@ -640,6 +655,9 @@
 	],
 	"Configuration": [
 		"Nastavenie"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Potvrdenie hesla nemôže byť prázdne"
@@ -906,9 +924,6 @@
 	"Delete local data and re-download from sync target": [
 		"Vymazať lokálne údaje a opätovne ich stiahnuť z cieľa synchronizácie"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Vymazať poznámku"
 	],
@@ -968,6 +983,12 @@
 	],
 	"Detailed": [
 		"Podrobné"
+	],
+	"Dev": [
+		"Vývoj"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Priečinok"
@@ -1109,15 +1130,6 @@
 	],
 	"Edit": [
 		"Upraviť"
-	],
-	"Edit in external editor": [
-		"Upraviť v externom editore"
-	],
-	"Edit in new window": [
-		"Upraviť v novom okne"
-	],
-	"Edit in...": [
-		"Upraviť v..."
 	],
 	"Edit link": [
 		"Upraviť odkaz"
@@ -1284,6 +1296,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		"Povolí pokračovanie zoznamu Markdown, automatické uzatváranie značiek HTML a ďalšie automatické doplňovanie značiek."
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Zapnutie šifrovania znamená, že *všetky* vaše poznámky a prílohy budú opätovne synchronizované a odoslané zašifrované do cieľa synchronizácie."
 	],
@@ -1365,9 +1380,6 @@
 	"Expand %s": [
 		"Rozbaliť %s"
 	],
-	"Expanded, press space to collapse.": [
-		"Rozbalené, stlačte medzerník pre zbalenie."
-	],
 	"Export": [
 		"Exportovať"
 	],
@@ -1416,6 +1428,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Bezpečnosť pri poruche: Nevymazať lokálne údaje, keď je cieľ synchronizácie prázdny (často v dôsledku nesprávnej konfigurácie alebo chyby)."
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Závažná chyba:"
 	],
@@ -1445,6 +1460,9 @@
 	],
 	"Find: ": [
 		"Nájsť: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Rozšírenie Firefoxu"
@@ -1751,6 +1769,9 @@
 	"Invalid command: \"%s\"": [
 		"Neplatný príkaz: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Neplatná hodnota možnosti: „%s“. Možné hodnoty sú: %s."
 	],
@@ -1861,6 +1882,9 @@
 	],
 	"Language, date format": [
 		"Jazyk, formát dátumu"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Posledná chyba: %s"
@@ -2032,6 +2056,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"Prehrávač médií, matematika, diagramy, obsah"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Minimalizovať"
 	],
@@ -2068,8 +2095,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Presunúť %d poznámok do zápisníka „%s“?"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Presunúť zápisník \"%s\" do koša?\n\nDo koša sa presunú aj všetky poznámky a podradené zápisníky v tomto zápisníku."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Presunúť do zápisníka"
@@ -2079,6 +2112,9 @@
 	],
 	"Move to notebook:": [
 		"Presunúť do zápisníka:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Presunie danú <položku> do [zápisníka]"
@@ -2199,6 +2235,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nie je overené pomocou %s. Uveďte všetky chýbajúce poverenia."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Nestiahnuté"
@@ -2347,8 +2386,14 @@
 	"Open PDF viewer": [
 		"Otvoriť prehliadač PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Otvoriť priečinok profilu"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open settings": [
 		"Otvoriť nastavenia"
@@ -2394,6 +2439,12 @@
 	],
 	"Page size for PDF export": [
 		"Veľkosť strany pre export do PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Heslo"
@@ -2454,6 +2505,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"V prehliadači prosím otvorte nasledujúcu adresu URL, aby ste overili aplikáciu. Aplikácia vytvorí priečinok v „Apps/Joplin“ a bude čítať a zapisovať súbory len v tomto priečinku. Nebude mať prístup k žiadnym súborom mimo tohto adresára ani k žiadnym iným osobným údajom. Žiadne údaje sa nebudú zdieľať so žiadnou treťou stranou."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Nahrajte prosím svoj hlas..."
@@ -2630,7 +2684,7 @@
 		"Ukončiť"
 	],
 	"Re-download model": [
-		""
+		"Opätovne stiahnuť model"
 	],
 	"Re-encrypt data": [
 		"Znova zašifrovať údaje"
@@ -2667,6 +2721,9 @@
 	],
 	"Recommended plugins": [
 		"Odporúčané doplnky"
+	],
+	"Record audio": [
+		""
 	],
 	"Redo": [
 		"Znova"
@@ -2863,6 +2920,9 @@
 	"Scanned code": [
 		"Naskenovaný kód"
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Hľadať"
 	],
@@ -3052,6 +3112,9 @@
 	"Skipped: %d.": [
 		"Vynechané: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Slnečná tmavá"
 	],
@@ -3117,6 +3180,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Spustiť aplikáciu minimalizovanú na paneli s ikonou"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Spustiť, zastaviť alebo skontrolovať server API. Ak chcete určiť, na ktorom porte má bežať, nastavte konfiguračnú premennú api.port. Príkazy sú (%s)."
@@ -3279,6 +3345,12 @@
 	],
 	"Synchronizing...": [
 		"Synchronizuje sa..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3686,6 +3758,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Nie je možné zdieľať údaje záznamu. Dôvod: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Nedokončené úlohy na vrchu"
 	],
@@ -3727,6 +3802,9 @@
 	],
 	"Unsupported link or message: %s": [
 		"Nepodporovaný odkaz alebo správa: %s"
+	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Nepodporovaný odkaz alebo správa: %s.\nChyba: %s"
 	],
 	"Untitled": [
 		"Nepomenované"
@@ -3842,6 +3920,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Súbory jazyka hlasového zadávania (URL)"
 	],
@@ -3934,6 +4015,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Ste prihlásený do Joplin Cloud, teraz môžete opustiť túto obrazovku."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"Momentálne nemáte žiadne zápisníky."

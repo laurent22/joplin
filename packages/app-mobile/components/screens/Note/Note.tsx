@@ -20,7 +20,7 @@ import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
 import FloatingActionButton from '../../buttons/FloatingActionButton';
-const { fileExtension, safeFileExtension } = require('@joplin/lib/path-utils');
+import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
@@ -1561,7 +1561,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						<TextInput
 							autoCapitalize="sentences"
 							style={this.styles().bodyTextInput}
-							ref="noteBodyTextField"
 							multiline={true}
 							value={note.body}
 							onChangeText={this.onPlainEditorTextChange}
@@ -1585,6 +1584,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						toolbarEnabled={this.props.toolbarEnabled}
 						themeId={this.props.themeId}
 						noteId={this.props.noteId}
+						noteHash={this.props.noteHash}
 						initialText={note.body}
 						initialSelection={this.selection}
 						onChange={this.onMarkdownEditorTextChange}

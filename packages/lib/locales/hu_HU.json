@@ -1,30 +1,39 @@
 {
 	"\"%s\" is missing the required \"%s\" property.": [
-		"\"%s\" hiányzik a szükséges \"%s\" tulajdonság."
+		"A(z) „%s” hiányzik; a szükséges tulajdonság a következő: „%s”."
 	],
 	"%d days": [
 		"%d nap"
 	],
 	"%d GB": [
-		""
+		"%d GB"
 	],
 	"%d GB storage space": [
-		""
+		"%d GB-os tárterület"
 	],
 	"%d hour": [
 		"%d óra"
 	],
 	"%d hours": [
-		"%d óranként"
+		"%d óránként"
 	],
 	"%d MB": [
-		""
+		"%d MB"
+	],
+	"%d MB per note or attachment": [
+		"%d MB jegyzetenként vagy csatolmányonként"
 	],
 	"%d minutes": [
 		"%d percenként"
 	],
 	"%d notes match this pattern. Delete them?": [
-		"%d jegyzetek egyeznek ezen mintával. Töröljem őket?"
+		"%d jegyzet megfelel ennek a mintának. Törli ezeket?"
+	],
+	"%d notes will be permanently deleted. Continue?": [
+		"%d jegyzet véglegesen törölve lesz. Folytatja?"
+	],
+	"%s": [
+		"%s"
 	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
@@ -39,7 +48,7 @@
 		"%s (%s): %s"
 	],
 	"%s (pre-release)": [
-		"%s (pre-release)"
+		"%s (előzetes kiadás)"
 	],
 	"%s - Copy": [
 		"%s - Másolás"
@@ -56,17 +65,23 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		"A(z) %s nincs optimalizálva több, kis fájl szinkronizálására, így a kezdeti szinkronizálás lassú lesz."
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
-		""
+		"%s lap megnyitva"
 	],
 	"%s: %d": [
 		"%s: %d"
 	],
 	"%s: %d notes": [
-		"%s: %d jegyzetek"
+		"%s: %d jegyzet"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -74,17 +89,20 @@
 	"%s: %s": [
 		"%s: %s"
 	],
+	"%s: Missing password.": [
+		"%s: Hiányzik a jelszó."
+	],
 	"&Edit": [
-		"Sz&erkesztés"
+		"Sze&rkesztés"
 	],
 	"&File": [
 		"&Fájl"
 	],
 	"&Go": [
-		"&Ugrás"
+		"U&grás"
 	],
 	"&Help": [
-		"&Segítség"
+		"&Súgó"
 	],
 	"&Note": [
 		"&Jegyzet"
@@ -95,38 +113,44 @@
 	"&View": [
 		"&Nézet"
 	],
+	"&Window": [
+		"&Ablak"
+	],
 	"(%s)": [
 		"(%s)"
 	],
 	"(In plugin: %s)": [
-		""
+		"(Bővítményben: %s)"
 	],
 	"(level %d)": [
-		""
+		"(%d. szint)"
 	],
 	"(None)": [
-		""
+		"(Semmi)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Ezt a promptot kikapcsolhatja a beállításokban)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"- Kamera: engedélyezze kép készítéséhez és csatolja azt a jegyzethez."
+		"– Kamera: lehetővé teszi a fénykép készítését és a jegyzethez való csatolását."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
-		"- Hely: engedélyezze, a geo-location hozzáadását a jegyzethez."
+		"– Helyszín: lehetővé teszi a földrajzi helymeghatározási információk csatolását a jegyzethez."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Tároló: engedélyezi a fájlok csatolását a jegyzetekhez és engedélyezi a fájlrendszer szinkronizációt."
+		"– Tárhely: lehetővé teszi a fájlok jegyzetekhez való csatolását és a fájlrendszer szinkronizálását."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		""
+		"A <tag-command> lehet „add” (hozzáadás), „remove” (eltávolítás), „list” (listázás) vagy „notetags” (jegyzetcímkék) a [tag] [note] jegyzethez történő hozzárendeléséhez vagy eltávolításához, a [tag] címkéhez társított jegyzetek listázásához, illetve a [note] jegyzethez kapcsolódó címkék listázásához. A `tag list` parancs az összes címke listázására használható (a -l opcióval részletesebb megjelenítés érhető el)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
-		""
+		"A <todo-command> lehet „toggle” (váltás) vagy „clear” (törlés). A „toggle” használatával az adott teendőt válthatja az elvégzett és a nem elvégzett állapot között (ha a cél egy normál jegyzet, akkor az teendővé alakul). A „clear” segítségével a teendőt visszaalakíthatja normál jegyzetté."
+	],
+	"A new update (%s) is available": [
+		"Új frissítés (%s) érhető el"
 	],
 	"A3": [
 		"A3"
@@ -138,61 +162,76 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Névjegy"
 	],
 	"About Joplin": [
-		"Joplin névjegy"
+		"A Joplin névjegye"
 	],
 	"accelerator": [
 		"gyorsbillentyű"
 	],
 	"Accelerator \"%s\" is not valid.": [
-		"Gyorsbillentyű \"%s\" nem érvényes."
+		"A(z) „%s” gyorsbillentyű nem érvényes."
 	],
 	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
-		"Gyorsbillentyű \"%s\" használva van a \"%s\" és \"%s\" parancsoknál. Ez váratlan viselkedéshez vezethet."
+		"A(z) „%s” gyorsbillentyű a(z) „%s” és „%s” parancsokhoz van hozzárendelve. Ez váratlan viselkedést okozhat."
 	],
 	"Accept": [
 		"Elfogadás"
 	],
 	"Accepted invitations": [
-		""
+		"Elfogadott meghívások"
 	],
 	"Access denied: Please check your username and password": [
-		""
+		"Hozzáférés megtagadva: Ellenőrizze a felhasználónevét és jelszavát"
 	],
 	"Access denied: Please re-enter your password and/or username": [
-		""
+		"Hozzáférés megtagadva: Adja meg újra a jelszavát és/vagy felhasználónevét"
 	],
 	"Account": [
-		""
+		"Fiók"
+	],
+	"Account information": [
+		"Fiók információ"
 	],
 	"Account type": [
-		""
+		"Fióktípus"
+	],
+	"Action": [
+		"Művelet"
+	],
+	"Actions": [
+		"Műveletek"
 	],
 	"Active": [
 		"Aktív"
 	],
 	"Actual Size": [
-		"Aktív Méret"
+		"Tényleges méret"
 	],
 	"Add body": [
 		"Törzsszöveg hozzáadása"
 	],
+	"Add new": [
+		"Új hozzáadása"
+	],
 	"Add or remove tags:": [
-		"Tagek hozzáadása vagy törlése:"
+		"Címkék hozzáadása vagy eltávolítása:"
 	],
 	"Add recipient:": [
-		""
+		"Címzett hozzáadása:"
 	],
 	"Add tag %s to note": [
-		""
+		"A(z) %s címke hozzáadása a jegyzethez"
 	],
 	"Add title": [
 		"Cím hozzáadása"
 	],
 	"Add to dictionary": [
 		"Hozzáadás szótárhoz"
+	],
+	"Add to note": [
+		"Hozzáadás jegyzethez"
 	],
 	"Admin": [
 		"Adminisztrátor"
@@ -201,55 +240,70 @@
 		"Adminisztrátori felület"
 	],
 	"Advanced options": [
-		"Haladó beállítások"
+		"Speciális beállítások"
+	],
+	"Advanced settings": [
+		"Speciális beállítások"
 	],
 	"Advanced tools": [
-		"Haladó beállítások"
+		"Speciális eszközök"
+	],
+	"all": [
+		"összes"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
-		""
+		"Az összes adat, beleértve a jegyzeteket, jegyzetfüzeteket és címkéket, véglegesen törlődik."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"Az összes elem szinkronizálási hibája „mellőzöttként” lett megjelölve."
 	],
 	"All notes": [
-		"Minden jegyzet"
+		"Összes jegyzet"
 	],
 	"All potential ports are in use - please report the issue at %s": [
-		"Minden potenciális port használva van - kérem jelentse a hibát itt: %s"
+		"Az összes lehetséges port foglalt – jelentse a problémát itt: %s"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
-		""
+		"Lehetővé teszi a mobilalkalmazás bővítményeinek hibakeresését. Részletekért lásd: %s."
 	],
 	"Also displays unset and hidden config variables.": [
-		"Megjeleníti a beállítatlan és rejtett config változókat."
+		"Megjeleníti a nem beállított és rejtett konfigurációs változókat is."
+	],
+	"Also publish linked notes": [
+		"Kapcsolódó jegyzetek publikálása is"
 	],
 	"Always": [
 		"Mindig"
 	],
+	"Always ask": [
+		"Mindig kérdezzen rá"
+	],
 	"Always open %s files without asking.": [
-		""
+		"A(z) %s fájlokat mindig kérdés nélkül nyissa meg."
+	],
+	"Always resize": [
+		"Mindig méretezze át"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		""
+		"Többértelmű jegyzetfüzet: „%s”. Használjon jegyzetfüzet-azonosítót helyette – nyomja meg a „ti” billentyűkombinációt a rövid azonosító megtekintéséhez, vagy használja a $b változót az jelenleg kijelölt jegyzetfüzethez"
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
-		""
+		"Többértelmű jegyzetfüzet: „%s”. Használjon rövid jegyzetfüzet-azonosítót – nyomja meg a „ti” billentyűkombinációt a rövid azonosító megtekintéséhez"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Automatikusan mentett rajz megtalálva. Csatolja a másolatát a jegyzethez?"
 	],
 	"An error occurred: %s": [
-		""
+		"Hiba történt: %s"
 	],
 	"An update is available, do you want to download it now?": [
-		"Egy frissítés elérhető, le szeretné tölteni most?"
+		"Frissítés érhető el, letölti most?"
 	],
 	"Android API level: %d": [
-		""
+		"Android API-szint: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		""
+		"Bármely erre a címre küldött e-mail jegyzetté lesz alakítva, és hozzáadódik a gyűjteményéhez. A jegyzet az „Inbox” nevű jegyzetfüzetbe lesz elmentve"
 	],
 	"Appearance": [
 		"Megjelenés"
@@ -261,22 +315,25 @@
 		"Alkalmaz"
 	],
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
-		""
+		"Biztosan visszaállítja az eszköztár alapértelmezett elrendezését?  \nEz a művelet nem vonható vissza."
 	],
 	"Are you sure you want to renew the authorisation token?": [
-		""
+		"Biztosan meg akarja újítani a hitelesítési tokent?"
 	],
 	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
-		""
+		"Biztosan vissza szeretne térni az alapértelmezett elrendezéshez? A jelenlegi elrendezés konfigurációja elvész."
 	],
 	"Arguments:": [
-		"Paraméterek:"
+		"Argumentumok:"
 	],
 	"Aritim Dark": [
 		"Aritim sötét"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
-		""
+		"Jelenleg a Joplin Web egyszerre csak egy lapban nyitható meg. Zárja be a Joplin másik példányát."
+	],
+	"Attach": [
+		"Csatolás"
 	],
 	"Attach file": [
 		"Fájl csatolása"
@@ -285,169 +342,193 @@
 		"Fotó csatolása"
 	],
 	"Attach...": [
-		"Csatol..."
+		"Csatolás…"
 	],
 	"Attaches the given file to the note.": [
-		"Csatolja az adott fájlt a jegyzethez."
+		"Csatolja a megadott fájlt a jegyzethez."
 	],
 	"attachment": [
 		"csatolmány"
 	],
 	"Attachment conflict: \"%s\"": [
-		"Csatolmány ütközés: \"%s\""
+		"Csatolmány ütközés: „%s”"
 	],
 	"Attachment download behaviour": [
-		"Csatolmányok letöltésének működése"
+		"A csatolmányok letöltésének működése"
 	],
 	"Attachments": [
 		"Csatolmányok"
 	],
 	"Attachments that could not be downloaded": [
-		"Csatolmányokat nem lehet letölteni"
+		"A csatolmányokat nem lehet letölteni"
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
-		"Figyelem: ha megváltoztatja ezt a helyet, bizonyosodjon meg abban hogy átmásolta az új helyre az összes tartalmat mielőtt szinkronizál, különben minden fájlja el lesz távolítva! A részleteket elolvashatja a GYIK-ben: %s"
+		"Figyelem: Ha módosítja ezt a helyet, győződjön meg arról, hogy az összes tartalmát átmásolta oda szinkronizálás előtt, különben minden fájl törlődni fog! További részletekért lásd a GYIK-et: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
-		"Hitelesítés nem fejeződött be (nem érkezett hitelesítő token)"
+		"Az azonosítás nem fejeződött be (nem érkezett azonosító-token)."
 	],
 	"Authorisation token:": [
-		"Hitelesítő token:"
+		"Azonosító-token:"
+	],
+	"Authorise": [
+		"Azonosítás"
 	],
 	"Auto": [
-		"Auto"
+		"Automatikus"
 	],
 	"Auto-add disabled accounts for deletion": [
+		"A letiltott fiókok automatikus hozzáadása a törléshez"
+	],
+	"Auto-format Markdown in the Rich Text Editor": [
 		""
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
-		"Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
+		"Automatikusan párosítsa a zárójeleket, idézőjeleket, stb."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Automatikus kiegészítés Markdown és HTML esetén"
 	],
 	"Automatically check for updates": [
-		"Automatikus frissítés keresés"
+		"Frissítések automatikus ellenőrzése"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Automatikusan törölje a kuka tartalmát bizonyos napok elteltével"
 	],
 	"Automatically switch theme to match system theme": [
-		"Automatikusan kapcsoljon olyan témára, ami egyezik a rendszer témával"
+		"Automatikusan váltson olyan témára, ami egyezik a rendszer témával"
 	],
 	"Back": [
 		"Vissza"
 	],
 	"Basic": [
-		""
+		"Alapvető"
 	],
 	"Beta": [
-		""
+		"Béta"
 	],
 	"Bold": [
 		"Félkövér"
 	],
 	"Browse all plugins": [
-		"Plugin-ok tallózása"
+		"Bővítmények böngészése"
 	],
 	"Browse...": [
-		"Tallózás..."
+		"Böngészés…"
 	],
 	"Built-in": [
-		""
+		"Beépített"
 	],
 	"Bulleted List": [
-		"Felsorolás"
+		"Felsorolásos lista"
 	],
 	"by %s": [
-		""
+		"%s által"
 	],
 	"by word": [
+		"szó által"
+	],
+	"Camera": [
 		""
+	],
+	"Can Share": [
+		"Megosztható"
 	],
 	"Can view": [
-		""
+		"Megnézhető"
 	],
 	"Can view and edit": [
-		""
+		"Megnézhető és szerkeszthető"
 	],
 	"Cancel": [
 		"Mégse"
 	],
 	"Cancelling background synchronisation... Please wait.": [
-		"Háttér szinkronizáció megszakítása... Kérem várjon."
+		"A háttérben történő szinkronizálás megszakítása… Kis türelmet."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
-		"Megszakítás..."
+		"Megszakítás…"
 	],
 	"Cancelling... Please wait.": [
-		"Megszakítás... Kérem várjon."
+		"Megszakítás… Kis türelmet."
 	],
 	"Cannot access %s": [
-		"Hozzáférés sikertelen %s"
+		"Nem lehet hozzáférni a következőhöz: %s"
 	],
 	"Cannot change encrypted item": [
-		"Titkosított elem nem módosítható"
+		"Nem lehet módosítani a titkosított elemet"
 	],
 	"Cannot copy note to \"%s\" notebook": [
-		"Jegyzet nem másolható a \"%s\" jegyzetfüzetbe"
+		"Nem lehet másolni a jegyzetet a(z) „%s” jegyzetfüzetbe"
+	],
+	"Cannot create a new note: %s": [
+		"Nem lehet létrehozni az új jegyzetet: %s"
 	],
 	"Cannot find \"%s\".": [
-		"Nem található \"%s\"."
+		"Nem található „%s”."
+	],
+	"Cannot find: \"%s\"": [
+		"Nem található: „%s”"
 	],
 	"Cannot initialise synchroniser.": [
-		"Szinkronizáló inicializálása sikertelen."
+		"Nem lehet előkészíteni a szinkronizálót."
 	],
 	"Cannot load \"%s\" module for format \"%s\" and output \"%s\"": [
-		"Nem tölthető be a \"%s\" modul, a \"%s\" formátumhoz és a \"%s\" kimenethez."
+		"Nem lehet betölteni a(z) „%s” modult a(z) „%s” formátumhoz és a(z) „%s” kimenethez."
 	],
 	"Cannot load \"%s\" module for format \"%s\" and target \"%s\"": [
-		"Nem tölthető be a \"%s\" modul a \"%s\" formátumhoz és \"%s\" célhoz."
+		"Nem lehet betölteni a(z) „%s” modult a(z) „%s” formátumhoz és a(z) „%s” célhoz."
 	],
 	"Cannot move note to \"%s\" notebook": [
-		"Jegyzet nem mozgatható a \"%s\" jegyzetfüzetbe"
+		"A jegyzetet nem lehet áthelyezni a(z) „%s” jegyzetfüzetbe"
 	],
 	"Cannot move notebook to this location": [
-		"Jegyzetfüzet nem mozgatható ide"
+		"Nem lehet a jegyzetfüzetet áthelyezni erre a helyre"
 	],
 	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
-		"Token nem frissíthető: hitelesítési adat hiányzik. A szinkronizáció ismételt indítása megoldhatja a problémát."
+		"Nem lehet frissíteni a tokent: az azonosítási adatok hiányoznak. A szinkronizálás újbóli elindítása megoldhatja a problémát."
 	],
 	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
-		""
+		"Nem lehet elmenteni a következőt: %s „%s”, mert nagyobb, mint a megengedett határérték (%s)"
 	],
 	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
-		""
+		"Nem lehet elmenteni a következőt: %s „%s”, mert meghaladná a fiók megengedett teljes méretét (%s)"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		""
+		"A titkosított jegyzetfüzetet nem lehet megosztani a következő címzettel: %s, mert az nem engedélyezte a végpontok közötti titkosítást. Ezt megteheti a Beállítások > Titkosítás menüben."
 	],
 	"Case sensitive": [
-		""
+		"Nagy- és kisbetű érzékeny"
 	],
 	"Change application layout": [
-		"Alkalmazás kinézet megváltoztatása"
+		"Alkalmazás elrendezésének módosítása"
 	],
 	"Change language": [
-		"Nyelv váltása"
+		"Nyelv módosítása"
+	],
+	"Change ratio": [
+		"Arány módosítása"
 	],
 	"Change shortcut for \"%s\"": [
-		""
+		"A(z) „%s” parancsikonjának módosítása"
 	],
 	"Characters": [
 		"Karakterek"
 	],
 	"Characters excluding spaces": [
-		"Karaktere szóköz kivételével"
+		"Karakterek szóközök nélkül"
 	],
 	"Check elements to display in the toolbar": [
-		""
+		"Az eszköztáron megjelenítendő elemek ellenőrzése"
 	],
 	"Check for updates...": [
-		"Frissítés keresése..."
+		"Frissítés ellenőrzése…"
 	],
 	"Check synchronisation configuration": [
-		"Szinkronizációs beállítások ellenőrzése"
+		"A szinkronizálási beállítások ellenőrzése"
 	],
 	"Checkbox": [
 		"Jelölőnégyzet"
@@ -456,10 +537,10 @@
 		"Jelölőnégyzet lista"
 	],
 	"Checking... Please wait.": [
-		"Ellenőrzés... Kérem várjon."
+		"Ellenőrzés… Kis türelmet."
 	],
 	"Choose an option": [
-		"Válasszon egy opciót"
+		"Válasszon egy beállítást"
 	],
 	"Chrome Web Store": [
 		"Chrome Web Store"
@@ -470,53 +551,71 @@
 	"Clear alarm": [
 		"Riasztás törlése"
 	],
+	"Clear search": [
+		"Keresés törlése"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
-		"Kattintson \"%s\" a jegyzet visszaállításához. Be fog másolodni a \"%s\" nevű jegyzetfüzetbe. A jegyzet aktuális verziója nem lesz kicserélve vagy módosítva."
+		"Kattintson a(z) „%s” gombra a jegyzet visszaállításához. A jegyzet a(z) „%s” nevű jegyzetfüzetbe lesz másolva. A jegyzet jelenlegi verziója nem lesz lecserélve vagy módosítva."
+	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
 	],
 	"Click to add tags...": [
-		"Kattintson tag hozzáadáshoz..."
+		"Kattintson a címke hozzáadáshoz…"
 	],
 	"Client ID: %s": [
-		"Kliens ID: %s"
+		"Kliens-azonosító: %s"
+	],
+	"close": [
+		"bezárás"
 	],
 	"Close": [
-		"Bezár"
+		"Bezárás"
+	],
+	"Close dropdown": [
+		"Legördülő menü bezárása"
 	],
 	"Close side menu": [
-		""
+		"Oldalmenü bezárása"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Zárja be az alkalmazást, majd törölje a profilját a következőben: „%s”, és indítsa újra az alkalmazást. Először mindenképpen készítsen biztonsági másolatot az összes jegyzetének JEX fájlként történő exportálásával."
 	],
 	"Close Window": [
 		"Ablak bezárása"
 	],
-	"Cmd-click to open": [
+	"Closing session...": [
 		""
 	],
+	"Cmd-click to open": [
+		"Cmd + kattintás a megnyitáshoz"
+	],
 	"Cmd-click to open: %s": [
-		""
+		"Cmd + kattintás a megnyitáshoz: %s"
 	],
 	"Code": [
 		"Kód"
 	],
 	"Code Block": [
-		"Code Blokk"
+		"Kódblokk"
 	],
 	"Code View": [
-		"Kód nézet"
+		"Kódnézet"
+	],
+	"Collaborate on a notebook with others": [
+		"Együttműködés egy jegyzetfüzeten másokkal"
 	],
 	"Collaborate on notebooks with others": [
-		""
+		"Együttműködés a jegyzetfüzeteken másokkal"
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
-		"Riasztás beállítása"
+		"Következő riasztások"
 	],
 	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
-		"Vesszóvel elválasztott listája azoknak a mappáknak ahonnan betölthetjük a bizonyítványokat vagy egyedi elérési útvonal cert fájlok betöltéséhez. Például: /my/cert_dir, /other/custom.pem.  Figyelem, amennyiben megváltoztatja a TLS beállításokat, el kell mentenie a változásokat mielőtt kattint a \"Szinkronizációs beállítások ellenőrzése\"-re. \nNote that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\"."
+		"A tanúsítványok betöltéséhez használt könyvtárak elérési útvonalainak vesszővel elválasztott listája, vagy az egyes tanúsítványfájlok elérési útvonala. Például: /my/cert_dir, /other/custom.pem. Vegye figyelembe, hogy ha módosítja a TLS-beállításokat, mentse el a módosításokat, mielőtt a „Szinkronizálási konfiguráció ellenőrzése” gombra kattint."
 	],
 	"command": [
 		"parancs"
@@ -530,32 +629,44 @@
 	"Command palette...": [
 		"Parancs paletta…"
 	],
+	"Compact": [
+		"Kompakt"
+	],
+	"Complete": [
+		"Kész"
+	],
+	"Complete to-do": [
+		"Teendő befejezése"
+	],
 	"Completed": [
-		"Befejeződött"
+		"Elkészült"
 	],
 	"Completed decryption.": [
 		"Visszafejtés befejeződött."
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"Figyelmeztetésekkel elkészült:\n%s"
 	],
 	"Completed: %s (%s)": [
-		"Befejeződött: %s (%s)"
+		"Elkészült: %s (%s)"
 	],
 	"completion date": [
-		""
+		"befejezés dátuma"
 	],
 	"Compress old changes": [
-		""
+		"Régi módosítások tömörítése"
 	],
 	"Configuration": [
 		"Beállítások"
 	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Confirm password cannot be empty": [
-		"Jelszó ismétlése nem lehet üres"
+		"A jelszó megerősítése nem lehet üres"
 	],
 	"Confirm password:": [
-		"Jelszó ismétlése:"
+		"Jelszó megerősítése:"
 	],
 	"Confirmation": [
 		"Megerősítés"
@@ -564,40 +675,59 @@
 		"Ütközik: %d"
 	],
 	"Conflicts": [
-		"Ütközés"
+		"Ütközések"
 	],
 	"Conflicts (attachments)": [
-		"Ütközés (jegyzet csatolmányok)"
+		"Ütközések (csatolmányok)"
+	],
+	"Connect to Joplin Cloud": [
+		"Kapcsolódva a következőhöz: Joplin Cloud"
 	],
 	"Consolidated billing": [
-		""
+		"Összevont számlázás"
+	],
+	"Contains %d note": [
+		"%d jegyzetet tartalmaz",
+		"%d jegyzetet tartalmaz"
 	],
 	"Content provided by %s": [
-		"Tartalom %s által biztosítva"
+		"Tartalomszolgáltató: %s"
+	],
+	"Content provided by: %s": [
+		"Tartalomszolgáltató: %s"
 	],
 	"Continue": [
-		""
+		"Folytatás"
+	],
+	"Control character": [
+		"Vezérlőkarakter"
 	],
 	"Convert to note": [
 		"Átalakítás jegyzetté"
 	],
 	"Convert to todo": [
-		"Átalakítás todo-ra"
+		"Átalakítás tennivalóra"
+	],
+	"Converting speech to text...": [
+		"Beszéd szöveggé átalakítása…"
 	],
 	"Copy": [
 		"Másolás"
 	],
 	"Copy dev mode command to clipboard": [
-		"Dev mód parancs másolása vágólapra"
+		"Dev mode parancs másolása a vágólapra"
 	],
 	"Copy external link": [
-		"Külső link másolása"
+		"Külső hivatkozás másolása"
 	],
 	"Copy image": [
 		"Kép másolása"
 	],
 	"Copy Link Address": [
-		"Link címének másolása"
+		"Hivatkozás címének másolása"
+	],
+	"Copy link to website": [
+		"Hivatkozás másolása a weboldalra"
 	],
 	"Copy Markdown link": [
 		"Markdown hivatkozás másolása"
@@ -609,47 +739,62 @@
 		"Megosztható hivatkozás másolása",
 		"Megosztható hivatkozások másolása"
 	],
+	"Copy to clipboard": [
+		"Másolás a vágólapra"
+	],
 	"Copy token": [
 		"Token másolása"
 	],
+	"Copy version info": [
+		"Verzió-információk másolása"
+	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
-		"Alkalmazás nem hitelesíthető:\n\n%s\n\nKérem próbálja újra."
+		"Az alkalmazás nem azonosítható:\n\n%s\n\nPróbálja újra."
 	],
 	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
-		"Sikertelen kapcsolódás a Joplin szerverhez. Kérem ellenőrizze a Szinkronizáció beállításokat a  beállításoknál. Ez volt a teljes hiba:\n\n%s"
+		"Nem lehetett kapcsolódni a Joplin-kiszolgálóhoz. Ellenőrizze a szinkronizálási beállításokat. A teljes hiba a következő volt:\n\n%s"
 	],
 	"Could not connect to plugin repository.": [
-		"Sikertelen kapcsolódás a plugin adattárhoz."
+		"Nem lehetett kapcsolódni a bővítménytárolóhoz."
 	],
 	"Could not export notes: %s": [
-		"Jegyzetek nem exportálhatóak: %s"
+		"Nem lehetett exportálni a jegyzeteket: %s"
 	],
 	"Could not install plugin: %s": [
-		"Bővítmény nem telepíthető: %s"
+		"Nem lehetett telepíteni a bővítményt: %s"
 	],
 	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
-		""
+		"Nem lehetett válaszolni a meghívásra. Próbálja újra, vagy kérdezze meg a jegyzetfüzet tulajdonosát, hogy még mindig megosztja-e a jegyzetfüzetet.\n\nA hiba a következő volt: „%s”"
+	],
+	"Could not switch profile: %s": [
+		"Nem lehetett profilt váltani: %s"
 	],
 	"Could not upgrade master key: %s": [
-		"Mesterkulcs nem frissíthető: %s"
+		"Nem lehetett frissíteni a mesterkulcsot: %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
-		""
+		"Nem lehetett ellenőrizni a jegyzetfüzet megosztási állapotát – megszakítás. Próbálja újra, amikor kapcsolódik az internethez."
+	],
+	"Could not verify your identity: %s": [
+		"Nem sikerült ellenőrizni az Ön személyazonosságát: %s"
 	],
 	"Create": [
 		"Létrehozás"
+	],
+	"Create a new notebook under a parent notebook.": [
+		"Új jegyzetfüzet létrehozása egy szülőjegyzetfüzet alatt."
 	],
 	"Create a notebook": [
 		"Jegyzetfüzet létrehozása"
 	],
 	"Create new profile...": [
-		"Új profil létrehozása."
+		"Új profil létrehozása…"
 	],
 	"Create notebook": [
 		"Jegyzetfüzet létrehozása"
 	],
 	"Create user": [
-		"Új felhasználó létrehozása"
+		"Felhasználó létrehozása"
 	],
 	"Created": [
 		"Létrehozva"
@@ -658,7 +803,7 @@
 		"létrehozás dátuma"
 	],
 	"Created local items: %d.": [
-		"Created local items: %d."
+		"Helyben létrehozott elemek: %d."
 	],
 	"Created locally": [
 		"Helyben létrehozva"
@@ -676,46 +821,55 @@
 		"Létrehozva: %s"
 	],
 	"Creates a new note.": [
-		"Új jegyzet létrehozása."
+		"Egy új jegyzet létrehozása."
 	],
 	"Creates a new notebook.": [
-		"Új jegyzetfüzet létrehozása."
+		"Egy új jegyzetfüzet létrehozása."
 	],
 	"Creates a new to-do.": [
-		"Új to-do létrehozása."
+		"Egy új teendő létrehozása."
+	],
+	"Creating new note...": [
+		"Új jegyzet létrehozása…"
+	],
+	"Creating new to-do...": [
+		"Új teendő létrehozása…"
 	],
 	"Creating report...": [
-		"Jelentés készítése..."
+		"Jelentés létrehozása…"
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl + klikk a megnyitáshoz"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl + klikk a megnyitáshoz: %s"
 	],
 	"current match": [
-		""
+		"jelenlegi egyezés"
+	],
+	"Current password": [
+		"Jelenlegi jelszó"
 	],
 	"Current version is up-to-date.": [
-		"Aktuális verzió a legfrissebb."
+		"A jelenlegi verzió naprakész."
 	],
 	"custom order": [
-		"egyedi sorrend"
+		"egyéni sorrend"
 	],
 	"Custom order": [
-		"Egyedi sorrend"
+		"Egyéni sorrend"
 	],
 	"Custom stylesheet for Joplin-wide app styles": [
-		"Egyedi stíluslap Joplin-széles app stílushoz"
+		"Egyéni stíluslap a Joplin globális stílusaihoz"
 	],
 	"Custom stylesheet for rendered Markdown": [
-		"Egyedi stíluslap Markdown megjelenítéshez"
+		"Egyéni stíluslap a renderelt Markdownhoz"
 	],
 	"Custom TLS certificates": [
-		"Egyedi TLS bizonyítvány"
+		"Egyéni TLS-bizonyítvány"
 	],
 	"Customise the note publishing banner": [
-		""
+		"A jegyzet-közzétételi kísérőoldal testreszabása"
 	],
 	"Cut": [
 		"Kivágás"
@@ -724,40 +878,40 @@
 		"Sötét"
 	],
 	"Dashboard": [
-		""
+		"Irányítópult"
 	],
 	"Date": [
 		"Dátum"
 	],
 	"Date format": [
-		"Dátumforma"
+		"Dátumformátum"
 	],
 	"days": [
-		"napok"
+		"nap"
 	],
 	"Decrease indent level": [
-		""
+		"Behúzás csökkentése"
 	],
 	"Decrypted items: %d": [
-		"Dekódolt elemek: %d"
+		"Visszafejtett elemek: %d"
 	],
 	"Decrypted items: %s / %s": [
-		"Dekódolt elemek: %s / %s"
+		"Visszafejtett elemek: %s / %s"
 	],
 	"Decrypting items: %d/%d": [
-		"Elemek titkosítása: %d/%d"
+		"Elemek visszafejtése: %d/%d"
 	],
 	"Default": [
-		"Alapérték"
+		"Alapértelmezett"
 	],
 	"Default: %s": [
-		"Alapérték: %s"
+		"Alapértelmezett: %s"
 	],
 	"Delete": [
 		"Törlés"
 	],
 	"Delete attachment \"%s\"?": [
-		"\"%s\" csatolmány törlése ?"
+		"Törli a(z) „%s” csatolmányt?"
 	],
 	"Delete expired sessions": [
 		"Lejárt munkamenetek törlése"
@@ -769,19 +923,34 @@
 		"Sor törlése"
 	],
 	"Delete local data and re-download from sync target": [
-		""
+		"Helyi adatok törlése és újraletöltése a szinkronizálási célról"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
+	"Delete note": [
+		"Jegyzet törlése"
+	],
+	"Delete notebook": [
+		"Jegyzetfüzet törlése"
 	],
 	"Delete plugin \"%s\"?": [
-		"\"%s\" bővítmény törlése?"
+		"Törli a(z) „%s” nevű bővítményt?"
+	],
+	"Delete profile \"%s\"": [
+		"A(z) „%s” nevű profil törlése"
+	],
+	"Delete selected notes": [
+		"Kijelölt jegyzetek törlése"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
-		""
+		"Törli az „Inbox” nevű jegyzetfüzetet?\n\nHa törli az „Inbox” nevű jegyzetfüzetet, az ide nemrég küldött e-mailek elveszhetnek."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
-		""
+		"Törli ezt a meghívást? A címzett többé nem fér hozzá ehhez a megosztott jegyzetfüzethez."
+	],
+	"Delete this profile?": [
+		"Törli ezt a profilt?"
+	],
+	"Deleted": [
+		"Törölve"
 	],
 	"Deleted local items: %d.": [
 		"Törölt helyi elemek: %d."
@@ -790,34 +959,43 @@
 		"Törölt távoli elemek: %d."
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"Véglegesen törli a jegyzeteket, kihagyva a kukát."
 	],
 	"Deletes the given notebook.": [
-		"Adott jegyzetfüzet törlése."
+		"Törli a megadott jegyzetfüzetet."
 	],
 	"Deletes the notebook without asking for confirmation.": [
-		"Adott jegyzetfüzet törlése, megerősítés kérése nélkül."
+		"Törli a jegyzetfüzetet megerősítés kérése nélkül."
 	],
 	"Deletes the notes matching <note-pattern>.": [
-		"Adott jegyzetek törlése <note-pattern>."
+		"Törli a(z) <note-pattern> mintának megfelelő jegyzeteket."
 	],
 	"Deletes the notes without asking for confirmation.": [
-		"Adott jegyzetek törlése, megerősítés kérése nélkül."
+		"Törli a jegyzeteket megerősítés kérése nélkül."
+	],
+	"Deletion log": [
+		"Napló törlése"
+	],
+	"Deselect": [
+		"Kijelölés megszüntetése"
 	],
 	"Destination format: %s": [
-		"Cél formátum: %s"
+		"Célformátum: %s"
 	],
 	"Detailed": [
-		""
+		"Részletes"
 	],
 	"Dev": [
+		"Fejlesztő"
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
 		"Könyvtár"
 	],
 	"Directory to synchronise with (absolute path)": [
-		"Könyvtár amivel szinkronizálunk (abszolút útvonal)"
+		"Könyvtár amivel szinkronizál (abszolút elérési út)"
 	],
 	"Disable": [
 		"Letiltás"
@@ -826,43 +1004,49 @@
 		"Titkosítás letiltása"
 	],
 	"Disable safe mode and restart": [
-		""
+		"Biztonságos mód kikapcsolása és újraindítás"
 	],
 	"Disable Web Clipper Service": [
-		"Web Vágó szolgáltatás letiltása"
+		"Web Clipper szolgáltatás letiltása"
 	],
 	"Disabled": [
 		"Letiltva"
 	],
+	"Disabled keys": [
+		"Letiltott billentyűk"
+	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
-		"Titkosítás letiltása azt jelenti, az *összes* jegyzete és csatolmányai együtt, újra lesznek szinkronizálva és titkosítás nélkül utaznak a cél eszközre. Akarja folytatni?"
+		"A titkosítás kikapcsolása azt jelenti, hogy az *összes* jegyzet és melléklet újra lesz szinkronizálva, és titkosítatlanul lesz elküldve a szinkronizálási célra. Folytatja?"
+	],
+	"Discard": [
+		"Elvetés"
 	],
 	"Discard changes": [
-		"Változások elvetése"
+		"Módosítások elvetése"
 	],
 	"Dismiss": [
 		"Elvetés"
 	],
 	"Displays a geolocation URL for the note.": [
-		"Mutassa a geolokációs URL-t a jegyzethez."
+		"Megjeleníti a jegyzethez tartozó földrajzi helyszín webcímét."
 	],
 	"Displays only the first top <num> notes.": [
-		"Mutassa csak az első  <num> jegyzetet."
+		"Csak az első <num> leggyakrabban használt jegyzetet jeleníti meg."
 	],
 	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
-		"Csak bizonyos típusú elemeket mutasson. Az `n` a jegyetekhez, a `t` a to-do-khoz vagy `nt` mindkettőhöz (pl. `-tt` mutatja a to-do-kat, míg a `-tnt` mutatja a jegyzeteket és to-do-kat)."
+		"Csak a megadott típusú elemeket jeleníti meg. Lehet `n` a jegyzetekhez, `t` a teendőkhöz, vagy `nt` a jegyzetekhez és teendőkhöz (például: `-tt` csak a teendőket jeleníti meg, míg a `-tnt` a jegyzeteket és teendőket is)."
 	],
 	"Displays summary about the notes and notebooks.": [
-		"Mutasson összegzést a jegyzetekről és jegyzetfüzetekről."
+		"Összefoglalót jelenít meg a jegyzetekről és jegyzetfüzetekről."
 	],
 	"Displays the complete information about note.": [
-		"Minden információt mutasson meg a jegyzetről."
+		"Részletes információkat jelenít meg a jegyzetekről."
 	],
 	"Displays the given note.": [
-		"Megjelenít egy adott jegyzetet."
+		"Megjeleníti a megadott jegyzetet."
 	],
 	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
-		"Mutasson minden jegyzetet az aktuális jegyzetfüzetben. Használja az `ls /`-t a jegyzetfüzetek listájának megjelenítéséhez."
+		"Megjeleníti a jegyzeteket a jelenlegi jegyzetfüzetben. Használja az `ls /` parancsot a jegyzetfüzetek listájának megjelenítéséhez."
 	],
 	"Displays usage information.": [
 		"Megjeleníti a használati információkat."
@@ -871,19 +1055,25 @@
 		"Megjeleníti a verzió információit"
 	],
 	"Do it now": [
-		"Csináld meg most"
+		"Tegye meg most"
 	],
 	"Do not ask for confirmation.": [
 		"Ne kérjen jóváhagyást."
 	],
+	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		"Ne veszítse el a jelszót, mert biztonsági okokból ez lesz az *egyetlen* módja az adatok visszafejtésének! A titkosítás engedélyezéséhez adja meg a jelszavát alább."
+	],
+	"Donate, website": [
+		"Támogatás, weboldal"
+	],
 	"Done": [
-		""
+		"Kész"
 	],
 	"Download": [
 		"Letöltés"
 	],
 	"Download and install the relevant extension for your browser:": [
-		"Töltse le és telepítse a releváns böngésző bővítményt:"
+		"Töltse le és telepítse a böngészőjéhez megfelelő bővítményt:"
 	],
 	"Downloaded": [
 		"Letöltve"
@@ -897,17 +1087,20 @@
 	"Downloading": [
 		"Letöltés"
 	],
+	"Downloading %s language files...": [
+		"„%s” nyelvi fájlok letöltése…"
+	],
 	"Downloading resources...": [
-		"Erőforrások letöltése..."
+		"Erőforrások letöltése…"
 	],
 	"Dracula": [
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"Kép rajzolása"
 	],
 	"Drawing": [
-		""
+		"Rajzolás"
 	],
 	"Drop notes or files here": [
 		"Dobja ide a jegyzeteket vagy fájlokat"
@@ -916,28 +1109,31 @@
 		"Dropbox"
 	],
 	"Dropbox Login": [
-		"Dropbox Login"
+		"Dropbox bejelentkezés"
 	],
 	"Due": [
-		""
+		"Esedékes"
+	],
+	"due date": [
+		"határidő"
 	],
 	"Duplicate": [
-		"Duplikált"
+		"Duplikálás"
 	],
 	"Duplicate line": [
-		"Duplikált sor"
+		"Sor duplikálása"
+	],
+	"Duplicate selected notes": [
+		"Kijelölt jegyzetek duplikálása"
 	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
-		""
+		"A(z) <note> jegyzetnek megfelelő jegyzeteket duplikálja a(z) [notebook] jegyzetfüzetbe. Ha nincs megadva jegyzetfüzet, a jegyzet a jelenlegi jegyzetfüzetben lesz duplikálva."
 	],
 	"Edit": [
 		"Szerkesztés"
 	],
-	"Edit in external editor": [
-		"Szerkesztés külső szerkesztőben"
-	],
-	"Edit in new window": [
-		""
+	"Edit link": [
+		"Hivatkozás szerkesztése"
 	],
 	"Edit note.": [
 		"Jegyzet szerkesztése."
@@ -945,50 +1141,65 @@
 	"Edit notebook": [
 		"Jegyzetfüzet szerkesztése"
 	],
+	"Edit profile": [
+		"Profil szerkesztése"
+	],
 	"Edit profile configuration...": [
-		""
+		"Profilbeállítások szerkesztése…"
 	],
 	"Editor": [
 		"Szerkesztő"
 	],
+	"Editor actions": [
+		"Szerkesztő-műveletek"
+	],
 	"Editor font": [
-		"Szerkesztő betűkészlet"
+		"Szerkesztő betűtípusa"
 	],
 	"Editor font family": [
-		"Szerkesztő betű család"
+		"Szerkesztő betűcsaládja"
 	],
 	"Editor font size": [
-		"Szerkesztő betű méret"
+		"Szerkesztő betűmérete"
 	],
 	"Editor maximum width": [
-		""
+		"Szerkesztő maximális szélessége"
+	],
+	"Editor monospace font family": [
+		"Szerkesztő monospace betűcsaládja"
 	],
 	"Editor: %s": [
 		"Szerkesztő: %s"
 	],
 	"Either \"text\" or \"json\"": [
-		"\"szöveg\" vagy \"json\""
+		"Vagy „szöveg”, vagy „json”"
 	],
 	"Emacs": [
 		"Emacs"
 	],
 	"Email": [
-		"Email"
+		"E-mail"
+	],
+	"Email to note": [
+		"E-mail a jegyzetbe"
 	],
 	"Email to Note": [
-		""
+		"E-mail a jegyzetbe"
+	],
+	"Email To Note, login information": [
+		"E-mail a jegyzetbe, bejelentkezési információk"
 	],
 	"Emails": [
-		"Emailek"
+		"E-mailek"
 	],
 	"emphasised text": [
 		"kiemelt szöveg"
 	],
 	"Empty trash": [
-		""
+		"Kuka kiürítése"
 	],
 	"Enable": [
-		"Engedélyez"
+		"Engedélyezés"
 	],
 	"Enable ++insert++ syntax": [
 		"++insert++ szintaxis engedélyezése"
@@ -997,73 +1208,85 @@
 		"==mark== szintaxis engedélyezése"
 	],
 	"Enable ^sup^ syntax": [
-		"^sup^ szintakszis engedélyezése"
+		"^sup^ szintaxis engedélyezése"
 	],
 	"Enable abbreviation syntax": [
-		"Rövidítés szintakszis engedélyezése"
+		"Rövidítés-szintaxis engedélyezése"
 	],
 	"Enable audio player": [
-		"Audio lejátszó engedélyezése"
+		"Hanglejátszó engedélyezése"
 	],
 	"Enable biometrics authentication?": [
-		""
+		"Biometrikus azonosítás engedélyezése?"
 	],
 	"Enable deflist syntax": [
-		"Deflist szintakszis engedélyezése"
+		"Deflist szintaxis engedélyezése"
 	],
 	"Enable encryption": [
 		"Titkosítás engedélyezése"
 	],
 	"Enable file:// URLs for images and videos": [
-		""
+		"File://webcímek engedélyezése a képekhez és a videókhoz"
 	],
 	"Enable footnotes": [
 		"Lábjegyzetek engedélyezése"
 	],
 	"Enable Fountain syntax support": [
-		"Fountain szintakszis engedélyezése"
+		"Fountain szintaxis engedélyezése"
 	],
 	"Enable Linkify": [
 		"Linkify engedélyezése"
 	],
 	"Enable markdown emoji": [
-		"Markdown emoji engedélyezése"
+		"Markdown emodzsi engedélyezése"
 	],
 	"Enable math expressions": [
-		"Képletek engedélyezése"
+		"Matematikai képletek engedélyezése"
 	],
 	"Enable Mermaid diagrams support": [
 		"Mermaid diagram támogatás engedélyezése"
 	],
 	"Enable multimarkdown table extension": [
-		"Multimarkdown táblázat bővítmény engedélyezése"
+		"Multimarkdown táblázatbővítmény engedélyezése"
 	],
 	"Enable note history": [
-		"Jegyzet előélet engedélyezése"
+		"Jegyzet előéletének engedélyezése"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Optikai karakterfelismerés (OCR) engedélyezése"
+	],
+	"Enable or disable plugins": [
+		"Bővítmények engedélyezése / letiltása"
 	],
 	"Enable PDF viewer": [
-		"PDF megjelenítő engedélyezése"
+		"PDF-nézegető engedélyezése"
+	],
+	"Enable plugin support": [
+		"Bővítmény-támogatás engedélyezése"
 	],
 	"Enable soft breaks": [
 		"Lágy törések engedélyezése"
 	],
+	"Enable spell checking in Markdown editor": [
+		"Helyesírás-ellenőrzés engedélyezése a Markdown-szerkesztőben"
+	],
 	"Enable spellcheck in the text editor": [
-		""
+		"Helyesírás-ellenőrzés engedélyezése a szövegszerkesztőben"
 	],
 	"Enable table of contents extension": [
-		"Tartalomjegyzék bővítmény engedélyezése"
+		"Tartalomjegyzék-bővítmény engedélyezése"
+	],
+	"Enable the Markdown toolbar": [
+		"Markdown eszköztár engedélyezése"
 	],
 	"Enable typographer support": [
 		"Tipográfiai támogatás engedélyezése"
 	],
 	"Enable video player": [
-		"Video lejátszó engedélyezése"
+		"Videólejátszó engedélyezése"
 	],
 	"Enable Web Clipper Service": [
-		"Web Vágó Szolgáltatás engedélyezése"
+		"Web Clipper szolgáltatás engedélyezése"
 	],
 	"Enable ~sub~ syntax": [
 		"~sub~ szintaxis engedélyezése"
@@ -1072,19 +1295,25 @@
 		"Engedélyezve"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		"Engedélyezi a Markdown lista folytatását, az automatikus HTML-címkék bezárását és egyéb automatikus jelölés-kiegészítéseket."
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
+	],
+	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
+		"A titkosítás engedélyezése azt jelenti, hogy *minden* jegyzet és melléklet újra lesz szinkronizálva, és titkosítva lesz elküldve a szinkronizálási célra."
 	],
 	"Encrypted": [
 		"Titkosítva"
 	],
 	"Encrypted items cannot be modified": [
-		"Titkosított elemek nem módosíthatóak"
+		"A titkosított elemek nem módosíthatóak"
 	],
 	"Encryption": [
 		"Titkosítás"
 	],
 	"Encryption Config": [
-		"Titkosítás beállítás"
+		"Titkosítási beállítás"
 	],
 	"Encryption is: %s": [
 		"Titkosítás: %s"
@@ -1096,22 +1325,25 @@
 		"Titkosítás:"
 	],
 	"End-to-end encryption": [
-		"End-to-end titkosítás"
+		"Végpontok közötti titkosítás"
 	],
 	"Ends voice typing": [
-		""
+		"Befejezi a hangalapú gépelést"
 	],
 	"Enter code here": [
-		"A kódot írja ide"
+		"Adja meg a kódot itt"
 	],
 	"Enter master password:": [
-		"Adja meg a mester jelszót:"
+		"Adja meg a mesterjelszót:"
 	],
 	"Enter notebook title": [
 		"Adja meg a jegyzetfüzet címét"
 	],
+	"Enter password": [
+		"Adja meg a jelszót"
+	],
 	"Entering selection mode": [
-		""
+		"Belépés a kijelölési módba"
 	],
 	"Enum": [
 		"Felsorolás"
@@ -1120,245 +1352,296 @@
 		"Hiba"
 	],
 	"Error opening note in editor: %s": [
-		"Hiba szerkesztőben a jegyzet megnyitáskor: %s"
+		"Hiba a jegyzet megnyitásakor a szerkesztőben: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
-		"Hiba. Kérem ellenőrizze az URL-t, a felhasználónevet, jelszót, stb. hogy megfelelőek-e és a szinkronizációs cél elérhető. A hiba a következő:"
+		"Hiba. Ellenőrizze, hogy a webcím, felhasználónév, jelszó stb. helyesek-e, és hogy a szinkronizálási cél elérhető-e. A jelentett hiba a következő:"
 	],
 	"Error: %s": [
-		"Hibák: %s"
+		"Hiba: %s"
 	],
 	"Errors only": [
 		"Csak hibák"
 	],
 	"Evernote Export File (as HTML)": [
-		"Evernote fájl export (HTML-ként)"
+		"Evernote exportálási fájl (HTML-ként)"
 	],
 	"Evernote Export File (as Markdown)": [
-		"Evernote fájl export (Markdown-ként)"
+		"Evernote exportálási fájl (Markdown-ként)"
+	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote exportálási fájlok (HTML-ként)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote exportálási fájlok (Markdown-ként)"
 	],
 	"Exits the application.": [
-		"Kilép a programból."
+		"Kilép az alkalmazásból."
 	],
 	"Expand %s": [
-		""
-	],
-	"Expanded, press space to collapse.": [
-		""
+		"%s kibontása"
 	],
 	"Export": [
 		"Exportálás"
 	],
 	"Export all": [
-		"Mindent exportál"
+		"Összes exportálása"
+	],
+	"Export all notes as JEX": [
+		"Összes jegyzet exportálása JEX fájlként"
 	],
 	"Export debug report": [
-		"Debug jelentés exportálása"
+		"Hibakeresési jelentés exportálása"
 	],
 	"Export Debug Report": [
-		"Debug jelentés exportálása"
+		"Hibakeresési jelentés exportálása"
+	],
+	"Export deletion log": [
+		"Törlési napló exportálása"
 	],
 	"Export profile": [
 		"Profil exportálása"
 	],
 	"Exported successfully!": [
-		""
+		"Sikeresen exportálva!"
 	],
 	"Exporting profile...": [
-		"Profil exportálása..."
+		"Profil exportálása…"
 	],
 	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
-		"Exportálás \"%s\"-ként, \"%s\" formátumban. Kérem várjon..."
+		"Exportálás „%s” fájlba „%s” formátumban. Kis türelmet…"
+	],
+	"Exporting...": [
+		"Exportálás…"
 	],
 	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
-		""
+		"A Joplin adatainak exportálása a megadott elérési útra. Alapértelmezés szerint az egész adatbázis exportálva lesz, beleértve a jegyzetfüzeteket, jegyzeteket, címkéket és erőforrásokat."
 	],
 	"Exports only the given note.": [
-		"Adott jegyzet exportálása."
+		"Csak a megadott jegyzet exportálása."
 	],
 	"Exports only the given notebook.": [
-		"Adott jegyzetfüzet exportálása."
+		"Csak a megadott jegyzetfüzet exportálása."
 	],
 	"Fail-safe": [
-		"Hibatűrő"
+		"Hibatűrés"
 	],
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
-		"Hibatűrő: Ne törölje a helyi adatot, ha a távoli adat üres (gyakran rossz beállítás vagy hiba eredménye)"
+		"Hibatűrés: Ne törölje a helyi adatokat, ha a szinkronizálási cél üres (ami gyakran helytelen konfiguráció vagy hiba következménye)."
+	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
 	],
 	"Fatal error:": [
 		"Végzetes hiba:"
 	],
 	"Feature flags": [
-		""
+		"Funkciójelölők"
 	],
 	"Fetched items: %d/%d.": [
-		"Letöltött elemek: %d/%d."
+		"Lekérdezett elemek: %d/%d."
 	],
 	"Fetching resources: %d/%d": [
-		"Erőforrások lekérése: %d/%d"
+		"Erőforrások lekérdezése: %d/%d"
 	],
 	"File": [
 		"Fájl"
 	],
 	"File system": [
-		"Fájl-rendszer"
+		"Fájlrendszer"
+	],
+	"Filter": [
+		"Szűrő"
+	],
+	"Filter tags": [
+		"Címkék szűrése"
+	],
+	"Find": [
+		"Megtalált"
+	],
+	"Find: ": [
+		"Megtalált: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
-		"Firefox Bővítmény"
+		"Firefox-bővítmény"
 	],
 	"Fix search index": [
 		"Keresési index javítása"
 	],
 	"Fixing search index...": [
-		"Keresési index javítása..."
+		"Keresési index javítása…"
 	],
 	"Focus": [
-		"Fókusz"
+		"Fókuszálás"
 	],
 	"Focus body": [
-		"Szövegtörzs legyen a fókusz"
+		"Fókuszálás a szövegtörzsre"
 	],
 	"Focus title": [
-		"Cím legyen a fókusz"
+		"Fókuszálás a címre"
 	],
 	"Follow link": [
-		""
+		"Hivatkozás követése"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
-		""
+		"Csak hibakeresési célra: exportálja a profilját egy külső SD-kártyára."
 	],
 	"For example \"%s\"": [
-		""
+		"Például: „%s”"
 	],
 	"For information on how to customise the shortcuts please visit %s": [
-		""
+		"A gyorsbillentyűk testreszabásával kapcsolatos további információkért látogasson el a következő oldalra: %s"
 	],
 	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
-		""
+		"További információkért a végpontok közötti titkosításról (E2EE) és annak engedélyezésével kapcsolatos tanácsokért, tekintse meg a következő dokumentációt:"
 	],
 	"For the list of keyboard shortcuts and config options, type `help keymap`": [
-		""
+		"A billentyűparancsok és konfigurációs beállítások listájához írja be a következőt: `help keymap`"
 	],
 	"Force path style": [
-		""
+		"Kényszerített elérési út stílusa"
 	],
 	"Forward": [
-		"Tovább"
+		"Továbbítás"
 	],
 	"Found: %d.": [
-		"Találtam: %d."
+		"Megtalálva: %d."
 	],
 	"FTS enabled: %d": [
 		"FTS engedélyezve: %d"
 	],
 	"Full changelog": [
-		"Teljes változási napló"
+		"Teljes változáslista"
+	],
+	"Full name": [
+		"Teljes név"
 	],
 	"General": [
 		"Általános"
 	],
 	"Generated": [
-		"Generált"
+		"Előállítva"
 	],
 	"Generating link...": [
-		"Link létrehozása...",
-		"Linkek létrehozása..."
+		"Hivatkozás előállítása…",
+		"Hivatkozások előállítása…"
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Földrajzi hely, helyesírás-ellenőrzés, szerkesztő-eszköztár, kép átméretezése"
 	],
 	"Get it now:": [
 		"Szerezze be most:"
 	],
 	"Get pre-releases when checking for updates": [
-		"Előzetes kiadások beszerzése amikor frissítéseket keresek"
+		"Előzetes verziók letöltése a frissítések ellenőrzésekor"
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
-		""
+		"Beállít egy konfigurációs értéket, vagy lekéri azt. Ha a [value] nincs megadva, akkor megjeleníti a [name] értékét. Ha sem a [name], sem a [value] nincs megadva, akkor felsorolja a jelenlegi konfigurációt."
 	],
 	"go": [
-		""
+		"ugrás"
 	],
 	"Go back": [
-		""
+		"Vissza"
+	],
+	"Go to Joplin Cloud profile": [
+		"Ugrás a Joplin Cloud profilra"
 	],
 	"Go to line": [
-		""
+		"Ugrás a sorhoz"
 	],
 	"Go to source URL": [
-		"Ugrás forrás URL-re"
+		"Ugrás a forrás webcímére"
 	],
 	"Goto Anything...": [
-		"Ugrás bárhova..."
+		"Ugrás bárhova…"
 	],
 	"Grant authorisation": [
 		"Engedély megadása"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Engedélyezi az alkalmazás bejelentkezését a fenti webcímen?"
 	],
 	"Header %d": [
-		""
+		"%d fejléc"
 	],
 	"Heading": [
-		"Címsor"
+		"Cím"
 	],
 	"Help": [
-		"Segítség"
+		"Súgó"
 	],
 	"Here's what we do to make plugins safer:": [
-		""
+		"A következőket tesszük, hogy biztonságosabbá tegyük a bővítményeket:"
+	],
+	"Hermes enabled: %d": [
+		"Hermes engedélyezve: %d"
 	],
 	"Hide %s": [
 		"%s elrejtése"
 	],
 	"Hide advanced": [
-		""
+		"Speciális elrejtése"
+	],
+	"Hide disabled": [
+		"Letiltott elrejtése"
+	],
+	"Hide disabled keys": [
+		"Letiltott billentyűk elrejtése"
 	],
 	"Hide Joplin": [
 		"Joplin elrejtése"
 	],
 	"Hide keyboard": [
-		""
+		"Billentyűzet elrejtése"
+	],
+	"Hide password": [
+		"Jelszó elrejtése"
 	],
 	"Highlight": [
 		"Kiemelés"
 	],
 	"Home": [
-		""
+		"Főoldal"
 	],
 	"Horizontal Rule": [
-		"Vízszintes vonal"
+		"Vízszintes vonalzó"
 	],
 	"HTML Directory": [
-		"HTML Könyvtár"
+		"HTML-könyvtár"
 	],
 	"HTML document": [
-		""
+		"HTML-dokumentum"
 	],
 	"HTML File": [
-		"HTML fájl"
+		"HTML-fájl"
 	],
 	"Hyperlink": [
-		"Hiperlink"
+		"Hiperhivatkozás"
 	],
 	"Icon": [
 		"Ikon"
 	],
 	"ID": [
-		"ID"
+		"Azonosító"
 	],
 	"Idle": [
 		"Tétlen"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Ha már engedélyezte, várja meg, amíg az alkalmazás szinkronizálódik a Joplin Clouddal."
 	],
 	"Ignore": [
-		"Mellőz"
+		"Mellőzés"
 	],
 	"Ignore TLS certificate errors": [
-		"TLS bizonyítvány hibák figyelmen kívül hagyása"
+		"TLS-tanúsítvány-hibák mellőzése"
+	],
+	"Ignored items that cannot be synchronised": [
+		"Mellőzött, nem szinkronizálható elemek"
 	],
 	"Images": [
 		"Képek"
@@ -1366,65 +1649,83 @@
 	"Import": [
 		"Importálás"
 	],
+	"Import and Export": [
+		"Importálás és exportálás"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		""
+		"Az importálás sikertelen. Győződjön meg arról, hogy egy JEX fájl lett kijelölve.\nRészletek: %s"
 	],
 	"Import from JEX": [
-		""
+		"Importálás JEX-fájlból"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"Jegyzetek importálása JEX-fájlból (Joplin Export)."
+	],
+	"Import or export your data": [
+		"Adatok importálása vagy exportálása"
 	],
 	"Imported successfully!": [
-		""
+		"Sikeresen importálva!"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
-		"\"%s\" importálása,\"%s\" formátumban. Kérem várjon..."
+		"Adatok importálása „%s” fájlból „%s” formátumként. Kis türelmet…"
 	],
 	"Importing notes...": [
-		"Jegyzetek importálása..."
+		"Jegyzetek importálása…"
+	],
+	"Importing...": [
+		"Importálás…"
 	],
 	"Imports data into Joplin.": [
-		"Adat importálása Joplin-ba."
+		"Adatok importálása a Joplin alkalmazásba."
 	],
 	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
-		""
+		"„Kézi” módban a csatolmányok csak akkor töltődnek le, ha rájuk kattint. „Automatikus” módban a csatolmányok akkor töltődnek le, amikor megnyitja a jegyzetet. „Mindig” módban az összes csatolmány le lesz töltve, függetlenül attól, hogy megnyitja-e a jegyzetet, vagy sem."
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
-		""
+		"Bármely parancsban egy jegyzet vagy jegyzetfüzet hivatkozható cím vagy azonosító alapján, illetve a jelenleg kijelölt jegyzet vagy jegyzetfüzet esetén a `$n` vagy `$b` parancs használatával. A jelenlegi kijelölt elemre a `$c` paranccsal hivatkozhat."
 	],
 	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
+		"Ahhoz, hogy a jegyzethez földrajzi helyet társíthasson, engedélyt kell adnia az alkalmazásnak az Ön helyadataihoz való hozzáféréshez.\n\nEzt az engedélyt bármikor kikapcsolhatja a Beállítások menüben."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
-		"Ahhoz hogy megcsinálja, a teljes adat készletét titkosítani és szinkronizálni kell, emiatt a legjobb ha ez éjszaka történik.\n\nAz indításhoz kövesse a következő utasításokat:\n\n1. Szinkronizálja az összes eszközét.\n2. Kattintson a \"%s\"-ra.\n3. Futtassa befejezésig. Amíg fut, kerülje bármelyik jegyzete módosítását a többi eszközén, a konfliktusok elkerüléséhez.\n4. Amint a szinkronizálás kész ezen az eszközön, szinkronizálja az összes többi eszközét és futtassa befejezésig.\n\nFontos: ezt egy eszközön csak EGYSZER kell futtatnia."
+		"Ehhez az összes adatának titkosítása és szinkronizálása szükséges, ezért a folyamatot érdemes éjszakára időzíteni.\n\nA kezdéshez kövesse az alábbi lépéseket:\n\n1. Szinkronizálja az összes eszközét.  \n2. Kattintson a(z) „%s” gombra.  \n3. Várja meg, amíg a folyamat befejeződik. Amíg fut, kerülje a jegyzetek módosítását más eszközein, hogy elkerülje az ütközéseket.  \n4. Miután a szinkronizálás ezen az eszközön befejeződött, szinkronizálja a többi eszközt, és várja meg, amíg ott is befejeződik.  \n\nFontos: ezt a folyamatot ELÉG egyszer lefuttatni egyetlen eszközön."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"A szinkronizáláshoz frissítse az alkalmazást a(z) %s vagy újabb verzióra"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
-		""
+		"A fájlrendszer szinkronizálásának használatához engedélyeznie kell az írást a külső tárhelyre."
 	],
 	"In order to use the web clipper, you need to do the following:": [
-		"Ahhoz, hogy a Web Vágó működjön csinálja a következőt:"
+		"A Web Clipper használatához kövesse az alábbi lépéseket:"
 	],
 	"In progress": [
 		"Folyamatban"
 	],
+	"In: %s": [
+		"Ebben: %s"
+	],
 	"Incompatible": [
-		""
+		"Nem kompatibilis"
+	],
+	"Incomplete": [
+		"Befejezetlen"
+	],
+	"Incomplete to-do": [
+		"Befejezetlen teendő"
 	],
 	"Increase indent level": [
-		""
+		"Behúzás szintjének növelése"
 	],
 	"Indent less": [
-		"Behúzása csökkentése"
+		"Behúzás csökkentése"
 	],
 	"Indent more": [
 		"Behúzás növelése"
 	],
 	"Info": [
-		""
+		"Információ"
 	],
 	"Information": [
 		"Információ"
@@ -1438,6 +1739,9 @@
 	"Insert Hyperlink": [
 		"Hiperhivatkozás beszúrása"
 	],
+	"Insert time": [
+		"Idő beszúrása"
+	],
 	"Install": [
 		"Telepítés"
 	],
@@ -1447,8 +1751,11 @@
 	"Installed": [
 		"Telepítve"
 	],
+	"Installed (%d):": [
+		"Telepítve (%d):"
+	],
 	"Installing...": [
-		"Telepítés..."
+		"Telepítés…"
 	],
 	"Invalid": [
 		"Érvénytelen"
@@ -1460,91 +1767,124 @@
 		"Érvénytelen válasz: %s"
 	],
 	"Invalid command: \"%s\"": [
-		"Érvénytelen parancs: \"%s\""
+		"Érvénytelen parancs: „%s”"
+	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
-		"Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
+		"Érvénytelen opció érték: „%s”. Lehetséges értékek: %s."
 	],
 	"Invalid password": [
 		"Érvénytelen jelszó: %s"
+	],
+	"iOS version: %s": [
+		"iOS verzió: %s"
 	],
 	"Italic": [
 		"Dőlt"
 	],
 	"Item \"%s\" could not be downloaded: %s": [
-		"Elem \"%s\" nem tölthető le: %s"
+		"A(z) „%s” elem nem tölthető le: %s"
 	],
 	"Items": [
 		"Elemek"
 	],
 	"Items that cannot be decrypted": [
-		"Elemeket nem lehet dekódolni"
+		"Az elemeket nem lehet visszafejteni"
 	],
 	"Items that cannot be synchronised": [
-		"Elemeket nem lehet szinkronizálni"
+		"Az elemeket nem lehet szinkronizálni"
 	],
 	"Join us on %s": [
-		""
+		"Csatlakozzon hozzánk a(z) %s felületen"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
-		""
+		"A Joplin különböző szolgáltatók segítségével tudja szinkronizálni a jegyzeteit. Jelöljön ki egyet az alábbi listából."
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud bejelentkezés"
+	],
+	"Joplin Desktop": [
+		"Joplin asztali alkalmazás"
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"A Joplin nem ismeri fel a(z) %s nevű bővítményt. Ennek a fájlnak a megnyitása veszélyes lehet. Mit szeretne tenni?"
 	],
 	"Joplin Export Directory": [
-		"Joplin Export Könyvtár"
+		"Joplin exportálási könyvtár"
 	],
 	"Joplin Export File": [
-		"Joplin Export fájl"
+		"Joplin exportálási fájl"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
-		""
+		"A Joplin többször nem tudta visszafejteni ezeket az elemeket, valószínűleg azért, mert sérültek vagy túl nagyok. Ezek az elemek az eszközön maradnak, de a Joplin többé nem próbálja visszafejteni őket."
 	],
 	"Joplin Forum": [
-		"Joplin Forum"
+		"Joplin fórum"
+	],
+	"Joplin is already running.": [
+		"A Joplin már fut."
+	],
+	"Joplin Mobile": [
+		"Joplin mobilalkalmazás"
 	],
 	"Joplin Server": [
-		"Joplin Szerver"
+		"Joplin-kiszolgáló"
 	],
 	"Joplin Server email": [
-		"Joplin Server email"
+		"Joplin-kiszolgáló e-mail-címe"
 	],
 	"Joplin Server password": [
-		"Joplin Szerver jelszó"
+		"Joplin-kiszolgáló jelszava"
 	],
 	"Joplin Server URL": [
-		"Joplin Szerver URL"
+		"Joplin-kiszolgáló webcíme"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
-		"Joplin Web Vágó segítségével lementhetünk web oldalakat és képernyőképeket a böngészőből Joplin-ba."
+		"A Joplin Web Clipper lehetővé teszi weboldalak és képernyőképek mentését a böngészőből a Joplin alkalmazásba."
 	],
 	"Joplin website": [
-		"Joplin weboldal"
+		"Joplin weboldala"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
+		"A Joplin saját szinkronizálási szolgáltatása. Emellett hozzáférést biztosít Joplin-specifikus funkciókhoz, például jegyzetek publikálásához vagy jegyzetfüzetek megosztott használatához másokkal."
 	],
 	"Keep note history for": [
-		"Jegyzet előélet megtartása"
+		"Jegyzet előéletének megőrzése"
+	],
+	"Keep notes in the trash for": [
+		"Jegyzetek megőrzése a kukában"
 	],
 	"Keyboard Mode": [
-		"Billentyűzet mód"
+		"Billentyűzet módja"
 	],
 	"Keyboard Shortcut": [
-		"Gyorsbillentyű"
+		"Billentyűparancs"
 	],
 	"Keyboard Shortcuts": [
-		"Gyorsbillentyűk"
+		"Billentyűparancsok"
+	],
+	"Keychain Supported: %s": [
+		"Támogatott kulcstartók: %s"
+	],
+	"Keys that need upgrading": [
+		"Frissítésre szoruló kulcsok"
 	],
 	"Landscape": [
 		"Fekvő"
 	],
 	"Language": [
 		"Nyelv"
+	],
+	"Language, date format": [
+		"Nyelv, dátumformátum"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Utolsó hiba: %s"
@@ -1553,77 +1893,116 @@
 		"Később"
 	],
 	"Latitude": [
-		""
+		"Szélesség"
 	],
 	"Layout": [
 		"Elrendezés"
 	],
 	"Layout button sequence": [
-		"Elrendezés gomb sorrend"
+		"Elrendezésgomb sorrendje"
+	],
+	"Learn more": [
+		"Tudjon meg többet"
 	],
 	"Leave it blank to download the language files from the default website": [
-		""
+		"Hagyja üresen, hogy a nyelvi fájlok az alapértelmezett webhelyről töltődjenek le"
+	],
+	"Leave notebook": [
+		"Jegyzetfüzet elhagyása"
 	],
 	"Leave notebook...": [
-		"Jegyzet elhagyása…"
+		"Jegyzetfüzet elhagyása…"
 	],
 	"Legal": [
-		"US Legal"
+		"Legal"
 	],
 	"Letter": [
-		"US Levél"
+		"Levél"
 	],
 	"Light": [
 		"Világos"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"Mint minden telepített szoftver, a bővítmények is okozhatnak biztonsági problémákat vagy adatvesztést."
 	],
 	"Lines": [
 		"Sorok"
 	],
+	"Link": [
+		"Hivatkozás"
+	],
+	"Link description": [
+		"Hivatkozás leírása"
+	],
 	"Link has been copied to clipboard!": [
-		"Hivatkozás a vágólapra másolva!",
-		"Hivatkozások a vágólapra másolva!"
+		"A hivatkozás vágólapra lett másolva!",
+		"A hivatkozások vágólapra lettek másolva!"
+	],
+	"Link text": [
+		"Hivatkozás szövege"
 	],
 	"List item": [
-		"Felsorolás elem"
+		"Listaelem"
+	],
+	"Loaded": [
+		"Betöltve"
+	],
+	"Loading...": [
+		"Betöltés…"
 	],
 	"Location": [
-		"Hely"
+		"Helyszín"
 	],
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
-		""
+		"A zárolási fájl már használatban van. Ha biztos benne, hogy nem történik szinkronizálás, törölheti a zárolási fájlt itt: „%s”, és folytathatja a műveletet."
 	],
 	"Log": [
 		"Napló"
 	],
+	"Login to Joplin Cloud.": [
+		"Bejelentkezés a Joplin Cloudba."
+	],
 	"Login with Dropbox": [
-		"Belép Dropbox-al"
+		"Bejelentkezés Dropbox-szal"
 	],
 	"Login with OneDrive": [
-		"Belép OneDrive-al"
+		"Bejelentkezés OneDrive-val"
 	],
 	"Logout": [
-		"Kilépés"
+		"Kijelentkezés"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Naplók, profilok, szinkronizálási állapot"
 	],
 	"Longitude": [
-		""
+		"Hosszúság"
 	],
 	"Make a donation": [
-		"Adakozzon"
+		"Adományozás"
 	],
 	"Manage master password": [
-		"Mester jelszó kezelése"
+		"Mesterjelszó kezelése"
 	],
 	"Manage master password...": [
-		"Mester jelszó kezelése…"
+		"Mesterjelszó kezelése…"
+	],
+	"Manage multiple users": [
+		"Több felhasználó kezelése"
+	],
+	"Manage profiles": [
+		"Profilok kezelése"
+	],
+	"Manage shared notebooks": [
+		"Megosztott jegyzetfüzetek kezelése"
+	],
+	"Manage toolbar options": [
+		"Eszköztár beállításainak kezelése"
 	],
 	"Manage your plugins": [
-		"Pluginok kezelése"
+		"Bővítmények kezelése"
+	],
+	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
+		"Végpontok közötti titkosítás-beállítások kezelése (E2EE). A parancsok a következők: `enable` (engedélyezés), `disable` (letiltás), `decrypt` (visszafejtés), `status` (állapot), `decrypt-file` (fájl visszafejtése) és `target-status` (cél állapota)."
 	],
 	"Manual": [
 		"Kézi"
@@ -1634,77 +2013,110 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor": [
+		"Markdown szerkesztő"
+	],
 	"Marks a to-do as done.": [
-		"Egy to-do készként jelölése."
+		"Egy teendő elkészültnek jelölése."
 	],
 	"Marks a to-do as non-completed.": [
-		"Egy to-do befejezetlenkén jelölése."
+		"Egy teendő befejezetlennek jelölése."
 	],
 	"Markup": [
 		"Formátum"
 	],
 	"Master Key %s": [
-		"Mester Kulcs %s"
+		"%s mesterkulcs"
 	],
 	"Master password": [
-		"Mester jelszó"
+		"Mesterjelszó"
 	],
 	"Master password:": [
-		"Mester jelszó:"
+		"Mesterjelszó:"
 	],
 	"match case": [
-		""
+		"kis-nagybetű érzékeny"
 	],
 	"Math": [
-		""
+		"Matematika"
 	],
 	"Max concurrent connections": [
-		"Maximális konkurrens kapcsolat"
+		"Maximális egyidejű kapcsolatok"
 	],
 	"Max Item Size": [
-		""
+		"Maximális elemméret"
+	],
+	"Max note or attachment size": [
+		"Maximális jegyzet- vagy csatolmányméret"
+	],
+	"Max Total Size": [
+		"Maximális összméret"
 	],
 	"Media player, math, diagrams, table of contents": [
+		"Médialejátszó, matematika, diagramok, tartalomjegyzék"
+	],
+	"Medium": [
 		""
 	],
 	"Minimise": [
-		""
+		"Minimalizálás"
+	],
+	"Missing camera permission": [
+		"Hiányzó kamerahasználati engedély"
 	],
 	"Missing keys": [
 		"Hiányzó kulcsok"
 	],
 	"Missing Master Keys": [
-		"Hiányzó Mester Kulcsok"
+		"Hiányzó mesterkulcsok"
 	],
 	"Missing required argument: %s": [
-		"Szükséges paraméter hiányzik: %s"
+		"Hiányzó szükséges argumentum: %s"
+	],
+	"Missing required flag value: %s": [
+		"Hiányzó szükséges jelzőérték: %s"
 	],
 	"Mobile data - auto-sync disabled": [
-		"Mobil adat - auto-szinkronizáció letiltva"
+		"Mobiladatok és automatikus szinkronizálás letiltva"
 	],
 	"More info": [
-		"Több info"
+		"További információ"
 	],
 	"More information": [
-		"Több információ"
+		"További információ"
 	],
 	"More than one item match \"%s\". Please narrow down your query.": [
-		"Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdezést."
+		"Több elem is megfelel a(z) „%s” kifejezésnek. Pontosítsa a lekérdezést."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
-		""
+		"A legtöbb bővítmény forráskódja elérhető átnézésre a bővítmény weboldalán."
 	],
 	"Move %d notes to notebook \"%s\"?": [
+		"Áthelyezi a(z) %d jegyzetet a(z) „%s” jegyzetfüzetbe?"
+	],
+	"Move left": [
+		""
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Áthelyezi a(z) „%s” nevű jegyzetfüzetet a kukába?\n\nA jegyzetfüzetben található összes jegyzet és almappa szintén a kukába lesz áthelyezve."
+	],
+	"Move right": [
 		""
 	],
 	"Move to notebook": [
-		"Jegyzetfüzetbe áthelyezés"
+		"Áthelyezés jegyzetfüzetbe"
 	],
 	"Move to notebook...": [
-		"Jegyzetfüzetbe áthelyezés…"
+		"Áthelyezés jegyzetfüzetbe…"
 	],
 	"Move to notebook:": [
-		"Jegyzetfüzetbe áthelyezés:"
+		"Áthelyezés jegyzetfüzetbe:"
+	],
+	"Move up": [
+		""
+	],
+	"Moves the given <item> to [notebook]": [
+		"Áthelyezi a következő elemmel egyezőket: <item> a(z) [notebook] nevű jegyzetfüzetbe"
 	],
 	"n": [
 		"n"
@@ -1713,7 +2125,16 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Soha ne méretezze át"
+	],
+	"New attachment": [
+		"Új csatolmány"
+	],
+	"New drawing": [
+		"Új rajz"
+	],
+	"New invitations": [
+		"Új meghívók"
 	],
 	"New note": [
 		"Új jegyzet"
@@ -1722,28 +2143,31 @@
 		"Új jegyzetfüzet"
 	],
 	"New Notebook": [
-		"Új Jegyzetfüzet"
+		"Új jegyzetfüzet"
 	],
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
-		"Új jegyzetfüzet \"%s\" létrehozása és a fájl \"%s\" bele lesz importálva"
+		"Új „%s” nevű jegyzetfüzet jön létre, és a(z) „%s” fájl ebbe lesz importálva"
+	],
+	"New photo": [
+		"Új fotó"
 	],
 	"New sub-notebook": [
-		"Új al-jegyzetfüzet"
+		"Új aljegyzetfüzet"
 	],
 	"New tags:": [
-		"Új tag-ek:"
+		"Új címkék:"
 	],
 	"New to-do": [
-		"Új to-do"
+		"Új teendő"
 	],
 	"New version: %s": [
 		"Új verzió: %s"
 	],
 	"next": [
-		""
+		"következő"
 	],
 	"Next match": [
-		""
+		"Következő egyezés"
 	],
 	"Nextcloud": [
 		"Nextcloud"
@@ -1752,10 +2176,10 @@
 		"Nextcloud jelszó"
 	],
 	"Nextcloud username": [
-		"Nextcloud felhasználó"
+		"Nextcloud felhasználónév"
 	],
 	"Nextcloud WebDAV URL": [
-		"Nextcloud WebDAV URL"
+		"Nextcloud WebDAV webcím"
 	],
 	"no": [
 		"nem"
@@ -1767,19 +2191,19 @@
 		"Nincs aktív jegyzetfüzet."
 	],
 	"No new invitations": [
-		""
+		"Nincsenek új meghívók"
 	],
 	"No notebook has been specified.": [
-		"Nincs jegyzetfüzet megadva."
+		"Nincs megadva jegyzetfüzet."
 	],
 	"No notebook selected.": [
-		"Nincs kiválasztva jegyzetfüzet."
+		"Nincs kijelölve jegyzetfüzet."
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
-		"Itt nincs jegyzet. Hozzon létre újat az \"Új jegyzet\"-re kattintva."
+		"Nincs itt jegyzet. Hozzon létre egyet az „Új jegyzet” gombra kattintva."
 	],
 	"No plugins are installed.": [
-		""
+		"Nincsenek telepített bővítmények."
 	],
 	"No resources!": [
 		"Nincs erőforrás!"
@@ -1788,136 +2212,163 @@
 		"Nincs eredmény"
 	],
 	"No such command: %s": [
-		"Nincs ilyen parancs: %s"
+		"Nem létezik ilyen parancs: %s"
 	],
 	"No suggestions": [
-		"Nincs javaslat"
+		"Nincsenek javaslatok"
+	],
+	"No tab selected": [
+		"Nincs lap kijelölve"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
-		"Nincs szövegszerkesztő megadva. Kérem állítson be egyet a `config editor <editor-path>`-al"
+		"Nincs szövegszerkesztő megadva. Adjon meg egyet a `config editor <editor-path>` parancs használatával"
+	],
+	"No updates available": [
+		"Nincsenek elérhető frissítések"
 	],
 	"None": [
-		""
+		"Semmi"
 	],
 	"Nord": [
 		"Nord"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
-		"Nincs hitelesítve a %s-val. Kérem adja meg a hiányzó hitelesítő adatokat."
+		"Nincs azonosítva a(z) %s szolgáltatással. Adja meg a hiányzó hitelesítő adatokat."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Nincs letöltve"
 	],
 	"Not generated": [
-		"Nem generált"
+		"Nincs előállítva"
+	],
+	"Not now": [
+		"Most nem"
 	],
 	"note": [
-		"megjegyzés"
+		"jegyzet"
 	],
 	"Note": [
-		"Megjegyzés"
+		"Jegyzet"
 	],
 	"Note area growth factor": [
-		"Jegyzet terület növekedési faktor"
+		"Jegyzetterület növekedési tényezője"
 	],
 	"Note attachments": [
-		"Jegyzet csatolmányok"
+		"Jegyzetcsatolmányok"
 	],
 	"Note attachments...": [
-		"Jegyzet csatolmányok..."
+		"Jegyzetcsatolmányok…"
 	],
 	"Note body": [
-		"Jegyzet szövege"
+		"Jegyzettörzs"
 	],
 	"Note does not exist: \"%s\". Create it?": [
-		"Jegyzet nem létezik: \"%s\". Létrehozzam?"
+		"A jegyzet nem létezik: „%s”. Létrehozza?"
+	],
+	"Note editor": [
+		"Jegyzetszerkesztő"
 	],
 	"Note has been saved.": [
-		"Jegyzet mentve."
+		"Jegyzet elmentve."
 	],
 	"Note History": [
 		"Jegyzet előélete"
 	],
 	"Note is not a to-do: \"%s\"": [
-		"A jegyzet nem to-do: \"%s\""
+		"A jegyzet nem egy teendő: „%s”"
 	],
 	"Note list": [
-		"Jegyzet lista"
+		"Jegyzetlista"
 	],
 	"Note list growth factor": [
-		"Jegyzet lista növekedési faktor"
+		"Jegyzetlista növekedési tényezője"
+	],
+	"Note list style": [
+		"Jegyzetlista stílusa"
 	],
 	"Note properties": [
-		"Jegyzet tulajdonságai"
+		"Jegyzet-tulajdonságok"
 	],
 	"Note title": [
-		"Jegyzet címe"
+		"Jegyzetcím"
 	],
 	"Note&book": [
-		""
+		"Jegy&zetfüzet"
 	],
 	"Note: Does not work in all desktop environments.": [
 		"Megjegyzés: Nem működik minden asztali környezetben."
 	],
 	"Note: When a note is shared, it will no longer be encrypted on the server.": [
-		""
+		"Megjegyzés: Amikor egy jegyzet meg van osztva, többé nem lesz titkosítva a kiszolgálón."
 	],
 	"Notebook": [
 		"Jegyzetfüzet"
 	],
 	"Notebook list growth factor": [
-		"Jegyzetfüzet lista növekedési faktor"
+		"Jegyzetfüzetlista növekedési tényezője"
 	],
 	"Notebook: %s": [
 		"Jegyzetfüzet: %s"
+	],
+	"Notebook: %s (%s)": [
+		"Jegyzetfüzet: %s (%s)"
 	],
 	"Notebooks": [
 		"Jegyzetfüzetek"
 	],
 	"Notebooks cannot be named \"%s\", which is a reserved title.": [
-		"Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
+		"A jegyzetfüzetek nem nevezhetők el a következő néven: „%s”, mivel ez egy fenntartott cím."
 	],
 	"Notes": [
 		"Jegyzetek"
 	],
 	"Notes and settings are stored in: %s": [
-		"Jegyzetek és beállítások tárolása itt: %s"
+		"A jegyzetek és beállítások itt vannak tárolva: %s"
 	],
 	"Notes can only be created within a notebook.": [
-		"Jegyzetek csak jegyezetfüzetben hozhatóak létre."
+		"A jegyzetek csak egy jegyzetfüzeten belül hozhatók létre."
 	],
 	"Numbered List": [
 		"Számozott lista"
 	],
 	"OCR: Clear cache and re-download language data files": [
-		""
+		"OCR: Gyorsítótár törlése és a nyelvi fájlok újraletöltése"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: Nyelvi adatok webcíme vagy elérési útja"
 	],
 	"OK": [
 		"OK"
 	],
 	"OLED Dark": [
-		"OLED Sötét"
+		"OLED sötét"
 	],
 	"On %s: %s": [
-		"%s-on: %s"
+		"Ezen: %s: %s"
 	],
 	"on line": [
-		""
+		"sorban"
 	],
 	"One of your master keys use an obsolete encryption method.": [
-		"Az egyik mester kulcsa egy elavult titkosítási módot használ."
+		"Az egyik mesterkulcsa elavult titkosítási módszert használ."
 	],
 	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
-		""
+		"Jelenleg egy vagy több elem titkosítva van, és szükség lehet egy mesterjelszó megadása. Ehhez írja be az `e2ee decrypt` (e2ee visszafejtése) parancsot. Ha már megadta a jelszót, a titkosított elemek a háttérben visszafejtődnek, és hamarosan elérhetők lesznek."
 	],
 	"One or more master keys need a password.": [
-		"Egy vagy több mester kulcs igényel jelszót."
+		"Egy vagy több mesterkulcshoz jelszó szükséges."
 	],
 	"OneDrive": [
 		"OneDrive"
 	],
 	"OneDrive Login": [
-		"OneDrive Login"
+		"OneDrive bejelentkezés"
+	],
+	"OneNote Notebook": [
+		"OneNote jegyzetfüzet"
 	],
 	"Only one note can be printed at a time.": [
 		"Csak egy jegyzet nyomtatható ki egyidőben."
@@ -1926,19 +2377,46 @@
 		"Megnyitás"
 	],
 	"Open %s": [
-		"Megnyitás %s"
+		"%s megnyitása"
+	],
+	"Open it": [
+		"Megnyitás"
+	],
+	"Open PDF viewer": [
+		"PDF-nézegető megnyitása"
+	],
+	"Open primary app instance...": [
+		""
 	],
 	"Open profile directory": [
-		"Adatmappa megnyitása"
+		"Profilkönyvtár megnyitása"
+	],
+	"Open secondary app instance...": [
+		""
+	],
+	"Open settings": [
+		"Beállítások megnyitása"
+	],
+	"Open Source": [
+		"Forrás megnyitása"
 	],
 	"Open Sync Wizard...": [
-		"Sync-varázsló megnyitása…"
+		"Szinkronizáló-segéd megnyitása…"
 	],
 	"Open...": [
-		"Megnyitás..."
+		"Megnyitás…"
 	],
 	"Opening section %s": [
-		""
+		"A(z) %s szakasz megnyitása"
+	],
+	"Opens dropdown": [
+		"Lenyíló menü megnyitása"
+	],
+	"Opens note": [
+		"Jegyzet megnyitása"
+	],
+	"Opens notebook": [
+		"Jegyzetfüzet megnyitása"
 	],
 	"Operation cancelled": [
 		"Művelet megszakítva"
@@ -1946,101 +2424,143 @@
 	"Options": [
 		"Beállítások"
 	],
+	"Ordered list": [
+		"Rendezett lista"
+	],
 	"Other applications...": [
-		"Más applikációk…"
+		"További alkalmazások…"
 	],
 	"Output format: %s": [
 		"Kimeneti formátum: %s"
 	],
 	"Page orientation for PDF export": [
-		"Oldal tájolás PDF export-hoz"
+		"Oldal tájolása a PDF fájlba való exportáláshoz"
 	],
 	"Page size for PDF export": [
-		"Oldal méret PDF export-hoz"
+		"Oldal méretezése a PDF fájlba való exportáláshoz"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Jelszó"
 	],
 	"Password cannot be empty": [
-		"Jelszó nem lehet üres"
+		"A jelszó nem lehet üres"
 	],
 	"Password:": [
 		"Jelszó:"
 	],
 	"Passwords do not match!": [
-		"Jelszavak nem egyeznek!"
+		"A jelszavak nem egyeznek!"
 	],
 	"Paste": [
 		"Beillesztés"
 	],
 	"Paste as text": [
-		""
+		"Beillesztés szövegként"
 	],
 	"Path:": [
 		"Útvonal:"
 	],
 	"PDF File": [
-		"PDF Fájl"
+		"PDF fájl"
 	],
 	"Per user. Minimum of %d users.": [
-		""
+		"Felhasználónként. Minimum %d felhasználó."
+	],
+	"Permanently delete note": [
+		"Jegyzet végleges törlése"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Véglegesen törli a(z) „%s” nevű jegyzetet?"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Véglegesen törli a(z) „%s” nevű jegyzetfüzetet?\n\nAz ebben a jegyzetfüzetben található összes jegyzet és aljegyzetfüzet véglegesen törlődik."
+	],
+	"Permanently delete these %d notes?": [
+		"Véglegesen törli ezt a(z) %d jegyzetet?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"A jegyzetfüzet véglegesen törlődik, a kuka kihagyásával."
 	],
 	"Permission needed": [
-		"Hozzáférés szükséges"
+		"Engedély szükséges"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
-		""
+		"Kattintson a(z) „%s” elemre a folytatáshoz, vagy állítsa be a jelszavakat az alábbi „%s” listában."
 	],
 	"Please confirm that you would like to re-encrypt your complete database.": [
-		"Kérem erősítse meg, hogy szeretné újra titkosítani a teljes adatbázisát."
+		"Erősítse meg, hogy újra szeretné titkosítani a teljes adatbázisát."
 	],
 	"Please enter your password in the master key list below before upgrading the key.": [
-		""
+		"Adja meg a jelszavát az alábbi mesterkulcslistában, mielőtt frissítené a kulcsot."
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
-		""
+		"Vegye figyelembe, hogy ha a jegyzetfüzet nagy méretű, eltarthat néhány percig, amíg az összes jegyzet megjelenik a címzett eszközén."
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		"Nyissa meg az alábbi webcímet a böngészőjében az alkalmazás hitelesítéséhez. Az alkalmazás létrehoz egy könyvtárat az „Apps/Joplin” mappában, és kizárólag ebben a könyvtárban fog fájlokat olvasni és írni. Nem fér hozzá semmilyen fájlhoz ezen a könyvtáron kívül, és nem fér hozzá más személyes adatokhoz sem. Az adatok nem lesznek megosztva harmadik felekkel."
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
-		""
+		"Rögzítse a hangját…"
 	],
 	"Please select a notebook first.": [
-		"Kérem, először válasszon egy jegyzetfüzetet."
+		"Először jelöljön ki egy jegyzetfüzetet."
 	],
 	"Please select the note or notebook to be deleted first.": [
-		"A törléshez, először kérem válasszon egy jegyzetet vagy jegyzetfüzetet."
+		"Először jelölje ki a törlendő jegyzetet vagy jegyzetfüzetet."
 	],
 	"Please select where the sync status should be exported to": [
-		"Kérem válassza ki, hova exportáljam a szinkronizációs státuszt"
+		"Jelölje ki, hogy hová legyen exportálva a szinkronizálási állapot"
 	],
 	"Please specify import format for %s": [
-		"Kérem adja meg az importálási formátumot %s-hoz"
+		"Adja meg a(z) %s importálási formátumát"
 	],
 	"Please specify the notebook where the notes should be imported to.": [
-		"Kérem adja meg a jegyzetfüzet nevét, ahova a jegyzetek kell importálni."
+		"Adja meg a jegyzetfüzetet, ahová importálni kívánja a jegyzeteket."
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Frissítse a Joplint a(z) %s vagy újabb verzióra a bővítmény használatához."
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
-		"Kérem várjon minden csatolmány letöltésére és dekódolására. Átválthat %s-re a jegyzet szerkesztéséhez."
+		"Várjon, amíg minden csatolmány letöltődik és visszafejtődik. A jegyzet szerkesztéséhez átválthat a(z) %s nézetre is."
 	],
 	"Please wait...": [
-		"Kérem várjon..."
+		"Kis türelmet…"
+	],
+	"Plugin message": [
+		"Bővítményüzenet"
+	],
+	"Plugin panels": [
+		"Bővítménypanel"
 	],
 	"Plugin repository failed to load": [
-		""
+		"Nem sikerült betölteni a bővítménytárat"
+	],
+	"Plugin search": [
+		"Bővítménykeresés"
+	],
+	"Plugin security": [
+		"Bővítménybiztonság"
 	],
 	"Plugin tools": [
-		"Bővítmény eszközök"
+		"Bővítményeszközök"
 	],
 	"Plugin WebView debugging": [
-		""
+		"WebView bővítmény-hibakeresés"
 	],
 	"Plugins": [
 		"Bővítmények"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"A bővítmények további funkciókkal egészítik ki a Joplint, amelyek alapértelmezetten nem érhetők el. A bővítmények kiterjeszthetik a Joplin szerkesztőjét, megjelenítőjét és egyéb részeit."
 	],
 	"Portrait": [
 		"Álló"
@@ -2055,97 +2575,115 @@
 		"Beállítások"
 	],
 	"Preferences...": [
-		"Beállítások..."
+		"Beállítások…"
 	],
 	"Preferred dark theme": [
-		"Javasolt sötét téma"
+		"Előnyben részesített sötét téma"
 	],
 	"Preferred light theme": [
-		"Javasolt világos téma"
+		"Előnyben részesített világos téma"
 	],
 	"Preferred voice typing provider": [
-		""
+		"Előnyben részesített hangalapú beviteli szolgáltató"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"Színek megőrzése a szöveg beillesztésekor a Rich Text szerkesztőben"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
-		"Nyomja le Ctrl+D vagy írja be \"exit\" a programból való kilépéshez"
+		"Használja a Ctrl+D billentyű-kombinációt, vagy írja be az „exit” parancsot az alkalmazás bezárásához"
 	],
 	"Press the shortcut": [
-		"Nyomja le a gyorsbillentyűt"
+		"Használja a billentyűparancsot"
 	],
 	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
-		"Nyomja le a gyorsbillentyűt, majd az ENTER-t. Vagy nyomja le a BACKSPACE-t a gyorsbillentyű törléséhez."
+		"Használja a billentyűparancsot, majd nyomja meg az ENTER-t. Vagy nyomja meg a BACKSPACE-t a billentyűparancs törléséhez."
 	],
 	"Press to set the decryption password.": [
-		""
+		"Nyomja meg a visszafejtési jelszó beállításához."
 	],
 	"previous": [
-		""
+		"előző"
 	],
 	"Previous match": [
-		""
+		"Előző egyezés"
 	],
 	"Previous versions of this note": [
-		"Jegyzet előző verziói"
+		"Ennek a jegyzetnek a korábbi verziói"
 	],
 	"Print": [
 		"Nyomtatás"
 	],
 	"Priority support": [
-		""
+		"Elsőbbségi támogatás"
 	],
 	"Privacy Policy": [
 		"Adatvédelmi Irányelvek"
 	],
+	"Pro": [
+		"Pro"
+	],
 	"Process failed payment subscriptions": [
-		""
+		"Nem sikerült feldolgozni az előfizetés kifizetését"
 	],
 	"Process oversized accounts": [
-		""
+		"Túlméretes fiókok feldolgozása"
 	],
 	"Process user deletions": [
-		""
+		"Felhasználói törlések feldolgozása"
 	],
 	"Processing": [
-		""
+		"Feldolgozás"
+	],
+	"Processing photo...": [
+		"Fotó feldolgozása…"
 	],
 	"Profile": [
 		"Profil"
 	],
+	"Profile name": [
+		"Profilnév"
+	],
 	"Profile name:": [
-		"Profil név:"
+		"Profilnév:"
 	],
 	"Profile Version: %s": [
-		"Profil verzió: %s"
+		"Profilverzió: %s"
+	],
+	"Profiles": [
+		"Profilok"
 	],
 	"Properties": [
 		"Tulajdonságok"
 	],
+	"Proxy enabled": [
+		"Proxy engedélyezve"
+	],
 	"Proxy timeout (seconds)": [
-		""
+		"Proxy-időtúllépés (másodpercben)"
 	],
 	"Proxy URL": [
-		""
+		"Proxy-webcím"
 	],
 	"Public-private key pair:": [
-		"Nyilvános-titkos kulcs pár:"
+		"Nyilvános-privát kulcspár:"
 	],
 	"Publish note...": [
-		"Jegyzet publikálálása…"
+		"Jegyzet publikálása…"
 	],
 	"Publish Notes": [
-		"Jegyzetek Publikálálása"
+		"Jegyzetek publikálása"
 	],
 	"Publish notes to the internet": [
-		"Jegyzetek publikálálása az internetre"
+		"Jegyzetek publikálása az internetre"
+	],
+	"QR Code": [
+		"QR-kód"
 	],
 	"Quit": [
 		"Kilépés"
 	],
 	"Re-download model": [
-		""
+		"Modell újraletöltése"
 	],
 	"Re-encrypt data": [
 		"Adat újratitkosítása"
@@ -2153,8 +2691,11 @@
 	"Re-encryption": [
 		"Újratitkosítás"
 	],
+	"Re-enter password": [
+		"Jelszó megerősítése"
+	],
 	"Re-upload local data to sync target": [
-		""
+		"Helyi adatok újrafeltöltése a szinkronizálási célra"
 	],
 	"Read more about it": [
 		"Olvasson erről többet"
@@ -2163,15 +2704,24 @@
 		"Olvasási idő: %s perc"
 	],
 	"Recipient has accepted the invitation": [
-		""
+		"A címzett elfogadta a meghívást"
 	],
 	"Recipient has not yet accepted the invitation": [
-		""
+		"A címzett még nem fogadta el a meghívást"
 	],
 	"Recipient has rejected the invitation": [
-		""
+		"A címzett elutasította a meghívást"
 	],
 	"Recipients:": [
+		"Címzettek:"
+	],
+	"Recommended": [
+		"Ajánlott"
+	],
+	"Recommended plugins": [
+		"Ajánlott bővítmények"
+	],
+	"Record audio": [
 		""
 	],
 	"Redo": [
@@ -2180,62 +2730,86 @@
 	"Refresh": [
 		"Frissítés"
 	],
+	"Regular expression": [
+		"Reguláris kifejezés"
+	],
 	"Reject": [
-		"Elutasít"
+		"Elutasítás"
 	],
 	"Remove": [
 		"Eltávolítás"
 	],
+	"Remove %s from share": [
+		"A(z) %s eltávolítása a megosztásból"
+	],
 	"Remove tag \"%s\" from all notes?": [
-		"Tag \"%s\" eltávolítása minden jegyzetből?"
+		"A(z) „%s” címke eltávolítása az összes megjegyzésből?"
 	],
 	"Remove this search from the sidebar?": [
-		"Eltávolítsam ezt a keresést az oldalsávról?"
+		"Eltávolítja ezt a keresést az oldalsávról?"
 	],
 	"Rename": [
 		"Átnevezés"
 	],
 	"Rename notebook:": [
-		"Jegyzetfüzet átnevezéses:"
+		"Jegyzetfüzet átnevezése:"
 	],
 	"Rename tag:": [
-		"Tag átnevezése:"
+		"Címke átnevezése:"
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
-		"Átnevezi az adott  <item> (jegyzet vagy jegyzetfüzet) erre <name>."
+		"A megadott <item> (jegyzet vagy jegyzetfüzet) átnevezése <name> névre."
 	],
 	"Renew token": [
 		"Token megújítása"
 	],
+	"replace": [
+		"csere"
+	],
 	"Replace": [
-		""
+		"Csere"
+	],
+	"replace all": [
+		"összes cseréje"
+	],
+	"Replace all": [
+		"Összes cseréje"
 	],
 	"Replace with...": [
-		""
+		"Csere ezzel…"
 	],
 	"Replace: ": [
-		""
+		"Csere: "
 	],
 	"replaced $ matches": [
-		""
+		"$ egyezés lecserélve"
 	],
 	"replaced match on line $": [
-		""
+		"a(z) $. sorban lévő egyezés lecserélve"
 	],
 	"Report an issue": [
-		""
+		"Probléma bejelentése"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Jelentse a bővítménnyel kapcsolatos problémákat."
 	],
 	"Report fraudulent plugin": [
-		""
+		"Csaló bővítmény bejelentése"
+	],
+	"Report system": [
+		"Jelentéskezelő rendszer"
+	],
+	"Reports": [
+		"Jelentések"
+	],
+	"Reset application layout": [
+		"Alkalmazás elrendezésének visszaállítása"
 	],
 	"Reset master password": [
-		"Mester jelszó visszaállítása"
+		"Mesterjelszó visszaállítása"
 	],
 	"Resize large images:": [
-		""
+		"Nagy méretű képek átméretezése:"
 	],
 	"Resources: %d.": [
 		"Erőforrások: %d."
@@ -2243,44 +2817,62 @@
 	"Restart and upgrade": [
 		"Újraindítás és frissítés"
 	],
+	"Restart in safe mode": [
+		"Újraindítás csökkentett módban"
+	],
 	"Restart now": [
 		"Újraindítás most"
 	],
 	"Restore": [
 		"Visszaállítás"
 	],
+	"Restore defaults": [
+		"Visszaállítás alapértelmezettre"
+	],
+	"Restore note": [
+		"Jegyzet visszaállítása"
+	],
+	"Restore notebook": [
+		"Jegyzetfüzet visszaállítása"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"A(z) <pattern> mintának megfelelő elemek visszaállítása a kukából."
+	],
+	"Restored items": [
+		"Visszaállított elemek"
+	],
 	"Restored Notes": [
 		"Visszaállított jegyzetek"
 	],
 	"Results (%d):": [
-		""
+		"Eredmények (%d):"
 	],
 	"Retry": [
 		"Ismét"
 	],
 	"Retry All": [
-		"Próbálja mindet újra"
+		"Összes újrapróbálása"
 	],
 	"Reveal file in folder": [
-		"Mutassa a fájlt a mappában"
+		"Fájl megjelenítése a mappában"
 	],
 	"Reverse sort order": [
-		"Fordított sorrend"
+		"Fordított rendezési sorrend"
 	],
 	"Reverses the sorting order.": [
 		"Rendezés sorrendjének megfordítása."
 	],
 	"Revision: %s (%s)": [
-		"Revízió: %s (%s)"
+		"Felülvizsgálat: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Rich Text"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		""
+		"Rich Text szerkesztő. Nyomja meg az ESC, majd a Tab billentyűt a fókusz elhagyásához."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
-		""
+		"A szöveges fájlban található parancsok futtatása. Minden sorban egy parancsnak kell szerepelnie."
 	],
 	"S3": [
 		"S3"
@@ -2298,10 +2890,10 @@
 		"S3 titkos kulcs"
 	],
 	"S3 URL": [
-		"S3 URL"
+		"S3 webcím"
 	],
 	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
-		""
+		"A biztonsági üzemmód jelenleg aktív. A jegyzet-renderelés és az összes bővítmény ideiglenesen le van tiltva."
 	],
 	"Save": [
 		"Mentés"
@@ -2309,62 +2901,98 @@
 	"Save alarm": [
 		"Riasztás mentése"
 	],
+	"Save as %s": [
+		"Mentés mint %s"
+	],
 	"Save as...": [
-		"Mentés másként..."
+		"Mentés másként…"
 	],
 	"Save changes": [
-		"Változások mentése"
+		"Módosítások mentése"
+	],
+	"Save changes?": [
+		"Módosítások mentése?"
 	],
 	"Save geo-location with notes": [
-		"Geo-lokáció mentése jegyzetekkel"
+		"A földrajzi helyszín mentése jegyzetekkel"
 	],
 	"Scanned code": [
+		"Beolvasott QR-kód"
+	],
+	"Scrollbar size": [
 		""
 	],
 	"Search": [
 		"Keresés"
 	],
 	"Search for plugins...": [
-		"Bővítmények keresése..."
+		"Bővítmények keresése…"
+	],
+	"Search for...": [
+		"Keresés…"
+	],
+	"Search hidden": [
+		"Keresés a rejtettek között"
 	],
 	"Search in all the notes": [
-		"Keresés összes jegyzetben"
+		"Keresés az összes jegyzetben"
 	],
 	"Search in current note": [
-		"Keresés aktuális jegyzetben"
+		"Keresés a jelenlegi jegyzetben"
+	],
+	"Search results": [
+		"Keresési eredmény"
+	],
+	"Search shown": [
+		"Keresés a láthatók között"
 	],
 	"Search...": [
-		"Keresés..."
+		"Keresés…"
 	],
 	"Search:": [
 		"Keresés:"
 	],
 	"Searches for the given <pattern> in all the notes.": [
-		"Keres egy adott <pattern> minden jegyetben."
+		"A megadott <pattern> mintát keresi az összes jegyzetben."
+	],
+	"See changelog": [
+		"Változáslista megtekintése"
 	],
 	"See the pre-release page for more details: %s": [
-		"Nézze meg a előzetes kiadás oldalát a részletekért: %s"
+		"Tekintse meg a előzetes kiadás oldalát a további részletekért: %s"
 	],
 	"Select": [
-		"Kiválasztás"
+		"Kijelölés"
 	],
 	"Select all": [
-		"Minden kiválasztása"
+		"Az összes kijelölése"
 	],
 	"Select emoji...": [
-		"Emoji kiválasztása…"
+		"Emodzsi kijelölése…"
 	],
 	"Select file...": [
-		"Fájl kiválasztása…"
+		"Fájl kijelölése…"
+	],
+	"Select parent notebook": [
+		"Szülő-jegyzetfüzet kijelölése"
+	],
+	"Selection deleted": [
+		"Kijelölés törölve"
+	],
+	"Selects a notebook": [
+		"Egy jegyzetfüzet kijelölése"
+	],
+	"Send bug report": [
+		"Hibajelentés küldése"
 	],
 	"Server is already running on port %d": [
-		"Szerver már fut a %d porton"
+		"A kiszolgáló már fut a(z) %d porton"
 	],
 	"Server is not running.": [
-		"Szerver nem működik."
+		"A kiszolgáló nem fut."
 	],
 	"Server is running on port %d": [
-		"Szerver fut a %d porton"
+		"A kiszolgáló fut a(z) %d porton"
 	],
 	"Set alarm": [
 		"Riasztás beállítása"
@@ -2373,22 +3001,28 @@
 		"Riasztás beállítása:"
 	],
 	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
-		""
+		"Állítsa 0-ra, hogy a teljes rendelkezésre álló helyet elfoglalja. Az ajánlott szélesség 600."
 	],
 	"Set the password": [
-		"Jelszó beállítása"
+		"A jelszó beállítása"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
-		""
+		"A megadott <note> jegyzet <name> név tulajdonságát a megadott [value] értékre állítja. A lehetséges tulajdonságok a következők:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Beállítások"
 	],
 	"Share": [
 		"Megosztás"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
-		""
+		"Ossza meg az összes jegyzet másolatát olyan fájlformátumban, amelyet a Joplin egy számítógépen importálni tud."
+	],
+	"Share a notebook with others": [
+		"Jegyzetfüzet megosztása másokkal"
+	],
+	"Share from %s (%s)": [
+		"Megosztás innen: %s (%s)"
 	],
 	"Share Notebook": [
 		"Jegyzetfüzet megosztása"
@@ -2397,40 +3031,70 @@
 		"Jegyzetfüzet megosztása…"
 	],
 	"Share permissions": [
-		""
+		"Jogosultságok megosztása"
+	],
+	"Shared": [
+		"Megosztva"
+	],
+	"Shares": [
+		"Megosztások"
+	],
+	"Sharing notebook...": [
+		"Jegyzetfüzet megosztása…"
 	],
 	"Shortcuts are not available in CLI mode.": [
-		"Gyorsbillentyűk nem érhetőek el CLI módban."
+		"A billentyűparancsok nem érhetők el a CLI módban."
+	],
+	"Show advanced": [
+		"Speciális beállítások megjelenítése"
 	],
 	"Show Advanced Settings": [
 		"Speciális beállítások megjelenítése"
 	],
 	"Show all": [
-		"Összes megjelenítése"
+		"Az összes megjelenítése"
 	],
 	"Show completed to-dos": [
-		"Mutassa a befejezett to-do-kat"
+		"A befejezett teendők megjelenítése"
+	],
+	"Show disabled": [
+		"Letiltottak megjelenítése"
+	],
+	"Show disabled keys": [
+		"Letiltott billentyűk megjelenítése"
+	],
+	"Show monospace fonts only.": [
+		"Csak Monospace betűcsaládok megjelenítése."
 	],
 	"Show note counts": [
-		"Jegyzet számok megjelenítése"
+		"Jegyzet számának megjelenítése"
+	],
+	"Show notebook options": [
+		"Jegyzetfüzet beállításainak megjelenítése"
+	],
+	"Show password": [
+		"Jelszó megjelenítése"
 	],
 	"Show sort order buttons": [
-		"Rendszerezési sorrend gombok megjelenítése"
+		"Rendszerezési sorrend gombjainak megjelenítése"
 	],
 	"Show tray icon": [
 		"Tálca ikon megjelenítése"
 	],
 	"Show/hide the sidebar": [
-		""
+		"Az oldalsáv megjelenítése/elrejtése"
+	],
+	"Shows notes for tag": [
+		"Megjeleníti a címkéhez tartozó jegyzeteket"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Nagy méretű képek kicsinyítése a jegyzetekhez való hozzáadás előtt."
 	],
 	"Side menu closed": [
-		""
+		"Oldalmenü bezárva"
 	],
 	"Side menu opened": [
-		""
+		"Oldalmenü kinyitva"
 	],
 	"Sidebar": [
 		"Oldalsáv"
@@ -2439,40 +3103,46 @@
 		"Méret"
 	],
 	"Skip this version": [
-		"Verzió átugrása"
+		"Ezen verzió kihagyása"
 	],
 	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
-		"Kihagyott elemek: %d (használja a --retry-failed-items hogy megismételje a dekódolást)"
+		"Kihagyott elemek: %d (használja a --retry-failed-items opciót a visszafejtés megismétléséhez)"
 	],
 	"Skipped: %d.": [
 		"Kihagyva: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
-		"Solarised Dark"
+		"Solarised sötét"
 	],
 	"Solarised Light": [
-		"Solarised Light"
+		"Solarised világos"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Néhány mellékletet nem lehetett letölteni. Próbálja újraletölteni őket."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Néhány mellékletet le kell tölteni. Állítsa a mellékletek letöltési módját „mindig” értékre, és próbálja újra."
 	],
 	"Some items cannot be decrypted.": [
-		"Néhány elemet nem lehet visszafejteni."
+		"Néhány elemet nem lehetett visszafejteni."
 	],
 	"Some items cannot be synchronised.": [
-		"Néhány elemet nem lehet szinkronizálni."
+		"Néhány elemet nem lehetett szinkronizálni."
 	],
 	"Some items cannot be synchronised. Press for more info.": [
-		"Néhány elemet nem lehet szinkronizálni. Kattintson több információért."
+		"Néhány elemet nem lehetett szinkronizálni. Kattintson a további információkért."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Néhány elemet nem lehetett szinkronizálni. Először próbálja szinkronizálni őket."
 	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"A(z) „%s” rendezése növekvő sorrendben"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"A(z) „%s” rendezése csökkenő sorrendben"
 	],
 	"Sort notebooks by": [
 		"Jegyzetfüzetek rendezése"
@@ -2481,223 +3151,253 @@
 		"Jegyzetek rendezése"
 	],
 	"Sort selected lines": [
-		"Kiválasztott sorok rendezése"
+		"A kijelölt sorok rendezése"
 	],
 	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
-		"Elem rendezése <field> szerint (pl. title, updated_time, created_time)"
+		"Elem rendezése a(z) <field> minta szerint (például: title, updated_time, created_time)"
 	],
 	"Source": [
 		"Forrás"
 	],
 	"Source format: %s": [
-		"Forrás formátum: %s"
+		"Forrás formátuma: %s"
 	],
 	"Source: ": [
 		"Forrás: "
 	],
 	"Spacer": [
-		""
+		"Elválasztó"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
-		""
+		"Adja meg az API-kiszolgáló által használt portot. Ha nincs megadva, az alapértelmezettet fogja használni."
 	],
 	"Spell checker": [
 		"Helyesírás-ellenőrző"
 	],
 	"Split View": [
-		"Nézet megosztása"
+		"Osztott nézet"
 	],
 	"Start application minimised in the tray icon": [
 		"Alkalmazás indításakor kicsinyítse azt a tálcára"
 	],
-	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+	"Start recording": [
 		""
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		"Az API-kiszolgáló elindítása, leállítása vagy ellenőrzése. Annak megadásához, hogy melyik porton fusson, állítsa be az api.port konfigurációs változót. A parancsok (%s)."
 	],
 	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
-		""
+		"A visszafejtés indítása… Kis türelmet, ez több percet is igénybe vehet, attól függően, hogy mennyi visszafejtendő adat van."
 	],
 	"Starting synchronisation...": [
-		"Szinkronizáció elkezdése..."
+		"Szinkronizálás indítása…"
 	],
 	"Starting to edit note. Close the editor to get back to the prompt.": [
-		"Jegyzet szerkesztés elkezdése. Zárja be a szerkesztőt, hogy visszakapja a prompt-ot."
+		"A jegyzet szerkesztésének indítása. Zárja be a szerkesztőt, hogy visszatérjen a prompthoz."
 	],
 	"Statistics": [
-		"Statisztika"
+		"Statisztikák"
 	],
 	"Statistics...": [
-		"Statisztikák..."
+		"Statisztikák…"
 	],
 	"Status": [
-		"Státusz"
+		"Állapot"
 	],
 	"Status: %s": [
-		"Státusz: %s"
+		"Állapot: %s"
 	],
 	"Status: Started on port %d": [
-		"Státusz: Elindítva a %d  porton"
+		"Állapot: Elindítva a(z) %d porton"
 	],
 	"Step 1: Enable the clipper service": [
-		"1. lépés: Engedélyezze a Web Vágó szolgáltatást"
+		"1. lépés: Engedélyezze a Web Clipper szolgáltatást"
 	],
 	"Step 1: Open this URL in your browser to authorise the application:": [
-		"1. lépés: Nyissa meg ezt az URL-t a böngészőben, hogy hitelesítse az alkalmazást:"
+		"1. lépés: Nyissa meg ezt a webcímet a böngészőben, hogy hitelesítse az alkalmazást:"
 	],
 	"Step 2: Enter the code provided by Dropbox:": [
-		"2. lépés: Írja be a Dropbox által adott kódot:"
+		"2. lépés: Adja meg a Dropbox által szolgáltatott kódot:"
 	],
 	"Step 2: Install the extension": [
-		"2. lépés: telepítse a bővítményt"
+		"2. lépés: Telepítse a bővítményt"
 	],
 	"Stop": [
-		"Stop"
+		"Állj"
 	],
 	"Stop external editing": [
 		"Külső szerkesztés leállítása"
 	],
 	"Storage space": [
-		""
+		"Tárhely"
 	],
 	"Strikethrough": [
 		"Áthúzott"
 	],
 	"strong text": [
-		"félkövér szöveg"
+		"félkövér „strong” szöveg"
 	],
 	"Submit": [
-		"Elküld"
+		"Beküldés"
 	],
 	"Subscript": [
 		"Alsó index"
 	],
 	"Success! Synchronisation configuration appears to be correct.": [
-		"Siker! Szinkronizációs beállítás jónak tűnik."
+		"Siker! A szinkronizálási beállítás jónak tűnik."
 	],
 	"Superscript": [
 		"Felső index"
 	],
 	"Swap line down": [
-		"Sor csere le"
+		"Sor csere lefelé"
 	],
 	"Swap line up": [
-		"Sor csere fel"
+		"Sor csere felfelé"
 	],
 	"Switch between note and to-do type": [
-		"Váltás jegyzet és todo típus között"
+		"Váltás jegyzet és teendő típus között"
 	],
 	"Switch profile": [
-		"Profil váltása"
+		"Profilváltás"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Váltás a hátlapi kamerára"
+	],
+	"Switch to front-facing camera": [
+		"Váltás előlapi kamerára"
 	],
 	"Switch to note type": [
-		"Váltás jegyzet típusra"
+		"Váltás jegyzettípusra"
 	],
 	"Switch to profile %d": [
-		"Váltás a %d profilra"
+		"Váltás a(z) %d profilra"
+	],
+	"Switch to the %s Editor": [
+		"Váltás a(z) %s szerkesztőre"
+	],
+	"Switch to the legacy editor": [
+		"Váltás a régi szerkesztőre"
 	],
 	"Switch to to-do type": [
-		"Váltás to-do típusra"
+		"Váltás teendő típusra"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
-		"Átváltás a [notebook]-ra - minden további művelet, ezen jegyzetfüzetben fog megtörténni."
+		"Váltás a(z) [notebook] jegyzetfüzetre – minden további művelet ebben a jegyzetfüzetben történik."
 	],
 	"Sync as many devices as you want": [
-		""
+		"Szinkronizáljon annyi eszközt, amennyit csak akar"
 	],
 	"Sync Status": [
-		"Szinkronizációs státusz"
+		"Szinkronizálási állapot"
 	],
 	"Sync status (synced items / total items)": [
-		"Szinkronizációs státusz (mozgatott elemek / minden elem)"
+		"Szinkronizálási állapot (szinkronizált elemek / összes elem)"
 	],
 	"Sync target must be upgraded! Run `%s` to proceed.": [
-		"Szinkronizációs eszközt frissíteni kell! Futtassa a `%s`-t a folytatáshoz."
+		"A szinkronizálási célpontot frissíteni kell! A folytatáshoz futtassa a(z) `%s` parancsot."
 	],
 	"Sync Target Upgrade": [
-		"Szinkronizációs Eszköz Frissítése"
+		"Szinkronizálási cél frissítése"
 	],
 	"Sync to provided target (defaults to sync.target config value)": [
-		"Szinkronizáció a megadott helyre (alapérték a sync.target beállítás értéke)"
+		"Szinkronizálás a megadott célra (alapértelmezés a sync.target beállítás értékre)"
 	],
 	"Sync Version: %s": [
-		"Szinkronizáció verzió: %s"
+		"Szinkronizálás verziója: %s"
 	],
 	"Sync your notes": [
-		"Jegyzetek szinkronizálása"
+		"Szinkronizálja az Ön jegyzeteit"
+	],
+	"Sync, encryption, proxy": [
+		"Szinkronizálás, titkosítás, proxy"
 	],
 	"Synchronisation": [
-		"Szinkronizáció"
+		"Szinkronizálás"
 	],
 	"Synchronisation interval": [
-		"Szinkronizációs időköz"
+		"Szinkronizálás időköze"
 	],
 	"Synchronisation is already in progress.": [
-		"Szinkronizáció már folyamatban van."
+		"A szinkronizálás már folyamatban van."
 	],
 	"Synchronisation Status": [
-		"Szinkronizációs státusz"
+		"Szinkronizálás állapota"
 	],
 	"Synchronisation target": [
-		"Szinkronizációs cél"
+		"Szinkronizálási cél"
 	],
 	"Synchronisation target: %s (%s)": [
-		"Szinkronizációs cél: %s (%s)"
+		"Szinkronizálási cél: %s (%s)"
 	],
 	"Synchronise": [
 		"Szinkronizálás"
 	],
 	"Synchronise only over WiFi connection": [
-		""
+		"Szinkronizálás csak Wi-Fi-kapcsolaton keresztül"
 	],
 	"Synchronises with remote storage.": [
-		"Szinkronizáció távoli tárolóra."
+		"Szinkronizálás távoli tárolóval."
 	],
 	"Synchronising...": [
-		"Szinkronizálás..."
+		"Szinkronizálás…"
 	],
 	"Synchronizing...": [
-		"Szinkronizálás..."
+		"Szinkronizálás…"
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
 	],
 	"tag1, tag2, ...": [
-		"tag1, tag2, …"
+		"címke1, címke2, …"
 	],
 	"Tagged: %d.": [
-		"Taggelve: %d."
+		"Címkézett: %d."
 	],
 	"Tags": [
-		"Tagek"
+		"Címkék"
 	],
 	"Take photo": [
 		"Fotó készítése"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"A(z) „%s” feladat sikertelen volt a következő hibával: %s"
+	],
+	"Task list": [
+		"Feladatlista"
 	],
 	"Tasks": [
 		"Feladatok"
 	],
 	"Teams": [
-		""
+		"Csapatok"
+	],
+	"Text document": [
+		"Szöveges dokumentum"
 	],
 	"Text editor command": [
 		"Szövegszerkesztő parancs"
 	],
+	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+		"A [Web Clipper](%s) egy böngészőbővítmény, amely lehetővé teszi weboldalak és képernyőképek mentését a böngészőből."
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
-		""
+		"Az aktív profil nem törölhető. Váltson másik profilra, és próbálja újra."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		"Az alkalmazás bezárul. kérem indítsa újra a folyamat befejezéséhez."
+		"Az alkalmazás most bezárul. Indítsa újra a folyamat befejezéséhez."
 	],
 	"The application did not close properly. Would you like to start in safe mode?": [
-		""
+		"Az alkalmazás nem zárult be megfelelően. Szeretné biztonságos módban elindítani?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
-		"Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot."
+		"Az alkalmazás hitelesítve – most már bezárhatja ezt a böngészőfület."
 	],
 	"The application has been authorised!": [
 		"Az alkalmazás hitelesítve!"
@@ -2706,175 +3406,216 @@
 		"Az alkalmazás sikeresen hitelesítve."
 	],
 	"The application must be restarted for these changes to take effect.": [
-		"Az alkalmazást újra kell indítani a változások érvényesítéséhez."
+		"Az alkalmazást újra kell indítani a módosítások érvényesítéséhez."
 	],
 	"The attachments will no longer be watched when you switch to a different note.": [
 		"A csatolmányok figyelése megszűnik, ha átvált egy másik jegyzetre."
 	],
 	"The command \"%s\" is only available in GUI mode": [
-		"A \"%s\" parancs csak a GUI verzióban érhető el"
+		"A(z) „%s” parancs csak GUI módban érhető el"
 	],
 	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
-		""
+		"Az alapértelmezett adminisztrátori jelszó nem biztonságos és nem lett módosítva! [Módosítsa most](%s)"
 	],
 	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
-		"Az alapértelmezett titkosítási mód megváltozott egy sokkal biztonságosabbra és javasolt hogy alkalmazza azt adataira."
+		"Az alapértelmezett titkosítási módszer biztonságosabbra módosult, és ajánlott, hogy ezt alkalmazza az adataira."
 	],
 	"The default encryption method has been changed, you should re-encrypt your data.": [
-		"Az alapértelmezett titkosítási mód megváltozott, újra kell titkosítani az adatokat."
+		"Az alapértelmezett titkosítási módszer módosult, ezért újra kell titkosítania az adatait."
 	],
 	"The default profile cannot be deleted": [
-		""
+		"Az alapértelmezett profil nem törölhető"
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
-		""
+		"A jegyzet megnyitásához használt szerkesztőparancs (tartalmazhat argumentumokat). Ha nincs megadva, a program megpróbálja automatikusan felismerni az alapértelmezett szerkesztőt."
 	],
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
-		""
+		"A faktor tulajdonság határozza meg, hogy az elem a többi elemhez képest hogyan fog nőni vagy zsugorodni, hogy elférjen a tárolójában rendelkezésre álló helyhez képest. Így egy 2 faktorú elem kétszer annyi helyet foglal el, mint egy 1 faktorú elem. A módosítások megtekintéséhez indítsa újra az alkalmazást."
+	],
+	"The following attachment matches your search query:": [
+		"A következő csatolmány megfelel az Ön keresési lekérdezésének:",
+		"A következő csatolmányok megfelelnek az Ön keresési lekérdezésének:"
 	],
 	"The following attachments are being watched for changes:": [
-		"A következő csatolmányok változása figyelve van:"
+		"A következő csatolmányok módosítása figyelve van:"
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		"A következő kulcsok elavult titkosítási algoritmust használnak, ezért ajánlott frissíteni őket. A frissített kulcs továbbra is képes lesz a szokásos módon visszafejteni és titkosítani az adatokat."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"A következő bővítmények nem feltétlenül támogatják a jelenlegi markdown-szerkesztőt:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
-		""
+		"A Joplin csapata ellenőrizte ezt a bővítményt, és megfelel a biztonsági és teljesítménybeli szabványainknak."
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
-		""
+		"Az ezen azonosítókkal ellátott kulcsok az Ön egyes elemeinek titkosítására szolgálnak, azonban az alkalmazás jelenleg nem fér hozzá ezekhez. Valószínű, hogy a szinkronizáláson keresztül végül le lesznek töltve."
 	],
 	"The master key has been upgraded successfully!": [
-		"A mester kulcs frissítése sikeresen megtörtént!"
+		"A mesterkulcs frissítése sikeresen megtörtént!"
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
-		""
+		"Az ezekhez az azonosítókhoz tartozó mesterkulcsok az Ön egyes elemeinek titkosítására szolgálnak, azonban az alkalmazás jelenleg nem fér hozzá ezekhez. Valószínű, hogy a szinkronizáláson keresztül végül le lesznek töltve."
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
-		"A \"%s\" jegyzet sikeresen visszaállítva a \"%s\" jegyzetfüzetbe."
+		"A(z) „%s” jegyzetet sikeresen vissza lettek állítva a(z) „%s” jegyzetfüzetbe."
+	],
+	"The note was successfully moved to the trash.": [
+		"A jegyzet sikeresen át lett helyezve a kukába.",
+		"A jegyzetek sikeresen át lettek helyezve a kukába."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"A jegyzetfüzet és annak tartalma sikeresen át lett helyezve a kukába."
 	],
 	"The notebook could not be saved: %s": [
-		"A jegyzetfüzet nem menthető el: %s"
+		"A következő jegyzetfüzet nem menthető el: %s"
 	],
 	"The notes have been imported: %s": [
-		"A jegyeztek importálva: %s"
+		"A következő jegyzetek importálva lettek: %s"
 	],
 	"The possible commands are:": [
-		"Az elérhető parancsok:"
+		"A lehetséges parancsok a következők:"
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
-		""
+		"A címzettet nem lehetett törölni a listáról. Próbálja újra.\n\nA hiba a következő volt: „%s”"
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"A szinkronizálás célpontja nem módosítható a következő okból: %s\n\nHa a probléma nem oldható meg, akkor először törölnie kell az adatokat az alábbi utasítások szerint:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
-		"A szinkronizációs célt frissíteni kell a Joplin szinkronizációhoz. Ez a művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A folytatáshoz kattintson a lenti linkre."
+		"A szinkronizálás célpontját frissíteni kell, mielőtt a Joplin szinkronizálni tudna. A művelet néhány percig eltarthat, és az alkalmazást újra kell indítani. A folytatáshoz kattintson a hivatkozásra."
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		"A szinkronizálási célt frissíteni kell. Az elfogadáshoz nyomja meg ezt a kísérőoldalt."
+	],
+	"The synchronisation password is missing.": [
+		"A szinkronizálási jelszó hiányzik."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
-		"A tag “%s” már létezik. Kérem válasszon másik nevet."
+		"A(z) „%s” nevű címke már létezik. Válasszon másik nevet neki."
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
-		""
+		"A szinkronizálási cél. Minden szinkronizációs célnak további paraméterei lehetnek, amelyek a `sync.NUM.NAME` nevet kapják (ezek mindegyike alább dokumentálva van)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"A webes kliens nem támogatja a titkosított, megosztott jegyzetfüzetek elfogadását. A megosztás elfogadása előtt váltson át asztali vagy mobilalkalmazásra.\n\nHiba: „%s”"
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
-		""
+		"A Web Clippernek szüksége van az Ön engedélyére ahhoz, hogy hozzáférjen az Ön adataihoz."
 	],
 	"The web clipper service is enabled and set to auto-start.": [
-		"A Web Vágó szolgáltatás engedélyezve van és automatikusan indul."
+		"A Web Clipper szolgáltatás engedélyezve van, és automatikus indításra van állítva."
 	],
 	"The web clipper service is not enabled.": [
-		"A Web Vágó szolgáltatás nincs engedélyezve."
+		"A Web Clipper szolgáltatás nincs engedélyezve."
 	],
 	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
-		""
+		"A WebDAV %s implementációja nem kompatibilis a Joplinnal, és mint ilyen, már nem támogatott. Használjon más szinkronizálási módszert."
 	],
 	"Theme": [
 		"Téma"
 	],
+	"Themes, editor font": [
+		"Témák, szerkesztő betűtípusa"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
-		""
+		"Jelenleg nincsenek jegyzetek. Hozzon létre egyet a (+) gombra kattintva."
+	],
+	"There are no notes in the trash folder.": [
+		"Nincsenek jegyzetek a kukában."
 	],
 	"There are unsaved changes.": [
-		""
+		"Elmentetlen módosítások vannak."
 	],
 	"There is no data to export.": [
-		"Nincs exportálható adat."
+		"Nincsenek exportálandó adatok."
 	],
 	"There was a [conflict](%s) on the attachment below.\n\n%s": [
-		"Van egy [conflict](%s) a lenti csatolmányon.\n\n%s"
+		"Az alábbi csatolmányon [conflict](%s) keletkezett.\n\n%s"
 	],
 	"There was an error downloading this attachment:": [
-		"Hiba történt ezen csatolmány letöltése közben:"
+		"Hiba történt a csatolmány letöltésekor:"
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"Ezeket az elemeket nem sikerült szinkronizálni, de „figyelmen kívül hagyottként” lettek megjelölve. Ezek nem okozzák a szinkronizálási figyelmeztetés megjelenését, de mégsem szinkronizálódnak. A figyelmen kívül hagyás megszüntetéséhez kattintson az „újbóli próbálkozás” gombra."
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
-		""
+		"Ezek az elemek az eszközön maradnak, de nem lesznek feltöltve a szinkronizálási célra. Ezen elemek megtalálásához vagy a címre vagy az azonosítóra (amely a fenti zárójelben látható) kell keresni."
 	],
 	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
-		""
+		"Ezek a bővítmények további funkciókkal bővítik a Markdown-renderelőt. Vegye figyelembe, hogy bár ezek a funkciók hasznosak lehetnek, nem szabványos Markdownok, és így a legtöbbjük csak Joplinban fog működni. Ezen kívül néhányuk *nem kompatibilis* a WYSIWYG szerkesztővel. Ha megnyit egy olyan jegyzetet, amely valamelyik ilyen bővítményt használja, abban a szerkesztőben, elveszíti a bővítmény formázását. Az alábbiakban jelezzük, hogy mely bővítmények kompatibilisek vagy nem kompatibilisek a WYSIWYG-szerkesztővel."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Ez lehetővé teszi egy másik felhasználó számára, hogy megosszon Önnel egy jegyzetfüzetet, és mindketten együtt dolgozhassanak rajta. Nem teszi azonban lehetővé, hogy Ön osszon meg egy jegyzetfüzetet valaki mással, kivéve, ha Ön rendelkezik a(z) „%s” funkcióval."
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"Ez a csatolmány nem tartalmaz OCR-adatokat (Állapot: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
-		"Ez a csatolmány még nincs letöltve és dekódolva"
+		"Ez a melléklet még nincs letöltve vagy visszafejtve"
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
-		"Ez a hitelesítő token csak ahhoz kell, hogy 3. fél alkalmazásai hozzáférjenek Joplin-hoz."
+		"Erre az engedélyezési tokenre csak ahhoz van szükség, hogy harmadik fél alkalmazásai hozzáférhessenek a Joplinhoz."
 	],
 	"This drawing may have unsaved changes.": [
-		""
+		"Ez a rajz elmentetlen módosításokat tartalmazhat."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
-		""
+		"Ez egy fejlett eszköz a jegyzetekhez kapcsolódó csatolmányok megjelenítésére. Legyen óvatos, amikor törli valamelyiket, mert utólag nem lehet visszaállítani."
+	],
+	"This note could not be deleted: %s": [
+		"A következő jegyzetfüzet nem törölhető: %s",
+		"A következő jegyzetfüzetek nem törölhetők: %s"
+	],
+	"This note could not be duplicated: %s": [
+		"A következő jegyzetfüzet nem duplikálható: %s",
+		"A következő jegyzetfüzetek nem nem duplikálhatók: %s"
+	],
+	"This note could not be moved: %s": [
+		"A következő jegyzetfüzet nem helyezhető át: %s",
+		"A következő jegyzetfüzetek nem helyezhetők át: %s"
 	],
 	"This note does not have geolocation information.": [
-		"Ennek a jegyzetnek nincs geolokációs információja."
+		"Ez a megjegyzés nem tartalmaz földrajzi helymeghatározási információkat."
 	],
 	"This note has been modified:": [
-		"Jegyzet módosult:"
+		"Ez a jegyzet módosítva lett:"
 	],
 	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
-		"Ez a jegyzet üres. Kattintson a \"%s\"-on váltani a szerkesztőt és szerkeszteni a jegyzetet."
+		"Ennek a jegyzetnek nincs tartalma. Kattintson a(z) „%s” gombra a szerkesztő bekapcsolásához és a jegyzet szerkesztéséhez."
 	],
 	"This note has no history": [
-		"Jegyzetnek nincs előélete"
+		"Ennek a jegyzetnek nincs előélete"
 	],
 	"This plugin doesn't support %s.": [
-		""
+		"Ez a bővítmény nem támogatja a következőt: %s."
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
-		"Ennek a Rich Text szerkesztőnek számos korlátja van és javasolt ezekkel tisztában lenni a használata előtt."
+		"Ennek a Rich Text szerkesztőnek számos korlátozása van, és ajánlott tisztában lennie velük, mielőtt használná."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
-		"Ez a szolgáltatás lehetővé teszi, hogy a böngésző kommunikájon Joplin-nal. Amikor engedélyezi ezt, a tűzfal kérheti, hogy adjon jogot a port használatához."
+		"Ez a szolgáltatás lehetővé teszi, hogy a böngészőbővítmény kommunikáljon a Joplinnal. Engedélyezéskor a tűzfal megkérheti, hogy engedélyezze a Joplin számára egy adott port figyelését."
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"A kuka ezen almappája nem tartalmaz jegyzeteket."
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
-		""
+		"Ez lehetővé teszi, hogy a Joplin a háttérben fusson. Ajánlott engedélyezni ezt a beállítást, hogy a jegyzetek folyamatosan szinkronizálódjanak, így csökkentve a konfliktusok számát."
 	],
 	"This will open a new screen. Save your current changes?": [
-		"Ez új képernyőt nyit. Mentsem az aktuális változásokat?"
+		"Ez egy új képernyőt nyit meg. Elmenti a jelenlegi módosításokat?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Ez véglegesen törli az összes elemet a kukából. Folytatja?"
+	],
+	"This will permanently delete the note \"%s\". Continue?": [
+		"Ez véglegesen törli a(z) „%s” jegyzetet. Folytatja?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
-		""
+		"Ezzel eltávolítja a jegyzetfüzetet a gyűjteményéből, és többé nem férhet hozzá a tartalmához. Folytatja?"
 	],
 	"Time format": [
-		"Idő formátum"
+		"Időformátum"
 	],
 	"title": [
 		"cím"
@@ -2883,43 +3624,52 @@
 		"Cím"
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
-		"Hogy a Joplin tudjon szinkronizálni Dropbox-al, kérem kövesse a következő lépéseket:"
+		"Ahhoz, hogy a Joplin szinkronizálhasson a Dropbox-szal, kövesse az alábbi lépéseket:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Ahhoz, hogy a Joplin szinkronizálódhasson a Joplin Clouddal, Jelentkezzen be ezen a webcímen:"
 	],
 	"To continue, please enter your master password below.": [
-		"A folytatáshoz adja meg a mester jelszót."
+		"A folytatáshoz adja meg az alábbiakban a mesterjelszót."
 	],
 	"To delete a tag, untag the associated notes.": [
-		"Tag törléséhez, törölje a taget a hivatkozott jegyzetekből."
+		"Címke törléséhez távolítsa el a kapcsolódó jegyzeteket."
 	],
 	"To delete: %d": [
-		"Törölni: %d"
+		"Törlendő: %d"
 	],
 	"To enter command line mode, press \":\"": [
-		"Parancssor módba lépéshez nyomja meg a \":\""
+		"A parancssori módba való belépéshez nyomja meg a „:” billentyűt"
 	],
 	"To exit command line mode, press ESCAPE": [
-		"Parancssor módból kilépéshez, nyomja le az ESCAPE gombot"
+		"A parancssori módból való kilépéshez nyomja meg az „ESC” billentyűt"
 	],
 	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
-		"A jegyzetek kézi rendezéséhez, a rendezési sorrendet át kell állítani \"%s\"-ra, \"%s\" > \"%s\" a menüben"
+		"A jegyzetek kézi rendezéséhez a(z) „%s” > „%s” menüben a rendezési sorrendet a következőre kell módosítania:„%s”"
 	],
 	"To maximise/minimise the console, press \"tc\".": [
-		"A konzol teljes méret, kis méret váltáshoz, nyomja le a \"tc\"-t."
+		"A konzol maximalizálásához/minimalizálásához nyomja meg a „tc” gombot."
 	],
 	"To move from one pane to another, press Tab or Shift+Tab.": [
-		"Egyik panelről a másikra mozgatáshoz, nyomja le a Shift+Tab-ot."
+		"Az egyik ablaktábláról a másikra való áttéréshez nyomja le a Tab vagy a Shift+Tab billentyűkombinációt."
 	],
 	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
-		""
+		"Ezeknek az elemeknek a visszafejtését újra meg kell próbálni. Futtassa az `e2ee decrypt --retry-failed-items` parancsot"
 	],
 	"To switch the profile, the app is going to close and you will need to restart it.": [
-		""
+		"A profilváltáshoz az alkalmazás bezárul, és újra kell indítania."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
-		""
+		"A megfelelő működéshez az alkalmazásnak a következő engedélyekre van szüksége. Engedélyezze ezeket a telefon beállításaiban, az Alkalmazások > Joplin > Engedélyek menüpontban"
 	],
 	"to-do": [
-		"to-do"
+		"teendő"
+	],
+	"To-do": [
+		"Teendő"
+	],
+	"to-do: %s": [
+		"teendő: %s"
 	],
 	"Toggle comment": [
 		"Megjegyzés váltása"
@@ -2928,82 +3678,127 @@
 		"Fejlesztőeszközök váltása"
 	],
 	"Toggle editor layout": [
-		"Szerkesztő elrendezés váltása"
+		"Szerkesztő elrendezésének váltása"
+	],
+	"Toggle editor plugin": [
+		"Szerkesztő bővítményének váltása"
 	],
 	"Toggle editors": [
-		"Szerkesztő váltása"
+		"Szerkesztők váltása"
 	],
 	"Toggle external editing": [
 		"Külső szerkesztés váltása"
 	],
+	"Toggle menu bar": [
+		"Menüsáv váltása"
+	],
+	"Toggle note history, keep notes for": [
+		"Jegyzet előéletének váltása, jegyzetek megtartása"
+	],
 	"Toggle note list": [
 		"Jegyzetlista váltása"
+	],
+	"Toggle own sort order": [
+		"Saját rendezési sorrend váltása"
+	],
+	"Toggle safe mode": [
+		"Biztonságos mód váltása"
 	],
 	"Toggle sidebar": [
 		"Oldalsáv váltása"
 	],
+	"Toggle sort order field": [
+		"Rendezési sorrendmező váltása"
+	],
 	"Token has been copied to the clipboard!": [
-		"Token vágólapra másolva!"
+		"A token át lett másolva a vágólapra!"
 	],
 	"Tools": [
 		"Eszközök"
 	],
+	"Total Size": [
+		"Teljes méret"
+	],
 	"Total: %d/%d": [
-		"Összes: %d/%d"
+		"Teljes: %d/%d"
 	],
 	"Trash": [
-		""
+		"Kuka"
 	],
 	"Try again": [
 		"Próbálja újra"
 	],
+	"Try it now": [
+		"Próbálja ki most"
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
-		""
+		"A paranccsal kapcsolatos további információkért írja be a `help [command]` parancsot; vagy a teljes használati információért írja be a `help all` parancsot."
 	],
 	"Type `joplin help` for usage information.": [
-		"Írja be `joplin help` a használati információkért."
+		"A használati információkért írja be a `joplin help` parancsot."
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
-		"Írja be a jegyzet címét vagy a tartalmának egy részletét, ahova ugrani szeretne. Esetleg írja be a #-et a tag nevével, vagy @ a jegyzetfüzet nevével. Beírhatja :-ot parancsok kereséséhez."
+		"A jegyzet címének vagy tartalmának egy részének beírásával ugorhat a jegyzetre. Vagy írja be a „#” a címke neve után, vagy a „@” a jegyzetfüzet neve után. Vagy írja be a „:” billentyűt a parancsok kereséséhez."
 	],
 	"Type new tags or select from list": [
-		"Írjon be egy új tag-et vagy válasszon a listáról"
+		"Írjon be új címkéket vagy válasszon a listából"
 	],
 	"Type: %s.": [
 		"Típus: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
+		"A(z) %s típusú erőforrás szerkesztése nem lehetséges"
 	],
 	"Unable to share log data. Reason: %s": [
+		"A naplóadatok megosztása nem lehetséges. Indok: %s"
+	],
+	"Unchecked": [
 		""
 	],
 	"Uncompleted to-dos on top": [
-		"Befejezetlen to-do-k felül"
+		"Befejezetlen teendők felül"
 	],
 	"Undo": [
 		"Visszavonás"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Távolítsa el és telepítse újra az alkalmazást. Győződjön meg arról, hogy először biztonsági másolatot készít az összes jegyzet JEX fájlként történő exportálásával az asztali alkalmazásból."
 	],
 	"Unknown": [
 		"Ismeretlen"
 	],
+	"Unknown file type": [
+		"Ismeretlen fájltípus"
+	],
 	"Unknown flag: %s": [
-		"Ismeretlen jelző %s"
+		"Ismeretlen jelző: %s"
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
-		"Ismeretlen elem típus lett letöltve - kérem frissítse a Joplin-t a legfrissebb verzióra"
+		"Ismeretlen elemtípus lett letöltve – frissítse a Joplint a legújabb verzióra"
+	],
+	"Unknown platform": [
+		"Ismeretlen platform"
+	],
+	"Unordered list": [
+		"Rendezetlen lista"
+	],
+	"Unpublish note": [
+		"Jegyzet publikálásának visszavonása"
+	],
+	"Unshare": [
+		"Megosztás visszavonása"
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
-		""
+		"Visszavonja a jegyzetfüzet megosztását? A címzettek többé nem férnek hozzá a tartalmához."
 	],
 	"Unsupported image type: %s": [
-		"Nem támogatott kép típus: %s"
+		"Nem támogatott képtípus: %s"
 	],
 	"Unsupported link or message: %s": [
 		"Nem támogatott hivatkozás vagy üzenet: %s"
+	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Nem támogatott hivatkozás vagy üzenet: %s\nHiba: %s"
 	],
 	"Untitled": [
 		"Névtelen"
@@ -3011,8 +3806,17 @@
 	"Update": [
 		"Frissítés"
 	],
+	"Update available": [
+		"Frissítés érhető el"
+	],
+	"Update later": [
+		"Frissítés később"
+	],
 	"Update profile": [
 		"Profil frissítése"
+	],
+	"Update total sizes": [
+		"Frissítés teljes mérete"
 	],
 	"Updated": [
 		"Frissítve"
@@ -3027,58 +3831,61 @@
 		"Frissített távoli elemek: %d."
 	],
 	"Updated: ": [
-		"Frissített: "
+		"Frissítve: "
 	],
 	"Updated: %d.": [
-		"Frissített: %d."
+		"Frissítve %d."
 	],
 	"Updated: %s": [
-		"Frissített: %s"
+		"Frissítve: %s"
 	],
 	"Updating...": [
-		"Frissítés..."
+		"Frissítés…"
 	],
 	"Upgrade": [
-		"Upgrade"
+		"Fejlesztés"
 	],
 	"Upgrade the sync target to the latest version.": [
-		"Frissítse a szinkronizációs célt a legfrissebb verzióra."
+		"Fejlessze a szinkronizálási célt a legfrissebb verzióra."
 	],
 	"URL": [
-		"URL"
+		"Webcím"
 	],
 	"Usage: %s": [
 		"Használat: %s"
 	],
 	"Use biometrics to secure access to the app": [
-		""
+		"Biometrikus adatok használata az alkalmazáshoz való hozzáférés biztosításához"
 	],
 	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
-		""
+		"Használjon hosszú lista formátumot. A formátum: ID, NOTE_COUNT (jegyzetfüzet esetén), DATE, TODO_CHECKED (teendő esetén), TITLE"
 	],
 	"Use spell checker": [
 		"Használja a helyesírás-ellenőrzőt"
 	],
 	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
-		""
+		"A nyilakkal és a PgUp/PgDn lapozással görgetheti a listákat és a szöveges területeket (beleértve ezt a konzolt is)."
 	],
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
-		"Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az \"Escape\"-et a kilépéshez."
+		"A nyilak segítségével mozgathatja az elrendezési elemeket. A kilépéshez nyomja meg az „ESC” gombot."
+	],
+	"Use the legacy Markdown editor": [
+		"Használja a régi markdown-szerkesztőt"
 	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
-		""
+		"Használja ezt a keresési index újjáépítéséhez, ha probléma van a kereséssel. Ez a jegyzetek számától függően sokáig tarthat."
 	],
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
-		""
+		"Használja biometrikus adatait az alkalmazáshoz való hozzáférés biztosításához. Ezt később bármikor beállíthatja a Beállításokban."
 	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
-		""
+		"A markdown-szerkesztő legtöbb szövegéhez használatos. Ha nem található, akkor egy általános, arányos (változó szélességű) betűtípus lesz használva."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
-		""
+		"Ott használatos, ahol a szöveg olvasható elrendezéséhez fix szélességű betűtípusra van szükség (például: táblázatok, jelölőnégyzetek, kódok). Ha nem található, akkor egy általános monospace (fix szélességű) betűtípus lesz használva."
 	],
 	"User deletions": [
-		""
+		"Felhasználói törlések"
 	],
 	"Users": [
 		"Felhasználók"
@@ -3087,49 +3894,55 @@
 		"Érvényes"
 	],
 	"Verify your identity": [
-		""
+		"Személyazonosságának ellenőrzése"
 	],
 	"View": [
 		"Nézet"
 	],
 	"View OCR text": [
-		""
+		"OCR-szöveg-nézet"
 	],
 	"View on map": [
-		"Mutasd a térképen"
+		"Megtekintés a térképen"
 	],
 	"View them now": [
-		"Mutasd ezeket most"
+		"Megtekintés most"
 	],
 	"Viewer": [
-		"Megjelenítő"
+		"Nézegető"
 	],
 	"Vim": [
 		"Vim"
 	],
-	"Voice typing language files (URL)": [
+	"Voice recorder": [
 		""
+	],
+	"Voice typing language files (URL)": [
+		"Hanggépelési nyelvi fájlok (webcím)"
 	],
 	"Voice typing...": [
-		""
+		"Hanggépelés…"
 	],
 	"Vosk": [
-		""
+		"Vosk"
+	],
+	"Waiting for authorisation...": [
+		"Várakozás az engedélyre…"
 	],
 	"Warning": [
 		"Figyelmeztetés"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
-		""
+		"Figyelmeztetés: a teljesítmény miatt nem minden erőforrás jelenik meg (korlát: %s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"Van rendszerünk a problémás bővítmények jelentésére és eltávolítására."
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"A Joplin közösség megbízható tagjai által fejlesztett bővítményeket „ajánlottként” jelöljük."
 	],
 	"Web Clipper": [
-		"Web Vágó"
+		"Web Clipper"
 	],
 	"WebDAV": [
 		"WebDAV"
@@ -3138,37 +3951,43 @@
 		"WebDAV jelszó"
 	],
 	"WebDAV URL": [
-		"WebDAV URL"
+		"WebDAV webcím"
 	],
 	"WebDAV username": [
 		"WebDAV felhasználónév"
 	],
 	"Website and documentation": [
-		"Web oldal és dokumentáció"
+		"Weboldal és dokumentáció"
 	],
 	"WebView package: %s": [
-		""
+		"WebView csomag: %s"
+	],
+	"WebView version: %s": [
+		"WebView verzió: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
-		""
+		"Üdvözöljük a Joplinban!\n\nA billentyűparancsok listázásához írja be a `:help shortcuts` parancsot, vagy csak a `:help` parancsot a használati információkért.\n\nPéldául egy jegyzetfüzet létrehozásához írja be az `mb` parancsot; egy jegyzet létrehozásához pedig írja be az `mn` parancsot."
 	],
 	"Welcome!": [
-		""
+		"Üdvözöljük!"
+	],
+	"What are plugins?": [
+		"Mik azok a bővítmények?"
 	],
 	"When creating a new note:": [
-		"Amikor egy új jegyzetet hoz létre:"
+		"Új jegyzet létrehozásakor:"
 	],
 	"When creating a new to-do:": [
-		"Amikor egy új to-do-t hoz létre:"
+		"Új teendő létrehozásakor:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Amikor engedélyezve van, az alkalmazás beolvassa a csatolmányokat, és kivonja belőlük a szöveget. Ez lehetővé teszi a szöveg keresését ezekben a csatolmányokban."
 	],
 	"Whisper": [
-		""
+		"Whisper"
 	],
 	"Window unresponsive.": [
-		""
+		"Az ablak nem válaszol."
 	],
 	"Words": [
 		"Szavak"
@@ -3186,46 +4005,49 @@
 		"Igen"
 	],
 	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
-		""
+		"Nagy méretű képet (%dx%d pixel) készül csatolni. Szeretné átméretezni a képet %d pixelre, mielőtt csatolná?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		"Ön bejelentkezett a Joplin Cloudba, most már elhagyhatja ezt a képernyőt."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [
-		"Önnek nincs egyetlen jegyzetfüzete sem."
+		"Önnek jelenleg nincsenek jegyzetfüzetei."
 	],
 	"You do not have any installed plugin.": [
-		"Nincs telepített bővítmény."
+		"Önnek jelenleg nincsenek telepített bővítményei."
 	],
 	"You may also type `status` for more information.": [
-		"További információért beírhatja `status`."
+		"További információkért beírhatja a `status` (állapot) parancsot is."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
-		"Használhatja a lenti eszközt, hogy újra titkosítsa az adatait, ha például tudja, hogy néhány jegyzete elavult titkosítási módot használ."
+		"Az alábbi eszközzel újratitkosíthatja adatait, például ha tudja, hogy néhány jegyzete elavult titkosítási módszerrel van titkosítva."
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
-		""
+		"Nem tudott csatlakozni a Joplin Cloudhoz. Ellenőrizze a hitelesítő adatokat, és próbálja újra. Hiba:"
 	],
 	"Your account doesn't have access to this feature": [
-		""
+		"Az Ön fiókja nem rendelkezik hozzáféréssel ehhez a funkcióhoz"
 	],
 	"Your choice: ": [
-		"Ön választása: "
+		"Az Ön választása: "
 	],
 	"Your data is going to be re-encrypted and synced again.": [
-		"Az adatai újra lesznek titkosítva és utána szinkronizálva."
+		"Az adatai újratitkosítva és -szinkronizálva lesznek."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"A Joplin Cloud hitelesítő adatai érvénytelenek, jelentkezzen be."
 	],
 	"Your password is needed to decrypt some of your data.": [
-		""
+		"Az Ön jelszava szükséges az adatainak visszafejtéséhez."
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
-		""
+		"A jelszóra az adatok egy részének visszafejtéséhez van szükség. A beállításához írja be a `:e2ee decrypt` parancsot."
 	],
 	"Your version: %s": [
-		"Verziója: %s"
+		"Az Ön verziója: %s"
 	],
 	"Zoom In": [
 		"Nagyítás"

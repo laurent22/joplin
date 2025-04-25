@@ -59,7 +59,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -329,6 +335,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"ادراج النصف الآخر للأقواس و علامات الإقتباس."
 	],
@@ -374,6 +383,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"يمكن المشاركة"
 	],
@@ -388,6 +400,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"يجري إلغاء مزامنة الخلفية... فضلاً انتظر."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"الإلغاء جارٍ..."
@@ -488,6 +503,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"اضغط لإدراج سمات..."
 	],
@@ -509,6 +527,9 @@
 	"Close Window": [
 		"إغلاق النافذة"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -526,9 +547,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"تعاون مع الآخرين على دفاتر الملاحظات"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"المنبّهات القادمة"
@@ -568,6 +586,9 @@
 	],
 	"Configuration": [
 		"الضبط"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"تأكيد كلمة المرور لا يمكن أن تكون فارغة"
@@ -805,9 +826,6 @@
 	"Delete local data and re-download from sync target": [
 		"حذف البيانات المحليّة وإعادة تنزيل"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"حذف الملاحظة"
 	],
@@ -860,6 +878,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -987,12 +1008,6 @@
 	],
 	"Edit": [
 		"تحرير"
-	],
-	"Edit in external editor": [
-		"التحرير في محرر خارجي"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"تحرير الرابط"
@@ -1141,6 +1156,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"تخويل التشفير يعني أن *كل* ملاحظاتك ومرفقاتها ستجري إعادة مزامنتها ثم ترسل مشفرة إلى وجهة المزامنة."
 	],
@@ -1210,9 +1228,6 @@
 	"Exits the application.": [
 		"الخروج من التطبيق."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"تصدير"
 	],
@@ -1252,6 +1267,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"آمن من الفشل: لا تقم بمسح البيانات المحلية عندما يكون هدف المزامنة فارغًا (غالبًا ما يكون نتيجة لحدوث خطأ في التكوين أو خلل برمجي)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"خطأ فادح:"
 	],
@@ -1275,6 +1293,9 @@
 	],
 	"Find: ": [
 		"بحث:"
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"إضافة Firefox"
@@ -1539,6 +1560,9 @@
 	"Invalid command: \"%s\"": [
 		"أمر غير صالح:\"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"قيمة خيار غير صحيحة: \"%s\". القيم الممكنة هي: %s."
 	],
@@ -1625,6 +1649,9 @@
 	],
 	"Language": [
 		"اللغة"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"آخر خطأ: %s"
@@ -1766,6 +1793,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1793,6 +1823,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"نقل %d ملاحظات إلى دفتر الملاحظات \"%s\" ؟"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"النقل إلى دفتر ملاحظات"
 	],
@@ -1801,6 +1837,9 @@
 	],
 	"Move to notebook:": [
 		"النقل إلى دفتر ملاحظات:"
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"لا"
@@ -1897,6 +1936,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"لا يمكن المصادقة باستخدام %s. يرجى التزويد بأي من بيانات اعتماد الدخول المفقودة."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"لم تنزّل"
@@ -2024,11 +2066,20 @@
 	"Open %s": [
 		"افتح %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"فتح عارض PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"فتح مجلّد ملف التعريف"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"فتح معالج المزامنة..."
@@ -2056,6 +2107,12 @@
 	],
 	"Page size for PDF export": [
 		"حجم الصفحة لتصدير PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"كلمة المرور"
@@ -2101,6 +2158,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"فضلاً افتح عنوان URL التالي في المستعرض لديك لتمكين التطبيق من المصادقة سينشئ التطبيق دليلاً في \"Apps/Joplin\" ثم يقوم فقط بقراءة وكتابة الملفات في هذا الدليل. لن يكون لديه أي وصول لأي ملف خارج هذا الدليل أو لأي بيانات شخصية أخرى. لن نشارك البيانات مع أي طرف ثالث."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -2273,6 +2333,9 @@
 	"Recipients:": [
 		"المستلمون:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"إعادة التحميل"
 	],
@@ -2402,6 +2465,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"بحث"
 	],
@@ -2516,6 +2582,9 @@
 	"Skipped: %d.": [
 		"تم تخطيها: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2575,6 +2644,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"بدء التطبيق مصغراً في لوحة النظام"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"ابدأ، أوقف أو تحقق من خادم API. لتحديد أي منفذ يجب تشغيله، قم بتعيين متغير تكوين api.port. الأوامر هي (%s)."
@@ -2719,6 +2791,12 @@
 	],
 	"Synchronizing...": [
 		"المزامنة جارية..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"صحيفة شعبية"
@@ -3032,6 +3110,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"قوائم المهام غير المكتملة في الأعلى"
 	],
@@ -3164,6 +3245,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -3243,6 +3327,9 @@
 		"أنت على وشك إرفاق صورة كبيرة (%dx%d بكسل). هل ترغب في تغيّير حجمة إلى %d بكسل قبل إرفاقه؟"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

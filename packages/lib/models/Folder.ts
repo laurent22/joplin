@@ -187,6 +187,24 @@ export default class Folder extends BaseItem {
 		};
 	}
 
+	// Checks for invalid state -- whether startId or its parents is part of a cycle
+	// in the folder graph (which should be a tree).
+	private static checkForFolderHierarchyCycle_(
+		idToFolder: Record<string, FolderEntity>,
+		startId: string,
+	) {
+		let folderId = startId;
+		const seenIds = new Set();
+		for (; idToFolder[folderId]; folderId = idToFolder[folderId].parent_id) {
+			if (seenIds.has(folderId)) {
+				return true;
+			}
+			seenIds.add(folderId);
+		}
+
+		return false;
+	}
+
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
 	// Note: this only calculates the overall number of nodes for this folder and all its descendants
 	public static async addNoteCounts(folders: FolderEntity[], includeCompletedTodos = true) {
@@ -226,10 +244,22 @@ export default class Folder extends BaseItem {
 		}
 
 		const noteCounts: NoteCount[] = await this.db().selectAll(sql);
-		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		noteCounts.forEach((noteCount) => {
+		for (const noteCount of noteCounts) {
 			let parentId = noteCount.folder_id;
+
+			let i = 0;
+			let checkedForCycle = false;
 			do {
+				// Handle invalid state, preventing infinite loops -- check whether the current
+				// folder has itself as a parent.
+				if (i++ > 100 && !checkedForCycle) {
+					if (Folder.checkForFolderHierarchyCycle_(foldersById, parentId)) {
+						logger.warn(`Invalid state: Folder ${parentId} has itself as a parent.`);
+						break;
+					}
+					checkedForCycle = true;
+				}
+
 				const folder = foldersById[parentId];
 				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
 				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
@@ -240,7 +270,7 @@ export default class Folder extends BaseItem {
 
 				parentId = folder.parent_id;
 			} while (parentId);
-		});
+		}
 	}
 
 	// Folders that contain notes that have been modified recently go on top.

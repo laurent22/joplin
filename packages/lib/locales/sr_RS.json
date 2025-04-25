@@ -56,7 +56,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -299,6 +305,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Ауто-упари заграде, цитате, итд."
 	],
@@ -341,6 +350,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -352,6 +364,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Обустављање синхонизације у позадини... Молим сачекајте."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Отказивање..."
@@ -440,6 +455,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Кликните \"%s\" за повраћај белешке. Биће копирана у бележницу под називом \"%s\". Тренутна верзија белешке неће бити замењена или измењена."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Кликни да додаш ознаку..."
 	],
@@ -455,6 +473,9 @@
 	"Close Window": [
 		"Затвори прозор"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -467,7 +488,7 @@
 	"Code Block": [
 		"Кôд блок"
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -502,6 +523,9 @@
 	],
 	"Configuration": [
 		"Поставке"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Conflicted: %d": [
 		"У конфликту: %d"
@@ -653,9 +677,6 @@
 	"Delete local data and re-download from sync target": [
 		"Избришите локалне податке и поново их скините са одредишта за синхронизацију"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -690,6 +711,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -800,12 +824,6 @@
 	"Edit": [
 		"Уреди"
 	],
-	"Edit in external editor": [
-		"Уреди у спољном уређивачу"
-	],
-	"Edit in new window": [
-		""
-	],
 	"Edit note.": [
 		"Уреди белешку."
 	],
@@ -914,6 +932,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Шифровано"
 	],
@@ -965,7 +986,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -995,6 +1016,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Сигурни услови: Не бришите локалне податке када је одредиште за синхронизацију празно (често буде резултат погрешне конфигурације или грешке)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Фатална грешка:"
 	],
@@ -1012,6 +1036,9 @@
 	],
 	"File system": [
 		"Фајл систем"
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox екстензија"
@@ -1253,6 +1280,9 @@
 	"Invalid command: \"%s\"": [
 		"Невалидна команда: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Неважећа вредност за опцију: \"%s\". Могуће вредности су: %s."
 	],
@@ -1336,6 +1366,9 @@
 	],
 	"Language": [
 		"Језик"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Последња грешка: %s"
@@ -1439,6 +1472,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1463,6 +1499,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Премести %d белешке у бележницу \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Премести у бележницу;"
 	],
@@ -1471,6 +1513,9 @@
 	],
 	"Move to notebook:": [
 		"Премести у бележницу;"
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1558,6 +1603,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Нисте потрвдили идентитет са %s. Молимо вас да унесете податке који недостају."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Није преузето"
@@ -1652,6 +1700,15 @@
 	"Open %s": [
 		"Отвори %s"
 	],
+	"Open in new window": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
+		""
+	],
 	"Open Sync Wizard...": [
 		""
 	],
@@ -1675,6 +1732,12 @@
 	],
 	"Page size for PDF export": [
 		"Величина странице за извоз у ПДФ формат"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Лозинка"
@@ -1714,6 +1777,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Молимо вас отворите следећи УРЛ у вашем претраживачу да бисте дали потребна овлашћења апликацији. Апликација ће креирати свој директоријум у \"Apps/Joplin\" и само ће писати и читати фајлове унутар овог директоријума. Неће имати присту спољашњим директоријумима нити било којим другим личним подацима. Ни један део података се не дели са трећим странама."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -1865,6 +1931,9 @@
 	"Recipients:": [
 		"Примаоци:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Корак напред"
 	],
@@ -1991,6 +2060,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Претрага"
 	],
@@ -2084,6 +2156,9 @@
 	"Skipped: %d.": [
 		"Прескочено: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Соларизовано тамно"
 	],
@@ -2137,6 +2212,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Покрени апликацију умањену у траци"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
@@ -2194,6 +2272,9 @@
 	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Успешно! Излгеда да су поставке конфигурације синхронизације тачне."
+	],
+	"Suggestions": [
+		""
 	],
 	"Superscript": [
 		"Експонент"
@@ -2260,6 +2341,12 @@
 	],
 	"Synchronises with remote storage.": [
 		"Синхонизује се за удаљеним складиштем."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Таблоид"
@@ -2552,6 +2639,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Недовршене ставке задужења на врх"
 	],
@@ -2657,6 +2747,9 @@
 	"Vim": [
 		"Вим"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -2733,6 +2826,9 @@
 		"Приложићете слику величине (%dx%d пиксела). Да ли желите да је смањите на %d пиксела пре него што је приложите?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [

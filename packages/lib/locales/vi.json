@@ -56,7 +56,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -317,6 +323,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Tự động đóng ngoặc nhọn, ngoặc đơn, ngoặc kép, v.v..."
 	],
@@ -359,6 +368,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -370,6 +382,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Hủy đồng bộ hóa đang chạy dưới nền… Vui lòng chờ."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Hủy..."
@@ -464,6 +479,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Ấn \"%s\" để hồi phục note. Thao tác này sẽ sao chép notebook có tên \"%s\". Phiên bản hiện tại của note sẽ không bị mất đi hay thay đổi."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Nhấn để thêm nhãn…"
 	],
@@ -482,6 +500,9 @@
 	"Close Window": [
 		"Đóng cửa sổ"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -497,7 +518,7 @@
 	"Code View": [
 		"Xem Code"
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -535,6 +556,9 @@
 	],
 	"Configuration": [
 		"Cấu hình"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Xác nhận không thể để trống mật khẩu"
@@ -719,9 +743,6 @@
 	"Delete local data and re-download from sync target": [
 		"Xóa dữ liệu cục bộ và tải xuống lại từ mục tiêu đồng bộ hóa"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete plugin \"%s\"?": [
 		"Xoá phần mở rộng “%s”?"
 	],
@@ -759,6 +780,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -877,12 +901,6 @@
 	],
 	"Edit": [
 		"Chỉnh sửa"
-	],
-	"Edit in external editor": [
-		"Chỉnh sửa trên trình chỉnh sửa văn bản khác"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit note.": [
 		"Sửa ghi chú."
@@ -1019,6 +1037,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Đã mã hóa"
 	],
@@ -1079,7 +1100,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -1121,6 +1142,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Thiết kế an toàn: Không xóa dữ liệu cục bộ khi điểm đến đồng bộ hóa trống (thường là kết quả của bug hoặc cấu hình sai)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Lỗi nghiêm trọng:"
 	],
@@ -1138,6 +1162,9 @@
 	],
 	"File system": [
 		"Tập tin hệ thống"
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox Extension"
@@ -1400,6 +1427,9 @@
 	"Invalid command: \"%s\"": [
 		"Câu lệnh sai: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Giá trị lựa chọn lỗi: \"%s\". Các giá trị có thể sử dụng là: %s."
 	],
@@ -1483,6 +1513,9 @@
 	],
 	"Language": [
 		"Ngôn ngữ"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Lỗi gần nhất; %s"
@@ -1589,6 +1622,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1616,6 +1652,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Di chuyển %d notes tới notebook \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Chuyển tới sổ ghi chú"
 	],
@@ -1624,6 +1666,9 @@
 	],
 	"Move to notebook:": [
 		"Chuyển tới sổ ghi chú:"
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1723,6 +1768,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Chưa được ủy quyền với %s. Vui lòng cung cấp thông tin chưa được cung cấp."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Không thể tải"
@@ -1841,8 +1889,17 @@
 	"Open %s": [
 		"Mở %s"
 	],
+	"Open in new window": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Mở thư mục cá nhân"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		""
@@ -1867,6 +1924,12 @@
 	],
 	"Page size for PDF export": [
 		"Kích thước của trang để export dạng PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Mật khẩu"
@@ -1912,6 +1975,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Vui lòng mở URL này trong trình duyệt web của bạn để ủy quyền cho ứng dụng. Ứng dụng sẽ tạo một đường dẫn \"Apps/Joplin\" và sẽ chỉ đọc và ghi tập tin tại đường dẫn này. Ứng dụng sẽ không thể truy cập bất kỳ file nào ngoài đường dẫn này cũng như các dữ liệu cá nhân. Không có dữ liệu nào sẽ được chia sẻ với bên thứ ba."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -2084,6 +2150,9 @@
 	"Recipients:": [
 		"Người nhận:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Redo"
 	],
@@ -2216,6 +2285,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Tìm kiếm"
 	],
@@ -2333,6 +2405,9 @@
 	"Skipped: %d.": [
 		"Đã bỏ qua: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2392,6 +2467,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Chạy chương trình trong nền, hiển thị icon trong tray khi máy khởi động"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Bắt đầu, dừng, hoặc kiểm tra server API. Để chỉ định port mà ứng dụng sẽ chạy, đặt giá trị cho biến cấu hình api.port. Những câu lệnh bao gồm (%s)."
@@ -2533,6 +2611,12 @@
 	],
 	"Synchronizing...": [
 		"Đang đồng bộ hóa..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -2846,6 +2930,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"HIển thị to-dos chưa hoàn thành lên đầu"
 	],
@@ -2972,6 +3059,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -3054,6 +3144,9 @@
 		"Bạn sắp đính kèm một hình ảnh lớn (%dx%d pixel). Bạn có muốn giảm kích cỡ xuống %d pixel trước khi đính kèm nó?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

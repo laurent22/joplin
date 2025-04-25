@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 
 import { Component } from 'react';
 
@@ -88,7 +88,7 @@ class NoteListComponent extends Component<NoteListProps> {
 
 		if (this.props.items.length) {
 			return <FlatList
-				ref={ref => (this.rootRef_ = ref)}
+				ref={ref => { this.rootRef_ = ref; }}
 				data={this.props.items}
 				renderItem={({ item }) => <NoteItem note={item} />}
 				keyExtractor={item => item.id}

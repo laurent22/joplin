@@ -65,8 +65,14 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s не оптимізовано для синхронізації багатьох невеликих файлів, тому початкова синхронізація буде повільною."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"%s відкрито вкладку"
@@ -117,7 +123,7 @@
 		"(У плагіні: %s)"
 	],
 	"(level %d)": [
-		""
+		"(Рівень %d)"
 	],
 	"(None)": [
 		"(Жодного)"
@@ -129,7 +135,7 @@
 		"(Ви можете вимкнути цей запит у налаштуваннях)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"- Камера: щоб надати доступ до камери була можливість додавати фто до нотатки."
+		"- Камера: дозволяє зробити знімок і додати його до примітки."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
 		"- Розташування: щоб дозволити додавати інформацію про геолокацію до нотатки."
@@ -142,6 +148,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> може бути “toggle” або “clear”. Використовуйте “toggle”, щоб переключити дане завдання між завершеним та незавершеним станом (якщо ціль - звичайна нотатка, вона буде перетворена на завдання). Використовуйте “clear”, щоб перетворити завдання назад на звичайну нотатку."
+	],
+	"A new update (%s) is available": [
+		"Доступне нове оновлення (%s)"
 	],
 	"A3": [
 		"A3"
@@ -213,13 +222,16 @@
 		"Додати одержувача:"
 	],
 	"Add tag %s to note": [
-		""
+		"Додати тег %s до примітки"
 	],
 	"Add title": [
 		"Додати заголовок"
 	],
 	"Add to dictionary": [
 		"Додати до словника"
+	],
+	"Add to note": [
+		"Додати до примітки"
 	],
 	"Admin": [
 		"Адміністратор"
@@ -235,6 +247,9 @@
 	],
 	"Advanced tools": [
 		"Розширені інструменти"
+	],
+	"all": [
+		"все"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Усі дані, включно з нотатками, блокнотами та тегами, буде остаточно видалено."
@@ -299,6 +314,9 @@
 	"Apply": [
 		"Застосувати"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"Ви впевнені, що бажаєте відновити макет панелі інструментів за замовчуванням?\nЦе неможливо скасувати."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Ви впевненні що хочете поновити токен авторизації?"
 	],
@@ -312,7 +330,7 @@
 		"Aritim Dark"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
-		""
+		"Наразі Joplin Web можна відкрити лише в одній вкладці одночасно. Будь ласка, закрийте інший екземпляр Joplin."
 	],
 	"Attach": [
 		"Прикріпити"
@@ -362,11 +380,14 @@
 	"Auto-add disabled accounts for deletion": [
 		"Автоматично додавати вимкнені облікові записи для видалення"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Автоматичне закриття дужок, лапок тощо."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Автопідказки для Markdown та HTML"
 	],
 	"Automatically check for updates": [
 		"Автоматично перевіряти наявність оновлень"
@@ -405,6 +426,9 @@
 		"від %s"
 	],
 	"by word": [
+		"по словах"
+	],
+	"Camera": [
 		""
 	],
 	"Can Share": [
@@ -421,6 +445,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Скасування фонової синхронізації … Зачекайте."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Скасування…"
@@ -482,8 +509,11 @@
 	"Change language": [
 		"Змінити мову"
 	],
+	"Change ratio": [
+		"Зміна співвідношення"
+	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Змінити скорочення для \"%s\""
 	],
 	"Characters": [
 		"Символи"
@@ -492,7 +522,7 @@
 		"Символи виключаючи пробіли"
 	],
 	"Check elements to display in the toolbar": [
-		""
+		"Виберіть елементи для відображення на панелі інструментів"
 	],
 	"Check for updates...": [
 		"Перевірити наявність оновлень…"
@@ -527,11 +557,17 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Натисніть “%s”, щоб відновити нотатку. Вона буде скопійована у блокнот із назвою “%s”. Поточна версія примітки не буде замінена або змінена."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Клацніть, щоб додати теги..."
 	],
 	"Client ID: %s": [
 		"ID клієнта: %s"
+	],
+	"close": [
+		"закрити"
 	],
 	"Close": [
 		"Закрити"
@@ -540,13 +576,16 @@
 		"Закрити випадаючий список"
 	],
 	"Close side menu": [
-		""
+		"Закрити бокове меню"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"Закрийте програму, потім видаліть свій профіль у \"%s\" і запустіть програму знову. Переконайтеся, що ви створили резервну копію, експортувавши всі ваші нотатки у форматі JEX."
 	],
 	"Close Window": [
 		"Закрити вікно"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		"Cmd-клік, щоб відкрити"
@@ -569,9 +608,6 @@
 	"Collaborate on notebooks with others": [
 		"Співпрацюйте над нотатками з іншими"
 	],
-	"Collapsed, press space to expand.": [
-		""
-	],
 	"Coming alarms": [
 		"Найближчі будильники"
 	],
@@ -593,6 +629,9 @@
 	"Compact": [
 		"Компактно"
 	],
+	"Complete": [
+		"Завершено"
+	],
 	"Completed": [
 		"Завершено"
 	],
@@ -613,6 +652,9 @@
 	],
 	"Configuration": [
 		"Налаштування"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Підтвердження паролю не може бути порожнім"
@@ -637,6 +679,11 @@
 	],
 	"Consolidated billing": [
 		"Консолідована оплата"
+	],
+	"Contains %d note": [
+		"Містить %d примітку",
+		"Містить %d примітки",
+		"Містить %d приміток"
 	],
 	"Content provided by %s": [
 		"Вміст надано %s"
@@ -790,6 +837,12 @@
 	"Ctrl-click to open: %s": [
 		"Ctrl-клік, щоб відкрити: %s"
 	],
+	"current match": [
+		"поточне співпадіння"
+	],
+	"Current password": [
+		"Поточний пароль"
+	],
 	"Current version is up-to-date.": [
 		"Поточна версія є оновленою."
 	],
@@ -865,9 +918,6 @@
 	"Delete local data and re-download from sync target": [
 		"Видаліть локальні дані та повторно завантажте з цілі синхронізації"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Видалити нотатку"
 	],
@@ -916,11 +966,23 @@
 	"Deletes the notes without asking for confirmation.": [
 		"Видаляє нотатки, не вимагаючи підтвердження."
 	],
+	"Deletion log": [
+		"Журнал видалення"
+	],
+	"Deselect": [
+		"Зняти вибір"
+	],
 	"Destination format: %s": [
 		"Формат призначення: %s"
 	],
 	"Detailed": [
 		"Детально"
+	],
+	"Dev": [
+		"Розробка"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"Каталог"
@@ -942,6 +1004,9 @@
 	],
 	"Disabled": [
 		"Відключено"
+	],
+	"Disabled keys": [
+		"Вимкнені клавіші"
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Вимкнення шифрування означає, що *всі* ваші нотатки та вкладення будуть повторно синхронізовані та відправлені незашифрованими до цілі синхронізації. Ви хочете продовжити?"
@@ -1060,12 +1125,6 @@
 	"Edit": [
 		"Редагувати"
 	],
-	"Edit in external editor": [
-		"Радктувати в зовнішньому редакторі"
-	],
-	"Edit in new window": [
-		""
-	],
 	"Edit link": [
 		"Редагувати посилання"
 	],
@@ -1083,6 +1142,9 @@
 	],
 	"Editor": [
 		"Редактор"
+	],
+	"Editor actions": [
+		"Дії редактора"
 	],
 	"Editor font": [
 		"Шрифт редактора"
@@ -1156,9 +1218,6 @@
 	"Enable encryption": [
 		"Ввімкнути шифрування"
 	],
-	"Enable file:// URLs for images and videos": [
-		""
-	],
 	"Enable footnotes": [
 		"Увімкнути виноски"
 	],
@@ -1198,6 +1257,9 @@
 	"Enable soft breaks": [
 		"Увімкнути м’які переходи"
 	],
+	"Enable spell checking in Markdown editor": [
+		"Увімкнути перевірку правопису в редакторі Markdown"
+	],
 	"Enable spellcheck in the text editor": [
 		"Увімкніть перевірку правопису в текстовому редакторі"
 	],
@@ -1223,6 +1285,9 @@
 		"Включено"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		"Вмикає продовження списку Markdown, автоматичне закриття тегів HTML та інші автозавершення розмітки."
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
@@ -1252,6 +1317,9 @@
 	"End-to-end encryption": [
 		"Наскрізне шифрування"
 	],
+	"Ends voice typing": [
+		"Завершення голосового введення"
+	],
 	"Enter code here": [
 		"Введіть код тут"
 	],
@@ -1263,6 +1331,9 @@
 	],
 	"Enter password": [
 		"Введіть пароль"
+	],
+	"Entering selection mode": [
+		"Вхід у режим виділення"
 	],
 	"Enum": [
 		"Enum"
@@ -1300,9 +1371,6 @@
 	"Expand %s": [
 		"Розгорнути %s"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Експорт"
 	],
@@ -1317,6 +1385,9 @@
 	],
 	"Export Debug Report": [
 		"Експортувати розширений звіт"
+	],
+	"Export deletion log": [
+		"Експорт журналу видалень"
 	],
 	"Export profile": [
 		"Експорт профілю"
@@ -1348,6 +1419,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Безаварійність: не видаляйти локальні дані, коли ціль синхронізації порожня (часто результат неправильної конфігурації або помилки)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Критична помилка:"
 	],
@@ -1372,8 +1446,14 @@
 	"Filter tags": [
 		"Фільтри тегів"
 	],
+	"Find": [
+		"Знайти"
+	],
 	"Find: ": [
 		"Знайти: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Рощширення Firefox"
@@ -1394,7 +1474,7 @@
 		"Фокус на залоговку"
 	],
 	"Follow link": [
-		""
+		"Перейти за посиланням"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Тільки для налагодження: експортуйте свій профіль на зовнішню SD-карту."
@@ -1447,7 +1527,7 @@
 		"Отримати зараз:"
 	],
 	"Get pre-releases when checking for updates": [
-		"Отримуйте ntcnjdb випуски, перевіряючи наявність оновлень"
+		"Отримувати попередні випуски під час перевірки оновлень"
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Отримує або встановлює значення конфігурації. Якщо значення [value] не вказано, воно буде відображати значення [name]. Якщо не вказано ні [ім’я], ні [значення], у ньому буде вказано поточну конфігурацію."
@@ -1456,13 +1536,13 @@
 		""
 	],
 	"Go back": [
-		""
+		"Повернутись назад"
 	],
 	"Go to Joplin Cloud profile": [
 		"Перейти до профілю Joplin Cloud"
 	],
 	"Go to line": [
-		""
+		"Перейти до рядка"
 	],
 	"Go to source URL": [
 		"Перейти до посилання"
@@ -1508,6 +1588,9 @@
 	],
 	"Hide keyboard": [
 		"Сховати клавіатуру"
+	],
+	"Hide password": [
+		"Приховати пароль"
 	],
 	"Highlight": [
 		"Виділення"
@@ -1617,6 +1700,12 @@
 	"Incompatible": [
 		"Несумісний"
 	],
+	"Incomplete": [
+		"Не завершено"
+	],
+	"Incomplete to-do": [
+		"Не завершені завдання"
+	],
 	"Increase indent level": [
 		"Збільшити відступ"
 	],
@@ -1627,7 +1716,7 @@
 		"Збільшити відступ"
 	],
 	"Info": [
-		""
+		"Інформація"
 	],
 	"Information": [
 		"Інформація"
@@ -1642,7 +1731,7 @@
 		"Вставити Посилання"
 	],
 	"Insert time": [
-		"Введіть час"
+		"Вставити час"
 	],
 	"Install": [
 		"Встановити"
@@ -1671,6 +1760,9 @@
 	"Invalid command: \"%s\"": [
 		"Хибна команда: “%s”"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Недійсне значення параметра: “%s”. Можливі значення: %s."
 	],
@@ -1694,6 +1786,9 @@
 	],
 	"Items that cannot be synchronised": [
 		"Елементи, які неможливо синхронізувати"
+	],
+	"Join us on %s": [
+		"Приєднуйтесь до нас у %s"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin може синхронізувати ваші нотатки за допомогою різних провайдерів. Виберіть один зі списку нижче."
@@ -1721,6 +1816,9 @@
 	],
 	"Joplin Forum": [
 		"Форум Joplin"
+	],
+	"Joplin is already running.": [
+		"Joplin вже запущено."
 	],
 	"Joplin Mobile": [
 		"Joplin Mobile"
@@ -1775,6 +1873,9 @@
 	],
 	"Language, date format": [
 		"Мова, формат дати"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Остання помилка: %s"
@@ -1886,6 +1987,9 @@
 	"Manage shared notebooks": [
 		"Керування спільними блокнотами"
 	],
+	"Manage toolbar options": [
+		"Керуйте параметрами панелі інструментів"
+	],
 	"Manage your plugins": [
 		"Керування розширеннями"
 	],
@@ -1900,6 +2004,9 @@
 	],
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
+	],
+	"Markdown editor": [
+		"Редактор Markdown"
 	],
 	"Marks a to-do as done.": [
 		"Позначити завдання як виконане."
@@ -1923,7 +2030,7 @@
 		""
 	],
 	"Math": [
-		""
+		"Математика"
 	],
 	"Max concurrent connections": [
 		"Максимальна кількість одночасних з’єднань"
@@ -1940,8 +2047,14 @@
 	"Media player, math, diagrams, table of contents": [
 		"Медіаплеєр, математика, діаграми, зміст"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"Мінімізувати"
+	],
+	"Missing camera permission": [
+		"Відсутній дозвіл камери"
 	],
 	"Missing keys": [
 		"Відсутні ключі"
@@ -1973,8 +2086,14 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Перемістити %d нотатку(-ок) до блокноту \"%s\"?"
 	],
+	"Move left": [
+		""
+	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Перемістити зошит \"%s\" на смітник?\n\nУсі нотатки та піднотатки у цьому блокноті також буде переміщено до кошика."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Перемістити в блокнот"
@@ -1984,6 +2103,9 @@
 	],
 	"Move to notebook:": [
 		"Перемістити в блокнот:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Переміщує вказаний <item> до [notebook]"
@@ -1996,6 +2118,12 @@
 	],
 	"Never resize": [
 		"Ніколи не змінюйте розмір"
+	],
+	"New attachment": [
+		"Нове вкладення"
+	],
+	"New drawing": [
+		"Новий малюнок"
 	],
 	"New invitations": [
 		"Нові запрошення"
@@ -2012,8 +2140,11 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Новий блокнот “%s” буде створено і файл “%s” буде імпортовано в нього"
 	],
+	"New photo": [
+		"Нове зображення"
+	],
 	"New sub-notebook": [
-		"Повий вкладений блокнот"
+		"Новий вкладений блокнот"
 	],
 	"New tags:": [
 		"Нові теги:"
@@ -2025,7 +2156,7 @@
 		"Нова версія: %s"
 	],
 	"next": [
-		""
+		"далі"
 	],
 	"Next match": [
 		"Наступне співпадіння"
@@ -2061,7 +2192,7 @@
 		"Не вибрано жодного блокнота."
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
-		"Тут немає нотаток. Створіть його, натиснувши “Нова нотатка”."
+		"Тут немає нотаток. Створіть її, натиснувши «Нова нотатка»."
 	],
 	"No plugins are installed.": [
 		"Плагіни не встановлені."
@@ -2084,11 +2215,20 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Не визначено жодного текстового редактора. Будь ласка, встановіть його за допомогою `config editor <editor-path>`"
 	],
+	"No updates available": [
+		"Немає доступних оновлень"
+	],
+	"None": [
+		"Нічого"
+	],
 	"Nord": [
 		"Nord"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Не аутентифіковано за допомогою %s. Надайте будь-які відсутні облікові дані."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Не завантажено"
@@ -2187,7 +2327,10 @@
 		"Нумерований список"
 	],
 	"OCR: Clear cache and re-download language data files": [
-		""
+		"OCR: Очистити кеш та перезавантажити файли мов"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: Посилання або шлях до мовних даних"
 	],
 	"OK": [
 		"OK"
@@ -2199,7 +2342,7 @@
 		"%s: %s"
 	],
 	"on line": [
-		""
+		"на рядку"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Один з ваших мастер-ключів використовує застарілий метод шифрування."
@@ -2216,6 +2359,9 @@
 	"OneDrive Login": [
 		"OneDrive логін"
 	],
+	"OneNote Notebook": [
+		"Блокнот OneNote"
+	],
 	"Only one note can be printed at a time.": [
 		"Лише однв нотатка може бути роздрукована за раз."
 	],
@@ -2231,8 +2377,17 @@
 	"Open PDF viewer": [
 		"Відкрити переглядач PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Відкрити каталог профілю"
+	],
+	"Open secondary app instance...": [
+		""
+	],
+	"Open settings": [
+		"Відкрити налаштування"
 	],
 	"Open Source": [
 		"Відкритий вихідний код"
@@ -2245,6 +2400,15 @@
 	],
 	"Opening section %s": [
 		"Початковий розділ %s"
+	],
+	"Opens dropdown": [
+		"Відкрити випадаючий список"
+	],
+	"Opens note": [
+		"Відкрити примітку"
+	],
+	"Opens notebook": [
+		"Відкрити блокнот"
 	],
 	"Operation cancelled": [
 		"Операцію скасовано"
@@ -2266,6 +2430,12 @@
 	],
 	"Page size for PDF export": [
 		"Розмір сторінки для експорту в PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Пароль"
@@ -2326,6 +2496,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Будь ласка, відкрийте наступну URL-адресу у своєму браузері, щоб автентифікувати програму. Додаток створить каталог у “Apps/Joplin” і буде лише читати та записувати файли в цьому каталозі. Він не матиме доступу до будь-яких файлів поза цим каталогом, а також до будь-яких інших особистих даних. Ніякі дані не передаватимуться третім особам."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Будь ласка, запишіть свій голос..."
@@ -2403,10 +2576,10 @@
 		"Улюблена світла тема"
 	],
 	"Preferred voice typing provider": [
-		""
+		"Бажаний постачальник послуг голосового введення"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"Зберігайте кольори під час вставлення тексту в форматованому текстовому редакторі"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Натисніть Ctrl + D або введіть “exit”, щоб вийти з програми"
@@ -2419,6 +2592,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Натисніть, щоб встановити пароль розшифровки."
+	],
+	"previous": [
+		"попереднє"
 	],
 	"Previous match": [
 		"Попереднє співпадіння"
@@ -2449,6 +2625,9 @@
 	],
 	"Processing": [
 		"В обробці"
+	],
+	"Processing photo...": [
+		"Обробка зображення..."
 	],
 	"Profile": [
 		"Профіль"
@@ -2489,17 +2668,23 @@
 	"Publish notes to the internet": [
 		"Публікуйте нотатки в Інтернеті"
 	],
+	"QR Code": [
+		"QR код"
+	],
 	"Quit": [
 		"Вихід"
 	],
 	"Re-download model": [
-		""
+		"Перезавантажити моделі"
 	],
 	"Re-encrypt data": [
 		"Перезашифрувати дані"
 	],
 	"Re-encryption": [
 		"Перешифрування"
+	],
+	"Re-enter password": [
+		"Повторно введіть пароль"
 	],
 	"Re-upload local data to sync target": [
 		"Повторно завантажте локальні дані для синхронізації"
@@ -2528,8 +2713,11 @@
 	"Recommended plugins": [
 		"Рекомендовані плагіни"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
-		"Відмінити"
+		"Повторити"
 	],
 	"Refresh": [
 		"Оновити"
@@ -2542,6 +2730,9 @@
 	],
 	"Remove": [
 		"Видалити"
+	],
+	"Remove %s from share": [
+		"Видалити %s із спільного доступу"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Видалити тег “%s” з усіх нотаток?"
@@ -2564,8 +2755,14 @@
 	"Renew token": [
 		"Оновити токен"
 	],
+	"replace": [
+		"замінити"
+	],
 	"Replace": [
 		"Замінити"
+	],
+	"replace all": [
+		"замінити все"
 	],
 	"Replace all": [
 		"Замінити все"
@@ -2577,10 +2774,10 @@
 		"Замінити: "
 	],
 	"replaced $ matches": [
-		""
+		"замінено $ збігів"
 	],
 	"replaced match on line $": [
-		""
+		"замінено збігів у рядку $"
 	],
 	"Report an issue": [
 		"Повідомити про проблему"
@@ -2658,10 +2855,10 @@
 		"Ревізія: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Розширений текст"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		""
+		"Редактор розширеного тексту. Натисніть Esc, а потім Tab, щоб вийти з фокусу."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Виконує команди, що містяться в текстовому файлі. У кожному рядку має бути одна команда."
@@ -2709,6 +2906,9 @@
 		"Збережіть геолокацію з нотатками"
 	],
 	"Scanned code": [
+		"Відсканований код"
+	],
+	"Scrollbar size": [
 		""
 	],
 	"Search": [
@@ -2729,6 +2929,9 @@
 	"Search in current note": [
 		"Пошук в поточній нотатці"
 	],
+	"Search results": [
+		"Результати пошуку"
+	],
 	"Search shown": [
 		"Показано пошук"
 	],
@@ -2740,6 +2943,9 @@
 	],
 	"Searches for the given <pattern> in all the notes.": [
 		"Шукає заданий <pattern> у всіх примітках."
+	],
+	"See changelog": [
+		"Переглянути журнал змін"
 	],
 	"See the pre-release page for more details: %s": [
 		"Докладніше про тестову версію: %s"
@@ -2758,6 +2964,12 @@
 	],
 	"Select parent notebook": [
 		"Виберіть батьківський блокнот"
+	],
+	"Selection deleted": [
+		"Вибір видалено"
+	],
+	"Selects a notebook": [
+		"Виберіть блокнот"
 	],
 	"Send bug report": [
 		"Надіслати повідомлення про помилку"
@@ -2787,7 +2999,7 @@
 		"Встановлює властивість <name> даного <note> до заданого [значення]. Можливі властивості:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Налаштування"
 	],
 	"Share": [
 		"Поділитися"
@@ -2843,6 +3055,12 @@
 	"Show note counts": [
 		"Показати лічильники нотатки"
 	],
+	"Show notebook options": [
+		"Показати налаштування блокноту"
+	],
+	"Show password": [
+		"Показати пароль"
+	],
 	"Show sort order buttons": [
 		"Показати кнопки порядку сортування"
 	],
@@ -2851,6 +3069,9 @@
 	],
 	"Show/hide the sidebar": [
 		"Показати/приховати бічну панель"
+	],
+	"Shows notes for tag": [
+		"Показує примітки для тегу"
 	],
 	"Shrink large images before adding them to notes.": [
 		"Зменшуйте великі зображення, перш ніж додавати їх до нотаток."
@@ -2875,6 +3096,9 @@
 	],
 	"Skipped: %d.": [
 		"Пропущено: %d."
+	],
+	"Small": [
+		""
 	],
 	"Solarised Dark": [
 		"Solarised Dark"
@@ -2901,10 +3125,10 @@
 		"Деякі елементи не вдалося синхронізувати. Будь ласка, спробуйте синхронізувати їх спочатку."
 	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Сортувати \"%s\" у порядку зростання"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Сортувати \"%s\" у порядку спадання"
 	],
 	"Sort notebooks by": [
 		"Сортувати блокноти за"
@@ -2941,6 +3165,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Запускати додаток мінімізований у значок"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Запустіть, зупиніть або перевірте сервер API. Щоб вказати, на якому порту він повинен працювати, встановіть конфігураційну змінну api.port. Команди (%s)."
@@ -3021,13 +3248,22 @@
 		"Змінити профіль"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Переключитися на задню камеру"
+	],
+	"Switch to front-facing camera": [
+		"Переключитися на передню камеру"
 	],
 	"Switch to note type": [
 		"Переключити до нотатки"
 	],
 	"Switch to profile %d": [
 		"Перейти до профілю %d"
+	],
+	"Switch to the %s Editor": [
+		"Переключитись на Редактор %s"
+	],
+	"Switch to the legacy editor": [
+		"Перейти в застарілий редактор"
 	],
 	"Switch to to-do type": [
 		"Переключити до списку справ"
@@ -3094,6 +3330,12 @@
 	],
 	"Synchronizing...": [
 		"Синхронізую…"
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3188,7 +3430,7 @@
 		"У наступних ключах використовується застарілий алгоритм шифрування, тому їх рекомендується оновити. Оновлений ключ як і раніше зможе розшифровувати та шифрувати ваші дані."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"Наступні розширення можуть не підтримувати поточний редактор Markdown:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Команда Joplin перевірила цей плагін, і він відповідає нашим стандартам безпеки та продуктивності."
@@ -3244,7 +3486,7 @@
 		"Ціль синхронізації. Кожна ціль може мати додаткові параметри іменовані `sync.NUM.NAME` (задокументовані нижче)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"Веб-клієнт не підтримує прийом зашифрованих спільних блокнотів. Будь ласка, перейдіть на настільний або мобільний додаток, перш ніж прийняти спільний доступ.\n\nПомилка: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper потребує Вашої авторизації для доступу до Ваших даних."
@@ -3429,6 +3671,9 @@
 	"Toggle editor layout": [
 		"Переключити макет редактора"
 	],
+	"Toggle editor plugin": [
+		"Перемкнути розширення редактора"
+	],
 	"Toggle editors": [
 		"Переключити редактори"
 	],
@@ -3498,14 +3743,20 @@
 	"Unable to share log data. Reason: %s": [
 		"Неможливо надати доступ до даних журналу. Причина: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Незавершені списки справ на горі"
 	],
 	"Undo": [
-		"Сказувати"
+		"Відмінити"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"Видаліть і переінсталюйте програму. Переконайтеся, що ви створили резервну копію, експортувавши всі ваші нотатки у форматі JEX з десктопної програми."
+	],
+	"Unknown": [
+		"Невідомий"
 	],
 	"Unknown file type": [
 		"Невідомий тип файлу"
@@ -3515,6 +3766,9 @@
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Завантажено невідомий тип елементу - оновіть Joplin до останньої версії"
+	],
+	"Unknown platform": [
+		"Невідома платформа"
 	],
 	"Unordered list": [
 		"Unordered list"
@@ -3534,6 +3788,9 @@
 	"Unsupported link or message: %s": [
 		"Непідтримуване посилання або повідомлення: %s"
 	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Непідтримуване посилання або повідомлення: %s\nПомилка: %s"
+	],
 	"Untitled": [
 		"Без назви"
 	],
@@ -3542,6 +3799,9 @@
 	],
 	"Update available": [
 		"Доступне оновлення"
+	],
+	"Update later": [
+		"Оновити пізніше"
 	],
 	"Update profile": [
 		"Оновити профіль"
@@ -3600,6 +3860,9 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		"Використовуйте стрілки для переміщення елементів макета. Натисніть “Escape”, щоб вийти."
 	],
+	"Use the legacy Markdown editor": [
+		"Використовувати застарілий редактор Markdown"
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		"Використовуйте це, щоб відновити індекс пошуку, якщо проблема з пошуком. Це може зайняти багато часу, залежно від кількості нотаток."
 	],
@@ -3641,6 +3904,9 @@
 	],
 	"Vim": [
 		"Vim"
+	],
+	"Voice recorder": [
+		""
 	],
 	"Voice typing language files (URL)": [
 		"Мовні файли голосового введення (URL)"
@@ -3734,6 +4000,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Ви ввійшли в Joplin Cloud, ви можете покинути цей екран."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"У вас зараз немає блокнотів."

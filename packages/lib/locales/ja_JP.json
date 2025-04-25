@@ -62,7 +62,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -341,6 +347,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"無効アカウントを削除に自動追加"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 	],
@@ -386,6 +395,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"共有可能"
 	],
@@ -400,6 +412,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"バックグラウンド同期を中止中… しばらくお待ちください。"
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"中止中..."
@@ -503,6 +518,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"\"%s\"をクリックすると復元を行います。復元されるノートは\"%s\"というノートブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"クリックしてタグを追加..."
 	],
@@ -524,6 +542,9 @@
 	"Close Window": [
 		"ウィンドウを閉じる"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -541,9 +562,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"ノートブック上で共同作業を行う"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"直近のアラーム"
@@ -586,6 +604,9 @@
 	],
 	"Configuration": [
 		"設定"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"パスワード(確認用)は空にできません"
@@ -827,9 +848,6 @@
 	"Delete local data and re-download from sync target": [
 		"ローカルデータを削除して同期先から再ダウンロードする"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"ノートを削除"
 	],
@@ -880,6 +898,9 @@
 	],
 	"Detailed": [
 		"詳細"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"ディレクトリ"
@@ -1015,12 +1036,6 @@
 	],
 	"Edit": [
 		"編集"
-	],
-	"Edit in external editor": [
-		"外部エディターで編集"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1178,6 +1193,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗号化した状態で送ることを意味します。"
 	],
@@ -1244,9 +1262,6 @@
 	"Exits the application.": [
 		"アプリケーションの終了。"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"エクスポート"
 	],
@@ -1292,6 +1307,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ローカルデータを消去しないようにする"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"致命的なエラー:"
 	],
@@ -1315,6 +1333,9 @@
 	],
 	"Find: ": [
 		"検索文字列: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox 拡張機能"
@@ -1598,6 +1619,9 @@
 	"Invalid command: \"%s\"": [
 		"無効な命令: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"無効な設定値: \"%s\"。有効な値は: %sです。"
 	],
@@ -1687,6 +1711,9 @@
 	],
 	"Language, date format": [
 		"言語、日付の形式"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"最新のエラー: %s"
@@ -1841,6 +1868,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"メディアプレーヤー、数式、作図、目次"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1874,6 +1904,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"%d 個のノートを \"%s\" ノートブックに移動しますか？"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"ノートブックへ移動"
 	],
@@ -1882,6 +1918,9 @@
 	],
 	"Move to notebook:": [
 		"ノートブックへ移動:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"指定された <item> を [notebook] に移動します"
@@ -1981,6 +2020,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s では認証できません。他の資格証明書を使用してください。"
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"未ダウンロード"
@@ -2114,11 +2156,20 @@
 	"Open %s": [
 		"%s を開く"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"PDFビューアーを開く"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"プロファイルディレクトリを開く"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Source": [
 		"オープンソース"
@@ -2152,6 +2203,12 @@
 	],
 	"Page size for PDF export": [
 		"エクスポートするPDFのページサイズ"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"パスワード"
@@ -2197,6 +2254,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"このアプリケーションを認証するためには下記のURLをブラウザで開いてください。アプリケーションは\"Apps/Joplin\"フォルダを作成し、その中のファイルのみを読み書きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスしません。第三者にデータが共有されることもありません。"
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"お話しください..."
@@ -2390,6 +2450,9 @@
 	"Recommended plugins": [
 		"おすすめのプラグイン"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"やり直す"
 	],
@@ -2555,6 +2618,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"検索"
 	],
@@ -2702,6 +2768,9 @@
 	"Skipped: %d.": [
 		"スキップ: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised (暗)"
 	],
@@ -2764,6 +2833,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"アプリケーションをトレイアイコンで最小化して起動"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"APIサーバーの起動、停止、状況確認を行います。APIサーバーが使用するポートは api.port で変更できます。コマンドは (%s)。"
@@ -2917,6 +2989,12 @@
 	],
 	"Synchronizing...": [
 		"同期中..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3278,6 +3356,9 @@
 	"Unable to share log data. Reason: %s": [
 		"ログを共有できません。理由: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"未完のToDoをリストの上部に表示"
 	],
@@ -3419,6 +3500,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"音声入力言語ファイル (URL)"
 	],
@@ -3504,6 +3588,9 @@
 		"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小してから添付しますか？"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

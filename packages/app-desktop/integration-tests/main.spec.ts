@@ -4,7 +4,7 @@ import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
 import createStartupArgs from './util/createStartupArgs';
-import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
+import getMainWindow from './util/getMainWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
 import getImageSourceSize from './util/getImageSourceSize';
@@ -196,7 +196,7 @@ test.describe('main', () => {
 		// Open the app ourselves:
 		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
-		const mainWindow = await firstNonDevToolsWindow(electronApp);
+		const mainWindow = await getMainWindow(electronApp);
 
 		const safeModeDisableLink = mainWindow.getByText('Disable safe mode and restart');
 		await safeModeDisableLink.waitFor();

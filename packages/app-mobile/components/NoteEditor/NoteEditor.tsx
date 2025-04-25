@@ -42,6 +42,7 @@ interface Props {
 	themeId: number;
 	initialText: string;
 	noteId: string;
+	noteHash: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	toolbarEnabled: boolean;
@@ -332,6 +333,9 @@ function NoteEditor(props: Props, ref: any) {
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 		cm.execCommand('scrollSelectionIntoView');
 	` : '';
+	const jumpToHashJs = props.noteHash ? `
+		cm.jumpToHash(${JSON.stringify(props.noteHash)});
+	` : '';
 
 	const editorSettings: EditorSettings = useMemo(() => ({
 		themeId: props.themeId,
@@ -391,6 +395,9 @@ function NoteEditor(props: Props, ref: any) {
 						settings
 					);
 
+					${jumpToHashJs}
+					// Set the initial selection after jumping to the header -- the initial selection,
+					// if specified, should take precedence.
 					${setInitialSelectionJS}
 
 					window.onresize = () => {
@@ -424,6 +431,20 @@ function NoteEditor(props: Props, ref: any) {
 			`);
 		}
 	}, [css]);
+
+	// Scroll to the new hash, if it changes.
+	const isFirstScrollRef = useRef(true);
+	useEffect(() => {
+		// The first "jump to header" is handled during editor setup and shouldn't
+		// be handled a second time:
+		if (isFirstScrollRef.current) {
+			isFirstScrollRef.current = false;
+			return;
+		}
+		if (jumpToHashJs && webviewRef.current) {
+			webviewRef.current.injectJS(jumpToHashJs);
+		}
+	}, [jumpToHashJs]);
 
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);

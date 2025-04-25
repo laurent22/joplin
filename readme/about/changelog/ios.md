@@ -1,5 +1,16 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.4) - 2025-04-24T08:53:53Z
+
+- Improved: Note editor: Hash links: Move cursor to header or anchor associated with link target (#12129 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Print name of file when import fails (c3fe0ed)
+- Improved: Update to js-draw v1.29.2 (#12074 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix to-do completion status can't be changed from the note list (#12101 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix error when attempting to show message boxes in some cases (#12142 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Make list continuation logic more predictable (#11919) (#10226 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown Editor: Fix numbered sublist renumbering (#12091 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Settings: Fix desktop-specific setting visible in note &gt; advanced (#12146 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.3.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.3) - 2025-04-07T19:20:10Z
 
 - New: Add "swap line up" and "swap line down" to toolbar extended options (#12053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

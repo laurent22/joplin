@@ -62,7 +62,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -332,6 +338,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Automatski dodaj deaktivirane račune za brisanje"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatski uskladi zagrade, navodnike itd."
 	],
@@ -377,6 +386,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Može dijeliti"
 	],
@@ -391,6 +403,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Prekida se sinkronizacija u pozadini … Pričekaj."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Prekida se …"
@@ -494,6 +509,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Za obnavljanje bilješke pritisni „%s”. Kopirat će se u bilježnicu „%s”. Trenutačna verzija bilješke neće se zamijeniti niti promijeniti."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Pritisni za dodavanje oznaka …"
 	],
@@ -515,6 +533,9 @@
 	"Close Window": [
 		"Zatvori prozor"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -532,9 +553,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Surađuj s drugima na bilježnicama"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Nadolazeća upozorenja"
@@ -574,6 +592,9 @@
 	],
 	"Configuration": [
 		"Konfiguracija"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Lozinka potvrde ne smije biti prazna"
@@ -808,9 +829,6 @@
 	"Delete local data and re-download from sync target": [
 		"Izbriši lokalne podatke i ponovo preuzmi iz izvora sinronizacije"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"Izbriši bilješku"
 	],
@@ -863,6 +881,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -993,12 +1014,6 @@
 	],
 	"Edit": [
 		"Uredi"
-	],
-	"Edit in external editor": [
-		"Uredi u vanjskom uređivaču"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Uredi poveznicu"
@@ -1150,6 +1165,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo sinkronizirati i poslati šifrirano u cilj sinkronizacije."
 	],
@@ -1216,9 +1234,6 @@
 	"Exits the application.": [
 		"Zatvara program."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Izvezi"
 	],
@@ -1264,6 +1279,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Sigurnosni mehanizam: Ne briši lokalne podatke kad je cilj sinkronizacije prazan (često se radi o krivoj konfiguraciji ili o programskoj grešci)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatalna greška:"
 	],
@@ -1287,6 +1305,9 @@
 	],
 	"Find: ": [
 		"Pronađi: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox proširenje"
@@ -1563,6 +1584,9 @@
 	"Invalid command: \"%s\"": [
 		"Neispravna naredba: „%s”"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Neispravna vrijednost opcije: „%s”. Moguće vrijednosti su: %s."
 	],
@@ -1649,6 +1673,9 @@
 	],
 	"Language": [
 		"Jezik"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Zadnja greška: %s"
@@ -1802,6 +1829,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1835,6 +1865,12 @@
 	"Move %d notes to notebook \"%s\"?": [
 		"Premjestiti %d bilješke u bilježnicu „%s”?"
 	],
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
 	"Move to notebook": [
 		"Premjesti u bilježnicu"
 	],
@@ -1843,6 +1879,9 @@
 	],
 	"Move to notebook:": [
 		"Premjesti u bilježnicu:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Premješta zadani element <item> u bilježnicu [notebook]"
@@ -1942,6 +1981,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Nije autentificirano s %s. Upiši sve nedostajuće podatke za prijavu."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Nepreuzeto"
@@ -2072,11 +2114,20 @@
 	"Open %s": [
 		"Otvori %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Otvori prikazivač PDF datoteka"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Otvori mapu profila"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Otvori programčić za sinkronizaciju …"
@@ -2107,6 +2158,12 @@
 	],
 	"Page size for PDF export": [
 		"Veličina stranice za izvoz u PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Lozinka"
@@ -2152,6 +2209,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Otvori sljedeći URL u pregledniku za autentificiranje programa. Program će stvoriti mapu u „Aplikacije/Joplin” dozvolama za čitanje i pisanje. Program neće moći pristupiti datotekama izvan ove mape niti bilo kojim drugim osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"Snimi svoj glas …"
@@ -2333,6 +2393,9 @@
 	"Recipients:": [
 		"Primaoci:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Ponovi"
 	],
@@ -2492,6 +2555,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Traži"
 	],
@@ -2633,6 +2699,9 @@
 	"Skipped: %d.": [
 		"Preskočeno: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarno tamna"
 	],
@@ -2695,6 +2764,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Pokreni program u sklopljenom stanju u programskoj traci"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Pokreni, prekini ili provjeri API poslužitelj. Za određivanje priključka na kojem se pokreće, postavi konfiguracijsku varijablu api.port. Naredbe su (%s)."
@@ -2845,6 +2917,12 @@
 	],
 	"Synchronizing...": [
 		"Sinkroniziranje …"
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3197,6 +3275,9 @@
 	"Type: %s.": [
 		"Vrsta: %s."
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Najprije nezavršeni zadaci"
 	],
@@ -3335,6 +3416,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"Jezične datoteke za tipkanje glasom (URL)"
 	],
@@ -3417,6 +3501,9 @@
 		"Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d piksela prije prilaganja slike?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [
