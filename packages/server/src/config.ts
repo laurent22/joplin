@@ -156,6 +156,9 @@ function samlConfigFromEnv(env: EnvVariables): SamlConfig {
 	} else {
 		return {
 			enabled: false,
+			identityProviderConfigFile: '',
+			serviceProviderConfigFile: '',
+			organizationDisplayName: '',
 		};
 	}
 }

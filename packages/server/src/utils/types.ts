@@ -147,9 +147,9 @@ export interface LdapConfig {
 
 export interface SamlConfig {
 	enabled: boolean;
-	identityProviderConfigFile?: string;
-	serviceProviderConfigFile?: string;
-	organizationDisplayName?: string;
+	identityProviderConfigFile: string;
+	serviceProviderConfigFile: string;
+	organizationDisplayName: string;
 }
 
 export interface Config extends EnvVariables {

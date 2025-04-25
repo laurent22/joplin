@@ -69,6 +69,7 @@ describe('getLoginRequest', () => {
 			enabled: true,
 			identityProviderConfigFile: `${dir}/idp.xml`,
 			serviceProviderConfigFile: `${dir}/sp.xml`,
+			organizationDisplayName: '',
 		};
 	});
 
