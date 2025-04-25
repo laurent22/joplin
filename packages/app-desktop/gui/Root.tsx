@@ -30,7 +30,7 @@ import WindowCommandsAndDialogs from './WindowCommandsAndDialogs/WindowCommandsA
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
 import bridge from '../services/bridge';
 import EditorWindow from './NoteEditor/EditorWindow';
-import SsoLoginScreen from './SsoLoginScreen';
+import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');

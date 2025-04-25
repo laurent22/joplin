@@ -392,7 +392,7 @@ packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
 packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/Sidebar/types.js
-packages/app-desktop/gui/SsoLoginScreen.js
+packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
 packages/app-desktop/gui/SyncWizard/Dialog.js
