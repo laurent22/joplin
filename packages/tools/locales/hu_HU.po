@@ -2423,14 +2423,14 @@ msgstr "Csak a megadott jegyzetfüzet exportálása."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1499
 msgid "Fail-safe"
-msgstr "Hibatűrés"
+msgstr "Hibabiztos"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1500
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Hibatűrés: Ne törölje a helyi adatokat, ha a szinkronizálási cél üres (ami "
+"Hibabiztos: Ne törölje a helyi adatokat, ha a szinkronizálási cél üres (ami "
 "gyakran helytelen konfiguráció vagy hiba következménye)."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:134
