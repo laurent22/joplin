@@ -340,7 +340,7 @@ msgstr "Compte"
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
 msgid "Account information"
-msgstr "Information de compte"
+msgstr "Informations du compte"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
@@ -413,7 +413,7 @@ msgstr "Options avancées"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:653
 msgid "Advanced settings"
-msgstr "Options avancées"
+msgstr "Paramètres avancés"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
@@ -428,7 +428,7 @@ msgid ""
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
 "Toutes vos données, y compris les notes, carnets et étiquettes seront "
-"effacés de façon permanente."
+"effacées de façon permanente."
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
@@ -483,8 +483,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
-"\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
+"Carnet ambigu \"%s\". Veuillez utiliser l'identifiant du carnet – pressez \"ti\" "
+"pour afficher les identifiants abrégés ou utilisez $b pour le carnet sélectionné."
 
 #: packages/app-cli/app/command-mkbook.ts:33
 #: packages/app-cli/app/command-mv.ts:30
@@ -492,8 +492,8 @@ msgid ""
 "Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti"
 "\" to see the short notebook id"
 msgstr ""
-"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti"
-"\" pour afficher les identifiants"
+"Carnet ambigu \"%s\". Veuillez utiliser l’identifiant abrégé du carnet – "
+"pressez \"ti\" pour afficher l’identifiant abrégé."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -502,7 +502,7 @@ msgstr ""
 
 #: packages/app-desktop/ElectronAppWrapper.ts:161
 msgid "An error occurred: %s"
-msgstr "Erreur : %s"
+msgstr "Une erreur est survenue : %s"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "An update is available, do you want to download it now?"
@@ -520,7 +520,7 @@ msgid ""
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
 "Un email envoyé à cette adresse sera converti en note et ajouté à votre "
-"collection. La note sera sauvé dans votre carnet \"Inbox\""
+"collection. La note sera sauvegardée dans votre carnet \"Inbox\""
 
 #: packages/lib/models/Setting.ts:1177
 msgid "Appearance"
@@ -545,15 +545,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Renouveler le code d'authentification ?"
+msgstr "Êtes-vous sûr de vouloir renouveler le code d'authentification ?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:14
 msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
-"Restaurer la disposition de l'interface ? La disposition en cours sera "
-"perdue."
+"Êtes-vous sûr de vouloir restaurer la disposition de l'interface ? La disposition en cours "
+"sera perdue."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.tsx:235
 msgid "Arguments:"
@@ -580,11 +580,11 @@ msgstr "Joindre"
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:26
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:90
 msgid "Attach file"
-msgstr "Attacher un fichier"
+msgstr "Joindre un fichier"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:95
 msgid "Attach photo"
-msgstr "Attacher une photo"
+msgstr "Joindre une photo"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1200
 msgid "Attach..."
@@ -597,7 +597,7 @@ msgstr "Joindre le fichier fourni à la note."
 #: packages/server/src/models/UserModel.ts:247
 #: packages/server/src/models/UserModel.ts:264
 msgid "attachment"
-msgstr "fichier joint"
+msgstr "pièce jointe"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
 msgid "Attachment"
@@ -605,7 +605,7 @@ msgstr "Pièce jointe"
 
 #: packages/lib/models/Resource.ts:509
 msgid "Attachment conflict: \"%s\""
-msgstr "Conflit de fichier joint : \"%s\""
+msgstr "Conflit de pièce jointe : \"%s\""
 
 #: packages/lib/models/settings/builtInMetadata.ts:408
 msgid "Attachment download behaviour"
