@@ -1007,8 +1007,8 @@ msgstr ""
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
 msgstr ""
-"Kattintson a „start” gombra, ha új hangjegyzetet szeretne csatolni a "
-"jegyzethez."
+"Kattintson a „Rögzítés indítása” gombra, ha új hangjegyzetet szeretne "
+"csatolni a jegyzethez."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -5399,12 +5399,12 @@ msgstr "Felső index"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:146
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:102
 msgid "Swap line down"
-msgstr "Sor csere lefelé"
+msgstr "Sorcsere lefelé"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:142
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:107
 msgid "Swap line up"
-msgstr "Sor csere felfelé"
+msgstr "Sorcsere felfelé"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:7
 msgid "Switch between note and to-do type"
@@ -6050,8 +6050,8 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Ennek a jegyzetnek nincs tartalma. Kattintson a(z) „%s” gombra a szerkesztő "
-"bekapcsolásához és a jegyzet szerkesztéséhez."
+"Ennek a jegyzetnek nincs tartalma. Kattintson a(z) „%s” gombra a "
+"szerkesztőre való váltáshoz és a jegyzet szerkesztéséhez."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:65
 msgid "This note has no history"
@@ -6224,7 +6224,7 @@ msgstr "teendő: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
-msgstr "Átváltás az összes jegyzetfüzetre"
+msgstr "Az összes jegyzetfüzet váltása"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6244,7 +6244,7 @@ msgstr "Szerkesztő bővítményének váltása"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
 msgid "Toggle editor tab key navigation"
-msgstr "Átváltás a szerkesztőfül billentyűs navigációjára"
+msgstr "A szerkesztőfül billentyűs navigációjára váltás"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6272,7 +6272,7 @@ msgstr "Saját rendezési sorrend váltása"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:434
 msgid "Toggle plugin editor"
-msgstr "Átváltás a bővítményszerkesztőre"
+msgstr "Bővítményszerkesztő váltása"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
