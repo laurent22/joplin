@@ -1445,11 +1445,11 @@ msgstr "Ordre personnalisé"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1222
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Feuille de style pour l'application Joplin"
+msgstr "Feuille de style customisée pour l'application Joplin"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1205
 msgid "Custom stylesheet for rendered Markdown"
-msgstr "Feuille de style pour le rendu Markdown"
+msgstr "Feuille de style customisée pour le rendu Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Custom TLS certificates"
@@ -1528,7 +1528,7 @@ msgstr "Supprimer"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid "Delete attachment \"%s\"?"
-msgstr "Supprimer fichier joint \"%s\" ?"
+msgstr "Supprimer la pièce jointe \"%s\" ?"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1536,7 +1536,7 @@ msgstr "Supprimer les sessions expirées"
 
 #: packages/server/src/services/TaskService.ts:22
 msgid "Delete expired tokens"
-msgstr "Supprimer les tokens expirés"
+msgstr "Supprimer les jetons expirés"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 msgid "Delete line"
@@ -1544,7 +1544,7 @@ msgstr "Supprimer la ligne"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1246
 msgid "Delete local data and re-download from sync target"
-msgstr "Supprimer les données locales et re‑télécharger depuis la cible de synchronisation"
+msgstr "Supprimer les données locales et retélécharger depuis la cible de synchronisation"
 
 #: packages/lib/commands/deleteNote.ts:7
 msgid "Delete note"
@@ -1556,11 +1556,11 @@ msgstr "Supprimer le carnet"
 
 #: packages/lib/components/shared/config/plugins/useOnDeleteHandler.ts:16
 msgid "Delete plugin \"%s\"?"
-msgstr "Supprimer plugin \"%s\" ?"
+msgstr "Supprimer le plugin \"%s\" ?"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:111
 msgid "Delete profile \"%s\""
-msgstr "Supprimer profil \"%s\" ?"
+msgstr "Supprimer le profil \"%s\" ?"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:453
 msgid "Delete selected notes"
@@ -1605,7 +1605,7 @@ msgstr "Supprime les notes définitivement, en sautant la corbeille."
 
 #: packages/app-cli/app/command-rmbook.ts:14
 msgid "Deletes the given notebook."
-msgstr "Supprimer le carnet."
+msgstr "Supprimer le carnet sélectionné."
 
 #: packages/app-cli/app/command-rmbook.ts:19
 msgid "Deletes the notebook without asking for confirmation."
@@ -1693,7 +1693,7 @@ msgid ""
 "synchronised and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
 "Désactiver le chiffrement signifie que *toutes* les notes et fichiers vont être "
-"re‑synchronisés et envoyés déchiffrés sur la cible de la synchronisation. Souhaitez vous "
+"resynchronisés et envoyés déchiffrés sur la cible de la synchronisation. Souhaitez vous "
 "continuer ?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
@@ -1731,7 +1731,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
-msgstr "Afficher un résumé des notes et carnets."
+msgstr "Affiche un résumé des notes et carnets."
 
 #: packages/app-cli/app/command-cat.ts:18
 msgid "Displays the complete information about note."
@@ -1769,8 +1769,9 @@ msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Ne perdez pas le mot de passe car, par sécurité, ce sera la seule façon de déchiffrer les "
-"données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
+"Ne perdez pas le mot de passe car, pour des raisons de sécurité, ce sera *la seule* façon "
+"de déchiffrer les données ! Pour activer le chiffrement, veuillez entrer votre mot de "
+"passe ci-dessous."
 
 #: packages/lib/models/Setting.ts:1223
 msgid "Donate, website"
@@ -1893,7 +1894,7 @@ msgstr "Édition"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
-msgstr "Éditer lien"
+msgstr "Éditer le lien"
 
 #: packages/app-cli/app/command-edit.ts:17
 msgid "Edit note."
@@ -1930,11 +1931,11 @@ msgstr "Police de l'éditeur"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1135
 msgid "Editor font family"
-msgstr "Police de l'éditeur"
+msgstr "Famille de polices de l'éditeur"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1097
 msgid "Editor font size"
-msgstr "Taille police éditeur"
+msgstr "Taille de police de l'éditeur"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1156
 msgid "Editor maximum width"
@@ -1942,7 +1943,7 @@ msgstr "Largeur maximale de l'éditeur"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1148
 msgid "Editor monospace font family"
-msgstr "Police monospace de l'éditeur"
+msgstr "Famille de polices monospace de l'éditeur"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -2021,7 +2022,7 @@ msgstr "Activer la syntaxe pour abréviations"
 
 #: packages/lib/models/settings/builtInMetadata.ts:992
 msgid "Enable audio player"
-msgstr "Activer lecteur audio"
+msgstr "Activer le lecteur audio"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
@@ -2522,7 +2523,7 @@ msgstr "L'obtenir maintenant :"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1254
 msgid "Get pre-releases when checking for updates"
-msgstr "Recevoir les pré‑release lors de la vérification des mises à jour"
+msgstr "Recevoir les préversions lors de la vérification des mises à jour"
 
 #: packages/app-cli/app/command-config.ts:14
 msgid ""
@@ -3997,7 +3998,7 @@ msgstr "Mot de passe"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:153
 msgid "Password cannot be empty"
-msgstr "Mot de passe ne peut être vide"
+msgstr "Le mot de passe ne peut être vide"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:176
