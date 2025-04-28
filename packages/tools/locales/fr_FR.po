@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Laurent Cozic\n"
+"Last-Translator: Ismaël Moret <lanesh4d0w@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -135,7 +135,7 @@ msgstr "%d Mo"
 #: packages/lib/utils/joplinCloud/index.ts:134
 #: packages/lib/utils/joplinCloud/index.ts:135
 msgid "%d MB per note or attachment"
-msgstr "%d Mo pour les notes et pièces jointes"
+msgstr "%d Mo par note ou pièce jointe"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
@@ -167,7 +167,7 @@ msgstr "%s (%s) n'a pas pu être envoyé : %s"
 #: packages/app-desktop/gui/MainScreen.tsx:563
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s (%s) souhaiterais partager un carnet avec vous."
+msgstr "%s (%s) souhaiterait partager un carnet avec vous."
 
 #: packages/lib/services/ReportService.ts:340
 msgid "%s (%s): %s"
@@ -175,7 +175,7 @@ msgstr "%s (%s) : %s"
 
 #: packages/app-desktop/checkForUpdates.ts:103
 msgid "%s (pre-release)"
-msgstr "%s (pré‑release)"
+msgstr "%s (préversion)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:625
 #: packages/lib/models/settings/builtInMetadata.ts:626
@@ -268,8 +268,8 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"Gère le statut des tâches. <todo-command> peut être \"toggle\" ou \"clear\". "
-"Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
+"<todo-command> peut être \"toggle\" ou \"clear\". "
+"Utilisez \"toggle\" pour basculer la tâche entre le statut terminé et non "
 "terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
 "\"clear\" pour convertir la tâche en note."
 
@@ -327,11 +327,11 @@ msgstr "Invitations acceptées"
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
-msgstr "Accès non-autorisé : Veuillez vérifier votre nom et mot de passe"
+msgstr "Accès non autorisé : Veuillez vérifier votre nom d'utilisateur et mot de passe"
 
 #: packages/lib/WebDavApi.js:458
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr "Accès non-autorisé : Veuillez ré-entrer votre nom ou mot de passe"
+msgstr "Accès non autorisé : Veuillez réécrire votre nom d'utilisateur et/ou mot de passe"
 
 #: packages/server/src/routes/admin/users.ts:144
 msgid "Account"
@@ -545,7 +545,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Êtes-vous sûr de vouloir renouveler le code d'authentification ?"
+msgstr "Êtes-vous sûr de vouloir renouveler le jeton d'authentification ?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:14
 msgid ""
@@ -609,15 +609,15 @@ msgstr "Conflit de pièce jointe : \"%s\""
 
 #: packages/lib/models/settings/builtInMetadata.ts:408
 msgid "Attachment download behaviour"
-msgstr "Téléchargement des ressources"
+msgstr "Comportement de téléchargement des pièces jointes"
 
 #: packages/lib/services/ReportService.ts:311
 msgid "Attachments"
-msgstr "Fichiers joints"
+msgstr "Pièces jointes"
 
 #: packages/lib/services/ReportService.ts:335
 msgid "Attachments that could not be downloaded"
-msgstr "Fichiers qui n'ont pas pu être téléchargé"
+msgstr "Pièces jointes qui n'ont pas pu être téléchargées"
 
 #: packages/lib/models/settings/builtInMetadata.ts:39
 msgid ""
@@ -634,11 +634,11 @@ msgstr ""
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:49
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Impossible d'autoriser le logiciel (jeton d'identification non‑reçu)."
+msgstr "L'authentification n'a pas été effectuée (jeton d'authentification non reçu)."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
-msgstr "Code d'authentification :"
+msgstr "Jeton d'authentification :"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:88
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:162
@@ -655,7 +655,7 @@ msgstr "Supprimer automatiquement les comptes désactivés"
 
 #: packages/lib/models/settings/builtInMetadata.ts:693
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr "Formatage automatique de Markdown dans l'éditeur de texte enrichi"
+msgstr "Formatage automatique du Markdown dans l’éditeur de texte enrichi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:661
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -663,7 +663,7 @@ msgstr "Auto‑compléter les paires de parenthèses, guillemets, etc."
 
 #: packages/lib/models/settings/builtInMetadata.ts:672
 msgid "Autocomplete Markdown and HTML"
-msgstr "Complétion automatique Markdown et HTML"
+msgstr "Complétion automatique du Markdown et HTML"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1253
 msgid "Automatically check for updates"
