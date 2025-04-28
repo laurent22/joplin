@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -201,13 +203,12 @@ msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
-#, fuzzy
 msgid "%s cannot be greater than %s"
-msgstr "Tidak dapat membuat catatan baru: %s"
+msgstr "%s tidak boleh lebih besar dari %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr ""
+msgstr "%s tidak boleh kurang dari %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:231
 msgid ""
@@ -219,7 +220,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr ""
+msgstr "%s harus berupa angka"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -462,9 +463,8 @@ msgid "Also publish linked notes"
 msgstr "Terbitkan juga catatan terkait"
 
 #: packages/lib/versionInfo.ts:93
-#, fuzzy
 msgid "Alternative instance ID: %s"
-msgstr "ID pelanggan: %s"
+msgstr "ID instansi alternatif: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:412
 msgid "Always"
@@ -605,7 +605,6 @@ msgid "attachment"
 msgstr "lampiran"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
-#, fuzzy
 msgid "Attachment"
 msgstr "Lampiran"
 
@@ -661,7 +660,7 @@ msgstr "Tambahkan otomatis akun non-aktif untuk dihapus"
 
 #: packages/lib/models/settings/builtInMetadata.ts:693
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr ""
+msgstr "Rapikan otomatis Markdown pada Penyunting Teks Kaya"
 
 #: packages/lib/models/settings/builtInMetadata.ts:661
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -735,7 +734,7 @@ msgstr "berdasarkan kata"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:74
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -791,6 +790,8 @@ msgid ""
 "Cancelling will discard the recording. This cannot be undone. Are you sure "
 "you want to proceed?"
 msgstr ""
+"Membatalkan akan menghapus perekaman. Ini tidak dapat diurungkan. Anda yakin "
+"akan melanjutkan pembatalan?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:206
@@ -933,9 +934,8 @@ msgid "Characters excluding spaces"
 msgstr "Semua karakter kecuali spasi"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
-#, fuzzy
 msgid "Check"
-msgstr "Kotak centang"
+msgstr "Periksa"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
@@ -960,9 +960,8 @@ msgid "Checkbox list"
 msgstr "Daftar kotak centang"
 
 #: packages/app-mobile/components/Checkbox.tsx:49
-#, fuzzy
 msgid "Checked"
-msgstr "Kotak centang"
+msgstr "Telah diperiksa"
 
 #: packages/lib/components/shared/config/config-shared.ts:97
 msgid "Checking... Please wait."
@@ -1004,6 +1003,7 @@ msgstr ""
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
 msgstr ""
+"Tekan “start” untuk melampirkan sebuah catatan suara baru ke dalam catatan"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1032,9 +1032,8 @@ msgid "Close"
 msgstr "Tutup"
 
 #: packages/app-mobile/components/Modal.tsx:139
-#, fuzzy
 msgid "Close dialog"
-msgstr "Tutup jendela"
+msgstr "Tutup sembulan"
 
 #: packages/app-mobile/components/Dropdown.tsx:199
 msgid "Close dropdown"
@@ -1061,7 +1060,7 @@ msgstr "Tutup jendela"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr ""
+msgstr "Menutup sesi…"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
@@ -1093,14 +1092,12 @@ msgid "Collaborate on notebooks with others"
 msgstr "Bekerja sama pada buku-buku catatan dengan orang lain"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Collapse all notebooks"
-msgstr "Buat buku catatan"
+msgstr "Lipat semua buku catatan"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
-#, fuzzy
 msgid "Collapsed"
-msgstr "Lipat"
+msgstr "Terlipat"
 
 #: packages/lib/services/ReportService.ts:385
 msgid "Coming alarms"
@@ -1184,7 +1181,7 @@ msgstr "Pengaturan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1173
 msgid "Configures the size of scrollbars used in the app."
-msgstr ""
+msgstr "Atur ukuran bilah gulung yang digunakan pada aplikasi"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1444,9 +1441,8 @@ msgid "Created: %s"
 msgstr "Dibuat: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:65
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
-msgstr "Buat buku catatan baru di bawah buku catatan induk."
+msgstr "Membuat sebuah catatan dengan sebuah lampiran dengan jenis %s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1704,7 +1700,7 @@ msgstr "Dev"
 
 #: packages/lib/versionInfo.ts:88
 msgid "Device: %s"
-msgstr ""
+msgstr "Perangkat: %s"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1728,9 +1724,8 @@ msgid "Disable safe mode and restart"
 msgstr "Matikan mode aman dan mulai ulang"
 
 #: packages/app-desktop/gui/MainScreen.tsx:594
-#, fuzzy
 msgid "Disable synchronisation"
-msgstr "Penyelarasan"
+msgstr "Matikan penyelarasan"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
@@ -1861,9 +1856,8 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr "Unduh dan pasang ekstensi yang berkaitan dengan peramban web Anda:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:586
-#, fuzzy
 msgid "Download it now"
-msgstr "Sedang mengunduh"
+msgstr "Unduh sekarang"
 
 #: packages/lib/models/Resource.ts:409
 msgid "Downloaded"
@@ -1946,9 +1940,8 @@ msgstr ""
 "saat ini."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:217
-#, fuzzy
 msgid "Duration: %s"
-msgstr "Versi Anda: %s"
+msgstr "Lama waktu: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:94
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
@@ -2214,6 +2207,8 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
+"Menyalakan penggantian pola Markdown pada Penyunting Teks Kaya. Contohnya, "
+"ketika dinyalakan, mengetik **bold** menghasilkan teks tebal."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2349,14 +2344,12 @@ msgid "Expand %s"
 msgstr "Buka %s"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Expand all notebooks"
-msgstr "Sunting buku catatan"
+msgstr "Buka semua buku catatan"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
-#, fuzzy
 msgid "Expanded"
-msgstr "Buka"
+msgstr "Terbuka"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:182
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:213
@@ -2440,6 +2433,9 @@ msgid ""
 "target is empty or damaged. To override this behaviour disable the fail-safe "
 "in the sync settings."
 msgstr ""
+"Gagal-aman: Penyelarasan dihentikan untuk mencegah kehilangan data, karena "
+"sasaran penyelarasan kosong atau rusak. Untuk menimpa perilaku ini matikan "
+"gagal-aman pada pengaturan penyelarasan."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2486,7 +2482,7 @@ msgstr "Cari: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:208
 msgid "Finishes recording"
-msgstr ""
+msgstr "Selesai merekam"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
@@ -3009,7 +3005,7 @@ msgstr "Perintah tidak berlaku: \"%s\""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
-msgstr ""
+msgstr "Format tidak berlaku. Contoh: 48.8581372, 2.2926735"
 
 #: packages/lib/models/Setting.ts:665
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -3047,9 +3043,8 @@ msgid "Items that cannot be synchronised"
 msgstr "Benda-benda yang tidak dapat diselaraskan"
 
 #: packages/lib/services/ReportService.ts:294
-#, fuzzy
 msgid "Items with error: %s"
-msgstr "Galat terakhir: %s"
+msgstr "Benda-benda dengan galat: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:945
 msgid "Join us on %s"
@@ -3195,7 +3190,7 @@ msgstr "Bahasa, format tanggal"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1169
 msgid "Large"
-msgstr ""
+msgstr "Besar"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3278,9 +3273,8 @@ msgid "Link text"
 msgstr "Teks tautan"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
-#, fuzzy
 msgid "Link to note..."
-msgstr "Memindahkan ke buku catatan..."
+msgstr "Tautkan ke buku catatan..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3463,7 +3457,7 @@ msgstr "Pemutar media, matematika, diagram, daftar isi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1168
 msgid "Medium"
-msgstr ""
+msgstr "Sedang"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3482,9 +3476,8 @@ msgid "Missing Master Keys"
 msgstr "Kehilangan Kunci Utama"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:120
-#, fuzzy
 msgid "Missing permission to record audio."
-msgstr "Kehilangan izin kamera"
+msgstr "Kehilangan izin untuk merekam suara."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3523,13 +3516,12 @@ msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
-#, fuzzy
 msgid "Move down"
-msgstr "Tutup senarai"
+msgstr "Pindah ke bawah"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:74
 msgid "Move left"
-msgstr ""
+msgstr "Pindah ke kiri"
 
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3547,7 +3539,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
-msgstr ""
+msgstr "Pindah ke kanan"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
@@ -3563,7 +3555,7 @@ msgstr "Memindahkan ke buku catatan..."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:72
 msgid "Move up"
-msgstr ""
+msgstr "Pindah ke atas"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
@@ -3595,11 +3587,12 @@ msgid "New invitations"
 msgstr "Undangan baru"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
-#, fuzzy
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
-msgstr "Pembaruan tersedia, apakah Anda ingin mengunduhnya sekarang?"
+msgstr ""
+"Model baru tersedia\n"
+"Sebuah model pengetikan suara baru telah tersedia. Anda ingin mengunduhnya?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:111
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -3631,9 +3624,8 @@ msgid "New photo"
 msgstr "Foto baru"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
-#, fuzzy
 msgid "New profile"
-msgstr "Beralih profil"
+msgstr "Profil baru"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -3763,7 +3755,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
 msgid "Not checked"
-msgstr ""
+msgstr "Tidak diperiksa"
 
 #: packages/lib/models/Resource.ts:407
 msgid "Not downloaded"
@@ -3854,9 +3846,8 @@ msgstr "Judul catatan"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:242
-#, fuzzy
 msgid "Note viewer"
-msgstr "Judul catatan"
+msgstr "Yang melihat catatan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1030
 msgid "Note: Does not work in all desktop environments."
@@ -3919,9 +3910,8 @@ msgid "Notes can only be created within a notebook."
 msgstr "Catatan hanya dapat dibuat di dalam buku catatan."
 
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
-#, fuzzy
 msgid "Notifications"
-msgstr "Lokasi"
+msgstr "Pemberitahuan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:80
 msgid "Numbered List"
@@ -4016,14 +4006,12 @@ msgid "Open %s"
 msgstr "Buka %s"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
-#, fuzzy
 msgid "Open in external editor"
-msgstr "Sunting di penyunting eksternal"
+msgstr "Buka di penyunting eksternal"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
-#, fuzzy
 msgid "Open in new window"
-msgstr "Sunting di jendela baru"
+msgstr "Buka di jendela baru"
 
 #: packages/app-desktop/bridge.ts:466
 msgid "Open it"
@@ -4035,7 +4023,7 @@ msgstr "Buka penampil PDF"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Buka instansi aplikasi utama…"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4043,7 +4031,7 @@ msgstr "Buka folder profil"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Buka instansi aplikasi kedua…"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
 msgid "Open settings"
@@ -4111,11 +4099,11 @@ msgstr "Ukuran halaman untuk ekspor PDF"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Panel “%s” terlihat"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Panel “%s” disembunyikan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4237,7 +4225,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:332
 msgid "Please provide the recipient email"
-msgstr ""
+msgstr "Silakan sediakan surel penerima"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4549,17 +4537,15 @@ msgstr "Plugin yang disarankan"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Rekam suara"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
-#, fuzzy
 msgid "Recording"
-msgstr "Tajuk"
+msgstr "Rekaman"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
-#, fuzzy
 msgid "Recording..."
-msgstr "Memuat…"
+msgstr "Merekam…"
 
 #: packages/app-desktop/gui/MenuBar.tsx:767
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -4867,7 +4853,7 @@ msgstr "Kode yang dipindai"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1172
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Ukuran bilah gulung"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -5166,7 +5152,7 @@ msgstr "Dilewati: %d."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1167
 msgid "Small"
-msgstr ""
+msgstr "Kecil"
 
 #: packages/lib/models/settings/builtInMetadata.ts:52
 msgid "Solarised Dark"
@@ -5281,7 +5267,7 @@ msgstr "Mulai aplikasi dalam keadaan disembunyikan dalam baki ikon"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:199
 msgid "Start recording"
-msgstr ""
+msgstr "Mulai merekam"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -5381,18 +5367,16 @@ msgid "Subscript"
 msgstr "Tulisan kecil di bawah garis"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:16
-#, fuzzy
 msgid "Success"
-msgstr "Kunci akses S3"
+msgstr "Berhasil"
 
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Berhasil! Pengaturan penyelarasan sepertinya sudah benar."
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:182
-#, fuzzy
 msgid "Suggestions"
-msgstr "Tidak ada saran"
+msgstr "Saran"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
@@ -5543,12 +5527,12 @@ msgstr "Sedang menyelaraskan…"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 msgid "Tab indents"
-msgstr ""
+msgstr "Indentasi tab"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:713
 msgid "Tab moves focus"
-msgstr ""
+msgstr "Tab memindahkan fokus"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1310
 msgid "Tabloid"
@@ -5865,20 +5849,19 @@ msgstr ""
 
 #: packages/app-desktop/gui/Root.tsx:151
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr "Web Clipper membutuhkan otorisasi Anda untuk mengakses data Anda."
+msgstr "Pemotong Web membutuhkan otorisasi Anda untuk mengakses data Anda."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
-msgstr "Layanan Web Clipper dinyalakan dan diatur menjadi mulai otomatis."
+msgstr "Layanan pemotong web tidak dapat dinyalakan pada instansi Joplin ini."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Layanan Web Clipper dinyalakan dan diatur menjadi mulai otomatis."
+msgstr "Layanan pemotong web dinyalakan dan diatur ke mulai otomatis."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
-msgstr "Layanan web clipper tidak menyala."
+msgstr "Layanan pemotong web tidak menyala."
 
 #: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
@@ -6210,9 +6193,8 @@ msgid "to-do: %s"
 msgstr "tugas: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
-#, fuzzy
 msgid "Toggle all notebooks"
-msgstr "Pilih buku catatan"
+msgstr "Saklar semua buku catatan"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6231,9 +6213,8 @@ msgid "Toggle editor plugin"
 msgstr "Saklar plugin penyunting"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
-msgstr "Saklar tata letak penyunting"
+msgstr "Saklar navigasi tombol tab penyunting"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6260,9 +6241,8 @@ msgid "Toggle own sort order"
 msgstr "Saklar tata urutan sendiri"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:434
-#, fuzzy
 msgid "Toggle plugin editor"
-msgstr "Saklar penyunting"
+msgstr "Saklar penyunting plugin"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -6281,9 +6261,8 @@ msgid "Token has been copied to the clipboard!"
 msgstr "Token telah disalin ke papan klip!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
-msgstr "Perkakas"
+msgstr "Bilah alat"
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Tools"
@@ -6335,9 +6314,8 @@ msgstr ""
 "ketik : untuk mencari perintah."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:714
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Ketik label baru atau pilih dari daftar"
+msgstr "Ketik sebuah judul catatan untuk mencarinya."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:235
 msgid "Type new tags or select from list"
@@ -6357,7 +6335,7 @@ msgstr "Tidak dapat membagikan data log. Alasan: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr ""
+msgstr "Tidak diperiksa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "Uncompleted to-dos on top"
@@ -6640,9 +6618,8 @@ msgid "Viewer"
 msgstr "Penampil"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1083
-#, fuzzy
 msgid "Viewer font size"
-msgstr "Ukuran font pada penyunting"
+msgstr "Ukuran font pada penampil"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1346
 msgid "Vim"
@@ -6650,7 +6627,7 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Voice recorder"
-msgstr ""
+msgstr "Perekam suara"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1772
 msgid "Voice typing language files (URL)"
@@ -6697,7 +6674,7 @@ msgstr ""
 #: packages/lib/models/Setting.ts:1185
 #: packages/lib/utils/joplinCloud/index.ts:166
 msgid "Web Clipper"
-msgstr "Web Clipper"
+msgstr "Pemotong Web"
 
 #: packages/lib/SyncTargetWebDAV.js:24
 msgid "WebDAV"
@@ -6818,6 +6795,8 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Anda menjalankan versi Intel dari Joplin pada sebuah prosesor Apple Silicon. "
+"Untuk versi Apple Silicon untuk kinerja yang lebih baik."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."

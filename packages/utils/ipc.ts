@@ -12,7 +12,7 @@ const maxPorts = 10;
 const findAvailablePort = async (startPort: number) => {
 	for (let i = 0; i < 100; i++) {
 		const port = startPort + i;
-		const inUse = await tcpPortUsed.check(port);
+		const inUse = await tcpPortUsed.check(port, 'localhost');
 		if (!inUse) return port;
 	}
 
@@ -23,7 +23,7 @@ const findListenerPorts = async (startPort: number) => {
 	const output: number[] = [];
 	for (let i = 0; i < maxPorts; i++) {
 		const port = startPort + i;
-		const inUse = await tcpPortUsed.check(port);
+		const inUse = await tcpPortUsed.check(port, 'localhost');
 		if (inUse) output.push(port);
 	}
 
@@ -133,7 +133,7 @@ export const startServer = async (startPort: number, secretKeyFilePath: string, 
 				if (logger) logger.error('Server error:', error);
 			});
 
-			server.listen(port, () => {
+			server.listen(port, 'localhost', () => {
 				resolve({
 					httpServer: server,
 					port,
