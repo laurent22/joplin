@@ -228,6 +228,16 @@ export default function(theme: any, options: Options = null) {
 			margin-bottom: 0;
 		}
 
+		dt {
+			font-weight: bold;
+			margin-bottom: 0.25em;
+		}
+
+		dd {
+			margin-inline-start: 2.5em;
+			margin-bottom: 0.5em;
+		}
+
 		.resource-icon {
 			display: inline-block;
 			position: relative;
