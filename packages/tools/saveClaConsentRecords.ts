@@ -50,7 +50,7 @@ const runRequest = async (path: string) => {
 	};
 
 	const response = await fetch(url, { headers });
-	if (!response.ok) throw new Error(`Error fetching issue: ${await response.text()}`);
+	if (!response.ok) throw new Error(`Error: ${path}: ${await response.text()}`);
 
 	return response.json();
 };
@@ -86,6 +86,7 @@ const main = async () => {
 	const excludedIssueIds = [
 		7785, // Not merged
 		8531, // Not merged
+		11567, // Changed year on license file: https://github.com/laurent22/joplin/commit/2b43a9a4d667fe6b81bc97b66e0b3700688ec3cf
 	];
 
 	const signedContributors = await getSignedContributors();
