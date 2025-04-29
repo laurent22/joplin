@@ -6699,7 +6699,7 @@ msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
-"A Joplin közösség megbízható tagjai által fejlesztett bővítményeket "
+"A Joplin-közösség megbízható tagjai által fejlesztett bővítményeket "
 "„ajánlottként” jelöljük."
 
 #: packages/lib/models/Setting.ts:1185
@@ -6887,7 +6887,7 @@ msgid ""
 "to set it."
 msgstr ""
 "A jelszóra az adatok egy részének visszafejtéséhez van szükség. A "
-"beállításához írja be a `:e2ee decrypt` parancsot."
+"beállításához írja be az `:e2ee decrypt` parancsot."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
