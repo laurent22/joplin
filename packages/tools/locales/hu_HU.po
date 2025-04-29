@@ -660,7 +660,7 @@ msgstr "A letiltott fiókok automatikus hozzáadása a törléshez"
 
 #: packages/lib/models/settings/builtInMetadata.ts:693
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr "Markdown automatikus formázása a Rich Text szerkesztőben"
+msgstr "Markdown automatikus átalakítása a formázott szöveges szerkesztőben"
 
 #: packages/lib/models/settings/builtInMetadata.ts:661
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -742,11 +742,11 @@ msgstr "Megosztható"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:120
 msgid "Can view"
-msgstr "Megnézhető"
+msgstr "Megtekinthető"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:121
 msgid "Can view and edit"
-msgstr "Megnézhető és szerkeszthető"
+msgstr "Megtekinthető és szerkeszthető"
 
 #: packages/app-desktop/bridge.ts:385 packages/app-desktop/bridge.ts:401
 #: packages/app-desktop/bridge.ts:464
@@ -2152,7 +2152,7 @@ msgstr "Bővítmények engedélyezése / letiltása"
 
 #: packages/lib/models/settings/builtInMetadata.ts:994
 msgid "Enable PDF viewer"
-msgstr "PDF-nézegető engedélyezése"
+msgstr "PDF-megjelenítő engedélyezése"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:942
@@ -2212,8 +2212,9 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
-"Engedélyezi a Markdown-minták cseréjét a Rich Text szerkesztőben. Ha például "
-"engedélyezve van, a **félkövér** beírása félkövér szöveget hoz létre."
+"Engedélyezi a Markdown-minták cseréjét a formázott szöveges szerkesztőben. "
+"Ha például engedélyezve van, a **félkövér** beírása félkövér szöveget hoz "
+"létre."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -3860,7 +3861,7 @@ msgstr "Jegyzetcím"
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:242
 msgid "Note viewer"
-msgstr "Jegyzetnézegető"
+msgstr "Jegyzetmegjelenítő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1030
 msgid "Note: Does not work in all desktop environments."
@@ -4032,7 +4033,7 @@ msgstr "Megnyitás"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
-msgstr "PDF-nézegető megnyitása"
+msgstr "PDF-megjelenítő megnyitása"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
@@ -4307,7 +4308,7 @@ msgstr "Bővítményeszközök"
 
 #: packages/lib/models/settings/builtInMetadata.ts:930
 msgid "Plugin WebView debugging"
-msgstr "WebView bővítmény-hibakeresés"
+msgstr "WebView-hibakeresés bővítmény"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:148
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:523
@@ -4359,7 +4360,8 @@ msgstr "Előnyben részesített hangalapú beviteli szolgáltató"
 
 #: packages/lib/models/settings/builtInMetadata.ts:683
 msgid "Preserve colours when pasting text in Rich Text Editor"
-msgstr "Színek megőrzése a szöveg beillesztésekor a Rich Text szerkesztőben"
+msgstr ""
+"Színek megőrzése a szöveg beillesztésekor a formázott szöveges szerkesztőben"
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -4457,7 +4459,7 @@ msgstr "Tulajdonságok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1468
 msgid "Proxy enabled"
-msgstr "Proxy engedélyezve"
+msgstr "Proxy engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1490
 msgid "Proxy timeout (seconds)"
@@ -4772,13 +4774,13 @@ msgstr "Felülvizsgálat: %s (%s)"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
 msgid "Rich Text"
-msgstr "Rich Text"
+msgstr "Formázott szöveg"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:716
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
 msgstr ""
-"Rich Text szerkesztő. Nyomja meg az ESC, majd a Tab billentyűt a fókusz "
-"elhagyásához."
+"Formázott szöveges szerkesztő. Nyomja meg az ESC, majd a Tab billentyűt a "
+"fókusz elhagyásához."
 
 #: packages/app-cli/app/command-batch.js:10
 msgid ""
@@ -6065,7 +6067,7 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
-"Ennek a Rich Text szerkesztőnek számos korlátozása van, és ajánlott "
+"Ennek a formázott szöveges szerkesztőnek számos korlátozása van, és ajánlott "
 "tisztában lennie velük, mielőtt használná."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
@@ -6629,28 +6631,28 @@ msgstr "Nézet"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:139
 msgid "View OCR text"
-msgstr "OCR-szöveg-nézet"
+msgstr "OCR-ezett szöveg megjelenítése"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1089
 msgid "View on map"
-msgstr "Megtekintés a térképen"
+msgstr "Megjelenítés a térképen"
 
 #: packages/app-desktop/gui/MainScreen.tsx:543
 #: packages/app-desktop/gui/MainScreen.tsx:549
 #: packages/app-desktop/gui/MainScreen.tsx:572
 msgid "View them now"
-msgstr "Megtekintés most"
+msgstr "Megjelenítés most"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:145
 #: packages/lib/models/settings/builtInMetadata.ts:624
 #: packages/lib/models/settings/builtInMetadata.ts:625
 #: packages/lib/models/settings/builtInMetadata.ts:627
 msgid "Viewer"
-msgstr "Nézegető"
+msgstr "Megjelenítő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1083
 msgid "Viewer font size"
-msgstr "Nézegető betűmérete"
+msgstr "Megjelenítő betűmérete"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1346
 msgid "Vim"
