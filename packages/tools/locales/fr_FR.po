@@ -996,7 +996,7 @@ msgid ""
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 "Cliquez sur \"%s\" pour restaurer cette note. Elle sera copiée dans le "
-"carnet \"%s\". La version actuelle de la note ne sera pas remplacée ou "
+"carnet \"%s\". La version actuelle de la note ne sera pas replacée ou "
 "modifiée."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
