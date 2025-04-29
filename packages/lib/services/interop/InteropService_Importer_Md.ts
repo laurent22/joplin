@@ -117,6 +117,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				// If the URI cannot be decoded, leave it as it is.
 				continue;
 			}
+			// Strip the angle brackets if they exist
+			if (link.startsWith('<') && link.endsWith('>')) {
+				link = link.substring(1, link.length - 1);
+			}
+
+			// Use the normal protocol check
 			if (hasProtocol(link, ['http', 'https', 'mailto'])) {
 				continue;
 			}
