@@ -5,20 +5,14 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
-import {
-	basename,
-	filename,
-	rtrimSlashes,
-	fileExtension,
-	dirname,
-} from '../../path-utils';
+import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../path-utils';
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
-import { hasProtocol, isDataUrl } from '@joplin/utils/url';
+import { isDataUrl, hasProtocol } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
@@ -32,9 +26,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const filePaths = [];
 		if (await shim.fsDriver().isDirectory(sourcePath)) {
 			if (!this.options_.destinationFolder) {
-				const folderTitle = await Folder.findUniqueItemTitle(
-					basename(sourcePath),
-				);
+				const folderTitle = await Folder.findUniqueItemTitle(basename(sourcePath));
 				const folder = await Folder.save({ title: folderTitle });
 				parentFolderId = folder.id;
 			} else {
@@ -54,19 +46,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 		for (const importedLocalPath of Object.keys(this.importedNotes)) {
 			const note = this.importedNotes[importedLocalPath];
-			const updatedBody = await this.importLocalFiles(
-				importedLocalPath,
-				note.body,
-				note.parent_id,
-			);
+			const updatedBody = await this.importLocalFiles(importedLocalPath, note.body, note.parent_id);
 			const updatedNote = {
 				...this.importedNotes[importedLocalPath],
 				body: updatedBody || note.body,
 			};
-			this.importedNotes[importedLocalPath] = await Note.save(updatedNote, {
-				isNew: false,
-				autoTimestamp: false,
-			});
+			this.importedNotes[importedLocalPath] = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 		}
 
 		return result;
@@ -82,22 +67,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				if (await this.isDirectoryEmpty(`${dirPath}/${stat.path}`)) {
 					continue;
 				}
-				const folderTitle = await Folder.findUniqueItemTitle(
-					basename(stat.path),
-				);
-				const folder = await Folder.save({
-					title: folderTitle,
-					parent_id: parentFolderId,
-				});
-				await this.importDirectory(
-					`${dirPath}/${basename(stat.path)}`,
-					folder.id,
-				);
-			} else if (
-				supportedFileExtension.indexOf(
-					fileExtension(stat.path).toLowerCase(),
-				) >= 0
-			) {
+				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
+				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
+				await this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
+			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
 				await this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
 			}
 		}
@@ -113,15 +86,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				if (!(await this.isDirectoryEmpty(`${dirPath}/${innerStat.path}`))) {
 					return false;
 				}
-			} else if (
-				supportedFileExtension.indexOf(
-					fileExtension(innerStat.path).toLowerCase(),
-				) >= 0
-			) {
+			} else if (supportedFileExtension.indexOf(fileExtension(innerStat.path).toLowerCase()) >= 0) {
 				return false;
 			}
 		}
 		return true;
+
 	}
 
 	private trimAnchorLink(link: string) {
@@ -134,11 +104,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 	// Parse text for links, attempt to find local file, if found create Joplin resource
 	// and update link accordingly.
-	public async importLocalFiles(
-		filePath: string,
-		md: string,
-		parentFolderId: string,
-	) {
+	public async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);
 		const htmlLinks = htmlUtils.extractFileUrls(md);
@@ -151,10 +117,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				// If the URI cannot be decoded, leave it as it is.
 				continue;
 			}
-
 			if (hasProtocol(link, ['http', 'https', 'mailto'])) {
 				continue;
 			}
+
 
 			if (isDataUrl(link)) {
 				// Just leave it as it is. We could potentially import
@@ -163,13 +129,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			} else {
 				// Handle anchor links appropriately
 				const trimmedLink = this.trimAnchorLink(link);
-				const attachmentPath = filename(
-					`${dirname(filePath)}/${trimmedLink}`,
-					true,
-				);
-				const pathWithExtension = `${attachmentPath}.${fileExtension(
-					trimmedLink,
-				)}`;
+				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
+				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
 				const stat = await shim.fsDriver().stat(pathWithExtension);
 				const isDir = stat ? stat.isDirectory() : false;
 				if (stat && !isDir) {
@@ -177,11 +138,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
 					let id = '';
 					// If the link looks like a note, then import it
-					if (
-						supportedFileExtension.indexOf(
-							fileExtension(trimmedLink).toLowerCase(),
-						) >= 0
-					) {
+					if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
 						// If the note hasn't been imported yet, do so now
 						if (!this.importedNotes[resolvedPath]) {
 							await this.importFile(resolvedPath, parentFolderId);
@@ -189,11 +146,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 						id = this.importedNotes[resolvedPath].id;
 					} else {
-						const resource = await shim.createResourceFromPath(
-							pathWithExtension,
-							null,
-							{ resizeLargeImages: 'never' },
-						);
+						const resource = await shim.createResourceFromPath(pathWithExtension, null, { resizeLargeImages: 'never' });
 						id = resource.id;
 					}
 
@@ -201,20 +154,13 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					// Only opening patterns are consider in order to cover all occurrences
 					// We need to use the encoded link as well because some links (link's with spaces)
 					// will appear encoded in the source. Other links (unicode chars) will not
-					const linksToReplace = [
-						this.trimAnchorLink(link),
-						this.trimAnchorLink(encodedLink),
-					];
+					const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];
 
 					for (let j = 0; j < linksToReplace.length; j++) {
 						const linkToReplace = pregQuote(linksToReplace[j]);
 
 						// Markdown links
-						updated = markdownUtils.replaceResourceUrl(
-							updated,
-							linkToReplace,
-							id,
-						);
+						updated = markdownUtils.replaceResourceUrl(updated, linkToReplace, id);
 
 						// HTML links
 						updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
@@ -227,9 +173,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 	public async importFile(filePath: string, parentFolderId: string) {
 		const resolvedPath = shim.fsDriver().resolve(filePath);
-		if (this.importedNotes[resolvedPath]) {
-			return this.importedNotes[resolvedPath];
-		}
+		if (this.importedNotes[resolvedPath]) return this.importedNotes[resolvedPath];
 
 		const stat = await shim.fsDriver().stat(resolvedPath);
 		if (!stat) throw new Error(`Cannot read ${resolvedPath}`);
@@ -247,9 +191,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			user_created_time: stat.birthtime.getTime(),
 			markup_language: ext === 'html' ? MarkupToHtml.MARKUP_LANGUAGE_HTML : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
-		this.importedNotes[resolvedPath] = await Note.save(note, {
-			autoTimestamp: false,
-		});
+		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
 		return this.importedNotes[resolvedPath];
 	}

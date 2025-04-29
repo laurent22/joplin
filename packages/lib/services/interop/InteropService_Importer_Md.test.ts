@@ -2,15 +2,11 @@ import InteropService_Importer_Md from '../../services/interop/InteropService_Im
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
-import {
-	createTempDir,
-	setupDatabaseAndSynchronizer,
-	supportDir,
-	switchClient,
-} from '../../testing/test-utils';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import Resource from '../../models/Resource';
+
 
 describe('InteropService_Importer_Md', () => {
 	let tempDir: string;
@@ -57,9 +53,7 @@ describe('InteropService_Importer_Md', () => {
 		expect(inexistentLinkUnchanged).toBe(true);
 	});
 	it('should only create 1 resource for duplicate links, all tags should be updated', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-duplicate-links.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-duplicate-links.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(1);
@@ -68,28 +62,20 @@ describe('InteropService_Importer_Md', () => {
 		expect(matched.length).toBe(2);
 	});
 	it('should import linked files and modify tags appropriately when link is also in alt text', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-link-in-alt-text.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-link-in-alt-text.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(1);
 	});
 	it('should passthrough unchanged if no links present', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-no-links.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-no-links.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(0);
-		expect(note.body).toContain(
-			'Unidentified vessel travelling at sub warp speed, bearing 235.7. Fluctuations in energy readings from it, Captain. All transporters off.',
-		);
+		expect(note.body).toContain('Unidentified vessel travelling at sub warp speed, bearing 235.7. Fluctuations in energy readings from it, Captain. All transporters off.');
 	});
 	it('should import linked image with special characters in name', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-special-chars.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-special-chars.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(3);
@@ -99,9 +85,7 @@ describe('InteropService_Importer_Md', () => {
 		expect(spaceSyntaxLeft).toBe(false);
 	});
 	it('should import resources and notes for files', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-files.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-files.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(3);
@@ -120,35 +104,27 @@ describe('InteropService_Importer_Md', () => {
 		expect(noteBIds[0]).toEqual(noteA.id);
 	});
 	it('should not import resources from file:// links', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-file-links.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-file-links.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(0);
 		expect(note.body).toContain('![sample](file://../../photo.jpg)');
 	});
 	it('should attach resources that are missing the file extension', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-no-extension.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-no-extension.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(1);
 	});
 	it('should attach resources that include anchor links', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-anchor-link.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-anchor-link.md`);
 
 		const itemIds = await Note.linkedItemIds(note.body);
 		expect(itemIds.length).toBe(1);
 		expect(note.body).toContain(`[Section 1](:/${itemIds[0]}#markdown)`);
 	});
 	it('should attach resources that include a title', async () => {
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-link-title.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-link-title.md`);
 
 		const items = await Note.linkedItems(note.body);
 		expect(items.length).toBe(3);
@@ -172,76 +148,47 @@ describe('InteropService_Importer_Md', () => {
 
 		await importNoteDirectory(`${tempDir}/non-empty`);
 		const allFolders = await Folder.all();
-		expect(
-			allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty'),
-		).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async () => {
 		await fs.mkdirp(`${tempDir}/empty1/empty2`);
 
 		await importNoteDirectory(`${tempDir}/empty1`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty1')).toBe(
-			0,
-		);
-		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty2')).toBe(
-			-1,
-		);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty1')).toBe(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty2')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async () => {
-		await fs.mkdirp(
-			`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`,
-		);
-		await fs.mkdirp(
-			`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`,
-		);
-		await fs.writeFile(
-			`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`,
-			'# Sample',
-		);
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`);
+		await fs.writeFile(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`, '# Sample');
 
 		await importNoteDirectory(`${tempDir}/non-empty-subdir`);
 		const allFolders = await Folder.all();
-		expect(
-			allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir'),
-		).toBeGreaterThanOrEqual(0);
-		expect(
-			allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty'),
-		).toBe(-1);
-		expect(
-			allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty'),
-		).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
 	});
 
 	it('should import all files before replacing links', async () => {
 		await fs.mkdirp(`${tempDir}/links/0/1/2`);
 		await fs.mkdirp(`${tempDir}/links/Target_folder`);
-		await fs.writeFile(
-			`${tempDir}/links/Target_folder/Targeted_note.md`,
-			'# Targeted_note',
-		);
-		await fs.writeFile(
-			`${tempDir}/links/0/1/2/Note_with_reference_to_another_note.md`,
-			'# 20\n[Target_folder:Targeted_note](../../../Target_folder/Targeted_note.md)',
-		);
+		await fs.writeFile(`${tempDir}/links/Target_folder/Targeted_note.md`, '# Targeted_note');
+		await fs.writeFile(`${tempDir}/links/0/1/2/Note_with_reference_to_another_note.md`, '# 20\n[Target_folder:Targeted_note](../../../Target_folder/Targeted_note.md)');
 
 		await importNoteDirectory(`${tempDir}/links`);
 
 		const allFolders = await Folder.all();
 		const allNotes = await Note.all();
-		const targetFolder = allFolders.find((f) => f.title === 'Target_folder');
-		const noteBeingReferenced = allNotes.find(
-			(n) => n.title === 'Targeted_note',
-		);
+		const targetFolder = allFolders.find(f => f.title === 'Target_folder');
+		const noteBeingReferenced = allNotes.find(n => n.title === 'Targeted_note');
 
 		expect(noteBeingReferenced.parent_id).toBe(targetFolder.id);
 	});
 
 	it('should not fail to import file that contains a link to a file that does not exist', async () => {
 		// The first implicit test is that the below call doesn't throw due to the invalid image
-		const note = await importNote(
-			`${supportDir}/test_notes/md/invalid-image-link.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/invalid-image-link.md`);
 		const links = Note.linkedItemIds(note.body);
 		expect(links.length).toBe(1);
 		const resource: ResourceEntity = await Resource.load(links[0]);
@@ -251,17 +198,12 @@ describe('InteropService_Importer_Md', () => {
 
 	it('should not fail to import file that contains a malformed URI', async () => {
 		// The first implicit test is that the below call doesn't throw due to the malformed URI
-		const note = await importNote(
-			`${supportDir}/test_notes/md/sample-malformed-uri.md`,
-		);
+		const note = await importNote(`${supportDir}/test_notes/md/sample-malformed-uri.md`);
 		const itemIds = Note.linkedItemIds(note.body);
 		expect(itemIds.length).toBe(0);
 		// The malformed link is imported as-is
-		expect(note.body).toContain(
-			'![malformed link](https://malformed_uri/%E0%A4%A.jpg)',
-		);
+		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
 	});
-
 	it('should not treat very long http links as local files (Issue #12172)', async () => {
 		const longUrl =
       'https://l.facebook.com/l.php?u=https%3A%2F%2Fix.sk%2FNiBZH%3Futm_source%3DYouTube%2520Instagram%26utm_medium%3D2HIqFSGVVB2mFsVTJClrQ7ZnuGJaUt6hu1MNH0vUMjcrgWnUsK%26utm_campaign%3D%25F0%259F%2598%25A9%25F0%259F%2598%258E%25F0%259F%2598%25BF%25F0%259F%25A4%2594%25F0%259F%2598%25A9%25F0%259F%2599%2583%25F0%259F%25A4%25AF%25F0%259F%25A5%25B0%25F0%259F%2598%25AB%25F0%259F%2598%25BA%26utm_id%3D%25F0%259F%2598%258B%25F0%259F%2598%25A5%25F0%259F%25A4%25A1%25F0%259F%2598%25A0%25F0%259F%2598%2587%25F0%259F%25A5%25B4%25F0%259F%25A7%2590%25F0%259F%2598%258E%25F0%259F%2598%2582%25F0%259F%2598%259E%26utm_term%3D%25F0%259F%2598%2584%25F0%259F%25A4%25A9%25F0%259F%2599%2580%25F0%259F%2598%2593%25F0%259F%25A4%25AF%25F0%259F%25A4%25A5%25F0%259F%2591%25BE%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%25A4%25A5%26utm_content%3D%25F0%259F%2591%25BD%25F0%259F%2598%25AB%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%2598%25A9%25F0%259F%2599%2589%26fbclid%3DIwAR0I3l5DBLypLaTjDTCGPQ1i1MmPB2-pE8iqrxrgUK9Kkvq3OX5Mjejibzw&h=AT3nNxW4G-9nAkhXU1EVN-aVGl1o_-DzDAaWFx9xbprpN3JRBOh17lCQQHNAlIMv6iE4P2vobBAAivLvdzy00K8xqIqb-CvGj6YnnBX6R9wwtj5Y&__tn__=H-y-R&c[0]=AT0eE6OXx_t9HzpPmMgTdOWAw2ZRNPRDIHJWf699NZYkYzugbWS6g3rOndhPA8fwrCIgk1zn2D1To7phLW9wXkqfgZU1ayT3887_dxrfN-x822Pos0lCjTIhoQcxfBl516pTz1XrRG_MbtPpLzUFAGu4nw5W86UR1EkBCZhustNbgTX4wVReiVSuwAWu7Sp1yiWvUm5JXlo76663333hhsgsu';
