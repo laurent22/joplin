@@ -900,9 +900,9 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
-"Impossible de partager ce carnet chiffré car le destinataire %s car ils "
-"n'ont pas activé le chiffrement. Ils peuvent le faire à partir de l'écran "
-"Configuration > Chiffrement."
+"Impossible de partager ce carnet chiffré car les destinataires %s n'ont pas "
+"activé le chiffrement bout-à-bout. Ils peuvent le faire à partir de "
+"l'écran Configuration > Chiffrement."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:331
 msgid "Case sensitive"
@@ -934,7 +934,7 @@ msgstr "Caractères sans espaces"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
 msgid "Check"
-msgstr "Coché"
+msgstr "Cocher"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
@@ -948,7 +948,7 @@ msgstr "Vérifier les mises à jour…"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:264
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:465
 msgid "Check synchronisation configuration"
-msgstr "Vérifier config synchronisation"
+msgstr "Vérifier config. synchronisation"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:90
 msgid "Checkbox"
@@ -996,7 +996,7 @@ msgid ""
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 "Cliquez sur \"%s\" pour restaurer cette note. Elle sera copiée dans le "
-"carnet \"%s\". La version actuelle de la note ne sera pas replacée ou "
+"carnet \"%s\". La version actuelle de la note ne sera pas remplacée ou "
 "modifiée."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
@@ -1112,7 +1112,7 @@ msgstr ""
 "contenants des certificats, ou les chemins de certificats individuels. Par "
 "exemple : /my/cert_dir, /other/custom.pem. Remarquez que si vous changez les "
 "paramètres TLS, vous devez enregistrer vos changements avant de cliquer sur "
-"\"Vérifier config synchronisation\"."
+"\"Vérifier config. synchronisation\"."
 
 #: packages/lib/services/KeymapService.ts:331
 msgid "command"
@@ -1206,7 +1206,7 @@ msgstr "Conflits"
 
 #: packages/lib/models/Resource.ts:478
 msgid "Conflicts (attachments)"
-msgstr "Conflits (fichiers joints)"
+msgstr "Conflits (pièces jointes)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:253
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:462
@@ -1261,7 +1261,7 @@ msgstr "Copier"
 
 #: packages/app-desktop/commands/copyDevCommand.ts:9
 msgid "Copy dev mode command to clipboard"
-msgstr "Copier commande de développement dans presse papier"
+msgstr "Copier la commande de développement dans le presse papier"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
@@ -1286,7 +1286,7 @@ msgstr "Copier le lien vers le site Web"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
 #: packages/app-mobile/components/screens/Note/Note.tsx:1275
 msgid "Copy Markdown link"
-msgstr "Copier lien Markdown"
+msgstr "Copier le lien Markdown"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:156
 msgid "Copy path to clipboard"
@@ -1295,8 +1295,8 @@ msgstr "Copier le chemin"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:216
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Copier lien partageable"
-msgstr[1] "Copier liens partageables"
+msgstr[0] "Copier le lien partageable"
+msgstr[1] "Copier les liens partageables"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:52
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:75
@@ -1305,7 +1305,7 @@ msgstr "Copier"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
-msgstr "Copier le code"
+msgstr "Copier le jeton"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "Copy version info"
@@ -1332,14 +1332,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Impossible de se connecter au server Joplin. Veuillez vérifier la "
-"configuration. L'erreur complète était :\n"
+"Impossible de se connecter au server Joplin. Veuillez vérifier les options "
+"de synchronisation dans l'écran de configuration. L'erreur complète était :\n"
 "\n"
 "%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:319
 msgid "Could not connect to plugin repository."
-msgstr "Impossible de télécharger la liste des plugins."
+msgstr "Impossible de télécharger la liste des modules."
 
 #: packages/app-desktop/InteropServiceHelper.ts:220
 msgid "Could not export notes: %s"
@@ -1367,7 +1367,7 @@ msgstr "Impossible de changer de profil : %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:224
 msgid "Could not upgrade master key: %s"
-msgstr "Impossible de mettre la clef à niveau : %s"
+msgstr "Impossible de mettre à niveau la clef principale : %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/leaveSharedFolder.ts:27
 msgid ""
@@ -1387,7 +1387,7 @@ msgstr "Créer"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "Créer un carnet sous un carnet parent."
+msgstr "Créer un nouveau carnet sous un carnet parent."
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
@@ -1404,7 +1404,7 @@ msgstr "Créer un carnet"
 
 #: packages/server/src/routes/admin/users.ts:257
 msgid "Create user"
-msgstr "Créer utilisateur"
+msgstr "Créer un utilisateur"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
@@ -1463,7 +1463,7 @@ msgstr "Création d'une nouvelle note..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
 msgid "Creating new to-do..."
-msgstr "Création d'un nouveau to-do…"
+msgstr "Création d'une nouvelle tâche…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1582,7 +1582,7 @@ msgstr "Supprimer"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid "Delete attachment \"%s\"?"
-msgstr "Supprimer fichier joint \"%s\" ?"
+msgstr "Supprimer la pièce jointe \"%s\" ?"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1590,7 +1590,7 @@ msgstr "Supprimer les sessions expirées"
 
 #: packages/server/src/services/TaskService.ts:22
 msgid "Delete expired tokens"
-msgstr "Supprimer les tokens expirés"
+msgstr "Supprimer les jetons expirés"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 msgid "Delete line"
