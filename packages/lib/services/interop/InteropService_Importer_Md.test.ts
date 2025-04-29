@@ -204,18 +204,16 @@ describe('InteropService_Importer_Md', () => {
 		// The malformed link is imported as-is
 		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
 	});
-	it('should not treat very long http links as local files (Issue #12172)', async () => {
-		const longUrl =
-      'https://l.facebook.com/l.php?u=https%3A%2F%2Fix.sk%2FNiBZH%3Futm_source%3DYouTube%2520Instagram%26utm_medium%3D2HIqFSGVVB2mFsVTJClrQ7ZnuGJaUt6hu1MNH0vUMjcrgWnUsK%26utm_campaign%3D%25F0%259F%2598%25A9%25F0%259F%2598%258E%25F0%259F%2598%25BF%25F0%259F%25A4%2594%25F0%259F%2598%25A9%25F0%259F%2599%2583%25F0%259F%25A4%25AF%25F0%259F%25A5%25B0%25F0%259F%2598%25AB%25F0%259F%2598%25BA%26utm_id%3D%25F0%259F%2598%258B%25F0%259F%2598%25A5%25F0%259F%25A4%25A1%25F0%259F%2598%25A0%25F0%259F%2598%2587%25F0%259F%25A5%25B4%25F0%259F%25A7%2590%25F0%259F%2598%258E%25F0%259F%2598%2582%25F0%259F%2598%259E%26utm_term%3D%25F0%259F%2598%2584%25F0%259F%25A4%25A9%25F0%259F%2599%2580%25F0%259F%2598%2593%25F0%259F%25A4%25AF%25F0%259F%25A4%25A5%25F0%259F%2591%25BE%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%25A4%25A5%26utm_content%3D%25F0%259F%2591%25BD%25F0%259F%2598%25AB%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%2598%25A9%25F0%259F%2599%2589%26fbclid%3DIwAR0I3l5DBLypLaTjDTCGPQ1i1MmPB2-pE8iqrxrgUK9Kkvq3OX5Mjejibzw&h=AT3nNxW4G-9nAkhXU1EVN-aVGl1o_-DzDAaWFx9xbprpN3JRBOh17lCQQHNAlIMv6iE4P2vobBAAivLvdzy00K8xqIqb-CvGj6YnnBX6R9wwtj5Y&__tn__=H-y-R&c[0]=AT0eE6OXx_t9HzpPmMgTdOWAw2ZRNPRDIHJWf699NZYkYzugbWS6g3rOndhPA8fwrCIgk1zn2D1To7phLW9wXkqfgZU1ayT3887_dxrfN-x822Pos0lCjTIhoQcxfBl516pTz1XrRG_MbtPpLzUFAGu4nw5W86UR1EkBCZhustNbgTX4wVReiVSuwAWu7Sp1yiWvUm5JXlo76663333hhsgsu';
-		const mdContent = `# Test\n\n[Long Link](${longUrl})`;
+	it('should not treat very long http links as local files', async () => {
+		const longUrl = 'https://l.facebook.com/l.php?u=https%3A%2F%2Fix.sk%2FNiBZH%3Futm_source%3DYouTube%2520Instagram%26utm_medium%3D2HIqFSGVVB2mFsVTJClrQ7ZnuGJaUt6hu1MNH0vUMjcrgWnUsK%26utm_campaign%3D%25F0%259F%2598%25A9%25F0%259F%2598%258E%25F0%259F%2598%25BF%25F0%259F%25A4%2594%25F0%259F%2598%25A9%25F0%259F%2599%2583%25F0%259F%25A4%25AF%25F0%259F%25A5%25B0%25F0%259F%2598%25AB%25F0%259F%2598%25BA%26utm_id%3D%25F0%259F%2598%258B%25F0%259F%2598%25A5%25F0%259F%25A4%25A1%25F0%259F%2598%25A0%25F0%259F%2598%2587%25F0%259F%25A5%25B4%25F0%259F%25A7%2590%25F0%259F%2598%258E%25F0%259F%2598%2582%25F0%259F%2598%259E%26utm_term%3D%25F0%259F%2598%2584%25F0%259F%25A4%25A9%25F0%259F%2599%2580%25F0%259F%2598%2593%25F0%259F%25A4%25AF%25F0%259F%25A4%25A5%25F0%259F%2591%25BE%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%25A4%25A5%26utm_content%3D%25F0%259F%2591%25BD%25F0%259F%2598%25AB%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%2598%25A9%25F0%259F%2599%2589%26fbclid%3DIwAR0I3l5DBLypLaTjDTCGPQ1i1MmPB2-pE8iqrxrgUK9Kkvq3OX5Mjejibzw&h=AT3nNxW4G-9nAkhXU1EVN-aVGl1o_-DzDAaWFx9xbprpN3JRBOh17lCQQHNAlIMv6iE4P2vobBAAivLvdzy00K8xqIqb-CvGj6YnnBX6R9wwtj5Y&__tn__=H-y-R&c[0]=AT0eE6OXx_t9HzpPmMgTdOWAw2ZRNPRDIHJWf699NZYkYzugbWS6g3rOndhPA8fwrCIgk1zn2D1To7phLW9wXkqfgZU1ayT3887_dxrfN-x822Pos0lCjTIhoQcxfBl516pTz1XrRG_MbtPpLzUFAGu4nw5W86UR1EkBCZhustNbgTX4wVReiVSuwAWu7Sp1yiWvUm5JXlo';
+		const mdContent = `# Test\n\n[${longUrl}](<${longUrl}>)`;
 		const tempFilePath = `${tempDir}/long_link_test.md`;
 
 		await fs.writeFile(tempFilePath, mdContent);
-		// Use the helper function defined in this test file
 		const note = await importNote(tempFilePath);
 
 		// Check the link wasn't modified or treated as a resource
-		expect(note.body).toContain(`[Long Link](${longUrl})`);
+		expect(note.body).toContain(`[${longUrl}](<${longUrl}>)`);
 		const linkedItems = await Note.linkedItemIds(note.body);
 		expect(linkedItems.length).toBe(0);
 	});
