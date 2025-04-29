@@ -1834,9 +1834,9 @@ msgid ""
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"Ne perdez pas le mot de passe car, par sécurité, ce sera la seule façon de "
-"déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre "
-"mot de passe ci-dessous."
+"Ne perdez pas le mot de passe car, pour des raisons de sécurité, ce sera "
+"la *seule* façon de déchiffrer les données. Pour activer le chiffrement, "
+"veuillez entrer votre mot de passe ci-dessous."
 
 #: packages/lib/models/Setting.ts:1223
 msgid "Donate, website"
@@ -2035,15 +2035,15 @@ msgstr "Email"
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:47
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:23
 msgid "Email to note"
-msgstr "Conversion email en note"
+msgstr "Conversion de l'email en note"
 
 #: packages/lib/utils/joplinCloud/index.ts:187
 msgid "Email to Note"
-msgstr "Conversion email en note"
+msgstr "Conversion de l'email en note"
 
 #: packages/lib/models/Setting.ts:1216
 msgid "Email To Note, login information"
-msgstr "\"Email to note\", info de connexion"
+msgstr "\"Email to note\", information de connexion"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
@@ -2089,7 +2089,7 @@ msgstr "Activer la syntaxe pour abréviations"
 
 #: packages/lib/models/settings/builtInMetadata.ts:992
 msgid "Enable audio player"
-msgstr "Activer lecteur audio"
+msgstr "Activer le lecteur audio"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
@@ -2150,7 +2150,7 @@ msgstr "Activer ou désactiver les modules"
 
 #: packages/lib/models/settings/builtInMetadata.ts:994
 msgid "Enable PDF viewer"
-msgstr "Activer visionneuse PDF"
+msgstr "Activer la visionneuse PDF"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:942
@@ -2159,7 +2159,7 @@ msgstr "Activer la prise en charge des plugins"
 
 #: packages/lib/models/settings/builtInMetadata.ts:984
 msgid "Enable soft breaks"
-msgstr "Activer retours à la ligne \"doux\""
+msgstr "Activer les retours à la ligne \"doux\""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1358
 msgid "Enable spell checking in Markdown editor"
@@ -2183,7 +2183,7 @@ msgstr "Activer le typographe"
 
 #: packages/lib/models/settings/builtInMetadata.ts:993
 msgid "Enable video player"
-msgstr "Activer lecteur vidéo"
+msgstr "Activer le lecteur vidéo"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
@@ -2237,7 +2237,7 @@ msgstr "Chiffrement"
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:530
 #: packages/app-mobile/components/screens/encryption-config.tsx:334
 msgid "Encryption Config"
-msgstr "Config chiffrement"
+msgstr "Config. chiffrement"
 
 #: packages/app-cli/app/command-e2ee.ts:128
 #: packages/app-mobile/components/screens/encryption-config.tsx:353
