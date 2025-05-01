@@ -63,34 +63,20 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should not toggle a the full list when the cursor is on a blank line', async () => {
-		const checklistStartText = [
-			'# Test',
-			'',
-			'- [ ] This',
-			'- [ ] is',
-			'',
-		].join('\n');
+	it('should not toggle the full list when the cursor is on a blank line', async () => {
+		const checklistStartText = ['- [ ] This', '- [ ] is'].join('\n');
+		const checklistEndText = ['- [ ] a', '- [ ] test'].join('\n');
 
-		const checklistEndText = [
-			'- [ ] a',
-			'- [ ] test',
-		].join('\n');
+		const input = `${checklistStartText}\n\n${checklistEndText}`;
+		const expected = `${checklistStartText}\n\n${checklistEndText}`; // no change
 
 		const editor = await createTestEditor(
-			`${checklistStartText}\n${checklistEndText}`,
-
-			// Place the cursor on the blank line between the checklist
-			// regions
-			EditorSelection.cursor(unorderedListText.length + 1),
-			['BulletList', 'ATXHeading1'],
+			input,
+			EditorSelection.cursor(checklistStartText.length + 1), // place cursor on the blank line
+			['BulletList'],
 		);
-
-		// Should create a checkbox on the blank line
 		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${checklistStartText}- [ ] \n${checklistEndText}`,
-		);
+		expect(editor.state.doc.toString()).toBe(expected);
 	});
 
 	// it('should correctly replace an unordered list with a checklist', async () => {
@@ -248,26 +234,26 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should set isEntirelyTargetList = false when blank lines are in a checklist selection', async () => {
-		const checklistWithGaps = [
-			'- [ ] A',
+	it('should preserve blank lines when toggling a checklist with blank lines', async () => {
+		const listWithGaps = [
+			'- A',
 			'',
-			'- [ ] B',
+			'- B',
 			'',
-			'- [ ] C',
+			'- C',
 		].join('\n');
 
 		const expectedAfterToggle = [
 			'- [ ] A',
-			'- [ ] ',
+			'',
 			'- [ ] B',
-			'- [ ] ',
+			'',
 			'- [ ] C',
 		].join('\n');
 
 		const editor = await createTestEditor(
-			checklistWithGaps,
-			EditorSelection.range(0, checklistWithGaps.length),
+			listWithGaps,
+			EditorSelection.range(0, listWithGaps.length),
 			['BulletList'],
 		);
 

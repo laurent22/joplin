@@ -158,17 +158,6 @@ export const toggleList = (listType: ListType): Command => {
 		for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
 			const line = doc.line(lineNum);
 			const content = stripBlockquote(line);
-
-			//
-			// If the selection contains a blank line and we're toggling to a checklist,
-			// treat it as mixed content by setting isEntirelyTargetList = false.
-			// This ensures we don't mistakenly treat the entire selection as a tight checklist block,
-			// allowing each line (including blanks) to be handled individually.
-			//
-			if (content.trim() === '' && listType === ListType.CheckList) {
-				isEntirelyTargetList = false;
-				break;
-			}
 			if (content.trim() === '') continue;
 			if (getContainerType(line) !== listType) {
 				isEntirelyTargetList = false;
@@ -186,8 +175,8 @@ export const toggleList = (listType: ListType): Command => {
 			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
 				const line = doc.line(lineNum);
 				const origLineContent = stripBlockquote(line);
-				if (origLineContent.trim() === '' && listType !== ListType.CheckList) {
-					continue;
+				if (origLineContent.trim() === '') {
+					continue; // skip blank lines
 				}
 
 				const lineContentFrom = line.to - origLineContent.length;
@@ -252,6 +241,7 @@ export const toggleList = (listType: ListType): Command => {
 		return true;
 	};
 };
+
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {
