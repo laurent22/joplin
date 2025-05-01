@@ -132,6 +132,7 @@ export interface NoteBodyEditorProps {
 	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarItem[];
 	plugins: PluginStates;
+	mathEnabled: boolean;
 	fontSize: number;
 	contentMaxWidth: number;
 	isSafeMode: boolean;

@@ -109,7 +109,7 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 	const [error, setError] = useState('');
 	const [duration, setDuration] = useState(0);
 
-	const recordingRef = useRef<Audio.Recording|null>();
+	const recordingRef = useRef<Audio.Recording|null>(null);
 	const onStartRecording = useCallback(async () => {
 		try {
 			setRecordingState(RecorderState.Loading);

@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d päeva"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d tund"
-	],
-	"%d hours": [
-		"%d tundi"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minutit"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
 	],
 	"%s": [
 		""
@@ -53,7 +38,13 @@
 	"%s = %s (%s)": [
 		"%s = %s ( %s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -61,9 +52,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d märkused"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -293,6 +281,9 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automaatne sidumine traksid, sulg, noteeringud jne."
 	],
@@ -335,6 +326,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -346,6 +340,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Tausta sünkroniseerimise tühistamine... Oota."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Tühistamine..."
@@ -413,6 +410,9 @@
 	"Clear alarm": [
 		"Tühjenda alarm"
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Close": [
 		"Sulge"
 	],
@@ -424,6 +424,9 @@
 	],
 	"Close Window": [
 		"Sule aken"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		""
@@ -437,7 +440,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapsed, press space to expand.": [
+	"Collapsed": [
 		""
 	],
 	"command": [
@@ -469,6 +472,9 @@
 	],
 	"Configuration": [
 		"Seadistamine"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Parooli kinnitamine ei tohi olla tühi"
@@ -630,9 +636,6 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -664,6 +667,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -765,12 +771,6 @@
 	"Edit": [
 		"Muuda"
 	],
-	"Edit in external editor": [
-		"Redigeeri välisredaktoris"
-	],
-	"Edit in new window": [
-		""
-	],
 	"Edit note.": [
 		"Redigeeri märkust."
 	],
@@ -849,6 +849,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Krüpteeritud"
 	],
@@ -894,7 +897,7 @@
 	"Expand %s": [
 		""
 	],
-	"Expanded, press space to collapse.": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -918,6 +921,9 @@
 	"Fail-safe": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Parandamatu tõrge:"
 	],
@@ -935,6 +941,9 @@
 	],
 	"File system": [
 		"Failisüsteem"
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefoxi laiendus"
@@ -1162,6 +1171,9 @@
 	"Invalid command: \"%s\"": [
 		"Sobimatu käsk: %s"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Sobimatu suvandiväärtus: %s. Võimalikud väärtused on: %s."
 	],
@@ -1221,6 +1233,9 @@
 	],
 	"Language": [
 		"Keel"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Viimane tõrge: %s"
@@ -1316,6 +1331,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1337,11 +1355,17 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Kas teisaldada %d märkmed märkmikku \"%s\"?"
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook...": [
 		"Teisalda märkmikku..."
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1430,6 +1454,9 @@
 	"Nord": [
 		"Nord"
 	],
+	"Not checked": [
+		""
+	],
 	"Not downloaded": [
 		"Ei laaditud alla"
 	],
@@ -1511,7 +1538,16 @@
 	"Open %s": [
 		"Ava %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
+		""
+	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
 		""
 	],
 	"Open Sync Wizard...": [
@@ -1531,6 +1567,12 @@
 	],
 	"Page orientation for PDF export": [
 		"Lehekülje suund PDF-i eksportimiseks"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"Parool"
@@ -1556,7 +1598,7 @@
 	"PDF File": [
 		"PDF-fail"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -1569,6 +1611,9 @@
 		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -1724,6 +1769,9 @@
 	"Recommended plugins": [
 		""
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		""
 	],
@@ -1856,6 +1904,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Otsi"
 	],
@@ -1955,6 +2006,9 @@
 	"Skipped: %d.": [
 		"Vahele jäetud: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2006,6 +2060,9 @@
 	"Split View": [
 		"Tükelda vaade"
 	],
+	"Start recording": [
+		""
+	],
 	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
 		"Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit sõltuvalt sellest, kui palju on dekrüpteerida."
 	],
@@ -2051,8 +2108,14 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Edu! Sünkroonimise konfiguratsioon näib olevat õige."
+	],
+	"Suggestions": [
+		""
 	],
 	"Superscript": [
 		""
@@ -2101,6 +2164,12 @@
 	],
 	"Synchronising...": [
 		"Sünkroonimine..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"tag1, tag2, ...": [
 		""
@@ -2370,6 +2439,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Lõpetamata ülesanded üleval"
 	],
@@ -2472,6 +2544,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -2545,6 +2620,9 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

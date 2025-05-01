@@ -405,7 +405,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
-			footnote: _('Per user. Minimum of %d users.', 2),
+			footnote: _('Per user. Minimum of 2 users.'),
 		},
 	};
 }

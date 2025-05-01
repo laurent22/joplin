@@ -287,6 +287,7 @@ async function switchClient(id: number, options: any = null) {
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 	ResourceFetcher.instance_ = resourceFetchers_[id];
+	DecryptionWorker.instance_ = decryptionWorker(id);
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -549,7 +550,7 @@ function revisionService(id: number = null) {
 function decryptionWorker(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = decryptionWorkers_[id];
-	o.setKvStore(kvStore(id));
+	o?.setKvStore(kvStore(id));
 	return o;
 }
 

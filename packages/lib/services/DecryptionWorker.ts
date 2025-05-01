@@ -18,6 +18,16 @@ interface DecryptionResult {
 	error: any;
 }
 
+// Key for use with the KvStore.
+const decryptionErrorKeyPrefix = 'decryptErrorLabel:';
+const decryptionErrorKey = (type: number, id: string) => {
+	return `${decryptionErrorKeyPrefix}${type}:${id}`;
+};
+const decryptionCounterKeyPrefix = 'decrypt:';
+const decryptionCounterKey = (type: number, id: string) => {
+	return `${decryptionCounterKeyPrefix}${type}:${id}`;
+};
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
@@ -96,24 +106,29 @@ export default class DecryptionWorker {
 	}
 
 	public async decryptionDisabledItems() {
-		let items = await this.kvStore().searchByPrefix('decrypt:');
+		let items = await this.kvStore().searchByPrefix(decryptionCounterKeyPrefix);
 		items = items.filter(item => item.value > this.maxDecryptionAttempts_);
-		items = items.map(item => {
+		return await Promise.all(items.map(async item => {
 			const s = item.key.split(':');
+			const type_ = Number(s[1]);
+			const id = s[2];
+			const errorDescription = await this.kvStore().value<string>(decryptionErrorKey(type_, id));
 			return {
-				type_: Number(s[1]),
-				id: s[2],
+				type_,
+				id,
+				reason: errorDescription,
 			};
-		});
-		return items;
+		}));
 	}
 
-	public async clearDisabledItem(typeId: string, itemId: string) {
-		await this.kvStore().deleteValue(`decrypt:${typeId}:${itemId}`);
+	public async clearDisabledItem(typeId: number, itemId: string) {
+		await this.kvStore().deleteValue(decryptionCounterKey(typeId, itemId));
+		await this.kvStore().deleteValue(decryptionErrorKey(typeId, itemId));
 	}
 
 	public async clearDisabledItems() {
-		await this.kvStore().deleteByPrefix('decrypt:');
+		await this.kvStore().deleteByPrefix(decryptionCounterKeyPrefix);
+		await this.kvStore().deleteByPrefix(decryptionErrorKeyPrefix);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -193,10 +208,14 @@ export default class DecryptionWorker {
 						itemCount: items.length,
 					});
 
-					const counterKey = `decrypt:${item.type_}:${item.id}`;
+					const counterKey = decryptionCounterKey(item.type_, item.id);
+					const errorKey = decryptionErrorKey(item.type_, item.id);
 
 					const clearDecryptionCounter = async () => {
 						await this.kvStore().deleteValue(counterKey);
+						// The decryption error key stores the reason for the decryption counter's value.
+						// As such, the error should be reset when the decryption counter is reset:
+						await this.kvStore().deleteValue(errorKey);
 					};
 
 					// Don't log in production as it results in many messages when importing many items
@@ -252,6 +271,8 @@ export default class DecryptionWorker {
 							await clearDecryptionCounter();
 							throw error;
 						}
+
+						await this.kvStore().setValue(errorKey, String(error));
 
 						if (options.errorHandler === 'log') {
 							this.logger().warn(`DecryptionWorker: error for: ${item.id} (${ItemClass.tableName()})`, error);

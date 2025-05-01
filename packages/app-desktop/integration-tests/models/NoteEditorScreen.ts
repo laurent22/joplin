@@ -80,7 +80,11 @@ export default class NoteEditorPage {
 		// We use frameLocator(':scope') to convert the richTextEditor Locator into
 		// a FrameLocator. (:scope selects the locator itself).
 		// https://playwright.dev/docs/api/class-framelocator
-		return this.richTextEditor.frameLocator(':scope');
+		return this.richTextEditor.contentFrame();
+	}
+
+	public getRichTextEditorBody() {
+		return this.richTextEditor.contentFrame().locator('body');
 	}
 
 	public focusCodeMirrorEditor() {

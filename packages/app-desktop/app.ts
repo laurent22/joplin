@@ -92,7 +92,7 @@ class Application extends BaseApplication {
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
-		newState = super.reducer(newState, action);
+		newState = super.reducer(newState, action) as AppState;
 		return newState;
 	}
 
@@ -456,9 +456,6 @@ class Application extends BaseApplication {
 			bridge().openDevTools();
 		}
 
-		bridge().electronApp().initializeCustomProtocolHandler(
-			Logger.create('handleCustomProtocols'),
-		);
 		this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
 		this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));

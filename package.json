@@ -38,7 +38,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "packageJsonLint": "node ./packages/tools/packageJsonLint.js",
-    "postinstall": "gulp build",
+    "postinstall": "husky && gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@17/bin:$PATH\" node packages/tools/release-android.js",
@@ -64,11 +64,6 @@
     "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
     "watchWebsite": "nodemon --delay 1 --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --watch packages/doc-builder/build --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "corepack yarn lint-staged"
-    }
-  },
   "devDependencies": {
     "@crowdin/cli": "3",
     "@joplin/utils": "~2.12",
@@ -86,7 +81,7 @@
     "fs-extra": "11.2.0",
     "glob": "10.4.5",
     "gulp": "4.0.2",
-    "husky": "3.1.0",
+    "husky": "9.1.7",
     "lerna": "3.22.1",
     "lint-staged": "15.2.8",
     "madge": "7.0.0",
@@ -108,7 +103,6 @@
     "app-builder-lib@24.4.0": "patch:app-builder-lib@npm%3A24.4.0#./.yarn/patches/app-builder-lib-npm-24.4.0-05322ff057.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
-    "husky": "patch:husky@npm%3A3.1.0#./.yarn/patches/husky-npm-3.1.0-5cc13e4e34.patch",
     "chokidar@^2.0.0": "3.5.3",
     "react-native@0.74.1": "patch:react-native@npm%3A0.74.1#./.yarn/patches/react-native-npm-0.74.1-754c02ae9e.patch",
     "rn-fetch-blob@0.12.0": "patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch",

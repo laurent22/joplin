@@ -1,5 +1,15 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.3.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.3.1) - 2025-05-01T21:18:35Z
+
+- New: Add plural forms for notes, users, hours, minutes, days (#12171 by [@SilverGreen93](https://github.com/SilverGreen93))
+- New: Add setting migration for ocr.enabled (ab86b95)
+- Improved: Logging: Log less information at level `warn` when a decryption error occurs (#11771 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move S3 sync target out of beta (798e1b8)
+- Improved: Updated packages @adobe/css-tools (v4.4.1)
+- Fixed: Adjust how items are queried by ID (#11734) (#11630 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Restoring a note which was in a deleted notebook  (#12016) (#11934)
+
 ## [cli-v3.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.3) - 2025-01-16T01:14:35Z
 
 - Improved: Updated packages @rollup/plugin-node-resolve (v15.2.4), adm-zip (v0.5.16)

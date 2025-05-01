@@ -5,7 +5,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { stateUtils } from '@joplin/lib/reducer';
 import BaseModel from '@joplin/lib/BaseModel';
 import uuid from '@joplin/lib/uuid';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../app.reducer';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
@@ -180,10 +180,15 @@ function SearchBar(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: AppState) => {
+interface OwnProps {
+	windowId: string;
+}
+
+const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	return {
-		notesParentType: state.notesParentType,
-		selectedNoteId: stateUtils.selectedNoteId(state),
+		notesParentType: windowState.notesParentType,
+		selectedNoteId: stateUtils.selectedNoteId(windowState),
 		isFocused: state.focusedField === 'globalSearch',
 	};
 };

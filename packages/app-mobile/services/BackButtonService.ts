@@ -1,6 +1,6 @@
 import { BackHandler } from 'react-native';
 
-type BackButtonHandler = ()=> boolean|Promise<boolean>;
+export type BackButtonHandler = ()=> boolean|Promise<boolean>;
 
 export default class BackButtonService {
 	private static handlers_: BackButtonHandler[] = [];

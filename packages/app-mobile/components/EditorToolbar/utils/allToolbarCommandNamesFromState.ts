@@ -22,6 +22,8 @@ const builtInCommandNames = [
 	'-',
 	EditorCommandType.IndentLess,
 	EditorCommandType.IndentMore,
+	`editor.${EditorCommandType.SwapLineDown}`,
+	`editor.${EditorCommandType.SwapLineUp}`,
 	'-',
 	'insertDateTime',
 	'-',
