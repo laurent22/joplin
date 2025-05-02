@@ -5,9 +5,11 @@
 # Jozef Gaal <preklady@mayday.sk>, 2024,2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.3.7\n"
+"Project-Id-Version: Joplin v3.3.9\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
-"Language-Team: Jozef Gaal <preklady@mayday.sk >\n"
+"Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,11 +102,10 @@ msgstr "&Okno"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d dní"
-msgstr[1] "%d dní"
+msgstr[0] "%d deň"
+msgstr[1] "%d dni"
 msgstr[2] "%d dní"
 
 #: packages/lib/utils/joplinCloud/index.ts:148
@@ -122,12 +123,11 @@ msgstr "%d GB úložného priestoru"
 #: packages/lib/models/settings/builtInMetadata.ts:1282
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d hodina"
-msgstr[1] "%d hodina"
-msgstr[2] "%d hodina"
+msgstr[1] "%d hodiny"
+msgstr[2] "%d hodín"
 
 #: packages/lib/utils/joplinCloud/index.ts:136
 #: packages/lib/utils/joplinCloud/index.ts:137
@@ -144,27 +144,24 @@ msgstr "%d MB na poznámku alebo prílohu"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minút"
-msgstr[1] "%d minút"
+msgstr[0] "%d minúta"
+msgstr[1] "%d minúty"
 msgstr[2] "%d minút"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "%d poznámok zodpovedá tomuto vzoru. Vymazať ich?"
-msgstr[1] "%d poznámok zodpovedá tomuto vzoru. Vymazať ich?"
+msgstr[0] "%d poznámka zodpovedá tomuto vzoru. Vymazať ju?"
+msgstr[1] "%d poznámky zodpovedajú tomuto vzoru. Vymazať ich?"
 msgstr[2] "%d poznámok zodpovedá tomuto vzoru. Vymazať ich?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
-msgstr[0] "%d poznámok bude natrvalo vymazaných. Pokračovať?"
-msgstr[1] "%d poznámok bude natrvalo vymazaných. Pokračovať?"
+msgstr[0] "%d poznámka bude natrvalo vymazaná. Pokračovať?"
+msgstr[1] "%d poznámky budú natrvalo vymazané. Pokračovať?"
 msgstr[2] "%d poznámok bude natrvalo vymazaných. Pokračovať?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
@@ -247,11 +244,10 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
-msgstr[0] "%s: %d poznámok"
-msgstr[1] "%s: %d poznámok"
+msgstr[0] "%s: %d poznámka"
+msgstr[1] "%s: %d poznámky"
 msgstr[2] "%s: %d poznámok"
 
 #: packages/lib/services/ReportService.ts:359
@@ -2103,7 +2099,7 @@ msgstr "Povoliť biometrické overenie?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1000
 msgid "Enable deflist syntax"
-msgstr "Povolenie syntax deflist"
+msgstr "Povoliť syntax deflist"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:226
 #: packages/app-mobile/components/screens/encryption-config.tsx:317
@@ -3520,11 +3516,10 @@ msgstr ""
 "doplnku."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
-msgstr[0] "Presunúť %d poznámok do zápisníka „%s“?"
-msgstr[1] "Presunúť %d poznámok do zápisníka „%s“?"
+msgstr[0] "Presunúť %d poznámku do zápisníka „%s“?"
+msgstr[1] "Presunúť %d poznámky do zápisníka „%s“?"
 msgstr[2] "Presunúť %d poznámok do zápisníka „%s“?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
@@ -4149,9 +4144,8 @@ msgid "PDF File"
 msgstr "Súbor PDF"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
-msgstr "Na používateľa. Minimálne %d používateľov."
+msgstr "Na používateľa. Minimálne 2 používatelia."
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
 msgid "Permanently delete note"
@@ -4173,11 +4167,10 @@ msgstr ""
 "vymazané."
 
 #: packages/lib/models/Note.ts:944
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
-msgstr[0] "Natrvalo odstrániť týchto %d poznámok?"
-msgstr[1] "Natrvalo odstrániť týchto %d poznámok?"
+msgstr[0] "Natrvalo odstrániť túto poznámku?"
+msgstr[1] "Natrvalo odstrániť tieto %d poznámky?"
 msgstr[2] "Natrvalo odstrániť týchto %d poznámok?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
