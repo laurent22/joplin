@@ -1866,7 +1866,7 @@ msgstr "Letöltés"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
-msgstr "Töltse le és telepítse a böngészőjéhez megfelelő bővítményt:"
+msgstr "Töltse le és telepítse a böngészőjéhez megfelelő kiegészítőt:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:586
 msgid "Download it now"
@@ -2144,7 +2144,7 @@ msgstr "Mermaid-diagram támogatásának engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1004
 msgid "Enable multimarkdown table extension"
-msgstr "Multimarkdown-táblázatbővítmény engedélyezése"
+msgstr "Multimarkdown-táblázatkiegészítő engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1528
 msgid "Enable note history"
@@ -2181,7 +2181,7 @@ msgstr "Helyesírás-ellenőrzés engedélyezése a szövegszerkesztőben"
 
 #: packages/lib/models/settings/builtInMetadata.ts:997
 msgid "Enable table of contents extension"
-msgstr "Tartalomjegyzék-bővítmény engedélyezése"
+msgstr "Tartalomjegyzék-kiegészítő engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:837
 msgid "Enable the Markdown toolbar"
@@ -2501,7 +2501,7 @@ msgstr "Rögzítés befejezése"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
-msgstr "Firefox-bővítmény"
+msgstr "Firefox kiegészítő"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:552
 msgid "Fix search index"
@@ -6248,7 +6248,7 @@ msgstr "Szerkesztő elrendezésének váltása"
 
 #: packages/lib/commands/toggleEditorPlugin.ts:11
 msgid "Toggle editor plugin"
-msgstr "Szerkesztő bővítményének váltása"
+msgstr "Szerkesztőbővítmény váltása"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
 msgid "Toggle editor tab key navigation"
