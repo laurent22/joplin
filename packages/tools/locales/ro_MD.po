@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
 "Language: ro_MD\n"
@@ -66,7 +68,7 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-mobile/components/screens/Note/Note.tsx:757
 #: packages/lib/shim-init-node.ts:273
 msgid "(You may disable this prompt in the options)"
-msgstr "(Puteți dezactiva această solicitare în opțiuni)"
+msgstr "(Poți dezactiva această solicitare în opțiuni)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -105,12 +107,11 @@ msgstr "&Fereastră"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d zile"
+msgstr[0] "%d zi"
 msgstr[1] "%d zile"
-msgstr[2] "%d zile"
+msgstr[2] "%d de zile"
 
 #: packages/lib/utils/joplinCloud/index.ts:148
 #: packages/lib/utils/joplinCloud/index.ts:149
@@ -127,12 +128,11 @@ msgstr "spațiu de stocare %d GO"
 #: packages/lib/models/settings/builtInMetadata.ts:1282
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d oră"
-msgstr[1] "%d oră"
-msgstr[2] "%d oră"
+msgstr[1] "%d ore"
+msgstr[2] "%d de ore"
 
 #: packages/lib/utils/joplinCloud/index.ts:136
 #: packages/lib/utils/joplinCloud/index.ts:137
@@ -149,28 +149,25 @@ msgstr "%d MO per notiță sau atașament"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minute"
+msgstr[0] "%d minut"
 msgstr[1] "%d minute"
-msgstr[2] "%d minute"
+msgstr[2] "%d de minute"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "Notițile: %d se potrivesc acestui model. Doriți sa le ștergeți?"
-msgstr[1] "Notițile: %d se potrivesc acestui model. Doriți sa le ștergeți?"
-msgstr[2] "Notițile: %d se potrivesc acestui model. Doriți sa le ștergeți?"
+msgstr[0] "%d notiță se potrivește acestui șablon. Dorești să o ștergi?"
+msgstr[1] "%d notițe se potrivesc acestui șablon. Dorești să le ștergi?"
+msgstr[2] "%d de notițe se potrivesc acestui șablon. Dorești să le ștergi?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
-msgstr[0] "%d notițe vor fi șterse permanent. Continui?"
+msgstr[0] "%d notiță va fi ștearsă permanent. Continui?"
 msgstr[1] "%d notițe vor fi șterse permanent. Continui?"
-msgstr[2] "%d notițe vor fi șterse permanent. Continui?"
+msgstr[2] "%d de notițe vor fi șterse permanent. Continui?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -228,7 +225,7 @@ msgstr "%s nu poate fi mai mare decît %s"
 msgid "%s cannot be less than %s"
 msgstr "%s nu poate fi mai mic decît %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:231
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:237
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
@@ -252,12 +249,11 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
-msgstr[0] "%s: %d notițe"
+msgstr[0] "%s: %d notiță"
 msgstr[1] "%s: %d notițe"
-msgstr[2] "%s: %d notițe"
+msgstr[2] "%s: %d de notițe"
 
 #: packages/lib/services/ReportService.ts:359
 msgid "%s: %d/%d"
@@ -352,7 +348,7 @@ msgstr "Invitații acceptate"
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
-msgstr "Acces refuzat: Te rog să vă verificați numele de utilizator și parola"
+msgstr "Acces refuzat: Te rog să îți verifici numele de utilizator și parola"
 
 #: packages/lib/WebDavApi.js:458
 msgid "Access denied: Please re-enter your password and/or username"
@@ -396,7 +392,7 @@ msgid "Add body"
 msgstr "Adaugă corp"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:64
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:127
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:130
 msgid "Add new"
 msgstr "Adaugă un nou"
 
@@ -625,7 +621,7 @@ msgstr "Atașează fișierul în notiță."
 msgid "attachment"
 msgstr "atașament"
 
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:69
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
 msgid "Attachment"
 msgstr "Atașament"
 
@@ -651,9 +647,9 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Atenție: dacă modificați această locație, asigurați-vă că copiați tot "
-"conținutul pe ea înainte de sincronizare, altfel toate fișierele vor fi "
-"eliminate! Consultați FAQ pentru mai multe detalii: %s"
+"Atenție: dacă modifici această locație, asigură-te că copiezi tot conținutul "
+"în ea înainte de sincronizare, altfel toate fișierele vor fi șterse! "
+"Consultă FAQ pentru mai multe detalii: %s"
 
 #: packages/app-cli/app/command-sync.ts:72
 #: packages/app-cli/app/command-sync.ts:86
@@ -667,7 +663,7 @@ msgstr ""
 msgid "Authorisation token:"
 msgstr "Token autorizare:"
 
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:88
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:89
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:162
 msgid "Authorise"
 msgstr "Autorizează"
@@ -732,7 +728,7 @@ msgstr "Aldin"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:222
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:319
 msgid "Browse all plugins"
-msgstr "Navigați toate plugin-urile"
+msgstr "Răsfoiește toate plugin-urile"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.tsx:275
 msgid "Browse..."
@@ -753,9 +749,9 @@ msgstr "după %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:20
 msgid "by word"
-msgstr "după cuvînt"
+msgstr "cuvînt întreg"
 
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:71
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:74
 msgid "Camera"
 msgstr "Aparat foto"
 
@@ -954,7 +950,7 @@ msgstr "Caractere"
 msgid "Characters excluding spaces"
 msgstr "Caractere cu excepția spațiilor libere"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
 msgid "Check"
 msgstr "Bifează"
 
@@ -970,7 +966,7 @@ msgstr "Verifică pentru actualizări..."
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:264
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:465
 msgid "Check synchronisation configuration"
-msgstr "Verificați configurația de sincronizare"
+msgstr "Verifică configurația de sincronizare"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:90
 msgid "Checkbox"
@@ -1040,7 +1036,7 @@ msgstr "închide"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:223
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:308
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:315
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:83
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:166
@@ -1056,7 +1052,7 @@ msgstr "Închide dialogul"
 
 #: packages/app-mobile/components/Dropdown.tsx:199
 msgid "Close dropdown"
-msgstr "Închideți meniul derulant"
+msgstr "Închide meniul derulant"
 
 #: packages/app-mobile/components/SideMenu.tsx:303
 msgid "Close side menu"
@@ -1106,7 +1102,7 @@ msgstr "Vizualizare code"
 msgid "Collaborate on a notebook with others"
 msgstr "Colaborează la caiet cu alte persoane"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:175
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:176
 msgid "Collaborate on notebooks with others"
 msgstr "Colaborează la caiete cu alte persoane"
 
@@ -1129,12 +1125,11 @@ msgid ""
 "custom.pem. Note that if you make changes to the TLS settings, you must save "
 "your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Listă de căi de acces la directoare din care se încarcă certificatele sau "
-"calea de acces la fișierele de certificate individuale. De exemplu: /my/"
-"cert_dir, /other/custom.pem. Rețineți că, dacă efectuați modificări la "
-"setările TLS, trebuie să salvați modificările înainte de a face clic pe "
-"“Check synchronisation configuration” (Verificați configurația de "
-"sincronizare)."
+"Listă separată de virgule de căi de acces la dosare din care se încarcă "
+"certificatele sau calea de acces la fișierele de certificate individuale. De "
+"exemplu: /my/cert_dir, /other/custom.pem. Reține că, dacă faci modificări la "
+"setările TLS, trebuie să salvezi modificările înainte de a face clic pe "
+"„Verifică configurația de sincronizare”."
 
 #: packages/lib/services/KeymapService.ts:331
 msgid "command"
@@ -1144,7 +1139,7 @@ msgstr "command"
 msgid "Command"
 msgstr "Comandă"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:791
+#: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
 msgstr "Paleta de comenzi"
 
@@ -1294,13 +1289,13 @@ msgstr "Copiază link-ul extern"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:171
 msgid "Copy image"
-msgstr "Copie imagine"
+msgstr "Copiază imaginea"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:209
 msgid "Copy Link Address"
 msgstr "Copiază adresa link-ului"
 
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:95
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 msgid "Copy link to website"
 msgstr "Copiază legătură către website"
@@ -1317,9 +1312,9 @@ msgstr "Copiază locația în clipboard"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:216
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Copiază linkul care se poate partaja"
-msgstr[1] "Distribuie"
-msgstr[2] "Distribuie"
+msgstr[0] "Copiază legătura partajabilă"
+msgstr[1] "Copiază legăturile partajabile"
+msgstr[2] "Copiază legăturile partajabile"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:52
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:75
@@ -1355,7 +1350,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Nu s-a putut conecta la serverul Joplin. Te rog să verificați opțiunile de "
+"Nu s-a putut conecta la serverul Joplin. Te rog să verifici opțiunile de "
 "sincronizare din ecranul de configurare. Eroarea completă a fost:\n"
 "\n"
 "%s"
@@ -1410,7 +1405,7 @@ msgstr "Create"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "Creează o nouă secțiune într-un caiet."
+msgstr "Creează un nou sub-caiet într-un caiet."
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
@@ -1464,7 +1459,7 @@ msgstr "Creat: %d."
 msgid "Created: %s"
 msgstr "Creat: %s"
 
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:62
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:65
 msgid "Creates a new note with an attachment of type %s"
 msgstr "Creează o nouă notiță cu un atașament de tipul %s"
 
@@ -1534,7 +1529,7 @@ msgstr "Certificate TLS cusomizate"
 
 #: packages/lib/utils/joplinCloud/index.ts:194
 msgid "Customise the note publishing banner"
-msgstr "Personalizați bannerul de publicare a notițelor"
+msgstr "Personalizează banner-ul de publicare a notițelor"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:40
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:85
@@ -1565,7 +1560,7 @@ msgstr "zile"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:92
 msgid "Decrease indent level"
-msgstr "Reduceți nivelul de indentare"
+msgstr "Micșorează nivelul de indentare"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Decrypted items: %d"
@@ -1776,24 +1771,24 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Dezactivarea criptării înseamnă că *toate* notele și atașamentele dvs. vor "
-"fi resincronizate și trimise necriptate către ținta de sincronizare. Doriți "
-"să continuați?"
+"Dezactivarea criptării înseamnă că *toate* notițele și atașamentele tale vor "
+"fi resincronizate și trimise necriptate către destinația de sincronizare. "
+"Dorești să continui?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
 msgid "Discard"
-msgstr "Renunțați"
+msgstr "Renunță"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:105
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:269
 #: packages/app-mobile/components/screens/Note/Note.tsx:230
 msgid "Discard changes"
-msgstr "Renunțați la schimbări"
+msgstr "Renunță la schimbări"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.tsx:20
 #: packages/app-mobile/root.tsx:1410
 msgid "Dismiss"
-msgstr "Respingeți"
+msgstr "Respinge"
 
 #: packages/app-cli/app/command-geoloc.ts:13
 msgid "Displays a geolocation URL for the note."
@@ -1836,7 +1831,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-help.ts:13
 msgid "Displays usage information."
-msgstr "Afișați informațiile de utilizare."
+msgstr "Afișează informațiile de utilizare."
 
 #: packages/app-cli/app/command-version.ts:11
 msgid "Displays version information"
@@ -1914,16 +1909,16 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1207
 msgid "Draw picture"
-msgstr "Desenați imaginea"
+msgstr "Desenează imagine"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:917
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:75
 msgid "Drawing"
 msgstr "Desen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1559
 msgid "Drop notes or files here"
-msgstr "Plasați notițe sau fișiere aici"
+msgstr "Plasează notițe sau fișiere aici"
 
 #: packages/lib/SyncTargetDropbox.js:25
 msgid "Dropbox"
@@ -2240,7 +2235,7 @@ msgid ""
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
 "Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi "
-"resincronizate și trimise criptate către ținta de sincronizare."
+"resincronizate și trimise criptate către destinația de sincronizare."
 
 #: packages/lib/models/BaseItem.ts:923
 msgid "Encrypted"
@@ -2248,7 +2243,7 @@ msgstr "Criptat"
 
 #: packages/lib/models/BaseItem.ts:985
 msgid "Encrypted items cannot be modified"
-msgstr "Itemii criptați nu pot fi editați"
+msgstr "Elementele criptate nu pot fi editate"
 
 #: packages/lib/models/Setting.ts:1184
 msgid "Encryption"
@@ -2283,20 +2278,20 @@ msgstr "Termină transcrierea vocală"
 
 #: packages/app-mobile/components/screens/dropbox-login.tsx:70
 msgid "Enter code here"
-msgstr "Introdu codul aici"
+msgstr "Întrodu codul aici"
 
 #: packages/app-cli/app/command-e2ee.ts:39
 #: packages/app-cli/app/command-e2ee.ts:85
 msgid "Enter master password:"
-msgstr "Introdu parola principală:"
+msgstr "Întrodu parola principală:"
 
 #: packages/app-mobile/components/screens/folder.js:100
 msgid "Enter notebook title"
-msgstr "Introdu titlul caietului"
+msgstr "Întrodu titlul caietului"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:122
 msgid "Enter password"
-msgstr "Introdu parola"
+msgstr "Întrodu parola"
 
 #: packages/app-mobile/components/NoteItem.tsx:129
 msgid "Entering selection mode"
@@ -2335,8 +2330,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"Eroare. Te rog să verificați dacă adresa URL, numele de utilizator, parola "
-"etc. sînt corecte și că ținta de sincronizare este accesibilă. Eroarea "
+"Eroare. Te rog să verifici dacă adresa URL, numele de utilizator, parola "
+"etc. sînt corecte și că destinația de sincronizare este accesibilă. Eroarea "
 "raportată a fost:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
@@ -2447,8 +2442,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Fail-safe: Nu șterge datele locale atunci cînd ținta de sincronizare este "
-"goală (adesea rezultatul unei configurații greșite sau al unei erori)."
+"Fail-safe: Nu șterge datele locale atunci cînd destinația de sincronizare "
+"este goală (adesea rezultatul unei configurații greșite sau al unei erori)."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:134
 msgid ""
@@ -2457,9 +2452,9 @@ msgid ""
 "in the sync settings."
 msgstr ""
 "Fail-safe: Sincronizarea a fost întreruptă pentru a preveni pierderea de "
-"date, deoarece ținta sincronizării este goală sau eronată. Pentru a anula "
-"acest comportament, dezactivează mecanismul de fail-safe din setările de "
-"sincronizare."
+"date, deoarece destinația sincronizării este goală sau eronată. Pentru a "
+"anula acest comportament, dezactivează mecanismul de fail-safe din setările "
+"de sincronizare."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2502,7 +2497,7 @@ msgstr "Găsește"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:253
 msgid "Find: "
-msgstr "Găsiți: "
+msgstr "Găsește: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:208
 msgid "Finishes recording"
@@ -2546,7 +2541,7 @@ msgstr "Urmează legătura"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "Numai în scop de depanare: exportați profilul pe un card SD extern."
+msgstr "Numai în scop de depanare: exportă profilul pe un card SD extern."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1479
 msgid "For example \"%s\""
@@ -2555,7 +2550,7 @@ msgstr "De exemplu, „%s”"
 #: packages/app-cli/app/command-help.ts:37
 msgid "For information on how to customise the shortcuts please visit %s"
 msgstr ""
-"Pentru informații despre cum să personalizați comenzile rapide, vizitați %s"
+"Pentru informații despre cum să personalizezi comenzile rapide, vizitează %s"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:338
 msgid ""
@@ -2563,7 +2558,7 @@ msgid ""
 "enable it please check the documentation:"
 msgstr ""
 "Pentru mai multe informații despre criptarea de la un capăt la altul (E2EE) "
-"și sfaturi despre cum să o , te rog să consultați documentația:"
+"și sfaturi despre cum să o activezi, te rog să consulți documentația:"
 
 #: packages/app-cli/app/command-help.ts:85
 msgid ""
@@ -2574,7 +2569,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:306
 msgid "Force path style"
-msgstr "Forțați path style"
+msgstr "Forțează stil cale"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -2609,9 +2604,9 @@ msgstr "Generate"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:186
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "Se creează link..."
-msgstr[1] "Se crează un %s..."
-msgstr[2] "Se crează un %s..."
+msgstr[0] "Se generează legătura..."
+msgstr[1] "Se generează legăturile..."
+msgstr[2] "Se generează legăturile..."
 
 #: packages/lib/models/Setting.ts:1218
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
@@ -2656,10 +2651,10 @@ msgstr "Mergi la linia"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1096
 msgid "Go to source URL"
-msgstr "Accesați sursa URL"
+msgstr "Mergi la URL-ul sursă"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:18
-#: packages/app-desktop/plugins/GotoAnything.tsx:783
+#: packages/app-desktop/plugins/GotoAnything.tsx:775
 msgid "Goto Anything..."
 msgstr "Mergi la..."
 
@@ -2696,27 +2691,27 @@ msgstr "Hermes activat: %d"
 
 #: packages/app-desktop/gui/MenuBar.tsx:685
 msgid "Hide %s"
-msgstr "Ascundeți %s"
+msgstr "Ascunde %s"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Hide advanced"
-msgstr "Ascundeți avansat"
+msgstr "Ascunde avansat"
 
 #: packages/server/src/routes/admin/users.ts:206
 msgid "Hide disabled"
-msgstr "Ascundeți dezactivat"
+msgstr "Ascunde dezactivat"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:160
 msgid "Hide disabled keys"
-msgstr "Ascundeți cheile dezactivate"
+msgstr "Ascunde cheile dezactivate"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
-msgstr "Ascundeți Joplin"
+msgstr "Ascunde Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
 msgid "Hide keyboard"
-msgstr "Ascundeți tastatura"
+msgstr "Ascunde tastatura"
 
 #: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
 msgid "Hide password"
@@ -2843,7 +2838,7 @@ msgstr "Se importă..."
 
 #: packages/app-cli/app/command-import.ts:16
 msgid "Imports data into Joplin."
-msgstr "Importați date în Joplin."
+msgstr "Importă date în Joplin."
 
 #: packages/lib/models/settings/builtInMetadata.ts:409
 msgid ""
@@ -2874,10 +2869,10 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"Pentru a asocia o geolocație cu nota, aplicația are nevoie de permisiunea "
-"dvs. de a vă accesa locația.\n"
+"Pentru a asocia o geolocație cu notița, aplicația are nevoie de permisiunea "
+"de a îți accesa locația.\n"
 "\n"
-"Puteți dezactiva această opțiune în orice moment în ecranul de configurare."
+"Poți dezactiva această opțiune în orice moment din ecranul de configurare."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:346
 msgid ""
@@ -2951,7 +2946,7 @@ msgstr "Sarcini de făcut incomplete"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:97
 msgid "Increase indent level"
-msgstr "Creșteți nivelul de indentare"
+msgstr "Mărește nivelul de indentare"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:126
 msgid "Indent less"
@@ -2976,7 +2971,7 @@ msgstr "Inline Cod"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
-msgstr "Inserați"
+msgstr "Inserează"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:198
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.ts:84
@@ -3068,7 +3063,7 @@ msgstr "Elemente care nu pot fi decriptate"
 
 #: packages/lib/services/ReportService.ts:185
 msgid "Items that cannot be synchronised"
-msgstr "Elementele nu pot fi sincronizați"
+msgstr "Elementele nu pot fi sincronizate"
 
 #: packages/lib/services/ReportService.ts:294
 msgid "Items with error: %s"
@@ -3078,7 +3073,7 @@ msgstr "Elemente cu eroarea: %s"
 msgid "Join us on %s"
 msgstr "Alătură-te nouă pe %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:302
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:309
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
@@ -3295,9 +3290,9 @@ msgstr "Descriere legătură"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:187
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Legătura a fost copiată în clipboard!"
-msgstr[1] "Legăturile au fost copiate în clipboard!"
-msgstr[2] "Legăturile au fost copiate în clipboard!"
+msgstr[0] "Legătura a fost copiată în Clipboard!"
+msgstr[1] "Legăturile au fost copiate în Clipboard!"
+msgstr[2] "Legăturile au fost copiate în Clipboard!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:89
 msgid "Link text"
@@ -3433,11 +3428,11 @@ msgstr "Editor Markdown"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
-msgstr "Marcați o sarcină ca fiind terminată."
+msgstr "Marchează o sarcină ca fiind terminată."
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "Marcați o sarcină ca fiind necompletă."
+msgstr "Marchează o sarcină ca fiind neterminată."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
@@ -3460,7 +3455,7 @@ msgstr "Parola principală:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:19
 msgid "match case"
-msgstr "potrivește mărimea"
+msgstr "sensibil la verzale"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:72
 msgid "Math"
@@ -3533,7 +3528,7 @@ msgstr "Informații suplimentare"
 #: packages/app-cli/app/app.ts:67
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
-"Mai multe elemente se potrivesc cu „%s\". Te rog să restrîngeți interogarea."
+"Mai multe elemente se potrivesc cu „%s\". Te rog să restrîngi interogarea."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid ""
@@ -3543,12 +3538,11 @@ msgstr ""
 "website-ul plugin-ului."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
-msgstr[0] "Muți %d notițe în caietul „%s”?"
+msgstr[0] "Muți %d notiță în caietul „%s”?"
 msgstr[1] "Muți %d notițe în caietul „%s”?"
-msgstr[2] "Muți %d notițe în caietul „%s”?"
+msgstr[2] "Muți %d de notițe în caietul „%s”?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -3632,8 +3626,8 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:112
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.ts:10
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:105
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:94
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:108
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:97
 #: packages/app-mobile/setupQuickActions.ts:30
 msgid "New note"
 msgstr "Notiță nouă"
@@ -3662,7 +3656,7 @@ msgstr "Profil nou"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
-msgstr "Secțiune nouă"
+msgstr "Sub-caiet nou"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:206
 msgid "New tags:"
@@ -3671,8 +3665,8 @@ msgstr "Etichete noi:"
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:122
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.ts:7
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:108
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:84
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:111
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:87
 #: packages/app-mobile/setupQuickActions.ts:31
 msgid "New to-do"
 msgstr "Listă de făcut nouă"
@@ -3687,7 +3681,7 @@ msgstr "următoarea"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:271
 msgid "Next match"
-msgstr "Next match"
+msgstr "Următoarea potrivire"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -3784,7 +3778,7 @@ msgstr "Nord"
 msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr "Neautentificat cu %s. Te rog să furnizezi orice acreditări lipsă."
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
 msgid "Not checked"
 msgstr "Nebifat"
 
@@ -3894,7 +3888,7 @@ msgstr ""
 msgid "Note&book"
 msgstr "&Caiet"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:608
+#: packages/app-desktop/plugins/GotoAnything.tsx:600
 #: packages/lib/models/Setting.ts:1179
 msgid "Notebook"
 msgstr "Caiet"
@@ -4002,10 +3996,10 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Unul sau mai multe elemente sînt criptate în prezent și este posibil să fie "
-"necesar să furnizați o parolă master. Pentru a face acest lucru, te rog să "
-"tastați `e2ee decriptare`. Dacă ați furnizat deja parola, elementele "
-"criptate sînt decriptate în fundal și vor fi disponibile în curînd."
+"Unul sau mai multe elemente sînt criptate și este posibil să fie necesar să "
+"furnizezi o parolă master. Pentru a face acest lucru, te rog să tastezi "
+"`e2ee decrypt`. Dacă ai furnizat deja parola, elementele criptate sînt "
+"decriptate în fundal și vor fi disponibile în curînd."
 
 #: packages/app-desktop/gui/MainScreen.tsx:577
 msgid "One or more master keys need a password."
@@ -4175,9 +4169,8 @@ msgid "PDF File"
 msgstr "Fișier PDF"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
-msgstr "Per utilizator. Minim %d utilizatori."
+msgstr "Per utilizator. Minim 2 utilizatori."
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
 msgid "Permanently delete note"
@@ -4198,12 +4191,11 @@ msgstr ""
 "Toate notițele și secțiunile din acest caiet vor fi șterse permanent."
 
 #: packages/lib/models/Note.ts:944
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
-msgstr[0] "Șterge aceste %d notițe?"
-msgstr[1] "Șterge aceste %d notițe?"
-msgstr[2] "Șterge aceste %d notițe?"
+msgstr[0] "Ștergi permanent această notiță?"
+msgstr[1] "Ștergi permanent aceste %d notițe?"
+msgstr[2] "Ștergi permanent aceste %d de notițe?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
 msgid "Permanently deletes the notebook, skipping the trash."
@@ -4386,27 +4378,27 @@ msgstr "Păstrează culorile la lipirea textului în editorul de text îmbogăț
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Apăsați Ctrl+D ori scrieți \"exit\" pentru a ieși din aplicație"
+msgstr "Apasă Ctrl+D sau tastează „exit” pentru a ieși din aplicație"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:70
 msgid "Press the shortcut"
-msgstr "Apăsați comanda rapidă"
+msgstr "Apasă scurtătura"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:69
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
-"Apăsați comanda rapidă și apoi apăsați ENTER. Sau apăsați BACKSPACE pentru a "
-"șterge comanda rapidă."
+"Apasă scurtătura și apoi apasă ENTER. Sau apasă BACKSPACE pentru a șterge "
+"scurtătura."
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
-msgstr "Apăsați pentru a seta parola de decriptare."
+msgstr "Apasă pentru a seta parola de decriptare."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:17
 msgid "previous"
-msgstr "anterior"
+msgstr "anterioara"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Previous match"
@@ -4500,7 +4492,7 @@ msgstr "Publică notița…"
 msgid "Publish Notes"
 msgstr "Publică notițele"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:174
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:175
 #: packages/lib/utils/joplinCloud/index.ts:153
 msgid "Publish notes to the internet"
 msgstr "Publică notițele pe internet"
@@ -4522,7 +4514,7 @@ msgstr "Descarcă din nou modelul"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
-msgstr "Re-criptați datele"
+msgstr "Re-criptează datele"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:354
 msgid "Re-encryption"
@@ -4530,7 +4522,7 @@ msgstr "Re-criptare"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:181
 msgid "Re-enter password"
-msgstr "Introdu parola din nou"
+msgstr "Întrodu parola din nou"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1235
 msgid "Re-upload local data to sync target"
@@ -4538,7 +4530,7 @@ msgstr "Reîncărcarea datelor locale către destinația de sincronizare"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:47
 msgid "Read more about it"
-msgstr "Citiți mai multe despre aceasta"
+msgstr "Citește mai multe despre acestea"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:159
 msgid "Read time: %s min"
@@ -4572,7 +4564,7 @@ msgstr "Plugin-uri recomandate"
 msgid "Record audio"
 msgstr "Înregistrează audio"
 
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:70
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
 msgid "Recording"
 msgstr "Înregistrare"
 
@@ -4651,11 +4643,11 @@ msgstr "Înlocuiește"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:22
 msgid "replace all"
-msgstr "înlocuiește tot"
+msgstr "înlocuiește toate"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace all"
-msgstr "Înlocuiește tot"
+msgstr "Înlocuiește toate"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:239
 msgid "Replace with..."
@@ -4782,7 +4774,7 @@ msgstr "Afișează fișierul în dosar"
 #: packages/lib/models/settings/builtInMetadata.ts:725
 #: packages/lib/models/settings/builtInMetadata.ts:804
 msgid "Reverse sort order"
-msgstr "Inversați ordinea sortării"
+msgstr "Inversează ordinea sortării"
 
 #: packages/app-cli/app/command-ls.ts:30
 msgid "Reverses the sorting order."
@@ -4916,7 +4908,7 @@ msgstr "Caută în toate notițele"
 msgid "Search in current note"
 msgstr "Caută în notița curentă"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:703
+#: packages/app-desktop/plugins/GotoAnything.tsx:695
 msgid "Search results"
 msgstr "Rezultate căutare"
 
@@ -4946,9 +4938,9 @@ msgstr "Vezi lista de schimbări"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1254
 msgid "See the pre-release page for more details: %s"
-msgstr "Pentru mai multe detalii, consultați pagina de pre-reluase: %s"
+msgstr "Pentru mai multe detalii, consultă pagina de pre-release: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:205
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:206
 #: packages/app-mobile/components/NoteItem.tsx:151
 msgid "Select"
 msgstr "Selectează"
@@ -4980,7 +4972,7 @@ msgstr "Selectează un caiet"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
-msgstr "Trimiteți un raport de eroare"
+msgstr "Trimite un raport de eroare"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -5046,8 +5038,8 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
-"Partajați o copie a tuturor notițelor într-un format de fișier care poate fi "
-"importat de Joplin pe un computer."
+"Partajează o copie a tuturor notițelor într-un format de fișier care poate "
+"fi importat de Joplin pe un calculator."
 
 #: packages/lib/utils/joplinCloud/index.ts:125
 msgid "Share a notebook with others"
@@ -5162,6 +5154,10 @@ msgstr "Meniu lateral deschis"
 msgid "Sidebar"
 msgstr "Panou lateral"
 
+#: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
+msgid "Sign up to Joplin Cloud"
+msgstr "Creează cont Joplin Cloud"
+
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
 msgstr "Mărime"
@@ -5220,7 +5216,7 @@ msgstr "Unele elemente nu pot fi sincronizate."
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
-"Unele elemente nu pot fi sincronizate. Apăsați pentru mai multe informații."
+"Unele elemente nu pot fi sincronizate. Apasă pentru mai multe informații."
 
 #: packages/lib/models/settings/settingValidations.ts:24
 msgid ""
@@ -5323,7 +5319,7 @@ msgstr "Se începe sincronizarea..."
 #: packages/app-cli/app/command-edit.ts:76
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Începere să editeze nota. Închideți editorul pentru a reveni la prompt."
+"Se începe editarea notiței. Închide editorul pentru a reveni la prompt."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:163
 msgid "Statistics"
@@ -5355,14 +5351,14 @@ msgstr "Pasul 1: Activează clipper service"
 #: packages/app-mobile/components/screens/dropbox-login.tsx:63
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
-"Pasul 1: Deschideți adresa URL în navigatorul dumneavoastră web pentru a "
-"autoriza aplicația:"
+"Pasul 1: Deschide adresa URL în navigatorul tău web pentru a autoriza "
+"aplicația:"
 
 #: packages/app-cli/app/command-sync.ts:84
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:50
 #: packages/app-mobile/components/screens/dropbox-login.tsx:69
 msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "Pasul 2: Introdu codul oferit de Dropbox:"
+msgstr "Pasul 2: Întrodu codul oferit de Dropbox:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
@@ -5442,13 +5438,13 @@ msgstr "Comută la camera din față"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:83
 msgid "Switch to note type"
-msgstr "Comută la tipul de notiță"
+msgstr "Comută la tipul „notiță”"
 
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
 msgid "Switch to profile %d"
-msgstr "Treceți la profilul %d"
+msgstr "Comută la profilul %d"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
 msgid "Switch to the %s Editor"
@@ -5460,7 +5456,7 @@ msgstr "Comută la editorul învechit"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
-msgstr "Treceți la tipul to-do"
+msgstr "Comută la tipul „de făcut”"
 
 #: packages/app-cli/app/command-use.ts:12
 msgid ""
@@ -5472,7 +5468,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:160
 msgid "Sync as many devices as you want"
-msgstr "Sincronizați cît de multe dispozitive doriți"
+msgstr "Sincronizează cît de multe dispozitive dorești"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:549
 msgid "Sync Status"
@@ -5485,7 +5481,7 @@ msgstr "Starea de sincronizare (elemente sincronizate / total elemente)"
 #: packages/app-cli/app/command-sync.ts:271
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
-"Obiectivul de sincronizare trebuie să fie actualizat! Rulați `%s` pentru a "
+"Destinația de sincronizare trebuie să fie actualizată! Rulează `%s` pentru a "
 "continua."
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.tsx:59
@@ -5495,14 +5491,14 @@ msgstr "Sync Target Upgrade"
 #: packages/app-cli/app/command-sync.ts:41
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sincronizarea cu o ținta specificată (presetat la valoare de configurare "
-"sync.target)"
+"Sincronizarea cu o destinație specificată (presetat la valoarea de "
+"configurare sync.target)"
 
 #: packages/lib/versionInfo.ts:90
 msgid "Sync Version: %s"
 msgstr "Versiunea de sincronizare: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:173
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:174
 msgid "Sync your notes"
 msgstr "Sincronizează-ți notițele"
 
@@ -5529,11 +5525,11 @@ msgstr "Starea sincronizării"
 
 #: packages/lib/models/settings/builtInMetadata.ts:100
 msgid "Synchronisation target"
-msgstr "Țintă de sincronizare"
+msgstr "Destinație sincronizare"
 
 #: packages/app-cli/app/command-sync.ts:200
 msgid "Synchronisation target: %s (%s)"
-msgstr "Țintă sincronizare: %s (%s)"
+msgstr "Destinație sincronizare: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:650
@@ -5631,20 +5627,20 @@ msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
 msgstr ""
-"Profilul activ nu poate fi șters. Treceți la un alt profil și încercați din "
+"Profilul activ nu poate fi șters. Comută la un alt profil și încearcă din "
 "nou."
 
 #: packages/app-desktop/bridge.ts:569
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"Aplicația se va închide acum. Te rog să o relansați pentru a finaliza "
+"Aplicația se va închide acum. Te rog să o lansezi din nou pentru a finaliza "
 "procesul."
 
 #: packages/app-desktop/app.ts:339
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr "Aplicația nu s-a închis corect. Doriți să porniți în modul sigur?"
+msgstr "Aplicația nu s-a închis corect. Dorești să o pornești în modul sigur?"
 
 #: packages/lib/onedrive-api-node-utils.js:87
 msgid ""
@@ -5671,7 +5667,7 @@ msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr ""
-"Atașamentele nu vor mai fi urmărite atunci cînd treceți la o altă notă."
+"Atașamentele nu vor mai fi urmărite atunci cînd treci la o altă notiță."
 
 #: packages/app-cli/app/app.ts:282
 msgid "The command \"%s\" is only available in GUI mode"
@@ -5691,15 +5687,15 @@ msgid ""
 "is recommended that you apply it to your data."
 msgstr ""
 "Metoda implicită de criptare a fost schimbată într-una mai sigură și se "
-"recomandă să o aplicați datelor dumnevoastră."
+"recomandă să o aplici datelor tale."
 
 #: packages/app-desktop/gui/MainScreen.tsx:554
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
-"Metoda implicită de criptare a fost modificată, ar trebui să vă criptați din "
-"nou datele."
+"Metoda implicită de criptare a fost modificată, ar trebui să îți criptezi "
+"din nou datele."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid "The default profile cannot be deleted"
@@ -5726,15 +5722,15 @@ msgstr ""
 "Proprietatea factor stabilește modul în care elementul va crește sau se va "
 "micșora pentru a se potrivi spațiului disponibil în containerul său în "
 "raport cu celelalte elemente. Astfel, un element cu un factor de 2 va ocupa "
-"de două ori mai mult spațiu decît un element cu un factor de 1. Reporniți "
+"de două ori mai mult spațiu decît un element cu un factor de 1. Repornește "
 "aplicația pentru a vedea modificările."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:581
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
-msgstr[0] "Următorul atașament corespunde căutării dumneavoastră:"
-msgstr[1] "Următoarele atașamente corespund căutării dumneavoastră:"
-msgstr[2] "Următoarele atașamente corespund căutării dumneavoastră:"
+msgstr[0] "Următorul atașament corespunde căutării tale:"
+msgstr[1] "Următoarele atașamente corespund căutării tale:"
+msgstr[2] "Următoarele atașamente corespund căutării tale:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:565
 msgid "The following attachments are being watched for changes:"
@@ -5823,7 +5819,7 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Destinatarul nu a putut fi eliminat din listă. Te rog să încercați din nou.\n"
+"Destinatarul nu a putut fi eliminat din listă. Te rog să încerci din nou.\n"
 "\n"
 "Eroarea a fost: „%s”"
 
@@ -5836,7 +5832,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ținta sincronizării nu poate fi schimbată din următorul motiv: %s\n"
+"Destinația de sincronizare nu poate fi schimbată din următorul motiv: %s\n"
 "\n"
 "Dacă problema nu poate fi rezolvată, va trebui să cureți datele mai întîi, "
 "urmînd următoarele instrucțiuni:\n"
@@ -5857,7 +5853,7 @@ msgstr ""
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
-"Destinația de sincronizare trebuie să fie actualizată. Apăsați acest banner "
+"Destinația de sincronizare trebuie să fie actualizată. Apasă pe acest banner "
 "pentru a continua."
 
 #: packages/app-desktop/gui/MainScreen.tsx:530
@@ -5866,16 +5862,16 @@ msgstr "Lipsește parola de sincronizare."
 
 #: packages/lib/models/Tag.ts:233
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "Eticheta „%s” există deja. Te rog să alegeți un alt nume."
+msgstr "Eticheta „%s” există deja. Te rog să alegi un alt nume."
 
 #: packages/lib/models/settings/builtInMetadata.ts:102
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Ținta la care se sincronizează. Fiecare țintă de sincronizare poate avea "
-"parametri suplimentari care sînt numiți `sync.NUM.NAME` (toți documentați "
-"mai jos)."
+"Destinația la care se sincronizează. Fiecare destinație de sincronizare "
+"poate avea parametri suplimentari care sînt numiți `sync.NUM.NAME` (toți "
+"documentați mai jos)."
 
 #: packages/lib/services/share/invitationRespond.ts:22
 msgid ""
@@ -5915,7 +5911,7 @@ msgid ""
 "no longer supported. Please use a different sync method."
 msgstr ""
 "Implementarea WebDAV a lui %s este incompatibilă cu Joplin și, ca atare, nu "
-"mai este susținută. Te rog să folosiți o altă metodă de sincronizare."
+"mai este suportată. Te rog să folosești o altă metodă de sincronizare."
 
 #: packages/lib/models/settings/builtInMetadata.ts:559
 msgid "Theme"
@@ -5972,9 +5968,9 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Aceste elemente vor rămîne pe dispozitiv, dar nu vor fi încărcate pe "
-"obiectivul de sincronizare. Pentru a găsi aceste elemente, căutați fie "
-"titlul, fie ID-ul (care este afișat în paranteze mai sus)."
+"Aceste elemente vor rămîne pe dispozitiv, dar nu vor fi încărcate în "
+"destinația de sincronizare. Pentru a găsi aceste elemente, caută fie titlul, "
+"fie ID-ul (care este afișat în paranteze mai sus)."
 
 #: packages/lib/models/Setting.ts:1199
 msgid ""
@@ -6034,29 +6030,29 @@ msgid ""
 "restored afterwards."
 msgstr ""
 "Acesta este un instrument avansat pentru a afișa atașamentele care sînt "
-"legate de notele dumnevoastră. Te rog să fiți atenți la ștergerea uneia "
-"dintre ele, deoarece acestea nu pot fi restaurate ulterior."
+"legate de notele dumnevoastră. Te rog să fii atent la ștergerea uneia dintre "
+"ele, deoarece acestea nu pot fi restaurate ulterior."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:239
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Acest fișier nu a putut fi deschis: %s"
-msgstr[1] "Acest fișier nu a putut fi deschis: %s"
-msgstr[2] "Această notiță nu a putut fi ștearsă: %s"
+msgstr[0] "Această notiță nu a putut fi ștearsă: %s"
+msgstr[1] "Aceste notiție nu au putut fi șterse: %s"
+msgstr[2] "Aceste notițe nu au putut fi șterse: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:226
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Aceste notițe nu pot fi duplicate: %s"
-msgstr[1] "Caietul de notițe nu a puut fi salvat: %s"
-msgstr[2] "Caietul de notițe nu a puut fi salvat: %s"
+msgstr[0] "Această notiță nu a putut fi duplicată: %s"
+msgstr[1] "Aceste notițe nu au putut fi duplicate: %s"
+msgstr[2] "Aceste notițe nu au putut fi duplicate: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:584
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Aceste notițe nu pot fi mutate: %s"
-msgstr[1] "Caietul de notițe nu a puut fi salvat: %s"
-msgstr[2] "Caietul de notițe nu a puut fi salvat: %s"
+msgstr[0] "Această notiță nu a putut fi mutată: %s"
+msgstr[1] "Aceste notițe nu au putut fi mutate: %s"
+msgstr[2] "Aceste notițe nu au putut fi mutate: %s"
 
 #: packages/lib/models/Note.ts:130
 msgid "This note does not have geolocation information."
@@ -6088,8 +6084,8 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
-"Acest editor Rich Text are o serie de limitări și este recomandat să le "
-"cunoașteți înainte de a-l utiliza."
+"Acest editor de text îmbogățit are o serie de limitări și este recomandat să "
+"le cunoști înainte de a-l utiliza."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
@@ -6118,8 +6114,7 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:148
 msgid "This will open a new screen. Save your current changes?"
 msgstr ""
-"Se va deschide un nou ecran. Doriți să salvați modificările dumnevoastră "
-"actuale?"
+"Se va deschide un nou ecran. Dorești să îți salvezi modificările actuale?"
 
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:340
@@ -6162,7 +6157,7 @@ msgstr ""
 "de mai jos:"
 
 #: packages/app-cli/app/command-sync.ts:110
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:85
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
@@ -6191,7 +6186,7 @@ msgstr "Pentru a intra în linia de comandă, tastează „:”"
 
 #: packages/app-cli/app/command-help.ts:84
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Pentru a ieși din modul linie de comandă, apăsați ESCAPE"
+msgstr "Pentru a ieși din modul linie de comandă, apasă ESCAPE"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid ""
@@ -6207,13 +6202,13 @@ msgstr "Pentru a maximiza/minimiza consola, tastează „tc”."
 
 #: packages/app-cli/app/command-help.ts:80
 msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Pentru a vă muta dintr-un panou în altul, apăsați Tab ori Shift+Tab."
+msgstr "Pentru a te muta dintr-un panou în altul, apasă Tab sau Shift+Tab."
 
 #: packages/app-cli/app/command-status.js:44
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Pentru a reîncerca decriptarea acestor elemente. Rulați `e2ee decrypt --"
+"Pentru a reîncerca decriptarea acestor elemente. Rulează `e2ee decrypt --"
 "retry-failed-items`"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
@@ -6350,24 +6345,24 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Tastați `help [command]` pentru mai multe informații despre o comandă; sau "
-"tastați „help all\" pentru informații complete de utilizare."
+"Tastează `help [command]` pentru mai multe informații despre o comandă; sau "
+"tastează `help all` pentru informații complete de utilizare."
 
 #: packages/app-cli/app/main.js:105
 msgid "Type `joplin help` for usage information."
-msgstr "Tastați `joplin help` pentru informații de utilizare."
+msgstr "Tastează `joplin help` pentru informații de utilizare."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:716
+#: packages/app-desktop/plugins/GotoAnything.tsx:708
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Tastați titlul unei notițe sau o parte din conținutul acesteia pentru a "
-"trece la ea. Sau tastați # urmat de numele unei etichete sau @ urmat de "
-"numele unui caiet. Sau tastați : pentru a căuta comenzi."
+"Tastează titlul unei notițe sau o parte din conținutul acesteia pentru a "
+"trece la ea. Sau tastează # urmat de numele unei etichete sau @ urmat de "
+"numele unui caiet. Sau tastează : pentru a căuta comenzi."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:714
+#: packages/app-desktop/plugins/GotoAnything.tsx:706
 msgid "Type a note title to search for it."
 msgstr "Tastează un titlu de notiță pentru a-l căuta."
 
@@ -6428,7 +6423,7 @@ msgstr "Unknown flag: %s"
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
-"Tip de element necunoscut descărcat - te rog să actualizați Joplin la cea "
+"Tip de element necunoscut descărcat - te rog să actualizezi Joplin la cea "
 "mai recentă versiune"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
@@ -6544,7 +6539,7 @@ msgstr "Actualizare majoră"
 
 #: packages/app-cli/app/command-sync.ts:42
 msgid "Upgrade the sync target to the latest version."
-msgstr "Actualizează ținta de sincronizare la cea mai recentă versiune."
+msgstr "Actualizează destinația de sincronizare la cea mai recentă versiune."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
@@ -6585,8 +6580,8 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen.tsx:794
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
-"Folosiți săgețile pentru a muta elementele de prezentare. Apăsați “Escape” "
-"pentru a ieși."
+"Folosește săgețile pentru a muta elementele de aspect. Apasă „Escape” pentru "
+"a ieși."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1402
 msgid "Use the legacy Markdown editor"
@@ -6606,8 +6601,8 @@ msgid ""
 "Use your biometrics to secure access to your application. You can always set "
 "it up later in Settings."
 msgstr ""
-"Folosiți datele biometrice pentru a securiza accesul la aplicația dvs. "
-"Puteți oricînd să o configurați mai tîrziu în Setări."
+"Folosește datele biometrice pentru a securiza accesul la aplicație. Poți "
+"oricînd să le configurezi mai tîrziu în Setări."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1137
 msgid ""
@@ -6646,7 +6641,7 @@ msgstr "Valid"
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:10
 msgid "Verify your identity"
-msgstr "Verificați identitatea dumneavoastră"
+msgstr "Verifică-ți identitatea"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid "View"
@@ -6800,8 +6795,7 @@ msgid ""
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
 "Atunci cînd este activată, aplicația va scana atașamentele și va extrage "
-"textul din ele. Acest lucru vă va permite să căutați text în aceste "
-"atașamente."
+"textul din ele. Acest lucru îți va permite să cauți text în atașamente."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1792
 msgid "Whisper"
@@ -6840,8 +6834,8 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"Ești pe cale să atașezi o imagine mare (%dx%d pixeli). Doriți să îl "
-"redimensionați pînă la %d pixeli înainte de a-l atașa?"
+"Ești pe cale să atașezi o imagine mare (%dx%d pixeli). Dorești să o "
+"redimensionezi la %d pixeli înainte de a o atașa?"
 
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
@@ -6857,11 +6851,11 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
-msgstr "Nu aveți niciun caiet de notițe activ."
+msgstr "Nu ai niciun caiet de notițe."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:280
 msgid "You do not have any installed plugin."
-msgstr "Nu aveți niciun plugin instalat."
+msgstr "Nu ai niciun plugin instalat."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -6872,8 +6866,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Puteți utiliza instrumentul de mai jos pentru a vă cripta din nou datele, de "
-"exemplu, dacă știți că unele note sînt criptate cu o metodă de criptare "
+"Poți utiliza instrumentul de mai jos pentru a îți cripta din nou datele, de "
+"exemplu, dacă știi că unele notițe sînt criptate cu o metodă de criptare "
 "învechită."
 
 #: packages/lib/services/joplinCloudUtils.ts:53
@@ -6976,7 +6970,7 @@ msgstr "Micșorează"
 #~ msgstr "Restrînge"
 
 #~ msgid "Find and replace"
-#~ msgstr "Găsiți și înlocuiți"
+#~ msgstr "Găsește și înlocuiește"
 
 #~ msgid "Formatting"
 #~ msgstr "Formatare"
@@ -7112,7 +7106,7 @@ msgstr "Micșorează"
 
 #, fuzzy
 #~ msgid "%s: Missing password"
-#~ msgstr "Introduceți parola master:"
+#~ msgstr "Întroduceți parola master:"
 
 #, fuzzy
 #~ msgid "Share and collaborate on a notebook"
@@ -7150,7 +7144,7 @@ msgstr "Micșorează"
 #~ msgstr "Editați caietul de notițe"
 
 #~ msgid "Insert Date Time"
-#~ msgstr "Introduceți data și ora"
+#~ msgstr "Întroduceți data și ora"
 
 #, fuzzy
 #~ msgid "Italicize"
