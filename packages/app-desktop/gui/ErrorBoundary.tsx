@@ -5,7 +5,6 @@ import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
-import dialogs from './dialogs';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -42,7 +41,7 @@ const SwitchToNewEditorBanner = (props: BannerProps) => {
 	const handleSwitchToNewEditor = async () => {
 		Setting.setValue('editor.legacyMarkdown', false);
 		const message = _('You are now using the latest version of the Markdown editor.');
-		await dialogs.alert(message);
+		await alert(message);
 	};
 
 	return <BannerContent
