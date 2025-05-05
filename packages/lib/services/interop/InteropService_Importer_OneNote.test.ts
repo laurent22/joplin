@@ -77,7 +77,7 @@ describe('InteropService_Importer_OneNote', () => {
 		const menuLines = menuHtml.split('</li>');
 
 		const pageTwo = notes.find(n => n.title === 'Page 2');
-		expectWithInstructions(menuLines[3].trim(), instructionMessage).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
+		expectWithInstructions(menuLines[3].trim()).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
 
 		const pageTwoA = notes.find(n => n.title === 'Page 2-a');
 		expectWithInstructions(menuLines[4].trim()).toBe(`<li class="l2"><a href=":/${pageTwoA.id}" target="content" title="Page 2-a">${pageTwoA.title}</a>`);
