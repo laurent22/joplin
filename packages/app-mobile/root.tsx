@@ -454,7 +454,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		throw error;
 	}
 
-	return reducer(newState, action);
+	return reducer(newState, action) as AppState;
 };
 
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));

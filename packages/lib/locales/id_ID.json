@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" kehilangan properti wajib ”%s”."
 	],
-	"%d days": [
-		"%d hari"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB ruang penyimpanan"
 	],
-	"%d hour": [
-		"%d jam"
-	],
-	"%d hours": [
-		"%d jam"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB tiap catatan atau lampiran"
-	],
-	"%d minutes": [
-		"%d menit"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d catatan cocok dengan pola ini. Hapus semuanya?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d catatan akan dihapus selamanya. Lanjutkan?"
 	],
 	"%s": [
 		"%s"
@@ -65,23 +47,23 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be greater than %s": [
+		"%s tidak boleh lebih besar dari %s"
+	],
 	"%s cannot be less than %s": [
-		""
+		"%s tidak boleh kurang dari %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s tidak dioptimalkan untuk menyelaraskan banyak berkas kecil sehingga penyelarasan awal akan menjadi lambat."
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s harus berupa angka"
 	],
 	"%s tab opened": [
 		"%s tab dibuka"
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d catatan"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -272,6 +254,9 @@
 	"Also publish linked notes": [
 		"Terbitkan juga catatan terkait"
 	],
+	"Alternative instance ID: %s": [
+		"ID instansi alternatif: %s"
+	],
 	"Always": [
 		"Selalu"
 	],
@@ -350,6 +335,9 @@
 	"attachment": [
 		"lampiran"
 	],
+	"Attachment": [
+		"Lampiran"
+	],
 	"Attachment conflict: \"%s\"": [
 		"Lampiran bertentangan: \"%s\""
 	],
@@ -381,7 +369,7 @@
 		"Tambahkan otomatis akun non-aktif untuk dihapus"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		""
+		"Rapikan otomatis Markdown pada Penyunting Teks Kaya"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Pasangkan otomatis kurung kurawal, tanda kurung, tanda petik, dll."
@@ -429,7 +417,7 @@
 		"berdasarkan kata"
 	],
 	"Camera": [
-		""
+		"Kamera"
 	],
 	"Can Share": [
 		"Dapat membagikan"
@@ -447,7 +435,7 @@
 		"Membatalkan penyelarasan di latar belakang... Mohon tunggu."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"Membatalkan akan menghapus perekaman. Ini tidak dapat diurungkan. Anda yakin akan melanjutkan pembatalan?"
 	],
 	"Cancelling...": [
 		"Membatalkan..."
@@ -521,6 +509,9 @@
 	"Characters excluding spaces": [
 		"Semua karakter kecuali spasi"
 	],
+	"Check": [
+		"Periksa"
+	],
 	"Check elements to display in the toolbar": [
 		"Periksa elemen untuk ditampilkan di bilah alat"
 	],
@@ -535,6 +526,9 @@
 	],
 	"Checkbox list": [
 		"Daftar kotak centang"
+	],
+	"Checked": [
+		"Telah diperiksa"
 	],
 	"Checking... Please wait.": [
 		"Sedang memeriksa… Mohon tunggu."
@@ -558,7 +552,7 @@
 		"Tekan \"%s\" untuk memulihkan catatan. Catatan akan disalin dalam buku catatan bernama \"%s\". Versi saat ini dari catatan tidak akan diganti atau diubah."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Tekan “start” untuk melampirkan sebuah catatan suara baru ke dalam catatan"
 	],
 	"Click to add tags...": [
 		"Tekan untuk menambahkan label..."
@@ -571,6 +565,9 @@
 	],
 	"Close": [
 		"Tutup"
+	],
+	"Close dialog": [
+		"Tutup sembulan"
 	],
 	"Close dropdown": [
 		"Tutup senarai"
@@ -585,7 +582,7 @@
 		"Tutup jendela"
 	],
 	"Closing session...": [
-		""
+		"Menutup sesi…"
 	],
 	"Cmd-click to open": [
 		"Cmd-klik untuk membuka"
@@ -607,6 +604,12 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Bekerja sama pada buku-buku catatan dengan orang lain"
+	],
+	"Collapse all notebooks": [
+		"Lipat semua buku catatan"
+	],
+	"Collapsed": [
+		"Terlipat"
 	],
 	"Coming alarms": [
 		"Alarm yang akan datang"
@@ -657,7 +660,7 @@
 		"Pengaturan"
 	],
 	"Configures the size of scrollbars used in the app.": [
-		""
+		"Atur ukuran bilah gulung yang digunakan pada aplikasi"
 	],
 	"Confirm password cannot be empty": [
 		"Konfirmasi kata sandi tidak boleh kosong"
@@ -814,6 +817,9 @@
 	],
 	"Created: %s": [
 		"Dibuat: %s"
+	],
+	"Creates a new note with an attachment of type %s": [
+		"Membuat sebuah catatan dengan sebuah lampiran dengan jenis %s"
 	],
 	"Creates a new note.": [
 		"Membuat catatan baru."
@@ -984,7 +990,7 @@
 		"Dev"
 	],
 	"Device: %s": [
-		""
+		"Perangkat: %s"
 	],
 	"Directory": [
 		"Direktori"
@@ -1000,6 +1006,9 @@
 	],
 	"Disable safe mode and restart": [
 		"Matikan mode aman dan mulai ulang"
+	],
+	"Disable synchronisation": [
+		"Matikan penyelarasan"
 	],
 	"Disable Web Clipper Service": [
 		"Matikan Layanan Pemotong Web"
@@ -1070,6 +1079,9 @@
 	"Download and install the relevant extension for your browser:": [
 		"Unduh dan pasang ekstensi yang berkaitan dengan peramban web Anda:"
 	],
+	"Download it now": [
+		"Unduh sekarang"
+	],
 	"Downloaded": [
 		"Telah diunduh"
 	],
@@ -1123,6 +1135,9 @@
 	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"Gandakan catatan yang sesuai dengan <note> ke [notebook]. Jika tidak ada buku catatan yang ditentukan maka catatan akan digandakan ke buku catatan saat ini."
+	],
+	"Duration: %s": [
+		"Lama waktu: %s"
 	],
 	"Edit": [
 		"Sunting"
@@ -1293,7 +1308,7 @@
 		"Menyalakan pelanjutan daftar Markdown, tutup otomatis label HTML, dan pelengkapan otomatis penandaan lainnya."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		""
+		"Menyalakan penggantian pola Markdown pada Penyunting Teks Kaya. Contohnya, ketika dinyalakan, mengetik **bold** menghasilkan teks tebal."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Menyalakan enkripsi berarti *semua* catatan dan lampiran Anda akan diselaraskan ulang dan dikirim dalam keadaan terenkripsi ke sasaran penyelarasan."
@@ -1376,6 +1391,12 @@
 	"Expand %s": [
 		"Buka %s"
 	],
+	"Expand all notebooks": [
+		"Buka semua buku catatan"
+	],
+	"Expanded": [
+		"Terbuka"
+	],
 	"Export": [
 		"Ekspor"
 	],
@@ -1425,7 +1446,7 @@
 		"Gagal-aman: Jangan menghapus data lokal ketika sasaran penyelarasan sedang kosong (seringkali akibat kesalahan konfigurasi atau bug)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"Gagal-aman: Penyelarasan dihentikan untuk mencegah kehilangan data, karena sasaran penyelarasan kosong atau rusak. Untuk menimpa perilaku ini matikan gagal-aman pada pengaturan penyelarasan."
 	],
 	"Fatal error:": [
 		"Galat fatal:"
@@ -1458,7 +1479,7 @@
 		"Cari: "
 	],
 	"Finishes recording": [
-		""
+		"Selesai merekam"
 	],
 	"Firefox Extension": [
 		"Ekstensi Firefox"
@@ -1764,7 +1785,7 @@
 		"Perintah tidak berlaku: \"%s\""
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"Format tidak berlaku. Contoh: 48.8581372, 2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Nilai pilihan tidak berlaku: \"%s\". Nilai yang mungkin adalah: %s."
@@ -1789,6 +1810,9 @@
 	],
 	"Items that cannot be synchronised": [
 		"Benda-benda yang tidak dapat diselaraskan"
+	],
+	"Items with error: %s": [
+		"Benda-benda dengan galat: %s"
 	],
 	"Join us on %s": [
 		"Bergabung dengan kami di %s"
@@ -1878,7 +1902,7 @@
 		"Bahasa, format tanggal"
 	],
 	"Large": [
-		""
+		"Besar"
 	],
 	"Last error: %s": [
 		"Galat terakhir: %s"
@@ -1933,6 +1957,9 @@
 	],
 	"Link text": [
 		"Teks tautan"
+	],
+	"Link to note...": [
+		"Tautkan ke buku catatan..."
 	],
 	"List item": [
 		"Daftar benda"
@@ -2049,7 +2076,7 @@
 		"Pemutar media, matematika, diagram, daftar isi"
 	],
 	"Medium": [
-		""
+		"Sedang"
 	],
 	"Minimise": [
 		"Kecilkan"
@@ -2062,6 +2089,9 @@
 	],
 	"Missing Master Keys": [
 		"Kehilangan Kunci Utama"
+	],
+	"Missing permission to record audio.": [
+		"Kehilangan izin untuk merekam suara."
 	],
 	"Missing required argument: %s": [
 		"Argumen yang dibutuhkan hilang: %s"
@@ -2084,17 +2114,17 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Sebagian besar plugin memiliki sumber kode yang tersedia untuk ditinjau pada situs web plugin."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Pindahkan %d catatan ke buku catatan \"%s\"?"
+	"Move down": [
+		"Pindah ke bawah"
 	],
 	"Move left": [
-		""
+		"Pindah ke kiri"
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Pindahkan buku catatan \"%s\" ke tempat sampah?\n\nSemua catatan dan sub-buku catatan dalam buku catatan ini juga akan dipindahkan ke tempat sampah."
 	],
 	"Move right": [
-		""
+		"Pindah ke kanan"
 	],
 	"Move to notebook": [
 		"Pindahkan ke buku catatan"
@@ -2106,7 +2136,7 @@
 		"Pindah ke buku catatan:"
 	],
 	"Move up": [
-		""
+		"Pindah ke atas"
 	],
 	"Moves the given <item> to [notebook]": [
 		"Memindahkan benda <item> ke [notebook]."
@@ -2129,6 +2159,9 @@
 	"New invitations": [
 		"Undangan baru"
 	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"Model baru tersedia\nSebuah model pengetikan suara baru telah tersedia. Anda ingin mengunduhnya?"
+	],
 	"New note": [
 		"Catatan baru"
 	],
@@ -2143,6 +2176,9 @@
 	],
 	"New photo": [
 		"Foto baru"
+	],
+	"New profile": [
+		"Profil baru"
 	],
 	"New sub-notebook": [
 		"Sub-buku catatan baru"
@@ -2229,7 +2265,7 @@
 		"Tidak dapat dilakukan otentikasi dengan %s. Harap sediakan semua kredensial yang hilang."
 	],
 	"Not checked": [
-		""
+		"Tidak diperiksa"
 	],
 	"Not downloaded": [
 		"Tidak terunduh"
@@ -2288,6 +2324,9 @@
 	"Note title": [
 		"Judul catatan"
 	],
+	"Note viewer": [
+		"Yang melihat catatan"
+	],
 	"Note&book": [
 		"Catatan & buku"
 	],
@@ -2323,6 +2362,9 @@
 	],
 	"Notes can only be created within a notebook.": [
 		"Catatan hanya dapat dibuat di dalam buku catatan."
+	],
+	"Notifications": [
+		"Pemberitahuan"
 	],
 	"Numbered List": [
 		"Daftar bernomor"
@@ -2372,6 +2414,12 @@
 	"Open %s": [
 		"Buka %s"
 	],
+	"Open in external editor": [
+		"Buka di penyunting eksternal"
+	],
+	"Open in new window": [
+		"Buka di jendela baru"
+	],
 	"Open it": [
 		"Buka yang dipilih"
 	],
@@ -2379,13 +2427,13 @@
 		"Buka penampil PDF"
 	],
 	"Open primary app instance...": [
-		""
+		"Buka instansi aplikasi utama…"
 	],
 	"Open profile directory": [
 		"Buka folder profil"
 	],
 	"Open secondary app instance...": [
-		""
+		"Buka instansi aplikasi kedua…"
 	],
 	"Open settings": [
 		"Buka pengaturan"
@@ -2433,10 +2481,10 @@
 		"Ukuran halaman untuk ekspor PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Panel “%s” terlihat"
 	],
 	"Panel %s is hidden": [
-		""
+		"Panel “%s” disembunyikan"
 	],
 	"Password": [
 		"Kata sandi"
@@ -2462,9 +2510,6 @@
 	"PDF File": [
 		"Berkas PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"Tiap pengguna. Minimal %d pengguna."
-	],
 	"Permanently delete note": [
 		"Hapus catatan selamanya"
 	],
@@ -2473,9 +2518,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Hapus buku catatan “%s” selamanya?\n\nSemua catatan dan sub-buku catatan dalam buku catatan ini akan dihapus selamanya."
-	],
-	"Permanently delete these %d notes?": [
-		"Hapus %d catatan tersebut selamanya?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Hapus buku catatan selamanya, bukan ke tong sampah."
@@ -2499,7 +2541,7 @@
 		"Silakan buka URL berikut di peramban web Anda untuk mengotentikasi aplikasi. Aplikasi akan membuat direktori di \"Apps/Joplin\" dan hanya akan membaca dan menulis berkas pada direktori ini. Ia tidak akan memiliki akses ke berkas apa pun di luar direktori ini atau ke data pribadi lainnya. Tidak ada data yang akan dibagikan dengan pihak ketiga mana pun."
 	],
 	"Please provide the recipient email": [
-		""
+		"Silakan sediakan surel penerima"
 	],
 	"Please record your voice...": [
 		"Silakan rekam suara Anda…"
@@ -2715,7 +2757,13 @@
 		"Plugin yang disarankan"
 	],
 	"Record audio": [
-		""
+		"Rekam suara"
+	],
+	"Recording": [
+		"Rekaman"
+	],
+	"Recording...": [
+		"Merekam…"
 	],
 	"Redo": [
 		"Ulangi"
@@ -2913,7 +2961,7 @@
 		"Kode yang dipindai"
 	],
 	"Scrollbar size": [
-		""
+		"Ukuran bilah gulung"
 	],
 	"Search": [
 		"Pencarian"
@@ -3105,7 +3153,7 @@
 		"Dilewati: %d."
 	],
 	"Small": [
-		""
+		"Kecil"
 	],
 	"Solarised Dark": [
 		"Solarised Gelap"
@@ -3174,7 +3222,7 @@
 		"Mulai aplikasi dalam keadaan disembunyikan dalam baki ikon"
 	],
 	"Start recording": [
-		""
+		"Mulai merekam"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Memulai, menghentikan atau memeriksa server API. Untuk menentukan pada port mana server seharusnya berjalan, atur variabel pengaturan api.port. Perintahnya adalah (%s)."
@@ -3236,8 +3284,14 @@
 	"Subscript": [
 		"Tulisan kecil di bawah garis"
 	],
+	"Success": [
+		"Berhasil"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Berhasil! Pengaturan penyelarasan sepertinya sudah benar."
+	],
+	"Suggestions": [
+		"Saran"
 	],
 	"Superscript": [
 		"Tulisan kecil di atas garis"
@@ -3339,10 +3393,10 @@
 		"Sedang menyelaraskan…"
 	],
 	"Tab indents": [
-		""
+		"Indentasi tab"
 	],
 	"Tab moves focus": [
-		""
+		"Tab memindahkan fokus"
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3492,13 +3546,16 @@
 		"Aplikasi web tidak mendukung menerima buku catatan terenkripsi yang dibagikan. Mohon beralih ke aplikasi desktop atau ponsel sebelum menerima yang dibagikan.\n\nGalat: “%s”"
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
-		"Web Clipper membutuhkan otorisasi Anda untuk mengakses data Anda."
+		"Pemotong Web membutuhkan otorisasi Anda untuk mengakses data Anda."
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"Layanan pemotong web tidak dapat dinyalakan pada instansi Joplin ini."
 	],
 	"The web clipper service is enabled and set to auto-start.": [
-		"Layanan Web Clipper dinyalakan dan diatur menjadi mulai otomatis."
+		"Layanan pemotong web dinyalakan dan diatur ke mulai otomatis."
 	],
 	"The web clipper service is not enabled.": [
-		"Layanan web clipper tidak menyala."
+		"Layanan pemotong web tidak menyala."
 	],
 	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
 		"Penerapan WebDAV dari %s tidak cocok dengan Joplin, dan yang seperti itu tidak lagi didukung. Silakan gunakan metode penyelarasan lainnya."
@@ -3596,9 +3653,6 @@
 	"This will permanently delete all items in the trash. Continue?": [
 		"Ini akan menghapus semua benda di tempat sampah selamanya. Lanjutkan?"
 	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Ini akan menghapus catatan “%s” selamanya. Lanjutkan?"
-	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ini akan menghapus buku catatan dari koleksi Anda dan Anda tidak akan memiliki akses lagi ke isinya. Apakah Anda ingin melanjutkan?"
 	],
@@ -3659,6 +3713,9 @@
 	"to-do: %s": [
 		"tugas: %s"
 	],
+	"Toggle all notebooks": [
+		"Saklar semua buku catatan"
+	],
 	"Toggle comment": [
 		"Saklar komentar"
 	],
@@ -3670,6 +3727,9 @@
 	],
 	"Toggle editor plugin": [
 		"Saklar plugin penyunting"
+	],
+	"Toggle editor tab key navigation": [
+		"Saklar navigasi tombol tab penyunting"
 	],
 	"Toggle editors": [
 		"Saklar penyunting"
@@ -3689,6 +3749,9 @@
 	"Toggle own sort order": [
 		"Saklar tata urutan sendiri"
 	],
+	"Toggle plugin editor": [
+		"Saklar penyunting plugin"
+	],
 	"Toggle safe mode": [
 		"Saklar mode aman"
 	],
@@ -3700,6 +3763,9 @@
 	],
 	"Token has been copied to the clipboard!": [
 		"Token telah disalin ke papan klip!"
+	],
+	"Toolbar": [
+		"Bilah alat"
 	],
 	"Tools": [
 		"Perkakas"
@@ -3728,6 +3794,9 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Ketik judul catatan atau bagian dari isinya untuk menuju ke situ. Atau ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku catatan. Atau ketik : untuk mencari perintah."
 	],
+	"Type a note title to search for it.": [
+		"Ketik sebuah judul catatan untuk mencarinya."
+	],
 	"Type new tags or select from list": [
 		"Ketik label baru atau pilih dari daftar"
 	],
@@ -3741,7 +3810,7 @@
 		"Tidak dapat membagikan data log. Alasan: %s"
 	],
 	"Unchecked": [
-		""
+		"Tidak diperiksa"
 	],
 	"Uncompleted to-dos on top": [
 		"Tugas belum selesai berada di atas"
@@ -3899,11 +3968,14 @@
 	"Viewer": [
 		"Penampil"
 	],
+	"Viewer font size": [
+		"Ukuran font pada penampil"
+	],
 	"Vim": [
 		"Vim"
 	],
 	"Voice recorder": [
-		""
+		"Perekam suara"
 	],
 	"Voice typing language files (URL)": [
 		"Berkas bahasa pengetikan suara (URL)"
@@ -3930,7 +4002,7 @@
 		"Kami menandai plugin yang dikembangkan oleh anggota komunitas Joplin yang terpercaya sebagai “disarankan”."
 	],
 	"Web Clipper": [
-		"Web Clipper"
+		"Pemotong Web"
 	],
 	"WebDAV": [
 		"WebDAV"
@@ -3999,7 +4071,7 @@
 		"Anda telah masuk ke Joplin Cloud, Anda dapat meninggalkan layar ini."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Anda menjalankan versi Intel dari Joplin pada sebuah prosesor Apple Silicon. Untuk versi Apple Silicon untuk kinerja yang lebih baik."
 	],
 	"You currently have no notebooks.": [
 		"Saat ini tidak ada buku catatan."

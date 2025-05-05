@@ -61,51 +61,54 @@ msgid "(wysiwyg: %s)"
 msgstr ""
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:757
-#: packages/lib/shim-init-node.ts:273
+#: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:1059
-#: packages/app-desktop/gui/MenuBar.tsx:750
+#: packages/app-desktop/gui/MenuBar.tsx:1063
+#: packages/app-desktop/gui/MenuBar.tsx:754
 msgid "&Edit"
 msgstr "Редактиране(&E)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:1055
-#: packages/app-desktop/gui/MenuBar.tsx:623
-#: packages/app-desktop/gui/MenuBar.tsx:700
+#: packages/app-desktop/gui/MenuBar.tsx:1059
+#: packages/app-desktop/gui/MenuBar.tsx:629
+#: packages/app-desktop/gui/MenuBar.tsx:706
 msgid "&File"
 msgstr "Файл(&F)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:880
+#: packages/app-desktop/gui/MenuBar.tsx:884
 msgid "&Go"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:935
+#: packages/app-desktop/gui/MenuBar.tsx:939
 msgid "&Help"
 msgstr "Помощ (&H)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:898
+#: packages/app-desktop/gui/MenuBar.tsx:902
 #, fuzzy
 msgid "&Note"
 msgstr "Бележки"
 
-#: packages/app-desktop/gui/MenuBar.tsx:913
+#: packages/app-desktop/gui/MenuBar.tsx:917
 msgid "&Tools"
 msgstr "Инструменти (&T)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:792
+#: packages/app-desktop/gui/MenuBar.tsx:796
 msgid "&View"
 msgstr "Изглед(&V)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:925
+#: packages/app-desktop/gui/MenuBar.tsx:929
 #, fuzzy
 msgid "&Window"
 msgstr "Затвори прозорец"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-msgid "%d days"
-msgstr "%d дни"
+#, fuzzy
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d дни"
+msgstr[1] "%d дни"
 
 #: packages/lib/utils/joplinCloud/index.ts:148
 #: packages/lib/utils/joplinCloud/index.ts:149
@@ -120,13 +123,13 @@ msgid "%d GB storage space"
 msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1282
-msgid "%d hour"
-msgstr "%d час"
-
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-msgid "%d hours"
-msgstr "%d часа"
+#, fuzzy
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d час"
+msgstr[1] "%d час"
 
 #: packages/lib/utils/joplinCloud/index.ts:136
 #: packages/lib/utils/joplinCloud/index.ts:137
@@ -144,20 +147,28 @@ msgstr "Прикачи файл"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-msgid "%d minutes"
-msgstr "%d минути"
+#, fuzzy
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d минути"
+msgstr[1] "%d минути"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-msgid "%d notes match this pattern. Delete them?"
-msgstr "%d бележки съответстват на този шаблон. Да ги изтрия ли?"
+#, fuzzy
+msgid "%d note matches this pattern. Delete it?"
+msgid_plural "%d notes match this pattern. Delete them?"
+msgstr[0] "%d бележки съответстват на този шаблон. Да ги изтрия ли?"
+msgstr[1] "%d бележки съответстват на този шаблон. Да ги изтрия ли?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
 #, fuzzy
-msgid "%d notes will be permanently deleted. Continue?"
-msgstr "Да изтрия ли тези бележки?"
+msgid "%d note will be permanently deleted. Continue?"
+msgid_plural "%d notes will be permanently deleted. Continue?"
+msgstr[0] "Да изтрия ли тези бележки?"
+msgstr[1] "Да изтрия ли тези бележки?"
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:228
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:238
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
 msgid "%s"
 msgstr ""
 
@@ -215,7 +226,7 @@ msgstr "Създава нова бележка."
 msgid "%s cannot be less than %s"
 msgstr ""
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:231
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:237
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
@@ -237,9 +248,12 @@ msgstr ""
 msgid "%s: %d"
 msgstr "%s: %s"
 
-#: packages/lib/services/ReportService.ts:377
-msgid "%s: %d notes"
-msgstr "%s: %d бележки"
+#: packages/lib/services/ReportService.ts:378
+#, fuzzy
+msgid "%s: %d note"
+msgid_plural "%s: %d notes"
+msgstr[0] "%s: %d бележки"
+msgstr[1] "%s: %d бележки"
 
 #: packages/lib/services/ReportService.ts:359
 msgid "%s: %d/%d"
@@ -303,8 +317,8 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:629
-#: packages/app-desktop/gui/MenuBar.tsx:977
+#: packages/app-desktop/gui/MenuBar.tsx:635
+#: packages/app-desktop/gui/MenuBar.tsx:981
 msgid "About Joplin"
 msgstr "Относно Joplin"
 
@@ -371,7 +385,7 @@ msgid "Active"
 msgstr "Активен"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:848
+#: packages/app-desktop/gui/MenuBar.tsx:852
 msgid "Actual Size"
 msgstr ""
 
@@ -380,7 +394,7 @@ msgid "Add body"
 msgstr ""
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:64
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:131
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:130
 #, fuzzy
 msgid "Add new"
 msgstr "заглавие"
@@ -511,7 +525,7 @@ msgstr ""
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
 
-#: packages/app-desktop/ElectronAppWrapper.ts:161
+#: packages/app-desktop/ElectronAppWrapper.ts:171
 msgid "An error occurred: %s"
 msgstr ""
 
@@ -648,7 +662,7 @@ msgstr "Оторизирането не беше завършено (не пол
 msgid "Authorisation token:"
 msgstr "Оторизационен жетон:"
 
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:88
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:89
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:162
 #, fuzzy
 msgid "Authorise"
@@ -783,7 +797,7 @@ msgstr ""
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:202
 #: packages/app-mobile/utils/makeShowMessageBox.ts:16
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
-#: packages/lib/shim-init-node.ts:274
+#: packages/lib/shim-init-node.ts:278
 msgid "Cancel"
 msgstr "Отмени"
 
@@ -806,7 +820,7 @@ msgstr "Отменям..."
 msgid "Cancelling... Please wait."
 msgstr "Отменям... Моля изчакайте."
 
-#: packages/lib/shim-init-node.ts:334
+#: packages/lib/shim-init-node.ts:338
 msgid "Cannot access %s"
 msgstr "Няма достъп до %s"
 
@@ -936,7 +950,7 @@ msgstr ""
 msgid "Characters excluding spaces"
 msgstr ""
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
 #, fuzzy
 msgid "Check"
 msgstr "Поле за отметка"
@@ -945,8 +959,8 @@ msgstr "Поле за отметка"
 msgid "Check elements to display in the toolbar"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:643
-#: packages/app-desktop/gui/MenuBar.tsx:951
+#: packages/app-desktop/gui/MenuBar.tsx:649
+#: packages/app-desktop/gui/MenuBar.tsx:955
 msgid "Check for updates..."
 msgstr "Провери за обновления..."
 
@@ -1030,7 +1044,7 @@ msgstr ""
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:223
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:308
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:315
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:83
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:166
@@ -1062,7 +1076,7 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:714
 msgid "Close Window"
 msgstr "Затвори прозорец"
 
@@ -1097,7 +1111,7 @@ msgstr "Код"
 msgid "Collaborate on a notebook with others"
 msgstr "Моля първо създайте тетрадка"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:175
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:176
 #, fuzzy
 msgid "Collaborate on notebooks with others"
 msgstr "Моля първо създайте тетрадка"
@@ -1111,7 +1125,7 @@ msgstr "Създава нова тетрадка."
 msgid "Collapsed"
 msgstr ""
 
-#: packages/lib/services/ReportService.ts:385
+#: packages/lib/services/ReportService.ts:386
 msgid "Coming alarms"
 msgstr "Идни аларми"
 
@@ -1136,7 +1150,7 @@ msgstr ""
 msgid "Command"
 msgstr ""
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:791
+#: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
 msgstr ""
 
@@ -1276,7 +1290,7 @@ msgstr "Конвертиране към задача"
 msgid "Converting speech to text..."
 msgstr "Конвертиране към бележка"
 
-#: packages/app-desktop/gui/MenuBar.tsx:610
+#: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:188
@@ -1306,7 +1320,7 @@ msgstr "Копирай жетона"
 msgid "Copy Link Address"
 msgstr "Копирай адреса на линка"
 
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:94
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:95
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 #, fuzzy
 msgid "Copy link to website"
@@ -1369,7 +1383,7 @@ msgstr ""
 msgid "Could not connect to plugin repository."
 msgstr ""
 
-#: packages/app-desktop/InteropServiceHelper.ts:220
+#: packages/app-desktop/InteropServiceHelper.ts:222
 msgid "Could not export notes: %s"
 msgstr ""
 
@@ -2447,8 +2461,8 @@ msgstr ""
 msgid "Export"
 msgstr "Експортиране"
 
-#: packages/app-desktop/gui/MenuBar.tsx:662
-#: packages/app-desktop/gui/MenuBar.tsx:718
+#: packages/app-desktop/gui/MenuBar.tsx:668
+#: packages/app-desktop/gui/MenuBar.tsx:724
 #, fuzzy
 msgid "Export all"
 msgstr "Експортиране"
@@ -2486,7 +2500,7 @@ msgstr ""
 msgid "Exporting profile..."
 msgstr "Импортирам на бележки..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:199
+#: packages/app-desktop/InteropServiceHelper.ts:201
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Експортирам към \"%s\" във формат \"%s\". Моля изчакайте..."
 
@@ -2591,7 +2605,7 @@ msgstr ""
 msgid "Fixing search index..."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:886
+#: packages/app-desktop/gui/MenuBar.tsx:890
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:8
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:8
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:9
@@ -2728,7 +2742,7 @@ msgid "Go to source URL"
 msgstr "Иди на уеб адреса (URL)"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:18
-#: packages/app-desktop/plugins/GotoAnything.tsx:783
+#: packages/app-desktop/plugins/GotoAnything.tsx:775
 msgid "Goto Anything..."
 msgstr "Отиди на нещо..."
 
@@ -2766,7 +2780,7 @@ msgstr ""
 msgid "Hermes enabled: %d"
 msgstr "FTS пуснат: %d"
 
-#: packages/app-desktop/gui/MenuBar.tsx:679
+#: packages/app-desktop/gui/MenuBar.tsx:685
 msgid "Hide %s"
 msgstr "Скрий %s"
 
@@ -2852,7 +2866,7 @@ msgid ""
 "Joplin Cloud."
 msgstr ""
 
-#: packages/app-desktop/ElectronAppWrapper.ts:155
+#: packages/app-desktop/ElectronAppWrapper.ts:165
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:360
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:121
 #: packages/app-mobile/components/screens/status.tsx:203
@@ -2873,8 +2887,8 @@ msgid "Images"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:181
-#: packages/app-desktop/gui/MenuBar.tsx:658
-#: packages/app-desktop/gui/MenuBar.tsx:715
+#: packages/app-desktop/gui/MenuBar.tsx:664
+#: packages/app-desktop/gui/MenuBar.tsx:721
 #: packages/app-desktop/gui/Root.tsx:192
 msgid "Import"
 msgstr "Импортиране"
@@ -3142,11 +3156,11 @@ msgstr "Някои обекти не можаха да бъдат синхрон
 msgid "Items with error: %s"
 msgstr "Последна грешка: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:945
+#: packages/app-desktop/gui/MenuBar.tsx:949
 msgid "Join us on %s"
 msgstr ""
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:302
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:309
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
@@ -3195,7 +3209,7 @@ msgstr ""
 "Тези обекти ще останат на устройството, но Joplin вече няма да се опитва да "
 "ги декриптира."
 
-#: packages/app-desktop/gui/MenuBar.tsx:942
+#: packages/app-desktop/gui/MenuBar.tsx:946
 #, fuzzy
 msgid "Joplin Forum"
 msgstr "Joplin експорт файл"
@@ -3309,7 +3323,7 @@ msgstr ""
 msgid "Layout"
 msgstr "Разположеня"
 
-#: packages/app-desktop/gui/MenuBar.tsx:803
+#: packages/app-desktop/gui/MenuBar.tsx:807
 msgid "Layout button sequence"
 msgstr ""
 
@@ -3445,7 +3459,7 @@ msgstr ""
 msgid "Longitude"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:948
+#: packages/app-desktop/gui/MenuBar.tsx:952
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:604
 msgid "Make a donation"
 msgstr "Искам да направя дарение"
@@ -3635,8 +3649,11 @@ msgid ""
 msgstr ""
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Да преместя ли %d бележки в тетрадка \"%s\"?"
+#, fuzzy
+msgid "Move %d note to notebook \"%s\"?"
+msgid_plural "Move %d notes to notebook \"%s\"?"
+msgstr[0] "Да преместя ли %d бележки в тетрадка \"%s\"?"
+msgstr[1] "Да преместя ли %d бележки в тетрадка \"%s\"?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 #, fuzzy
@@ -3723,11 +3740,11 @@ msgid ""
 "A new voice typing model is available. Do you want to download it?"
 msgstr "Има обновление, искате ли да го свалите сега?"
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:111
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:112
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.ts:10
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:109
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:98
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:108
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:97
 #: packages/app-mobile/setupQuickActions.ts:30
 msgid "New note"
 msgstr "Нова бележка"
@@ -3767,10 +3784,10 @@ msgstr "Нова тетрадка"
 msgid "New tags:"
 msgstr "Нови тагове:"
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:121
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:122
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.ts:7
-#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:112
+#: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:111
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:87
 #: packages/app-mobile/setupQuickActions.ts:31
 msgid "New to-do"
@@ -3811,7 +3828,7 @@ msgstr "н"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
 #: packages/app-mobile/components/screens/Note/Note.tsx:759
-#: packages/lib/shim-init-node.ts:274 packages/lib/versionInfo.ts:92
+#: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
 msgstr "Не"
 
@@ -3886,7 +3903,7 @@ msgid "Not authenticated with %s. Please provide any missing credentials."
 msgstr ""
 "Не сме оторизирани за %s. Моля въведете липсващите оторизационни данни."
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:163
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
 msgid "Not checked"
 msgstr ""
 
@@ -3902,7 +3919,7 @@ msgstr ""
 msgid "Not now"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:109
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 #: packages/server/src/models/UserModel.ts:247
 #: packages/server/src/models/UserModel.ts:264
@@ -3924,7 +3941,7 @@ msgstr ""
 msgid "Note attachments"
 msgstr "Прикачи файл"
 
-#: packages/app-desktop/gui/MenuBar.tsx:583
+#: packages/app-desktop/gui/MenuBar.tsx:589
 #, fuzzy
 msgid "Note attachments..."
 msgstr "Прикачи файл"
@@ -3967,7 +3984,7 @@ msgstr "История на бележката"
 msgid "Note list growth factor"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:807
+#: packages/app-desktop/gui/MenuBar.tsx:811
 #, fuzzy
 msgid "Note list style"
 msgstr "История на бележката"
@@ -3997,12 +4014,12 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:892
+#: packages/app-desktop/gui/MenuBar.tsx:896
 #, fuzzy
 msgid "Note&book"
 msgstr "Тетрадки"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:608
+#: packages/app-desktop/plugins/GotoAnything.tsx:600
 #: packages/lib/models/Setting.ts:1179
 #, fuzzy
 msgid "Notebook"
@@ -4069,9 +4086,10 @@ msgstr "Формат за дати"
 
 #: packages/app-desktop/bridge.ts:372 packages/app-desktop/bridge.ts:385
 #: packages/app-desktop/bridge.ts:399 packages/app-desktop/bridge.ts:415
+#: packages/app-desktop/bridge.ts:536
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
-#: packages/app-desktop/gui/MenuBar.tsx:610
+#: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:282
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:17
@@ -4096,7 +4114,7 @@ msgstr "Добре"
 msgid "OLED Dark"
 msgstr "Тъмна"
 
-#: packages/lib/services/ReportService.ts:390
+#: packages/lib/services/ReportService.ts:391
 msgid "On %s: %s"
 msgstr "На %s: %s"
 
@@ -4168,6 +4186,11 @@ msgstr ""
 msgid "Open it"
 msgstr "Отвори..."
 
+#: packages/app-desktop/bridge.ts:537
+#, fuzzy
+msgid "Open log"
+msgstr "Отвори %s"
+
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
 msgstr ""
@@ -4229,7 +4252,7 @@ msgid "Operation cancelled"
 msgstr "Действието бе отменено"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
-#: packages/app-desktop/gui/MenuBar.tsx:572
+#: packages/app-desktop/gui/MenuBar.tsx:578
 #: packages/app-desktop/gui/Root.tsx:193
 msgid "Options"
 msgstr "Конфигурация"
@@ -4306,7 +4329,7 @@ msgid "PDF File"
 msgstr "PDF файл"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-msgid "Per user. Minimum of %d users."
+msgid "Per user. Minimum of 2 users."
 msgstr ""
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
@@ -4331,8 +4354,10 @@ msgstr ""
 
 #: packages/lib/models/Note.ts:944
 #, fuzzy
-msgid "Permanently delete these %d notes?"
-msgstr "Да изтрия ли тези %d бележки?"
+msgid "Permanently delete this note?"
+msgid_plural "Permanently delete these %d notes?"
+msgstr[0] "Да изтрия ли тези %d бележки?"
+msgstr[1] "Да изтрия ли тези %d бележки?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
 #, fuzzy
@@ -4489,7 +4514,7 @@ msgstr "Възможни стойности: %s."
 msgid "Preferences"
 msgstr "Настройки..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:636
+#: packages/app-desktop/gui/MenuBar.tsx:642
 msgid "Preferences..."
 msgstr "Настройки..."
 
@@ -4631,7 +4656,7 @@ msgstr "Възстановени бележки"
 msgid "Publish Notes"
 msgstr ""
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:174
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:175
 #: packages/lib/utils/joplinCloud/index.ts:153
 msgid "Publish notes to the internet"
 msgstr ""
@@ -4642,7 +4667,7 @@ msgid "QR Code"
 msgstr "Код"
 
 #: packages/app-desktop/app.ts:205
-#: packages/app-desktop/ElectronAppWrapper.ts:151
+#: packages/app-desktop/ElectronAppWrapper.ts:161
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:429
 msgid "Quit"
@@ -4717,7 +4742,7 @@ msgstr "Заглавие"
 msgid "Recording..."
 msgstr "Наблюдаване..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:767
+#: packages/app-desktop/gui/MenuBar.tsx:771
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:168
 #: packages/app-mobile/components/ScreenHeader/index.tsx:353
@@ -4861,7 +4886,7 @@ msgstr "Ресурси: %d."
 msgid "Restart and upgrade"
 msgstr ""
 
-#: packages/app-desktop/ElectronAppWrapper.ts:158
+#: packages/app-desktop/ElectronAppWrapper.ts:168
 #, fuzzy
 msgid "Restart in safe mode"
 msgstr "Страничен панел"
@@ -5070,7 +5095,7 @@ msgstr "Търсене във всички бележки"
 msgid "Search in current note"
 msgstr "Търсене в настоящата бележка"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:703
+#: packages/app-desktop/plugins/GotoAnything.tsx:695
 #, fuzzy
 msgid "Search results"
 msgstr "Търсене..."
@@ -5105,7 +5130,7 @@ msgstr "Запази промените"
 msgid "See the pre-release page for more details: %s"
 msgstr "Вижте страницата за експерименталните версии за повече подробности: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:205
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:206
 #: packages/app-mobile/components/NoteItem.tsx:151
 #, fuzzy
 msgid "Select"
@@ -5339,6 +5364,11 @@ msgstr ""
 #: packages/app-mobile/components/ScreenHeader/index.tsx:264
 msgid "Sidebar"
 msgstr "Страничен панел"
+
+#: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
+#, fuzzy
+msgid "Sign up to Joplin Cloud"
+msgstr "Joplin експорт файл"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5677,7 +5707,7 @@ msgstr ""
 msgid "Sync Version: %s"
 msgstr "Нова версия: %s"
 
-#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:173
+#: packages/app-desktop/gui/SyncWizard/Dialog.tsx:174
 #, fuzzy
 msgid "Sync your notes"
 msgstr "Сортирай бележките по"
@@ -5814,7 +5844,7 @@ msgid ""
 "again."
 msgstr ""
 
-#: packages/app-desktop/bridge.ts:569
+#: packages/app-desktop/bridge.ts:583
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
@@ -6241,11 +6271,6 @@ msgstr ""
 msgid "This will permanently delete all items in the trash. Continue?"
 msgstr ""
 
-#: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
-msgid "This will permanently delete the note \"%s\". Continue?"
-msgstr "Да изтрия ли бележка \"%s\"?"
-
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/leaveSharedFolder.ts:17
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
 msgid ""
@@ -6279,7 +6304,7 @@ msgstr ""
 "стъпки:"
 
 #: packages/app-cli/app/command-sync.ts:110
-#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:84
+#: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:85
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
 #, fuzzy
 msgid ""
@@ -6343,7 +6368,7 @@ msgstr ""
 "Приложението има нужда от следните разрешения за да работи правилно. Моля "
 "дайте ги от настройките на телефона в Приложения > Joplin > Разрешения"
 
-#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:119
+#: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 msgid "to-do"
 msgstr "задача"
@@ -6368,7 +6393,7 @@ msgstr "Изтрий тетрадка"
 msgid "Toggle comment"
 msgstr "Списък бележки"
 
-#: packages/app-desktop/gui/MenuBar.tsx:961
+#: packages/app-desktop/gui/MenuBar.tsx:965
 msgid "Toggle development tools"
 msgstr "Инструменти за разработка"
 
@@ -6484,7 +6509,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Въведете `joplin help` за информация за употребата."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:716
+#: packages/app-desktop/plugins/GotoAnything.tsx:708
 #, fuzzy
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
@@ -6494,7 +6519,7 @@ msgstr ""
 "Напишете заглавие на бележка на която да идем. Или напишете # следвано от "
 "име на таг, или @ следване от име на тетрадка."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:714
+#: packages/app-desktop/plugins/GotoAnything.tsx:706
 #, fuzzy
 msgid "Type a note title to search for it."
 msgstr "Напишете нови тагове или изберете от списъка"
@@ -6523,7 +6548,7 @@ msgstr ""
 msgid "Uncompleted to-dos on top"
 msgstr "Неизпълнените задачи най-отгоре"
 
-#: packages/app-desktop/gui/MenuBar.tsx:763
+#: packages/app-desktop/gui/MenuBar.tsx:767
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:167
 #: packages/app-mobile/components/ScreenHeader/index.tsx:343
@@ -6873,7 +6898,7 @@ msgid "WebDAV username"
 msgstr "Потребителско име за WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:938
+#: packages/app-desktop/gui/MenuBar.tsx:942
 msgid "Website and documentation"
 msgstr "Уебсайт и документация"
 
@@ -6931,7 +6956,7 @@ msgstr ""
 msgid "Whisper"
 msgstr ""
 
-#: packages/app-desktop/ElectronAppWrapper.ts:249
+#: packages/app-desktop/ElectronAppWrapper.ts:259
 msgid "Window unresponsive."
 msgstr ""
 
@@ -6955,12 +6980,12 @@ msgstr "Да"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
 #: packages/app-mobile/components/screens/Note/Note.tsx:758
-#: packages/lib/shim-init-node.ts:274 packages/lib/versionInfo.ts:92
+#: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Да"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:757
-#: packages/lib/shim-init-node.ts:273
+#: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
@@ -7034,14 +7059,21 @@ msgstr ""
 msgid "Your version: %s"
 msgstr "Вашата версия: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:859
-#: packages/app-desktop/gui/MenuBar.tsx:865
+#: packages/app-desktop/gui/MenuBar.tsx:863
+#: packages/app-desktop/gui/MenuBar.tsx:869
 msgid "Zoom In"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:872
+#: packages/app-desktop/gui/MenuBar.tsx:876
 msgid "Zoom Out"
 msgstr ""
+
+#~ msgid "%d hours"
+#~ msgstr "%d часа"
+
+#, fuzzy
+#~ msgid "This will permanently delete the note \"%s\". Continue?"
+#~ msgstr "Да изтрия ли бележка \"%s\"?"
 
 #, fuzzy
 #~ msgid "Close menu"

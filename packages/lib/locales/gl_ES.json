@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
+	"%d day": [
+		"",
 		""
 	],
 	"%d GB": [
@@ -11,20 +12,8 @@
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d hora"
-	],
-	"%d hours": [
-		"%d horas"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minutos"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notas coinciden co patrón. Desexa eliminalas?"
 	],
 	"%s": [
 		""
@@ -61,9 +50,6 @@
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d notas"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1456,9 +1442,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Mover %d notas para o caderno \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1702,7 +1685,7 @@
 	"PDF File": [
 		"Ficheiro PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

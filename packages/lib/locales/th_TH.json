@@ -2,28 +2,16 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d วัน"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d ชั่วโมง"
-	],
-	"%d hours": [
-		"%d ชั่วโมง"
-	],
 	"%d MB": [
 		""
 	],
-	"%d minutes": [
-		"%d นาที"
-	],
-	"%d notes match this pattern. Delete them?": [
+	"%d note matches this pattern. Delete it?": [
 		""
 	],
 	"%s": [
@@ -64,9 +52,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d บันทึก"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1439,9 +1424,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
-	],
 	"Move left": [
 		""
 	],
@@ -1685,7 +1667,7 @@
 	"PDF File": [
 		"ไฟล์ PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [

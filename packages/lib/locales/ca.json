@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"A «%s» li manca la propietat «%s»."
 	],
-	"%d days": [
-		"%d dies"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB d'espai d'emmagatzematge"
 	],
-	"%d hour": [
-		"%d hora"
-	],
-	"%d hours": [
-		"%d hores"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per nota o adjunt"
-	],
-	"%d minutes": [
-		"%d minuts"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notes coincideixen amb aquest patró. Voleu suprimir-les?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notes"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1880,9 +1862,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Voleu moure %dnotes al bloc de notes \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2207,7 +2186,7 @@
 	"PDF File": [
 		"Fitxer PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

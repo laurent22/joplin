@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"“%s” đang thiếu thuộc tính bắt buộc “%s”."
 	],
-	"%d days": [
-		"%d ngày"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d giờ"
-	],
-	"%d hours": [
-		"%d giờ"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d phút"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"Có %d notes trùng với chuỗi này. Xóa chúng?"
 	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
@@ -70,9 +55,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d ghi chú"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1649,9 +1631,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Di chuyển %d notes tới notebook \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1955,7 +1934,7 @@
 	"PDF File": [
 		"Tập tin PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

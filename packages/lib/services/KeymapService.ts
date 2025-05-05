@@ -427,9 +427,9 @@ export default class KeymapService extends BaseService {
 
 	// Electron and aria-keyshortcuts have slightly different formats for accelerators.
 	// See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-keyshortcuts
-	public getAriaKeyShortcuts(commandName: string) {
+	public getAriaKeyShortcuts(commandName: string): string|undefined {
 		const electronAccelerator = this.getAccelerator(commandName);
-		return electronAccelerator.replace('Ctrl', 'Control');
+		return electronAccelerator?.replace('Ctrl', 'Control');
 	}
 
 	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {

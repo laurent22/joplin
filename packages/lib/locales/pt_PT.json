@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Está em falta a propriedade \"%s\" de \"%s\"."
 	],
-	"%d days": [
-		"%d dias"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB de espaço de armazenamento"
 	],
-	"%d hour": [
-		"%d hora"
-	],
-	"%d hours": [
-		"%d hora"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB por nota ou anexo"
-	],
-	"%d minutes": [
-		"%d minutos"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notas correspondem a este padrão. Eliminar todas?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%s notas serão permanentemente destruídas. Continuar?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notas"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1997,9 +1976,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"A maioria dos plugins tem código-fonte disponível para revisão no site do plugin."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Mover %d notas para caderno \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2345,9 +2321,6 @@
 	"PDF File": [
 		"Ficheiro PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"Por utilizador. Mínimo de %d utilizadores."
-	],
 	"Permanently delete note": [
 		"Eliminar nota permanentemente"
 	],
@@ -2356,9 +2329,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Eliminar permanentemente o caderno \"%s\"?\n\nTodas as notas e sub-cadernos dentro deste caderno serão permanentemente eliminados."
-	],
-	"Permanently delete these %d notes?": [
-		"Eliminar permanentemente estas %d notas?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina permanentemente o caderno, ignorando a lixeira."
@@ -3426,9 +3396,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Isto irá eliminar permanentemente todos os itens da lixeira. Continuar?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Isto irá eliminar permanentemente a nota \"%s\". Continuar?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Isto irá remover o caderno da sua coleção e não poderá voltar a aceder ao seu conteúdo. Quer continuar?"

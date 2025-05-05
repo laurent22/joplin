@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"%s 缺少必須的屬性 %s。"
 	],
-	"%d days": [
-		"%d 天"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB 儲存空間"
 	],
-	"%d hour": [
-		"%d 小時"
-	],
-	"%d hours": [
-		"%d 小時"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"每個筆記或附件 %d MB"
-	],
-	"%d minutes": [
-		"%d 分鐘"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"相符的記事共有 %d 則，要刪除嗎？"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"刪除選定的記事？"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s：%d 則記事"
 	],
 	"%s: %d/%d": [
 		"%s：%d/%d"
@@ -1994,9 +1973,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"大多數延伸模組在延伸模組網站上提供源代碼供您進行評估。"
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"要將 %d 移動到「%s」記事本嗎？"
-	],
 	"Move left": [
 		""
 	],
@@ -2342,9 +2318,6 @@
 	"PDF File": [
 		"PDF 檔案"
 	],
-	"Per user. Minimum of %d users.": [
-		"每位使用者。最少 %d 位使用者。"
-	],
 	"Permanently delete note": [
 		"永久刪除記事"
 	],
@@ -2353,9 +2326,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"永久刪除記事本？\n\n此舉亦會永久刪除其中的所有記事和子記事本。"
-	],
-	"Permanently delete these %d notes?": [
-		"永久刪除這些記事 %d ？"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"永久刪除這些記事本 ，不要移到垃圾桶。"
@@ -3418,9 +3388,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"這將永久刪除垃圾桶裡所有項目，要繼續嗎？"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"這將永久刪除此記事「%s」，繼續？"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"此動作將會從你的收藏庫中移除記事本，並且未來將無法再存取其內容。確定要繼續嗎？"

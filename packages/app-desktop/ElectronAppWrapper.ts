@@ -75,6 +75,7 @@ export default class ElectronAppWrapper {
 	private ipcStartPort_ = 2658;
 
 	private ipcLogger_: Logger;
+	private ipcLoggerFilePath_: string;
 
 	public constructor(electronApp: App, { env, profilePath, isDebugMode, initialCallbackUrl, isEndToEndTesting }: Options) {
 		this.electronApp_ = electronApp;
@@ -90,8 +91,9 @@ export default class ElectronAppWrapper {
 		// calls, either because it hasn't been set or other issue. So we set one here specifically
 		// for this.
 		this.ipcLogger_ = new Logger();
+		this.ipcLoggerFilePath_ = `${profilePath}/log-cross-app-ipc.txt`;
 		this.ipcLogger_.addTarget(TargetType.File, {
-			path: `${profilePath}/log-cross-app-ipc.txt`,
+			path: this.ipcLoggerFilePath_,
 		});
 	}
 
@@ -113,6 +115,14 @@ export default class ElectronAppWrapper {
 
 	public activeWindow() {
 		return BrowserWindow.getFocusedWindow() ?? this.win_;
+	}
+
+	public ipcServerStarted() {
+		return !!this.ipcServer_;
+	}
+
+	public ipcLoggerFilePath() {
+		return this.ipcLoggerFilePath_;
 	}
 
 	public windowById(joplinId: string) {
@@ -582,14 +592,18 @@ export default class ElectronAppWrapper {
 
 		if (port === null) port = this.ipcStartPort_;
 
-		return await sendMessage(port, {
-			...message,
-			sourcePort: this.ipcServer_.port,
-			secretKey: this.ipcServer_.secretKey,
-		}, {
-			logger: this.ipcLogger_,
-			...options,
-		});
+		if (this.ipcServer_) {
+			return await sendMessage(port, {
+				...message,
+				sourcePort: this.ipcServer_.port,
+				secretKey: this.ipcServer_.secretKey,
+			}, {
+				logger: this.ipcLogger_,
+				...options,
+			});
+		} else {
+			return [];
+		}
 	}
 
 	public async ensureSingleInstance() {
@@ -675,32 +689,39 @@ export default class ElectronAppWrapper {
 
 		this.ipcLogger_.info('Starting server using secret key:', secretKeyFilePath);
 
-		this.ipcServer_ = await startServer(this.ipcStartPort_, secretKeyFilePath, async (message) => {
-			if (messageHandlers[message.action]) {
-				this.ipcLogger_.info('Got message:', message);
-				return messageHandlers[message.action](message);
-			}
+		try {
+			this.ipcServer_ = await startServer(this.ipcStartPort_, secretKeyFilePath, async (message) => {
+				if (messageHandlers[message.action]) {
+					this.ipcLogger_.info('Got message:', message);
+					return messageHandlers[message.action](message);
+				}
 
-			throw newHttpError(404);
-		}, {
-			logger: this.ipcLogger_,
-		});
+				throw newHttpError(404);
+			}, {
+				logger: this.ipcLogger_,
+			});
+		} catch (error) {
+			this.ipcLogger_.error('Could not start server:', error);
+			this.ipcServer_ = null;
+		}
 
 		// First check that no other app is running from that profile folder
 		const gotAppLock = await this.profileLocker_.lock();
 		if (gotAppLock) return false;
 
-		const message: Message = {
-			action: 'onSecondInstance',
-			data: {
-				senderPort: this.ipcServer_.port,
-				profilePath: this.profilePath_,
-				argv: process.argv,
-			},
-			secretKey: this.ipcServer_.secretKey,
-		};
+		if (this.ipcServer_) {
+			const message: Message = {
+				action: 'onSecondInstance',
+				data: {
+					senderPort: this.ipcServer_.port,
+					profilePath: this.profilePath_,
+					argv: process.argv,
+				},
+				secretKey: this.ipcServer_.secretKey,
+			};
 
-		await this.sendCrossAppIpcMessage(message);
+			await this.sendCrossAppIpcMessage(message);
+		}
 
 		this.quit();
 		if (this.env() === 'dev') console.warn(`Closing the application because another instance is already running, or the previous instance was force-quit within the last ${Math.round(this.profileLocker_.options.interval / Second)} seconds.`);

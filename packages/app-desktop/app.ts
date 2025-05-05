@@ -92,7 +92,7 @@ class Application extends BaseApplication {
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
-		newState = super.reducer(newState, action);
+		newState = super.reducer(newState, action) as AppState;
 		return newState;
 	}
 

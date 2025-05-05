@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" chybí požadovaná vlastnost \"%s\"."
 	],
-	"%d days": [
-		"%d dní"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB místa v úložišti"
 	],
-	"%d hour": [
-		"%d hodina"
-	],
-	"%d hours": [
-		"%d hodin"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB na poznámku nebo přílohu"
-	],
-	"%d minutes": [
-		"%d minut"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d poznámek vyhovuje zadání. Smazat všechny?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d poznámek"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1829,9 +1811,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Přesunout poznámky %d do zápisníku \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2155,9 +2134,6 @@
 	],
 	"PDF File": [
 		"PDF soubor"
-	],
-	"Per user. Minimum of %d users.": [
-		"Na uživatele. Minimálně %d uživatelů."
 	],
 	"Permission needed": [
 		"Vyžadováno oprávnění"

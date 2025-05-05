@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"„%s” ne sadrži potrebno svojstvo „%s”."
 	],
-	"%d days": [
-		"%d dana"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB memorije"
 	],
-	"%d hour": [
-		"%d h"
-	],
-	"%d hours": [
-		"%d h"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB za bilješku ili privitak"
-	],
-	"%d minutes": [
-		"%d min"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d bilješke se poklapaju s ovim uzorkom. Želiš li ih izbrisati?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d bilješke"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1862,9 +1844,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Premjestiti %d bilješke u bilježnicu „%s”?"
-	],
 	"Move left": [
 		""
 	],
@@ -2188,9 +2167,6 @@
 	],
 	"PDF File": [
 		"PDF datoteka"
-	],
-	"Per user. Minimum of %d users.": [
-		"Po korisniku. Najmanje %d korisnika."
 	],
 	"Permission needed": [
 		"Potrebna je dozvola"

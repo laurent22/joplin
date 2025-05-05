@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d дни"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d час"
-	],
-	"%d hours": [
-		"%d часа"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d минути"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d бележки съответстват на този шаблон. Да ги изтрия ли?"
 	],
 	"%s": [
 		""
@@ -64,9 +49,6 @@
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d бележки"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1457,9 +1439,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Да преместя ли %d бележки в тетрадка \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1718,7 +1697,7 @@
 	"PDF File": [
 		"PDF файл"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [

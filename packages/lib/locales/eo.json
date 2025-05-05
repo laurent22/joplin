@@ -2,28 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d tagoj"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d horo"
-	],
-	"%d hours": [
-		"%d horoj"
-	],
 	"%d MB": [
 		""
 	],
-	"%d minutes": [
-		"%d minutoj"
-	],
-	"%d notes match this pattern. Delete them?": [
+	"%d note matches this pattern. Delete it?": [
+		"",
 		""
 	],
 	"%s": [
@@ -61,9 +50,6 @@
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d notoj"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1593,9 +1579,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Movi %d notojn al notlibro \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1860,7 +1843,7 @@
 	"PDF File": [
 		"PDF-dosiero"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [

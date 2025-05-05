@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Το \"%s\" δεν διαθέτει την απαιτούμενη ιδιότητα \"%s\"."
 	],
-	"%d days": [
-		"%d ημέρες"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB αποθηκευτικού χώρου"
 	],
-	"%d hour": [
-		"%d ώρα"
-	],
-	"%d hours": [
-		"%d ώρες"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB ανά σημείωση ή συνημμένο"
-	],
-	"%d minutes": [
-		"%d λεπτά"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d σημειώσεις ταιριάζουν. Θέλετε να διαγραφούν;"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d σημειώσεις θα διαγραφούν οριστικά. Να συνεχίσω;"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d σημειώσεις"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1997,9 +1976,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Ο κώδικας των περισσότερων πρόσθετων είναι διαθέσιμος για έλεγχο στην ιστοσελίδα."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
-	],
 	"Move left": [
 		""
 	],
@@ -2345,9 +2321,6 @@
 	"PDF File": [
 		"Αρχείο PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"Ανά χρήστη. Τουλάχιστον %d χρήστες."
-	],
 	"Permanently delete note": [
 		"Οριστική διαγραφή σημείωσης"
 	],
@@ -2356,9 +2329,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Να διαγραφεί οριστικά το σημειωματάριο “%s”; \n\nΌλες οι σημειώσεις και τα υποσημειωματάρια θα διαγραφούν επίσης."
-	],
-	"Permanently delete these %d notes?": [
-		"Να διαγραφούν οριστικά οι %d σημειώσεις;"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Διαγράφει οριστικά το σημειωματάριο, παρακάμπτοντας τον κάδο απορριμμάτων."
@@ -3420,9 +3390,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Θα πραγματοποιηθεί οριστική διαγραφή όλων των περιεχομένων του κάδου. Θέλετε να συνεχίσετε;"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Θα πραγματοποιηθεί οριστική διαγραφή της σημείωσης “%s”. Θέλετε να συνεχίσετε;"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Πρόκειται να αφαιρέσετε το σημειωματάριο από τη συλλογή σας και δεν θα έχετε πλέον πρόσβαση στο περιεχόμενό του. Θέλετε να συνεχίσετε;"

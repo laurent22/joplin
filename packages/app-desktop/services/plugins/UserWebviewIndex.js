@@ -33,6 +33,13 @@
 				target: 'postMessageService.registerViewMessageHandler',
 			});
 		},
+
+		menuPopupFromTemplate: (args) => {
+			postMessage({
+				target: 'webviewApi.menuPopupFromTemplate',
+				args,
+			});
+		},
 	};
 
 	function docReady(fn) {

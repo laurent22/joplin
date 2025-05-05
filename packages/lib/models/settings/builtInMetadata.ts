@@ -1,6 +1,6 @@
 import { rtrimSlashes } from '@joplin/utils/path';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
-import { _, defaultLocale, supportedLocalesToLanguages } from '../../locale';
+import { _, _n, defaultLocale, supportedLocalesToLanguages } from '../../locale';
 import shim from '../../shim';
 import time from '../../time';
 import type SettingType from '../Setting';
@@ -1276,12 +1276,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			options: () => {
 				return {
 					0: _('Disabled'),
-					300: _('%d minutes', 5),
-					600: _('%d minutes', 10),
-					1800: _('%d minutes', 30),
-					3600: _('%d hour', 1),
-					43200: _('%d hours', 12),
-					86400: _('%d hours', 24),
+					300: _n('%d minute', '%d minutes', 5, 5),
+					600: _n('%d minute', '%d minutes', 10, 10),
+					1800: _n('%d minute', '%d minutes', 30, 30),
+					3600: _n('%d hour', '%d hours', 1, 1),
+					43200: _n('%d hour', '%d hours', 12, 12),
+					86400: _n('%d hour', '%d hours', 24, 24),
 				};
 			},
 			storage: SettingStorage.File,
@@ -1535,7 +1535,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			maximum: 365 * 2,
 			step: 1,
 			unitLabel: (value: number = null) => {
-				return value === null ? _('days') : _('%d days', value);
+				return value === null ? _('days') : _n('%d day', '%d days', value, value);
 			},
 			label: () => _('Keep note history for'),
 			storage: SettingStorage.File,
@@ -1811,7 +1811,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			maximum: 300,
 			step: 1,
 			unitLabel: (value: number = null) => {
-				return value === null ? _('days') : _('%d days', value);
+				return value === null ? _('days') : _n('%d day', '%d days', value, value);
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => settings['trash.autoDeletionEnabled'],

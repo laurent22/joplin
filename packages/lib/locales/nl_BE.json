@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mist de vereiste \"%s\" eigenschap."
 	],
-	"%d days": [
-		"%d dagen"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB opslagruimte"
 	],
-	"%d hour": [
-		"%d uur"
-	],
-	"%d hours": [
-		"%d uren"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per notitie of bijlage"
-	],
-	"%d minutes": [
-		"%d minuten"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notities komen overeen met het patroon. Deze verwijderen?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d notities zullen permanent verwijderd worden. Doorgaan?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notities"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2091,9 +2070,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"De meeste plugins hebben broncode die je kunt bekijken op de website van de plugin."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Verplaats %d notities naar notitieboek \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2469,9 +2445,6 @@
 	"PDF File": [
 		"PDF-Bestand"
 	],
-	"Per user. Minimum of %d users.": [
-		"Per gebruiker. Minimum van %d gebruikers."
-	],
 	"Permanently delete note": [
 		"Notitie permanent verwijderen"
 	],
@@ -2480,9 +2453,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Notitieboek \"%s\" permanent verwijderen?\n\nAlle notities en sub-notitieboeken in dit notitieboek zullen ook permanent verwijderd worden."
-	],
-	"Permanently delete these %d notes?": [
-		"Deze %d notities permanent verwijderen?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Verwijdert het notitieboek permanent, zonder het naar de prullenmand te verplaatsen."
@@ -3607,9 +3577,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Dit zal alle items in de prullenmand permanent verwijderen. Doorgaan?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Dit zal de notitie \"%s\" permanent verwijderen. Doorgaan?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Dit zal het notitieboek van je verzameling verwijderen. Je zal niet langer toegang hebben tot de inhoud ervan. Wil je verder gaan?"

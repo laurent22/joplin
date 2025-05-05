@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" は必須の \"%s\" プロパティを持っていません。"
 	],
-	"%d days": [
-		"%d 日"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"ストレージ容量 %d GB"
 	],
-	"%d hour": [
-		"%d 時間"
-	],
-	"%d hours": [
-		"%d 時間"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"ノート/添付ファイルあたり %d MB"
-	],
-	"%d minutes": [
-		"%d 分"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d 個のノートが一致しました。削除しますか？"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d ノート"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1901,9 +1883,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"ほとんどのプラグインはソースコードをプラグインのウェブサイトで公開しています。"
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d 個のノートを \"%s\" ノートブックに移動しますか？"
-	],
 	"Move left": [
 		""
 	],
@@ -2233,9 +2212,6 @@
 	],
 	"PDF File": [
 		"PDF ファイル"
-	],
-	"Per user. Minimum of %d users.": [
-		"ユーザーごと。%d ユーザーから。"
 	],
 	"Permission needed": [
 		"許可が必要"

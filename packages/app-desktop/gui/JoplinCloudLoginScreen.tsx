@@ -10,6 +10,7 @@ import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSu
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
+import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -105,6 +106,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
+				<JoplinCloudSignUpCallToAction />
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

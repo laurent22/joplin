@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d dana"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d sat"
-	],
-	"%d hours": [
-		"%d sati"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minuta"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d bilješki odgovara upitu. Izbrisati ih?"
 	],
 	"%s": [
 		""
@@ -61,9 +46,6 @@
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d bilješki"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1445,9 +1427,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Premjestiti %d bilješki u bilježnicu \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1694,7 +1673,7 @@
 	"PDF File": [
 		"PDF datoteka"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [

@@ -1059,7 +1059,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.3.0):
+  - react-native-saf-x (3.3.1):
     - React-Core
   - react-native-safe-area-context (4.10.8):
     - React-Core
@@ -1677,7 +1677,7 @@ SPEC CHECKSUMS:
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
   OpenSSL-Universal: b60a3702c9fea8b3145549d421fdb018e53ab7b4
-  RCT-Folly: 5dc73daec3476616d19e8a53f0156176f7b55461
+  RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: efb313d8126259e9294dc4ee0002f44a6f676aba
   RCTRequired: f49ea29cece52aee20db633ae7edc4b271435562
   RCTTypeSafety: a11979ff0570d230d74de9f604f7d19692157bc4
@@ -1711,7 +1711,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 28c2462c85067fe653615f6f595673bdca93a287
   react-native-quick-crypto: 38fde7e5ddfb667b54536c25e6a6ac6d404633d3
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 318d0cdb38f4618bd7ef5840d4f5c12e097dfbe7
+  react-native-saf-x: d60328b397989ebec2a2ad7f531a9732e824f603
   react-native-safe-area-context: b72c4611af2e86d80a59ac76279043d8f75f454c
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141

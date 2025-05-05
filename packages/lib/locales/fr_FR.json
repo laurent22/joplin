@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" requiert la propriété \"%s\"."
 	],
-	"%d days": [
+	"%d day": [
+		"%d jour",
 		"%d jours"
 	],
 	"%d GB": [
@@ -12,24 +13,25 @@
 		"%d Go en espace de stockage"
 	],
 	"%d hour": [
-		"%d heure"
-	],
-	"%d hours": [
+		"%d heure",
 		"%d heures"
 	],
 	"%d MB": [
 		"%d Mo"
 	],
 	"%d MB per note or attachment": [
-		"%d Mo pour les notes et pièces jointes"
+		"%d Mo par note ou pièce jointe"
 	],
-	"%d minutes": [
+	"%d minute": [
+		"%d minute",
 		"%d minutes"
 	],
-	"%d notes match this pattern. Delete them?": [
+	"%d note matches this pattern. Delete it?": [
+		"%d note correspond à ce motif. La supprimer ?",
 		"%d notes correspondent à ce motif. Les supprimer ?"
 	],
-	"%d notes will be permanently deleted. Continue?": [
+	"%d note will be permanently deleted. Continue?": [
+		"%d note sera définitivement supprimée. Continuer ?",
 		"%d notes seront définitivement supprimées. Continuer ?"
 	],
 	"%s": [
@@ -42,13 +44,13 @@
 		"%s (%s) n'a pas pu être envoyé : %s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
-		"%s (%s) souhaiterais partager un carnet avec vous."
+		"%s (%s) souhaiterait partager un carnet avec vous."
 	],
 	"%s (%s): %s": [
 		"%s (%s) : %s"
 	],
 	"%s (pre-release)": [
-		"%s (pré‑release)"
+		"%s (préversion)"
 	],
 	"%s - Copy": [
 		"%s – Copie"
@@ -83,7 +85,8 @@
 	"%s: %d": [
 		"%s : %d"
 	],
-	"%s: %d notes": [
+	"%s: %d note": [
+		"%s : %d note",
 		"%s : %d notes"
 	],
 	"%s: %d/%d": [
@@ -150,7 +153,7 @@
 		"<tag-command> peut être \"add\", \"remove\", \"list\" ou \"notetags\" pour assigner ou enlever l'étiquette [tag] de la [note], pour lister les notes associées avec l'étiquette [tag], ou pour lister les étiquettes associées avec [note]. La commande `tag list` peut être utilisée pour lister les étiquettes (utilisez l'option -l pour les options complètes)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
-		"Gère le statut des tâches. <todo-command> peut être \"toggle\" ou \"clear\". Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez \"clear\" pour convertir la tâche en note."
+		"<todo-command> peut être \"toggle\" ou \"clear\". Utilisez \"toggle\" pour basculer la tâche entre le statut terminé et non terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez \"clear\" pour convertir la tâche en note."
 	],
 	"A new update (%s) is available": [
 		"Une nouvelle mise à jour (%s) est disponible"
@@ -186,16 +189,16 @@
 		"Invitations acceptées"
 	],
 	"Access denied: Please check your username and password": [
-		"Accès non-autorisé : Veuillez vérifier votre nom et mot de passe"
+		"Accès non autorisé : Veuillez vérifier votre nom d'utilisateur et mot de passe"
 	],
 	"Access denied: Please re-enter your password and/or username": [
-		"Accès non-autorisé : Veuillez ré-entrer votre nom ou mot de passe"
+		"Accès non autorisé : Veuillez réécrire votre nom d'utilisateur et/ou mot de passe"
 	],
 	"Account": [
 		"Compte"
 	],
 	"Account information": [
-		"Information de compte"
+		"Informations du compte"
 	],
 	"Account type": [
 		"Type de compte"
@@ -246,7 +249,7 @@
 		"Options avancées"
 	],
 	"Advanced settings": [
-		"Options avancées"
+		"Paramètres avancés"
 	],
 	"Advanced tools": [
 		"Outils avancés"
@@ -255,7 +258,7 @@
 		"tout"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
-		"Toutes vos données, y compris les notes, carnets et étiquettes seront effacés de façon permanente."
+		"Toutes vos données, y compris les notes, carnets et étiquettes seront effacées de façon permanente."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
 		"Tous les échecs de synchronisation ont été marqués comme \"ignorés\"."
@@ -291,16 +294,16 @@
 		"Toujours redimensionner"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti\" pour afficher les identifiants, ou utilisez $b pour le carnet en cours"
+		"Carnet ambigu \"%s\". Veuillez utiliser l'identifiant du carnet – pressez \"ti\" pour afficher les identifiants abrégés ou utilisez $b pour le carnet sélectionné"
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
-		"Titre ambigu \"%s\". Veuillez entrer l'identifiant du carnet - pressez \"ti\" pour afficher les identifiants"
+		"Carnet ambigu \"%s\". Veuillez utiliser l’identifiant abrégé du carnet – pressez \"ti\" pour afficher l’identifiant abrégé"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Un dessin automatiquement sauvegardé a été trouvé. Le joindre à la note ?"
 	],
 	"An error occurred: %s": [
-		"Erreur : %s"
+		"Une erreur est survenue : %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Une mise à jour est disponible, souhaitez vous la télécharger maintenant ?"
@@ -309,7 +312,7 @@
 		"Niveau d'API Android : %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		"Un email envoyé à cette adresse sera converti en note et ajouté à votre collection. La note sera sauvé dans votre carnet \"Inbox\""
+		"Un email envoyé à cette adresse sera converti en note et ajouté à votre collection. La note sera sauvegardée dans votre carnet \"Inbox\""
 	],
 	"Appearance": [
 		"Apparence"
@@ -324,10 +327,10 @@
 		"Êtes-vous sûr de vouloir restaurer la disposition par défaut de la barre d'outils ?\nCette opération est irréversible."
 	],
 	"Are you sure you want to renew the authorisation token?": [
-		"Renouveler le code d'authentification ?"
+		"Êtes-vous sûr de vouloir renouveler le jeton d'authentification ?"
 	],
 	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
-		"Restaurer la disposition de l'interface ? La disposition en cours sera perdue."
+		"Êtes-vous sûr de vouloir restaurer la disposition de l'interface ? La disposition en cours sera perdue."
 	],
 	"Arguments:": [
 		"Arguments :"
@@ -342,10 +345,10 @@
 		"Joindre"
 	],
 	"Attach file": [
-		"Attacher un fichier"
+		"Joindre un fichier"
 	],
 	"Attach photo": [
-		"Attacher une photo"
+		"Joindre une photo"
 	],
 	"Attach...": [
 		"Joindre…"
@@ -354,31 +357,31 @@
 		"Joindre le fichier fourni à la note."
 	],
 	"attachment": [
-		"fichier joint"
+		"pièce jointe"
 	],
 	"Attachment": [
 		"Pièce jointe"
 	],
 	"Attachment conflict: \"%s\"": [
-		"Conflit de fichier joint : \"%s\""
+		"Conflit de pièce jointe : \"%s\""
 	],
 	"Attachment download behaviour": [
-		"Téléchargement des ressources"
+		"Comportement de téléchargement des pièces jointes"
 	],
 	"Attachments": [
-		"Fichiers joints"
+		"Pièces jointes"
 	],
 	"Attachments that could not be downloaded": [
-		"Fichiers qui n'ont pas pu être téléchargé"
+		"Pièces jointes qui n'ont pas pu être téléchargées"
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
 		"Attention : si vous changez cet emplacement, copiez‑y tout le contenu avant de synchroniser, sinon tous les fichiers seront supprimés ! Consulter la FAQ pour plus de détails : %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
-		"Impossible d'autoriser le logiciel (jeton d'identification non‑reçu)."
+		"L'authentification n'a pas été effectuée (jeton d'authentification non reçu)."
 	],
 	"Authorisation token:": [
-		"Code d'authentification :"
+		"Jeton d'authentification :"
 	],
 	"Authorise": [
 		"Autoriser"
@@ -390,13 +393,13 @@
 		"Supprimer automatiquement les comptes désactivés"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		"Formatage automatique de Markdown dans l'éditeur de texte enrichi"
+		"Formatage automatique du Markdown dans l’éditeur de texte enrichi"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Auto‑compléter les paires de parenthèses, guillemets, etc."
 	],
 	"Autocomplete Markdown and HTML": [
-		"Complétion automatique Markdown et HTML"
+		"Complétion automatique du Markdown et HTML"
 	],
 	"Automatically check for updates": [
 		"Vérifier automatiquement les mises à jour"
@@ -507,7 +510,7 @@
 		"Impossible d'enregistrer l'élément %s \"%s\" car cela excèderait la limite totale allouée (%s) pour ce compte"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"Impossible de partager ce carnet chiffré car le destinataire %s car ils n'ont pas activé le chiffrement. Ils peuvent le faire à partir de l'écran Configuration > Chiffrement."
+		"Impossible de partager ce carnet chiffré car les destinataires %s n'ont pas activé le chiffrement bout-à-bout. Ils peuvent le faire à partir de l'écran Configuration > Chiffrement."
 	],
 	"Case sensitive": [
 		"Sensible à la casse"
@@ -531,7 +534,7 @@
 		"Caractères sans espaces"
 	],
 	"Check": [
-		"Coché"
+		"Cocher"
 	],
 	"Check elements to display in the toolbar": [
 		"Choisissez les éléments à afficher dans la barre d'outils"
@@ -540,7 +543,7 @@
 		"Vérifier les mises à jour…"
 	],
 	"Check synchronisation configuration": [
-		"Vérifier config synchronisation"
+		"Vérifier config. synchronisation"
 	],
 	"Checkbox": [
 		"Case à cocher"
@@ -636,7 +639,7 @@
 		"Alarmes à venir"
 	],
 	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
-		"Liste séparée par des virgules contenant les chemins des répertoires contenants des certificats, ou les chemins de certificats individuels. Par exemple : /my/cert_dir, /other/custom.pem. Remarquez que si vous changez les paramètres TLS, vous devez enregistrer vos changements avant de cliquer sur \"Vérifier config synchronisation\"."
+		"Liste séparée par des virgules contenant les chemins des répertoires contenants des certificats, ou les chemins de certificats individuels. Par exemple : /my/cert_dir, /other/custom.pem. Remarquez que si vous changez les paramètres TLS, vous devez enregistrer vos changements avant de cliquer sur \"Vérifier config. synchronisation\"."
 	],
 	"command": [
 		"commande"
@@ -699,7 +702,7 @@
 		"Conflits"
 	],
 	"Conflicts (attachments)": [
-		"Conflits (fichiers joints)"
+		"Conflits (pièces jointes)"
 	],
 	"Connect to Joplin Cloud": [
 		"Se connecter à Joplin Cloud"
@@ -736,7 +739,7 @@
 		"Copier"
 	],
 	"Copy dev mode command to clipboard": [
-		"Copier commande de développement dans presse papier"
+		"Copier la commande de développement dans le presse papier"
 	],
 	"Copy external link": [
 		"Copier le lien externe"
@@ -751,20 +754,20 @@
 		"Copier le lien vers le site Web"
 	],
 	"Copy Markdown link": [
-		"Copier lien Markdown"
+		"Copier le lien Markdown"
 	],
 	"Copy path to clipboard": [
 		"Copier le chemin"
 	],
 	"Copy Shareable Link": [
-		"Copier lien partageable",
-		"Copier liens partageables"
+		"Copier le lien partageable",
+		"Copier les liens partageables"
 	],
 	"Copy to clipboard": [
 		"Copier"
 	],
 	"Copy token": [
-		"Copier le code"
+		"Copier le jeton"
 	],
 	"Copy version info": [
 		"Copier les informations sur la version"
@@ -773,10 +776,10 @@
 		"Impossible d'autoriser le logiciel :\n\n%s\n\nVeuillez réessayer."
 	],
 	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
-		"Impossible de se connecter au server Joplin. Veuillez vérifier la configuration. L'erreur complète était :\n\n%s"
+		"Impossible de se connecter au server Joplin. Veuillez vérifier les options de synchronisation dans l'écran de configuration. L'erreur complète était :\n\n%s"
 	],
 	"Could not connect to plugin repository.": [
-		"Impossible de télécharger la liste des plugins."
+		"Impossible de télécharger la liste des modules."
 	],
 	"Could not export notes: %s": [
 		"Impossible d'exporter les notes : %s"
@@ -791,7 +794,7 @@
 		"Impossible de changer de profil : %s"
 	],
 	"Could not upgrade master key: %s": [
-		"Impossible de mettre la clef à niveau : %s"
+		"Impossible de mettre à niveau la clef principale : %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Impossible de vérifier l'état du partage du carnet - annulation. Veuillez réessayer lorsque vous serez connecté à internet."
@@ -803,7 +806,7 @@
 		"Créer"
 	],
 	"Create a new notebook under a parent notebook.": [
-		"Créer un carnet sous un carnet parent."
+		"Créer un nouveau carnet sous un carnet parent."
 	],
 	"Create a notebook": [
 		"Créer un carnet"
@@ -815,7 +818,7 @@
 		"Créer un carnet"
 	],
 	"Create user": [
-		"Créer utilisateur"
+		"Créer un utilisateur"
 	],
 	"Created": [
 		"Créé"
@@ -857,7 +860,7 @@
 		"Création d'une nouvelle note..."
 	],
 	"Creating new to-do...": [
-		"Création d'un nouveau to-do…"
+		"Création d'une nouvelle tâche…"
 	],
 	"Creating report...": [
 		"Création du rapport…"
@@ -935,13 +938,13 @@
 		"Supprimer"
 	],
 	"Delete attachment \"%s\"?": [
-		"Supprimer fichier joint \"%s\" ?"
+		"Supprimer la pièce jointe \"%s\" ?"
 	],
 	"Delete expired sessions": [
 		"Supprimer les sessions expirées"
 	],
 	"Delete expired tokens": [
-		"Supprimer les tokens expirés"
+		"Supprimer les jetons expirés"
 	],
 	"Delete line": [
 		"Supprimer la ligne"
@@ -1088,7 +1091,7 @@
 		"Ne pas demander de confirmation."
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
-		"Ne perdez pas le mot de passe car, par sécurité, ce sera la seule façon de déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
+		"Ne perdez pas le mot de passe car, pour des raisons de sécurité, ce sera la *seule* façon de déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
 	],
 	"Donate, website": [
 		"Donations, site web"
@@ -1214,13 +1217,13 @@
 		"Email"
 	],
 	"Email to note": [
-		"Conversion email en note"
+		"Conversion de l'email en note"
 	],
 	"Email to Note": [
-		"Conversion email en note"
+		"Conversion de l'email en note"
 	],
 	"Email To Note, login information": [
-		"\"Email to note\", info de connexion"
+		"\"Email to note\", information de connexion"
 	],
 	"Emails": [
 		"Emails"
@@ -1247,7 +1250,7 @@
 		"Activer la syntaxe pour abréviations"
 	],
 	"Enable audio player": [
-		"Activer lecteur audio"
+		"Activer le lecteur audio"
 	],
 	"Enable biometrics authentication?": [
 		"Activer l'authentification biométrique ?"
@@ -1292,13 +1295,13 @@
 		"Activer ou désactiver les modules"
 	],
 	"Enable PDF viewer": [
-		"Activer visionneuse PDF"
+		"Activer la visionneuse PDF"
 	],
 	"Enable plugin support": [
 		"Activer la prise en charge des plugins"
 	],
 	"Enable soft breaks": [
-		"Activer retours à la ligne \"doux\""
+		"Activer les retours à la ligne \"doux\""
 	],
 	"Enable spell checking in Markdown editor": [
 		"Activer la vérification orthographique dans l'éditeur Markdown"
@@ -1316,7 +1319,7 @@
 		"Activer le typographe"
 	],
 	"Enable video player": [
-		"Activer lecteur vidéo"
+		"Activer le lecteur vidéo"
 	],
 	"Enable Web Clipper Service": [
 		"Activer le service du Web Clipper"
@@ -1346,7 +1349,7 @@
 		"Chiffrement"
 	],
 	"Encryption Config": [
-		"Config chiffrement"
+		"Config. chiffrement"
 	],
 	"Encryption is: %s": [
 		"Le chiffrement est : %s"
@@ -2139,7 +2142,8 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"La plupart des plugins ont leur code source disponible sur le site web du plugin."
 	],
-	"Move %d notes to notebook \"%s\"?": [
+	"Move %d note to notebook \"%s\"?": [
+		"Déplacer %d note vers carnet \"%s\" ?",
 		"Déplacer %d notes vers carnet \"%s\" ?"
 	],
 	"Move down": [
@@ -2538,8 +2542,8 @@
 	"PDF File": [
 		"Fichier PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"Par utilisateur. Minimum %d utilisateurs."
+	"Per user. Minimum of 2 users.": [
+		"Par utilisateur. Minimum 2 utilisateurs."
 	],
 	"Permanently delete note": [
 		"Supprimer définitivement la note"
@@ -2550,7 +2554,8 @@
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Supprimer définitivement le carnet \"%s\" ?\n\nToutes les notes et sous-carnets de ce carnet seront définitivement supprimés."
 	],
-	"Permanently delete these %d notes?": [
+	"Permanently delete this note?": [
+		"Supprimer définitivement cette note ?",
 		"Supprimer définitivement ces %d notes ?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
@@ -3691,9 +3696,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Cela supprimera définitivement tous les éléments de la corbeille. Continuer?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Cela supprimera définitivement la note \"%s\". Continuer?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Cela enlèvera le carnet de votre collection et vous n'aurez plus accès à son contenu. Souhaitez vous continuer ?"

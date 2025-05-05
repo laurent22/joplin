@@ -562,6 +562,12 @@ function useMenu(props: Props) {
 				submenu: switchProfileMenuItems,
 			};
 
+			const profilesAndAppInstancesItems = [
+				openSecondaryAppInstance,
+				openPrimaryAppInstance,
+				switchProfileItem,
+			];
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let toolsItems: any[] = [];
 
@@ -673,7 +679,7 @@ function useMenu(props: Props) {
 					platforms: ['darwin'],
 				},
 
-				shim.isMac() ? noItem : switchProfileItem,
+				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
@@ -723,9 +729,7 @@ function useMenu(props: Props) {
 					printItem, {
 						type: 'separator',
 					},
-					switchProfileItem,
-					openSecondaryAppInstance,
-					openPrimaryAppInstance,
+					...profilesAndAppInstancesItems,
 				],
 			};
 

@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" nie posiada wymaganej właściwości \"%s\"."
 	],
-	"%d days": [
-		"%d dni"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB przestrzeni dyskowej"
 	],
-	"%d hour": [
-		"%d godzina"
-	],
-	"%d hours": [
-		"%d godzin"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB na notatkę lub załącznik"
-	],
-	"%d minutes": [
-		"%d minut"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notatki spełniają wzór. Usunąć je?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notatek"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1892,9 +1874,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Większość wtyczek posiada kod źródłowy dostępny do wglądu na stronie internetowej danej wtyczki."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Przenieść %d notatek do notatnika \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2221,9 +2200,6 @@
 	],
 	"PDF File": [
 		"Plik PDF"
-	],
-	"Per user. Minimum of %d users.": [
-		"Na użytkownika. Minimum %d użytkowników."
 	],
 	"Permission needed": [
 		"Potrzebne uprawnienie"
