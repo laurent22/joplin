@@ -1,12 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: new_section 1`] = `
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: new_section 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,13 +97,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: title 1`] = `
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: title 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,13 +137,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: A page can have any width it wants 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>A page can have any width it wants?</title>
@@ -195,13 +177,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: A page with a lot of svgs 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with a lot of svgs 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>A page with a lot of svgs</title>
@@ -239,13 +215,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: A page with text and drawing above it 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with text and drawing above it 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>A page with text and drawing above it</title>
@@ -289,13 +259,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: A simple filename 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A simple filename 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>A simple filename</title>
@@ -333,13 +297,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Page with more than one font size 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Page with more than one font size 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>Page with more than one font size</title>
@@ -380,13 +338,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Quick Notes 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Quick Notes 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -493,13 +445,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: text 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: text 1`] = `
 "<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta charset="UTF-8" />
     <title>text</title>
@@ -541,13 +487,7 @@ Check packages/onenote-converter/README.md for more instructions
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should extract svgs 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
- 1`] = `
+exports[`InteropService_Importer_OneNote should extract svgs 1`] = `
 {
   "html": "<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>
 
@@ -584,13 +524,7 @@ Check packages/onenote-converter/README.md for more instructions
 }
 `;
 
-exports[`InteropService_Importer_OneNote should extract svgs 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
- 2`] = `
+exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
 {
   "html": "<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
@@ -858,13 +792,7 @@ Check packages/onenote-converter/README.md for more instructions
 }
 `;
 
-exports[`InteropService_Importer_OneNote should ignore broken characters at the start of paragraph 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
- 1`] = `
+exports[`InteropService_Importer_OneNote should ignore broken characters at the start of paragraph 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -936,13 +864,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should import a simple OneNote notebook 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Page title 1`] = `
+exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -982,13 +904,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Quick Notes 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Quick Notes 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1091,13 +1007,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1137,13 +1047,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: wikipedia link 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: wikipedia link 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1183,13 +1087,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: 风景  (Web view) 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1229,13 +1127,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: 风景 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1274,13 +1166,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render audio as links to resource 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: My title 1`] = `
+exports[`InteropService_Importer_OneNote should render audio as links to resource: My title 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1325,13 +1211,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render audio as links to resource 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Quick Notes 1`] = `
+exports[`InteropService_Importer_OneNote should render audio as links to resource: Quick Notes 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1428,13 +1308,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Is Mexico safe for shooting Street Photography 1`] = `
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1476,13 +1350,7 @@ Check packages/onenote-converter/README.md for more instructions
 </html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker 
---------------------------------------
-IF THIS IS FAILING IN THE CI
-you can test it locally
-Check packages/onenote-converter/README.md for more instructions
---------------------------------------
-: Quick Notes 1`] = `
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Quick Notes 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
 <head>
