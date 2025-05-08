@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: summoner <summoner@vivaldi.net>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -620,7 +622,7 @@ msgstr "Mellékletütközés: „%s”"
 
 #: packages/lib/models/settings/builtInMetadata.ts:408
 msgid "Attachment download behaviour"
-msgstr "A mellékletek letöltésének működése"
+msgstr "Mellékletek letöltésének működése"
 
 #: packages/lib/services/ReportService.ts:311
 msgid "Attachments"
@@ -1136,11 +1138,11 @@ msgstr "Parancs"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
-msgstr "Parancs paletta"
+msgstr "Parancspaletta"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/commandPalette.ts:7
 msgid "Command palette..."
-msgstr "Parancs paletta…"
+msgstr "Parancspaletta…"
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1998,7 +2000,7 @@ msgstr "Szerkesztő"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx:40
 msgid "Editor actions"
-msgstr "Szerkesztő-műveletek"
+msgstr "Szerkesztőműveletek"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1109
 msgid "Editor font"
@@ -2357,7 +2359,7 @@ msgstr "%s kibontása"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
 msgid "Expand all notebooks"
-msgstr "Az összes jegyzetfüzet kibontása"
+msgstr "Összes jegyzetfüzet kibontása"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2517,7 +2519,7 @@ msgstr "Keresési index javítása…"
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:10
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:11
 msgid "Focus"
-msgstr "Fókuszálás"
+msgstr "Fókuszálás erre"
 
 #: packages/lib/models/settings/builtInMetadata.ts:853
 #: packages/lib/models/settings/builtInMetadata.ts:870
@@ -3859,7 +3861,7 @@ msgstr "Jegyzetlista stílusa"
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:490
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
-msgstr "Jegyzet-tulajdonságok"
+msgstr "Jegyzettulajdonságok"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:124
@@ -4041,9 +4043,8 @@ msgid "Open it"
 msgstr "Megnyitás"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "%s megnyitása"
+msgstr "Napló megnyitása"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -4059,7 +4060,7 @@ msgstr "Profilkönyvtár megnyitása"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr "A másodlagos alkalmazáspéldány megnyitása…"
+msgstr "Másodlagos alkalmazáspéldány megnyitása…"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
 msgid "Open settings"
@@ -4119,11 +4120,11 @@ msgstr "Kimeneti formátum: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1314
 msgid "Page orientation for PDF export"
-msgstr "Oldal tájolása a PDF fájlba való exportáláshoz"
+msgstr "Oldal tájolása a PDF-fájlba való exportáláshoz"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1304
 msgid "Page size for PDF export"
-msgstr "Oldal méretezése a PDF fájlba való exportáláshoz"
+msgstr "Oldal méretezése a PDF-fájlba való exportáláshoz"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
@@ -4382,19 +4383,19 @@ msgstr ""
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
-"Használja a Ctrl+D billentyű-kombinációt, vagy írja be az „exit” parancsot "
+"Nyomja meg a Ctrl+D billentyű-kombinációt, vagy írja be az „exit” parancsot "
 "az alkalmazás bezárásához"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:70
 msgid "Press the shortcut"
-msgstr "Használja a billentyűparancsot"
+msgstr "Nyomja meg a billentyűparancsot"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:69
 msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
-"Használja a billentyűparancsot, majd nyomja meg az ENTER-t. Vagy nyomja meg "
+"Nyomja meg a billentyűparancsot, majd nyomja meg az ENTER-t. Vagy nyomja meg "
 "a BACKSPACE-t a billentyűparancs törléséhez."
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
@@ -4610,7 +4611,7 @@ msgstr "A(z) %s eltávolítása a megosztásból"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:111
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "A(z) „%s” címke eltávolítása az összes megjegyzésből?"
+msgstr "A(z) „%s” címke eltávolítása az összes jegyzetről?"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:113
 msgid "Remove this search from the sidebar?"
@@ -4835,8 +4836,8 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"A biztonsági üzemmód jelenleg aktív. A jegyzet-renderelés és az összes "
-"bővítmény ideiglenesen le van tiltva."
+"A biztonságos mód jelenleg aktív. A jegyzetrenderelés és az összes bővítmény "
+"ideiglenesen le van tiltva."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:129
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:93
@@ -4954,7 +4955,7 @@ msgstr "Kijelölés"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:366
 msgid "Select all"
-msgstr "Az összes kijelölése"
+msgstr "Összes kijelölése"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
 msgid "Select emoji..."
@@ -5094,7 +5095,7 @@ msgstr "Speciális beállítások megjelenítése"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Show all"
-msgstr "Az összes megjelenítése"
+msgstr "Összes megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:633
 msgid "Show completed to-dos"
@@ -5130,7 +5131,7 @@ msgstr "Rendszerezési sorrend gombjainak megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1028
 msgid "Show tray icon"
-msgstr "Tálca ikon megjelenítése"
+msgstr "Tálcaikon megjelenítése"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:265
 msgid "Show/hide the sidebar"
@@ -5161,9 +5162,8 @@ msgid "Sidebar"
 msgstr "Oldalsáv"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "Bejelentkezés a Joplin Cloudba."
+msgstr "Regisztráció a Joplin Cloudba"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5252,7 +5252,7 @@ msgstr "Jegyzetek rendezése"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:138
 msgid "Sort selected lines"
-msgstr "A kijelölt sorok rendezése"
+msgstr "Kijelölt sorok rendezése"
 
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
@@ -5297,7 +5297,7 @@ msgstr "Osztott nézet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1043
 msgid "Start application minimised in the tray icon"
-msgstr "Alkalmazás indításakor kicsinyítse azt a tálcára"
+msgstr "Indításakor kicsinyítse az alkalmazást a tálcára"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:199
 msgid "Start recording"
@@ -6058,8 +6058,7 @@ msgstr[1] "A következő jegyzetfüzetek nem helyezhetők át: %s"
 
 #: packages/lib/models/Note.ts:130
 msgid "This note does not have geolocation information."
-msgstr ""
-"Ez a megjegyzés nem tartalmaz földrajzi helymeghatározási információkat."
+msgstr "Ez a jegyzet nem tartalmaz földrajzi helymeghatározási információkat."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:229
 msgid "This note has been modified:"
@@ -6071,8 +6070,8 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Ennek a jegyzetnek nincs tartalma. Kattintson a(z) „%s” gombra a "
-"szerkesztőre való váltáshoz és a jegyzet szerkesztéséhez."
+"Ennek a jegyzetnek nincs tartalma. Kattintson a(z) „%s” gombra a szerkesztő "
+"be-/kikapcsolásához és a jegyzet szerkesztéséhez."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:65
 msgid "This note has no history"
@@ -6153,7 +6152,7 @@ msgstr "Cím"
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Ahhoz, hogy a Joplin szinkronizálhasson a Dropbox-szal, kövesse az alábbi "
+"Ahhoz, hogy a Joplin szinkronizálhasson a Dropboxszal, kövesse az alábbi "
 "lépéseket:"
 
 #: packages/app-cli/app/command-sync.ts:110
@@ -6241,63 +6240,63 @@ msgstr "teendő: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
-msgstr "Az összes jegyzetfüzet váltása"
+msgstr "Összes jegyzetfüzet be/ki"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
-msgstr "Megjegyzés váltása"
+msgstr "Megjegyzés be/ki"
 
 #: packages/app-desktop/gui/MenuBar.tsx:965
 msgid "Toggle development tools"
-msgstr "Fejlesztőeszközök váltása"
+msgstr "Fejlesztőeszközök be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.ts:6
 msgid "Toggle editor layout"
-msgstr "Szerkesztő elrendezésének váltása"
+msgstr "Szerkesztő elrendezése be/ki"
 
 #: packages/lib/commands/toggleEditorPlugin.ts:11
 msgid "Toggle editor plugin"
-msgstr "Szerkesztőbővítmény váltása"
+msgstr "Szerkesztőbővítmény be/ki"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
 msgid "Toggle editor tab key navigation"
-msgstr "A szerkesztőfül billentyűs navigációjára váltás"
+msgstr "Szerkesztőfül billentyűs navigációja be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
-msgstr "Szerkesztők váltása"
+msgstr "Átváltás a szerkesztők között"
 
 #: packages/app-desktop/commands/toggleExternalEditing.ts:8
 msgid "Toggle external editing"
-msgstr "Külső szerkesztés váltása"
+msgstr "Átváltás külső szerkesztőre"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.ts:7
 msgid "Toggle menu bar"
-msgstr "Menüsáv váltása"
+msgstr "Menüsáv be/ki"
 
 #: packages/lib/models/Setting.ts:1219
 msgid "Toggle note history, keep notes for"
-msgstr "Jegyzet előéletének váltása, jegyzetek megtartása"
+msgstr "Jegyzet előéletének be-/kikapcsolása, jegyzetek megtartása ehhez"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
-msgstr "Jegyzetlista váltása"
+msgstr "Jegyzetlista be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/togglePerFolderSortOrder.ts:7
 msgid "Toggle own sort order"
-msgstr "Saját rendezési sorrend váltása"
+msgstr "Saját rendezési sorrend be/ki"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:434
 msgid "Toggle plugin editor"
-msgstr "Bővítményszerkesztő váltása"
+msgstr "Bővítményszerkesztő be/ki"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
-msgstr "Biztonságos mód váltása"
+msgstr "Biztonságos mód be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.ts:10
 msgid "Toggle sidebar"
-msgstr "Oldalsáv váltása"
+msgstr "Oldalsáv be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"
@@ -6566,7 +6565,7 @@ msgstr ""
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:185
 msgid "Use spell checker"
-msgstr "Használja a helyesírás-ellenőrzőt"
+msgstr "Helyesírás-ellenőrző használata"
 
 #: packages/app-cli/app/command-help.ts:81
 msgid ""
@@ -6584,7 +6583,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1402
 msgid "Use the legacy Markdown editor"
-msgstr "Használja a régi markdown-szerkesztőt"
+msgstr "Régi markdown-szerkesztő használata"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:552
 msgid ""
