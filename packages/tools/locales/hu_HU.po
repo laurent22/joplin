@@ -1322,7 +1322,7 @@ msgstr "Token másolása"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "Copy version info"
-msgstr "Verzió-információk másolása"
+msgstr "Verzióinformációk másolása"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -2095,7 +2095,7 @@ msgstr "~sub~ szintaxis engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1001
 msgid "Enable abbreviation syntax"
-msgstr "Rövidítés-szintaxis engedélyezése"
+msgstr "Rövidítésszintaxis engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:992
 msgid "Enable audio player"
@@ -2165,7 +2165,7 @@ msgstr "PDF-megjelenítő engedélyezése"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:942
 msgid "Enable plugin support"
-msgstr "Bővítmény-támogatás engedélyezése"
+msgstr "Bővítménytámogatás engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:984
 msgid "Enable soft breaks"
