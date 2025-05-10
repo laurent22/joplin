@@ -1,69 +1,69 @@
 # Contributing to Joplin
 
-## User support
+## User Support
 
-The [Joplin Forum](https://discourse.joplinapp.org/) is the community driven place for user support, general discussion about Joplin, problems with installation, new features and software development questions. It is possible to login with your GitHub account. Don't use the issue tracker for support questions.
+The [Joplin Forum](https://discourse.joplinapp.org/) is the community-driven hub for user support, general discussion about Joplin, installation issues, feature requests, and software development questions. You can log in using your GitHub account. **Please avoid using the GitHub issue tracker for support questions.**
 
-## Reporting a bug
+## Reporting a Bug
 
-File bugs in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Please follow these guidelines:
+To report a bug, please use the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). Follow these guidelines when submitting an issue:
 
-- Search existing issues first, make sure yours hasn't already been reported.
-- Please follow the template.
-- Consider [enabling debug mode](https://joplinapp.org/help/apps/debugging/) so that you can provide as much details as possible when reporting the issue.
-- Stay on topic, but describe the issue in detail so that others can **reproduce** it.
-- **Provide a screenshot** if possible. A screenshot showing the problem is often more useful than a paragraph describing it.
-- For web clipper bugs, **please provide the URL causing the issue**. Sometimes the clipper works in one page but not in another so it is important to know what URL has a problem.
+- **Search existing issues**: Before opening a new issue, check if it has already been reported.
+- **Follow the template**: Ensure you provide the necessary details to help others understand the problem.
+- **Enable debug mode**: Consider [enabling debug mode](https://joplinapp.org/help/apps/debugging/) for more information when reporting the issue.
+- **Stay on topic**: Describe the issue clearly and concisely to help others **reproduce** it.
+- **Provide a screenshot**: A screenshot can often be more helpful than a written description.
+- **For web clipper issues**: Include the **URL** causing the problem, as it may work on some pages but not others.
 
-## Feature requests
+## Feature Requests
 
-Feature requests **must be opened and discussed on the [forum](https://discourse.joplinapp.org/c/features)**. After they have been accepted, they can be added to the GitHub tracker.
+Feature requests must be discussed on the [Joplin Forum](https://discourse.joplinapp.org/c/features). Once accepted, they can be added to the GitHub tracker.
 
-Please check that your request has not already been posted on the forum or the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue). If it has, **up-voting the issue or topic** increases the chances it'll be noticed and implemented in the future. "+1" comments are not tracked.
+- **Check for existing requests**: Ensure your request has not already been posted on the forum or the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue).
+- **Upvote existing requests**: If you find a similar request, upvoting it increases the chances it will be noticed and implemented.
+- **Avoid multiple requests in one topic**: One request per topic helps us track and discuss it more efficiently.
 
-Avoid listing multiple requests in one topic. One topic per request makes it easier to track and discuss it.
+When submitting a pull request, remember to [test your code](#automated-tests).
 
-Finally, when submitting a pull request, don't forget to [test your code](#automated-tests).
+## Contributing to Joplin's Translation
 
-## Contributing to Joplin's translation
+Joplin is available in multiple languages, thanks to the contributions of its users. If you want to help translate Joplin or keep existing translations up-to-date, please refer to the [Localisation](https://joplinapp.org/help/dev/localisation) documentation.
 
-Joplin is available in multiple languages thanks to the help of its users. You can help translate Joplin to your language or keep it up to date. Please read the documentation about [Localisation](https://joplinapp.org/help/dev/localisation).
+## Contributing to Joplin's Code
 
-## Contributing to Joplin's code
+To start contributing to Joplin's codebase, follow these guidelines before submitting a pull request:
 
-If you want to start contributing to the project's code, please follow these guidelines before creating a pull request: 
+- **Detailed pull request description**: The PR description should include a full, self-contained explanation of the feature. Describe what the feature does, how it works, and include examples and screenshots. Avoid vague descriptions like "Implement feature #4345."
+- **Bug fixes are encouraged**: Start by reviewing the [list of open bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
+- **Start with good first issues**: If you're new, consider working on a [good first issue](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). These issues are meant to be beginner-friendly and include the necessary details to guide you.
+- **Discuss large features before starting**: Before adding a new feature, open a discussion on the [GitHub Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue) or the [Joplin Forum](https://discourse.joplinapp.org/).
+- **Large changes require discussion**: Changes larger than 50 lines of code should be discussed on the [Joplin Forum](https://discourse.joplinapp.org/), so you don't spend time on a feature that may not be accepted.
+- **Ensure compatibility with other apps**: All Joplin apps share the same backend, so ensure any backend changes work across all platforms.
+- **Avoid bulk changes**: Pull requests with many changes, such as automated fixes (e.g., spell-checking), will not be accepted unless previously discussed on the forum.
+- **Focus on a single issue**: PRs addressing multiple issues are likely to stall. Focus on one issue per PR for easier review.
+- **Do not resolve review comments prematurely**: Let the reviewer mark comments as resolved to keep track of pending issues.
 
-- The top post of the pull request should contain a full, self-contained explanation of the feature: what it does, how it does it, with examples of usage and screenshots. Also explain why you want to add this - what problem does it solve. Do not simply add a text `Implement feature #4345` or link to forum posts, because the information there will most likely be outdated or confusing (multiple discussions and opinions). The pull request needs to be self-contained.
-- Bug fixes are always welcome. Start by reviewing the [list of bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
-- A good way to easily start contributing is to pick and work on a [good first issue](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). We try to make these issues as clear as possible and provide basic info on how the code should be changed, and if something is unclear feel free to ask for more information on the issue.
-- Before adding a new feature, ask about it in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue) or the [Joplin Forum](https://discourse.joplinapp.org/), or check if existing discussions exist to make sure the new functionality is desired.
-- **Changes that will consist of more than 50 lines of code should be discussed on the [Joplin Forum](https://discourse.joplinapp.org/)**, so that you don't spend too much time implementing something that might not be accepted.
-- All the applications share the same backend (database, synchronisation, settings, models, business logic, etc.) so if you change something in the backend in one app, make sure it still works in the other apps. Usually it does, but keep this in mind.
-- Pull requests that make many changes using an automated tool, like for spell fixing, styling, etc. will not be accepted. An exception would be if the changes have been discussed in the forum and someone has agreed to review **and test** the pull request.
-- Pull requests that address multiple issues will most likely stall and eventually be closed. This is because we might be fine with one of the changes but not with others and untangling that kind of pull request is too much hassle both for maintainers and the person who submitted it. So most of the time someone gives up and the PR gets closed. So please keep the pull request focused on one issue.
-- **Do not mark your reviewer's comments as "resolved"**. If you do that, the comments will be hidden and the reviewer will not know what are the pending issues in the pull request. Only the reviewer should resolve the comments.
-
-Building the apps is relatively easy - please [see the build instructions](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md) for more details.
+For detailed instructions, please refer to the [build instructions](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md).
 
 ### Signing the Individual Contributor License Agreement
 
-All contributors to the project must sign our [Individual Contributor License Agreement](https://raw.githubusercontent.com/laurent22/joplin/dev/readme/cla.md).
+All contributors must sign the [Individual Contributor License Agreement](https://raw.githubusercontent.com/laurent22/joplin/dev/readme/cla.md).
 
-### Coding style
+### Coding Style
 
-Please see [the coding style document](https://github.com/laurent22/joplin/blob/dev/readme/dev/coding_style.md).
+Please refer to the [coding style document](https://github.com/laurent22/joplin/blob/dev/readme/dev/coding_style.md).
 
-### GUI style
+### GUI Style
 
-For changes made to the Desktop and mobile clients that affect the user interface, refer to `packages/lib/theme.ts` for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
+For UI changes to the desktop and mobile clients, refer to `packages/lib/theme.ts` for styling guidelines. The goal is to maintain a consistent UI across all platforms for a seamless user experience.
 
-### Automated tests
+### Automated Tests
 
-When submitting a pull request for a new feature or a bug fix, please add automated tests. We use [Jest](https://jestjs.io/) as a testing framework so you will need to be familiar with it or go through their documentation.
+When submitting a pull request for a new feature or bug fix, please include automated tests. We use [Jest](https://jestjs.io/) for testing, so familiarize yourself with its documentation.
 
-#### Running the tests
+#### Running Tests
 
-To run all the test units, run from the root:
+To run all unit tests, execute the following command from the root directory:
 
 ```sh
 yarn test
