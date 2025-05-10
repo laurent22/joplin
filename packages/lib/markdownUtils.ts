@@ -216,12 +216,19 @@ const markdownUtils = {
 
 	titleFromBody(body: string) {
 		if (!body) return '';
+		const spaceEntities = /&nbsp;/g;
+		body = body.replace(spaceEntities, ' ');
+		const lines = body.trim().split('\n');
+		const title = lines[0].trim();
+
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
 		const filterRegex = /^[# \n\t*`-]*/;
-		const lines = body.trim().split('\n');
-		const title = lines[0].trim();
-		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0, 80);
+		return title
+			.replace(filterRegex, '')
+			.replace(mdLinkRegex, '$1')
+			.replace(emptyMdLinkRegex, '$1')
+			.substring(0, 80);
 	},
 };
 

@@ -1,5 +1,5 @@
 import SearchEngine from './SearchEngine';
-import Note from '../../models/Note';
+import Note, { PreviewsOptions } from '../../models/Note';
 import Setting from '../../models/Setting';
 
 export interface NotesForQueryOptions {
@@ -55,10 +55,10 @@ export default class SearchEngineUtils {
 			todoCompletedAutoAdded = true;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const previewOptions: any = { order: [],
+		const previewOptions: PreviewsOptions = { order: [],
 			fields: fields,
-			conditions: [`id IN ('${noteIds.join('\',\'')}')`], ...options };
+			conditions: [`id IN (${Note.escapeIdsForSql(noteIds)})`],
+			...options };
 
 		const notes = await Note.previews(null, previewOptions);
 

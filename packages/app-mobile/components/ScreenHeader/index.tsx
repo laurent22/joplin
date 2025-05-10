@@ -25,6 +25,7 @@ import WebBetaButton from './WebBetaButton';
 
 import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
+import CommandService from '@joplin/lib/services/CommandService';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -67,6 +68,7 @@ interface ScreenHeaderProps {
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
 	showContextMenuButton?: boolean;
+	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
 
 	saveButtonDisabled?: boolean;
@@ -420,6 +422,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const renderTogglePluginEditorButton = (styles: any, onPress: OnPressCallback, disabled: boolean) => {
+			if (!this.props.showPluginEditorButton) return null;
+
+			return (
+				<IconButton
+					onPress={onPress}
+					disabled={disabled}
+
+					themeId={themeId}
+					description={_('Toggle plugin editor')}
+					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+
+					iconName='ionicon eye'
+					iconStyle={styles.topIcon}
+				/>
+			);
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
@@ -481,15 +502,15 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function sortButton(styles: any, onPress: OnPressCallback) {
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
+					themeId={themeId}
 
-					accessibilityLabel={_('Sort notes by')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="filter-outline" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					description={_('Sort notes by')}
+					iconName='ionicon filter-outline'
+					contentWrapperStyle={styles.iconButton}
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
@@ -543,7 +564,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await shim.showConfirmationDialog(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await shim.showConfirmationDialog(_n('Move %d note to notebook "%s"?', 'Move %d notes to notebook "%s"?', noteIds.length, noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
@@ -604,12 +625,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const togglePluginEditorButton = renderTogglePluginEditorButton(this.styles(), () => CommandService.instance().execute('toggleEditorPlugin'), false);
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient
 		// space while in use, we allow certain buttons to be hidden.
 		const hideableRightComponents = <>
 			{pluginPanelsComp}
 			{betaIconComp}
+			{togglePluginEditorButton}
 		</>;
 
 		const titleComp = createTitleComponent(hideableRightComponents);

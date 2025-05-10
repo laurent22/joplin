@@ -8,7 +8,7 @@ import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
-import produce from 'immer';
+import { produce } from 'immer';
 import { PluginManifest } from './utils/types';
 import isCompatible from './utils/isCompatible';
 import { AppType } from './api/types';
@@ -201,6 +201,14 @@ export default class PluginService extends BaseService {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
 		return this.plugins_[id];
+	}
+
+	public safePluginNameById(id: string) {
+		if (!this.plugins_[id]) {
+			return id;
+		}
+
+		return this.pluginById(id).manifest?.name ?? 'Unknown';
 	}
 
 	public viewControllerByViewId(id: string): ViewController|null {

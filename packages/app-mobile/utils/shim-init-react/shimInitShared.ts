@@ -79,6 +79,10 @@ const shimInitShared = () => {
 		return Platform.OS;
 	};
 
+	shim.platformArch = () => {
+		return ''; // Not supported
+	};
+
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
 		return injectedJs[name as keyof typeof injectedJs];

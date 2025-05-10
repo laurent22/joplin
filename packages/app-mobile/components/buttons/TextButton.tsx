@@ -4,6 +4,7 @@ import { themeStyle } from '../global-style';
 import { Button, ButtonProps } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { AppState } from '../../utils/types';
+import { TextStyle, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 
 export enum ButtonType {
 	Primary,
@@ -12,9 +13,16 @@ export enum ButtonType {
 	Link,
 }
 
-interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'> {
+export enum ButtonSize {
+	Normal,
+	Larger,
+}
+
+interface Props extends Omit<ButtonProps, 'item'|'onPress'|'children'|'style'> {
 	themeId: number;
 	type: ButtonType;
+	size?: ButtonSize;
+	style?: TextStyle;
 	onPress: ()=> void;
 	children: ReactNode;
 }
@@ -41,12 +49,25 @@ const useStyles = ({ themeId }: Props) => {
 			primaryButton: { },
 		};
 
-		return { themeOverride };
+		return {
+			themeOverride,
+			styles: StyleSheet.create({
+				largeContainer: {
+					paddingVertical: 2,
+					borderWidth: 2,
+					borderRadius: 10,
+				},
+				largeLabel: {
+					fontSize: theme.fontSize,
+					fontWeight: 'bold',
+				},
+			}),
+		};
 	}, [themeId]);
 };
 
 const TextButton: React.FC<Props> = props => {
-	const { themeOverride } = useStyles(props);
+	const { themeOverride, styles } = useStyles(props);
 
 	let mode: ButtonProps['mode'];
 	let theme: ButtonProps['theme'];
@@ -68,8 +89,19 @@ const TextButton: React.FC<Props> = props => {
 		return exhaustivenessCheck;
 	}
 
+	let labelStyle: TextStyle|undefined = undefined;
+	const containerStyle: StyleProp<ViewStyle>[] = [];
+	if (props.size === ButtonSize.Larger) {
+		labelStyle = styles.largeLabel;
+		containerStyle.push(styles.largeContainer);
+	}
+
+	if (props.style) containerStyle.push(props.style);
+
 	return <Button
+		labelStyle={labelStyle}
 		{...props}
+		style={containerStyle}
 		theme={theme}
 		mode={mode}
 		onPress={props.onPress}

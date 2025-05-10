@@ -116,7 +116,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 			<tbody>
 				{filteredResources.map((resource: InnerResource, index: number) =>
 					<tr key={index}>
-						<td style={titleCellStyle} className="titleCell">
+						<td id={`title-${resource.id}`} style={titleCellStyle} className="titleCell">
 							<a
 								style={{ color: theme.urlColor }}
 								href="#"
@@ -126,7 +126,14 @@ const ResourceTableComp = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">{prettyBytes(resource.size)}</td>
 						<td style={cellStyle} className="dataCell">{resource.id}</td>
 						<td style={cellStyle} className="dataCell">
-							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
+							<button
+								id={`delete-${resource.id}`}
+								aria-labelledby={`delete-${resource.id} title-${resource.id}`}
+								style={theme.buttonStyle}
+								onClick={() => props.onResourceDelete(resource)}
+							>
+								{_('Delete')}
+							</button>
 						</td>
 					</tr>,
 				)}

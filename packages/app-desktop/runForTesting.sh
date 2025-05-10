@@ -180,7 +180,7 @@ fi
 
 if [ "$IS_DESKTOP" = "1" ]; then
 	cd "$ROOT_DIR/packages/app-desktop"
-	yarn start --profile "$PROFILE_DIR"
+	yarn start --profile "$PROFILE_DIR" --alt-instance-id $USER_NUM
 else
 	cd "$ROOT_DIR/packages/app-cli"
 	if [[ $CMD == "--" ]]; then

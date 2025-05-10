@@ -9,7 +9,6 @@
 @use 'gui/JoplinCloudLoginScreen.scss' as joplin-cloud-login-screen;
 @use 'gui/NoteListHeader/style.scss' as note-list-header;
 @use 'gui/UpdateNotification/style.scss' as update-notification;
-@use 'gui/TrashNotification/style.scss' as trash-notification;
 @use 'gui/Sidebar/style.scss' as sidebar-styles;
 @use 'gui/NoteEditor/style.scss' as note-editor-styles;
 @use 'gui/KeymapConfig/style.scss' as keymap-styles;
@@ -24,7 +23,6 @@
 // See https://sasscss.org/documentation/at-rules/import#plain-css-imports.
 @import url('style/icons/style.css');
 @import url('vendor/lib/@fortawesome/fontawesome-free/css/all.min.css');
-@import url('vendor/lib/react-datetime/css/react-datetime.css');
 @import url('vendor/lib/smalltalk/css/smalltalk.css');
 @import url('vendor/lib/roboto-fontface/css/roboto/roboto-fontface.css');
 @import url('vendor/lib/codemirror/lib/codemirror.css');

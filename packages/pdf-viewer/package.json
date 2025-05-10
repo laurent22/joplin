@@ -1,6 +1,6 @@
 {
   "name": "@joplin/pdf-viewer",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Provides embedded PDF viewers for Joplin",
   "main": "dist/main.js",
   "types": "src/main.ts",
@@ -39,7 +39,7 @@
     "@fortawesome/fontawesome-svg-core": "6.1.2",
     "@fortawesome/free-solid-svg-icons": "6.1.2",
     "@fortawesome/react-fontawesome": "0.2.2",
-    "@joplin/lib": "~3.2",
+    "@joplin/lib": "~3.3",
     "async-mutex": "0.5.0",
     "pdfjs-dist": "2.16.105",
     "react": "18.3.1",

@@ -63,23 +63,70 @@ const Dialog: React.FC<Props> = props => {
 	</div>;
 };
 
+// We keep track of the mouse events to allow the action to be cancellable on the mouseup
+// If dialogElement is the source of the mouse event it means
+// that the user clicked in the dimmed background and not in the content of the dialog
+const useClickedOutsideContent = (dialogElement: HTMLDialogElement|null) => {
+	const mouseDownOutsideContent = useRef(false);
+	mouseDownOutsideContent.current	= false;
+	const [clickedOutsideContent, setClickedOutsideContent] = useState(false);
+
+	useEffect(() => {
+		if (!dialogElement) return () => {};
+
+		const mouseDownListener = (event: MouseEvent) => {
+			if (event.target === dialogElement) {
+				mouseDownOutsideContent.current = true;
+			} else {
+				mouseDownOutsideContent.current = false;
+			}
+		};
+		const mouseUpListener = (event: MouseEvent) => {
+			if (!mouseDownOutsideContent.current) return;
+			if (mouseDownOutsideContent.current && event.target === dialogElement) {
+				setClickedOutsideContent(true);
+				mouseDownOutsideContent.current = false;
+			} else {
+				setClickedOutsideContent(false);
+				mouseDownOutsideContent.current = false;
+			}
+		};
+
+		dialogElement.addEventListener('mousedown', mouseDownListener);
+		dialogElement.addEventListener('mouseup', mouseUpListener);
+
+		return () => {
+			dialogElement.removeEventListener('mousedown', mouseDownListener);
+			dialogElement.removeEventListener('mouseup', mouseUpListener);
+		};
+	}, [dialogElement]);
+
+	return [clickedOutsideContent, setClickedOutsideContent] as const;
+};
+
 const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCancelListener) => {
 	const [dialogElement, setDialogElement] = useState<HTMLDialogElement|null>(null);
 
 	const onCancelRef = useRef(onCancel);
 	onCancelRef.current = onCancel;
 
+	const [clickedOutsideContent, setClickedOutsideContent] = useClickedOutsideContent(dialogElement);
+
+	useEffect(() => {
+		if (clickedOutsideContent) {
+			const onCancel = onCancelRef.current;
+			if (onCancel) {
+				onCancel();
+			} else {
+				setClickedOutsideContent(false);
+			}
+		}
+	}, [clickedOutsideContent, setClickedOutsideContent]);
+
 	useEffect(() => {
 		if (!containerDocument) return () => {};
 
 		const dialog = containerDocument.createElement('dialog');
-		dialog.addEventListener('click', event => {
-			const onCancel = onCancelRef.current;
-			const isBackgroundClick = event.target === dialog;
-			if (isBackgroundClick && onCancel) {
-				onCancel();
-			}
-		});
 		dialog.classList.add('dialog-modal-layer');
 		dialog.addEventListener('cancel', event => {
 			const canCancel = !!onCancelRef.current;

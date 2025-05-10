@@ -1,7 +1,7 @@
 {
   "name": "@joplin/react-native-alarm-notification",
   "title": "React Native Alarm Notification for Joplin. Forked from https://github.com/emekalites/react-native-alarm-notification",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "schedule alarm with notification in react-native",
   "main": "index.js",
   "private": true,

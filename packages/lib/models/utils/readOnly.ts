@@ -92,7 +92,8 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	if (!item.share_id) return false;
 
 	// Item belongs to the user
-	if (shareState.shares.find(s => s.user.id === userId)) return false;
+	const parentShare = shareState.shares.find(s => s.id === item.share_id);
+	if (parentShare && parentShare.user?.id === userId) return false;
 
 	const shareUser = shareState.shareInvitations.find(si => si.share.id === item.share_id);
 

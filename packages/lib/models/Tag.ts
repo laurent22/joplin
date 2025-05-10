@@ -39,7 +39,7 @@ export default class Tag extends BaseItem {
 
 		return Note.previews(
 			null,
-			{ ...options, conditions: [`id IN ('${noteIds.join('\',\'')}')`] },
+			{ ...options, conditions: [`id IN (${this.escapeIdsForSql(noteIds)})`] },
 		);
 	}
 
@@ -153,7 +153,7 @@ export default class Tag extends BaseItem {
 
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
 		if (!tagIds.length) return [];
-		return this.modelSelectAll(`SELECT ${options.fields ? this.db().escapeFields(options.fields) : '*'} FROM tags WHERE id IN ('${tagIds.join('\',\'')}')`);
+		return this.modelSelectAll(`SELECT ${options.fields ? this.db().escapeFields(options.fields) : '*'} FROM tags WHERE id IN (${this.escapeIdsForSql(tagIds)})`);
 	}
 
 	public static async commonTagsByNoteIds(noteIds: string[]) {
@@ -168,7 +168,7 @@ export default class Tag extends BaseItem {
 				break;
 			}
 		}
-		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ('${commonTagIds.join('\',\'')}')`);
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.escapeIdsForSql(commonTagIds)})`);
 	}
 
 	public static async loadByTitle(title: string): Promise<TagEntity> {

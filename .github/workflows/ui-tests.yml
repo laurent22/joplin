@@ -1,0 +1,30 @@
+name: Joplin UI tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  Main:
+    # Don't run on forks
+    if: github.repository == 'laurent22/joplin'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-13, ubuntu-22.04, windows-2025]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup build environment
+        uses: ./.github/workflows/shared/setup-build-environment
+      - name: Build
+        run: yarn install
+      - name: Run UI tests
+        shell: bash
+        run: |
+          cd ${GITHUB_WORKSPACE}/packages/app-desktop/
+          bash ./integration-tests/run-ci.sh
+      # See https://playwright.dev/docs/ci-intro#setting-up-github-actions
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.os }}
+          path: packages/app-desktop/playwright-report/
+          retention-days: 7

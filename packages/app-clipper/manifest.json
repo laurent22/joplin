@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Joplin Web Clipper [DEV]",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "description": "Capture and save web pages and screenshots from your browser to Joplin.",
     "homepage_url": "https://joplinapp.org",
     "content_security_policy": {

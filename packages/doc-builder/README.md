@@ -8,12 +8,6 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 From `packages/tools`, run `node website/processDocs.js --env dev`
 
-### Getting the translations
-
-```shell
-CROWDIN_PERSONAL_TOKEN=..... yarn crowdinDownload
-```
-
 ### Building the doc
 
 From `packages/doc-builder`, run:
@@ -39,6 +33,23 @@ Alternatively, to test the doc website after it has been built, build it using o
 ## Translation
 
 Translation is done using https://crowdin.com/
+
+### Uploading the string
+
+```shell
+CROWDIN_PERSONAL_TOKEN=..... yarn crowdinUpload
+```
+
+### Getting the translations
+
+```shell
+CROWDIN_PERSONAL_TOKEN=..... yarn crowdinDownload
+```
+
+### Adding a translation
+
+- Make sure the translation is available in Crowdin
+- In `packages/doc-builder/docusaurus.config.js`, add the language code to `i18n.locales`
 
 ## Building for production
 

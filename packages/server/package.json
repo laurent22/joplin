@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "3.2.0",
+  "version": "3.3.13",
   "private": true,
   "scripts": {
     "start-dev": "yarn build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -24,14 +24,13 @@
   "dependencies": {
     "@aws-sdk/client-s3": "3.296.0",
     "@fortawesome/fontawesome-free": "5.15.4",
-    "@joplin/lib": "~3.2",
-    "@joplin/renderer": "~3.2",
-    "@joplin/utils": "~3.2",
+    "@joplin/lib": "~3.3",
+    "@joplin/renderer": "~3.3",
+    "@joplin/utils": "~3.3",
     "@koa/cors": "3.4.3",
     "@types/uuid": "9.0.7",
     "bcryptjs": "2.4.3",
     "bulma": "1.0.2",
-    "bulma-prefers-dark": "0.1.0-beta.1",
     "compare-versions": "6.1.1",
     "dayjs": "1.11.12",
     "formidable": "2.1.2",
@@ -61,7 +60,7 @@
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
-    "@joplin/tools": "~3.2",
+    "@joplin/tools": "~3.3",
     "@rmp135/sql-ts": "1.18.1",
     "@types/bcryptjs": "2.4.6",
     "@types/formidable": "2.0.6",

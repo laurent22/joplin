@@ -12,6 +12,7 @@ export interface PromptButtonSpec extends BaseButtonSpec {
 }
 
 export interface PromptOptions {
+	onDismiss?(): void;
 	cancelable?: boolean;
 }
 

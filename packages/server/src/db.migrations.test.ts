@@ -32,6 +32,7 @@ describe('db.migrations', () => {
 			'20211111134329_storage_index',
 			'20220121172409_email_recipient_default',
 			'20240413141308_changes_optimization',
+			'20250219183745_changes_optimization',
 		];
 
 		let startProcessing = false;

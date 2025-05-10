@@ -164,7 +164,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
 			{buttons}
 		</StyledRoot>
 	);

@@ -28,6 +28,7 @@ export interface NoteViewerControl {
 	domReady(): boolean;
 	setHtml(html: string, options: SetHtmlOptions): void;
 	send(channel: string, arg0?: unknown, arg1?: unknown): void;
+	focusLine(editorLine: number): void;
 	focus(): void;
 	hasFocus(): boolean;
 }
@@ -107,6 +108,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 					win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
 				}
 
+				if (channel === 'focusLine') {
+					win.postMessage({ target: 'webview', name: 'focusLine', data: { line: arg0 } }, '*');
+				}
+
 				// External code should use .setHtml (rather than send('setHtml', ...))
 				if (channel === 'setHtml') {
 					win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
@@ -138,6 +143,15 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			},
 			hasFocus: () => {
 				return webviewRef.current?.contains(parentDoc.activeElement);
+			},
+			focusLine: (lineNumber: number) => {
+				if (webviewRef.current) {
+					focus('NoteTextViewer::focusLine', webviewRef.current);
+					// A timeout seems necessary after focusing the viewer to prevent focus from jumping to the top
+					setTimeout(() => {
+						result.send('focusLine', lineNumber);
+					}, 100);
+				}
 			},
 		};
 		return result;
@@ -225,7 +239,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			style={viewerStyle}
 			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
 			allowFullScreen={true}
-			aria-label={_('Note editor')}
+			aria-label={_('Note viewer')}
 			src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
 		></iframe>
 	);
