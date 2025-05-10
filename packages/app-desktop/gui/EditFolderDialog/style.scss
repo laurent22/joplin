@@ -1,13 +1,26 @@
 .icon-selector-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start; // Align items to the start
+  gap: 12px; // Add consistent space between child elements
+  padding: 12px; // Add padding around the container
 }
 
 .icon-selector-row > .foldericon {
-	margin-right: 5px;
-	display: flex;
-	border: 1px solid var(--joplin-divider-color);
-	padding: 5px;
-	background-color: var(--joplin-background-color);
+  margin-right: 12px; // Adjust spacing between icons
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--joplin-divider-color); // Thicker border for better visibility
+  border-radius: 10px; // Rounded corners for smoother aesthetics
+  padding: 10px;
+  background-color: var(--joplin-background-color);
+  transition: all 0.3s ease-in-out;
+}
+
+// Adding a hover effect for interactivity
+.icon-selector-row > .foldericon:hover {
+  background-color: var(--joplin-hover-color); // Assuming this is defined
+  transform: scale(1.08); // Smooth scaling effect
 }
