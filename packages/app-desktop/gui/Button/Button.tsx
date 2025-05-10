@@ -15,13 +15,15 @@ export enum ButtonSize {
 	Normal = 2,
 }
 
-interface ButtonProps extends SpaceProps {
+type ReactButtonProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+
+interface ButtonProps extends Omit<ReactButtonProps, 'onClick'>, SpaceProps {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
 	iconLabel?: string;
 	className?: string;
-	onClick?: ()=> void;
+	onClick?: () => void;
 	color?: string;
 	iconAnimation?: string;
 	tooltip?: string;
@@ -45,129 +47,146 @@ const buttonSizePx = (props: ButtonProps) => {
 const isSquare = (props: ButtonProps) => props.iconOnly || props.isSquare;
 
 const StyledButtonBase = styled.button<ButtonProps>`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  height: ${(props) => buttonSizePx(props)}px;
-  min-height: ${(props) => buttonSizePx(props)}px;
-  max-height: ${(props) => buttonSizePx(props)}px;
-  width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : 'auto')};
-  min-width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : '100px')};
-  max-width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : 'none')};
-  box-sizing: border-box;
-  border-radius: 3px;
-  border-style: solid;
-  border-width: 1px;
-  padding: 0 ${(props) => (isSquare(props) ? 4 : 14)}px;
-  justify-content: center;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  user-select: none;
-  font-size: ${(props) => props.fontSize ?? 'inherit'};
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	height: ${(props) => buttonSizePx(props)}px;
+	min-height: ${(props) => buttonSizePx(props)}px;
+	max-height: ${(props) => buttonSizePx(props)}px;
+	width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : 'auto')};
+	min-width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : '100px')};
+	max-width: ${(props) => (isSquare(props) ? `${buttonSizePx(props)}px` : 'none')};
+	box-sizing: border-box;
+	border-radius: 3px;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0 ${(props) => (isSquare(props) ? 4 : 14)}px;
+	justify-content: center;
+	opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+	user-select: none;
+	font-size: ${(props) => props.fontSize ?? 'inherit'};
 `;
 
 const StyledIcon = styled.span<{ animation?: string }>`
-  font-size: ${(props) => props.theme.toolbarIconSize}px;
-  ${(props) => props.animation && `animation: ${props.animation}`};
+	font-size: ${(props) => props.theme.toolbarIconSize}px;
+	${(props) => props.animation && `animation: ${props.animation}`};
 `;
 
 const StyledButtonPrimary = styled(StyledButtonBase)`
-  border: none;
-  background-color: ${(props) => props.theme.backgroundColor5};
+	border: none;
+	background-color: ${(props) => props.theme.backgroundColor5};
 
-  &:hover {
-    background-color: ${(props) => props.theme.backgroundColorHover5};
-  }
+	&:hover {
+		background-color: ${(props) => props.theme.backgroundColorHover5};
+	}
 
-  &:active {
-    background-color: ${(props) => props.theme.backgroundColorActive5};
-  }
+	&:active {
+		background-color: ${(props) => props.theme.backgroundColorActive5};
+	}
 
-  ${StyledIcon} {
-    color: ${(props) => props.theme.color5};
-  }
+	${StyledIcon} {
+		color: ${(props) => props.theme.color5};
+	}
 `;
 
 const StyledButtonSecondary = styled(StyledButtonBase)`
-  border: 1px solid ${(props) => props.theme.borderColor4};
-  background-color: ${(props) => props.theme.backgroundColor4};
+	border: 1px solid ${(props) => props.theme.borderColor4};
+	background-color: ${(props) => props.theme.backgroundColor4};
 
-  &:hover {
-    background-color: ${(props) => props.theme.backgroundColorHover4};
-  }
+	&:hover {
+		background-color: ${(props) => props.theme.backgroundColorHover4};
+	}
 
-  &:active {
-    background-color: ${(props) => props.theme.backgroundColorActive4};
-  }
+	&:active {
+		background-color: ${(props) => props.theme.backgroundColorActive4};
+	}
 
-  ${StyledIcon} {
-    color: ${(props) => props.theme.color4};
-  }
+	${StyledIcon} {
+		color: ${(props) => props.theme.color4};
+	}
 `;
 
 const StyledButtonTertiary = styled(StyledButtonBase)`
-  border: 1px solid ${(props) => props.theme.color3};
-  background-color: ${(props) => props.theme.backgroundColor3};
+	border: 1px solid ${(props) => props.theme.color3};
+	background-color: ${(props) => props.theme.backgroundColor3};
 
-  &:hover {
-    background-color: ${(props) => props.theme.backgroundColorHoverDim3};
-  }
+	&:hover {
+		background-color: ${(props) => props.theme.backgroundColorHoverDim3};
+	}
 
-  &:active {
-    background-color: ${(props) => props.theme.backgroundColorActive3};
-  }
+	&:active {
+		background-color: ${(props) => props.theme.backgroundColorActive3};
+	}
 
-  ${StyledIcon} {
-    color: ${(props) => props.theme.color};
-  }
+	${StyledIcon} {
+		color: ${(props) => props.theme.color};
+	}
 `;
 
 const StyledButtonRecommended = styled(StyledButtonBase)`
-  border: 1px solid ${(props) => props.theme.borderColor4};
-  background-color: ${(props) => props.theme.warningBackgroundColor};
+	border: 1px solid ${(props) => props.theme.borderColor4};
+	background-color: ${(props) => props.theme.warningBackgroundColor};
 
-  ${StyledIcon} {
-    color: ${(props) => props.theme.color};
-  }
+	${StyledIcon} {
+		color: ${(props) => props.theme.color};
+	}
 `;
 
 const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
-  background: none;
-  border-color: ${(props) => props.theme.color2};
-  color: ${(props) => props.theme.color2};
+	background: none;
+	border-color: ${(props) => props.theme.color2};
+	color: ${(props) => props.theme.color2};
 
-  &:hover {
-    color: ${(props) => props.theme.colorHover2};
-    border-color: ${(props) => props.theme.colorHover2};
-  }
+	&:hover {
+		color: ${(props) => props.theme.colorHover2};
+		border-color: ${(props) => props.theme.colorHover2};
+	}
 
-  &:active {
-    color: ${(props) => props.theme.colorActive2};
-    border-color: ${(props) => props.theme.colorActive2};
-  }
+	&:active {
+		color: ${(props) => props.theme.colorActive2};
+		border-color: ${(props) => props.theme.colorActive2};
+	}
 
-  ${StyledIcon} {
-    color: ${(props) => props.theme.color2};
-  }
+	${StyledIcon} {
+		color: ${(props) => props.theme.color2};
+	}
 `;
 
-const buttonClass = (level: ButtonLevel) => {
+const buttonClass = (level: ButtonLevel = ButtonLevel.Secondary) => {
 	switch (level) {
-	case ButtonLevel.Primary:
-		return StyledButtonPrimary;
-	case ButtonLevel.Tertiary:
-		return StyledButtonTertiary;
-	case ButtonLevel.SidebarSecondary:
-		return StyledButtonSidebarSecondary;
-	case ButtonLevel.Recommended:
-		return StyledButtonRecommended;
-	default:
-		return StyledButtonSecondary;
+		case ButtonLevel.Primary:
+			return StyledButtonPrimary;
+		case ButtonLevel.Tertiary:
+			return StyledButtonTertiary;
+		case ButtonLevel.SidebarSecondary:
+			return StyledButtonSidebarSecondary;
+		case ButtonLevel.Recommended:
+			return StyledButtonRecommended;
+		default:
+			return StyledButtonSecondary;
 	}
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-	const { iconName, title, iconLabel, iconAnimation, onClick, disabled, size, color, fontSize, isSquare, className, tooltip, ...rest } = props;
-	const StyledButton = buttonClass(props.level ?? ButtonLevel.Secondary);
+	const {
+		iconName,
+		title,
+		iconLabel,
+		iconAnimation,
+		onClick,
+		disabled,
+		size,
+		color,
+		fontSize,
+		isSquare,
+		className,
+		tooltip,
+		level,
+		iconOnly,
+		...rest
+	} = props;
+
+	const StyledButton = buttonClass(level);
 
 	const renderIcon = () => {
 		if (!iconName) return null;
@@ -178,7 +197,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 				animation={iconAnimation}
 				color={color}
 				className={iconName}
-				mr={props.iconOnly ? 0 : 6}
 				role="img"
 			/>
 		);
@@ -199,7 +217,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 			onClick={disabled ? undefined : onClick}
 			title={tooltip}
 			className={className}
+			iconOnly={iconOnly || (!title && !!iconName)}
 			aria-label={title ? undefined : tooltip}
+			aria-disabled={disabled}
 			{...rest}
 		>
 			{renderIcon()}
@@ -209,5 +229,5 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 });
 
 export default styled(Button)`
-  ${space}
+	${space}
 `;

@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import pickDocument from '../../../../utils/pickDocument';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import Logger from '@joplin/utils/Logger';
+import { msleep } from '@joplin/utils/time';
 
 const logger = Logger.create('attachFile');
 
@@ -13,6 +14,7 @@ export enum AttachFileAction {
 	AttachFile = 'attachFile',
 	AttachPhoto = 'attachPhoto',
 	AttachDrawing = 'attachDrawing',
+	RecordAudio = 'attachRecording',
 }
 
 export interface AttachFileOptions {
@@ -44,7 +46,13 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 	};
 	const attachPhoto = async () => {
 		// the selection Limit should be specified. I think 200 is enough?
-		const response: ImagePickerResponse = await launchImageLibrary({ mediaType: 'photo', includeBase64: false, selectionLimit: 200 });
+		const response: ImagePickerResponse = await launchImageLibrary({
+			mediaType: 'mixed',
+			videoQuality: 'low',
+			formatAsMp4: true,
+			includeBase64: false,
+			selectionLimit: 200,
+		});
 
 		if (response.errorCode) {
 			logger.warn('Got error from picker', response.errorCode);
@@ -57,8 +65,12 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 		}
 
 		for (const asset of response.assets) {
-			await props.attachFile(asset, 'image');
+			await props.attachFile(asset, asset.type);
 		}
+	};
+
+	const recordAudio = async () => {
+		props.setAudioRecorderVisible(true);
 	};
 
 	const showAttachMenu = async (action: AttachFileAction = null) => {
@@ -76,6 +88,7 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 			//
 			// On Android, it will depend on the phone, but usually it will allow browsing all files and photos.
 			buttons.push({ text: _('Attach file'), id: AttachFileAction.AttachFile });
+			buttons.push({ text: _('Record audio'), id: AttachFileAction.RecordAudio });
 
 			// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
 			// because that's only way to browse photos from the camera roll.
@@ -83,11 +96,19 @@ export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 			buttons.push({ text: _('Take photo'), id: AttachFileAction.TakePhoto });
 
 			buttonId = await props.dialogs.showMenu(_('Choose an option'), buttons) as AttachFileAction;
+
+			if (Platform.OS === 'ios') {
+				// Fixes an issue: The first time "attach file" or "attach photo" is chosen after starting Joplin
+				// on iOS, no attach dialog was shown. Adding a brief delay after the "choose an option" dialog is
+				// dismissed seems to fix the issue.
+				await msleep(1);
+			}
 		}
 
 		if (buttonId === AttachFileAction.TakePhoto) await takePhoto();
 		if (buttonId === AttachFileAction.AttachFile) await attachFile();
 		if (buttonId === AttachFileAction.AttachPhoto) await attachPhoto();
+		if (buttonId === AttachFileAction.RecordAudio) await recordAudio();
 	};
 
 	return {

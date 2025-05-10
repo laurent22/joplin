@@ -111,8 +111,10 @@ export default class InteropServiceHelper {
 							// 2024-01-31: Printing with webContents.print still
 							// fails on Linux (even if run in the main process).
 							// As such, we use window.print(), which seems to work.
+							//
+							// 2025-05-03: Windows also needs the window.print() workaround.
 
-							if (shim.isLinux()) {
+							if (shim.isLinux() || shim.isWindows()) {
 								await win.webContents.executeJavaScript(`
 									// Blocks while the print dialog is open
 									window.print();

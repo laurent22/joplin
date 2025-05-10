@@ -98,6 +98,16 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'ant indent-right',
 	},
 	{
+		name: `editor.${EditorCommandType.SwapLineDown}`,
+		label: () => _('Swap line down'),
+		iconName: 'material chevron-double-down',
+	},
+	{
+		name: `editor.${EditorCommandType.SwapLineUp}`,
+		label: () => _('Swap line up'),
+		iconName: 'material chevron-double-up',
+	},
+	{
 		name: EditorCommandType.ToggleSearch,
 		label: () => _('Search'),
 		iconName: 'material magnify',

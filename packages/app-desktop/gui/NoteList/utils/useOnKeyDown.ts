@@ -23,6 +23,8 @@ const useOnKeyDown = (
 	noteCount: number,
 	flow: ItemFlow,
 	itemsPerLine: number,
+	showCompletedTodos: boolean,
+	uncompletedTodosOnTop: boolean,
 ) => {
 	const scrollNoteIndex = useCallback((visibleItemCount: number, key: KeyboardEventKey, ctrlKey: boolean, metaKey: boolean, noteIndex: number) => {
 		if (flow === ItemFlow.TopToBottom) {
@@ -142,13 +144,32 @@ const useOnKeyDown = (
 			const todos = selectedNotes.filter(n => !!n.is_todo);
 			if (!todos.length) return;
 
+			const firstNoteIndex = notes.findIndex(n => n.id === todos[0].id);
+			let nextSelectedNoteIndex = firstNoteIndex + 1;
+			if (nextSelectedNoteIndex > notes.length - 1) nextSelectedNoteIndex = notes.length - 1;
+			const nextSelectedNote = nextSelectedNoteIndex >= 0 ? notes[nextSelectedNoteIndex] : todos[0];
+
 			for (let i = 0; i < todos.length; i++) {
 				const toggledTodo = Note.toggleTodoCompleted(todos[i]);
 				await Note.save(toggledTodo);
 			}
 
+			// When the settings `uncompletedTodosOnTop` or `showCompletedTodos` are enabled, the
+			// note that got set as completed or uncompleted is going to disappear from view,
+			// possibly hidden or moved to the top or bottom of the note list. It is assumed that
+			// the user does not want to keep that note selected since the to-do is indeed
+			// "completed". And by keeping that selection, the cursor would jump, making you lose
+			// context if you have multiple to-dos that need to be ticked. For that reason we set
+			// the selection to the next note in the list, which also ensures that the scroll
+			// position doesn't change. This is the same behaviour as when deleting a note.
+			const maintainScrollPosition = !showCompletedTodos || uncompletedTodosOnTop;
+
+			if (maintainScrollPosition) {
+				dispatch({ type: 'NOTE_SELECT', noteId: nextSelectedNote.id });
+			}
+
 			dispatch({ type: 'NOTE_SORT' });
-			focusNote(todos[0].id);
+			if (!maintainScrollPosition) focusNote(todos[0].id);
 			const wasCompleted = !!todos[0].todo_completed;
 			announceForAccessibility(!wasCompleted ? _('Complete') : _('Incomplete'));
 		}
@@ -171,7 +192,7 @@ const useOnKeyDown = (
 				type: 'NOTE_SELECT_ALL',
 			});
 		}
-	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, activeNoteId, dispatch, flow, itemsPerLine]);
+	}, [moveNote, focusNote, visibleItemCount, scrollNoteIndex, makeItemIndexVisible, notes, selectedNoteIds, activeNoteId, dispatch, flow, itemsPerLine, showCompletedTodos, uncompletedTodosOnTop]);
 
 
 	return onKeyDown;

@@ -168,6 +168,10 @@ export default function shimInit() {
 		return Platform.OS;
 	};
 
+	shim.isAppleSilicon = () => {
+		return false;
+	};
+
 	shim.appVersion = () => {
 		const p = require('react-native-version-info').default;
 		return p.appVersion;

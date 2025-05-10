@@ -48,6 +48,8 @@ describe('NoteEditor', () => {
 				<NoteEditor
 					themeId={Setting.THEME_ARITIM_DARK}
 					initialText='Testing...'
+					noteId=''
+					noteHash=''
 					style={{}}
 					toolbarEnabled={true}
 					readOnly={false}

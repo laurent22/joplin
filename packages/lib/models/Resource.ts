@@ -76,7 +76,7 @@ export default class Resource extends BaseItem {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static fetchStatuses(resourceIds: string[]): Promise<any[]> {
 		if (!resourceIds.length) return Promise.resolve([]);
-		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN ('${resourceIds.join('\',\'')}')`);
+		return this.db().selectAll(`SELECT resource_id, fetch_status FROM resource_local_states WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})`);
 	}
 
 	public static sharedResourceIds(): Promise<string[]> {
@@ -368,7 +368,7 @@ export default class Resource extends BaseItem {
 	public static async downloadedButEncryptedBlobCount(excludedIds: string[] = null) {
 		let excludedSql = '';
 		if (excludedIds && excludedIds.length) {
-			excludedSql = `AND resource_id NOT IN ('${excludedIds.join('\',\'')}')`;
+			excludedSql = `AND resource_id NOT IN (${this.escapeIdsForSql(excludedIds)})`;
 		}
 
 		const r = await this.db().selectOne(`
@@ -536,7 +536,7 @@ export default class Resource extends BaseItem {
 
 	public static async needOcr(supportedMimeTypes: string[], skippedResourceIds: string[], limit: number, options: LoadOptions): Promise<ResourceEntity[]> {
 		const query = this.baseNeedOcrQuery(this.selectFields(options), supportedMimeTypes);
-		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN  ('${skippedResourceIds.join('\',\'')}')` : '';
+		const skippedResourcesSql = skippedResourceIds.length ? `AND resources.id NOT IN (${this.escapeIdsForSql(skippedResourceIds)})` : '';
 
 		return await this.db().selectAll(`
 			${query.sql}
@@ -576,7 +576,7 @@ export default class Resource extends BaseItem {
 	public static async resourceOcrTextsByIds(ids: string[]): Promise<ResourceEntity[]> {
 		if (!ids.length) return [];
 		ids = unique(ids);
-		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN ('${ids.join('\',\'')}')`);
+		return this.modelSelectAll(`SELECT id, ocr_text FROM resources WHERE id IN (${this.escapeIdsForSql(ids)})`);
 	}
 
 	public static async allForNormalization(updatedTime: number, id: string, limit = 100, options: LoadOptions = null) {

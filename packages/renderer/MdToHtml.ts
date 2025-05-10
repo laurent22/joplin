@@ -399,9 +399,10 @@ export default class MdToHtml implements MarkupRenderer {
 	public async allAssets(theme: any, noteStyleOptions: NoteStyleOptions = null) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const assets: any = {};
-		for (const key in rules) {
+		const allRules = { ...rules, ...this.extraRendererRules_ };
+		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
-			const rule = rules[key];
+			const rule = allRules[key];
 
 			if (rule.assets) {
 				assets[key] = rule.assets(theme);

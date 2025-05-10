@@ -19,7 +19,7 @@ jobs:
           # the below token should have repo scope and must be manually added by you in the repository's secret
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          path-to-signatures: 'readme/cla_signatures.json'
+          path-to-signatures: 'readme/cla/signatures.json'
           path-to-document: 'https://github.com/laurent22/joplin/blob/dev/readme/cla.md' # e.g. a CLA or a DCO document
           # branch should not be protected
           branch: 'cla_signatures'

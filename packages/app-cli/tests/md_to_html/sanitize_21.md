@@ -1,1 +1,1 @@
-Should keep this comment: <!-- keep this &amp; that -->
+Should keep this comment: <!-- keep this & that -->

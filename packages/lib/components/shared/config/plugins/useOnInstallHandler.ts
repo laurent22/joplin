@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import Logger from '@joplin/utils/Logger';
 import { ItemEvent, OnPluginSettingChangeHandler } from './types';
 import type * as React from 'react';
