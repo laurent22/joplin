@@ -3,6 +3,7 @@
 @use './user-webview-dialog.scss';
 @use './prompt-dialog.scss';
 @use './flat-button.scss';
+@use './link-button.scss';
 @use './help-text.scss';
 @use './toolbar-button.scss';
 @use './toolbar-icon.scss';
@@ -11,3 +12,9 @@
 @use './dialog-anchor-node.scss';
 @use './note-editor-wrapper.scss';
 @use './text-input.scss';
+@use './combobox-wrapper.scss';
+@use './combobox-suggestion-option.scss';
+@use './change-app-layout-dialog.scss';
+@use './joplin-cloud-sign-up.scss';
+@use './popup-notification-list.scss';
+@use './popup-notification-item.scss';

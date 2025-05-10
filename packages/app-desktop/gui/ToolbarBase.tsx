@@ -15,6 +15,7 @@ interface Props {
 	items: ToolbarItem[];
 	disabled: boolean;
 	'aria-label': string;
+	id?: string;
 }
 
 const getItemType = (item: ToolbarItem) => {
@@ -181,6 +182,7 @@ const ToolbarBaseComponent: React.FC<Props> = props => {
 			className={`editor-toolbar ${props.scrollable ? '-scrollable' : ''}`}
 			style={props.style}
 
+			id={props.id ?? undefined}
 			role='toolbar'
 			aria-label={props['aria-label']}
 

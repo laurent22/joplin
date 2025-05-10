@@ -230,5 +230,28 @@ test.describe('markdownEditor', () => {
 		// Editor should be focused
 		await expect(focusInMarkdownEditor).toBeAttached();
 	});
+
+	test('focusElementNoteViewer should move focus to the viewer', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		const noteEditor = mainScreen.noteEditor;
+
+		await mainScreen.createNewNote('Note');
+
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('# Test');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('Test paragraph.');
+
+		// Wait for rendering
+		await expect(noteEditor.getNoteViewerFrameLocator().getByText('Test paragraph.')).toBeAttached();
+
+		// Move focus
+		await mainScreen.goToAnything.runCommand(electronApp, 'focusElementNoteViewer');
+
+		// Note viewer should be focused
+		await expect(noteEditor.noteViewerContainer).toBeFocused();
+	});
 });
 

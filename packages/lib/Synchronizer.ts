@@ -22,7 +22,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { checkIfCanSync, fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -858,6 +858,13 @@ export default class Synchronizer {
 
 						logger: logger,
 					});
+
+					// Ensure that if the sync target directory has changed, lost access, or has been purged by some external process while the sync is running, that a failsafe error is triggered where info.json and .sync/version.txt can no longer be found
+					// This check is more reliable than checking the count of items alone, as it is possible for sync items become segmented between 2 directories, possibly by the target directory changing during sync
+					// This scenario is possible with OneDrive sync, see https://github.com/laurent22/joplin/issues/11489
+					// This check while the sync is running is only necessary for the delta step of the sync, as this is where local deletions are calculated by comparing the local database and the sync target. These deletions are driven by the listResult field to determine which remote items exist
+					// As long as we check that info.json still exists after each time the listResult field is repopulated, there should not be a risk of unwanted deletions when failsafe is enabled, unless the target directory is directly manipulated by the user
+					await checkSyncTargetIsValid(this.api());
 
 					const supportsDeltaWithItems = getSupportsDeltaWithItems(listResult);
 

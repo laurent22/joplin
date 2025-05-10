@@ -13,7 +13,6 @@ import { RegionSpec } from '../utils/formatting/RegionSpec';
 import toggleInlineFormatGlobally from '../utils/formatting/toggleInlineFormatGlobally';
 import stripBlockquote from './utils/stripBlockquote';
 import isIndentationEquivalent from '../utils/formatting/isIndentationEquivalent';
-import growSelectionToNode from '../utils/growSelectionToNode';
 import tabsToSpaces from '../utils/formatting/tabsToSpaces';
 import renumberSelectedLists from './utils/renumberSelectedLists';
 import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
@@ -126,9 +125,6 @@ export const toggleList = (listType: ListType): Command => {
 		let state = view.state;
 		let doc = state.doc;
 
-		const orderedListTag = 'OrderedList';
-		const unorderedListTag = 'BulletList';
-
 		// RegExps for different list types. The regular expressions MUST
 		// be mutually exclusive.
 		// `(?!\[[ xX]+\])` means "not followed by [x] or [ ]".
@@ -187,15 +183,6 @@ export const toggleList = (listType: ListType): Command => {
 
 			const origFirstLineIndentation = firstLineIndentation;
 			const origContainerType = containerType;
-
-			// Grow `sel` to the smallest containing list, unless the
-			// cursor is on an empty line, in which case, the user
-			// probably wants to add a list item (and not select the entire
-			// list).
-			if (sel.empty && fromLine.text.trim() !== '') {
-				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
-				computeSelectionProps();
-			}
 
 			// Reset the selection if it seems likely the user didn't want the selection
 			// to be expanded

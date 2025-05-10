@@ -39,11 +39,15 @@ const useFileSystemPath = (settingId: string, updateSettingValue: UpdateSettingV
 		if (shim.mobilePlatform() === 'web') {
 			// Directory picker IDs can't include certain characters.
 			const pickerId = `setting-${settingId}`.replace(/[^a-zA-Z]/g, '_');
-			const handle = await self.showDirectoryPicker({ id: pickerId, mode: accessMode });
-			const fsDriver = shim.fsDriver() as FsDriverWeb;
-			const uri = await fsDriver.mountExternalDirectory(handle, pickerId, accessMode);
-			await updateSettingValue(settingId, uri);
-			setFileSystemPath(uri);
+			try {
+				const handle = await self.showDirectoryPicker({ id: pickerId, mode: accessMode });
+				const fsDriver = shim.fsDriver() as FsDriverWeb;
+				const uri = await fsDriver.mountExternalDirectory(handle, pickerId, accessMode);
+				await updateSettingValue(settingId, uri);
+				setFileSystemPath(uri);
+			} catch (error) {
+				if (error.name !== 'AbortError') throw error;
+			}
 		} else {
 			try {
 				const doc = await openDocumentTree(true);

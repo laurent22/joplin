@@ -4,6 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
+import { formatMsToDateTimeLocal } from '@joplin/utils/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 export const declaration: CommandDeclaration = {
@@ -29,7 +30,7 @@ export const runtime = (comp: any): CommandRuntime => {
 					label: _('Set alarm:'),
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
-					value: note.todo_due ? new Date(note.todo_due) : defaultDate,
+					value: note.todo_due ? formatMsToDateTimeLocal(note.todo_due) : formatMsToDateTimeLocal(defaultDate.getTime()),
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onClose: async (answer: any, buttonType: string) => {
 						let newNote: NoteEntity = null;
@@ -42,7 +43,7 @@ export const runtime = (comp: any): CommandRuntime => {
 						} else if (answer !== null) {
 							newNote = {
 								id: note.id,
-								todo_due: answer.getTime(),
+								todo_due: answer,
 							};
 						}
 

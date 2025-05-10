@@ -36,7 +36,7 @@ const path = require('path');
 const md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
-if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist: ${docDir}`);
+if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist - create it first. At: ${docDir}`);
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const readmeDir = `${rootDir}/readme`;

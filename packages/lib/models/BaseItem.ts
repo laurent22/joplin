@@ -243,11 +243,12 @@ export default class BaseItem extends BaseModel {
 		if (!ids.length) return [];
 
 		const classes = this.syncItemClassNames();
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any[] = [];
 		for (let i = 0; i < classes.length; i++) {
 			const ItemClass = this.getClass(classes[i]);
-			const sql = `SELECT * FROM ${ItemClass.tableName()} WHERE id IN ('${ids.join('\',\'')}')`;
+			const sql = `SELECT * FROM ${ItemClass.tableName()} WHERE id IN (${this.escapeIdsForSql(ids)})`;
 			const models = await ItemClass.modelSelectAll(sql);
 			output = output.concat(models);
 		}
@@ -261,7 +262,7 @@ export default class BaseItem extends BaseModel {
 		const fields = options && options.fields ? options.fields : [];
 		const ItemClass = this.getClassByItemType(itemType);
 		const fieldsSql = fields.length ? this.db().escapeFields(fields) : '*';
-		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()} WHERE id IN ('${ids.join('\',\'')}')`;
+		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()} WHERE id IN (${this.escapeIdsForSql(ids)})`;
 		return ItemClass.modelSelectAll(sql);
 	}
 
@@ -300,7 +301,7 @@ export default class BaseItem extends BaseModel {
 		// since no other client have (or should have) them.
 		let conflictNoteIds: string[] = [];
 		if (this.modelType() === BaseModel.TYPE_NOTE) {
-			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ('${ids.join('\',\'')}') AND is_conflict = 1`);
+			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
 				return n.id;
 			});
@@ -661,7 +662,9 @@ export default class BaseItem extends BaseModel {
 				whereSql = [`(encryption_applied = 1 OR (${blobDownloadedButEncryptedSql})`];
 			}
 
-			if (exclusions.length) whereSql.push(`id NOT IN ('${exclusions.join('\',\'')}')`);
+			if (exclusions.length) {
+				whereSql.push(`id NOT IN (${this.escapeIdsForSql(exclusions)})`);
+			}
 
 			const sql = sprintf(
 				`
@@ -943,7 +946,7 @@ export default class BaseItem extends BaseModel {
 			});
 			if (!ids.length) continue;
 
-			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN ('${ids.join('\',\'')}')`);
+			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN (${this.escapeIdsForSql(ids)})`);
 		}
 	}
 

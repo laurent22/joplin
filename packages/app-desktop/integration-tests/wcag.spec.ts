@@ -7,6 +7,9 @@ import { Page } from '@playwright/test';
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
 		.disableRules(['page-has-heading-one'])
+		// Ignore a failure related to CodeMirror that seems to be a Windows-specific false positive:
+		// "Ensure elements that have scrollable content are accessible by keyboard".
+		.exclude(['.cm-scroller'])
 		// Needed because we're using Electron. See https://github.com/dequelabs/axe-core-npm/issues/1141
 		.setLegacyMode(true);
 };
@@ -54,6 +57,12 @@ test.describe('wcag', () => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
+		// Ensure that there is at least one sub-folder in the sidebar
+		const folder1 = await mainScreen.sidebar.createNewFolder('Test folder 1');
+		const folder2 = await mainScreen.sidebar.createNewFolder('Test folder 2');
+		await folder2.dragTo(folder1);
+		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
+
 		await mainScreen.createNewNote('Test');
 
 		// Ensure that `:hover` styling is consistent between tests:
@@ -65,6 +74,12 @@ test.describe('wcag', () => {
 		await mainScreen.noteEditor.toggleEditorsButton.click();
 		await mainScreen.noteEditor.richTextEditor.click();
 
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.changeLayoutScreen.open(electronApp);
 		await expectNoViolations(mainWindow);
 	});
 });

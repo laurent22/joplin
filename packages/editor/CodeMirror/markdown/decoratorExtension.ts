@@ -44,6 +44,10 @@ const htmlTagNameDecoration = Decoration.mark({
 	attributes: { class: 'cm-htmlTag', ...noSpellCheckAttrs },
 });
 
+const markDecoration = Decoration.mark({
+	attributes: { class: 'cm-highlighted' },
+});
+
 const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
@@ -104,6 +108,10 @@ const taskMarkerDecoration = Decoration.mark({
 	attributes: { class: 'cm-taskMarker' },
 });
 
+const strikethroughDecoration = Decoration.mark({
+	attributes: { class: 'cm-strike' },
+});
+
 const nodeNameToLineDecoration: Record<string, Decoration> = {
 	'FencedCode': codeBlockDecoration,
 	'CodeBlock': codeBlockDecoration,
@@ -136,6 +144,8 @@ const nodeNameToMarkDecoration: Record<string, Decoration> = {
 	'TagName': htmlTagNameDecoration,
 	'HorizontalRule': horizontalRuleDecoration,
 	'TaskMarker': taskMarkerDecoration,
+	'Strikethrough': strikethroughDecoration,
+	'Highlight': markDecoration,
 };
 
 const multilineNodes = {

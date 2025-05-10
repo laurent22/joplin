@@ -7,7 +7,6 @@ import '@testing-library/jest-native/extend-expect';
 
 import NoteBodyViewer from './NoteBodyViewer';
 import Setting from '@joplin/lib/models/Setting';
-import { MenuProvider } from 'react-native-popup-menu';
 import { resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import { MarkupLanguage } from '@joplin/renderer';
 import { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
@@ -16,6 +15,8 @@ import shim from '@joplin/lib/shim';
 import Note from '@joplin/lib/models/Note';
 import { ResourceInfo } from './hooks/useRerenderHandler';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
+import TestProviderStack from '../testing/TestProviderStack';
+import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 
 interface WrapperProps {
 	noteBody: string;
@@ -29,6 +30,7 @@ interface WrapperProps {
 const emptyObject = {};
 const emptyArray: string[] = [];
 const noOpFunction = () => {};
+const testStore = createMockReduxStore();
 const WrappedNoteViewer: React.FC<WrapperProps> = (
 	{
 		noteBody,
@@ -39,7 +41,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 		onMarkForDownload,
 	}: WrapperProps,
 ) => {
-	return <MenuProvider>
+	return <TestProviderStack store={testStore}>
 		<NoteBodyViewer
 			themeId={Setting.THEME_LIGHT}
 			style={emptyObject}
@@ -56,7 +58,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 			onScroll={onScroll}
 			pluginStates={emptyObject}
 		/>
-	</MenuProvider>;
+	</TestProviderStack>;
 };
 
 const getNoteViewerDom = async () => {
