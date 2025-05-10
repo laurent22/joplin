@@ -4,6 +4,7 @@ import IconButton from '../IconButton';
 import { memo, useMemo } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import { themeStyle } from '../global-style';
+import { Tooltip } from 'react-native-paper'; // Assuming you are using react-native-paper for Tooltip
 
 interface Props {
 	themeId: number;
@@ -39,20 +40,24 @@ const ToolbarButton: React.FC<Props> = memo(({ themeId, buttonInfo, selected }) 
 	const styles = useStyles(themeId, selected, buttonInfo.enabled);
 	const isToggleButton = selected !== undefined;
 
-	return <IconButton
-		iconName={buttonInfo.iconName}
-		description={buttonInfo.title || buttonInfo.tooltip}
-		onPress={buttonInfo.onClick}
-		disabled={!buttonInfo.enabled}
-		iconStyle={styles.icon}
-		containerStyle={styles.button}
-		accessibilityState={{ selected }}
-		accessibilityRole={isToggleButton ? 'togglebutton' : 'button'}
-		role={'button'}
-		aria-pressed={selected}
-		preventKeyboardDismiss={true}
-		themeId={themeId}
-	/>;
+	return (
+		<Tooltip title={buttonInfo.title || buttonInfo.tooltip}> {/* Tooltip wraps the IconButton */}
+			<IconButton
+				iconName={buttonInfo.iconName}
+				description={buttonInfo.title || buttonInfo.tooltip}
+				onPress={buttonInfo.onClick}
+				disabled={!buttonInfo.enabled}
+				iconStyle={styles.icon}
+				containerStyle={styles.button}
+				accessibilityState={{ selected }}
+				accessibilityRole={isToggleButton ? 'togglebutton' : 'button'}
+				role={'button'}
+				aria-pressed={selected}
+				preventKeyboardDismiss={true}
+				themeId={themeId}
+			/>
+		</Tooltip>
+	);
 });
 
 export default ToolbarButton;
