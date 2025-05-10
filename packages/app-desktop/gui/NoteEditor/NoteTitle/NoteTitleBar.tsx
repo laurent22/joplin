@@ -25,7 +25,7 @@ function styles_(props: Props) {
 				flex: 1,
 				display: 'inline-block',
 				paddingTop: 5,
-				minHeight: 38,
+				minHeight: 150,
 				boxSizing: 'border-box',
 				fontWeight: 'bold',
 				paddingBottom: 5,
