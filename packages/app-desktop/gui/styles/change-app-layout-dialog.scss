@@ -1,0 +1,14 @@
+.change-app-layout-dialog {
+	padding: 0;
+
+	> .content {
+		position:relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&::backdrop {
+		background-color: transparent !important;
+	}
+}

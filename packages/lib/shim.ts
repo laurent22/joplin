@@ -156,6 +156,12 @@ const shim = {
 		return typeof process !== 'undefined' && process.platform === 'darwin';
 	},
 
+	// Tells whether the computer **CPU** is an Apple Silicon (not whether the running version was
+	// built for ARM64)
+	isAppleSilicon: (): boolean => {
+		throw new Error('Not implemented: isAppleSilicon');
+	},
+
 	platformName: () => {
 		if (shim.isReactNative()) return shim.mobilePlatform();
 		if (shim.isMac()) return 'darwin';
@@ -164,6 +170,23 @@ const shim = {
 		if (shim.isFreeBSD()) return 'freebsd';
 		if (typeof process !== 'undefined' && process.platform) return process.platform;
 		throw new Error('Cannot determine platform');
+	},
+
+	// Tells the computer CPU architecture. Which if different from the architecture the running
+	// version was built for. For example, the laptop CPU may be an ARM64, while the version was
+	// built for x64 architecture. Here we want to know the laptop CPU.
+	platformArch: (): string => {
+		throw new Error('Not implemented: platformArch');
+	},
+
+	deviceString: () => {
+		const output: string[] = [];
+
+		output.push(shim.platformName());
+
+		if (shim.platformArch()) output.push(shim.platformArch());
+
+		return output.join(', ');
 	},
 
 	// "ios" or "android", or "" if not on mobile

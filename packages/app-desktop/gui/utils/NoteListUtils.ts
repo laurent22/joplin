@@ -107,28 +107,12 @@ export default class NoteListUtils {
 				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
 			);
 
-			if (includeDeletedNotes) {
-				menu.append(
-					new MenuItem(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
-					),
-				);
-
-				menu.append(
-					new MenuItem(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
-					),
-				);
-			} else {
-				menu.append(
-					new MenuItem(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
-					),
-				);
-			}
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+				),
+			);
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
@@ -203,6 +187,23 @@ export default class NoteListUtils {
 
 			menu.append(exportMenuItem);
 		}
+
+		if (includeDeletedNotes) {
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
+				),
+			);
+
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
+				),
+			);
+		}
+
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 

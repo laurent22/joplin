@@ -84,6 +84,13 @@ export default class Database {
 		return output;
 	}
 
+	public escapeValues(values: string[]) {
+		return values.map(value => {
+			// See https://www.sqlite.org/printf.html#percentq
+			return `'${value.replace(/[']/g, '\'\'')}'`;
+		});
+	}
+
 	public escapeFieldsToString(fields: string[] | string): string {
 		if (typeof fields === 'string') {
 			if (fields === '*') return '*';

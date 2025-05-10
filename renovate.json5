@@ -76,6 +76,7 @@
 		"browserify",
 		"codemirror",
 		"cspell",
+		"expo-av", // Must be updated with expo
 		"file-loader",
 		"gradle",
 		"html-webpack-plugin",

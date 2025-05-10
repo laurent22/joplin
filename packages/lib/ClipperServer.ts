@@ -23,6 +23,7 @@ export default class ClipperServer {
 	private api_: Api = null;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private dispatch_: Function;
+	private enabled_ = true;
 
 	private static instance_: ClipperServer = null;
 
@@ -38,6 +39,18 @@ export default class ClipperServer {
 
 	public get api(): Api {
 		return this.api_;
+	}
+
+	public enabled() {
+		return this.enabled_;
+	}
+
+	public setEnabled(v: boolean) {
+		this.enabled_ = v;
+
+		if (!this.enabled_ && this.isRunning()) {
+			void this.stop();
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -106,6 +119,8 @@ export default class ClipperServer {
 	}
 
 	public async start() {
+		if (!this.enabled()) throw new Error('Cannot start clipper server because it is disabled');
+
 		this.setPort(null);
 
 		this.setStartState(StartState.Starting);
@@ -251,8 +266,11 @@ export default class ClipperServer {
 	}
 
 	public async stop() {
-		this.server_.destroy();
-		this.server_ = null;
+		if (this.server_) {
+			this.server_.destroy();
+			this.server_ = null;
+		}
+
 		this.setStartState(StartState.Idle);
 		this.setPort(null);
 	}

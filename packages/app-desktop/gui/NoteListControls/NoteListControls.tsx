@@ -1,6 +1,6 @@
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useContext } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -14,6 +14,7 @@ import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseC
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { Breakpoints } from '../NoteList/utils/types';
 import { stateUtils } from '@joplin/lib/reducer';
+import { WindowIdContext } from '../NewWindowOrIFrame';
 
 interface Props {
 	showNewNoteButtons: boolean;
@@ -245,11 +246,12 @@ function NoteListControls(props: Props) {
 		);
 	}
 
+	const windowId = useContext(WindowIdContext);
 	return (
 		<StyledRoot ref={noteControlsRef} padding={props.padding} buttonVerticalGap={props.buttonVerticalGap}>
 			{renderNewNoteButtons()}
 			<BottomRow ref={searchAndSortRef} className="search-and-sort">
-				<SearchBar inputRef={searchBarRef}/>
+				<SearchBar inputRef={searchBarRef} windowId={windowId}/>
 				{showsSortOrderButtons() &&
 					<SortOrderButtonsContainer>
 						<StyledPairButtonL

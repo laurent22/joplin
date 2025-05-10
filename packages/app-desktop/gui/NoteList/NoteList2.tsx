@@ -118,6 +118,8 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 		listRenderer.flow,
 		itemsPerLine,
+		props.showCompletedTodos,
+		props.uncompletedTodosOnTop,
 	);
 
 	useItemCss(listRenderer.itemCss);

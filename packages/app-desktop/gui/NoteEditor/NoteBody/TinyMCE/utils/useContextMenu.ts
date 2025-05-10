@@ -7,44 +7,20 @@ import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextM
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import Setting from '@joplin/lib/models/Setting';
-import type { Event as ElectronEvent } from 'electron';
+import type { ContextMenuParams, Event as ElectronEvent, MenuItemConstructorOptions } from 'electron';
 
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
 import { Editor } from 'tinymce';
+import { EditDialogControl } from './useEditDialog';
+import { Dispatch } from 'redux';
+import { _ } from '@joplin/lib/locale';
+import type { MenuItem as MenuItemType } from 'electron';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const menuUtils = new MenuUtils(CommandService.instance());
-
-// x and y are the absolute coordinates, as returned by the context-menu event
-// handler on the webContent. This function will return null if the point is
-// not within the TinyMCE editor.
-function contextMenuElement(editor: Editor, x: number, y: number) {
-	if (!editor || !editor.getDoc()) return null;
-
-	const containerDoc = editor.getContainer().ownerDocument;
-	const iframes = containerDoc.getElementsByClassName('tox-edit-area__iframe');
-	if (!iframes.length) return null;
-
-	const zoom = Setting.value('windowContentZoomFactor') / 100;
-	const xScreen = x / zoom;
-	const yScreen = y / zoom;
-
-	// We use .elementFromPoint to handle the case where a dialog is covering
-	// part of the editor.
-	const targetElement = containerDoc.elementFromPoint(xScreen, yScreen);
-	if (targetElement !== iframes[0]) {
-		return null;
-	}
-
-	const iframeRect = iframes[0].getBoundingClientRect();
-	const relativeX = xScreen - iframeRect.left;
-	const relativeY = yScreen - iframeRect.top;
-	return editor.getDoc().elementFromPoint(relativeX, relativeY);
-}
 
 interface ContextMenuActionOptions {
 	current: ContextMenuOptions;
@@ -52,23 +28,14 @@ interface ContextMenuActionOptions {
 
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(editor: Editor, plugins: PluginStates, dispatch: Function, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler) {
+export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatch, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler, editDialog: EditDialogControl) {
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const contextMenuItems = menuItems(dispatch, htmlToMd, mdToHtml);
+		const contextMenuItems = menuItems(dispatch);
 		const targetWindow = bridge().activeWindow();
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onContextMenu(event: ElectronEvent, params: any) {
-			const element = contextMenuElement(editor, params.x, params.y);
-			if (!element) return;
-
-			event.preventDefault();
-
-			const menu = new Menu();
-
+		const makeMainMenuItems = (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
 			let linkToCopy = null;
@@ -103,38 +70,103 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Functio
 				mdToHtml,
 			};
 
+			const result = [];
 			for (const itemName in contextMenuItems) {
 				const item = contextMenuItems[itemName];
 
 				if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
 
-				menu.append(new MenuItem({
+				result.push(new MenuItem({
 					label: item.label,
 					click: () => {
 						item.onAction(contextMenuActionOptions.current);
 					},
 				}));
 			}
+			return result;
+		};
 
-			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
-
-			for (const item of spellCheckerMenuItems) {
-				menu.append(new MenuItem(item));
+		const makeEditableMenuItems = (element: Element) => {
+			if (editDialog.isEditable(element)) {
+				return [
+					new MenuItem({
+						type: 'normal',
+						label: _('Edit'),
+						click: () => {
+							editDialog.editExisting(element);
+						},
+					}),
+					new MenuItem({ type: 'separator' }),
+				];
 			}
+			return [];
+		};
 
-			for (const item of menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu)) {
-				menu.append(new MenuItem(item));
+		const showContextMenu = (element: HTMLElement, misspelledWord: string|null, dictionarySuggestions: string[]) => {
+			const menu = new Menu();
+			const menuItems: MenuItemType[] = [];
+			const toMenuItems = (specs: MenuItemConstructorOptions[]) => {
+				return specs.map(spec => new MenuItem(spec));
+			};
+
+			menuItems.push(...makeEditableMenuItems(element));
+			menuItems.push(...makeMainMenuItems(element));
+			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
+			menuItems.push(
+				...toMenuItems(spellCheckerMenuItems),
+			);
+			menuItems.push(
+				...toMenuItems(menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu)),
+			);
+
+			for (const item of menuItems) {
+				menu.append(item);
 			}
-
 			menu.popup({ window: targetWindow });
-		}
+		};
 
-		targetWindow.webContents.prependListener('context-menu', onContextMenu);
+		let lastTarget: EventTarget|null = null;
+		const onElectronContextMenu = (event: ElectronEvent, params: ContextMenuParams) => {
+			if (!lastTarget) return;
+			const element = lastTarget as HTMLElement;
+			lastTarget = null;
 
-		return () => {
-			if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
-				targetWindow.webContents.off('context-menu', onContextMenu);
+			event.preventDefault();
+			showContextMenu(element, params.misspelledWord, params.dictionarySuggestions);
+		};
+
+		const onBrowserContextMenu = (event: PointerEvent) => {
+			const isKeyboard = event.buttons === 0;
+			if (isKeyboard) {
+				// Context menu events from the keyboard seem to always use <body> as the
+				// event target. Since which context menu is displayed depends on what the
+				// target is, using event.target for keyboard-triggered contextmenu events
+				// would prevent keyboard-only users from accessing certain functionality.
+				// To fix this, use the selection instead.
+				lastTarget = editor.selection.getNode();
+			} else {
+				lastTarget = event.target;
+			}
+
+			// Plugins in the Rich Text Editor (e.g. the mermaid renderer) can sometimes
+			// create custom right-click events. These don't trigger the Electron 'context-menu'
+			// event. As such, the context menu must be shown manually.
+			const isFromPlugin = !event.isTrusted;
+			if (isFromPlugin) {
+				event.preventDefault();
+				showContextMenu(lastTarget as HTMLElement, null, []);
+				lastTarget = null;
 			}
 		};
-	}, [editor, plugins, dispatch, htmlToMd, mdToHtml]);
+
+		targetWindow.webContents.prependListener('context-menu', onElectronContextMenu);
+		editor.on('contextmenu', onBrowserContextMenu);
+
+		return () => {
+			editor.off('contextmenu', onBrowserContextMenu);
+			if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
+				targetWindow.webContents.off('context-menu', onElectronContextMenu);
+			}
+		};
+	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog]);
 }

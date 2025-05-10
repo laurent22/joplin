@@ -18,5 +18,6 @@ export interface CommandRuntimeProps {
 	setMode(mode: EditorMode): void;
 	setCameraVisible(visible: boolean): void;
 	setTagDialogVisible(visible: boolean): void;
+	setAudioRecorderVisible(visible: boolean): void;
 	dialogs: DialogControl;
 }

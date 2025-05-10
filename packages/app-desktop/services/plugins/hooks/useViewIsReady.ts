@@ -1,13 +1,25 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
+import useMessageHandler from './useMessageHandler';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function useViewIsReady(viewRef: any) {
+export default function useViewIsReady(viewRef: RefObject<HTMLIFrameElement>) {
 	// Just checking if the iframe is ready is not sufficient because its content
 	// might not be ready (for example, IPC listeners might not be initialised).
 	// So we also listen to a custom "ready" message coming from the webview content
 	// (in UserWebviewIndex.js)
 	const [iframeReady, setIFrameReady] = useState(false);
 	const [iframeContentReady, setIFrameContentReady] = useState(false);
+
+	useMessageHandler(viewRef, event => {
+		const data = event.data;
+		if (!data || data.target !== 'UserWebview') return;
+
+		// eslint-disable-next-line no-console
+		console.debug('useViewIsReady: message', data);
+
+		if (data.message === 'ready') {
+			setIFrameContentReady(true);
+		}
+	});
 
 	useEffect(() => {
 		// eslint-disable-next-line no-console
@@ -19,20 +31,6 @@ export default function useViewIsReady(viewRef: any) {
 			setIFrameReady(true);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onMessage(event: any) {
-			const data = event.data;
-
-			if (!data || data.target !== 'UserWebview') return;
-
-			// eslint-disable-next-line no-console
-			console.debug('useViewIsReady: message', data);
-
-			if (data.message === 'ready') {
-				setIFrameContentReady(true);
-			}
-		}
-
 		const iframeDocument = viewRef.current.contentWindow.document;
 
 		// eslint-disable-next-line no-console
@@ -42,20 +40,15 @@ export default function useViewIsReady(viewRef: any) {
 			onIFrameReady();
 		}
 
-		viewRef.current.addEventListener('dom-ready', onIFrameReady);
-		viewRef.current.addEventListener('load', onIFrameReady);
-		viewRef.current.contentWindow.addEventListener('message', onMessage);
+		const view = viewRef.current;
+		view.addEventListener('dom-ready', onIFrameReady);
+		view.addEventListener('load', onIFrameReady);
 
 		return () => {
-			if (viewRef.current) {
-				viewRef.current.removeEventListener('dom-ready', onIFrameReady);
-				viewRef.current.removeEventListener('load', onIFrameReady);
-				// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-				viewRef.current.contentWindow.removeEventListener('message', onMessage);
-			}
+			view.removeEventListener('dom-ready', onIFrameReady);
+			view.removeEventListener('load', onIFrameReady);
 		};
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, []);
+	}, [viewRef]);
 
 	return iframeReady && iframeContentReady;
 }

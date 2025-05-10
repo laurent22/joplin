@@ -167,7 +167,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
 					if (!webviewRef.current) return;
-					webviewRef.current.send('scrollToHash', options.value as string);
+					const hash: string = options.value;
+					webviewRef.current.send('scrollToHash', hash);
+					editorRef.current.jumpToHash(hash);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
 					setEditorPercentScroll(percent);
@@ -358,6 +360,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return {
 			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 			readOnly: props.disabled,
+			markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
 			katexEnabled: Setting.value('markdown.plugin.katex'),
 			themeData: {
 				...styles.globalTheme,
@@ -372,18 +375,23 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
 			keymap: keyboardMode,
 			indentWithTabs: true,
+			tabMovesFocus: props.tabMovesFocus,
 			editorLabel: _('Markdown editor'),
 		};
 	}, [
 		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
+		props.tabMovesFocus,
 	]);
 
 	// Update the editor's value
 	useEffect(() => {
-		if (editorRef.current?.updateBody(props.content)) {
+		// Include the noteId in the update props to give plugins access
+		// to the current note ID.
+		const updateProps = { noteId: props.noteId };
+		if (editorRef.current?.updateBody(props.content, updateProps)) {
 			editorRef.current?.clearHistory();
 		}
-	}, [props.content]);
+	}, [props.content, props.noteId]);
 
 	const renderEditor = () => {
 		return (
@@ -391,6 +399,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				<Editor
 					style={styles.editor}
 					initialText={props.content}
+					initialNoteId={props.noteId}
 					ref={editorRef}
 					settings={editorSettings}
 					pluginStates={props.plugins}

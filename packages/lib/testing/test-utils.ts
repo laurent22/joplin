@@ -287,6 +287,7 @@ async function switchClient(id: number, options: any = null) {
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 	ResourceFetcher.instance_ = resourceFetchers_[id];
+	DecryptionWorker.instance_ = decryptionWorker(id);
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -549,7 +550,7 @@ function revisionService(id: number = null) {
 function decryptionWorker(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = decryptionWorkers_[id];
-	o.setKvStore(kvStore(id));
+	o?.setKvStore(kvStore(id));
 	return o;
 }
 
@@ -1023,21 +1024,23 @@ class TestApp extends BaseApplication {
 }
 
 const createTestShareData = (shareId: string): ShareState => {
+	const share = {
+		id: shareId,
+		folder_id: '',
+		master_key_id: '',
+		note_id: '',
+		type: 1,
+	};
+
 	return {
 		processingShareInvitationResponse: false,
-		shares: [],
+		shares: [share],
 		shareInvitations: [
 			{
 				id: '',
 				master_key: {},
 				status: 0,
-				share: {
-					id: shareId,
-					folder_id: '',
-					master_key_id: '',
-					note_id: '',
-					type: 1,
-				},
+				share,
 				can_read: 1,
 				can_write: 0,
 			},
@@ -1046,10 +1049,40 @@ const createTestShareData = (shareId: string): ShareState => {
 	};
 };
 
-const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
+const mergeShareData = (state1: ShareState, state2: ShareState) => {
+	return {
+		...state1,
+		shares: [...state1.shares, ...state2.shares],
+		shareInvitations: [
+			...state1.shareInvitations,
+			...state2.shareInvitations,
+		],
+		shareUsers: {
+			...state1.shareUsers,
+			...state2.shareUsers,
+		},
+	};
+};
+
+const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
+	if (!Array.isArray(shareIds)) {
+		shareIds = [shareIds];
+	}
+
 	Setting.setValue('sync.target', 10);
 	Setting.setValue('sync.userId', 'abcd');
-	const shareData = createTestShareData(shareId);
+
+	// Create all shares
+	let shareData: ShareState|null = null;
+	for (const shareId of shareIds) {
+		const newShareData = createTestShareData(shareId);
+		if (!shareData) {
+			shareData = newShareData;
+		} else {
+			shareData = mergeShareData(shareData, newShareData);
+		}
+	}
+
 	BaseItem.syncShareCache = shareData;
 
 	if (store) {

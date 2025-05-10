@@ -12,6 +12,10 @@ export default class GoToAnything {
 		this.inputLocator = this.containerLocator.getByRole('textbox');
 	}
 
+	public async waitFor() {
+		await this.containerLocator.waitFor();
+	}
+
 	public async open(electronApp: ElectronApplication) {
 		await this.mainScreen.waitFor();
 		await activateMainMenuItem(electronApp, 'Goto Anything...');
@@ -19,8 +23,31 @@ export default class GoToAnything {
 		return this.waitFor();
 	}
 
-	public async waitFor() {
-		await this.containerLocator.waitFor();
+	public async openLinkToNote(electronApp: ElectronApplication) {
+		await this.mainScreen.waitFor();
+		await activateMainMenuItem(electronApp, 'Link to note...');
+		return this.waitFor();
+	}
+
+	public resultLocator(resultText: string|RegExp) {
+		return this.containerLocator.getByRole('option', { name: resultText });
+	}
+
+	public async searchForWithRetry(query: string, resultLocator: Locator) {
+		// If note indexing hasn't finished, it's sometimes necessary to search multiple times.
+		// This expect.poll retries the search if it initially fails.
+		await expect.poll(async () => {
+			await this.inputLocator.clear();
+			await this.inputLocator.fill(query);
+			try {
+				await expect(resultLocator).toBeVisible({ timeout: 1000 });
+			} catch (error) {
+				// Return, rather than throw, the error -- expect.poll doesn't retry
+				// if the callback throws.
+				return error;
+			}
+			return true;
+		}, { timeout: 10_000 }).toBe(true);
 	}
 
 	public async expectToBeClosed() {

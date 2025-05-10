@@ -93,10 +93,10 @@ export default class JoplinViewsEditors {
 	}
 
 	/**
-	 * Emitted when the editor can potentially be activated - this for example when the current note
-	 * is changed, or when the application is opened. At that point should can check the current
-	 * note and decide whether your editor should be activated or not. If it should return `true`,
-	 * otherwise return `false`.
+	 * Emitted when the editor can potentially be activated - this is for example when the current
+	 * note is changed, or when the application is opened. At that point you should check the
+	 * current note and decide whether your editor should be activated or not. If it should, return
+	 * `true`, otherwise return `false`.
 	 */
 	public async onActivationCheck(handle: ViewHandle, callback: ActivationCheckCallback): Promise<void> {
 		const handler: FilterHandler<EditorActivationCheckFilterObject> = async (object) => {
@@ -118,7 +118,7 @@ export default class JoplinViewsEditors {
 	}
 
 	/**
-	 * Emitted when the editor content should be updated. This for example when the currently
+	 * Emitted when your editor content should be updated. This is for example when the currently
 	 * selected note changes, or when the user makes the editor visible.
 	 */
 	public async onUpdate(handle: ViewHandle, callback: UpdateCallback): Promise<void> {

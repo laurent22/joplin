@@ -4,12 +4,12 @@ import appDefaultState from '../appDefaultState';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState } from '../types';
 
-const testReducer = (state: AppState|undefined, action: unknown) => {
+const testReducer = (state: AppState|undefined, action: unknown): AppState => {
 	state ??= {
 		...appDefaultState,
 		settings: Setting.toPlainObject(),
 	};
-	return reducer(state, action);
+	return { ...state, ...reducer(state, action) };
 };
 
 const createMockReduxStore = () => {

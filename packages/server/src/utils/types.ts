@@ -127,6 +127,7 @@ export interface StorageDriverConfig {
 	path?: string;
 	mode?: StorageDriverMode;
 	region?: string;
+	endpoint?: string;
 	accessKeyId?: string;
 	secretAccessKeyId?: string;
 	bucket?: string;

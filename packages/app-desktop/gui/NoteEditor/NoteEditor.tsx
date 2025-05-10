@@ -16,13 +16,11 @@ import useFolder from './utils/useFolder';
 import styles_ from './styles';
 import { NoteEditorProps, FormNote, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions, NoteBodyEditorRef } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
-import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
-import TagList from '../TagList';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
@@ -54,11 +52,10 @@ import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
 import { stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-import { EditorActivationCheckFilterObject } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import WebviewController from '@joplin/lib/services/plugins/WebviewController';
-import AsyncActionQueue, { IntervalType } from '@joplin/lib/AsyncActionQueue';
+import EditorPluginHandler from '@joplin/lib/services/plugins/EditorPluginHandler';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
+import StatusBar from './StatusBar';
 
 const debounce = require('debounce');
 
@@ -73,15 +70,6 @@ const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 const onDragOver: React.DragEventHandler = event => event.preventDefault();
 let editorIdCounter = 0;
 
-const makeNoteUpdateAction = (shownEditorViewIds: string[]) => {
-	return async () => {
-		for (const viewId of shownEditorViewIds) {
-			const controller = PluginService.instance().viewControllerByViewId(viewId) as WebviewController;
-			if (controller) controller.emitUpdate();
-		}
-	};
-};
-
 function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
@@ -91,7 +79,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const titleInputRef = useRef<HTMLInputElement>();
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
-	const viewUpdateAsyncQueue_ = useRef<AsyncActionQueue>(new AsyncActionQueue(100, IntervalType.Fixed));
+
+	const editorPluginHandler = useMemo(() => {
+		return new EditorPluginHandler(PluginService.instance());
+	}, []);
 
 	const shownEditorViewIds = props['plugins.shownEditorViewIds'];
 
@@ -115,25 +106,15 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const effectiveNoteId = useEffectiveNoteId(props);
 
-	useAsyncEffect(async (event) => {
+	useAsyncEffect(async (_event) => {
 		if (!props.startupPluginsLoaded) return;
-
-		let filterObject: EditorActivationCheckFilterObject = {
-			activatedEditors: [],
-		};
-		filterObject = await eventManager.filterEmit('editorActivationCheck', filterObject);
-		if (event.cancelled) return;
-
-		for (const editor of filterObject.activatedEditors) {
-			const controller = PluginService.instance().pluginById(editor.pluginId).viewController(editor.viewId) as WebviewController;
-			controller.setActive(editor.isActive);
-		}
-	}, [effectiveNoteId, props.startupPluginsLoaded]);
+		await editorPluginHandler.emitActivationCheck();
+	}, [effectiveNoteId, editorPluginHandler, props.startupPluginsLoaded]);
 
 	useEffect(() => {
 		if (!props.startupPluginsLoaded) return;
-		viewUpdateAsyncQueue_.current.push(makeNoteUpdateAction(shownEditorViewIds));
-	}, [effectiveNoteId, shownEditorViewIds, props.startupPluginsLoaded]);
+		editorPluginHandler.emitUpdate(shownEditorViewIds);
+	}, [effectiveNoteId, editorPluginHandler, shownEditorViewIds, props.startupPluginsLoaded]);
 
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, shownEditorViewIds);
 	const builtInEditorVisible = !editorPlugin;
@@ -182,8 +163,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		scrollbarSize: props.scrollbarSize,
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null) => {
 		options = {
 			contentMaxWidthTarget: '',
 			...options,
@@ -191,7 +171,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml(props.plugins, {
 			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
 			customCss: props.customCss,
 		});
@@ -202,7 +182,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			scrollbarSize: props.scrollbarSize,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
-	}, [props.themeId, props.scrollbarSize, props.customCss, props.contentMaxWidth]);
+	}, [props.plugins, props.themeId, props.scrollbarSize, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -440,26 +420,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return <div style={emptyDivStyle} ref={containerRef}></div>;
 	}
 
-	function renderTagButton() {
-		return <ToolbarButton
-			themeId={props.themeId}
-			toolbarButtonInfo={props.setTagsToolbarButtonInfo}
-		/>;
-	}
-
-	function renderTagBar() {
-		const theme = themeStyle(props.themeId);
-		const noteIds = [formNote.id];
-		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>{_('Click to add tags...')}</span>;
-		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
-
-		return (
-			<div style={{ paddingLeft: 8, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{tagList}{instructions}</div>
-		);
-	}
-
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
+	const markupLanguage = formNote.markup_language;
 	const editorProps: NoteBodyEditorProps = {
 		ref: editorRef,
 		contentKey: formNote.id,
@@ -469,7 +432,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		onWillChange: onBodyWillChange,
 		onMessage: onMessage,
 		content: formNote.body,
-		contentMarkupLanguage: formNote.markup_language,
+		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
@@ -488,10 +451,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
+		enableTextPatterns: Setting.value('editor.enableTextPatterns'),
+		tabMovesFocus: props.tabMovesFocus,
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
+		// KaTeX isn't supported in HTML notes
+		mathEnabled: markupLanguage === MarkupLanguage.Markdown && Setting.value('markdown.plugin.katex'),
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		scrollbarSize: props.scrollbarSize,
@@ -690,10 +657,11 @@ function NoteEditorContent(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div className="tag-bar" style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
-					{renderTagButton()}
-					{renderTagBar()}
-				</div>
+				<StatusBar
+					noteId={formNote.id}
+					setTagsToolbarButtonInfo={props.setTagsToolbarButtonInfo}
+					selectedNoteTags={props.selectedNoteTags}
+				/>
 				<WarningBanner bodyEditor={props.bodyEditor}/>
 			</div>
 		</div>
@@ -750,6 +718,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		], whenClauseContext)[0] as ToolbarButtonInfo,
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
+		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,
 		syncUserId: state.settings['sync.userId'],
