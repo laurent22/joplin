@@ -4,15 +4,16 @@
 
 <img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" style="margin-right:15px"/>
 
-**Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md).
+**Joplin** Joplin is a free and open-source note-taking and to-do application designed to manage a large number of notes organized into notebooks. Notes are fully searchable, can be tagged, copied, and edited directly within the app or using your preferred text editor. For flexibility and compatibility, All notes are stored in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md).
 
-Notes exported from Evernote [can be imported](https://github.com/laurent22/joplin/blob/dev/readme/apps/import_export.md) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+You can import notes from Evernote [can be imported](https://github.com/laurent22/joplin/blob/dev/readme/apps/import_export.md) including formatted content (automatically converted to Markdown), resources such as images and attachments, and complete metadata like geolocation, creation time, and last updated time. Plain Markdown files can also be imported seamlessly.
 
-Joplin is "offline first", which means you always have all your data on your phone or computer. This ensures that your notes are always accessible, whether you have an internet connection or not.
+Joplin is designed with an "offline-first" approach, meaning your data is always stored locally on your device. This ensures that your notes remain accessible at all times, even without an internet connection.
 
 The notes can be securely [synchronised](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/index.md) using [end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/e2ee.md) with various cloud services including Nextcloud, Dropbox, OneDrive and [Joplin Cloud](https://joplinapp.org/plans/).
 
-Full text search is available on all platforms to quickly find the information you need. The app can be customised using plugins and themes, and you can also easily create your own.
+Full-text search is available across all platforms, allowing you to quickly find the information you need. Joplin is highly customizable through a wide range of plugins and themes—and if needed, you can easily create your own.
+
 
 The application is available for Windows, Linux, macOS, Android and iOS. A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
@@ -24,7 +25,7 @@ For more information about the applications, see the [full Joplin documentation]
 
 # Donations
 
-Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
+Donations to Joplin play a crucial role in supporting the ongoing development of the project. While creating high-quality applications requires time and effort, there are also associated costs, such as digital certificates for signing apps, app store fees, hosting, and more. Most importantly, your donation helps maintain the high development standards that Joplin users rely on.
 
 Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/donate.md) for information on how to support the development of Joplin.
 
