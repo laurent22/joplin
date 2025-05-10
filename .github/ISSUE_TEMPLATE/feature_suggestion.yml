@@ -1,0 +1,56 @@
+name: "\u2728 Feature or Plugin Suggestion"
+description: Suggest a new feature or plugin idea for Joplin.
+title: "[Suggestion] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to suggest a feature or plugin idea! Please fill in as much detail as you can.
+
+  - type: input
+    id: summary
+    attributes:
+      label: ✨ Summary
+      description: Briefly describe your idea.
+      placeholder: e.g., Add AI summarization plugin for note content
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 🧠 Why is this needed?
+      description: What problem does this solve? Why would someone use it?
+      placeholder: Describe the use case and why it matters.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 🛠️ Proposed Solution
+      description: Describe how this would work or what you have in mind.
+      placeholder: e.g., A plugin that uses an API to generate summaries and displays them inline.
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefit
+    attributes:
+      label: 👥 Who would benefit?
+      description: Who is this feature or plugin for? All users, power users, developers?
+      placeholder: Describe the user(s) who would get value from this.
+
+  - type: textarea
+    id: alt
+    attributes:
+      label: 🔄 Alternatives or related plugins
+      description: Are there any existing plugins, workarounds, or alternatives?
+      placeholder: Link or describe anything similar.
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 🖼️ Screenshots / Mockups
+      description: Optional – If you have visuals, attach them here.
