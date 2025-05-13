@@ -81,10 +81,11 @@ const PluginBox: React.FC<Props> = props => {
 	const styles = useStyles(props.isCompatible);
 
 	const CardWrapper = props.onShowPluginInfo ? TouchableRipple : View;
+	const containerIsButton = !!props.onShowPluginInfo;
 	return (
 		<CardWrapper
-			accessibilityRole={props.onShowPluginInfo ? 'button' : null}
-			accessible={true}
+			accessibilityRole={containerIsButton ? 'button' : null}
+			accessible={containerIsButton}
 			onPress={props.onShowPluginInfo ? onPress : null}
 			style={styles.cardContainer}
 		>

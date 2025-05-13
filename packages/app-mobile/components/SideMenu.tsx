@@ -271,12 +271,14 @@ const SideMenuComponent: React.FC<Props> = props => {
 		<AccessibleView
 			inert={!open}
 			style={styles.menuWrapper}
+			testID='menu-wrapper'
 		>
 			<AccessibleView
 				// Auto-focuses an empty view at the beginning of the sidemenu -- if we instead
 				// focus the container view, VoiceOver fails to focus to any components within
 				// the sidebar.
 				refocusCounter={!open ? 1 : undefined}
+				testID='sidemenu-menu-focus-region'
 			/>
 
 			{props.menu}
@@ -287,8 +289,9 @@ const SideMenuComponent: React.FC<Props> = props => {
 		<AccessibleView
 			inert={open}
 			style={styles.contentWrapper}
+			testID='content-wrapper'
 		>
-			<AccessibleView refocusCounter={open ? 1 : undefined} />
+			<AccessibleView refocusCounter={open ? 1 : undefined} testID='sidemenu-content-focus-region' />
 			{props.children}
 		</AccessibleView>
 	);

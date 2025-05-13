@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import Setting from '@joplin/lib/models/Setting';
 import { defaultState, defaultWindowState, State, WindowState } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';

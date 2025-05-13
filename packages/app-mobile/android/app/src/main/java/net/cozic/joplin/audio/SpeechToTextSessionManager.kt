@@ -1,6 +1,5 @@
 package net.cozic.joplin.audio
 
-import ai.onnxruntime.OrtEnvironment
 import android.content.Context
 import com.facebook.react.bridge.Promise
 import java.util.concurrent.Executor
@@ -21,13 +20,14 @@ class SpeechToTextSessionManager(
 	fun openSession(
 		modelPath: String,
 		locale: String,
-		environment: OrtEnvironment,
+		prompt: String,
+		useShortAudioCtx: Boolean,
 		context: Context,
 	): Int {
 		val sessionId = nextSessionId++
 		sessions[sessionId] = SpeechToTextSession(
 			SpeechToTextConverter(
-				modelPath, locale, recorderFactory = AudioRecorder.factory, environment, context,
+				modelPath, locale, prompt, useShortAudioCtx, recorderFactory = AudioRecorder.factory, context,
 			)
 		)
 		return sessionId
@@ -87,9 +87,9 @@ class SpeechToTextSessionManager(
 	}
 
 	// Waits for the next [duration] seconds to become available, then converts
-	fun expandBufferAndConvert(sessionId: Int, duration: Double, promise: Promise) {
+	fun convertNext(sessionId: Int, duration: Double, promise: Promise) {
 		this.concurrentWithSession(sessionId, promise::reject) { session ->
-			val result = session.converter.expandBufferAndConvert(duration)
+			val result = session.converter.convertNext(duration)
 			promise.resolve(result)
 		}
 	}
@@ -97,7 +97,7 @@ class SpeechToTextSessionManager(
 	// Converts all available recorded data
 	fun convertAvailable(sessionId: Int, promise: Promise) {
 		this.concurrentWithSession(sessionId, promise::reject) { session ->
-			val result = session.converter.expandBufferAndConvert()
+			val result = session.converter.convertRemaining()
 			promise.resolve(result)
 		}
 	}

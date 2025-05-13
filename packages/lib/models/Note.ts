@@ -13,7 +13,7 @@ import Resource from './Resource';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
-const { _ } = require('../locale');
+const { _, _n } = require('../locale');
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
@@ -29,7 +29,7 @@ export interface PreviewsOrder {
 	dir: string;
 }
 
-interface PreviewsOptions {
+export interface PreviewsOptions {
 	order?: PreviewsOrder[];
 	conditions?: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -893,8 +893,7 @@ export default class Note extends BaseItem {
 					'updated_time = ?',
 				];
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const params: any[] = [
+				const params: (string|number)[] = [
 					now,
 					now,
 				];
@@ -907,7 +906,7 @@ export default class Note extends BaseItem {
 				const sql = `
 					UPDATE notes
 					SET	${updateSql.join(', ')}						
-					WHERE id IN ('${processIds.join('\',\'')}')
+					WHERE id IN (${this.escapeIdsForSql(processIds)})
 				`;
 
 				await this.db().exec({ sql, params });
@@ -942,7 +941,7 @@ export default class Note extends BaseItem {
 			if (!note) return null;
 			msg = _('Permanently delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
 		} else {
-			msg = _('Permanently delete these %d notes?', noteIds.length);
+			msg = _n('Permanently delete this note?', 'Permanently delete these %d notes?', noteIds.length, noteIds.length);
 		}
 		return msg;
 	}

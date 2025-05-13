@@ -1,0 +1,14 @@
+.tag-bar {
+	padding-left: var(--joplin-editor-padding-left);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 40px;
+
+	> .content {
+		padding-left: 8px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+}

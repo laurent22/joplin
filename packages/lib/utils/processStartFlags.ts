@@ -13,6 +13,7 @@ export interface MatchedStartFlags {
 	logLevel?: LogLevel;
 	allowOverridingDnsResultOrder?: boolean;
 	devPlugins?: string[];
+	altInstanceId?: string;
 }
 
 // Handles the initial flags passed to main script and
@@ -118,6 +119,12 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg === '--alt-instance-id') {
+			matched.altInstanceId = nextArg;
+			argv.splice(0, 2);
+			continue;
+		}
+
 		if (arg.indexOf('--remote-debugging-port=') === 0) {
 			// Electron-specific flag used for debugging - ignore it. Electron expects this flag in '--x=y' form, a single string.
 			argv.splice(0, 1);
@@ -145,10 +152,21 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
-		if (arg.indexOf('--enable-wayland-ime') === 0) {
+		if (
+			arg === '--enable-wayland-ime'
+			|| arg === '--disable-gtk-ime'
+			|| arg.startsWith('--wayland-text-input-version=')
+		) {
 			// Electron-specific flag - ignore it
-			// Enables input method support on Linux/Wayland
+			// Enables/configures input method support on Linux/Wayland
 			// See https://github.com/laurent22/joplin/issues/10345
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg.startsWith('--gtk-version=')) {
+			// Electron-specific flag. Allows forcing a different GTK version.
+			// See https://wiki.archlinux.org/title/Chromium#Native_Wayland_support
 			argv.splice(0, 1);
 			continue;
 		}
@@ -177,6 +195,12 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 		if (arg === '--updated') {
 			// Electron-specific flag - ignore it
 			// Allows to restart with the updated application after the update option is selected by the user
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg === '--running-tests') {
+			// Used by the desktop app to indicate that the app is running end-to-end tests.
 			argv.splice(0, 1);
 			continue;
 		}

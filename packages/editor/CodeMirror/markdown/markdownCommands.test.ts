@@ -5,7 +5,7 @@ import {
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from './markdownCommands';
 import createTestEditor from '../testUtil/createTestEditor';
-import { blockMathTagName } from './markdownMathParser';
+import { blockMathTagName } from './MarkdownMathExtension';
 
 describe('markdownCommands', () => {
 

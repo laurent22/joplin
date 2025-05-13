@@ -2,7 +2,7 @@ import { ViewPlugin } from '@codemirror/view';
 import createEditorControl from './testUtil/createEditorControl';
 import { EditorCommandType } from '../types';
 import pressReleaseKey from './testUtil/pressReleaseKey';
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
@@ -207,5 +207,44 @@ describe('CodeMirrorControl', () => {
 		}
 
 		expect(control.editor.state.doc.toString()).toBe(expected);
+	});
+
+	it('updateBody should update the note ID facet and dispatch changes', () => {
+		const control = createEditorControl('test');
+		const noteIdFacet = control.joplinExtensions.noteIdFacet;
+		const getFacet = () => control.editor.state.facet(noteIdFacet);
+
+		control.updateBody('Test', { noteId: 'updated' });
+		expect(getFacet()).toBe('updated');
+
+		// Updating the ID without updating the body should change the ID
+		control.updateBody('Test', { noteId: 'updated 2' });
+		expect(getFacet()).toBe('updated 2');
+
+		// Changing the body, without specifying a new note ID, should
+		// not update the facet.
+		control.updateBody('Test 2');
+		expect(getFacet()).toBe('updated 2');
+	});
+
+	it('updateBody should dispatch changes to the note ID', () => {
+		const control = createEditorControl('test');
+
+		let noteId = '';
+		const noteIdChangeListener = EditorState.transactionExtender.of(transaction => {
+			for (const effect of transaction.effects) {
+				if (effect.is(control.joplinExtensions.setNoteIdEffect)) {
+					noteId = effect.value;
+				}
+			}
+			return null;
+		});
+		control.addExtension(noteIdChangeListener);
+
+		control.updateBody('Test', { noteId: 'updated' });
+		expect(noteId).toBe('updated');
+
+		control.updateBody('Test', { noteId: 'updated-2' });
+		expect(noteId).toBe('updated-2');
 	});
 });

@@ -1,41 +1,14 @@
-import { useEffect } from 'react';
+import { RefObject } from 'react';
+import useMessageHandler from './useMessageHandler';
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(frameWindow: any, onSubmit: Function, onDismiss: Function, loadedHtmlHash: string) {
-	const document = frameWindow && frameWindow.document ? frameWindow.document : null;
-
-	useEffect(() => {
-		if (!document) return () => {};
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onFormSubmit(event: any) {
-			event.preventDefault();
-			if (onSubmit) onSubmit();
+export default function(viewRef: RefObject<HTMLIFrameElement>, onSubmit: Function, onDismiss: Function) {
+	useMessageHandler(viewRef, event => {
+		const message = event.data?.message;
+		if (message === 'form-submit') {
+			onSubmit();
+		} else if (message === 'dismiss') {
+			onDismiss();
 		}
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onKeyDown(event: any) {
-			if (event.key === 'Escape') {
-				if (onDismiss) onDismiss();
-			}
-
-			if (event.key === 'Enter') {
-				//
-				// Disable enter key from submitting when a text area is in focus!
-				// https://github.com/laurent22/joplin/issues/4766
-				//
-				if (document.activeElement.tagName !== 'TEXTAREA') {
-					if (onSubmit) onSubmit();
-				}
-			}
-		}
-
-		document.addEventListener('submit', onFormSubmit);
-		document.addEventListener('keydown', onKeyDown);
-
-		return () => {
-			if (document) document.removeEventListener('submit', onFormSubmit);
-			if (document) document.removeEventListener('keydown', onKeyDown);
-		};
-	}, [document, loadedHtmlHash, onSubmit, onDismiss]);
+	});
 }

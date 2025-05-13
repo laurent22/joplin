@@ -33,6 +33,10 @@ export const SearchInput = styled(StyledInput)`
 	padding-right: 20px;
 	flex: 1;
 	width: 10px;
+
+	&::-webkit-search-cancel-button {
+		display: none;
+	}
 `;
 
 interface Props {

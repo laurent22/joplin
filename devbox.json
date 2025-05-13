@@ -25,7 +25,8 @@
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "git": "latest",
+    "git":    "latest",
+    "giflib": "latest",
   },
   "shell": {
     "init_hook": [

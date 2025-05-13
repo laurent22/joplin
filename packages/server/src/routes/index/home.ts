@@ -22,6 +22,44 @@ function setupMessageHtml() {
 	}
 }
 
+// Note: Take the list from `packages/doc-builder/docusaurus.config.js`
+const socialFeeds = () => {
+	return [
+		{
+			label: 'Bluesky',
+			href: 'https://bsky.app/profile/joplinapp.bsky.social',
+		},
+		{
+			label: 'Patreon',
+			href: 'https://www.patreon.com/joplin',
+		},
+		{
+			label: 'YouTube',
+			href: 'https://www.youtube.com/@joplinapp',
+		},
+		{
+			label: 'LinkedIn',
+			href: 'https://www.linkedin.com/company/joplin',
+		},
+		{
+			label: 'Discord',
+			href: 'https://discord.gg/VSj7AFHvpq',
+		},
+		{
+			label: 'Mastodon',
+			href: 'https://mastodon.social/@joplinapp',
+		},
+		{
+			label: 'Lemmy',
+			href: 'https://sopuli.xyz/c/joplinapp',
+		},
+		{
+			label: 'GitHub',
+			href: 'https://github.com/laurent22/joplin/',
+		},
+	];
+};
+
 router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
 
@@ -79,6 +117,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			betaExpiredDays: betaUserTrialPeriodDays(user.created_time, 0, 0),
 			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
+			socialFeeds: socialFeeds(),
 		};
 
 		view.cssFiles = ['index/home'];

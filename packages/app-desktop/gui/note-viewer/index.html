@@ -377,6 +377,39 @@
 			contentElement.scrollTop = scrollTop;
 		}
 
+		const getLineCorrespondingTo = (editorLineNumber) => {
+			const lineElements = document.getElementsByClassName('maps-to-line');
+			let lastLineElement;
+			let lastLine = 0;
+			for (const element of lineElements) {
+				// Stop just before the element that corresponds to a greater position
+				if (Number(element.getAttribute('source-line')) > editorLineNumber) {
+					break;
+				}
+				lastLineElement = element;
+			}
+			return lastLineElement;
+		};
+
+		ipc.focusLine = (event) => {
+			const targetLine = event.line;
+			const lineElement = getLineCorrespondingTo(targetLine);
+			if (lineElement) {
+				const doFocus = () => {
+					lineElement.focus({ preventScroll: true });
+				};
+				doFocus();
+
+				// Handle the case where the element is not naturally focusable.
+				if (!lineElement.contains(document.activeElement)) {
+					// tabindex=-1 allows focusing with JavaScript, but does not add the element
+					// to the focus order.
+					lineElement.setAttribute('tabindex', '-1');
+					doFocus();
+				}
+			}
+		}
+
 		const rewriteFileUrls = (accessKey) => {
 			if (!accessKey) return;
 

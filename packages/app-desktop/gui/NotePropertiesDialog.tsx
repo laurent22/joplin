@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
-import time from '@joplin/lib/time';
 import DialogButtonRow from './DialogButtonRow';
 import Note from '@joplin/lib/models/Note';
 import bridge from '../services/bridge';
@@ -9,7 +8,7 @@ import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from './Dialog';
-const Datetime = require('react-datetime').default;
+import { formatDateTimeLocalToMs, formatMsToDateTimeLocal, formatMsToLocal } from '@joplin/utils/time';
 const { clipboard } = require('electron');
 const formatcoords = require('formatcoords');
 
@@ -23,14 +22,14 @@ interface Props {
 
 interface FormNote {
 	id: string;
-	deleted_time: string;
+	deleted_time: number;
 	location: string;
 	markup_language: string;
 	revisionsLink: string;
 	source_url: string;
-	todo_completed?: string;
-	user_created_time: string;
-	user_updated_time: string;
+	todo_completed?: number;
+	user_created_time: number;
+	user_updated_time: number;
 }
 
 interface State {
@@ -38,7 +37,16 @@ interface State {
 	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editedValue: any;
+	isValid: {
+		location: boolean;
+	};
 }
+
+const uniqueId = (key: string) => `note-properties-dialog-${key}`;
+
+const isPropertyDatetimeRelated = (key: string) => {
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+};
 
 class NotePropertiesDialog extends React.Component<Props, State> {
 
@@ -48,18 +56,24 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	private styleKey_: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	private inputRef: React.RefObject<HTMLInputElement>;
 
 	public constructor(props: Props) {
 		super(props);
 
 		this.revisionsLink_click = this.revisionsLink_click.bind(this);
 		this.buttonRow_click = this.buttonRow_click.bind(this);
+		this.locationOnChange = this.locationOnChange.bind(this);
 		this.okButton = React.createRef();
+		this.inputRef = React.createRef();
 
 		this.state = {
 			formNote: null,
 			editedKey: null,
 			editedValue: null,
+			isValid: {
+				location: true,
+			},
 		};
 
 		this.keyToLabel_ = {
@@ -116,17 +130,17 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public noteToFormNote(note: NoteEntity) {
 		const formNote: FormNote = {
 			id: note.id,
-			user_updated_time: time.formatMsToLocal(note.user_updated_time),
-			user_created_time: time.formatMsToLocal(note.user_created_time),
+			user_updated_time: note.user_updated_time,
+			user_created_time: note.user_created_time,
 			source_url: note.source_url,
 			location: '',
 			revisionsLink: note.id,
 			markup_language: Note.markupLanguageToLabel(note.markup_language),
-			deleted_time: note.deleted_time ? time.formatMsToLocal(note.deleted_time) : '',
+			deleted_time: note.deleted_time,
 		};
 
 		if (note.todo_completed) {
-			formNote.todo_completed = time.formatMsToLocal(note.todo_completed);
+			formNote.todo_completed = note.todo_completed;
 		}
 
 		if (Number(note.latitude) || Number(note.longitude)) {
@@ -138,11 +152,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 	public formNoteToNote(formNote: FormNote) {
 		const note: NoteEntity = { id: formNote.id, ...this.latLongFromLocation(formNote.location) };
-		note.user_created_time = time.formatLocalToMs(formNote.user_created_time);
-		note.user_updated_time = time.formatLocalToMs(formNote.user_updated_time);
+		note.user_created_time = formNote.user_created_time;
+		note.user_updated_time = formNote.user_updated_time;
 
 		if (formNote.todo_completed) {
-			note.todo_completed = time.formatLocalToMs(formNote.todo_completed);
+			note.todo_completed = formNote.todo_completed;
 		}
 
 		note.source_url = formNote.source_url;
@@ -188,6 +202,17 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			borderColor: theme.dividerColor,
 		};
 
+		this.styles_.invalidInput = {
+			border: '1px solid',
+			borderColor: theme.colorWarn,
+		};
+
+		this.styles_.invalidMessage = {
+			marginTop: '0.3em',
+			color: theme.color,
+			fontSize: theme.fontSize * 0.9,
+		};
+
 		return this.styles_;
 	}
 
@@ -224,13 +249,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		});
 
 		shim.setTimeout(() => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if ((this.refs.editField as any).openCalendar) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(this.refs.editField as any).openCalendar();
-			} else {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				focus('NotePropertiesDialog::editPropertyButtonClick', (this.refs.editField as any));
+			// Opens datetime-local fields with calendar
+			if (this.inputRef.current.showPicker) {
+				this.inputRef.current.showPicker();
+			} else if (this.inputRef.current) {
+				focus('NotePropertiesDialog::editPropertyButtonClick', (this.inputRef.current));
 			}
 		}, 100);
 	}
@@ -242,14 +265,8 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		return new Promise((resolve: Function) => {
 			const newFormNote = { ...this.state.formNote };
 
-			if (this.state.editedKey.indexOf('_time') >= 0) {
-				const dt = time.anythingToDateTime(this.state.editedValue, new Date());
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(newFormNote as any)[this.state.editedKey] = time.formatMsToLocal(dt.getTime());
-			} else {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(newFormNote as any)[this.state.editedKey] = this.state.editedValue;
-			}
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			(newFormNote as any)[this.state.editedKey] = this.state.editedValue;
 
 			this.setState(
 				{
@@ -277,20 +294,37 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		});
 	}
 
+	public async locationOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({ editedValue: event.target.value });
+		if (!event.target.value) {
+			this.setState({ isValid: { ...this.state.isValid, location: true } });
+			return;
+		}
+
+		if (event.target.value.includes(',')) {
+			const [lat, log] = event.target.value.split(',');
+			if (parseFloat(lat) < 90 && parseFloat(lat) > -90 && parseFloat(log) < 180 && parseFloat(log) > -180) {
+				this.setState({ isValid: { ...this.state.isValid, location: true } });
+				return;
+			}
+		}
+
+		this.setState({ isValid: { ...this.state.isValid, location: false } });
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public createNoteField(key: keyof FormNote, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
 		const labelText = this.formatLabel(key);
-		const labelComp = <label role='rowheader' style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
+		const labelComp = <label htmlFor={uniqueId(key)} role='rowheader' style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
 		let editCompIcon = null;
 		let editComDescription = null;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const onKeyDown = (event: any) => {
+		const onKeyDown = (event: React.KeyboardEvent) => {
 			if (event.keyCode === 13) {
 				void this.saveProperty();
 			} else if (event.keyCode === 27) {
@@ -299,41 +333,60 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		};
 
 		if (this.state.editedKey === key) {
-			if (key.indexOf('_time') >= 0) {
-				controlComp = (
-					<Datetime
-						ref="editField"
-						initialValue={value}
-						dateFormat={time.dateFormat()}
-						timeFormat={time.timeFormat()}
-						inputProps={{
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-							onKeyDown: (event: any) => onKeyDown(event),
-							style: styles.input,
-						}}
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						onChange={(momentObject: any) => {
-							this.setState({ editedValue: momentObject });
-						}}
-					/>
-				);
+			if (isPropertyDatetimeRelated(key)) {
+				controlComp = <input
+					type="datetime-local"
+					defaultValue={formatMsToDateTimeLocal(value)}
+					ref={this.inputRef}
+					onChange={event => this.setState({ editedValue: formatDateTimeLocalToMs(event.target.value) })}
+					onKeyDown={event => onKeyDown(event)}
+					style={styles.input}
+					id={uniqueId(key)}
+					name={uniqueId(key)}
+				/>;
 
 				editCompHandler = () => {
 					void this.saveProperty();
 				};
 				editCompIcon = 'fa-save';
 				editComDescription = _('Save changes');
+			} else if (this.state.editedKey === 'location') {
+				controlComp = (
+					<React.Fragment>
+						<input
+							defaultValue={value}
+							type="text"
+							ref={this.inputRef}
+							onChange={this.locationOnChange}
+							onKeyDown={event => onKeyDown(event)}
+							style={this.state.isValid.location ? styles.input : { ...styles.input, ...styles.invalidInput }}
+							id={uniqueId(key)}
+							name={uniqueId(key)}
+							aria-invalid={!this.state.isValid.location}
+						/>
+						{
+							this.state.isValid.location ? null
+								: <React.Fragment>
+									<div aria-live='polite' style={styles.invalidMessage}>
+										{_('Invalid format. E.g.: 48.8581372, 2.2926735')}
+									</div>
+								</React.Fragment>
+						}
+					</React.Fragment>
+				);
 			} else {
 				controlComp = (
 					<input
 						defaultValue={value}
 						type="text"
-						ref="editField"
+						ref={this.inputRef}
 						onChange={event => {
 							this.setState({ editedValue: event.target.value });
 						}}
 						onKeyDown={event => onKeyDown(event)}
 						style={styles.input}
+						id={uniqueId(key)}
+						name={uniqueId(key)}
 					/>
 				);
 			}
@@ -347,6 +400,8 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				} catch (error) {
 					displayedValue = '';
 				}
+			} else if (isPropertyDatetimeRelated(key)) {
+				displayedValue = formatMsToLocal(value);
 			}
 
 			if (['source_url', 'location'].indexOf(key) >= 0) {
@@ -413,22 +468,6 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public formatLabel(key: string) {
 		if (this.keyToLabel_[key]) return this.keyToLabel_[key];
 		return key;
-	}
-
-	public formatValue(key: string, note: NoteEntity) {
-		if (key === 'location') {
-			if (!Number(note.latitude) && !Number(note.longitude)) return null;
-			const dms = formatcoords(Number(note.latitude), Number(note.longitude));
-			return dms.format('DDMMss', { decimalPlaces: 0 });
-		}
-
-		if (['user_updated_time', 'user_created_time', 'todo_completed'].indexOf(key) >= 0) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return time.formatMsToLocal((note as any)[key]);
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return (note as any)[key];
 	}
 
 	public render() {

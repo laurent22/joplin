@@ -3,15 +3,17 @@ import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
-import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
-import { MarkdownMathExtension } from './markdown/markdownMathParser';
+import MarkdownMathExtension from './markdown/MarkdownMathExtension';
+import MarkdownHighlightExtension from './markdown/MarkdownHighlightExtension';
 import lookUpLanguage from './markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import { Prec } from '@codemirror/state';
+import insertNewlineContinueMarkup from './markdown/insertNewlineContinueMarkup';
 
 const configFromSettings = (settings: EditorSettings) => {
 	const languageExtension = (() => {
@@ -24,6 +26,8 @@ const configFromSettings = (settings: EditorSettings) => {
 					extensions: [
 						GitHubFlavoredMarkdownExtension,
 
+						settings.markdownMarkEnabled ? MarkdownHighlightExtension : [],
+
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
@@ -31,6 +35,7 @@ const configFromSettings = (settings: EditorSettings) => {
 
 					...(settings.autocompleteMarkup ? {
 						// Most Markup completion is enabled by default
+						addKeymap: false, // However, we have our own keymap
 					} : {
 						addKeymap: false,
 						completeHTMLTags: false,
@@ -38,6 +43,10 @@ const configFromSettings = (settings: EditorSettings) => {
 					}),
 				}),
 				markdownLanguage.data.of({ closeBrackets: { brackets: openingBrackets } }),
+				keymap.of(settings.autocompleteMarkup ? [
+					{ key: 'Enter', run: insertNewlineContinueMarkup },
+					{ key: 'Backspace', run: deleteMarkupBackward },
+				] : []),
 			];
 		} else if (language === EditorLanguageType.Html) {
 			return html({ autoCloseTags: settings.autocompleteMarkup });

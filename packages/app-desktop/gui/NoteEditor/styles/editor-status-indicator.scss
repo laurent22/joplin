@@ -1,0 +1,18 @@
+
+.editor-status-indicator {
+	width: 0;
+	overflow: hidden;
+
+	&:has(> :focus-visible), &.-show {
+		width: unset;
+		overflow: visible;
+	}
+
+	> .button {
+		font-size: var(--joplin-font-size-small);
+		background-color: var(--joplin-background-color-active3);
+		color: var(--joplin-color);
+		border: none;
+		padding: 4px;
+	}
+}

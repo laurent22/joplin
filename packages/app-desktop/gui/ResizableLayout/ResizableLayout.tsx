@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import setLayoutItemProps from './utils/setLayoutItemProps';
 import useLayoutItemSizes, { LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem, itemMinWidth, itemMinHeight } from './utils/useLayoutItemSizes';
@@ -7,16 +7,26 @@ import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
-import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRootMessage } from './utils/style';
-import { Resizable } from 're-resizable';
-const EventEmitter = require('events');
+import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
+import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
+import Dialog from '../Dialog';
+import * as EventEmitter from 'events';
+import LayoutItemContainer from './LayoutItemContainer';
 
 interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
+interface ResizedItem {
+	key: string;
+	initialWidth: number;
+	initialHeight: number;
+	maxSize: Size;
+}
+
 interface Props {
 	layout: LayoutItem;
+	layoutKeyToLabel: (key: string)=> string;
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
@@ -33,101 +43,57 @@ function itemVisible(item: LayoutItem, moveMode: boolean) {
 	return item.visible !== false;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-function renderContainer(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, resizedItemMaxSize: Size | null, onResizeStart: Function, onResize: Function, onResizeStop: Function, children: any[], isLastChild: boolean, moveMode: boolean): any {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const style: any = {
-		display: itemVisible(item, moveMode) ? 'flex' : 'none',
-		flexDirection: item.direction,
-	};
-
-	const size: Size = itemSize(item, parent, sizes, true);
-
-	const className = `resizableLayoutItem rli-${item.key}`;
-	if (item.resizableRight || item.resizableBottom) {
-		const enable = {
-			top: false,
-			right: !!item.resizableRight && !isLastChild,
-			bottom: !!item.resizableBottom && !isLastChild,
-			left: false,
-			topRight: false,
-			bottomRight: false,
-			bottomLeft: false,
-			topLeft: false,
-		};
-
-		return (
-			<Resizable
-				key={item.key}
-				className={className}
-				style={style}
-				size={size}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onResizeStart={onResizeStart as any}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onResize={onResize as any}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onResizeStop={onResizeStop as any}
-				enable={enable}
-				minWidth={'minWidth' in item ? item.minWidth : itemMinWidth}
-				minHeight={'minHeight' in item ? item.minHeight : itemMinHeight}
-				maxWidth={resizedItemMaxSize?.width}
-				maxHeight={resizedItemMaxSize?.height}
-			>
-				{children}
-			</Resizable>
-		);
-	} else {
-		return (
-			<div key={item.key} className={className} style={{ ...style, ...size }}>
-				{children}
-			</div>
-		);
-	}
-}
-
 function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const [resizedItem, setResizedItem] = useState<any>(null);
+	const [resizedItem, setResizedItem] = useState<ResizedItem|null>(null);
+	const lastUsedMoveButtonKey = useRef<string|null>(null);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function renderItemWrapper(comp: any, item: LayoutItem, parent: LayoutItem | null, size: Size, moveMode: boolean) {
-		const moveOverlay = moveMode ? (
-			<StyledMoveOverlay>
-				<MoveButtons
-					itemKey={item.key}
-					onClick={props.onMoveButtonClick}
-					canMoveLeft={canMove(MoveDirection.Left, item, parent)}
-					canMoveRight={canMove(MoveDirection.Right, item, parent)}
-					canMoveUp={canMove(MoveDirection.Up, item, parent)}
-					canMoveDown={canMove(MoveDirection.Down, item, parent)}
-				/>
-			</StyledMoveOverlay>
-		) : null;
+	const onMoveButtonClick = useCallback((event: MoveButtonClickEvent) => {
+		lastUsedMoveButtonKey.current = event.buttonKey;
+		props.onMoveButtonClick(event);
+	}, [props.onMoveButtonClick]);
 
+	const renderMoveControls = (item: LayoutItem, parent: LayoutItem | null, size: Size) => {
 		return (
 			<StyledWrapperRoot key={item.key} size={size}>
-				{moveOverlay}
+				<StyledMoveOverlay>
+					<MoveButtons
+						autoFocusKey={lastUsedMoveButtonKey.current}
+						itemKey={item.key}
+						itemLabel={props.layoutKeyToLabel(item.key)}
+						onClick={onMoveButtonClick}
+						canMoveLeft={canMove(MoveDirection.Left, item, parent)}
+						canMoveRight={canMove(MoveDirection.Right, item, parent)}
+						canMoveUp={canMove(MoveDirection.Up, item, parent)}
+						canMoveDown={canMove(MoveDirection.Down, item, parent)}
+					/>
+				</StyledMoveOverlay>
+			</StyledWrapperRoot>
+		);
+	};
+
+	function renderItemWrapper(comp: React.ReactNode, item: LayoutItem, size: Size) {
+		return (
+			<StyledWrapperRoot key={item.key} size={size}>
 				{comp}
 			</StyledWrapperRoot>
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function renderLayoutItem(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean): any {
-		function onResizeStart() {
+	function renderLayoutItem(
+		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean,
+	): React.ReactNode {
+		const onResizeStart: ResizeStartCallback = () => {
 			setResizedItem({
 				key: item.key,
 				initialWidth: sizes[item.key].width,
 				initialHeight: sizes[item.key].height,
 				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
 			});
-		}
+		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onResize(_event: any, direction: string, _refToElement: any, delta: any) {
+		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
 			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
 			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
 
@@ -147,15 +113,18 @@ function ResizableLayout(props: Props) {
 
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');
-		}
+		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function onResizeStop(_event: any, _direction: any, _refToElement: any, delta: any) {
+		const onResizeStop: ResizeCallback = (_event, _direction, _refToElement, delta) => {
 			onResize(_event, _direction, _refToElement, delta);
 			setResizedItem(null);
-		}
+		};
 
 		const resizedItemMaxSize = resizedItem && item.key === resizedItem.key ? resizedItem.maxSize : null;
+		const visible = itemVisible(item, props.moveMode);
+		const itemContainerProps = {
+			key: item.key, item, parent, sizes, resizedItemMaxSize, onResizeStart, onResizeStop, onResize, isLastChild, visible,
+		};
 		if (!item.children) {
 			const size = itemSize(item, parent, sizes, false);
 
@@ -166,17 +135,22 @@ function ResizableLayout(props: Props) {
 				visible: isVisible,
 			});
 
-			const wrapper = renderItemWrapper(comp, item, parent, size, props.moveMode);
-
-			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, [wrapper], isLastChild, props.moveMode);
+			const wrapper = onlyMoveControls ? renderMoveControls(item, parent, size) : renderItemWrapper(comp, item, size);
+			return <LayoutItemContainer {...itemContainerProps}>
+				{wrapper}
+			</LayoutItemContainer>;
 		} else {
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
-				childrenComponents.push(renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1));
+				childrenComponents.push(
+					renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1, onlyMoveControls),
+				);
 			}
 
-			return renderContainer(item, parent, sizes, resizedItemMaxSize, onResizeStart, onResize, onResizeStop, childrenComponents, isLastChild, props.moveMode);
+			return <LayoutItemContainer {...itemContainerProps}>
+				{childrenComponents}
+			</LayoutItemContainer>;
 		}
 	}
 
@@ -187,22 +161,24 @@ function ResizableLayout(props: Props) {
 	useWindowResizeEvent(eventEmitter);
 	const sizes = useLayoutItemSizes(props.layout, props.moveMode);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function renderMoveModeBox(rootComp: any) {
-		return (
-			<MoveModeRootWrapper>
+	const renderRoot = (moveControlsOnly: boolean) => {
+		return renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout, props.moveMode), true, moveControlsOnly);
+	};
+
+	function renderMoveModeBox() {
+		return <div>
+			<Dialog contentFillsScreen={true} className='change-app-layout-dialog'>
 				<MoveModeRootMessage>{props.moveModeMessage}</MoveModeRootMessage>
-				{rootComp}
-			</MoveModeRootWrapper>
-		);
+				{renderRoot(true)}
+			</Dialog>
+			{renderRoot(false)}
+		</div>;
 	}
 
-	const rootComp = renderLayoutItem(props.layout, null, sizes, itemVisible(props.layout, props.moveMode), true);
-
 	if (props.moveMode) {
-		return renderMoveModeBox(rootComp);
+		return renderMoveModeBox();
 	} else {
-		return rootComp;
+		return renderRoot(false);
 	}
 }
 
