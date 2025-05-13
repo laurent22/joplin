@@ -205,7 +205,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 				<View
 					style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}
 					onLayout={this.updateHeaderCoordinates}
-					ref={ref => (this.headerRef = ref)}
+					ref={ref => { this.headerRef = ref; } }
 				>
 					<TouchableOpacity
 						style={headerWrapperStyle}

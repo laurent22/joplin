@@ -41,6 +41,8 @@ const logger = Logger.create('NoteEditor');
 interface Props {
 	themeId: number;
 	initialText: string;
+	noteId: string;
+	noteHash: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	toolbarEnabled: boolean;
@@ -331,10 +333,14 @@ function NoteEditor(props: Props, ref: any) {
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 		cm.execCommand('scrollSelectionIntoView');
 	` : '';
+	const jumpToHashJs = props.noteHash ? `
+		cm.jumpToHash(${JSON.stringify(props.noteHash)});
+	` : '';
 
 	const editorSettings: EditorSettings = useMemo(() => ({
 		themeId: props.themeId,
 		themeData: editorTheme(props.themeId),
+		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		language: EditorLanguageType.Markdown,
@@ -347,6 +353,8 @@ function NoteEditor(props: Props, ref: any) {
 		ignoreModifiers: false,
 		autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
 
+		// For now, mobile CodeMirror uses its built-in focus toggle shortcut.
+		tabMovesFocus: false,
 		indentWithTabs: true,
 
 		editorLabel: _('Markdown editor'),
@@ -374,16 +382,30 @@ function NoteEditor(props: Props, ref: any) {
 				${shim.injectedJs('codeMirrorBundle')};
 
 				const parentElement = document.getElementsByClassName('CodeMirror')[0];
-				const initialText = ${JSON.stringify(props.initialText)};
-				const settings = ${JSON.stringify(editorSettings)};
+				// On Android, injectJavaScript is run twice -- once before the parent element exists.
+				// To avoid logging unnecessary errors to the console, skip setup in this case:
+				if (parentElement) {
+					const initialText = ${JSON.stringify(props.initialText)};
+					const settings = ${JSON.stringify(editorSettings)};
 
-				window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+					window.cm = codeMirrorBundle.initCodeMirror(
+						parentElement,
+						initialText,
+						${JSON.stringify(props.noteId)},
+						settings
+					);
 
-				${setInitialSelectionJS}
+					${jumpToHashJs}
+					// Set the initial selection after jumping to the header -- the initial selection,
+					// if specified, should take precedence.
+					${setInitialSelectionJS}
 
-				window.onresize = () => {
-					cm.execCommand('scrollSelectionIntoView');
-				};
+					window.onresize = () => {
+						cm.execCommand('scrollSelectionIntoView');
+					};
+				} else {
+					console.warn('No parent element for the editor found. This may mean that the editor HTML is still loading.');
+				}
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}
@@ -409,6 +431,20 @@ function NoteEditor(props: Props, ref: any) {
 			`);
 		}
 	}, [css]);
+
+	// Scroll to the new hash, if it changes.
+	const isFirstScrollRef = useRef(true);
+	useEffect(() => {
+		// The first "jump to header" is handled during editor setup and shouldn't
+		// be handled a second time:
+		if (isFirstScrollRef.current) {
+			isFirstScrollRef.current = false;
+			return;
+		}
+		if (jumpToHashJs && webviewRef.current) {
+			webviewRef.current.injectJS(jumpToHashJs);
+		}
+	}, [jumpToHashJs]);
 
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);

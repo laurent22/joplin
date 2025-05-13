@@ -1,7 +1,9 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo } from './syncInfoUtils';
 import Setting from '../../models/Setting';
+import BaseItem from '../../models/BaseItem';
+import BaseModel from '../../models/BaseItem';
 import Logger from '@joplin/utils/Logger';
 
 describe('syncInfoUtils', () => {
@@ -9,6 +11,7 @@ describe('syncInfoUtils', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		await fileApi().clearRoot();
 	});
 
 	afterAll(async () => {
@@ -326,4 +329,67 @@ describe('syncInfoUtils', () => {
 
 		Logger.globalLogger.enabled = true;
 	});
+
+	it('should succeed when info.json exists for checkSyncTargetIsValid', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		const syncInfo = new SyncInfo();
+		await fileApi().put('info.json', syncInfo.serialize());
+		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+	}));
+
+	it('should succeed when info.json does not exist and failsafe is disabled for checkSyncTargetIsValid', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', false);
+		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+	}));
+
+	it('should fail with failsafe error when info.json does not exist for checkSyncTargetIsValid', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await expect(checkSyncTargetIsValid(fileApi())).rejects.toThrow('Fail-safe: ');
+	}));
+
+	it('should succeed when info.json exists and is valid for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		const expectedSyncInfo = new SyncInfo();
+		expectedSyncInfo.version = 50;
+		await fileApi().put('info.json', expectedSyncInfo.serialize());
+
+		const actualSyncInfo = await fetchSyncInfo(fileApi());
+		expect(actualSyncInfo).toStrictEqual(expectedSyncInfo);
+	}));
+
+	it('should fail with missing version error when info.json exists but is invalid for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await fileApi().put('info.json', new SyncInfo().serialize());
+		await expect(fetchSyncInfo(fileApi())).rejects.toThrow('Missing "version" field');
+	}));
+
+	it('should succeed when info.json does not exist but .sync/version.txt does exist for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		await fileApi().put('.sync/version.txt', '{}');
+
+		const actualSyncInfo = await fetchSyncInfo(fileApi());
+		expect(actualSyncInfo.version).toBe(1);
+	}));
+
+	it('should succeed when info.json and .sync/version.txt does not exist and failsafe is disabled for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', false);
+
+		const actualSyncInfo = await fetchSyncInfo(fileApi());
+		expect(actualSyncInfo.version).toBe(0);
+	}));
+
+	it('should fail with failsafe error when info.json and .sync/version.txt does not exist when sync items are present for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		const note = {
+			id: 1,
+			type_: BaseModel.TYPE_NOTE,
+		};
+		await BaseItem.saveSyncTime(fileApi().syncTargetId(), note, 1);
+		await expect(fetchSyncInfo(fileApi())).rejects.toThrow('Fail-safe: ');
+	}));
+
+	it('should succeed when info.json and .sync/version.txt does not exist when sync items are not present for fetchSyncInfo', (async () => {
+		Setting.setValue('sync.wipeOutFailSafe', true);
+		expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
+	}));
 });

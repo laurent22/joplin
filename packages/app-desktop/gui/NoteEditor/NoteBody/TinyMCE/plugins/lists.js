@@ -1576,7 +1576,7 @@
     var removeStyles = function (dom, element, styles) {
       Tools.each(styles, function (style) {
         var _a;
-        return dom.setStyle(element, (_a = {}, _a[style] = '', _a));
+        return dom.setStyle(element, style, '');
       });
     };
     var getEndPointNode = function (editor, rng, start, root) {

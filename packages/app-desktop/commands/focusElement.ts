@@ -16,6 +16,7 @@ export const runtime = (): CommandRuntime => {
 			if (target === 'noteList') return CommandService.instance().execute('focusElementNoteList');
 			if (target === 'sideBar') return CommandService.instance().execute('focusElementSideBar');
 			if (target === 'noteTitle') return CommandService.instance().execute('focusElementNoteTitle', options);
+			if (target === 'toolbar') return CommandService.instance().execute('focusElementToolbar', options);
 			throw new Error(`Invalid focus target: ${target}`);
 		},
 	};

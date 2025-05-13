@@ -72,6 +72,8 @@
 	<string>The images will be displayed on your notes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To allow attaching voice recordings to a note</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

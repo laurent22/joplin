@@ -1,5 +1,4 @@
-const React = require('react');
-
+import * as React from 'react';
 import { FunctionComponent, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';

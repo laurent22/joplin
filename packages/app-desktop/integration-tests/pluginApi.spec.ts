@@ -1,5 +1,5 @@
 
-import { test } from './util/test';
+import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 
 test.describe('pluginApi', () => {
@@ -21,6 +21,44 @@ test.describe('pluginApi', () => {
 		await editor.goBack();
 
 		await editor.expectToHaveText('PASS');
+	});
+
+	test('should return form data from the dialog API', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('First note');
+
+		const editor = mainScreen.noteEditor;
+		await editor.expectToHaveText('');
+
+		await mainScreen.goToAnything.runCommand(app, 'showTestDialog');
+		// Wait for the iframe to load
+		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+		await dialogContent.locator('form').waitFor();
+
+		// Submitting the dialog should include form data in the output
+		await mainScreen.dialog.getByRole('button', { name: 'Okay' }).click();
+		await editor.expectToHaveText(JSON.stringify({
+			id: 'ok',
+			hasFormData: true,
+		}));
+	});
+
+	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+
+		await mainScreen.goToAnything.runCommand(app, 'testShowToastNotification');
+		const notificationLocator = mainWindow.getByText('Toast: This is a test info message.');
+		await expect(notificationLocator).toBeVisible();
+
+		// Running the command again, there should be two notifications with the same text.
+		await mainScreen.goToAnything.runCommand(app, 'testShowToastNotification');
+		await expect(notificationLocator.nth(1)).toBeVisible();
+		await expect(notificationLocator.nth(0)).toBeVisible();
+
+		await mainScreen.goToAnything.runCommand(app, 'testShowToastNotification');
+		await expect(notificationLocator).toHaveCount(3);
 	});
 });
 

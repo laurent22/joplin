@@ -35,6 +35,8 @@ else
 	IS_MACOS=1
 fi
 
+DOCKER_IMAGE_PLATFORM="linux/amd64"
+
 # Tests can randomly fail in some cases, so only run them when not publishing
 # a release
 RUN_TESTS=0
@@ -43,10 +45,33 @@ if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
 	RUN_TESTS=1
 fi
 
+if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_SERVER_RELEASE" == "0" ]; then
+	# We exit now because nothing works properly with the ARM64 architecture.
+	# We only proceed  if building the server image.
+	echo "Running on ARM64 and not trying to build server image - early exit"
+	exit 0
+fi
+
+if [ "$RUNNER_ARCH" == "ARM64" ]; then
+	# Canvas is only needed for tests and it doesn't build in ARM64 so remove it
+	RUN_TESTS=0
+	cd "$ROOT_DIR/packages/lib"
+	yarn remove canvas
+	cd "$ROOT_DIR"
+
+	DOCKER_IMAGE_PLATFORM="linux/arm64"
+
+	# Delete certain directories because `yarn install` will fail on ARM64.
+	rm -rf app-desktop
+	rm -rf app-mobile
+fi
+
 # =============================================================================
 # Print environment
 # =============================================================================
 
+echo "RUNNER_OS=$RUNNER_OS"
+echo "RUNNER_ARCH=$RUNNER_ARCH"
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 echo "GITHUB_REF=$GITHUB_REF"
@@ -55,6 +80,7 @@ echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 echo "BUILD_SEQUENCIAL=$BUILD_SEQUENCIAL"
 echo "SERVER_REPOSITORY=$SERVER_REPOSITORY"
 echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
+echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
@@ -277,7 +303,7 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
-	yarn buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+	yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	

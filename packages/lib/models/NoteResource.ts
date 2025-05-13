@@ -91,7 +91,7 @@ export default class NoteResource extends BaseModel {
 			FROM note_resources
 			LEFT JOIN notes
 			ON notes.id = note_resources.note_id
-			WHERE resource_id IN ('${resourceIds.join('\', \'')}') AND is_associated = 1
+			WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)}) AND is_associated = 1
 		`);
 
 		const output: Record<string, NoteEntity[]> = {};

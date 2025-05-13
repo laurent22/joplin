@@ -11,6 +11,8 @@ import { ParseOptions } from '@joplin/lib/HtmlToMd';
 import { ScrollStrategy } from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupToHtmlOptions } from '../../hooks/useMarkupToHtml';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
+import { RefObject, SetStateAction } from 'react';
+import * as React from 'react';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -49,6 +51,7 @@ export interface NoteEditorProps {
 	watchedResources: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	highlightedWords: any[];
+	tabMovesFocus: boolean;
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarItem[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
@@ -109,8 +112,7 @@ export interface NoteBodyEditorProps {
 	htmlToMarkdown: HtmlToMarkdownHandler;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	noteToolbar: any;
 	setLocalSearchResultCount(count: number): void;
@@ -121,6 +123,8 @@ export interface NoteBodyEditorProps {
 	searchMarkers: SearchMarkers;
 	visiblePanes: string[];
 	keyboardMode: string;
+	tabMovesFocus: boolean;
+	enableTextPatterns: boolean;
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	locale: string;
@@ -128,6 +132,7 @@ export interface NoteBodyEditorProps {
 	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarItem[];
 	plugins: PluginStates;
+	mathEnabled: boolean;
 	fontSize: number;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
@@ -270,4 +275,12 @@ export interface ScrollToTextValue {
 	text: string;
 	element: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'strong' | 'ul';
 	scrollStrategy?: ScrollStrategy;
+}
+
+export interface WindowCommandDependencies {
+	setShowLocalSearch: React.Dispatch<SetStateAction<boolean>>;
+	noteSearchBarRef: RefObject<HTMLInputElement>;
+	editorRef: RefObject<NoteBodyEditorRef>;
+	titleInputRef: RefObject<HTMLInputElement>;
+	containerRef: RefObject<HTMLDivElement|null>;
 }

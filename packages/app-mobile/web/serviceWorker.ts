@@ -99,7 +99,8 @@ if (typeof window === 'undefined') {
 					if (!(client instanceof WindowClient)) continue;
 
 					const clientUrl = new URL(client.url);
-					if (mainPagePaths.includes(clientUrl.pathname) && event.resultingClientId !== client.id && !client.focused) {
+					const isRefresh = event.clientId === client.id || event.resultingClientId === client.id;
+					if (mainPagePaths.includes(clientUrl.pathname) && !isRefresh) {
 						hasLockingClient = true;
 					}
 				}
@@ -129,7 +130,10 @@ if (typeof window === 'undefined') {
 				}
 				newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
 
-				response = new Response(response.body, {
+				// Ref: https://github.com/laurent22/joplin/pull/12127
+				const body = (response.status === 101 || response.status === 204 || response.status === 205 || response.status === 304) ? null : response.body;
+
+				response = new Response(body, {
 					status: response.status,
 					statusText: response.statusText,
 					headers: newHeaders,

@@ -15,13 +15,15 @@ typealias AudioRecorderFactory = (context: Context)->AudioRecorder;
 
 class AudioRecorder(context: Context) : Closeable {
 	private val sampleRate = 16_000
-	private val maxLengthSeconds = 30 // Whisper supports a maximum of 30s
+	// Don't allow the unprocessed audio buffer to grow indefinitely -- discard
+	// data if longer than this:
+	private val maxLengthSeconds = 120
 	private val maxBufferSize = sampleRate * maxLengthSeconds
 	private val buffer = FloatArray(maxBufferSize)
 	private var bufferWriteOffset = 0
 
 	// Accessor must not modify result
-	val bufferedData: FloatArray get() = buffer.sliceArray(0 until bufferWriteOffset)
+	private val bufferedData: FloatArray get() = buffer.sliceArray(0 until bufferWriteOffset)
 	val bufferLengthSeconds: Double get() = bufferWriteOffset.toDouble() / sampleRate
 
 	init {
@@ -74,11 +76,16 @@ class AudioRecorder(context: Context) : Closeable {
 	}
 
 	// Pulls all available data from the audio recorder's buffer
-	fun pullAvailable() {
-		return read(maxBufferSize, AudioRecord.READ_NON_BLOCKING)
+	fun pullAvailable(): FloatArray {
+		read(maxBufferSize, AudioRecord.READ_NON_BLOCKING)
+
+		val result = bufferedData
+		buffer.fill(0.0f, 0, maxBufferSize);
+		bufferWriteOffset = 0
+		return result
 	}
 
-	fun pullNextSeconds(seconds: Double) {
+	fun pullNextSeconds(seconds: Double):FloatArray {
 		val remainingSize = maxBufferSize - bufferWriteOffset
 		val requestedSize = (seconds * sampleRate).toInt()
 
@@ -87,7 +94,8 @@ class AudioRecorder(context: Context) : Closeable {
 			advanceStartBySamples(maxBufferSize / 3)
 		}
 
-		return read(requestedSize, AudioRecord.READ_BLOCKING)
+		read(requestedSize, AudioRecord.READ_BLOCKING)
+		return pullAvailable()
 	}
 
 	override fun close() {

@@ -67,6 +67,8 @@ interface Shared {
 	installResourceHandling?: (refreshResourceHandler: any)=> void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	uninstallResourceHandling?: (refreshResourceHandler: any)=> void;
+
+	reloadNote?: (comp: BaseNoteScreenComponent)=> Promise<NoteEntity>;
 }
 
 const shared: Shared = {};
@@ -268,7 +270,7 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.initState = async function(comp: BaseNoteScreenComponent) {
+shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -292,6 +294,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 			fromShare: !!comp.props.sharedData,
 			noteResources: await shared.attachedResources(note ? note.body : ''),
 			readOnly: itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note as ItemSlice, Setting.value('sync.userId'), BaseItem.syncShareCache),
+			noteLastLoadTime: Date.now(),
 		});
 	} else {
 		// Handle the case where a non-existent note is loaded. This can happen briefly after deleting a note.
@@ -304,8 +307,15 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 			fromShare,
 			noteResources: [],
 			readOnly: true,
+			noteLastLoadTime: Date.now(),
 		});
 	}
+
+	return note;
+};
+
+shared.initState = async function(comp: BaseNoteScreenComponent) {
+	const note = await shared.reloadNote(comp);
 
 	if (comp.props.sharedData) {
 		if (comp.props.sharedData.title) {

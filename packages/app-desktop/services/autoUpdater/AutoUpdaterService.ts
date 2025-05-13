@@ -53,6 +53,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private includePreReleases_ = false;
 	private allowDowngrade = false;
 	private isManualCheckInProgress = false;
+	private isUpdateInProgress = false;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -125,6 +126,12 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private checkForLatestRelease = async (): Promise<void> => {
+		if (this.isUpdateInProgress) {
+			this.logger_.info('An update check is already in progress');
+			return;
+		}
+		this.isUpdateInProgress = true;
+
 		try {
 			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
 
@@ -134,13 +141,16 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
 				await autoUpdater.checkForUpdates();
-				this.isManualCheckInProgress = false;
 			} catch (error) {
 				this.logger_.error(`Update download url failed: ${error.message}`);
+				this.isUpdateInProgress = false;
 			}
 
 		} catch (error) {
 			this.logger_.error(`Fetching releases failed:  ${error.message}`);
+			this.isUpdateInProgress = false;
+		} finally {
+			this.isManualCheckInProgress = false;
 		}
 	};
 
@@ -174,6 +184,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 			this.window_.webContents.send(AutoUpdaterEvents.UpdateNotAvailable);
 		}
 
+		this.isUpdateInProgress = false;
 		this.logger_.info('Update not available.');
 	};
 
@@ -187,11 +198,13 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 	private onUpdateDownloaded = (info: UpdateInfo): void => {
 		this.logger_.info('Update downloaded.');
+		this.isUpdateInProgress = false;
 		void this.promptUserToUpdate(info);
 	};
 
 	private onError = (error: Error): void => {
 		this.logger_.error('Error in auto-updater.', error);
+		this.isUpdateInProgress = false;
 	};
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {

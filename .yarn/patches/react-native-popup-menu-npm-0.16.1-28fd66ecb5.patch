@@ -1,0 +1,55 @@
+# This patch improves the note actions menu (the kebab menu)'s accessibility
+# by labelling its dismiss button.
+diff --git a/build/rnpm.js b/build/rnpm.js
+index 1111c2de99b3d4c5651ca4eee3ba59c0ce8e13e1..d410ee12b38d02c399b0a40973217da0082d73c0 100644
+--- a/build/rnpm.js
++++ b/build/rnpm.js
+@@ -1573,7 +1573,9 @@
+             onPress = _this$props.onPress,
+             style = _this$props.style;
+         return /*#__PURE__*/React__default.createElement(reactNative.TouchableWithoutFeedback, {
+-          onPress: onPress
++          onPress: onPress,
++          accessibilityLabel: _this$props.accessibilityLabel,
++          accessibilityRole: 'button',
+         }, /*#__PURE__*/React__default.createElement(reactNative.Animated.View, {
+           style: [styles.fullscreen, {
+             opacity: this.fadeAnim
+@@ -1588,7 +1590,8 @@
+   }(React.Component);
+ 
+   Backdrop.propTypes = {
+-    onPress: propTypes.func.isRequired
++    onPress: propTypes.func.isRequired,
++    accessibilityLabel: propTypes.string,
+   };
+   var styles = reactNative.StyleSheet.create({
+     fullscreen: {
+@@ -1658,6 +1661,7 @@
+           style: styles$1.placeholder
+         }, /*#__PURE__*/React__default.createElement(Backdrop, {
+           onPress: ctx._onBackdropPress,
++          accessibilityLabel: this.props.closeButtonLabel,
+           style: backdropStyles,
+           ref: ctx.onBackdropRef
+         }), ctx._makeOptions());
+@@ -2090,6 +2094,7 @@
+         }), /*#__PURE__*/React__default.createElement(MenuPlaceholder, {
+           ctx: this,
+           backdropStyles: customStyles.backdrop,
++          closeButtonLabel: this.props.closeButtonLabel,
+           ref: this._onPlaceholderRef
+         }))));
+       }
+diff --git a/src/index.d.ts b/src/index.d.ts
+index 1db1e643a915e4bfb715e33354678ec1be219f50..007157e366d1935368bdd8eff5e7a0773e183d0f 100644
+--- a/src/index.d.ts
++++ b/src/index.d.ts
+@@ -18,6 +18,7 @@ declare module "react-native-popup-menu" {
+       menuProviderWrapper?: StyleProp<ViewStyle>;
+       backdrop?: StyleProp<ViewStyle>;
+     };
++    closeButtonLabel: string;
+     backHandler?: boolean | Function;
+     skipInstanceCheck?: boolean;
+     children: React.ReactNode;

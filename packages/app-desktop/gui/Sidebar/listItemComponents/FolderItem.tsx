@@ -11,6 +11,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import { useId } from 'react';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -65,6 +66,7 @@ function FolderItem(props: FolderItemProps) {
 		if (!showFolderIcon) return null;
 		return renderFolderIcon(folderIcon);
 	};
+	const titleId = useId();
 
 	return (
 		<ListItemWrapper
@@ -85,9 +87,13 @@ function FolderItem(props: FolderItemProps) {
 			data-folder-id={folderId}
 			data-id={folderId}
 			data-type={ModelType.Folder}
+			// Accessibility labels: Don't include the expand/collapse link in the description,
+			// since this information is already conveyed by aria-* props.
+			aria-labelledby={titleId}
 		>
 			<StyledListItemAnchor
 				className="list-item"
+				id={titleId}
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				selected={selected}
 				shareId={shareId}
@@ -106,7 +112,6 @@ function FolderItem(props: FolderItemProps) {
 				// title first.
 				className='toggle'
 				hasChildren={hasChildren}
-				folderTitle={folderTitle}
 				folderId={folderId}
 				onClick={onFolderToggleClick_}
 				isExpanded={isExpanded}

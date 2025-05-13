@@ -51,7 +51,10 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 								button.onPress?.();
 							},
 						})),
-						onDismiss: cancelable ? () => onDismiss(dialog) : null,
+						onDismiss: cancelable ? () => {
+							options?.onDismiss?.();
+							onDismiss(dialog);
+						} : null,
 					};
 
 					setPromptDialogs(dialogs => {

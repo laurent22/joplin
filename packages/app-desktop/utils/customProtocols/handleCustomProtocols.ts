@@ -3,7 +3,6 @@ import { dirname, resolve, normalize } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { contentProtocolName } from './constants';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
-import { LoggerWrapper } from '@joplin/utils/Logger';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
@@ -17,6 +16,7 @@ export interface CustomProtocolHandler {
 	// note-viewer/ URLs
 	allowReadAccessToDirectory(path: string): void;
 	allowReadAccessToFile(path: string): AccessController;
+	allowReadAccessToFiles(paths: string[]): AccessController;
 
 	// file-media/ URLs
 	setMediaAccessEnabled(enabled: boolean): void;
@@ -124,6 +124,12 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 	);
 };
 
+const makeAccessDeniedResponse = (message: string) => {
+	return new Response(message, {
+		status: 403, // Forbidden
+	});
+};
+
 // Creating a custom protocol allows us to isolate iframes by giving them
 // different domain names from the main Joplin app.
 //
@@ -134,10 +140,10 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 //
 // TODO: Use Logger.create (doesn't work for now because Logger is only initialized
 // in the main process.)
-const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => {
-	logger = {
-		...logger,
-		debug: () => {},
+const handleCustomProtocols = (): CustomProtocolHandler => {
+	const logger = {
+		// Disabled for now
+		debug: (..._message: unknown[]) => {},
 	};
 
 	// Allow-listed files/directories for joplin-content://note-viewer/
@@ -155,14 +161,16 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 		// See https://security.stackexchange.com/a/123723
 		if (pathname.startsWith('..')) {
-			throw new Error(`Invalid URL (not absolute), ${request.url}`);
+			return new Response('Invalid URL (not absolute)', {
+				status: 400,
+			});
 		}
 
 		pathname = resolve(appBundleDirectory, pathname);
 
 		let canRead = false;
 		let mediaOnly = true;
-		if (host === 'note-viewer') {
+		if (host === 'note-viewer' || host === 'plugin-webview') {
 			if (readableFiles.has(pathname)) {
 				canRead = true;
 			} else {
@@ -177,7 +185,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			mediaOnly = false;
 		} else if (host === 'file-media') {
 			if (!mediaAccessKey) {
-				throw new Error('Media access denied. This must be enabled with .setMediaAccessEnabled');
+				return makeAccessDeniedResponse('Media access denied. This must be enabled with .setMediaAccessEnabled');
 			}
 
 			canRead = true;
@@ -185,14 +193,16 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 			const accessKey = url.searchParams.get('access-key');
 			if (accessKey !== mediaAccessKey) {
-				throw new Error(`Invalid or missing media access key (was ${accessKey}). An allow-listed ?access-key= parameter must be provided.`);
+				return makeAccessDeniedResponse('Invalid or missing media access key. An allow-listed ?access-key= parameter must be provided.');
 			}
 		} else {
-			throw new Error(`Invalid URL ${request.url}`);
+			return new Response(`Invalid request URL (${request.url})`, {
+				status: 400,
+			});
 		}
 
 		if (!canRead) {
-			throw new Error(`Read access not granted for URL ${request.url}`);
+			return makeAccessDeniedResponse(`Read access not granted for URL (${request.url})`);
 		}
 
 		const asFileUrl = pathToFileURL(pathname).toString();
@@ -214,7 +224,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			// This is an extra check to prevent loading text/html and arbitrary non-media content from the URL.
 			const contentType = response.headers.get('Content-Type');
 			if (!contentType || !contentType.match(/^(image|video|audio)\//)) {
-				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
+				return makeAccessDeniedResponse(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
 			}
 		}
 
@@ -222,7 +232,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 	});
 
 	const appBundleDirectory = dirname(dirname(__dirname));
-	return {
+	const result: CustomProtocolHandler = {
 		allowReadAccessToDirectory: (path: string) => {
 			path = resolve(appBundleDirectory, path);
 			logger.debug('protocol handler: Allow read access to directory', path);
@@ -250,6 +260,18 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 				},
 			};
 		},
+		allowReadAccessToFiles: (paths: string[]) => {
+			const handles = paths.map(path => {
+				return result.allowReadAccessToFile(path);
+			});
+			return {
+				remove: () => {
+					for (const handle of handles) {
+						handle.remove();
+					}
+				},
+			};
+		},
 		setMediaAccessEnabled: (enabled: boolean) => {
 			if (enabled) {
 				mediaAccessKey ||= createSecureRandom();
@@ -263,6 +285,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			return mediaAccessKey || null;
 		},
 	};
+	return result;
 };
 
 export default handleCustomProtocols;

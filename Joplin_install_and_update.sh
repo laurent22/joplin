@@ -68,9 +68,22 @@ showHelp() {
 }
 
 #-----------------------------------------------------
+# Setup Download Helper: DL
+#-----------------------------------------------------
+if [[ `command -v wget2` ]]; then
+  DL='wget2 -qO'
+elif [[ `command -v wget` ]]; then
+  DL='wget -qO'
+elif [[ `command -v curl` ]]; then
+  DL='curl -sLo'
+else
+  print "${COLOR_RED}Error: wget2, wget, and curl not found. Please install one of these tools.${COLOR_RESET}"
+  exit 1
+fi
+
+#-----------------------------------------------------
 # PARSE ARGUMENTS
 #-----------------------------------------------------
-
 optspec=":h-:"
 while getopts "${optspec}" OPT; do
   [ "${OPT}" = " " ] && continue
@@ -140,9 +153,9 @@ fi
 
 # Get the latest version to download
 if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
 else
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 fi
 
 # Check if it's in the latest version
@@ -163,8 +176,8 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
-wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
+$DL "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
+$DL "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
@@ -287,7 +300,7 @@ echo "$RELEASE_VERSION" > "${INSTALL_DIR}/VERSION"
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
-  NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
+  NOTES=$($DL - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
   print "${COLOR_BLUE}Changelog:${COLOR_RESET}\n${NOTES}"
 fi
 
