@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
 "Language: ro_RO\n"
@@ -464,7 +466,7 @@ msgstr "Toate notițele"
 #: packages/lib/onedrive-api-node-utils.js:46
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
-"Toate porturile potențiale sunt în uz - te rog să raportați problema la %s"
+"Toate porturile potențiale sunt în uz - te rog să raportezi problema la %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:931
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -489,7 +491,7 @@ msgstr "Mereu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:887
 msgid "Always ask"
-msgstr "Întreabă mereu"
+msgstr "Întreabă"
 
 #: packages/app-desktop/bridge.ts:462
 msgid "Always open %s files without asking."
@@ -497,7 +499,7 @@ msgstr "Deschide mereu fișierele %s fără să mai întrebi."
 
 #: packages/lib/models/settings/builtInMetadata.ts:888
 msgid "Always resize"
-msgstr "Redimensionează mereu"
+msgstr "Mereu"
 
 #: packages/app-cli/app/command-mv.ts:37
 msgid ""
@@ -540,8 +542,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Orice e-mail trimis la această adresă va fi convertit într-o notă și va fi "
-"adăugat la colecția dumneavoastră. Nota va fi salvată în carnețelul Inbox"
+"Orice e-mail trimis la această adresă va fi convertit într-o notiță și va fi "
+"adăugat la colecția ta. Notița va fi salvată în caietul Inbox"
 
 #: packages/lib/models/Setting.ts:1177
 msgid "Appearance"
@@ -930,7 +932,7 @@ msgstr "Modifică aspectul aplicației"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:210
 msgid "Change language"
-msgstr "Schimbă limba"
+msgstr "Alte limbi"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
 msgid "Change ratio"
@@ -1395,7 +1397,7 @@ msgstr ""
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:30
 msgid "Could not verify your identity: %s"
-msgstr "Nu s-a putut verifica identitatea dumneavoastră: %s"
+msgstr "Nu ți-am putut verifica identitatea: %s"
 
 #: packages/app-desktop/gui/PromptDialog.tsx:275
 msgid "Create"
@@ -1577,11 +1579,11 @@ msgstr "Se decriptează elementele: %d/%d"
 #: packages/lib/models/settings/builtInMetadata.ts:1123
 #: packages/lib/models/settings/builtInMetadata.ts:1344
 msgid "Default"
-msgstr "Modul implicit"
+msgstr "Mod implicit"
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
-msgstr "Modul implicit: %s"
+msgstr "Mod implicit: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:135
@@ -2526,12 +2528,12 @@ msgstr "Focalizează pe"
 #: packages/lib/models/settings/builtInMetadata.ts:853
 #: packages/lib/models/settings/builtInMetadata.ts:870
 msgid "Focus body"
-msgstr "Focalizare pe corp"
+msgstr "Focalizează pe corp"
 
 #: packages/lib/models/settings/builtInMetadata.ts:852
 #: packages/lib/models/settings/builtInMetadata.ts:869
 msgid "Focus title"
-msgstr "Focalizare pe titlu"
+msgstr "Focalizează pe titlu"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:97
 msgid "Follow link"
@@ -2915,8 +2917,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Pentru a utiliza sincronizarea sistemului de fișiere este necesară "
-"permisiunea dumneavoastră de a scrie pe un spațiu de stocare extern."
+"Pentru a utiliza sincronizarea cu sistemul de fișiere, este necesară "
+"permisiunea de a scrie în spațiul de stocare extern."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
@@ -3154,7 +3156,7 @@ msgid ""
 "to Joplin."
 msgstr ""
 "Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran "
-"din browser-ul dumnevoastră în Joplin."
+"din navigatorul tău web în Joplin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:605
 msgid "Joplin website"
@@ -3599,7 +3601,7 @@ msgstr "N"
 
 #: packages/lib/models/settings/builtInMetadata.ts:889
 msgid "Never resize"
-msgstr "Nu redimensiona niciodată"
+msgstr "Niciodată"
 
 #: packages/app-mobile/setupQuickActions.ts:33
 msgid "New attachment"
@@ -4041,9 +4043,8 @@ msgid "Open it"
 msgstr "Deschide-l"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "Deschide %s"
+msgstr "Deschide jurnal"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -4119,7 +4120,7 @@ msgstr "Formatul sursei: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1314
 msgid "Page orientation for PDF export"
-msgstr "Page orientation for PDF export"
+msgstr "Orientarea paginii pentru export PDF"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1304
 msgid "Page size for PDF export"
@@ -4462,7 +4463,7 @@ msgstr "Numele profilului:"
 
 #: packages/lib/versionInfo.ts:91
 msgid "Profile Version: %s"
-msgstr "Versiunea profil: %s"
+msgstr "Versiune profil: %s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:199
 msgid "Profiles"
@@ -5748,7 +5749,7 @@ msgid ""
 msgstr ""
 "Următoarele chei utilizează un algoritm de criptare depășit și se recomandă "
 "actualizarea lor. Cheia actualizată va fi în continuare capabilă să "
-"decripteze și să cripteze datele dumneavoastră ca de obicei."
+"decripteze și să cripteze datele tale ca de obicei."
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:83
 msgid "The following plugins may not support the current markdown editor:"
@@ -5892,9 +5893,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/Root.tsx:151
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
-"Web Clipper are nevoie de autorizația dumneavoastră pentru a vă accesa "
-"datele."
+msgstr "Web Clipper are nevoie de aprobarea ta pentru a-ți accesa datele."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
@@ -6033,9 +6032,9 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Acesta este un instrument avansat pentru a afișa atașamentele care sunt "
-"legate de notele dumnevoastră. Te rog să fii atent la ștergerea uneia dintre "
-"ele, deoarece acestea nu pot fi restaurate ulterior."
+"Acesta este un instrument avansat de listare al atașamentelor care sunt "
+"legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi "
+"vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:239
 msgid "This note could not be deleted: %s"
@@ -6229,7 +6228,7 @@ msgid ""
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "Pentru a funcționa corect, aplicația are nevoie de următoarele permisiuni. "
-"Te rog să le  în setările telefonului dumneavoastră, în Aplicații > Joplin > "
+"Te rog să le activezi din setările telefonului tău în Aplicații > Joplin > "
 "Permisiuni"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
