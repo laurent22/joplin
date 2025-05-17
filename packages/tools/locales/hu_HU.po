@@ -5297,7 +5297,7 @@ msgstr "Osztott nézet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1043
 msgid "Start application minimised in the tray icon"
-msgstr "Indításakor kicsinyítse az alkalmazást a tálcára"
+msgstr "Indításkor kicsinyítse az alkalmazást a tálcára"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:199
 msgid "Start recording"
