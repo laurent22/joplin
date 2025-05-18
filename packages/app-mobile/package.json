@@ -103,7 +103,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.67",
-    "@types/react": "18.3.3",
+    "@types/react": "18.3.18",
     "@types/react-native": "0.70.6",
     "@types/react-redux": "7.1.33",
     "@types/serviceworker": "0.0.95",
