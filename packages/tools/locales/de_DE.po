@@ -626,9 +626,8 @@ msgid "attachment"
 msgstr "Anhang"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:72
-#, fuzzy
 msgid "Attachment"
-msgstr "Anhänge"
+msgstr "Anhang"
 
 #: packages/lib/models/Resource.ts:509
 msgid "Attachment conflict: \"%s\""
@@ -768,7 +767,7 @@ msgstr "nach Wort"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:74
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -4625,17 +4624,15 @@ msgstr "Empfohlene Erweiterungen"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Audio aufnehmen"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
-#, fuzzy
 msgid "Recording"
-msgstr "Überschrift"
+msgstr "Aufnahme"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
-#, fuzzy
 msgid "Recording..."
-msgstr "Lade..."
+msgstr "Aufnahme läuft..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:771
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
