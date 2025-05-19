@@ -1,3 +1,4 @@
+use crate::log_warn;
 use crate::parser::errors::{ErrorKind, Result};
 use crate::parser::fsshttpb::data::cell_id::CellId;
 use crate::parser::fsshttpb::data::exguid::ExGuid;
@@ -34,10 +35,10 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     }
 
     let entity_guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object)?
-        .ok_or_else(|| {
-            log_warn!("Error at page: {}", get_current_page().unwrap());
-            ErrorKind::MalformedOneNoteFileData("page series has no guid".into())
-        })?;
+        .unwrap_or_else(|| {
+            log_warn!("page series has no guid");
+            return Guid::nil();
+        });
     let page_spaces =
         ObjectSpaceReference::parse_vec(PropertyType::ChildGraphSpaceElementNodes, object)?
             .unwrap_or_default();
