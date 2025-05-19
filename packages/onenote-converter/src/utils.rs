@@ -6,6 +6,8 @@ use std::fmt::Display;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 use widestring::U16CString;
+use lazy_static::lazy_static;
+use std::sync::Mutex;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
@@ -161,4 +163,21 @@ impl Utf16ToString for &[u8] {
         let value = U16CString::from_vec_truncate(data);
         Ok(value.to_string().unwrap())
     }
+}
+
+#[cfg(debug_assertions)]
+lazy_static! {
+    static ref CURRENT_PAGE: Mutex<Option<String>> = Mutex::new(None);
+}
+
+#[cfg(debug_assertions)]
+pub fn set_current_page(page_name: String) {
+    let mut current_page = CURRENT_PAGE.lock().unwrap();
+    *current_page = Some(page_name.to_string());
+}
+
+#[cfg(debug_assertions)]
+pub fn get_current_page() -> Option<String> {
+    let current_page = CURRENT_PAGE.lock().unwrap();
+    current_page.clone()
 }

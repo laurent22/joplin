@@ -5,6 +5,7 @@ use crate::parser::one::property_set::{page_manifest_node, page_metadata, page_n
 use crate::parser::onenote::outline::{parse_outline, Outline};
 use crate::parser::onenote::page_content::{parse_page_content, PageContent};
 use crate::parser::onestore::object_space::ObjectSpace;
+use crate::utils::set_current_page;
 
 /// A page.
 ///
@@ -179,6 +180,25 @@ impl Title {
     }
 }
 
+#[cfg(debug_assertions)]
+fn extract_text_from_title(title: &Option<Title>) -> String {
+    let mut result = String::new();
+    if let Some(title_content) = title {
+        for outline in &title_content.contents {
+            for item in &outline.items {
+                if let Some(element) = item.element() {
+                    for content in &element.contents {
+                        if let Some(rich_text) = content.rich_text() {
+                                result.push_str(&rich_text.text);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    result
+}
+
 pub(crate) fn parse_page(page_space: &ObjectSpace) -> Result<Page> {
     let metadata = parse_metadata(page_space)?;
     let manifest = parse_manifest(page_space)?;
@@ -189,6 +209,8 @@ pub(crate) fn parse_page(page_space: &ObjectSpace) -> Result<Page> {
         .title
         .map(|id| parse_title(id, page_space))
         .transpose()?;
+    let page_title = extract_text_from_title(&title);
+    set_current_page(page_title);
     let level = metadata.page_level;
 
     let contents = data
