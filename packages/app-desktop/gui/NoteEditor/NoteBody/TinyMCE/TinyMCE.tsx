@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue } from '../../utils/types';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo, Ref } from 'react';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue, NoteBodyEditorRef } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml } from '../../utils/resourceHandling';
 import attachedResources from '@joplin/lib/utils/attachedResources';
 import useScroll from './utils/useScroll';
@@ -45,6 +45,8 @@ import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
 import Setting from '@joplin/lib/models/Setting';
 import useTextPatternsLookup from './utils/useTextPatternsLookup';
+import { toFileProtocolPath } from '@joplin/utils/path';
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 
 const logger = Logger.create('TinyMCE');
 
@@ -93,8 +95,7 @@ interface LastOnChangeEventInfo {
 let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
+const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const [editorContainer, setEditorContainer] = useState<HTMLDivElement|null>(null);
 	const editorContainerDom = useDocument(editorContainer);
 	const [editor, setEditor] = useState<Editor|null>(null);
@@ -946,6 +947,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			return docHead_;
 		}
 
+		const assetToUrl = (asset: RenderResultPluginAsset) => {
+			if (asset.pathIsAbsolute) {
+				// This is important on Windows, where the C:/ at the start of the path
+				// is interpreted as a relative subfolder without the file:// prefix.
+				return toFileProtocolPath(asset.path);
+			} else {
+				return asset.path;
+			}
+		};
+
 		const allCssFiles = [
 			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
@@ -953,16 +964,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			pluginAssets
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'text/css')
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.map((a: any) => a.path),
+				.map(assetToUrl),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'application/javascript')
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.map((a: any) => a.path),
+				.map(assetToUrl),
 		);
 
 		const filePathToElementId = (path: string) => {
@@ -1190,11 +1199,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>();
+	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
+	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
@@ -10,7 +11,6 @@ import { themeStyle } from '@joplin/lib/theme';
 import { Size } from './ResizableLayout/utils/types';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
-const React = require('react');
 const { createRoot } = require('react-dom/client');
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
@@ -36,6 +36,7 @@ const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-
 interface Props {
 	themeId: number;
 	appState: string;
+	profileConfigCurrentProfileId: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
 	size: Size;

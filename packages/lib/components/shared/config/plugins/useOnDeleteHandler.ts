@@ -2,7 +2,7 @@ import { _ } from '../../../../locale';
 import PluginService, { PluginSettings, defaultPluginSetting } from '../../../../services/plugins/PluginService';
 import type * as React from 'react';
 import shim from '../../../../shim';
-import produce from 'immer';
+import { produce } from 'immer';
 import { ItemEvent, OnPluginSettingChangeHandler } from './types';
 
 const useOnDeleteHandler = (

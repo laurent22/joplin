@@ -6,6 +6,7 @@ const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
+import shim from '@joplin/lib/shim';
 
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(() => {
@@ -13,7 +14,7 @@ function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 			let canClose = true;
 
 			if (!upgradeResult.done) {
-				canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
+				canClose = await shim.showConfirmationDialog('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
 			}
 
 			if (canClose) {

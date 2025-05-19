@@ -14,7 +14,7 @@ import { Text } from 'react-native-paper';
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
-import { formatMsToDurationCompat } from '@joplin/utils/time';
+import { formatMsToDurationCompat, msleep } from '@joplin/utils/time';
 
 const logger = Logger.create('AudioRecording');
 
@@ -109,7 +109,7 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 	const [error, setError] = useState('');
 	const [duration, setDuration] = useState(0);
 
-	const recordingRef = useRef<Audio.Recording|null>();
+	const recordingRef = useRef<Audio.Recording|null>(null);
 	const onStartRecording = useCallback(async () => {
 		try {
 			setRecordingState(RecorderState.Loading);
@@ -119,6 +119,11 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 				if (!response.granted) {
 					throw new Error(_('Missing permission to record audio.'));
 				}
+
+				// Work around "This experience is currently in the background, so the audio session could not be activated"
+				// See https://github.com/expo/expo/issues/21782
+				// May be resolved by migrating to expo-audio.
+				await msleep(500);
 			}
 
 			await Audio.setAudioModeAsync({

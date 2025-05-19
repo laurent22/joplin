@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
@@ -17,7 +17,7 @@ import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScree
 import Setting, { AppType, Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
-import ShareExtension from './utils/ShareExtension';
+import ShareExtension, { UnsubscribeShareListener } from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
@@ -30,14 +30,14 @@ const VersionInfo = require('react-native-version-info').default;
 import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 import fastDeepEqual = require('fast-deep-equal');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
-import BackButtonService from './services/BackButtonService';
+import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
@@ -68,9 +68,9 @@ import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
-import SideMenuContentNote from './components/SideMenuContentNote';
+import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
-const { defaultState } = require('@joplin/lib/reducer');
+import { defaultState } from '@joplin/lib/reducer';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -454,7 +454,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		throw error;
 	}
 
-	return reducer(newState, action);
+	return reducer(newState, action) as AppState;
 };
 
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));
@@ -853,7 +853,27 @@ async function initialize(dispatch: Dispatch) {
 	reg.logger().info('Application initialized');
 }
 
-class AppComponent extends React.Component {
+interface AppComponentProps {
+	dispatch: Dispatch;
+	themeId: number;
+	biometricsDone: boolean;
+	routeName: string;
+	selectedFolderId: string;
+	appState: string;
+	noteSideMenuOptions: SideMenuContentOptions;
+	disableSideMenuGestures: boolean;
+	historyCanGoBack: boolean;
+	showSideMenu: boolean;
+	noteSelectionEnabled: boolean;
+}
+
+interface AppComponentState {
+	sideMenuWidth: number;
+	sensorInfo: SensorInfo;
+	sideMenuContentOpacity: Animated.Value;
+}
+
+class AppComponent extends React.Component<AppComponentProps, AppComponentState> {
 
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
@@ -864,8 +884,18 @@ class AppComponent extends React.Component {
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 	private callbackUrl: string|null = null;
 
-	public constructor() {
-		super();
+	private lastSyncStarted_ = false;
+	private quickActionShortcutListener_: EmitterSubscription|undefined;
+	private unsubscribeScreenWidthChangeHandler_: EmitterSubscription|undefined;
+	private unsubscribeNetInfoHandler_: NetInfoSubscription|undefined;
+	private unsubscribeNewShareListener_: UnsubscribeShareListener|undefined;
+	private onAppStateChange_: ()=> void;
+	private backButtonHandler_: BackButtonHandler;
+	private handleNewShare_: ()=> void;
+	private handleOpenURL_: (event: unknown)=> void;
+
+	public constructor(props: AppComponentProps) {
+		super(props);
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
@@ -1390,8 +1420,7 @@ class AppComponent extends React.Component {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,

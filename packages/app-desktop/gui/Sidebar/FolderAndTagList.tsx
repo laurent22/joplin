@@ -62,7 +62,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		collapsedFolderIds: props.collapsedFolderIds,
 	});
 
-	const itemListRef = useRef<ItemList<ListItem>>();
+	const itemListRef = useRef<ItemList<ListItem>|null>(null);
 	const { focusSidebar } = useFocusHandler({ itemListRef, selectedIndex, listItems });
 
 	useSidebarCommandHandler({ focusSidebar });

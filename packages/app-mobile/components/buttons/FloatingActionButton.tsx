@@ -56,7 +56,7 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 		if (open) onMenuToggled();
 	}, [open, onMenuToggled]);
 
-	const mainButtonRef = useRef<View>();
+	const mainButtonRef = useRef<View>(null);
 
 	const closedIcon = useIcon(props.mainButton?.icon ?? 'add');
 	const openIcon = useIcon('close');

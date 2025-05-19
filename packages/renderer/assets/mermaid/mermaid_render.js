@@ -29,7 +29,7 @@ const initExportButtons = () => {
 			const buttonContainer = button.parentElement;
 			const mermaidElem = buttonContainer.nextElementSibling;
 
-			const rightClickEvent = new PointerEvent('contextmenu', {bubbles: true});
+			const rightClickEvent = new PointerEvent('contextmenu', { bubbles: true });
 			rightClickEvent.target = mermaidElem;
 			mermaidElem.dispatchEvent(rightClickEvent);
 		};

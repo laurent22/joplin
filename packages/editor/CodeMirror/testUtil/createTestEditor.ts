@@ -15,6 +15,7 @@ const createTestEditor = async (
 	initialSelection: SelectionRange,
 	expectedSyntaxTreeTags: string[],
 	extraExtensions: Extension[] = [],
+	addMarkdownKeymap = true,
 ): Promise<EditorView> => {
 	await loadLanguages();
 
@@ -24,6 +25,7 @@ const createTestEditor = async (
 		extensions: [
 			markdown({
 				extensions: [MarkdownMathExtension, MarkdownHighlightExtension, GithubFlavoredMarkdownExt],
+				addKeymap: addMarkdownKeymap,
 			}),
 			indentUnit.of('\t'),
 			EditorState.tabSize.of(4),

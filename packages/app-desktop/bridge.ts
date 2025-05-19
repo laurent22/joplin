@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -526,16 +526,30 @@ export class Bridge {
 		}
 	}
 
-	public async launchAltAppInstance(env: string) {
-		const cmd = this.appLaunchCommand(env, 'alt1');
+	private async launchAppInstanceById(env: string, altInstanceId: string) {
+		if (this.electronApp().ipcServerStarted()) {
+			const cmd = this.appLaunchCommand(env, altInstanceId);
+			await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+		} else {
+			const buttonIndex = this.showErrorMessageBox('Cannot launch another instance because IPC server could not start.', {
+				buttons: [
+					_('OK'),
+					_('Open log'),
+				],
+			});
 
-		await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+			if (buttonIndex === 1) {
+				void this.openItem(this.electronApp().ipcLoggerFilePath());
+			}
+		}
+	}
+
+	public async launchAltAppInstance(env: string) {
+		await this.launchAppInstanceById(env, 'alt1');
 	}
 
 	public async launchMainAppInstance(env: string) {
-		const cmd = this.appLaunchCommand(env, '');
-
-		await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+		await this.launchAppInstanceById(env, '');
 	}
 
 	public async restart() {
@@ -586,6 +600,11 @@ export class Bridge {
 
 	public createImageFromPath(path: string) {
 		return nativeImage.createFromPath(path);
+	}
+
+	public menuPopupFromTemplate(template: ((MenuItemConstructorOptions) | (MenuItem))[]) {
+		const menu = Menu.buildFromTemplate(template);
+		return menu.popup({ window: this.mainWindow() });
 	}
 
 	public safeStorage = {

@@ -7,7 +7,7 @@ import SearchPlugins from './SearchPlugins';
 import PluginBox, { UpdateState } from './PluginBox';
 import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
-import produce from 'immer';
+import { produce } from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
 import { PluginItem, ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';

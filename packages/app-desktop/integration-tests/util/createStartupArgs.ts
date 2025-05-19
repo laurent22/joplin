@@ -7,7 +7,7 @@ const createStartupArgs = (profileDirectory: string) => {
 
 	// We need to run with --env dev to disable the single instance check.
 	return [
-		mainPath, '--env', 'dev', '--no-welcome', '--running-tests', '--profile', resolve(profileDirectory),
+		mainPath, '--env', 'dev', '--log-level', 'debug', '--no-welcome', '--running-tests', '--profile', resolve(profileDirectory),
 	];
 };
 

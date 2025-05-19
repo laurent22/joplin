@@ -7,7 +7,7 @@ import { useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 
 import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
 
 const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {
-	const editorRef = useRef<HTMLTextAreaElement>();
+	const editorRef = useRef<HTMLTextAreaElement|null>(null);
 
 	useImperativeHandle(ref, () => {
 		return {

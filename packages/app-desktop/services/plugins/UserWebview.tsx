@@ -11,6 +11,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import { WindowIdContext } from '../../gui/NewWindowOrIFrame';
 import useSubmitHandler from './hooks/useSubmitHandler';
 import useFormData from './hooks/useFormData';
+import Setting from '@joplin/lib/models/Setting';
 
 const logger = Logger.create('UserWebview');
 
@@ -121,12 +122,22 @@ function UserWebview(props: Props, ref: any) {
 		'--content-height': `${contentSize.height}px`,
 	} as React.CSSProperties), [contentSize.width, contentSize.height]);
 
+	const src = useMemo(() => {
+		const isolate = Setting.value('featureFlag.plugins.isolatePluginWebViews');
+		const path = `${__dirname}/UserWebviewIndex.html`;
+		if (isolate) {
+			return `joplin-content://plugin-webview/${path}`;
+		} else {
+			return `file://${path}`;
+		}
+	}, []);
+
 	return <iframe
 		id={props.viewId}
 		style={style}
 		className={`plugin-user-webview ${props.fitToContent ? '-fit-to-content' : ''} ${props.borderBottom ? '-border-bottom' : ''}`}
 		ref={viewRef}
-		src={`joplin-content://plugin-webview/${__dirname}/UserWebviewIndex.html`}
+		src={src}
 	></iframe>;
 }
 

@@ -10,7 +10,7 @@ const useActiveDescendantId = (selectedFolderId: string, selectedNoteIds: string
 		setActiveNoteId(selectedNoteIdsRef.current?.[0] ?? '');
 	}, [selectedFolderId]);
 
-	const previousNoteIdsRef = useRef<string[]>();
+	const previousNoteIdsRef = useRef<string[]>(null);
 	previousNoteIdsRef.current = usePrevious(selectedNoteIds);
 
 	useEffect(() => {

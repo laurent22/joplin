@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
@@ -10,6 +11,7 @@ import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSu
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
+import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -80,7 +82,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<div className="login-page">
 			<div className="page-container">
 				{state.active !== 'COMPLETED' ? (
-					<Fragment>
+					<>
 						<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
 						<div className="buttons-container">
 							<Button
@@ -97,7 +99,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 							/>
 
 						</div>
-					</Fragment>
+					</>
 				) : null}
 				<p className={state.className}>{state.message()}
 					{state.active === 'ERROR' ? (
@@ -105,6 +107,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
+				<JoplinCloudSignUpCallToAction />
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

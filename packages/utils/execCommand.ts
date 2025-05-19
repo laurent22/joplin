@@ -45,7 +45,8 @@ export default async (command: string | string[], options: ExecCommandOptions | 
 	const args: string[] = typeof command === 'string' ? splitCommandString(command) : command as string[];
 	const executableName = args[0];
 	args.splice(0, 1);
-	const promise = execa(executableName, args, { env: options.env, detached: options.detached });
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Workaround for type definition conflicts. Expo currently overrides NodeJs.ProcessEnv, making NODE_ENV required. This changes the type of the "env" argument to execa.
+	const promise = execa(executableName, args, { env: options.env as any });
 	if (options.showStdout && promise.stdout) promise.stdout.pipe(process.stdout);
 	if (options.showStderr && promise.stderr) promise.stderr.pipe(process.stderr);
 	const result = await promise;
