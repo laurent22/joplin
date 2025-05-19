@@ -9,8 +9,6 @@ use crate::parser::one::property::{simple, PropertyType};
 use crate::parser::one::property_set::PropertySetId;
 use crate::parser::onestore::object::Object;
 use crate::parser::shared::guid::Guid;
-use crate::utils::utils::log_warn;
-use crate::utils::get_current_page;
 
 /// A page series.
 ///

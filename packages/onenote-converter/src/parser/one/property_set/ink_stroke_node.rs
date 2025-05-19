@@ -43,10 +43,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
             0 => InkBias::Handwriting,
             1 => InkBias::Drawing,
             2 => InkBias::Both,
-            i => {
-                log_warn!("A incorrect InkBias was set: {:?}. Using default value 'Both'", i);
-                return InkBias::Both;
-            }
+            _i => InkBias::Both,
         })
         .unwrap_or_else(|| {
                 log_warn!("No InkBias was set. Using default value 'Both'");
