@@ -140,6 +140,9 @@ pub mod utils {
 
     macro_rules! log_warn {
         ( $( $t:tt )* ) => {
+            use crate::utils::get_current_page;
+
+            web_sys::console::warn_1(&format!("OneNoteConverter: Warning generated from page: {}", get_current_page().unwrap()).into());
             web_sys::console::warn_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
         }
     }
@@ -165,18 +168,15 @@ impl Utf16ToString for &[u8] {
     }
 }
 
-#[cfg(debug_assertions)]
 lazy_static! {
     static ref CURRENT_PAGE: Mutex<Option<String>> = Mutex::new(None);
 }
 
-#[cfg(debug_assertions)]
 pub fn set_current_page(page_name: String) {
     let mut current_page = CURRENT_PAGE.lock().unwrap();
     *current_page = Some(page_name.to_string());
 }
 
-#[cfg(debug_assertions)]
 pub fn get_current_page() -> Option<String> {
     let current_page = CURRENT_PAGE.lock().unwrap();
     current_page.clone()

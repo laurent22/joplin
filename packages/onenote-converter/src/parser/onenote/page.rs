@@ -180,7 +180,6 @@ impl Title {
     }
 }
 
-#[cfg(debug_assertions)]
 fn extract_text_from_title(title: &Option<Title>) -> String {
     let mut result = String::new();
     if let Some(title_content) = title {
