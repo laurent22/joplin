@@ -101,7 +101,7 @@ const MenuComponent: React.FC<Props> = props => {
 					<AccessibleView refocusCounter={canAutoFocus ? refocusCounter : undefined} testID={key}>
 						<Text
 							style={option.disabled ? styles.contextMenuItemTextDisabled : styles.contextMenuItemText}
-							disabled={!!option.disabled}
+							disabled={option.disabled}
 						>{option.title}</Text>
 					</AccessibleView>
 				</MenuOptionComponent>,
@@ -149,7 +149,7 @@ const MenuComponent: React.FC<Props> = props => {
 				<FocusControl.ModalWrapper state={open ? ModalState.Open : ModalState.Closed}>
 					<ScrollView
 						style={styles.menuContentScroller}
-						testID={`menu-content-${refocusCounter ? 'refocusing' : ''}`}
+						testID={`menu-content-${open ? 'open' : 'closed'}`}
 					>{menuOptionComponents}</ScrollView>
 				</FocusControl.ModalWrapper>
 			</MenuOptions>

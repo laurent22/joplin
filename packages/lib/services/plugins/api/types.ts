@@ -417,6 +417,20 @@ export interface EditorActivationCheckFilterObject {
 
 export type FilterHandler<T> = (object: T)=> Promise<T>;
 
+export type CommandArgument = string|number|object|boolean|null;
+
+export interface MenuTemplateItem {
+	label?: string;
+	command?: string;
+	commandArgs?: CommandArgument[];
+}
+
+export interface WebviewApi {
+	postMessage: (message: object)=> unknown;
+	onMessage: (message: object)=> void;
+	menuPopupFromTemplate: (template: MenuTemplateItem[])=> void;
+}
+
 // =================================================================
 // Settings types
 // =================================================================

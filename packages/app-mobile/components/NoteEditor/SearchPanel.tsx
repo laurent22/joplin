@@ -1,7 +1,7 @@
 // Displays a find/replace dialog
 
-const React = require('react');
-const { useMemo, useState, useEffect } = require('react');
+import * as React from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';

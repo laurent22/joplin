@@ -29,7 +29,7 @@ const onCancelClick = async (lastDeletion: StateLastDeletion) => {
 export default (props: Props) => {
 	const popupManager = useContext(PopupNotificationContext);
 
-	const lastDeletionNotificationTimeRef = useRef<number>();
+	const lastDeletionNotificationTimeRef = useRef<number>(props.lastDeletionNotificationTime);
 	lastDeletionNotificationTimeRef.current = props.lastDeletionNotificationTime;
 
 	useEffect(() => {

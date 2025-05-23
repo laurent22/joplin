@@ -31,6 +31,7 @@ const React = require('react');
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
 const pdfJs = require('pdfjs-dist');
+const { isAppleSilicon } = require('is-apple-silicon');
 require('@sentry/electron/renderer');
 
 
@@ -110,6 +111,7 @@ const main = async () => {
 		electronBridge: bridge(),
 		nodeSqlite,
 		pdfJs,
+		isAppleSilicon,
 	});
 
 	const logger = new Logger();

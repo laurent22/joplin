@@ -14,7 +14,7 @@ import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions, NoteBodyEditorRef } from './utils/types';
+import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -75,8 +75,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
-	const editorRef = useRef<NoteBodyEditorRef>();
-	const titleInputRef = useRef<HTMLInputElement>();
+	const editorRef = useRef<NoteBodyEditorRef|null>(null);
+	const titleInputRef = useRef<HTMLInputElement|null>(null);
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
 
@@ -91,7 +91,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return `editor-${editorIdCounter++}`;
 	}, []);
 
-	const setFormNoteRef = useRef<OnSetFormNote>();
+	const setFormNoteRef = useRef<OnSetFormNote>(null);
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
 		setFormNote: setFormNoteRef, dispatch: props.dispatch, editorRef, editorId,
 	});
@@ -130,7 +130,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		editorId,
 	});
 	setFormNoteRef.current = setFormNote;
-	const formNoteRef = useRef<FormNote>();
+	const formNoteRef = useRef<FormNote>(formNote);
 	formNoteRef.current = { ...formNote };
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
@@ -423,7 +423,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
 	const markupLanguage = formNote.markup_language;
-	const editorProps: NoteBodyEditorProps = {
+	const editorProps: NoteBodyEditorPropsAndRef = {
 		ref: editorRef,
 		contentKey: formNote.id,
 		style: styles.tinyMCE,

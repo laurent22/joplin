@@ -14,7 +14,7 @@ const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollP
 	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions|null>(null);
 
 	const previousNoteId = usePrevious(noteId);
-	const lastScrollPercentsRef = useRef<EditorScrollPercents>();
+	const lastScrollPercentsRef = useRef<EditorScrollPercents>(null);
 	lastScrollPercentsRef.current = lastEditorScrollPercents;
 
 	useEffect(() => {

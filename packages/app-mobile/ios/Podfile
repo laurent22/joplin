@@ -1,3 +1,8 @@
+# Use the Legacy Architecture:
+# See https://blog.logrocket.com/react-native-new-architecture-sync-async-rendering
+#     https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here
+ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',

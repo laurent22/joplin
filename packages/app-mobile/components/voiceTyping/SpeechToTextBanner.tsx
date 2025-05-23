@@ -8,13 +8,11 @@ import whisper from '../../services/voiceTyping/whisper';
 import vosk from '../../services/voiceTyping/vosk';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
-import Logger from '@joplin/utils/Logger';
 import { RecorderState } from './types';
 import RecordingControls from './RecordingControls';
 import { PrimaryButton } from '../buttons';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
-
-const logger = Logger.create('VoiceTypingDialog');
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	locale: string;
@@ -34,7 +32,6 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 	const [voiceTyping, setVoiceTyping] = useState<VoiceTypingSession>(null);
 	const [error, setError] = useState<Error|null>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
-	const [modelIsOutdated, setModelIsOutdated] = useState(false);
 	const [stoppingSession, setIsStoppingSession] = useState(false);
 
 	const onTextRef = useRef(onText);
@@ -51,12 +48,6 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 
 	const [redownloadCounter, setRedownloadCounter] = useState(0);
 
-	useEffect(() => {
-		if (modelIsOutdated) {
-			logger.info('The downloaded version of the model is from an outdated URL.');
-		}
-	}, [modelIsOutdated]);
-
 	useQueuedAsyncEffect(async (event: AsyncEffectEvent) => {
 		try {
 			// Reset the error: If starting voice typing again resolves the error, the error
@@ -66,7 +57,15 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 			await voiceTypingRef.current?.cancel();
 			onSetPreviewRef.current?.('');
 
-			setModelIsOutdated(await builder.isDownloadedFromOutdatedUrl());
+			const outdated = await builder.isDownloadedFromOutdatedUrl();
+			if (outdated) {
+				const allowOutdatedMessage = _('New model available\nA new voice typing model is available. Do you want to download it?');
+				const downloadNewModel = await shim.showConfirmationDialog(allowOutdatedMessage);
+				if (downloadNewModel) {
+					await onRequestRedownload();
+					return;
+				}
+			}
 
 			if (!await builder.isDownloaded()) {
 				if (event.cancelled) return;
@@ -105,7 +104,7 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 	}, [builder]);
 
 	return {
-		error, mustDownloadModel, stoppingSession, voiceTyping, onRequestRedownload, modelIsOutdated,
+		error, mustDownloadModel, stoppingSession, voiceTyping, onRequestRedownload,
 	};
 };
 
@@ -118,7 +117,6 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 		voiceTyping,
 		stoppingSession,
 		onRequestRedownload,
-		modelIsOutdated,
 	} = useVoiceTyping({
 		locale: props.locale,
 		onSetPreview: setPreview,
@@ -189,9 +187,9 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 		disabled={stoppingSession || recorderState === RecorderState.Downloading}
 		onPress={onRequestRedownload}
 	>
-		{modelIsOutdated ? _('Download updated model') : _('Re-download model')}
+		{_('Re-download model')}
 	</Button>;
-	const allowReDownload = recorderState === RecorderState.Error || modelIsOutdated;
+	const allowReDownload = recorderState === RecorderState.Error;
 
 	const actions = <>
 		{allowReDownload ? reDownloadButton : null}

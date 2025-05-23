@@ -57,7 +57,11 @@ const LabelledIconButton: React.FC<Props> = ({ title, icon, style, themeId, ...o
 	>
 		<View style={styles.buttonContent}>
 			<Icon style={styles.icon} accessibilityLabel={null} name={icon}/>
-			<Text variant='labelMedium'>{title}</Text>
+			<Text
+				variant='labelMedium'
+				ellipsizeMode='tail'
+				numberOfLines={1}
+			>{title}</Text>
 		</View>
 	</TouchableRipple>;
 };

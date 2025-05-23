@@ -3,8 +3,9 @@ import { remove, mkdirp, readFile, pathExists } from 'fs-extra';
 import { _electron as electron, Page, ElectronApplication, test as base, TestInfo } from '@playwright/test';
 import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
-import firstNonDevToolsWindow from './firstNonDevToolsWindow';
+import getMainWindow from './getMainWindow';
 import setDarkMode from './setDarkMode';
+import evaluateWithRetry from './evaluateWithRetry';
 
 
 type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
@@ -21,7 +22,7 @@ type JoplinFixtures = {
 // https://playwright.dev/docs/test-fixtures
 
 const initializeMainWindow = async (electronApp: ElectronApplication) => {
-	const mainWindow = await firstNonDevToolsWindow(electronApp);
+	const mainWindow = await getMainWindow(electronApp);
 
 	// Setting the viewport size helps keep test environments consistent.
 	await mainWindow.setViewportSize({
@@ -32,8 +33,8 @@ const initializeMainWindow = async (electronApp: ElectronApplication) => {
 	return mainWindow;
 };
 
-const waitForMainMessage = (electronApp: ElectronApplication, messageId: string) => {
-	return electronApp.evaluate(({ ipcMain }, messageId) => {
+const waitForMainMessage = async (electronApp: ElectronApplication, messageId: string) => {
+	return evaluateWithRetry(electronApp, ({ ipcMain }, messageId) => {
 		return new Promise<void>(resolve => {
 			ipcMain.once(messageId, () => resolve());
 		});

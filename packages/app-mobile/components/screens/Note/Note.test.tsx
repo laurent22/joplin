@@ -118,10 +118,10 @@ const openNoteActionsMenu = async () => {
 			await userEvent.press(actionMenuButton);
 		});
 
-		// State can update until the menu content is marked as in the process of refocusing (part of the
+		// State can update until the menu content is marked as open (part of the
 		// menu transition).
 		await waitFor(async () => {
-			expect(await screen.findByTestId('menu-content-refocusing')).toBeVisible();
+			expect(await screen.findByTestId('menu-content-open')).toBeVisible();
 		});
 	});
 };

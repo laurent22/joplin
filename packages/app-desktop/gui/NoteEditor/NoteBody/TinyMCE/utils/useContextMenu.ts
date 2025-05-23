@@ -17,6 +17,7 @@ import { EditDialogControl } from './useEditDialog';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import type { MenuItem as MenuItemType } from 'electron';
+import isItemId from '@joplin/lib/models/utils/isItemId';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -40,11 +41,16 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			let resourceId = '';
 			let linkToCopy = null;
 
+			const pathToId = (path: string) => {
+				const id = Resource.pathToId(path);
+				return isItemId(id) ? id : '';
+			};
+
 			if (element.nodeName === 'IMG') {
 				itemType = ContextMenuItemType.Image;
-				resourceId = Resource.pathToId((element as HTMLImageElement).src);
+				resourceId = pathToId((element as HTMLImageElement).src);
 			} else if (element.nodeName === 'A') {
-				resourceId = Resource.pathToId((element as HTMLAnchorElement).href);
+				resourceId = pathToId((element as HTMLAnchorElement).href);
 				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
 				linkToCopy = element.getAttribute('href') || '';
 			} else {

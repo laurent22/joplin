@@ -10,7 +10,7 @@ const React = require('react');
 
 require('../../jest.base-setup.js')();
 
-shimInit({ sharp, nodeSqlite, pdfJs, React, appVersion: () => packageInfo.version });
+shimInit({ pdfJs, sharp, nodeSqlite, React, appVersion: () => packageInfo.version });
 
 global.afterEach(async () => {
 	await afterEachCleanUp();

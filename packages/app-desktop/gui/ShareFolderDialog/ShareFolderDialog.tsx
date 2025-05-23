@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Dialog from '../Dialog';
 import DialogButtonRow, { ClickEvent, ButtonSpec } from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';

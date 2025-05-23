@@ -17,7 +17,7 @@ import { AppState } from '../app.reducer';
 import { saveLayout, loadLayout } from './ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
-import produce from 'immer';
+import { produce } from 'immer';
 import shim from '@joplin/lib/shim';
 import bridge from '../services/bridge';
 import styled from 'styled-components';

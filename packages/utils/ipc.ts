@@ -12,7 +12,7 @@ const maxPorts = 10;
 const findAvailablePort = async (startPort: number) => {
 	for (let i = 0; i < 100; i++) {
 		const port = startPort + i;
-		const inUse = await tcpPortUsed.check(port);
+		const inUse = await tcpPortUsed.check(port, 'localhost');
 		if (!inUse) return port;
 	}
 
@@ -23,7 +23,7 @@ const findListenerPorts = async (startPort: number) => {
 	const output: number[] = [];
 	for (let i = 0; i < maxPorts; i++) {
 		const port = startPort + i;
-		const inUse = await tcpPortUsed.check(port);
+		const inUse = await tcpPortUsed.check(port, 'localhost');
 		if (inUse) output.push(port);
 	}
 
@@ -104,12 +104,21 @@ const getSecretKey = async (filePath: string) => {
 
 // `secretKeyFilePath` must be the same for all the instances that can communicate with each others
 export const startServer = async (startPort: number, secretKeyFilePath: string, messageHandler: IpcMessageHandler, options: StartServerOptions|null = null): Promise<IpcServer> => {
-	const port = await findAvailablePort(startPort);
 	const logger = options && options.logger ? options.logger : new Logger();
+
+	let port: number;
+	try {
+		port = await findAvailablePort(startPort);
+	} catch (error) {
+		logger.error(`Could not find available - using default: ${startPort}`, error);
+		port = startPort;
+	}
 
 	const secretKey = await getSecretKey(secretKeyFilePath);
 
 	return new Promise<IpcServer>((resolve, reject) => {
+		let promiseFulfilled = false;
+
 		try {
 			const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
 				let message: Message|null = null;
@@ -130,29 +139,43 @@ export const startServer = async (startPort: number, secretKeyFilePath: string, 
 			});
 
 			server.on('error', error => {
-				if (logger) logger.error('Server error:', error);
+				logger.error('Server error:', error);
+				if (!promiseFulfilled) {
+					promiseFulfilled = true;
+					reject(error);
+				}
 			});
 
-			server.listen(port, () => {
-				resolve({
-					httpServer: server,
-					port,
-					secretKey,
-				});
+			server.listen(port, 'localhost', () => {
+				if (!promiseFulfilled) {
+					promiseFulfilled = true;
+					resolve({
+						httpServer: server,
+						port,
+						secretKey,
+					});
+				}
 			});
 		} catch (error) {
-			reject(error);
+			if (!promiseFulfilled) {
+				promiseFulfilled = true;
+				reject(error);
+			} else {
+				logger.error('Server initialization error:', error);
+			}
 		}
 	});
 };
 
-export const stopServer = async (server: IpcServer) => {
+export const stopServer = async (server: IpcServer|null): Promise<void> => {
+	if (!server) return;
+
 	return new Promise((resolve, reject) => {
 		server.httpServer.close((error) => {
 			if (error) {
 				reject(error);
 			} else {
-				resolve(null);
+				resolve();
 			}
 		});
 	});
@@ -169,9 +192,18 @@ export interface SendMessageOptions {
 }
 
 export const sendMessage = async (startPort: number, message: Message, options: SendMessageOptions|null = null) => {
-	const output: SendMessageOutput[] = [];
-	const ports = await findListenerPorts(startPort);
 	const logger = options && options.logger ? options.logger : new Logger();
+
+	const output: SendMessageOutput[] = [];
+
+	let ports: number[] = [];
+	try {
+		ports = await findListenerPorts(startPort);
+	} catch (error) {
+		logger.error(`Could not find listener ports - using default only: ${startPort}`, error);
+		ports.push(startPort);
+	}
+
 	const sendToSpecificPortOnly = !!options && !!options.sendToSpecificPortOnly;
 
 	for (const port of ports) {

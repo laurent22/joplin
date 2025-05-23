@@ -56,11 +56,26 @@ To work with the project you will need:
 
 - Rust https://www.rust-lang.org/learn/get-started
 
+### Running tests
+
+Tests for the project are located in the `lib` packages, but to make it work it is necessary to build this project first:
+
+`IS_CONTINUOUS_INTEGRATION=1 yarn build # for production build`
+or 
+`IS_CONTINUOUS_INTEGRATION=1 yarn buildDev # for build with more logs and compiles faster`
+
+After that you should navigate to `lib` package and run the tests of `InteropService_Importer_OneNote.test.` file
+
+```
+cd ../lib
+IS_CONTINUOUS_INTEGRATION=1 yarn test services/interop/InteropService_Importer_OneNote.test.
+```
+
+### Developing
+
 When working with the Rust code you will probably rather run `yarn buildDev` since it is faster and it has more logging messages (they can be disabled in the macro `log!()`)
 
 During development, it will be easier to test it where this library is called. `InteropService_Importer_Onenote.ts` is the code that depends on this and already has some tests.
-
-### Running tests and IS_CONTINUOUS_INTEGRATION
 
 We don't require developers that won't work on this project to have Rust installed on their machine.
 To make this work we:
