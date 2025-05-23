@@ -50,7 +50,6 @@ const SwitchToNewEditorBanner = (props: BannerProps) => {
 		visible={props.isVisible}
 	>
 		{_('The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.')}
-		<br/>
 	</BannerContent>;
 };
 
