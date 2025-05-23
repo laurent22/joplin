@@ -188,7 +188,7 @@ fn extract_text_from_title(title: &Option<Title>) -> String {
                 if let Some(element) = item.element() {
                     for content in &element.contents {
                         if let Some(rich_text) = content.rich_text() {
-                                result.push_str(&rich_text.text);
+                            result.push_str(&rich_text.text);
                         }
                     }
                 }

@@ -46,8 +46,8 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
             _i => InkBias::Both,
         })
         .unwrap_or_else(|| {
-                log_warn!("No InkBias was set. Using default value 'Both'");
-                return InkBias::Both;
+            log_warn!("No InkBias was set. Using default value 'Both'");
+            return InkBias::Both;
         });
     let language_code = simple::parse_u32(PropertyType::LanguageId, object)?;
     let properties = ObjectReference::parse(PropertyType::InkStrokeProperties, object)?
