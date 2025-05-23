@@ -142,7 +142,7 @@ pub mod utils {
         ( $( $t:tt )* ) => {
             use crate::utils::get_current_page;
 
-            web_sys::console::warn_1(&format!("OneNoteConverter: Warning generated from page: {}", get_current_page().unwrap()).into());
+            web_sys::console::warn_1(&format!("OneNoteConverter: Warning around the following page: {}", get_current_page().unwrap()).into());
             web_sys::console::warn_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
         }
     }
