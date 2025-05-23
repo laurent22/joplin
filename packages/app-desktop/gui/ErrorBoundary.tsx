@@ -38,10 +38,10 @@ interface BannerProps {
 
 const SwitchToNewEditorBanner = (props: BannerProps) => {
 
-	const handleSwitchToNewEditor = async () => {
+	const handleSwitchToNewEditor = () => {
 		Setting.setValue('editor.legacyMarkdown', false);
 		const message = _('You are now using the latest version of the Markdown editor.');
-		await alert(message);
+		alert(message);
 	};
 
 	return <BannerContent
