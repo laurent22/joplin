@@ -41,6 +41,7 @@ const SwitchToNewEditorBanner = (props: BannerProps) => {
 	const handleSwitchToNewEditor = () => {
 		Setting.setValue('editor.legacyMarkdown', false);
 		const message = _('You are now using the latest version of the Markdown editor.');
+		// eslint-disable-next-line no-restricted-globals
 		alert(message);
 	};
 
