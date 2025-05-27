@@ -97,7 +97,6 @@ msgstr "窗口 (&W)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
@@ -117,7 +116,6 @@ msgstr "%d GB 存储空间"
 #: packages/lib/models/settings/builtInMetadata.ts:1282
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d 小时"
@@ -137,19 +135,16 @@ msgstr "每个笔记或附件大小 %d MB"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分钟"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "有 %d 条笔记匹配。是否删除？"
+msgstr[0] "有 %d 条笔记匹配此模式。要删除吗？"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
 msgstr[0] "%d 条笔记将被永久删除。是否继续？"
@@ -232,7 +227,6 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
 msgstr[0] "%s: %d 条笔记"
@@ -269,9 +263,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办事"
-"项的完成/未完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命"
-"令来把待办事项转换到普通笔记。"
+"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办"
+"的完成/未完成状态（若目标为普通笔记则将会转换成待办）。使用 “clear” 命"
+"令来把待办转换到普通笔记。"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -1017,7 +1011,7 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
-"关闭应用程序，然后删除“%s”中您的配置档，然后再次启动应用程序。请确保您已事先"
+"关闭应用程序，然后删除“%s”中您的配置档案，然后再次启动应用程序。请确保您已事先"
 "将所有笔记以 JEX 格式导出来创建备份。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
@@ -1107,7 +1101,7 @@ msgstr "已完成"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
 msgid "Complete to-do"
-msgstr "已完成的待办事项"
+msgstr "已完成的待办"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
@@ -1210,7 +1204,7 @@ msgstr "转换为笔记"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1266
 msgid "Convert to todo"
-msgstr "转换为待办事项"
+msgstr "转换为待办"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Converting speech to text..."
@@ -1325,7 +1319,7 @@ msgstr ""
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:60
 msgid "Could not switch profile: %s"
-msgstr "无法切换到配置档：%s"
+msgstr "无法切换到配置档案：%s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:224
 msgid "Could not upgrade master key: %s"
@@ -1356,7 +1350,7 @@ msgstr "新建一个笔记本"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
 msgid "Create new profile..."
-msgstr "创建新的配置档……"
+msgstr "创建新的配置档案……"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1415,7 +1409,7 @@ msgstr "新建一个笔记本。"
 
 #: packages/app-cli/app/command-mktodo.js:12
 msgid "Creates a new to-do."
-msgstr "新建一条待办事项。"
+msgstr "新建一条待办。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
 msgid "Creating new note..."
@@ -1574,7 +1568,7 @@ msgstr "是否删除插件 “%s”？"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:111
 msgid "Delete profile \"%s\""
-msgstr "删除配置档 “%s”"
+msgstr "删除配置档案 “%s”"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:453
 msgid "Delete selected notes"
@@ -1600,7 +1594,7 @@ msgstr "是否删除该邀请？受邀人将无法再次访问此共享笔记本
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:107
 msgid "Delete this profile?"
-msgstr "是否删除此配置档？"
+msgstr "是否删除此配置档案？"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:83
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
@@ -1741,8 +1735,8 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"仅显示指定类型的条目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
-"记和待办事项（示例：`-tt` 只会显示待办事项，当使用 `-tnt` 时将会显示笔记和待"
+"仅显示指定类型的条目。可以把 `n` 用于笔记，`t` 用于待办，或者 `nt` 用于笔"
+"记和待办（示例：`-tt` 只会显示待办，当使用 `-tnt` 时将会显示笔记和待"
 "办事项。）"
 
 #: packages/app-cli/app/command-status.js:13
@@ -1847,7 +1841,7 @@ msgstr "添加绘图"
 #: packages/app-mobile/components/screens/Note/Note.tsx:917
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:75
 msgid "Drawing"
-msgstr "绘制中"
+msgstr "绘图"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1559
 msgid "Drop notes or files here"
@@ -1923,11 +1917,11 @@ msgstr "编辑笔记本"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
 msgid "Edit profile"
-msgstr "编辑配置档"
+msgstr "编辑配置档案"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr "编辑配置档内的配置……"
+msgstr "编辑配置档案内的配置……"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:144
@@ -2328,7 +2322,7 @@ msgstr "导出"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:16
 msgid "Export profile"
-msgstr "导出配置档"
+msgstr "导出配置档案"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:70
 msgid "Exported successfully!"
@@ -2336,7 +2330,7 @@ msgstr "导出成功！"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:36
 msgid "Exporting profile..."
-msgstr "正在导出配置档……"
+msgstr "正在导出配置档案……"
 
 #: packages/app-desktop/InteropServiceHelper.ts:201
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
@@ -2468,7 +2462,7 @@ msgstr "打开链接"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "仅用于调试目的：将您的配置档导出到外部 SD 卡。"
+msgstr "仅用于调试目的：将您的配置档案导出到外部 SD 卡。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1479
 msgid "For example \"%s\""
@@ -2845,7 +2839,7 @@ msgstr "未完成"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
 msgid "Incomplete to-do"
-msgstr "未完成的待办事项"
+msgstr "未完成的待办"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:97
 msgid "Increase indent level"
@@ -3246,7 +3240,7 @@ msgstr "登出"
 
 #: packages/lib/models/Setting.ts:1220
 msgid "Logs, profiles, sync status"
-msgstr "日志，配置档、同步状态"
+msgstr "日志，配置档案、同步状态"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:8
 msgid "Longitude"
@@ -3271,7 +3265,7 @@ msgstr "管理多个用户"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:548
 msgid "Manage profiles"
-msgstr "管理配置档"
+msgstr "管理配置档案"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:555
 msgid "Manage shared notebooks"
@@ -3317,11 +3311,11 @@ msgstr "Markdown 编辑器"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
-msgstr "标记待办事项为完成。"
+msgstr "标记待办为完成。"
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "标记待办事项为未完成。"
+msgstr "标记待办为未完成。"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
@@ -3424,7 +3418,6 @@ msgid ""
 msgstr "大多数插件的源代码可在插件网站上查阅。"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "是否移动 %d 条笔记到笔记本 “%s”？"
@@ -3536,7 +3529,7 @@ msgstr "新照片"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
 msgid "New profile"
-msgstr "新建配置档"
+msgstr "新建配置档案"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -3553,7 +3546,7 @@ msgstr "新建标签："
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:87
 #: packages/app-mobile/setupQuickActions.ts:31
 msgid "New to-do"
-msgstr "新建待办事项"
+msgstr "新建待办"
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "New version: %s"
@@ -3722,7 +3715,7 @@ msgstr "笔记历史"
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
-msgstr "笔记并非待办事项：“%s”"
+msgstr "笔记不是一个待办：“%s”"
 
 #: packages/app-desktop/gui/MainScreen.tsx:128
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
@@ -3918,9 +3911,8 @@ msgid "Open it"
 msgstr "打开它"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "打开 %s"
+msgstr "打开日志"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -3932,7 +3924,7 @@ msgstr "打开主要应用实例……"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
-msgstr "打开配置档目录"
+msgstr "打开配置档案目录"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
@@ -4050,9 +4042,8 @@ msgid "PDF File"
 msgstr "PDF 文件"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
-msgstr "每个用户。至少有 %d 个用户。"
+msgstr "按每个用户计算。至少 2 个用户。"
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
 msgid "Permanently delete note"
@@ -4073,7 +4064,6 @@ msgstr ""
 "所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 
 #: packages/lib/models/Note.ts:944
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "是否永久删除这 %d 条笔记？"
@@ -4313,23 +4303,23 @@ msgstr "正在处理照片……"
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
-msgstr "配置档"
+msgstr "配置档案"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:96
 msgid "Profile name"
-msgstr "配置档名称"
+msgstr "配置档案名称"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
 msgid "Profile name:"
-msgstr "配置档名称："
+msgstr "配置档案名称："
 
 #: packages/lib/versionInfo.ts:91
 msgid "Profile Version: %s"
-msgstr "配置档版本：%s"
+msgstr "配置档案版本：%s"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:199
 msgid "Profiles"
-msgstr "配置档"
+msgstr "配置档案"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1293
 msgid "Properties"
@@ -4433,7 +4423,7 @@ msgstr "录制音频"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
 msgid "Recording"
-msgstr "录音中"
+msgstr "录音"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Recording..."
@@ -4949,7 +4939,7 @@ msgstr "显示全部"
 
 #: packages/lib/models/settings/builtInMetadata.ts:633
 msgid "Show completed to-dos"
-msgstr "显示已完成待办事项"
+msgstr "显示已完成待办"
 
 #: packages/server/src/routes/admin/users.ts:206
 msgid "Show disabled"
@@ -5012,9 +5002,8 @@ msgid "Sidebar"
 msgstr "边栏"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "登录至 Joplin 云。"
+msgstr "注册于 Joplin 云。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5261,12 +5250,12 @@ msgstr "向上交换行"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteType.ts:7
 msgid "Switch between note and to-do type"
-msgstr "在笔记和待办事项类型之间切换"
+msgstr "在笔记和待办类型之间切换"
 
 #: packages/app-desktop/gui/MenuBar.tsx:561
 #: packages/app-mobile/components/side-menu-content.tsx:625
 msgid "Switch profile"
-msgstr "切换配置档"
+msgstr "切换配置档案"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
 msgid "Switch to back-facing camera"
@@ -5284,7 +5273,7 @@ msgstr "切换为笔记类型"
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
 msgid "Switch to profile %d"
-msgstr "切换到配置档 %d"
+msgstr "切换到配置档案 %d"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
 msgid "Switch to the %s Editor"
@@ -5296,7 +5285,7 @@ msgstr "切换到传统编辑器"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
-msgstr "切换为待办事项类型"
+msgstr "切换为待办类型"
 
 #: packages/app-cli/app/command-use.ts:12
 msgid ""
@@ -5459,7 +5448,7 @@ msgstr ""
 msgid ""
 "The active profile cannot be deleted. Switch to a different profile and try "
 "again."
-msgstr "无法删除正在使用的配置档。请切换到另一配置档后再次尝试。"
+msgstr "无法删除正在使用的配置档案。请切换到另一配置档案后再次尝试。"
 
 #: packages/app-desktop/bridge.ts:583
 msgid ""
@@ -5518,7 +5507,7 @@ msgstr "默认的加密方式已变更，您应当重新加密数据。"
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid "The default profile cannot be deleted"
-msgstr "无法删除默认配置档"
+msgstr "无法删除默认配置档案"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1303
 msgid ""
@@ -5968,7 +5957,7 @@ msgstr "运行 `e2ee decrypt --retry-failed-items` 来尝试再次解密这些�
 msgid ""
 "To switch the profile, the app is going to close and you will need to "
 "restart it."
-msgstr "切换配置档后，应用程序将会自动关闭，您需要重新启动它。"
+msgstr "切换配置档案后，应用程序将会自动关闭，您需要重新启动它。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:587
 msgid ""
@@ -5981,15 +5970,15 @@ msgstr ""
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
 msgid "to-do"
-msgstr "待办事项"
+msgstr "待办"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
 msgid "To-do"
-msgstr "待办事项"
+msgstr "待办"
 
 #: packages/app-mobile/components/NoteItem.tsx:158
 msgid "to-do: %s"
-msgstr "待办事项：%s"
+msgstr "待办：%s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
 msgid "Toggle all notebooks"
@@ -6137,7 +6126,7 @@ msgstr "已取消勾选"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "Uncompleted to-dos on top"
-msgstr "置顶未完成待办事项"
+msgstr "置顶未完成待办"
 
 #: packages/app-desktop/gui/MenuBar.tsx:767
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
@@ -6233,7 +6222,7 @@ msgstr "稍后更新"
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
 msgid "Update profile"
-msgstr "更新配置档"
+msgstr "更新配置档案"
 
 #: packages/server/src/services/TaskService.ts:23
 msgid "Update total sizes"
@@ -6511,7 +6500,7 @@ msgstr "当新建笔记时："
 
 #: packages/lib/models/settings/builtInMetadata.ts:849
 msgid "When creating a new to-do:"
-msgstr "当新建待办事项时："
+msgstr "当新建待办时："
 
 #: packages/lib/models/settings/builtInMetadata.ts:517
 msgid ""
