@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -102,7 +104,6 @@ msgstr "&Jendela"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d hari"
@@ -122,7 +123,6 @@ msgstr "%d GB ruang penyimpanan"
 #: packages/lib/models/settings/builtInMetadata.ts:1282
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d jam"
@@ -142,19 +142,16 @@ msgstr "%d MB tiap catatan atau lampiran"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d menit"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
 msgstr[0] "%d catatan cocok dengan pola ini. Hapus semuanya?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
 msgstr[0] "%d catatan akan dihapus selamanya. Lanjutkan?"
@@ -239,7 +236,6 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
 msgstr[0] "%s: %d catatan"
@@ -442,7 +438,7 @@ msgstr ""
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
-"Semua berkas yang gagal diselaraskan telah ditandai sebagai “diabaikan”."
+"Semua benda yang gagal diselaraskan telah ditandai sebagai “diabaikan”."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:73
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:208
@@ -815,7 +811,7 @@ msgstr "Tidak dapat mengakses %s"
 
 #: packages/app-cli/app/base-command.ts:19
 msgid "Cannot change encrypted item"
-msgstr "Tidak dapat mengubah item yang terenkripsi"
+msgstr "Tidak dapat mengubah benda yang terenkripsi"
 
 #: packages/lib/models/Note.ts:618
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1010,7 +1006,7 @@ msgstr ""
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
 msgstr ""
-"Tekan “start” untuk melampirkan sebuah catatan suara baru ke dalam catatan"
+"Tekan “start” untuk melampirkan sebuah catatan suara baru ke dalam catatan."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1188,7 +1184,7 @@ msgstr "Pengaturan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1173
 msgid "Configures the size of scrollbars used in the app."
-msgstr "Atur ukuran bilah gulung yang digunakan pada aplikasi"
+msgstr "Atur ukuran bilah gulung yang digunakan pada aplikasi."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1423,7 +1419,7 @@ msgstr "tanggal dibuat"
 
 #: packages/lib/Synchronizer.ts:199
 msgid "Created local items: %d."
-msgstr "Item lokal yang dibuat: %d."
+msgstr "Benda lokal yang dibuat: %d."
 
 #: packages/lib/services/ReportService.ts:322
 msgid "Created locally"
@@ -1431,7 +1427,7 @@ msgstr "Dibuat di lokal"
 
 #: packages/lib/Synchronizer.ts:201
 msgid "Created remote items: %d."
-msgstr "Item jarak jauh yang dibuat: %d."
+msgstr "Benda jarak jauh yang dibuat: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:140
 msgid "Created: "
@@ -1552,16 +1548,16 @@ msgstr "Turunkan tingkat indentasi"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Decrypted items: %d"
-msgstr "Item terdekripsi: %d"
+msgstr "Benda terdekripsi: %d"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:45
 msgid "Decrypted items: %s / %s"
-msgstr "Item terdekripsi: %s / %s"
+msgstr "Benda terdekripsi: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:48
 #: packages/app-mobile/components/side-menu-content.tsx:637
 msgid "Decrypting items: %d/%d"
-msgstr "Mendekripsi item: %d/%d"
+msgstr "Mendekripsi benda-benda: %d/%d"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1116
 #: packages/lib/models/settings/builtInMetadata.ts:1123
@@ -1658,11 +1654,11 @@ msgstr "Dihapus"
 
 #: packages/lib/Synchronizer.ts:203
 msgid "Deleted local items: %d."
-msgstr "Item lokal yang dihapus: %d."
+msgstr "Benda lokal yang dihapus: %d."
 
 #: packages/lib/Synchronizer.ts:204
 msgid "Deleted remote items: %d."
-msgstr "Item jarak jauh yang dihapus: %d."
+msgstr "Benda jarak jauh yang dihapus: %d."
 
 #: packages/app-cli/app/command-rmnote.ts:20
 msgid "Deletes notes permanently, skipping the trash."
@@ -1791,7 +1787,7 @@ msgid ""
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
-"Menampilkan hanya item dengan jenis tertentu. Dapat berupa `n` untuk "
+"Menampilkan hanya benda dengan jenis tertentu. Dapat berupa `n` untuk "
 "catatan, `t` untuk tugas, atau `nt` untuk catatan dan tugas (contoh: `-tt` "
 "akan menampilkan hanya tugas, sedangkan `-tnt` akan menampilkan catatan dan "
 "tugas)."
@@ -2232,7 +2228,7 @@ msgstr "Terenkripsi"
 
 #: packages/lib/models/BaseItem.ts:985
 msgid "Encrypted items cannot be modified"
-msgstr "Item yang terenkripsi tidak bisa diubah"
+msgstr "Benda yang terenkripsi tidak bisa diubah"
 
 #: packages/lib/models/Setting.ts:1184
 msgid "Encryption"
@@ -2455,7 +2451,7 @@ msgstr "Penanda fitur"
 
 #: packages/lib/Synchronizer.ts:205
 msgid "Fetched items: %d/%d."
-msgstr "Item yang diambil: %d/%d."
+msgstr "Benda yang diambil: %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:53
 #: packages/app-mobile/components/side-menu-content.tsx:642
@@ -2770,7 +2766,7 @@ msgstr "Abaikan galat sertifikat TLS"
 
 #: packages/lib/services/ReportService.ts:236
 msgid "Ignored items that cannot be synchronised"
-msgstr "Benda-benda yang diabaikan yang tidak dapat diselaraskan"
+msgstr "Benda-benda terabaikan yang tidak dapat diselaraskan"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -2846,7 +2842,7 @@ msgstr ""
 "Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul "
 "atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan "
 "atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk "
-"pada item yang saat ini terpilih."
+"pada benda yang saat ini terpilih."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:530
 msgid ""
@@ -3102,9 +3098,9 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"Joplin berkali-kali gagal mendekripsi benda-benda ini, mungkin karena rusak "
-"atau terlalu besar. Benda-benda ini akan tetap berada di perangkat tetapi "
-"Joplin tidak akan mencoba untuk mendekripsinya lagi."
+"Joplin telah gagal mendekripsi pada benda-benda ini berulang kali, mungkin "
+"karena rusak atau terlalu besar. Benda-benda ini akan tetap berada di "
+"perangkat tetapi Joplin tidak akan mencoba untuk mendekripsinya lagi."
 
 #: packages/app-desktop/gui/MenuBar.tsx:946
 msgid "Joplin Forum"
@@ -3448,7 +3444,7 @@ msgstr "Jumlah maks. sambungan yang bersamaan"
 
 #: packages/server/src/routes/admin/users.ts:148
 msgid "Max Item Size"
-msgstr "Ukuran maks. benda"
+msgstr "Ukuran maksimum benda"
 
 #: packages/lib/utils/joplinCloud/index.ts:129
 msgid "Max note or attachment size"
@@ -3519,7 +3515,6 @@ msgstr ""
 "situs web plugin."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Pindahkan %d catatan ke buku catatan \"%s\"?"
@@ -4028,9 +4023,8 @@ msgid "Open it"
 msgstr "Buka yang dipilih"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "Buka %s"
+msgstr "Buka log"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -4160,9 +4154,8 @@ msgid "PDF File"
 msgstr "Berkas PDF"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
-msgstr "Tiap pengguna. Minimal %d pengguna."
+msgstr "Tiap pengguna. Minimal 2 pengguna."
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
 msgid "Permanently delete note"
@@ -4184,10 +4177,9 @@ msgstr ""
 "selamanya."
 
 #: packages/lib/models/Note.ts:944
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
-msgstr[0] "Hapus %d catatan tersebut selamanya?"
+msgstr[0] "Hapus catatan tersebut selamanya?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
 msgid "Permanently deletes the notebook, skipping the trash."
@@ -4738,7 +4730,7 @@ msgstr "Pulihkan benda yang cocok dengan <note-pattern> dari tempat sampah."
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
-msgstr "Benda yang Dipulihkan"
+msgstr "Benda-benda yang dipulihkan"
 
 #: packages/lib/services/RevisionService.ts:250
 msgid "Restored Notes"
@@ -5150,9 +5142,8 @@ msgid "Sidebar"
 msgstr "Bilah samping"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "Masuk ke Joplin Cloud."
+msgstr "Daftar ke Joplin Cloud"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5711,8 +5702,8 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"Properti faktor menentukan bagaimana item akan tumbuh atau menyusut untuk "
-"menyesuaikan dengan ruang yang tersedia dalam wadahnya dengan "
+"Properti faktor menentukan bagaimana benda tersebut akan mengembang atau "
+"menyusut untuk menyesuaikan dengan ruang yang tersedia dalam wadahnya dengan "
 "memperhitungkan benda lainnya. Jadi benda dengan faktor 2 akan mengambil "
 "ruang dua kali lebih banyak dari benda dengan faktor 1. Mulai ulang aplikasi "
 "untuk melihat perubahan."
@@ -5938,9 +5929,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
-"Benda berikut gagal diselaraskan, tetapi telah ditandai sebagai “diabaikan”. "
-"Mereka tidak akan menyebabkan peringatan penyelaraskan muncul, tetapi masih "
-"tidak diselaraskan. Untuk batal mengabaikan, tekan “ulangi”."
+"Benda-benda berikut gagal diselaraskan, tetapi telah ditandai sebagai "
+"“diabaikan”. Mereka tidak akan menyebabkan peringatan penyelarasan muncul, "
+"tetapi masih tidak diselaraskan. Untuk batal mengabaikan, tekan “ulangi”."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -5948,9 +5939,9 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Benda berikut akan tetap berada di perangkat tetapi tidak akan diunggah ke "
-"sasaran penyelarasan. Untuk menemukan benda berikut, cari judulnya atau ID "
-"(yang ditampilkan dalam tanda kurung di atas)."
+"Benda-benda berikut akan tetap berada di perangkat tetapi tidak akan "
+"diunggah ke sasaran penyelarasan. Untuk menemukan benda berikut, cari "
+"judulnya atau ID (yang ditampilkan dalam tanda kurung di atas)."
 
 #: packages/lib/models/Setting.ts:1199
 msgid ""
@@ -6587,7 +6578,7 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
-"Digunakan di mana font lebar tetap diperlukan untuk meletakkan teks dengan "
+"Digunakan di mana fonta lebar tetap diperlukan untuk meletakkan teks dengan "
 "jelas (misalnya tabel, kotak centang, kode). Jika tidak ditemukan, fonta "
 "generik monospace (lebar tetap) digunakan."
 
