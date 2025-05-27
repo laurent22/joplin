@@ -4,14 +4,14 @@ This is the renderer used by [Joplin](https://github.com/laurent22/joplin) to re
 
 ## Installation
 
-	npm i -s joplin-renderer
+	npm i @joplin/renderer
 
 Certain plugins require additional assets like CSS, fonts, etc. These assets are in the `/assets` directory and should be copied to wherever the application can find them at runtime.
 
 ## Usage
 
 ```js
-const { MarkupToHtml } = require('joplin-renderer');
+const { MarkupToHtml } = require('@joplin/renderer');
 
 const options = {};
 
