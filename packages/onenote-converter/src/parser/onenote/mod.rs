@@ -26,6 +26,7 @@ pub(crate) mod rich_text;
 pub(crate) mod section;
 pub(crate) mod table;
 
+extern crate lazy_static;
 extern crate console_error_panic_hook;
 
 /// The OneNote file parser.
