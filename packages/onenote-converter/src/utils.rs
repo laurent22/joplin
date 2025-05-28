@@ -1,13 +1,13 @@
 use crate::parser::errors::Result;
 use itertools::Itertools;
+use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
+use std::sync::Mutex;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 use widestring::U16CString;
-use lazy_static::lazy_static;
-use std::sync::Mutex;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
