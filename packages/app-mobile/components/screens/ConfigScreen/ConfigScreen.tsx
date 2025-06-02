@@ -37,6 +37,7 @@ import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './J
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
+import RevisionService from '@joplin/lib/services/RevisionService';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -124,6 +125,15 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private e2eeConfig_ = () => {
 		void NavService.go('EncryptionConfig');
+	};
+
+	private deleteAllHistoryAction_ = async () => {
+		const response = await shim.showMessageBox(_('Are you sure you want to delete all note history? This cannot be undone.'), {
+			buttons: [_('Yes'), _('No')],
+		});
+		if (response === 0) {
+			await RevisionService.instance_.deleteOldRevisions(0);
+		}
 	};
 
 	private saveButton_press = async () => {
@@ -546,6 +556,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'sync') {
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+		}
+
+		if (section.name === 'revisionService') {
+			addSettingButton('delete_all_history_button', _('Delete All History'), this.deleteAllHistoryAction_);
 		}
 
 		if (section.name === 'joplinCloud') {

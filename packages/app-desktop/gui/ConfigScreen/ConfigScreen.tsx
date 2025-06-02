@@ -20,6 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim from '@joplin/lib/shim';
+import RevisionService from '@joplin/lib/services/RevisionService';
 
 
 interface Font {
@@ -292,6 +293,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>,
 				);
 			}
+		}
+
+		if (section.name === 'revisionService') {
+			const deleteAllHistoryAction = async () => {
+				const response = await shim.showMessageBox(_('Are you sure you want to delete all note history? This cannot be undone.'), {
+					buttons: [_('Yes'), _('No')],
+				});
+				if (response === 0) {
+					await RevisionService.instance_.deleteOldRevisions(0);
+				}
+			};
+			settingComps.push(
+				<div key="delete_all_history_button" style={this.rowStyle_}>
+					<Button
+						title={_('Delete All History')}
+						level={ButtonLevel.Primary}
+						onClick={deleteAllHistoryAction}
+					/>
+				</div>,
+			);
 		}
 
 		let advancedSettingsButton = null;
