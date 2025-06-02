@@ -258,6 +258,28 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					);
 				}
 
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					const server = settings['sync.11.path'] as string;
+
+					const goToSamlLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerSamlLogin',
+						});
+					};
+
+					settingComps.push(
+						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
+							<Button
+								title={_('Connect using your organisation account')}
+								level={ButtonLevel.Primary}
+								onClick={goToSamlLogin}
+								disabled={!server || server?.trim().length === 0}
+							/>
+						</div>,
+					);
+				}
+
 				settingComps.push(
 					<div key="check_sync_config_button" style={this.rowStyle_}>
 						<Button

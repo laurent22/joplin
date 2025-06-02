@@ -82,6 +82,7 @@ const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
+import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
@@ -99,6 +100,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver/fs-driver-rn';
@@ -141,6 +143,8 @@ import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import PluginNotification from './components/plugins/PluginNotification';
 import FocusControl from './components/accessibility/FocusControl/FocusControl';
+import SsoLoginScreen from './components/screens/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
 
 const logger = Logger.create('root');
@@ -1227,7 +1231,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 				folderId: params.id,
 			});
 			break;
-
 		}
 	}
 
@@ -1302,6 +1305,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ShareManager: { screen: ShareManager },

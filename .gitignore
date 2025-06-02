@@ -394,6 +394,7 @@ packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
 packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/Sidebar/types.js
+packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
 packages/app-desktop/gui/SyncWizard/Dialog.js
@@ -792,6 +793,7 @@ packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
 packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
 packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
+packages/app-mobile/components/screens/SsoLoginScreen.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
@@ -1025,6 +1027,7 @@ packages/lib/RotatingLogs.js
 packages/lib/SyncTargetFilesystem.js
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinServer.js
+packages/lib/SyncTargetJoplinServerSAML.js
 packages/lib/SyncTargetNone.js
 packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetRegistry.js
@@ -1052,6 +1055,8 @@ packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
+packages/lib/components/shared/SamlShared.js
+packages/lib/components/shared/SsoScreenShared.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
@@ -1493,6 +1498,7 @@ packages/lib/utils/ipc/utils/separateCallbacksFromSerializableArray.js
 packages/lib/utils/joplinCloud/index.js
 packages/lib/utils/joplinCloud/types.js
 packages/lib/utils/markupLanguageUtils.js
+packages/lib/utils/prefixWithHttps.js
 packages/lib/utils/processStartFlags.js
 packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js

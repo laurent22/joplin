@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig, SamlConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
@@ -145,6 +145,24 @@ function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
 	return ldapConfig;
 }
 
+function samlConfigFromEnv(env: EnvVariables): SamlConfig {
+	if (env.SAML_ENABLED) {
+		return {
+			enabled: true,
+			identityProviderConfigFile: env.SAML_IDP_CONFIG_FILE,
+			serviceProviderConfigFile: env.SAML_SP_CONFIG_FILE,
+			organizationDisplayName: env.SAML_ORGANIZATION_DISPLAY_NAME,
+		};
+	} else {
+		return {
+			enabled: false,
+			identityProviderConfigFile: '',
+			serviceProviderConfigFile: '',
+			organizationDisplayName: '',
+		};
+	}
+}
+
 let config_: Config = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -197,6 +215,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
+		saml: samlConfigFromEnv(env),
 		...overrides,
 	};
 }

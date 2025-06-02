@@ -30,6 +30,8 @@ import WindowCommandsAndDialogs from './WindowCommandsAndDialogs/WindowCommandsA
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
 import bridge from '../services/bridge';
 import EditorWindow from './NoteEditor/EditorWindow';
+import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
@@ -190,6 +192,7 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },

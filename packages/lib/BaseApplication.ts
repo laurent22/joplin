@@ -9,6 +9,7 @@ import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDr
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
+import SyncTargetJoplinServerSAML from './SyncTargetJoplinServerSAML';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
 import { createStore, applyMiddleware, Store } from 'redux';
 import { defaultState, stateUtils } from './reducer';
@@ -715,6 +716,7 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 		SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+		SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
 		SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 		try {
