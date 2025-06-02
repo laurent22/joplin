@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"„%s“ fehlt die erforderliche Eigenschaft „%s“."
 	],
-	"%d days": [
-		"%d Tage"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB Speicherplatz"
 	],
-	"%d hour": [
-		"%d Stunde"
-	],
-	"%d hours": [
-		"%d Stunden"
-	],
 	"%d MB": [
 		"&d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB pro Notiz oder Anhang"
-	],
-	"%d minutes": [
-		"%d Minuten"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d Notizen stimmen mit diesem Muster überein. Löschen?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d Notizen werden dauerhaft gelöscht. Fortfahren?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d Notizen"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2088,9 +2067,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Die meisten Erweiterungen stellen den Quellcode auf der Erweiterungswebsite zur Verfügung, um eingesehen zu werden."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d Notizen in das Notizbuch „%s“ verschieben?"
-	],
 	"Move left": [
 		""
 	],
@@ -2466,9 +2442,6 @@
 	"PDF File": [
 		"PDF-Datei"
 	],
-	"Per user. Minimum of %d users.": [
-		"Pro Nutzer. Minimum von %d Nutzern."
-	],
 	"Permanently delete note": [
 		"Notiz dauerhaft löschen"
 	],
@@ -2477,9 +2450,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Notizbuch „%s“ dauerhaft löschen? Alle Notizen und Unter-Notizbücher in diesem Notizbuch werden ebenfalls gelöscht."
-	],
-	"Permanently delete these %d notes?": [
-		"Diese %d Notizen dauerhaft löschen?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Löscht das Notizbuch dauerhaft, überspringt den Papierkorb."
@@ -3601,9 +3571,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Diese Aktion wird alle Elemente im Papierkorb dauerhaft löschen. Fortfahren?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Die Notiz „%s“ wird dauerhaft gelöscht. Fortfahren?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Das Notizbuch wird aus deiner Sammlung gelöscht und du wirst keinen Zugriff mehr darauf haben. Möchtest du fortfahren?"

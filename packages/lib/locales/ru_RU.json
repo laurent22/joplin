@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"В \"%s\" отсутствует необходимое свойство \"%s\"."
 	],
-	"%d days": [
-		"%d дней"
-	],
 	"%d GB": [
 		"%d ГБ"
 	],
 	"%d GB storage space": [
 		"%d ГБ дискового пространства"
 	],
-	"%d hour": [
-		"%d час"
-	],
-	"%d hours": [
-		"%d часов"
-	],
 	"%d MB": [
 		"%d МБ"
 	],
 	"%d MB per note or attachment": [
 		"%d МБ на заметку или вложение"
-	],
-	"%d minutes": [
-		"%d минут"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d заметок соответствуют указанному выражению. Удалить их?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d заметок будут удалены навсегда. Продолжить?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d заметок"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2092,9 +2071,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Большинство плагинов имеют исходный код, доступный для просмотра на сайте плагина."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Переместить %d заметок в блокнот \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2470,9 +2446,6 @@
 	"PDF File": [
 		"Файл PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"На каждого пользователя. Минимум %d пользователей."
-	],
 	"Permanently delete note": [
 		"Безвозвратно удалить заметку"
 	],
@@ -2481,9 +2454,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Удалить безвозвратно блокнот “%s”?\n\nВсе заметки и вложенные блокноты также будут безвозвратно удалены."
-	],
-	"Permanently delete these %d notes?": [
-		"Удалить безвозвратно эти %d заметки?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Безвозвратно удаляет блокнот, минуя корзину."
@@ -3613,9 +3583,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Это приведет к безвозвратному удалению всех элементов в корзине. Продолжить?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Заметка \"%s\" будет безвозвратно удалена. Продолжить?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Это удалит блокнот из вашей коллекции, и вы больше не будете иметь доступа к его содержимому. Хотите продолжить?"

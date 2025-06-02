@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
+	"%d day": [
+		"",
 		""
 	],
 	"%d GB": [
@@ -11,20 +12,8 @@
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"% ordua"
-	],
-	"%d hours": [
-		"% orduak"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minutuak"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d oharrak bat datoz ereduarekin. Ezabatu nahi dituzu?"
 	],
 	"%s": [
 		""
@@ -61,9 +50,6 @@
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d oharrak"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1465,9 +1451,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Mugitu %d oharrak \"%s\" koadernora?"
-	],
 	"Move left": [
 		""
 	],
@@ -1699,7 +1682,7 @@
 	"Path:": [
 		""
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

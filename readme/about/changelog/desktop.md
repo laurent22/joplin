@@ -1,5 +1,47 @@
 # Joplin Desktop Changelog
 
+## [v3.4.1](https://github.com/laurent22/joplin/releases/tag/v3.4.1) (Pre-release) - 2025-05-20T09:59:39Z
+
+- New: Plugins: Added copyToClipboard command ([067ce65](https://github.com/laurent22/joplin/commit/067ce65))
+- New: Plugins: Added the webviewApi.menuPopupFromTemplate() API to create context menus ([370f6bd](https://github.com/laurent22/joplin/commit/370f6bd))
+- Improved: Built-in plugins: Update Freehand Drawing to v3.1.0 ([#12323](https://github.com/laurent22/joplin/issues/12323) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make default window color match system theme ([#12303](https://github.com/laurent22/joplin/issues/12303) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Set new encryption methods as default ([#12229](https://github.com/laurent22/joplin/issues/12229) by Self Not Found)
+- Improved: Setup auto-update service when the feature flag is set in config ([318ca3d](https://github.com/laurent22/joplin/commit/318ca3d))
+- Improved: Updated packages @adobe/css-tools (v4.4.2)
+- Fixed: //" URLs setting does not allow loading local images ([#12281](https://github.com/laurent22/joplin/issues/12281) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix "Open" option for attachments shown in context menu for web links ([#12215](https://github.com/laurent22/joplin/issues/12215) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix keyboard can't add text after certain confirm dialogs are shown ([#12200](https://github.com/laurent22/joplin/issues/12200) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix dropping a URL from the Firefox addressbar inserts nothing ([#12282](https://github.com/laurent22/joplin/issues/12282) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.3.12](https://github.com/laurent22/joplin/releases/tag/v3.3.12) - 2025-05-04T18:12:23Z
+
+- Improved: Plugins: Undeprecate joplin.settings.value() ([3f364a4](https://github.com/laurent22/joplin/commit/3f364a4))
+- Fixed: Fix crash after removing "toggle tab indentation" keyboard shortcut ([#12213](https://github.com/laurent22/joplin/issues/12213)) ([#12204](https://github.com/laurent22/joplin/issues/12204) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix printing ([#12219](https://github.com/laurent22/joplin/issues/12219) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent application from hanging when multi-instance setup does not work ([#12222](https://github.com/laurent22/joplin/issues/12222))
+
+## [v3.3.10](https://github.com/laurent22/joplin/releases/tag/v3.3.10) - 2025-05-02T19:46:15Z
+
+- Fixed: Notify user when they are using the Intel app on Apple Silicon ([#11989](https://github.com/laurent22/joplin/issues/11989))
+
+## [v3.3.9](https://github.com/laurent22/joplin/releases/tag/v3.3.9) - 2025-05-01T21:02:12Z
+
+- Fixed: Fix inserting note links using the mouse ([#12199](https://github.com/laurent22/joplin/issues/12199)) ([#12197](https://github.com/laurent22/joplin/issues/12197) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.3.7](https://github.com/laurent22/joplin/releases/tag/v3.3.7) (Pre-release) - 2025-04-29T13:47:19Z
+
+- New: Add plural forms for notes, users, hours, minutes, days ([#12171](https://github.com/laurent22/joplin/issues/12171) by [@SilverGreen93](https://github.com/SilverGreen93))
+- Improved: "Collapse all" button in sidebar doesn't collapse trash folder ([#12051](https://github.com/laurent22/joplin/issues/12051)) ([#12039](https://github.com/laurent22/joplin/issues/12039) by [@MorbidMiyako](https://github.com/MorbidMiyako))
+- Improved: Built-in plugins: Upgrade Backup to v1.4.3 ([#12180](https://github.com/laurent22/joplin/issues/12180) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update immer to v9.0.21 ([#12182](https://github.com/laurent22/joplin/issues/12182) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to Electron 35.2.1 ([#12178](https://github.com/laurent22/joplin/issues/12178) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix "focus viewer" doesn't move foucs to the correct line for sufficiently large documents ([#12183](https://github.com/laurent22/joplin/issues/12183) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Allow opening secondary app instances from the "File" menu ([#12181](https://github.com/laurent22/joplin/issues/12181)) ([#12177](https://github.com/laurent22/joplin/issues/12177) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Allow syntax highlighting within ==highlight==s ([#12167](https://github.com/laurent22/joplin/issues/12167)) ([#12110](https://github.com/laurent22/joplin/issues/12110) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix firewall warning on startup ([#12176](https://github.com/laurent22/joplin/issues/12176) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Preserve search query when opening a note in a new window ([#12175](https://github.com/laurent22/joplin/issues/12175)) ([#12168](https://github.com/laurent22/joplin/issues/12168) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.3.6](https://github.com/laurent22/joplin/releases/tag/v3.3.6) (Pre-release) - 2025-04-24T12:27:20Z
 
 - Improved: Markdown editor: Scroll linked-to headers to the top of the editor ([#12125](https://github.com/laurent22/joplin/issues/12125) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

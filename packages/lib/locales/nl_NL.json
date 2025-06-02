@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mist de vereiste \"%s\" eigenschap."
 	],
-	"%d days": [
-		"%d dagen"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB opslagruimte"
 	],
-	"%d hour": [
-		"%d uur"
-	],
-	"%d hours": [
-		"%d uur"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per notitie of bijlage"
-	],
-	"%d minutes": [
-		"%d minuten"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
 	],
 	"%s": [
 		"(%s)"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notities"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1859,9 +1841,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d notities verplaatsen naar notitieboek \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2185,9 +2164,6 @@
 	],
 	"PDF File": [
 		"PDF-bestand"
-	],
-	"Per user. Minimum of %d users.": [
-		"Per gebruiker. Minimum van %d gebruikers."
 	],
 	"Permission needed": [
 		"Toestemming vereist"

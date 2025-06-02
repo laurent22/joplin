@@ -76,10 +76,13 @@
     Such application may want to use `-[MLModel initWithContentsOfURL:configuration:error:]` and `+URLOfModelInThisBundle` to create a MLModel object to pass-in.
 */
 - (instancetype)initWithMLModel:(MLModel *)model {
+    if (model == nil) {
+        return nil;
+    }
     self = [super init];
-    if (!self) { return nil; }
-    _model = model;
-    if (_model == nil) { return nil; }
+    if (self != nil) {
+        _model = model;
+    }
     return self;
 }
 
@@ -174,6 +177,28 @@
     id<MLFeatureProvider> outFeatures = [self.model predictionFromFeatures:input options:options error:error];
     if (!outFeatures) { return nil; }
     return [[whisper_encoder_implOutput alloc] initWithOutput:(MLMultiArray *)[outFeatures featureValueForName:@"output"].multiArrayValue];
+}
+
+- (void)predictionFromFeatures:(whisper_encoder_implInput *)input completionHandler:(void (^)(whisper_encoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler {
+    [self.model predictionFromFeatures:input completionHandler:^(id<MLFeatureProvider> prediction, NSError *predictionError) {
+        if (prediction != nil) {
+            whisper_encoder_implOutput *output = [[whisper_encoder_implOutput alloc] initWithOutput:(MLMultiArray *)[prediction featureValueForName:@"output"].multiArrayValue];
+            completionHandler(output, predictionError);
+        } else {
+            completionHandler(nil, predictionError);
+        }
+    }];
+}
+
+- (void)predictionFromFeatures:(whisper_encoder_implInput *)input options:(MLPredictionOptions *)options completionHandler:(void (^)(whisper_encoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler {
+    [self.model predictionFromFeatures:input options:options completionHandler:^(id<MLFeatureProvider> prediction, NSError *predictionError) {
+        if (prediction != nil) {
+            whisper_encoder_implOutput *output = [[whisper_encoder_implOutput alloc] initWithOutput:(MLMultiArray *)[prediction featureValueForName:@"output"].multiArrayValue];
+            completionHandler(output, predictionError);
+        } else {
+            completionHandler(nil, predictionError);
+        }
+    }];
 }
 
 - (nullable whisper_encoder_implOutput *)predictionFromLogmel_data:(MLMultiArray *)logmel_data error:(NSError * _Nullable __autoreleasing * _Nullable)error {

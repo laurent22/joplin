@@ -23,6 +23,7 @@ interface DropdownProps {
 	headerStyle?: TextStyle;
 	itemStyle?: TextStyle;
 	disabled?: boolean;
+	defaultHeaderLabel?: string; // Defaults to "..."
 	accessibilityHint?: string;
 
 	labelTransform?: 'trim';
@@ -149,7 +150,7 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 
 		const itemStyle = { ...(this.props.itemStyle ? this.props.itemStyle : {}) };
 
-		let headerLabel = '...';
+		let headerLabel = this.props.defaultHeaderLabel ?? '...';
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
 			if (item.value === this.props.selectedValue) {

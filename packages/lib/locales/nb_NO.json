@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mangler den nødvendige \"%s\"-verdien."
 	],
-	"%d days": [
-		"%d dager"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d time"
-	],
-	"%d hours": [
-		"%d timer"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minutter"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d notater passer dette mønsteret. Vil du slette dem?"
 	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
@@ -70,9 +55,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d notater"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1742,9 +1724,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Flytt %d notater til notatbok \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2054,7 +2033,7 @@
 	"PDF File": [
 		"PDF-fil"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

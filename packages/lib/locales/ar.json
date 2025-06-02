@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"يفتقد \"%s\" خاصية \"%s\" المطلوبة."
 	],
-	"%d days": [
-		"%d أيام"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		"GB %d مساحة التخزين"
 	],
-	"%d hour": [
-		"%d ساعة"
-	],
-	"%d hours": [
-		"%d ساعات"
-	],
 	"%d MB": [
 		""
 	],
 	"%d MB per note or attachment": [
 		"MB %d لكل ملاحظة او مرفق"
-	],
-	"%d minutes": [
-		"%d دقائق"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d ملاحظة تطابق هذا النمط. حذف هذه الملاحظات؟"
 	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
@@ -73,9 +58,6 @@
 	],
 	"%s: %d": [
 		"%s : %d"
-	],
-	"%s: %d notes": [
-		"%s: %d ملاحظات"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1820,9 +1802,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"نقل %d ملاحظات إلى دفتر الملاحظات \"%s\" ؟"
-	],
 	"Move left": [
 		""
 	],
@@ -2138,7 +2117,7 @@
 	"PDF File": [
 		"ملف PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permission needed": [

@@ -16,6 +16,7 @@ const urlUtils = require('@joplin/lib/urlUtils');
 const ReactTooltip = require('react-tooltip');
 const { connect } = require('react-redux');
 import shared from '@joplin/lib/components/shared/note-screen-shared';
+import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { RefObject, useCallback, useRef, useState } from 'react';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
@@ -163,7 +164,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	}
 
 	const restoreButtonTitle = _('Restore');
-	const helpMessage = _('Click "%s" to restore the note. It will be copied in the notebook named "%s". The current version of the note will not be replaced or modified.', restoreButtonTitle, RevisionService.instance().restoreFolderTitle());
+	const helpMessage = getHelpMessage(restoreButtonTitle);
 
 	const titleInput = (
 		<div className='revision-viewer-title'>

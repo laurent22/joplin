@@ -48,6 +48,8 @@ const useStyles = (theme: ThemeStyle) => {
 				gap: 8,
 				flexDirection: 'row',
 				flexWrap: 'wrap',
+				flexShrink: 1,
+				flexGrow: 1,
 			},
 			modalBackground: {
 				paddingTop: 0,

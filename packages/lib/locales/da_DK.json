@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mangler for den påkrævede \"%s\" egenskab."
 	],
-	"%d days": [
-		"%d dage"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB lagerplads"
 	],
-	"%d hour": [
-		"%d time"
-	],
-	"%d hours": [
-		"%d timer"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB pr. note eller vedhæftning"
-	],
-	"%d minutes": [
-		"%d minutter"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d noter der matcher dette mønster. Slet dem?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d noter vil blive slettet permanent. Vil du fortsætte?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d noter"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2088,9 +2067,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"De fleste plugins har kildekode, der kan gennemgås på plugin-hjemmesiden."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Flyt %d noter til notesbogen \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2466,9 +2442,6 @@
 	"PDF File": [
 		"PDF-fil"
 	],
-	"Per user. Minimum of %d users.": [
-		"Pr. bruger. Minimum %d brugere."
-	],
 	"Permanently delete note": [
 		"Slet note permanent"
 	],
@@ -2477,9 +2450,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Slet notesbogen \"%s\" permanent?\n\nAlle noter og undernotesbøger i denne notesbog vil blive slettet permanent."
-	],
-	"Permanently delete these %d notes?": [
-		"Slet disse %d noter permanent?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Sletter notesbogen permanent og springer papirkurven over."
@@ -3604,9 +3574,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Dette vil slette alle elementer i papirkurven permanent. Ønsker du at fortsætte?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Dette vil slette noten \"%s\" permanent. Vil du fortsætte?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Dette vil fjerne notesbogen fra din samling, og du vil ikke længere have adgang til dens indhold. Ønsker du at fortsætte?"

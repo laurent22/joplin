@@ -125,6 +125,7 @@ packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
 packages/app-desktop/commands/copyDevCommand.js
+packages/app-desktop/commands/copyToClipboard.js
 packages/app-desktop/commands/editProfileConfig.js
 packages/app-desktop/commands/emptyTrash.js
 packages/app-desktop/commands/exportDeletionLog.test.js
@@ -183,6 +184,7 @@ packages/app-desktop/gui/InlineCombobox.js
 packages/app-desktop/gui/ItemList.js
 packages/app-desktop/gui/JoplinCloudConfigScreen.js
 packages/app-desktop/gui/JoplinCloudLoginScreen.js
+packages/app-desktop/gui/JoplinCloudSignUpCallToAction.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
@@ -508,12 +510,14 @@ packages/app-desktop/integration-tests/sidebar.spec.js
 packages/app-desktop/integration-tests/simpleBackup.spec.js
 packages/app-desktop/integration-tests/util/activateMainMenuItem.js
 packages/app-desktop/integration-tests/util/createStartupArgs.js
+packages/app-desktop/integration-tests/util/evaluateWithRetry.js
 packages/app-desktop/integration-tests/util/extendedExpect.js
 packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/getMainWindow.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
+packages/app-desktop/integration-tests/util/setSettingValue.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
 packages/app-desktop/integration-tests/wcag.spec.js
@@ -777,6 +781,8 @@ packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
+packages/app-mobile/components/screens/NoteRevisionViewer.test.js
+packages/app-mobile/components/screens/NoteRevisionViewer.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
@@ -865,6 +871,7 @@ packages/app-mobile/utils/makeShowMessageBox.test.js
 packages/app-mobile/utils/makeShowMessageBox.js
 packages/app-mobile/utils/pickDocument.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
+packages/app-mobile/utils/polyfills/crypto-polyfill/index.js
 packages/app-mobile/utils/polyfills/index.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareFile.js
@@ -992,7 +999,10 @@ packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/tools/updateCategories.js
-packages/htmlpack/src/index.js
+packages/htmlpack/index.test.js
+packages/htmlpack/index.js
+packages/htmlpack/packToString.js
+packages/htmlpack/utils/parseHtmlAsync.js
 packages/lib/ArrayUtils.js
 packages/lib/AsyncActionQueue.test.js
 packages/lib/AsyncActionQueue.js
@@ -1044,6 +1054,7 @@ packages/lib/commands/toggleEditorPlugin.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
+packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
 packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/SsoScreenShared.js
 packages/lib/components/shared/config/config-shared.js
@@ -1140,6 +1151,7 @@ packages/lib/models/settings/settingValidations.js
 packages/lib/models/settings/types.js
 packages/lib/models/utils/areAllFoldersCollapsed.test.js
 packages/lib/models/utils/areAllFoldersCollapsed.js
+packages/lib/models/utils/getCanBeCollapsedFolderIds.test.js
 packages/lib/models/utils/getCanBeCollapsedFolderIds.js
 packages/lib/models/utils/getCollator.js
 packages/lib/models/utils/getConflictFolderId.js
@@ -1492,6 +1504,7 @@ packages/lib/utils/replaceUnsupportedCharacters.test.js
 packages/lib/utils/replaceUnsupportedCharacters.js
 packages/lib/utils/resolvePathWithinDir.test.js
 packages/lib/utils/resolvePathWithinDir.js
+packages/lib/utils/types/pdfJs.js
 packages/lib/utils/userFetcher.js
 packages/lib/utils/webDAVUtils.test.js
 packages/lib/utils/webDAVUtils.js

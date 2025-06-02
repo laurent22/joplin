@@ -18,6 +18,7 @@ class AudioRecorder(context: Context) : Closeable {
 	// Don't allow the unprocessed audio buffer to grow indefinitely -- discard
 	// data if longer than this:
 	private val maxLengthSeconds = 120
+	private val maxRecorderBufferLengthSeconds = 20
 	private val maxBufferSize = sampleRate * maxLengthSeconds
 	private val buffer = FloatArray(maxBufferSize)
 	private var bufferWriteOffset = 0
@@ -45,7 +46,7 @@ class AudioRecorder(context: Context) : Closeable {
 				.setChannelMask(AudioFormat.CHANNEL_IN_MONO)
 				.build()
 		)
-		.setBufferSizeInBytes(maxBufferSize * Float.SIZE_BYTES)
+		.setBufferSizeInBytes(maxRecorderBufferLengthSeconds * sampleRate * Float.SIZE_BYTES)
 		.build()
 
 	// Discards the first [samples] samples from the start of the buffer. Conceptually, this

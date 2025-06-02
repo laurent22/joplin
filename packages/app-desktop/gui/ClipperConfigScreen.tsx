@@ -35,8 +35,8 @@ class ClipperConfigScreenComponent extends React.Component {
 		void shim.showMessageBox(_('Token has been copied to the clipboard!'), { type: MessageBoxType.Info });
 	}
 
-	private renewToken_click() {
-		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
+	private async renewToken_click() {
+		if (await shim.showConfirmationDialog(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
 				.generateApiToken()
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied

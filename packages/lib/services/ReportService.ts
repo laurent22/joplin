@@ -7,7 +7,7 @@ import BaseModel from '../BaseModel';
 import DecryptionWorker from './DecryptionWorker';
 import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
-import { _ } from '../locale';
+import { _, _n } from '../locale';
 const { toTitleCase } = require('../string-utils.js');
 
 enum CanRetryType {
@@ -374,7 +374,8 @@ export default class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
+			const noteCount = await Folder.noteCount(folders[i].id);
+			section.body.push(_n('%s: %d note', '%s: %d notes', noteCount, folders[i].title, noteCount));
 		}
 
 		sections.push(section);

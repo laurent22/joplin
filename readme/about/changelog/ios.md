@@ -1,5 +1,18 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.7) - 2025-05-01T16:06:30Z
+
+- New: Force quick action shortcuts to have the same size (#12195 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Increase space between new note/to-do buttons (#12194 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix new note menu size (#12193) (#12191 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [ios-v13.3.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.5) - 2025-04-29T13:18:40Z
+
+- New: Add plural forms for notes, users, hours, minutes, days (#12171 by [@SilverGreen93](https://github.com/SilverGreen93))
+- Improved: Allow new note and new to-do buttons to wrap (#12163 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update immer to v9.0.21 (#12182 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Allow syntax highlighting within ==highlight==s (#12167) (#12110 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.3.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.4) - 2025-04-24T08:53:53Z
 
 - Improved: Note editor: Hash links: Move cursor to header or anchor associated with link target (#12129 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

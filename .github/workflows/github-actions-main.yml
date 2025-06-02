@@ -141,11 +141,6 @@ jobs:
           echo "RUNNER_ARCH=$RUNNER_ARCH"
           echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
-          # Canvas is only needed for tests and it doesn't build in ARM64 so remove it
-          cd packages/lib
-          yarn remove canvas
-          cd ../..
-          
           yarn install
           yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
 

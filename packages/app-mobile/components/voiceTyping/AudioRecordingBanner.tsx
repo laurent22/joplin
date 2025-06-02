@@ -14,7 +14,7 @@ import { Text } from 'react-native-paper';
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
-import { formatMsToDurationCompat } from '@joplin/utils/time';
+import { formatMsToDurationCompat, msleep } from '@joplin/utils/time';
 
 const logger = Logger.create('AudioRecording');
 
@@ -100,6 +100,7 @@ const resetAudioMode = async () => {
 		// instead of the default one, so it's disabled when not recording:
 		allowsRecordingIOS: false,
 		playsInSilentModeIOS: false,
+		staysActiveInBackground: false,
 	});
 };
 
@@ -119,11 +120,17 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 				if (!response.granted) {
 					throw new Error(_('Missing permission to record audio.'));
 				}
+
+				// Work around "This experience is currently in the background, so the audio session could not be activated"
+				// See https://github.com/expo/expo/issues/21782
+				// May be resolved by migrating to expo-audio.
+				await msleep(500);
 			}
 
 			await Audio.setAudioModeAsync({
 				allowsRecordingIOS: true,
 				playsInSilentModeIOS: true,
+				staysActiveInBackground: true,
 				// Fixes an issue where opening a recording in the iOS audio player
 				// breaks creating new recordings.
 				// See https://github.com/expo/expo/issues/31152#issuecomment-2341811087

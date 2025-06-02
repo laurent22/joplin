@@ -1,9 +1,9 @@
-const { connect } = require('react-redux');
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button from './Button/Button';
-import { Fragment } from 'react';
 import { accountTypeToString } from '@joplin/lib/utils/joplinCloud/types';
 import bridge from '../services/bridge';
 
@@ -47,10 +47,10 @@ const JoplinCloudConfigScreen = (props: JoplinCloudConfigScreenProps) => {
 			<h2>{_('Email to note')}</h2>
 			<p>{_('Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook')}</p>
 			{
-				isEmailToNoteAvailableInAccount ? <Fragment>
+				isEmailToNoteAvailableInAccount ? <>
 					<p className='inbox-email-value'>{props.inboxEmail}</p>
 					<Button onClick={copyToClipboard} title={_('Copy to clipboard')} />
-				</Fragment>
+				</>
 					: <div className='alert-warn'>
 						<p>{_('Your account doesn\'t have access to this feature')}</p>
 					</div>

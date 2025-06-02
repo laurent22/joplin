@@ -2,29 +2,14 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d päeva"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d tund"
-	],
-	"%d hours": [
-		"%d tundi"
-	],
 	"%d MB": [
 		""
-	],
-	"%d minutes": [
-		"%d minutit"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
 	],
 	"%s": [
 		""
@@ -67,9 +52,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d märkused"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1373,9 +1355,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Kas teisaldada %d märkmed märkmikku \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -1619,7 +1598,7 @@
 	"PDF File": [
 		"PDF-fail"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [

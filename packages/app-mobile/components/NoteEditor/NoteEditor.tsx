@@ -43,6 +43,7 @@ interface Props {
 	initialText: string;
 	noteId: string;
 	noteHash: string;
+	globalSearch: string;
 	initialSelection?: SelectionRange;
 	style: ViewStyle;
 	toolbarEnabled: boolean;
@@ -329,12 +330,18 @@ const useEditorControl = (
 function NoteEditor(props: Props, ref: any) {
 	const webviewRef = useRef<WebViewControl>(null);
 
-	const setInitialSelectionJS = props.initialSelection ? `
+	const setInitialSelectionJs = props.initialSelection ? `
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 		cm.execCommand('scrollSelectionIntoView');
 	` : '';
 	const jumpToHashJs = props.noteHash ? `
 		cm.jumpToHash(${JSON.stringify(props.noteHash)});
+	` : '';
+	const setInitialSearchJs = props.globalSearch ? `
+		cm.setSearchState(${JSON.stringify({
+		...defaultSearchState,
+		searchText: props.globalSearch,
+	})})
 	` : '';
 
 	const editorSettings: EditorSettings = useMemo(() => ({
@@ -398,7 +405,8 @@ function NoteEditor(props: Props, ref: any) {
 					${jumpToHashJs}
 					// Set the initial selection after jumping to the header -- the initial selection,
 					// if specified, should take precedence.
-					${setInitialSelectionJS}
+					${setInitialSelectionJs}
+					${setInitialSearchJs}
 
 					window.onresize = () => {
 						cm.execCommand('scrollSelectionIntoView');

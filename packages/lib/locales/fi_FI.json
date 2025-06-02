@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Ominaisuudesta %s puuttuu pakollinen ominaisuus %s."
 	],
-	"%d days": [
-		"%d päivää"
-	],
 	"%d GB": [
 		"%d Gt"
 	],
 	"%d GB storage space": [
 		"%d Gt tallennustila"
 	],
-	"%d hour": [
-		"%d tunti"
-	],
-	"%d hours": [
-		"%d tuntia"
-	],
 	"%d MB": [
 		"%d Mt"
 	],
 	"%d MB per note or attachment": [
 		"%d Mt muistiinpanoa tai liitettä kohti"
-	],
-	"%d minutes": [
-		"%d minuuttia"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d muistiinpanoja"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1826,9 +1808,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2152,9 +2131,6 @@
 	],
 	"PDF File": [
 		"PDF tiedosto"
-	],
-	"Per user. Minimum of %d users.": [
-		"Käyttäjää kohti. Vähintään %d käyttäjää."
 	],
 	"Permission needed": [
 		"Tarvittava lupa"

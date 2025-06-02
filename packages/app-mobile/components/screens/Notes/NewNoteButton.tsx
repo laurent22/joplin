@@ -30,18 +30,17 @@ const styles = StyleSheet.create({
 		gap: 2,
 	},
 	mainButtonRow: {
-		flexWrap: 'nowrap',
-	},
-	spacer: {
-		flexShrink: 1,
-		flexGrow: 0,
-		width: 12,
+		flexWrap: 'wrap',
+		gap: 12,
 	},
 	shortcutButton: {
 		flexGrow: 1,
+		flexShrink: 1,
+		flexBasis: 0,
 	},
 	mainButton: {
 		flexShrink: 1,
+		flexGrow: 1,
 	},
 	mainButtonLabel: {
 		fontSize: 16,
@@ -50,6 +49,7 @@ const styles = StyleSheet.create({
 	menuContent: {
 		gap: 12,
 		flexShrink: 1,
+		flexGrow: 1,
 		flexDirection: 'column',
 	},
 });
@@ -85,7 +85,6 @@ const NewNoteButton: React.FC<Props> = _props => {
 				type={ButtonType.Secondary}
 				size={ButtonSize.Larger}
 			>{_('New to-do')}</TextButton>
-			<View style={styles.spacer}/>
 			<TextButton
 				touchableRef={newNoteRef}
 				icon='file-document-outline'

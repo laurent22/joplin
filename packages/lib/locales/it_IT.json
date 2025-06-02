@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"A \"% s\" manca la proprietà \"% s\" richiesta."
 	],
-	"%d days": [
-		"%d giorni"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB di spazio di archiviazione"
 	],
-	"%d hour": [
-		"%d ora"
-	],
-	"%d hours": [
-		"%d ore"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per nota o allegato"
-	],
-	"%d minutes": [
-		"%d minuti"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d note corrispondono. Eliminarle?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d note saranno eliminate definitivamente. Continuare?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d note"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1997,9 +1976,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"La maggior parte dei plugin ha il codice sorgente disponibile per la revisione sul sito web del plugin."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Spostare le note %d sul Taccuino \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2345,9 +2321,6 @@
 	"PDF File": [
 		"PDF File"
 	],
-	"Per user. Minimum of %d users.": [
-		"Per utente. Minimo %d utenti."
-	],
 	"Permanently delete note": [
 		"Eliminare definitivamente le note selezionate"
 	],
@@ -2356,9 +2329,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Eliminare definitivamente il taccuino \"%s\"?\n\nAnche tutte le note e sotto-taccuini di questo taccuino saranno eliminate definitivamente."
-	],
-	"Permanently delete these %d notes?": [
-		"Eliminare definitivamente queste %d note?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina definitivamente il taccuino, saltando il cestino."
@@ -3426,9 +3396,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Questo eliminerà definitivamente tutti gli elementi nel cestino. Continuare?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Questo eliminerà definitivamente la nota \"%s\". Continuare?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ciò rimuoverà il taccuino dalla tua raccolta e non avrai più accesso al suo contenuto. Vuoi continuare?"

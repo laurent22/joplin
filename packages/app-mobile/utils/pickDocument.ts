@@ -1,5 +1,5 @@
 import shim from '@joplin/lib/shim';
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { DocumentPickerResponse, pick, isErrorWithCode } from '@react-native-documents/picker';
 import { openDocument } from '@joplin/react-native-saf-x';
 import Logger from '@joplin/utils/Logger';
 import type FsDriverWeb from './fs-driver/fs-driver-rn.web';
@@ -83,9 +83,9 @@ const pickDocument = async ({ multiple = false, preferCamera = false }: Options 
 		} else {
 			let docPickerResult: DocumentPickerResponse[] = [];
 			if (multiple) {
-				docPickerResult = await DocumentPicker.pick({ allowMultiSelection: true });
+				docPickerResult = await pick({ allowMultiSelection: true });
 			} else {
-				docPickerResult = [await DocumentPicker.pickSingle()];
+				docPickerResult = await pick();
 			}
 
 			result = docPickerResult.map(r => {
@@ -98,7 +98,7 @@ const pickDocument = async ({ multiple = false, preferCamera = false }: Options 
 			});
 		}
 	} catch (error) {
-		if (DocumentPicker?.isCancel?.(error) || error?.message?.includes('cancel')) {
+		if ((isErrorWithCode(error) && error.code === 'OPERATION_CANCELED') || error?.message?.includes('cancel')) {
 			logger.info('user has cancelled');
 			return [];
 		} else {

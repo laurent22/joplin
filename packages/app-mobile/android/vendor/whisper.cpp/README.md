@@ -10,7 +10,7 @@
 > [!NOTE]
 > New maintenance roadmap: https://github.com/ggerganov/whisper.cpp/discussions/2788
 
-Stable: [v1.7.4](https://github.com/ggerganov/whisper.cpp/releases/tag/v1.7.4) / [Roadmap | F.A.Q.](https://github.com/ggerganov/whisper.cpp/discussions/126)
+Stable: [v1.7.5](https://github.com/ggerganov/whisper.cpp/releases/tag/v1.7.5) / [Roadmap | F.A.Q.](https://github.com/ggerganov/whisper.cpp/discussions/126)
 
 High-performance inference of [OpenAI's Whisper](https://github.com/openai/whisper) automatic speech recognition (ASR) model:
 
@@ -184,11 +184,11 @@ speed-up - more than x3 faster compared with CPU-only execution. Here are the in
   ```
 
   - To ensure `coremltools` operates correctly, please confirm that [Xcode](https://developer.apple.com/xcode/) is installed and execute `xcode-select --install` to install the command-line tools.
-  - Python 3.10 is recommended.
+  - Python 3.11 is recommended.
   - MacOS Sonoma (version 14) or newer is recommended, as older versions of MacOS might experience issues with transcription hallucination.
   - [OPTIONAL] It is recommended to utilize a Python version management system, such as [Miniconda](https://docs.conda.io/en/latest/miniconda.html) for this step:
-    - To create an environment, use: `conda create -n py310-whisper python=3.10 -y`
-    - To activate the environment, use: `conda activate py310-whisper`
+    - To create an environment, use: `conda create -n py311-whisper python=3.11 -y`
+    - To activate the environment, use: `conda activate py311-whisper`
 
 - Generate a Core ML model. For example, to generate a `base.en` model, use:
 
@@ -427,7 +427,8 @@ For detailed instructions on how to use Conan, please refer to the [Conan docume
 
 This is a naive example of performing real-time inference on audio from your microphone.
 The [stream](examples/stream) tool samples the audio every half a second and runs the transcription continuously.
-More info is available in [issue #10](https://github.com/ggerganov/whisper.cpp/issues/10).
+More info is available in [issue #10](https://github.com/ggerganov/whisper.cpp/issues/10). 
+You will need to have [sdl2](https://wiki.libsdl.org/SDL2/Installation) installed for it to work properly. 
 
 ```bash
 cmake -B build -DWHISPER_SDL2=ON

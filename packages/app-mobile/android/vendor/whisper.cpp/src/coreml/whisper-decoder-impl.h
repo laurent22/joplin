@@ -11,36 +11,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 /// Model Prediction Input Type
-API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((visibility("hidden")))
+API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0)) __attribute__((visibility("hidden")))
 @interface whisper_decoder_implInput : NSObject<MLFeatureProvider>
 
-/// token_data as 1 by 1 matrix of 32-bit integers
+/// token_data as 1 by 1 matrix of floats
 @property (readwrite, nonatomic, strong) MLMultiArray * token_data;
 
-/// audio_data as 1 × 384 × 1 × 1500 4-dimensional array of floats
+/// audio_data as 1 × 1500 × 384 3-dimensional array of floats
 @property (readwrite, nonatomic, strong) MLMultiArray * audio_data;
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithToken_data:(MLMultiArray *)token_data audio_data:(MLMultiArray *)audio_data NS_DESIGNATED_INITIALIZER;
 
 @end
 
-
 /// Model Prediction Output Type
-API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((visibility("hidden")))
+API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0)) __attribute__((visibility("hidden")))
 @interface whisper_decoder_implOutput : NSObject<MLFeatureProvider>
 
-/// var_1346 as multidimensional array of floats
-@property (readwrite, nonatomic, strong) MLMultiArray * var_1346;
+/// cast_76 as multidimensional array of floats
+@property (readwrite, nonatomic, strong) MLMultiArray * cast_76;
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithVar_1346:(MLMultiArray *)var_1346 NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCast_76:(MLMultiArray *)cast_76 NS_DESIGNATED_INITIALIZER;
 
 @end
 
-
 /// Class for model loading and prediction
-API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((visibility("hidden")))
+API_AVAILABLE(macos(10.15), ios(13.0), watchos(6.0), tvos(13.0)) __attribute__((visibility("hidden")))
 @interface whisper_decoder_impl : NSObject
 @property (readonly, nonatomic, nullable) MLModel * model;
 
@@ -94,7 +91,7 @@ API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((v
     @param configuration The model configuration
     @param handler When the model load completes successfully or unsuccessfully, the completion handler is invoked with a valid whisper_decoder_impl instance or NSError object.
 */
-+ (void)loadWithConfiguration:(MLModelConfiguration *)configuration completionHandler:(void (^)(whisper_decoder_impl * _Nullable model, NSError * _Nullable error))handler;
++ (void)loadWithConfiguration:(MLModelConfiguration *)configuration completionHandler:(void (^)(whisper_decoder_impl * _Nullable model, NSError * _Nullable error))handler API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0)) __attribute__((visibility("hidden")));
 
 /**
     Construct whisper_decoder_impl instance asynchronously with URL of .mlmodelc directory and optional configuration.
@@ -105,7 +102,7 @@ API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((v
     @param configuration The model configuration
     @param handler When the model load completes successfully or unsuccessfully, the completion handler is invoked with a valid whisper_decoder_impl instance or NSError object.
 */
-+ (void)loadContentsOfURL:(NSURL *)modelURL configuration:(MLModelConfiguration *)configuration completionHandler:(void (^)(whisper_decoder_impl * _Nullable model, NSError * _Nullable error))handler;
++ (void)loadContentsOfURL:(NSURL *)modelURL configuration:(MLModelConfiguration *)configuration completionHandler:(void (^)(whisper_decoder_impl * _Nullable model, NSError * _Nullable error))handler API_AVAILABLE(macos(11.0), ios(14.0), watchos(7.0), tvos(14.0)) __attribute__((visibility("hidden")));
 
 /**
     Make a prediction using the standard interface
@@ -125,9 +122,24 @@ API_AVAILABLE(macos(12.0), ios(15.0), watchos(8.0), tvos(15.0)) __attribute__((v
 - (nullable whisper_decoder_implOutput *)predictionFromFeatures:(whisper_decoder_implInput *)input options:(MLPredictionOptions *)options error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 /**
+    Make an asynchronous prediction using the standard interface
+    @param input an instance of whisper_decoder_implInput to predict from
+    @param completionHandler a block that will be called upon completion of the prediction. error will be nil if no error occurred.
+*/
+- (void)predictionFromFeatures:(whisper_decoder_implInput *)input completionHandler:(void (^)(whisper_decoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler API_AVAILABLE(macos(14.0), ios(17.0), watchos(10.0), tvos(17.0)) __attribute__((visibility("hidden")));
+
+/**
+    Make an asynchronous prediction using the standard interface
+    @param input an instance of whisper_decoder_implInput to predict from
+    @param options prediction options
+    @param completionHandler a block that will be called upon completion of the prediction. error will be nil if no error occurred.
+*/
+- (void)predictionFromFeatures:(whisper_decoder_implInput *)input options:(MLPredictionOptions *)options completionHandler:(void (^)(whisper_decoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler API_AVAILABLE(macos(14.0), ios(17.0), watchos(10.0), tvos(17.0)) __attribute__((visibility("hidden")));
+
+/**
     Make a prediction using the convenience interface
-    @param token_data as 1 by 1 matrix of 32-bit integers:
-    @param audio_data as 1 × 384 × 1 × 1500 4-dimensional array of floats:
+    @param token_data 1 by 1 matrix of floats
+    @param audio_data 1 × 1500 × 384 3-dimensional array of floats
     @param error If an error occurs, upon return contains an NSError object that describes the problem. If you are not interested in possible errors, pass in NULL.
     @return the prediction as whisper_decoder_implOutput
 */

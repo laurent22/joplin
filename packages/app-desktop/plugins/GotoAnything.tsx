@@ -572,16 +572,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private listItem_onClick(event: any) {
-		const itemId = event.currentTarget.getAttribute('data-id');
-		const parentId = event.currentTarget.getAttribute('data-parent-id');
-		const itemType = Number(event.currentTarget.getAttribute('data-type'));
-
-		void this.gotoItem({
-			id: itemId,
-			parent_id: parentId,
-			type: itemType,
-			commandArgs: this.state.commandArgs,
-		});
+		const targetResultId = event.currentTarget.getAttribute('id');
+		void this.gotoItem(this.selectedItem(targetResultId));
 	}
 
 	public renderItem(item: GotoAnythingSearchResult, index: number) {
@@ -642,8 +634,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return -1;
 	}
 
-	public selectedItem() {
-		const index = this.selectedItemIndex();
+	public selectedItem(itemId: string = undefined) {
+		const index = this.selectedItemIndex(undefined, itemId);
 		if (index < 0) return null;
 		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}

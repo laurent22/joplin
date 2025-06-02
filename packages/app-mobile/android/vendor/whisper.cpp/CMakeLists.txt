@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5) # for add_link_options and implicit target directories.
 project("whisper.cpp" C CXX)
-project("whisper.cpp" VERSION 1.7.4)
+project("whisper.cpp" VERSION 1.7.5)
 include(CheckIncludeFileCXX)
 
 set(SOVERSION 1)
@@ -38,8 +38,13 @@ if (EMSCRIPTEN)
 
     # TODO: without these, we get the following error:
     #       wasm-ld: error: --shared-memory is disallowed by whisper.cpp.o because it was not compiled with 'atomics' or 'bulk-memory' features.
-    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -pthread -s TOTAL_STACK=5242880")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -s TOTAL_STACK=5242880")
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -pthread")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s TOTAL_STACK=5242880")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s TOTAL_STACK=5242880")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
 else()
     if (MINGW)
         set(BUILD_SHARED_LIBS_DEFAULT OFF)
@@ -62,7 +67,8 @@ option(WHISPER_ALL_WARNINGS           "whisper: enable all compiler warnings"   
 option(WHISPER_ALL_WARNINGS_3RD_PARTY "whisper: enable all compiler warnings in 3rd party libs" OFF)
 
 # build
-option(WHISPER_FATAL_WARNINGS "whisper: enable -Werror flag" OFF)
+option(WHISPER_FATAL_WARNINGS  "whisper: enable -Werror flag"               OFF)
+option(WHISPER_USE_SYSTEM_GGML "whisper: use system-installed GGML library" OFF)
 
 # sanitizers
 option(WHISPER_SANITIZE_THREAD    "whisper: enable thread sanitizer"    OFF)
@@ -121,7 +127,15 @@ whisper_option_depr(WARNING     WHISPER_SYCL_F16            GGML_SYCL_F16)
 #
 
 if (NOT TARGET ggml)
-    add_subdirectory(ggml)
+    if (WHISPER_USE_SYSTEM_GGML)
+        find_package(ggml REQUIRED)
+        if (NOT ggml_FOUND)
+            message(FATAL_ERROR "System-installed GGML library not found.")
+        endif()
+        add_library(ggml ALIAS ggml::ggml)
+    else()
+        add_subdirectory(ggml)
+    endif()
     # ... otherwise assume ggml is added by a parent CMakeLists.txt
 endif()
 add_subdirectory(src)
@@ -176,8 +190,8 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/whisper.pc"
 #
 
 if (WHISPER_BUILD_TESTS AND NOT CMAKE_JS_VERSION)
-    #include(CTest)
-    #add_subdirectory(tests)
+    include(CTest)
+    add_subdirectory(tests)
 endif ()
 
 if (WHISPER_BUILD_EXAMPLES)

@@ -4,6 +4,8 @@ import { join } from 'path';
 import getImageSourceSize from './util/getImageSourceSize';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import activateMainMenuItem from './util/activateMainMenuItem';
+import setSettingValue from './util/setSettingValue';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 
 test.describe('markdownEditor', () => {
@@ -252,6 +254,25 @@ test.describe('markdownEditor', () => {
 
 		// Note viewer should be focused
 		await expect(noteEditor.noteViewerContainer).toBeFocused();
+	});
+
+	test('local file URLs setting should allow loading images from local file URLs', async ({ mainWindow, electronApp }) => {
+		await setSettingValue(electronApp, mainWindow, 'renderer.fileUrls', true);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.createNewNote('Test local file URLs');
+
+		const editor = mainScreen.noteEditor;
+		await editor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type(`![Test image](file://${toForwardSlashes(join(__dirname, 'resources', 'test.png'))})`);
+
+		const renderedImage = editor.getNoteViewerFrameLocator().getByRole('img', { name: 'Test image' });
+		await expect(renderedImage).toBeAttached();
+
+		const imageSize = await getImageSourceSize(renderedImage);
+		expect(imageSize[0]).toBeGreaterThan(0);
+		expect(imageSize[1]).toBeGreaterThan(0);
 	});
 });
 

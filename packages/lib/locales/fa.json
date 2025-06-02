@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"«%s» ویژگی ضروری «%s» را ندارد."
 	],
-	"%d days": [
-		"%d روز"
-	],
 	"%d GB": [
 		"%d گیگابایت"
 	],
 	"%d GB storage space": [
 		"%d گیگابایت فضای ذخیره‌سازی"
 	],
-	"%d hour": [
-		"%d ساعت"
-	],
-	"%d hours": [
-		"%d ساعت"
-	],
 	"%d MB": [
 		"%d مگابایت"
 	],
 	"%d MB per note or attachment": [
 		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
-	],
-	"%d minutes": [
-		"%d دقیقه"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d یادداشت"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1994,9 +1973,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"اکثر افزونه ها دارای کد منبع برای بررسی در وب سایت افزونه هستند."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"انتقال یادداشت‌های  %d به دفترچه «%s»؟"
-	],
 	"Move left": [
 		""
 	],
@@ -2342,9 +2318,6 @@
 	"PDF File": [
 		"فایل PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"به ازای هر کاربر. حداقل %d کاربر."
-	],
 	"Permanently delete note": [
 		"حذف دائمی یادداشت‌"
 	],
@@ -2353,9 +2326,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"دفترچه \"%s\" برای همیشه حذف شود؟\n\nهمه یادداشت‌ها و زیر دفترچه‌های این دفترچه برای همیشه حذف خواهند شد."
-	],
-	"Permanently delete these %d notes?": [
-		"آیا یادداشت‌های پوشه %d به طور دائم حذف شود؟"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"دفترچه را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
@@ -3423,9 +3393,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"با این کار همه موارد موجود در سطل زباله برای همیشه حذف می شوند. آیا ادامه هید؟"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"با این کار یادداشت \"%s\" برای همیشه حذف می شود. ادامه می‌دهید؟"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا مایل هستید ادامه دهید؟"

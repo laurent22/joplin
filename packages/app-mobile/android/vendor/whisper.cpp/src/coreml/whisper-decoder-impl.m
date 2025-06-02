@@ -39,21 +39,21 @@
 
 @implementation whisper_decoder_implOutput
 
-- (instancetype)initWithVar_1346:(MLMultiArray *)var_1346 {
+- (instancetype)initWithCast_76:(MLMultiArray *)cast_76 {
     self = [super init];
     if (self) {
-        _var_1346 = var_1346;
+        _cast_76 = cast_76;
     }
     return self;
 }
 
 - (NSSet<NSString *> *)featureNames {
-    return [NSSet setWithArray:@[@"var_1346"]];
+    return [NSSet setWithArray:@[@"cast_76"]];
 }
 
 - (nullable MLFeatureValue *)featureValueForName:(NSString *)featureName {
-    if ([featureName isEqualToString:@"var_1346"]) {
-        return [MLFeatureValue featureValueWithMultiArray:self.var_1346];
+    if ([featureName isEqualToString:@"cast_76"]) {
+        return [MLFeatureValue featureValueWithMultiArray:self.cast_76];
     }
     return nil;
 }
@@ -80,10 +80,13 @@
     Such application may want to use `-[MLModel initWithContentsOfURL:configuration:error:]` and `+URLOfModelInThisBundle` to create a MLModel object to pass-in.
 */
 - (instancetype)initWithMLModel:(MLModel *)model {
+    if (model == nil) {
+        return nil;
+    }
     self = [super init];
-    if (!self) { return nil; }
-    _model = model;
-    if (_model == nil) { return nil; }
+    if (self != nil) {
+        _model = model;
+    }
     return self;
 }
 
@@ -177,7 +180,29 @@
 - (nullable whisper_decoder_implOutput *)predictionFromFeatures:(whisper_decoder_implInput *)input options:(MLPredictionOptions *)options error:(NSError * _Nullable __autoreleasing * _Nullable)error {
     id<MLFeatureProvider> outFeatures = [self.model predictionFromFeatures:input options:options error:error];
     if (!outFeatures) { return nil; }
-    return [[whisper_decoder_implOutput alloc] initWithVar_1346:(MLMultiArray *)[outFeatures featureValueForName:@"var_1346"].multiArrayValue];
+    return [[whisper_decoder_implOutput alloc] initWithCast_76:(MLMultiArray *)[outFeatures featureValueForName:@"cast_76"].multiArrayValue];
+}
+
+- (void)predictionFromFeatures:(whisper_decoder_implInput *)input completionHandler:(void (^)(whisper_decoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler {
+    [self.model predictionFromFeatures:input completionHandler:^(id<MLFeatureProvider> prediction, NSError *predictionError) {
+        if (prediction != nil) {
+            whisper_decoder_implOutput *output = [[whisper_decoder_implOutput alloc] initWithCast_76:(MLMultiArray *)[prediction featureValueForName:@"cast_76"].multiArrayValue];
+            completionHandler(output, predictionError);
+        } else {
+            completionHandler(nil, predictionError);
+        }
+    }];
+}
+
+- (void)predictionFromFeatures:(whisper_decoder_implInput *)input options:(MLPredictionOptions *)options completionHandler:(void (^)(whisper_decoder_implOutput * _Nullable output, NSError * _Nullable error))completionHandler {
+    [self.model predictionFromFeatures:input options:options completionHandler:^(id<MLFeatureProvider> prediction, NSError *predictionError) {
+        if (prediction != nil) {
+            whisper_decoder_implOutput *output = [[whisper_decoder_implOutput alloc] initWithCast_76:(MLMultiArray *)[prediction featureValueForName:@"cast_76"].multiArrayValue];
+            completionHandler(output, predictionError);
+        } else {
+            completionHandler(nil, predictionError);
+        }
+    }];
 }
 
 - (nullable whisper_decoder_implOutput *)predictionFromToken_data:(MLMultiArray *)token_data audio_data:(MLMultiArray *)audio_data error:(NSError * _Nullable __autoreleasing * _Nullable)error {
@@ -192,7 +217,7 @@
     NSMutableArray<whisper_decoder_implOutput*> *results = [NSMutableArray arrayWithCapacity:(NSUInteger)outBatch.count];
     for (NSInteger i = 0; i < outBatch.count; i++) {
         id<MLFeatureProvider> resultProvider = [outBatch featuresAtIndex:i];
-        whisper_decoder_implOutput * result = [[whisper_decoder_implOutput alloc] initWithVar_1346:(MLMultiArray *)[resultProvider featureValueForName:@"var_1346"].multiArrayValue];
+        whisper_decoder_implOutput * result = [[whisper_decoder_implOutput alloc] initWithCast_76:(MLMultiArray *)[resultProvider featureValueForName:@"cast_76"].multiArrayValue];
         [results addObject:result];
     }
     return results;

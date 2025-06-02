@@ -110,6 +110,6 @@
     "app-builder-lib@24.13.3": "patch:app-builder-lib@npm%3A24.13.3#./.yarn/patches/app-builder-lib-npm-24.13.3-86a66c0bf3.patch",
     "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch",
     "react-native-paper@5.13.1": "patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch",
-    "react-native-popup-menu@0.16.1": "patch:react-native-popup-menu@npm%3A0.16.1#./.yarn/patches/react-native-popup-menu-npm-0.16.1-28fd66ecb5.patch"
+    "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch"
   }
 }

@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"У “%s” відсутня необхідна властивість “%s”."
 	],
-	"%d days": [
-		"%d днів"
-	],
 	"%d GB": [
 		"%d ГБ"
 	],
 	"%d GB storage space": [
 		"%d ГБ місця для зберігання"
 	],
-	"%d hour": [
-		"%d година"
-	],
-	"%d hours": [
-		"%d годин"
-	],
 	"%d MB": [
 		"%d MБ"
 	],
 	"%d MB per note or attachment": [
 		"%d МБ на нотатку або вкладення"
-	],
-	"%d minutes": [
-		"%d хвилин"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d нотаток відповідають цьому шаблону. Видалити їх?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d нотаток буде безповоротно видалено. Продовжити?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d нотаток"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2083,9 +2062,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Більшість плагінів мають вихідний код, доступний для перегляду на веб-сайті плагіна."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Перемістити %d нотатку(-ок) до блокноту \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2461,9 +2437,6 @@
 	"PDF File": [
 		"PDF файл"
 	],
-	"Per user. Minimum of %d users.": [
-		"На користувача. Мінімум %d користувачів."
-	],
 	"Permanently delete note": [
 		"Назавжди видалити примітку"
 	],
@@ -2472,9 +2445,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Назавжди видалити блокнот \"%s\"?\n\nУсі нотатки та піднотатки у цьому блокноті буде назавжди видалено."
-	],
-	"Permanently delete these %d notes?": [
-		"Видалити назавжди ці %d нотаток?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Видаляє назавжди нотаток, пропускаючи кошик."
@@ -3598,9 +3568,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Це призведе до остаточного видалення всіх елементів у кошику. Продовжити?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Це призведе до остаточного видалення примітки \"%s\". Продовжувати?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Блокнот буде видалено з вашої колекції, і Ви більше не матимете доступу до його вмісту. Ви бажаєте продовжити?"

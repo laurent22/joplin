@@ -5,6 +5,7 @@ import uuid from '@joplin/lib/uuid';
 import createStartupArgs from './createStartupArgs';
 import getMainWindow from './getMainWindow';
 import setDarkMode from './setDarkMode';
+import evaluateWithRetry from './evaluateWithRetry';
 
 
 type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
@@ -32,8 +33,8 @@ const initializeMainWindow = async (electronApp: ElectronApplication) => {
 	return mainWindow;
 };
 
-const waitForMainMessage = (electronApp: ElectronApplication, messageId: string) => {
-	return electronApp.evaluate(({ ipcMain }, messageId) => {
+const waitForMainMessage = async (electronApp: ElectronApplication, messageId: string) => {
+	return evaluateWithRetry(electronApp, ({ ipcMain }, messageId) => {
 		return new Promise<void>(resolve => {
 			ipcMain.once(messageId, () => resolve());
 		});

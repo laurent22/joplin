@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\"에 \"%s\" 필수 속성이 없습니다."
 	],
-	"%d days": [
-		"%d 일"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB 저장 공간"
 	],
-	"%d hour": [
-		"%d 시간"
-	],
-	"%d hours": [
-		"%d 시간"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"노트 또는 첨부 파일당 %d MB"
-	],
-	"%d minutes": [
-		"%d 분"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d개의 노트가 이 패턴과 일치합니다. 이를 삭제할까요?"
 	],
 	"%s": [
 		"%s"
@@ -76,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d 노트"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -1916,9 +1898,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
-	],
 	"Move left": [
 		""
 	],
@@ -2249,17 +2228,11 @@
 	"PDF File": [
 		"PDF 파일"
 	],
-	"Per user. Minimum of %d users.": [
-		"사용자당 최소 %d명의 사용자 수입니다."
-	],
 	"Permanently delete note": [
 		"선택된 노트를 영구적으로 삭제"
 	],
 	"Permanently delete note \"%s\"?": [
 		"\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
-	],
-	"Permanently delete these %d notes?": [
-		"\"%d\"개의 노트 영구적으로 삭제하시겠습니까?"
 	],
 	"Permission needed": [
 		"권한 요구"

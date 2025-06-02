@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" saknar den nödvändiga egenskapen \"%s\"."
 	],
-	"%d days": [
-		"%d dagar"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB lagringsutrymme"
 	],
-	"%d hour": [
-		"%d timme"
-	],
-	"%d hours": [
-		"%d timmar"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per anteckning eller bilaga"
-	],
-	"%d minutes": [
-		"%d minuter"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d anteckningar matchar det här mönstret. Ta bort dem?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d anteckningar kommer att raderas permanent. Fortsätta?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d anteckningar"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2088,9 +2067,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"De flesta insticksmoduler har källkod tillgänglig för granskning på insticksmodulens webbplats."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Flytta %d anteckningar till anteckningsboken \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2466,9 +2442,6 @@
 	"PDF File": [
 		"PDF-fil"
 	],
-	"Per user. Minimum of %d users.": [
-		"Per användare. Minst %d användare."
-	],
 	"Permanently delete note": [
 		"Ta bort anteckning permanent"
 	],
@@ -2477,9 +2450,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Vill du ta bort anteckningsboken \"%s\" permanent?\n\nAlla anteckningar och underanteckningsböcker i denna anteckningsbok kommer att raderas permanent."
-	],
-	"Permanently delete these %d notes?": [
-		"Vill du ta bort dessa %d anteckningar permanent?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Tar bort anteckningsboken permanent och hoppar över papperskorgen."
@@ -3604,9 +3574,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Detta tar permanent bort alla objekt i papperskorgen. Fortsätta?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Detta kommer att permanent radera anteckningen \"%s\". Fortsätta?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Detta tar bort anteckningsboken från din samling och du kommer inte längre ha tillgång till innehållet. Vill du fortsätta?"

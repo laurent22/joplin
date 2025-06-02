@@ -1,0 +1,5 @@
+{
+    "name": "crypto-polyfill",
+    "private": true,
+    "main": "./index.js"
+}

@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"“%s”, işlemler için gerekli olan “%s” özelliğini barındırmıyor."
 	],
-	"%d days": [
-		"%d gün"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB depolama alanı"
 	],
-	"%d hour": [
-		"%d saat"
-	],
-	"%d hours": [
-		"%d saat"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"Not veya ek dosya başına %d MB"
-	],
-	"%d minutes": [
-		"%d dakika"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d not eşleşti. Silinsin mi?"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%s notları kalıcı olarak silecek. Devam edilsin mi?"
 	],
 	"%s": [
 		"%s"
@@ -79,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d not"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -2088,9 +2067,6 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"Pek çok eklentinin kaynak kodları sitelerinde incelenebilmesi için açık olarak paylaşılmaktadır."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d notlarını not defterine taşı \"%s\"?"
-	],
 	"Move left": [
 		""
 	],
@@ -2466,9 +2442,6 @@
 	"PDF File": [
 		"PDF Dosyası"
 	],
-	"Per user. Minimum of %d users.": [
-		"Kullanıcı başına. Minimum %d kullanıcı."
-	],
 	"Permanently delete note": [
 		"Notu kalıcı olarak sil"
 	],
@@ -2477,9 +2450,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"Not defteri kalıcı olarak silinsin mi?\n\nSilinecek not defterindeki tüm notlar ve alt notlar da kalıcı olarak silinecek."
-	],
-	"Permanently delete these %d notes?": [
-		"%d notları kalıcı olarak silinsin mi?"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Not defteri kalıcı olarak, çöpe de gönderilmeden silinecek."
@@ -3604,9 +3574,6 @@
 	],
 	"This will permanently delete all items in the trash. Continue?": [
 		"Bu işlem çöp kutusundaki tüm öğeleri kalıcı olarak silecek. Devam edilsin mi?"
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"Bu işlem %s notunu kalıcı olarak silecek. Devam edilsin mi?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Bu işlem not defterini koleksiyonunuzdan kaldıracak, ve de içeriğine artık erişemeyeceksiniz. Devam etmek istiyor musunuz?"

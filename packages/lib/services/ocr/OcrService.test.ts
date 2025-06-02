@@ -88,7 +88,6 @@ describe('OcrService', () => {
 		// Use embedded text (skip OCR)
 		['dummy.pdf', 'Dummy PDF file'],
 		['multi_page__embedded_text.pdf', 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
-		['multi_page__no_embedded_text.pdf', 'This is a multi-page PDF\nwith no embedded text.\nPage 2: more text.\nThe third page.'],
 	])('should process PDF resources', async (samplePath: string, expectedText: string) => {
 		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 

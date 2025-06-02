@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue } from '../../utils/types';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo, Ref } from 'react';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue, NoteBodyEditorRef } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml } from '../../utils/resourceHandling';
 import attachedResources from '@joplin/lib/utils/attachedResources';
 import useScroll from './utils/useScroll';
@@ -95,8 +95,7 @@ interface LastOnChangeEventInfo {
 let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
+const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const [editorContainer, setEditorContainer] = useState<HTMLDivElement|null>(null);
 	const editorContainerDom = useDocument(editorContainer);
 	const [editor, setEditor] = useState<Editor|null>(null);
@@ -1200,11 +1199,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>();
+	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
+	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

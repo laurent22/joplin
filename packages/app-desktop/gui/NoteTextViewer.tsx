@@ -157,24 +157,24 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		return result;
 	}, [parentDoc]);
 
-	const webview_domReadyRef = useRef<EventListener>();
+	const webview_domReadyRef = useRef<EventListener>(null);
 	webview_domReadyRef.current = (event: Event) => {
 		domReadyRef.current = true;
 		if (props.onDomReady) props.onDomReady(event);
 	};
 
-	const webview_ipcMessageRef = useRef<EventListener>();
+	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
 		if (props.onIpcMessage) props.onIpcMessage(event);
 	};
 
-	const webview_loadRef = useRef<EventListener>();
+	const webview_loadRef = useRef<EventListener>(null);
 	webview_loadRef.current = (event: Event) => {
 		webview_domReadyRef.current(event);
 	};
 
 	type MessageEventListener = (event: MessageEvent)=> void;
-	const webview_messageRef = useRef<MessageEventListener>();
+	const webview_messageRef = useRef<MessageEventListener>(null);
 	webview_messageRef.current = (event: MessageEvent) => {
 		if (event.source !== webviewRef.current?.contentWindow) return;
 		if (!event.data || event.data.target !== 'main') return;

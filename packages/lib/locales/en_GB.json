@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
+	"%d day": [
+		"",
 		""
 	],
 	"%d GB": [
@@ -12,9 +13,7 @@
 		""
 	],
 	"%d hour": [
-		""
-	],
-	"%d hours": [
+		"",
 		""
 	],
 	"%d MB": [
@@ -23,13 +22,16 @@
 	"%d MB per note or attachment": [
 		""
 	],
-	"%d minutes": [
+	"%d minute": [
+		"",
 		""
 	],
-	"%d notes match this pattern. Delete them?": [
+	"%d note matches this pattern. Delete it?": [
+		"",
 		""
 	],
-	"%d notes will be permanently deleted. Continue?": [
+	"%d note will be permanently deleted. Continue?": [
+		"",
 		""
 	],
 	"%s": [
@@ -83,7 +85,8 @@
 	"%s: %d": [
 		""
 	],
-	"%s: %d notes": [
+	"%s: %d note": [
+		"",
 		""
 	],
 	"%s: %d/%d": [
@@ -2139,7 +2142,8 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
+	"Move %d note to notebook \"%s\"?": [
+		"",
 		""
 	],
 	"Move down": [
@@ -2451,6 +2455,9 @@
 	"Open it": [
 		""
 	],
+	"Open log": [
+		""
+	],
 	"Open PDF viewer": [
 		""
 	],
@@ -2538,7 +2545,7 @@
 	"PDF File": [
 		""
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permanently delete note": [
@@ -2550,7 +2557,8 @@
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		""
 	],
-	"Permanently delete these %d notes?": [
+	"Permanently delete this note?": [
+		"",
 		""
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
@@ -3174,6 +3182,9 @@
 	"Sidebar": [
 		""
 	],
+	"Sign up to Joplin Cloud": [
+		""
+	],
 	"Size": [
 		""
 	],
@@ -3690,9 +3701,6 @@
 		""
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
-	],
-	"This will permanently delete the note \"%s\". Continue?": [
 		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [

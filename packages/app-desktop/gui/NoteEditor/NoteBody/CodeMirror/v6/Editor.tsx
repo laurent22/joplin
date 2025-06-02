@@ -26,7 +26,7 @@ interface Props extends EditorProps {
 }
 
 const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
-	const editorContainerRef = useRef<HTMLDivElement>();
+	const editorContainerRef = useRef<HTMLDivElement|null>(null);
 	const [editor, setEditor] = useState<CodeMirrorControl|null>(null);
 
 	// The editor will only be created once, so callbacks that could
