@@ -16,6 +16,7 @@ interface Options {
 	userContentBaseUrl(): string;
 	username(): string;
 	password(): string;
+	session(): Session | null;
 	env?: Env;
 }
 
@@ -36,7 +37,7 @@ export interface ExecOptions {
 	source?: string;
 }
 
-interface Session {
+export interface Session {
 	id: string;
 	user_id: string;
 }
@@ -76,6 +77,12 @@ export default class JoplinServerApi {
 	}
 
 	private async session() {
+		const optionSession = this.options_.session();
+
+		if (optionSession) {
+			return optionSession;
+		}
+
 		if (this.session_) return this.session_;
 
 		const clientInfo = await this.getClientInfo();

@@ -137,6 +137,7 @@ export enum TaskId {
 	ProcessEmails,
 	LogHeartbeatMessage,
 	DeleteOldEvents,
+	DeleteExpiredAuthCodes,
 }
 
 // AUTO-GENERATED-TYPES
@@ -259,6 +260,9 @@ export interface User extends WithDates, WithUuid {
 	enabled?: number;
 	disabled_time?: number;
 	can_receive_folder?: number;
+	is_external?: number;
+	sso_auth_code?: string;
+	sso_auth_code_expire_at?: number;
 }
 
 export interface UserFlag extends WithDates {
@@ -468,6 +472,9 @@ export const databaseSchema: DatabaseTables = {
 		enabled: { type: 'number', defaultValue: 1 },
 		disabled_time: { type: 'string', defaultValue: 0 },
 		can_receive_folder: { type: 'number', defaultValue: null },
+		is_external: { type: 'number', defaultValue: 0 },
+		sso_auth_code: { type: 'string', defaultValue: '' },
+		sso_auth_code_expire_at: { type: 'number', defaultValue: 0 },
 	},
 	user_flags: {
 		id: { type: 'number', defaultValue: null },

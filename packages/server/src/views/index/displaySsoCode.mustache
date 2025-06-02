@@ -1,0 +1,19 @@
+<section class="section">
+    <div class="container block">
+        <div class="columns">
+            <div class="column">
+                {{#organizationName}}
+                    <h1 class="title">Successfully logged into your {{organizationName}} account!</h1>
+                {{/organizationName}}
+                {{^organizationName}}
+                    <h1 class="title">Successfully logged into your account!</h1>
+                {{/organizationName}}
+                
+                <p>Please enter the following code into your Joplin application to start syncing your notes:</p>
+                <p class="is-family-monospace is-size-1">{{ssoCode}}</p>
+
+                <button class="button is-primary" onclick="navigator.clipboard.writeText('{{ssoCode}}')">Copy to clipboard</button>
+            </div>
+        </div>
+    </div>
+</section>
