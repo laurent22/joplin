@@ -274,6 +274,14 @@ export default class RevisionService extends BaseService {
 		return _('The note "%s" has been successfully restored to the notebook "%s".', substrWithEllipsis(note.title, 0, 32), this.restoreFolderTitle());
 	}
 
+	public deleteAllPromptMessage(): string {
+		return _('Are you sure you want to delete all history for this note? This cannot be undone.');
+	}
+
+	public deleteAllSuccessMessage(): string {
+		return _('Note history has been deleted.');
+	}
+
 	public async importRevisionNote(note: NoteEntity): Promise<NoteEntity> {
 		const toImport = { ...note };
 		delete toImport.id;

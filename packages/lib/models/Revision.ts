@@ -373,6 +373,15 @@ export default class Revision extends BaseItem {
 		}
 	}
 
+	public static async deleteAllRevisionsForNote(itemId: string) {
+		const revisions: RevisionEntity[] = await this.modelSelectAll(
+			'SELECT * FROM revisions WHERE item_id = ? ORDER BY item_updated_time DESC',
+			[itemId],
+		);
+
+		await this.batchDelete(revisions.map(item => item.id), { sourceDescription: 'Revision.deleteAllRevisionsForNote' });
+	}
+
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;

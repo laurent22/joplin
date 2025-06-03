@@ -86,6 +86,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	const [revisions, setRevisions] = useState<RevisionEntity[]>([]);
 	const [currentRevId, setCurrentRevId] = useState('');
 	const [restoring, setRestoring] = useState(false);
+	const [deleting, setDeleting] = useState(false);
 
 	const note = useNoteContent(viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize);
 
@@ -104,6 +105,23 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		await RevisionService.instance().importRevisionNote(note);
 		setRestoring(false);
 		await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
+	}, [note]);
+
+	const deleteAllButton_onClick = useCallback(async () => {
+		if (!note) return;
+		const response = await shim.showMessageBox(RevisionService.instance().deleteAllPromptMessage(), {
+			title: _('Warning'),
+			buttons: [_('Yes'), _('No')],
+			type: MessageBoxType.Confirm,
+		});
+		if (response === 0) {
+			setDeleting(true);
+			await Revision.deleteAllRevisionsForNote(note.id);
+			setDeleting(false);
+			setRevisions([]);
+			setCurrentRevId(null);
+			await shim.showMessageBox(RevisionService.instance().deleteAllSuccessMessage(), { type: MessageBoxType.Info });
+		}
 	}, [note]);
 
 	const backButton_click = useCallback(() => {
@@ -164,6 +182,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	}
 
 	const restoreButtonTitle = _('Restore');
+	const deleteAllButtonTitle = _('Delete All');
 	const helpMessage = getHelpMessage(restoreButtonTitle);
 
 	const titleInput = (
@@ -177,6 +196,9 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			</select>
 			<button disabled={!revisions.length || restoring} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{restoreButtonTitle}
+			</button>
+			<button disabled={!revisions.length || deleting} onClick={deleteAllButton_onClick} className='deleteAll'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+				{deleteAllButtonTitle}
 			</button>
 			<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={helpButton_onClick} />
 		</div>

@@ -7,7 +7,7 @@ import Revision from '@joplin/lib/models/Revision';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { IconButton, Text } from 'react-native-paper';
 import Dropdown from '../Dropdown';
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import { formatMsToLocal } from '@joplin/utils/time';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimaryButton } from '../buttons';
@@ -21,6 +21,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
+const md5 = require('md5');
 
 interface Props {
 	themeId: number;
@@ -113,6 +114,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const [currentRevisionId, setCurrentRevisionId] = useState<string>('');
 	const { note, resources } = useRevisionNote(revisions, currentRevisionId);
 	const [initialScroll, setInitialScroll] = useState(0);
+	const [hasRevisions, setHasRevisions] = useState(false);
 
 	const options = useMemo(() => {
 		const result = [];
@@ -123,6 +125,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 				value: revision.id,
 			});
 		}
+		setHasRevisions(result.length > 0);
 		return result;
 	}, [revisions]);
 
@@ -142,6 +145,51 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		}
 	}, [note]);
 
+	const [deleting, setDeleting] = useState(false);
+	const deleteAllButton_onPress = async () => {
+		if (!noteId) return;
+		const response = await shim.showMessageBox(RevisionService.instance().deleteAllPromptMessage(), {
+			title: _('Warning'),
+			buttons: [_('Yes'), _('No')],
+			type: MessageBoxType.Confirm,
+		});
+		if (response === 0) {
+			setDeleting(true);
+			try {
+				await Revision.deleteAllRevisionsForNote(noteId);
+				await shim.showMessageBox(RevisionService.instance().deleteAllSuccessMessage(), { type: MessageBoxType.Info });
+			} finally {
+				setDeleting(false);
+				setCurrentRevisionId(null);
+				setHasRevisions(false);
+				revisions.length = 0;
+				options.length = 0;
+			}
+		}
+	};
+
+	let menuOptionsCache_: Record<string, MenuOptionType[]> = {};
+	const menuOptions = () => {
+		const disableDeleteAll = deleting || !hasRevisions;
+
+		const cacheKey = md5([disableDeleteAll].join('_'));
+		if (menuOptionsCache_) menuOptionsCache_ = {};
+		if (menuOptionsCache_[cacheKey]) return menuOptionsCache_[cacheKey];
+		const output: MenuOptionType[] = [];
+
+		output.push({
+			title: _('Delete All'),
+			onPress: async () => {
+				void deleteAllButton_onPress();
+			},
+			disabled: disableDeleteAll,
+		});
+
+		menuOptionsCache_[cacheKey] = output;
+
+		return output;
+	};
+
 	const restoreButtonTitle = _('Restore');
 	const helpMessageText = getHelpMessage(restoreButtonTitle);
 	const dialogs = useContext(DialogContext);
@@ -153,7 +201,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const dropdownLabelText = _('Revision:');
 
 	return <View style={styles.root}>
-		<ScreenHeader title={_('Note history')} />
+		<ScreenHeader menuOptions={menuOptions()} title={_('Note history')} />
 		<View style={styles.controls}>
 			<Text variant='labelLarge'>{dropdownLabelText}</Text>
 			<Dropdown
