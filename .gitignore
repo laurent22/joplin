@@ -720,6 +720,7 @@ packages/app-mobile/components/plugins/types.js
 packages/app-mobile/components/plugins/utils/createOnLogHandler.js
 packages/app-mobile/components/plugins/utils/useOnDevPluginsUpdated.js
 packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen/DeleteAllHistoryButton.js
 packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.js
 packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.js

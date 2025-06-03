@@ -19,8 +19,9 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
-import shim from '@joplin/lib/shim';
-import RevisionService from '@joplin/lib/services/RevisionService';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
+import Revision from '@joplin/lib/models/Revision';
+import CommandService from '@joplin/lib/services/CommandService';
 
 
 interface Font {
@@ -298,10 +299,21 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (section.name === 'revisionService') {
 			const deleteAllHistoryAction = async () => {
 				const response = await shim.showMessageBox(_('Are you sure you want to delete all note history? This cannot be undone.'), {
+					title: _('Warning'),
 					buttons: [_('Yes'), _('No')],
+					type: MessageBoxType.Confirm,
 				});
 				if (response === 0) {
-					await RevisionService.instance_.deleteOldRevisions(0);
+					void CommandService.instance().execute('showModalMessage', _('Deleting note history. Please wait...'));
+
+					try {
+						await Revision.deleteOldRevisions(0);
+					} catch (error) {
+						console.error(error);
+						bridge().showErrorMessageBox(_('Note history deletion failed: %s', error.message));
+					}
+
+					void CommandService.instance().execute('hideModalMessage');
 				}
 			};
 			settingComps.push(
