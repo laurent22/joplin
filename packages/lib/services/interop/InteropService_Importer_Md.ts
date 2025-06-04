@@ -5,7 +5,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
-import { basename, filename, rtrimSlashes, fileExtension, dirname, convertWindowsPathToPosix } from '../../path-utils';
+import { basename, filename, rtrimSlashes, fileExtension, dirname, toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
@@ -124,7 +124,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				continue;
 			} else {
 				// Handle anchor links appropriately
-				const linkPosix = convertWindowsPathToPosix(link);
+				const linkPosix = toForwardSlashes(link);
 				const trimmedLink = this.trimAnchorLink(linkPosix);
 				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
 				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;

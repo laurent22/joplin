@@ -1,4 +1,4 @@
-import { convertWindowsPathToPosix, extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
+import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
 
 describe('path', () => {
 	it('should quote and unquote paths', (async () => {
@@ -74,21 +74,4 @@ describe('path', () => {
 		expect(isUncPath(path, os)).toBe(expected);
 	});
 
-	test.each([
-		['./a.txt', './a.txt'],
-		['\\b.txt', '/b.txt'],
-		['/home/foo/bar/baz', '/home/foo/bar/baz'],
-		['\\home\\foo\\bar\\baz', '/home/foo/bar/baz'],
-		['First note_files\\en_todo.png', 'First note_files/en_todo.png'],
-		['First note_files\\\\en_todo.png', 'First note_files//en_todo.png'],
-		['C:\\', 'C:/'],
-		['C:\\Users\\Documents\\Project\\file.txt', 'C:/Users/Documents/Project/file.txt'],
-		['\\\\Server\\Share\\Data\\report.csv', '//Server/Share/Data/report.csv'],
-		['', ''],
-		['C:/Program Files\\App/Data\\file.txt', 'C:/Program Files/App/Data/file.txt'],
-		['C:\\Users\\Documents\\', 'C:/Users/Documents/'],
-		['\\', '/'],
-	])('should convert Windows Path to POSIX correctly', (original: string, converted: string) => {
-		expect(convertWindowsPathToPosix(original)).toBe(converted);
-	});
 });
