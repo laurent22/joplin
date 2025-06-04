@@ -88,7 +88,7 @@ describe('path', () => {
 		['C:/Program Files\\App/Data\\file.txt', 'C:/Program Files/App/Data/file.txt'],
 		['C:\\Users\\Documents\\', 'C:/Users/Documents/'],
 		['\\', '/'],
-	])('should correctly detect UNC paths', (original: string, converted: string) => {
+	])('should convert Windows Path to POSIX correctly', (original: string, converted: string) => {
 		expect(convertWindowsPathToPosix(original)).toBe(converted);
 	});
 });
