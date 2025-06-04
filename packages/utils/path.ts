@@ -139,3 +139,7 @@ export function extractExecutablePath(cmd: string) {
 
 	return output;
 }
+
+export function convertWindowsPathToPosix(path: string) {
+	return path.split('\\').join('/');
+}
