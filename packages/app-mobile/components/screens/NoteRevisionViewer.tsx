@@ -9,7 +9,7 @@ import { IconButton, Text } from 'react-native-paper';
 import Dropdown from '../Dropdown';
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import { formatMsToLocal } from '@joplin/utils/time';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
@@ -22,7 +22,6 @@ import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
 import useDeleteAllClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteAllClick';
-const md5 = require('md5');
 
 interface Props {
 	themeId: number;
@@ -160,25 +159,16 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		resetScreenState,
 	});
 
-	let menuOptionsCache_ = useRef<Record<string, MenuOptionType[]>>({}).current;
-	const menuOptions = () => {
-		const disableDeleteAll = deleting || !hasRevisions;
-
-		const cacheKey = md5([disableDeleteAll].join('_'));
-		if (menuOptionsCache_) menuOptionsCache_ = {};
-		if (menuOptionsCache_[cacheKey]) return menuOptionsCache_[cacheKey];
-		const output: MenuOptionType[] = [];
-
-		output.push({
+	const disableDeleteAll = deleting || !hasRevisions;
+	const menuOptions = useMemo(() => {
+		const output: MenuOptionType[] = [{
 			title: _('Delete All'),
 			onPress: deleteAll_onPress,
 			disabled: disableDeleteAll,
-		});
-
-		menuOptionsCache_[cacheKey] = output;
+		}];
 
 		return output;
-	};
+	}, [deleteAll_onPress, disableDeleteAll]);
 
 	const restoreButtonTitle = _('Restore');
 	const helpMessageText = getHelpMessage(restoreButtonTitle);
@@ -191,7 +181,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const dropdownLabelText = _('Revision:');
 
 	return <View style={styles.root}>
-		<ScreenHeader menuOptions={menuOptions()} title={_('Note history')} />
+		<ScreenHeader menuOptions={menuOptions} title={_('Note history')} />
 		<View style={styles.controls}>
 			<Text variant='labelLarge'>{dropdownLabelText}</Text>
 			<Dropdown
