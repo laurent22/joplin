@@ -9,7 +9,7 @@ import { IconButton, Text } from 'react-native-paper';
 import Dropdown from '../Dropdown';
 import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import { formatMsToLocal } from '@joplin/utils/time';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { PrimaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
@@ -21,6 +21,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
+import useDeleteAllClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteAllClick';
 const md5 = require('md5');
 
 interface Props {
@@ -145,30 +146,21 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		}
 	}, [note]);
 
-	const [deleting, setDeleting] = useState(false);
-	const deleteAllButton_onPress = async () => {
-		if (!noteId) return;
-		const response = await shim.showMessageBox(RevisionService.instance().deleteAllPromptMessage(), {
-			title: _('Warning'),
-			buttons: [_('Yes'), _('No')],
-			type: MessageBoxType.Confirm,
-		});
-		if (response === 0) {
-			setDeleting(true);
-			try {
-				await Revision.deleteAllRevisionsForNote(noteId);
-				await shim.showMessageBox(RevisionService.instance().deleteAllSuccessMessage(), { type: MessageBoxType.Info });
-			} finally {
-				setDeleting(false);
-				setCurrentRevisionId(null);
-				setHasRevisions(false);
-				revisions.length = 0;
-				options.length = 0;
-			}
-		}
-	};
+	const resetScreenState = useCallback(() => {
+		setCurrentRevisionId(null);
+		setHasRevisions(false);
+		revisions.length = 0;
+		options.length = 0;
+	}, [revisions, options]);
 
-	let menuOptionsCache_: Record<string, MenuOptionType[]> = {};
+	const [deleting, setDeleting] = useState(false);
+	const deleteAll_onPress = useDeleteAllClick({
+		noteId,
+		setDeleting,
+		resetScreenState,
+	});
+
+	let menuOptionsCache_ = useRef<Record<string, MenuOptionType[]>>({}).current;
 	const menuOptions = () => {
 		const disableDeleteAll = deleting || !hasRevisions;
 
@@ -179,9 +171,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 
 		output.push({
 			title: _('Delete All'),
-			onPress: async () => {
-				void deleteAllButton_onPress();
-			},
+			onPress: deleteAll_onPress,
 			disabled: disableDeleteAll,
 		});
 

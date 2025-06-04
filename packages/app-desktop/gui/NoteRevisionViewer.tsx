@@ -24,6 +24,7 @@ import useMarkupToHtml from './hooks/useMarkupToHtml';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import useDeleteAllClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteAllClick';
 
 interface Props {
 	themeId: number;
@@ -107,22 +108,16 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
 	}, [note]);
 
-	const deleteAllButton_onClick = useCallback(async () => {
-		if (!note) return;
-		const response = await shim.showMessageBox(RevisionService.instance().deleteAllPromptMessage(), {
-			title: _('Warning'),
-			buttons: [_('Yes'), _('No')],
-			type: MessageBoxType.Confirm,
-		});
-		if (response === 0) {
-			setDeleting(true);
-			await Revision.deleteAllRevisionsForNote(note.id);
-			setDeleting(false);
-			setRevisions([]);
-			setCurrentRevId(null);
-			await shim.showMessageBox(RevisionService.instance().deleteAllSuccessMessage(), { type: MessageBoxType.Info });
-		}
-	}, [note]);
+	const resetScreenState = useCallback(() => {
+		setRevisions([]);
+		setCurrentRevId(null);
+	}, []);
+
+	const deleteAllButton_onClick = useDeleteAllClick({
+		noteId: note?.id,
+		setDeleting,
+		resetScreenState,
+	});
 
 	const backButton_click = useCallback(() => {
 		if (onBack) onBack();
