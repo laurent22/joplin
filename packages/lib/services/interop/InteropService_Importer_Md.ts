@@ -177,10 +177,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const title = filename(resolvedPath);
 		const body = stripBom(await shim.fsDriver().readFile(resolvedPath));
 
+		const fixedBody = this.applyImportFixes(body);
+
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: body,
+			body: fixedBody,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
@@ -190,5 +192,17 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
 		return this.importedNotes[resolvedPath];
+	}
+
+	public applyImportFixes(body: string) {
+		const edgeCases = [
+			// https://github.com/laurent22/joplin/issues/12363
+			// Necessary to clean up self-closing anchor tag always present in the start of the export generate by YinXiang.
+			{ findPattern: /^<a\b(.*)\/>$/m, replaceWith: '<a$1></a>' },
+		];
+
+		return edgeCases.reduce((modifiedBody, edgeCase) => {
+			return modifiedBody.replace(edgeCase.findPattern, edgeCase.replaceWith);
+		}, body);
 	}
 }
