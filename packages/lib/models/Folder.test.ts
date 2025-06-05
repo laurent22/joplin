@@ -438,4 +438,72 @@ describe('models/Folder', () => {
 		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
 	});
 
+	it('should permanently delete empty folder', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		await Folder.delete(folder1.id, { toTrash: true });
+		await Folder.permanentlyDeleteFolder(folder1.id, 'permanentlyDeleteFolder command');
+
+		const deletedFolder = await Folder.load(folder1.id);
+		const all = await allItems();
+
+		expect(all.length).toBe(0);
+		expect(deletedFolder).toBeUndefined();
+	});
+
+	it('should permanently delete folder with notes', async () => {
+		const folder1 = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder1.id });
+		const note2 = await Note.save({ parent_id: folder1.id });
+		const note3 = await Note.save({ parent_id: folder1.id });
+
+		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
+		await Folder.permanentlyDeleteFolder(folder1.id, 'permanentlyDeleteFolder command');
+
+		const deletedFolder = await Folder.load(folder1.id);
+		const deletedNote1 = await Note.load(note1.id);
+		const deletedNote2 = await Note.load(note2.id);
+		const deletedNote3 = await Note.load(note3.id);
+		const all = await allItems();
+
+		expect(all.length).toBe(0);
+		expect(deletedFolder).toBeUndefined();
+		expect(deletedNote1).toBeUndefined();
+		expect(deletedNote2).toBeUndefined();
+		expect(deletedNote3).toBeUndefined();
+	});
+
+	it('should permanently delete folder and its subfolders', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({ parent_id: folder1.id });
+		const note1 = await Note.save({ parent_id: folder2.id });
+
+		await Folder.delete(folder1.id, { toTrash: true, deleteChildren: true });
+		await Folder.permanentlyDeleteFolder(folder1.id, 'permanentlyDeleteFolder command');
+
+		const deletedFolder1 = await Folder.load(folder1.id);
+		const deletedFolder2 = await Folder.load(folder2.id);
+		const deletedNote1 = await Note.load(note1.id);
+		const all = await allItems();
+
+		expect(all.length).toBe(0);
+		expect(deletedFolder1).toBeUndefined();
+		expect(deletedFolder2).toBeUndefined();
+		expect(deletedNote1).toBeUndefined();
+	});
+
+	it('should only permanently delete the specified folder', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+
+		await Folder.delete(folder1.id, { toTrash: true });
+		await Folder.permanentlyDeleteFolder(folder1.id, 'permanentlyDeleteFolder command');
+
+		const deletedFolder1 = await Folder.load(folder1.id);
+		const all = await allItems();
+
+		expect(all.length).toBe(1);
+		expect(deletedFolder1).toBeUndefined();
+		expect((await Folder.load(folder2.id)).deleted_time).toBe(0);
+	});
 });

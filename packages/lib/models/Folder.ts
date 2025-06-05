@@ -163,6 +163,28 @@ export default class Folder extends BaseItem {
 		});
 	}
 
+	public static async permanentlyDeleteFolder(folderId: string, sourceDescription: string) {
+		const sql = 'SELECT id FROM notes WHERE parent_id = ? AND deleted_time > 0';
+		const notesInTrash = await Note.modelSelectAll(sql, [folderId]);
+		const noteIds = notesInTrash.map(n => n.id);
+		const subFolderIds = await Folder.subFolderIds(folderId);
+
+		if (noteIds.length) {
+			await Note.batchDelete(noteIds, { toTrash: false, sourceDescription: sourceDescription });
+		}
+
+		for (let i = 0; i < subFolderIds.length; i++) {
+			const subFolderId = subFolderIds[i];
+			await Folder.permanentlyDeleteFolder(subFolderId, sourceDescription);
+		}
+
+		await Folder.delete(folderId, {
+			toTrash: false,
+			deleteChildren: false,
+			sourceDescription,
+		});
+	}
+
 	public static conflictFolderTitle() {
 		return _('Conflicts');
 	}

@@ -20,6 +20,7 @@ import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as openPdfViewer from './openPdfViewer';
 import * as openTag from './openTag';
+import * as permanentlyDeleteFolder from './permanentlyDeleteFolder';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
@@ -69,6 +70,7 @@ const index: any[] = [
 	openNote,
 	openPdfViewer,
 	openTag,
+	permanentlyDeleteFolder,
 	print,
 	renameFolder,
 	renameTag,

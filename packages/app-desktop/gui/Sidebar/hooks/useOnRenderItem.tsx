@@ -267,6 +267,11 @@ const useOnRenderItem = (props: Props) => {
 					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemId)),
 				);
 			}
+			if (itemType === BaseModel.TYPE_FOLDER) {
+				menu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem('permanentlyDeleteFolder', itemId)),
+				);
+			}
 		}
 
 		menu.popup({ window: bridge().activeWindow() });
