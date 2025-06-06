@@ -73,5 +73,4 @@ describe('path', () => {
 	])('should correctly detect UNC paths', (path, os, expected) => {
 		expect(isUncPath(path, os)).toBe(expected);
 	});
-
 });
