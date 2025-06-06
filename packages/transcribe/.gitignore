@@ -1,7 +1,7 @@
 node_modules/
 dist/
 images/*
-images/htr_sample.png
+!images/htr_sample.png
 models/
 *.sqlite3
 *.sqlite-journal
