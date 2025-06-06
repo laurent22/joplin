@@ -11,7 +11,7 @@ const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');
 const { isCallbackUrl } = require('@joplin/lib/callbackUrlUtils');
 const determineBaseAppDirs = require('@joplin/lib/determineBaseAppDirs').default;
-const registerCustomProtocols = require('./utils/customProtocols/registerCustomProtocols.js').default;
+const registerCustomProtocols = require('./utils/customProtocols/registerCustomProtocols').default;
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in
@@ -74,7 +74,7 @@ const wrapper = new ElectronAppWrapper(electronApp, {
 	env, profilePath: rootProfileDir, isDebugMode, initialCallbackUrl, isEndToEndTesting,
 });
 
-initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
+globalThis.joplinBridge = initBridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 
 wrapper.start().catch((error) => {
 	console.error('Electron App fatal error:');

@@ -31,6 +31,8 @@ import { Config, Env, LdapConfig } from '../utils/types';
 import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
+import config from '../config';
+import { randomInt } from 'node:crypto';
 
 const logger = Logger.create('UserModel');
 
@@ -115,12 +117,12 @@ export function accountTypeToString(accountType: AccountType): string {
 }
 
 export default class UserModel extends BaseModel<User> {
+	private authCodeTtl = 600000; // 10 minutes
 
 	private ldapConfig_: LdapConfig[];
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
-
 		this.ldapConfig_ = config.ldap;
 	}
 
@@ -133,7 +135,16 @@ export default class UserModel extends BaseModel<User> {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
+	public async loadBySsoAuthCode(code: string): Promise<User> {
+		const user = this.formatValues({ sso_auth_code: code });
+		return this.db<User>(this.tableName).where(user).first();
+	}
+
 	public async login(email: string, password: string): Promise<User> {
+		if (!config().LOCAL_AUTH_ENABLED) {
+			return null;
+		}
+
 		const user = await this.loadByEmail(email);
 
 		for (const config of this.ldapConfig_) {
@@ -149,9 +160,72 @@ export default class UserModel extends BaseModel<User> {
 			}
 		}
 
-		if (!user) return null;
+		if (!user || user.is_external) return null;
 		if (!(await checkPassword(password, user.password))) return null;
 		return user;
+	}
+
+	public async ssoLogin(email: string, displayName: string) {
+		if (!email || !displayName) {
+			return null;
+		}
+
+		let user = await this.loadByEmail(email);
+
+		if (!user) { // User does not exist
+			user = {
+				email: email,
+				full_name: displayName,
+				must_set_password: 0,
+				email_confirmed: 1,
+				is_external: 1,
+				password: '',
+			};
+
+			user = await this.save(user, { skipValidation: true });
+		}
+
+		return user;
+	}
+
+	public async generateSsoCode(user: User) {
+		let authCode;
+
+		// Make sure that the code is not already in use.
+		do {
+			authCode = randomInt(0, 999999999).toString().padStart(9, '0');
+		} while (await this.loadBySsoAuthCode(authCode) === null);
+
+		user.sso_auth_code = authCode;
+		user.sso_auth_code_expire_at = Date.now() + this.authCodeTtl;
+
+		await this.save(user, { skipValidation: true });
+	}
+
+	public async authCodeLogin(code: string) {
+		const user = await this.loadBySsoAuthCode(code);
+
+		if (!user) {
+			return null;
+		} else if (user.sso_auth_code_expire_at > Date.now()) {
+			// Clear the saved code
+			user.sso_auth_code = '';
+			user.sso_auth_code_expire_at = 0;
+
+			return await this.save(user, { skipValidation: true });
+		} else { // Code is expired. Clear the code but do not return the user.
+			user.sso_auth_code = '';
+			user.sso_auth_code_expire_at = 0;
+
+			await this.save(user, { skipValidation: true });
+			return null;
+		}
+	}
+
+	public async deleteExpiredAuthCodes() {
+		await this.db(this.tableName)
+			.where('sso_auth_code_expire_at', '<', Date.now())
+			.update({ sso_auth_code: '', sso_auth_code_expire_at: 0 });
 	}
 
 	public fromApiInput(object: User): User {
@@ -169,6 +243,9 @@ export default class UserModel extends BaseModel<User> {
 		if ('can_upload' in object) user.can_upload = object.can_upload;
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
+		if ('is_external' in object) user.is_external = object.is_external;
+		if ('sso_auth_code' in object) user.sso_auth_code = object.sso_auth_code;
+		if ('sso_auth_code_expire_at' in object) user.sso_auth_code_expire_at = object.sso_auth_code_expire_at;
 
 		return user;
 	}
@@ -190,6 +267,10 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		if (action === AclAction.Update) {
+			if (user.is_external) { // Modifying users directly from Joplin may cause them to be out of sync with the data we got from the Identity Provider
+				throw new ErrorForbidden('users imported from an external source (such as SAML) cannot be modified');
+			}
+
 			const previousResource = await this.load(resource.id);
 
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
@@ -705,5 +786,4 @@ export default class UserModel extends BaseModel<User> {
 			}
 		}, 'UserModel::saveMulti');
 	}
-
 }

@@ -69,9 +69,7 @@ impl<'a> Renderer<'a> {
             }
 
             let path = PathBuf::from(filename);
-            let ext = path
-                .extension()
-                .unwrap_or_default();
+            let ext = path.extension().unwrap_or_default();
             let base = path
                 .as_os_str()
                 .to_str()

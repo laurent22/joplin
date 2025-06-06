@@ -8,28 +8,27 @@ import OneDriveLoginScreen from './OneDriveLoginScreen';
 import DropboxLoginScreen from './DropboxLoginScreen';
 import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from '@joplin/lib/theme';
-import { Size } from './ResizableLayout/utils/types';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
 const { createRoot } = require('react-dom/client');
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
-import shim from '@joplin/lib/shim';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
 import Dialog from './Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
-const { ResourceScreen } = require('./ResourceScreen.js');
+import ResourceScreen from './ResourceScreen';
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import WindowCommandsAndDialogs from './WindowCommandsAndDialogs/WindowCommandsAndDialogs';
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
-import bridge from '../services/bridge';
 import EditorWindow from './NoteEditor/EditorWindow';
+import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
@@ -39,7 +38,6 @@ interface Props {
 	profileConfigCurrentProfileId: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	size: Size;
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
@@ -60,31 +58,9 @@ const GlobalStyle = createGlobalStyle`
 	}
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let wcsTimeoutId_: any = null;
+const navigatorStyle = { width: '100vw', height: '100vh' };
 
 async function initialize() {
-	bridge().activeWindow().on('resize', () => {
-		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
-
-		wcsTimeoutId_ = shim.setTimeout(() => {
-			store.dispatch({
-				type: 'WINDOW_CONTENT_SIZE_SET',
-				size: bridge().windowContentSize(),
-			});
-			wcsTimeoutId_ = null;
-		}, 10);
-	});
-
-	// Need to dispatch this to make sure the components are
-	// displayed at the right size. The windowContentSize is
-	// also set in the store default state, but at that point
-	// the window might not be at its final size.
-	store.dispatch({
-		type: 'WINDOW_CONTENT_SIZE_SET',
-		size: bridge().windowContentSize(),
-	});
-
 	store.dispatch({
 		type: 'EDITOR_CODE_VIEW_CHANGE',
 		value: Setting.value('editor.codeView'),
@@ -178,11 +154,6 @@ class RootComponent extends React.Component<Props, any> {
 	}
 
 	public render() {
-		const navigatorStyle = {
-			width: this.props.size.width / this.props.zoomFactor,
-			height: this.props.size.height / this.props.zoomFactor,
-		};
-
 		const theme = themeStyle(this.props.themeId);
 
 		const screens = {
@@ -190,6 +161,7 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
@@ -216,7 +188,6 @@ class RootComponent extends React.Component<Props, any> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
 		themeId: state.settings.theme,

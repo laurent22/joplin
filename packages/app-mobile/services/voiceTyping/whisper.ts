@@ -201,11 +201,8 @@ const whisper: VoiceTypingProvider = {
 			urlTemplate = 'https://github.com/joplin/voice-typing-models/releases/download/v0.2.0/{task}.zip';
 		}
 
-		// Note: whisper-base-q8_0.fr is also available and may have better performance on French-language
-		// input.
-		// TODO: Auto-select the model?
 		return urlTemplate
-			.replace(/\{task\}/g, 'whisper-base-q8_0')
+			.replace(/\{task\}/g, 'whisper-small-q8_0')
 			.replace(/\{lang\}/g, lang);
 	},
 	deleteCachedModels: async (locale) => {

@@ -437,6 +437,7 @@ dependencies = [
  "encoding_rs",
  "enum-primitive-derive",
  "itertools",
+ "lazy_static",
  "log",
  "mime_guess",
  "num-traits",

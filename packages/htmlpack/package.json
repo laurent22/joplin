@@ -6,12 +6,12 @@
   "types": "index.ts",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "types": "./index.ts"
+      "types": "./index.ts",
+      "default": "./dist/index.js"
     },
     "./packToString": {
-      "default": "./dist/packToString.js",
-      "types": "./packToString.ts"
+      "types": "./packToString.ts",
+      "default": "./dist/packToString.js"
     }
   },
   "publishConfig": {

@@ -93,6 +93,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		await NavService.go('JoplinCloudLogin');
 	};
 
+	private goToJoplinServerSamlLogin_ = async () => {
+		// Save the settings to allow for sync when the user completes authentication
+		await this.saveButton_press();
+
+		await NavService.go('JoplinServerSamlLogin');
+	};
+
+	private logoutJoplinServerSaml_ = () => {
+		Setting.setValue('sync.11.id', '');
+		Setting.setValue('sync.11.userId', '');
+	};
+
 	private checkSyncConfig_ = async () => {
 		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 			const isAuthenticated = await reg.syncTarget().isAuthenticated();
@@ -460,6 +472,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 					if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 						addSettingButton('go_to_joplin_cloud_login_button', _('Connect to Joplin Cloud'), this.goToJoplinCloudLogin_);
+					} else if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+						addSettingButton('login_joplin_server_saml_button', _('Connect using your organisation account'), this.goToJoplinServerSamlLogin_);
+
+						if (Setting.value('sync.11.id') !== '' || Setting.value('sync.11.userId') !== '') {
+							addSettingButton('logout_joplin_server_saml_button', _('Logout'), this.logoutJoplinServerSaml_);
+						}
 					}
 
 					addSettingButton('check_sync_config_button', _('Check synchronisation configuration'), this.checkSyncConfig_, { statusComp: statusComp });

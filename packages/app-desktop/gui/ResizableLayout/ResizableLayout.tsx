@@ -10,7 +10,7 @@ import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
 import Dialog from '../Dialog';
-import * as EventEmitter from 'events';
+import EventEmitter = require('events');
 import LayoutItemContainer from './LayoutItemContainer';
 
 interface OnResizeEvent {

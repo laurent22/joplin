@@ -17,6 +17,7 @@ export interface ContextMenuOptions {
 	resourceId: string;
 	mime: string;
 	filename: string;
+	linkToOpen: string;
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;

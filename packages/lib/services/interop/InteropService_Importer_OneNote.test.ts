@@ -245,4 +245,18 @@ describe('InteropService_Importer_OneNote', () => {
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
+
+	skipIfNotCI('should use default value for EntityGuid and InkBias if not found', async () => {
+		let idx = 0;
+		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
+		const notes = await importNote(`${supportDir}/onenote/ink_bias_and_entity_guid.zip`);
+
+		// InkBias bug
+		expect(notes.find(n => n.title === 'Marketing Funnel & Training').body).toMatchSnapshot();
+
+		// EntityGuid
+		expect(notes.find(n => n.title === 'Decrease support costs').body).toMatchSnapshot();
+
+		BaseModel.setIdGenerator(originalIdGenerator);
+	});
 });

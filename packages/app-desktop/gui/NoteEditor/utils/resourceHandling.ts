@@ -2,7 +2,6 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
-const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
@@ -15,6 +14,7 @@ import { fileExtension, filename, safeFileExtension, safeFilename } from '@jopli
 const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 import * as mimeUtils from '@joplin/lib/mime-utils';
+import bridge from '../../../services/bridge';
 const md5 = require('md5');
 const path = require('path');
 

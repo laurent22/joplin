@@ -20,7 +20,6 @@ interface Props {
 
 	newWindow: boolean;
 	windowId: string;
-	activeWindowId: string;
 	startupPluginsLoaded: boolean;
 }
 
@@ -57,22 +56,10 @@ const SecondaryWindow: React.FC<Props> = props => {
 		}
 	}, [props.dispatch, props.windowId, newWindow]);
 
-	const onWindowFocus = useCallback(() => {
-		// Verify that the window still has focus (e.g. to handle the case where the event was delayed).
-		if (containerRef.current?.ownerDocument.hasFocus()) {
-			props.dispatch({
-				type: 'WINDOW_FOCUS',
-				windowId: props.windowId,
-				lastWindowId: props.activeWindowId,
-			});
-		}
-	}, [props.dispatch, props.windowId, props.activeWindowId]);
-
 	return <NewWindowOrIFrame
 		mode={newWindow ? WindowMode.NewWindow : WindowMode.Iframe}
 		windowId={props.windowId}
 		onClose={onWindowClose}
-		onFocus={onWindowFocus}
 		title={windowTitle}
 	>
 		<LibraryStyleRoot>
@@ -122,7 +109,6 @@ export default connect((state: AppState, ownProps: ConnectProps) => {
 		isSafeMode: state.settings.isSafeMode,
 		codeView: windowState?.editorCodeView ?? state.settings['editor.codeView'],
 		legacyMarkdown: state.settings['editor.legacyMarkdown'],
-		activeWindowId: stateUtils.activeWindowId(state),
 		startupPluginsLoaded: state.startupPluginsLoaded,
 	};
 })(SecondaryWindow);

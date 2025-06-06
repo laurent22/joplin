@@ -44,7 +44,7 @@ import useDocument from '../../../hooks/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
 import Setting from '@joplin/lib/models/Setting';
-import useTextPatternsLookup from './utils/useTextPatternsLookup';
+import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatternsLookup';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 
@@ -764,7 +764,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					forecolor: { inline: 'span', styles: { color: '%value' }, remove_similar: true },
 				},
 				text_patterns: [],
-				text_patterns_lookup: () => textPatternsLookupRef.current(),
+				text_patterns_lookup: (ctx: TextPatternContext) => textPatternsLookupRef.current(ctx),
 
 				setup: (editor: Editor) => {
 					editor.addCommand('joplinMath', async () => {

@@ -1,12 +1,17 @@
 import { useRef } from 'react';
 
+export interface TextPatternContext {
+	readonly text: string;
+	readonly block: Element;
+}
+
 interface TextPatternOptions {
 	enabled: boolean;
 	enableMath: boolean;
 }
 
 const useTextPatternsLookup = ({ enabled, enableMath }: TextPatternOptions) => {
-	const getTextPatterns = () => {
+	const getTextPatterns = (ctx: TextPatternContext) => {
 		if (!enabled) return [];
 
 		return [
@@ -27,6 +32,8 @@ const useTextPatternsLookup = ({ enabled, enableMath }: TextPatternOptions) => {
 			{ start: '1.', cmd: 'InsertOrderedList' },
 			{ start: '*', cmd: 'InsertUnorderedList' },
 			{ start: '-', cmd: 'InsertUnorderedList' },
+			// To more closely match Markdown, only do <hr/> replacements if the full line matches the pattern.
+			['---', '***', '___'].includes(ctx.text) && { start: ctx.text, replacement: '<hr/>' },
 		].filter(pattern => !!pattern);
 	};
 

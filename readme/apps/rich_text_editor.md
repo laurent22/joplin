@@ -40,6 +40,7 @@ By default, the following patterns are replaced:
 - `## Heading 3`: Creates a level 3 heading.
 - `- List`: Creates a bulleted list.
 - `1. List`: Creates a numbered list.
+- `---`, `___`, or `***`: Creates a horizontal rule.
 
 Most replacements require pressing the <kbd>space</kbd> or <kbd>enter</kbd> key after the closing formatting character. For example, typing `==test==` does not highlight "test", but pressing a space after the last `=` does.
 

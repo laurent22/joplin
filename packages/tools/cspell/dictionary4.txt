@@ -168,6 +168,8 @@ pmmmwh
 webm
 millis
 sideloading
+samlify
+authenio
 ggml
 Minidump
 collapseall
@@ -178,3 +180,6 @@ unfocusable
 unlocker
 Tiktok
 topagency
+esbuild
+mapbox
+outfile

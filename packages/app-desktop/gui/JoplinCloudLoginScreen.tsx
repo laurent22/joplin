@@ -4,7 +4,6 @@ import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
-const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
 import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
@@ -12,6 +11,7 @@ import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
 import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
+import bridge from '../services/bridge';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -62,7 +62,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	const onAuthorizeClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
-		bridge().openExternal(url);
+		void bridge().openExternal(url);
 		onButtonUsed();
 	};
 

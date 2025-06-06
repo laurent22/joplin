@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../services/bridge';
 const { themeStyle } = require('@joplin/lib/theme');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
@@ -66,7 +66,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		const logComps = [];
 		for (const l of this.state.authLog) {
 			if (l.text.indexOf('http:') === 0) {
-				logComps.push(<a key={l.key} style={theme.urlStyle} href="#" onClick={() => { bridge().openExternal(l.text); }}>{l.text}</a>);
+				logComps.push(<a key={l.key} style={theme.urlStyle} href="#" onClick={() => { void bridge().openExternal(l.text); }}>{l.text}</a>);
 			} else {
 				logComps.push(<p key={l.key} style={theme.textStyle}>{l.text}</p>);
 			}

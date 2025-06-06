@@ -12,6 +12,8 @@ import { WindowIdContext } from '../../gui/NewWindowOrIFrame';
 import useSubmitHandler from './hooks/useSubmitHandler';
 import useFormData from './hooks/useFormData';
 import Setting from '@joplin/lib/models/Setting';
+import getAssetPath from '../../utils/getAssetPath';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 const logger = Logger.create('UserWebview');
 
@@ -124,7 +126,7 @@ function UserWebview(props: Props, ref: any) {
 
 	const src = useMemo(() => {
 		const isolate = Setting.value('featureFlag.plugins.isolatePluginWebViews');
-		const path = `${__dirname}/UserWebviewIndex.html`;
+		const path = toForwardSlashes(getAssetPath('services/plugins/UserWebviewIndex.html'));
 		if (isolate) {
 			return `joplin-content://plugin-webview/${path}`;
 		} else {

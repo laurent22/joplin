@@ -54,8 +54,6 @@ export interface AppState extends State, AppWindowState {
 	route: AppStateRoute;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navHistory: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	windowContentSize: any;
 	watchedNoteFiles: string[];
 	lastEditorScrollPercents: EditorScrollPercents;
 	focusedField: string;
@@ -81,7 +79,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
+export function createAppDefaultState(resourceEditWatcherDefaultState: any): AppState {
 	return {
 		...defaultState,
 		...createAppDefaultWindowState(),
@@ -91,7 +89,6 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 			props: {},
 		},
 		navHistory: [],
-		windowContentSize, // bridge().windowContentSize(),
 		watchedNoteFiles: [],
 		lastEditorScrollPercents: {},
 		visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
@@ -164,12 +161,6 @@ export default function(state: AppState, action: any) {
 					mainLayout: JSON.parse(JSON.stringify(newState.mainLayout)),
 				};
 			}
-			break;
-
-		case 'WINDOW_CONTENT_SIZE_SET':
-
-			newState = { ...state };
-			newState.windowContentSize = action.size;
 			break;
 
 		case 'NOTE_VISIBLE_PANES_TOGGLE':

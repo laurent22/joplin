@@ -29,8 +29,9 @@
   "exports": {
     ".": "./index.js",
     "./lib/uslug": {
+      "types": "./lib/uslug.ts",
       "require": "./lib/uslug.js",
-      "types": "./lib/uslug.ts"
+      "default": "./lib/uslug.js"
     }
   },
   "engines": {

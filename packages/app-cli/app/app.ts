@@ -8,7 +8,7 @@ import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry.js';
-import { fileExtension } from '@joplin/lib/path-utils';
+import { dirname, fileExtension } from '@joplin/lib/path-utils';
 import { splitCommandString } from '@joplin/utils';
 import { _ } from '@joplin/lib/locale';
 import { pathExists, readFile, readdirSync } from 'fs-extra';
@@ -397,8 +397,12 @@ class Application extends BaseApplication {
 	}
 
 	public async start(argv: string[]) {
-		const keychainEnabled = this.checkIfKeychainEnabled(argv);
+		// TODO: Currently, `pluginAssetDir` needs to be set differently for each platform and requires
+		// a call to Setting.setConstant. Ideally, this would be done in a way that requires users to
+		// set this constant on startup.
+		Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 
+		const keychainEnabled = this.checkIfKeychainEnabled(argv);
 		argv = await super.start(argv, { keychainEnabled });
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

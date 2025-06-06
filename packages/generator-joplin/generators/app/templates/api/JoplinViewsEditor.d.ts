@@ -1,5 +1,18 @@
 import Plugin from '../Plugin';
-import { ActivationCheckCallback, ViewHandle, UpdateCallback } from './types';
+import { ActivationCheckCallback, ViewHandle, UpdateCallback, EditorPluginCallbacks } from './types';
+interface SaveNoteOptions {
+    /**
+     * The ID of the note to save. This should match either:
+     * - The ID of the note currently being edited
+     * - The ID of a note that was very recently open in the editor.
+     *
+     * This property is present to ensure that the note editor doesn't write
+     * to the wrong note just after switching notes.
+     */
+    noteId: string;
+    /** The note's new content. */
+    body: string;
+}
 /**
  * Allows creating alternative note editors. You can create a view to handle loading and saving the
  * note, and do your own rendering.
@@ -41,10 +54,18 @@ export default class JoplinViewsEditors {
     private store;
     private plugin;
     private activationCheckHandlers_;
+    private unhandledActivationCheck_;
     constructor(plugin: Plugin, store: any);
     private controller;
     /**
+     * Registers a new editor plugin. Joplin will call the provided callback to create new editor views
+     * associated with the plugin as necessary (e.g. when a new editor is created in a new window).
+     */
+    register(viewId: string, callbacks: EditorPluginCallbacks): Promise<void>;
+    /**
      * Creates a new editor view
+     *
+     * @deprecated
      */
     create(id: string): Promise<ViewHandle>;
     /**
@@ -60,10 +81,17 @@ export default class JoplinViewsEditors {
      */
     onMessage(handle: ViewHandle, callback: Function): Promise<void>;
     /**
+     * Saves the content of the editor, without calling `onUpdate` for editors in the same window.
+     */
+    saveNote(handle: ViewHandle, props: SaveNoteOptions): Promise<void>;
+    /**
      * Emitted when the editor can potentially be activated - this is for example when the current
      * note is changed, or when the application is opened. At that point you should check the
      * current note and decide whether your editor should be activated or not. If it should, return
      * `true`, otherwise return `false`.
+     *
+     * @deprecated - `onActivationCheck` should be provided when the editor is first created with
+     * 	`editor.register`.
      */
     onActivationCheck(handle: ViewHandle, callback: ActivationCheckCallback): Promise<void>;
     /**
@@ -86,3 +114,4 @@ export default class JoplinViewsEditors {
      */
     isVisible(handle: ViewHandle): Promise<boolean>;
 }
+export {};

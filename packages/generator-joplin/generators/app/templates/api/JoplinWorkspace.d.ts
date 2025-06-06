@@ -80,6 +80,8 @@ export default class JoplinWorkspace {
     filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>): void;
     /**
      * Gets the currently selected note. Will be `null` if no note is selected.
+     *
+     * On desktop, this returns the selected note in the focused window.
      */
     selectedNote(): Promise<any>;
     /**
@@ -93,5 +95,12 @@ export default class JoplinWorkspace {
      * Gets the IDs of the selected notes (can be zero, one, or many). Use the data API to retrieve information about these notes.
      */
     selectedNoteIds(): Promise<string[]>;
+    /**
+     * Gets the last hash (note section ID) from cross-note link targeting specific section.
+     * New hash is available after `onNoteSelectionChange()` is triggered.
+     * Example of cross-note link where `hello-world` is a hash: [Other Note Title](:/9bc9a5cb83f04554bf3fd3e41b4bb415#hello-world).
+     * Method returns empty value when a note was navigated with method other than cross-note link containing valid hash.
+     */
+    selectedNoteHash(): Promise<string>;
 }
 export {};

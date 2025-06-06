@@ -152,6 +152,13 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 	const dropdownLabelText = _('Revision:');
 
+	const restoreButton = (
+		<PrimaryButton
+			onPress={onRestore}
+			disabled={restoring || !note}
+		>{restoreButtonTitle}</PrimaryButton>
+	);
+
 	return <View style={styles.root}>
 		<ScreenHeader title={_('Note history')} />
 		<View style={styles.controls}>
@@ -165,11 +172,11 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 				itemStyle={styles.dropdownItemStyle}
 				accessibilityHint={dropdownLabelText}
 				defaultHeaderLabel={_('Select a revision...')}
+				// Hides the restore button when the dropdown is open. This
+				// is important on small screens where otherwise it's difficult
+				// to read the content of the revision dropdown.
+				coverableChildrenRight={restoreButton}
 			/>
-			<PrimaryButton
-				onPress={onRestore}
-				disabled={restoring || !note}
-			>{restoreButtonTitle}</PrimaryButton>
 			<IconButton
 				icon='help-circle-outline'
 				accessibilityLabel={_('Help')}

@@ -70,17 +70,20 @@ export const test = base.extend<JoplinFixtures>({
 	// See https://github.com/microsoft/playwright/issues/8798
 	//
 	// eslint-disable-next-line no-empty-pattern
-	profileDirectory: async ({ }, use) => {
+	profileDirectory: async ({ }, use, testInfo) => {
 		const profilePath = resolve(join(testDir, 'test-profile'));
 		const profileSubdir = join(profilePath, uuid.createNano());
 		await mkdirp(profileSubdir);
 
 		await use(profileSubdir);
 
+		// For debugging purposes, attach the Joplin log file to the test:
+		await attachJoplinLog(profileSubdir, testInfo);
+
 		await remove(profileSubdir);
 	},
 
-	electronApp: async ({ profileDirectory }, use, testInfo) => {
+	electronApp: async ({ profileDirectory }, use) => {
 		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
 		const startupPromise = waitForAppLoaded(electronApp);
@@ -88,9 +91,6 @@ export const test = base.extend<JoplinFixtures>({
 		await startupPromise;
 
 		await use(electronApp);
-
-		// For debugging purposes, attach the Joplin log file to the test:
-		await attachJoplinLog(profileDirectory, testInfo);
 
 		await electronApp.firstWindow();
 		await electronApp.close();

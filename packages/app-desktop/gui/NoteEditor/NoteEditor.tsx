@@ -52,10 +52,10 @@ import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
 import { stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-import EditorPluginHandler from '@joplin/lib/services/plugins/EditorPluginHandler';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
+import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 
 const debounce = require('debounce');
 
@@ -80,12 +80,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
 
-	const editorPluginHandler = useMemo(() => {
-		return new EditorPluginHandler(PluginService.instance());
-	}, []);
-
-	const shownEditorViewIds = props['plugins.shownEditorViewIds'];
-
 	// Should be constant and unique to this instance of the editor.
 	const editorId = useMemo(() => {
 		return `editor-${editorIdCounter++}`;
@@ -105,18 +99,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-
-	useAsyncEffect(async (_event) => {
-		if (!props.startupPluginsLoaded) return;
-		await editorPluginHandler.emitActivationCheck();
-	}, [effectiveNoteId, editorPluginHandler, props.startupPluginsLoaded]);
-
-	useEffect(() => {
-		if (!props.startupPluginsLoaded) return;
-		editorPluginHandler.emitUpdate(shownEditorViewIds);
-	}, [effectiveNoteId, editorPluginHandler, shownEditorViewIds, props.startupPluginsLoaded]);
-
-	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, shownEditorViewIds);
+	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
@@ -134,6 +117,19 @@ function NoteEditorContent(props: NoteEditorProps) {
 	formNoteRef.current = { ...formNote };
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
+
+	const windowId = useContext(WindowIdContext);
+	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
+	useConnectToEditorPlugin({
+		startupPluginsLoaded: props.startupPluginsLoaded,
+		setFormNote,
+		scheduleSaveNote,
+		formNote,
+		effectiveNoteId,
+		shownEditorViewIds,
+		activeEditorView: editorView,
+		plugins: props.plugins,
+	});
 
 	const {
 		localSearch,
@@ -336,7 +332,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
 	});
-	const windowId = useContext(WindowIdContext);
 	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
@@ -706,7 +701,6 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
-		'plugins.shownEditorViewIds': state.settings['plugins.shownEditorViewIds'] || [],
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
 			'historyBackward',
 			'historyForward',

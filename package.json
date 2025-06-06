@@ -15,9 +15,9 @@
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
-    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn tsc",
+    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological-dev run build && yarn tsc",
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn buildPluginDoc_",
-    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn tsc",
+    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological-dev run build && yarn tsc",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
@@ -110,6 +110,9 @@
     "app-builder-lib@24.13.3": "patch:app-builder-lib@npm%3A24.13.3#./.yarn/patches/app-builder-lib-npm-24.13.3-86a66c0bf3.patch",
     "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch",
     "react-native-paper@5.13.1": "patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch",
-    "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch"
+    "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch",
+    "pdfjs-dist@2.16.105": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "pdfjs-dist@*": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "pdfjs-dist@3.11.174": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch"
   }
 }
