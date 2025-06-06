@@ -1565,7 +1565,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Int,
 			public: true,
 			minimum: 1,
-			maximum: 999999,
+			maximum: 99999,
 			step: 1,
 			unitLabel: (value: number = null) => {
 				return value === null ? _('days') : _n('%d day', '%d days', value, value);
