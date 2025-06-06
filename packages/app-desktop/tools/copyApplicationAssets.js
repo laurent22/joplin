@@ -90,6 +90,7 @@ async function main() {
 		'smalltalk/dist/smalltalk.min.js',
 		'smalltalk/img/IDR_CLOSE_DIALOG_H.png',
 		'smalltalk/img/IDR_CLOSE_DIALOG.png',
+		'tesseract.js/dist/tesseract.min.js',
 		{
 			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
 			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,

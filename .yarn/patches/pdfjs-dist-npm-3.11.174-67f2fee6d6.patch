@@ -1,6 +1,22 @@
 
 # We remove the `canvas` optional dependency because electron-rebuild fails to build it, and
 # the `canvas` API is already part of Electron
+diff --git a/build/pdf.js b/build/pdf.js
+index 4acf16b1d6f9351bda1a98649ea4f926618fe617..f63dbc6050ca63ca8e8ed982edea134103fa15dd 100644
+--- a/build/pdf.js
++++ b/build/pdf.js
+@@ -6244,8 +6244,9 @@ class NodeFilterFactory extends _base_factory.BaseFilterFactory {}
+ exports.NodeFilterFactory = NodeFilterFactory;
+ class NodeCanvasFactory extends _base_factory.BaseCanvasFactory {
+   _createCanvas(width, height) {
+-    const Canvas = require("canvas");
+-    return Canvas.createCanvas(width, height);
++    throw new Error('Node canvas disabled');
++    // const Canvas = require("canvas");
++    // return Canvas.createCanvas(width, height);
+   }
+ }
+ exports.NodeCanvasFactory = NodeCanvasFactory;
 diff --git a/package.json b/package.json
 index 105811f53d508486e08a60dc1b6e437cd24d7427..dea6a4e6612c4a4006cc482e46ff5270dcfda1e5 100644
 --- a/package.json

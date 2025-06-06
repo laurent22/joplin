@@ -1,5 +1,4 @@
 import { _ } from '../../locale';
-import shim from '../../shim';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
@@ -123,17 +122,6 @@ export const makeExportModule = (
 
 			return result;
 		},
-	};
-};
-
-// A module factory that uses dynamic requires.
-// TODO: This is currently only used because some importers/exporters import libraries that
-// don't work on mobile (e.g. htmlpack or fs). These importers/exporters should be migrated
-// to fs so that this can be removed.
-export const dynamicRequireModuleFactory = (fileName: string) => {
-	return () => {
-		const ModuleClass = shim.requireDynamic(fileName).default;
-		return new ModuleClass();
 	};
 };
 

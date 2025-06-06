@@ -39,7 +39,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		const makeMainMenuItems = (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
-			let linkToCopy = null;
+			let linkUrl = null;
 
 			const pathToId = (path: string) => {
 				const id = Resource.pathToId(path);
@@ -52,7 +52,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			} else if (element.nodeName === 'A') {
 				resourceId = pathToId((element as HTMLAnchorElement).href);
 				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
-				linkToCopy = element.getAttribute('href') || '';
+				linkUrl = element.getAttribute('href') || '';
 			} else {
 				itemType = ContextMenuItemType.Text;
 			}
@@ -62,7 +62,8 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				resourceId,
 				filename: null,
 				mime: null,
-				linkToCopy,
+				linkToCopy: linkUrl,
+				linkToOpen: linkUrl,
 				textToCopy: null,
 				htmlToCopy: editor.selection ? editor.selection.getContent() : '',
 				insertContent: (content: string) => {

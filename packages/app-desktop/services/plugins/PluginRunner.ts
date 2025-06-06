@@ -8,6 +8,7 @@ import { EventHandlers } from '@joplin/lib/services/plugins/utils/mapEventHandle
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import getPathToExecutable7Zip from '../../utils/7zip/getPathToExecutable7Zip';
+import getAssetPath from '../../utils/getAssetPath';
 // import BackOffHandler from './BackOffHandler';
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -134,7 +135,7 @@ export default class PluginRunner extends BasePluginRunner {
 		};
 
 		void pluginWindow.loadURL(`${require('url').format({
-			pathname: require('path').join(__dirname, 'plugin_index.html'),
+			pathname: getAssetPath('services/plugins/plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,
 		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}&libraryData=${encodeURIComponent(JSON.stringify(libraryData))}`);

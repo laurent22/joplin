@@ -38,7 +38,7 @@ describe('exportDeletionLog', () => {
 	let state: AppState = undefined;
 
 	beforeAll(() => {
-		state = createAppDefaultState({}, {});
+		state = createAppDefaultState({});
 		jest.useFakeTimers();
 		jest.setSystemTime(new Date('2024-09-18T12:00:00Z').getTime());
 	});

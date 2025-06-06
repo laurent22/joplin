@@ -42,9 +42,11 @@ export default class JoplinSettings {
      */
     values(keys: string[] | string): Promise<Record<string, unknown>>;
     /**
-     * @deprecated Use joplin.settings.values()
+     * Gets a setting value (only applies to setting you registered from your plugin).
      *
-     * Gets a setting value (only applies to setting you registered from your plugin)
+     * Note: If you want to retrieve all your plugin settings, for example when the plugin starts,
+     * it is recommended to use the `values()` function instead - it will be much faster than
+     * calling `value()` multiple times.
      */
     value(key: string): Promise<any>;
     /**

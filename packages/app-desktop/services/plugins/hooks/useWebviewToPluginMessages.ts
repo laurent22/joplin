@@ -25,9 +25,13 @@ export default function(webviewRef: RefObject<HTMLIFrameElement>, isReady: boole
 			}
 
 			if (event.data.target === 'postMessageService.registerViewMessageHandler') {
-				PostMessageService.instance().registerViewMessageHandler(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
-					postMessage('postMessageService.plugin_message', { message });
-				});
+				PostMessageService.instance().registerViewMessageHandler(
+					ResponderComponentType.UserWebview,
+					viewId,
+					(message: MessageResponse) => {
+						postMessage('postMessageService.plugin_message', { message });
+					},
+				);
 			} else if (event.data.target === 'postMessageService.message') {
 				void PostMessageService.instance().postMessage({
 					pluginId,

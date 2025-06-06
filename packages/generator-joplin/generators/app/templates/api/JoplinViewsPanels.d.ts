@@ -80,5 +80,9 @@ export default class JoplinViewsPanels {
      * Tells whether the panel is visible or not
      */
     visible(handle: ViewHandle): Promise<boolean>;
+    /**
+     * Assuming that the current panel is an editor plugin view, returns
+     * whether the editor plugin view supports editing the current note.
+     */
     isActive(handle: ViewHandle): Promise<boolean>;
 }

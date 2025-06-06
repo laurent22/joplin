@@ -13,7 +13,6 @@ import { SecondaryWindowApi } from '../utils/window/types';
 export const WindowIdContext = createContext(defaultWindowId);
 
 type OnCloseCallback = ()=> void;
-type OnFocusCallback = ()=> void;
 
 export enum WindowMode {
 	Iframe, NewWindow,
@@ -27,7 +26,6 @@ interface Props {
 	mode: WindowMode;
 	windowId: string;
 	onClose: OnCloseCallback;
-	onFocus?: OnFocusCallback;
 }
 
 const useDocument = (
@@ -86,10 +84,7 @@ const useDocument = (
 };
 
 type OnSetLoaded = (loaded: boolean)=> void;
-const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded, onFocus?: OnFocusCallback) => {
-	const onFocusRef = useRef(onFocus);
-	onFocusRef.current = onFocus;
-
+const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded) => {
 	useEffect(() => {
 		if (!doc) return;
 
@@ -120,14 +115,6 @@ const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded, onFocus?: 
 
 		doc.body.style.height = '100vh';
 
-		const containerWindow = doc.defaultView;
-		containerWindow.addEventListener('focus', () => {
-			onFocusRef.current?.();
-		});
-		if (doc.hasFocus()) {
-			onFocusRef.current?.();
-		}
-
 		setLoaded(true);
 	}, [doc, setLoaded]);
 };
@@ -137,7 +124,7 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 	const [loaded, setLoaded] = useState(false);
 
 	const doc = useDocument(props.mode, iframeRef, props.onClose);
-	useDocumentSetup(doc, setLoaded, props.onFocus);
+	useDocumentSetup(doc, setLoaded);
 
 	useEffect(() => {
 		if (!doc) return;

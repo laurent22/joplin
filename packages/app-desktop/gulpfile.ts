@@ -4,9 +4,18 @@ const compileSass = require('@joplin/tools/compileSass');
 const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
 import buildDefaultPlugins from '@joplin/default-plugins/commands/buildAll';
 import copy7Zip from './tools/copy7Zip';
+import bundleJs from './tools/bundleJs';
 import { remove } from 'fs-extra';
 
 const tasks = {
+	bundle: {
+		fn: () => bundleJs(false),
+	},
+	// Bundles and computes additional information that can be analysed with
+	// locally or with https://esbuild.github.io/analyze/.
+	bundleWithStats: {
+		fn: () => bundleJs(true),
+	},
 	compileScripts: {
 		fn: require('./tools/compileScripts'),
 	},
@@ -54,7 +63,7 @@ const tasks = {
 
 utils.registerGulpTasks(gulp, tasks);
 
-const buildBeforeStartParallel = [
+const buildBeforeStartParallel = gulp.parallel(
 	'compileScripts',
 	'compilePackageInfo',
 	'copyPluginAssets',
@@ -62,14 +71,21 @@ const buildBeforeStartParallel = [
 	'updateIgnoredTypeScriptBuild',
 	'buildScriptIndexes',
 	'compileSass',
-];
+);
+const buildRequiresTsc = gulp.series('bundle');
 
-gulp.task('before-start', gulp.parallel(...buildBeforeStartParallel));
+gulp.task('before-start', gulp.series(
+	buildRequiresTsc,
+	buildBeforeStartParallel,
+));
+gulp.task('before-dist', buildRequiresTsc);
 
-const buildAllSequential = [
-	'before-start',
+// Since "build" runs before "tsc", exclude tasks that require
+// other packages to be built (i.e. don't include buildRequiresTsc).
+const buildSequential = [
+	buildBeforeStartParallel,
 	'copyDefaultPluginsAssets',
 	'buildDefaultPlugins',
 ];
 
-gulp.task('build', gulp.series(buildAllSequential));
+gulp.task('build', gulp.series(buildSequential));

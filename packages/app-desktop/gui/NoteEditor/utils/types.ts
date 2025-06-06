@@ -63,7 +63,6 @@ export interface NoteEditorProps {
 	syncUserId: string;
 	searchResults: ProcessResultsRow[];
 	pluginHtmlContents: PluginHtmlContents;
-	'plugins.shownEditorViewIds': string[];
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 	startupPluginsLoaded: boolean;

@@ -180,6 +180,10 @@ export default class Plugin {
 		this.viewControllers_[v.handle] = v;
 	}
 
+	public removeViewController(v: ViewController) {
+		delete this.viewControllers_[v.handle];
+	}
+
 	public hasViewController(handle: ViewHandle) {
 		return !!this.viewControllers_[handle];
 	}
@@ -227,6 +231,10 @@ export default class Plugin {
 
 	public addOnUnloadListener(callback: OnUnloadListener) {
 		this.onUnloadListeners_.push(callback);
+	}
+
+	public removeOnUnloadListener(callback: OnUnloadListener) {
+		this.onUnloadListeners_ = this.onUnloadListeners_.filter(other => other !== callback);
 	}
 
 	public onUnload() {

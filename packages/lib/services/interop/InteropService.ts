@@ -18,7 +18,11 @@ import InteropService_Exporter_Md from './InteropService_Exporter_Md';
 import InteropService_Exporter_Md_frontmatter from './InteropService_Exporter_Md_frontmatter';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
-import Module, { dynamicRequireModuleFactory, makeExportModule, makeImportModule } from './Module';
+import Module, { makeExportModule, makeImportModule } from './Module';
+import InteropService_Exporter_Html from './InteropService_Exporter_Html';
+import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexToHtml';
+import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
+import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const EventEmitter = require('events');
@@ -76,7 +80,7 @@ export default class InteropService {
 					description: _('Evernote Export File (as HTML)'),
 					supportsMobile: false,
 					outputFormat: ImportModuleOutputFormat.Html,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+				}, () => new InteropService_Importer_EnexToHtml()),
 
 				makeImportModule({
 					format: 'enex',
@@ -85,7 +89,7 @@ export default class InteropService {
 					description: _('Evernote Export File (as Markdown)'),
 					supportsMobile: false,
 					isDefault: true,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+				}, () => new InteropService_Importer_EnexToMd()),
 
 				makeImportModule({
 					format: 'enex',
@@ -94,7 +98,7 @@ export default class InteropService {
 					description: _('Evernote Export Files (Directory, as HTML)'),
 					supportsMobile: false,
 					outputFormat: ImportModuleOutputFormat.Html,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToHtml')),
+				}, () => new InteropService_Importer_EnexToHtml()),
 
 				makeImportModule({
 					format: 'enex',
@@ -102,7 +106,7 @@ export default class InteropService {
 					sources: [FileSystemItem.Directory],
 					description: _('Evernote Export Files (Directory, as Markdown)'),
 					supportsMobile: false,
-				}, dynamicRequireModuleFactory('./InteropService_Importer_EnexToMd')),
+				}, () => new InteropService_Importer_EnexToMd()),
 
 				makeImportModule({
 					format: 'html',
@@ -142,7 +146,7 @@ export default class InteropService {
 					sources: [FileSystemItem.File],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),
-				}, dynamicRequireModuleFactory('./InteropService_Importer_OneNote')),
+				}, () => new InteropService_Importer_OneNote()),
 			];
 
 			const exportModules = [
@@ -178,14 +182,14 @@ export default class InteropService {
 					isNoteArchive: false,
 					description: _('HTML File'),
 					supportsMobile: false,
-				}, dynamicRequireModuleFactory('./InteropService_Exporter_Html')),
+				}, () => new InteropService_Exporter_Html()),
 
 				makeExportModule({
 					format: ExportModuleOutputFormat.Html,
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory'),
 					supportsMobile: false,
-				}, dynamicRequireModuleFactory('./InteropService_Exporter_Html')),
+				}, () => new InteropService_Exporter_Html()),
 			];
 
 			this.defaultModules_ = (importModules as Module[]).concat(exportModules);

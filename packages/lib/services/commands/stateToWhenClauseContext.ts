@@ -63,7 +63,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const commandFolderId = state.notesParentType === 'Folder' ? (options.commandFolderId || windowState.selectedFolderId) : '';
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
-	const { editorPlugin } = state.pluginService ? getActivePluginEditorView(state.pluginService.plugins) : { editorPlugin: null };
+	const { editorPlugin } = state.pluginService ? getActivePluginEditorView(state.pluginService.plugins, windowState.windowId) : { editorPlugin: null };
 
 	const settings = state.settings || {};
 

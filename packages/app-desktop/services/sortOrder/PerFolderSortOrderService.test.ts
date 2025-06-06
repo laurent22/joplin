@@ -39,7 +39,7 @@ describe('PerFolderSortOrderService', () => {
 	beforeEach(() => {
 		PerFolderSortOrderService.initialize();
 		Setting.setValue('notes.perFolderSortOrderEnabled', true);
-		updateAppState(createAppDefaultState({}, {}));
+		updateAppState(createAppDefaultState({}));
 		switchToFolder(folderId1);
 	});
 	afterEach(() => {

@@ -40,17 +40,15 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         .unwrap();
     let bias = simple::parse_u8(PropertyType::InkBias, object)?
         .map(|bias| match bias {
-            0 => Ok(InkBias::Handwriting),
-            1 => Ok(InkBias::Drawing),
-            2 => Ok(InkBias::Both),
-            i => Err(ErrorKind::MalformedOneNoteFileData(
-                format!("invalid ink bias value: {}", i).into(),
-            )),
+            0 => InkBias::Handwriting,
+            1 => InkBias::Drawing,
+            2 => InkBias::Both,
+            _i => InkBias::Both,
         })
-        .transpose()?
-        .ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("ink stroke node has no ink bias".into())
-        })?;
+        .unwrap_or_else(|| {
+            log_warn!("No InkBias was set. Using default value 'Both'");
+            return InkBias::Both;
+        });
     let language_code = simple::parse_u32(PropertyType::LanguageId, object)?;
     let properties = ObjectReference::parse(PropertyType::InkStrokeProperties, object)?
         .ok_or_else(|| {

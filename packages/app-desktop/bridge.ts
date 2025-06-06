@@ -246,7 +246,7 @@ export class Bridge {
 	// version of electron-context-menu.
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
-		require('electron-context-menu')({
+		require('./services/electron-context-menu')({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
@@ -311,13 +311,6 @@ export class Bridge {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
-	}
-
-	// Note: This provides the size of the main window. Prefer CSS where possible.
-	public windowContentSize() {
-		if (!this.mainWindow()) return { width: 0, height: 0 };
-		const s = this.mainWindow().getContentSize();
-		return { width: s[0], height: s[1] };
 	}
 
 	public windowSetSize(width: number, height: number) {

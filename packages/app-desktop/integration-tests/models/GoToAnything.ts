@@ -2,6 +2,7 @@
 import { ElectronApplication, expect, Locator, Page } from '@playwright/test';
 import MainScreen from './MainScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
+import { msleep } from '@joplin/utils/time';
 
 export default class GoToAnything {
 	public readonly containerLocator: Locator;
@@ -38,6 +39,8 @@ export default class GoToAnything {
 		// This expect.poll retries the search if it initially fails.
 		await expect.poll(async () => {
 			await this.inputLocator.clear();
+			// Pause to help ensure that the change in the search input is detected
+			await msleep(300);
 			await this.inputLocator.fill(query);
 			try {
 				await expect(resultLocator).toBeVisible({ timeout: 1000 });
@@ -47,7 +50,7 @@ export default class GoToAnything {
 				return error;
 			}
 			return true;
-		}, { timeout: 10_000 }).toBe(true);
+		}, { timeout: 15_000 }).toBe(true);
 	}
 
 	public async expectToBeClosed() {

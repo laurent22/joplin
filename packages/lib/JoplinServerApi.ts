@@ -1,6 +1,6 @@
 import shim from './shim';
 import { _ } from './locale';
-const { rtrimSlashes } = require('./path-utils.js');
+import { rtrimSlashes } from './path-utils';
 import JoplinError from './JoplinError';
 import { Env } from './models/Setting';
 import Logger from '@joplin/utils/Logger';
