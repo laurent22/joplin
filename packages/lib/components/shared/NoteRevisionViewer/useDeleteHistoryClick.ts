@@ -9,7 +9,7 @@ interface Props {
 	resetScreenState(): void;
 }
 
-const useDeleteAllClick = ({
+const useDeleteHistoryClick = ({
 	noteId, setDeleting, resetScreenState,
 }: Props) => {
 	return useCallback(async () => {
@@ -23,7 +23,7 @@ const useDeleteAllClick = ({
 		if (response === 0) {
 			setDeleting(true);
 			try {
-				await Revision.deleteAllRevisionsForNote(noteId);
+				await Revision.deleteHistoryForNote(noteId);
 				await shim.showMessageBox(_('Note history has been deleted.'), { type: MessageBoxType.Info });
 			} finally {
 				setDeleting(false);
@@ -33,4 +33,4 @@ const useDeleteAllClick = ({
 	}, [noteId, setDeleting, resetScreenState]);
 };
 
-export default useDeleteAllClick;
+export default useDeleteHistoryClick;

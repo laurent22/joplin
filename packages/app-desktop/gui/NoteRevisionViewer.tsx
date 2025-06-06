@@ -24,7 +24,7 @@ import useMarkupToHtml from './hooks/useMarkupToHtml';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import useDeleteAllClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteAllClick';
+import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 
 interface Props {
 	themeId: number;
@@ -113,7 +113,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		setCurrentRevId(null);
 	}, []);
 
-	const deleteAllButton_onClick = useDeleteAllClick({
+	const deleteHistoryButton_onClick = useDeleteHistoryClick({
 		noteId: note?.id,
 		setDeleting,
 		resetScreenState,
@@ -177,7 +177,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	}
 
 	const restoreButtonTitle = _('Restore');
-	const deleteAllButtonTitle = _('Delete All');
+	const deleteHistoryButtonTitle = _('Delete history');
 	const helpMessage = getHelpMessage(restoreButtonTitle);
 
 	const titleInput = (
@@ -192,8 +192,8 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			<button disabled={!revisions.length || restoring} onClick={importButton_onClick} className='restore'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
 				{restoreButtonTitle}
 			</button>
-			<button disabled={!revisions.length || deleting} onClick={deleteAllButton_onClick} className='deleteAll'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
-				{deleteAllButtonTitle}
+			<button disabled={!revisions.length || deleting} onClick={deleteHistoryButton_onClick} className='deleteHistory'style={{ ...theme.buttonStyle, marginLeft: 10, height: theme.inputStyle.height }}>
+				{deleteHistoryButtonTitle}
 			</button>
 			<HelpButton tip={helpMessage} id="noteRevisionHelpButton" onClick={helpButton_onClick} />
 		</div>

@@ -21,7 +21,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
-import useDeleteAllClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteAllClick';
+import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 
 interface Props {
 	themeId: number;
@@ -153,22 +153,22 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	}, [revisions, options]);
 
 	const [deleting, setDeleting] = useState(false);
-	const deleteAll_onPress = useDeleteAllClick({
+	const deleteHistory_onPress = useDeleteHistoryClick({
 		noteId,
 		setDeleting,
 		resetScreenState,
 	});
 
-	const disableDeleteAll = deleting || !hasRevisions;
+	const disableDeleteHistory = deleting || !hasRevisions;
 	const menuOptions = useMemo(() => {
 		const output: MenuOptionType[] = [{
-			title: _('Delete All'),
-			onPress: deleteAll_onPress,
-			disabled: disableDeleteAll,
+			title: _('Delete history'),
+			onPress: deleteHistory_onPress,
+			disabled: disableDeleteHistory,
 		}];
 
 		return output;
-	}, [deleteAll_onPress, disableDeleteAll]);
+	}, [deleteHistory_onPress, disableDeleteHistory]);
 
 	const restoreButtonTitle = _('Restore');
 	const helpMessageText = getHelpMessage(restoreButtonTitle);
