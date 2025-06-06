@@ -36,6 +36,7 @@ module.exports = {
 				'packages/lib/plugin_types/**',
 				'packages/server/**',
 				'packages/utils/**',
+				'packages/transcribe/**',
 			],
 		}).filter(f => !f.endsWith('.d.ts'));
 

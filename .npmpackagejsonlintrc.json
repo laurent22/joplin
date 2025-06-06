@@ -8,6 +8,7 @@
 					"@joplin/fork-sax",
 					"@joplin/fork-uslug",
 					"@joplin/htmlpack",
+					"@joplin/transcribe",
 					"@joplin/lib",
 					"@joplin/onenote-converter",
 					"@joplin/pdf-viewer",

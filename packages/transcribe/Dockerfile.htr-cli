@@ -1,0 +1,26 @@
+FROM bitnami/minideb:bookworm
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+RUN wget -q https://github.com/ggml-org/llama.cpp/releases/download/b5449/llama-b5449-bin-ubuntu-x64.zip
+
+RUN mkdir /models/
+RUN wget -q -O /models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf 
+RUN wget -q -O /models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+
+WORKDIR /app
+RUN unzip llama-b5449-bin-ubuntu-x64.zip
+WORKDIR /app/build/bin
+
+# Create an entrypoint script
+COPY entrypoint.sh /entrypoint.sh 
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
