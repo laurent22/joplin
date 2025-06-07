@@ -46,7 +46,7 @@ const useRevisions = (noteId: string) => {
 
 		const revisions = await Revision.allByType(ModelType.Note, noteId);
 		if (event.cancelled) return;
-		setRevisions(revisions);
+		setRevisions(revisions.slice().reverse());
 	}, [noteId]);
 
 	return revisions;
