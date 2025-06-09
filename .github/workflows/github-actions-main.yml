@@ -11,6 +11,13 @@ jobs:
         # https://github.com/actions/runner-images/issues/6709
         os: [macos-13, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+
       - uses: actions/checkout@v4
 
       - name: Setup build environment
