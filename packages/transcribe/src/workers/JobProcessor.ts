@@ -9,13 +9,13 @@ export default class JobProcessor {
 	private isActive = false;
 	private checkInteval = 5000;
 	private currentJob: JobWithData | null = null;
-	private transcriber: WorkHandler;
+	private workHandler: WorkHandler;
 
-	public constructor(queue: BaseQueue, transcriber: WorkHandler, checkInterval?: number) {
+	public constructor(queue: BaseQueue, workHandler: WorkHandler, checkInterval?: number) {
 		this.queue = queue;
-		this.transcriber = transcriber;
+		this.workHandler = workHandler;
 		this.checkInteval = checkInterval ?? 5000;
-		logger.info('Created Transcriber');
+		logger.info('Created JobProcessor');
 	}
 
 	public async init() {
@@ -25,7 +25,7 @@ export default class JobProcessor {
 		}
 
 		this.isRunning = true;
-		await this.transcriber.init();
+		await this.workHandler.init();
 		this.scheduleCheckForJobs();
 	}
 
@@ -46,7 +46,7 @@ export default class JobProcessor {
 		}
 
 		logger.info(`Processing job ${this.currentJob.id}`);
-		const transcription = await this.transcriber.run(this.currentJob.data.filePath);
+		const transcription = await this.workHandler.run(this.currentJob.data.filePath);
 		await this.queue.complete(this.currentJob.id, { result: transcription });
 	}
 
