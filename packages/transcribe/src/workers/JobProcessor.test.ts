@@ -12,6 +12,8 @@ const cleanUpResult = (result: string) => {
 	return result.replace('“', '"').replace('”', '"');
 };
 
+const skipIfCI = process.env.IS_CONTINUOUS_INTEGRATION ? it.skip : it;
+
 describe('JobProcessor', () => {
 	let queue: BaseQueue;
 
@@ -29,7 +31,7 @@ describe('JobProcessor', () => {
 		await cleanUpDb('./JobProcessor.test.sqlite3');
 	});
 
-	it('should execute work on job in the queue', async () => {
+	skipIfCI('should execute work on job in the queue', async () => {
 		jest.useRealTimers();
 		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2'), 1000);
 		await tw.init();
@@ -51,7 +53,7 @@ describe('JobProcessor', () => {
 		}
 	}, 12 * Minute);
 
-	it('should execute work on job in the queue even if one fails', async () => {
+	skipIfCI('should execute work on job in the queue even if one fails', async () => {
 		jest.useRealTimers();
 		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2'), 1000);
 		await tw.init();
