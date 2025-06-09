@@ -118,7 +118,8 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 
 	const options = useMemo(() => {
 		const result = [];
-		for (const revision of revisions) {
+		const reversedRevisions = revisions.slice().reverse();
+		for (const revision of reversedRevisions) {
 			const stats = Revision.revisionPatchStatsText(revision);
 			result.push({
 				label: `${formatMsToLocal(revision.item_updated_time)} (${stats})`,

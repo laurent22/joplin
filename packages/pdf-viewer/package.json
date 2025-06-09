@@ -9,11 +9,17 @@
     "access": "restricted"
   },
   "scripts": {
+    "tsc": "",
     "tsc_DISABLED": "tsc --project tsconfig.json",
+    "watch": "",
     "watch_DISABLED": "webpack --watch --config webpack.config.js --mode=development",
+    "build": "",
     "build_DISABLED": "webpack --config webpack.config.js --mode=production",
+    "test": "",
     "test_DISABLED": "jest",
+    "test-ci": "",
     "test-ci_DISABLED": "yarn test",
+    "postinstall": "",
     "postinstall_DISABLED": "yarn build"
   },
   "author": "Joplin",

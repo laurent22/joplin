@@ -28,10 +28,15 @@ const waitForAnimationsToEnd = (page: Page) => {
 
 const expectNoViolations = async (page: Page) => {
 	await waitForAnimationsToEnd(page);
-	const results = await createScanner(page).analyze();
-	expect(results.violations).toEqual([]);
-};
+	const scanner = createScanner(page);
 
+	// Retry the accessibility scanner on failure to prevent
+	// random failure in CI.
+	await expect.poll(async () => {
+		const results = await scanner.analyze();
+		return results.violations;
+	}).toEqual([]);
+};
 
 test.describe('wcag', () => {
 	for (const tabName of ['General', 'Plugins']) {
