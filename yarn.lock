@@ -9477,7 +9477,7 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@types/zxcvbn": "npm:4.4.5"
     bcryptjs: "npm:2.4.3"
-    bulma: "npm:1.0.2"
+    bulma: "npm:1.0.3"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.12"
     formidable: "npm:2.1.2"
@@ -18631,10 +18631,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bulma@npm:1.0.2":
-  version: 1.0.2
-  resolution: "bulma@npm:1.0.2"
-  checksum: 10/af40425c61fedb88f34801a5a4d7e559bbf0c88ab437caa76a5d685419ce203ddbcaefa4a427ddfc3b4d493a1bbbca68ee549be1ad7684f4ee9ef52fbaece78a
+"bulma@npm:1.0.3":
+  version: 1.0.3
+  resolution: "bulma@npm:1.0.3"
+  checksum: 10/099ea71a1718a614b3d33eb8b25953c815183a523d91453831c2b254870a5889a0549db981c95c0198106fd6d21eefb817c63a775116e99470aa28826ce2351b
   languageName: node
   linkType: hard
 
