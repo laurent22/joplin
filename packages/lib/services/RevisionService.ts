@@ -90,7 +90,7 @@ export default class RevisionService extends BaseService {
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
 			} else {
-				if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+				if (Date.now() - parentRev.updated_time < 1000 * 60 * Setting.value('revisionService.intervalBetweenRevisions')) return null;
 
 				const merged = await Revision.mergeDiffs(parentRev);
 				output.parent_id = parentRev.id;
@@ -159,7 +159,7 @@ export default class RevisionService extends BaseService {
 								}
 
 								const rev = await this.createNoteRevision_(note);
-								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
+								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d minutes ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
 								this.isOldNotesCache_[noteId] = false;
 							}
@@ -319,7 +319,7 @@ export default class RevisionService extends BaseService {
 		if (this.isRunningInBackground_) return;
 		this.isRunningInBackground_ = true;
 
-		if (collectRevisionInterval === null) collectRevisionInterval = 1000 * 60 * 10;
+		if (collectRevisionInterval === null) collectRevisionInterval = 1000 * 60 * Setting.value('revisionService.intervalBetweenRevisions');
 
 		logger.info(`runInBackground: Starting background service with revision collection interval ${collectRevisionInterval}`);
 

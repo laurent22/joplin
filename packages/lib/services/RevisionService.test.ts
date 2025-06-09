@@ -214,7 +214,7 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should not error on revisions for missing (not downloaded yet/permanently deleted) notes', async () => {
-		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 0.001, false);
 
 		const note = await createTestRevisions({
 			share_id: 'test-share-id',
@@ -521,6 +521,8 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should give a detailed error when a patch cannot be applied', async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 0.001, false);
+
 		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1

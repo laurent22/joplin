@@ -182,7 +182,7 @@ describe('Synchronizer.revisions', () => {
 	}));
 
 	it('should delete old revisions remotely when deleted locally', async () => {
-		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 0.001, false);
 		jest.useFakeTimers({ advanceTimers: true });
 
 		const note = await Note.save({ title: 'note' });

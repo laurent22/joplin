@@ -1584,7 +1584,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Keep note history for'),
 			storage: SettingStorage.File,
 		},
-		'revisionService.intervalBetweenRevisions': { section: 'revisionService', value: 1000 * 60 * 10, type: SettingItemType.Int, public: false },
+		'revisionService.intervalBetweenRevisions': {
+			section: 'revisionService',
+			value: 10,
+			type: SettingItemType.Int,
+			public: true,
+			minimum: 1,
+			maximum: 60 * 24,
+			step: 1,
+			unitLabel: (value: number = null) => {
+				return value === null ? _('minutes') : _n('%d minute', '%d minutes', value, value);
+			},
+			label: () => _('Interval between revisions'),
+			storage: SettingStorage.File,
+		},
 		'revisionService.oldNoteInterval': { section: 'revisionService', value: 1000 * 60 * 60 * 24 * 7, type: SettingItemType.Int, public: false },
 
 		'welcome.wasBuilt': { value: false, type: SettingItemType.Bool, public: false },
