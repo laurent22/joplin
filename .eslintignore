@@ -78,6 +78,7 @@ packages/plugins/**/api
 packages/plugins/**/dist
 packages/server/dist/
 packages/utils/dist/
+packages/transcribe/dist/
 packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
