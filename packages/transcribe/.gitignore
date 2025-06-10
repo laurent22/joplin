@@ -1,5 +1,5 @@
 node_modules/
-dist/
+dist
 images/*
 !images/htr_sample.png
 models/
