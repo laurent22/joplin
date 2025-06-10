@@ -10,7 +10,7 @@
 ```shell
 docker build -f ./Dockerfile.transcribe -t transcribe .
 docker run --env-file .env-transcribe -p 4567:4567 \
-     -v /var/run/docker.sock:/var/run/docker.sock 
+     -v /var/run/docker.sock:/var/run/docker.sock \
      -v ./packages/transcribe/images:/app/packages/transcribe/images \
      transcribe
 ```
