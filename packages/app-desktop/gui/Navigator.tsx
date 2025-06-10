@@ -56,7 +56,7 @@ const useWindowRefocusManager = (route: AppStateRoute) => {
 };
 
 const useContainerSize = (container: HTMLElement|null) => {
-	const [size, setSize] = useState({ width: container?.clientWidth, height: container?.clientHeight });
+	const [size, setSize] = useState({ width: container?.clientWidth ?? 0, height: container?.clientHeight ?? 0 });
 
 	useEffect(() => {
 		if (!container) return () => {};

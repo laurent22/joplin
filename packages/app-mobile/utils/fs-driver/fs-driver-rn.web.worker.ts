@@ -54,8 +54,8 @@ export interface TransferableStat {
 	isDirectory: boolean;
 }
 
-const isNotFoundError = (error: DOMException) => error.name === 'NotFoundError';
-const isTypeMismatchError = (error: DOMException) => error.name === 'TypeMismatchError';
+const isNotFoundError = (error: Error) => error instanceof DOMException && error.name === 'NotFoundError';
+const isTypeMismatchError = (error: Error) => error instanceof DOMException && error.name === 'TypeMismatchError';
 const externalDirectoryPrefix = '/external/';
 
 type AccessHandleDatabaseControl = {
@@ -240,8 +240,10 @@ export class WorkerApi {
 			handle = await parent.getDirectoryHandle(folderName, { create });
 			this.directoryHandleCache_.set(path, handle);
 		} catch (error) {
-			// TODO: Handle this better
-			logger.warn('Error getting directory handle', error, 'for', path, 'create:', create);
+			if (!isNotFoundError(error)) {
+				throw error;
+			}
+
 			handle = null;
 		}
 
@@ -402,7 +404,13 @@ export class WorkerApi {
 
 	public async stat(path: string, handle?: FileSystemDirectoryHandle|FileSystemFileHandle): Promise<TransferableStat|null> {
 		logger.debug('stat', path, handle ? 'with handle' : '');
-		handle ??= await this.pathToDirectoryHandle_(path);
+		try {
+			handle ??= await this.pathToDirectoryHandle_(path);
+		} catch (error) {
+			if (!isTypeMismatchError(error)) {
+				throw error;
+			}
+		}
 		try {
 			handle ??= await this.pathToFileHandle_(path);
 		} catch (error) {
