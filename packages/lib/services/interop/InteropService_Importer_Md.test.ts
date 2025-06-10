@@ -220,6 +220,14 @@ describe('InteropService_Importer_Md', () => {
 		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
 	});
 
+	it('should import resources from links with Windows path', async () => {
+		const note = await importNote(`${supportDir}/test_notes/md/windows_path.html`);
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(2);
+		expect(items.find(i => i.title === 'sample.txt')).toBeTruthy();
+		expect(items.find(i => i.title === 'photo.jpg')).toBeTruthy();
+	});
+
 	it.each([
 		['<a name="525"/>', '<a name="525"></a>'],
 		['<a name="525" id="test" class="link"/>', '<a name="525" id="test" class="link"></a>'],

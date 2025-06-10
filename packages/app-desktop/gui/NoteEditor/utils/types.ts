@@ -57,6 +57,7 @@ export interface NoteEditorProps {
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	contentMaxWidth: number;
 	scrollbarSize: ScrollbarSize;
+	viewerFontFamily: string;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;
@@ -131,6 +132,7 @@ export interface NoteBodyEditorProps {
 	plugins: PluginStates;
 	mathEnabled: boolean;
 	fontSize: number;
+	baseFontFamily: string;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	noteId: string;

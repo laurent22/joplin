@@ -59,6 +59,7 @@ docs/**/*.mustache
 .pnp.*
 .yarn/*
 !.yarn/patches
+!.yarn/joplin-empty-package
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
@@ -797,6 +798,8 @@ packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.js
 packages/app-mobile/components/screens/ShareManager/IncomingShareItem.js
 packages/app-mobile/components/screens/ShareManager/index.test.js
 packages/app-mobile/components/screens/ShareManager/index.js
+packages/app-mobile/components/screens/ShareNoteDialog.test.js
+packages/app-mobile/components/screens/ShareNoteDialog.js
 packages/app-mobile/components/screens/SsoLoginScreen.js
 packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
@@ -1059,7 +1062,13 @@ packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
+packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js
 packages/lib/components/shared/SamlShared.js
+packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
+packages/lib/components/shared/ShareNoteDialog/types.js
+packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
+packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
+packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js

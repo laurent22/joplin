@@ -7,7 +7,7 @@ import Revision from '@joplin/lib/models/Revision';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import { IconButton, Text } from 'react-native-paper';
 import Dropdown from '../Dropdown';
-import ScreenHeader from '../ScreenHeader';
+import ScreenHeader, { MenuOptionType } from '../ScreenHeader';
 import { formatMsToLocal } from '@joplin/utils/time';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { PrimaryButton } from '../buttons';
@@ -21,6 +21,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
+import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 
 interface Props {
 	themeId: number;
@@ -113,16 +114,19 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const [currentRevisionId, setCurrentRevisionId] = useState<string>('');
 	const { note, resources } = useRevisionNote(revisions, currentRevisionId);
 	const [initialScroll, setInitialScroll] = useState(0);
+	const [hasRevisions, setHasRevisions] = useState(false);
 
 	const options = useMemo(() => {
 		const result = [];
-		for (const revision of revisions) {
+		const reversedRevisions = revisions.slice().reverse();
+		for (const revision of reversedRevisions) {
 			const stats = Revision.revisionPatchStatsText(revision);
 			result.push({
 				label: `${formatMsToLocal(revision.item_updated_time)} (${stats})`,
 				value: revision.id,
 			});
 		}
+		setHasRevisions(result.length > 0);
 		return result;
 	}, [revisions]);
 
@@ -142,6 +146,31 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		}
 	}, [note]);
 
+	const resetScreenState = useCallback(() => {
+		setCurrentRevisionId(null);
+		setHasRevisions(false);
+		revisions.length = 0;
+		options.length = 0;
+	}, [revisions, options]);
+
+	const [deleting, setDeleting] = useState(false);
+	const deleteHistory_onPress = useDeleteHistoryClick({
+		noteId,
+		setDeleting,
+		resetScreenState,
+	});
+
+	const disableDeleteHistory = deleting || !hasRevisions;
+	const menuOptions = useMemo(() => {
+		const output: MenuOptionType[] = [{
+			title: _('Delete history'),
+			onPress: deleteHistory_onPress,
+			disabled: disableDeleteHistory,
+		}];
+
+		return output;
+	}, [deleteHistory_onPress, disableDeleteHistory]);
+
 	const restoreButtonTitle = _('Restore');
 	const helpMessageText = getHelpMessage(restoreButtonTitle);
 	const dialogs = useContext(DialogContext);
@@ -160,7 +189,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	);
 
 	return <View style={styles.root}>
-		<ScreenHeader title={_('Note history')} />
+		<ScreenHeader menuOptions={menuOptions} title={_('Note history')} />
 		<View style={styles.controls}>
 			<Text variant='labelLarge'>{dropdownLabelText}</Text>
 			<Dropdown

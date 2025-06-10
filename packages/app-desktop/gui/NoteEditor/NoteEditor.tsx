@@ -157,6 +157,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		customCss: props.customCss,
 		plugins: props.plugins,
 		scrollbarSize: props.scrollbarSize,
+		baseFontFamily: props.viewerFontFamily,
 	});
 
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null) => {
@@ -176,9 +177,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
 			scrollbarSize: props.scrollbarSize,
+			baseFontFamily: props.viewerFontFamily,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
-	}, [props.plugins, props.themeId, props.scrollbarSize, props.customCss, props.contentMaxWidth]);
+	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -457,6 +459,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		scrollbarSize: props.scrollbarSize,
+		baseFontFamily: props.viewerFontFamily,
 		isSafeMode: props.isSafeMode,
 		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
@@ -712,6 +715,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		], whenClauseContext)[0] as ToolbarButtonInfo,
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
+		viewerFontFamily: state.settings['style.viewer.fontFamily'],
 		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,

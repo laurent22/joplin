@@ -5,8 +5,11 @@ import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
+import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
+
+const logger = Logger.create('ErrorBoundary');
 
 interface ErrorInfo {
 	componentStack: string;
@@ -83,6 +86,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 		}
 
 		this.setState({ error, errorInfo, pluginInfos, plugins });
+
+		logger.error('The application encountered an error:', error);
+		logger.error('Component stack', errorInfo?.componentStack);
 	}
 
 	public componentDidMount() {

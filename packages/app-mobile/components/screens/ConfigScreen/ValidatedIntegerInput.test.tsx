@@ -27,11 +27,11 @@ describe('ValidatedIntegerInput', () => {
 	});
 
 	test.each(
-		['731', '1e20'],
+		['100000', '1e20'],
 	)('should return error message for too high integer values', async (input) => {
 		const md = Setting.settingMetadata('revisionService.ttlDays');
 		const value = validate(input, md, md.label());
-		expect(value).toBe('Keep note history for cannot be greater than 730');
+		expect(value).toBe('Keep note history for cannot be greater than 99999');
 	});
 
 	test.each(
@@ -43,7 +43,7 @@ describe('ValidatedIntegerInput', () => {
 	});
 
 	test.each(
-		['1', '300', '730', '1.0'],
+		['1', '300', '99999', '1.0'],
 	)('should return empty string for valid integer values for setting with range', async (input) => {
 		const md = Setting.settingMetadata('revisionService.ttlDays');
 		const value = validate(input, md, md.label());
