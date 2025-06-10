@@ -33,7 +33,7 @@ describe('JobProcessor', () => {
 
 	skipIfCI('should execute work on job in the queue', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2'), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', 'images'), 1000);
 		await tw.init();
 
 		const jobId = await queue.send({ filePath: 'htr_sample.png' });
@@ -42,7 +42,7 @@ describe('JobProcessor', () => {
 			await msleep(30 * Second);
 			const response = await queue.getJobById(jobId);
 
-			if (response.state !== 'completed') continue;
+			if (response.state === 'active') continue;
 
 			expect(response.id).toEqual(jobId);
 			expect(response.state).toEqual('completed');
@@ -51,11 +51,11 @@ describe('JobProcessor', () => {
 			// cSpell:enable
 			return;
 		}
-	}, 12 * Minute);
+	}, 6 * Minute);
 
 	skipIfCI('should execute work on job in the queue even if one fails', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2'), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', 'images'), 1000);
 		await tw.init();
 
 		const jobId1 = await queue.send({ filePath: 'non-existing-file' });
@@ -75,5 +75,5 @@ describe('JobProcessor', () => {
 			// cSpell:enable
 			return;
 		}
-	}, 12 * Minute);
+	}, 6 * Minute);
 });

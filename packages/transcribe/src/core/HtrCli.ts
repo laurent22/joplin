@@ -1,27 +1,27 @@
 import Logger from '@joplin/utils/Logger';
 import { execCommand } from '@joplin/utils';
 import { WorkHandler } from '../types';
-import { dirname } from 'path';
 
 const logger = Logger.create('HtrCli');
 
 export default class HtrCli implements WorkHandler {
 
 	private htrCliDockerImage: string;
+	private htrCliImagesFolder: string;
 
-	public constructor(htrCliDockerImage: string) {
+	public constructor(htrCliDockerImage: string, htrCliImagesFolder: string) {
 		this.htrCliDockerImage = htrCliDockerImage;
+		this.htrCliImagesFolder = htrCliImagesFolder;
 	}
 
 	public async init() {
 		logger.info('Loading');
-		const result = await execCommand(`docker pull ${this.htrCliDockerImage}`);
+		const result = await execCommand(`docker pull ${this.htrCliDockerImage}`, { quiet: true });
 		logger.info('Finished loading: ', result);
 	}
 
 	public async run(imageName: string) {
-		const packageRoot = dirname(dirname(dirname(__dirname)));
-		const command = `docker run --rm -t -v "${packageRoot}/images:/images" ${this.htrCliDockerImage} ${imageName}`;
+		const command = `docker run --rm -t -v "${this.htrCliImagesFolder}:/images" ${this.htrCliDockerImage} ${imageName}`;
 
 		logger.info('Running transcription...');
 		logger.info(`Command: ${command}`);

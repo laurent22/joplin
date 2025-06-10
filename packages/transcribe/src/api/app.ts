@@ -33,7 +33,7 @@ const init = async () => {
 	app.context.queue = queue;
 	app.context.storage = fileStorage;
 
-	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE);
+	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE, envVariables.HTR_CLI_IMAGES_FOLDER);
 
 	const jobProcessor = new JobProcessor(queue, htrCli);
 
