@@ -9284,7 +9284,7 @@ __metadata:
     moment: "npm:2.30.1"
     multiparty: "npm:4.2.3"
     mustache: "npm:4.2.0"
-    nanoid: "npm:3.3.7"
+    nanoid: "npm:3.3.9"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
