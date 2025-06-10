@@ -6,13 +6,14 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { BackHandler, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import ExtendedWebView from '../../ExtendedWebView';
 import { OnMessageEvent, WebViewControl } from '../../ExtendedWebView/types';
 import { clearAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
 import { DialogContext } from '../../DialogManager';
 import useEditorMessenger from './utils/useEditorMessenger';
+import BackButtonService from '../../../services/BackButtonService';
 
 
 const logger = Logger.create('ImageEditor');
@@ -124,10 +125,10 @@ const ImageEditor = (props: Props) => {
 			onRequestCloseEditor(true);
 			return true;
 		};
-		const handle = BackHandler.addEventListener('hardwareBackPress', hardwareBackPressListener);
+		BackButtonService.addHandler(hardwareBackPressListener);
 
 		return () => {
-			handle.remove();
+			BackButtonService.removeHandler(hardwareBackPressListener);
 		};
 	}, [onRequestCloseEditor]);
 

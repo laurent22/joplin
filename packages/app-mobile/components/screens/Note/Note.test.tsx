@@ -292,7 +292,7 @@ describe('screens/Note', () => {
 		const deleteButton = await screen.findByText('Delete');
 		expect(deleteButton).toBeDisabled();
 
-		cleanup();
+		act(() => cleanup());
 	});
 
 	it.each([

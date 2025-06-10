@@ -45,10 +45,12 @@ const useIcon = (iconName: string) => {
 const FloatingActionButton = (props: ActionButtonProps) => {
 	const [open, setOpen] = useState(false);
 	const onMenuToggled = useCallback(() => {
-		props.dispatch({
-			type: 'SIDE_MENU_CLOSE',
-		});
 		const newOpen = !open;
+		if (newOpen) {
+			props.dispatch({
+				type: 'SIDE_MENU_CLOSE',
+			});
+		}
 		setOpen(newOpen);
 	}, [setOpen, open, props.dispatch]);
 
