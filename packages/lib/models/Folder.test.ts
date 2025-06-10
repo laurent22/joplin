@@ -1,6 +1,6 @@
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow } from '../testing/test-utils';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 
@@ -174,8 +174,10 @@ describe('models/Folder', () => {
 		await Folder.save({ id: f1.id, parent_id: f3.id });
 
 		const folders = await Folder.all();
-		// Should not loop indefinitely:
-		await Folder.addNoteCounts(folders);
+		// Should not loop indefinitely, okay to warn:
+		await withWarningSilenced(/has itself as a parent/, async () => {
+			await Folder.addNoteCounts(folders);
+		});
 		// Note count may be incorrect
 		expect(folders.find(folder => folder.id === f1.id)).toHaveProperty('note_count');
 	});
