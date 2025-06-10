@@ -9489,7 +9489,7 @@ __metadata:
     jquery: "npm:3.7.1"
     jsdom: "npm:24.1.3"
     knex: "npm:3.1.0"
-    koa: "npm:2.15.3"
+    koa: "npm:2.15.4"
     ldapts: "npm:7.1.0"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
@@ -32672,9 +32672,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.15.3":
-  version: 2.15.3
-  resolution: "koa@npm:2.15.3"
+"koa@npm:2.15.4":
+  version: 2.15.4
+  resolution: "koa@npm:2.15.4"
   dependencies:
     accepts: "npm:^1.3.5"
     cache-content-type: "npm:^1.0.0"
@@ -32699,7 +32699,7 @@ __metadata:
     statuses: "npm:^1.5.0"
     type-is: "npm:^1.6.16"
     vary: "npm:^1.1.2"
-  checksum: 10/b2c2771a4ee5268f9d039ce025b9c3798a0baba8c3cf3895a6fc2d286363e0cd2c98c02a5b87f14100baa2bc17d854eed6ed80f9bd41afda1d056f803b206514
+  checksum: 10/98de77173822f0a28c0f5d1ebd261ab02f3f905d40602e51957a0c7202122647a60c5b6c59be03361dd24bf6a5685eac97af84b306914efd057751e71f93cb0f
   languageName: node
   linkType: hard
 
