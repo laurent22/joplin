@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { render, screen, waitFor } from '@testing-library/react-native';
+import { render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 
 import NoteBodyViewer from './NoteBodyViewer';

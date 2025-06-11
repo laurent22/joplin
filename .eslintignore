@@ -916,6 +916,7 @@ packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/testing/getWebViewWindowById.js
 packages/app-mobile/utils/testing/setupGlobalStore.js
+packages/app-mobile/utils/testing/testingLibrary.js
 packages/app-mobile/utils/types.js
 packages/app-mobile/web/serviceWorker.js
 packages/app-mobile/web/webpack.config.js

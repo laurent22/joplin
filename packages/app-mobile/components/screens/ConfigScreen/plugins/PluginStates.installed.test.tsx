@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
-import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../../utils/testing/testingLibrary';
 
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import pluginServiceSetup from './testUtils/pluginServiceSetup';

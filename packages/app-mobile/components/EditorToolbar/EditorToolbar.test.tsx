@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';

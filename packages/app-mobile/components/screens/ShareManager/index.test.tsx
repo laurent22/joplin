@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ShareManagerComponent } from './index';
 import Setting from '@joplin/lib/models/Setting';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
-import { act, render, screen, userEvent, waitFor } from '@testing-library/react-native';
+import { act, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import ShareService from '@joplin/lib/services/share/ShareService';
