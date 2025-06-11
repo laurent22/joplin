@@ -14019,11 +14019,11 @@ __metadata:
   linkType: hard
 
 "@types/proper-lockfile@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "@types/proper-lockfile@npm:4.1.2"
+  version: 4.1.4
+  resolution: "@types/proper-lockfile@npm:4.1.4"
   dependencies:
     "@types/retry": "npm:*"
-  checksum: 10/9d8a100f96e6df3ce1213eea2696b86de4b75dce3ab5bbc1767226732976bf38d2d2ce1060d6942e76561e8617576547e83bb172e95375192a0b8df1fbca2331
+  checksum: 10/b0d1b8e84a563b2c5f869f7ff7542b1d83dec03d1c9d980847cbb189865f44b4a854673cdde59767e41bcb8c31932e613ac43822d358a6f8eede6b79ccfceb1d
   languageName: node
   linkType: hard
 
