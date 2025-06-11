@@ -805,8 +805,11 @@ export default class Note extends BaseItem {
 		syncDebugLog.info('Save Note: P:', oldNote);
 
 		let beforeNoteJson = null;
-		if (oldNote && this.revisionService().isOldNote(o.id)) {
-			beforeNoteJson = JSON.stringify(oldNote);
+		if (oldNote) {
+			const oldNoteDetails = this.revisionService().cacheOldNoteDetails(o.id, oldNote);
+			if (oldNoteDetails.isOld) {
+				beforeNoteJson = JSON.stringify(oldNoteDetails.oldNote);
+			}
 		}
 
 		const changedFields = [];
