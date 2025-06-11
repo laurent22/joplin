@@ -17,11 +17,6 @@ const { wrapError } = require('../errorUtils');
 
 const logger = Logger.create('RevisionService');
 
-export interface OldNoteDetails {
-	isOld: boolean;
-	oldNote?: NoteEntity;
-}
-
 export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
@@ -31,7 +26,7 @@ export default class RevisionService extends BaseService {
 	// the original note is saved. The goal is to have at least one revision in case the note
 	// is deleted or modified as a result of a bug or user mistake.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private oldNoteDetailsCache_: any = {};
+	private oldNotesCache_: any = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceCalls_: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -51,17 +46,12 @@ export default class RevisionService extends BaseService {
 		return Date.now() - Setting.value('revisionService.oldNoteInterval');
 	}
 
-	public async cacheOldNoteDetails(noteId: string, oldNote: NoteEntity): Promise<OldNoteDetails> {
-		if (noteId in this.oldNoteDetailsCache_) return this.oldNoteDetailsCache_[noteId];
+	public async cacheOldNote(noteId: string, oldNote: NoteEntity) {
+		if (noteId in this.oldNotesCache_) return this.oldNotesCache_[noteId];
 
-		const isOld = await Note.noteIsOlderThan(noteId, this.oldNoteCutOffDate_());
-		const oldNoteDetails: OldNoteDetails = {
-			isOld,
-			oldNote: isOld ? oldNote : null,
-		};
-		this.oldNoteDetailsCache_[noteId] = oldNoteDetails;
+		this.oldNotesCache_[noteId] = oldNote;
 
-		return oldNoteDetails;
+		return oldNote;
 	}
 
 	private noteMetadata_(note: NoteEntity) {
@@ -152,6 +142,8 @@ export default class RevisionService extends BaseService {
 					Note.escapeIdsForSql(noteIds)
 				})`);
 
+				const itemsWithNoRevisions = await Revision.itemsWithNoRevisions(BaseModel.TYPE_NOTE, changes.map(change => change.item_id));
+
 				for (let i = 0; i < changes.length; i++) {
 					const change = changes[i];
 					const noteId = change.item_id;
@@ -162,20 +154,21 @@ export default class RevisionService extends BaseService {
 							const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
 
 							if (note) {
-								if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
-									// This is where we save the original version of this old note
-									const rev = await this.createNoteRevision_(oldNote);
-									if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+								if (oldNote) {
+									// When we edit an existing note with no history, we want to ensure a revision containing the original content, not the new content, is created. But this does not apply if the user has just
+									// created the note, so the difference between the current note updated_time and old note updated_time should be at least as long as the interval period
+									const hasNoRevisionsAndOutsideIntervalPeriod = itemsWithNoRevisions.includes(noteId) && note.updated_time - oldNote.updated_time >= Setting.value('revisionService.intervalBetweenRevisions');
+									if (oldNote.updated_time < this.oldNoteCutOffDate_() || hasNoRevisionsAndOutsideIntervalPeriod) {
+										// This is where we save the original version of this old note
+										const rev = await this.createNoteRevision_(oldNote);
+										if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+									}
 								}
 
 								const rev = await this.createNoteRevision_(note);
 								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
-								const oldNoteDetails: OldNoteDetails = {
-									isOld: false,
-									oldNote: null,
-								};
-								this.oldNoteDetailsCache_[noteId] = oldNoteDetails;
+								delete this.oldNotesCache_[noteId];
 							}
 						}
 
