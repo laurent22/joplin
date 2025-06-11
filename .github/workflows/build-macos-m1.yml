@@ -8,7 +8,7 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-      - uses: olegtarasov/get-tag@v2.1.3
+      - uses: olegtarasov/get-tag@v2.1.4
       - uses: actions/setup-node@v4
         with:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:

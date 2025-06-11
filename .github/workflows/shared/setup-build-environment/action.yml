@@ -47,7 +47,7 @@ runs:
         # Required for building the canvas package
         brew install pango
 
-    - uses: olegtarasov/get-tag@v2.1.3
+    - uses: olegtarasov/get-tag@v2.1.4
     - uses: dtolnay/rust-toolchain@stable
     - uses: actions/setup-node@v4
       with:
