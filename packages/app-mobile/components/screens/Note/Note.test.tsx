@@ -143,6 +143,12 @@ const openEditor = async () => {
 	await expectToBeEditing(true);
 };
 
+const runEditorCommand = async (commandName: string) => {
+	await act(() => {
+		return CommandService.instance().execute(commandName);
+	});
+};
+
 describe('screens/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -340,9 +346,9 @@ describe('screens/Note', () => {
 		render(<WrappedNoteScreen />);
 
 		await expectToBeEditing(false);
-		await CommandService.instance().execute('toggleVisiblePanes');
+		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(true);
-		await CommandService.instance().execute('toggleVisiblePanes');
+		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(false);
 	});
 });
