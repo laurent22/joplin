@@ -3,11 +3,10 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import TestProviderStack from '../testing/TestProviderStack';
 import NoteRevisionViewer from './NoteRevisionViewer';
-import { setupDatabaseAndSynchronizer, switchClient, revisionService, waitFor } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, revisionService } from '@joplin/lib/testing/test-utils';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import Note from '@joplin/lib/models/Note';
 import { useMemo } from 'react';
 import Revision from '@joplin/lib/models/Revision';
@@ -86,20 +85,19 @@ describe('screens/NoteRevisionViewer', () => {
 
 	test('selecting a revision should render its content', async () => {
 		const note = await createNoteWithTestRevisions(3);
-		const { unmount } = render(<WrappedRevisionViewerScreen noteId={note.id}/>);
+		render(<WrappedRevisionViewerScreen noteId={note.id}/>);
 
 		const dropdown = screen.getByRole('button', { name: 'Select a revision...' });
 		fireEvent.press(dropdown);
 
 		// Select the second revision
-		await act(() => waitFor(async () => {
+		await waitFor(() => {
 			const firstRevision = screen.getAllByRole('menuitem')[1];
 			fireEvent.press(firstRevision);
-		}));
+		});
 
-		await act(() => waitFor(async () => {
+		await waitFor(async () => {
 			expect(await getRevisionViewerText()).toBe('Update 2');
-		}));
-		unmount();
+		});
 	});
 });

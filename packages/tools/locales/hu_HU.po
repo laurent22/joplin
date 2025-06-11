@@ -21,7 +21,8 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
-"– Kamera: lehetővé teszi a képkészítést és a képek mellékelését jegyzetekhez."
+"– Kamera: lehetővé teszi a képkészítést és a képek mellékelését a "
+"jegyzetekhez."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:596
 msgid "- Location: to allow attaching geo-location information to a note."
@@ -622,7 +623,7 @@ msgstr "Mellékletütközés: „%s”"
 
 #: packages/lib/models/settings/builtInMetadata.ts:408
 msgid "Attachment download behaviour"
-msgstr "Mellékletek letöltésének működése"
+msgstr "Mellékletek letöltése"
 
 #: packages/lib/services/ReportService.ts:311
 msgid "Attachments"
@@ -730,7 +731,7 @@ msgstr "Beépített"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:85
 msgid "Bulleted List"
-msgstr "Felsorolásos lista"
+msgstr "Felsorolásjeles lista"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:129
 msgid "by %s"
@@ -964,11 +965,11 @@ msgstr "A szinkronizálási beállítások ellenőrzése"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:90
 msgid "Checkbox"
-msgstr "Jelölőnégyzet"
+msgstr "Jelölőnégyzetes lista"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2148
 msgid "Checkbox list"
-msgstr "Jelölőnégyzet-lista"
+msgstr "Jelölőnégyzetes lista"
 
 #: packages/app-mobile/components/Checkbox.tsx:49
 msgid "Checked"
@@ -2107,7 +2108,7 @@ msgstr "Engedélyezi a biometrikus hitelesítést?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1000
 msgid "Enable deflist syntax"
-msgstr "Deflist-szintaxis engedélyezése"
+msgstr "Definícióslista-szintaxis engedélyezése"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:226
 #: packages/app-mobile/components/screens/encryption-config.tsx:317
@@ -2124,7 +2125,7 @@ msgstr "Lábjegyzetek engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:989
 msgid "Enable Fountain syntax support"
-msgstr "Fountain szintaxis engedélyezése"
+msgstr "Forgatókönyv-szintaxis engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:986
 msgid "Enable Linkify"
@@ -2148,7 +2149,7 @@ msgstr "Multimarkdown-táblázatkiegészítő engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1528
 msgid "Enable note history"
-msgstr "Jegyzet előéletének engedélyezése"
+msgstr "Jegyzetelőzmények engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:516
 msgid "Enable optical character recognition (OCR)"
@@ -2212,8 +2213,8 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
-"Engedélyezi a Markdown lista folytatását, az automatikus HTML-címkék "
-"bezárását és egyéb automatikus jelölő-kiegészítéseket."
+"Engedélyezi a Markdown-lista folytatását, az automatikus HTML-címkék "
+"bezárását és egyéb automatikus jelölőkiegészítéseket."
 
 #: packages/lib/models/settings/builtInMetadata.ts:694
 msgid ""
@@ -2248,7 +2249,7 @@ msgstr "Titkosítás"
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:530
 #: packages/app-mobile/components/screens/encryption-config.tsx:334
 msgid "Encryption Config"
-msgstr "Titkosítási beállítás"
+msgstr "Titkosítás beállítása"
 
 #: packages/app-cli/app/command-e2ee.ts:128
 #: packages/app-mobile/components/screens/encryption-config.tsx:353
@@ -2608,7 +2609,8 @@ msgstr[1] "Hivatkozások előállítása…"
 #: packages/lib/models/Setting.ts:1218
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
-"Földrajzi hely, helyesírás-ellenőrzés, szerkesztő-eszköztár, kép átméretezése"
+"Földrajzi hely, helyesírás-ellenőrzés, szerkesztési eszköztár, kép "
+"átméretezése"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
@@ -2724,7 +2726,7 @@ msgstr "Kezdőlap"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 msgid "Horizontal Rule"
-msgstr "Vízszintes vonalzó"
+msgstr "Vízszintes elválasztó vonal"
 
 #: packages/lib/services/interop/InteropService.ts:186
 msgid "HTML Directory"
@@ -2966,7 +2968,7 @@ msgstr "Beágyazott kód"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
-msgstr "Beszúrás"
+msgstr "Aláhúzott"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:198
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.ts:84
@@ -3168,7 +3170,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1540
 msgid "Keep note history for"
-msgstr "Jegyzet előéletének megőrzése"
+msgstr "Jegyzetelőzmények megőrzése egy adott napig"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1818
 msgid "Keep notes in the trash for"
@@ -3837,7 +3839,7 @@ msgstr "Jegyzet elmentve."
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1183
 msgid "Note History"
-msgstr "Jegyzet előélete"
+msgstr "Jegyzetelőzmények"
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4108,7 +4110,7 @@ msgstr "Beállítások"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:77
 msgid "Ordered list"
-msgstr "Rendezett lista"
+msgstr "Számozott lista"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -5099,7 +5101,7 @@ msgstr "Összes megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:633
 msgid "Show completed to-dos"
-msgstr "A befejezett teendők megjelenítése"
+msgstr "Befejezett teendők megjelenítése"
 
 #: packages/server/src/routes/admin/users.ts:206
 msgid "Show disabled"
@@ -6075,7 +6077,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:65
 msgid "This note has no history"
-msgstr "Ennek a jegyzetnek nincs előélete"
+msgstr "Ennek a jegyzetnek nincsenek előzményei"
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6276,7 +6278,9 @@ msgstr "Menüsáv be/ki"
 
 #: packages/lib/models/Setting.ts:1219
 msgid "Toggle note history, keep notes for"
-msgstr "Jegyzet előéletének be-/kikapcsolása, jegyzetek megtartása ehhez"
+msgstr ""
+"Jegyzetelőzmények be-/kikapcsolása, jegyzetelőzmények megőrzése egy adott "
+"napig"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
@@ -6429,7 +6433,7 @@ msgstr "Ismeretlen platform"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:82
 msgid "Unordered list"
-msgstr "Rendezetlen lista"
+msgstr "Felsorolásjeles lista"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:165
 msgid "Unpublish note"
