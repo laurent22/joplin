@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Christoph Eder\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -54,7 +56,7 @@ msgstr "(Ebene %d)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
-msgstr "(Keiner)"
+msgstr "(Kein)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:35
 #: packages/lib/models/settings/builtInMetadata.ts:36
@@ -103,10 +105,9 @@ msgstr "&Fenster"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1538
 #: packages/lib/models/settings/builtInMetadata.ts:1814
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d Tage"
+msgstr[0] "%d Tag"
 msgstr[1] "%d Tage"
 
 #: packages/lib/utils/joplinCloud/index.ts:148
@@ -124,11 +125,10 @@ msgstr "%d GB Speicherplatz"
 #: packages/lib/models/settings/builtInMetadata.ts:1282
 #: packages/lib/models/settings/builtInMetadata.ts:1283
 #: packages/lib/models/settings/builtInMetadata.ts:1284
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d Stunde"
-msgstr[1] "%d Stunde"
+msgstr[1] "%d Stunden"
 
 #: packages/lib/utils/joplinCloud/index.ts:136
 #: packages/lib/utils/joplinCloud/index.ts:137
@@ -145,24 +145,21 @@ msgstr "%d MB pro Notiz oder Anhang"
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 #: packages/lib/models/settings/builtInMetadata.ts:1280
 #: packages/lib/models/settings/builtInMetadata.ts:1281
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d Minuten"
+msgstr[0] "%d Minute"
 msgstr[1] "%d Minuten"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "%d Notizen stimmen mit diesem Muster überein. Löschen?"
+msgstr[0] "%d Notize stimmt mit diesem Muster überein. Löschen?"
 msgstr[1] "%d Notizen stimmen mit diesem Muster überein. Löschen?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
-msgstr[0] "%d Notizen werden dauerhaft gelöscht. Fortfahren?"
+msgstr[0] "%d Notiz wird dauerhaft gelöscht. Fortfahren?"
 msgstr[1] "%d Notizen werden dauerhaft gelöscht. Fortfahren?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
@@ -214,13 +211,12 @@ msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
-#, fuzzy
 msgid "%s cannot be greater than %s"
-msgstr "Konnte neue Notiz nicht erstellen: %s"
+msgstr "%s nach nicht größer als %s sein"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr ""
+msgstr "%s kann nicht weniger als %s sein"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:237
 msgid ""
@@ -232,7 +228,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr ""
+msgstr "%s muss eine gültige ganze Zahl sein"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -246,10 +242,9 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
-msgstr[0] "%s: %d Notizen"
+msgstr[0] "%s: %d Notiz"
 msgstr[1] "%s: %d Notizen"
 
 #: packages/lib/services/ReportService.ts:359
@@ -480,9 +475,8 @@ msgid "Also publish linked notes"
 msgstr "Auch verlinkte Notizen veröffentlichen"
 
 #: packages/lib/versionInfo.ts:93
-#, fuzzy
 msgid "Alternative instance ID: %s"
-msgstr "Client-ID: %s"
+msgstr "Alternative Instanz ID: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:412
 msgid "Always"
@@ -683,7 +677,7 @@ msgstr "Automatisches Hinzufügen deaktivierter Konten zur Löschliste"
 
 #: packages/lib/models/settings/builtInMetadata.ts:693
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr ""
+msgstr "Markdown im Rich Text-Editor autoformatieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:661
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -823,6 +817,8 @@ msgid ""
 "Cancelling will discard the recording. This cannot be undone. Are you sure "
 "you want to proceed?"
 msgstr ""
+"Abbrechen wird die Aufnahme verwerfen. Dies kann nicht rückgängig gemacht "
+"werden. Sicher, dass du fortfahren möchtest?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:206
@@ -839,7 +835,7 @@ msgstr "Kann nicht auf %s zugreifen"
 
 #: packages/app-cli/app/base-command.ts:19
 msgid "Cannot change encrypted item"
-msgstr "Kann verschlüsseltes Objekt nicht ändern"
+msgstr "Kann verschlüsseltes Element nicht ändern"
 
 #: packages/lib/models/Note.ts:618
 msgid "Cannot copy note to \"%s\" notebook"
@@ -967,9 +963,8 @@ msgid "Characters excluding spaces"
 msgstr "Zeichen ohne Leerzeichen"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
-#, fuzzy
 msgid "Check"
-msgstr "Kontrollkästchen"
+msgstr "Haken"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
@@ -994,9 +989,8 @@ msgid "Checkbox list"
 msgstr "Liste mit Kontrollkästchen"
 
 #: packages/app-mobile/components/Checkbox.tsx:49
-#, fuzzy
 msgid "Checked"
-msgstr "Kontrollkästchen"
+msgstr "Angehakt"
 
 #: packages/lib/components/shared/config/config-shared.ts:97
 msgid "Checking... Please wait."
@@ -1037,7 +1031,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr ""
+msgstr "Auf Start klicken um ein neues Sprachmemo der Notiz anzufügen."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1066,9 +1060,8 @@ msgid "Close"
 msgstr "Schließen"
 
 #: packages/app-mobile/components/Modal.tsx:139
-#, fuzzy
 msgid "Close dialog"
-msgstr "Fenster schließen"
+msgstr "Schließen-Dialog"
 
 #: packages/app-mobile/components/Dropdown.tsx:199
 msgid "Close dropdown"
@@ -1095,7 +1088,7 @@ msgstr "Fenster schließen"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr ""
+msgstr "Sitzung schließen..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
@@ -1127,14 +1120,12 @@ msgid "Collaborate on notebooks with others"
 msgstr "Gemeinsam mit anderen an Notizbüchern arbeiten"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Collapse all notebooks"
-msgstr "Notizbuch erstellen"
+msgstr "Alle Notizbücher einklappen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
-#, fuzzy
 msgid "Collapsed"
-msgstr "Einklappen"
+msgstr "Eingeklappt"
 
 #: packages/lib/services/ReportService.ts:386
 msgid "Coming alarms"
@@ -1219,6 +1210,7 @@ msgstr "Konfiguration"
 #: packages/lib/models/settings/builtInMetadata.ts:1173
 msgid "Configures the size of scrollbars used in the app."
 msgstr ""
+"Konfiguriert die Größe der Bildlaufleisten, die in der App verwendet werden."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1482,9 +1474,8 @@ msgid "Created: %s"
 msgstr "Erstellt: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:65
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
-msgstr "Erstelle ein neues Notizbuch unter einem übergeordneten Notizbuch."
+msgstr "Erstellt eine neue Notiz mit Anhang des Typs %s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1587,16 +1578,16 @@ msgstr "Einrückung verringern"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Decrypted items: %d"
-msgstr "Entschlüsselte Objekte: %d"
+msgstr "Entschlüsselte Elemente: %d"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:45
 msgid "Decrypted items: %s / %s"
-msgstr "Entschlüsselte Objekte: %s / %s"
+msgstr "Entschlüsselte Elemente: %s / %s"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:48
 #: packages/app-mobile/components/side-menu-content.tsx:637
 msgid "Decrypting items: %d/%d"
-msgstr "Entschlüsselte Objekte: %d/%d"
+msgstr "Entschlüsselte Elemente: %d/%d"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1116
 #: packages/lib/models/settings/builtInMetadata.ts:1123
@@ -1743,7 +1734,7 @@ msgstr "Entwicklung"
 
 #: packages/lib/versionInfo.ts:88
 msgid "Device: %s"
-msgstr ""
+msgstr "Gerät: %s"
 
 #: packages/lib/services/interop/Module.ts:62
 msgid "Directory"
@@ -1767,9 +1758,8 @@ msgid "Disable safe mode and restart"
 msgstr "Sicheren Modus beenden und neu starten"
 
 #: packages/app-desktop/gui/MainScreen.tsx:594
-#, fuzzy
 msgid "Disable synchronisation"
-msgstr "Synchronisation abbrechen"
+msgstr "Synchronisation deaktivieren"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
@@ -1903,9 +1893,8 @@ msgstr ""
 "installiere sie:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:586
-#, fuzzy
 msgid "Download it now"
-msgstr "Wird heruntergeladen"
+msgstr "Jetzt herunterladen"
 
 #: packages/lib/models/Resource.ts:409
 msgid "Downloaded"
@@ -1988,9 +1977,8 @@ msgstr ""
 "dupliziert."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:217
-#, fuzzy
 msgid "Duration: %s"
-msgstr "Deine Version: %s"
+msgstr "Dauer: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:94
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
@@ -2181,7 +2169,7 @@ msgstr "Mermaid-Diagrammunterstützung aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1004
 msgid "Enable multimarkdown table extension"
-msgstr "Multimarkdown Tabellenerweiterung aktivieren"
+msgstr "Multimarkdown-Tabellenerweiterung aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1528
 msgid "Enable note history"
@@ -2202,7 +2190,7 @@ msgstr "PDF-Betrachter aktivieren"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:942
 msgid "Enable plugin support"
-msgstr "Erweiterungs-Unterstützung aktivieren"
+msgstr "Unterstützung von Erweiterungen aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:984
 msgid "Enable soft breaks"
@@ -2226,7 +2214,7 @@ msgstr "Markdown-Werkzeugleiste aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:985
 msgid "Enable typographer support"
-msgstr "Typographie-Unterstützung aktivieren"
+msgstr "Unterstützung von Typographie aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:993
 msgid "Enable video player"
@@ -2257,6 +2245,8 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
+"Aktiviert Markdown-Musterersetzung im Rich Text-Editor. Zum Beispiel die "
+"Eingabe von **fett** erstellt fetten Text, falls aktiviert."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2391,14 +2381,12 @@ msgid "Expand %s"
 msgstr "%s ausklappen"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Expand all notebooks"
-msgstr "Notizbuch bearbeiten"
+msgstr "Alle Notizbücher ausklappen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
-#, fuzzy
 msgid "Expanded"
-msgstr "Erweitern"
+msgstr "Ausgeklappt"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:182
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:213
@@ -2483,6 +2471,10 @@ msgid ""
 "target is empty or damaged. To override this behaviour disable the fail-safe "
 "in the sync settings."
 msgstr ""
+"Ausfallsicherheit: Synchronisation wurde unterbrochen um Datenverlust zu "
+"vermeiden, weil das Ziel leer oder beschädigt ist. Um dieses Verhalten außer "
+"Kraft zu setzen, deaktiviere die Ausfallsicherheit in den "
+"Synchronisationseinstellungen."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2529,7 +2521,7 @@ msgstr "Suche: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:208
 msgid "Finishes recording"
-msgstr ""
+msgstr "Aufnahme abschließen"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
@@ -2889,7 +2881,7 @@ msgstr ""
 "Bei jedem Befehl können Notizen oder Notizbücher durch ihren Titel oder ihre "
 "ID angegeben werden oder durch die Abkürzungen `$n` oder `$b` für die "
 "aktuelle Notiz bzw. das aktuelle Notizbuch. `$c` kann benutzt werden, um auf "
-"die momentane Auswahl zu verweisen."
+"momentan ausgewählte Element zu verweisen."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:530
 msgid ""
@@ -3055,7 +3047,7 @@ msgstr "Ungültiger Befehl: „%s“"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
-msgstr ""
+msgstr "Ungültiges Format. Z.B.: 48.8581372, 2.2926735"
 
 #: packages/lib/models/Setting.ts:665
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -3093,9 +3085,8 @@ msgid "Items that cannot be synchronised"
 msgstr "Elemente, die nicht synchronisiert werden können"
 
 #: packages/lib/services/ReportService.ts:294
-#, fuzzy
 msgid "Items with error: %s"
-msgstr "Letzte Fehlermeldung: %s"
+msgstr "Elemente mit Fehlern: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:949
 msgid "Join us on %s"
@@ -3242,7 +3233,7 @@ msgstr "Sprache, Datumsformat"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1169
 msgid "Large"
-msgstr ""
+msgstr "Groß"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3263,7 +3254,7 @@ msgstr "Layout"
 
 #: packages/app-desktop/gui/MenuBar.tsx:807
 msgid "Layout button sequence"
-msgstr "Layout Button-Reihenfolge"
+msgstr "Layout-Schaltflächenfolge"
 
 #: packages/app-desktop/bridge.ts:465
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:118
@@ -3327,9 +3318,8 @@ msgid "Link text"
 msgstr "Link-Text"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
-#, fuzzy
 msgid "Link to note..."
-msgstr "In Notizbuch verschieben..."
+msgstr "Link zu Notiz..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3513,7 +3503,7 @@ msgstr "Medienspieler, Mathematik, Diagramme, Inhaltsverzeichnis"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1168
 msgid "Medium"
-msgstr ""
+msgstr "Mittel"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3532,9 +3522,8 @@ msgid "Missing Master Keys"
 msgstr "Fehlende Hauptschlüssel"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:120
-#, fuzzy
 msgid "Missing permission to record audio."
-msgstr "Fehlende Berechtigung zur Verwendung der Kamera"
+msgstr "Fehlende Berechtigung zur Aufnahme von Audio."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3570,20 +3559,18 @@ msgstr ""
 "zur Verfügung, um eingesehen zu werden."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
-msgstr[0] "%d Notizen in das Notizbuch „%s“ verschieben?"
+msgstr[0] "%d Notiz in das Notizbuch „%s“ verschieben?"
 msgstr[1] "%d Notizen in das Notizbuch „%s“ verschieben?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
-#, fuzzy
 msgid "Move down"
-msgstr "Auswahlliste schließen"
+msgstr "Abwärts bewegen"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:74
 msgid "Move left"
-msgstr ""
+msgstr "Nach links bewegen"
 
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3601,7 +3588,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
-msgstr ""
+msgstr "Nach rechts bewegen"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
@@ -3617,7 +3604,7 @@ msgstr "In Notizbuch verschieben..."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:72
 msgid "Move up"
-msgstr ""
+msgstr "Aufwärts bewegen"
 
 # der/die/das gewählte?
 #: packages/app-cli/app/command-mv.ts:14
@@ -3650,12 +3637,12 @@ msgid "New invitations"
 msgstr "Neue Einladungen"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
-#, fuzzy
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
 msgstr ""
-"Es ist eine Aktualisierung verfügbar. Soll sie jetzt heruntergeladen werden?"
+"Neues Modell verfügbar.\n"
+"Soll sie jetzt heruntergeladen werden?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:112
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -3687,9 +3674,8 @@ msgid "New photo"
 msgstr "Neues Foto"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
-#, fuzzy
 msgid "New profile"
-msgstr "Profil wechseln"
+msgstr "Neues Profil"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -3817,7 +3803,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:164
 msgid "Not checked"
-msgstr ""
+msgstr "Nicht angehakt"
 
 #: packages/lib/models/Resource.ts:407
 msgid "Not downloaded"
@@ -3909,9 +3895,8 @@ msgstr "Notiz-Titel"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:242
-#, fuzzy
 msgid "Note viewer"
-msgstr "Notiz-Titel"
+msgstr "Notiz-Betrachter"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1030
 msgid "Note: Does not work in all desktop environments."
@@ -3975,9 +3960,8 @@ msgstr "Notizen können nur in einem Notizbuch erstellt werden."
 
 # Please note: The term 'Location' is assumed to be the geographical location where the note has been created. For this the german word 'Standort' fits better than the previously used 'Ablageort'. The latter one is used for the folder where files are stored.
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
-#, fuzzy
 msgid "Notifications"
-msgstr "Standort"
+msgstr "Benachrichtigungen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:80
 msgid "Numbered List"
@@ -4040,10 +4024,11 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Ein oder mehrere Objekte sind derzeit verschlüsselt und es kann erforderlich "
-"sein, ein Master-Passwort zu hinterlegen. Gib dazu bitte `e2ee decrypt` ein. "
-"Wenn du das Passwort bereits eingegeben hast, werden die verschlüsselten "
-"Objekte im Hintergrund entschlüsselt und stehen in Kürze zur Verfügung."
+"Ein oder mehrere Elemente sind derzeit verschlüsselt und es kann "
+"erforderlich sein, ein Master-Passwort zu hinterlegen. Gib dazu bitte `e2ee "
+"decrypt` ein. Wenn du das Passwort bereits eingegeben hast, werden die "
+"verschlüsselten Objekte im Hintergrund entschlüsselt und stehen in Kürze zur "
+"Verfügung."
 
 #: packages/app-desktop/gui/MainScreen.tsx:577
 msgid "One or more master keys need a password."
@@ -4074,23 +4059,20 @@ msgid "Open %s"
 msgstr "Öffne %s"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
-#, fuzzy
 msgid "Open in external editor"
-msgstr "Im externen Editor bearbeiten"
+msgstr "In externem Editor öffnen"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
-#, fuzzy
 msgid "Open in new window"
-msgstr "Bearbeiten in neuem Fenster"
+msgstr "In neuem Fenster öffnen"
 
 #: packages/app-desktop/bridge.ts:466
 msgid "Open it"
 msgstr "Öffne es"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "Öffne %s"
+msgstr "Öffne Bericht"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -4098,7 +4080,7 @@ msgstr "PDF-Betrachter öffnen"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Primäre App-Instanz öffnen…"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4106,7 +4088,7 @@ msgstr "Profilverzeichnis öffnen"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Zweite App-Instanz öffnen…"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
 msgid "Open settings"
@@ -4174,11 +4156,11 @@ msgstr "Seitengröße für den PDF-Export"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Feld „%s“ ist sichtbar"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "%s-Feld ist versteckt"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4220,7 +4202,6 @@ msgid "PDF File"
 msgstr "PDF-Datei"
 
 #: packages/lib/utils/joplinCloud/index.ts:408
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
 msgstr "Pro Nutzer. Minimum von %d Nutzern."
 
@@ -4242,10 +4223,9 @@ msgstr ""
 "diesem Notizbuch werden ebenfalls gelöscht."
 
 #: packages/lib/models/Note.ts:944
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
-msgstr[0] "Diese %d Notizen dauerhaft löschen?"
+msgstr[0] "Diese Notiz dauerhaft löschen?"
 msgstr[1] "Diese %d Notizen dauerhaft löschen?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
@@ -4302,7 +4282,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:332
 msgid "Please provide the recipient email"
-msgstr ""
+msgstr "Bitte gib die E-Mail des Empfängers an"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4393,8 +4373,8 @@ msgid ""
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
 "Mit Erweiterungen lassen sich in Joplin zusätzliche Funktionen hinzufügen, "
-"die standardmäßig nicht verfügbar sind. Erweiterungen können den Editor, die "
-"Ansicht und vieles mehr ergänzen."
+"die standardmäßig nicht verfügbar sind. Erweiterungen können Editor, "
+"Betrachter und vieles mehr ergänzen."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1316
 msgid "Portrait"
@@ -4436,7 +4416,7 @@ msgstr "Bevorzugter Anbieter für Spracheingabe"
 
 #: packages/lib/models/settings/builtInMetadata.ts:683
 msgid "Preserve colours when pasting text in Rich Text Editor"
-msgstr "Farben erhalten beim Einfügen von Text im Rich Text-Editor"
+msgstr "Farben beim Einfügen von Text im Rich Text-Editor erhalten"
 
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -4628,7 +4608,7 @@ msgstr "Audio aufnehmen"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
 msgid "Recording"
-msgstr "Aufnahme"
+msgstr "Aufnehmen"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Recording..."
@@ -4941,7 +4921,7 @@ msgstr "Eingescannter Code"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1172
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Bildlaufleistengröße"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -5185,7 +5165,7 @@ msgstr "Zeige Passwort"
 
 #: packages/lib/models/settings/builtInMetadata.ts:735
 msgid "Show sort order buttons"
-msgstr "Buttons für die Sortierreihenfolge anzeigen"
+msgstr "Schaltflächen für die Sortierreihenfolge anzeigen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1028
 msgid "Show tray icon"
@@ -5220,9 +5200,8 @@ msgid "Sidebar"
 msgstr "Seitenleiste"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "Mit Joplin Cloud verbinden."
+msgstr "Mit Joplin Cloud verbinden"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5235,7 +5214,7 @@ msgstr "Überspringe diese Version"
 #: packages/app-cli/app/command-e2ee.ts:66
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
-"Übersprungene Objekte: %d (benutze --retry-failed-items um erneut eine "
+"Übersprungene Elemente: %d (benutze --retry-failed-items um erneut eine "
 "Entschlüsselung zu versuchen)"
 
 #: packages/app-cli/app/command-import.ts:53
@@ -5245,7 +5224,7 @@ msgstr "Übersprungen: %d."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1167
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 #: packages/lib/models/settings/builtInMetadata.ts:52
 msgid "Solarised Dark"
@@ -5361,7 +5340,7 @@ msgstr "Anwendung minimiert als Taskleistensymbol starten"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:199
 msgid "Start recording"
-msgstr ""
+msgstr "Aufnahme starten"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -5462,9 +5441,8 @@ msgid "Subscript"
 msgstr "Tiefgestellt"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:16
-#, fuzzy
 msgid "Success"
-msgstr "S3-Zugriffsschlüssel"
+msgstr "Erfolg"
 
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -5472,9 +5450,8 @@ msgstr ""
 "Erfolgreich! Die Synchronisationskonfiguration scheint korrekt zu sein."
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:182
-#, fuzzy
 msgid "Suggestions"
-msgstr "Keine Vorschläge"
+msgstr "Vorschläge"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
@@ -5547,7 +5524,7 @@ msgstr "Synchronisationsstatus"
 
 #: packages/lib/services/ReportService.ts:355
 msgid "Sync status (synced items / total items)"
-msgstr "Synchronisationsstatus (Elemente synchronisiert / Elemente insgesamt)"
+msgstr "Synchronisationsstatus (Elemente synchronisiert / insgesamt)"
 
 #: packages/app-cli/app/command-sync.ts:271
 msgid "Sync target must be upgraded! Run `%s` to proceed."
@@ -5625,14 +5602,13 @@ msgid "Synchronizing..."
 msgstr "Synchronisieren..."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
-#, fuzzy
 msgid "Tab indents"
-msgstr "Inhaltsverzeichnis"
+msgstr "Tabulator-Einrückungen"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:713
 msgid "Tab moves focus"
-msgstr ""
+msgstr "Tab verschiebt Fokus"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1310
 msgid "Tabloid"
@@ -5794,7 +5770,7 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"Die Faktor-Eigenschaft legt fest, wie der Artikel wächst oder schrumpft, um "
+"Die Faktor-Eigenschaft legt fest, wie das Element wächst oder schrumpft, um "
 "dem verfügbaren Platz in seinem Container in Bezug auf die anderen Artikel "
 "zu entsprechen. Ein Element mit dem Faktor 2 benötigt also doppelt so viel "
 "Platz wie ein Element mit dem Faktor 1. Starte die App neu, um Änderungen zu "
@@ -5843,7 +5819,7 @@ msgid ""
 "eventually be downloaded via synchronisation."
 msgstr ""
 "Die Schlüssel mit diesen IDs werden zur Verschlüsselung einiger deiner "
-"Objekte verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
+"Elemente verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
 "Es ist wahrscheinlich, dass sie irgendwann über die Synchronisation "
 "heruntergeladen werden."
 
@@ -5858,7 +5834,7 @@ msgid ""
 "they will eventually be downloaded via synchronisation."
 msgstr ""
 "Die Hauptschlüssel mit diesen IDs werden zur Verschlüsselung einiger deiner "
-"Objekte verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
+"Elemente verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
 "Es ist wahrscheinlich, dass sie irgendwann über die Synchronisation "
 "heruntergeladen werden."
 
@@ -5972,9 +5948,9 @@ msgstr ""
 "Der Web Clipper benötigt deine Autorisierung, um auf die Daten zuzugreifen."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
-msgstr "Der Web Clipper-Dienst ist aktiviert und auf Autostart eingestellt."
+msgstr ""
+"Der Web Clipper-Dienst kann in dieser Joplin-Instanz nicht aktiviert werden."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
@@ -6004,8 +5980,8 @@ msgstr "Erscheinungsbilder, Editor-Schriftart"
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf den (+)-"
-"Knopf drückst."
+"Momentan existieren noch keine Notizen. Erstelle eine, indem du auf die (+)-"
+"Schaltfläche drückst."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
 msgid "There are no notes in the trash folder."
@@ -6146,7 +6122,7 @@ msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr ""
-"Diese Notiz hat keinen Inhalt. Klicke auf „%s“, um den Editor zu aktivieren "
+"Diese Notiz hat keinen Inhalt. Klicke auf „%s“, um den Editor umzuschalten "
 "und die Notiz zu bearbeiten."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:65
@@ -6321,9 +6297,8 @@ msgid "to-do: %s"
 msgstr "Aufgabe: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
-#, fuzzy
 msgid "Toggle all notebooks"
-msgstr "Wählt ein Notizbuch aus"
+msgstr "Alle Notizbücher umschalten"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6342,9 +6317,8 @@ msgid "Toggle editor plugin"
 msgstr "Editor-Erweiterung umschalten"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
-msgstr "Editorlayout umschalten"
+msgstr "Tabulatortastennavigation des Editors umschalten"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6371,9 +6345,8 @@ msgid "Toggle own sort order"
 msgstr "Eigene Sortierreihenfolge umschalten"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:434
-#, fuzzy
 msgid "Toggle plugin editor"
-msgstr "Editoren umschalten"
+msgstr "Erweiterungseditor umschalten"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -6392,9 +6365,8 @@ msgid "Token has been copied to the clipboard!"
 msgstr "Token wurde in die Zwischenablage kopiert!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
-msgstr "Werkzeuge"
+msgstr "Werkzeugleiste"
 
 #: packages/lib/models/Setting.ts:1188
 msgid "Tools"
@@ -6447,9 +6419,8 @@ msgstr ""
 "eines Notizbuchs ein. Oder gib : für eine Suche nach Befehlen ein."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Neues Schlagwort eingeben oder aus der Liste auswählen"
+msgstr "Notiz-Titel eingeben um danach zu suchen."
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.tsx:235
 msgid "Type new tags or select from list"
@@ -6469,7 +6440,7 @@ msgstr "Protokolldaten können nicht geteilt werden. Grund: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr ""
+msgstr "Nicht angehakt"
 
 #: packages/lib/models/settings/builtInMetadata.ts:632
 msgid "Uncompleted to-dos on top"
@@ -6507,7 +6478,9 @@ msgstr "Unbekanntes Argument: %s"
 #: packages/lib/Synchronizer.ts:1135
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr "Unbekannter Eintrags-Typ heruntergeladen - bitte aktualisiere Joplin"
+msgstr ""
+"Unbekannter Elementtyp heruntergeladen - bitte aktualisiere Joplin auf die "
+"neueste Version"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
 msgid "Unknown platform"
@@ -6748,12 +6721,11 @@ msgstr "Zeige sie jetzt an"
 #: packages/lib/models/settings/builtInMetadata.ts:625
 #: packages/lib/models/settings/builtInMetadata.ts:627
 msgid "Viewer"
-msgstr "Vorschau"
+msgstr "Betrachter"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1083
-#, fuzzy
 msgid "Viewer font size"
-msgstr "Schriftgröße im Editor"
+msgstr "Schriftgröße im Betrachter"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1346
 msgid "Vim"
@@ -6761,7 +6733,7 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Voice recorder"
-msgstr ""
+msgstr "Sprachrekorder"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1772
 msgid "Voice typing language files (URL)"
@@ -6930,6 +6902,8 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Du verwendest die Intel-Version von Joplin auf einem Apple Silicon-"
+"Prozessor. Lade die für Apple Silicon herunter für bessere Leistung."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."

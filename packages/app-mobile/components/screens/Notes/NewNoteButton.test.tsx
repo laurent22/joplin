@@ -6,7 +6,6 @@ import { Store } from 'redux';
 import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import { act, render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
 import { AccessibilityActionInfo } from 'react-native';
 import { setupDatabaseAndSynchronizer } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';

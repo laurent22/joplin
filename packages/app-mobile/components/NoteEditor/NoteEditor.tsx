@@ -387,6 +387,7 @@ function NoteEditor(props: Props, ref: any) {
 
 			try {
 				${shim.injectedJs('codeMirrorBundle')};
+				codeMirrorBundle.setUpLogger();
 
 				const parentElement = document.getElementsByClassName('CodeMirror')[0];
 				// On Android, injectJavaScript is run twice -- once before the parent element exists.

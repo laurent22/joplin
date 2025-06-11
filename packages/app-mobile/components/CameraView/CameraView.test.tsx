@@ -2,7 +2,6 @@ import * as React from 'react';
 import CameraView from './CameraView';
 import { CameraResult } from './types';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import TestProviderStack from '../testing/TestProviderStack';
 

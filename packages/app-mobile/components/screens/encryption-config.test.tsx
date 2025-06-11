@@ -8,7 +8,6 @@ import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { getActiveMasterKeyId, setEncryptionEnabled, setMasterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { act, render, screen } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
 
 interface WrapperProps { }
 
