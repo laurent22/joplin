@@ -32227,7 +32227,7 @@ __metadata:
     strip-ansi: "npm:6.0.1"
     tcp-port-used: "npm:1.0.2"
     temp: "npm:0.9.4"
-    terminal-kit: "npm:3.1.1"
+    terminal-kit: "npm:3.1.2"
     tkwidgets: "npm:0.5.27"
     typescript: "npm:5.4.5"
     url-parse: "npm:1.5.10"
@@ -45511,10 +45511,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-kit@npm:^0.18.1":
-  version: 0.18.2
-  resolution: "string-kit@npm:0.18.2"
-  checksum: 10/6af8a2aa5ef67a2b8accd7b95085e61c67bf254e068f78b820f784b4119cc9b2eed1d0edccfbb3d64dc1e0f2b60cc7d0bcf0c5a9f4282c99cf896709a7a46da5
+"string-kit@npm:^0.19.0":
+  version: 0.19.2
+  resolution: "string-kit@npm:0.19.2"
+  checksum: 10/190cab08820e7294925eb3a4cb4b15955dcd6c26e7159160be08ce32021320caf6a32623b509d6b99940989cf3b588e5b79fadd9f4517a60781cafea3edfe774
   languageName: node
   linkType: hard
 
@@ -46773,9 +46773,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terminal-kit@npm:3.1.1":
-  version: 3.1.1
-  resolution: "terminal-kit@npm:3.1.1"
+"terminal-kit@npm:3.1.2":
+  version: 3.1.2
+  resolution: "terminal-kit@npm:3.1.2"
   dependencies:
     "@cronvel/get-pixels": "npm:^3.4.1"
     chroma-js: "npm:^2.4.2"
@@ -46783,9 +46783,9 @@ __metadata:
     ndarray: "npm:^1.0.19"
     nextgen-events: "npm:^1.5.3"
     seventh: "npm:^0.9.2"
-    string-kit: "npm:^0.18.1"
+    string-kit: "npm:^0.19.0"
     tree-kit: "npm:^0.8.7"
-  checksum: 10/c6c2fad07883ca93a627b10be714d8270e63415bae308f53a88e01986d3fa5489e7221f80c3d8ef354010b485e9f385ba25487cdd7c3e6216b42fb0bce7d3f5a
+  checksum: 10/e9292200b7225603649d44a1a7192b420ef9a125b2d70b1d92d46984c4369b6dee73a673dd75ae6181a59ebb6174f77df29696f35e7712c1e255d8b241a598ee
   languageName: node
   linkType: hard
 

@@ -63,7 +63,8 @@ describe('ShareNoteDialog', () => {
 
 		await waitFor(() => {
 			expect(screen.getByText('Link has been copied to clipboard!')).toBeVisible();
-		});
+			// Synchronization can take a long time
+		}, { timeout: 20 * 1000 });
 		expect(await Note.load(note.id)).toMatchObject({
 			is_shared: 1,
 		});
