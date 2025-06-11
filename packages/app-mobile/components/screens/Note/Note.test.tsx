@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
 
 import NoteScreen from './Note';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
@@ -113,7 +112,7 @@ const openNoteActionsMenu = async () => {
 
 	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
 	// warnings).
-	await act(async () => {
+	await waitFor(async () => {
 		await runWithFakeTimers(async () => {
 			await userEvent.press(actionMenuButton);
 		});
@@ -156,10 +155,7 @@ describe('screens/Note', () => {
 		// In order for note changes to be saved, note-screen-shared requires
 		// that at least one folder exist.
 		await Folder.save({ title: 'test', parent_id: '' });
-	});
-
-	afterEach(() => {
-		screen.unmount();
+		jest.useRealTimers();
 	});
 
 	it('should show the currently selected note', async () => {
@@ -210,27 +206,27 @@ describe('screens/Note', () => {
 		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });
 
 		const noteScreen = render(<WrappedNoteScreen />);
-		await act(async () => await runWithFakeTimers(async () => {
-			await openEditor();
-			const editor = await getNoteEditorControl();
+		await openEditor();
+		const editor = await getNoteEditorControl();
+		await act(async () => {
 			editor.select(defaultBody.length, defaultBody.length);
-
 			editor.insertText(' Testing!!!');
-			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
 
+			expect(editor.editor.state.doc.toString()).toBe('Change me! Testing!!!');
+		});
+
+		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
+
+		await act(async () => {
 			editor.insertText(' This is a test.');
 			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test.' });
 
 			// should also save changes made shortly before unmounting
 			editor.insertText(' Test!');
 
-			// TODO: Decreasing this below 100 causes the test to fail.
-			//       See issue #11125.
-			await jest.advanceTimersByTimeAsync(450);
-
 			noteScreen.unmount();
 			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
-		}));
+		});
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {
@@ -290,7 +286,7 @@ describe('screens/Note', () => {
 
 		await openNoteActionsMenu();
 		const deleteButton = await screen.findByText('Delete');
-		expect(deleteButton).toBeDisabled();
+		expect(deleteButton).toHaveProp('disabled', true);
 
 		act(() => cleanup());
 	});
