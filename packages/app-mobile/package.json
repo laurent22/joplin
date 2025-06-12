@@ -95,7 +95,7 @@
     "@js-draw/material-icons": "1.30.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@react-native-community/cli": "15.0.1",
-    "@react-native-community/cli-platform-android": "15.0.1",
+    "@react-native-community/cli-platform-android": "15.1.3",
     "@react-native-community/cli-platform-ios": "15.0.1",
     "@react-native/babel-preset": "0.79.2",
     "@react-native/metro-config": "0.79.2",
