@@ -6070,17 +6070,17 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:3":
-  version: 3.15.0
-  resolution: "@crowdin/cli@npm:3.15.0"
+  version: 3.19.4
+  resolution: "@crowdin/cli@npm:3.19.4"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
-    node-fetch: "npm:2.6.7"
-    shelljs: "npm:^0.8.4"
-    tar: "npm:^4.4.8"
-    yauzl: "npm:^2.10.0"
+    node-fetch: "npm:2.7.0"
+    shelljs: "npm:^0.8.5"
+    tar: "npm:^6.2.0"
+    yauzl: "npm:^3.1.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/17ccc8d8c124ee9d82da92581ab022d060cb1e74d5df5e0243e13e001cb07cc9273238aec243a644760ad8be957b1a3dff17a419abacb50a06ae5ade10407d69
+  checksum: 10/bab4e08be0a0693f787e170a669a750cae3478c8efb6936b32812076d71dcab92ef573f2d9ea701e7d6a5d7fbe95133c38a1dca62e0357d985901694e449f4a2
   languageName: node
   linkType: hard
 
@@ -36260,16 +36260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.2.0, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1":
-  version: 2.6.6
-  resolution: "node-fetch@npm:2.6.6"
-  dependencies:
-    whatwg-url: "npm:^5.0.0"
-  checksum: 10/58235868373af390dfafbda5576fbe54f1ba357f4c16189ca328332a5d3a62142c113d3bbdce60c6fc0d4f9718c8a102917ea9b5c6814553d80c679da56b9f1a
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.9":
+"node-fetch@npm:2.7.0, node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.9":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -36280,6 +36271,15 @@ __metadata:
     encoding:
       optional: true
   checksum: 10/b24f8a3dc937f388192e59bcf9d0857d7b6940a2496f328381641cb616efccc9866e89ec43f2ec956bbd6c3d3ee05524ce77fe7b29ccd34692b3a16f237d6676
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.2.0, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1":
+  version: 2.6.6
+  resolution: "node-fetch@npm:2.6.6"
+  dependencies:
+    whatwg-url: "npm:^5.0.0"
+  checksum: 10/58235868373af390dfafbda5576fbe54f1ba357f4c16189ca328332a5d3a62142c113d3bbdce60c6fc0d4f9718c8a102917ea9b5c6814553d80c679da56b9f1a
   languageName: node
   linkType: hard
 
@@ -46464,7 +46464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.2.1":
+"tar@npm:6.2.1, tar@npm:^6.2.0":
   version: 6.2.1
   resolution: "tar@npm:6.2.1"
   dependencies:
@@ -51135,6 +51135,16 @@ __metadata:
     buffer-crc32: "npm:~0.2.3"
     fd-slicer: "npm:~1.1.0"
   checksum: 10/1e4c311050dc0cf2ee3dbe8854fe0a6cde50e420b3e561a8d97042526b4cf7a0718d6c8d89e9e526a152f4a9cec55bcea9c3617264115f48bd6704cf12a04445
+  languageName: node
+  linkType: hard
+
+"yauzl@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "yauzl@npm:3.2.0"
+  dependencies:
+    buffer-crc32: "npm:~0.2.3"
+    pend: "npm:~1.2.0"
+  checksum: 10/a3cd2bfcf7590673bb35750f2a4e5107e3cc939d32d98a072c0673fe42329e390f471b4a53dbbd72512229099b18aa3b79e6ddb87a73b3a17446080c903a2c4b
   languageName: node
   linkType: hard
 
