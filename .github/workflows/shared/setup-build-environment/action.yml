@@ -49,6 +49,7 @@ runs:
 
     - uses: olegtarasov/get-tag@v2.1.4
     - uses: dtolnay/rust-toolchain@stable
+      if: ${{ runner.os != 'Windows' }}
     - uses: actions/setup-node@v4
       with:
         node-version: '18.18.0'
