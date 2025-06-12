@@ -542,6 +542,7 @@ packages/app-desktop/integration-tests/util/evaluateWithRetry.js
 packages/app-desktop/integration-tests/util/extendedExpect.js
 packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/getMainWindow.js
+packages/app-desktop/integration-tests/util/retryOnFailure.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
