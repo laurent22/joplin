@@ -8928,7 +8928,7 @@ __metadata:
     "@react-native-community/cli-platform-android": "npm:15.1.3"
     "@react-native-community/cli-platform-ios": "npm:15.0.1"
     "@react-native-community/datetimepicker": "npm:8.3.0"
-    "@react-native-community/geolocation": "npm:3.3.0"
+    "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.11.0"
     "@react-native-documents/picker": "npm:10.1.2"
@@ -11852,13 +11852,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/geolocation@npm:3.3.0":
-  version: 3.3.0
-  resolution: "@react-native-community/geolocation@npm:3.3.0"
+"@react-native-community/geolocation@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@react-native-community/geolocation@npm:3.4.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/8eefb441015d5bd2c89a70130d54fbdb4a49461e8df66572f48dc8885812c560a8d20b9a63c3b55fee17eb6c8f6eb9f0b0be940323b648df5fadd477d0032523
+  checksum: 10/e8f9c487dbea6ae0540185f07d92aca68a1efc823ef572492776b7533be9eebe0234374b9a34f1837899a15e98dbd7673e906380442c19313405bccf7f3e42b1
   languageName: node
   linkType: hard
 
