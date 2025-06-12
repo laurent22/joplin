@@ -70,7 +70,7 @@ export default class RevisionService extends BaseService {
 		return md;
 	}
 
-	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null): Promise<RevisionEntity> {
+	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false): Promise<RevisionEntity> {
 		try {
 			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
@@ -90,7 +90,7 @@ export default class RevisionService extends BaseService {
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
 			} else {
-				if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+				if (!bypassInterval && Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
 
 				const merged = await Revision.mergeDiffs(parentRev);
 				output.parent_id = parentRev.id;
@@ -154,19 +154,26 @@ export default class RevisionService extends BaseService {
 							const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
 
 							if (note) {
+								let oldNoteSaved = false;
+
 								if (oldNote) {
 									// When we edit an existing note with no history, we want to ensure a revision containing the original content, not the new content, is created. But this does not apply if the user has just
 									// created the note, so the difference between the current note updated_time and old note updated_time should be at least as long as the interval period
 									const hasNoRevisionsAndOutsideIntervalPeriod = itemsWithNoRevisions.includes(noteId) && note.updated_time - oldNote.updated_time >= Setting.value('revisionService.intervalBetweenRevisions');
 									if (oldNote.updated_time < this.oldNoteCutOffDate_() || hasNoRevisionsAndOutsideIntervalPeriod) {
 										// This is where we save the original version of this old note
-										oldNote.updated_time = note.updated_time; // We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
+										// We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
+										// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
+										oldNote.updated_time = note.updated_time - 1;
 										const rev = await this.createNoteRevision_(oldNote);
-										if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+										if (rev) {
+											oldNoteSaved = true;
+											logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+										}
 									}
 								}
 
-								const rev = await this.createNoteRevision_(note);
+								const rev = await this.createNoteRevision_(note, null, oldNoteSaved);
 								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
 								delete this.oldNotesCache_[noteId];
