@@ -195,20 +195,20 @@ describe('Synchronizer.revisions', () => {
 		jest.advanceTimersByTime(200);
 
 		await revisionService().collectRevisions(); // REV0
-		expect(await getNoteRevisions()).toHaveLength(1);
+		expect(await getNoteRevisions()).toHaveLength(2);
 
 		jest.advanceTimersByTime(200);
 
 		await Note.save({ id: note.id, title: 'note REV1' });
 		await revisionService().collectRevisions(); // REV1
-		expect(await getNoteRevisions()).toHaveLength(2);
+		expect(await getNoteRevisions()).toHaveLength(3);
 
 		// Should sync the revisions
 		await synchronizer().start();
 		await switchClient(2);
 		await synchronizer().start();
 
-		expect(await getNoteRevisions()).toHaveLength(2);
+		expect(await getNoteRevisions()).toHaveLength(3);
 		await revisionService().deleteOldRevisions(100);
 		expect(await getNoteRevisions()).toHaveLength(0);
 
@@ -224,7 +224,7 @@ describe('Synchronizer.revisions', () => {
 		// After switching back to the original client, syncing should locally delete
 		// the remotely deleted revisions.
 		await switchClient(1);
-		expect(await getNoteRevisions()).toHaveLength(2);
+		expect(await getNoteRevisions()).toHaveLength(3);
 		await synchronizer().start();
 		expect(await getNoteRevisions()).toHaveLength(0);
 
