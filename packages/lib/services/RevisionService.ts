@@ -160,6 +160,7 @@ export default class RevisionService extends BaseService {
 									const hasNoRevisionsAndOutsideIntervalPeriod = itemsWithNoRevisions.includes(noteId) && note.updated_time - oldNote.updated_time >= Setting.value('revisionService.intervalBetweenRevisions');
 									if (oldNote.updated_time < this.oldNoteCutOffDate_() || hasNoRevisionsAndOutsideIntervalPeriod) {
 										// This is where we save the original version of this old note
+										oldNote.updated_time = note.updated_time; // We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
 										const rev = await this.createNoteRevision_(oldNote);
 										if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
 									}
