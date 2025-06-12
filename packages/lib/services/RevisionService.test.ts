@@ -1,4 +1,4 @@
-import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -38,7 +38,7 @@ describe('services/RevisionService', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		Setting.setValue('revisionService.intervalBetweenRevisions', 0);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		jest.useFakeTimers({ advanceTimers: true });
 	});
@@ -46,32 +46,39 @@ describe('services/RevisionService', () => {
 	it('should create diff and rebuild notes', (async () => {
 		const service = new RevisionService();
 
-		const n1_v1 = await Note.save({ title: '', author: 'testing' });
-		await service.collectRevisions();
-		await Note.save({ id: n1_v1.id, title: 'hello', author: 'testing' });
-		await service.collectRevisions();
-		await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' });
+		const n1_v1 = await Note.save({ title: '', author: 'testing' }); // CHANGE 1
+		await service.collectRevisions(); // No revision is created because change type must be update or delete in order to create one
+		jest.advanceTimersByTime(100);
+		await Note.save({ id: n1_v1.id, title: 'hello', author: 'testing' }); // CHANGE 2
+		await service.collectRevisions(); // Old and new content are created as revisions
+		jest.advanceTimersByTime(100);
+		await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' }); // CHANGE 3
 		await service.collectRevisions();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
-		expect(revisions.length).toBe(2);
+		expect(revisions.length).toBe(3);
 		expect(revisions[1].parent_id).toBe(revisions[0].id);
+		expect(revisions[2].parent_id).toBe(revisions[1].id);
 
 		const rev1 = await service.revisionNote(revisions, 0);
-		expect(rev1.title).toBe('hello');
+		expect(rev1.title).toBe('');
 		expect(rev1.author).toBe('testing');
 
 		const rev2 = await service.revisionNote(revisions, 1);
-		expect(rev2.title).toBe('hello welcome');
-		expect(rev2.author).toBe('');
+		expect(rev2.title).toBe('hello');
+		expect(rev2.author).toBe('testing');
 
-		const time_rev2 = Date.now();
-		await msleep(10);
+		const rev3 = await service.revisionNote(revisions, 2);
+		expect(rev3.title).toBe('hello welcome');
+		expect(rev3.author).toBe('');
 
-		const ttl = Date.now() - time_rev2 - 1;
+		const time_rev3 = Date.now();
+		jest.advanceTimersByTime(10);
+
+		const ttl = Date.now() - time_rev3 - 1;
 		await service.deleteOldRevisions(ttl);
-		const revisions2 = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
-		expect(revisions2.length).toBe(0);
+		const revisions3 = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
+		expect(revisions3.length).toBe(0);
 	}));
 
 	// ----------------------------------------------------------------------
@@ -122,7 +129,7 @@ describe('services/RevisionService', () => {
 		await service.collectRevisions();
 
 		const time_v1 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
@@ -144,12 +151,12 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
 		await service.collectRevisions();
 		const time_v1 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'one two' });
 		await service.collectRevisions();
 		const time_v2 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'one two three' });
 		await service.collectRevisions();
@@ -183,11 +190,14 @@ describe('services/RevisionService', () => {
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'note 1' });
+		// Note.save does not await ItemChange.add, therefore too many calls in a row can cause a race condition in the test that causes an incorrect count of revisions
+		// To avoid this, collect the revisions after just 2 calls, but do not advance the timers, so that only 1 revision is created for the 2 changes
+		await service.collectRevisions();
 		const n2_v0 = await Note.save({ title: '' });
 		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
 		await service.collectRevisions();
 		const time_n2_v1 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
@@ -222,7 +232,7 @@ describe('services/RevisionService', () => {
 		const getNoteRevisions = () => {
 			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		};
-		expect(await getNoteRevisions()).toHaveLength(4);
+		expect(await getNoteRevisions()).toHaveLength(5);
 
 		await Note.delete(note.id, { toTrash: false, sourceDescription: 'tests/RevisionService' });
 
@@ -272,7 +282,7 @@ describe('services/RevisionService', () => {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		// Set the interval in such a way that the note is considered an old one.
 		Setting.setValue('revisionService.oldNoteInterval', 50);
@@ -319,21 +329,22 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should not create a revision for notes that get deleted if there is already a revision', (async () => {
-		const n1 = await Note.save({ title: 'hello' });
-		await revisionService().collectRevisions();
+		const n1 = await Note.save({ title: 'hello' }); // CHANGE 1
+		await revisionService().collectRevisions(); // No revision is created because change type must be update or delete in order to create one
+		jest.advanceTimersByTime(100);
 		const noteId = n1.id;
-		await Note.save({ id: noteId, title: 'hello Paul' });
-		await revisionService().collectRevisions(); // REV 1
+		await Note.save({ id: noteId, title: 'hello Paul' }); // CHANGE 2
+		await revisionService().collectRevisions(); // Old and new content are created as revisions
 
-		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(2);
 
 		await Note.delete(noteId);
 
 		// At this point there is no need to create a new revision for the deleted note
-		// because we already have the latest version as REV 1
+		// because we already have the latest version as CHANGE 2
 		await revisionService().collectRevisions();
 
-		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(1);
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(2);
 	}));
 
 	it('should not create a revision for new note the first time they are saved', (async () => {
@@ -354,14 +365,21 @@ describe('services/RevisionService', () => {
 
 	it('should abort collecting revisions when one of them is encrypted', (async () => {
 		const n1 = await Note.save({ title: 'hello' }); // CHANGE 1
-		await revisionService().collectRevisions();
+		await revisionService().collectRevisions(); // No revision is created because change type must be update or delete in order to create one
+		jest.advanceTimersByTime(100);
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(0);
+
 		await Note.save({ id: n1.id, title: 'hello Ringo' }); // CHANGE 2
-		await revisionService().collectRevisions();
+		await revisionService().collectRevisions(); // Old and new content are created as revisions
+		jest.advanceTimersByTime(100);
+		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1.id)).length).toBe(2);
+
 		await Note.save({ id: n1.id, title: 'hello George' }); // CHANGE 3
 		await revisionService().collectRevisions();
+		jest.advanceTimersByTime(100);
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
-		expect(revisions.length).toBe(2);
+		expect(revisions.length).toBe(3);
 
 		const encryptedRevId = revisions[0].id;
 
@@ -394,10 +412,9 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await msleep(10);
+		jest.advanceTimersByTime(100);
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
-		await msleep(10);
 
 		expect((await Revision.all()).length).toBe(2);
 
@@ -422,7 +439,7 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -446,7 +463,7 @@ describe('services/RevisionService', () => {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -471,6 +488,7 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
+		jest.advanceTimersByTime(100);
 		expect((await Revision.all()).length).toBe(1);
 
 		await Note.save({ id: n1_v0.id, title: 'hello' });
@@ -485,6 +503,7 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
+		jest.advanceTimersByTime(100);
 		expect((await Revision.all()).length).toBe(1);
 
 		const userUpdatedTime = Date.now() - 1000 * 60 * 60;
@@ -504,11 +523,12 @@ describe('services/RevisionService', () => {
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
 		const sleepTime = 500;
-		await msleep(sleepTime);
+		jest.advanceTimersByTime(sleepTime);
 
 		const timeRev2 = Date.now();
 		await Note.save({ id: n1_v0.id, title: 'hello 2' });
 		await revisionService().collectRevisions(); // REV 2
+		jest.advanceTimersByTime(100);
 		expect((await Revision.all()).length).toBe(2);
 
 		const interval = Date.now() - timeRev1 + sleepTime / 2;
@@ -524,7 +544,7 @@ describe('services/RevisionService', () => {
 		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await msleep(100);
+		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome', todo_completed: 1000 });
 		await revisionService().collectRevisions(); // REV 2
