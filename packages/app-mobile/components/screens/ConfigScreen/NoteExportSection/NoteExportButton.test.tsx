@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { _ } from '@joplin/lib/locale';
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '../../../../utils/testing/testingLibrary';
 import { expect, describe, beforeEach, test, jest } from '@jest/globals';
 import { createNTestNotes, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
