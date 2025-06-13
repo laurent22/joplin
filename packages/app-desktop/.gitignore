@@ -25,3 +25,7 @@ build/7zip/7za
 build/7zip/7za.exe
 sentry.properties
 downloads/
+
+# Bundler output
+*.js.meta.json
+*.bundle.js

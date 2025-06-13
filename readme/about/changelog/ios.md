@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.8](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.8) - 2025-06-09T17:15:06Z
+
+- Fixed: Fix error shown the first time a user attempts to record (#12328) (#12314 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix sharing to Joplin (#12334) (#12331 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.3.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.7) - 2025-05-01T16:06:30Z
 
 - New: Force quick action shortcuts to have the same size (#12195 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

@@ -5,7 +5,7 @@ import Note from '../../models/Note';
 import { reg } from '../../registry';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import DecryptionWorker from '../../services/DecryptionWorker';
-import eventManager from '../../eventManager';
+import eventManager, { EventName } from '../../eventManager';
 import BaseItem from '../../models/BaseItem';
 import shim from '../../shim';
 import { Dispatch } from 'redux';
@@ -141,5 +141,15 @@ export default async (store: any, _next: any, action: any, dispatch: Dispatch) =
 				reg.logger().error('Detected empty element in note array', action);
 			}
 		}
+	}
+
+	if (action.type === 'WINDOW_OPEN') {
+		eventManager.emit(EventName.WindowOpen, {
+			windowId: action.windowId,
+		});
+	} else if (action.type === 'WINDOW_CLOSE') {
+		eventManager.emit(EventName.WindowClose, {
+			windowId: action.windowId,
+		});
 	}
 };

@@ -25,6 +25,21 @@ describe('InteropService_Importer_Md', () => {
 		const allNotes: NoteEntity[] = await Note.all();
 		return allNotes[0];
 	}
+	async function importHTMLNote(path: string) {
+		const newFolder = await Folder.save({ title: 'folder' });
+		const importer = new InteropService_Importer_Md();
+		await importer.init(path, {
+			format: 'html',
+			outputFormat: 'html',
+			path,
+			destinationFolder: newFolder,
+			destinationFolderId: newFolder.id,
+		});
+		importer.setMetadata({ fileExtensions: ['md'] });
+		await importer.exec({ warnings: [] });
+		const allNotes: NoteEntity[] = await Note.all();
+		return allNotes[0];
+	}
 	async function importNoteDirectory(path: string) {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
@@ -203,5 +218,51 @@ describe('InteropService_Importer_Md', () => {
 		expect(itemIds.length).toBe(0);
 		// The malformed link is imported as-is
 		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
+	});
+
+	it('should import resources from links with Windows path', async () => {
+		const note = await importNote(`${supportDir}/test_notes/md/windows_path.html`);
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(2);
+		expect(items.find(i => i.title === 'sample.txt')).toBeTruthy();
+		expect(items.find(i => i.title === 'photo.jpg')).toBeTruthy();
+	});
+
+	it.each([
+		['<a name="525"/>', '<a name="525"></a>'],
+		['<a name="525" id="test" class="link"/>', '<a name="525" id="test" class="link"></a>'],
+		['<a name="test@#$%^&*()" data-value="hello&world"/>', '<a name="test@#$%^&*()" data-value="hello&world"></a>'],
+		['<a name="525 href="#test"/>', '<a name="525 href="#test"></a>'],
+		['<a name="525" <!-- comment --> href="#"/>', '<a name="525" <!-- comment --> href="#"></a>'],
+		['<a name="525" title="a > b"/>', '<a name="525" title="a > b"></a>'],
+
+		// Shouldn't break anything
+		['<a/><a></a>', '<a/><a></a>'],
+		['<a><br/></a>', '<a><br/></a>'],
+		['<a><span>test</span></a>', '<a><span>test</span></a>'],
+		['<a name="525"></a>', '<a name="525"></a>'],
+		['<a>test</a>', '<a>test</a>'],
+		[
+			'<div><a href=":/0be7f50730194dd9b7d3b2834b8bfd58" rev="en_rl_none">First note</a> </div>',
+			'<div><a href=":/0be7f50730194dd9b7d3b2834b8bfd58" rev="en_rl_none">First note</a> </div>',
+		],
+		[
+			`<a name="525">
+</a>`,
+			`<a name="525">
+</a>`,
+		],
+	])('should transform self closing a tag into two', async (original: string, result: string) => {
+		const importer = new InteropService_Importer_Md();
+
+		expect(importer.applyImportFixes(original)).toBe(result);
+	});
+
+	it('should import apply import fix on note imported from Yinxiang', async () => {
+		const note = await importHTMLNote(`${supportDir}/test_notes/md/self-closing-anchor.html`);
+		expect(note.body).toContain(`<body>
+<a name="519"></a>
+<h1>Second note</h1>
+</body>`);
 	});
 });

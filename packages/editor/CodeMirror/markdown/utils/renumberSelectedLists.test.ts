@@ -3,6 +3,8 @@ import createTestEditor from '../../testUtil/createTestEditor';
 import renumberSelectedLists from './renumberSelectedLists';
 
 describe('renumberSelectedLists', () => {
+	jest.retryTimes(2);
+
 	it('should correctly renumber a list with multiple selections in that list', async () => {
 		const listText = [
 			'1. This',
@@ -138,6 +140,49 @@ describe('renumberSelectedLists', () => {
 				'\t5. test',
 			].join('\n'),
 		},
+		{ // Should handle mixed number/bullet lists
+			before: [
+				'1. This',
+				'\t- is',
+				'\t\t',
+				'',
+				'\t\t1. Test',
+				'\t1. A test',
+				'- Test',
+			].join('\n'),
+			after: [
+				'1. This',
+				'\t- is',
+				'\t\t',
+				'',
+				'\t\t1. Test',
+				'\t1. A test',
+				'- Test',
+			].join('\n'),
+		},
+		{ // Should handle non-tight lists
+			before: [
+				'1. This',
+				'   ![](./test.png)',
+				'',
+				'\t1. is',
+				'\t3. a test',
+				'\t4. a test',
+				'',
+				'1. A test',
+			].join('\n'),
+			after: [
+				'1. This',
+				'   ![](./test.png)',
+				'',
+				'\t1. is',
+				'\t2. a test',
+				'\t3. a test',
+				'',
+				'2. A test',
+			].join('\n'),
+		},
+
 	])('should handle nested lists (case %#)', async ({ before, after }) => {
 		const suffix = '\n\n# End';
 		before += suffix;

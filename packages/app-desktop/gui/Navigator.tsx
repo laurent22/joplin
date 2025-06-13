@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState, AppStateRoute } from '../app.reducer';
 import bridge from '../services/bridge';
-import { useContext, useEffect, useMemo, useRef } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of code from before rule was applied
@@ -55,26 +55,44 @@ const useWindowRefocusManager = (route: AppStateRoute) => {
 	}, [routeName, windowId]);
 };
 
+const useContainerSize = (container: HTMLElement|null) => {
+	const [size, setSize] = useState({ width: container?.clientWidth ?? 0, height: container?.clientHeight ?? 0 });
+
+	useEffect(() => {
+		if (!container) return () => {};
+
+		const observer = new ResizeObserver(() => {
+			setSize({
+				width: container.clientWidth,
+				height: container.clientHeight,
+			});
+		});
+		observer.observe(container);
+		return () => {
+			observer.disconnect();
+		};
+	}, [container]);
+
+	return size;
+};
+
 const NavigatorComponent: React.FC<Props> = props => {
 	const route = props.route;
 	const screenInfo = props.screens[route?.routeName];
+	const [container, setContainer] = useState<HTMLElement|null>(null);
 
 	useWindowTitleManager(screenInfo);
 	useWindowRefocusManager(route);
+	const size = useContainerSize(container);
 
 	if (!route) throw new Error('Route must not be null');
 
 	const screenProps = route.props ? route.props : {};
 	const Screen = screenInfo.screen;
 
-	const screenStyle = {
-		width: props.style.width,
-		height: props.style.height,
-	};
-
 	return (
-		<div style={props.style} className={props.className}>
-			<Screen style={screenStyle} {...screenProps} />
+		<div ref={setContainer} style={props.style} className={props.className}>
+			<Screen style={size} {...screenProps} />
 		</div>
 	);
 };

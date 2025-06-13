@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { WindowControl } from '../utils/useWindowControl';
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'print',

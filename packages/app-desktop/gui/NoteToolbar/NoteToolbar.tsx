@@ -51,7 +51,7 @@ interface ConnectProps {
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 
-	const { editorPlugin } = getActivePluginEditorView(state.pluginService.plugins);
+	const { editorPlugin } = getActivePluginEditorView(state.pluginService.plugins, ownProps.windowId);
 
 	const commands = [
 		'showSpellCheckerMenu',

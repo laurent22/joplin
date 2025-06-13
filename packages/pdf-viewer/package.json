@@ -9,11 +9,17 @@
     "access": "restricted"
   },
   "scripts": {
+    "tsc": "",
     "tsc_DISABLED": "tsc --project tsconfig.json",
+    "watch": "",
     "watch_DISABLED": "webpack --watch --config webpack.config.js --mode=development",
+    "build": "",
     "build_DISABLED": "webpack --config webpack.config.js --mode=production",
+    "test": "",
     "test_DISABLED": "jest",
+    "test-ci": "",
     "test-ci_DISABLED": "yarn test",
+    "postinstall": "",
     "postinstall_DISABLED": "yarn build"
   },
   "author": "Joplin",
@@ -21,8 +27,8 @@
   "devDependencies": {
     "@types/jest": "29.5.12",
     "@types/pdfjs-dist": "2.10.378",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
     "@types/styled-components": "5.1.32",
     "babel-jest": "29.7.0",
     "css-loader": "6.11.0",
@@ -30,7 +36,7 @@
     "jest-environment-jsdom": "29.7.0",
     "style-loader": "3.3.4",
     "ts-jest": "29.1.5",
-    "ts-loader": "9.5.1",
+    "ts-loader": "9.5.2",
     "typescript": "5.4.5",
     "webpack": "5.74.0",
     "webpack-cli": "4.10.0"

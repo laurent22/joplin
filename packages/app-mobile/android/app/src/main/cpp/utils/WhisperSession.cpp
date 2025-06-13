@@ -126,7 +126,7 @@ WhisperSession::splitAndTranscribeBefore_(int transcribeUpTo, int trimTo) {
 }
 
 bool WhisperSession::isBufferSilent_() {
-	int toleranceSamples = WHISPER_SAMPLE_RATE / 8; // 0.125s
+	int toleranceSamples = WHISPER_SAMPLE_RATE / 5; // 0.2s
 	auto silence = findLongestSilence(
 			audioBuffer_,
 			LongestSilenceOptions {
@@ -145,7 +145,7 @@ WhisperSession::transcribeNextChunk() {
 
 	// Handles a silence detected between (splitStart, splitEnd).
 	auto splitAndProcess = [&] (int splitStart, int splitEnd) {
-		int tolerance = WHISPER_SAMPLE_RATE / 20; // 0.05s
+		int tolerance = WHISPER_SAMPLE_RATE / 8; // 0.125s
 		bool isCompletelySilent = splitStart < tolerance && splitEnd > audioBuffer_.size() - tolerance;
 		LOGD("WhisperSession: Found silence range from %.2f -> %.2f", splitStart / (float) WHISPER_SAMPLE_RATE, splitEnd / (float) WHISPER_SAMPLE_RATE);
 

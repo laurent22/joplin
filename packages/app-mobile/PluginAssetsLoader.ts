@@ -19,7 +19,7 @@ export default class PluginAssetsLoader {
 	}
 
 	private destDir_() {
-		return `${Setting.value('resourceDir')}/pluginAssets`;
+		return Setting.value('pluginAssetDir');
 	}
 
 	private async importAssetsMobile_() {

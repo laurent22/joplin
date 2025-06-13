@@ -15,6 +15,7 @@ import Setting from '@joplin/lib/models/Setting';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import shim from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
+import CommandService from '@joplin/lib/services/CommandService';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -84,9 +85,18 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		open: {
 			label: _('Open...'),
 			onAction: async (options: ContextMenuOptions) => {
-				await openItemById(options.resourceId, dispatch);
+				if (options.resourceId) {
+					await openItemById(options.resourceId, dispatch);
+				} else if (options.linkToOpen) {
+					await CommandService.instance().execute('openItem', options.linkToOpen);
+				} else {
+					await shim.showErrorDialog('No link found');
+				}
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (
+				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource))
+				|| (!!options.linkToOpen && itemType === ContextMenuItemType.Link)
+			),
 		},
 		saveAs: {
 			label: _('Save as...'),

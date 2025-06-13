@@ -397,9 +397,40 @@ export interface Rectangle {
 	height?: number;
 }
 
-export type ActivationCheckCallback = ()=> Promise<boolean>;
+export interface EditorUpdateEvent {
+	newBody: string;
+	noteId: string;
+}
+export type UpdateCallback = (event: EditorUpdateEvent)=> Promise<void>;
 
-export type UpdateCallback = ()=> Promise<void>;
+
+export interface ActivationCheckEvent {
+	handle: ViewHandle;
+	noteId: string;
+}
+export type ActivationCheckCallback = (event: ActivationCheckEvent)=> Promise<boolean>;
+
+/**
+ * Required callbacks for creating an editor plugin.
+ */
+export interface EditorPluginCallbacks {
+	/**
+	 * Emitted when the editor can potentially be activated - this is for example when the current
+	 * note is changed, or when the application is opened. At that point you should check the
+	 * current note and decide whether your editor should be activated or not. If it should, return
+	 * `true`, otherwise return `false`.
+	 */
+	onActivationCheck: ActivationCheckCallback;
+
+	/**
+	 * Emitted when an editor view is created. This happens, for example, when a new window containing
+	 * a new editor is created.
+	 *
+	 * This callback should set the editor plugin's HTML using `editors.setHtml`, add scripts to the editor
+	 * with `editors.addScript`, and optionally listen for external changes using `editors.onUpdate`.
+	 */
+	onSetup: (handle: ViewHandle)=> Promise<void>;
+}
 
 export type VisibleHandler = ()=> Promise<void>;
 
@@ -408,6 +439,8 @@ export interface EditContextMenuFilterObject {
 }
 
 export interface EditorActivationCheckFilterObject {
+	effectiveNoteId: string;
+	windowId: string;
 	activatedEditors: {
 		pluginId: string;
 		viewId: string;

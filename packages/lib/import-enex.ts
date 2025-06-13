@@ -15,11 +15,14 @@ const { wrapError } = require('./errorUtils');
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
-const md5File = require('md5-file');
 import * as mime from './mime-utils';
+import type * as FsExtra from 'fs-extra';
 
-// const Promise = require('promise');
-const fs = require('fs-extra');
+let fs_: typeof FsExtra = null;
+const fs = () => {
+	fs_ ??= shim.requireDynamic('fs-extra');
+	return fs_;
+};
 
 function dateToTimestamp(s: string, defaultValue: number = null): number {
 	// Most dates seem to be in this format
@@ -60,9 +63,9 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 		// to disk, thus resulting in the calling code to find a
 		// file with size 0.
 
-		const destFile = fs.openSync(destFilePath, 'w');
-		const sourceStream = fs.createReadStream(sourceFilePath);
-		const destStream = fs.createWriteStream(destFile, {
+		const destFile = fs().openSync(destFilePath, 'w');
+		const sourceStream = fs().createReadStream(sourceFilePath);
+		const destStream = fs().createWriteStream(destFilePath, {
 			fd: destFile,
 			autoClose: false,
 		});
@@ -72,8 +75,8 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 		// because even if the source has finished sending data, the destination might not have
 		// finished receiving it and writing it to disk.
 		destStream.on('finish', () => {
-			fs.fdatasyncSync(destFile);
-			fs.closeSync(destFile);
+			fs().fdatasyncSync(destFile);
+			fs().closeSync(destFile);
 			resolve(null);
 		});
 
@@ -140,7 +143,7 @@ async function processNoteResource(resource: ExtractedResource) {
 		if (setId) resource.id = md5(Date.now() + Math.random());
 		resource.size = 0;
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
-		await fs.writeFile(resource.dataFilePath, '');
+		await shim.fsDriver().writeFile(resource.dataFilePath, '');
 	};
 
 	if (!resource.hasData) {
@@ -155,14 +158,14 @@ async function processNoteResource(resource: ExtractedResource) {
 			throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
 		}
 
-		const stats = fs.statSync(resource.dataFilePath);
+		const stats = await shim.fsDriver().stat(resource.dataFilePath);
 		resource.size = stats.size;
 
 		if (!resource.id) {
 			// If no resource ID is present, the resource ID is actually the MD5
 			// of the data. This ID will match the "hash" attribute of the
 			// corresponding <en-media> tag. resourceId = md5(decodedData);
-			resource.id = await md5File(resource.dataFilePath);
+			resource.id = await shim.fsDriver().md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
@@ -203,7 +206,7 @@ async function saveNoteResources(note: ExtractedNote) {
 		const existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await fs.move(resource.dataFilePath, Resource.fullPath(toSave), { overwrite: true });
+		await shim.fsDriver().move(resource.dataFilePath, Resource.fullPath(toSave));
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -381,7 +384,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			notesTagged: 0,
 		};
 
-		const stream = fs.createReadStream(fileToProcess);
+		const stream = fs().createReadStream(fileToProcess);
 
 		const options = {};
 		const strict = true;
@@ -547,7 +550,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 					noteResource.hasData = true;
 
-					fs.appendFileSync(noteResource.dataFilePath, text);
+					fs().appendFileSync(noteResource.dataFilePath, text);
 				} else {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					if (!(n in noteResource)) (noteResource as any)[n] = '';

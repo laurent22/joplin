@@ -6,6 +6,7 @@ import EditorCodeDialog from './EditorCodeDialog';
 export default class NoteEditorPage {
 	public readonly codeMirrorEditor: Locator;
 	public readonly noteViewerContainer: Locator;
+	public readonly editorPluginFrame: Locator;
 	public readonly richTextEditor: Locator;
 	public readonly noteTitleInput: Locator;
 
@@ -16,6 +17,7 @@ export default class NoteEditorPage {
 	public readonly toggleEditorsButton: Locator;
 	public readonly toggleEditorLayoutButton: Locator;
 	private readonly disableTabNavigationButton: Locator;
+	public readonly toggleEditorPluginButton: Locator;
 
 	public readonly editorSearchInput: Locator;
 	public readonly viewerSearchInput: Locator;
@@ -26,6 +28,7 @@ export default class NoteEditorPage {
 		this.containerLocator = page.locator('.rli-editor');
 		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
+		this.editorPluginFrame = this.containerLocator.locator('iframe[id^="plugin-view-"]');
 		this.noteTitleInput = this.containerLocator.locator('.title-input');
 		this.attachFileButton = this.containerLocator.getByRole('button', { name: 'Attach file' });
 		this.toggleCodeBlockButton = this.containerLocator.getByRole('button', { name: 'Code Block' });
@@ -36,6 +39,7 @@ export default class NoteEditorPage {
 		this.editorSearchInput = this.containerLocator.getByPlaceholder('Find');
 		this.viewerSearchInput = this.containerLocator.getByPlaceholder('Search...');
 		this.disableTabNavigationButton = this.containerLocator.getByRole('button', { name: 'Tab moves focus' });
+		this.toggleEditorPluginButton = this.containerLocator.getByRole('button', { name: 'Toggle editor plugin' });
 
 		this.richTextCodeEditor = new EditorCodeDialog(page);
 	}

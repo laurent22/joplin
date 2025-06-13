@@ -12,12 +12,9 @@ import toggleRegionFormatGlobally from '../utils/formatting/toggleRegionFormatGl
 import { RegionSpec } from '../utils/formatting/RegionSpec';
 import toggleInlineFormatGlobally from '../utils/formatting/toggleInlineFormatGlobally';
 import stripBlockquote from './utils/stripBlockquote';
-import isIndentationEquivalent from '../utils/formatting/isIndentationEquivalent';
-import tabsToSpaces from '../utils/formatting/tabsToSpaces';
 import renumberSelectedLists from './utils/renumberSelectedLists';
 import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
 
-const startingSpaceRegex = /^(\s*)/;
 
 export const toggleBolded: Command = (view: EditorView): boolean => {
 	const spec = RegionSpec.of({ template: '**', nodeName: 'StrongEmphasis' });
@@ -121,16 +118,20 @@ export const toggleMath: Command = (view: EditorView): boolean => {
 };
 
 export const toggleList = (listType: ListType): Command => {
-	return (view: EditorView): boolean => {
-		let state = view.state;
-		let doc = state.doc;
+	enum ListAction {
+		AddList,
+		RemoveList,
+		SwitchFormatting,
+	}
 
-		// RegExps for different list types. The regular expressions MUST
-		// be mutually exclusive.
-		// `(?!\[[ xX]+\])` means "not followed by [x] or [ ]".
+	return (view: EditorView): boolean => {
+		const state = view.state;
+		const doc = state.doc;
+
 		const bulletedRegex = /^\s*([-*])\s(?!\[[ xX]+\]\s)/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s/;
 		const numberedRegex = /^\s*\d+\.\s/;
+		const startingSpaceRegex = /^\s*/;
 
 		const listRegexes: Record<ListType, RegExp> = {
 			[ListType.OrderedList]: numberedRegex,
@@ -138,180 +139,149 @@ export const toggleList = (listType: ListType): Command => {
 			[ListType.UnorderedList]: bulletedRegex,
 		};
 
-		const getContainerType = (line: Line): ListType|null => {
+		const getContainerType = (line: Line): ListType | null => {
 			const lineContent = stripBlockquote(line);
-
-			// Determine the container's type.
-			const checklistMatch = lineContent.match(checklistRegex);
-			const bulletListMatch = lineContent.match(bulletedRegex);
-			const orderedListMatch = lineContent.match(numberedRegex);
-
-			if (checklistMatch) {
-				return ListType.CheckList;
-			} else if (bulletListMatch) {
-				return ListType.UnorderedList;
-			} else if (orderedListMatch) {
-				return ListType.OrderedList;
-			}
-
+			if (lineContent.match(checklistRegex)) return ListType.CheckList;
+			if (lineContent.match(bulletedRegex)) return ListType.UnorderedList;
+			if (lineContent.match(numberedRegex)) return ListType.OrderedList;
 			return null;
 		};
 
-		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
-			const changes: ChangeSpec[] = [];
-			let containerType: ListType|null = null;
+		// Maximum line number in the original document that has
+		// been processed
+		let maximumChangedLine = -1;
+		const getNextLineRange = (sel: SelectionRange) => {
+			let fromLine = doc.lineAt(sel.from);
+			const toLine = doc.lineAt(sel.to);
 
-			// Total number of characters added (deleted if negative)
+			// Full selection already processed.
+			if (toLine.number <= maximumChangedLine) {
+				return null;
+			}
+
+			if (fromLine.number <= maximumChangedLine) {
+				fromLine = doc.line(maximumChangedLine);
+			}
+			maximumChangedLine = toLine.number;
+
+			return { fromLine, toLine };
+		};
+
+		const getIndent = (line: Line) => {
+			const content = stripBlockquote(line);
+			return (content.match(startingSpaceRegex)?.[0] || '').length;
+		};
+
+		const getBaselineIndent = (fromLine: Line, toLine: Line) => {
+			let baselineIndent = Infinity;
+			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
+				const line = doc.line(lineNum);
+				const content = stripBlockquote(line);
+				if (content.trim() !== '') {
+					baselineIndent = Math.min(baselineIndent, getIndent(line));
+				}
+			}
+			if (baselineIndent === Infinity) baselineIndent = 0;
+
+			return baselineIndent;
+		};
+
+		const getFirstBaselineIndentLine = (fromLine: Line, toLine: Line) => {
+			const baselineIndent = getBaselineIndent(fromLine, toLine);
+			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
+				const line = doc.line(lineNum);
+				const content = stripBlockquote(line);
+				if (content.trim() === '') continue;
+
+				const indent = getIndent(line);
+				if (indent === baselineIndent) {
+					return line;
+				}
+			}
+			return fromLine;
+		};
+
+		const getAction = (fromLine: Line, toLine: Line) => {
+			const firstLine = getFirstBaselineIndentLine(fromLine, toLine);
+
+			const currentListType = getContainerType(firstLine);
+			if (currentListType === null) {
+				return ListAction.AddList;
+			} else if (currentListType === listType) {
+				return ListAction.RemoveList;
+			}
+			return ListAction.SwitchFormatting;
+		};
+
+		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
+			const lineRange = getNextLineRange(sel);
+			if (!lineRange) return { range: sel };
+			const { fromLine, toLine } = lineRange;
+			const baselineIndent = getBaselineIndent(fromLine, toLine);
+			const action = getAction(fromLine, toLine);
+
+			// Outermost list item number
+			let outerCounter = 1;
+			// Stack mapping parent indentation to item numbers
+			const stack: { indent: number; counter: number }[] = [];
+			const changes: ChangeSpec[] = [];
 			let charsAdded = 0;
 
-			const originalSel = sel;
-			let fromLine: Line;
-			let toLine: Line;
-			let firstLineIndentation: string;
-			let firstLineInBlockQuote: boolean;
-			let fromLineContent: string;
-			const computeSelectionProps = () => {
-				fromLine = doc.lineAt(sel.from);
-				toLine = doc.lineAt(sel.to);
-				fromLineContent = stripBlockquote(fromLine);
-				firstLineIndentation = fromLineContent.match(startingSpaceRegex)[0];
-				firstLineInBlockQuote = (fromLineContent !== fromLine.text);
-
-				containerType = getContainerType(fromLine);
-			};
-			computeSelectionProps();
-
-			const origFirstLineIndentation = firstLineIndentation;
-			const origContainerType = containerType;
-
-			// Reset the selection if it seems likely the user didn't want the selection
-			// to be expanded
-			const isIndentationDiff =
-				!isIndentationEquivalent(state, firstLineIndentation, origFirstLineIndentation);
-			if (isIndentationDiff) {
-				const expandedRegionIndentation = firstLineIndentation;
-				sel = originalSel;
-				computeSelectionProps();
-
-				// Use the indentation level of the expanded region if it's greater.
-				// This makes sense in the case where unindented text is being converted to
-				// the same type of list as its container. For example,
-				//     1. Foobar
-				// unindented text
-				// that should be made a part of the above list.
-				//
-				// becoming
-				//
-				//     1. Foobar
-				//     2. unindented text
-				//     3. that should be made a part of the above list.
-				const wasGreaterIndentation = (
-					tabsToSpaces(state, expandedRegionIndentation).length
-						> tabsToSpaces(state, firstLineIndentation).length
-				);
-				if (wasGreaterIndentation) {
-					firstLineIndentation = expandedRegionIndentation;
-				}
-			} else if (
-				(origContainerType !== containerType && (origContainerType ?? null) !== null)
-					|| containerType !== getContainerType(toLine)
-			) {
-				// If the container type changed, this could be an artifact of checklists/bulleted
-				// lists sharing the same node type.
-				// Find the closest range of the same type of list to the original selection
-				let newFromLineNo = doc.lineAt(originalSel.from).number;
-				let newToLineNo = doc.lineAt(originalSel.to).number;
-				let lastFromLineNo;
-				let lastToLineNo;
-
-				while (newFromLineNo !== lastFromLineNo || newToLineNo !== lastToLineNo) {
-					lastFromLineNo = newFromLineNo;
-					lastToLineNo = newToLineNo;
-
-					if (lastFromLineNo - 1 >= 1) {
-						const testFromLine = doc.line(lastFromLineNo - 1);
-						if (getContainerType(testFromLine) === origContainerType) {
-							newFromLineNo --;
-						}
-					}
-
-					if (lastToLineNo + 1 <= doc.lines) {
-						const testToLine = doc.line(lastToLineNo + 1);
-						if (getContainerType(testToLine) === origContainerType) {
-							newToLineNo ++;
-						}
-					}
-				}
-
-				sel = EditorSelection.range(
-					doc.line(newFromLineNo).from,
-					doc.line(newToLineNo).to,
-				);
-				computeSelectionProps();
-			}
-
-			// Determine whether the expanded selection should be empty
-			if (originalSel.empty && fromLine.number === toLine.number) {
-				sel = EditorSelection.cursor(toLine.to);
-			}
-
-			// Select entire lines (if not just a cursor)
-			if (!sel.empty) {
-				sel = EditorSelection.range(fromLine.from, toLine.to);
-			}
-
-			// Number of the item in the list (e.g. 2 for the 2nd item in the list)
-			let listItemCounter = 1;
-			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum ++) {
+			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
 				const line = doc.line(lineNum);
-				const lineContent = stripBlockquote(line);
-				const lineContentFrom = line.to - lineContent.length;
-				const inBlockQuote = (lineContent !== line.text);
-				const indentation = lineContent.match(startingSpaceRegex)[0];
-
-				const wrongIndentation = !isIndentationEquivalent(state, indentation, firstLineIndentation);
-
-				// If not the right list level,
-				if (inBlockQuote !== firstLineInBlockQuote || wrongIndentation) {
-					// We'll be starting a new list
-					listItemCounter = 1;
-					continue;
+				const origLineContent = stripBlockquote(line);
+				if (origLineContent.trim() === '') {
+					continue; // skip blank lines
 				}
 
-				// Don't add list numbers to otherwise empty lines (unless it's the first line)
-				if (lineNum !== fromLine.number && line.text.trim().length === 0) {
-					// Do not reset the counter -- the markdown renderer doesn't!
-					continue;
-				}
+				// Content excluding the block quote start
+				const lineContentFrom = line.to - origLineContent.length;
+				const indentation = origLineContent.match(startingSpaceRegex)?.[0] || '';
+				const currentIndent = indentation.length;
+				const normalizedIndent = currentIndent - baselineIndent;
 
+				const currentContainer = getContainerType(line);
 				const deleteFrom = lineContentFrom;
 				let deleteTo = deleteFrom + indentation.length;
-
-				// If we need to remove an existing list,
-				const currentContainer = getContainerType(line);
+				let isAlreadyListItem = false;
 				if (currentContainer !== null) {
 					const containerRegex = listRegexes[currentContainer];
-					const containerMatch = lineContent.match(containerRegex);
-					if (!containerMatch) {
-						throw new Error(
-							'Assertion failed: container regex does not match line content.',
-						);
+					const containerMatch = origLineContent.match(containerRegex);
+					if (containerMatch) {
+						deleteTo = lineContentFrom + containerMatch[0].length;
+						isAlreadyListItem = true;
 					}
-
-					deleteTo = lineContentFrom + containerMatch[0].length;
 				}
 
-				let replacementString;
-
-				if (listType === containerType) {
-					// Delete the existing list if it's the same type as the current
-					replacementString = '';
-				} else if (listType === ListType.OrderedList) {
-					replacementString = `${firstLineIndentation}${listItemCounter}. `;
-				} else if (listType === ListType.CheckList) {
-					replacementString = `${firstLineIndentation}- [ ] `;
-				} else {
-					replacementString = `${firstLineIndentation}- `;
+				let replacementString = indentation;
+				if (action === ListAction.AddList || action === ListAction.SwitchFormatting) {
+					if (action === ListAction.SwitchFormatting && !isAlreadyListItem) {
+						// Skip replacement if the line didn't previously have list formatting
+						deleteTo = deleteFrom;
+						replacementString = '';
+					} else if (listType === ListType.OrderedList) {
+						if (normalizedIndent <= 0) {
+							// Top-level item
+							stack.length = 0;
+							replacementString = `${indentation}${outerCounter}. `;
+							outerCounter++;
+						} else {
+							// Nested item
+							while (stack.length && stack[stack.length - 1].indent > currentIndent) {
+								stack.pop();
+							}
+							if (!stack.length || stack[stack.length - 1].indent < currentIndent) {
+								stack.push({ indent: currentIndent, counter: 1 });
+							}
+							const currentLevel = stack[stack.length - 1];
+							replacementString = `${indentation}${currentLevel.counter}. `;
+							currentLevel.counter++;
+						}
+					} else if (listType === ListType.CheckList) {
+						replacementString = `${indentation}- [ ] `;
+					} else if (listType === ListType.UnorderedList) {
+						replacementString = `${indentation}- `;
+					}
 				}
 
 				changes.push({
@@ -321,35 +291,23 @@ export const toggleList = (listType: ListType): Command => {
 				});
 				charsAdded -= deleteTo - deleteFrom;
 				charsAdded += replacementString.length;
-				listItemCounter++;
 			}
 
-			// Don't change cursors to selections
-			if (sel.empty) {
-				// Position the cursor at the end of the last line modified
-				sel = EditorSelection.cursor(toLine.to + charsAdded);
-			} else {
-				sel = EditorSelection.range(
-					sel.from,
-					sel.to + charsAdded,
-				);
-			}
-
-			return {
-				changes,
-				range: sel,
-			};
+			const newSelection = sel.empty
+				? EditorSelection.cursor(toLine.to + charsAdded)
+				: EditorSelection.range(sel.from, sel.to + charsAdded);
+			return { changes, range: newSelection };
 		});
-		view.dispatch(changes);
-		state = view.state;
-		doc = state.doc;
 
-		// Renumber the list
-		view.dispatch(renumberSelectedLists(state));
+		view.dispatch(changes);
+		// Fix any selected lists. Do this as a separate .dispatch
+		// so that it can be undone separately.
+		view.dispatch(renumberSelectedLists(view.state));
 
 		return true;
 	};
 };
+
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {

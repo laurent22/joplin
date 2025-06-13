@@ -137,6 +137,24 @@ export default class ElectronAppWrapper {
 		return null;
 	}
 
+	private windowIdFromWebContents(webContents: WebContents): SecondaryWindowId|null {
+		const browserWindow = BrowserWindow.fromWebContents(webContents);
+		// Convert from electron IDs to Joplin IDs.
+		const targetElectronId = browserWindow.id;
+
+		if (this.win_?.id === targetElectronId) {
+			return 'default';
+		}
+
+		for (const [joplinId, { electronId }] of this.secondaryWindows_) {
+			if (electronId === targetElectronId) {
+				return joplinId;
+			}
+		}
+
+		return null;
+	}
+
 	public allAppWindows() {
 		const allWindowIds = [...this.secondaryWindows_.keys(), defaultWindowId];
 		return allWindowIds.map(id => this.windowById(id));
@@ -356,6 +374,14 @@ export default class ElectronAppWrapper {
 
 			webContents.on('did-create-window', (event) => {
 				addWindowEventHandlers(event.webContents);
+			});
+
+			webContents.on('focus', () => {
+				const joplinId = this.windowIdFromWebContents(webContents);
+
+				if (joplinId !== null) {
+					this.win_.webContents.send('window-focused', joplinId);
+				}
 			});
 		};
 		addWindowEventHandlers(this.win_.webContents);

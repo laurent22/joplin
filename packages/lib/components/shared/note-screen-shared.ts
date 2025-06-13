@@ -31,14 +31,31 @@ export interface Props {
 	sharedData: SharedData|undefined;
 }
 
-export interface BaseNoteScreenComponent {
-	props: Props;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	state: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	setState: (newState: any)=> void;
+export interface BaseState {
+	note: NoteEntity;
+	lastSavedNote: NoteEntity;
+	newAndNoTitleChangeNoteId: boolean;
+	mode: string;
+	folder: FolderEntity;
+	isLoading: boolean;
+	fromShare: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+	noteResources: any;
+	readOnly: boolean;
+	noteLastLoadTime: number;
+}
 
-	scheduleSave(): void;
+export interface BaseNoteScreenComponent<State extends BaseState = BaseState> {
+	props: Props;
+	state: State;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	setState(state: any): void;
+
+	// To prevent race conditions, scheduleSave takes a snapshot of the
+	// current state. Previously, the delay between calling setState(state) and
+	// this.state getting the new state value could cause the wrong state
+	// to be saved.
+	scheduleSave(currentState: State): void;
 	scheduleFocusUpdate(): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	attachFile(asset: any, fileType: any): void;
@@ -49,7 +66,7 @@ interface Shared {
 	noteExists?: (noteId: string)=> Promise<boolean>;
 	handleNoteDeletedWhileEditing_?: (note: NoteEntity)=> Promise<NoteEntity>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	saveNoteButton_press?: (comp: BaseNoteScreenComponent, folderId: string, options: any)=> Promise<void>;
+	saveNoteButton_press?: (comp: BaseNoteScreenComponent, state: BaseState, folderId: string, options: any)=> Promise<void>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	saveOneProperty?: (comp: BaseNoteScreenComponent, name: string, value: any)=> void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -97,12 +114,13 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, folderId: string = null, options: any = null) {
+shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, state: BaseState, folderId: string = null, options: any = null) {
 	options = { autoTitle: true, ...options };
+	state = { ...comp.state, ...state };
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
-	let note = { ...comp.state.note };
+	let note = { ...state.note };
 
 	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
 	if (recreatedNote) note = recreatedNote;
@@ -121,11 +139,11 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 
 	const saveOptions = {
 		userSideValidation: true,
-		fields: BaseModel.diffObjectsFields(comp.state.lastSavedNote, note),
+		fields: BaseModel.diffObjectsFields(state.lastSavedNote, note),
 		dispatchOptions: { preserveSelection: true },
 	};
 
-	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
+	const hasAutoTitle = state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note.body);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
@@ -133,7 +151,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 
 	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);
 
-	const stateNote = comp.state.note;
+	const stateNote = state.note;
 
 	// Note was reloaded while being saved.
 	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
@@ -169,7 +187,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 		const updateGeoloc = async () => {
 			const geoNote: NoteEntity = await Note.updateGeolocation(note.id);
 
-			const stateNote = comp.state.note;
+			const stateNote = state.note;
 			if (!stateNote || !geoNote) return;
 			if (stateNote.id !== geoNote.id) return; // Another note has been loaded while geoloc was being retrieved
 
@@ -183,7 +201,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, fold
 			};
 
 			const modNote = { ...stateNote, ...geoInfo };
-			const modLastSavedNote = { ...comp.state.lastSavedNote, ...geoInfo };
+			const modLastSavedNote = { ...state.lastSavedNote, ...geoInfo };
 
 			comp.setState({ note: modNote, lastSavedNote: modLastSavedNote });
 		};
@@ -206,7 +224,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	let toSave: any = { id: note.id };
 	toSave[name] = value;
 	toSave = await Note.save(toSave);
-	note[name] = toSave[name];
+	(note as Record<string, unknown>)[name] = toSave[name];
 
 	comp.setState({
 		lastSavedNote: { ...note },
@@ -220,11 +238,11 @@ shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: 
 	const newState: any = {};
 
 	const note = { ...comp.state.note };
-	note[propName] = propValue;
+	(note as Record<string, unknown>)[propName] = propValue;
 	newState.note = note;
 
 	comp.setState(newState);
-	comp.scheduleSave();
+	comp.scheduleSave(newState);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

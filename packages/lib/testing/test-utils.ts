@@ -68,6 +68,7 @@ import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
 import { Store } from 'redux';
+import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 
 // Each suite has its own separate data and temp directory so that multiple
@@ -198,6 +199,7 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
+Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', Env.Dev);
@@ -1185,6 +1187,24 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		shim.clearTimeout = originalClearTimeout;
 		shim.clearInterval = originalClearInterval;
 		jest.useRealTimers();
+	}
+};
+
+export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+	// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+	// shows how to use .spyOn to hide warnings
+	let warningMock;
+	try {
+		warningMock = jest.spyOn(console, 'warn');
+		warningMock.mockImplementation((message, ...args) => {
+			const fullMessage = [message, ...args].join(' ');
+			if (!fullMessage.match(warningRegex)) {
+				console.error(`Unexpected warning: ${message}`, ...args);
+			}
+		});
+		return await task();
+	} finally {
+		warningMock.mockRestore();
 	}
 };
 

@@ -7,6 +7,8 @@ import { ForwardedRef, forwardRef, RefObject, useContext, useEffect, useImperati
 import { WindowIdContext } from './NewWindowOrIFrame';
 import useDocument from './hooks/useDocument';
 import { _ } from '@joplin/lib/locale';
+import getAssetPath from '../utils/getAssetPath';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -240,7 +242,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
 			allowFullScreen={true}
 			aria-label={_('Note viewer')}
-			src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
+			src={`joplin-content://note-viewer/${toForwardSlashes(getAssetPath('gui/note-viewer/index.html'))}`}
 		></iframe>
 	);
 });

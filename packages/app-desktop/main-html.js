@@ -3,7 +3,7 @@
 // Disable React message in console "Download the React DevTools for a better development experience"
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
 // eslint-disable-next-line no-undef
-__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	supportsFiber: true,
 	inject: function() {},
 	onCommitFiberRoot: function() {},
@@ -22,9 +22,9 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const Revision = require('@joplin/lib/models/Revision').default;
 const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
+const bridge = require('./services/bridge').default;
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const FileApiDriverLocal = require('@joplin/lib/file-api-driver-local').default;
 const React = require('react');
@@ -33,6 +33,9 @@ const initLib = require('@joplin/lib/initLib').default;
 const pdfJs = require('pdfjs-dist');
 const { isAppleSilicon } = require('is-apple-silicon');
 require('@sentry/electron/renderer');
+
+// Allows components to use React as a global
+window.React = React;
 
 
 const main = async () => {
@@ -83,6 +86,7 @@ const main = async () => {
 
 	Setting.setConstant('appId', bridge().appId());
 	Setting.setConstant('appType', 'desktop');
+	Setting.setConstant('pluginAssetDir', `${__dirname}/pluginAssets`);
 
 	// eslint-disable-next-line no-console
 	console.info(`appId: ${Setting.value('appId')}`);

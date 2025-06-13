@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FocusControl from './FocusControl/FocusControl';
-import { render } from '@testing-library/react-native';
+import { render } from '../../utils/testing/testingLibrary';
 import AccessibleView from './AccessibleView';
 import { AccessibilityInfo } from 'react-native';
 import ModalWrapper from './FocusControl/ModalWrapper';

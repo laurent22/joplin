@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Text } from 'react-native';
 
 import { describe, it, expect, jest } from '@jest/globals';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native';
+import { fireEvent, render, screen, waitFor } from '../utils/testing/testingLibrary';
 
 import Dropdown, { DropdownListItem } from './Dropdown';
 

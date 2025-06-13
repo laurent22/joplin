@@ -1184,6 +1184,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 			subType: SettingItemSubType.MonospaceFontFamily,
 		},
+		'style.viewer.fontFamily': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Desktop],
+			section: 'appearance',
+			label: () => _('Viewer and Rich Text Editor font family'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			subType: SettingItemSubType.FontFamily,
+		},
 
 		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
@@ -1565,7 +1576,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Int,
 			public: true,
 			minimum: 1,
-			maximum: 365 * 2,
+			maximum: 99999,
 			step: 1,
 			unitLabel: (value: number = null) => {
 				return value === null ? _('days') : _n('%d day', '%d days', value, value);

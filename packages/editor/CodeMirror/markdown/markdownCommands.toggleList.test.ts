@@ -63,34 +63,20 @@ describe('markdownCommands.toggleList', () => {
 		);
 	});
 
-	it('should not toggle a the full list when the cursor is on a blank line', async () => {
-		const checklistStartText = [
-			'# Test',
-			'',
-			'- [ ] This',
-			'- [ ] is',
-			'',
-		].join('\n');
+	it('should not toggle the full list when the cursor is on a blank line', async () => {
+		const checklistStartText = ['- [ ] This', '- [ ] is'].join('\n');
+		const checklistEndText = ['- [ ] a', '- [ ] test'].join('\n');
 
-		const checklistEndText = [
-			'- [ ] a',
-			'- [ ] test',
-		].join('\n');
+		const input = `${checklistStartText}\n\n${checklistEndText}`;
+		const expected = `${checklistStartText}\n\n${checklistEndText}`; // no change
 
 		const editor = await createTestEditor(
-			`${checklistStartText}\n${checklistEndText}`,
-
-			// Place the cursor on the blank line between the checklist
-			// regions
-			EditorSelection.cursor(unorderedListText.length + 1),
-			['BulletList', 'ATXHeading1'],
+			input,
+			EditorSelection.cursor(checklistStartText.length + 1), // place cursor on the blank line
+			['BulletList'],
 		);
-
-		// Should create a checkbox on the blank line
 		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${checklistStartText}- [ ] \n${checklistEndText}`,
-		);
+		expect(editor.state.doc.toString()).toBe(expected);
 	});
 
 	// it('should correctly replace an unordered list with a checklist', async () => {
@@ -246,5 +232,238 @@ describe('markdownCommands.toggleList', () => {
 		expect(editor.state.doc.toString()).toBe(
 			'- 192.168.1.1. This\n- 127.0.0.1. is\n- 0.0.0.0. a list',
 		);
+	});
+
+	it('should preserve blank lines when toggling a checklist with blank lines', async () => {
+		const listWithGaps = [
+			'- A',
+			'',
+			'- B',
+			'',
+			'- C',
+		].join('\n');
+
+		const expectedAfterToggle = [
+			'- [ ] A',
+			'',
+			'- [ ] B',
+			'',
+			'- [ ] C',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			listWithGaps,
+			EditorSelection.range(0, listWithGaps.length),
+			['BulletList'],
+		);
+
+		toggleList(ListType.CheckList)(editor);
+		expect(editor.state.doc.toString()).toBe(expectedAfterToggle);
+	});
+
+	it('should correctly toggle sublists within block quotes', async () => {
+		const listInBlockQuote = `
+A block quote:
+> - This *
+> 	- is
+>	  
+> 		- a test. *
+>  
+>		
+>
+> 			- TEST
+> 		- Test *
+> 	- a
+> - test`.trim();
+		const editor = await createTestEditor(
+			listInBlockQuote,
+			EditorSelection.range(
+				'A block quote:'.length + 1,
+				listInBlockQuote.length,
+			),
+			['BlockQuote', 'BulletList'],
+		);
+
+		toggleList(ListType.OrderedList)(editor);
+		expect(editor.state.doc.toString()).toBe(`
+A block quote:
+> 1. This *
+> 	1. is
+>	  
+> 		1. a test. *
+>  
+>		
+>
+> 			1. TEST
+> 		2. Test *
+> 	2. a
+> 2. test
+		`.trim());
+	});
+
+	it('should correctly toggle sublists when there are multiple cursors', async () => {
+		const testDocument = `
+- This (cursor)
+ 	- is
+ 	  
+ 		- a test. (cursor)
+   
+ 		
+ 
+ 			- TEST
+ 		- Test (cursor)
+ 	- a (cursor)
+ - test
+ 		`.trim();
+
+		const getExpectedCursorLocations = (docText: string) => {
+			return [...docText.matchAll(/\(cursor\)/g)]
+				.map(match => match.index + match[0].length);
+		};
+		const initialCursors = getExpectedCursorLocations(testDocument)
+			.map(location => EditorSelection.cursor(location));
+
+		const editor = await createTestEditor(
+			testDocument,
+			initialCursors,
+			['BulletList'],
+		);
+
+		toggleList(ListType.OrderedList)(editor);
+		// Should renumber each line with a cursor separately
+		expect(editor.state.doc.toString()).toBe(`
+1. This (cursor)
+ 	- is
+ 	  
+ 		1. a test. (cursor)
+   
+ 		
+ 
+ 			- TEST
+ 		2. Test (cursor)
+ 	1. a (cursor)
+ - test
+		`.trim());
+		expect(
+			editor.state.selection.ranges.map(range => range.anchor),
+		).toEqual(
+			getExpectedCursorLocations(editor.state.doc.toString()),
+		);
+	});
+
+	it('should convert a nested bulleted list to an ordered list', async () => {
+		const initialDocText = [
+			'- Item 1',
+			'    - Sub-item 1',
+			'    - Sub-item 2',
+			'- Item 2',
+		].join('\n');
+
+		const expectedDocText = [
+			'1. Item 1',
+			'    1. Sub-item 1',
+			'    2. Sub-item 2',
+			'2. Item 2',
+		].join('\n');
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleList(ListType.OrderedList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
+	});
+
+	it('should convert a mixed nested list to a bulleted list', async () => {
+		const initialDocText = `1. Item 1
+			1. Sub-item 1
+			2. Sub-item 2
+		2. Item 2`;
+
+		const expectedDocText = `- Item 1
+			- Sub-item 1
+			- Sub-item 2
+		- Item 2`;
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['OrderedList'],
+		);
+
+		toggleList(ListType.UnorderedList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
+	});
+
+	it('should preserve non-list sub-items when changing list formatting', async () => {
+		const initialDocText = `1. Item 1
+			1. Sub-item 1
+
+			   \`\`\`
+			   code
+			   \`\`\`
+			2. Sub-item 2
+			   Not part of the list
+			   Also not part of the list
+		2. Item 2`;
+
+		const expectedDocText = `- Item 1
+			- Sub-item 1
+
+			   \`\`\`
+			   code
+			   \`\`\`
+			- Sub-item 2
+			   Not part of the list
+			   Also not part of the list
+		- Item 2`;
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['OrderedList'],
+		);
+
+		toggleList(ListType.UnorderedList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
+	});
+
+	it('should remove list formatting when toggling formatting in an existing list item', async () => {
+		const initialDocText = `- [ ] Item 1
+			- [ ] Sub-item 1
+
+			   \`\`\`
+			   code
+			   \`\`\`
+			- [ ] Sub-item 2
+			   Not part of the list
+			   Also not part of the list
+		- [ ] Item 2`;
+
+		const expectedDocText = `Item 1
+			Sub-item 1
+
+			   \`\`\`
+			   code
+			   \`\`\`
+			Sub-item 2
+			   Not part of the list
+			   Also not part of the list
+		Item 2`;
+
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleList(ListType.CheckList)(editor);
+
+		expect(editor.state.doc.toString()).toBe(expectedDocText);
 	});
 });

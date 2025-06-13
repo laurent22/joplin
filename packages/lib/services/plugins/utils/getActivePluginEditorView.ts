@@ -1,28 +1,22 @@
 import Logger from '@joplin/utils/Logger';
-import { PluginState, PluginStates, PluginViewState } from '../reducer';
-import { ContainerType } from '../WebviewController';
+import { PluginStates } from '../reducer';
+import getActivePluginEditorViews from './getActivePluginEditorViews';
 
 const logger = Logger.create('getActivePluginEditorView');
 
-interface Output {
-	editorPlugin: PluginState;
-	editorView: PluginViewState;
-}
+export default (plugins: PluginStates, windowId: string) => {
+	const allActiveViews = getActivePluginEditorViews(plugins, windowId);
 
-export default (plugins: PluginStates) => {
-	let output: Output = { editorPlugin: null, editorView: null };
-	for (const [, pluginState] of Object.entries(plugins)) {
-		for (const [, view] of Object.entries(pluginState.views)) {
-			if (view.type === 'webview' && view.containerType === ContainerType.Editor && view.opened) {
-				if (output.editorPlugin) {
-					logger.warn(`More than one editor plugin are active for this note. Active plugin: ${output.editorPlugin.id}. Ignored plugin: ${pluginState.id}`);
-				} else {
-					output = { editorPlugin: pluginState, editorView: view };
-				}
-			}
-		}
+	if (allActiveViews.length === 0) {
+		return { editorPlugin: null, editorView: null };
 	}
 
-	return output;
+	const result = allActiveViews[0];
+	if (allActiveViews.length > 1) {
+		const ignoredPluginIds = allActiveViews.slice(1).map(({ editorPlugin }) => editorPlugin.id);
+		logger.warn(`More than one editor plugin are active for this note. Active plugin: ${result.editorPlugin.id}. Ignored plugins: ${ignoredPluginIds.join(',')}`);
+	}
+
+	return allActiveViews[0];
 };
 

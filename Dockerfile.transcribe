@@ -1,0 +1,51 @@
+FROM node:18-bullseye
+
+RUN apt-get update \
+    && apt-get install -y \
+    ca-certificates curl \
+    python3 tini
+
+## install docker
+RUN install -m 0755 -d /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+RUN chmod a+r /etc/apt/keyrings/docker.asc
+RUN echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo bullseye) stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update \
+    && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV NODE_ENV=production
+
+RUN corepack enable
+
+WORKDIR /app
+
+COPY .yarn/plugins ./.yarn/plugins
+COPY .yarn/releases ./.yarn/releases
+COPY .yarn/patches ./.yarn/patches
+COPY package.json .
+COPY .yarnrc.yml .
+COPY yarn.lock .
+COPY gulpfile.js .
+COPY tsconfig.json .
+COPY packages/lib ./packages/lib
+COPY packages/utils ./packages/utils
+COPY packages/tools ./packages/tools
+COPY packages/renderer ./packages/renderer
+COPY packages/htmlpack ./packages/htmlpack
+COPY packages/transcribe ./packages/transcribe
+
+# We don't want to build onenote-converter since it is not used by the server
+RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
+
+RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
+    && yarn cache clean \
+    && rm -rf .yarn/berry
+
+WORKDIR /app/packages/transcribe
+
+# Start the Node.js application
+CMD ["yarn", "start"]

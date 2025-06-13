@@ -10,14 +10,14 @@
   },
   "engines": {
     "node": ">=18",
-    "yarn": "3.8.3"
+    "yarn": "4.9.2"
   },
   "scripts": {
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildScriptIndexes": "node packages/tools/gulp/tasks/buildScriptIndexesRun.js",
-    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 --topological run build && yarn tsc",
+    "buildParallel": "yarn workspaces foreach --worktree --verbose --interlaced --parallel --jobs 2 --topological-dev run build && yarn tsc",
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn buildPluginDoc_",
-    "buildSequential": "yarn workspaces foreach --verbose --interlaced --topological run build && yarn tsc",
+    "buildSequential": "yarn workspaces foreach --worktree --verbose --interlaced --topological-dev run build && yarn tsc",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
@@ -53,15 +53,15 @@
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "spellcheck": "node packages/tools/spellcheck.js",
     "tagServerLatest": "node packages/tools/tagServerLatest.js",
-    "test-ci": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test-ci",
-    "test": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 2 run test",
-    "tsc": "yarn workspaces foreach --parallel --verbose --interlaced run tsc",
+    "test-ci": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test-ci",
+    "test": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test",
+    "tsc": "yarn workspaces foreach --worktree --parallel --verbose --interlaced run tsc",
     "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "validateFilenames": "node ./packages/tools/validateFilenames.js",
-    "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
+    "watch": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 999 run watch",
     "watchWebsite": "nodemon --delay 1 --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --watch packages/doc-builder/build --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
   "devDependencies": {
@@ -93,9 +93,9 @@
     "eslint-plugin-github": "4.10.2",
     "http-server": "14.1.1",
     "node-gyp": "9.4.1",
-    "nodemon": "3.1.7"
+    "nodemon": "3.1.9"
   },
-  "packageManager": "yarn@3.8.3",
+  "packageManager": "yarn@4.9.2",
   "resolutions": {
     "react-native-camera@4.2.1": "patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch",
     "react-native-vosk@0.1.12": "patch:react-native-vosk@npm%3A0.1.12#./.yarn/patches/react-native-vosk-npm-0.1.12-76b1caaae8.patch",
@@ -104,12 +104,16 @@
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "chokidar@^2.0.0": "3.5.3",
-    "react-native@0.74.1": "patch:react-native@npm%3A0.74.1#./.yarn/patches/react-native-npm-0.74.1-754c02ae9e.patch",
     "rn-fetch-blob@0.12.0": "patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch",
     "app-builder-lib@26.0.0-alpha.7": "patch:app-builder-lib@npm%3A26.0.0-alpha.7#./.yarn/patches/app-builder-lib-npm-26.0.0-alpha.7-e1b3dca119.patch",
     "app-builder-lib@24.13.3": "patch:app-builder-lib@npm%3A24.13.3#./.yarn/patches/app-builder-lib-npm-24.13.3-86a66c0bf3.patch",
     "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch",
     "react-native-paper@5.13.1": "patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch",
-    "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch"
+    "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch",
+    "react-native@0.79.2": "patch:react-native@npm%3A0.79.2#./.yarn/patches/react-native-npm-0.79.2-9db13eddfe.patch",
+    "pdfjs-dist@2.16.105": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "pdfjs-dist@*": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "pdfjs-dist@3.11.174": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
+    "canvas@npm:^2.11.2": "link:./.yarn/joplin-empty-package/"
   }
 }

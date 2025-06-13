@@ -3,10 +3,9 @@ import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
 import PostMessageService, { MessageParticipant } from '../PostMessageService';
-import { PluginViewState } from './reducer';
+import { PluginEditorViewState, PluginViewState } from './reducer';
 import { defaultWindowId } from '../../reducer';
 import Logger from '@joplin/utils/Logger';
-import CommandService from '../CommandService';
 
 const logger = Logger.create('WebviewController');
 
@@ -49,32 +48,48 @@ function findItemByKey(layout: any, key: string): any {
 	return recurseFind(layout);
 }
 
+interface EditorUpdateEvent {
+	noteId: string;
+	newBody: string;
+}
+type EditorUpdateListener = (event: EditorUpdateEvent)=> void;
+
+interface SaveNoteEvent {
+	noteId: string;
+	body: string;
+}
+type OnSaveNoteCallback = (saveNoteEvent: SaveNoteEvent)=> void;
+
 export default class WebviewController extends ViewController {
 
 	private baseDir_: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private messageListener_: Function = null;
-	private updateListener_: ()=> void = null;
+	private updateListener_: EditorUpdateListener|null = null;
 	private closeResponse_: CloseResponse = null;
 	private containerType_: ContainerType = null;
+	private saveNoteListener_: OnSaveNoteCallback|null = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType) {
+	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType, parentWindowId: string|null) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 		this.containerType_ = containerType;
 
 		const view: PluginViewState = {
 			id: this.handle,
+			editorTypeId: '',
 			type: this.type,
 			containerType: containerType,
 			html: '',
 			scripts: [],
+			buttons: null,
+			fitToContent: true,
 			// Opened is used for dialogs and mobile panels (which are shown
 			// like dialogs):
 			opened: containerType === ContainerType.Panel,
-			buttons: null,
-			fitToContent: true,
+			active: false,
+			parentWindowId,
 		};
 
 		this.store.dispatch({
@@ -84,8 +99,21 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
+	public destroy() {
+		this.store.dispatch({
+			type: 'PLUGIN_VIEW_REMOVE',
+			pluginId: this.pluginId,
+			viewId: this.storeView.id,
+		});
+	}
+
 	public get type(): string {
 		return 'webview';
+	}
+
+	// Returns `null` if the view can be shown in any window.
+	public get parentWindowId(): string {
+		return this.storeView.parentWindowId;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -127,7 +155,6 @@ export default class WebviewController extends ViewController {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public postMessage(message: any) {
-
 		const messageId = `plugin_${Date.now()}${Math.random()}`;
 
 		void PostMessageService.instance().postMessage({
@@ -146,15 +173,10 @@ export default class WebviewController extends ViewController {
 	public async emitMessage(event: EmitMessageEvent) {
 		if (!this.messageListener_) return;
 
-		if (this.containerType_ === ContainerType.Editor && !this.isActive()) {
-			logger.info('emitMessage: Not emitting message because editor is disabled:', this.pluginId, this.handle);
-			return;
-		}
-
 		return this.messageListener_(event.message);
 	}
 
-	public emitUpdate() {
+	public emitUpdate(event: EditorUpdateEvent) {
 		if (!this.updateListener_) return;
 
 		if (this.containerType_ === ContainerType.Editor && (!this.isActive() || !this.isVisible())) {
@@ -162,7 +184,7 @@ export default class WebviewController extends ViewController {
 			return;
 		}
 
-		this.updateListener_();
+		this.updateListener_(event);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -170,8 +192,7 @@ export default class WebviewController extends ViewController {
 		this.messageListener_ = callback;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onUpdate(callback: any) {
+	public onUpdate(callback: EditorUpdateListener) {
 		this.updateListener_ = callback;
 	}
 
@@ -271,22 +292,37 @@ export default class WebviewController extends ViewController {
 	// Specific to editors
 	// ---------------------------------------------
 
+	public setEditorTypeId(id: string) {
+		this.setStoreProp('editorTypeId', id);
+	}
+
 	public setActive(active: boolean) {
-		this.setStoreProp('opened', active);
+		this.setStoreProp('active', active);
 	}
 
 	public isActive(): boolean {
-		return this.storeView.opened;
+		const state = this.storeView as PluginEditorViewState;
+		return state.active;
+	}
+
+	public setOpened(visible: boolean) {
+		this.setStoreProp('opened', visible);
 	}
 
 	public isVisible(): boolean {
-		if (!this.storeView.opened) return false;
-		const shownEditorViewIds: string[] = this.store.getState().settings['plugins.shownEditorViewIds'];
-		return shownEditorViewIds.includes(this.handle);
+		const state = this.storeView as PluginEditorViewState;
+		return state.active && state.opened;
 	}
 
-	public async setVisible(visible: boolean) {
-		await CommandService.instance().execute('showEditorPlugin', this.handle, visible);
+	public async requestSaveNote(event: SaveNoteEvent) {
+		if (!this.saveNoteListener_) {
+			logger.warn('Note save requested, but no save handler was registered. View ID: ', this.storeView?.id);
+			return;
+		}
+		this.saveNoteListener_(event);
 	}
 
+	public onNoteSaveRequested(listener: OnSaveNoteCallback) {
+		this.saveNoteListener_ = listener;
+	}
 }

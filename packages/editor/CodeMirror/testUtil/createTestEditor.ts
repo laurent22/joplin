@@ -12,16 +12,18 @@ import MarkdownHighlightExtension from '../markdown/MarkdownHighlightExtension';
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
 const createTestEditor = async (
 	initialText: string,
-	initialSelection: SelectionRange,
+	initialSelection: SelectionRange|SelectionRange[],
 	expectedSyntaxTreeTags: string[],
 	extraExtensions: Extension[] = [],
 	addMarkdownKeymap = true,
 ): Promise<EditorView> => {
 	await loadLanguages();
 
+	initialSelection = Array.isArray(initialSelection) ? initialSelection : [initialSelection];
+
 	const editor = new EditorView({
 		doc: initialText,
-		selection: EditorSelection.create([initialSelection]),
+		selection: EditorSelection.create(initialSelection),
 		extensions: [
 			markdown({
 				extensions: [MarkdownMathExtension, MarkdownHighlightExtension, GithubFlavoredMarkdownExt],

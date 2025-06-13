@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HtrCli should parse empty result 1`] = `"text"`;
+
+exports[`HtrCli should parse empty result 2 1`] = `""`;
+
+exports[`HtrCli should parse empty result 3 1`] = `"txt"`;
+
+exports[`HtrCli should parse multiline result 1`] = `
+"python
+Kroken HTR
+
+Tasks:
+- Compare French HTR accuracy with Finetuned TROCR.
+  - Set up comparison logic:
+    - Kroken
+    - TROCR
+- Evaluate page segmentation performance. <--- T-C a seg
+- Can there models run on end-user computers?
+  - Kroken?
+  - TROCR?"
+`;
+
+exports[`HtrCli should parse multiline result 2 1`] = `
+"This is another mix of drawings and diagrams:
+
+The above drawing is not text and should not be recognised as such.
+
+This diagram has some text:
+
+A
+  \\  / 
+   U B
+
+This is more text.
+This is even more."
+`;
+
+exports[`HtrCli should parse singleline result 1`] = `"This is a quick test of multi-line text."`;

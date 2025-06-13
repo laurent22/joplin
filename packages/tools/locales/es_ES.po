@@ -15,6 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: Spanish <lucas.vieites@gmail.com>\n"
 "Language: es_ES\n"
@@ -22,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
@@ -1161,7 +1163,7 @@ msgstr "Compacto"
 
 #: packages/app-desktop/gui/NoteList/utils/useOnKeyDown.ts:174
 msgid "Complete"
-msgstr "Completo"
+msgstr "Completa"
 
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
 msgid "Complete to-do"
@@ -1186,7 +1188,7 @@ msgstr ""
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Completed: %s (%s)"
-msgstr "Completado: %s (%s)"
+msgstr "Completada: %s (%s)"
 
 #: packages/lib/models/Note.ts:66
 msgid "completion date"
@@ -4047,9 +4049,8 @@ msgid "Open it"
 msgstr "Ábrela"
 
 #: packages/app-desktop/bridge.ts:537
-#, fuzzy
 msgid "Open log"
-msgstr "Abrir %s"
+msgstr "Abrir registro"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -5164,9 +5165,8 @@ msgid "Sidebar"
 msgstr "Barra lateral"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "Inicie sesión en Joplin Cloud."
+msgstr "Inicie sesión en Joplin Cloud"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"

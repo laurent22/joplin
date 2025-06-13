@@ -4,7 +4,7 @@ import { PluginHtmlContents, ViewInfo } from '@joplin/lib/services/plugins/reduc
 import ExtendedWebView from '../../ExtendedWebView';
 import { WebViewControl } from '../../ExtendedWebView/types';
 import { ViewStyle } from 'react-native';
-import usePlugin from '@joplin/lib/hooks/usePlugin';
+import usePlugin from '@joplin/lib/hooks/plugins/usePlugin';
 import shim from '@joplin/lib/shim';
 import useDialogMessenger from './hooks/useDialogMessenger';
 import useWebViewSetup from './hooks/useWebViewSetup';

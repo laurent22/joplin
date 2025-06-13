@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react-native';
+import { screen, waitFor } from './testingLibrary';
 
 const getWebViewWindowById = async (id: string): Promise<Window> => {
 	const webviewContent = await screen.findByTestId(id);

@@ -57,13 +57,13 @@ export interface NoteEditorProps {
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	contentMaxWidth: number;
 	scrollbarSize: ScrollbarSize;
+	viewerFontFamily: string;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;
 	syncUserId: string;
 	searchResults: ProcessResultsRow[];
 	pluginHtmlContents: PluginHtmlContents;
-	'plugins.shownEditorViewIds': string[];
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 	startupPluginsLoaded: boolean;
@@ -132,6 +132,7 @@ export interface NoteBodyEditorProps {
 	plugins: PluginStates;
 	mathEnabled: boolean;
 	fontSize: number;
+	baseFontFamily: string;
 	contentMaxWidth: number;
 	isSafeMode: boolean;
 	noteId: string;
