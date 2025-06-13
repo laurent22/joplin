@@ -5,10 +5,10 @@ runs:
   steps:
     # Trying to fix random networking issues on Windows
     # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
-    - name: Disable TCP/UDP offload on Windows
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+    # - name: Disable TCP/UDP offload on Windows
+    #   if: runner.os == 'Windows'
+    #   shell: pwsh
+    #   run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
 
     - name: Disable TCP/UDP offload on Linux
       if: runner.os == 'Linux'
