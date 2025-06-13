@@ -13,6 +13,13 @@ async function main() {
 		return;
 	}
 
+	// Sometimes the onenote-converter build needs to be disabled in CI.
+	if (process.env.SKIP_ONENOTE_CONVERTER_BUILD) {
+		// eslint-disable-next-line no-console
+		console.info('SKIP_ONENOTE_CONVERTER_BUILD was set. The onenote-converter package will not be built.');
+		return;
+	}
+
 	const argv = yargs.argv;
 	if (!argv.profile) throw new Error('OneNote build: profile value is missing');
 	if (!['release', 'dev'].includes(argv.profile)) throw new Error('OneNote build: profile value is invalid');

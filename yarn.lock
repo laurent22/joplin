@@ -3831,15 +3831,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-export-namespace-from@npm:7.24.7, @babel/plugin-transform-export-namespace-from@npm:^7.24.7":
-  version: 7.24.7
-  resolution: "@babel/plugin-transform-export-namespace-from@npm:7.24.7"
+"@babel/plugin-transform-export-namespace-from@npm:7.25.9":
+  version: 7.25.9
+  resolution: "@babel/plugin-transform-export-namespace-from@npm:7.25.9"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.24.7"
-    "@babel/plugin-syntax-export-namespace-from": "npm:^7.8.3"
+    "@babel/helper-plugin-utils": "npm:^7.25.9"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10/d59d21945d2fd1ead914bb21f909f75b70ebe0e7627c2b1326ce500babca4c8e4a2513af6899d92e06e87186c61ee5087209345f5102fb4ff5a0e47e7b159a2c
+  checksum: 10/4dfe8df86c5b1d085d591290874bb2d78a9063090d71567ed657a418010ad333c3f48af2c974b865f53bbb718987a065f89828d43279a7751db1a56c9229078d
   languageName: node
   linkType: hard
 
@@ -3852,6 +3851,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10/73af5883a321ed56a4bfd43c8a7de0164faebe619287706896fc6ee2f7a4e69042adaa1338c0b8b4bdb9f7e5fdceb016fb1d40694cb43ca3b8827429e8aac4bf
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-export-namespace-from@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/plugin-transform-export-namespace-from@npm:7.24.7"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^7.24.7"
+    "@babel/plugin-syntax-export-namespace-from": "npm:^7.8.3"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10/d59d21945d2fd1ead914bb21f909f75b70ebe0e7627c2b1326ce500babca4c8e4a2513af6899d92e06e87186c61ee5087209345f5102fb4ff5a0e47e7b159a2c
   languageName: node
   linkType: hard
 
@@ -6070,17 +6081,17 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:3":
-  version: 3.15.0
-  resolution: "@crowdin/cli@npm:3.15.0"
+  version: 3.19.4
+  resolution: "@crowdin/cli@npm:3.19.4"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
-    node-fetch: "npm:2.6.7"
-    shelljs: "npm:^0.8.4"
-    tar: "npm:^4.4.8"
-    yauzl: "npm:^2.10.0"
+    node-fetch: "npm:2.7.0"
+    shelljs: "npm:^0.8.5"
+    tar: "npm:^6.2.0"
+    yauzl: "npm:^3.1.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/17ccc8d8c124ee9d82da92581ab022d060cb1e74d5df5e0243e13e001cb07cc9273238aec243a644760ad8be957b1a3dff17a419abacb50a06ae5ade10407d69
+  checksum: 10/bab4e08be0a0693f787e170a669a750cae3478c8efb6936b32812076d71dcab92ef573f2d9ea701e7d6a5d7fbe95133c38a1dca62e0357d985901694e449f4a2
   languageName: node
   linkType: hard
 
@@ -8899,7 +8910,7 @@ __metadata:
   resolution: "@joplin/app-mobile@workspace:packages/app-mobile"
   dependencies:
     "@babel/core": "npm:7.26.0"
-    "@babel/plugin-transform-export-namespace-from": "npm:7.24.7"
+    "@babel/plugin-transform-export-namespace-from": "npm:7.25.9"
     "@babel/preset-env": "npm:7.25.3"
     "@babel/runtime": "npm:7.25.0"
     "@bam.tech/react-native-image-resizer": "npm:3.0.11"
@@ -8912,9 +8923,9 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@js-draw/material-icons": "npm:1.30.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
-    "@react-native-clipboard/clipboard": "npm:1.14.3"
+    "@react-native-clipboard/clipboard": "npm:1.16.2"
     "@react-native-community/cli": "npm:15.0.1"
-    "@react-native-community/cli-platform-android": "npm:15.0.1"
+    "@react-native-community/cli-platform-android": "npm:15.1.3"
     "@react-native-community/cli-platform-ios": "npm:15.0.1"
     "@react-native-community/datetimepicker": "npm:8.3.0"
     "@react-native-community/geolocation": "npm:3.3.0"
@@ -8931,7 +8942,7 @@ __metadata:
     "@types/node": "npm:18.19.67"
     "@types/react": "npm:19.0.10"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.124"
+    "@types/serviceworker": "npm:0.0.125"
     "@types/tar-stream": "npm:3.1.3"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -11396,9 +11407,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-clipboard/clipboard@npm:1.14.3":
-  version: 1.14.3
-  resolution: "@react-native-clipboard/clipboard@npm:1.14.3"
+"@react-native-clipboard/clipboard@npm:1.16.2":
+  version: 1.16.2
+  resolution: "@react-native-clipboard/clipboard@npm:1.16.2"
   peerDependencies:
     react: ">= 16.9.0"
     react-native: ">= 0.61.5"
@@ -11409,7 +11420,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10/0778410650fb0abcba3fb00a5f999ee62fd35d75edd0b322faa75263ffd625a64faca13e8c978c44d098a0823b36f79c0340c98ddfd1f98c8ab3edb128c6e38d
+  checksum: 10/c556ed2f539c524aafd8fdfa34b03136185dc75fcb1e98bd2ca319adde852aa5f4b5e4c8998a1b0297c3ba36c1e98c1036930adc56792ba36073a71add9af1fa
   languageName: node
   linkType: hard
 
@@ -11434,6 +11445,18 @@ __metadata:
     execa: "npm:^1.0.0"
     prompts: "npm:^2.4.0"
   checksum: 10/df25c27500a78038aee30c8924a2bb724d3422b35bb27c9cf73c4694c26f7059eb73d70289f193b29afe49b466beafd65b53dae42d9220578fc3172e7906c92e
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-config-android@npm:15.1.3":
+  version: 15.1.3
+  resolution: "@react-native-community/cli-config-android@npm:15.1.3"
+  dependencies:
+    "@react-native-community/cli-tools": "npm:15.1.3"
+    chalk: "npm:^4.1.2"
+    fast-glob: "npm:^3.3.2"
+    fast-xml-parser: "npm:^4.4.1"
+  checksum: 10/ea59b9e662f1dfdd8c92e666bf38a80de553e63b645de6d8041b0dcd64d9313aadfd9ee162d778562c01c2350f09b84732572471ca7bb4e5574a27ab616fca28
   languageName: node
   linkType: hard
 
@@ -11569,6 +11592,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-platform-android@npm:15.1.3":
+  version: 15.1.3
+  resolution: "@react-native-community/cli-platform-android@npm:15.1.3"
+  dependencies:
+    "@react-native-community/cli-config-android": "npm:15.1.3"
+    "@react-native-community/cli-tools": "npm:15.1.3"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    logkitty: "npm:^0.7.1"
+  checksum: 10/8ddfa18a11c6cf9e9b30792e295f62702035f67f2fb5365ed64068e7148fb66a352a969b364ac35acb45033ad8cc0a66639bbd9bb52a405b20e3c63c5ed13564
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-platform-android@npm:9.3.1, @react-native-community/cli-platform-android@npm:^9.3.1":
   version: 9.3.1
   resolution: "@react-native-community/cli-platform-android@npm:9.3.1"
@@ -11687,6 +11723,25 @@ __metadata:
     shell-quote: "npm:^1.7.3"
     sudo-prompt: "npm:^9.0.0"
   checksum: 10/3447257d1650104466b7d59846ddcd45d8432b18d18df71c0606ecfed7892014fa959b917ab435c822b305a9a890bd51e762e941137e29f7824e215beacb42a5
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-tools@npm:15.1.3":
+  version: 15.1.3
+  resolution: "@react-native-community/cli-tools@npm:15.1.3"
+  dependencies:
+    appdirsjs: "npm:^1.2.4"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    find-up: "npm:^5.0.0"
+    mime: "npm:^2.4.1"
+    open: "npm:^6.2.0"
+    ora: "npm:^5.4.1"
+    prompts: "npm:^2.4.2"
+    semver: "npm:^7.5.2"
+    shell-quote: "npm:^1.7.3"
+    sudo-prompt: "npm:^9.0.0"
+  checksum: 10/050344a4617c39d996c549446e4f894076c99bd2897fa8132c9d675ef387e88e1f5b48cdcd718a2eab90a2e51c6c4d6c4b240421633a2b3f0bc6b7d866f8e6c9
   languageName: node
   linkType: hard
 
@@ -14273,10 +14328,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.124":
-  version: 0.0.124
-  resolution: "@types/serviceworker@npm:0.0.124"
-  checksum: 10/c6aac609513a80a31efe6be8c1597bf52da3aa11cc5c58c8ea3cedf63841093067e68873b9480cf0e85f62288f145874092dd9dc189dc1c9f35f03f991f6657e
+"@types/serviceworker@npm:0.0.125":
+  version: 0.0.125
+  resolution: "@types/serviceworker@npm:0.0.125"
+  checksum: 10/334397e5dd00facefa2f34d55a69bbddca89dbe16625bc240d6ddfff6a5acdd3bfc4257c61c7164c36db233b5a758da72e71a15222dc55d18257f42cf2abc6ab
   languageName: node
   linkType: hard
 
@@ -36260,16 +36315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.2.0, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1":
-  version: 2.6.6
-  resolution: "node-fetch@npm:2.6.6"
-  dependencies:
-    whatwg-url: "npm:^5.0.0"
-  checksum: 10/58235868373af390dfafbda5576fbe54f1ba357f4c16189ca328332a5d3a62142c113d3bbdce60c6fc0d4f9718c8a102917ea9b5c6814553d80c679da56b9f1a
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.9":
+"node-fetch@npm:2.7.0, node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.9":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -36280,6 +36326,15 @@ __metadata:
     encoding:
       optional: true
   checksum: 10/b24f8a3dc937f388192e59bcf9d0857d7b6940a2496f328381641cb616efccc9866e89ec43f2ec956bbd6c3d3ee05524ce77fe7b29ccd34692b3a16f237d6676
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.2.0, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1":
+  version: 2.6.6
+  resolution: "node-fetch@npm:2.6.6"
+  dependencies:
+    whatwg-url: "npm:^5.0.0"
+  checksum: 10/58235868373af390dfafbda5576fbe54f1ba357f4c16189ca328332a5d3a62142c113d3bbdce60c6fc0d4f9718c8a102917ea9b5c6814553d80c679da56b9f1a
   languageName: node
   linkType: hard
 
@@ -46464,7 +46519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.2.1":
+"tar@npm:6.2.1, tar@npm:^6.2.0":
   version: 6.2.1
   resolution: "tar@npm:6.2.1"
   dependencies:
@@ -51135,6 +51190,16 @@ __metadata:
     buffer-crc32: "npm:~0.2.3"
     fd-slicer: "npm:~1.1.0"
   checksum: 10/1e4c311050dc0cf2ee3dbe8854fe0a6cde50e420b3e561a8d97042526b4cf7a0718d6c8d89e9e526a152f4a9cec55bcea9c3617264115f48bd6704cf12a04445
+  languageName: node
+  linkType: hard
+
+"yauzl@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "yauzl@npm:3.2.0"
+  dependencies:
+    buffer-crc32: "npm:~0.2.3"
+    pend: "npm:~1.2.0"
+  checksum: 10/a3cd2bfcf7590673bb35750f2a4e5107e3cc939d32d98a072c0673fe42329e390f471b4a53dbbd72512229099b18aa3b79e6ddb87a73b3a17446080c903a2c4b
   languageName: node
   linkType: hard
 
