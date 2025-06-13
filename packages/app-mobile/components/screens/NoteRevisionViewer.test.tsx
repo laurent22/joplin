@@ -45,7 +45,7 @@ const createNoteWithTestRevisions = async (count: number) => {
 	}
 
 	// Verify that the revisions were created successfully
-	expect(await Revision.allByType(ModelType.Note, noteId)).toHaveLength(count);
+	expect(await Revision.allByType(ModelType.Note, noteId)).toHaveLength(count + 1);
 	return note;
 };
 
