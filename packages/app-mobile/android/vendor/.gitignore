@@ -1,0 +1,9 @@
+whisper.cpp/.gitmodules
+whisper.cpp/scripts/
+whisper.cpp/samples/
+whisper.cpp/tests/
+whisper.cpp/models/
+whisper.cpp/examples/
+whisper.cpp/.*/
+whisper.cpp/bindings/
+whisper.cpp/**/*.Dockerfile

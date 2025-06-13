@@ -1,6 +1,6 @@
-const React = require('react');
-const { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } = require('react-native');
-const { connect } = require('react-redux');
+import * as React from 'react';
+import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
@@ -16,13 +16,11 @@ import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	themeId: any;
+	themeId: number;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
 	notLoadedMasterKeys: string[];
 	encryptionEnabled: boolean;
-	shouldReencrypt: boolean;
 	activeMasterKeyId: string;
 	masterPassword: string;
 }
@@ -54,7 +52,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	}, [theme]);
 
 	const styles = useMemo(() => {
-		const styles = {
+		return StyleSheet.create({
 			titleText: {
 				flex: 1,
 				fontWeight: 'bold',
@@ -85,9 +83,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
 			},
-		};
-
-		return StyleSheet.create(styles);
+		});
 	}, [theme]);
 
 	const decryptedItemsInfo = props.encryptionEnabled ? <Text style={styles.normalText}>{decryptedStatText(stats)}</Text> : null;
@@ -96,7 +92,8 @@ const EncryptionConfigScreen = (props: Props) => {
 		const theme = themeStyle(props.themeId);
 
 		const password = inputPasswords[mk.id] ? inputPasswords[mk.id] : '';
-		const passwordOk = passwordChecks[mk.id] === true ? '✔' : '❌';
+		const passwordOk = passwordChecks[mk.id] === true;
+		const passwordOkIcon = passwordOk ? '✔' : '❌';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
@@ -111,8 +108,19 @@ const EncryptionConfigScreen = (props: Props) => {
 			} else {
 				return (
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-						<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={(text: string) => onInputPasswordChange(mk, text)} style={inputStyle}></TextInput>
-						<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
+						<TextInput
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							secureTextEntry={true}
+							value={password}
+							onChangeText={(text: string) => onInputPasswordChange(mk, text)}
+							style={inputStyle}
+						/>
+						<Text
+							style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}
+							accessibilityRole='image'
+							accessibilityLabel={passwordOk ? _('Valid') : _('Invalid password')}
+						>{passwordOkIcon}</Text>
 						<Button title={_('Save')} onPress={() => onSavePasswordClick(mk, inputPasswords)}></Button>
 					</View>
 				);
@@ -121,7 +129,10 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		return (
 			<View key={mk.id}>
-				<Text style={styles.titleText}>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
+				<Text
+					style={styles.titleText}
+					accessibilityRole='header'
+				>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
 				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
@@ -157,11 +168,14 @@ const EncryptionConfigScreen = (props: Props) => {
 			return <Text key={msg} style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{msg}</Text>;
 		});
 
+		const passwordLabelId = 'password-label';
+		const confirmPasswordLabelId = 'confirm-password';
 		return (
 			<View style={{ flex: 1, flexBasis: 'auto', borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
 				<View>{messageComps}</View>
-				<Text style={styles.normalText}>{_('Password:')}</Text>
+				<Text nativeID={passwordLabelId} style={styles.normalText}>{_('Password:')}</Text>
 				<TextInput
+					accessibilityLabelledBy={passwordLabelId}
 					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
 					style={styles.normalTextInput}
@@ -172,8 +186,9 @@ const EncryptionConfigScreen = (props: Props) => {
 					}}
 				></TextInput>
 
-				<Text style={styles.normalText}>{_('Confirm password:')}</Text>
+				<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
 				<TextInput
+					accessibilityLabelledBy={confirmPasswordLabelId}
 					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
 					style={styles.normalTextInput}
@@ -221,11 +236,23 @@ const EncryptionConfigScreen = (props: Props) => {
 				</View>
 			);
 		} else {
+			const labelId = 'master-password-label';
 			return (
 				<View style={{ display: 'flex', flexDirection: 'column', marginTop: 10 }}>
-					<Text style={styles.normalText}>{'The master password is not set or is invalid. Please type it below:'}</Text>
+					<Text
+						style={styles.normalText}
+						nativeID={labelId}
+					>{'The master password is not set or is invalid. Please type it below:'}</Text>
 					<View style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
-						<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={inputMasterPassword} onChangeText={(text: string) => onMasterPasswordChange(text)} style={inputStyle}></TextInput>
+						<TextInput
+							accessibilityLabelledBy={labelId}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							secureTextEntry={true}
+							value={inputMasterPassword}
+							onChangeText={(text: string) => onMasterPasswordChange(text)}
+							style={inputStyle}
+						/>
 						<Button onPress={onMasterPasswordSave} title={_('Save')} />
 					</View>
 				</View>
@@ -233,17 +260,15 @@ const EncryptionConfigScreen = (props: Props) => {
 		}
 	};
 
-	for (let i = 0; i < props.masterKeys.filter(mk => masterKeyEnabled(mk)).length; i++) {
-		const mk = props.masterKeys[i];
-		mkComps.push(renderMasterKey(mk));
+	for (const enabledKey of props.masterKeys.filter(mk => masterKeyEnabled(mk))) {
+		mkComps.push(renderMasterKey(enabledKey));
 
-		const idx = nonExistingMasterKeyIds.indexOf(mk.id);
+		const idx = nonExistingMasterKeyIds.indexOf(enabledKey.id);
 		if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
 	}
 
-	for (let i = 0; i < props.masterKeys.filter(mk => !masterKeyEnabled(mk)).length; i++) {
-		const mk = props.masterKeys[i];
-		disabledMkComps.push(renderMasterKey(mk));
+	for (const disabledKey of props.masterKeys.filter(mk => !masterKeyEnabled(mk))) {
+		disabledMkComps.push(renderMasterKey(disabledKey));
 	}
 
 	const onToggleButtonClick = async () => {
@@ -293,6 +318,17 @@ const EncryptionConfigScreen = (props: Props) => {
 		</View>
 	) : null;
 
+	const disabledMasterKeyList = disabledMkComps.length ? <List.Accordion
+		title={_('Disabled keys')}
+		titleStyle={styles.titleText}
+		expanded={showDisabledKeys}
+		onPress={() => setShowDisabledKeys(st => !st)}
+	>
+		<View style={styles.disabledContainer}>
+			{disabledMkComps}
+		</View>
+	</List.Accordion> : null;
+
 	return (
 		<View style={rootStyle}>
 			<ScreenHeader title={_('Encryption Config')} />
@@ -302,14 +338,18 @@ const EncryptionConfigScreen = (props: Props) => {
 						<Text>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</Text>
 						<TouchableOpacity
 							onPress={() => {
-								Linking.openURL('https://joplinapp.org/help/apps/sync/e2ee');
+								void Linking.openURL('https://joplinapp.org/help/apps/sync/e2ee');
 							}}
+							accessibilityRole='link'
 						>
 							<Text>https://joplinapp.org/help/apps/sync/e2ee</Text>
 						</TouchableOpacity>
 					</View>
 
-					<Text style={styles.titleText}>{_('Status')}</Text>
+					<Text
+						style={styles.titleText}
+						accessibilityRole='header'
+					>{_('Status')}</Text>
 					<Text style={styles.normalText}>{_('Encryption is: %s', props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
 					{decryptedItemsInfo}
 					{renderMasterPassword()}
@@ -319,16 +359,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					{nonExistingMasterKeySection}
 				</View>
 				<Divider />
-				<List.Accordion
-					title={_('Disabled keys')}
-					titleStyle={styles.titleText}
-					expanded={showDisabledKeys}
-					onPress={() => setShowDisabledKeys(st => !st)}
-				>
-					<View style={styles.disabledContainer}>
-						{disabledMkComps}
-					</View>
-				</List.Accordion>
+				{disabledMasterKeyList}
 			</ScrollView>
 		</View>
 	);

@@ -43,7 +43,7 @@ Then you can test the various applications:
 	cd packages/app-desktop
 	yarn start
 
-You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
+Use the regular Command Prompt to develop in Windows. We [do not recommend using WSL for this](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md#other-issues) and we do not support this use case.
 
 ## Testing the Terminal application
 

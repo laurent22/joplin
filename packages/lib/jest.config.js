@@ -11,6 +11,9 @@ module.exports = {
 
 	testEnvironment: 'node',
 
-	setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+	setupFilesAfterEnv: [
+		'jest-expect-message',
+		`${__dirname}/jest.setup.js`,
+	],
 	slowTestThreshold: 40,
 };

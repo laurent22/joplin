@@ -198,8 +198,8 @@ const useTooltipStyles = (themeId: number) => {
 // On web, by default, pressing buttons defocuses the active edit control, dismissing the
 // virtual keyboard. This hook creates listeners that optionally prevent the keyboard from dismissing.
 const usePreventKeyboardDismissTouchListeners = (preventKeyboardDismiss: boolean, onPress: ()=> void, disabled: boolean) => {
-	const touchStartPointRef = useRef<[number, number]>();
-	const isTapRef = useRef<boolean>();
+	const touchStartPointRef = useRef<[number, number]>([-1, -1]);
+	const isTapRef = useRef<boolean>(false);
 	const onTouchStart = useCallback((event: GestureResponderEvent) => {
 		if (Platform.OS === 'web' && preventKeyboardDismiss) {
 			const touch = event.nativeEvent.touches[0];

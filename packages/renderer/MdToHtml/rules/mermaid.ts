@@ -98,17 +98,6 @@ export default {
 
 const exportGraphButton = (ruleOptions: RuleOptions) => {
 	const theme = ruleOptions.theme;
-	// Clicking on export button manually triggers a right click context menu event
-	const onClickHandler = `
-		const target = arguments[0].target;
-		const button = target.closest("div.mermaid-export-graph");
-		if (!button) return false;
-		const $mermaid_elem = button.nextElementSibling;
-		const rightClickEvent = new PointerEvent("contextmenu", {bubbles: true});
-		rightClickEvent.target = $mermaid_elem;
-		$mermaid_elem.dispatchEvent(rightClickEvent);
-		return false;
-	`.trim();
 	const style = `
 		display: block;	
 		margin-left: auto;
@@ -119,9 +108,10 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 		border: ${theme.buttonStyle.border};
 	`.trim();
 
+	// OnClick is handled in the renderer script
 	return `
 		<div class="mermaid-export-graph">
-			<button onclick='${onClickHandler}' style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
+			<button style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
 		</div>
 	`;
 };

@@ -72,9 +72,9 @@ export default class EncryptionService {
 
 	private encryptedMasterKeys_: Map<string, EncryptedMasterKey> = new Map();
 	private decryptedMasterKeys_: Map<string, DecryptedMasterKey> = new Map();
-	public defaultEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.StringV1 : EncryptionMethod.SJCL1a; // public because used in tests
-	public defaultFileEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.FileV1 : EncryptionMethod.SJCL1a; // public because used in tests
-	private defaultMasterKeyEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.KeyV1 : EncryptionMethod.SJCL4;
+	public defaultEncryptionMethod_ = EncryptionMethod.StringV1; // public because used in tests
+	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests
+	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.KeyV1;
 
 	private encryptionNonce_: Uint8Array = null;
 

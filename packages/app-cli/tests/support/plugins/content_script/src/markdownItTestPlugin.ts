@@ -13,13 +13,6 @@ export default function(context) {
 				const token = tokens[idx];
 				if (token.info !== 'justtesting') return defaultRender(tokens, idx, options, env, self);
 
-				const postMessageWithResponseTest = `
-					webviewApi.postMessage('${contentScriptId}', 'justtesting').then(function(response) {
-						console.info('Got response in content script: ' + response);
-					});
-					return false;
-				`;
-
 				// Rich text editor support:
 				// The joplin-editable and joplin-source CSS classes mark the generated div
 				// as a region that needs special processing when converting back to markdown.
@@ -38,14 +31,23 @@ export default function(context) {
 						${richTextEditorMetadata}
 
 						<p>JUST TESTING: <pre>${markdownIt.utils.escapeHtml(leftPad(token.content.trim(), 10, 'x'))}</pre></p>
-						<p><a href="#" onclick="${postMessageWithResponseTest.replace(/\n/g, ' ')}">Click to post a message "justtesting" to plugin and check the response in the console</a></p>
+						<p>
+							<a
+								href="#"
+								data-content-script-id="${markdownIt.utils.escapeHtml(contentScriptId)}"
+								class="post-message-link"
+							>
+								Click to post a message "justtesting" to plugin and check the response in the console
+							</a>
+						</p>
 					</div>
 				`;
 			};
 		},
 		assets: function() {
 			return [
-				{ name: 'markdownItTestPlugin.css' }
+				{ name: 'markdownItTestPlugin.css' },
+				{ name: 'markdownItTestPluginRuntime.js' },
 			];
 		},
 	}

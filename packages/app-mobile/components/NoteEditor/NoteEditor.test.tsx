@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native';
+import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 import NoteEditor from './NoteEditor';
 import Setting from '@joplin/lib/models/Setting';
@@ -48,7 +47,9 @@ describe('NoteEditor', () => {
 				<NoteEditor
 					themeId={Setting.THEME_ARITIM_DARK}
 					initialText='Testing...'
+					globalSearch=''
 					noteId=''
+					noteHash=''
 					style={{}}
 					toolbarEnabled={true}
 					readOnly={false}

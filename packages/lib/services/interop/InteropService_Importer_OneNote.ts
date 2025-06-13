@@ -3,7 +3,6 @@ import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './t
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
-import * as AdmZip from 'adm-zip';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
@@ -45,11 +44,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	public async exec(result: ImportExportResult) {
 		const sourcePath = rtrimSlashes(this.sourcePath_);
 		const unzipTempDirectory = await this.temporaryDirectory_(true);
-		const zip = new AdmZip(sourcePath);
 		logger.info('Unzipping files...');
-		zip.extractAllTo(unzipTempDirectory, false);
+		const files = await shim.fsDriver().zipExtract({ source: sourcePath, extractTo: unzipTempDirectory });
 
-		const files = zip.getEntries();
 		if (files.length === 0) {
 			result.warnings.push('Zip file has no files.');
 			return result;
@@ -60,7 +57,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const notebookBaseDir = join(unzipTempDirectory, baseFolder, sep);
 		const outputDirectory2 = join(tempOutputDirectory, baseFolder);
 
-		const notebookFiles = zip.getEntries().filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
+		const notebookFiles = files.filter(e => e.name !== '.onetoc2' && e.name !== 'OneNote_RecycleBin.onetoc2');
 		const { oneNoteConverter } = shim.requireDynamic('@joplin/onenote-converter');
 
 		logger.info('Extracting OneNote to HTML');

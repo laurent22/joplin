@@ -1,12 +1,11 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
-import { ErrorEvent } from '@sentry/types/types';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
 import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
@@ -15,6 +14,7 @@ import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { execCommand } from '@joplin/utils';
 
 interface LastSelectedPath {
 	file: string;
@@ -43,16 +43,18 @@ export class Bridge {
 	private appName_: string;
 	private appId_: string;
 	private logFilePath_ = '';
+	private altInstanceId_ = '';
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
 
-	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
 		this.appId_ = appId;
 		this.appName_ = appName;
 		this.rootProfileDir_ = rootProfileDir;
 		this.autoUploadCrashDumps_ = autoUploadCrashDumps;
+		this.altInstanceId_ = altInstanceId;
 		this.lastSelectedPaths_ = {
 			file: null,
 			directory: null,
@@ -98,9 +100,9 @@ export class Bridge {
 					if (logAttachment) hint.attachments = [logAttachment];
 					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
 
-					interface ErrorEventWithLog extends ErrorEvent {
+					type ErrorEventWithLog = (typeof event) & {
 						log: string[];
-					}
+					};
 
 					const errorEventWithLog: ErrorEventWithLog = {
 						...event,
@@ -118,6 +120,12 @@ export class Bridge {
 					return event;
 				}
 			},
+
+			integrations: [Sentry.electronMinidumpIntegration()],
+
+			// Using the default ipcMode value causes <iframe>s that use custom protocols to
+			// have isSecureOrigin: false, limiting which browser APIs are available.
+			ipcMode: Sentry.IPCMode.Classic,
 		};
 
 		if (this.autoUploadCrashDumps_) options.dsn = 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296';
@@ -216,6 +224,10 @@ export class Bridge {
 		return this.electronApp().electronApp().getLocale();
 	};
 
+	public altInstanceId() {
+		return this.altInstanceId_;
+	}
+
 	// Applies to electron-context-menu@3:
 	//
 	// For now we have to disable spell checking in non-editor text
@@ -234,7 +246,7 @@ export class Bridge {
 	// version of electron-context-menu.
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
-		require('electron-context-menu')({
+		require('./services/electron-context-menu')({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
@@ -299,13 +311,6 @@ export class Bridge {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public newBrowserWindow(options: any) {
 		return new BrowserWindow(options);
-	}
-
-	// Note: This provides the size of the main window. Prefer CSS where possible.
-	public windowContentSize() {
-		if (!this.mainWindow()) return { width: 0, height: 0 };
-		const s = this.mainWindow().getContentSize();
-		return { width: s[0], height: s[1] };
 	}
 
 	public windowSetSize(width: number, height: number) {
@@ -489,7 +494,58 @@ export class Bridge {
 		}
 	}
 
-	public restart(linuxSafeRestart = true) {
+	public appLaunchCommand(env: string, altInstanceId = '') {
+		const altInstanceArgs = altInstanceId ? ['--alt-instance-id', altInstanceId] : [];
+
+		if (env === 'dev') {
+			// This is convenient to quickly test on dev, but the path needs to be adjusted
+			// depending on how things are setup.
+
+			return {
+				execPath: `${homedir()}/.npm-global/bin/electron`,
+				args: [
+					`${homedir()}/src/joplin/packages/app-desktop`,
+					'--env', 'dev',
+					'--log-level', 'debug',
+					'--open-dev-tools',
+					'--no-welcome',
+				].concat(altInstanceArgs),
+			};
+		} else {
+			return {
+				execPath: bridge().electronApp().electronApp().getPath('exe'),
+				args: [].concat(altInstanceArgs),
+			};
+		}
+	}
+
+	private async launchAppInstanceById(env: string, altInstanceId: string) {
+		if (this.electronApp().ipcServerStarted()) {
+			const cmd = this.appLaunchCommand(env, altInstanceId);
+			await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+		} else {
+			const buttonIndex = this.showErrorMessageBox('Cannot launch another instance because IPC server could not start.', {
+				buttons: [
+					_('OK'),
+					_('Open log'),
+				],
+			});
+
+			if (buttonIndex === 1) {
+				void this.openItem(this.electronApp().ipcLoggerFilePath());
+			}
+		}
+	}
+
+	public async launchAltAppInstance(env: string) {
+		await this.launchAppInstanceById(env, 'alt1');
+	}
+
+	public async launchMainAppInstance(env: string) {
+		await this.launchAppInstanceById(env, '');
+	}
+
+	public async restart() {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
@@ -500,17 +556,48 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
-		} else if (shim.isLinux() && linuxSafeRestart) {
-			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+		} else if (this.altInstanceId_) {
+			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
+			// would still be open in the tray except unusable. Or maybe it reopens it quickly but
+			// in a broken state. It might be due to the way it is launched from the main instance.
+			// So here we ask the main instance to relaunch this app after a short delay.
+
+			const responses = await this.electronApp().sendCrossAppIpcMessage({
+				action: 'restartAltInstance',
+				data: null,
+			});
+
+			// However is the main instance is not running, we're stuck, so the user needs to
+			// manually restart. `relaunch()` doesn't appear to work even when the main instance is
+			// not running.
+			const r = responses.find(r => !!r.response);
+
+			if (!r || !r.response) {
+				this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+
+				// Note: this should work, but doesn't:
+
+				// const cmd = this.appLaunchCommand(this.env(), this.altInstanceId_);
+
+				// app.relaunch({
+				// 	execPath: cmd.execPath,
+				// 	args: cmd.args,
+				// });
+			}
 		} else {
 			app.relaunch();
 		}
 
-		app.exit();
+		this.electronApp().exit();
 	}
 
 	public createImageFromPath(path: string) {
 		return nativeImage.createFromPath(path);
+	}
+
+	public menuPopupFromTemplate(template: ((MenuItemConstructorOptions) | (MenuItem))[]) {
+		const menu = Menu.buildFromTemplate(template);
+		return menu.popup({ window: this.mainWindow() });
 	}
 
 	public safeStorage = {
@@ -532,9 +619,9 @@ export class Bridge {
 
 let bridge_: Bridge = null;
 
-export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 	if (bridge_) throw new Error('Bridge already initialized');
-	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps);
+	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 	return bridge_;
 }
 

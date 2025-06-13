@@ -1,9 +1,8 @@
 // Dialog allowing the user to update/create links
 
-const React = require('react');
-const { useState, useEffect, useMemo, useRef } = require('react');
-const { StyleSheet } = require('react-native');
-const { View, Text, TextInput, Button } = require('react-native');
+import * as React from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 import Modal from '../Modal';
 import { themeStyle } from '@joplin/lib/theme';
@@ -26,7 +25,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	const [linkLabel, setLinkLabel] = useState('');
 	const [linkURL, setLinkURL] = useState('');
 
-	const linkInputRef = useRef();
+	const linkInputRef = useRef<TextInput|null>(null);
 
 	// Reset the label and URL when shown/hidden
 	useEffect(() => {
@@ -52,10 +51,6 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				},
 				shadowOpacity: 0.4,
 				shadowRadius: 1,
-			},
-			button: {
-				color: theme.color2,
-				backgroundColor: theme.backgroundColor2,
 			},
 			text: {
 				color: theme.color,
@@ -146,7 +141,6 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				{linkURLInput}
 			</View>
 			<Button
-				style={styles.button}
 				onPress={onSubmit}
 				title={_('Done')}
 			/>

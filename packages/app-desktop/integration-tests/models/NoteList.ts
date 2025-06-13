@@ -25,6 +25,7 @@ export default class NoteList {
 
 	public async focusContent(electronApp: ElectronApplication) {
 		await activateMainMenuItem(electronApp, 'Note list', 'Focus');
+		await expect(this.container.locator(':focus')).toBeAttached();
 	}
 
 	// The resultant locator may fail to resolve if the item is not visible

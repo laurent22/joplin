@@ -7,7 +7,7 @@ import BaseModel from '../BaseModel';
 import DecryptionWorker from './DecryptionWorker';
 import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
-import { _ } from '../locale';
+import { _, _n } from '../locale';
 const { toTitleCase } = require('../string-utils.js');
 
 enum CanRetryType {
@@ -16,7 +16,7 @@ enum CanRetryType {
 	ItemSync = 'itemSync',
 }
 
-enum ReportItemType {
+export enum ReportItemType {
 	OpenList = 'openList',
 	CloseList = 'closeList',
 }
@@ -255,17 +255,51 @@ export default class ReportService {
 
 			section.body.push('');
 
+			const errorMessagesToItems: Map<string, ReportItem[]> = new Map();
+
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
-				section.body.push({
-					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
+
+				const resourceTypeName = toTitleCase(BaseModel.modelTypeToName(row.type_));
+				const message = _('%s: %s', resourceTypeName, row.id);
+
+				const item: ReportItem = {
+					text: message,
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
 					},
-				});
+				};
+
+				const itemError = row.reason;
+				if (itemError) {
+					// If the error message is known, postpone adding the report item.
+					// Instead, add it under the error message as a heading
+					if (errorMessagesToItems.has(itemError)) {
+						errorMessagesToItems.get(itemError).push(item);
+					} else {
+						errorMessagesToItems.set(itemError, [item]);
+					}
+				} else {
+					// If there's no known error, add directly:
+					section.body.push(item);
+				}
+			}
+
+			// Categorize any items under each known error:
+			let errorIdx = 0;
+			for (const itemError of errorMessagesToItems.keys()) {
+				section.body.push(_('Items with error: %s', itemError));
+
+				errorIdx++;
+				section.body.push({ type: ReportItemType.OpenList, key: `itemsWithError${errorIdx}` });
+
+				// Add all items associated with the header
+				section.body.push(...errorMessagesToItems.get(itemError));
+
+				section.body.push({ type: ReportItemType.CloseList });
 			}
 
 			section = this.addRetryAllHandler(section);
@@ -340,7 +374,8 @@ export default class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
+			const noteCount = await Folder.noteCount(folders[i].id);
+			section.body.push(_n('%s: %d note', '%s: %d notes', noteCount, folders[i].title, noteCount));
 		}
 
 		sections.push(section);

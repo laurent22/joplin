@@ -1,19 +1,17 @@
 {
   "name": "@joplin/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "4.0.79",
+  "version": "4.0.80",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
   "publishConfig": {
     "access": "public"
   },
-  "browser": {
-    "jsdom": false
-  },
+  "browser": "lib/turndown.browser.cjs.js",
   "dependencies": {
-    "@adobe/css-tools": "4.4.1",
+    "@adobe/css-tools": "4.4.2",
     "html-entities": "1.4.0",
-    "jsdom": "24.1.1"
+    "jsdom": "24.1.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "25.0.8",
@@ -21,7 +19,7 @@
     "@rollup/plugin-replace": "5.0.7",
     "browserify": "14.5.0",
     "rollup": "4.2.0",
-    "standard": "17.1.0",
+    "standard": "17.1.2",
     "turndown-attendant": "0.0.3"
   },
   "files": [
@@ -41,12 +39,12 @@
   },
   "scripts": {
     "build-all": "npm run build-cjs && npm run build-es && npm run build-umd && npm run build-iife",
-    "build": "rollup -c config/rollup.config.cjs.mjs",
     "build-cjs": "rollup -c config/rollup.config.cjs.mjs && rollup -c config/rollup.config.browser.cjs.mjs",
     "build-es": "rollup -c config/rollup.config.es.mjs && rollup -c config/rollup.config.browser.es.mjs",
     "build-umd": "rollup -c config/rollup.config.umd.mjs && rollup -c config/rollup.config.browser.umd.mjs",
     "build-iife": "rollup -c config/rollup.config.iife.mjs",
     "build-test": "browserify test/turndown-test.js --outfile test/turndown-test.browser.js",
+    "build": "npm run build-cjs",
     "prepare": "npm run build"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"

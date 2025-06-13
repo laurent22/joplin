@@ -62,6 +62,7 @@ export default function PdfViewer(props: Props) {
 			mime: 'text/plain',
 			textToCopy: text,
 			linkToCopy: null,
+			linkToOpen: null,
 			htmlToCopy: '',
 			insertContent: () => { console.warn('insertContent() not implemented'); },
 			fireEditorEvent: () => { console.warn('fireEditorEvent() not implemented'); },

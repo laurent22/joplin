@@ -74,8 +74,9 @@ export enum EditorCommandType {
 	SelectedText = 'selectedText',
 	InsertText = 'insertText',
 	ReplaceSelection = 'replaceSelection',
-
 	SetText = 'setText',
+
+	JumpToHash = 'jumpToHash',
 }
 
 // Because the editor package can run in a WebView, plugin content scripts
@@ -146,6 +147,7 @@ export interface EditorTheme extends Theme {
 	contentMaxWidth?: number;
 	marginLeft?: number;
 	marginRight?: number;
+	listTabSize?: string;
 }
 
 export interface EditorSettings {

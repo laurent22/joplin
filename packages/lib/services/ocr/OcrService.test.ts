@@ -88,7 +88,6 @@ describe('OcrService', () => {
 		// Use embedded text (skip OCR)
 		['dummy.pdf', 'Dummy PDF file'],
 		['multi_page__embedded_text.pdf', 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
-		['multi_page__no_embedded_text.pdf', 'This is a multi-page PDF\nwith no embedded text.\nPage 2: more text.\nThe third page.'],
 	])('should process PDF resources', async (samplePath: string, expectedText: string) => {
 		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 
@@ -247,5 +246,29 @@ describe('OcrService', () => {
 
 	// 	await service.dispose();
 	// });
+
+	it('should generate text even on cases of lower confidence', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/low_confidence_testing.png` });
+
+		const service = newOcrService();
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text.includes('1.')).toBe(true);
+		// cSpell:disable
+		expect(processedResource.ocr_text.includes('eback Mountain (2005)')).toBe(true);
+		// cSpell:enable
+
+		expect(processedResource.ocr_text.includes('2.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Havoc (2005)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('3.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Love & Other Drugs (2010)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('4.')).toBe(true);
+		expect(processedResource.ocr_text.includes('The Last Thing He Wanted (2020)')).toBe(true);
+
+		await service.dispose();
+	});
 
 });

@@ -8,6 +8,7 @@ const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 			settings: {
 				'path': `${Setting.value('homeDir')}`,
 				'createSubfolderPerProfile': true,
+				'backupRetention': 7,
 			},
 
 			// Joplin Portable is more likely to run on a device with low write speeds

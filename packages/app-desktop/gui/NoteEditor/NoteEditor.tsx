@@ -14,7 +14,7 @@ import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions, NoteBodyEditorRef } from './utils/types';
+import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -52,10 +52,10 @@ import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
 import { stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
-import EditorPluginHandler from '@joplin/lib/services/plugins/EditorPluginHandler';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
+import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 
 const debounce = require('debounce');
 
@@ -75,23 +75,17 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
-	const editorRef = useRef<NoteBodyEditorRef>();
-	const titleInputRef = useRef<HTMLInputElement>();
+	const editorRef = useRef<NoteBodyEditorRef|null>(null);
+	const titleInputRef = useRef<HTMLInputElement|null>(null);
 	const isMountedRef = useRef(true);
 	const noteSearchBarRef = useRef(null);
-
-	const editorPluginHandler = useMemo(() => {
-		return new EditorPluginHandler(PluginService.instance());
-	}, []);
-
-	const shownEditorViewIds = props['plugins.shownEditorViewIds'];
 
 	// Should be constant and unique to this instance of the editor.
 	const editorId = useMemo(() => {
 		return `editor-${editorIdCounter++}`;
 	}, []);
 
-	const setFormNoteRef = useRef<OnSetFormNote>();
+	const setFormNoteRef = useRef<OnSetFormNote>(null);
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
 		setFormNote: setFormNoteRef, dispatch: props.dispatch, editorRef, editorId,
 	});
@@ -105,18 +99,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
-
-	useAsyncEffect(async (_event) => {
-		if (!props.startupPluginsLoaded) return;
-		await editorPluginHandler.emitActivationCheck();
-	}, [effectiveNoteId, editorPluginHandler, props.startupPluginsLoaded]);
-
-	useEffect(() => {
-		if (!props.startupPluginsLoaded) return;
-		editorPluginHandler.emitUpdate(shownEditorViewIds);
-	}, [effectiveNoteId, editorPluginHandler, shownEditorViewIds, props.startupPluginsLoaded]);
-
-	const { editorPlugin, editorView } = usePluginEditorView(props.plugins, shownEditorViewIds);
+	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
@@ -130,10 +113,23 @@ function NoteEditorContent(props: NoteEditorProps) {
 		editorId,
 	});
 	setFormNoteRef.current = setFormNote;
-	const formNoteRef = useRef<FormNote>();
+	const formNoteRef = useRef<FormNote>(formNote);
 	formNoteRef.current = { ...formNote };
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
+
+	const windowId = useContext(WindowIdContext);
+	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
+	useConnectToEditorPlugin({
+		startupPluginsLoaded: props.startupPluginsLoaded,
+		setFormNote,
+		scheduleSaveNote,
+		formNote,
+		effectiveNoteId,
+		shownEditorViewIds,
+		activeEditorView: editorView,
+		plugins: props.plugins,
+	});
 
 	const {
 		localSearch,
@@ -161,10 +157,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 		customCss: props.customCss,
 		plugins: props.plugins,
 		scrollbarSize: props.scrollbarSize,
+		baseFontFamily: props.viewerFontFamily,
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null) => {
 		options = {
 			contentMaxWidthTarget: '',
 			...options,
@@ -172,7 +168,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
-		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
+		const markupToHtml = markupLanguageUtils.newMarkupToHtml(props.plugins, {
 			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
 			customCss: props.customCss,
 		});
@@ -181,9 +177,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
 			scrollbarSize: props.scrollbarSize,
+			baseFontFamily: props.viewerFontFamily,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
-	}, [props.themeId, props.scrollbarSize, props.customCss, props.contentMaxWidth]);
+	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -337,7 +334,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
 	});
-	const windowId = useContext(WindowIdContext);
 	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
@@ -423,7 +419,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 
-	const editorProps: NoteBodyEditorProps = {
+	const markupLanguage = formNote.markup_language;
+	const editorProps: NoteBodyEditorPropsAndRef = {
 		ref: editorRef,
 		contentKey: formNote.id,
 		style: styles.tinyMCE,
@@ -432,7 +429,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		onWillChange: onBodyWillChange,
 		onMessage: onMessage,
 		content: formNote.body,
-		contentMarkupLanguage: formNote.markup_language,
+		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
@@ -451,14 +448,18 @@ function NoteEditorContent(props: NoteEditorProps) {
 		searchMarkers: searchMarkers,
 		visiblePanes: props.noteVisiblePanes || ['editor', 'viewer'],
 		keyboardMode: Setting.value('editor.keyboardMode'),
+		enableTextPatterns: Setting.value('editor.enableTextPatterns'),
 		tabMovesFocus: props.tabMovesFocus,
 		locale: Setting.value('locale'),
 		onDrop: onDrop,
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
+		// KaTeX isn't supported in HTML notes
+		mathEnabled: markupLanguage === MarkupLanguage.Markdown && Setting.value('markdown.plugin.katex'),
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
 		scrollbarSize: props.scrollbarSize,
+		baseFontFamily: props.viewerFontFamily,
 		isSafeMode: props.isSafeMode,
 		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
@@ -703,7 +704,6 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		highlightedWords: state.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
-		'plugins.shownEditorViewIds': state.settings['plugins.shownEditorViewIds'] || [],
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
 			'historyBackward',
 			'historyForward',
@@ -715,6 +715,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		], whenClauseContext)[0] as ToolbarButtonInfo,
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
+		viewerFontFamily: state.settings['style.viewer.fontFamily'],
 		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,

@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
@@ -17,7 +17,7 @@ import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScree
 import Setting, { AppType, Env } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer, { NotesParent, parseNotesParent, serializeNotesParent } from '@joplin/lib/reducer';
-import ShareExtension from './utils/ShareExtension';
+import ShareExtension, { UnsubscribeShareListener } from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
@@ -30,14 +30,14 @@ const VersionInfo = require('react-native-version-info').default;
 import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 import fastDeepEqual = require('fast-deep-equal');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
-import BackButtonService from './services/BackButtonService';
+import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
@@ -55,7 +55,7 @@ import Revision from '@joplin/lib/models/Revision';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
-import NotesScreen from './components/screens/Notes';
+import NotesScreen from './components/screens/Notes/Notes';
 import TagsScreen from './components/screens/tags';
 import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
@@ -68,9 +68,9 @@ import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
-import SideMenuContentNote from './components/SideMenuContentNote';
+import SideMenuContentNote, { SideMenuContentOptions } from './components/SideMenuContentNote';
 import { reg } from '@joplin/lib/registry';
-const { defaultState } = require('@joplin/lib/reducer');
+import { defaultState } from '@joplin/lib/reducer';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -82,6 +82,7 @@ const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
+import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import initLib from '@joplin/lib/initLib';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
@@ -99,6 +100,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver/fs-driver-rn';
@@ -140,6 +142,10 @@ import lockToSingleInstance from './utils/lockToSingleInstance';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import PluginNotification from './components/plugins/PluginNotification';
+import FocusControl from './components/accessibility/FocusControl/FocusControl';
+import SsoLoginScreen from './components/screens/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
+import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
 
 const logger = Logger.create('root');
 
@@ -453,7 +459,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 		throw error;
 	}
 
-	return reducer(newState, action);
+	return reducer(newState, action) as AppState;
 };
 
 const store = createStore(appReducer, applyMiddleware(generalMiddleware));
@@ -521,6 +527,7 @@ async function initialize(dispatch: Dispatch) {
 	Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);
 	const resourceDir = getResourceDir(currentProfile, isSubProfile);
 	Setting.setConstant('resourceDir', resourceDir);
+	Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 	Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 	Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 
@@ -852,7 +859,27 @@ async function initialize(dispatch: Dispatch) {
 	reg.logger().info('Application initialized');
 }
 
-class AppComponent extends React.Component {
+interface AppComponentProps {
+	dispatch: Dispatch;
+	themeId: number;
+	biometricsDone: boolean;
+	routeName: string;
+	selectedFolderId: string;
+	appState: string;
+	noteSideMenuOptions: SideMenuContentOptions;
+	disableSideMenuGestures: boolean;
+	historyCanGoBack: boolean;
+	showSideMenu: boolean;
+	noteSelectionEnabled: boolean;
+}
+
+interface AppComponentState {
+	sideMenuWidth: number;
+	sensorInfo: SensorInfo;
+	sideMenuContentOpacity: Animated.Value;
+}
+
+class AppComponent extends React.Component<AppComponentProps, AppComponentState> {
 
 	private urlOpenListener_: EmitterSubscription|null = null;
 	private appStateChangeListener_: NativeEventSubscription|null = null;
@@ -863,8 +890,18 @@ class AppComponent extends React.Component {
 	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
 	private callbackUrl: string|null = null;
 
-	public constructor() {
-		super();
+	private lastSyncStarted_ = false;
+	private quickActionShortcutListener_: EmitterSubscription|undefined;
+	private unsubscribeScreenWidthChangeHandler_: EmitterSubscription|undefined;
+	private unsubscribeNetInfoHandler_: NetInfoSubscription|undefined;
+	private unsubscribeNewShareListener_: UnsubscribeShareListener|undefined;
+	private onAppStateChange_: ()=> void;
+	private backButtonHandler_: BackButtonHandler;
+	private handleNewShare_: ()=> void;
+	private handleOpenURL_: (event: unknown)=> void;
+
+	public constructor(props: AppComponentProps) {
+		super(props);
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
@@ -1195,7 +1232,6 @@ class AppComponent extends React.Component {
 				folderId: params.id,
 			});
 			break;
-
 		}
 	}
 
@@ -1212,13 +1248,16 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	private sideMenu_change(isOpen: boolean) {
+	private sideMenu_change = (isOpen: boolean) => {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
-		this.props.dispatch({
-			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
-		});
-	}
+		// Avoid dispatching unnecessarily. See https://github.com/laurent22/joplin/issues/12427
+		if (isOpen !== this.props.showSideMenu) {
+			this.props.dispatch({
+				type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
+			});
+		}
+	};
 
 	private getSideMenuWidth = () => {
 		const sideMenuWidth = getResponsiveValue({
@@ -1270,11 +1309,13 @@ class AppComponent extends React.Component {
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
 			ProfileEditor: { screen: ProfileEditor },
+			NoteRevisionViewer: { screen: NoteRevisionViewer },
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
@@ -1308,11 +1349,12 @@ class AppComponent extends React.Component {
 					toleranceY={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
-					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+					onChange={this.sideMenu_change}
+					isOpen={this.props.showSideMenu}
 					disableGestures={disableSideMenuGestures}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuProvider style={{ flex: 1 }}>
+					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -1326,7 +1368,7 @@ class AppComponent extends React.Component {
 								sensorInfo={this.state.sensorInfo}
 							/> }
 						</SafeAreaView>
-					</MenuProvider>
+					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
 				<PluginNotification/>
@@ -1338,50 +1380,58 @@ class AppComponent extends React.Component {
 
 		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
 		return (
-			<PaperProvider theme={{
-				...paperTheme,
-				version: 3,
-				colors: {
-					...paperTheme.colors,
-					onPrimaryContainer: theme.color5,
-					primaryContainer: theme.backgroundColor5,
+			<FocusControl.Provider>
+				<PaperProvider theme={{
+					...paperTheme,
+					version: 3,
+					colors: {
+						...paperTheme.colors,
+						onPrimaryContainer: theme.color5,
+						primaryContainer: theme.backgroundColor5,
 
-					outline: theme.codeBorderColor,
+						outline: theme.codeBorderColor,
 
-					primary: theme.color4,
-					onPrimary: theme.backgroundColor4,
+						primary: theme.color4,
+						onPrimary: theme.backgroundColor4,
 
-					background: theme.backgroundColor,
+						background: theme.backgroundColor,
 
-					surface: theme.backgroundColor,
-					onSurface: theme.color,
+						surface: theme.backgroundColor,
+						onSurface: theme.color,
 
-					secondaryContainer: theme.raisedBackgroundColor,
-					onSecondaryContainer: theme.raisedColor,
+						secondaryContainer: theme.raisedBackgroundColor,
+						onSecondaryContainer: theme.raisedColor,
 
-					surfaceVariant: theme.backgroundColor3,
-					onSurfaceVariant: theme.color3,
+						surfaceVariant: theme.backgroundColor3,
+						onSurfaceVariant: theme.color3,
 
-					elevation: {
-						level0: 'transparent',
-						level1: theme.oddBackgroundColor,
-						level2: theme.raisedBackgroundColor,
-						level3: theme.raisedBackgroundColor,
-						level4: theme.raisedBackgroundColor,
-						level5: theme.raisedBackgroundColor,
+						elevation: {
+							level0: 'transparent',
+							level1: theme.oddBackgroundColor,
+							level2: theme.raisedBackgroundColor,
+							level3: theme.raisedBackgroundColor,
+							level4: theme.raisedBackgroundColor,
+							level5: theme.raisedBackgroundColor,
+						},
 					},
-				},
-			}}>
-				<DialogManager themeId={this.props.themeId}>
-					{mainContent}
-				</DialogManager>
-			</PaperProvider>
+				}}>
+					<DialogManager themeId={this.props.themeId}>
+						<MenuProvider
+							style={{ flex: 1 }}
+							closeButtonLabel={_('Dismiss')}
+						>
+							<FocusControl.MainAppContent style={{ flex: 1 }}>
+								{mainContent}
+							</FocusControl.MainAppContent>
+						</MenuProvider>
+					</DialogManager>
+				</PaperProvider>
+			</FocusControl.Provider>
 		);
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		showSideMenu: state.showSideMenu,

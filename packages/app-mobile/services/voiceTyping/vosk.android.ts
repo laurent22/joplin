@@ -154,6 +154,14 @@ export const startRecording = (vosk: Vosk, options: StartOptions): VoiceTypingSe
 		completeRecording(e.data, null);
 	}));
 
+	const stopOrCancel = () => {
+		if (state_ === State.Recording) {
+			logger.info('Cancelling...');
+			state_ = State.Completing;
+			vosk.stopOnly();
+			completeRecording('', null);
+		}
+	};
 
 	return {
 		start: async () => {
@@ -161,12 +169,10 @@ export const startRecording = (vosk: Vosk, options: StartOptions): VoiceTypingSe
 			await vosk.start();
 		},
 		stop: async () => {
-			if (state_ === State.Recording) {
-				logger.info('Cancelling...');
-				state_ = State.Completing;
-				vosk.stopOnly();
-				completeRecording('', null);
-			}
+			stopOrCancel();
+		},
+		cancel: async () => {
+			stopOrCancel();
 		},
 	};
 };

@@ -15,9 +15,11 @@ type Option = {
 	isDivider: true;
 };
 
+export type SideMenuContentOptions = Option[];
+
 interface Props {
 	themeId: number;
-	options: Option[];
+	options: SideMenuContentOptions;
 }
 
 const useStyles = (themeId: number) => {

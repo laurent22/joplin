@@ -65,10 +65,7 @@ const pluginClasses = [
 	require('./plugins/GotoAnything').default,
 ];
 
-const appDefaultState = createAppDefaultState(
-	bridge().windowContentSize(),
-	resourceEditWatcherDefaultState,
-);
+const appDefaultState = createAppDefaultState(resourceEditWatcherDefaultState);
 
 class Application extends BaseApplication {
 
@@ -92,7 +89,7 @@ class Application extends BaseApplication {
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
-		newState = super.reducer(newState, action);
+		newState = super.reducer(newState, action) as AppState;
 		return newState;
 	}
 
@@ -147,6 +144,10 @@ class Application extends BaseApplication {
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
+		}
+
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
+			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
@@ -331,18 +332,6 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
-	public crashDetectionHandler() {
-		// This handler conflicts with the single instance behaviour, so it's
-		// not used for now.
-		// https://discourse.joplinapp.org/t/pre-release-v2-8-is-now-available-updated-27-april/25158/56?u=laurent
-		if (!Setting.value('wasClosedSuccessfully')) {
-			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
-			Setting.setValue('isSafeMode', !!answer);
-		}
-
-		Setting.setValue('wasClosedSuccessfully', false);
-	}
-
 	private async setupOcrService() {
 		if (Setting.value('ocr.clearLanguageDataCache')) {
 			Setting.setValue('ocr.clearLanguageDataCache', false);
@@ -386,6 +375,8 @@ class Application extends BaseApplication {
 	}
 
 	private setupAutoUpdaterService() {
+		this.logger().info('Setting up auto-updater service...');
+
 		if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
 			bridge().electronApp().initializeAutoUpdaterService(
 				Logger.create('AutoUpdaterService'),
@@ -412,6 +403,14 @@ class Application extends BaseApplication {
 		});
 	}
 
+	private async setupIntegrationTestUtils() {
+		// Events used by Playwright tests to quickly change the value of a setting.
+		ipcRenderer.on('testing--setSetting', (_event, key, value) => {
+			this.logger().info('Updating setting using testing API: %s = %s', key, JSON.stringify(value));
+			Setting.setValue(key, value);
+		});
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
@@ -419,6 +418,8 @@ class Application extends BaseApplication {
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv, startOptions);
+
+		await this.setupIntegrationTestUtils();
 
 		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
 
@@ -456,9 +457,6 @@ class Application extends BaseApplication {
 			bridge().openDevTools();
 		}
 
-		bridge().electronApp().initializeCustomProtocolHandler(
-			Logger.create('handleCustomProtocols'),
-		);
 		this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
 		this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
@@ -617,10 +615,11 @@ class Application extends BaseApplication {
 		clipperLogger.addTarget(TargetType.Console);
 
 		ClipperServer.instance().initialize(actionApi);
+		ClipperServer.instance().setEnabled(!Setting.value('altInstanceId'));
 		ClipperServer.instance().setLogger(clipperLogger);
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
-		if (Setting.value('clipperServer.autoStart')) {
+		if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
 			void ClipperServer.instance().start();
 		}
 
@@ -666,13 +665,15 @@ class Application extends BaseApplication {
 			Setting.setValue('linking.extraAllowedExtensions', newExtensions);
 		});
 
-		window.addEventListener('focus', () => {
+		ipcRenderer.on('window-focused', (_event, newWindowId) => {
 			const currentWindowId = this.store().getState().windowId;
-			this.dispatch({
-				type: 'WINDOW_FOCUS',
-				windowId: 'default',
-				lastWindowId: currentWindowId,
-			});
+			if (newWindowId !== currentWindowId) {
+				this.dispatch({
+					type: 'WINDOW_FOCUS',
+					windowId: newWindowId,
+					lastWindowId: currentWindowId,
+				});
+			}
 		});
 
 		await this.initPluginService();

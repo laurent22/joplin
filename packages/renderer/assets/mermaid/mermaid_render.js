@@ -22,6 +22,20 @@ const isDarkMode = () => {
 	return !!document.querySelector('.mermaid.joplin--mermaid-use-dark-theme');
 };
 
+const initExportButtons = () => {
+	const exportButtons = document.querySelectorAll('.mermaid-export-graph > button');
+	for (const button of exportButtons) {
+		button.onclick = () => {
+			const buttonContainer = button.parentElement;
+			const mermaidElem = buttonContainer.nextElementSibling;
+
+			const rightClickEvent = new PointerEvent('contextmenu', { bubbles: true });
+			rightClickEvent.target = mermaidElem;
+			mermaidElem.dispatchEvent(rightClickEvent);
+		};
+	}
+};
+
 function mermaidInit() {
 	if (mermaidReady()) {
 		const mermaidTargetNodes = document.getElementsByClassName('mermaid');
@@ -46,6 +60,8 @@ function mermaidInit() {
 		for (const element of mermaidTargetNodes) {
 			element.style.width = '100%';
 		}
+
+		initExportButtons();
 	}
 }
 

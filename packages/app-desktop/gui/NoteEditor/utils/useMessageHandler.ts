@@ -52,6 +52,7 @@ export default function useMessageHandler(
 				resourceId: arg0.resourceId,
 				filename: arg0.filename,
 				mime: arg0.mime,
+				linkToOpen: null,
 				textToCopy: arg0.textToCopy,
 				linkToCopy: arg0.linkToCopy || null,
 				htmlToCopy: '',

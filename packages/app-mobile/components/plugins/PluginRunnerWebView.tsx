@@ -99,7 +99,7 @@ interface Props {
 }
 
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
-	const webviewRef = useRef<WebViewControl>();
+	const webviewRef = useRef<WebViewControl>(null);
 
 	const [webviewLoaded, setLoaded] = useState(false);
 	const [webviewReloadCounter, setWebviewReloadCounter] = useState(0);

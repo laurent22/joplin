@@ -1,6 +1,6 @@
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow } from '../testing/test-utils';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 
@@ -162,6 +162,25 @@ describe('models/Folder', () => {
 			expect(foldersById[Folder.conflictFolderId()].note_count).toBe(1);
 		}
 	}));
+
+	it('folder hierarchy cycles should not cause addNoteCounts to loop infinitely', async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		await Note.save({ title: 'test', parent_id: f1.id });
+
+		// Create a cycle.
+		// Note: This has been observed to happen, likely as a result of a bug in other code.
+		await Folder.save({ id: f1.id, parent_id: f3.id });
+
+		const folders = await Folder.all();
+		// Should not loop indefinitely, okay to warn:
+		await withWarningSilenced(/has itself as a parent/, async () => {
+			await Folder.addNoteCounts(folders);
+		});
+		// Note count may be incorrect
+		expect(folders.find(folder => folder.id === f1.id)).toHaveProperty('note_count');
+	});
 
 	it('should not count completed to-dos', (async () => {
 

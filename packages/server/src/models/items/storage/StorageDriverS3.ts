@@ -38,6 +38,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 		this.client_ = new S3Client({
 			// We need to set a region. See https://github.com/aws/aws-sdk-js-v3/issues/1845#issuecomment-754832210
 			region: this.config.region,
+			endpoint: this.config.endpoint,
 			credentials: {
 				accessKeyId: this.config.accessKeyId,
 				secretAccessKey: this.config.secretAccessKeyId,

@@ -15,6 +15,10 @@ import uuid from '@joplin/lib/uuid';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useContentScripts from './hooks/useContentScripts';
 import { MarkupLanguage } from '@joplin/renderer';
+import shim from '@joplin/lib/shim';
+import CommandService from '@joplin/lib/services/CommandService';
+import { AppState } from '../../utils/types';
+import { connect } from 'react-redux';
 
 interface Props {
 	themeId: number;
@@ -27,7 +31,6 @@ interface Props {
 	paddingBottom: number;
 	initialScroll: number|null;
 	noteHash: string;
-	onJoplinLinkClick: HandleMessageCallback;
 	onCheckboxChange?: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onMarkForDownload?: OnMarkForDownloadCallback;
@@ -36,7 +39,15 @@ interface Props {
 	pluginStates: PluginStates;
 }
 
-export default function NoteBodyViewer(props: Props) {
+const onJoplinLinkClick = async (message: string) => {
+	try {
+		await CommandService.instance().execute('openItem', message);
+	} catch (error) {
+		await shim.showErrorDialog(error.message);
+	}
+};
+
+function NoteBodyViewer(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
 	const onScroll = useCallback(async (scrollTop: number) => {
@@ -45,14 +56,14 @@ export default function NoteBodyViewer(props: Props) {
 
 	const onResourceLongPress = useOnResourceLongPress(
 		{
-			onJoplinLinkClick: props.onJoplinLinkClick,
+			onJoplinLinkClick,
 			onRequestEditResource: props.onRequestEditResource,
 		},
 	);
 
 	const onPostMessage = useOnMessage(props.noteBody, {
 		onMarkForDownload: props.onMarkForDownload,
-		onJoplinLinkClick: props.onJoplinLinkClick,
+		onJoplinLinkClick,
 		onRequestEditResource: props.onRequestEditResource,
 		onCheckboxChange: props.onCheckboxChange,
 		onResourceLongPress,
@@ -118,3 +129,9 @@ export default function NoteBodyViewer(props: Props) {
 		</View>
 	);
 }
+
+export default connect((state: AppState) => ({
+	themeId: state.settings.theme,
+	fontSize: state.settings['style.viewer.fontSize'],
+	pluginStates: state.pluginService.plugins,
+}))(NoteBodyViewer);

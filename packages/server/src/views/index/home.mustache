@@ -38,3 +38,19 @@
 	<a href="{{{global.baseUrl}}}/upgrade" class="upgrade-button">Upgrade to a Pro account</a> to collaborate on notebooks with other people, to increase the max note size, or the max total size.
 </p>
 {{/showUpgradeProButton}}
+
+<h2 class="title">Follow us on social media</h2>
+
+<p class="block">Get the latest updates about {{global.appName}} on our social feeds!</p>
+
+<table class="table is-hoverable user-props-table">
+	<tbody>
+		{{#socialFeeds}}
+			<tr>
+				<td>
+					<strong><a target="_blank" href="{{href}}">{{label}}</a></strong>
+				</td>
+			</tr>
+		{{/socialFeeds}}
+	</tbody>
+</table>

@@ -43,7 +43,8 @@
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme"
+		android:supportsRtl="true">
 
 		<!--
 		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification

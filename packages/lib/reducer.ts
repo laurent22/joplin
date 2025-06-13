@@ -1,4 +1,4 @@
-import produce, { Draft, original } from 'immer';
+import { produce, Draft, original } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
@@ -449,6 +449,11 @@ function stateHasEncryptedItems(state: State) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function folderSetCollapsed(draft: Draft<State>, action: any) {
+	if (action.ids) {
+		draft.collapsedFolderIds = action.ids;
+		return;
+	}
+
 	const collapsedFolderIds = draft.collapsedFolderIds.slice();
 	const idx = collapsedFolderIds.indexOf(action.id);
 

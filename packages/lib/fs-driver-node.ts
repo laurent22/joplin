@@ -1,4 +1,5 @@
-import FsDriverBase, { Stat } from './fs-driver-base';
+import AdmZip = require('adm-zip');
+import FsDriverBase, { Stat, ZipEntry, ZipExtractOptions } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
 const fs = require('fs-extra');
@@ -210,4 +211,9 @@ export default class FsDriverNode extends FsDriverBase {
 		await require('tar').create(options, filePaths);
 	}
 
+	public async zipExtract(options: ZipExtractOptions): Promise<ZipEntry[]> {
+		const zip = new AdmZip(options.source);
+		zip.extractAllTo(options.extractTo, false);
+		return zip.getEntries();
+	}
 }

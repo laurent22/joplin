@@ -19,6 +19,8 @@ export enum EventName {
 	NoteContentChange = 'noteContentChange',
 	OcrServiceResourcesProcessed = 'ocrServiceResourcesProcessed',
 	NoteResourceIndexed = 'noteResourceIndexed',
+	WindowOpen = 'windowOpen',
+	WindowClose = 'windowClose',
 }
 
 interface ItemChangeEvent {
@@ -56,6 +58,14 @@ interface AlarmChangeEvent {
 	note: NoteEntity;
 }
 
+export interface WindowOpenEvent {
+	windowId: string;
+}
+
+export interface WindowCloseEvent {
+	windowId: string;
+}
+
 type EventArgs = {
 	[EventName.ResourceCreate]: [];
 	[EventName.ResourceChange]: [ResourceChangeEvent];
@@ -71,6 +81,8 @@ type EventArgs = {
 	[EventName.NoteContentChange]: [NoteContentChangeEvent];
 	[EventName.OcrServiceResourcesProcessed]: [];
 	[EventName.NoteResourceIndexed]: [];
+	[EventName.WindowOpen]: [WindowOpenEvent];
+	[EventName.WindowClose]: [WindowCloseEvent];
 };
 
 type EventListenerCallbacks = {

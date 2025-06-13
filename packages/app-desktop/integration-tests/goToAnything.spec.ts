@@ -65,22 +65,53 @@ test.describe('goToAnything', () => {
 		}
 	});
 
-	test('should be possible to show the set tags dialog from goToAnything', async ({ electronApp, mainWindow }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.createNewNote('Test note');
+	for (const activateWithClick of [true, false]) {
+		test(`should be possible to show the set tags dialog from goToAnything (activate with click: ${activateWithClick})`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.createNewNote('Test note');
 
-		const goToAnything = mainScreen.goToAnything;
-		await goToAnything.open(electronApp);
-		await goToAnything.inputLocator.fill(':setTags');
+			const goToAnything = mainScreen.goToAnything;
+			await goToAnything.open(electronApp);
+			await goToAnything.inputLocator.fill(':setTags');
 
-		// Should show a matching command
-		await expect(goToAnything.containerLocator.getByText('Tags (setTags)')).toBeAttached();
+			// Should show a matching command
+			const result = goToAnything.resultLocator('Tags (setTags)');
+			await expect(result).toBeAttached();
+			if (activateWithClick) {
+				await result.click();
+			} else {
+				await mainWindow.keyboard.press('Enter');
+			}
+			await goToAnything.expectToBeClosed();
 
-		await mainWindow.keyboard.press('Enter');
-		await goToAnything.expectToBeClosed();
+			// Should show the "set tags" dialog
+			const setTagsLabel = mainWindow.getByText('Add or remove tags:');
+			await expect(setTagsLabel).toBeVisible();
+		});
 
-		// Should show the "set tags" dialog
-		const setTagsLabel = mainWindow.getByText('Add or remove tags:');
-		await expect(setTagsLabel).toBeVisible();
-	});
+		// The note link dialog internally uses the same component as GotoAnything
+		test(`should be possible to attach note links (activate with click: ${activateWithClick})`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.createNewNote('Target note');
+			await mainScreen.createNewNote('Test note');
+
+			const goToAnything = mainScreen.goToAnything;
+			await goToAnything.openLinkToNote(electronApp);
+
+			const result = goToAnything.resultLocator('Target note');
+			await goToAnything.searchForWithRetry('Target not', result);
+
+			// Should show a matching command
+			await expect(result).toBeAttached();
+			if (activateWithClick) {
+				await result.click();
+			} else {
+				await mainWindow.keyboard.press('Enter');
+			}
+			await goToAnything.expectToBeClosed();
+
+			// Should have added the link
+			await expect(mainScreen.noteEditor.codeMirrorEditor).toContainText('[Target note]');
+		});
+	}
 });

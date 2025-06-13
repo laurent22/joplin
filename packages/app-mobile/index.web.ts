@@ -1,5 +1,15 @@
 import { AppRegistry } from 'react-native';
 import Root from './root';
+import Setting from '@joplin/lib/models/Setting';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import CommandService from '@joplin/lib/services/CommandService';
+import RevisionService from '@joplin/lib/services/RevisionService';
+import MigrationService from '@joplin/lib/services/MigrationService';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import Tag from '@joplin/lib/models/Tag';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 
 require('./web/rnVectorIconsSetup.js');
 
@@ -11,6 +21,26 @@ interface ExtendedNavigator extends Navigator {
 	virtualKeyboard?: { overlaysContent: boolean };
 }
 declare const navigator: ExtendedNavigator;
+
+// Add properties useful for debugging from the console window:
+interface ExtendedWindow extends Window {
+	joplin: unknown;
+}
+declare const window: ExtendedWindow;
+if (__DEV__) {
+	window.joplin = {
+		Setting,
+		Note,
+		Folder,
+		Tag,
+		revisionService: RevisionService.instance(),
+		migrationService: MigrationService.instance(),
+		decryptionWorker: DecryptionWorker.instance(),
+		commandService: CommandService.instance(),
+		pluginService: PluginService.instance(),
+		searchEngine: SearchEngine.instance(),
+	};
+}
 
 // Should prevent the browser from auto-deleting background data.
 const requestPersistentStorage = async () => {

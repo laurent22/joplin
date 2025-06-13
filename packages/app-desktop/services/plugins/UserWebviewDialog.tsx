@@ -46,9 +46,9 @@ export default function UserWebviewDialog(props: Props) {
 	const buttons: ButtonSpec[] = (props.buttons ? props.buttons : defaultButtons()).map((b: ButtonSpec) => {
 		return {
 			...b,
-			onClick: () => {
+			onClick: async () => {
 				const response: DialogResult = { id: b.id };
-				const formData = webviewRef.current.formData();
+				const formData = await webviewRef.current.formData();
 				if (formData && Object.keys(formData).length) response.formData = formData;
 				viewController().closeWithResponse(response);
 			},

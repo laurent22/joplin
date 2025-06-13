@@ -2,32 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Ominaisuudesta %s puuttuu pakollinen ominaisuus %s."
 	],
-	"%d days": [
-		"%d päivää"
-	],
 	"%d GB": [
 		"%d Gt"
 	],
 	"%d GB storage space": [
 		"%d Gt tallennustila"
 	],
-	"%d hour": [
-		"%d tunti"
-	],
-	"%d hours": [
-		"%d tuntia"
-	],
 	"%d MB": [
 		"%d Mt"
 	],
 	"%d MB per note or attachment": [
 		"%d Mt muistiinpanoa tai liitettä kohti"
-	],
-	"%d minutes": [
-		"%d minuuttia"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
 	],
 	"%s": [
 		"%s"
@@ -62,7 +47,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -70,9 +61,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d muistiinpanoja"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -332,6 +320,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"Lisää käytöstä poistetut tilit automaattisesti poistettavaksi"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Yhdistä sulut, sulkeet, lainaukset jne."
 	],
@@ -377,6 +368,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"Voit jakaa"
 	],
@@ -391,6 +385,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Peruutetaan taustasynkronointi... Odota."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Peruutetaan..."
@@ -491,6 +488,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Napsauta \"%s\" palauttaaksesi muistiinpanon. Se kopioidaan muistikirjaan nimeltä \"%s\". Huomautuksen nykyistä versiota ei korvata tai muuteta."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"Klikkaa lisätäksesi tunnisteita..."
 	],
@@ -512,6 +512,9 @@
 	"Close Window": [
 		"Sulje ikkuna"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		""
 	],
@@ -529,9 +532,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"Muistikirjojen yhteiskäyttö muiden kanssa"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"Tulevat hälytykset"
@@ -571,6 +571,9 @@
 	],
 	"Configuration": [
 		"Asetukset"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"Vahvista salasana ei voi olla tyhjä"
@@ -795,9 +798,6 @@
 	"Delete local data and re-download from sync target": [
 		"Poista paikalliset tiedot ja lataa uudelleen synkronointikohteesta"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete plugin \"%s\"?": [
 		"Poista laajennus \"%s\"?"
 	],
@@ -844,6 +844,9 @@
 		""
 	],
 	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -971,12 +974,6 @@
 	],
 	"Edit": [
 		"Muokkaa"
-	],
-	"Edit in external editor": [
-		"Muokkaa ulkoisessa tekstieditorissa"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"Muokkaa linkkiä"
@@ -1122,6 +1119,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Salauksen ottaminen käyttöön tarkoittaa, että *kaikki* muistiinpanosi ja liitteesi synkronoidaan uudelleen ja lähetetään salattuina synkronointikohteeseen."
 	],
@@ -1191,9 +1191,6 @@
 	"Exits the application.": [
 		"Sulkee sovelluksen."
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"Vie"
 	],
@@ -1233,6 +1230,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"Vikaturvallinen: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä (usein virheellisen määritysvirheen tai virheen seurauksena)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"Vakava virhe:"
 	],
@@ -1256,6 +1256,9 @@
 	],
 	"Find: ": [
 		"Etsi: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox laajennus"
@@ -1531,6 +1534,9 @@
 	"Invalid command: \"%s\"": [
 		"Virheellinen komento: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 	],
@@ -1617,6 +1623,9 @@
 	],
 	"Language": [
 		"Kieli"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Viimeinen virhe: %s"
@@ -1766,6 +1775,9 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		""
 	],
@@ -1796,8 +1808,11 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"Siirry muistikirjaan"
@@ -1807,6 +1822,9 @@
 	],
 	"Move to notebook:": [
 		"Siirrä muistikirjaan:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"Siirtää annetun <item> [notebook]"
@@ -1906,6 +1924,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ei todennettu %s. Anna puuttuvat tunnistetiedot."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"Ei ladattu"
@@ -2036,11 +2057,20 @@
 	"Open %s": [
 		"Avaa %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"Avaa PDF katseluohjelma"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"Avaa profiilihakemisto"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Sync Wizard...": [
 		"Avaa ohjattu synkronointitoiminto."
@@ -2072,6 +2102,12 @@
 	"Page size for PDF export": [
 		"PDF viennin sivukoko"
 	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
+	],
 	"Password": [
 		"Salasana"
 	],
@@ -2096,9 +2132,6 @@
 	"PDF File": [
 		"PDF tiedosto"
 	],
-	"Per user. Minimum of %d users.": [
-		"Käyttäjää kohti. Vähintään %d käyttäjää."
-	],
 	"Permission needed": [
 		"Tarvittava lupa"
 	],
@@ -2116,6 +2149,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Todenna sovellus avaamalla selaimessasi seuraava URL-osoite. Sovellus luo hakemiston \"Sovellukset / Joplin\" ja lukee ja kirjoittaa vain tiedostoja tähän hakemistoon. Sillä ei ole pääsyä tämän hakemiston ulkopuolisiin tiedostoihin eikä muihin henkilötietoihin. Tietoja ei jaeta kolmannen osapuolen kanssa."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -2297,6 +2333,9 @@
 	"Recipients:": [
 		"Vastaanottajat:"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"Tee uudelleen"
 	],
@@ -2453,6 +2492,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Etsi"
 	],
@@ -2591,6 +2633,9 @@
 	"Skipped: %d.": [
 		"Ohitetaan: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2653,6 +2698,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Käynnistys sovellus pienennetään tehtäväpalkkiin"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Käynnistä, pysäytä tai tarkista API-palvelin. Määritä api.port-asetusmuuttuja määrittääksesi, missä portissa sen pitäisi toimia. Komennot ovat (% s)."
@@ -2803,6 +2851,12 @@
 	],
 	"Synchronizing...": [
 		"Synkronoidaan..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3146,6 +3200,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"Keskeneräiset tehtävät ylhäällä"
 	],
@@ -3287,6 +3344,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
@@ -3369,6 +3429,9 @@
 		"Olet liittämässä suurta kuvaa (%dx%d pikseliä). Haluatko muuttaa sen koon %d pikseliä ennen sen liittämistä?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [

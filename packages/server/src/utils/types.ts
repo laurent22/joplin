@@ -127,6 +127,7 @@ export interface StorageDriverConfig {
 	path?: string;
 	mode?: StorageDriverMode;
 	region?: string;
+	endpoint?: string;
 	accessKeyId?: string;
 	secretAccessKeyId?: string;
 	bucket?: string;
@@ -142,6 +143,13 @@ export interface LdapConfig {
 	bindDN: string;
 	bindPW: string;
 	tlsCaFile: string;
+}
+
+export interface SamlConfig {
+	enabled: boolean;
+	identityProviderConfigFile: string;
+	serviceProviderConfigFile: string;
+	organizationDisplayName: string;
 }
 
 export interface Config extends EnvVariables {
@@ -180,6 +188,7 @@ export interface Config extends EnvVariables {
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
 	ldap: LdapConfig[];
+	saml: SamlConfig;
 }
 
 export enum HttpMethod {
@@ -200,4 +209,10 @@ export type KoaNext = ()=> Promise<void>;
 
 export interface CommandContext {
 	models: Models;
+}
+
+export type SamlRelayState = 'web-login' | 'app-login' | null;
+export interface SamlPostResponse {
+	SAMLResponse: string;
+	RelayState?: SamlRelayState;
 }

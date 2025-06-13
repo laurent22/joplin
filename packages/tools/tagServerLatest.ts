@@ -6,9 +6,17 @@ async function main() {
 
 	const version = argv._[0];
 
-	await execCommand(`docker pull "joplin/server:${version}"`);
-	await execCommand(`docker tag "joplin/server:${version}" "joplin/server:latest"`);
-	await execCommand('docker push joplin/server:latest');
+	const imageName = 'joplin/server';
+
+	// docker manifest create joplin/server:latest joplin/server:arm64-3.3.13 joplin/server:amd64-3.3.13
+	// docker manifest annotate joplin/server:latest joplin/server:arm64-3.3.13 --arch arm64
+	// docker manifest annotate joplin/server:latest joplin/server:amd64-3.3.13 --arch amd64
+	// docker manifest push joplin/server:latest
+
+	await execCommand(`docker manifest create ${imageName}:latest ${imageName}:arm64-${version} ${imageName}:amd64-${version}`);
+	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:arm64-${version} --arch arm64`);
+	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:amd64-${version} --arch amd64`);
+	await execCommand(`docker manifest push ${imageName}:latest`);
 }
 
 if (require.main === module) {

@@ -1,8 +1,9 @@
 import { User } from '../../services/database/types';
 import { deleteApi, getApi, patchApi, postApi } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
+import { ErrorForbidden } from '../../utils/errors';
 
-describe('api_users', () => {
+describe('api/users', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('api_users');
@@ -77,6 +78,30 @@ describe('api_users', () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const results: any = await getApi(adminSession.id, 'users');
 		expect(results.items.length).toBe(3);
+	});
+
+	test('should not allow changing non-whitelisted properties', async () => {
+		const { session, user } = await createUserAndSession(1, false);
+		expect(user.is_admin).toBe(0);
+
+		await expectHttpError(async () => patchApi(session.id, `users/${user.id}`, {
+			is_admin: 1,
+		}), ErrorForbidden.httpCode);
+
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.is_admin).toBe(0);
+	});
+
+	test('should allow changing whitelisted properties', async () => {
+		const { session, user } = await createUserAndSession(1, false);
+		expect(user.is_admin).toBe(0);
+
+		await patchApi(session.id, `users/${user.id}`, {
+			full_name: 'New Name',
+		});
+
+		const reloadedUser = await models().user().load(user.id);
+		expect(reloadedUser.full_name).toBe('New Name');
 	});
 
 });

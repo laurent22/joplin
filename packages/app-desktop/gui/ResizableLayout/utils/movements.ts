@@ -1,6 +1,6 @@
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection, tempContainerPrefix } from './types';
-import produce from 'immer';
+import { produce } from 'immer';
 import uuid from '@joplin/lib/uuid';
 import validateLayout from './validateLayout';
 

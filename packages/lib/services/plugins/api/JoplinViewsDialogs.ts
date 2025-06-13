@@ -64,7 +64,7 @@ export default class JoplinViewsDialogs {
 		}
 
 		const handle = createViewHandle(this.plugin, id);
-		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Dialog);
+		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Dialog, null);
 		this.plugin.addViewController(controller);
 		return handle;
 	}

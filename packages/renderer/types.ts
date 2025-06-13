@@ -35,6 +35,7 @@ export interface FsDriver {
 export interface RenderOptions {
 	contentMaxWidth?: number;
 	scrollbarSize?: number;
+	baseFontFamily?: string;
 	bodyOnly?: boolean;
 	splitted?: boolean;
 	enableLongPress?: boolean;

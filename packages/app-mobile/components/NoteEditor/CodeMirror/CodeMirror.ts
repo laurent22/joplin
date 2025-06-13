@@ -15,6 +15,18 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import { WebViewToEditorApi } from '../types';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import Logger, { TargetType } from '@joplin/utils/Logger';
+
+let loggerCreated = false;
+export const setUpLogger = () => {
+	if (!loggerCreated) {
+		const logger = new Logger();
+		logger.addTarget(TargetType.Console);
+		logger.setLevel(Logger.LEVEL_WARN);
+		Logger.initializeGlobalLogger(logger);
+		loggerCreated = true;
+	}
+};
 
 export const initCodeMirror = (
 	parentElement: HTMLElement,

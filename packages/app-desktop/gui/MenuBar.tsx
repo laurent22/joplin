@@ -172,6 +172,7 @@ interface Props {
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.languages']: string[];
+	markdownEditorVisible: boolean;
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
@@ -278,6 +279,7 @@ function useMenuStates(menu: any, props: Props) {
 		props['notes.sortOrder.reverse'],
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 		props['folders.sortOrder.reverse'],
+		props.markdownEditorVisible,
 		props.tabMovesFocus,
 		props.noteListRendererId,
 		props.showNoteCounts,
@@ -479,6 +481,7 @@ function useMenu(props: Props) {
 				menuItemDic.focusElementNoteList,
 				menuItemDic.focusElementNoteTitle,
 				menuItemDic.focusElementNoteBody,
+				menuItemDic.focusElementNoteViewer,
 				menuItemDic.focusElementToolbar,
 			];
 
@@ -552,10 +555,18 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
+			const openSecondaryAppInstance = menuItemDic.openSecondaryAppInstance;
+			const openPrimaryAppInstance = menuItemDic.openPrimaryAppInstance;
 			const switchProfileItem = {
 				label: _('Switch profile'),
 				submenu: switchProfileMenuItems,
 			};
+
+			const profilesAndAppInstancesItems = [
+				openSecondaryAppInstance,
+				openPrimaryAppInstance,
+				switchProfileItem,
+			];
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let toolsItems: any[] = [];
@@ -668,7 +679,7 @@ function useMenu(props: Props) {
 					platforms: ['darwin'],
 				},
 
-				shim.isMac() ? noItem : switchProfileItem,
+				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
@@ -715,8 +726,10 @@ function useMenu(props: Props) {
 					}, {
 						type: 'separator',
 					},
-					printItem,
-					switchProfileItem,
+					printItem, {
+						type: 'separator',
+					},
+					...profilesAndAppInstancesItems,
 				],
 			};
 
@@ -789,6 +802,7 @@ function useMenu(props: Props) {
 						shim.isMac() ? noItem : menuItemDic.toggleMenuBar,
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
+						menuItemDic.toggleEditorPlugin,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
@@ -999,6 +1013,7 @@ function useMenu(props: Props) {
 
 			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
 			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
+			rootMenus.tools.submenu.push(menuItemDic.linkToNote);
 			rootMenus.tools.submenu.push(menuItemDic.openMasterPasswordDialog);
 
 			for (const view of props.pluginMenuItems) {
@@ -1138,7 +1153,7 @@ function MenuBar(props: Props): any {
 
 
 const mapStateToProps = (state: AppState): Partial<Props> => {
-	const whenClauseContext = stateToWhenClauseContext(state);
+	const whenClauseContext = stateToWhenClauseContext(state, { windowId: state.windowId });
 
 	const secondaryWindowFocused = state.windowId !== defaultWindowId;
 
@@ -1164,6 +1179,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.languages']: state.settings['spellChecker.languages'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
+		markdownEditorVisible: whenClauseContext.markdownEditorVisible,
 		plugins: state.pluginService.plugins,
 		customCss: state.customViewerCss,
 		profileConfig: state.profileConfig,

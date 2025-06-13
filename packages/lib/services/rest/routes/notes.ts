@@ -491,6 +491,8 @@ export default async function(request: Request, id: string = null, link: string 
 		const requestId = Date.now();
 		const requestNote = JSON.parse(request.body);
 
+		if (!requestNote) throw new Error(`Could not parse note body: ${request.body}`);
+
 		// const allowFileProtocolImages = urlUtils.urlProtocol(requestNote.base_url).toLowerCase() === 'file:';
 
 		const imageSizes = requestNote.image_sizes ? requestNote.image_sizes : {};

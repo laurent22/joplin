@@ -21,6 +21,16 @@ export interface RemoveOptions {
 	recursive?: boolean;
 }
 
+export interface ZipExtractOptions {
+	source: string;
+	extractTo: string;
+}
+
+export interface ZipEntry {
+	entryName: string;
+	name: string;
+}
+
 
 export default class FsDriverBase {
 
@@ -256,6 +266,10 @@ export default class FsDriverBase {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async tarCreate(_options: any, _filePaths: string[]) {
 		throw new Error('Not implemented: tarCreate');
+	}
+
+	public async zipExtract(_options: ZipExtractOptions): Promise<ZipEntry[]> {
+		throw new Error('Not implemented: zipExtract');
 	}
 
 }

@@ -8,6 +8,7 @@ import makeShowMessageBox from '../../utils/makeShowMessageBox';
 import { DialogControl, PromptDialogData } from './types';
 import useDialogControl from './hooks/useDialogControl';
 import PromptDialog from './PromptDialog';
+import { themeStyle } from '../global-style';
 
 export type { DialogControl } from './types';
 export const DialogContext = createContext<DialogControl>(null);
@@ -49,6 +50,7 @@ const DialogManager: React.FC<Props> = props => {
 		};
 	}, []);
 
+	const theme = themeStyle(props.themeId);
 	const styles = useStyles();
 
 	const dialogComponents: React.ReactNode[] = [];
@@ -73,7 +75,7 @@ const DialogManager: React.FC<Props> = props => {
 				scrollOverflow={true}
 				containerStyle={styles.modalContainer}
 				animationType='fade'
-				backgroundColor='rgba(0, 0, 0, 0.1)'
+				backgroundColor={theme.backgroundColorTransparent2}
 				transparent={true}
 				onRequestClose={dialogModels[dialogComponents.length - 1]?.onDismiss}
 			>

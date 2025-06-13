@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
 

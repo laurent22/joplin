@@ -12,6 +12,7 @@ import { RegionSpec } from './utils/formatting/RegionSpec';
 import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 import getSearchState from './utils/getSearchState';
 import { noteIdFacet, setNoteIdEffect } from './utils/selectedNoteIdExtension';
+import jumpToHash from './editorCommands/jumpToHash';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -205,6 +206,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		}
 
 		return textFound;
+	}
+
+	public jumpToHash(hash: string) {
+		return jumpToHash(this.editor, hash);
 	}
 
 	public addStyles(...styles: Parameters<typeof EditorView.theme>) {

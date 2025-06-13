@@ -351,7 +351,7 @@ describe('services_PluginService', () => {
 			joplin.plugins.register({
 				onStart: async function() {
 					const dataDir = await joplin.plugins.dataDir();
-					joplin.data.post(['folders'], null, { title: JSON.stringify(dataDir) });
+					await joplin.data.post(['folders'], null, { title: JSON.stringify(dataDir) });
 				},
 			});
 		`);

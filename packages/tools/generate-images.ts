@@ -1,7 +1,7 @@
-import { pathExists, readFile, writeFile, copyFile, readdir } from 'fs-extra';
+import { fileExtension } from '@joplin/lib/path-utils';
+import { copyFile, pathExists, readdir, readFile, writeFile } from 'fs-extra';
 import { dirname } from 'path';
 import { execCommand } from './tool-utils';
-import { fileExtension } from '@joplin/lib/path-utils';
 const md5File = require('md5-file');
 const sharp = require('sharp');
 
@@ -31,6 +31,22 @@ interface Operation {
 
 interface Results {
 	done: Record<string, boolean>;
+}
+
+interface iOSAppIconContents {
+	images: {
+		appearances?: [
+			{
+				appearance: 'luminosity';
+				value: 'dark' | 'tinted';
+			},
+		];
+		filename?: string;
+		idiom: 'universal';
+		platform: 'ios';
+		scale?: '2x' | '3x';
+		size: string;
+	}[];
 }
 
 const sources: Source[] = [
@@ -82,6 +98,10 @@ const sources: Source[] = [
 		id: 12,
 		name: 'JoplinCloudIcon2.svg',
 	},
+	{
+		id: 13,
+		name: '../JoplinLetterBlue.svg',
+	},
 ];
 
 function sourceById(id: number) {
@@ -91,475 +111,396 @@ function sourceById(id: number) {
 	throw new Error(`Invalid source ID: ${id}`);
 }
 
-const operations: Operation[] = [
+const iOSReadAppIcon = async (filePath: string): Promise<iOSAppIconContents> => {
+	if (!(await pathExists(filePath))) return { images: [] };
+	const content = await readFile(filePath, 'utf8');
+	return JSON.parse(content) as iOSAppIconContents;
+};
 
-	// ============================================================================
-	// iOS icons
-	// ============================================================================
+const getOperations = async (rootDir: string): Promise<Operation[]> => {
+	const iOSAppIconSet = 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset';
+	const iOSAppIconSetContents = await iOSReadAppIcon(`${rootDir}/${iOSAppIconSet}/Contents.json`);
 
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ios_marketing1024x1024.png',
-		width: 1024,
-		height: 1024,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_app76x76.png',
-		width: 76,
-		height: 76,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_app76x76@2x.png',
-		width: 152,
-		height: 152,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_notification20x20.png',
-		width: 20,
-		height: 20,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_notification20x20@2x.png',
-		width: 40,
-		height: 40,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_pro_app83.5x83.5@2x.png',
-		width: 167,
-		height: 167,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_settings29x29.png',
-		width: 29,
-		height: 29,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_settings29x29@2x.png',
-		width: 58,
-		height: 58,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_spotlight40x40.png',
-		width: 40,
-		height: 40,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/ipad_spotlight40x40@2x.png',
-		width: 80,
-		height: 80,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_app60x60@2x.png',
-		width: 120,
-		height: 120,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_app60x60@3x.png',
-		width: 180,
-		height: 180,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_notification20x20@2x.png',
-		width: 40,
-		height: 40,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_notification20x20@3x.png',
-		width: 60,
-		height: 60,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_settings29x29@2x.png',
-		width: 58,
-		height: 58,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_settings29x29@3x.png',
-		width: 87,
-		height: 87,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_spotlight40x40@2x.png',
-		width: 80,
-		height: 80,
-	},
-	{
-		source: 1,
-		dest: 'packages/app-mobile/ios/Joplin/Images.xcassets/AppIcon.appiconset/iphone_spotlight40x40@3x.png',
-		width: 120,
-		height: 120,
-	},
+	return [
+		// ============================================================================
+		// iOS icons
+		// ============================================================================
 
-	// ============================================================================
-	// macOS icons
-	// ============================================================================
+		...(iOSAppIconSetContents.images.map(icon => {
+			const size = icon.size.split('x').map(Number),
+				scale = parseInt(icon.scale, 10) || 1;
+			if (!size || !icon.filename) return null;
+			return [
+				{
+					source: 1,
+					dest: `${iOSAppIconSet}/ios${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
+					width: size[0] * scale,
+					height: size[1] * scale,
+				},
+				{
+					source: 13,
+					dest: `${iOSAppIconSet}/ios_dark${icon.size}${icon.scale ? `@${icon.scale}` : ''}.png`,
+					width: size[0] * scale,
+					height: size[1] * scale,
+				},
+			];
+		}).filter(ico => ico !== null)).flat(1),
 
-	{
-		source: 2,
-		dest: 'Assets/macOs.iconset/icon_16x16.png',
-		width: 16,
-		height: 16,
-	},
-	{
-		source: 3,
-		dest: 'Assets/macOs.iconset/icon_16x16@2x.png',
-		width: 32,
-		height: 32,
-	},
-	{
-		source: 3,
-		dest: 'Assets/macOs.iconset/icon_32x32.png',
-		width: 32,
-		height: 32,
-	},
-	{
-		source: 3,
-		dest: 'Assets/macOs.iconset/icon_32x32@2x.png',
-		width: 64,
-		height: 64,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_128x128.png',
-		width: 128,
-		height: 128,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_128x128@2x.png',
-		width: 256,
-		height: 256,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_256x256.png',
-		width: 256,
-		height: 256,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_256x256@2x.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_512x512.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 7,
-		dest: 'Assets/macOs.iconset/icon_512x512@2x.png',
-		width: 1024,
-		height: 1024,
-	},
+		// ============================================================================
+		// macOS icons
+		// ============================================================================
 
-	// ============================================================================
-	// Linux icons
-	// ============================================================================
+		{
+			source: 2,
+			dest: 'Assets/macOs.iconset/icon_16x16.png',
+			width: 16,
+			height: 16,
+		},
+		{
+			source: 3,
+			dest: 'Assets/macOs.iconset/icon_16x16@2x.png',
+			width: 32,
+			height: 32,
+		},
+		{
+			source: 3,
+			dest: 'Assets/macOs.iconset/icon_32x32.png',
+			width: 32,
+			height: 32,
+		},
+		{
+			source: 3,
+			dest: 'Assets/macOs.iconset/icon_32x32@2x.png',
+			width: 64,
+			height: 64,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_128x128.png',
+			width: 128,
+			height: 128,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_128x128@2x.png',
+			width: 256,
+			height: 256,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_256x256.png',
+			width: 256,
+			height: 256,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_256x256@2x.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_512x512.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 7,
+			dest: 'Assets/macOs.iconset/icon_512x512@2x.png',
+			width: 1024,
+			height: 1024,
+		},
 
-	{
-		source: 2,
-		dest: 'Assets/LinuxIcons/16x16.png',
-		width: 16,
-		height: 16,
-	},
-	{
-		source: 3,
-		dest: 'Assets/LinuxIcons/24x24.png',
-		width: 24,
-		height: 24,
-	},
-	{
-		source: 3,
-		dest: 'Assets/LinuxIcons/32x32.png',
-		width: 32,
-		height: 32,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/48x48.png',
-		width: 48,
-		height: 48,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/72x72.png',
-		width: 72,
-		height: 72,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/96x96.png',
-		width: 96,
-		height: 96,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/128x128.png',
-		width: 128,
-		height: 128,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/144x144.png',
-		width: 144,
-		height: 144,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/256x256.png',
-		width: 256,
-		height: 256,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/512x512.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 7,
-		dest: 'Assets/LinuxIcons/1024x1024.png',
-		width: 1024,
-		height: 1024,
-	},
+		// ============================================================================
+		// Linux icons
+		// ============================================================================
 
-	// ============================================================================
-	// PortableApps launcher
-	// ============================================================================
+		{
+			source: 2,
+			dest: 'Assets/LinuxIcons/16x16.png',
+			width: 16,
+			height: 16,
+		},
+		{
+			source: 3,
+			dest: 'Assets/LinuxIcons/24x24.png',
+			width: 24,
+			height: 24,
+		},
+		{
+			source: 3,
+			dest: 'Assets/LinuxIcons/32x32.png',
+			width: 32,
+			height: 32,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/48x48.png',
+			width: 48,
+			height: 48,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/72x72.png',
+			width: 72,
+			height: 72,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/96x96.png',
+			width: 96,
+			height: 96,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/128x128.png',
+			width: 128,
+			height: 128,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/144x144.png',
+			width: 144,
+			height: 144,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/256x256.png',
+			width: 256,
+			height: 256,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/512x512.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 7,
+			dest: 'Assets/LinuxIcons/1024x1024.png',
+			width: 1024,
+			height: 1024,
+		},
 
-	{
-		source: 5,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon.ico',
-	},
-	{
-		source: 2,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_16.png',
-	},
-	{
-		source: 3,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_32.png',
-		width: 32,
-		height: 32,
-	},
-	{
-		source: 4,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_75.png',
-		width: 75,
-		height: 75,
-	},
-	{
-		source: 4,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_128.png',
-		width: 128,
-		height: 128,
-	},
-	{
-		source: 4,
-		dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/Launcher/splash.jpg',
-		width: 144,
-		height: 144,
-	},
+		// ============================================================================
+		// PortableApps launcher
+		// ============================================================================
 
-	// ============================================================================
-	// Windows tiles
-	// ============================================================================
+		{
+			source: 5,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon.ico',
+		},
+		{
+			source: 2,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_16.png',
+		},
+		{
+			source: 3,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_32.png',
+			width: 32,
+			height: 32,
+		},
+		{
+			source: 4,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_75.png',
+			width: 75,
+			height: 75,
+		},
+		{
+			source: 4,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/appicon_128.png',
+			width: 128,
+			height: 128,
+		},
+		{
+			source: 4,
+			dest: 'packages/tools/PortableAppsLauncher/App/AppInfo/Launcher/splash.jpg',
+			width: 144,
+			height: 144,
+		},
 
-	{
-		source: 6,
-		dest: 'packages/app-desktop/build-win/icons/Square150x150Logo.png',
-		width: 150,
-		height: 150,
-		iconWidth: 99,
-		iconHeight: 75,
-	},
-	{
-		source: 6,
-		dest: 'packages/app-desktop/build-win/icons/SmallTile.png',
-		width: 70,
-		height: 70,
-		iconWidth: 46,
-		iconHeight: 46,
-	},
+		// ============================================================================
+		// Windows tiles
+		// ============================================================================
 
-	// ============================================================================
-	// Website images
-	// ============================================================================
+		{
+			source: 6,
+			dest: 'packages/app-desktop/build-win/icons/Square150x150Logo.png',
+			width: 150,
+			height: 150,
+			iconWidth: 99,
+			iconHeight: 75,
+		},
+		{
+			source: 6,
+			dest: 'packages/app-desktop/build-win/icons/SmallTile.png',
+			width: 70,
+			height: 70,
+			iconWidth: 46,
+			iconHeight: 46,
+		},
 
-	{
-		source: 8,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-4x.webp',
-		width: 4820,
-		height: 2938,
-	},
-	{
-		source: 8,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-2x.png',
-		width: 2388,
-		height: 1456,
-	},
-	{
-		source: 8,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-2x.webp',
-		width: 2388,
-		height: 1456,
-	},
-	{
-		source: 8,
-		dest: 'Assets/WebsiteAssets/images/home-top-img.png',
-		width: 1205,
-		height: 734,
-	},
-	{
-		source: 8,
-		dest: 'Assets/WebsiteAssets/images/home-top-img.webp',
-		width: 1205,
-		height: 734,
-	},
+		// ============================================================================
+		// Website images
+		// ============================================================================
 
-	// ============================================================================
-	// Website images CN
-	// ============================================================================
+		{
+			source: 8,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-4x.webp',
+			width: 4820,
+			height: 2938,
+		},
+		{
+			source: 8,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-2x.png',
+			width: 2388,
+			height: 1456,
+		},
+		{
+			source: 8,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-2x.webp',
+			width: 2388,
+			height: 1456,
+		},
+		{
+			source: 8,
+			dest: 'Assets/WebsiteAssets/images/home-top-img.png',
+			width: 1205,
+			height: 734,
+		},
+		{
+			source: 8,
+			dest: 'Assets/WebsiteAssets/images/home-top-img.webp',
+			width: 1205,
+			height: 734,
+		},
 
-	{
-		source: 9,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-4x.webp',
-		width: 4820,
-		height: 2938,
-	},
-	{
-		source: 9,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.png',
-		width: 2388,
-		height: 1456,
-	},
-	{
-		source: 9,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.webp',
-		width: 2388,
-		height: 1456,
-	},
-	{
-		source: 9,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-cn.png',
-		width: 1205,
-		height: 734,
-	},
-	{
-		source: 9,
-		dest: 'Assets/WebsiteAssets/images/home-top-img-cn.webp',
-		width: 1205,
-		height: 734,
-	},
+		// ============================================================================
+		// Website images CN
+		// ============================================================================
 
-	// ============================================================================
-	// Joplin Server Icons
-	// ============================================================================
+		{
+			source: 9,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-cn-4x.webp',
+			width: 4820,
+			height: 2938,
+		},
+		{
+			source: 9,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.png',
+			width: 2388,
+			height: 1456,
+		},
+		{
+			source: 9,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-cn-2x.webp',
+			width: 2388,
+			height: 1456,
+		},
+		{
+			source: 9,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-cn.png',
+			width: 1205,
+			height: 734,
+		},
+		{
+			source: 9,
+			dest: 'Assets/WebsiteAssets/images/home-top-img-cn.webp',
+			width: 1205,
+			height: 734,
+		},
 
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/icon-512.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/icon-192.png',
-		width: 192,
-		height: 192,
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/icon-180.png',
-		width: 180,
-		height: 180,
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/server_logo.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/icon-32.png',
-		width: 32,
-		height: 32,
-		imageName: 'joplinServer32',
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/icon.svg',
-	},
-	{
-		source: 10,
-		dest: 'packages/server/public/images/icons/server/favicon.ico',
-		images: ['joplinServer32'],
-	},
+		// ============================================================================
+		// Joplin Server Icons
+		// ============================================================================
 
-	// ============================================================================
-	// Joplin Cloud Icons
-	// ============================================================================
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/icon-512.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/icon-192.png',
+			width: 192,
+			height: 192,
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/icon-180.png',
+			width: 180,
+			height: 180,
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/server_logo.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/icon-32.png',
+			width: 32,
+			height: 32,
+			imageName: 'joplinServer32',
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/icon.svg',
+		},
+		{
+			source: 10,
+			dest: 'packages/server/public/images/icons/server/favicon.ico',
+			images: ['joplinServer32'],
+		},
 
-	{
-		source: 11,
-		dest: 'packages/server/public/images/icons/cloud/icon-512.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 11,
-		dest: 'packages/server/public/images/icons/cloud/icon-192.png',
-		width: 192,
-		height: 192,
-	},
-	{
-		source: 11,
-		dest: 'packages/server/public/images/icons/cloud/icon-180.png',
-		width: 180,
-		height: 180,
-	},
-	{
-		source: 11,
-		dest: 'packages/server/public/images/cloud_logo.png',
-		width: 512,
-		height: 512,
-	},
-	{
-		source: 12,
-		dest: 'packages/server/public/images/icons/cloud/icon-32.png',
-		width: 32,
-		height: 32,
-		imageName: 'joplinCloud32',
-	},
-	{
-		source: 12,
-		dest: 'packages/server/public/images/icons/cloud/icon.svg',
-	},
-	{
-		source: 12,
-		dest: 'packages/server/public/images/icons/cloud/favicon.ico',
-		images: ['joplinCloud32'],
-	},
-];
+		// ============================================================================
+		// Joplin Cloud Icons
+		// ============================================================================
+
+		{
+			source: 11,
+			dest: 'packages/server/public/images/icons/cloud/icon-512.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 11,
+			dest: 'packages/server/public/images/icons/cloud/icon-192.png',
+			width: 192,
+			height: 192,
+		},
+		{
+			source: 11,
+			dest: 'packages/server/public/images/icons/cloud/icon-180.png',
+			width: 180,
+			height: 180,
+		},
+		{
+			source: 11,
+			dest: 'packages/server/public/images/cloud_logo.png',
+			width: 512,
+			height: 512,
+		},
+		{
+			source: 12,
+			dest: 'packages/server/public/images/icons/cloud/icon-32.png',
+			width: 32,
+			height: 32,
+			imageName: 'joplinCloud32',
+		},
+		{
+			source: 12,
+			dest: 'packages/server/public/images/icons/cloud/icon.svg',
+		},
+		{
+			source: 12,
+			dest: 'packages/server/public/images/icons/cloud/favicon.ico',
+			images: ['joplinCloud32'],
+		},
+	];
+};
 
 const md5Dir = async (dirPath: string): Promise<string> => {
 	const files = await readdir(dirPath);
@@ -601,6 +542,7 @@ async function main() {
 	const sourceImageDir = `${rootDir}/Assets/ImageSources`;
 	const resultFilePath = `${__dirname}/generate-images.json`;
 	const results: Results = await readResults(resultFilePath);
+	const operations = await getOperations(rootDir);
 
 	for (const operation of operations) {
 		const source = sourceById(operation.source);

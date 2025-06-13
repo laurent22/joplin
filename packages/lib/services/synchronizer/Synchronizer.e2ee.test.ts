@@ -409,7 +409,7 @@ describe('Synchronizer.e2ee', () => {
 		expect(disabledItems.length).toBe(1);
 		expect(disabledItems[0].id).toBe(note.id);
 
-		expect((await kvStore().all()).length).toBe(1);
+		expect((await kvStore().searchByPrefix('decrypt:')).length).toBe(1);
 		await kvStore().clear();
 
 		// Now check that if it fails once but succeed the second time, the note

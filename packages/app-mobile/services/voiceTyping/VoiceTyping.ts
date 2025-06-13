@@ -2,7 +2,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { PermissionsAndroid, Platform } from 'react-native';
 import unzip from './utils/unzip';
-import { _ } from '@joplin/lib/locale';
 const md5 = require('md5');
 
 const logger = Logger.create('voiceTyping');
@@ -19,6 +18,7 @@ export interface SpeechToTextCallbacks {
 export interface VoiceTypingSession {
 	start(): Promise<void>;
 	stop(): Promise<void>;
+	cancel(): Promise<void>;
 }
 
 export interface BuildProviderOptions {
@@ -86,12 +86,7 @@ export default class VoiceTyping {
 	}
 
 	public async clearDownloads() {
-		const confirmed = await shim.showConfirmationDialog(
-			_('Delete model and re-download?\nThis cannot be undone.'),
-		);
-		if (confirmed) {
-			await this.provider.deleteCachedModels(this.locale);
-		}
+		await this.provider.deleteCachedModels(this.locale);
 	}
 
 	public async download() {

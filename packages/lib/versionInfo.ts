@@ -85,10 +85,12 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 	const body = [
 		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), shim.platformName()),
 		'',
+		_('Device: %s', shim.deviceString()),
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),
 		_('Profile Version: %s', reg.db().version()),
 		_('Keychain Supported: %s', keychainSupported ? _('Yes') : _('No')),
+		_('Alternative instance ID: %s', Setting.value('altInstanceId') || '-'),
 	];
 
 	if (gitInfo) {

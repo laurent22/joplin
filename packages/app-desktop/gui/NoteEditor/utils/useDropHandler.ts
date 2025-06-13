@@ -62,18 +62,20 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 				paths.push(path);
 			}
 
-			const props: DropCommandValue = {
-				type: 'files',
-				pos: eventPosition,
-				paths: paths,
-				createFileURL: createFileURL,
-			};
+			if (paths.length > 0) {
+				const props: DropCommandValue = {
+					type: 'files',
+					pos: eventPosition,
+					paths: paths,
+					createFileURL: createFileURL,
+				};
 
-			editorRef.current.execCommand({
-				name: 'dropItems',
-				value: props,
-			});
-			return true;
+				editorRef.current.execCommand({
+					name: 'dropItems',
+					value: props,
+				});
+				return true;
+			}
 		}
 
 		return false;

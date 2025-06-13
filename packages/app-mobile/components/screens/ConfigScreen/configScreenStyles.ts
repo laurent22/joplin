@@ -40,6 +40,8 @@ export interface ConfigScreenStyleSheet {
 	sidebarHeaderText: TextStyle;
 
 	settingControl: TextStyle;
+	invalidMessage: TextStyle;
+	invalidInput: TextStyle;
 }
 
 interface ContainerStyles {
@@ -236,6 +238,13 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
+		},
+		invalidMessage: {
+			color: theme.colorError,
+			fontSize: theme.fontSize * 0.9,
+		},
+		invalidInput: {
+			borderBottomColor: theme.colorWarn,
 		},
 	});
 

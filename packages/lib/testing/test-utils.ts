@@ -48,7 +48,7 @@ import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
 const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
-import JoplinServerApi from '../JoplinServerApi';
+import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
@@ -68,6 +68,8 @@ import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
 import { Store } from 'redux';
+import { dirname } from '@joplin/utils/path';
+import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -129,6 +131,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 let syncTargetName_ = '';
@@ -146,7 +149,7 @@ function setSyncTargetName(name: string) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinCloud'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinServerSaml', 'joplinCloud'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
@@ -196,6 +199,7 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
+Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', Env.Dev);
@@ -287,6 +291,7 @@ async function switchClient(id: number, options: any = null) {
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 	ResourceFetcher.instance_ = resourceFetchers_[id];
+	DecryptionWorker.instance_ = decryptionWorker(id);
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -549,7 +554,7 @@ function revisionService(id: number = null) {
 function decryptionWorker(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = decryptionWorkers_[id];
-	o.setKvStore(kvStore(id));
+	o?.setKvStore(kvStore(id));
 	return o;
 }
 
@@ -696,6 +701,7 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
+			session: (): Session => null,
 		});
 
 		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));
@@ -1181,6 +1187,24 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		shim.clearTimeout = originalClearTimeout;
 		shim.clearInterval = originalClearInterval;
 		jest.useRealTimers();
+	}
+};
+
+export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+	// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+	// shows how to use .spyOn to hide warnings
+	let warningMock;
+	try {
+		warningMock = jest.spyOn(console, 'warn');
+		warningMock.mockImplementation((message, ...args) => {
+			const fullMessage = [message, ...args].join(' ');
+			if (!fullMessage.match(warningRegex)) {
+				console.error(`Unexpected warning: ${message}`, ...args);
+			}
+		});
+		return await task();
+	} finally {
+		warningMock.mockRestore();
 	}
 };
 

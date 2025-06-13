@@ -44,6 +44,48 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
+	test('left/right arrow keys should expand/collapse notebooks', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		// Build the folder hierarchy
+		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await expect(folderAHeader).toBeVisible();
+		const folderBHeader = await sidebar.createNewFolder('Folder B');
+		const folderCHeader = await sidebar.createNewFolder('Folder C');
+		const folderDHeader = await sidebar.createNewFolder('Folder D');
+		await folderBHeader.dragTo(folderAHeader);
+		await folderCHeader.dragTo(folderAHeader);
+		await folderDHeader.dragTo(folderCHeader);
+
+		// Folders should have correct initial levels
+		await expect(folderAHeader).toHaveJSProperty('ariaLevel', '2');
+		await expect(folderBHeader).toHaveJSProperty('ariaLevel', '3');
+		await expect(folderCHeader).toHaveJSProperty('ariaLevel', '3');
+		await expect(folderDHeader).toHaveJSProperty('ariaLevel', '4');
+
+		await sidebar.forceUpdateSorting(electronApp);
+		await folderBHeader.click();
+
+		// Pressing [left] on a folder with no children should jump to its parent
+		await mainWindow.keyboard.press('ArrowLeft');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A');
+
+		// Pressing [left] again should collapse the folder
+		await expect(folderAHeader).toHaveJSProperty('ariaExpanded', 'true');
+		await mainWindow.keyboard.press('ArrowLeft');
+		await expect(folderAHeader).toHaveJSProperty('ariaExpanded', 'false');
+		// Should still be focused
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder A');
+
+		// Pressing [right] on a collapsed folder should expand it
+		await mainWindow.keyboard.press('ArrowRight');
+		await expect(folderAHeader).toHaveJSProperty('ariaExpanded', 'true');
+		// Pressing [right] again should move to the next item
+		await mainWindow.keyboard.press('ArrowRight');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder B');
+	});
+
 	test('should allow changing the parent of a folder by drag-and-drop', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;

@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"«%s» ویژگی ضروری «%s» را ندارد."
 	],
-	"%d days": [
-		"%d روز"
-	],
 	"%d GB": [
 		"%d گیگابایت"
 	],
 	"%d GB storage space": [
 		"%d گیگابایت فضای ذخیره‌سازی"
 	],
-	"%d hour": [
-		"%d ساعت"
-	],
-	"%d hours": [
-		"%d ساعت"
-	],
 	"%d MB": [
 		"%d مگابایت"
 	],
 	"%d MB per note or attachment": [
 		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
-	],
-	"%d minutes": [
-		"%d دقیقه"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d یادداشت‌هایی که مطابق این الگو هستند. آیا حذف شوند؟"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"%d یادداشت برای همیشه حذف خواهد شد. ادامه هید؟"
 	],
 	"%s": [
 		"%s"
@@ -65,17 +47,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s برای همگام سازی بسیاری از فایل های کوچک بهینه نشده است، بنابراین همگام سازی اولیه شما کند خواهد بود."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"برگه %s باز شد"
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d یادداشت"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -362,6 +347,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"افزودن خودکار حساب های غیرفعال برای حذف"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"جفت‌سازی خودکار کروشه، پرانتز، نقل قول و غیره."
 	],
@@ -407,6 +395,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"می‌توانید به اشتراک بگذارید"
 	],
@@ -421,6 +412,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"در حال لغو همگام سازی در پس‌زمینه... لطفا صبور باشید."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"در حال لغو..."
@@ -527,6 +521,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"برای بازیابی یادداشت بر روی «%s» کلیک نمایید. یادداشت در دفترچه‌ای به نام «%s» کپی می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"کلیک برای افزودن برچسب..."
 	],
@@ -548,6 +545,9 @@
 	"Close Window": [
 		"بستن صفحه"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		"کلیک خط فرمان برای باز کردن"
 	],
@@ -568,9 +568,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"همکاری با دیگران در دفترچه‌ها"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"هشدار‌های آینده"
@@ -613,6 +610,9 @@
 	],
 	"Configuration": [
 		"تنظیمات"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"تایید گذرواژه نمی‌تواند خالی باشد"
@@ -864,9 +864,6 @@
 	"Delete local data and re-download from sync target": [
 		"حذف داده‌های محلی و دانلود مجدد از هدف همگام‌سازی"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"حذف یادداشت"
 	],
@@ -920,6 +917,9 @@
 	],
 	"Detailed": [
 		"اطلاعات دقیق"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"دایرکتوری"
@@ -1058,12 +1058,6 @@
 	],
 	"Edit": [
 		"ویرایش"
-	],
-	"Edit in external editor": [
-		"ویرایش در ویرایشگر خارجی"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"ویرایش لینک"
@@ -1224,6 +1218,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"فعال‌سازی رمزنگاری به این معنی است که *تمام* یادداشت‌ها و پیوست‌های شما دوباره همگام‌سازی می‌شوند و به صورت رمزنگاری شده به هدف همگام‌سازی ارسال می‌شوند."
 	],
@@ -1299,9 +1296,6 @@
 	"Expand %s": [
 		"گسترش %s"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"صدور"
 	],
@@ -1347,6 +1341,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"شکست ایمن: وقتی هدف همگام‌سازی خالی است، داده‌های محلی را پاک نکنید (اغلب نتیجه یک پیکربندی اشتباه یا اشکال است)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"خطای مهلک:"
 	],
@@ -1373,6 +1370,9 @@
 	],
 	"Find: ": [
 		"یافت‌شده: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"افزونه Firefox"
@@ -1669,6 +1669,9 @@
 	"Invalid command: \"%s\"": [
 		"دستور نامعتبر: «%s»"
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
 	],
@@ -1773,6 +1776,9 @@
 	],
 	"Language, date format": [
 		"زبان، فرمت تاریخ"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"آخرین خطا: %s"
@@ -1934,6 +1940,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"پخش کننده رسانه، ریاضی، نمودارها، فهرست مطالب"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"کوچک کردن"
 	],
@@ -1964,11 +1973,14 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"اکثر افزونه ها دارای کد منبع برای بررسی در وب سایت افزونه هستند."
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"انتقال یادداشت‌های  %d به دفترچه «%s»؟"
+	"Move left": [
+		""
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"دفترچه «%s» حذف شود؟\n\nتمامی یادداشت‌ها و دفترچه‌های فرزند این دفترچه نیز حذف خواهند شد."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"انتقال به دفترچه"
@@ -1978,6 +1990,9 @@
 	],
 	"Move to notebook:": [
 		"انتقال به دفترچه:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"یادداشت‌هایی که مطابق <note> هستند را به [notebook] منتقل می‌کند."
@@ -2083,6 +2098,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"با %s تایید نشد. لطفا هر گواهی‌نامه‌ی ناموجود را ارائه نمایید."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"دانلود نشده"
@@ -2219,14 +2237,23 @@
 	"Open %s": [
 		"بازکردن %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
 		"باز کن"
 	],
 	"Open PDF viewer": [
 		"بازکردن مشاهده‌کننده PDF"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"بازکردن مسیر حساب کاربری"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Source": [
 		"متن باز"
@@ -2261,6 +2288,12 @@
 	"Page size for PDF export": [
 		"اندازه صفحه برای صدور PDF"
 	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
+	],
 	"Password": [
 		"گذرواژه"
 	],
@@ -2285,9 +2318,6 @@
 	"PDF File": [
 		"فایل PDF"
 	],
-	"Per user. Minimum of %d users.": [
-		"به ازای هر کاربر. حداقل %d کاربر."
-	],
 	"Permanently delete note": [
 		"حذف دائمی یادداشت‌"
 	],
@@ -2296,9 +2326,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"دفترچه \"%s\" برای همیشه حذف شود؟\n\nهمه یادداشت‌ها و زیر دفترچه‌های این دفترچه برای همیشه حذف خواهند شد."
-	],
-	"Permanently delete these %d notes?": [
-		"آیا یادداشت‌های پوشه %d به طور دائم حذف شود؟"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"دفترچه را برای همیشه حذف می کند و از نگهداری در سطل زباله صرف نظر می کند."
@@ -2320,6 +2347,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"لطفاً آدرس زیر را در مرورگر خود باز کنید تا برنامه تأیید اعتبار شود. برنامه یک دایرکتوری در \"Apps/Joplin\" ایجاد می کند و فقط فایل ها را در این فهرست می خواند و می نویسد. به هیچ فایلی خارج از این فهرست دسترسی نخواهد داشت و به هیچ اطلاعات شخصی دیگری دسترسی نخواهد داشت. هیچ داده ای با هیچ شخص ثالثی به اشتراک گذاشته نخواهد شد."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"لطفا صدای خود را ضبط نمایید..."
@@ -2522,6 +2552,9 @@
 	"Recommended plugins": [
 		"افزونه های پیشنهادی"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"باز انجام"
 	],
@@ -2705,6 +2738,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"جستجو"
 	],
@@ -2870,6 +2906,9 @@
 	"Skipped: %d.": [
 		"رد شده: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -2935,6 +2974,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"شروع برنامه و کوچک‌شده در آیکن تسک‌بار"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"شروع، توقف یا بررسی سرور API. از متغیر تنظیمات api.port برای مشخص کردن پورتی که باید روی آن اجرا شود استفاده کنید. دستورات بصورت (%s) هستند."
@@ -3088,6 +3130,12 @@
 	],
 	"Synchronizing...": [
 		"در حال همگام سازی..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"چکیده"
@@ -3346,9 +3394,6 @@
 	"This will permanently delete all items in the trash. Continue?": [
 		"با این کار همه موارد موجود در سطل زباله برای همیشه حذف می شوند. آیا ادامه هید؟"
 	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"با این کار یادداشت \"%s\" برای همیشه حذف می شود. ادامه می‌دهید؟"
-	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"با این کار، دفترچه از مجموعه شما حذف می شود و دیگر به محتوای آن دسترسی نخواهید داشت. آیا مایل هستید ادامه دهید؟"
 	],
@@ -3486,6 +3531,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"امکان اشتراک‌گذاری داده های لاگ وجود ندارد. دلیل: %s"
+	],
+	"Unchecked": [
+		""
 	],
 	"Uncompleted to-dos on top": [
 		"فهرست کار‌های کامل نشده در بالا"
@@ -3634,6 +3682,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"فایل های زبان تایپ صوتی (URL)"
 	],
@@ -3726,6 +3777,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"شما به سرویس ابری Joplin وارد شده اید، اکنون می توانید این صفحه را ترک کنید."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"شما در حال حاضر دفترچه‌ای ندارید."

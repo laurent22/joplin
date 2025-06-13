@@ -75,6 +75,32 @@ test.describe('noteList', () => {
 		await expect(noteList.getNoteItemByTitle('test note 1')).toBeVisible();
 	});
 
+	test('deleting a note to the trash should show a notification', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test note 1');
+
+		const noteList = mainScreen.noteList;
+		await noteList.focusContent(electronApp);
+		const testNoteItem = noteList.getNoteItemByTitle('test note 1');
+		await expect(testNoteItem).toBeVisible();
+
+		// Should be removed after deleting
+		await testNoteItem.press('Delete');
+		await expect(testNoteItem).not.toBeVisible();
+
+		// Should show a deleted notification
+		const notification = mainWindow.locator('[role=alert]', {
+			hasText: /The note was successfully moved to the trash./i,
+		});
+		await expect(notification).toBeVisible();
+
+		// Should be possible to un-delete
+		const undeleteButton = notification.getByRole('button', { name: 'Cancel' });
+		await undeleteButton.click();
+
+		await expect(testNoteItem).toBeVisible();
+	});
+
 	test('arrow keys should navigate the note list', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;

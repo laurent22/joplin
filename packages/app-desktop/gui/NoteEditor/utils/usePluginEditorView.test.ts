@@ -1,16 +1,20 @@
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { renderHook } from '@testing-library/react-hooks';
 import usePluginEditorView from './usePluginEditorView';
-import { PluginStates, PluginViewState } from '@joplin/lib/services/plugins/reducer';
+import { PluginEditorViewState, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
+import { defaultWindowId } from '@joplin/lib/reducer';
 
-const sampleView = (): PluginViewState => {
+const sampleView = (): PluginEditorViewState => {
 	return {
 		buttons: [],
 		containerType: ContainerType.Editor,
 		id: 'view-1',
-		opened: true,
+		editorTypeId: 'view-1',
 		type: 'webview',
+		opened: true,
+		active: true,
+		parentWindowId: defaultWindowId,
 	};
 };
 
@@ -24,7 +28,7 @@ describe('usePluginEditorView', () => {
 		const pluginStates: PluginStates = {
 			'0': {
 				contentScripts: {},
-				id: '1',
+				id: '0',
 				views: {
 					'view-0': {
 						...sampleView(),
@@ -43,7 +47,7 @@ describe('usePluginEditorView', () => {
 		};
 
 		{
-			const test = renderHook(() => usePluginEditorView(pluginStates, ['view-1']));
+			const test = renderHook(() => usePluginEditorView(pluginStates));
 			expect(test.result.current.editorPlugin.id).toBe('1');
 			expect(test.result.current.editorView.id).toBe('view-1');
 			test.unmount();
@@ -51,7 +55,7 @@ describe('usePluginEditorView', () => {
 
 		{
 			pluginStates['1'].views['view-1'].opened = false;
-			const test = renderHook(() => usePluginEditorView(pluginStates, ['view-1']));
+			const test = renderHook(() => usePluginEditorView(pluginStates));
 			expect(test.result.current.editorPlugin).toBeFalsy();
 			test.unmount();
 		}
@@ -79,7 +83,7 @@ describe('usePluginEditorView', () => {
 		};
 
 		{
-			const test = renderHook(() => usePluginEditorView(pluginStates, ['view-1']));
+			const test = renderHook(() => usePluginEditorView(pluginStates));
 			expect(test.result.current.editorPlugin.id).toBe('1');
 			expect(test.result.current.editorView.id).toBe('view-1');
 			test.unmount();

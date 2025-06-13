@@ -24,6 +24,7 @@ export interface Theme {
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
 	backgroundColor2: string;
+	backgroundColorTransparent2: string; // Used for dimmed region outside modals
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;

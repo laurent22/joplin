@@ -7,6 +7,8 @@ import { ForwardedRef, forwardRef, RefObject, useContext, useEffect, useImperati
 import { WindowIdContext } from './NewWindowOrIFrame';
 import useDocument from './hooks/useDocument';
 import { _ } from '@joplin/lib/locale';
+import getAssetPath from '../utils/getAssetPath';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -28,6 +30,7 @@ export interface NoteViewerControl {
 	domReady(): boolean;
 	setHtml(html: string, options: SetHtmlOptions): void;
 	send(channel: string, arg0?: unknown, arg1?: unknown): void;
+	focusLine(editorLine: number): void;
 	focus(): void;
 	hasFocus(): boolean;
 }
@@ -107,6 +110,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 					win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
 				}
 
+				if (channel === 'focusLine') {
+					win.postMessage({ target: 'webview', name: 'focusLine', data: { line: arg0 } }, '*');
+				}
+
 				// External code should use .setHtml (rather than send('setHtml', ...))
 				if (channel === 'setHtml') {
 					win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
@@ -139,28 +146,37 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			hasFocus: () => {
 				return webviewRef.current?.contains(parentDoc.activeElement);
 			},
+			focusLine: (lineNumber: number) => {
+				if (webviewRef.current) {
+					focus('NoteTextViewer::focusLine', webviewRef.current);
+					// A timeout seems necessary after focusing the viewer to prevent focus from jumping to the top
+					setTimeout(() => {
+						result.send('focusLine', lineNumber);
+					}, 100);
+				}
+			},
 		};
 		return result;
 	}, [parentDoc]);
 
-	const webview_domReadyRef = useRef<EventListener>();
+	const webview_domReadyRef = useRef<EventListener>(null);
 	webview_domReadyRef.current = (event: Event) => {
 		domReadyRef.current = true;
 		if (props.onDomReady) props.onDomReady(event);
 	};
 
-	const webview_ipcMessageRef = useRef<EventListener>();
+	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
 		if (props.onIpcMessage) props.onIpcMessage(event);
 	};
 
-	const webview_loadRef = useRef<EventListener>();
+	const webview_loadRef = useRef<EventListener>(null);
 	webview_loadRef.current = (event: Event) => {
 		webview_domReadyRef.current(event);
 	};
 
 	type MessageEventListener = (event: MessageEvent)=> void;
-	const webview_messageRef = useRef<MessageEventListener>();
+	const webview_messageRef = useRef<MessageEventListener>(null);
 	webview_messageRef.current = (event: MessageEvent) => {
 		if (event.source !== webviewRef.current?.contentWindow) return;
 		if (!event.data || event.data.target !== 'main') return;
@@ -226,7 +242,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
 			allowFullScreen={true}
 			aria-label={_('Note viewer')}
-			src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
+			src={`joplin-content://note-viewer/${toForwardSlashes(getAssetPath('gui/note-viewer/index.html'))}`}
 		></iframe>
 	);
 });

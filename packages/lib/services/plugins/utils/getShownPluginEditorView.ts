@@ -1,10 +1,10 @@
 import { PluginStates } from '../reducer';
-import getActivePluginEditorView from './getActivePluginEditorView';
+import getActivePluginEditorViews from './getActivePluginEditorViews';
 
-export default (plugins: PluginStates, shownEditorViewIds: string[]) => {
-	const { editorPlugin, editorView } = getActivePluginEditorView(plugins);
-	if (editorView) {
-		if (!shownEditorViewIds.includes(editorView.id)) return { editorPlugin: null, editorView: null };
+export default (plugins: PluginStates, windowId: string) => {
+	const visibleViews = getActivePluginEditorViews(plugins, windowId, { mustBeVisible: true });
+	if (!visibleViews.length) {
+		return { editorView: null, editorPlugin: null };
 	}
-	return { editorPlugin, editorView };
+	return visibleViews[0];
 };

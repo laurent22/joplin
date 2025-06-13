@@ -9,6 +9,7 @@ const path = require('path');
 const sharp = require('sharp');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const sqlite3 = require('sqlite3');
 const React = require('react');
 require('../../jest.base-setup.js')();
@@ -30,6 +31,12 @@ shim.injectedJs = (name) => {
 		throw new Error(`Cannot find injected JS with ID ${name}`);
 	}
 	return injectedJs[name];
+};
+shim.fsDriver().getAppDirectoryPath = () => {
+	// On mobile, the rootProfileDirectory and the app directory
+	// (RNFetchBlob's DocumentDir) match the root profile directory
+	// by default.
+	return Setting.value('rootProfileDir');
 };
 
 // This library has the following error when running within Jest:
@@ -67,7 +74,7 @@ const emptyMockPackages = [
 	'react-native-share',
 	'react-native-file-viewer',
 	'react-native-image-picker',
-	'react-native-document-picker',
+	'@react-native-documents/picker',
 	'@joplin/react-native-saf-x',
 	'expo-av',
 	'expo-av/build/Audio',
@@ -90,7 +97,7 @@ jest.mock('react-native-zip-archive', () => {
 	return { default: { } };
 });
 
-jest.mock('react-native-document-picker', () => ({ default: { } }));
+jest.mock('@react-native-documents/picker', () => ({ default: { } }));
 
 // Used by the renderer
 jest.doMock('react-native-vector-icons/Ionicons', () => {

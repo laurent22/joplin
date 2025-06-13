@@ -237,7 +237,7 @@ export const settingsSections = createSelector(
 		} else {
 			output.push(...([
 				'tools', 'importOrExport', 'moreInfo',
-			].map(name => {
+			].map((name): SettingMetadataSection => {
 				return {
 					name,
 					metadatas: [],

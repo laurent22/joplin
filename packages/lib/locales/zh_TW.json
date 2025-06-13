@@ -2,35 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"%s 缺少必須的屬性 %s。"
 	],
-	"%d days": [
-		"%d 天"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB 儲存空間"
 	],
-	"%d hour": [
-		"%d 小時"
-	],
-	"%d hours": [
-		"%d 小時"
-	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"每個筆記或附件 %d MB"
-	],
-	"%d minutes": [
-		"%d 分鐘"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"相符的記事共有 %d 則，要刪除嗎？"
-	],
-	"%d notes will be permanently deleted. Continue?": [
-		"刪除選定的記事？"
 	],
 	"%s": [
 		"%s"
@@ -65,17 +47,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 沒有針對同步許多小文件進行優化，因此初始同步速度會比較慢。"
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		"%s 在分頁打開"
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s：%d 則記事"
 	],
 	"%s: %d/%d": [
 		"%s：%d/%d"
@@ -362,6 +347,9 @@
 	"Auto-add disabled accounts for deletion": [
 		"自動於刪除清單中加入已停用帳戶"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"自動配對大括號、括號、引號等。"
 	],
@@ -407,6 +395,9 @@
 	"by word": [
 		""
 	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"可以分享"
 	],
@@ -421,6 +412,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"正在取消同步...請稍等。"
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"正在取消..."
@@ -527,6 +521,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"點選「%s」將記事還原後複製到名為「%s」的記事本中。此記事當前的版本將保留，不會被取代或修改。"
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"新增標籤..."
 	],
@@ -548,6 +545,9 @@
 	"Close Window": [
 		"關閉視窗"
 	],
+	"Closing session...": [
+		""
+	],
 	"Cmd-click to open": [
 		"Cmd-click 開啟"
 	],
@@ -568,9 +568,6 @@
 	],
 	"Collaborate on notebooks with others": [
 		"與其他人在記事本協作"
-	],
-	"Collapsed, press space to expand.": [
-		""
 	],
 	"Coming alarms": [
 		"未來提醒"
@@ -613,6 +610,9 @@
 	],
 	"Configuration": [
 		"設置"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"確認密碼不能空白"
@@ -863,9 +863,6 @@
 	"Delete local data and re-download from sync target": [
 		"刪除本地資料，自同步目標重新下載所有檔案"
 	],
-	"Delete model and re-download?\nThis cannot be undone.": [
-		""
-	],
 	"Delete note": [
 		"刪除記事"
 	],
@@ -919,6 +916,9 @@
 	],
 	"Detailed": [
 		"詳細的"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"目錄"
@@ -1057,12 +1057,6 @@
 	],
 	"Edit": [
 		"編輯"
-	],
-	"Edit in external editor": [
-		"使用外部編輯器編輯"
-	],
-	"Edit in new window": [
-		""
 	],
 	"Edit link": [
 		"編輯連結"
@@ -1223,6 +1217,9 @@
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
 		""
 	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同步目標。"
 	],
@@ -1298,9 +1295,6 @@
 	"Expand %s": [
 		"擴展 %s"
 	],
-	"Expanded, press space to collapse.": [
-		""
-	],
 	"Export": [
 		"匯出"
 	],
@@ -1346,6 +1340,9 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"故障保護 (Fail-safe)：當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本機資料"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
 	"Fatal error:": [
 		"嚴重錯誤："
 	],
@@ -1372,6 +1369,9 @@
 	],
 	"Find: ": [
 		"尋找："
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox 附加元件"
@@ -1667,6 +1667,9 @@
 	"Invalid command: \"%s\"": [
 		"無效的命令：\"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"不正確選項值: \"%s\"。可能的值為: %s。"
 	],
@@ -1771,6 +1774,9 @@
 	],
 	"Language, date format": [
 		"語言、日期格式"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"上次錯誤: %s"
@@ -1934,6 +1940,9 @@
 	"Media player, math, diagrams, table of contents": [
 		"媒體播放器、數學、圖表、目錄"
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
 		"最小化"
 	],
@@ -1964,11 +1973,14 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		"大多數延伸模組在延伸模組網站上提供源代碼供您進行評估。"
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"要將 %d 移動到「%s」記事本嗎？"
+	"Move left": [
+		""
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"移動記事本到垃圾桶?\n\n此記事本中的所有記事和子記事本也將移動到垃圾桶。"
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"移動至記事本"
@@ -1978,6 +1990,9 @@
 	],
 	"Move to notebook:": [
 		"移動至記事本："
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"將給定的 <item> 移到 [notebook]"
@@ -2083,6 +2098,9 @@
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"與 %s 認證失敗，請提供完整的身份驗證資訊。"
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"尚未下載"
@@ -2219,14 +2237,23 @@
 	"Open %s": [
 		"開啟 %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
 		"開啟"
 	],
 	"Open PDF viewer": [
 		"開啟 PDF 查看器"
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
 		"開啟個人資料目錄"
+	],
+	"Open secondary app instance...": [
+		""
 	],
 	"Open Source": [
 		"來源"
@@ -2261,6 +2288,12 @@
 	"Page size for PDF export": [
 		"匯出 PDF 的頁面大小"
 	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
+	],
 	"Password": [
 		"密碼"
 	],
@@ -2285,9 +2318,6 @@
 	"PDF File": [
 		"PDF 檔案"
 	],
-	"Per user. Minimum of %d users.": [
-		"每位使用者。最少 %d 位使用者。"
-	],
 	"Permanently delete note": [
 		"永久刪除記事"
 	],
@@ -2296,9 +2326,6 @@
 	],
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		"永久刪除記事本？\n\n此舉亦會永久刪除其中的所有記事和子記事本。"
-	],
-	"Permanently delete these %d notes?": [
-		"永久刪除這些記事 %d ？"
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"永久刪除這些記事本 ，不要移到垃圾桶。"
@@ -2320,6 +2347,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"請在瀏覽器開啟以下 URL 驗證應用程式。應用程式將在「Apps/Joplin」中建立一個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"請錄製您的聲音..."
@@ -2522,6 +2552,9 @@
 	"Recommended plugins": [
 		"延伸模組推薦"
 	],
+	"Record audio": [
+		""
+	],
 	"Redo": [
 		"恢復"
 	],
@@ -2705,6 +2738,9 @@
 	"Scanned code": [
 		""
 	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"搜尋"
 	],
@@ -2870,6 +2906,9 @@
 	"Skipped: %d.": [
 		"略過：%d。"
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"黃昏黑"
 	],
@@ -2935,6 +2974,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"啟動應用程式時最小化到系統匣"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"開始、停止或檢查 API 伺服器。若要指定在哪個連接埠上執行，請設定 api.port 設定變數。指令為 (%s)"
@@ -3088,6 +3130,12 @@
 	],
 	"Synchronizing...": [
 		"同步中..."
+	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3341,9 +3389,6 @@
 	"This will permanently delete all items in the trash. Continue?": [
 		"這將永久刪除垃圾桶裡所有項目，要繼續嗎？"
 	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		"這將永久刪除此記事「%s」，繼續？"
-	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"此動作將會從你的收藏庫中移除記事本，並且未來將無法再存取其內容。確定要繼續嗎？"
 	],
@@ -3481,6 +3526,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"無法分享日誌資料。原因：%s"
+	],
+	"Unchecked": [
+		""
 	],
 	"Uncompleted to-dos on top": [
 		"最上方顯示未完成的待辦事項"
@@ -3629,6 +3677,9 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"語音輸入語言檔案(URL)"
 	],
@@ -3721,6 +3772,9 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"您已經登入 Joplin Cloud，您可以離開這個畫面。"
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"您目前尚未擁有記事本。"

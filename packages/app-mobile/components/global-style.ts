@@ -8,6 +8,7 @@ const Color = require('color');
 const baseStyle = {
 	appearance: 'light',
 	fontSize: 16,
+	fontSizeLarger: 18,
 	fontSizeLarge: 20,
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
@@ -15,6 +16,7 @@ const baseStyle = {
 	fontSizeSmaller: 14,
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',
+	listTabSize: '1.7em',
 	// The default, may be overridden in settings:
 	noteViewerFontSize: 16,
 };

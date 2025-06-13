@@ -80,6 +80,13 @@ async function main() {
 
 	await warningMessage();
 
+	// React Native caches a path to Node in there, which appears to point to a copy of the
+	// executable in a temp folder. If those temp folders are deleted it will still try to use that
+	// path and fail. Running "Clean build" won't remove `.xcode.env.local` so it's safer to always
+	// delete it, since if there's an issue the error makes no sense whatsoever, and several hours
+	// will be lost trying to fix the issue.
+	await fs.remove(`${mobileDir}/ios/Pods/../.xcode.env.local`);
+
 	const pbxprojFilePath = `${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`;
 	await checkDeploymentTargets(pbxprojFilePath);
 

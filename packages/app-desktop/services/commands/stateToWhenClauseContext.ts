@@ -12,6 +12,7 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 	const windowId = options?.windowId ?? defaultWindowId;
 	const isMainWindow = windowId === defaultWindowId;
 	const windowState = stateUtils.windowStateById(state, windowId);
+	const isAltInstance = !!state.settings.altInstanceId;
 
 	return {
 		...libStateToWhenClauseContext(state, options),
@@ -26,6 +27,7 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		gotoAnythingVisible: !!state.visibleDialogs['gotoAnything'],
 		sidebarVisible: isMainWindow && !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
 		noteListHasNotes: !!windowState.notes.length,
+		isAltInstance,
 
 		// Deprecated
 		sideBarVisible: !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),

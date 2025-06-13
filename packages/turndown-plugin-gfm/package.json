@@ -4,13 +4,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.61",
+  "version": "1.0.62",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
     "browserify": "14.5.0",
     "rollup": "0.50.1",
-    "standard": "17.1.0",
+    "standard": "17.1.2",
     "turndown": "7.2.0",
     "turndown-attendant": "0.0.3"
   },

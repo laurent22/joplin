@@ -69,6 +69,7 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogSize)
 };
 
 const DismissibleDialog: React.FC<Props> = props => {
+	const theme = themeStyle(props.themeId);
 	const styles = useStyles(props.themeId, props.containerStyle, props.size);
 
 	const heading = props.heading ? (
@@ -92,7 +93,7 @@ const DismissibleDialog: React.FC<Props> = props => {
 			onRequestClose={props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			animationType='fade'
-			backgroundColor='rgba(0, 0, 0, 0.1)'
+			backgroundColor={theme.backgroundColorTransparent2}
 			transparent={true}
 		>
 			<Surface style={styles.dialogSurface} elevation={1}>

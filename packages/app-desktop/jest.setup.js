@@ -19,6 +19,7 @@ jest.mock('@electron/remote', () => {
 				default: {},
 			};
 		},
+		getGlobal: () => ({}),
 	};
 });
 

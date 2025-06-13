@@ -1,51 +1,47 @@
-# Joplin for research
+# Joplin for Research
 
-Joplin allows you to store all your notes, ideas and lists in one place. You can access them at home or on-the-go thanks to synchronisation feature. Gather all the information you need and keep it accessible and organised.
+Joplin enables you to store all your notes, ideas, and lists in one convenient location. With its synchronisation feature, you can access your information at home or on the go. Gather all the data you need and keep it organised and accessible.
 
-Here are several ways how you can improve and streamline your research process with Joplin:
+Here are several ways you can enhance and streamline your research process using Joplin:
 
-## 1\. Organise your research
+## 1\. Organise Your Research
 
-Set-up an organised note-taking system. Create a dedicated notebook in Joplin for each project. You can also create sub-notebooks for each topic or category. Structure clearly your notes separating them into sections using headers, bullet points or numbered lists. You can also create tables, edit colours, highlight text or add hand-written notes or drawings. You can also use tags to indicate the status of a note (e.g., “to-do”, “in progress”, “done”), the relevance to specific research questions, or any other aspect that is important to your work. For best efficiency, make sure to stay consistent in your formatting.
+Establish a well-structured note-taking system. Create a dedicated notebook in Joplin for each project, and consider creating sub-notebooks for individual topics or categories. Structure your notes clearly by using headers, bullet points, or numbered lists. You can also create tables, edit colours, highlight text, or add hand-written notes and drawings. Use tags to indicate the status of a note (e.g., “to-do”, “in progress”, “done”), its relevance to specific research questions, or other aspects crucial to your work. To maximise efficiency, maintain consistency in your formatting.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/organise.png"  max-width="500px" />
 
-## 2\. Take advantage of search functionality
+## 2\. Leverage the Search Functionality
 
-You can search your notes by keyword, tag, or even text within the images. Thanks to Optical Character Recognition (OCR) Joplin can help you easily search the text in images for specific keywords or phrases. This can save a significant amount of time when you’re looking for specific information in a large document or across multiple documents.
+Search your notes by keyword, tag, or even text within images. With Optical Character Recognition (OCR), Joplin allows you to search for specific words or phrases in images. This feature can save a significant amount of time when you’re looking for particular information in a large document or across multiple documents.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/search.png"  max-width="500px" />
 
-## 3\. Add variety of resources to your research
+## 3\. Incorporate a Variety of Resources into Your Research
 
-Add visual aids to your notes such as photos, documents or even hand written notes or drawings. You may also take photos of interesting articles or inspirational materials and store them in Joplin notes. You can also use voice to speech feature to create written notes.
+Enhance your notes with visual aids such as photos, documents, or hand-written notes and drawings. You can also take photographs of interesting articles or inspirational materials and store them in Joplin. Additionally, use the Voice Typing feature to convert spoken words into text in real-time.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/resources.png"  max-width="500px" />
 
-## 4\. Use web clipper extension to preserve important articles or blog posts
+## 4\. Use the Web Clipper Extension to Save Important Articles or Blog Posts
 
-Joplin web Clipper can be a powerful tool for research. Here are some tips on how to use it effectively:
+Joplin's Web Clipper is an invaluable tool for research. Here are some tips for using it effectively:
 
-- **Clip Relevant Pages**
+- **Clip Relevant Pages**  
+When you find a web page with useful information, save it using the Web Clipper. This could include blog posts, news articles, research papers, or other types of content.
 
-Whenever you come across a web page that contains useful information for your research, use the Web Clipper to save it. This could be a blog post, a news article, a research paper, or any other type of content.
+- **Save Pay-Per-View Content**  
+If you have temporary access to subscription-based content, use the Web Clipper to save articles or journals relevant to your work. This ensures you can access the material even after your subscription expires.
 
-- **Save Pay-Per-View Content**
+- **Organise Your Clips**  
+Sort your clips into notebooks and arrange them by topic, source, or any other category that suits your research.
 
-If you have temporary access to pay-per-view journals or other subscription-based content, use Joplin Web Clipper to save in Joplin the content that seems relevant to your work. This way, you can access it even after your access expires.
+- **Add Tags and Notes**  
+After clipping a page, add tags and notes to remember why you saved it and its relevance to your research. This makes it easier to locate and utilise the clip later. Additionally, tagging helps track the source of the information in case you need to reference it again.
 
-- **Organize Your Clips**
+## 5\. Share Findings with Your Research Group
 
-Organise your clips into notebooks and keep your clips arranged by topic, source, or any other category that makes sense for you and your research.
-
-- **Add Tags and Notes**
-
-After clipping a web page, add tags and notes to help you remember why you saved it and how it’s relevant to your research. This will make it easier to find and use the clip later. IT will also help to identify the source of information, in case you need to go back to it later.
-
-## 5\. Share findings with your research group
-
-Engage your colleagues in the research group by sharing your notes and notebooks. Create a shared notebook that all members of the group can access and contribute to. This can serve as a central repository for all ideas and information related to the project.
+Collaborate with your colleagues by sharing notes and notebooks. Create a shared notebook that all group members can access and contribute to, serving as a central repository for ideas and information related to the project.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/use_cases/research/share.png"  max-width="500px" />
 
-Tip: Group related ideas together using tags or colour themes. This will help you identify patterns and themes, and can also help in structuring the project or research.
+**Tip:** Group related ideas together using tags or colour themes. This will help you identify patterns and themes, making it easier to structure your project or research.

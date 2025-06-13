@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import setLayoutItemProps from '../../ResizableLayout/utils/setLayoutItemProps';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
+import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleSideBar',
@@ -10,14 +11,16 @@ export const declaration: CommandDeclaration = {
 	iconName: 'fas fa-bars',
 };
 
-export const runtime = (): CommandRuntime => {
+export const runtime = (control: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			const layout = (context.state as AppState).mainLayout;
 
+			const visible = !layoutItemProp(layout, 'sideBar', 'visible');
 			const newLayout = setLayoutItemProps(layout, 'sideBar', {
-				visible: !layoutItemProp(layout, 'sideBar', 'visible'),
+				visible,
 			});
+			control.announcePanelVisibility(_('Sidebar'), visible);
 
 			// Toggling the sidebar will affect the size of most other on-screen components.
 			// Dispatching a window resize event is a bit of a hack, but it ensures that any

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo } from 'react';
-import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue } from '../../utils/types';
+import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo, Ref } from 'react';
+import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue, NoteBodyEditorRef } from '../../utils/types';
 import { resourcesStatus, commandAttachFileToBody, getResourcesFromPasteEvent, processPastedHtml } from '../../utils/resourceHandling';
 import attachedResources from '@joplin/lib/utils/attachedResources';
 import useScroll from './utils/useScroll';
@@ -43,6 +43,10 @@ import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
 import useDocument from '../../../hooks/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
+import Setting from '@joplin/lib/models/Setting';
+import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatternsLookup';
+import { toFileProtocolPath } from '@joplin/utils/path';
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 
 const logger = Logger.create('TinyMCE');
 
@@ -56,7 +60,7 @@ const logger = Logger.create('TinyMCE');
 //
 // The problem is that the list plugin was, unknown to me, relying on this <br/>
 // being present. Without it, trying to add a bullet point or checkbox on an
-// empty document, does nothing. The exact reason for this is unclear
+// empty document, adds an empty paragraph. The exact reason for this is unclear
 // so as a workaround we manually add this <br> for empty documents,
 // which fixes the issue.
 //
@@ -69,8 +73,8 @@ const logger = Logger.create('TinyMCE');
 //
 // Perhaps upgrading the list plugin (which is a fork of TinyMCE own list plugin)
 // would help?
-function awfulInitHack(html: string): string {
-	return html === '<div id="rendered-md"></div>' ? '<div id="rendered-md"><p></p></div>' : html;
+function preprocessHtml(html: string): string {
+	return html === '' ? '<p></p>' : html;
 }
 
 
@@ -91,8 +95,7 @@ interface LastOnChangeEventInfo {
 let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
+const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const [editorContainer, setEditorContainer] = useState<HTMLDivElement|null>(null);
 	const editorContainerDom = useDocument(editorContainer);
 	const [editor, setEditor] = useState<Editor|null>(null);
@@ -617,6 +620,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background: none;
 				background-color: ${theme.backgroundColor3} !important;
 			}
+
+			.tox .tox-tbtn,
+			.tox .tox-tbtn button,
+			.tox .tox-split-button,
+			.tox .tox-split-button button {
+				margin: 0 !important;
+			}
 		`));
 
 		return () => {
@@ -647,6 +657,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// Create and setup the editor
 	// -----------------------------------------------------------------------------------------
 
+	const textPatternsLookupRef = useTextPatternsLookup({ enabled: props.enableTextPatterns, enableMath: props.mathEnabled });
 	useEffect(() => {
 		if (!scriptLoaded) return;
 		if (!editorContainer) return;
@@ -673,7 +684,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			// we create small groups of just one button towards the end.
 
 			const toolbar = [
-				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', 'formattingExtras', '|',
+				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', '|',
+				'joplinInsert', 'joplinSup', 'joplinSub', 'forecolor', '|',
 				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', '|',
@@ -718,6 +730,25 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
+				// See https://www.tiny.cloud/docs/tinymce/latest/tinymce-and-csp/#content_security_policy
+				content_security_policy: Setting.value('featureFlag.richText.useStrictContentSecurityPolicy') ? [
+					// Media: *: Allow users to include images and videos from the internet (e.g. ![](http://example.com/image.png)).
+					// Media: blob: Allow loading images/videos/audio from blob URLs. The Rich Text Editor
+					//      replaces certain base64 URLs with blob URLs.
+					// Media: data: Allow loading images and other media from data: URLs
+					'default-src \'self\'',
+					'img-src \'self\' blob: data: *', // Images
+					'media-src \'self\' blob: data: *', // Audio and video players
+
+					// Disallow certain unused features
+					'child-src \'none\'', // Should not contain sub-frames
+					'object-src \'none\'', // Objects can be used for script injection
+					'form-action \'none\'', // No submitting forms
+
+					// Styles: unsafe-inline: TinyMCE uses inline style="" styles.
+					// Styles: *: Allow users to include styles from the internet (e.g. <style src="https://example.com/style.css">)
+					'style-src \'self\' \'unsafe-inline\' * data:',
+				].join(' ; ') : undefined,
 				contextmenu: false,
 				browser_spellcheck: true,
 
@@ -728,9 +759,42 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSub: { inline: 'sub', remove: 'all' },
 					joplinSup: { inline: 'sup', remove: 'all' },
 					code: { inline: 'code', remove: 'all', attributes: { spellcheck: 'false' } },
-					forecolor: { inline: 'span', styles: { color: '%value' } },
+					// Foreground color: The remove_similar: true is necessary here for the "remove formatting"
+					// button to work. See https://github.com/tinymce/tinymce/issues/5026.
+					forecolor: { inline: 'span', styles: { color: '%value' }, remove_similar: true },
 				},
+				text_patterns: [],
+				text_patterns_lookup: (ctx: TextPatternContext) => textPatternsLookupRef.current(ctx),
+
 				setup: (editor: Editor) => {
+					editor.addCommand('joplinMath', async () => {
+						const katex = editor.selection.getContent();
+						const md = `$${katex}$`;
+
+						// Save and clear the selection -- when this command is activated by a text pattern,
+						// TinyMCE:
+						// 1. Adjusts the selection just before calling the command to include the to-be-formatted text.
+						// 2. Calls the command.
+						// 3. Removes the "$" characters and restores the selection.
+						//
+						// As a result, the selection needs to be saved and restored.
+						const mathSelection = editor.selection.getBookmark();
+
+						const result = await markupToHtml.current(MarkupLanguage.Markdown, md, { bodyOnly: true });
+
+						// Replace the math...
+						const finalSelection = editor.selection.getBookmark();
+						editor.selection.moveToBookmark(mathSelection);
+						editor.selection.setContent(result.html);
+						editor.selection.moveToBookmark(finalSelection); // ...then move the selection back.
+
+						// Fire update events
+						editor.fire(TinyMceEditorEvents.JoplinChange);
+						dispatchDidUpdate(editor);
+						// The last replacement seems to need to be manually added to the undo history
+						editor.undoManager.add();
+					});
+
 					editor.addCommand('joplinAttach', () => {
 						insertResourcesIntoContentRef.current();
 					});
@@ -883,6 +947,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			return docHead_;
 		}
 
+		const assetToUrl = (asset: RenderResultPluginAsset) => {
+			if (asset.pathIsAbsolute) {
+				// This is important on Windows, where the C:/ at the start of the path
+				// is interpreted as a relative subfolder without the file:// prefix.
+				return toFileProtocolPath(asset.path);
+			} else {
+				return asset.path;
+			}
+		};
+
 		const allCssFiles = [
 			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
@@ -890,16 +964,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			pluginAssets
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'text/css')
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.map((a: any) => a.path),
+				.map(assetToUrl),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.filter((a: any) => a.mime === 'application/javascript')
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.map((a: any) => a.path),
+				.map(assetToUrl),
 		);
 
 		const filePathToElementId = (path: string) => {
@@ -974,6 +1046,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		return true;
 	}
 
+	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
 
@@ -987,7 +1060,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		const loadContent = async () => {
 			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 
-			if (lastOnChangeEventInfo.current.content !== props.content || !resourcesEqual) {
+			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
+			const differentNoteId = lastNoteIdRef.current !== props.noteId;
+			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
+			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
 					props.content,
@@ -998,6 +1074,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						// This prevents HTML-style resource URLs (e.g. <a href="file://path/to/resource/.../"></a>)
 						// from being discarded.
 						allowedFilePrefixes: [props.resourceDirectory],
+
+						// Remove the wrapping <div id="rendered-md">...</div>, which can cause
+						// TinyMCE to crash in some cases.
+						// See https://github.com/tinymce/tinymce/issues/10276
+						bodyOnly: true,
 					}),
 				);
 				if (cancelled) return;
@@ -1009,7 +1090,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				// when the note content is updated externally.
 				const offsetBookmarkId = 2;
 				const bookmark = editor.selection.getBookmark(offsetBookmarkId);
-				editor.setContent(awfulInitHack(result.html));
+				const htmlAndCss = [
+					`<style>${result.cssStrings?.join('\n')}</style>`,
+					preprocessHtml(result.html),
+				].join('\n');
+				editor.setContent(htmlAndCss);
+				lastNoteIdRef.current = props.noteId;
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
 					// Need to clear UndoManager to avoid this problem:
@@ -1041,7 +1127,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 			const allAssetsOptions: NoteStyleOptions = {
 				contentMaxWidthTarget: '.mce-content-body',
-				scrollbarSize: props.scrollbarSize,
+				contentWrapperSelector: '.mce-content-body',
 				themeId: props.contentMarkupLanguage === MarkupLanguage.Html ? 1 : null,
 				whiteBackgroundNoteRendering: props.whiteBackgroundNoteRendering,
 			};
@@ -1058,7 +1144,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			cancelled = true;
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [editor, props.themeId, props.scrollbarSize, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
+	}, [editor, props.noteId, props.themeId, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
 
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1097,6 +1183,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, [editor]);
 
+	useEffect(() => {
+		if (!editor) return;
+		// Meta+P is bound by default to print by TinyMCE. It can be unbound, but it seems necessary
+		// to do so after the editor loads. Meta+P should be able to trigger Joplin built-in shortcuts.
+		editor.shortcuts.remove('Meta+P');
+	}, [editor]);
+
 	// -----------------------------------------------------------------------------------------
 	// Handle onChange event
 	// -----------------------------------------------------------------------------------------
@@ -1105,11 +1198,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>();
+	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>();
+	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

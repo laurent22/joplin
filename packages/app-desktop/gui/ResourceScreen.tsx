@@ -343,4 +343,4 @@ const mapStateToProps = (state: any) => ({
 
 const ResourceScreen = connect(mapStateToProps)(ResourceScreenComponent);
 
-module.exports = { ResourceScreen };
+export default ResourceScreen;

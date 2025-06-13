@@ -4,7 +4,7 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 describe('app.reducer', () => {
 
 	it('should handle DIALOG_OPEN', async () => {
-		const state: AppState = createAppDefaultState({}, {});
+		const state: AppState = createAppDefaultState({});
 
 		let newState = appReducer(state, {
 			type: 'DIALOG_OPEN',
@@ -49,7 +49,7 @@ describe('app.reducer', () => {
 
 	it('showing a dialog in one window should hide dialogs with the same ID in background windows', () => {
 		const state: AppState = {
-			...createAppDefaultState({}, {}),
+			...createAppDefaultState({}),
 			backgroundWindows: {
 				testWindow: {
 					...createAppDefaultWindowState(),

@@ -1,0 +1,10 @@
+{
+	"name": "@joplin/empty",
+	"version": "0.0.0",
+	"description": "An empty package, used as a way to exclude certain packages from build",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/laurent22/joplin.git"
+	}
+}

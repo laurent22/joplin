@@ -1,0 +1,50 @@
+# This is a (hopefully temporary) fix for an accessibility issue in the FAB.Group
+# component. See https://github.com/callstack/react-native-paper/pull/4498 for details.
+diff --git a/lib/commonjs/components/FAB/FABGroup.js b/lib/commonjs/components/FAB/FABGroup.js
+index 26933dd7ac6862c0dd95e52b8cd91c8bbd0b6efc..417c91a0257849eb597afb5e339e13b6d1d54486 100644
+--- a/lib/commonjs/components/FAB/FABGroup.js
++++ b/lib/commonjs/components/FAB/FABGroup.js
+@@ -209,8 +209,9 @@ const FABGroup = _ref => {
+       }],
+       pointerEvents: open ? 'box-none' : 'none',
+       accessibilityRole: "button",
+-      importantForAccessibility: "yes",
+-      accessible: true,
++      importantForAccessibility: open ? 'yes' : 'no-hide-descendants',
++      accessibilityElementsHidden: !open,
++      accessible: open,
+       accessibilityLabel: accessibilityLabel
+     }, it.label && /*#__PURE__*/React.createElement(_reactNative.View, null, /*#__PURE__*/React.createElement(_Card.default, {
+       mode: isV3 ? 'contained' : 'elevated',
+diff --git a/lib/module/components/FAB/FABGroup.js b/lib/module/components/FAB/FABGroup.js
+index ca5c02679539b17b048d4c82f570791dd8b57545..a06902b744b3bfb06b0644930eda0ba2ce2967ca 100644
+--- a/lib/module/components/FAB/FABGroup.js
++++ b/lib/module/components/FAB/FABGroup.js
+@@ -200,8 +200,9 @@ const FABGroup = _ref => {
+       }],
+       pointerEvents: open ? 'box-none' : 'none',
+       accessibilityRole: "button",
+-      importantForAccessibility: "yes",
+-      accessible: true,
++      importantForAccessibility: open ? 'yes' : 'no-hide-descendants',
++      accessibilityElementsHidden: !open,
++      accessible: open,
+       accessibilityLabel: accessibilityLabel
+     }, it.label && /*#__PURE__*/React.createElement(View, null, /*#__PURE__*/React.createElement(Card, {
+       mode: isV3 ? 'contained' : 'elevated',
+diff --git a/src/components/FAB/FABGroup.tsx b/src/components/FAB/FABGroup.tsx
+index af1e85c4cbabfdd05499f9befb9f851be5911835..d010393975b0b31852efba1b7ce9cb09da4feaec 100644
+--- a/src/components/FAB/FABGroup.tsx
++++ b/src/components/FAB/FABGroup.tsx
+@@ -383,8 +383,9 @@ const FABGroup = ({
+                 ]}
+                 pointerEvents={open ? 'box-none' : 'none'}
+                 accessibilityRole="button"
+-                importantForAccessibility="yes"
+-                accessible={true}
++                importantForAccessibility={open ? 'yes' : 'no-hide-descendants'}
++                accessibilityElementsHidden={!open}
++                accessible={open}
+                 accessibilityLabel={accessibilityLabel}
+               >
+                 {it.label && (

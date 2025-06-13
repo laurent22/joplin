@@ -5,14 +5,15 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { MutableRefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { BackHandler, Platform } from 'react-native';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import ExtendedWebView from '../../ExtendedWebView';
 import { OnMessageEvent, WebViewControl } from '../../ExtendedWebView/types';
 import { clearAutosave } from './autosave';
 import { LocalizedStrings } from './js-draw/types';
 import { DialogContext } from '../../DialogManager';
 import useEditorMessenger from './utils/useEditorMessenger';
+import BackButtonService from '../../../services/BackButtonService';
 
 
 const logger = Logger.create('ImageEditor');
@@ -83,7 +84,7 @@ const useCss = (editorTheme: Theme) => {
 
 const ImageEditor = (props: Props) => {
 	const editorTheme: Theme = themeStyle(props.themeId);
-	const webviewRef: MutableRefObject<WebViewControl>|null = useRef(null);
+	const webviewRef = useRef<WebViewControl|null>(null);
 	const [imageChanged, setImageChanged] = useState(false);
 
 	const dialogs = useContext(DialogContext);
@@ -124,10 +125,10 @@ const ImageEditor = (props: Props) => {
 			onRequestCloseEditor(true);
 			return true;
 		};
-		BackHandler.addEventListener('hardwareBackPress', hardwareBackPressListener);
+		BackButtonService.addHandler(hardwareBackPressListener);
 
 		return () => {
-			BackHandler.removeEventListener('hardwareBackPress', hardwareBackPressListener);
+			BackButtonService.removeHandler(hardwareBackPressListener);
 		};
 	}, [onRequestCloseEditor]);
 

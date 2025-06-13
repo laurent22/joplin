@@ -1,10 +1,28 @@
 /* eslint-disable multiline-comment-style */
 
-import eventManager from '../../../eventManager';
+import eventManager, { EventName, WindowCloseEvent, WindowOpenEvent } from '../../../eventManager';
+import Setting from '../../../models/Setting';
+import { defaultWindowId } from '../../../reducer';
 import Plugin from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
-import { ActivationCheckCallback, EditorActivationCheckFilterObject, FilterHandler, ViewHandle, UpdateCallback } from './types';
+import { ActivationCheckCallback, EditorActivationCheckFilterObject, FilterHandler, ViewHandle, UpdateCallback, EditorPluginCallbacks } from './types';
+
+interface SaveNoteOptions {
+	/**
+	 * The ID of the note to save. This should match either:
+	 * - The ID of the note currently being edited
+	 * - The ID of a note that was very recently open in the editor.
+	 *
+	 * This property is present to ensure that the note editor doesn't write
+	 * to the wrong note just after switching notes.
+	 */
+	noteId: string;
+	/** The note's new content. */
+	body: string;
+}
+
+type ActivationCheckSlice = Pick<EditorActivationCheckFilterObject, 'effectiveNoteId'|'windowId'|'activatedEditors'>;
 
 /**
  * Allows creating alternative note editors. You can create a view to handle loading and saving the
@@ -49,6 +67,7 @@ export default class JoplinViewsEditors {
 	private store: any;
 	private plugin: Plugin;
 	private activationCheckHandlers_: Record<string, FilterHandler<EditorActivationCheckFilterObject>> = {};
+	private unhandledActivationCheck_: Map<string, ActivationCheckSlice> = new Map();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public constructor(plugin: Plugin, store: any) {
@@ -61,13 +80,105 @@ export default class JoplinViewsEditors {
 	}
 
 	/**
+	 * Registers a new editor plugin. Joplin will call the provided callback to create new editor views
+	 * associated with the plugin as necessary (e.g. when a new editor is created in a new window).
+	 */
+	public async register(viewId: string, callbacks: EditorPluginCallbacks) {
+		const initializeController = (handle: ViewHandle, windowId: string) => {
+			const editorTypeId = `${this.plugin.id}-${viewId}`;
+			const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Editor, windowId);
+			controller.setEditorTypeId(editorTypeId);
+			this.plugin.addViewController(controller);
+			// Restore the last open/closed state for the editor
+			controller.setOpened(Setting.value('plugins.shownEditorViewIds').includes(editorTypeId));
+
+			return () => {
+				this.plugin.removeViewController(controller);
+				controller.destroy();
+			};
+		};
+
+		// Register the activation check handler early to handle the case where the editorActivationCheck
+		// event is fired **before** an activation check handler is registered through the API.
+		const registerActivationCheckHandler = (handle: ViewHandle) => {
+			const onActivationCheck: FilterHandler<EditorActivationCheckFilterObject> = async object => {
+				if (this.activationCheckHandlers_[handle]) {
+					return this.activationCheckHandlers_[handle](object);
+				} else {
+					this.unhandledActivationCheck_.set(handle, {
+						...object,
+					});
+					return object;
+				}
+			};
+			eventManager.filterOn('editorActivationCheck', onActivationCheck);
+			const cleanup = () => {
+				eventManager.filterOff('editorActivationCheck', onActivationCheck);
+				this.unhandledActivationCheck_.delete(handle);
+			};
+
+			return cleanup;
+		};
+
+		const listenForWindowOrPluginClose = (windowId: string, onClose: ()=> void) => {
+			const closeListener = (event: WindowCloseEvent|null) => {
+				if (event && event.windowId !== windowId) return;
+
+				onClose();
+				eventManager.off(EventName.WindowClose, closeListener);
+			};
+			eventManager.on(EventName.WindowClose, closeListener);
+
+			this.plugin.addOnUnloadListener(() => {
+				closeListener(null);
+			});
+		};
+
+		const createEditorViewForWindow = async (windowId: string) => {
+			const handle = createViewHandle(this.plugin, `${viewId}-${windowId}`);
+
+			const removeController = initializeController(handle, windowId);
+			const removeActivationCheck = registerActivationCheckHandler(handle);
+
+			await callbacks.onSetup(handle);
+
+			// Register the activation check after calling onSetup to ensure that the editor
+			// is fully set up before it can be marked as active.
+			await this.onActivationCheck(handle, callbacks.onActivationCheck);
+
+			listenForWindowOrPluginClose(windowId, () => {
+				// Save resources by closing resources associated with
+				// closed windows:
+				removeController();
+				removeActivationCheck();
+			});
+		};
+
+		await createEditorViewForWindow(defaultWindowId);
+
+		const onWindowOpen = (event: WindowOpenEvent) => createEditorViewForWindow(event.windowId);
+		eventManager.on(EventName.WindowOpen, onWindowOpen);
+		this.plugin.addOnUnloadListener(() => {
+			eventManager.off(EventName.WindowOpen, onWindowOpen);
+		});
+	}
+
+	/**
 	 * Creates a new editor view
+	 *
+	 * @deprecated
 	 */
 	public async create(id: string): Promise<ViewHandle> {
-		const handle = createViewHandle(this.plugin, id);
-		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Editor);
-		this.plugin.addViewController(controller);
-		return handle;
+		return new Promise<ViewHandle>(resolve => {
+			void this.register(id, {
+				onSetup: async (handle) => {
+					resolve(handle);
+				},
+				onActivationCheck: async () => {
+					return false;
+				},
+			});
+		});
 	}
 
 	/**
@@ -93,28 +204,51 @@ export default class JoplinViewsEditors {
 	}
 
 	/**
+	 * Saves the content of the editor, without calling `onUpdate` for editors in the same window.
+	 */
+	public async saveNote(handle: ViewHandle, props: SaveNoteOptions): Promise<void> {
+		await this.controller(handle).requestSaveNote({
+			noteId: props.noteId,
+			body: props.body,
+		});
+	}
+
+	/**
 	 * Emitted when the editor can potentially be activated - this is for example when the current
 	 * note is changed, or when the application is opened. At that point you should check the
 	 * current note and decide whether your editor should be activated or not. If it should, return
 	 * `true`, otherwise return `false`.
+	 *
+	 * @deprecated - `onActivationCheck` should be provided when the editor is first created with
+	 * 	`editor.register`.
 	 */
 	public async onActivationCheck(handle: ViewHandle, callback: ActivationCheckCallback): Promise<void> {
-		const handler: FilterHandler<EditorActivationCheckFilterObject> = async (object) => {
-			const isActive = await callback();
+		const isActive = async ({ windowId, effectiveNoteId }: ActivationCheckSlice) => {
+			const isCorrectWindow = windowId === this.controller(handle).parentWindowId;
+			const active = isCorrectWindow && await callback({
+				handle,
+				noteId: effectiveNoteId,
+			});
+			return active;
+		};
+		const handler = async (object: ActivationCheckSlice) => {
 			object.activatedEditors.push({
 				pluginId: this.plugin.id,
 				viewId: handle,
-				isActive: isActive,
+				isActive: await isActive(object),
 			});
 			return object;
 		};
 
 		this.activationCheckHandlers_[handle] = handler;
 
-		eventManager.filterOn('editorActivationCheck', this.activationCheckHandlers_[handle]);
-		this.plugin.addOnUnloadListener(() => {
-			eventManager.filterOff('editorActivationCheck', this.activationCheckHandlers_[handle]);
-		});
+		// Handle the case where the activation check was done before this onActivationCheck handler was registered.
+		if (this.unhandledActivationCheck_.has(handle)) {
+			const lastActivationCheckObject = this.unhandledActivationCheck_.get(handle);
+			this.unhandledActivationCheck_.delete(handle);
+
+			this.controller(handle).setActive(await isActive(lastActivationCheckObject));
+		}
 	}
 
 	/**
@@ -137,7 +271,7 @@ export default class JoplinViewsEditors {
 	 * Tells whether the editor is active or not.
 	 */
 	public async isActive(handle: ViewHandle): Promise<boolean> {
-		return this.controller(handle).visible;
+		return this.controller(handle).isActive();
 	}
 
 	/**

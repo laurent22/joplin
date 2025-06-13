@@ -12,25 +12,25 @@ describe('markdownCommands.bulletedVsChecklist', () => {
 	const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;
 	const expectedTags = ['BulletList', 'Task'];
 
-	it('should remove a checklist following a bulleted list without modifying the bulleted list', async () => {
+	it('should remove a checklist following a bulleted list without modifying the bulleted list only at the selected line', async () => {
 		const editor = await createTestEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length + 5), expectedTags,
 		);
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			`${bulletedListPart}\n\nThis is a checklist\nwith multiple items.\n☑`,
+			`${bulletedListPart}\n\nThis is a checklist\n- [ ] with multiple items.\n- [ ] ☑`,
 		);
 	});
 
-	it('should remove an unordered list following a checklist without modifying the checklist', async () => {
+	it('should remove an unordered list only at the selected line following a checklist without modifying the checklist', async () => {
 		const editor = await createTestEditor(
 			initialDocText, EditorSelection.cursor(bulletedListPart.length - 5), expectedTags,
 		);
 
 		toggleList(ListType.UnorderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			`Test\nThis is a test.\n3\n4\n5\n\n${checklistPart}`,
+			`- Test\n- This is a test.\n- 3\n4\n- 5\n\n${checklistPart}`,
 		);
 	});
 

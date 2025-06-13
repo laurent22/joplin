@@ -36,8 +36,8 @@ const incompatiblePluginIds = [
 	// cSpell:disable
 	'com.septemberhx.Joplin.Enhancement',
 	'ylc395.noteLinkSystem',
-	'outline',
 	'joplin.plugin.cmoptions',
+	'com.asdibiase.joplin-languagetool',
 	// cSpell:enable
 ];
 

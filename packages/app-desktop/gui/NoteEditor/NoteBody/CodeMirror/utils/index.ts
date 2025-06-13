@@ -1,6 +1,4 @@
-import { useEffect, useRef } from 'react';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, import/prefer-default-export -- Old code before rule was applied
 export function cursorPositionToTextOffset(cursorPos: any, body: string) {
 	if (!body) return 0;
 
@@ -19,13 +17,4 @@ export function cursorPositionToTextOffset(cursorPos: any, body: string) {
 	}
 
 	return pos;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function usePrevious(value: any): any {
-	const ref = useRef();
-	useEffect(() => {
-		ref.current = value;
-	});
-	return ref.current;
 }

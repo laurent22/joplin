@@ -18,6 +18,9 @@ import ScannedBarcodes from './ScannedBarcodes';
 import { CameraRef } from './Camera/types';
 import Camera from './Camera';
 import { CameraResult } from './types';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('CameraView');
 
 interface Props {
 	themeId: number;
@@ -130,6 +133,7 @@ const CameraViewComponent: React.FC<Props> = props => {
 	const codeScanner = useBarcodeScanner();
 
 	const onCameraReady = useCallback(() => {
+		logger.debug('Camera ready');
 		setCameraReady(true);
 	}, []);
 

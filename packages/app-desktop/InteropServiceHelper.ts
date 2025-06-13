@@ -111,8 +111,12 @@ export default class InteropServiceHelper {
 							// 2024-01-31: Printing with webContents.print still
 							// fails on Linux (even if run in the main process).
 							// As such, we use window.print(), which seems to work.
+							//
+							// 2025-05-03: Windows and MacOS also need the window.print() workaround.
+							// See https://github.com/electron/electron/pull/46937.
 
-							if (shim.isLinux()) {
+							const applyWorkaround = true;
+							if (applyWorkaround) {
 								await win.webContents.executeJavaScript(`
 									// Blocks while the print dialog is open
 									window.print();

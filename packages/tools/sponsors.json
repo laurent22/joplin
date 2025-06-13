@@ -35,6 +35,9 @@
 		},
 		{
 			"name": "Akhil-CM"
+		},
+		{
+			"name": "ugoertz"
 		}
 	],
 	"orgs": [
@@ -98,21 +101,10 @@
 			"imageName": "CasinoReviews.png"
 		},
 		{
-			"url": "https://useviral.com.br/",
-			"title": "Comprar seguidores Instagram",
-			"imageName": "Useviral.png"
-		},
-		{
-			"url": "https://ca.edubirdie.com/",
-			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
-			"imageName": "Edubirdie.png",
-			"alt": "EduBirdie"
-		},
-		{
 			"url": "https://topagency.webflow.io",
 			"title": "WebDesignAgency",
 			"imageName": "WebDesignAgency.png",
-			"alt": "web design agency"
+			"alt": "topagency"
 		},
 		{
 			"url": "https://realgambling.ca/",
@@ -131,6 +123,37 @@
 			"title": "casino without making any upfront cost",
 			"imageName": "Slotozilla.png",
 			"alt": "casino without making any upfront cost"
+		},
+		{
+			"url": "https://www.reddit.com/r/tiktokRise/",
+			"title": "Tiktok Rise",
+			"imageName": "TiktokRise.jpg",
+			"alt": "Tiktok Rise",
+			"githubUser": "knickman"
+		},
+		{
+			"url": "https://essaywriter.pro",
+			"title": "write my essay services by EssayWriter",
+			"imageName": "EssayWriterPro.png",
+			"alt": "write my essay services by EssayWriter"
+		},
+		{
+			"url": "https://essayservice.com",
+			"title": "quick and reliable service to write my paper for me",
+			"imageName": "EssayService.png",
+			"alt": "quick and reliable service to write my paper for me"
+		},
+		{
+			"url": "https://writepaper.com/",
+			"title": "best service to write my paper for me",
+			"imageName": "WritePaper.png",
+			"alt": "best service to write my paper for me"
+		},
+		{
+			"url": "https://paperwriter.com/",
+			"title": "high-quality paper writing service PaperWriter",
+			"imageName": "PaperWriter.png",
+			"alt": "high-quality paper writing service PaperWriter"
 		}
 	],
 	"orgsOld": [
@@ -166,6 +189,12 @@
 			"title": "BYTV",
 			"imageName": "BYTV.png",
 			"githubUser": "bytv1"
+		},
+		{
+			"url": "https://ca.edubirdie.com/",
+			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
+			"imageName": "Edubirdie.png",
+			"alt": "EduBirdie"
 		}
 	]
 }

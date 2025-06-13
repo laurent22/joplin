@@ -5,7 +5,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
-import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../path-utils';
+import { basename, filename, rtrimSlashes, fileExtension, dirname, toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
@@ -124,7 +124,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				continue;
 			} else {
 				// Handle anchor links appropriately
-				const trimmedLink = this.trimAnchorLink(link);
+				const linkPosix = toForwardSlashes(link);
+				const trimmedLink = this.trimAnchorLink(linkPosix);
 				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
 				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
 				const stat = await shim.fsDriver().stat(pathWithExtension);
@@ -177,10 +178,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const title = filename(resolvedPath);
 		const body = stripBom(await shim.fsDriver().readFile(resolvedPath));
 
+		const fixedBody = this.applyImportFixes(body);
+
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: body,
+			body: fixedBody,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
@@ -190,5 +193,17 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
 		return this.importedNotes[resolvedPath];
+	}
+
+	public applyImportFixes(body: string) {
+		const edgeCases = [
+			// https://github.com/laurent22/joplin/issues/12363
+			// Necessary to clean up self-closing anchor tag always present in the start of the export generate by YinXiang.
+			{ findPattern: /^<a\b(.*)\/>$/m, replaceWith: '<a$1></a>' },
+		];
+
+		return edgeCases.reduce((modifiedBody, edgeCase) => {
+			return modifiedBody.replace(edgeCase.findPattern, edgeCase.replaceWith);
+		}, body);
 	}
 }

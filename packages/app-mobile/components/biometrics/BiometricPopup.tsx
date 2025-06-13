@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { useEffect, useMemo, useState } from 'react';
 import { View, Dimensions, Alert, Button } from 'react-native';

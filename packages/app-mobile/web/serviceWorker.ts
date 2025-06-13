@@ -130,7 +130,10 @@ if (typeof window === 'undefined') {
 				}
 				newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
 
-				response = new Response(response.body, {
+				// Ref: https://github.com/laurent22/joplin/pull/12127
+				const body = (response.status === 101 || response.status === 204 || response.status === 205 || response.status === 304) ? null : response.body;
+
+				response = new Response(body, {
 					status: response.status,
 					statusText: response.statusText,
 					headers: newHeaders,

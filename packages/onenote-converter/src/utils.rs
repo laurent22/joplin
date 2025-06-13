@@ -1,8 +1,10 @@
 use crate::parser::errors::Result;
 use itertools::Itertools;
+use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
+use std::sync::Mutex;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 use widestring::U16CString;
@@ -138,6 +140,9 @@ pub mod utils {
 
     macro_rules! log_warn {
         ( $( $t:tt )* ) => {
+            use crate::utils::get_current_page;
+
+            web_sys::console::warn_1(&format!("OneNoteConverter: Warning around the following page: {}", get_current_page().unwrap()).into());
             web_sys::console::warn_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
         }
     }
@@ -161,4 +166,18 @@ impl Utf16ToString for &[u8] {
         let value = U16CString::from_vec_truncate(data);
         Ok(value.to_string().unwrap())
     }
+}
+
+lazy_static! {
+    static ref CURRENT_PAGE: Mutex<Option<String>> = Mutex::new(None);
+}
+
+pub fn set_current_page(page_name: String) {
+    let mut current_page = CURRENT_PAGE.lock().unwrap();
+    *current_page = Some(page_name.to_string());
+}
+
+pub fn get_current_page() -> Option<String> {
+    let current_page = CURRENT_PAGE.lock().unwrap();
+    current_page.clone()
 }

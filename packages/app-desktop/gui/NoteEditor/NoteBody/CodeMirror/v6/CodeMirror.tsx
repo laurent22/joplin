@@ -167,7 +167,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
 					if (!webviewRef.current) return;
-					webviewRef.current.send('scrollToHash', options.value as string);
+					const hash: string = options.value;
+					webviewRef.current.send('scrollToHash', hash);
+					editorRef.current.jumpToHash(hash);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
 					setEditorPercentScroll(percent);

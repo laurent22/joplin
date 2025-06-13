@@ -18,7 +18,7 @@ import Plugin from '../Plugin';
  * now, are not well documented. You can find the list directly on GitHub
  * though at the following locations:
  *
- * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/MainScreen/commands)
+ * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/WindowCommandsAndDialogs/commands)
  * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/commands)
  * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts)
  *
@@ -29,7 +29,12 @@ import Plugin from '../Plugin';
  * commands can be found in these places:
  *
  * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/commands)
+ * * [Note screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/components/screens/Note/commands)
  * * [Editor commands](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/components/NoteEditor/commandDeclarations.ts)
+ *
+ * Additionally, certain global commands have the same implementation on both platforms:
+ *
+ * * [Shared global commands](https://github.com/laurent22/joplin/tree/dev/packages/lib/commands)
  *
  * ## Executing editor commands
  *

@@ -8,7 +8,13 @@
 
 import './utils/polyfills';
 
-import { LogBox, AppRegistry } from 'react-native';
+import { LogBox } from 'react-native';
+import { registerRootComponent } from 'expo';
+// Allows loading image assets. See https://github.com/expo/expo/issues/31240
+import 'expo-asset';
+import shim from '@joplin/lib/shim';
+shim.setReact(require('react'));
+
 const Root = require('./root').default;
 
 // Seems JavaScript developers love adding warnings everywhere, even when these warnings can't be fixed
@@ -45,7 +51,7 @@ LogBox.ignoreLogs([
 	'Did not receive response to shouldStartLoad in time, defaulting to YES',
 ]);
 
-AppRegistry.registerComponent('Joplin', () => Root);
+registerRootComponent(Root);
 
 // Using streams on react-native requires to polyfill process.nextTick()
 global.process.nextTick = setImmediate;

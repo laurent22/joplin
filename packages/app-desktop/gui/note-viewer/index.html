@@ -377,6 +377,39 @@
 			contentElement.scrollTop = scrollTop;
 		}
 
+		const getLineCorrespondingTo = (editorLineNumber) => {
+			const lineElements = document.getElementsByClassName('maps-to-line');
+			let lastLineElement;
+			let lastLine = 0;
+			for (const element of lineElements) {
+				// Stop just before the element that corresponds to a greater position
+				if (Number(element.getAttribute('source-line')) > editorLineNumber) {
+					break;
+				}
+				lastLineElement = element;
+			}
+			return lastLineElement;
+		};
+
+		ipc.focusLine = (event) => {
+			const targetLine = event.line;
+			const lineElement = getLineCorrespondingTo(targetLine);
+			if (lineElement) {
+				const doFocus = () => {
+					lineElement.focus({ preventScroll: true });
+				};
+				doFocus();
+
+				// Handle the case where the element is not naturally focusable.
+				if (!lineElement.contains(document.activeElement)) {
+					// tabindex=-1 allows focusing with JavaScript, but does not add the element
+					// to the focus order.
+					lineElement.setAttribute('tabindex', '-1');
+					doFocus();
+				}
+			}
+		}
+
 		const rewriteFileUrls = (accessKey) => {
 			if (!accessKey) return;
 
@@ -385,7 +418,9 @@
 			const mediaElements = document.querySelectorAll('video[src], audio[src], source[src], img[src]');
 			for (const element of mediaElements) {
 				if (element.src?.startsWith('file:')) {
-					const newUrl = element.src.replace(/^file:\/\//, 'joplin-content://file-media/');
+					// On Windows, .src can take the form "file:///C:/Users/..." (with three slashes at the beginning).
+					// The extra slash needs to be removed:
+					const newUrl = element.src.replace(/^file:\/\/\/?/, 'joplin-content://file-media/');
 					element.src = `${newUrl}?access-key=${accessKey}`;
 				}
 			}

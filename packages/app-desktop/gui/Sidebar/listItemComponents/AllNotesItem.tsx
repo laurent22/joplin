@@ -11,6 +11,7 @@ import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import { ListItem } from '../types';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const Menu = bridge().Menu;
@@ -20,6 +21,7 @@ interface Props {
 	dispatch: Dispatch;
 	anchorRef: ListItemRef;
 	selected: boolean;
+	item: ListItem;
 	index: number;
 	itemCount: number;
 }
@@ -53,7 +55,7 @@ const AllNotesItem: React.FC<Props> = props => {
 			containerRef={props.anchorRef}
 			key="allNotesHeader"
 			selected={props.selected}
-			depth={1}
+			depth={props.item.depth}
 			className={'list-item-container list-item-depth-0 all-notes'}
 			highlightOnHover={true}
 			itemIndex={props.index}

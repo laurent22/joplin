@@ -48,7 +48,7 @@ const updateListWithDetails = function (dom, el, detail) {
 };
 
 const removeStyles = (dom, element: HTMLElement, styles: string[]) => {
-  Tools.each(styles, (style) => dom.setStyle(element, { [style]: '' }));
+  Tools.each(styles, (style) => dom.setStyle(element, style, ''));
 };
 
 const getEndPointNode = function (editor, rng, start, root) {

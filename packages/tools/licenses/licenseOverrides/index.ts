@@ -78,6 +78,12 @@ const licenseOverrides: LicenseOverrides = {
 		// Octicons: Seems to be MIT, unused
 		// Zocial icons: Mostly MIT, one icon under CC BY. Do not use without attributing
 		// Simple line icons: MIT, unused
+		// antIcons: Licensed under the MIT
+		mitLicenseOverride(
+			'whisper.cpp',
+			'https://github.com/ggerganov/whisper.cpp/blob/master/LICENSE',
+			'Copyright (c) 2023-2024 The ggml authors',
+		),
 
 		...allPackageOverrides,
 	],

@@ -23,6 +23,7 @@ module.exports = {
 		'FileSystemCreateWritableOptions': 'readonly',
 		'FileSystemHandle': 'readonly',
 		'IDBTransactionMode': 'readonly',
+		'globalThis': 'readonly',
 
 		// ServiceWorker
 		'ExtendableEvent': 'readonly',
@@ -57,6 +58,8 @@ module.exports = {
 		'tinymce': 'readonly',
 
 		'JSX': 'readonly',
+
+		'NodeJS': 'readonly',
 	},
 	'parserOptions': {
 		'ecmaVersion': 2018,
@@ -309,7 +312,7 @@ module.exports = {
 						selector: 'interface',
 						format: null,
 						'filter': {
-							'regex': '^(RSA|RSAKeyPair)$',
+							'regex': '^(RSA|RSAKeyPair|iOS.*)$',
 							'match': true,
 						},
 					},

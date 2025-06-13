@@ -51,6 +51,8 @@ export default function(connectionString: string): StorageDriverConfig | null {
 				output.secretAccessKeyId = value;
 			} else if (key === 'Bucket') {
 				output.bucket = value;
+			} else if (key === 'Endpoint') {
+				output.endpoint = value;
 			} else {
 				throw new Error(`Invalid key: "${key}"`);
 			}

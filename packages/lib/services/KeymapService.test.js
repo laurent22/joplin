@@ -337,4 +337,9 @@ describe('services_KeymapService', () => {
 			}
 		});
 	});
+
+	it('getAriaKeyShortcuts should return undefined if there is no associated shortcut', () => {
+		keymapService.registerCommandAccelerator('some-command', null);
+		expect(keymapService.getAriaKeyShortcuts('some-command')).toBe(undefined);
+	});
 });

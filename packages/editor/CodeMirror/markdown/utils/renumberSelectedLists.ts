@@ -39,55 +39,64 @@ const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 			prevLineNumber = line.number;
 
 			const filteredText = stripBlockquote(line);
+			if (!filteredText.trim()) continue;
+
 			const match = filteredText.match(listItemRegex);
 
 			// Skip lines that aren't the correct type (e.g. blank lines)
-			if (!match) {
-				continue;
+			let indentation;
+			if (match) {
+				indentation = match[1];
+			} else {
+				indentation = filteredText.match(/^\s+/)?.[0] ?? '';
 			}
 
-			const indentation = match[1];
-
 			const indentationLen = tabsToSpaces(state, indentation).length;
-			let targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
-			if (targetIndentLen < indentationLen) {
-				listNumberStack.push({ nextListNumber, indentationLength: indentationLen });
+			let currentGroupIndentLength = tabsToSpaces(state, currentGroupIndentation).length;
+			const indentIncreased = indentationLen > currentGroupIndentLength;
+			const indentDecreased = indentationLen < currentGroupIndentLength;
+			if (indentIncreased) {
+				// Save the state of the previous group so that it can be restored later.
+				listNumberStack.push({
+					nextListNumber, indentationLength: currentGroupIndentLength,
+				});
 				nextListNumber = 1;
-			} else if (targetIndentLen > indentationLen) {
-				nextListNumber = parseInt(match[2], 10);
+			} else if (indentDecreased) {
+				if (match) {
+					nextListNumber = parseInt(match[2], 10);
+				}
 
 				// Handle the case where we deindent multiple times. For example,
 				// 1. test
 				//    1. test
 				//      1. test
 				// 2. test
-				while (targetIndentLen > indentationLen) {
+				while (indentationLen < currentGroupIndentLength) {
 					const listNumberRecord = listNumberStack.pop();
 
 					if (!listNumberRecord) {
 						break;
 					} else {
-						targetIndentLen = listNumberRecord.indentationLength;
+						currentGroupIndentLength = listNumberRecord.indentationLength;
 						nextListNumber = listNumberRecord.nextListNumber;
 					}
 				}
 
 			}
+			currentGroupIndentation = indentation;
 
-			if (targetIndentLen !== indentationLen) {
-				currentGroupIndentation = indentation;
+			if (match) {
+				const from = line.to - filteredText.length;
+				const to = from + match[0].length;
+				const inserted = `${indentation}${nextListNumber}. `;
+				nextListNumber++;
+
+				changes.push({
+					from,
+					to,
+					insert: inserted,
+				});
 			}
-
-			const from = line.to - filteredText.length;
-			const to = from + match[0].length;
-			const inserted = `${indentation}${nextListNumber}. `;
-			nextListNumber++;
-
-			changes.push({
-				from,
-				to,
-				insert: inserted,
-			});
 		}
 
 		return changes;

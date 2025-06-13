@@ -1,6 +1,6 @@
 import { rtrimSlashes } from '@joplin/utils/path';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
-import { _, defaultLocale, supportedLocalesToLanguages } from '../../locale';
+import { _, _n, defaultLocale, supportedLocalesToLanguages } from '../../locale';
 import shim from '../../shim';
 import time from '../../time';
 import type SettingType from '../Setting';
@@ -62,6 +62,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			public: false,
 		},
+
+		'altInstanceId': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'editor.codeView': {
 			value: true,
 			type: SettingItemType.Bool,
@@ -339,6 +349,37 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Joplin Server password'),
 			secure: true,
 		},
+		'sync.11.path': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml');
+			},
+			public: true,
+			label: () => _('Joplin Server URL'),
+			description: () => emptyDirWarning,
+			storage: SettingStorage.File,
+		},
+		'sync.11.userContentPath': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			storage: SettingStorage.Database,
+		},
+		'sync.11.id': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			storage: SettingStorage.Database,
+		},
+		'sync.11.userId': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			storage: SettingStorage.Database,
+		},
 
 		// Although sync.10.path is essentially a constant, we still define
 		// it here so that both Joplin Server and Joplin Cloud can be
@@ -423,6 +464,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.9.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.10.context': { value: '', type: SettingItemType.String, public: false },
+		'sync.11.context': { value: '', type: SettingItemType.String, public: false },
 
 		'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, isGlobal: true, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -674,6 +716,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
+		'editor.enableTextPatterns': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop],
+			label: () => _('Auto-format Markdown in the Rich Text Editor'),
+			description: () => _('Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 		'editor.toolbarButtons': {
 			value: [] as string[],
 			public: false,
@@ -814,22 +867,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => _('Enable the Markdown toolbar'),
-			storage: SettingStorage.File,
-			isGlobal: true,
-		},
-
-		// Works around a bug in which additional space is visible beneath the toolbar on some devices.
-		// See https://github.com/laurent22/joplin/pull/6823
-		'editor.mobile.removeSpaceBelowToolbar': {
-			value: false,
-			type: SettingItemType.Bool,
-			section: 'note',
-			public: true,
-			appTypes: [AppType.Mobile],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => settings['editor.mobile.removeSpaceBelowToolbar'],
-			label: () => 'Remove extra space below the markdown toolbar',
-			description: () => 'Works around bug on some devices where the markdown toolbar does not touch the bottom of the screen.',
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1147,6 +1184,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 			subType: SettingItemSubType.MonospaceFontFamily,
 		},
+		'style.viewer.fontFamily': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Desktop],
+			section: 'appearance',
+			label: () => _('Viewer and Rich Text Editor font family'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			subType: SettingItemSubType.FontFamily,
+		},
 
 		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
@@ -1271,12 +1319,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			options: () => {
 				return {
 					0: _('Disabled'),
-					300: _('%d minutes', 5),
-					600: _('%d minutes', 10),
-					1800: _('%d minutes', 30),
-					3600: _('%d hour', 1),
-					43200: _('%d hours', 12),
-					86400: _('%d hours', 24),
+					300: _n('%d minute', '%d minutes', 5, 5),
+					600: _n('%d minute', '%d minutes', 10, 10),
+					1800: _n('%d minute', '%d minutes', 30, 30),
+					3600: _n('%d hour', '%d hours', 1, 1),
+					43200: _n('%d hour', '%d hours', 12, 12),
+					86400: _n('%d hour', '%d hours', 24, 24),
 				};
 			},
 			storage: SettingStorage.File,
@@ -1442,6 +1490,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 						SyncTargetRegistry.nameToId('nextcloud'),
 						SyncTargetRegistry.nameToId('webdav'),
 						SyncTargetRegistry.nameToId('joplinServer'),
+						SyncTargetRegistry.nameToId('joplinServerSaml'),
 						// Needs to be enabled for Joplin Cloud too because
 						// some companies filter all traffic and swap TLS
 						// certificates, which result in error
@@ -1527,10 +1576,10 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Int,
 			public: true,
 			minimum: 1,
-			maximum: 365 * 2,
+			maximum: 99999,
 			step: 1,
 			unitLabel: (value: number = null) => {
-				return value === null ? _('days') : _('%d days', value);
+				return value === null ? _('days') : _n('%d day', '%d days', value, value);
 			},
 			label: () => _('Keep note history for'),
 			storage: SettingStorage.File,
@@ -1711,14 +1760,27 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		// 	storage: SettingStorage.File,
 		// },
 
-		'featureFlag.useBetaEncryptionMethod': {
+		'featureFlag.richText.useStrictContentSecurityPolicy': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Security: Stronger security controls in the Rich Text Editor',
+			description: () => 'Improves Rich Text Editor security by applying a strict content security policy to the Rich Text Editor\'s content.',
+			section: 'note',
+			isGlobal: true,
+		},
+
+		'featureFlag.plugins.isolatePluginWebViews': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			storage: SettingStorage.File,
-			label: () => 'Use beta encryption',
-			description: () => 'Set beta encryption methods as the default methods. This applies to all clients and takes effect after restarting the app.',
-			section: 'sync',
+			appTypes: [AppType.Desktop],
+			label: () => 'Security: Improve plugin panel, editor, and dialog security',
+			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
+			section: 'note',
 			isGlobal: true,
 		},
 
@@ -1782,7 +1844,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			maximum: 300,
 			step: 1,
 			unitLabel: (value: number = null) => {
-				return value === null ? _('days') : _('%d days', value);
+				return value === null ? _('days') : _n('%d day', '%d days', value, value);
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => settings['trash.autoDeletionEnabled'],

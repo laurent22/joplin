@@ -1,27 +1,41 @@
 {
   "name": "@joplin/htmlpack",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "main": "dist/index.js",
-  "types": "src/index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./dist/index.js"
+    },
+    "./packToString": {
+      "types": "./packToString.ts",
+      "default": "./dist/packToString.js"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
+    "test": "jest"
   },
   "author": "Laurent Cozic",
   "license": "MIT",
   "dependencies": {
-    "@adobe/css-tools": "4.4.1",
-    "@joplin/fork-htmlparser2": "^4.1.57",
+    "@adobe/css-tools": "4.4.2",
+    "@joplin/fork-htmlparser2": "^4.1.58",
     "datauri": "4.1.0",
     "fs-extra": "11.2.0",
     "html-entities": "1.4.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "11.0.4"
+    "@types/fs-extra": "11.0.4",
+    "@types/jest": "29.5.12",
+    "jest": "29.7.0",
+    "typescript": "5.4.5"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

@@ -83,6 +83,16 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
+			session: () => {
+				if (syncTargetId === 11) {
+					return {
+						id: Setting.value('sync.11.id'),
+						user_id: Setting.value('sync.11.userId'),
+					};
+				} else {
+					return null;
+				}
+			},
 		});
 
 		return this.api_;
@@ -329,6 +339,7 @@ export default class ShareService {
 		let recipientMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
+			if (!recipientEmail) throw new Error(_('Please provide the recipient email'));
 			const syncInfo = localSyncInfo();
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);

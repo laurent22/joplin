@@ -34,6 +34,9 @@ function baseUrl() {
 		output2.pop();
 		output = output2.join('/');
 	}
+	if (output[output.length - 1] === '/') {
+		output = output.slice(0, -1);
+	}
 	return output;
 }
 

@@ -6,7 +6,9 @@ interface Props {
 }
 
 const EmptyExpandLink: React.FC<Props> = props => {
-	return <a className={`sidebar-expand-link ${props.className ?? ''}`}><ExpandIcon isVisible={false} isExpanded={false}/></a>;
+	return <a className={`sidebar-expand-link ${props.className ?? ''}`}>
+		<ExpandIcon isVisible={false} isExpanded={false}/>
+	</a>;
 };
 
 export default EmptyExpandLink;

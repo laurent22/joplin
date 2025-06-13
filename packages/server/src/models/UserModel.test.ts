@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, createUser } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -6,6 +6,7 @@ import { accountByType, AccountType } from './UserModel';
 import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
 import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
+import config from '../config';
 
 describe('UserModel', () => {
 
@@ -455,4 +456,11 @@ describe('UserModel', () => {
 		expect(error instanceof ErrorBadRequest).toBe(true);
 	});
 
+	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
+		config().LOCAL_AUTH_ENABLED = false;
+
+		const user = await createUser();
+
+		expect(await models().user().login(user.email, '123456')).toBe(null);
+	});
 });

@@ -3,8 +3,13 @@ import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
+import BannerContent from './NoteEditor/WarningBanner/BannerContent';
+import { _ } from '@joplin/lib/locale';
+import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
+
+const logger = Logger.create('ErrorBoundary');
 
 interface ErrorInfo {
 	componentStack: string;
@@ -29,6 +34,28 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	children: any;
 }
+
+interface BannerProps {
+	isVisible: boolean;
+}
+
+const SwitchToNewEditorBanner = (props: BannerProps) => {
+
+	const handleSwitchToNewEditor = () => {
+		Setting.setValue('editor.legacyMarkdown', false);
+		const message = _('You are now using the latest version of the Markdown editor.');
+		// eslint-disable-next-line no-restricted-globals
+		alert(message);
+	};
+
+	return <BannerContent
+		acceptMessage={_('Switch to the new editor')}
+		onAccept={handleSwitchToNewEditor}
+		visible={props.isVisible}
+	>
+		{_('The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.')}
+	</BannerContent>;
+};
 
 export default class ErrorBoundary extends React.Component<Props, State> {
 
@@ -59,6 +86,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 		}
 
 		this.setState({ error, errorInfo, pluginInfos, plugins });
+
+		logger.error('The application encountered an error:', error);
+		logger.error('Component stack', errorInfo?.componentStack);
 	}
 
 	public componentDidMount() {
@@ -130,8 +160,11 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 					}
 				}
 
+				const isLegacyEditorError = !!this.state.error.stack.includes('CodeMirror/v5');
+
 				return (
 					<div style={{ overflow: 'auto', fontFamily: 'sans-serif', padding: '5px 20px' }}>
+						<SwitchToNewEditorBanner isVisible={isLegacyEditorError} />
 						<h1>Error</h1>
 						{this.renderMessage()}
 						<p>To report the error, please copy the *entire content* of this page and post it on Joplin forum or GitHub.</p>

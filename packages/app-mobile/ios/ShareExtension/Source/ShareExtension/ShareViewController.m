@@ -132,10 +132,18 @@
   UIResponder* responder = self;
   while (responder != nil) {
     if ([responder respondsToSelector:selector]) {
-      [responder performSelector:selector withObject:[NSURL URLWithString:ShareExtensionShareURL]];
+      UIApplication *app = (UIApplication*) responder;
+      NSURL *url = [NSURL URLWithString:ShareExtensionShareURL];
+      [app openURL:url options:@{} completionHandler:^(BOOL success) {
+        if (success) {
+          NSLog(@"Opened URL successfully!");
+        } else {
+          NSLog(@"Failed to open URL.");
+        }
+      }];
       break;
     }
-  
+    
     responder = responder.nextResponder;
   }
 }

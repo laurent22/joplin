@@ -20,6 +20,8 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				kind: ListItemType.Tag,
 				tag,
 				key: tag.id,
+				depth: 1,
+				hasChildren: false,
 			};
 		});
 	}, [props.tags]);
@@ -38,7 +40,9 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				kind: ListItemType.Folder,
 				folder,
 				hasChildren,
-				depth,
+				// The toplevel headers have depth 1, so the toplevel notebook needs
+				// depth 2.
+				depth: depth + 1,
 				key: folder.id,
 			};
 		});
@@ -57,11 +61,13 @@ const useSidebarListData = (props: Props): ListItem[] => {
 				['data-folder-id']: '',
 			},
 			supportsFolderDrop: true,
+			depth: 1,
+			hasChildren: folderItems.items.length > 0,
 		};
 		const foldersSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
-			{ kind: ListItemType.AllNotes, key: 'all-notes' },
+			{ kind: ListItemType.AllNotes, key: 'all-notes', depth: 2, hasChildren: false },
 			...folderItems.items,
-			{ kind: ListItemType.Spacer, key: 'after-folders-spacer' },
+			{ kind: ListItemType.Spacer, key: 'after-folders-spacer', depth: 1, hasChildren: false },
 		] : [];
 
 		const tagsHeader: HeaderListItem = {
@@ -74,6 +80,8 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			onClick: toggleHeader,
 			extraProps: { },
 			supportsFolderDrop: false,
+			depth: 1,
+			hasChildren: tagItems.items.length > 0,
 		};
 		const tagsSectionContent: ListItem[] = props.tagHeaderIsExpanded ? tagItems.items : [];
 

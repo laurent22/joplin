@@ -1,6 +1,7 @@
 
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
+import { msleep, Second } from '@joplin/utils/time';
 
 test.describe('pluginApi', () => {
 	test('the editor.setText command should update the current note (use RTE: false)', async ({ startAppWithPlugins }) => {
@@ -23,6 +24,27 @@ test.describe('pluginApi', () => {
 		await editor.expectToHaveText('PASS');
 	});
 
+	test('should return form data from the dialog API', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('First note');
+
+		const editor = mainScreen.noteEditor;
+		await editor.expectToHaveText('');
+
+		await mainScreen.goToAnything.runCommand(app, 'showTestDialog');
+		// Wait for the iframe to load
+		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+		await dialogContent.locator('form').waitFor();
+
+		// Submitting the dialog should include form data in the output
+		await mainScreen.dialog.getByRole('button', { name: 'Okay' }).click();
+		await editor.expectToHaveText(JSON.stringify({
+			id: 'ok',
+			hasFormData: true,
+		}));
+	});
+
 	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
 		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
 		const mainScreen = await new MainScreen(mainWindow).setup();
@@ -38,6 +60,67 @@ test.describe('pluginApi', () => {
 
 		await mainScreen.goToAnything.runCommand(app, 'testShowToastNotification');
 		await expect(notificationLocator).toHaveCount(3);
+	});
+
+	test('should be possible to switch between multiple editor plugins', async ({ startAppWithPlugins }) => {
+		const { mainWindow } = await startAppWithPlugins(['resources/test-plugins/multipleEditorPlugins.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+
+		await mainScreen.createNewNote('Test note');
+		const toggleButton = mainScreen.noteEditor.toggleEditorPluginButton;
+
+		// Initially, the toggle button should be visible, and so should the default editor.
+		await expect(mainScreen.noteEditor.codeMirrorEditor).toBeAttached();
+		await toggleButton.click();
+
+		const pluginFrame = mainScreen.noteEditor.editorPluginFrame;
+		await expect(pluginFrame).toBeAttached();
+
+		// Should describe the frame
+		const frameViewIdLabel = pluginFrame.contentFrame().locator('#view-id-base');
+		await expect(frameViewIdLabel).toHaveText('test-editor-plugin-1');
+
+		// Clicking toggle again should cycle to the next editor plugin
+		await toggleButton.click();
+		await expect(frameViewIdLabel).toHaveText('test-editor-plugin-2');
+
+		// Clicking toggle again should dismiss the editor plugins
+		await toggleButton.click();
+		await expect(mainScreen.noteEditor.codeMirrorEditor).toBeAttached();
+		await expect(pluginFrame).not.toBeAttached();
+	});
+
+	test('should be possible to save changes to a note using the editor plugin API', async ({ startAppWithPlugins }) => {
+		const { mainWindow, app } = await startAppWithPlugins(['resources/test-plugins/editorPluginSaving.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note');
+
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Initial content.');
+
+		const toggleButton = noteEditor.toggleEditorPluginButton;
+		await toggleButton.click();
+
+		// Should switch to the editor
+		const pluginFrame = noteEditor.editorPluginFrame;
+		await expect(pluginFrame).toBeAttached();
+		const pluginFrameContent = pluginFrame.contentFrame();
+		await expect(pluginFrameContent.getByText('Loaded!')).toBeAttached();
+
+		// Editor plugin tests should pass
+		await mainScreen.goToAnything.runCommand(app, 'testEditorPluginSave-test-editor-plugin');
+
+		// Should have saved
+		await toggleButton.click();
+		const expectedUpdatedText = 'Changed by test-editor-plugin';
+		await expect(noteEditor.codeMirrorEditor).toHaveText(expectedUpdatedText);
+
+		// Regression test: Historically the editor's content would very briefly be correct, then
+		// almost immediately be replaced with the old content. Doing another check after a brief
+		// delay should cause the test to fail if this bug returns:
+		await msleep(Second);
+		await expect(noteEditor.codeMirrorEditor).toHaveText(expectedUpdatedText);
 	});
 });
 

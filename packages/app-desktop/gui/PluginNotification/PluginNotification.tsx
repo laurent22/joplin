@@ -1,8 +1,8 @@
-import { useContext, useMemo } from 'react';
-import NotyfContext from '../NotyfContext';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import * as React from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { Toast, ToastType } from '@joplin/lib/services/plugins/api/types';
-import { INotyfNotificationOptions } from 'notyf';
+import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
+import { NotificationType } from '../PopupNotification/types';
 
 const emptyToast = (): Toast => {
 	return {
@@ -19,26 +19,23 @@ interface Props {
 }
 
 export default (props: Props) => {
-	const notyfContext = useContext(NotyfContext);
+	const popupManager = useContext(PopupNotificationContext);
+
 	const toast = useMemo(() => {
 		const toast: Toast = props.toast ? props.toast : emptyToast();
 		return toast;
 	}, [props.toast]);
 
-	useAsyncEffect(async () => {
+	useEffect(() => {
 		if (!toast.message) return;
 
-		const options: Partial<INotyfNotificationOptions> = {
-			type: toast.type,
-			message: toast.message,
-			duration: toast.duration,
-		};
-
-		notyfContext.open(options);
+		popupManager.createPopup(() => toast.message, {
+			type: toast.type as string as NotificationType,
+		}).scheduleDismiss(toast.duration);
 		// toast.timestamp needs to be included in the dependency list to allow
 		// showing multiple toasts with the same message, one after another.
 		// See https://github.com/laurent22/joplin/issues/11783
-	}, [toast.message, toast.duration, toast.type, toast.timestamp, notyfContext]);
+	}, [toast.message, toast.duration, toast.type, toast.timestamp, popupManager]);
 
 	return <div style={{ display: 'none' }}/>;
 };

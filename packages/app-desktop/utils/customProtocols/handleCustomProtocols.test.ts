@@ -19,7 +19,6 @@ jest.doMock('electron', () => {
 	};
 });
 
-import Logger from '@joplin/utils/Logger';
 import handleCustomProtocols from './handleCustomProtocols';
 import { supportDir } from '@joplin/lib/testing/test-utils';
 import { join } from 'path';
@@ -27,8 +26,7 @@ import { stat } from 'fs-extra';
 import { toForwardSlashes } from '@joplin/utils/path';
 
 const setUpProtocolHandler = () => {
-	const logger = Logger.create('test-logger');
-	const protocolHandler = handleCustomProtocols(logger);
+	const protocolHandler = handleCustomProtocols();
 
 	expect(handleProtocolMock).toHaveBeenCalledTimes(1);
 
@@ -56,9 +54,8 @@ const toAccessUrl = (path: string, { host = 'note-viewer' }: ExpectBlockedOption
 
 const expectPathToBeBlocked = async (onRequestListener: ProtocolHandler, filePath: string, options?: ExpectBlockedOptions) => {
 	const url = toAccessUrl(filePath, options);
-	await expect(
-		async () => await onRequestListener(new Request(url)),
-	).rejects.toThrow(/Read access not granted for URL|Invalid or missing media access key|Media access denied/);
+	const response = await onRequestListener(new Request(url));
+	expect(response.status).toBe(403); // Forbidden
 };
 
 const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, filePath: string, options?: ExpectBlockedOptions) => {

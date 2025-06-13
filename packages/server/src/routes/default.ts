@@ -19,7 +19,6 @@ interface PathToFileMap {
 // example if they are in node_modules, use the map below.
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
-	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
 	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
@@ -49,6 +48,23 @@ async function findLocalFile(path: string): Promise<string> {
 	return localPath;
 }
 
+const patchFile = (path: string, fileContent: Buffer): Buffer => {
+	const patches: Record<string, (fileContent: Buffer)=> Buffer> = {
+		'css/bulma.min.css': fileContent => {
+			// We apply the patch here rather than with `yarn patch` because that would mean
+			// modifying a minified file, which is likely to break on each new update of Bulma. Dark
+			// theme is disabled mostly because we don't want it in published notes, which may have
+			// their own style inherited from clipped web pages. Having dark theme in the web UI is
+			// not that useful because it's not frequently accessed by users.
+			return Buffer.from(fileContent.toString().replace('prefers-color-scheme:dark', 'prefers-color-scheme:dark-disabled-by-patch'), 'utf-8');
+		},
+	};
+
+	if (patches[path]) return patches[path](fileContent);
+
+	return fileContent;
+};
+
 const router = new Router(RouteType.Web);
 
 router.public = true;
@@ -70,7 +86,8 @@ router.get('', async (path: SubPath, ctx: AppContext) => {
 	let mimeType: string = mime.fromFilename(localPath);
 	if (!mimeType) mimeType = 'application/octet-stream';
 
-	const fileContent: Buffer = await fs.readFile(localPath);
+	let fileContent: Buffer = await fs.readFile(localPath);
+	fileContent = patchFile(path.raw, fileContent);
 
 	const koaResponse = ctx.response;
 	koaResponse.body = fileContent;

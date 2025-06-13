@@ -33,6 +33,7 @@ export const taskIdToLabel = (taskId: TaskId): string => {
 		[TaskId.ProcessEmails]: 'Process emails',
 		[TaskId.LogHeartbeatMessage]: 'Log heartbeat message',
 		[TaskId.DeleteOldEvents]: 'Delete old events',
+		[TaskId.DeleteExpiredAuthCodes]: 'Delete expired authentication codes',
 	};
 
 	const s = strings[taskId];

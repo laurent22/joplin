@@ -42,9 +42,11 @@ export default class JoplinSettings {
      */
     values(keys: string[] | string): Promise<Record<string, unknown>>;
     /**
-     * @deprecated Use joplin.settings.values()
+     * Gets a setting value (only applies to setting you registered from your plugin).
      *
-     * Gets a setting value (only applies to setting you registered from your plugin)
+     * Note: If you want to retrieve all your plugin settings, for example when the plugin starts,
+     * it is recommended to use the `values()` function instead - it will be much faster than
+     * calling `value()` multiple times.
      */
     value(key: string): Promise<any>;
     /**
@@ -52,11 +54,15 @@ export default class JoplinSettings {
      */
     setValue(key: string, value: any): Promise<void>;
     /**
-     * Gets a global setting value, including app-specific settings and those set by other plugins.
+     * Gets global setting values, including app-specific settings and those set by other plugins.
      *
      * The list of available settings is not documented yet, but can be found by looking at the source code:
      *
-     * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Setting.ts#L142
+     * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/settings/builtInMetadata.ts
+     */
+    globalValues(keys: string[]): Promise<any[]>;
+    /**
+     * @deprecated Use joplin.settings.globalValues()
      */
     globalValue(key: string): Promise<any>;
     /**

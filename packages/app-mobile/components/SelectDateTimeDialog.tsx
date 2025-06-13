@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
-const { View, Button, Text, StyleSheet } = require('react-native');
+import { View, Button, Text, StyleSheet } from 'react-native';
 import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
@@ -157,11 +157,11 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 				}}
 			>
 				<View style={{ ...styles.modalView, backgroundColor: theme.backgroundColor }}>
-					<View style={{ padding: 15, flexBasis: 'auto', paddingBottom: 0, flexGrow: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
+					<View style={{ padding: 15, flexBasis: 'auto', paddingBottom: 0, flexGrow: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
 						<Text style={{ ...styles.modalText, color: theme.color, fontSize: 14, fontWeight: 'bold' }}>{_('Set alarm')}</Text>
 					</View>
 					{this.renderContent()}
-					<View style={{ padding: 20, flexBasis: 'auto', borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: theme.dividerColor }}>
+					<View style={{ padding: 20, flexBasis: 'auto', borderTopWidth: 1, borderTopColor: theme.dividerColor }}>
 						<View style={{ marginBottom: 10 }}>
 							<Button title={_('Save alarm')} onPress={() => this.onAccept()} key="saveButton" />
 						</View>

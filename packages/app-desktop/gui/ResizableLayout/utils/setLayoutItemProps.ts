@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import { LayoutItem } from './types';
 import validateLayout from './validateLayout';
 

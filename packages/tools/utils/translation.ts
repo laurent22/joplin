@@ -25,6 +25,7 @@ export const translationExecutablePath = (file: string) => {
 		'/usr/local/opt/gettext/bin/',
 		'/opt/local/bin/',
 		'/usr/local/bin/',
+		'/opt/homebrew/bin/',
 	];
 
 	for (const path of potentialPaths) {

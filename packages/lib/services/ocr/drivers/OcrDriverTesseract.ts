@@ -23,10 +23,15 @@ const formatTesseractBoundingBox = (boundingBox: Tesseract.Bbox): RecognizeResul
 	return [boundingBox.x0, boundingBox.x1, boundingBox.y0, boundingBox.y1];
 };
 
-// Empirically, it seems anything below 70 is not usable. Between 70 and 75 it's
-// hit and miss, but often it's good enough that we should keep the result.
-// Above this is usually reliable.
-const minConfidence = 70;
+// 2023-12-13: Empirically, it seems anything below 70 is not usable. Between 70
+// and 75 it's hit and miss, but often it's good enough that we should keep the result.
+// Above this is usually reliable. Using 70 for now.
+//
+// 2025-04-03: Changed to 55 to detect text in images that are supported in
+// other tools but were not in Joplin.
+//
+// https://github.com/laurent22/joplin/issues/11608
+const minConfidence = 55;
 
 interface Options {
 	workerPath: string;

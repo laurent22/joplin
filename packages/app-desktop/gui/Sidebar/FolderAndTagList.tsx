@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AppState } from '../../app.reducer';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
+import areAllFoldersCollapsed from '@joplin/lib/models/utils/areAllFoldersCollapsed';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -41,6 +42,10 @@ const FolderAndTagList: React.FC<Props> = props => {
 		listItems: listItems,
 	});
 
+	const allFoldersCollapsed = useMemo(() => {
+		return areAllFoldersCollapsed(props.folders, props.collapsedFolderIds);
+	}, [props.collapsedFolderIds, props.folders]);
+
 	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
 		...props,
@@ -57,7 +62,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		collapsedFolderIds: props.collapsedFolderIds,
 	});
 
-	const itemListRef = useRef<ItemList<ListItem>>();
+	const itemListRef = useRef<ItemList<ListItem>|null>(null);
 	const { focusSidebar } = useFocusHandler({ itemListRef, selectedIndex, listItems });
 
 	useSidebarCommandHandler({ focusSidebar });
@@ -67,7 +72,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
-	const onRenderContentWrapper = useOnRenderListWrapper({ selectedIndex, onKeyDown: onKeyEventHandler });
+	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler });
 
 	return (
 		<div

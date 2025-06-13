@@ -1,6 +1,6 @@
-const React = require('react');
+import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-const { View, StyleSheet } = require('react-native');
+import { View, StyleSheet } from 'react-native';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
