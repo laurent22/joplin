@@ -124,12 +124,16 @@ describe('services/RevisionService', () => {
 	it('should delete old revisions (1 note, 2 rev)', (async () => {
 		const service = new RevisionService();
 
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
+
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await service.collectRevisions();
 
 		const time_v1 = Date.now();
 		jest.advanceTimersByTime(100);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
@@ -147,11 +151,15 @@ describe('services/RevisionService', () => {
 	it('should delete old revisions (1 note, 3 rev)', (async () => {
 		const service = new RevisionService();
 
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
+
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
 		await service.collectRevisions();
 		const time_v1 = Date.now();
 		jest.advanceTimersByTime(100);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'one two' });
 		await service.collectRevisions();
@@ -188,16 +196,17 @@ describe('services/RevisionService', () => {
 	it('should delete old revisions (2 notes, 2 rev)', (async () => {
 		const service = new RevisionService();
 
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
+
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'note 1' });
-		// Note.save does not await ItemChange.add, therefore too many calls in a row can cause a race condition in the test that causes an incorrect count of revisions
-		// To avoid this, collect the revisions after just 2 calls, but do not advance the timers, so that only 1 revision is created for the 2 changes
-		await service.collectRevisions();
 		const n2_v0 = await Note.save({ title: '' });
 		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
 		await service.collectRevisions();
 		const time_n2_v1 = Date.now();
 		jest.advanceTimersByTime(100);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
@@ -279,6 +288,7 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should create a revision for notes that are older than a given interval', (async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
@@ -303,6 +313,8 @@ describe('services/RevisionService', () => {
 			expect(revNote1.title).toBe('hello');
 			expect(revNote2.title).toBe('hello 2');
 		}
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		// If the note is saved a third time, we don't automatically create a revision. One
 		// will be created x minutes later when the service collects revisions.
@@ -408,11 +420,14 @@ describe('services/RevisionService', () => {
 		// Test case 1: Two revisions and the first one is encrypted.
 		// Calling deleteOldRevisions() with low TTL, which means all revisions
 		// should be deleted, but they won't be due to the encrypted one.
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		jest.advanceTimersByTime(100);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
+
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 
@@ -434,12 +449,15 @@ describe('services/RevisionService', () => {
 		// Test case 2: Two revisions and the first one is encrypted.
 		// Calling deleteOldRevisions() with higher TTL, which means the oldest
 		// revision should be deleted, but it won't be due to the encrypted one.
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
 		jest.advanceTimersByTime(100);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -458,12 +476,15 @@ describe('services/RevisionService', () => {
 		// Test case 2: Two revisions and the second one is encrypted.
 		// Calling deleteOldRevisions() with higher TTL, which means the oldest
 		// revision should be deleted, but it won't be due to the encrypted one.
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
 		jest.advanceTimersByTime(100);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
@@ -485,11 +506,13 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should not create a revision if the note has not changed', (async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		jest.advanceTimersByTime(100);
 		expect((await Revision.all()).length).toBe(1);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // Note has not changed (except its timestamp) so don't create a revision
@@ -499,12 +522,14 @@ describe('services/RevisionService', () => {
 	it('should preserve user update time', (async () => {
 		// user_updated_time is kind of tricky and can be changed automatically in various
 		// places so make sure it is saved correctly with the revision
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		jest.advanceTimersByTime(100);
 		expect((await Revision.all()).length).toBe(1);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		const userUpdatedTime = Date.now() - 1000 * 60 * 60;
 		await Note.save({ id: n1_v0.id, title: 'hello', updated_time: Date.now(), user_updated_time: userUpdatedTime }, { autoTimestamp: false });
@@ -518,12 +543,15 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should not create a revision if there is already a recent one', (async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 		const n1_v0 = await Note.save({ title: '' });
 		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
 		const sleepTime = 500;
 		jest.advanceTimersByTime(sleepTime);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		const timeRev2 = Date.now();
 		await Note.save({ id: n1_v0.id, title: 'hello 2' });
@@ -541,10 +569,12 @@ describe('services/RevisionService', () => {
 	}));
 
 	it('should give a detailed error when a patch cannot be applied', async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		jest.advanceTimersByTime(100);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome', todo_completed: 1000 });
 		await revisionService().collectRevisions(); // REV 2
