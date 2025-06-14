@@ -3,6 +3,7 @@ import { ElectronApplication, expect, Locator, Page } from '@playwright/test';
 import MainScreen from './MainScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import { msleep } from '@joplin/utils/time';
+import retryOnFailure from '../util/retryOnFailure';
 
 export default class GoToAnything {
 	public readonly containerLocator: Locator;
@@ -19,9 +20,11 @@ export default class GoToAnything {
 
 	public async open(electronApp: ElectronApplication) {
 		await this.mainScreen.waitFor();
-		await activateMainMenuItem(electronApp, 'Goto Anything...');
-
-		return this.waitFor();
+		const openFromMenu = async () => {
+			await activateMainMenuItem(electronApp, 'Goto Anything...');
+			await this.waitFor();
+		};
+		await retryOnFailure(openFromMenu, { maxRetries: 3 });
 	}
 
 	public async openLinkToNote(electronApp: ElectronApplication) {

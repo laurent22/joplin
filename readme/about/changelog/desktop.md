@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.3.13](https://github.com/laurent22/joplin/releases/tag/v3.3.13) - 2025-06-09T20:13:30Z
+
+- Fixed: Fix printing ([#12244](https://github.com/laurent22/joplin/issues/12244)) ([#12240](https://github.com/laurent22/joplin/issues/12240) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.4.1](https://github.com/laurent22/joplin/releases/tag/v3.4.1) (Pre-release) - 2025-05-20T09:59:39Z
 
 - New: Plugins: Added copyToClipboard command ([067ce65](https://github.com/laurent22/joplin/commit/067ce65))

@@ -75,7 +75,7 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_net_cozic_joplin_audio_NativeWhisperLib_00024Companion_free(JNIEnv *env, jobject thiz,
 																 jlong pointer) {
-	std::free(reinterpret_cast<WhisperSession *>(pointer));
+	delete reinterpret_cast<WhisperSession *>(pointer);
 }
 
 extern "C"

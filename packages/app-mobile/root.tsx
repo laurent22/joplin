@@ -1248,13 +1248,16 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 	}
 
-	private sideMenu_change(isOpen: boolean) {
+	private sideMenu_change = (isOpen: boolean) => {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
-		this.props.dispatch({
-			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
-		});
-	}
+		// Avoid dispatching unnecessarily. See https://github.com/laurent22/joplin/issues/12427
+		if (isOpen !== this.props.showSideMenu) {
+			this.props.dispatch({
+				type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
+			});
+		}
+	};
 
 	private getSideMenuWidth = () => {
 		const sideMenuWidth = getResponsiveValue({
@@ -1346,7 +1349,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 					toleranceY={20}
 					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
-					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
+					onChange={this.sideMenu_change}
+					isOpen={this.props.showSideMenu}
 					disableGestures={disableSideMenuGestures}
 				>
 					<StatusBar barStyle={statusBarStyle} />

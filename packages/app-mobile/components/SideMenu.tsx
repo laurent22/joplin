@@ -326,7 +326,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 const SideMenu = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
-		isOpen: state.showSideMenu,
 	};
 })(SideMenuComponent);
 

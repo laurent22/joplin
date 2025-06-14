@@ -1190,4 +1190,22 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 	}
 };
 
+export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+	// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+	// shows how to use .spyOn to hide warnings
+	let warningMock;
+	try {
+		warningMock = jest.spyOn(console, 'warn');
+		warningMock.mockImplementation((message, ...args) => {
+			const fullMessage = [message, ...args].join(' ');
+			if (!fullMessage.match(warningRegex)) {
+				console.error(`Unexpected warning: ${message}`, ...args);
+			}
+		});
+		return await task();
+	} finally {
+		warningMock.mockRestore();
+	}
+};
+
 export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

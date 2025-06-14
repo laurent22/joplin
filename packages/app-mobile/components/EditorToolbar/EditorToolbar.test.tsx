@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
+import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
@@ -46,11 +45,19 @@ const toggleSettingsItem = async (props: ToggleSettingItemProps) => {
 
 	const itemCheckbox = await screen.findByRole('checkbox', { name: props.name });
 	expect(itemCheckbox).toBeVisible();
-	expect(itemCheckbox).toHaveAccessibilityState({ checked: initialChecked });
+	if (initialChecked) {
+		expect(itemCheckbox).toBeChecked();
+	} else {
+		expect(itemCheckbox).not.toBeChecked();
+	}
 	fireEvent.press(itemCheckbox);
 
 	await waitFor(() => {
-		expect(itemCheckbox).toHaveAccessibilityState({ checked: finalChecked });
+		if (finalChecked) {
+			expect(itemCheckbox).toBeChecked();
+		} else {
+			expect(itemCheckbox).not.toBeChecked();
+		}
 	});
 };
 

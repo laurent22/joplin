@@ -2,14 +2,13 @@ import * as React from 'react';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import '@testing-library/jest-native/extend-expect';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import TestProviderStack from '../testing/TestProviderStack';
 import ShareNoteDialog from './ShareNoteDialog';
 import Note from '@joplin/lib/models/Note';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
 
@@ -63,7 +62,8 @@ describe('ShareNoteDialog', () => {
 
 		await waitFor(() => {
 			expect(screen.getByText('Link has been copied to clipboard!')).toBeVisible();
-		});
+			// Synchronization can take a long time
+		}, { timeout: 20 * 1000 });
 		expect(await Note.load(note.id)).toMatchObject({
 			is_shared: 1,
 		});

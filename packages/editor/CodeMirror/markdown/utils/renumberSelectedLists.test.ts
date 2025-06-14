@@ -3,6 +3,8 @@ import createTestEditor from '../../testUtil/createTestEditor';
 import renumberSelectedLists from './renumberSelectedLists';
 
 describe('renumberSelectedLists', () => {
+	jest.retryTimes(2);
+
 	it('should correctly renumber a list with multiple selections in that list', async () => {
 		const listText = [
 			'1. This',

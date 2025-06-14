@@ -16,6 +16,11 @@ jobs:
         uses: ./.github/workflows/shared/setup-build-environment
       - name: Build
         run: yarn install
+        env:
+          # The onenote-converter package uses Rust, which isn't installed on all CI
+          # runners. Since the onenote-converter doesn't have UI tests, it can be excluded
+          # from build:
+          SKIP_ONENOTE_CONVERTER_BUILD: 1
       - name: Run UI tests
         shell: bash
         run: |
