@@ -22,7 +22,7 @@
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "git":    "latest",
+    "git":    "2.47.1",
   },
   "shell": {
     "init_hook": [
