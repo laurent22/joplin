@@ -4,7 +4,6 @@ import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
 import Revision from '../models/Revision';
 import BaseModel, { ModelType } from '../BaseModel';
-import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
 import { NoteEntity } from './database/types';
 
@@ -44,31 +43,29 @@ describe('services/RevisionService', () => {
 	});
 
 	it('should create diff and rebuild notes', (async () => {
-		const service = new RevisionService();
-
 		const n1_v1 = await Note.save({ title: '', author: 'testing' }); // CHANGE 1
-		await service.collectRevisions(); // No revision is created because change type must be update or delete in order to create one
+		await revisionService().collectRevisions(); // No revision is created because change type must be update or delete in order to create one
 		jest.advanceTimersByTime(100);
 		await Note.save({ id: n1_v1.id, title: 'hello', author: 'testing' }); // CHANGE 2
-		await service.collectRevisions(); // Old and new content are created as revisions
+		await revisionService().collectRevisions(); // Old and new content are created as revisions
 		jest.advanceTimersByTime(100);
 		await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' }); // CHANGE 3
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 		expect(revisions.length).toBe(3);
 		expect(revisions[1].parent_id).toBe(revisions[0].id);
 		expect(revisions[2].parent_id).toBe(revisions[1].id);
 
-		const rev1 = await service.revisionNote(revisions, 0);
+		const rev1 = await revisionService().revisionNote(revisions, 0);
 		expect(rev1.title).toBe('');
 		expect(rev1.author).toBe('testing');
 
-		const rev2 = await service.revisionNote(revisions, 1);
+		const rev2 = await revisionService().revisionNote(revisions, 1);
 		expect(rev2.title).toBe('hello');
 		expect(rev2.author).toBe('testing');
 
-		const rev3 = await service.revisionNote(revisions, 2);
+		const rev3 = await revisionService().revisionNote(revisions, 2);
 		expect(rev3.title).toBe('hello welcome');
 		expect(rev3.author).toBe('');
 
@@ -76,7 +73,7 @@ describe('services/RevisionService', () => {
 		jest.advanceTimersByTime(10);
 
 		const ttl = Date.now() - time_rev3 - 1;
-		await service.deleteOldRevisions(ttl);
+		await revisionService().deleteOldRevisions(ttl);
 		const revisions3 = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 		expect(revisions3.length).toBe(0);
 	}));
@@ -122,13 +119,11 @@ describe('services/RevisionService', () => {
 	// }));
 
 	it('should delete old revisions (1 note, 2 rev)', (async () => {
-		const service = new RevisionService();
-
 		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 
 		const time_v1 = Date.now();
 		jest.advanceTimersByTime(100);
@@ -136,73 +131,69 @@ describe('services/RevisionService', () => {
 		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id)).length).toBe(2);
 
 		const ttl = Date.now() - time_v1 - 1;
-		await service.deleteOldRevisions(ttl);
+		await revisionService().deleteOldRevisions(ttl);
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 		expect(revisions.length).toBe(1);
 
-		const rev1 = await service.revisionNote(revisions, 0);
+		const rev1 = await revisionService().revisionNote(revisions, 0);
 		expect(rev1.title).toBe('hello welcome');
 	}));
 
 	it('should delete old revisions (1 note, 3 rev)', (async () => {
-		const service = new RevisionService();
-
 		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 		const time_v1 = Date.now();
 		jest.advanceTimersByTime(100);
 
 		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 
 		await Note.save({ id: n1_v1.id, title: 'one two' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 		const time_v2 = Date.now();
 		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: n1_v1.id, title: 'one two three' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 
 		{
 			const ttl = Date.now() - time_v1 - 1;
-			await service.deleteOldRevisions(ttl);
+			await revisionService().deleteOldRevisions(ttl);
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 			expect(revisions.length).toBe(2);
 
-			const rev1 = await service.revisionNote(revisions, 0);
+			const rev1 = await revisionService().revisionNote(revisions, 0);
 			expect(rev1.title).toBe('one two');
 
-			const rev2 = await service.revisionNote(revisions, 1);
+			const rev2 = await revisionService().revisionNote(revisions, 1);
 			expect(rev2.title).toBe('one two three');
 		}
 
 		{
 			const ttl = Date.now() - time_v2 - 1;
-			await service.deleteOldRevisions(ttl);
+			await revisionService().deleteOldRevisions(ttl);
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 			expect(revisions.length).toBe(1);
 
-			const rev1 = await service.revisionNote(revisions, 0);
+			const rev1 = await revisionService().revisionNote(revisions, 0);
 			expect(rev1.title).toBe('one two three');
 		}
 	}));
 
 	it('should delete old revisions (2 notes, 2 rev)', (async () => {
-		const service = new RevisionService();
-
 		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000); // Avoid race condition where saving notes is slower than the interval
 
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'note 1' });
 		const n2_v0 = await Note.save({ title: '' });
 		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 		const time_n2_v1 = Date.now();
 		jest.advanceTimersByTime(100);
 
@@ -210,24 +201,24 @@ describe('services/RevisionService', () => {
 
 		await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
-		await service.collectRevisions();
+		await revisionService().collectRevisions();
 
 		expect((await Revision.all()).length).toBe(4);
 
 		const ttl = Date.now() - time_n2_v1 - 1;
-		await service.deleteOldRevisions(ttl);
+		await revisionService().deleteOldRevisions(ttl);
 
 		{
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 			expect(revisions.length).toBe(1);
-			const rev1 = await service.revisionNote(revisions, 0);
+			const rev1 = await revisionService().revisionNote(revisions, 0);
 			expect(rev1.title).toBe('note 1 (v2)');
 		}
 
 		{
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n2_v1.id);
 			expect(revisions.length).toBe(1);
-			const rev1 = await service.revisionNote(revisions, 0);
+			const rev1 = await revisionService().revisionNote(revisions, 0);
 			expect(rev1.title).toBe('note 2 (v2)');
 		}
 	}));
@@ -252,8 +243,6 @@ describe('services/RevisionService', () => {
 	});
 
 	it('should handle conflicts', (async () => {
-		const service = new RevisionService();
-
 		// A conflict happens in this case:
 		// - Device 1 creates note1 (rev1)
 		// - Device 2 syncs and get note1
@@ -268,20 +257,20 @@ describe('services/RevisionService', () => {
 
 		const n1_v1 = await Note.save({ title: 'hello' });
 		const noteId = n1_v1.id;
-		const rev1 = await service.createNoteRevision_(n1_v1);
+		const rev1 = await revisionService().createNoteRevision_(n1_v1);
 		const n1_v2 = await Note.save({ id: noteId, title: 'hello Paul' });
-		await service.createNoteRevision_(n1_v2, rev1.id);
+		await revisionService().createNoteRevision_(n1_v2, rev1.id);
 		const n1_v3 = await Note.save({ id: noteId, title: 'hello John' });
-		await service.createNoteRevision_(n1_v3, rev1.id);
+		await revisionService().createNoteRevision_(n1_v3, rev1.id);
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 		expect(revisions.length).toBe(3);
 		expect(revisions[1].parent_id).toBe(rev1.id);
 		expect(revisions[2].parent_id).toBe(rev1.id);
 
-		const revNote1 = await service.revisionNote(revisions, 0);
-		const revNote2 = await service.revisionNote(revisions, 1);
-		const revNote3 = await service.revisionNote(revisions, 2);
+		const revNote1 = await revisionService().revisionNote(revisions, 0);
+		const revNote2 = await revisionService().revisionNote(revisions, 1);
+		const revNote3 = await revisionService().revisionNote(revisions, 2);
 		expect(revNote1.title).toBe('hello');
 		expect(revNote2.title).toBe('hello Paul');
 		expect(revNote3.title).toBe('hello John');
