@@ -30,7 +30,7 @@
     "@joplin/utils": "~3.4",
     "@react-native-clipboard/clipboard": "1.16.2",
     "@react-native-community/datetimepicker": "8.3.0",
-    "@react-native-community/geolocation": "3.3.0",
+    "@react-native-community/geolocation": "3.4.0",
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-community/push-notification-ios": "1.11.0",
     "@react-native-documents/picker": "10.1.2",
