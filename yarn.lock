@@ -8995,7 +8995,7 @@ __metadata:
     react-native-share: "npm:10.2.1"
     react-native-sqlite-storage: "npm:6.0.1"
     react-native-url-polyfill: "npm:2.0.0"
-    react-native-vector-icons: "npm:10.1.0"
+    react-native-vector-icons: "npm:10.2.0"
     react-native-version-info: "npm:1.1.1"
     react-native-vosk: "npm:0.1.12"
     react-native-web: "npm:0.20.0"
@@ -41104,9 +41104,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:10.1.0":
-  version: 10.1.0
-  resolution: "react-native-vector-icons@npm:10.1.0"
+"react-native-vector-icons@npm:10.2.0":
+  version: 10.2.0
+  resolution: "react-native-vector-icons@npm:10.2.0"
   dependencies:
     prop-types: "npm:^15.7.2"
     yargs: "npm:^16.1.1"
@@ -41115,7 +41115,7 @@ __metadata:
     fa5-upgrade: bin/fa5-upgrade.sh
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: 10/99877f36aeb61435d2f3dc18adaa08af9be9e88e4770efe47d733bd164b2c02ae332babecdcfcee9e3c7b1d80b5b107034e245733091638295eb3050f389f798
+  checksum: 10/ac3b05bb353807d0ed94256bd6de4291e8261afb320ce69c06270fba3be2ed3c7b3a81ecbda29191cfe906e89bf853d4b4f016465b6b56a428315c7b6630eff1
   languageName: node
   linkType: hard
 
