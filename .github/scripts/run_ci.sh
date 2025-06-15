@@ -133,7 +133,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# Allocation failed - JavaScript heap out of memory
 	#
 	# https://stackoverflow.com/questions/38558989
-	export NODE_OPTIONS="--max-old-space-size=32768"
+	export NODE_OPTIONS="--max-old-space-size=32768 --security-revert=CVE-2023-46809"
 	yarn test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
