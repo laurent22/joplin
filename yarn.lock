@@ -8881,7 +8881,7 @@ __metadata:
     node-rsa: "npm:1.1.1"
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
-    re-resizable: "npm:6.9.17"
+    re-resizable: "npm:6.10.3"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-redux: "npm:8.1.3"
@@ -8982,7 +8982,7 @@ __metadata:
     react-native-fingerprint-scanner: "npm:6.0.0"
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
-    react-native-image-picker: "npm:7.1.1"
+    react-native-image-picker: "npm:7.2.3"
     react-native-localize: "npm:3.2.1"
     react-native-modal-datetime-picker: "npm:17.1.0"
     react-native-paper: "npm:5.13.4"
@@ -9424,7 +9424,7 @@ __metadata:
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
-    node-mocks-http: "npm:1.15.1"
+    node-mocks-http: "npm:1.16.2"
     node-os-utils: "npm:1.3.7"
     nodemailer: "npm:6.10.0"
     nodemon: "npm:3.1.9"
@@ -36454,12 +36454,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-mocks-http@npm:1.15.1":
-  version: 1.15.1
-  resolution: "node-mocks-http@npm:1.15.1"
+"node-mocks-http@npm:1.16.2":
+  version: 1.16.2
+  resolution: "node-mocks-http@npm:1.16.2"
   dependencies:
-    "@types/express": "npm:^4.17.21"
-    "@types/node": "npm:*"
     accepts: "npm:^1.3.7"
     content-disposition: "npm:^0.5.3"
     depd: "npm:^1.1.0"
@@ -36470,7 +36468,15 @@ __metadata:
     parseurl: "npm:^1.3.3"
     range-parser: "npm:^1.2.0"
     type-is: "npm:^1.6.18"
-  checksum: 10/70275908538a896d01bdf3224e7a1008f3f3f9bea32672b989dc39b6b17881bc37a5155022cb04e3f31b687beb720fec56e4cc834e648ae971ca1d9573928c21
+  peerDependencies:
+    "@types/express": ^4.17.21 || ^5.0.0
+    "@types/node": "*"
+  peerDependenciesMeta:
+    "@types/express":
+      optional: true
+    "@types/node":
+      optional: true
+  checksum: 10/63269343071c389795c418468a167d92aa13eda3936aaa79f8159025e01502ec982469fd11f04395b7ad2241d2f4fd65ca84eac29973c4d941d86a4ba2e56f90
   languageName: node
   linkType: hard
 
@@ -40596,13 +40602,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-resizable@npm:6.9.17":
-  version: 6.9.17
-  resolution: "re-resizable@npm:6.9.17"
+"re-resizable@npm:6.10.3":
+  version: 6.10.3
+  resolution: "re-resizable@npm:6.10.3"
   peerDependencies:
-    react: ^16.13.1 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: 10/768c3a0fe39d6916caf4e003240d326d62c4d7512c7d3115cc2a98085416fdba80097afdbb93df57b69543c41ce56b33589f2fea6987cd5149faa83cf11c8ba1
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/23c69efa9a5b5827b7e3873077e2047cda584825f43fea924d6f3ecbee683c959b69461461d93ec1302eafa5603f4e7a2afef35839a31ecf2e9f849940bc0a83
   languageName: node
   linkType: hard
 
@@ -40936,13 +40942,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:7.1.1":
-  version: 7.1.1
-  resolution: "react-native-image-picker@npm:7.1.1"
+"react-native-image-picker@npm:7.2.3":
+  version: 7.2.3
+  resolution: "react-native-image-picker@npm:7.2.3"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/85a8d946da5c7e3187a1229bb1910e0b3d0a8664d591fcf322e1c7fa38997d2f182f0ea26c68bc7a0cb17ad78a6cb2987a2d54d1f8268e94c5a0745c65b4281f
+  checksum: 10/62c6cc3c88edb29f2b17b4cdaa098b32efd23a5faf4380171c2ccfb1706c732a50553f2ce447e1df1ea48197dde3af42dd67584c60e2c4577ee1b7769152475d
   languageName: node
   linkType: hard
 
