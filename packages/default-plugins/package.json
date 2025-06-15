@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@joplin/utils": "~3.4",
-    "fs-extra": "11.2.0",
+    "fs-extra": "11.3.0",
     "yargs": "17.7.2"
   }
 }
