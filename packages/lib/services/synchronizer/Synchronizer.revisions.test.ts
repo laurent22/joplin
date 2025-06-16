@@ -230,4 +230,57 @@ describe('Synchronizer.revisions', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should delete old revisions and sync updated revisions remotely, when revision deletion retains some revisions locally', async () => {
+		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000);
+		jest.useFakeTimers({ advanceTimers: true });
+
+		const note = await Note.save({ title: 'note' });
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		await Note.save({ id: note.id, title: 'note REV0' });
+		jest.advanceTimersByTime(200);
+
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+
+		await revisionService().collectRevisions(); // REV0
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		const interimTime = Date.now();
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		// Should sync the revisions
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		const revisions = await getNoteRevisions();
+		expect(revisions).toHaveLength(2);
+		expect(revisions[0].title_diff).toBe('[{"diffs":[[1,"note REV0"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisions[1].title_diff).toBe('[{"diffs":[[0," REV"],[-1,"0"],[1,"1"]],"start1":4,"start2":4,"length1":5,"length2":5}]');
+
+		await revisionService().deleteOldRevisions(Date.now() - interimTime);
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		await synchronizerStart();
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		// After switching back to the original client, syncing should locally delete
+		// the remotely deleted revisions and update the merged revision.
+		await switchClient(1);
+		expect(await getNoteRevisions()).toHaveLength(2);
+		await synchronizerStart();
+
+		const revisionsAfterSync = await getNoteRevisions();
+		expect(revisionsAfterSync).toHaveLength(1);
+		expect(revisionsAfterSync[0].title_diff).toBe('[{"diffs":[[1,"note REV1"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisionsAfterSync[0].updated_time).toBeGreaterThan(revisions[0].updated_time);
+
+		jest.useRealTimers();
+	});
 });
