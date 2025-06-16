@@ -68,7 +68,6 @@ import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
 import { Store } from 'redux';
-import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 
 // Each suite has its own separate data and temp directory so that multiple
@@ -199,7 +198,6 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
-Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', Env.Dev);
