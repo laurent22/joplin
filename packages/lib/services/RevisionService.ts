@@ -21,12 +21,13 @@ export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
 
-	// An "old note" is one that has been created before the revision service existed. These
+	// An "old note" is one that has been created before the revision service existed, or for some
+	// other reason does not have existing revisions (imported note, or the user deleted them). These
 	// notes never benefited from revisions so the first time they are modified, a copy of
 	// the original note is saved. The goal is to have at least one revision in case the note
 	// is deleted or modified as a result of a bug or user mistake.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private oldNotesCache_: any = {};
+	private changedSinceCollectionCache_: any = {};
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceCalls_: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -46,12 +47,13 @@ export default class RevisionService extends BaseService {
 		return Date.now() - Setting.value('revisionService.oldNoteInterval');
 	}
 
-	public async cacheOldNote(noteId: string, oldNote: NoteEntity) {
-		if (noteId in this.oldNotesCache_) return this.oldNotesCache_[noteId];
+	public async changedSinceCollection(noteId: string) {
+		if (noteId in this.changedSinceCollectionCache_) return true;
 
-		this.oldNotesCache_[noteId] = oldNote;
+		// No particular value needs to be stored, but it is more performant to look up a key on an object than searching for a value in an array
+		this.changedSinceCollectionCache_[noteId] = null;
 
-		return oldNote;
+		return false;
 	}
 
 	private noteMetadata_(note: NoteEntity) {
@@ -177,7 +179,8 @@ export default class RevisionService extends BaseService {
 								const rev = await this.createNoteRevision_(note, null, oldNoteSaved);
 								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
-								delete this.oldNotesCache_[noteId];
+
+								delete this.changedSinceCollectionCache_[noteId];
 							}
 						}
 

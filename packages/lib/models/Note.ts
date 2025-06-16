@@ -806,8 +806,12 @@ export default class Note extends BaseItem {
 
 		let beforeNoteJson = null;
 		if (oldNote) {
-			const cachedOldNote = await this.revisionService().cacheOldNote(o.id, oldNote);
-			beforeNoteJson = JSON.stringify(cachedOldNote);
+			const changedSinceCollection = await this.revisionService().changedSinceCollection(o.id);
+			if (changedSinceCollection) {
+				beforeNoteJson = await ItemChange.oldNoteChangeItem(o.id);
+			} else {
+				beforeNoteJson = JSON.stringify(oldNote);
+			}
 		}
 
 		const changedFields = [];
