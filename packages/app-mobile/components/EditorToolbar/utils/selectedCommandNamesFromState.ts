@@ -10,6 +10,9 @@ const omitFromDefault: string[] = [
 	'editor.textHeading5',
 	`editor.${EditorCommandType.SwapLineDown}`,
 	`editor.${EditorCommandType.SwapLineUp}`,
+	`editor.${EditorCommandType.DeleteLine}`,
+	`editor.${EditorCommandType.DuplicateLine}`,
+	`editor.${EditorCommandType.SortSelectedLines}`,
 ];
 
 // The "hide keyboard" button is only needed on iOS, so only show it there by default.
