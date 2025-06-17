@@ -12,7 +12,7 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "generatePluginTypes": "rm -rf ./plugin_types && yarn tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
-    "test": "jest --verbose=false",
+    "test": "node --security-revert=CVE-2023-46809 ./node_modules/.bin/jest --verbose=false",
     "test-ci": "yarn test"
   },
   "devDependencies": {
@@ -81,7 +81,7 @@
     "moment": "2.30.1",
     "multiparty": "4.2.3",
     "mustache": "4.2.0",
-    "nanoid": "3.3.9",
+    "nanoid": "3.3.10",
     "node-fetch": "2.6.7",
     "node-notifier": "10.0.1",
     "node-persist": "3.1.3",

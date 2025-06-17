@@ -6,7 +6,7 @@ import NoteRevisionViewer from './NoteRevisionViewer';
 import { setupDatabaseAndSynchronizer, switchClient, revisionService } from '@joplin/lib/testing/test-utils';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 import Note from '@joplin/lib/models/Note';
 import { useMemo } from 'react';
 import Revision from '@joplin/lib/models/Revision';

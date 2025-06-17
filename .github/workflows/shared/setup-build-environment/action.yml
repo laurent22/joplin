@@ -5,10 +5,10 @@ runs:
   steps:
     # Trying to fix random networking issues on Windows
     # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
-    - name: Disable TCP/UDP offload on Windows
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+    # - name: Disable TCP/UDP offload on Windows
+    #   if: runner.os == 'Windows'
+    #   shell: pwsh
+    #   run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
 
     - name: Disable TCP/UDP offload on Linux
       if: runner.os == 'Linux'
@@ -47,15 +47,17 @@ runs:
         # Required for building the canvas package
         brew install pango
 
-    - uses: olegtarasov/get-tag@v2.1.3
+    - uses: olegtarasov/get-tag@v2.1.4
     - uses: dtolnay/rust-toolchain@stable
+      if: ${{ runner.os != 'Windows' }}
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '18.18.0'
+        node-version: '18.19.1'
         # Disable the cache on ARM runners. For now, we don't run "yarn install" on these
         # environments and this breaks actions/setup-node.
         # See https://github.com/laurent22/joplin/commit/47d0d3eb9e89153a609fb5441344da10904c6308#commitcomment-159577783.
-        cache: ${{ (!contains(runner.os, 'arm') && 'yarn') || '' }}
+        # cache: ${{ (!contains(runner.os, 'arm') && 'yarn') || '' }}
 
     - name: Install Yarn
       shell: bash

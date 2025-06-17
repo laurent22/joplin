@@ -13,7 +13,7 @@
     "buildDev": "node ./build.js --profile=dev"
   },
   "devDependencies": {
-    "wasm-pack": "0.13.0",
+    "wasm-pack": "0.13.1",
     "yargs": "17.7.2"
   },
   "gitHead": "189ba7795a8af01a6ffd3607c92a271d69b68783"

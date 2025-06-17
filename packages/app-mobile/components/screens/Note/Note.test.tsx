@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, userEvent, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
@@ -141,6 +141,12 @@ const openEditor = async () => {
 
 	fireEvent.press(editButton);
 	await expectToBeEditing(true);
+};
+
+const runEditorCommand = async (commandName: string) => {
+	await act(() => {
+		return CommandService.instance().execute(commandName);
+	});
 };
 
 describe('screens/Note', () => {
@@ -340,9 +346,9 @@ describe('screens/Note', () => {
 		render(<WrappedNoteScreen />);
 
 		await expectToBeEditing(false);
-		await CommandService.instance().execute('toggleVisiblePanes');
+		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(true);
-		await CommandService.instance().execute('toggleVisiblePanes');
+		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(false);
 	});
 });

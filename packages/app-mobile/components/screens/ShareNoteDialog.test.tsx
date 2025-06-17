@@ -8,7 +8,7 @@ import TestProviderStack from '../testing/TestProviderStack';
 import ShareNoteDialog from './ShareNoteDialog';
 import Note from '@joplin/lib/models/Note';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
 

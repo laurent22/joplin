@@ -517,6 +517,7 @@ packages/app-desktop/integration-tests/util/evaluateWithRetry.js
 packages/app-desktop/integration-tests/util/extendedExpect.js
 packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/getMainWindow.js
+packages/app-desktop/integration-tests/util/retryOnFailure.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
@@ -891,6 +892,7 @@ packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/testing/getWebViewWindowById.js
 packages/app-mobile/utils/testing/setupGlobalStore.js
+packages/app-mobile/utils/testing/testingLibrary.js
 packages/app-mobile/utils/types.js
 packages/app-mobile/web/serviceWorker.js
 packages/app-mobile/web/webpack.config.js

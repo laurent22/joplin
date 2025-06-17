@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "watch": [
+    "dist/",
+    "../lib"
+  ]
+}

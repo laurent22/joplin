@@ -7,9 +7,10 @@ describe('ipc', () => {
 	it('should send and receive messages', async () => {
 		const tempDir = await createTempDir();
 		const secretFilePath = `${tempDir}/secret.txt`;
-		const startPort = 41168;
+		const serverPort1 = 41110;
+		const serverPort2 = 41115;
 
-		const server1 = await startServer(startPort, secretFilePath, async (request) => {
+		const server1 = await startServer(serverPort1, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello1',
@@ -19,7 +20,7 @@ describe('ipc', () => {
 			throw newHttpError(404);
 		});
 
-		const server2 = await startServer(startPort, secretFilePath, async (request) => {
+		const server2 = await startServer(serverPort2, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello2',
@@ -38,7 +39,7 @@ describe('ipc', () => {
 		const secretKey = await readFile(secretFilePath, 'utf-8');
 
 		{
-			const responses = await sendMessage(startPort, {
+			const responses = await sendMessage(serverPort1, {
 				action: 'testing',
 				data: {
 					test: 1234,
@@ -47,35 +48,35 @@ describe('ipc', () => {
 			});
 
 			expect(responses).toEqual([
-				{ port: 41168, response: { text: 'hello1' } },
-				{ port: 41169, response: { text: 'hello2' } },
+				{ port: serverPort1, response: { text: 'hello1' } },
+				{ port: serverPort2, response: { text: 'hello2' } },
 			]);
 		}
 
 		{
-			const responses = await sendMessage(startPort, {
+			const responses = await sendMessage(serverPort1, {
 				action: 'ping',
 				data: null,
 				secretKey,
 			});
 
 			expect(responses).toEqual([
-				{ port: 41169, response: { text: 'pong' } },
+				{ port: serverPort2, response: { text: 'pong' } },
 			]);
 		}
 
 		{
-			const responses = await sendMessage(startPort, {
+			const responses = await sendMessage(serverPort1, {
 				action: 'testing',
 				data: {
 					test: 1234,
 				},
-				sourcePort: 41168,
+				sourcePort: serverPort1,
 				secretKey,
 			});
 
 			expect(responses).toEqual([
-				{ port: 41169, response: { text: 'hello2' } },
+				{ port: serverPort2, response: { text: 'hello2' } },
 			]);
 		}
 
@@ -86,9 +87,9 @@ describe('ipc', () => {
 	it('should not process message if secret is invalid', async () => {
 		const tempDir = await createTempDir();
 		const secretFilePath = `${tempDir}/secret.txt`;
-		const startPort = 41168;
+		const serverPort = 41120;
 
-		const server = await startServer(startPort, secretFilePath, async (request) => {
+		const server = await startServer(serverPort, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
 				return {
 					text: 'hello1',
@@ -101,7 +102,7 @@ describe('ipc', () => {
 		const secretKey = await readFile(secretFilePath, 'utf-8');
 
 		{
-			const responses = await sendMessage(startPort, {
+			const responses = await sendMessage(serverPort, {
 				action: 'testing',
 				data: null,
 				secretKey: 'wrong_key',
@@ -111,7 +112,7 @@ describe('ipc', () => {
 		}
 
 		{
-			const responses = await sendMessage(startPort, {
+			const responses = await sendMessage(serverPort, {
 				action: 'testing',
 				data: null,
 				secretKey,
