@@ -694,6 +694,12 @@ class Setting extends BaseModel {
 			}
 		}
 
+		const md = this.settingMetadata(key);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+		if ('minimum' in md && value < md.minimum) value = md.minimum as any;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+		if ('maximum' in md && value > md.maximum) value = md.maximum as any;
+
 		this.cache_.push({
 			key: key,
 			value: this.formatValue(key, value),
