@@ -74,7 +74,8 @@ FROM nginx:1.27-alpine
 
 COPY --from=builder /build/packages/app-mobile/web/dist/ /var/www/html/
 
-RUN echo 'server {
+RUN cat <<'EOF' > /etc/nginx/conf.d/default.conf
+server {
     listen 80;
     server_name localhost;
     root /usr/share/nginx/html;
@@ -82,7 +83,8 @@ RUN echo 'server {
     location / {
         try_files $uri /index.html;
     }
-}' > /etc/nginx/conf.d/default.conf
+}
+EOF
 
 EXPOSE 80
 ENTRYPOINT ["nginx","-g","daemon off;"]
