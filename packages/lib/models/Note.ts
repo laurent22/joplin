@@ -50,7 +50,7 @@ export default class Note extends BaseItem {
 		const output = await super.unserialize(content);
 		if (!output.title) output.title = '';
 		if (!output.body) output.body = '';
-		output.body = await this.replaceResourceExternalToInternalLinks(output.body);
+		// output.body = await this.replaceResourceExternalToInternalLinks(output.body);
 		return output;
 	}
 
