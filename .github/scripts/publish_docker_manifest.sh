@@ -22,7 +22,7 @@ if [[ $GIT_TAG_NAME == $WEBAPP_TAG_PREFIX-* ]]; then
 fi
 
 # Exit if neither server nor webapp
-if [[ -z $REPOSITORY ]; then
+if [ -z $REPOSITORY ]; then
 	exit 0;
 fi
 
