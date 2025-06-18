@@ -15,7 +15,9 @@
 #	- This would typically be mapped to port to 443 (TLS) with a reverse proxy.
 #	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
 
-version: '3'
+# Uncomment below if you also want to run the webapp (https://app.joplincloud.com/)
+#include:
+#    - docker-compose-webapp.yml
 
 services:
     db:
@@ -45,10 +47,3 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PORT=${POSTGRES_PORT}
             - POSTGRES_HOST=db
-    webapp:
-        image: joplin/webapp:latest
-        depends_on:
-            - server
-        ports:
-            - "80:80"
-        restart: unless-stopped

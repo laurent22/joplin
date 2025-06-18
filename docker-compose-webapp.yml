@@ -1,0 +1,10 @@
+# This is a sample docker-compose file that can be used to run Joplin Webapp
+
+services:
+    webapp:
+        image: joplin/webapp:latest
+        depends_on:
+            - server
+        ports:
+            - "80:80"
+        restart: unless-stopped
