@@ -74,7 +74,7 @@ FROM nginx:1.27-alpine
 
 COPY --from=builder /build/packages/app-mobile/web/dist/ /var/www/html/
 
-echo 'server {
+RUN echo 'server {
     listen 80;
     server_name localhost;
     root /usr/share/nginx/html;
