@@ -16,16 +16,6 @@ RUN corepack enable
 
 WORKDIR /build
 
-# RUN git clone https://github.com/laurent22/joplin .
-# # Remove unused
-# RUN mv packages packages_unused
-# RUN mkdir packages && \
-#     for dir in app-mobile editor fork-htmlparser2 fork-uslug fork-sax htmlpack \
-#                lib react-native-alarm-notification react-native-saf-x renderer \
-#                tools turndown turndown-plugin-gfm utils; do \
-#         mv packages_unused/"$dir" packages/; \
-#     done
-
 COPY .yarn/releases ./.yarn/releases
 COPY .yarn/patches ./.yarn/patches
 COPY package.json .
@@ -42,7 +32,8 @@ COPY packages/fork-sax ./packages/fork-sax
 COPY packages/htmlpack ./packages/htmlpack
 COPY packages/lib ./packages/lib
 COPY packages/react-native-alarm-notification ./packages/react-native-alarm-notification
-COPY packages/react-native-saf-x renderer ./packages/react-native-saf-x renderer
+COPY packages/react-native-saf-x ./packages/react-native-saf-x
+COPY packages/renderer ./packages/renderer
 COPY packages/tools ./packages/tools
 COPY packages/turndown ./packages/turndown
 COPY packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
