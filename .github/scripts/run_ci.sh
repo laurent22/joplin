@@ -10,6 +10,7 @@ ROOT_DIR="$SCRIPT_DIR/../.."
 IS_PULL_REQUEST=0
 IS_DESKTOP_RELEASE=0
 IS_SERVER_RELEASE=0
+IS_WEBAPP_RELEASE=0
 IS_LINUX=0
 IS_MACOS=0
 
@@ -21,6 +22,10 @@ fi
 
 if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	IS_SERVER_RELEASE=1
+fi
+
+if [[ $GIT_TAG_NAME = $WEBAPP_TAG_PREFIX-* ]]; then
+	IS_WEBAPP_RELEASE=1
 fi
 
 if [[ $GIT_TAG_NAME = v* ]]; then
@@ -79,13 +84,16 @@ echo "RUNNER_OS=$RUNNER_OS"
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 echo "BUILD_SEQUENCIAL=$BUILD_SEQUENCIAL"
 echo "SERVER_REPOSITORY=$SERVER_REPOSITORY"
+echo "WEBAPP_REPOSITORY=$WEBAPP_REPOSITORY"
 echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
+echo "WEBAPP_TAG_PREFIX=$SERVER_TAG_PREFIX"
 echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
 echo "IS_DESKTOP_RELEASE=$IS_DESKTOP_RELEASE"
 echo "IS_SERVER_RELEASE=$IS_SERVER_RELEASE"
+echo "IS_WEBAPP_RELEASE=$IS_SERVER_RELEASE"
 echo "RUN_TESTS=$RUN_TESTS"
 echo "IS_LINUX=$IS_LINUX"
 echo "IS_MACOS=$IS_MACOS"
@@ -304,6 +312,10 @@ elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
 	yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+elif [[ $IS_LINUX = 1 ]] && [ "$IS_WEBAPP_RELEASE" == "1" ]; then
+	echo "Step: Building Docker Image..."
+	cd "$ROOT_DIR"
+	yarn buildWebappDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $WEBAPP_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	

@@ -19,6 +19,7 @@
     "buildPluginDoc": "cd packages/generate-plugin-doc && yarn buildPluginDoc_",
     "buildSequential": "yarn workspaces foreach --worktree --verbose --interlaced --topological-dev run build && yarn tsc",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
+    "buildWebappDocker": "node packages/tools/buildWebappDocker.js",
     "buildSettingJsonSchema": "yarn workspace joplin start settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "node packages/tools/build-translation.js",
     "buildWebsite": "node ./packages/tools/website/processDocs.js --env prod && node ./packages/tools/website/build.js && yarn buildPluginDoc && yarn buildSettingJsonSchema",

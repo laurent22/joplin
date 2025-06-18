@@ -1610,6 +1610,8 @@ packages/tools/build-translation.js
 packages/tools/build-welcome.js
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.js
+packages/tools/buildWebappDocker.test.js
+packages/tools/buildWebappDocker.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js

@@ -1,0 +1,102 @@
+# =============================================================================
+# Build stage
+# =============================================================================
+FROM node:18 AS builder
+
+RUN apt-get update \
+    && apt-get install -y \
+    python3 tini \
+    # needed for node-canvas for ARM32 platform.
+    # See also https://github.com/Automattic/node-canvas/wiki/Installation:-Ubuntu-and-other-Debian-based-systems
+    libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Enables Yarn
+RUN corepack enable
+
+WORKDIR /build
+
+# RUN git clone https://github.com/laurent22/joplin .
+# # Remove unused
+# RUN mv packages packages_unused
+# RUN mkdir packages && \
+#     for dir in app-mobile editor fork-htmlparser2 fork-uslug fork-sax htmlpack \
+#                lib react-native-alarm-notification react-native-saf-x renderer \
+#                tools turndown turndown-plugin-gfm utils; do \
+#         mv packages_unused/"$dir" packages/; \
+#     done
+
+COPY .yarn/releases ./.yarn/releases
+COPY .yarn/patches ./.yarn/patches
+COPY package.json .
+COPY .yarnrc.yml .
+COPY yarn.lock .
+COPY gulpfile.js .
+COPY tsconfig.json .
+
+COPY packages/app-mobile ./packages/app-mobile
+COPY packages/editor ./packages/editor
+COPY packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY packages/fork-uslug ./packages/fork-uslug
+COPY packages/fork-sax ./packages/fork-sax
+COPY packages/htmlpack ./packages/htmlpack
+COPY packages/lib ./packages/lib
+COPY packages/react-native-alarm-notification ./packages/react-native-alarm-notification
+COPY packages/react-native-saf-x renderer ./packages/react-native-saf-x renderer
+COPY packages/tools ./packages/tools
+COPY packages/turndown ./packages/turndown
+COPY packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
+COPY packages/utils ./packages/utils
+
+# We don't want to build onenote-converter since it is not used
+RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
+
+# For some reason there's both a .yarn/cache and .yarn/berry/cache that are
+# being generated, and both have the same content. Not clear why it does this
+# but we can delete it anyway. We can delete the cache because we use
+# `nodeLinker: node-modules`. If we ever implement Zero Install, we'll need to
+# keep the cache.
+#
+# Note that `yarn install` ignores `NODE_ENV=production` and will install dev
+# dependencies too, but this is fine because we need them to build the app.
+RUN --mount=type=cache,target=/build/.yarn/cache --mount=type=cache,target=/build/.yarn/berry/cache\
+    BUILD_SEQUENCIAL=1 yarn config set cacheFolder /build/.yarn/cache \
+    && yarn install --inline-builds
+
+# Build static pages
+RUN cd packages/app-mobile && yarn web
+
+# =============================================================================
+# Final stage - we copy only the relevant files from the build stage and start
+# from a smaller base image.
+# =============================================================================
+FROM nginx:1.27-alpine
+
+COPY --from=builder /build/packages/app-mobile/web/dist/ /var/www/html/
+
+echo 'server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+    location / {
+        try_files $uri /index.html;
+    }
+}' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+ENTRYPOINT ["nginx","-g","daemon off;"]
+
+# Build-time metadata
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md
+ARG BUILD_DATE
+ARG REVISION
+ARG VERSION
+ARG SOURCE
+LABEL org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.title="Joplin Webapp" \
+      org.opencontainers.image.description="Docker image for Joplin Webapp" \
+      org.opencontainers.image.url="https://joplinapp.org/" \
+      org.opencontainers.image.revision="$REVISION" \
+      org.opencontainers.image.source="$SOURCE" \
+      org.opencontainers.image.version="$VERSION"
