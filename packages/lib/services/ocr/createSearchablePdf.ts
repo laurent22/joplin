@@ -55,37 +55,42 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
+		@page {
+			margin: 0;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			background-color: #f5f5f5;
+		}
 	  
-	  body {
-		font-family: Arial, sans-serif;
-		margin: 0;
-		background-color: #f5f5f5;
-	  }
-	  
-	  .image-container {
-		position: relative;
-		display: inline-block;
-	  }
+		.image-container {
+			position: relative;
+			display: inline-block;
+		}
 
-	  .image-container img {
-	 	width: 100%; 
-	 	height: 100%; 
-	  }
+		.image-container img {
+			/* This is required so the image doesn't take more than one page. */
+			/* We need to check if 5px is a good value even for larger images. */
+			width: calc(100% - 5px); 
+			height: calc(100% - 5px); 
+		  }
 
-	  .image-container div {
-	 	position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%; 
-	  }
+		.image-container div {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%; 
+		}
 
-	  .image-container div span {
-		position: absolute;
-		opacity: 0.01;
-		color: rgba(0, 0, 0, 0.01);
-		font-size: 8px;
-	  }
+		.image-container div span {
+			position: absolute;
+			opacity: 0.01;
+			color: rgba(0, 0, 0, 0.01);
+			font-size: 8px;
+		}
 	</style>
 </head>
 <body>
