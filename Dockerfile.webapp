@@ -23,7 +23,6 @@ COPY .yarnrc.yml .
 COPY yarn.lock .
 COPY gulpfile.js .
 COPY tsconfig.json .
-
 COPY packages/app-mobile ./packages/app-mobile
 COPY packages/editor ./packages/editor
 COPY packages/fork-htmlparser2 ./packages/fork-htmlparser2
@@ -69,7 +68,7 @@ RUN cat <<'EOF' > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
     server_name localhost;
-    root /usr/share/nginx/html;
+    root /var/www/html;
     index index.html;
     location / {
         try_files $uri /index.html;
