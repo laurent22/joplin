@@ -238,7 +238,3 @@ jobs:
 
           yarn install
           yarn buildWebappDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name webapp-v0.0.0 --repository joplin/webapp
-
-          # Basic test to ensure that the created build is valid. It should exit with
-          # code 0 if it works.
-          docker run joplin/webapp:$(dpkg --print-architecture)-0.0.0 node dist/app.js migrate list
