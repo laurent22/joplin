@@ -22,12 +22,8 @@ const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDim
 const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: ImageDimensions) => {
 	return allWords.map(word => {
 		const { left, top } = calculateWordPosition(word.bb, imageDimensions);
-		return `<div class="detected-text"
-             data-type="text"
-             style="left: ${left.toFixed(2)}%; top: ${top.toFixed(2)}%;">${word.t}
-			 </div>
-             `;
-	});
+		return `<span style="left: ${left.toFixed(2)}%; top: ${top.toFixed(2)}%;">${word.t}</span>`;
+	}).join('\n');
 };
 
 const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine[]) => {
@@ -43,12 +39,12 @@ const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine
 	const textOverlayHtml = generateTextOverlay(allWords, imageDimensions);
 
 	return `<div class="image-container">
-				<img src="${currentImage}" class="image">
-				<div class="text-overlay">
+				<img src="${currentImage}">
+				<div>
 				${textOverlayHtml}
 				</div>
 			</div>
-        `;
+		`;
 };
 
 const wrapOnBaseHtml = (pagesHtml: string) => {
@@ -56,48 +52,44 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background-color: #f5f5f5;
-      }
-      
-      .image-container {
-        position: relative;
-        display: inline-block;
-        overflow: hidden;
-      }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	  
+	  body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		background-color: #f5f5f5;
+	  }
+	  
+	  .image-container {
+		position: relative;
+		display: inline-block;
+	  }
 
-      .image {
-        width: 100%;
-        height: 100%;
-      }
-      
-      .text-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
+	  .image-container img {
+	 	width: 100%; 
+	 	height: 100%; 
+	  }
 
-      .detected-text {
-        position: absolute;
-        opacity: 0.01;
-        color: rgba(0, 0, 0, 0.01);
-        font-size: 8px;
-        white-space: nowrap;
-        z-index: 3;
-      }
-    </style>
+	  .image-container div {
+	 	position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%; 
+	  }
+
+	  .image-container div span {
+		position: absolute;
+		opacity: 0.01;
+		color: rgba(0, 0, 0, 0.01);
+		font-size: 8px;
+	  }
+	</style>
 </head>
 <body>
-    <div class="container">
+	<div class="container">
 	${pagesHtml}
 	</div>
 </body>
