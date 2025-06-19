@@ -2033,8 +2033,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const pastedText = clipboard.readText();
 					if (pastedText) {
 						const escapedText = htmlEntity.encode(pastedText);
-						editor.insertContent(escapedText);
-						// execOnChangeEvent();
+						if (!shim.isLinux()) {
+							editor.insertContent(escapedText);
+							// execOnChangeEvent();
+						}
 					}
 				}
 			}
