@@ -20,6 +20,7 @@ const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
+import PdfOverlayService from '@joplin/lib/services/ocr/PdfOverlayService';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
@@ -157,6 +158,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				} else {
 					bridge().showInfoMessageBox(_('This attachment does not have OCR data (Status: %s)', resourceOcrStatusToString(resource.ocr_status)));
 				}
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
+		},
+		printHTML: {
+			label: _('Print HTML'),
+			onAction: async (options: ContextMenuOptions) => {
+				const service = new PdfOverlayService();
+				return service.createSearchablePdf(options.resourceId);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);

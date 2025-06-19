@@ -54,6 +54,11 @@ export interface ShowMessageBoxOptions {
 	cancelId?: number;
 }
 
+export interface ImageDimensions {
+	width: number;
+	height: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -558,6 +563,9 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	imageDimensions: (_imagePath: string): Promise<ImageDimensions> => {
+		throw new Error('Not Implemented');
+	},
 };
 
 export default shim;

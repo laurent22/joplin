@@ -45,7 +45,12 @@ export default class InteropServiceHelper {
 		return tempFile;
 	}
 
-	private static async exportNoteTo_(target: string, noteId: string, options: ExportNoteOptions = {}) {
+	private static async getHtmlContent(noteId: string, exportOptions: ExportOptions, htmlPath?: string) {
+		if (htmlPath) return htmlPath;
+		return this.exportNoteToHtmlFile(noteId, exportOptions);
+	}
+
+	private static async exportNoteTo_(target: string, noteId: string, options: ExportNoteOptions = {}, htmlPath?: string) {
 		let win: BrowserWindow|null = null;
 		let htmlFile: string = null;
 
@@ -60,7 +65,7 @@ export default class InteropServiceHelper {
 				plugins: options.plugins,
 			};
 
-			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
+			htmlFile = await this.getHtmlContent(noteId, exportOptions, htmlPath);
 
 			const windowOptions = {
 				show: false,
@@ -154,6 +159,10 @@ export default class InteropServiceHelper {
 			cleanup();
 			throw error;
 		}
+	}
+
+	public static async exportHTMLtoPdf(htmlPath: string, options: ExportNoteOptions = {}) {
+		return this.exportNoteTo_('pdf', undefined, options, htmlPath);
 	}
 
 	public static async exportNoteToPdf(noteId: string, options: ExportNoteOptions = {}) {

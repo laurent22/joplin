@@ -4,6 +4,7 @@ import * as commandPalette from './commandPalette';
 import * as deleteFolder from './deleteFolder';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
+import * as exportHtmlAsPDF from './exportHtmlAsPDF';
 import * as exportPdf from './exportPdf';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
@@ -53,6 +54,7 @@ const index: any[] = [
 	deleteFolder,
 	duplicateNote,
 	editAlarm,
+	exportHtmlAsPDF,
 	exportPdf,
 	gotoAnything,
 	hideModalMessage,

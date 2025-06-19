@@ -16,7 +16,8 @@ interface Props {
 
 interface PrintOptions {
 	path?: string;
-	noteId: string;
+	noteId?: string;
+	htmlPath?: string;
 }
 
 export type PrintCallback = (target: string, options: PrintOptions)=> Promise<void>;
@@ -48,14 +49,26 @@ const usePrintToCallback = (props: Props): PrintCallback => {
 
 		if (target === 'pdf') {
 			try {
-				const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
-					printBackground: true,
-					pageSize: Setting.value('export.pdfPageSize'),
-					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
-					customCss: props.customCss,
-					plugins: props.plugins,
-				});
-				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+				if (!options.noteId) {
+					const pdfData = await InteropServiceHelper.exportHTMLtoPdf(options.htmlPath, {
+						printBackground: true,
+						pageSize: Setting.value('export.pdfPageSize'),
+						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+						customCss: props.customCss,
+						plugins: props.plugins,
+					});
+					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+
+				} else {
+					const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
+						printBackground: true,
+						pageSize: Setting.value('export.pdfPageSize'),
+						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+						customCss: props.customCss,
+						plugins: props.plugins,
+					});
+					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+				}
 			} catch (error) {
 				console.error(error);
 				bridge().showErrorMessageBox(error.message);

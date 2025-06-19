@@ -897,6 +897,23 @@ function shimInit(options: ShimInitOptions = null) {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
 	};
+
+	shim.imageDimensions = async (filePath: string) => {
+		const image = new Image();
+		image.src = filePath;
+		await new Promise<void>((resolve, reject) => {
+			image.onload = () => resolve();
+			image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));
+			image.onabort = () => reject(new Error(`Loading stopped for image at ${filePath}.`));
+		});
+		if (!image.complete || (image.width === 0 && image.height === 0)) {
+			throw new Error(`Image is invalid or does not exist: ${filePath}`);
+		}
+		return {
+			width: image.width,
+			height: image.height,
+		};
+	};
 }
 
 module.exports = { shimInit, setupProxySettings };
