@@ -162,8 +162,8 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
-		printHTML: {
-			label: _('Add transcription overlay to PDF'),
+		overlayPDFWithTranscription: {
+			label: _('Add transcription to PDF'),
 			onAction: async (options: ContextMenuOptions) => {
 				const resource = await resourceInfo(options);
 

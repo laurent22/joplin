@@ -3,7 +3,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
-import createSearchablePdf from '@joplin/lib/services/ocr/createSearchablePdf';
+import createHtmlWithTranscriptionFromPdf from '@joplin/lib/services/ocr/createHtmlWithTranscriptionFromPdf';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -48,13 +48,9 @@ export default class InteropServiceHelper {
 		return tempFile;
 	}
 
-	private static async exportPdfWithOverlay(id: string) {
-		return createSearchablePdf(id);
-	}
-
 	private static async getHtmlFilePath(id: string, sourceType: SourceType, exportOptions: ExportOptions) {
 		if (sourceType === 'note') return this.exportNoteToHtmlFile(id, exportOptions);
-		if (sourceType === 'pdf') return this.exportPdfWithOverlay(id);
+		if (sourceType === 'pdf') return createHtmlWithTranscriptionFromPdf(id);
 		throw Error(`Type not defined: ${sourceType}`);
 	}
 

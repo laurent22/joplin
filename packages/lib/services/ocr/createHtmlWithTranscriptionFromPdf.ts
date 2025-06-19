@@ -102,7 +102,7 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 `;
 };
 
-const createSearchablePdf = async (resourceId: string) => {
+const createHtmlWithTranscriptionFromPdf = async (resourceId: string) => {
 	const resource = await Resource.load(resourceId, {
 		fields: [
 			'id',
@@ -140,4 +140,4 @@ const createSearchablePdf = async (resourceId: string) => {
 	return htmlFileFromPdf;
 };
 
-export default createSearchablePdf;
+export default createHtmlWithTranscriptionFromPdf;
