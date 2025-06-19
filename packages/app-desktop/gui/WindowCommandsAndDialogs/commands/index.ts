@@ -4,7 +4,6 @@ import * as commandPalette from './commandPalette';
 import * as deleteFolder from './deleteFolder';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
-import * as exportHtmlAsPDF from './exportHtmlAsPDF';
 import * as exportPdf from './exportPdf';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
@@ -21,6 +20,7 @@ import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as openPdfViewer from './openPdfViewer';
 import * as openTag from './openTag';
+import * as overlayPdfWithTranscription from './overlayPdfWithTranscription';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
@@ -54,7 +54,6 @@ const index: any[] = [
 	deleteFolder,
 	duplicateNote,
 	editAlarm,
-	exportHtmlAsPDF,
 	exportPdf,
 	gotoAnything,
 	hideModalMessage,
@@ -71,6 +70,7 @@ const index: any[] = [
 	openNote,
 	openPdfViewer,
 	openTag,
+	overlayPdfWithTranscription,
 	print,
 	renameFolder,
 	renameTag,

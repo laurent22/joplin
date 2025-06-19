@@ -3,7 +3,6 @@ export default function() {
 		'attachFile',
 		'copyDevCommand',
 		'exportPdf',
-		'exportHtmlAsPdf',
 		'focusElementNoteBody',
 		'focusElementNoteViewer',
 		'focusElementNoteList',

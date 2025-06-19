@@ -3,6 +3,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
+import createSearchablePdf from '@joplin/lib/services/ocr/createSearchablePdf';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -26,6 +27,8 @@ interface ExportNoteOptions {
 	plugins?: PluginStates;
 }
 
+export type SourceType = 'note' | 'pdf';
+
 export default class InteropServiceHelper {
 
 	private static async exportNoteToHtmlFile(noteId: string, exportOptions: ExportNoteOptions) {
@@ -45,12 +48,17 @@ export default class InteropServiceHelper {
 		return tempFile;
 	}
 
-	private static async getHtmlContent(noteId: string, exportOptions: ExportOptions, htmlPath?: string) {
-		if (htmlPath) return htmlPath;
-		return this.exportNoteToHtmlFile(noteId, exportOptions);
+	private static async exportPdfWithOverlay(id: string) {
+		return createSearchablePdf(id);
 	}
 
-	private static async exportNoteTo_(target: string, noteId: string, options: ExportNoteOptions = {}, htmlPath?: string) {
+	private static async getHtmlFilePath(id: string, sourceType: SourceType, exportOptions: ExportOptions) {
+		if (sourceType === 'note') return this.exportNoteToHtmlFile(id, exportOptions);
+		if (sourceType === 'pdf') return this.exportPdfWithOverlay(id);
+		throw Error(`Type not defined: ${sourceType}`);
+	}
+
+	private static async exportTo_(target: string, id: string, sourceType: SourceType, options: ExportNoteOptions = {}) {
 		let win: BrowserWindow|null = null;
 		let htmlFile: string = null;
 
@@ -65,7 +73,7 @@ export default class InteropServiceHelper {
 				plugins: options.plugins,
 			};
 
-			htmlFile = await this.getHtmlContent(noteId, exportOptions, htmlPath);
+			htmlFile = await this.getHtmlFilePath(id, sourceType, exportOptions);
 
 			const windowOptions = {
 				show: false,
@@ -161,16 +169,12 @@ export default class InteropServiceHelper {
 		}
 	}
 
-	public static async exportHTMLtoPdf(htmlPath: string, options: ExportNoteOptions = {}) {
-		return this.exportNoteTo_('pdf', undefined, options, htmlPath);
+	public static async exportToPdf(id: string, type: SourceType, options: ExportNoteOptions = {}) {
+		return this.exportTo_('pdf', id, type, options);
 	}
 
-	public static async exportNoteToPdf(noteId: string, options: ExportNoteOptions = {}) {
-		return this.exportNoteTo_('pdf', noteId, options);
-	}
-
-	public static async printNote(noteId: string, options: ExportNoteOptions = {}) {
-		return this.exportNoteTo_('printer', noteId, options);
+	public static async printNote(noteId: string, type: SourceType, options: ExportNoteOptions = {}) {
+		return this.exportTo_('printer', noteId, type, options);
 	}
 
 	public static async defaultFilename(noteId: string, fileExtension: string) {

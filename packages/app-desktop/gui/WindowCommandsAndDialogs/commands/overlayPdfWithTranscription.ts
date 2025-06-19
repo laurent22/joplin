@@ -6,13 +6,13 @@ import bridge from '../../../services/bridge';
 import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
-	name: 'exportHtmlAsPdf',
-	label: () => `PDF - ${_('Export HTML as PDF')}`,
+	name: 'overlayPdfWithTranscription',
+	label: () => `PDF - ${_('Overlay PDF with transcription')}`,
 };
 
 export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, htmlPath: string) => {
+		execute: async (_context: CommandContext, resourceId: string) => {
 			try {
 				let path = await bridge().showSaveDialog({
 					filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
@@ -31,7 +31,7 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 
 				const pdfPath = await shim.fsDriver().findUniqueFilename(path);
 
-				await comp.printTo('pdf', { path: pdfPath, htmlPath });
+				await comp.printTo('pdf', { path: pdfPath, id: resourceId, sourceType: 'pdf' });
 			} catch (error) {
 				console.error(error);
 				bridge().showErrorMessageBox(error.message);

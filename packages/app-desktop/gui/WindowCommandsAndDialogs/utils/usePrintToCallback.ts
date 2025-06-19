@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import bridge from '../../../services/bridge';
-import InteropServiceHelper from '../../../InteropServiceHelper';
+import InteropServiceHelper, { SourceType } from '../../../InteropServiceHelper';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -16,8 +16,8 @@ interface Props {
 
 interface PrintOptions {
 	path?: string;
-	noteId?: string;
-	htmlPath?: string;
+	id: string;
+	sourceType: SourceType;
 }
 
 export type PrintCallback = (target: string, options: PrintOptions)=> Promise<void>;
@@ -38,44 +38,32 @@ const usePrintToCallback = (props: Props): PrintCallback => {
 		// Concurrent print calls are disallowed to avoid incorrect settings being restored upon completion
 		if (isPrinting) {
 			// eslint-disable-next-line no-console -- Old code from before rule was applied
-			console.info(`Printing ${options.path ?? options.noteId} to ${target} disallowed, already printing.`);
+			console.info(`Printing ${options.path ?? options.id} to ${target} disallowed, already printing.`);
 			return;
 		}
 
 		isPrinting = true;
 
 		// Need to wait for save because the interop service reloads the note from the database
-		await waitForNoteToSaved(options.noteId);
+		await waitForNoteToSaved(options.id);
 
 		if (target === 'pdf') {
 			try {
-				if (!options.noteId) {
-					const pdfData = await InteropServiceHelper.exportHTMLtoPdf(options.htmlPath, {
-						printBackground: true,
-						pageSize: Setting.value('export.pdfPageSize'),
-						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
-						customCss: props.customCss,
-						plugins: props.plugins,
-					});
-					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
-
-				} else {
-					const pdfData = await InteropServiceHelper.exportNoteToPdf(options.noteId, {
-						printBackground: true,
-						pageSize: Setting.value('export.pdfPageSize'),
-						landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
-						customCss: props.customCss,
-						plugins: props.plugins,
-					});
-					await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
-				}
+				const pdfData = await InteropServiceHelper.exportToPdf(options.id, options.sourceType, {
+					printBackground: true,
+					pageSize: Setting.value('export.pdfPageSize'),
+					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
+					customCss: props.customCss,
+					plugins: props.plugins,
+				});
+				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
 			} catch (error) {
 				console.error(error);
 				bridge().showErrorMessageBox(error.message);
 			}
 		} else if (target === 'printer') {
 			try {
-				await InteropServiceHelper.printNote(options.noteId, {
+				await InteropServiceHelper.printNote(options.id, options.sourceType, {
 					printBackground: true,
 					customCss: props.customCss,
 				});

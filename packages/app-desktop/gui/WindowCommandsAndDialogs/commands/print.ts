@@ -16,7 +16,7 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 
 			try {
 				if (noteIds.length !== 1) throw new Error(_('Only one note can be printed at a time.'));
-				await comp.printTo('printer', { noteId: noteIds[0] });
+				await comp.printTo('printer', { id: noteIds[0], sourceType: 'note' });
 			} catch (error) {
 				bridge().showErrorMessageBox(error.message);
 			}

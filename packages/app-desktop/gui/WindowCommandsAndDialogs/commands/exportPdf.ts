@@ -53,7 +53,7 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 						pdfPath = await shim.fsDriver().findUniqueFilename(`${path}/${n}`);
 					}
 
-					await comp.printTo('pdf', { path: pdfPath, noteId: note.id });
+					await comp.printTo('pdf', { path: pdfPath, id: note.id, sourceType: 'note' });
 				}
 			} catch (error) {
 				console.error(error);

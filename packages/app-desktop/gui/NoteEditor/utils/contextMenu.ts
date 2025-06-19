@@ -20,7 +20,6 @@ const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
-import PdfOverlayService from '@joplin/lib/services/ocr/PdfOverlayService';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
@@ -164,13 +163,31 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			},
 		},
 		printHTML: {
-			label: _('Print HTML'),
+			label: _('Add transcription overlay to PDF'),
 			onAction: async (options: ContextMenuOptions) => {
-				const service = new PdfOverlayService();
-				return service.createSearchablePdf(options.resourceId);
+				const resource = await resourceInfo(options);
+
+				if (resource.resource.mime !== 'application/pdf') {
+					bridge().showInfoMessageBox(_('This is not a PDF file'));
+					return;
+				}
+
+				if (!resource.resource.ocr_details) {
+					bridge().showInfoMessageBox(_('This PDF is being transcribed. This might take some seconds or minutes, depending on the size of the document.'));
+					await Resource.save({
+						id: options.resourceId,
+						ocr_details: '',
+						ocr_error: '',
+						ocr_status: ResourceOcrStatus.Todo,
+						ocr_text: '',
+					});
+					return;
+				}
+
+				await CommandService.instance().execute('overlayPdfWithTranscription', options.resourceId);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			isActive: (itemType: ContextMenuItemType, _options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource;
 			},
 		},
 		copyPathToClipboard: {
