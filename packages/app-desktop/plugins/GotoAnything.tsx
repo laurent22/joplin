@@ -49,6 +49,14 @@ interface State {
 	resultsInBody: boolean;
 }
 
+// 検索結果クリック時にgotoItemへ渡す型
+interface GotoAnythingItem {
+	id: string;
+	parent_id: string;
+	type: number;
+	keywords?: (string | { value: string })[];
+}
+
 class GotoAnything {
 
 	public dispatch: Function;
@@ -371,7 +379,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	async gotoItem(item: any) {
+	async gotoItem(item: GotoAnythingItem) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -417,18 +425,29 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	listItem_onClick(event: any) {
+	// SearchResultからGotoAnythingItemへ変換するヘルパー
+	private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
+		return {
+			id: item.id,
+			parent_id: item.parent_id,
+			type: item.type ?? 0,
+			keywords: this.state.keywords,
+		};
+	}
+
+	listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		// 検索キーワードを取得
 		const keywords = this.state.keywords && this.state.keywords.length > 0 ? this.state.keywords : [];
-		void this.gotoItem({
+		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
 			keywords: keywords,
-		});
+		};
+		void this.gotoItem(item);
 	}
 
 	renderItem(item: SearchResult) {
@@ -497,7 +516,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			const item = this.selectedItem();
 			if (!item) return;
 
-			void this.gotoItem(item);
+			void this.gotoItem(this.toGotoAnythingItem(item));
 		}
 	}
 
