@@ -16,6 +16,7 @@
 #	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
 
 # Uncomment below if you also want to run the webapp (https://app.joplincloud.com/)
+# You need to enable CORS for server (or host both server and webapp at same origin), see https://github.com/laurent22/joplin/pull/10650#issuecomment-2987080271
 #include:
 #    - docker-compose-webapp.yml
 
