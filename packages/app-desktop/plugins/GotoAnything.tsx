@@ -409,6 +409,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
+				searchWord: item.keywords,
 			});
 
 			CommandService.instance().scheduleExecute('focusElement', 'noteBody');

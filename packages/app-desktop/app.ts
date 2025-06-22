@@ -131,6 +131,9 @@ export interface AppState extends State {
 	// Extra reducer keys go here
 	watchedResources: any;
 	mainLayout: LayoutItem;
+
+	// 検索ワードをstateに保持
+	searchWord?: string;
 }
 
 const appDefaultState: AppState = {
@@ -152,6 +155,8 @@ const appDefaultState: AppState = {
 	mainLayout: null,
 	startupPluginsLoaded: false,
 	...resourceEditWatcherDefaultState,
+	// searchWordの初期値
+	searchWord: '',
 };
 
 class Application extends BaseApplication {
@@ -381,6 +386,15 @@ class Application extends BaseApplication {
 					...state,
 					layoutMoveMode: action.value,
 				};
+				break;
+
+			case 'FOLDER_AND_NOTE_SELECT':
+				newState = Object.assign({}, state);
+				if (action.searchWord && action.searchWord.length > 0) {
+					newState.searchWord = action.searchWord[0];
+				} else {
+					newState.searchWord = '';
+				}
 				break;
 
 			}
