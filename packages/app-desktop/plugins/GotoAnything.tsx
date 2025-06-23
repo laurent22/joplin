@@ -320,12 +320,14 @@ class Dialog extends React.PureComponent<Props, State> {
 					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
+					let ri = 0;
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
 						if (row.fields.includes('body')) {
 							let fragments = '...';
+							const fragmentsList: string[] = [];
 
 							if (i < limit) { // Display note fragments of search keyword matches
 								const indices = [];
@@ -347,16 +349,24 @@ class Dialog extends React.PureComponent<Props, State> {
 								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
-								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
+								const mergedIndices = mergeOverlappingIntervals(indices, 1);
+								for (const index of indices) {
+									fragments = body.slice(index[0], index[1]); // .join(' ... ');
+									if (fragments.length > 0) {
+										fragmentsList.push(fragments);
+									}
+								}
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
 							}
-
-							results[i] = Object.assign({}, row, { path, fragments });
+							for (const tempFragment of fragmentsList) {
+								results[ri] = Object.assign({}, row, { path, fragments: tempFragment });
+								ri++;
+							}
 						} else {
-							results[i] = Object.assign({}, row, { path: path, fragments: '' });
+							results[ri] = Object.assign({}, row, { path: path, fragments: '' });
+							ri++;
 						}
 					}
 
