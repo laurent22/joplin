@@ -432,7 +432,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			id: item.id,
 			parent_id: item.parent_id,
 			type: item.type ?? 0,
-			keywords: this.state.keywords,
+			keywords: (this.state.keywords[0] as any)?.value,
 		};
 	}
 

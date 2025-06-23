@@ -390,8 +390,8 @@ class Application extends BaseApplication {
 
 			case 'FOLDER_AND_NOTE_SELECT':
 				newState = Object.assign({}, state);
-				if (action.searchWord && action.searchWord.length > 0) {
-					newState.searchWord = action.searchWord[0];
+				if (action.searchWord) {
+					newState.searchWord = action.searchWord;
 				} else {
 					newState.searchWord = '';
 				}
