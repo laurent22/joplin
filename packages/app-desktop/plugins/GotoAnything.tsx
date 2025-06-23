@@ -516,8 +516,11 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			const item = this.selectedItem();
 			if (!item) return;
-
-			void this.gotoItem(this.toGotoAnythingItem(item));
+			const itemArg = {
+				...this.toGotoAnythingItem(item),
+				keywords: (this.state.keywords[0] as any)?.value,
+			};
+			void this.gotoItem(itemArg);
 		}
 	}
 
