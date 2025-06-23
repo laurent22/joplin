@@ -1838,8 +1838,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 							}
 						}, 500);
 					}
-				}, 500);
-			}, 3000);
+				}, 100);
+			}, 1000);
 			// TinyMCEのAPIで検索UIを開く
 		}
 	}, [props.searchWord, editor]);
