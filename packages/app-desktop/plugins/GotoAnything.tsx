@@ -441,7 +441,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		// 検索キーワードを取得
-		const keywords = this.state.keywords && this.state.keywords.length > 0 ? this.state.keywords : [];
+		const keywords = (this.state.keywords[0] as any)?.value ?? '';
 		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
