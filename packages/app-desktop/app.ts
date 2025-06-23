@@ -133,7 +133,7 @@ export interface AppState extends State {
 	mainLayout: LayoutItem;
 
 	// 検索ワードをstateに保持
-	searchWord?: string;
+	searchWord?: {keyword: string};
 }
 
 const appDefaultState: AppState = {
@@ -156,7 +156,7 @@ const appDefaultState: AppState = {
 	startupPluginsLoaded: false,
 	...resourceEditWatcherDefaultState,
 	// searchWordの初期値
-	searchWord: '',
+	searchWord: { keyword: '' },
 };
 
 class Application extends BaseApplication {
@@ -391,9 +391,9 @@ class Application extends BaseApplication {
 			case 'FOLDER_AND_NOTE_SELECT':
 				newState = Object.assign({}, state);
 				if (action.searchWord) {
-					newState.searchWord = action.searchWord;
+					newState.searchWord = { keyword: action.searchWord };
 				} else {
-					newState.searchWord = '';
+					newState.searchWord = { keyword: '' };
 				}
 				break;
 
