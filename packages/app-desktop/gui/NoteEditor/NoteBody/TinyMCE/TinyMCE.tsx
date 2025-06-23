@@ -1803,6 +1803,32 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		};
 	}, [editor, onEditorContentClick]);
 
+	useEffect(() => {
+		if (!editor) {
+			return;
+		}
+		if (props.searchWord) {
+			// TinyMCEの検索UIを開き、検索ワードをセットする
+			// Ctrl+F相当の検索UIを表示
+			// 1. 検索UIを開く
+			// 2. 検索ワードをセット
+			// 3. 検索実行
+
+			// TinyMCEのAPIで検索UIを開く
+			if (editor.execCommand) {
+				editor.execCommand('SearchReplace');
+			}
+			// 検索ワードをinputにセット
+			const searchInput = editor.getDoc().querySelector('input.tox-textfield[aria-label="Find"]');
+			if (searchInput) {
+				(searchInput as HTMLInputElement).value = props.searchWord;
+				// 入力イベントを発火して検索を実行
+				const event = new Event('input', { bubbles: true });
+				searchInput.dispatchEvent(event);
+			}
+		}
+	}, [props.searchWord, editor]);
+
 	// This is to handle dropping notes on the editor. In this case, we add an
 	// overlay over the editor, which makes it a valid drop target. This in
 	// turn makes NoteEditor get the drop event and dispatch it.
