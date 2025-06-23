@@ -15,7 +15,7 @@ import Note from '@joplin/lib/models/Note';
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
-const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
+// const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 
@@ -29,6 +29,7 @@ interface SearchResult {
 	fragments?: string;
 	path?: string;
 	type?: number;
+	key: string;
 }
 
 interface Props {
@@ -54,7 +55,7 @@ interface GotoAnythingItem {
 	id: string;
 	parent_id: string;
 	type: number;
-	keywords?: (string | { value: string })[];
+	keywords?: string;
 }
 
 class GotoAnything {
@@ -350,7 +351,7 @@ class Dialog extends React.PureComponent<Props, State> {
 								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
-								const mergedIndices = mergeOverlappingIntervals(indices, 1);
+								// const mergedIndices = mergeOverlappingIntervals(indices, 1);
 								for (const index of indices) {
 									fragments = body.slice(index[0], index[1]); // .join(' ... ');
 									if (fragments.length > 0) {
@@ -364,15 +365,15 @@ class Dialog extends React.PureComponent<Props, State> {
 									}
 								}
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
-								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
+								// if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 
 							}
 							for (const tempFragment of fragmentsList) {
-								results[ri] = Object.assign({}, row, { path, fragments: tempFragment });
+								results[ri] = Object.assign({}, row, { index: ri, path, fragments: tempFragment });
 								ri++;
 							}
 						} else {
-							results[ri] = Object.assign({}, row, { path: path, fragments: '' });
+							results[ri] = Object.assign({}, row, { index: ri, path: path, fragments: '' });
 							ri++;
 						}
 					}
@@ -385,6 +386,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			// make list scroll to top in every search
 			this.itemListRef.current.makeItemIndexVisible(0);
+			console.log(`state.results.length: ${results.length}`);
 
 			this.setState({
 				listType: listType,
@@ -458,12 +460,12 @@ class Dialog extends React.PureComponent<Props, State> {
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		// 検索キーワードを取得
-		const keywords = (this.state.keywords[0] as any)?.value ?? '';
+		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
 		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
-			keywords: keywords,
+			keywords: this.state.results[Number(itemId)]?.fragments ?? '',
 		};
 		void this.gotoItem(item);
 	}
@@ -483,7 +485,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={item.Index} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -535,7 +537,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			if (!item) return;
 			const itemArg = {
 				...this.toGotoAnythingItem(item),
-				keywords: (this.state.keywords[0] as any)?.value,
+				keywords: this.state.results[Number(item.id)]?.fragments ?? '',
+				// keywords: (this.state.keywords[0] as any)?.value,
 			};
 			void this.gotoItem(itemArg);
 		}
@@ -548,7 +551,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			marginTop: 5,
 			height: Math.min(style.itemHeight * this.state.results.length, 10 * style.itemHeight),
 		};
-
+		console.log(`state.results.length: ${this.state.results.length}`);
 		return (
 			<ItemList
 				ref={this.itemListRef}
