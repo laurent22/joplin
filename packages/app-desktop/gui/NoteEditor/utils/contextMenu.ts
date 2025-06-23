@@ -174,13 +174,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 
 				if (!resource.resource.ocr_details) {
 					bridge().showInfoMessageBox(_('This PDF is being transcribed. This might take some seconds or minutes, depending on the size of the document.'));
-					await Resource.save({
-						id: options.resourceId,
-						ocr_details: '',
-						ocr_error: '',
-						ocr_status: ResourceOcrStatus.Todo,
-						ocr_text: '',
-					});
+					await Resource.resetFetchErrorStatus(resource.resource.id);
 					return;
 				}
 
