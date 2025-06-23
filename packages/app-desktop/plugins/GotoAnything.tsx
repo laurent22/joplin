@@ -321,8 +321,8 @@ class Dialog extends React.PureComponent<Props, State> {
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
 
 					let ri = 0;
+					const exists: Record<string, boolean> = {};
 					for (let i = 0; i < results.length; i++) {
-						const exists: Record<string, boolean> = {};
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
@@ -360,6 +360,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										}
 										exists[fragments] = true;
 										fragmentsList.push(fragments);
+										console.log(`Found fragment: ${fragments}`);
 									}
 								}
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
