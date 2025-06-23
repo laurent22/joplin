@@ -398,6 +398,7 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		searchWord: props.searchWord,
 	};
 
 	let editor = null;
@@ -600,6 +601,7 @@ const mapStateToProps = (state: AppState) => {
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
 		], whenClauseContext)[0],
+		searchWord: state.searchWord,
 	};
 };
 

@@ -35,6 +35,7 @@ export interface NoteEditorProps {
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	richTextBannerDismissed: boolean;
+	searchWord: string;
 }
 
 export interface NoteBodyEditorProps {
@@ -65,6 +66,7 @@ export interface NoteBodyEditorProps {
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
+	searchWord?: string;
 }
 
 export interface FormNote {

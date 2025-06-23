@@ -32,7 +32,7 @@ import { convertATagVideoToVideoTag, modifyJoplinResource } from '../../../../co
 import * as htmlEntity from 'html-entities';
 
 let gWorker: Worker = undefined;
-let gOnChangeHandler: ()=>void | undefined = undefined;
+let gOnChangeHandler: ()=> void | undefined = undefined;
 
 function markupRenderOptions(override: any = null) {
 	return {
@@ -1528,7 +1528,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			editors[0].onLinkSubmit = (changedData: any) => {
 				console.log('onLinkSubmit', changedData);
 				gOnChangeHandler?.();
-			}
+			};
 			setEditor(editors[0]);
 
 			const resizeAPItemp = (window as any).tinymce?.resizeAPI;
@@ -1769,6 +1769,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					resourceInfos: props.resourceInfos,
 					contentKey: props.contentKey,
 				};
+				console.log(`searchWord in TinyMCE: ${props.searchWord}`);
 			}
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
@@ -1801,6 +1802,47 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			editor.getDoc().removeEventListener('click', onEditorContentClick);
 		};
 	}, [editor, onEditorContentClick]);
+
+	useEffect(() => {
+		if (!editor) {
+			return;
+		}
+		if (props.searchWord) {
+			// TinyMCEの検索UIを開き、検索ワードをセットする
+			// Ctrl+F相当の検索UIを表示
+			// 1. 検索UIを開く
+			// 2. 検索ワードをセット
+			// 3. 検索実行
+
+			setTimeout(() => {
+				if (editor.execCommand) {
+					editor.execCommand('SearchReplace');
+				}
+				setTimeout(() => {
+					// 検索ワードをinputにセット
+				// <input type="text" placeholder="検索" inputmode="search" tabindex="-1" data-alloy-tabstop="true" class="tox-textfield">
+					const searchInput = document.querySelector('input.tox-textfield[inputmode="search"]');
+					if (searchInput) {
+						// remove asterisk in last char from search word
+						const searchWord = props.searchWord.replace(/\*$/g, '');
+						(searchInput as HTMLInputElement).value = searchWord;
+						// 入力イベントを発火して検索を実行
+						const event = new Event('input', { bubbles: true });
+						searchInput.dispatchEvent(event);
+
+						setTimeout(() => {
+							// <button title="検索" type="button" data-alloy-tabstop="true" tabindex="-1" class="tox-button">検索</button>
+							const searchButton = document.querySelector('button.tox-button[title="検索"]');
+							if (searchButton) {
+								(searchButton as any).click();
+							}
+						}, 500);
+					}
+				}, 100);
+			}, 1000);
+			// TinyMCEのAPIで検索UIを開く
+		}
+	}, [props.searchWord, editor]);
 
 	// This is to handle dropping notes on the editor. In this case, we add an
 	// overlay over the editor, which makes it a valid drop target. This in

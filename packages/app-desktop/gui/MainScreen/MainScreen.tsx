@@ -64,6 +64,7 @@ interface Props {
 	pluginsLegacy: any;
 	startupPluginsLoaded: boolean;
 	isSafeMode: boolean;
+	searchKeywords: string;
 }
 
 interface State {
@@ -630,6 +631,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 			editor: () => {
 				const bodyEditor = this.props.settingEditorCodeView ? 'CodeMirror' : 'TinyMCE';
+				console.log('searchKeywords', this.props.searchKeywords);
 				return <NoteEditor key={key} bodyEditor={bodyEditor} />;
 			},
 		};
@@ -797,6 +799,7 @@ const mapStateToProps = (state: AppState) => {
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
 		isSafeMode: state.settings.isSafeMode,
+		searchKeywords: state?.searchWord,
 	};
 };
 

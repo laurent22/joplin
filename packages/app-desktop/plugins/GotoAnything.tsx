@@ -49,6 +49,14 @@ interface State {
 	resultsInBody: boolean;
 }
 
+// 検索結果クリック時にgotoItemへ渡す型
+interface GotoAnythingItem {
+	id: string;
+	parent_id: string;
+	type: number;
+	keywords?: (string | { value: string })[];
+}
+
 class GotoAnything {
 
 	public dispatch: Function;
@@ -371,7 +379,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	async gotoItem(item: any) {
+	async gotoItem(item: GotoAnythingItem) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -401,6 +409,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
 				noteId: item.id,
+				searchWord: item.keywords,
 			});
 
 			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
@@ -417,16 +426,29 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	listItem_onClick(event: any) {
+	// SearchResultからGotoAnythingItemへ変換するヘルパー
+	private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
+		return {
+			id: item.id,
+			parent_id: item.parent_id,
+			type: item.type ?? 0,
+			keywords: (this.state.keywords[0] as any)?.value,
+		};
+	}
+
+	listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
-
-		void this.gotoItem({
+		// 検索キーワードを取得
+		const keywords = this.state.keywords && this.state.keywords.length > 0 ? this.state.keywords : [];
+		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
-		});
+			keywords: keywords,
+		};
+		void this.gotoItem(item);
 	}
 
 	renderItem(item: SearchResult) {
@@ -494,8 +516,11 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			const item = this.selectedItem();
 			if (!item) return;
-
-			void this.gotoItem(item);
+			const itemArg = {
+				...this.toGotoAnythingItem(item),
+				keywords: (this.state.keywords[0] as any)?.value,
+			};
+			void this.gotoItem(itemArg);
 		}
 	}
 
