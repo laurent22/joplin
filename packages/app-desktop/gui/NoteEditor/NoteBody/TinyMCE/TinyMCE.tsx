@@ -1769,6 +1769,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					resourceInfos: props.resourceInfos,
 					contentKey: props.contentKey,
 				};
+				console.log(`searchWord in TinyMCE: ${props.searchWord}`);
 			}
 
 			await loadDocumentAssets(editor, await props.allAssets(props.contentMarkupLanguage));
