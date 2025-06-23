@@ -322,6 +322,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 					let ri = 0;
 					for (let i = 0; i < results.length; i++) {
+						const exists: Record<string, boolean> = {};
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
@@ -332,7 +333,7 @@ class Dialog extends React.PureComponent<Props, State> {
 							if (i < limit) { // Display note fragments of search keyword matches
 								const indices = [];
 								const note = notesById[row.id];
-								const body = this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: true });
+								const body = note.body; // this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: false });
 
 								// Iterate over all matches in the body for each search keyword
 								for (let { valueRegex } of searchKeywords) {
@@ -353,6 +354,11 @@ class Dialog extends React.PureComponent<Props, State> {
 								for (const index of indices) {
 									fragments = body.slice(index[0], index[1]); // .join(' ... ');
 									if (fragments.length > 0) {
+										if (exists[fragments]) {
+											console.log(`Duplicate fragment found: ${fragments}`);
+											continue; // Prevent duplicates
+										}
+										exists[fragments] = true;
 										fragmentsList.push(fragments);
 									}
 								}
