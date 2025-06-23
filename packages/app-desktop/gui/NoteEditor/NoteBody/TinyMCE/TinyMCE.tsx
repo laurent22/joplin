@@ -1807,7 +1807,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		if (!editor) {
 			return;
 		}
-		if (props.searchWord) {
+		if (props?.searchWord?.keyword) {
 			// TinyMCEの検索UIを開き、検索ワードをセットする
 			// Ctrl+F相当の検索UIを表示
 			// 1. 検索UIを開く
@@ -1824,7 +1824,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					const searchInput = document.querySelector('input.tox-textfield[inputmode="search"]');
 					if (searchInput) {
 						// remove asterisk in last char from search word
-						const searchWord = props.searchWord.replace(/\*$/g, '');
+						const searchWord = props.searchWord.keyword.replace(/\*$/g, '');
 						(searchInput as HTMLInputElement).value = searchWord;
 						// 入力イベントを発火して検索を実行
 						const event = new Event('input', { bubbles: true });
