@@ -472,11 +472,12 @@ class Dialog extends React.PureComponent<Props, State> {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
-		const result = this.selectedItem();
-		// 検索キーワードを取得
-		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
-		// cheerioで最初の要素のinnerTextを取得
-		const fragment = result.fragments ?? '';
+		const index = Number(event.currentTarget.getAttribute('data-index'));
+		let fragment = '';
+		if (!isNaN(index)) {
+			fragment = this.state.results[index].fragments ?? '';
+		}
+
 		const fragmentText = this.extractFirstTextFromFragment(fragment);
 		// const txtFragment = fragment.replace(/<[^>]+>/g, ''); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
