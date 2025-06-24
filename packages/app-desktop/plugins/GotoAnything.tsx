@@ -76,6 +76,9 @@ class GotoAnything {
 
 }
 
+let gOnChangeTimer: null | number = null;
+const gTimerDelay = 3_000; // 3 seconds
+
 class Dialog extends React.PureComponent<Props, State> {
 
 	private styles_: any;
@@ -223,9 +226,19 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	input_onChange(event: any) {
-		this.setState({ query: event.target.value });
+		if (gOnChangeTimer) {
+			clearTimeout(gOnChangeTimer);
+			gOnChangeTimer = null;
+		}
 
-		this.scheduleListUpdate();
+		const curEvent = event;
+		const self = this;
+		const value = curEvent.target.value;
+		gOnChangeTimer = setTimeout(() => {
+			gOnChangeTimer = null;
+			self.setState({ query: value });
+			self.scheduleListUpdate();
+		}, gTimerDelay);
 	}
 
 	scheduleListUpdate() {
@@ -605,7 +618,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
+						<input autoFocus type="text" style={style.input} ref={this.inputRef} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
 						<HelpButton onClick={this.helpButton_onClick} />
 					</div>
 					{this.renderList()}
