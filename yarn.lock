@@ -9420,7 +9420,7 @@ __metadata:
     jsdom: "npm:24.1.3"
     knex: "npm:3.1.0"
     koa: "npm:2.15.4"
-    ldapts: "npm:7.3.1"
+    ldapts: "npm:7.3.3"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -33137,17 +33137,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:7.3.1":
-  version: 7.3.1
-  resolution: "ldapts@npm:7.3.1"
+"ldapts@npm:7.3.3":
+  version: 7.3.3
+  resolution: "ldapts@npm:7.3.3"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:~0.2.6"
     debug: "npm:~4.4.0"
     strict-event-emitter-types: "npm:~2.0.0"
-    uuid: "npm:~11.0.4"
-    whatwg-url: "npm:~14.1.0"
-  checksum: 10/8213c18b4acdd36135385be430848003ce4d202ed9348ec7b1d0b2ff5e412bb33c989bae476e66091c7738d5a8687ccf0ee316b53ba29cd33086524d6967c91e
+    uuid: "npm:~11.1.0"
+    whatwg-url: "npm:~14.2.0"
+  checksum: 10/d2be413f5fc1ec76c8418862d607f14b0f00952d2492882de35a4f89d6869ae0f989995e8d8848ccb04dfb71b5b8f7c8a2802c8d9cd23e287ce966e65eceae75
   languageName: node
   linkType: hard
 
@@ -47484,6 +47484,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tr46@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "tr46@npm:5.1.1"
+  dependencies:
+    punycode: "npm:^2.3.1"
+  checksum: 10/833a0e1044574da5790148fd17866d4ddaea89e022de50279967bcd6b28b4ce0d30d59eb3acf9702b60918975b3bad481400337e3a2e6326cffa5c77b874753d
+  languageName: node
+  linkType: hard
+
 "tr46@npm:~0.0.3":
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
@@ -49354,12 +49363,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:~11.0.4":
-  version: 11.0.5
-  resolution: "uuid@npm:11.0.5"
+"uuid@npm:~11.1.0":
+  version: 11.1.0
+  resolution: "uuid@npm:11.1.0"
   bin:
     uuid: dist/esm/bin/uuid
-  checksum: 10/0594ecdff3051e15d4a2c614b4c72e73af373bde0a5d156512353c01156975295d024ae8d7151846d7bd4d22ccd251b16ed51b4318fa71505fb20ad984102dc1
+  checksum: 10/d2da43b49b154d154574891ced66d0c83fc70caaad87e043400cf644423b067542d6f3eb641b7c819224a7cd3b4c2f21906acbedd6ec9c6a05887aa9115a9cf5
   languageName: node
   linkType: hard
 
@@ -50333,13 +50342,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-url@npm:~14.1.0":
-  version: 14.1.1
-  resolution: "whatwg-url@npm:14.1.1"
+"whatwg-url@npm:~14.2.0":
+  version: 14.2.0
+  resolution: "whatwg-url@npm:14.2.0"
   dependencies:
-    tr46: "npm:^5.0.0"
+    tr46: "npm:^5.1.0"
     webidl-conversions: "npm:^7.0.0"
-  checksum: 10/803bede3ec6c8f14de0d84ac6032479646b5a2b08f5a7289366c3461caed9d7888d171e2846b59798869191037562c965235c2eed6ff2e266c05a2b4a6ce0160
+  checksum: 10/f0a95b0601c64f417c471536a2d828b4c16fe37c13662483a32f02f183ed0f441616609b0663fb791e524e8cd56d9a86dd7366b1fc5356048ccb09b576495e7c
   languageName: node
   linkType: hard
 
