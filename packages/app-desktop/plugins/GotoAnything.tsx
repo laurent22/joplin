@@ -133,7 +133,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
 			row: {
 				overflow: 'hidden',
-				height: itemHeight,
+				minHeight: itemHeight,
+				maxHeight: 200,
 				display: 'flex',
 				justifyContent: 'center',
 				flexDirection: 'column',
