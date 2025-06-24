@@ -8843,7 +8843,7 @@ __metadata:
     "@types/jest": "npm:29.5.12"
     "@types/mustache": "npm:4.2.5"
     "@types/node": "npm:18.19.67"
-    "@types/react": "npm:18.3.19"
+    "@types/react": "npm:18.3.20"
     "@types/react-dom": "npm:18.3.5"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
@@ -9085,7 +9085,7 @@ __metadata:
     "@replit/codemirror-vim": "npm:6.2.1"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.12"
-    "@types/react": "npm:18.3.19"
+    "@types/react": "npm:18.3.20"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     jest: "npm:29.7.0"
@@ -9181,7 +9181,7 @@ __metadata:
     "@types/nanoid": "npm:3.0.0"
     "@types/node": "npm:18.19.67"
     "@types/node-rsa": "npm:1.1.4"
-    "@types/react": "npm:18.3.19"
+    "@types/react": "npm:18.3.20"
     "@types/uuid": "npm:9.0.7"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
@@ -9265,7 +9265,7 @@ __metadata:
     "@joplin/lib": "npm:~3.4"
     "@types/jest": "npm:29.5.12"
     "@types/pdfjs-dist": "npm:2.10.378"
-    "@types/react": "npm:18.3.19"
+    "@types/react": "npm:18.3.20"
     "@types/react-dom": "npm:18.3.5"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
@@ -14178,13 +14178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.3.19":
-  version: 18.3.19
-  resolution: "@types/react@npm:18.3.19"
+"@types/react@npm:18.3.20":
+  version: 18.3.20
+  resolution: "@types/react@npm:18.3.20"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10/4b40a4adf7a59390541dc24059c09d95a777e8e8025fab13d660e1929a88e78efadde8ec94ebd357c5cc80b25590645e81c5b621661700f40496e7833b3d2983
+  checksum: 10/020c51e63b60862e6d772f0cdea0b9441182eedab6289dabd8add0708ded62003834c4e7c6f23a1ccd3ca9486b46296057c3f881c34261a0483765351f8d0bc3
   languageName: node
   linkType: hard
 
