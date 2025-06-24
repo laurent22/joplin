@@ -284,6 +284,7 @@ class Dialog extends React.PureComponent<Props, State> {
 						parent_id: null,
 						fields: [],
 						type: BaseModel.TYPE_COMMAND,
+						key: result.commandName,
 					};
 				});
 			} else if (this.state.query.indexOf('#') === 0) { // TAGS
@@ -369,11 +370,11 @@ class Dialog extends React.PureComponent<Props, State> {
 
 							}
 							for (const tempFragment of fragmentsList) {
-								results[ri] = Object.assign({}, row, { index: ri, path, fragments: tempFragment });
+								results[ri] = Object.assign({}, row, { key: ri, path, fragments: tempFragment });
 								ri++;
 							}
 						} else {
-							results[ri] = Object.assign({}, row, { index: ri, path: path, fragments: '' });
+							results[ri] = Object.assign({}, row, { key: ri, path: path, fragments: '' });
 							ri++;
 						}
 					}
@@ -459,13 +460,14 @@ class Dialog extends React.PureComponent<Props, State> {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
+		const result = this.selectedItem();
 		// 検索キーワードを取得
 		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
 		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
-			keywords: this.state.results[Number(itemId)]?.fragments ?? '',
+			keywords: result.fragments ?? '',
 		};
 		void this.gotoItem(item);
 	}
@@ -473,6 +475,8 @@ class Dialog extends React.PureComponent<Props, State> {
 	renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
+		const key = item.key === undefined ? item.id : item.key;
+		const index = item.key === undefined ? undefined : item.key;
 		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
@@ -485,7 +489,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.Index} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={key} data-index={index} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -537,7 +541,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			if (!item) return;
 			const itemArg = {
 				...this.toGotoAnythingItem(item),
-				keywords: this.state.results[Number(item.id)]?.fragments ?? '',
+				keywords: item.fragments ?? '',
 				// keywords: (this.state.keywords[0] as any)?.value,
 			};
 			void this.gotoItem(itemArg);
