@@ -460,8 +460,15 @@ class Dialog extends React.PureComponent<Props, State> {
 	extractFirstTextFromFragment(fragment: string): string {
 		let fragmentText = fragment;
 		try {
-			const $ = cheerio.load(fragment);
-			fragmentText = $.root().children().first().text() || fragment;
+			const $ = cheerio.load(`<root>${fragment}</root>`);
+			// ルート直下のテキストノードのみを連結
+			let text = '';
+			$('root').contents().each((_, el) => {
+				if (el.type === 'text') {
+					text += $(el).text();
+				}
+			});
+			fragmentText = text || fragment;
 		} catch (e) {
 			fragmentText = fragment;
 		}
@@ -479,6 +486,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		const fragmentText = this.extractFirstTextFromFragment(fragment);
+		console.log(`extract: ${fragment} --> ${fragmentText}`);
 		// const txtFragment = fragment.replace(/<[^>]+>/g, ''); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
 			id: itemId,
