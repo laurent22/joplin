@@ -373,12 +373,12 @@ class Dialog extends React.PureComponent<Props, State> {
 									fragments = body.slice(index[0], index[1]); // .join(' ... ');
 									if (fragments.length > 0) {
 										if (exists[fragments]) {
-											console.log(`Duplicate fragment found: ${fragments}`);
+											// console.log(`Duplicate fragment found: ${fragments}`);
 											continue; // Prevent duplicates
 										}
 										exists[fragments] = true;
 										fragmentsList.push(fragments);
-										console.log(`Found fragment: ${fragments}`);
+										// console.log(`Found fragment: ${fragments}`);
 									}
 								}
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
@@ -404,7 +404,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			// make list scroll to top in every search
 			this.itemListRef.current.makeItemIndexVisible(0);
-			console.log(`state.results.length: ${results.length}`);
+			// console.log(`state.results.length: ${results.length}`);
 
 			this.setState({
 				listType: listType,
@@ -502,7 +502,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		const fragmentText = this.extractFirstTextFromFragment(fragment);
-		console.log(`extract: ${fragment} --> ${fragmentText}`);
+		// console.log(`extract: ${fragment} --> ${fragmentText}`);
 		// const txtFragment = fragment.replace(/<[^>]+>/g, ''); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
 			id: itemId,
@@ -596,7 +596,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			marginTop: 5,
 			height: Math.min(style.itemHeight * this.state.results.length, 10 * style.itemHeight),
 		};
-		console.log(`state.results.length: ${this.state.results.length}`);
+		// console.log(`state.results.length: ${this.state.results.length}`);
 		return (
 			<ItemList
 				ref={this.itemListRef}
