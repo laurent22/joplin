@@ -463,11 +463,13 @@ class Dialog extends React.PureComponent<Props, State> {
 		const result = this.selectedItem();
 		// 検索キーワードを取得
 		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
+		const fragment = result.fragments ?? '';
+		const txtFragment = fragment.replace(/<[^>]+>/g, '').replacce(/<[a-z]*//g); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
-			keywords: result.fragments ?? '',
+			keywords: txtFragment,
 		};
 		void this.gotoItem(item);
 	}
