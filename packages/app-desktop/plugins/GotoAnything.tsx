@@ -18,6 +18,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@jo
 // const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
+import * as cheerio from 'cheerio';
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -463,13 +464,22 @@ class Dialog extends React.PureComponent<Props, State> {
 		const result = this.selectedItem();
 		// 検索キーワードを取得
 		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
+		// cheerioで最初の要素のinnerTextを取得
 		const fragment = result.fragments ?? '';
-		const txtFragment = fragment.replace(/<[^>]+>/g, '').replacce(/<[a-z]*//g); // Remove HTML tags from fragments
+		let fragmentText = fragment;
+		try {
+			const $ = cheerio.load(fragment);
+			fragmentText = $.root().children().first().text() || fragment;
+		} catch (e) {
+			fragmentText = fragment;
+		}
+
+		// const txtFragment = fragment.replace(/<[^>]+>/g, ''); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
-			keywords: txtFragment,
+			keywords: fragmentText,
 		};
 		void this.gotoItem(item);
 	}
