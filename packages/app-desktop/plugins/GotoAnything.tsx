@@ -325,6 +325,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 					let ri = 0;
 					const exists: Record<string, boolean> = {};
+					const tempResults: SearchResult[] = [];
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
@@ -371,15 +372,16 @@ class Dialog extends React.PureComponent<Props, State> {
 
 							}
 							for (const tempFragment of fragmentsList) {
-								results[ri] = Object.assign({}, row, { key: ri, path, fragments: tempFragment });
+								tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
 								ri++;
 							}
 						} else {
-							results[ri] = Object.assign({}, row, { key: ri, path: path, fragments: '' });
+							// results[ri] = Object.assign({}, row, { key: ri, path: path, fragments: '' });
+							tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
 							ri++;
 						}
 					}
-
+					results = tempResults;
 					if (!this.props.showCompletedTodos) {
 						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
 					}
