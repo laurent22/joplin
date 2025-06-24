@@ -457,6 +457,17 @@ class Dialog extends React.PureComponent<Props, State> {
 		};
 	}
 
+	extractFirstTextFromFragment(fragment: string): string {
+		let fragmentText = fragment;
+		try {
+			const $ = cheerio.load(fragment);
+			fragmentText = $.root().children().first().text() || fragment;
+		} catch (e) {
+			fragmentText = fragment;
+		}
+		return fragmentText.trim();
+	}
+
 	listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
@@ -466,14 +477,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		// const keywords = (this.state.keywords[0] as any)?.value ?? '';
 		// cheerioで最初の要素のinnerTextを取得
 		const fragment = result.fragments ?? '';
-		let fragmentText = fragment;
-		try {
-			const $ = cheerio.load(fragment);
-			fragmentText = $.root().children().first().text() || fragment;
-		} catch (e) {
-			fragmentText = fragment;
-		}
-
+		const fragmentText = this.extractFirstTextFromFragment(fragment);
 		// const txtFragment = fragment.replace(/<[^>]+>/g, ''); // Remove HTML tags from fragments
 		const item: GotoAnythingItem = {
 			id: itemId,
