@@ -591,7 +591,7 @@ describe('services/SearchEngine', () => {
 			['not find',	'disabled',	false, 	3],
 		],
 	)('should %s resources if searching in OCR content is %s',
-		async (_testName: string, _testName2: string, isSearchEnabled: boolean, resultsFound: number) => {
+		async (_testName: string, _testName2: string, isSearchEnabled: boolean, resourcesFound: number) => {
 			const { resource } = await createNoteAndResource();
 			await Resource.save({
 				id: resource.id,
@@ -611,7 +611,7 @@ describe('services/SearchEngine', () => {
 				searchType: SearchEngine.SEARCH_TYPE_FTS,
 				includeOrphanedResources: true,
 			});
-			expect(rows.length).toBe(resultsFound);
+			expect(rows.length).toBe(resourcesFound);
 
 			Setting.setValue('ocr.searchInContentExtracted', searchInContextExtracted);
 		});
