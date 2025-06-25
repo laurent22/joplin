@@ -464,14 +464,14 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	// SearchResultからGotoAnythingItemへ変換するヘルパー
-	private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
-		return {
-			id: item.id,
-			parent_id: item.parent_id,
-			type: item.type ?? 0,
-			keywords: (this.state.keywords[0] as any)?.value,
-		};
-	}
+	// private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
+	// 	return {
+	// 		id: item.id,
+	// 		parent_id: item.parent_id,
+	// 		type: item.type ?? 0,
+	// 		keywords: (this.state.keywords[0] as any)?.value,
+	// 	};
+	// }
 
 	extractFirstTextFromFragment(fragment: string): string {
 		let fragmentText = fragment;
@@ -578,14 +578,23 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (keyCode === 13) { // ENTER
 			event.preventDefault();
 
-			const item = this.selectedItem();
-			if (!item) return;
-			const itemArg = {
-				...this.toGotoAnythingItem(item),
-				keywords: item.fragments ?? '',
-				// keywords: (this.state.keywords[0] as any)?.value,
-			};
-			void this.gotoItem(itemArg);
+			console.log(`GotoAnything: Enter pressed with query "${this.state.query}" and selected item "${this.state.selectedItemId}"`);
+			if (gOnChangeTimer) {
+				clearTimeout(gOnChangeTimer);
+				gOnChangeTimer = null;
+			}
+
+			gOnChangeTimer = null;
+			this.setState({ query: event.target.value });
+			this.scheduleListUpdate();
+			// const item = this.selectedItem();
+			// if (!item) return;
+			// const itemArg = {
+			// 	...this.toGotoAnythingItem(item),
+			// 	keywords: item.fragments ?? '',
+			// 	// keywords: (this.state.keywords[0] as any)?.value,
+			// };
+			// void this.gotoItem(itemArg);
 		}
 	}
 
