@@ -38,8 +38,5 @@ features = [
     "console"
 ]
 
-[features]
-test_environment = []
-
 [lib]
 crate-type = ["cdylib"]
