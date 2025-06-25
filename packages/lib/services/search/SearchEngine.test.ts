@@ -588,7 +588,7 @@ describe('services/SearchEngine', () => {
 	it.each(
 		[
 			['find',		'enabled',	true,	1],
-			['not find',	'disabled',	false, 	3],
+			['not find',	'disabled',	false, 	0],
 		],
 	)('should %s resources if searching in OCR content is %s',
 		async (_testName: string, _testName2: string, isSearchEnabled: boolean, resourcesFound: number) => {
