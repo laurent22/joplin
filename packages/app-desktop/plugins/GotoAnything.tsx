@@ -627,8 +627,13 @@ class Dialog extends React.PureComponent<Props, State> {
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
+						<label style={{ marginRight: 8 }}>検索</label>
 						<input autoFocus type="text" style={style.input} ref={this.inputRef} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
 						<HelpButton onClick={this.helpButton_onClick} />
+					</div>
+					<div style={style.inputHelpWrapper}>
+						<label style={{ marginRight: 8 }}>フィルタ</label>
+						<input type="text" style={{ flex: 1, width: '100%' }} />
 					</div>
 					{this.renderList()}
 				</div>
