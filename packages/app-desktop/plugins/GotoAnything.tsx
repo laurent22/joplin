@@ -20,6 +20,7 @@ import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import * as cheerio from 'cheerio';
 
+
 const PLUGIN_NAME = 'gotoAnything';
 
 interface SearchResult {
@@ -44,11 +45,13 @@ interface Props {
 interface State {
 	query: string;
 	results: SearchResult[];
+	filteredResults: SearchResult[];
 	selectedItemId: string;
 	keywords: string[];
 	listType: number;
 	showHelp: boolean;
 	resultsInBody: boolean;
+	filterWord: string;
 }
 
 // 検索結果クリック時にgotoItemへ渡す型
@@ -95,11 +98,13 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.state = {
 			query: startString,
 			results: [],
+			filteredResults: [],
 			selectedItemId: null,
 			keywords: [],
 			listType: BaseModel.TYPE_NOTE,
 			showHelp: false,
 			resultsInBody: false,
+			filterWord: '',
 		};
 
 		this.styles_ = {};
@@ -110,6 +115,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onChange = this.input_onChange.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
+		this.filterOnKeyDown = this.filterOnKeyDown.bind(this);
 		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
 		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
@@ -275,6 +281,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	async updateList() {
+		const updateListStart = Date.now();
 		let resultsInBody = false;
 
 		if (!this.state.query) {
@@ -405,15 +412,25 @@ class Dialog extends React.PureComponent<Props, State> {
 			// make list scroll to top in every search
 			this.itemListRef.current.makeItemIndexVisible(0);
 			// console.log(`state.results.length: ${results.length}`);
-
+			let filteredResults = results;
+			if (this.state.filterWord) {
+				filteredResults = results.filter((item: SearchResult) => {
+					const fragment = item.fragments ? item.fragments : '';
+					return fragment.includes(this.state.filterWord) || item.title.includes(this.state.filterWord);
+				});
+			}
 			this.setState({
 				listType: listType,
 				results: results,
+				filteredResults: filteredResults,
 				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
 			});
 		}
+		const updateListEnd = Date.now();
+		console.info(`GotoAnything: updateList took ${updateListEnd - updateListStart}ms for query "${this.state.query}" with ${this.state.results.length} results`);
+
 	}
 
 	async gotoItem(item: GotoAnythingItem) {
@@ -464,14 +481,14 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	// SearchResultからGotoAnythingItemへ変換するヘルパー
-	private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
-		return {
-			id: item.id,
-			parent_id: item.parent_id,
-			type: item.type ?? 0,
-			keywords: (this.state.keywords[0] as any)?.value,
-		};
-	}
+	// private toGotoAnythingItem(item: SearchResult): GotoAnythingItem {
+	// 	return {
+	// 		id: item.id,
+	// 		parent_id: item.parent_id,
+	// 		type: item.type ?? 0,
+	// 		keywords: (this.state.keywords[0] as any)?.value,
+	// 	};
+	// }
 
 	extractFirstTextFromFragment(fragment: string): string {
 		let fragmentText = fragment;
@@ -554,6 +571,24 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.state.results[index];
 	}
 
+	filterOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+		const keyCode = event.keyCode;
+		if (keyCode === 13) { // ENTER
+			event.preventDefault();
+			const filterWord = event.currentTarget.value.trim();
+			this.setState({ filterWord: filterWord });
+			let filteredResults = this.state.results;
+			if (filterWord) {
+				filteredResults = this.state.results.filter((item: SearchResult) => {
+					const fragment = item.fragments ? item.fragments : '';
+					return fragment.includes(filterWord) || item.title.includes(filterWord) || item.path?.includes(filterWord);
+				});
+			}
+			this.setState({ filteredResults: filteredResults });
+			this.scheduleListUpdate();
+		}
+	}
+
 	input_onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 
@@ -578,14 +613,23 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (keyCode === 13) { // ENTER
 			event.preventDefault();
 
-			const item = this.selectedItem();
-			if (!item) return;
-			const itemArg = {
-				...this.toGotoAnythingItem(item),
-				keywords: item.fragments ?? '',
-				// keywords: (this.state.keywords[0] as any)?.value,
-			};
-			void this.gotoItem(itemArg);
+			console.log(`GotoAnything: Enter pressed with query "${this.state.query}" and selected item "${this.state.selectedItemId}"`);
+			if (gOnChangeTimer) {
+				clearTimeout(gOnChangeTimer);
+				gOnChangeTimer = null;
+			}
+
+			gOnChangeTimer = null;
+			this.setState({ query: event.target.value });
+			this.scheduleListUpdate();
+			// const item = this.selectedItem();
+			// if (!item) return;
+			// const itemArg = {
+			// 	...this.toGotoAnythingItem(item),
+			// 	keywords: item.fragments ?? '',
+			// 	// keywords: (this.state.keywords[0] as any)?.value,
+			// };
+			// void this.gotoItem(itemArg);
 		}
 	}
 
@@ -601,7 +645,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			<ItemList
 				ref={this.itemListRef}
 				itemHeight={style.itemHeight}
-				items={this.state.results}
+				items={this.state.filteredResults}
 				style={itemListStyle}
 				itemRenderer={this.renderItem}
 			/>
@@ -618,8 +662,13 @@ class Dialog extends React.PureComponent<Props, State> {
 				<div style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
+						<label style={{ marginRight: 8 }}>検索</label>
 						<input autoFocus type="text" style={style.input} ref={this.inputRef} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
 						<HelpButton onClick={this.helpButton_onClick} />
+					</div>
+					<div style={style.inputHelpWrapper}>
+						<label style={{ marginRight: 8 }}>フィルタ</label>
+						<input type="text" style={{ flex: 1, width: '100%' }} onKeyDown={this.filterOnKeyDown}/>
 					</div>
 					{this.renderList()}
 				</div>
