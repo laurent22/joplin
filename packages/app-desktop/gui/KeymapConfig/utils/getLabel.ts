@@ -28,6 +28,8 @@ const getLabel = (commandName: string): string => {
 		return _('Close Window');
 	case 'commandPalette':
 		return _('Command palette');
+	case 'quickSearch':
+		return _('Quick Search...');
 	case 'config':
 		return shim.isMac() ? _('Preferences') : _('Options');
 	}

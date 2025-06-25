@@ -92,6 +92,7 @@ const globalCommands = [
 	require('./commands/exportNotes'),
 	require('./commands/focusElement'),
 	require('./commands/openProfileDirectory'),
+	require('./commands/quickSearch'),
 	require('./commands/replaceMisspelling'),
 	require('./commands/startExternalEditing'),
 	require('./commands/stopExternalEditing'),
@@ -107,6 +108,7 @@ import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDe
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
+	require('./plugins/QuickSearch').default,
 ];
 
 interface AppStateRoute {
