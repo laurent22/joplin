@@ -1,7 +1,7 @@
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import { remove, readFile } from 'fs-extra';
-import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import { NoteEntity } from '../database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 import BaseModel from '../../BaseModel';
@@ -223,7 +223,7 @@ describe('InteropService_Importer_OneNote', () => {
 	skipIfNotCI('should be able to create notes from corrupted attachment', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
-		const notes = await importNote(`${supportDir}/onenote/corrupted_attachment.zip`);
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/corrupted_attachment.zip`));
 
 		expectWithInstructions(notes.length).toBe(2);
 
@@ -249,7 +249,7 @@ describe('InteropService_Importer_OneNote', () => {
 	skipIfNotCI('should use default value for EntityGuid and InkBias if not found', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
-		const notes = await importNote(`${supportDir}/onenote/ink_bias_and_entity_guid.zip`);
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/ink_bias_and_entity_guid.zip`));
 
 		// InkBias bug
 		expect(notes.find(n => n.title === 'Marketing Funnel & Training').body).toMatchSnapshot();
