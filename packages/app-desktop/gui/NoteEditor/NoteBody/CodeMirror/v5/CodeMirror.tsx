@@ -646,6 +646,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				showIconForNoteLinks: props.showIconForNoteLinks,
 			}));
 
 			if (cancelled) return;

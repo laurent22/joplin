@@ -814,6 +814,15 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			appTypes: [AppType.Cli, AppType.Desktop],
 		},
+		'notes.showIconForNoteLinks': {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.Database,
+			section: 'appearance',
+			public: true,
+			label: () => _('Show J icon for note links'),
+			appTypes: [AppType.Desktop, AppType.Mobile],
+		},
 		'folders.sortOrder.field': {
 			value: 'title',
 			type: SettingItemType.String,

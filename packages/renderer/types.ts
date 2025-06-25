@@ -74,6 +74,8 @@ export interface RenderOptions {
 
 	platformName?: string;
 
+	showIconForNoteLinks?: boolean;
+
 	// HtmlToHtml only
 	whiteBackgroundNoteRendering?: boolean;
 }

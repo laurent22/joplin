@@ -131,6 +131,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 						linkRenderingType: LinkRenderingType.HrefHandler,
 					},
 				},
+				showIconForNoteLinks: Setting.value('notes.showIconForNoteLinks'),
 			});
 
 			const noteContent = [];

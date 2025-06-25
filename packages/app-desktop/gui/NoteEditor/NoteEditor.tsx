@@ -466,6 +466,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
+		showIconForNoteLinks: props.showIconForNoteLinks,
 	};
 
 	let editor = null;
@@ -722,6 +723,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
+		showIconForNoteLinks: state.settings['notes.showIconForNoteLinks'],
 	};
 };
 

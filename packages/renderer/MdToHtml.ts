@@ -205,6 +205,8 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
+
+	showIconForNoteLinks?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {
