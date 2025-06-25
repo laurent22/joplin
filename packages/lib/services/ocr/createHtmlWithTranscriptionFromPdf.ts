@@ -67,7 +67,6 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 	  
 		.image-container {
 			position: relative;
-			display: inline-block;
 		}
 
 		.image-container img {
