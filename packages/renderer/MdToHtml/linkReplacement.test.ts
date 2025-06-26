@@ -79,4 +79,28 @@ describe('linkReplacement', () => {
 		expect(linkHtml).toContain('ontouchend');
 		expect(linkHtml).toContain('ontouchcancel');
 	});
+
+	test('should show Joplin Icon for internal link by default', () => {
+		const resourceId = 'e6afba55bdf74568ac94f8d1e3578d2c';
+
+		const linkHtml = linkReplacement(`:/${resourceId}`, {
+			ResourceModel: defaultResourceModel,
+			resources: {},
+			showIconForNoteLinks: true,
+		}).html;
+
+		expect(linkHtml).toContain('<span class="resource-icon fa-joplin"></span>');
+	});
+
+	test('should not include Joplin Icon for internal link if configuration is not enabled', () => {
+		const resourceId = 'e6afba55bdf74568ac94f8d1e3578d2c';
+
+		const linkHtml = linkReplacement(`:/${resourceId}`, {
+			ResourceModel: defaultResourceModel,
+			resources: {},
+			showIconForNoteLinks: false,
+		}).html;
+
+		expect(linkHtml).not.toContain('<span class="resource-icon fa-joplin"></span>');
+	});
 });
