@@ -199,6 +199,7 @@ const useRerenderHandler = (props: Props) => {
 
 			createEditPopupSyntax,
 			destroyEditPopupSyntax,
+			showIconForNoteLinks: Setting.value('notes.showIconForNoteLinks'),
 		};
 
 		try {

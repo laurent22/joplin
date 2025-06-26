@@ -39,6 +39,8 @@ export interface RendererSettings {
 	pluginSettings: Record<string, any>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 	readAssetBlob: (assetPath: string)=> Promise<Blob>;
+
+	showIconForNoteLinks: boolean;
 }
 
 export interface MarkupRecord {
@@ -141,6 +143,8 @@ export default class Renderer {
 				return settings.pluginSettings[settingKey];
 			},
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+
+			showIconForNoteLinks: settings.showIconForNoteLinks,
 		};
 
 		this.markupToHtml.clearCache(markup.language);

@@ -19,6 +19,8 @@ const defaultRendererSettings: RendererSettings = {
 
 	pluginSettings: {},
 	requestPluginSetting: ()=>{},
+
+	showIconForNoteLinks: true,
 };
 
 const makeRenderer = (options: Partial<RendererSetupOptions>) => {
