@@ -41,7 +41,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
-	chatMessages: string[];
+	chatMessages: Array<{text: string; isUser: boolean}>;
 	chatInput: string;
 }
 
@@ -227,7 +227,8 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	private handleChatInputKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-		if (event.key === 'Enter') {
+		const keyCode = event.keyCode;
+		if (keyCode === 13) { // ENTER
 			if (event.shiftKey) {
 				// Shift + Enterで改行（デフォルトの動作を許可）
 				return;
@@ -242,10 +243,28 @@ class Dialog extends React.PureComponent<Props, State> {
 	private handleChatSend() {
 		const { chatInput, chatMessages } = this.state;
 		if (chatInput.trim() === '') return;
+
+		// ユーザーメッセージを追加
+		const newMessages = [...chatMessages, { text: chatInput, isUser: true }];
+
 		this.setState({
-			chatMessages: [...chatMessages, chatInput],
+			chatMessages: newMessages,
 			chatInput: '',
 		});
+
+		// APIを呼び出して回答を取得
+		this.reply(chatInput);
+	}
+
+	private reply(input: string) {
+		// サンプル実装：入力をそのまま返す
+		const response = `回答: ${input}`;
+
+		setTimeout(() => {
+			this.setState(prevState => ({
+				chatMessages: [...prevState.chatMessages, { text: response, isUser: false }],
+			}));
+		}, 500); // 500ms遅延でリアルな感じに
 	}
 
 	public render() {
@@ -286,6 +305,20 @@ class Dialog extends React.PureComponent<Props, State> {
 			marginBottom: 4,
 			whiteSpace: 'pre-wrap',
 		};
+		const chatBubbleReplyStyle: React.CSSProperties = {
+			alignSelf: 'flex-start',
+			background: '#f0f0f0',
+			color: '#333',
+			borderRadius: '16px 16px 16px 16px',
+			padding: '12px 20px',
+			maxWidth: '50%',
+			minWidth: '30%',
+			wordBreak: 'break-word',
+			position: 'relative',
+			marginLeft: 12,
+			marginBottom: 4,
+			whiteSpace: 'pre-wrap',
+		};
 		const chatInputRowStyle: React.CSSProperties = {
 			display: 'flex',
 			gap: 8,
@@ -323,6 +356,17 @@ class Dialog extends React.PureComponent<Props, State> {
 					border-left: 16px solid #4f8cff;
 					border-bottom: 12px solid transparent;
 				}
+				.chat-bubble-reply::after {
+					content: "";
+					position: absolute;
+					left: -8px;
+					bottom: 8px;
+					width: 0;
+					height: 0;
+					border-top: 12px solid transparent;
+					border-right: 16px solid #f0f0f0;
+					border-bottom: 12px solid transparent;
+				}
 				`}</style>
 				<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 					<div style={style.dialogBox}>
@@ -331,7 +375,13 @@ class Dialog extends React.PureComponent<Props, State> {
 						<div style={chatContainerStyle}>
 							<div style={chatMessagesStyle}>
 								{this.state.chatMessages.map((msg, idx) => (
-									<div key={idx} style={chatBubbleStyle} className="chat-bubble">{msg}</div>
+									<div
+										key={idx}
+										style={msg.isUser ? chatBubbleStyle : chatBubbleReplyStyle}
+										className={msg.isUser ? 'chat-bubble' : 'chat-bubble-reply'}
+									>
+										{msg.text}
+									</div>
 								))}
 							</div>
 							<div style={chatInputRowStyle}>
