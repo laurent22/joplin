@@ -100,6 +100,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
 		this.handleChatInputChange = this.handleChatInputChange.bind(this);
 		this.handleChatSend = this.handleChatSend.bind(this);
+		this.handleChatInputKeyDown = this.handleChatInputKeyDown.bind(this);
 
 	}
 
@@ -221,8 +222,21 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	private handleChatInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+	private handleChatInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		this.setState({ chatInput: event.target.value });
+	}
+
+	private handleChatInputKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+		if (event.key === 'Enter') {
+			if (event.shiftKey) {
+				// Shift + Enterで改行（デフォルトの動作を許可）
+				return;
+			} else {
+				// Enterのみで送信
+				event.preventDefault();
+				this.handleChatSend();
+			}
+		}
 	}
 
 	private handleChatSend() {
@@ -280,6 +294,10 @@ class Dialog extends React.PureComponent<Props, State> {
 			padding: 8,
 			borderRadius: 8,
 			border: '1px solid #ccc',
+			resize: 'none',
+			minHeight: 40,
+			maxHeight: 120,
+			fontFamily: 'inherit',
 		};
 		const chatSendButtonStyle: React.CSSProperties = {
 			padding: '8px 16px',
@@ -316,13 +334,12 @@ class Dialog extends React.PureComponent<Props, State> {
 								))}
 							</div>
 							<div style={chatInputRowStyle}>
-								<input
-									type="text"
+								<textarea
 									value={this.state.chatInput}
 									onChange={this.handleChatInputChange}
 									style={chatInputStyle}
 									placeholder="メッセージを入力..."
-									onKeyDown={e => { if (e.key === 'Enter') this.handleChatSend(); }}
+									onKeyDown={this.handleChatInputKeyDown}
 								/>
 								<button style={chatSendButtonStyle} onClick={this.handleChatSend}>送信</button>
 							</div>
