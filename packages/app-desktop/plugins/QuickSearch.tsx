@@ -46,6 +46,8 @@ interface State {
 	filterWord: string;
 	chatMessages: Array<{text: string; isUser: boolean}>;
 	chatInput: string;
+	dialogWidth: number; // 追加: ダイアログの幅
+	dialogHeight: number; // 追加: ダイアログの高さ
 }
 
 
@@ -92,6 +94,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			filterWord: '',
 			chatMessages: [...chatHistory], // 保存された履歴を復元
 			chatInput: '',
+			dialogWidth: 900, // デフォルト幅を大きく
+			dialogHeight: 700, // デフォルト高さを大きく
 		};
 
 		this.styles_ = {};
@@ -287,7 +291,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const chatContainerStyle: React.CSSProperties = {
 			display: 'flex',
 			flexDirection: 'column',
-			height: 300,
+			height: (this.state.dialogHeight || 700) - 120, // ダイアログ高さから余白を引く
 			border: '1px solid #ccc',
 			borderRadius: 8,
 			padding: 8,
