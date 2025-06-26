@@ -67,7 +67,7 @@ class QuickSearch {
 class Dialog extends React.PureComponent<Props, State> {
 
 	private styles_: any;
-	private inputRef: any;
+	// private inputRef: any;
 
 	private listUpdateIID_: any;
 	// private markupToHtml_: any;
@@ -93,7 +93,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 		this.styles_ = {};
 
-		this.inputRef = React.createRef();
+		// this.inputRef = React.createRef();
 
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
@@ -262,10 +262,14 @@ class Dialog extends React.PureComponent<Props, State> {
 			alignSelf: 'flex-end',
 			background: '#4f8cff',
 			color: 'white',
-			borderRadius: '16px 16px 0 16px',
-			padding: '8px 16px',
+			borderRadius: '16px 16px 4px 16px',
+			padding: '12px 20px',
 			maxWidth: '70%',
+			minWidth: '70%',
 			wordBreak: 'break-word',
+			position: 'relative',
+			marginRight: 12,
+			marginBottom: 4,
 		};
 		const chatInputRowStyle: React.CSSProperties = {
 			display: 'flex',
@@ -287,30 +291,45 @@ class Dialog extends React.PureComponent<Props, State> {
 		};
 
 		return (
-			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
-				<div style={style.dialogBox}>
-					{helpComp}
-					{/* --- Chat UI --- */}
-					<div style={chatContainerStyle}>
-						<div style={chatMessagesStyle}>
-							{this.state.chatMessages.map((msg, idx) => (
-								<div key={idx} style={chatBubbleStyle}>{msg}</div>
-							))}
-						</div>
-						<div style={chatInputRowStyle}>
-							<input
-								type="text"
-								value={this.state.chatInput}
-								onChange={this.handleChatInputChange}
-								style={chatInputStyle}
-								placeholder="メッセージを入力..."
-								onKeyDown={e => { if (e.key === 'Enter') this.handleChatSend(); }}
-							/>
-							<button style={chatSendButtonStyle} onClick={this.handleChatSend}>送信</button>
+			<>
+				<style>{`
+				.chat-bubble::after {
+					content: "";
+					position: absolute;
+					right: -8px;
+					bottom: 8px;
+					width: 0;
+					height: 0;
+					border-top: 12px solid transparent;
+					border-left: 16px solid #4f8cff;
+					border-bottom: 12px solid transparent;
+				}
+				`}</style>
+				<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
+					<div style={style.dialogBox}>
+						{helpComp}
+						{/* --- Chat UI --- */}
+						<div style={chatContainerStyle}>
+							<div style={chatMessagesStyle}>
+								{this.state.chatMessages.map((msg, idx) => (
+									<div key={idx} style={chatBubbleStyle} className="chat-bubble">{msg}</div>
+								))}
+							</div>
+							<div style={chatInputRowStyle}>
+								<input
+									type="text"
+									value={this.state.chatInput}
+									onChange={this.handleChatInputChange}
+									style={chatInputStyle}
+									placeholder="メッセージを入力..."
+									onKeyDown={e => { if (e.key === 'Enter') this.handleChatSend(); }}
+								/>
+								<button style={chatSendButtonStyle} onClick={this.handleChatSend}>送信</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</>
 		);
 	}
 
