@@ -41,6 +41,8 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
+	chatMessages: string[];
+	chatInput: string;
 }
 
 
@@ -85,6 +87,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			showHelp: false,
 			resultsInBody: false,
 			filterWord: '',
+			chatMessages: [],
+			chatInput: '',
 		};
 
 		this.styles_ = {};
@@ -94,6 +98,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.onKeyDown = this.onKeyDown.bind(this);
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.modalLayer_onClick = this.modalLayer_onClick.bind(this);
+		this.handleChatInputChange = this.handleChatInputChange.bind(this);
+		this.handleChatSend = this.handleChatSend.bind(this);
 
 	}
 
@@ -215,19 +221,93 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	private handleChatInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({ chatInput: event.target.value });
+	}
+
+	private handleChatSend() {
+		const { chatInput, chatMessages } = this.state;
+		if (chatInput.trim() === '') return;
+		this.setState({
+			chatMessages: [...chatMessages, chatInput],
+			chatInput: '',
+		});
+	}
+
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
+		// --- Chat UI ---
+		const chatContainerStyle: React.CSSProperties = {
+			display: 'flex',
+			flexDirection: 'column',
+			height: 300,
+			border: '1px solid #ccc',
+			borderRadius: 8,
+			padding: 8,
+			marginBottom: 16,
+			background: '#fafbfc',
+		};
+		const chatMessagesStyle: React.CSSProperties = {
+			flex: 1,
+			overflowY: 'auto',
+			marginBottom: 8,
+			display: 'flex',
+			flexDirection: 'column',
+			gap: 8,
+		};
+		const chatBubbleStyle: React.CSSProperties = {
+			alignSelf: 'flex-end',
+			background: '#4f8cff',
+			color: 'white',
+			borderRadius: '16px 16px 0 16px',
+			padding: '8px 16px',
+			maxWidth: '70%',
+			wordBreak: 'break-word',
+		};
+		const chatInputRowStyle: React.CSSProperties = {
+			display: 'flex',
+			gap: 8,
+		};
+		const chatInputStyle: React.CSSProperties = {
+			flex: 1,
+			padding: 8,
+			borderRadius: 8,
+			border: '1px solid #ccc',
+		};
+		const chatSendButtonStyle: React.CSSProperties = {
+			padding: '8px 16px',
+			borderRadius: 8,
+			background: '#4f8cff',
+			color: 'white',
+			border: 'none',
+			cursor: 'pointer',
+		};
+
 		return (
 			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 				<div style={style.dialogBox}>
 					{helpComp}
-					<div style={style.inputHelpWrapper}>
-						<label style={{ marginRight: 8 }}>入力</label>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} onKeyDown={this.input_onKeyDown} />
-
+					{/* --- Chat UI --- */}
+					<div style={chatContainerStyle}>
+						<div style={chatMessagesStyle}>
+							{this.state.chatMessages.map((msg, idx) => (
+								<div key={idx} style={chatBubbleStyle}>{msg}</div>
+							))}
+						</div>
+						<div style={chatInputRowStyle}>
+							<input
+								type="text"
+								value={this.state.chatInput}
+								onChange={this.handleChatInputChange}
+								style={chatInputStyle}
+								placeholder="メッセージを入力..."
+								onKeyDown={e => { if (e.key === 'Enter') this.handleChatSend(); }}
+							/>
+							<button style={chatSendButtonStyle} onClick={this.handleChatSend}>送信</button>
+						</div>
 					</div>
 				</div>
 			</div>
