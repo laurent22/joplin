@@ -604,7 +604,6 @@ describe('services/SearchEngine', () => {
 			const normalized = await db().selectAll('select * from items_fts');
 			expect(normalized[0].body).toBe('hello, how are you ?');
 
-			const searchInContextExtracted = Setting.value('ocr.searchInContentExtracted');
 			Setting.setValue('ocr.searchInContentExtracted', isSearchEnabled);
 
 			const rows = await engine.search('hello', {
@@ -612,8 +611,6 @@ describe('services/SearchEngine', () => {
 				includeOrphanedResources: true,
 			});
 			expect(rows.length).toBe(resourcesFound);
-
-			Setting.setValue('ocr.searchInContentExtracted', searchInContextExtracted);
 		});
 
 });
