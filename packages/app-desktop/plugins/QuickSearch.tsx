@@ -125,7 +125,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		this.styles_[styleKey] = {
-			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '50%', maxWidth: '50%' }),
+			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '80%', maxWidth: '80%', minHeight: '80%', maxHeight: '80%' }),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
 			row: {
 				overflow: 'hidden',
@@ -301,7 +301,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const chatContainerStyle: React.CSSProperties = {
 			display: 'flex',
 			flexDirection: 'column',
-			height: (this.state.dialogHeight || 700) - 120, // ダイアログ高さから余白を引く
+			height: 'calc(80vh)', // dialogBoxのminHeight/maxHeight: '80%'に合わせて
 			border: '1px solid #ccc',
 			borderRadius: 8,
 			padding: 8,
