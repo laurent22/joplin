@@ -282,6 +282,16 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, 500); // 500ms遅延でリアルな感じに
 	}
 
+
+
+	private handleClearHistory = () => {
+		this.setState({
+			chatMessages: [],
+		});
+		// メモリからも履歴を削除
+		chatHistory = [];
+	};
+
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
@@ -357,6 +367,22 @@ class Dialog extends React.PureComponent<Props, State> {
 			cursor: 'pointer',
 		};
 
+		const clearHistoryBtnStyle: React.CSSProperties = {
+			position: 'absolute',
+			top: 10,
+			right: 10,
+			zIndex: 10,
+			background: '#ff6b6b',
+			color: 'white',
+			border: 'none',
+			borderRadius: 6,
+			padding: '4px 12px',
+			fontSize: 14,
+			cursor: 'pointer',
+			boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+			transition: 'background 0.2s',
+		};
+
 		return (
 			<>
 				<style>{`
@@ -385,6 +411,9 @@ class Dialog extends React.PureComponent<Props, State> {
 				`}</style>
 				<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 					<div style={style.dialogBox}>
+						<button style={clearHistoryBtnStyle} onClick={this.handleClearHistory} title="履歴を削除">
+							🗑️
+						</button>
 						{helpComp}
 						{/* --- Chat UI --- */}
 						<div style={chatContainerStyle}>
