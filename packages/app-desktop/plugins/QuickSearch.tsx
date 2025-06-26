@@ -12,6 +12,9 @@ import BaseModel from '@joplin/lib/BaseModel';
 
 const PLUGIN_NAME = 'quickSearch';
 
+// 会話履歴をメモリに保存するための静的変数
+let chatHistory: Array<{text: string; isUser: boolean}> = [];
+
 interface SearchResult {
 	id: string;
 	title: string;
@@ -87,7 +90,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			showHelp: false,
 			resultsInBody: false,
 			filterWord: '',
-			chatMessages: [],
+			chatMessages: [...chatHistory], // 保存された履歴を復元
 			chatInput: '',
 		};
 
@@ -252,6 +255,9 @@ class Dialog extends React.PureComponent<Props, State> {
 			chatInput: '',
 		});
 
+		// 履歴をメモリに保存
+		chatHistory = newMessages;
+
 		// APIを呼び出して回答を取得
 		this.reply(chatInput);
 	}
@@ -261,9 +267,14 @@ class Dialog extends React.PureComponent<Props, State> {
 		const response = `回答: ${input}`;
 
 		setTimeout(() => {
-			this.setState(prevState => ({
-				chatMessages: [...prevState.chatMessages, { text: response, isUser: false }],
-			}));
+			this.setState(prevState => {
+				const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
+				// 履歴をメモリに保存
+				chatHistory = newMessages;
+				return {
+					chatMessages: newMessages,
+				};
+			});
 		}, 500); // 500ms遅延でリアルな感じに
 	}
 
