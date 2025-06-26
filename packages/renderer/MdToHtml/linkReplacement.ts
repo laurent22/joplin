@@ -80,7 +80,6 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			if (mime) {
 				iconType = getClassNameForMimeType(mime);
 			} else {
-				// This is likely a note link (no mime type)
 				iconType = options.showIconForNoteLinks ? 'fa-joplin' : '';
 			}
 
