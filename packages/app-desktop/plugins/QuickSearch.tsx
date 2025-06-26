@@ -15,7 +15,6 @@ import Note from '@joplin/lib/models/Note';
 const { ItemList } = require('../gui/ItemList.min');
 const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
-import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import * as cheerio from 'cheerio';
 
@@ -61,18 +60,18 @@ interface QuickSearchItem {
 
 class QuickSearch {
 
-	public dispatch: Function;
+	// private dispatch: Function;
 	public static Dialog: any;
 	public static manifest: any;
 
-	onTrigger(event: any) {
-		this.dispatch({
-			type: 'PLUGINLEGACY_DIALOG_SET',
-			open: true,
-			pluginName: PLUGIN_NAME,
-			userData: event.userData,
-		});
-	}
+	// private onTrigger(event: any) {
+	// 	this.dispatch({
+	// 		type: 'PLUGINLEGACY_DIALOG_SET',
+	// 		open: true,
+	// 		pluginName: PLUGIN_NAME,
+	// 		userData: event.userData,
+	// 	});
+	// }
 
 }
 
@@ -85,9 +84,9 @@ class Dialog extends React.PureComponent<Props, State> {
 	private inputRef: any;
 	private itemListRef: any;
 	private listUpdateIID_: any;
-	private markupToHtml_: any;
+	// private markupToHtml_: any;
 
-	constructor(props: Props) {
+	private constructor(props: Props) {
 		super(props);
 
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
@@ -121,7 +120,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		if (startString) this.scheduleListUpdate();
 	}
 
-	style() {
+	private style() {
 		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0'].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
@@ -185,7 +184,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.styles_[styleKey];
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
 
 		this.props.dispatch({
@@ -194,7 +193,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
 
@@ -204,7 +203,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	}
 
-	onKeyDown(event: any) {
+	private onKeyDown(event: any) {
 		if (event.keyCode === 27) { // ESCAPE
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -214,7 +213,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	modalLayer_onClick(event: any) {
+	private modalLayer_onClick(event: any) {
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -224,11 +223,11 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	helpButton_onClick() {
+	private helpButton_onClick() {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	input_onChange(event: any) {
+	private input_onChange(event: any) {
 		if (gOnChangeTimer) {
 			clearTimeout(gOnChangeTimer);
 			gOnChangeTimer = null;
@@ -244,7 +243,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, gTimerDelay);
 	}
 
-	scheduleListUpdate() {
+	private scheduleListUpdate() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 
 		this.listUpdateIID_ = shim.setTimeout(async () => {
@@ -253,7 +252,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}, 100);
 	}
 
-	makeSearchQuery(query: string) {
+	private makeSearchQuery(query: string) {
 		const output = [];
 		const splitted = query.split(' ');
 
@@ -266,155 +265,177 @@ class Dialog extends React.PureComponent<Props, State> {
 		return output.join(' ');
 	}
 
-	async keywords(searchQuery: string) {
+	private async keywords(searchQuery: string) {
 		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
-	markupToHtml() {
-		if (this.markupToHtml_) return this.markupToHtml_;
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({});
-		return this.markupToHtml_;
+
+	private async searchCommands(query: string): Promise<SearchResult[]> {
+		const commandResults = CommandService.instance().searchCommands(query, true);
+		return commandResults.map((result: CommandSearchResult) => {
+			return {
+				id: result.commandName,
+				title: result.title,
+				parent_id: null as any,
+				fields: [] as any[],
+				type: BaseModel.TYPE_COMMAND,
+				key: result.commandName,
+			};
+		});
 	}
 
-	async updateList() {
+	private async searchTags(query: string): Promise<SearchResult[]> {
+		const searchQuery = `*${query.split(' ')[0].substr(1).trim()}*`;
+		return await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+	}
+
+	private async searchFolders(query: string): Promise<SearchResult[]> {
+		const searchQuery = `*${query.split(' ')[0].substr(1).trim()}*`;
+		const results = await Folder.search({ titlePattern: searchQuery });
+
+		for (let i = 0; i < results.length; i++) {
+			const row = results[i];
+			const path = Folder.folderPathString(this.props.folders, row.parent_id);
+			results[i] = Object.assign({}, row, { path: path ? path : '/' });
+		}
+		return results;
+	}
+
+	private async searchNotes(query: string): Promise<{ results: SearchResult[]; resultsInBody: boolean }> {
+		const searchQuery = this.makeSearchQuery(query);
+		let results = await SearchEngine.instance().search(searchQuery);
+		const resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
+
+		if (!resultsInBody || query.length <= 1) {
+			for (let i = 0; i < results.length; i++) {
+				const row = results[i];
+				const path = Folder.folderPathString(this.props.folders, row.parent_id);
+				results[i] = Object.assign({}, row, { path: path });
+			}
+		} else {
+			results = await this.processNotesWithFragments(results, searchQuery);
+		}
+
+		if (!this.props.showCompletedTodos) {
+			results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+		}
+
+		return { results, resultsInBody };
+	}
+
+	private async processNotesWithFragments(results: any[], searchQuery: string): Promise<SearchResult[]> {
+		const limit = 20;
+		const searchKeywords = await this.keywords(searchQuery);
+		const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+		// @ts-ignore
+		const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+
+		let ri = 0;
+		const exists: Record<string, boolean> = {};
+		const tempResults: SearchResult[] = [];
+
+		for (let i = 0; i < results.length; i++) {
+			const row = results[i];
+			const path = Folder.folderPathString(this.props.folders, row.parent_id);
+
+			if (row.fields.includes('body')) {
+				const fragmentsList = this.extractFragments(row, notesById, searchKeywords, i, limit, exists);
+				for (const tempFragment of fragmentsList) {
+					tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
+					ri++;
+				}
+			} else {
+				tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
+				ri++;
+			}
+		}
+		return tempResults;
+	}
+
+	private extractFragments(row: any, notesById: any, searchKeywords: any[], index: number, limit: number, exists: Record<string, boolean>): string[] {
+		const fragmentsList: string[] = [];
+
+		if (index < limit) {
+			const indices = [];
+			const note = notesById[row.id];
+			const body = note.body;
+
+			for (let { valueRegex } of searchKeywords) {
+				valueRegex = removeDiacritics(valueRegex);
+				for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+					indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+					if (indices.length > 20) break;
+				}
+			}
+
+			for (const indexPair of indices) {
+				const fragments = body.slice(indexPair[0], indexPair[1]);
+				if (fragments.length > 0 && !exists[fragments]) {
+					exists[fragments] = true;
+					fragmentsList.push(fragments);
+				}
+			}
+		}
+		return fragmentsList;
+	}
+
+	private async updateList() {
 		const updateListStart = Date.now();
 		let resultsInBody = false;
 
 		if (!this.state.query) {
 			this.setState({ results: [], keywords: [] });
-		} else {
-			let results: SearchResult[] = [];
-			let listType = null;
-			let searchQuery = '';
-			let keywords = null;
+			return;
+		}
 
-			if (this.state.query.indexOf(':') === 0) { // COMMANDS
-				const query = this.state.query.substr(1);
-				listType = BaseModel.TYPE_COMMAND;
-				keywords = [query];
+		let results: SearchResult[] = [];
+		let listType = null;
+		let keywords = null;
 
-				const commandResults = CommandService.instance().searchCommands(query, true);
+		if (this.state.query.indexOf(':') === 0) { // COMMANDS
+			const query = this.state.query.substr(1);
+			listType = BaseModel.TYPE_COMMAND;
+			keywords = [query];
+			results = await this.searchCommands(query);
+		} else if (this.state.query.indexOf('#') === 0) { // TAGS
+			listType = BaseModel.TYPE_TAG;
+			results = await this.searchTags(this.state.query);
+		} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
+			listType = BaseModel.TYPE_FOLDER;
+			results = await this.searchFolders(this.state.query);
+		} else { // Note TITLE or BODY
+			listType = BaseModel.TYPE_NOTE;
+			const searchResult = await this.searchNotes(this.state.query);
+			results = searchResult.results;
+			resultsInBody = searchResult.resultsInBody;
+		}
 
-				results = commandResults.map((result: CommandSearchResult) => {
-					return {
-						id: result.commandName,
-						title: result.title,
-						parent_id: null as any,
-						fields: [] as any[],
-						type: BaseModel.TYPE_COMMAND,
-						key: result.commandName,
-					};
-				});
-			} else if (this.state.query.indexOf('#') === 0) { // TAGS
-				listType = BaseModel.TYPE_TAG;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
-			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
-				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Folder.search({ titlePattern: searchQuery });
-
-				for (let i = 0; i < results.length; i++) {
-					const row = results[i];
-					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = Object.assign({}, row, { path: path ? path : '/' });
-				}
-			} else { // Note TITLE or BODY
-				listType = BaseModel.TYPE_NOTE;
-				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
-
-				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
-
-				if (!resultsInBody || this.state.query.length <= 1) {
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-						results[i] = Object.assign({}, row, { path: path });
-					}
-				} else {
-					const limit = 20;
-					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
-					// @ts-ignore
-					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
-
-					let ri = 0;
-					const exists: Record<string, boolean> = {};
-					const tempResults: SearchResult[] = [];
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-
-						if (row.fields.includes('body')) {
-							let fragments = '...';
-							const fragmentsList: string[] = [];
-
-							if (i < limit) {
-								const indices = [];
-								const note = notesById[row.id];
-								const body = note.body;
-
-								for (let { valueRegex } of searchKeywords) {
-									valueRegex = removeDiacritics(valueRegex);
-
-									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
-										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
-										if (indices.length > 20) break;
-									}
-								}
-
-								for (const index of indices) {
-									fragments = body.slice(index[0], index[1]);
-									if (fragments.length > 0) {
-										if (exists[fragments]) {
-											continue;
-										}
-										exists[fragments] = true;
-										fragmentsList.push(fragments);
-									}
-								}
-							}
-							for (const tempFragment of fragmentsList) {
-								tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
-								ri++;
-							}
-						} else {
-							tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
-							ri++;
-						}
-					}
-					results = tempResults;
-					if (!this.props.showCompletedTodos) {
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
-					}
-				}
-			}
-
-			// make list scroll to top in every search
-			this.itemListRef.current.makeItemIndexVisible(0);
-			let filteredResults = results;
-			if (this.state.filterWord) {
-				filteredResults = results.filter((item: SearchResult) => {
-					const fragment = item.fragments ? item.fragments : '';
-					return fragment.includes(this.state.filterWord) || item.title.includes(this.state.filterWord);
-				});
-			}
-			this.setState({
-				listType: listType,
-				results: results,
-				filteredResults: filteredResults,
-				keywords: keywords ? keywords : await this.keywords(searchQuery),
-				selectedItemId: results.length === 0 ? null : results[0].id,
-				resultsInBody: resultsInBody,
+		// make list scroll to top in every search
+		this.itemListRef.current.makeItemIndexVisible(0);
+		let filteredResults = results;
+		if (this.state.filterWord) {
+			filteredResults = results.filter((item: SearchResult) => {
+				const fragment = item.fragments ? item.fragments : '';
+				return fragment.includes(this.state.filterWord) || item.title.includes(this.state.filterWord);
 			});
 		}
+
+		const searchQuery = this.makeSearchQuery(this.state.query);
+		this.setState({
+			listType: listType,
+			results: results,
+			filteredResults: filteredResults,
+			keywords: keywords ? keywords : await this.keywords(searchQuery),
+			selectedItemId: results.length === 0 ? null : results[0].id,
+			resultsInBody: resultsInBody,
+		});
+
 		const updateListEnd = Date.now();
 		console.info(`QuickSearch: updateList took ${updateListEnd - updateListStart}ms for query "${this.state.query}" with ${this.state.results.length} results`);
 	}
 
-	async gotoItem(item: QuickSearchItem) {
+	private async gotoItem(item: QuickSearchItem) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -461,7 +482,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	extractFirstTextFromFragment(fragment: string): string {
+	private extractFirstTextFromFragment(fragment: string): string {
 		let fragmentText = fragment;
 		try {
 			const $ = cheerio.load(`<root>${fragment}</root>`);
@@ -478,7 +499,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return fragmentText.trim();
 	}
 
-	listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
+	private listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		const parentId = event.currentTarget.getAttribute('data-parent-id');
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
@@ -498,7 +519,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		void this.gotoItem(item);
 	}
 
-	renderItem(item: SearchResult) {
+	private renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const key = item.key === undefined ? item.id : item.key;
@@ -523,7 +544,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
-	selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
+	private selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -533,13 +554,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		return -1;
 	}
 
-	selectedItem() {
-		const index = this.selectedItemIndex();
-		if (index < 0) return null;
-		return this.state.results[index];
-	}
-
-	filterOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+	private filterOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
 		const keyCode = event.keyCode;
 		if (keyCode === 13) { // ENTER
 			event.preventDefault();
@@ -557,7 +572,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	input_onKeyDown(event: any) {
+	private input_onKeyDown(event: any) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -593,7 +608,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	renderList() {
+	private renderList() {
 		const style = this.style();
 
 		const itemListStyle = {
@@ -611,7 +626,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		);
 	}
 
-	render() {
+	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
 		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
