@@ -284,6 +284,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			position: 'relative',
 			marginRight: 12,
 			marginBottom: 4,
+			whiteSpace: 'pre-wrap',
 		};
 		const chatInputRowStyle: React.CSSProperties = {
 			display: 'flex',
