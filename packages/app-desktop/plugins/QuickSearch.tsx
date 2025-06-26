@@ -48,6 +48,9 @@ interface State {
 	chatInput: string;
 	dialogWidth: number; // 追加: ダイアログの幅
 	dialogHeight: number; // 追加: ダイアログの高さ
+	isResizing: boolean; // リサイズ中かどうか
+	resizeStartX: number; // リサイズ開始時のX座標
+	resizeStartY: number; // リサイズ開始時のY座標
 }
 
 
@@ -96,6 +99,9 @@ class Dialog extends React.PureComponent<Props, State> {
 			chatInput: '',
 			dialogWidth: 900, // デフォルト幅を大きく
 			dialogHeight: 700, // デフォルト高さを大きく
+			isResizing: false,
+			resizeStartX: 0,
+			resizeStartY: 0,
 		};
 
 		this.styles_ = {};
@@ -108,11 +114,14 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.handleChatInputChange = this.handleChatInputChange.bind(this);
 		this.handleChatSend = this.handleChatSend.bind(this);
 		this.handleChatInputKeyDown = this.handleChatInputKeyDown.bind(this);
+		this.handleResizeStart = this.handleResizeStart.bind(this);
+		this.handleResizeMove = this.handleResizeMove.bind(this);
+		this.handleResizeEnd = this.handleResizeEnd.bind(this);
 
 	}
 
 	private style() {
-		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0'].join('-');
+		const styleKey = [this.props.themeId, this.state.listType, this.state.resultsInBody ? '1' : '0', this.state.dialogWidth, this.state.dialogHeight].join('-');
 
 		if (this.styles_[styleKey]) return this.styles_[styleKey];
 
@@ -122,10 +131,16 @@ class Dialog extends React.PureComponent<Props, State> {
 
 		if (this.state.listType === BaseModel.TYPE_COMMAND) {
 			itemHeight = 40;
-		}
-
-		this.styles_[styleKey] = {
-			dialogBox: Object.assign({}, theme.dialogBox, { minWidth: '80%', maxWidth: '80%', minHeight: '80%', maxHeight: '80%' }),
+		}		this.styles_[styleKey] = {
+			dialogBox: Object.assign({}, theme.dialogBox, {
+				width: this.state.dialogWidth,
+				height: this.state.dialogHeight,
+				minWidth: this.state.dialogWidth,
+				maxWidth: this.state.dialogWidth,
+				minHeight: this.state.dialogHeight,
+				maxHeight: this.state.dialogHeight,
+				position: 'relative',
+			}),
 			input: Object.assign({}, theme.inputStyle, { flex: 1 }),
 			row: {
 				overflow: 'hidden',
@@ -177,6 +192,8 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	public componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
+		document.addEventListener('mousemove', this.handleResizeMove);
+		document.addEventListener('mouseup', this.handleResizeEnd);
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
@@ -187,6 +204,8 @@ class Dialog extends React.PureComponent<Props, State> {
 	public componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
+		document.removeEventListener('mousemove', this.handleResizeMove);
+		document.removeEventListener('mouseup', this.handleResizeEnd);
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_REMOVE',
@@ -292,6 +311,41 @@ class Dialog extends React.PureComponent<Props, State> {
 		chatHistory = [];
 	};
 
+	private handleResizeStart(event: React.MouseEvent) {
+		this.setState({
+			isResizing: true,
+			resizeStartX: event.clientX,
+			resizeStartY: event.clientY,
+		});
+		event.preventDefault();
+	}
+
+	private handleResizeMove = (event: MouseEvent) => {
+		if (!this.state.isResizing) return;
+
+		const deltaX = event.clientX - this.state.resizeStartX;
+		const deltaY = event.clientY - this.state.resizeStartY;
+
+		this.setState({
+			dialogWidth: Math.max(400, this.state.dialogWidth + deltaX),
+			dialogHeight: Math.max(300, this.state.dialogHeight + deltaY),
+			resizeStartX: event.clientX,
+			resizeStartY: event.clientY,
+		});
+		console.log('Resizing dialog:', {
+			width: this.state.dialogWidth + deltaX,
+			height: this.state.dialogHeight + deltaY,
+			resizeStartX: event.clientX,
+			resizeStartY: event.clientY,
+		});
+	};
+
+	private handleResizeEnd = () => {
+		this.setState({
+			isResizing: false,
+		});
+	};
+
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
@@ -301,7 +355,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const chatContainerStyle: React.CSSProperties = {
 			display: 'flex',
 			flexDirection: 'column',
-			height: 'calc(80vh)', // dialogBoxのminHeight/maxHeight: '80%'に合わせて
+			height: this.state.dialogHeight - 160, // ダイアログ高さから余白を引く
 			border: '1px solid #ccc',
 			borderRadius: 8,
 			padding: 8,
@@ -383,6 +437,17 @@ class Dialog extends React.PureComponent<Props, State> {
 			transition: 'background 0.2s',
 		};
 
+		const resizeHandleStyle: React.CSSProperties = {
+			position: 'absolute',
+			bottom: 0,
+			right: 0,
+			width: 20,
+			height: 20,
+			background: 'linear-gradient(-45deg, transparent 0%, transparent 30%, #ccc 30%, #ccc 40%, transparent 40%, transparent 50%, #ccc 50%, #ccc 60%, transparent 60%, transparent 70%, #ccc 70%, #ccc 80%, transparent 80%)',
+			cursor: 'nw-resize',
+			zIndex: 10,
+		};
+
 		return (
 			<>
 				<style>{`
@@ -439,6 +504,11 @@ class Dialog extends React.PureComponent<Props, State> {
 								<button style={chatSendButtonStyle} onClick={this.handleChatSend}>送信</button>
 							</div>
 						</div>
+						<div
+							style={resizeHandleStyle}
+							onMouseDown={this.handleResizeStart}
+							title="ダイアログサイズを変更"
+						/>
 					</div>
 				</div>
 			</>
