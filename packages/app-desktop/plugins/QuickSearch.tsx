@@ -195,6 +195,20 @@ class Dialog extends React.PureComponent<Props, State> {
 		document.addEventListener('mousemove', this.handleResizeMove);
 		document.addEventListener('mouseup', this.handleResizeEnd);
 
+		// JOPLIN_OAI_KEYを取得
+		this.oaiKey = (typeof process !== 'undefined' && process.env && process.env.JOPLIN_OAI_KEY) ? process.env.JOPLIN_OAI_KEY : null;
+
+		if (!this.oaiKey) {
+			const response = 'エラー: AI用の認証キーが設定されていません';
+			this.setState(prevState => {
+				const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
+				chatHistory = newMessages;
+				return { chatMessages: newMessages };
+			});
+			return;
+		}
+
+
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: 'quickSearch',
@@ -291,6 +305,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		// APIを呼び出して回答を取得
 		this.reply(chatInput);
 	}
+
+	private oaiKey: string | null = null;
 
 	private reply(input: string) {
 		// サンプル実装：入力をそのまま返す
