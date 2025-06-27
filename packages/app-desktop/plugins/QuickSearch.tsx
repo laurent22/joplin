@@ -355,7 +355,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const chatContainerStyle: React.CSSProperties = {
 			display: 'flex',
 			flexDirection: 'column',
-			height: this.state.dialogHeight - 160, // ダイアログ高さから余白を引く
+			height: this.state.dialogHeight, // ダイアログ高さから余白を引く
 			border: '1px solid #ccc',
 			borderRadius: 8,
 			padding: 8,
