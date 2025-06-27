@@ -311,10 +311,6 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	private reply(input: string) {
-		if (!this.oaiKey) {
-			this.addBotMessage('エラー: AI用の認証キーが設定されていません');
-			return;
-		}
 		// サンプル実装：入力をそのまま返す
 		const response = `回答: ${input}`;
 
