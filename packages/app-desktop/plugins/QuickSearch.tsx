@@ -199,15 +199,9 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.oaiKey = (typeof process !== 'undefined' && process.env && process.env.JOPLIN_OAI_KEY) ? process.env.JOPLIN_OAI_KEY : null;
 
 		if (!this.oaiKey) {
-			const response = 'エラー: AI用の認証キーが設定されていません';
-			this.setState(prevState => {
-				const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
-				chatHistory = newMessages;
-				return { chatMessages: newMessages };
-			});
+			this.addBotMessage('エラー: AI用の認証キーが設定されていません');
 			return;
 		}
-
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
@@ -308,19 +302,24 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	private oaiKey: string | null = null;
 
+	private addBotMessage(response: string) {
+		this.setState(prevState => {
+			const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
+			chatHistory = newMessages;
+			return { chatMessages: newMessages };
+		});
+	}
+
 	private reply(input: string) {
+		if (!this.oaiKey) {
+			this.addBotMessage('エラー: AI用の認証キーが設定されていません');
+			return;
+		}
 		// サンプル実装：入力をそのまま返す
 		const response = `回答: ${input}`;
 
 		setTimeout(() => {
-			this.setState(prevState => {
-				const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
-				// 履歴をメモリに保存
-				chatHistory = newMessages;
-				return {
-					chatMessages: newMessages,
-				};
-			});
+			this.addBotMessage(response);
 		}, 500); // 500ms遅延でリアルな感じに
 	}
 
