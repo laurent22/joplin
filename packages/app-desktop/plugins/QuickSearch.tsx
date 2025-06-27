@@ -223,7 +223,14 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	private ignoreNextModalLayerClick: boolean = false;
+
 	private modalLayer_onClick(event: any) {
+		if (this.state.isResizing) return;
+		if (this.ignoreNextModalLayerClick) {
+			this.ignoreNextModalLayerClick = false;
+			return;
+		}
 		if (event.currentTarget == event.target) {
 			this.props.dispatch({
 				pluginName: PLUGIN_NAME,
@@ -317,6 +324,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			resizeStartX: event.clientX,
 			resizeStartY: event.clientY,
 		});
+		this.ignoreNextModalLayerClick = false;
 		event.preventDefault();
 	}
 
@@ -341,6 +349,9 @@ class Dialog extends React.PureComponent<Props, State> {
 	};
 
 	private handleResizeEnd = () => {
+		if (this.state.isResizing) {
+			this.ignoreNextModalLayerClick = true;
+		}
 		this.setState({
 			isResizing: false,
 		});
