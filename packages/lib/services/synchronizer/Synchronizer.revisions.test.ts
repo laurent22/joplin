@@ -232,6 +232,20 @@ describe('Synchronizer.revisions', () => {
 	});
 
 	it('should delete old revisions and sync updated revisions remotely, when revision deletion retains some revisions locally', async () => {
+		// - C1 creates note 1
+		// - C1 modifies note 1 over a period of time - 2 revisions are created
+		// - C1 sync
+		// - C2 sync
+		// - C2 receives note 1 with the revisions
+		// - C2 deletes the oldest of the 2 revisions, leaving 1 merged revision
+		// - C2 sync
+		// - C1 sync
+		// - C1 receives 1 merged revision and the older one is deleted
+		//
+		// When at least one, but not all revisions are deleted for a note, the new oldest revision must be a merge of all
+		// previous revisions which were deleted. So in addition to verifying that old revision deletions are synced so that
+		// other clients will delete those revisions, we also need to verify that a merged revision is synced and is then updated
+		// when another client receives it
 		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000);
 		jest.useFakeTimers({ advanceTimers: true });
 
