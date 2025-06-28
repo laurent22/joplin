@@ -854,9 +854,6 @@ export default class BaseApplication {
 				});
 		}
 
-		time.setDateFormat(Setting.value('dateFormat'));
-		time.setTimeFormat(Setting.value('timeFormat'));
-
 		BaseItem.revisionService_ = RevisionService.instance();
 
 
