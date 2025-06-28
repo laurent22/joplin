@@ -27,7 +27,7 @@ export default class RevisionService extends BaseService {
 	// the original note is saved. The goal is to have at least one revision in case the note
 	// is deleted or modified as a result of a bug or user mistake.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private changedSinceCollectionCache_: any = {};
+	private changedSinceCollectionCache_: Set<string> = new Set();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceCalls_: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -48,10 +48,9 @@ export default class RevisionService extends BaseService {
 	}
 
 	public async changedSinceCollection(noteId: string) {
-		if (noteId in this.changedSinceCollectionCache_) return true;
+		if (this.changedSinceCollectionCache_.has(noteId)) return true;
 
-		// No particular value needs to be stored, but it is more performant to look up a key on an object than searching for a value in an array
-		this.changedSinceCollectionCache_[noteId] = null;
+		this.changedSinceCollectionCache_.add(noteId);
 
 		return false;
 	}
@@ -180,7 +179,7 @@ export default class RevisionService extends BaseService {
 								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
 
-								delete this.changedSinceCollectionCache_[noteId];
+								this.changedSinceCollectionCache_.delete(noteId);
 							}
 						}
 

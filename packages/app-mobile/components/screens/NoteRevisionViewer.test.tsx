@@ -35,7 +35,9 @@ const createNoteWithTestRevisions = async (count: number) => {
 	const noteId = note.id;
 
 	for (let i = 0; i < count; i++) {
-		jest.advanceTimersByTime(1000 * 60 * 10);
+		if (i > 0) {
+			jest.advanceTimersByTime(1000 * 60 * 10);
+		}
 		await Note.save({
 			id: noteId,
 			title: `Note - Updated (x${i + 1})`,
@@ -45,7 +47,7 @@ const createNoteWithTestRevisions = async (count: number) => {
 	}
 
 	// Verify that the revisions were created successfully
-	expect(await Revision.allByType(ModelType.Note, noteId)).toHaveLength(count + 1);
+	expect(await Revision.allByType(ModelType.Note, noteId)).toHaveLength(count);
 	return note;
 };
 
