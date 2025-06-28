@@ -8881,7 +8881,7 @@ __metadata:
     node-rsa: "npm:1.1.1"
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
-    re-resizable: "npm:6.10.4"
+    re-resizable: "npm:6.11.2"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-redux: "npm:8.1.3"
@@ -40889,13 +40889,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-resizable@npm:6.10.4":
-  version: 6.10.4
-  resolution: "re-resizable@npm:6.10.4"
+"re-resizable@npm:6.11.2":
+  version: 6.11.2
+  resolution: "re-resizable@npm:6.11.2"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/ee065a99d024992f22eada8a2c78051db4e50c80c0ee52013504141c3f60d134b75de13279629a285fa303de8d293b2d81986b3e803476c43fe323aec8cf1cf7
+  checksum: 10/3b814c61b77af294862bd36382b6f2e7f9a90a86f3696fd93780d39d2534c1fcbab68f63b088fc1e1935b1b9dba6c1ab8f61f4f4e6e5d16e86e5805bae40cfb6
   languageName: node
   linkType: hard
 
