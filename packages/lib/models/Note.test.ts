@@ -613,7 +613,7 @@ describe('models/Note', () => {
 	it('should delete the revisions when permanently deleting a note', (async () => {
 		const service = new RevisionService();
 		const folder = await Folder.save({ title: 'folder1' });
-		const note = await Note.save({ title: 'ma note', parent_id: folder.id });
+		const note = await Note.save({ title: 'my note', parent_id: folder.id });
 
 		await Note.save({
 			id: note.id,
@@ -633,7 +633,7 @@ describe('models/Note', () => {
 	it('should not delete the revisions when sending to trash', (async () => {
 		const service = new RevisionService();
 		const folder = await Folder.save({ title: 'folder1' });
-		const note = await Note.save({ title: 'ma note', parent_id: folder.id });
+		const note = await Note.save({ title: 'my note', parent_id: folder.id });
 
 		await Note.save({
 			id: note.id,
