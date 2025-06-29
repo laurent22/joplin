@@ -65,7 +65,7 @@
     "watchWebsite": "nodemon --delay 1 --watch Assets/WebsiteAssets --watch packages/tools/website --watch packages/tools/website/utils --watch packages/doc-builder/build --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
   "devDependencies": {
-    "@crowdin/cli": "3",
+    "@crowdin/cli": "4",
     "@joplin/utils": "~2.12",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
     "@typescript-eslint/eslint-plugin": "6.21.0",

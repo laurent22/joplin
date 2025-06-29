@@ -6080,18 +6080,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@crowdin/cli@npm:3":
-  version: 3.19.4
-  resolution: "@crowdin/cli@npm:3.19.4"
+"@crowdin/cli@npm:4":
+  version: 4.8.0
+  resolution: "@crowdin/cli@npm:4.8.0"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
     node-fetch: "npm:2.7.0"
     shelljs: "npm:^0.8.5"
-    tar: "npm:^6.2.0"
-    yauzl: "npm:^3.1.0"
+    tar: "npm:^7.4.3"
+    yauzl: "npm:^3.2.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/bab4e08be0a0693f787e170a669a750cae3478c8efb6936b32812076d71dcab92ef573f2d9ea701e7d6a5d7fbe95133c38a1dca62e0357d985901694e449f4a2
+  checksum: 10/68b70175d2431fcc636822ef8dcc737a79bf724911d6f00c3891a6248cdeb2777e684fb566fbf156f904c5f8baf64473b95cc979178b625bc74257c772d6dc98
   languageName: node
   linkType: hard
 
@@ -43380,7 +43380,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@crowdin/cli": "npm:3"
+    "@crowdin/cli": "npm:4"
     "@joplin/utils": "npm:~2.12"
     "@seiyab/eslint-plugin-react-hooks": "npm:4.5.1-beta.0"
     "@types/fs-extra": "npm:11.0.4"
@@ -46808,7 +46808,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.2.1, tar@npm:^6.2.0":
+"tar@npm:6.2.1":
   version: 6.2.1
   resolution: "tar@npm:6.2.1"
   dependencies:
@@ -51511,7 +51511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yauzl@npm:^3.1.0":
+"yauzl@npm:^3.2.0":
   version: 3.2.0
   resolution: "yauzl@npm:3.2.0"
   dependencies:
