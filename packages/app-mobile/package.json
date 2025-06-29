@@ -94,7 +94,7 @@
     "@joplin/tools": "~3.4",
     "@js-draw/material-icons": "1.30.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
-    "@react-native-community/cli": "16.0.0",
+    "@react-native-community/cli": "16.0.2",
     "@react-native-community/cli-platform-android": "16.0.0",
     "@react-native-community/cli-platform-ios": "15.0.1",
     "@react-native/babel-preset": "0.79.2",
