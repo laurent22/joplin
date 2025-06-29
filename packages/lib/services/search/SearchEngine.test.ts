@@ -604,7 +604,7 @@ describe('services/SearchEngine', () => {
 			const normalized = await db().selectAll('select * from items_fts');
 			expect(normalized[0].body).toBe('hello, how are you ?');
 
-			Setting.setValue('ocr.searchInContentExtracted', isSearchEnabled);
+			Setting.setValue('ocr.searchInExtractedContent', isSearchEnabled);
 
 			const rows = await engine.search('hello', {
 				searchType: SearchEngine.SEARCH_TYPE_FTS,

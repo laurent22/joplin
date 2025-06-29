@@ -579,14 +579,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Clear cache and re-download language data files'),
 		},
 
-		'ocr.searchInContentExtracted': {
+		'ocr.searchInExtractedContent': {
 			value: true,
 			type: SettingItemType.Bool,
 			advanced: true,
 			public: true,
 			appTypes: [AppType.Desktop],
 			storage: SettingStorage.Database,
-			label: () => _('OCR: Search in content extracted via OCR'),
+			label: () => _('OCR: Search in extracted content'),
 		},
 
 		theme: {

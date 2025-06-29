@@ -809,7 +809,7 @@ export default class SearchEngine {
 					};
 				});
 
-				if (!queryHasFilters && Setting.value('ocr.searchInContentExtracted')) {
+				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
 					let itemRows: ProcessResultsRow[] = [];
