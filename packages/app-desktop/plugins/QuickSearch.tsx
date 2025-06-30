@@ -8,6 +8,7 @@ const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
 import BaseModel from '@joplin/lib/BaseModel';
+import sendMessage from './AIAgent';
 
 
 const PLUGIN_NAME = 'quickSearch';
@@ -267,7 +268,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.setState({ chatInput: event.target.value });
 	}
 
-	private handleChatInputKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+	private async handleChatInputKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
 		const keyCode = event.keyCode;
 		if (keyCode === 13) { // ENTER
 			if (event.shiftKey) {
@@ -276,12 +277,12 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else {
 				// Enterのみで送信
 				event.preventDefault();
-				this.handleChatSend();
+				await this.handleChatSend();
 			}
 		}
 	}
 
-	private handleChatSend() {
+	private async handleChatSend() {
 		const { chatInput, chatMessages } = this.state;
 		if (chatInput.trim() === '') return;
 
@@ -297,7 +298,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		chatHistory = newMessages;
 
 		// APIを呼び出して回答を取得
-		this.reply(chatInput);
+		const responseStr = await sendMessage(chatInput);
+		this.reply(responseStr);
 	}
 
 	private oaiKey: string | null = null;
