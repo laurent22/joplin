@@ -11,7 +11,7 @@
   "dependencies": {
     "@adobe/css-tools": "4.4.2",
     "html-entities": "1.4.0",
-    "jsdom": "24.1.3"
+    "jsdom": "25.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "28.0.3",
