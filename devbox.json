@@ -19,7 +19,7 @@
     "python": "latest",
     "bat":    "latest",
     "electron": {
-      "version":            "latest",
+      "version":            "33.0.2",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
     "git":    "2.47.2",
