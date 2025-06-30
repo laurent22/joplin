@@ -14,7 +14,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const PLUGIN_NAME = 'quickSearch';
 
 // 会話履歴をメモリに保存するための静的変数
-let chatHistory: Array<{text: string; isUser: boolean}> = [];
+let chatHistory: Array<{id: string; text: string; isUser: boolean}> = [];
 
 interface SearchResult {
 	id: string;
@@ -286,8 +286,10 @@ class Dialog extends React.PureComponent<Props, State> {
 		const { chatInput, chatMessages } = this.state;
 		if (chatInput.trim() === '') return;
 
+		// 一意なidを生成
+		const id = Date.now().toString() + Math.random().toString(36).slice(2);
 		// ユーザーメッセージを追加
-		const newMessages = [...chatMessages, { text: chatInput, isUser: true }];
+		const newMessages = [...chatMessages, { id, text: chatInput, isUser: true }];
 
 		this.setState({
 			chatMessages: newMessages,
@@ -299,26 +301,32 @@ class Dialog extends React.PureComponent<Props, State> {
 
 		// APIを呼び出して回答を取得
 		const responseStr = await sendMessage(chatInput);
-		this.reply(responseStr);
+		return this.reply(responseStr, id); // idを返す
 	}
 
 	private oaiKey: string | null = null;
-
-	private addBotMessage(response: string) {
+	private addBotMessage(response: string, id?: string) {
 		this.setState(prevState => {
-			const newMessages = [...prevState.chatMessages, { text: response, isUser: false }];
+			let newMessages;
+			if (id) {
+				// id指定時はそのidのメッセージを上書き
+				newMessages = prevState.chatMessages.map(msg =>
+					msg.id === id ? { ...msg, text: response, isUser: false } : msg
+				);
+			} else {
+				// 通常は末尾に追加
+				const newId = Date.now().toString() + Math.random().toString(36).slice(2);
+				newMessages = [...prevState.chatMessages, { id: newId, text: response, isUser: false }];
+			}
 			chatHistory = newMessages;
 			return { chatMessages: newMessages };
 		});
 	}
 
-	private reply(input: string) {
-		// サンプル実装：入力をそのまま返す
-		const response = `回答: ${input}`;
-
-		setTimeout(() => {
-			this.addBotMessage(response);
-		}, 500); // 500ms遅延でリアルな感じに
+	private reply(input: string, id?: string): string {
+		// id指定時はそのidの書き込みを上書き
+		this.addBotMessage(`回答: ${input}`, id);
+		return id || '';
 	}
 
 
