@@ -45,7 +45,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
-	chatMessages: Array<{text: string; isUser: boolean}>;
+	chatMessages: Array<{id: string; text: string; isUser: boolean}>;
 	chatInput: string;
 	dialogWidth: number; // 追加: ダイアログの幅
 	dialogHeight: number; // 追加: ダイアログの高さ
@@ -118,6 +118,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.handleResizeStart = this.handleResizeStart.bind(this);
 		this.handleResizeMove = this.handleResizeMove.bind(this);
 		this.handleResizeEnd = this.handleResizeEnd.bind(this);
+		this.reply = this.reply.bind(this);
 
 	}
 
@@ -282,9 +283,9 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
-	private async handleChatSend() {
+	private async handleChatSend(): Promise<string | undefined> {
 		const { chatInput, chatMessages } = this.state;
-		if (chatInput.trim() === '') return;
+		if (chatInput.trim() === '') return undefined;
 
 		// 一意なidを生成
 		const id = Date.now().toString() + Math.random().toString(36).slice(2);
@@ -297,36 +298,42 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 
 		// 履歴をメモリに保存
-		chatHistory = newMessages;
+		chatHistory = newMessages.map(msg => ({
+			id: (msg as any).id ? (msg as any).id : (Date.now().toString() + Math.random().toString(36).slice(2)),
+			text: msg.text,
+			isUser: msg.isUser,
+		}));
 
 		// APIを呼び出して回答を取得
-		const responseStr = await sendMessage(chatInput);
-		return this.reply(responseStr, id); // idを返す
+		const responseStr = await sendMessage(chatInput, this.reply);
+		return responseStr;
 	}
 
 	private oaiKey: string | null = null;
 	private addBotMessage(response: string, id?: string) {
+		const targetId = id ?? Date.now().toString() + Math.random().toString(36).slice(2);
 		this.setState(prevState => {
 			let newMessages;
 			if (id) {
 				// id指定時はそのidのメッセージを上書き
 				newMessages = prevState.chatMessages.map(msg =>
-					msg.id === id ? { ...msg, text: response, isUser: false } : msg
+					msg.id === targetId ? { ...msg, text: response, isUser: false } : msg
 				);
 			} else {
 				// 通常は末尾に追加
-				const newId = Date.now().toString() + Math.random().toString(36).slice(2);
-				newMessages = [...prevState.chatMessages, { id: newId, text: response, isUser: false }];
+				newMessages = [...prevState.chatMessages, { id: targetId, text: response, isUser: false }];
 			}
 			chatHistory = newMessages;
 			return { chatMessages: newMessages };
 		});
+		return targetId;
 	}
 
 	private reply(input: string, id?: string): string {
 		// id指定時はそのidの書き込みを上書き
-		this.addBotMessage(`回答: ${input}`, id);
-		return id || '';
+		const resultId = this.addBotMessage(`${input}`, id);
+		console.log('Replying with:', input, 'ID:', resultId);
+		return resultId;
 	}
 
 

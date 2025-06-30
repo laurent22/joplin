@@ -65,9 +65,9 @@ plugin_types/
 readme/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
-packages/AI/AIAgent.d.ts
-packages/AI/AIAgent.js
-packages/AI/AIAgent.js.map
+packages/AI/src/AIAgent.d.ts
+packages/AI/src/AIAgent.js
+packages/AI/src/AIAgent.js.map
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/LinkSelector.js.map
