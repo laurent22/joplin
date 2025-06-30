@@ -2,13 +2,13 @@ import * as React from 'react';
 import { AppState } from '../app';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
+import sendMessage from '../../AI/AIAgent';
 
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
 import BaseModel from '@joplin/lib/BaseModel';
-import sendMessage from './AIAgent';
 
 
 const PLUGIN_NAME = 'quickSearch';

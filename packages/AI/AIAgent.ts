@@ -13,6 +13,3 @@ const sendMessage = async (question: string) => {
 };
 
 export default sendMessage;
-
-
-
