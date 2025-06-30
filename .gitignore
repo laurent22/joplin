@@ -51,6 +51,9 @@ lerna-debug.log
 .env
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+packages/AI/AIAgent.d.ts
+packages/AI/AIAgent.js
+packages/AI/AIAgent.js.map
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/LinkSelector.js.map
@@ -192,6 +195,9 @@ packages/app-desktop/commands/font_embed_css.js.map
 packages/app-desktop/commands/openProfileDirectory.d.ts
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openProfileDirectory.js.map
+packages/app-desktop/commands/quickSearch.d.ts
+packages/app-desktop/commands/quickSearch.js
+packages/app-desktop/commands/quickSearch.js.map
 packages/app-desktop/commands/replaceMisspelling.d.ts
 packages/app-desktop/commands/replaceMisspelling.js
 packages/app-desktop/commands/replaceMisspelling.js.map
@@ -657,6 +663,9 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
 packages/app-desktop/plugins/GotoAnything.d.ts
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/plugins/GotoAnything.js.map
+packages/app-desktop/plugins/QuickSearch.d.ts
+packages/app-desktop/plugins/QuickSearch.js
+packages/app-desktop/plugins/QuickSearch.js.map
 packages/app-desktop/services/bridge.d.ts
 packages/app-desktop/services/bridge.js
 packages/app-desktop/services/bridge.js.map

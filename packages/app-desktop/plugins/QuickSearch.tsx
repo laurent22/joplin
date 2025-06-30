@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../app';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
-import sendMessage from '../../AI/AIAgent';
+import sendMessage from '../../AI/dist/AIAgent';
 
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
