@@ -48,7 +48,7 @@
     "@joplin/fork-sax": "^1.2.62",
     "@joplin/fork-uslug": "^2.0.1",
     "@joplin/htmlpack": "~3.4",
-    "@joplin/onenote-converter": "~3.4",
+    "@joplin/onenote-converter": "~3.2.0",
     "@joplin/renderer": "~3.4",
     "@joplin/turndown": "^4.0.80",
     "@joplin/turndown-plugin-gfm": "^1.0.62",

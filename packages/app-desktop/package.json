@@ -207,7 +207,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.1.2",
-    "@joplin/onenote-converter": "~3.4",
+    "@joplin/onenote-converter": "~3.2.0",
     "fs-extra": "11.2.0",
     "keytar": "7.9.0",
     "sqlite3": "5.1.6"
