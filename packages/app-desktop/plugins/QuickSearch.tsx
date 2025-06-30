@@ -81,6 +81,8 @@ class Dialog extends React.PureComponent<Props, State> {
 	private listUpdateIID_: any;
 	// private markupToHtml_: any;
 
+	private chatMessagesEndRef: React.RefObject<HTMLDivElement>;
+
 	private constructor(props: Props) {
 		super(props);
 
@@ -120,6 +122,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.handleResizeEnd = this.handleResizeEnd.bind(this);
 		this.reply = this.reply.bind(this);
 
+		this.chatMessagesEndRef = React.createRef();
 	}
 
 	private style() {
@@ -385,6 +388,13 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	};
 
+	public componentDidUpdate(_prevProps: Props, _prevState: State) {
+		// Chatメッセージが追加・更新されたら自動スクロール
+		if (this.chatMessagesEndRef.current) {
+			this.chatMessagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
+
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
@@ -531,6 +541,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										{msg.text}
 									</div>
 								))}
+								<div ref={this.chatMessagesEndRef} />
 							</div>
 							<div style={chatInputRowStyle}>
 								<textarea
