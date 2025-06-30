@@ -1,3 +1,10 @@
-*.js
-*.map
-node_modules/**
+# Ignore build output
+dist/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore root-level js/ts files (legacy)
+AIAgent.js
+AIAgent.js.map
+AIAgent.ts
