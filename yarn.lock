@@ -9101,7 +9101,7 @@ __metadata:
     react-native-rsa-native: "npm:2.0.5"
     react-native-safe-area-context: "npm:5.4.0"
     react-native-securerandom: "npm:1.0.1"
-    react-native-share: "npm:10.2.1"
+    react-native-share: "npm:12.0.3"
     react-native-sqlite-storage: "npm:6.0.1"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-vector-icons: "npm:10.2.0"
@@ -41652,10 +41652,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:10.2.1":
-  version: 10.2.1
-  resolution: "react-native-share@npm:10.2.1"
-  checksum: 10/6b579233f521a9c2e47181b80992f5e8da730b7711b7108111b2be13f202b6ce2845799fba2a44e15810c12e0240fc540772e16b3e98aafe3f7baa17130d3c06
+"react-native-share@npm:12.0.3":
+  version: 12.0.3
+  resolution: "react-native-share@npm:12.0.3"
+  checksum: 10/967e09546af4a589e3ce11475db6fd349d7454015b05160b7eb028e443ca011a0042e413ae4c97221050ad4f3c6a33d12933a5fa98400e588b3b50b704f12706
   languageName: node
   linkType: hard
 
