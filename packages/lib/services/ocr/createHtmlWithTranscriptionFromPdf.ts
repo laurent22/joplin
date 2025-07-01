@@ -9,20 +9,25 @@ const pdfExtractDir = async () => {
 	return p;
 };
 
+
 const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDimensions: ImageDimensions) => {
 	const left = boundingBox[0];
 	const top = boundingBox[2];
+	const height = boundingBox[3] - top;
+	const a4height = 1134;
 	return {
 		left: (left / imageDimensions.width) * 100,
 		top: (top / imageDimensions.height) * 100,
+		fontSize: (height / imageDimensions.height) * a4height,
+		boundingBox,
 	};
 
 };
 
 const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: ImageDimensions) => {
 	return allWords.map(word => {
-		const { left, top } = calculateWordPosition(word.bb, imageDimensions);
-		return `<span style="left: ${left.toFixed(2)}%; top: ${top.toFixed(2)}%;">${word.t}</span>`;
+		const { left, top, fontSize } = calculateWordPosition(word.bb, imageDimensions);
+		return `<span style="font-size: ${fontSize}px; left: ${left.toFixed(2)}%; top: ${top.toFixed(2)}%;">${word.t}</span>`;
 	}).join('\n');
 };
 
