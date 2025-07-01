@@ -5,7 +5,7 @@
       "version":   "latest",
       "platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "yarn": "latest",
+    "yarn": "1.22.19",
     "vips.dev": {
       "platforms": ["aarch64-darwin"],
     },
