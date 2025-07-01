@@ -47,7 +47,7 @@ describe('Synchronizer.revisions', () => {
 
 		await synchronizerStart();
 		await Note.delete(n1.id);
-		await revisionService().collectRevisions(); // REV 1
+		await revisionService().collectRevisions(); // One revision is created here because it is an "old note", see revisionService
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 			expect(allRevs.length).toBe(1);
@@ -59,7 +59,7 @@ describe('Synchronizer.revisions', () => {
 		await synchronizerStart(); // The local note gets deleted here, however a new rev is *not* created
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
-			expect(allRevs.length).toBe(1);
+			expect(allRevs.length).toBe(0);
 		}
 
 		const notes = await Note.all();

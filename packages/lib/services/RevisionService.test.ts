@@ -1,4 +1,4 @@
-import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep, db } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -224,7 +224,8 @@ describe('services/RevisionService', () => {
 		};
 		expect(await getNoteRevisions()).toHaveLength(4);
 
-		await Note.delete(note.id, { toTrash: false, sourceDescription: 'tests/RevisionService' });
+		// We delete the note directly because the Note.delete method removes revisions
+		await db().exec('DELETE FROM notes WHERE id = ?', [note.id]);
 
 		await revisionService().deleteOldRevisions(4_000);
 
