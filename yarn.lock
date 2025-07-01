@@ -8953,7 +8953,7 @@ __metadata:
     "@types/mustache": "npm:4.2.5"
     "@types/node": "npm:18.19.86"
     "@types/react": "npm:18.3.20"
-    "@types/react-dom": "npm:18.3.5"
+    "@types/react-dom": "npm:18.3.6"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     "@types/tesseract.js": "npm:2.0.0"
@@ -9375,7 +9375,7 @@ __metadata:
     "@types/jest": "npm:29.5.12"
     "@types/pdfjs-dist": "npm:2.10.378"
     "@types/react": "npm:18.3.20"
-    "@types/react-dom": "npm:18.3.5"
+    "@types/react-dom": "npm:18.3.6"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
     babel-jest: "npm:29.7.0"
@@ -14371,12 +14371,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.3.5":
-  version: 18.3.5
-  resolution: "@types/react-dom@npm:18.3.5"
+"@types/react-dom@npm:18.3.6":
+  version: 18.3.6
+  resolution: "@types/react-dom@npm:18.3.6"
   peerDependencies:
     "@types/react": ^18.0.0
-  checksum: 10/02095b326f373867498e0eb2b5ebb60f9bd9535db0d757ea13504c4b7d75e16605cf1d43ce7a2e67893d177b51db4357cabb2842fb4257c49427d02da1a14e09
+  checksum: 10/ae179355401c64423d39946eda22c5f7f74c94ce61c21505024d4d82c33853ec40bc9b370f75e4a7750b0524aba4d95a43fcc328d8d14684dc2abb41ba529de8
   languageName: node
   linkType: hard
 
