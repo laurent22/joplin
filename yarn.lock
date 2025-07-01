@@ -9093,7 +9093,7 @@ __metadata:
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:7.2.3"
     react-native-localize: "npm:3.4.1"
-    react-native-modal-datetime-picker: "npm:17.1.0"
+    react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.13.4"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
@@ -41537,15 +41537,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-modal-datetime-picker@npm:17.1.0":
-  version: 17.1.0
-  resolution: "react-native-modal-datetime-picker@npm:17.1.0"
+"react-native-modal-datetime-picker@npm:18.0.0":
+  version: 18.0.0
+  resolution: "react-native-modal-datetime-picker@npm:18.0.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@react-native-community/datetimepicker": ">=6.7.0"
     react-native: ">=0.65.0"
-  checksum: 10/fcb20d62885b0a288719c21b731fb4129be9f5e3a78e0d9971bfcc8e6083164434da13ddab0079d0924074b3324f5ec7d664598127db5470b4eb7278960e01df
+  checksum: 10/8f065f4ee6572f7cd6731fb049b71653ce73dd7ce564a4cf4f310f6a25a659c388b46f8b51625ea8671c5f139439a0c1824ac0cec787832a36d799982d1e51d9
   languageName: node
   linkType: hard
 
