@@ -9025,7 +9025,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:18.19.86"
-    "@types/react": "npm:19.0.12"
+    "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
     "@types/serviceworker": "npm:0.0.127"
     "@types/tar-stream": "npm:3.1.3"
@@ -14397,12 +14397,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:19.0.12":
-  version: 19.0.12
-  resolution: "@types/react@npm:19.0.12"
+"@types/react@npm:19.0.14":
+  version: 19.0.14
+  resolution: "@types/react@npm:19.0.14"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10/2476295f27371ea67f0ba3ca8fae3c683fc8d086b8b387e0519e67ff5731072c6ff0372fbd5a4c6d760895b1e7dc8997ac518f07bf6b6a8d1e40aeb5d2068b9e
+  checksum: 10/caf4572aae4f7efd049138bc4917f465a8e00abb362fcf6e6f82c9ed88fc42555109f0a3be7a738ed5efbdd51b0f0a4256f7d5141545f29fb7dc31b8e872aa4b
   languageName: node
   linkType: hard
 

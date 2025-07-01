@@ -105,7 +105,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.86",
-    "@types/react": "19.0.12",
+    "@types/react": "19.0.14",
     "@types/react-redux": "7.1.33",
     "@types/serviceworker": "0.0.127",
     "@types/tar-stream": "3.1.3",
