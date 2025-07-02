@@ -1,0 +1,17 @@
+{
+  "name": "@joplin/ai",
+  "version": "1.0.0",
+  "main": "dist/AIAgent.js",
+  "types": "dist/AIAgent.d.ts",
+  "scripts": {
+    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.61",
+    "@langchain/openai": "^0.5.16",
+    "langchain": "^0.3.29"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
