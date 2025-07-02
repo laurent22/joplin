@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../app';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
-import sendMessage from '../../AI/dist/AIAgent';
+import sendMessage, { AIHistory } from '../../AI/dist/AIAgent';
 
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
@@ -14,7 +14,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 const PLUGIN_NAME = 'quickSearch';
 
 // 会話履歴をメモリに保存するための静的変数
-let chatHistory: Array<{id: string; text: string; isUser: boolean}> = [];
+let chatHistory: Array<AIHistory> = [];
 
 interface SearchResult {
 	id: string;
@@ -45,7 +45,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
-	chatMessages: Array<{id: string; text: string; isUser: boolean; loading?: boolean}>;
+	chatMessages: Array<AIHistory>;
 	chatInput: string;
 	dialogWidth: number; // 追加: ダイアログの幅
 	dialogHeight: number; // 追加: ダイアログの高さ
@@ -312,7 +312,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		// APIを呼び出して回答を取得
 		this.changeAutoscrollMode(true); // 自動スクロールを有効化
 		const replyId = this.reply('', undefined, true); // ローディング状態でメッセージを追加
-		const responseStr = await sendMessage(chatInput, replyId, this.reply);
+		const responseStr = await sendMessage(chatInput, replyId, this.state.chatMessages, this.reply);
 		return responseStr;
 	}
 
