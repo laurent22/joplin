@@ -82,6 +82,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	// private markupToHtml_: any;
 
 	private chatMessagesEndRef: React.RefObject<HTMLDivElement>;
+	private autoScrollMode: boolean = true;
 
 	private constructor(props: Props) {
 		super(props);
@@ -121,6 +122,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.handleResizeMove = this.handleResizeMove.bind(this);
 		this.handleResizeEnd = this.handleResizeEnd.bind(this);
 		this.reply = this.reply.bind(this);
+		this.changeAutoscrollMode = this.changeAutoscrollMode.bind(this);
 
 		this.chatMessagesEndRef = React.createRef();
 	}
@@ -308,6 +310,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}));
 
 		// APIを呼び出して回答を取得
+		this.changeAutoscrollMode(true); // 自動スクロールを有効化
 		const replyId = this.reply('', undefined, true); // ローディング状態でメッセージを追加
 		const responseStr = await sendMessage(chatInput, replyId, this.reply);
 		return responseStr;
@@ -389,10 +392,15 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 	};
 
+	private changeAutoscrollMode = (mode: boolean) => {
+		console.log('Changing auto-scroll mode:', mode);
+		this.autoScrollMode = mode;
+	};
+
 	public componentDidUpdate(_prevProps: Props, _prevState: State) {
 		// Chatメッセージが追加・更新されたら自動スクロール
-		if (this.chatMessagesEndRef.current) {
-			this.chatMessagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+		if (this.chatMessagesEndRef.current && this.autoScrollMode) {
+			document.getElementById('scroller').scrollTop += 100000;
 		}
 	}
 
@@ -544,8 +552,18 @@ class Dialog extends React.PureComponent<Props, State> {
 						</button>
 						{helpComp}
 						{/* --- Chat UI --- */}
-						<div style={chatContainerStyle}>
-							<div style={chatMessagesStyle}>
+						<div style={chatContainerStyle} >
+							<div style={chatMessagesStyle} id="scroller" onScroll={e => {
+								const target = e.currentTarget;
+								// スクロールが一番下から20px以上離れていたら手動スクロールとみなす
+								const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 20;
+								if (!isAtBottom) {
+									this.changeAutoscrollMode(false);
+								} else {
+									// それ以外は自動スクロールする
+									this.changeAutoscrollMode(true);
+								}
+							}}>
 								{this.state.chatMessages.map((msg, idx) => (
 									<div
 										key={idx}
