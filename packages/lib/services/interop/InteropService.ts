@@ -161,6 +161,13 @@ export default class InteropService {
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory merged With Embeded Image'),
 				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'vectorDB',
+					fileExtensions: ['html', 'htm'],
+					target: FileSystemItem.Directory,
+					description: _('Create vector DB'),
+				},
 			];
 
 			this.defaultModules_ = importModules.concat(exportModules);
