@@ -45,7 +45,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
-	chatMessages: Array<{id: string; text: string; isUser: boolean}>;
+	chatMessages: Array<{id: string; text: string; isUser: boolean; loading?: boolean}>;
 	chatInput: string;
 	dialogWidth: number; // 追加: ダイアログの幅
 	dialogHeight: number; // 追加: ダイアログの高さ
@@ -308,23 +308,24 @@ class Dialog extends React.PureComponent<Props, State> {
 		}));
 
 		// APIを呼び出して回答を取得
-		const responseStr = await sendMessage(chatInput, this.reply);
+		const replyId = this.reply('', undefined, true); // ローディング状態でメッセージを追加
+		const responseStr = await sendMessage(chatInput, replyId, this.reply);
 		return responseStr;
 	}
 
 	private oaiKey: string | null = null;
-	private addBotMessage(response: string, id?: string) {
+	private addBotMessage(response: string, id?: string, loading: boolean = false) {
 		const targetId = id ?? Date.now().toString() + Math.random().toString(36).slice(2);
 		this.setState(prevState => {
 			let newMessages;
 			if (id) {
 				// id指定時はそのidのメッセージを上書き
 				newMessages = prevState.chatMessages.map(msg =>
-					msg.id === targetId ? { ...msg, text: response, isUser: false } : msg
+					msg.id === targetId ? { ...msg, text: response, isUser: false, loading: false } : msg
 				);
 			} else {
 				// 通常は末尾に追加
-				newMessages = [...prevState.chatMessages, { id: targetId, text: response, isUser: false }];
+				newMessages = [...prevState.chatMessages, { id: targetId, text: response, isUser: false, loading: loading }];
 			}
 			chatHistory = newMessages;
 			return { chatMessages: newMessages };
@@ -332,9 +333,9 @@ class Dialog extends React.PureComponent<Props, State> {
 		return targetId;
 	}
 
-	private reply(input: string, id?: string): string {
+	private reply(input: string, id?: string, loading: boolean = false): string {
 		// id指定時はそのidの書き込みを上書き
-		const resultId = this.addBotMessage(`${input}`, id);
+		const resultId = this.addBotMessage(`${input}`, id, loading);
 		console.log('Replying with:', input, 'ID:', resultId);
 		return resultId;
 	}
@@ -522,6 +523,19 @@ class Dialog extends React.PureComponent<Props, State> {
 					border-right: 16px solid #f0f0f0;
 					border-bottom: 12px solid transparent;
 				}
+				#loading-animation {
+					margin-right: 20px;
+					width: 20px;
+					height: 20px;
+					border: 5px solid lightblue;
+					border-top: 4px solid transparent;
+					border-radius: 50%;
+					transition-property: transform;
+					animation-name: rotate;
+					animation-duration: 1.2s;
+					animation-iteration-count: infinite;
+					animation-timing-function: linear;
+				}
 				`}</style>
 				<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
 					<div style={style.dialogBox}>
@@ -538,6 +552,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										style={msg.isUser ? chatBubbleStyle : chatBubbleReplyStyle}
 										className={msg.isUser ? 'chat-bubble' : 'chat-bubble-reply'}
 									>
+										{msg.loading && <div id="loading-animation" />}
 										{msg.text}
 									</div>
 								))}
