@@ -61,7 +61,6 @@ import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
-import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 
 const pluginClasses = [
@@ -151,10 +150,6 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
 			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
-		}
-
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.target' || action.type === 'SETTING_UPDATE_ALL') {
-			await this.ocrService_.updateDriver(new HtrDriver(JoplinServerApi));
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
@@ -365,7 +360,7 @@ class Application extends BaseApplication {
 					},
 				));
 
-				drivers.push(new HtrDriver(JoplinServerApi));
+				drivers.push(new HtrDriver());
 
 				this.ocrService_ = new OcrService(drivers);
 			}

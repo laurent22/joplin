@@ -240,14 +240,4 @@ export default class OcrService {
 		await this.htrQueue_.stop();
 	}
 
-	public async updateDriver(driver: OcrDriverBase) {
-		const driverIndex = this.drivers.findIndex(d => d.driverId === driver.driverId);
-
-		if (driverIndex >= 0) {
-			await this.drivers[driverIndex].dispose();
-			this.drivers[driverIndex] = driver;
-		} else {
-			this.drivers.push(driver);
-		}
-	}
 }
