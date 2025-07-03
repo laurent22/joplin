@@ -55,11 +55,14 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import HtrDriver from '@joplin/lib/services/ocr/drivers/HtrDriver';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
+import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -148,6 +151,10 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
 			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
+		}
+
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'sync.target' || action.type === 'SETTING_UPDATE_ALL') {
+			await this.ocrService_.updateDriver(new HtrDriver(JoplinServerApi));
 		}
 
 		const result = await super.generalMiddleware(store, next, action);
@@ -348,16 +355,19 @@ class Application extends BaseApplication {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const Tesseract = (window as any).Tesseract;
 
-				const driver = new OcrDriverTesseract(
+				const drivers: OcrDriverBase[] = [];
+				drivers.push(new OcrDriverTesseract(
 					{ createWorker: Tesseract.createWorker },
 					{
 						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
 						corePath: `${bridge().buildDir()}/tesseract.js-core`,
 						languageDataPath: Setting.value('ocr.languageDataPath') || null,
 					},
-				);
+				));
 
-				this.ocrService_ = new OcrService(driver);
+				drivers.push(new HtrDriver(JoplinServerApi));
+
+				this.ocrService_ = new OcrService(drivers);
 			}
 
 			void this.ocrService_.runInBackground();

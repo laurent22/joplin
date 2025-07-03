@@ -48,7 +48,8 @@ import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
 const WebDavApi = require('../WebDavApi');
 const DropboxApi = require('../DropboxApi');
-import JoplinServerApi, { Session } from '../JoplinServerApi';
+import JoplinServerApi from '../JoplinServerApi';
+import { Session } from '../types';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
@@ -1113,7 +1114,7 @@ const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
 
 export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
-	return new OcrService(driver);
+	return new OcrService([driver]);
 };
 
 export const mockMobilePlatform = (platform: string) => {
