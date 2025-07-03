@@ -12,9 +12,10 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 		outfile: `${filename(entryPoint)}.bundle.js`,
 		bundle: true,
 		minify: true,
-		keepNames: true,
+		keepNames: true, // Preserve original function names -- useful for debugging
 		format: 'iife', // Immediately invoked function expression
 		sourcemap: true,
+		sourcesContent: false, // Do not embed full source file content in the .map file
 		metafile: computeFileSizeStats,
 		platform: 'node',
 		target: ['node20.0'],

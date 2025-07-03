@@ -10,6 +10,7 @@ window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	onCommitFiberUnmount: function() {},
 };
 
+require('./utils/sourceMapSetup');
 const app = require('./app').default;
 const Folder = require('@joplin/lib/models/Folder').default;
 const Resource = require('@joplin/lib/models/Resource').default;
