@@ -411,7 +411,15 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					const ll = this.latLongFromLocation(value);
 					url = Note.geoLocationUrlFromLatLong(ll.latitude, ll.longitude);
 				}
-				const urlStyle: React.CSSProperties = { ...theme.urlStyle, maxWidth: '100%', wordBreak: 'break-all', display: 'inline-block' };
+				// const urlStyle: React.CSSProperties = { ...theme.urlStyle, maxWidth: '100%', wordBreak: 'break-all', display: 'inline-block' };
+				const urlStyle: React.CSSProperties = {
+					...theme.urlStyle,
+					maxWidth: '180px',
+					overflow: 'hidden',
+					whiteSpace: 'nowrap',
+					textOverflow: 'ellipsis',
+					display: 'inline-block',
+				};
 				controlComp = (
 					<a href="#" onClick={() => bridge().openExternal(url)} style={urlStyle} title ={url}>
 						{displayedValue}
