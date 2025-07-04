@@ -12,23 +12,35 @@ const embeddings = new OpenAIEmbeddings({
 
 // テキスト分割器を設定
 const textSplitter = new RecursiveCharacterTextSplitter({
-	chunkSize: 10000,
+	chunkSize: 8000,
 	chunkOverlap: 200,
 });
 
 
 
 const divideDocument = (allDocs: Document<{
-	source: string;
-	filePath: string;
+  source: string;
+  filePath: string;
 }>[]): Document<{
-	source: string;
-	filePath: string;
+  source: string;
+  filePath: string;
 }>[][] => {
-	const chunkSize = 20;
+	const MAX_CHARS = 250000;
 	const result: Document<{ source: string; filePath: string }>[] [] = [];
-	for (let i = 0; i < allDocs.length; i += chunkSize) {
-		result.push(allDocs.slice(i, i + chunkSize));
+	let currentBatch: Document<{ source: string; filePath: string }>[] = [];
+	let currentCharCount = 0;
+	for (const doc of allDocs) {
+		const len = doc.pageContent ? doc.pageContent.length : 0;
+		if (currentCharCount + len > MAX_CHARS && currentBatch.length > 0) {
+			result.push(currentBatch);
+			currentBatch = [];
+			currentCharCount = 0;
+		}
+		currentBatch.push(doc);
+		currentCharCount += len;
+	}
+	if (currentBatch.length > 0) {
+		result.push(currentBatch);
 	}
 	return result;
 };
