@@ -4,7 +4,7 @@ import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 import { Document } from '@langchain/core/documents';
 import * as fs from 'fs';
 import * as path from 'path';
-// import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 
 const embeddings = new OpenAIEmbeddings({
 	model: 'text-embedding-3-large',
@@ -16,30 +16,6 @@ const textSplitter = new RecursiveCharacterTextSplitter({
 	chunkOverlap: 200,
 });
 
-
-// 保存済みのFAISSインデックスをロードする関数
-
-// const loadVectorStore = async () => {
-// 	const indexPath = './faiss_index';
-
-// 	// FAISSインデックスが存在するかチェック
-// 	if (!fs.existsSync(indexPath)) {
-// 		console.log(
-// 			'FAISSインデックスが見つかりません。先にembedding.tsを実行してください。'
-// 		);
-// 		return null;
-// 	}
-
-// 	try {
-// 		console.log('FAISSインデックスをロードしています...');
-// 		const vectorStore = await FaissStore.load(indexPath, embeddings);
-// 		console.log('FAISSインデックスのロードが完了しました');
-// 		return vectorStore;
-// 	} catch (error) {
-// 		console.error('FAISSインデックスのロード中にエラーが発生しました:', error);
-// 		return null;
-// 	}
-// };
 
 
 const divideDocument = (allDocs: Document<{
@@ -102,12 +78,12 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 		try {
 			const htmlContent = fs.readFileSync(filePath, 'utf-8');
 			// CheerioでHTMLを解析してテキストを抽出
-			// const $ = cheerio.load(htmlContent);
-			// $('script, style').remove();
-			// const textContent = $('body').text() || $.text();
+			const $ = cheerio.load(htmlContent);
+			$('script, style').remove();
+			const textContent = $('body').text() || $.root().text();
 
 			// テキストを分割
-			const splitTexts = await textSplitter.splitText(htmlContent);
+			const splitTexts = await textSplitter.splitText(textContent);
 
 			// チャンクごとにDocumentを作成
 			for (const chunk of splitTexts) {

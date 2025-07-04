@@ -2,13 +2,14 @@ import * as React from 'react';
 import { AppState } from '../app';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
-import sendMessage, { AIHistory } from '../../AI/dist/AIAgent';
+import { AIHistory, ragSendMessage } from '../../AI/dist/AIAgent';
 
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
 import BaseModel from '@joplin/lib/BaseModel';
+import Setting from '@joplin/lib/models/Setting';
 
 
 const PLUGIN_NAME = 'quickSearch';
@@ -312,7 +313,9 @@ class Dialog extends React.PureComponent<Props, State> {
 		// APIを呼び出して回答を取得
 		this.changeAutoscrollMode(true); // 自動スクロールを有効化
 		const replyId = this.reply('', undefined, true); // ローディング状態でメッセージを追加
-		const responseStr = await sendMessage(chatInput, replyId, this.state.chatMessages, this.reply);
+		const dbPath = `${Setting.value('profileDir')}/vector_db_workspace/faiss_index`;
+		// const responseStr = await sendMessage(chatInput, replyId, this.state.chatMessages, this.reply);
+		const responseStr = await ragSendMessage(chatInput, dbPath, replyId, this.state.chatMessages, this.reply);
 		return responseStr;
 	}
 
