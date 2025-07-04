@@ -95,8 +95,6 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 	const allDocuments = [];
 
 	// 各HTMLファイルを処理し、テキストを抽出・分割してDocument化
-	// cheerioを使う場合はコメントアウトを外してください
-	const cheerio = require('cheerio');
 
 	for (const filePath of files) {
 		const file = path.basename(filePath);
@@ -104,12 +102,12 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 		try {
 			const htmlContent = fs.readFileSync(filePath, 'utf-8');
 			// CheerioでHTMLを解析してテキストを抽出
-			const $ = cheerio.load(htmlContent);
-			$('script, style').remove();
-			const textContent = $('body').text() || $.text();
+			// const $ = cheerio.load(htmlContent);
+			// $('script, style').remove();
+			// const textContent = $('body').text() || $.text();
 
 			// テキストを分割
-			const splitTexts = await textSplitter.splitText(textContent);
+			const splitTexts = await textSplitter.splitText(htmlContent);
 
 			// チャンクごとにDocumentを作成
 			for (const chunk of splitTexts) {
