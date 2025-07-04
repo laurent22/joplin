@@ -18,7 +18,6 @@ import net.cozic.joplin.audio.SpeechToTextPackage
 import net.cozic.joplin.versioninfo.SystemVersionInformationPackage
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
-import net.cozic.joplin.textinput.TextInputPackage
 
 class MainApplication : Application(), ReactApplication {
     override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(this, object : DefaultReactNativeHost(this) {
@@ -27,7 +26,6 @@ class MainApplication : Application(), ReactApplication {
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     add(SharePackage())
                     add(SslPackage())
-                    add(TextInputPackage())
                     add(SystemVersionInformationPackage())
                     add(SpeechToTextPackage())
                 }

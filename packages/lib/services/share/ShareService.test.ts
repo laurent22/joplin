@@ -95,7 +95,7 @@ describe('ShareService', () => {
 
 		await service.shareNote(note.id, false);
 		await msleep(1);
-		await Folder.updateAllShareIds(resourceService());
+		await Folder.updateAllShareIds(resourceService(), []);
 
 		await synchronizerStart();
 
@@ -187,7 +187,7 @@ describe('ShareService', () => {
 
 		await shareService.shareFolder(folder.id);
 
-		await Folder.updateAllShareIds(resourceService());
+		await Folder.updateAllShareIds(resourceService(), []);
 
 		// The share service should automatically create a new encryption key
 		// specifically for that shared folder
@@ -313,7 +313,7 @@ describe('ShareService', () => {
 
 		const resourceService = new ResourceService();
 		await Folder.save({ id: folder1.id, share_id: '123456789' });
-		await Folder.updateAllShareIds(resourceService);
+		await Folder.updateAllShareIds(resourceService, []);
 
 		const cleanup = simulateReadOnlyShareEnv('123456789');
 

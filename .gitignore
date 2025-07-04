@@ -97,6 +97,8 @@ packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
+packages/app-cli/app/command-share.test.js
+packages/app-cli/app/command-share.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-testing.js
 packages/app-cli/app/command-use.js
@@ -105,6 +107,8 @@ packages/app-cli/app/gui/FolderListWidget.js
 packages/app-cli/app/gui/StatusBarWidget.js
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/setupCommand.js
+packages/app-cli/app/utils/initializeCommandService.js
+packages/app-cli/app/utils/shimInitCli.js
 packages/app-cli/app/utils/testUtils.js
 packages/app-cli/tests/HtmlToMd.js
 packages/app-cli/tests/MarkupToHtml.js
@@ -424,7 +428,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/exportPdf.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/hideModalMessage.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
-packages/app-desktop/gui/WindowCommandsAndDialogs/commands/leaveSharedFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
@@ -576,6 +579,7 @@ packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
+packages/app-desktop/utils/sourceMapSetup.js
 packages/app-desktop/utils/window/types.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/commands/dismissPluginPanels.js
@@ -592,12 +596,16 @@ packages/app-mobile/components/BottomDrawer.js
 packages/app-mobile/components/CameraView/ActionButtons.js
 packages/app-mobile/components/CameraView/Camera/index.jest.js
 packages/app-mobile/components/CameraView/Camera/index.js
+packages/app-mobile/components/CameraView/Camera/index.web.js
 packages/app-mobile/components/CameraView/Camera/types.js
 packages/app-mobile/components/CameraView/CameraView.test.js
 packages/app-mobile/components/CameraView/CameraView.js
+packages/app-mobile/components/CameraView/CameraViewMultiPage.test.js
+packages/app-mobile/components/CameraView/CameraViewMultiPage.js
 packages/app-mobile/components/CameraView/ScannedBarcodes.js
 packages/app-mobile/components/CameraView/types.js
 packages/app-mobile/components/CameraView/utils/fitRectIntoBounds.js
+packages/app-mobile/components/CameraView/utils/testing.js
 packages/app-mobile/components/CameraView/utils/useBarcodeScanner.js
 packages/app-mobile/components/Checkbox.js
 packages/app-mobile/components/DialogManager/PromptButton.js
@@ -863,6 +871,7 @@ packages/app-mobile/utils/fs-driver/testUtil/createFilesFromPathRecord.js
 packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
+packages/app-mobile/utils/hooks/useBackHandler.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
@@ -1051,6 +1060,7 @@ packages/lib/commands/deleteNote.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js
 packages/lib/commands/index.js
+packages/lib/commands/leaveSharedFolder.js
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/permanentlyDeleteNote.js
 packages/lib/commands/renderMarkup.test.js

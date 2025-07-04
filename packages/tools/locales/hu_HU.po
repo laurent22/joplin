@@ -3418,7 +3418,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:128
 #: packages/lib/services/interop/InteropService.ts:171
 msgid "Markdown + Front Matter"
-msgstr "Markdown előtétadatokal (Front Matter)"
+msgstr "Markdown előtétadatokkal (Front Matter)"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:379
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:360
