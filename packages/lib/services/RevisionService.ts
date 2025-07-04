@@ -155,18 +155,16 @@ export default class RevisionService extends BaseService {
 							if (note) {
 								let oldNoteSaved = false;
 
-								if (oldNote) {
-									if (oldNote.updated_time < this.oldNoteCutOffDate_()) {
-										// This is where we save the original version of this old note
-										// We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
-										// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
-										oldNote.updated_time = note.updated_time - 1;
-										oldNote.user_updated_time = oldNote.updated_time;
-										const rev = await this.createNoteRevision_(oldNote);
-										if (rev) {
-											oldNoteSaved = true;
-											logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
-										}
+								if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
+									// This is where we save the original version of this old note
+									// We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
+									// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
+									oldNote.updated_time = note.updated_time - 1;
+									oldNote.user_updated_time = oldNote.updated_time;
+									const rev = await this.createNoteRevision_(oldNote);
+									if (rev) {
+										oldNoteSaved = true;
+										logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
 									}
 								}
 
