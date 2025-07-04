@@ -18,29 +18,31 @@ const textSplitter = new RecursiveCharacterTextSplitter({
 
 
 // 保存済みのFAISSインデックスをロードする関数
-export const loadVectorStore = async () => {
-	const indexPath = './faiss_index';
 
-	// FAISSインデックスが存在するかチェック
-	if (!fs.existsSync(indexPath)) {
-		console.log(
-			'FAISSインデックスが見つかりません。先にembedding.tsを実行してください。'
-		);
-		return null;
-	}
+// const loadVectorStore = async () => {
+// 	const indexPath = './faiss_index';
 
-	try {
-		console.log('FAISSインデックスをロードしています...');
-		const vectorStore = await FaissStore.load(indexPath, embeddings);
-		console.log('FAISSインデックスのロードが完了しました');
-		return vectorStore;
-	} catch (error) {
-		console.error('FAISSインデックスのロード中にエラーが発生しました:', error);
-		return null;
-	}
-};
+// 	// FAISSインデックスが存在するかチェック
+// 	if (!fs.existsSync(indexPath)) {
+// 		console.log(
+// 			'FAISSインデックスが見つかりません。先にembedding.tsを実行してください。'
+// 		);
+// 		return null;
+// 	}
+
+// 	try {
+// 		console.log('FAISSインデックスをロードしています...');
+// 		const vectorStore = await FaissStore.load(indexPath, embeddings);
+// 		console.log('FAISSインデックスのロードが完了しました');
+// 		return vectorStore;
+// 	} catch (error) {
+// 		console.error('FAISSインデックスのロード中にエラーが発生しました:', error);
+// 		return null;
+// 	}
+// };
 
 
+// eslint-disable-next-line import/prefer-default-export
 export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: string) => {
 	const documentPath = srcFolderPath;
 
@@ -99,7 +101,7 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 
 	if (allDocuments.length === 0) {
 		console.log('処理可能なドキュメントがありませんでした');
-		return;
+		return false;
 	}
 
 	// テキストを分割
@@ -116,5 +118,5 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 	await vectorStore.save(indexPath);
 	console.log(`FAISSインデックスを ${indexPath} に保存しました`);
 
-	return vectorStore;
+	return true;
 };
