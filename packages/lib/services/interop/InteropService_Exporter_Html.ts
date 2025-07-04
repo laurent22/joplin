@@ -71,6 +71,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private embededImage: boolean = false;
 	private merged: boolean = false;
 	private embededFontCss: string;
+	private skipJoplinSchmeConversion: boolean = false;
 
 	async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
@@ -81,6 +82,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 
 		this.merged = options.merged ? options.merged : false;
+		this.skipJoplinSchmeConversion = options.skipJoplinSchmeConversion ?? false;
 		console.log(`merged: ${this.merged}`);
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
@@ -213,14 +215,16 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			const dstResourcePath = PATH.join(this.destDir_, PATH.basename(srcResourcePath));
 			const profileDirPath = `${Setting.value('profileDir')}`;
 			let modifiedHtml = fullHtml;
-			if (noteFilePath.indexOf(profileDirPath) !== 0) {
-				const noteIdToPath: { [key: string]: string } = item.noteIdToPath;
-				const noteId = item.id;
-				modifiedHtml = await this.modifyExportHTMLSource(fullHtml, srcResourcePath, dstResourcePath, noteId, noteFilePath, noteIdToPath);
-			} else {
+			if (!this.skipJoplinSchmeConversion) {
+				if (noteFilePath.indexOf(profileDirPath) !== 0) {
+					const noteIdToPath: { [key: string]: string } = item.noteIdToPath;
+					const noteId = item.id;
+					modifiedHtml = await this.modifyExportHTMLSource(fullHtml, srcResourcePath, dstResourcePath, noteId, noteFilePath, noteIdToPath);
+				} else {
 				// for exporting pdf,  joplin_resource:// schme must be modified.
-				const resourceDir = Setting.value('resourceDir');
-				modifiedHtml = InteropService_Exporter_Html.modifyJoplinResource(fullHtml, resourceDir);
+					const resourceDir = Setting.value('resourceDir');
+					modifiedHtml = InteropService_Exporter_Html.modifyJoplinResource(fullHtml, resourceDir);
+				}
 			}
 			await shim.fsDriver().writeFile(noteFilePath, modifiedHtml, 'utf-8');
 		}

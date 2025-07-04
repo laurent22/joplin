@@ -457,6 +457,7 @@ export default class InteropService {
 
 		if (originalFormat === 'vectorDB') {
 			options.format = 'html';
+			options.skipJoplinSchmeConversion = true;
 		}
 
 
