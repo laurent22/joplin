@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13, ubuntu-22.04, windows-2025]
+        os: [ubuntu-22.04, windows-2025]
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment

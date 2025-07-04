@@ -83,7 +83,7 @@
     "gulp": "4.0.2",
     "husky": "9.1.7",
     "lerna": "3.22.1",
-    "lint-staged": "15.2.8",
+    "lint-staged": "15.4.3",
     "madge": "7.0.0",
     "npm-package-json-lint": "7.1.0",
     "typescript": "5.4.5"

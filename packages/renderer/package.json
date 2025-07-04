@@ -35,7 +35,7 @@
     "@joplin/utils": "~3.4",
     "font-awesome-filetypes": "2.1.0",
     "fs-extra": "11.2.0",
-    "highlight.js": "11.10.0",
+    "highlight.js": "11.11.1",
     "html-entities": "1.4.0",
     "json-stringify-safe": "5.0.1",
     "katex": "0.16.21",
