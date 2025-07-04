@@ -167,11 +167,12 @@ export default class InteropServiceHelper {
 				defaultPath: await this.defaultFilename(noteId, module.fileExtensions[0]),
 			});
 		} else if (module.format === 'vectorDB') {
-			path = `${Setting.value('profileDir')}/vector_db_workspace/html`;
+			const workspace = `${Setting.value('profileDir')}/vector_db_workspace`;
+			path = `${workspace}/html`;
 			// if vecotor_db_workspace does not exist, create it
-			if (fs.existsSync(path)) {
+			if (fs.existsSync(workspace)) {
 				// delete the folder if it exists
-				fs.rmSync(path, { recursive: true, force: true });
+				fs.rmSync(workspace, { recursive: true, force: true });
 			}
 			fs.mkdirSync(path, { recursive: true });
 		} else {
