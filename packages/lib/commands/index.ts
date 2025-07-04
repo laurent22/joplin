@@ -2,6 +2,7 @@
 import * as deleteNote from './deleteNote';
 import * as historyBackward from './historyBackward';
 import * as historyForward from './historyForward';
+import * as leaveSharedFolder from './leaveSharedFolder';
 import * as openMasterPasswordDialog from './openMasterPasswordDialog';
 import * as permanentlyDeleteNote from './permanentlyDeleteNote';
 import * as renderMarkup from './renderMarkup';
@@ -14,6 +15,7 @@ const index: any[] = [
 	deleteNote,
 	historyBackward,
 	historyForward,
+	leaveSharedFolder,
 	openMasterPasswordDialog,
 	permanentlyDeleteNote,
 	renderMarkup,

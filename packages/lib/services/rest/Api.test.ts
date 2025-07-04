@@ -11,7 +11,7 @@ import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../search/SearchEngine';
 const { MarkupToHtml } = require('@joplin/renderer');
-import { ResourceEntity } from '../database/types';
+import { NoteEntity, ResourceEntity } from '../database/types';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -960,5 +960,26 @@ describe('services/rest/Api', () => {
 
 		await SearchEngine.instance().destroy();
 
+	}));
+
+	it('should not fail when both deleted and conflict notes are included', (async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder.id });
+		await msleep(1);
+		const note2 = await Note.save({ parent_id: folder.id, deleted_time: 1 });
+		await msleep(1);
+		const note3 = await Note.save({ parent_id: folder.id, is_conflict: 1 });
+
+		const r1 = await api.route(RequestMethod.GET, 'notes', {
+			limit: 3,
+			include_conflicts: '1',
+			include_deleted: '1',
+		});
+
+		expect(r1.items.map((item: NoteEntity) => item.id)).toEqual([
+			note1.id,
+			note2.id,
+			note3.id,
+		]);
 	}));
 });

@@ -20,7 +20,7 @@ export interface WhereQuery {
 export default async function(db: any, tableName: string, pagination: Pagination, whereQuery: WhereQuery = null, fields: string[] = null): Promise<ModelFeedPage> {
 	fields = fields ? fields.slice() : ['id'];
 
-	const where = whereQuery ? [whereQuery.sql] : [];
+	const where = whereQuery && whereQuery.sql ? [whereQuery.sql] : [];
 	const sqlParams = whereQuery && whereQuery.params ? whereQuery.params.slice() : [];
 
 	if (!pagination.order.length) throw new Error('Pagination order must be provided');

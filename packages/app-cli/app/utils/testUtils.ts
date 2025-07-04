@@ -15,4 +15,7 @@ export const setupApplication = async () => {
 	// such notebook.
 	await Folder.save({ title: 'default' });
 	await app().refreshCurrentFolder();
+
+	// Some tests also need access to the Redux store
+	app().initRedux();
 };

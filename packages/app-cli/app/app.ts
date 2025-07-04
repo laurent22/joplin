@@ -6,7 +6,7 @@ import Folder from '@joplin/lib/models/Folder';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry.js';
 import { dirname, fileExtension } from '@joplin/lib/path-utils';
 import { splitCommandString } from '@joplin/utils';
@@ -16,6 +16,7 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import initializeCommandService from './utils/initializeCommandService';
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
 const { splitCommandBatch } = require('@joplin/lib/string-utils');
@@ -74,6 +75,12 @@ class Application extends BaseApplication {
 		} else {
 			return output.length ? output[0] : null;
 		}
+	}
+
+	public async loadItemOrFail(type: ModelType | 'folderOrNote', pattern: string) {
+		const output = await this.loadItem(type, pattern);
+		if (!output) throw new Error(_('Cannot find "%s".', pattern));
+		return output;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -413,6 +420,8 @@ class Application extends BaseApplication {
 		this.initRedux();
 
 		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
+
+		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.

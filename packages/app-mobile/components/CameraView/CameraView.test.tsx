@@ -4,6 +4,7 @@ import { CameraResult } from './types';
 import { fireEvent, render, screen } from '../../utils/testing/testingLibrary';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import TestProviderStack from '../testing/TestProviderStack';
+import { acceptCameraPermission, rejectCameraPermission, setQrCodeData, startCamera } from './utils/testing';
 
 interface WrapperProps {
 	onPhoto?: (result: CameraResult)=> void;
@@ -22,26 +23,6 @@ const CameraViewWrapper: React.FC<WrapperProps> = props => {
 			onCancel={props.onCancel ?? emptyFn}
 		/>
 	</TestProviderStack>;
-};
-
-const rejectCameraPermission = () => {
-	const rejectPermissionButton = screen.getByRole('button', { name: 'Reject permission' });
-	fireEvent.press(rejectPermissionButton);
-};
-
-const acceptCameraPermission = () => {
-	const acceptPermissionButton = screen.getByRole('button', { name: 'Accept permission' });
-	fireEvent.press(acceptPermissionButton);
-};
-
-const startCamera = () => {
-	const startCameraButton = screen.getByRole('button', { name: 'On camera ready' });
-	fireEvent.press(startCameraButton);
-};
-
-const setQrCodeData = (data: string) => {
-	const qrCodeDataInput = screen.getByPlaceholderText('QR code data');
-	fireEvent.changeText(qrCodeDataInput, data);
 };
 
 describe('CameraView', () => {
@@ -85,3 +66,4 @@ describe('CameraView', () => {
 		view.unmount();
 	});
 });
+

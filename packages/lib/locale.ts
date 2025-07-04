@@ -733,4 +733,4 @@ const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	}
 };
 
-export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, stringByLocale, languageCode, countryCodeOnly };

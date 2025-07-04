@@ -448,7 +448,7 @@ export default class Synchronizer {
 		// Before synchronising make sure all share_id properties are set
 		// correctly so as to share/unshare the right items.
 		try {
-			await Folder.updateAllShareIds(this.resourceService());
+			await Folder.updateAllShareIds(this.resourceService(), this.shareService_ ? this.shareService_.shares : []);
 			if (this.shareService_) await this.shareService_.checkShareConsistency();
 		} catch (error) {
 			if (error && error.code === ErrorCode.IsReadOnly) {

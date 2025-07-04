@@ -14,6 +14,11 @@ const customCssFilePath = (Setting: typeof SettingType, filename: string): strin
 	return `${Setting.value('rootProfileDir')}/${filename}`;
 };
 
+const showVoiceTypingSettings = () => (
+	// For now, iOS and web don't support voice typing.
+	shim.mobilePlatform() === 'android'
+);
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -1803,8 +1808,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			description: () => _('Leave it blank to download the language files from the default website'),
 			label: () => _('Voice typing language files (URL)'),
-			// For now, iOS and web don't support voice typing.
-			show: () => shim.mobilePlatform() === 'android',
+			show: showVoiceTypingSettings,
 			section: 'note',
 		},
 
@@ -1815,8 +1819,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			label: () => _('Preferred voice typing provider'),
 			isEnum: true,
-			// For now, iOS and web don't support voice typing.
-			show: () => shim.mobilePlatform() === 'android',
+			show: showVoiceTypingSettings,
 			section: 'note',
 
 			options: () => {
@@ -1825,6 +1828,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					'whisper-tiny': _('Whisper'),
 				};
 			},
+		},
+
+		'voiceTyping.glossary': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Mobile],
+			label: () => _('Voice typing: Glossary'),
+			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
+			show: (settings) => showVoiceTypingSettings() && settings['voiceTyping.preferredProvider'].startsWith('whisper'),
+			section: 'note',
 		},
 
 		'trash.autoDeletionEnabled': {

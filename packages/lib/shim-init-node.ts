@@ -98,7 +98,7 @@ function setupProxySettings(options: any) {
 	proxySettings.proxyUrl = options.proxyUrl;
 }
 
-interface ShimInitOptions {
+export interface ShimInitOptions {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	sharp: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

@@ -48,7 +48,7 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 
 	const [redownloadCounter, setRedownloadCounter] = useState(0);
 
-	useQueuedAsyncEffect(async (event: AsyncEffectEvent) => {
+	useQueuedAsyncEffect(async (event) => {
 		try {
 			// Reset the error: If starting voice typing again resolves the error, the error
 			// should be hidden (and voice typing should start).
