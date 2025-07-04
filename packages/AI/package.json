@@ -7,8 +7,11 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json"
   },
   "dependencies": {
+    "@langchain/community": "^0.3.48",
     "@langchain/core": "^0.3.61",
     "@langchain/openai": "^0.5.16",
+    "cheerio": "^1.1.0",
+    "faiss-node": "^0.5.1",
     "langchain": "^0.3.29"
   },
   "devDependencies": {
