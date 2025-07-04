@@ -455,6 +455,11 @@ export default class InteropService {
 			options.merged = true;
 		}
 
+		if (originalFormat === 'vectorDB') {
+			options.format = 'html';
+		}
+
+
 		const exporter = this.newModuleFromPath_(ModuleType.Exporter, options);
 		await exporter.init(exportPath, options);
 
@@ -504,7 +509,7 @@ export default class InteropService {
 			}
 		}
 
-		if (options.format === 'html') {
+		if (options.format === 'html' || options.format === 'vectorDB') {
 			const noteIdToPath: { [key: string]: string } = {};
 			// create map from noteID to html PATH
 			for (const item of targetItems) {

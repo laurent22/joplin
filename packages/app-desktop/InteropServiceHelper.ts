@@ -167,7 +167,7 @@ export default class InteropServiceHelper {
 				defaultPath: await this.defaultFilename(noteId, module.fileExtensions[0]),
 			});
 		} else if (module.format === 'vectorDB') {
-			path = `${Setting.value('profileDir')}/vector_db_workspace`;
+			path = `${Setting.value('profileDir')}/vector_db_workspace/html`;
 			// if vecotor_db_workspace does not exist, create it
 			if (!fs.existsSync(path)) {
 				fs.mkdirSync(path, { recursive: true });
