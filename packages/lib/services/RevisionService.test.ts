@@ -718,10 +718,9 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 1
 		await revisionService().collectRevisions(); // No revisions are collected, but item_changes are processed and deleted
 
-		jest.advanceTimersByTime(100);
+		jest.advanceTimersByTime(10_000);
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).length).toBe(1);
 
-		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
@@ -756,10 +755,9 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' });
 		await revisionService().collectRevisions(); // No revisions are collected, but item_changes are processed and deleted
 
-		jest.advanceTimersByTime(100);
+		jest.advanceTimersByTime(10_000);
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).length).toBe(1);
 
-		Setting.setValue('revisionService.intervalBetweenRevisions', 50);
 		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
