@@ -22,6 +22,7 @@ const expectWithInstructions = <T>(value: T) => {
 	return expect(value, instructionMessage);
 };
 
+// This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
 	async function importNote(path: string) {
