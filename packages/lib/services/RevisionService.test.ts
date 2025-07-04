@@ -647,7 +647,7 @@ describe('services/RevisionService', () => {
 		const note = await Note.save({ title: 'test', body: '' });
 		await Note.save({ id: note.id, title: 'test', body: 'A' });
 		await Note.save({ id: note.id, title: 'test', body: 'AB' });
-		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // Existing revision
+		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // REV 0
 		await revisionService().collectRevisions();
 		jest.advanceTimersByTime(100);
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).length).toBe(1);
@@ -664,9 +664,9 @@ describe('services/RevisionService', () => {
 		expect(revisions[1].body_diff).toBe('[{"diffs":[[0,"ABC"],[1,"DEF"]],"start1":0,"start2":0,"length1":3,"length2":6}]');
 	});
 
-	it('should create 1 revision, where the user has deleted all revisions for the note and the current contents of the note are the same as the initial note, when revisions are collected', async () => {
-		// This scenario occurs when the user modifies a note but then changes the content back to the original before revisions are collected
-		// Because there are no existing revisions, this should always create just 1 revision because old and new note contents will be the same
+	it('should create 1 revision, when changing a note which was modified less than 7 days ago and the user deleted its revisions', async () => {
+		// Only 1 revision is created because the note was last modified within 7 days, but a revision is created because non exist currently
+		// It does not matter whether the old and new contents match
 		const note = await Note.save({ title: 'test', body: 'ABC' }); // Existing state
 		await revisionService().collectRevisions(); // No revision created
 		jest.advanceTimersByTime(100);
@@ -682,9 +682,8 @@ describe('services/RevisionService', () => {
 		expect(revisions[0].body_diff).toBe('[{"diffs":[[1,"ABC"]],"start1":0,"start2":0,"length1":0,"length2":3}]');
 	});
 
-	it('should not create a revision, for a note with an existing revision and the current contents of the note are the same as the initial note, when revisions are collected', async () => {
-		// This scenario occurs when the user modifies a note but then changes the content back to the original before revisions are collected
-		// Because there are existing revisions, this should not create any revisions because old and new note contents will be the same and also be the same as the latest revision
+	it('should not create a revision, when changing a note which was modified less than 7 days ago, but the current contents of the note are the same as the initial note, when revisions are collected', async () => {
+		// No revisions are created, as the note was last modified within 7 days and the current note contents match the contents of the latest revision
 		const note = await Note.save({ title: 'test', body: '' });
 		await Note.save({ id: note.id, title: 'test', body: 'A' });
 		await Note.save({ id: note.id, title: 'test', body: 'AB' });
@@ -711,7 +710,7 @@ describe('services/RevisionService', () => {
 		const note = await Note.save({ title: 'test', body: '' });
 		await Note.save({ id: note.id, title: 'test', body: 'A' });
 		await Note.save({ id: note.id, title: 'test', body: 'AB' });
-		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // Existing revision
+		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // REV 0
 		await revisionService().collectRevisions(); // Collect initial revision
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).length).toBe(1);
 
@@ -749,12 +748,12 @@ describe('services/RevisionService', () => {
 		const note = await Note.save({ title: 'test', body: '' });
 		await Note.save({ id: note.id, title: 'test', body: 'A' });
 		await Note.save({ id: note.id, title: 'test', body: 'AB' });
-		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // Existing revision
+		await Note.save({ id: note.id, title: 'test', body: 'ABC' }); // REV 0
 		await revisionService().collectRevisions(); // Collect initial revision
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, note.id)).length).toBe(1);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCD' });
-		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 1
+		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' });
 		await revisionService().collectRevisions(); // No revisions are collected, but item_changes are processed and deleted
 
 		jest.advanceTimersByTime(100);
@@ -764,8 +763,8 @@ describe('services/RevisionService', () => {
 		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
-		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 2
-		await revisionService().collectRevisions();
+		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 1
+		await revisionService().collectRevisions(); // Content is the same, create just one revision instead of two
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(2);
