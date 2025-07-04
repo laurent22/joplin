@@ -17,6 +17,7 @@ import { pathExists, writeFile } from 'fs-extra';
 import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@joplin/lib/services/joplinCloudUtils';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
+import ShareService from '@joplin/lib/services/share/ShareService';
 
 const logger = Logger.create('command-sync');
 
@@ -229,6 +230,10 @@ class Command extends BaseCommand {
 
 				return cleanUp();
 			}
+
+			// Refresh share invitations -- if running without a GUI, some of the
+			// maintenance tasks may otherwise be skipped.
+			await ShareService.instance().maintenance();
 
 			this.stdout(_('Starting synchronisation...'));
 
