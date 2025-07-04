@@ -35,9 +35,7 @@ const createNoteWithTestRevisions = async (count: number) => {
 	const noteId = note.id;
 
 	for (let i = 0; i < count; i++) {
-		if (i > 0) {
-			jest.advanceTimersByTime(1000 * 60 * 10);
-		}
+		jest.advanceTimersByTime(1000 * 60 * 10);
 		await Note.save({
 			id: noteId,
 			title: `Note - Updated (x${i + 1})`,

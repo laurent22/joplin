@@ -182,17 +182,17 @@ describe('Synchronizer.revisions', () => {
 	}));
 
 	it('should delete old revisions remotely when deleted locally', async () => {
-		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000);
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
 		jest.useFakeTimers({ advanceTimers: true });
 
 		const note = await Note.save({ title: 'note' });
 		const getNoteRevisions = () => {
 			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		};
-		await Note.save({ id: note.id, title: 'note REV0' });
 		jest.advanceTimersByTime(200);
 
-		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		await Note.save({ id: note.id, title: 'note REV0' });
+		jest.advanceTimersByTime(200);
 
 		await revisionService().collectRevisions(); // REV0
 		expect(await getNoteRevisions()).toHaveLength(1);

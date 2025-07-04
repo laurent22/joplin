@@ -143,8 +143,6 @@ export default class RevisionService extends BaseService {
 					Note.escapeIdsForSql(noteIds)
 				})`);
 
-				const itemsWithNoRevisions = await Revision.itemsWithNoRevisions(BaseModel.TYPE_NOTE, changes.map(change => change.item_id));
-
 				for (let i = 0; i < changes.length; i++) {
 					const change = changes[i];
 					const noteId = change.item_id;
@@ -158,10 +156,7 @@ export default class RevisionService extends BaseService {
 								let oldNoteSaved = false;
 
 								if (oldNote) {
-									// When we edit an existing note with no history, we want to ensure a revision containing the original content, not the new content, is created. But this does not apply if the user has just
-									// created the note, so the difference between the current note updated_time and old note updated_time should be at least as long as the interval period
-									const hasNoRevisionsAndOutsideIntervalPeriod = itemsWithNoRevisions.includes(noteId) && note.updated_time - oldNote.updated_time >= Setting.value('revisionService.intervalBetweenRevisions');
-									if (oldNote.updated_time < this.oldNoteCutOffDate_() || hasNoRevisionsAndOutsideIntervalPeriod) {
+									if (oldNote.updated_time < this.oldNoteCutOffDate_()) {
 										// This is where we save the original version of this old note
 										// We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
 										// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
