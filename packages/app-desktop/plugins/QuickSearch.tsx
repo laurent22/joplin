@@ -327,7 +327,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			if (id) {
 				// id指定時はそのidのメッセージを上書き
 				newMessages = prevState.chatMessages.map(msg =>
-					msg.id === targetId ? { ...msg, text: response, isUser: false, loading: false } : msg
+					msg.id === targetId ? { ...msg, text: response, isUser: false, loading: loading } : msg
 				);
 			} else {
 				// 通常は末尾に追加

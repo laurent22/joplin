@@ -37,7 +37,7 @@ const loadVectorStore = async (indexPath: string) => {
 	}
 };
 
-export const ragSendMessage = async (question: string, dbPath: string, replyId: string, histories: Array<AIHistory>, replyFunc: (msg: string, id?: string)=> string) => {
+export const ragSendMessage = async (question: string, dbPath: string, replyId: string, histories: Array<AIHistory>, replyFunc: (msg: string, id?: string, loading?: boolean)=> string) => {
 	const model = new ChatOpenAI({ model: 'gpt-4o', apiKey: process.env.JOPLIN_OAI_KEY });
 	const vectorStore = await loadVectorStore(dbPath);
 	if (!vectorStore) {
@@ -55,7 +55,7 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 
 	// 関連するドキュメントを検索
 	console.log('\n関連ドキュメントを検索中...');
-	replyFunc('関連ドキュメントを検索中...', replyId);
+	replyFunc('関連ドキュメントを検索中...', replyId, true);
 	const relevantDocs = await vectorStore.similaritySearch(question, 10);
 	console.log(`${relevantDocs.length}件の関連ドキュメントが見つかりました`);
 
@@ -78,6 +78,7 @@ ${context}`;
 		new HumanMessage(question),
 	];
 
+	replyFunc('回答を生成中...', replyId, true);
 	// LLMに質問して回答を生成
 	let response = '';
 	const stream = await model.stream(messages);
