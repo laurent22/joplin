@@ -166,6 +166,15 @@ export default class InteropServiceHelper {
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
 				defaultPath: await this.defaultFilename(noteId, module.fileExtensions[0]),
 			});
+		} else if (module.format === 'vectorDB') {
+			const workspace = `${Setting.value('profileDir')}/vector_db_workspace`;
+			path = `${workspace}/html`;
+			// if vecotor_db_workspace does not exist, create it
+			if (fs.existsSync(workspace)) {
+				// delete the folder if it exists
+				fs.rmSync(workspace, { recursive: true, force: true });
+			}
+			fs.mkdirSync(path, { recursive: true });
 		} else {
 			path = bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],

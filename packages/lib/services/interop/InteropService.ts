@@ -12,6 +12,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import * as PATH from 'path';
 import * as fsExtra from 'fs-extra';
+import { vectorizeDocuments } from '../../../AI/dist/vectorize';
 const ArrayUtils = require('../../ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
@@ -160,6 +161,13 @@ export default class InteropService {
 					fileExtensions: ['html', 'htm'],
 					target: FileSystemItem.Directory,
 					description: _('HTML Directory merged With Embeded Image'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'vectorDB',
+					fileExtensions: ['html', 'htm'],
+					target: FileSystemItem.Directory,
+					description: _('Create vector DB'),
 				},
 			];
 
@@ -448,6 +456,12 @@ export default class InteropService {
 			options.merged = true;
 		}
 
+		if (originalFormat === 'vectorDB') {
+			options.format = 'html';
+			options.skipJoplinSchmeConversion = true;
+		}
+
+
 		const exporter = this.newModuleFromPath_(ModuleType.Exporter, options);
 		await exporter.init(exportPath, options);
 
@@ -497,7 +511,7 @@ export default class InteropService {
 			}
 		}
 
-		if (options.format === 'html') {
+		if (options.format === 'html' || options.format === 'vectorDB') {
 			const noteIdToPath: { [key: string]: string } = {};
 			// create map from noteID to html PATH
 			for (const item of targetItems) {
@@ -533,6 +547,10 @@ export default class InteropService {
 		if (options.format === 'html' && options.merged) {
 			const htmlExporter = exporter;
 			await htmlExporter.processMergedItems(targetItems);
+		}
+
+		if (originalFormat === 'vectorDB') {
+			await vectorizeDocuments(options.path, `${Setting.value('profileDir')}/vector_db_workspace/faiss_index`);
 		}
 
 		await exporter.close();

@@ -98,6 +98,7 @@ export interface ExportOptions {
 	plugins?: PluginStates;
 	embededImage?: boolean;
 	merged?: boolean;
+	skipJoplinSchmeConversion?: boolean;
 }
 
 export interface ImportExportResult {
