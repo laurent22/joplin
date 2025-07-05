@@ -10,24 +10,45 @@ const pdfExtractDir = async () => {
 };
 
 
-const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDimensions: ImageDimensions) => {
+const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDimensions: ImageDimensions, text: string) => {
 	const left = boundingBox[0];
 	const top = boundingBox[2];
 	const height = boundingBox[3] - top;
+	const width = boundingBox[1] - boundingBox[0];
 	const a4height = 1134;
-	return {
-		left: (left / imageDimensions.width) * 100,
-		top: (top / imageDimensions.height) * 100,
+	const obj = {
+		left,
+		top,
 		fontSize: (height / imageDimensions.height) * a4height,
-		boundingBox,
+		scale: { x: 0, y: 0 },
 	};
+
+	const canvas = new OffscreenCanvas(imageDimensions.width, imageDimensions.height);
+	const ctx = canvas.getContext('2d');
+	ctx.font = `${obj.fontSize}px Arial`;
+	const fontMeasures = ctx.measureText(text);
+	const fontWidth = fontMeasures.width;
+	obj.scale = {
+		x: width / fontWidth,
+		y: height / (fontMeasures.fontBoundingBoxAscent + fontMeasures.fontBoundingBoxDescent),
+	};
+
+
+	return obj;
 
 };
 
 const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: ImageDimensions) => {
 	return allWords.map(word => {
-		const { left, top, fontSize } = calculateWordPosition(word.bb, imageDimensions);
-		return `<span style="font-size: ${fontSize}px; left: ${left.toFixed(2)}%; top: ${top.toFixed(2)}%;">${word.t}</span>`;
+		const { left, top, fontSize, scale } = calculateWordPosition(word.bb, imageDimensions, word.t);
+		return `<span 
+			style="font-size: ${fontSize}px; 
+			left: ${left.toFixed(2)}px; 
+			top: ${top.toFixed(2)}px;
+			transform: scale(${scale.x}, ${scale.y}); 
+			transform-origin: top left;
+			">
+		${word.t}</span>`;
 	}).join('\n');
 };
 
@@ -44,7 +65,7 @@ const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine
 	const textOverlayHtml = generateTextOverlay(allWords, imageDimensions);
 
 	return `<div class="image-container">
-				<img src="${currentImage}">
+				<img style="width: ${imageDimensions.width}px; height: ${imageDimensions.height - 5}px;" src="${currentImage}">
 				<div>
 				${textOverlayHtml}
 				</div>
