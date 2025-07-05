@@ -13,28 +13,24 @@ const pdfExtractDir = async () => {
 const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDimensions: ImageDimensions, text: string) => {
 	const left = boundingBox[0];
 	const top = boundingBox[2];
-	const height = boundingBox[3] - top;
+	const fontSize = boundingBox[3] - top;
 	const width = boundingBox[1] - boundingBox[0];
-	const a4height = 1134;
-	const obj = {
-		left,
-		top,
-		fontSize: (height / imageDimensions.height) * a4height,
-		scale: { x: 0, y: 0 },
-	};
 
 	const canvas = new OffscreenCanvas(imageDimensions.width, imageDimensions.height);
 	const ctx = canvas.getContext('2d');
-	ctx.font = `${obj.fontSize}px Arial`;
+	ctx.font = `${fontSize}px Arial`;
 	const fontMeasures = ctx.measureText(text);
-	const fontWidth = fontMeasures.width;
-	obj.scale = {
-		x: width / fontWidth,
-		y: height / (fontMeasures.fontBoundingBoxAscent + fontMeasures.fontBoundingBoxDescent),
+	const scale = {
+		x: width / fontMeasures.width,
+		y: fontSize / (fontMeasures.fontBoundingBoxAscent + fontMeasures.fontBoundingBoxDescent),
 	};
 
-
-	return obj;
+	return {
+		left,
+		top,
+		fontSize,
+		scale,
+	};
 
 };
 
@@ -46,7 +42,6 @@ const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: I
 			left: ${left.toFixed(2)}px; 
 			top: ${top.toFixed(2)}px;
 			transform: scale(${scale.x}, ${scale.y}); 
-			transform-origin: top left;
 			">
 		${word.t}</span>`;
 	}).join('\n');
@@ -64,8 +59,11 @@ const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine
 	const allWords = currentLine.flatMap(l => l.words);
 	const textOverlayHtml = generateTextOverlay(allWords, imageDimensions);
 
+	// Slightly decreasing the image to fit into the page
+	const heightAdjusted = Math.round(imageDimensions.height - (imageDimensions.height * 0.005));
+
 	return `<div class="image-container">
-				<img style="width: ${imageDimensions.width}px; height: ${imageDimensions.height - 5}px;" src="${currentImage}">
+				<img style="width: ${imageDimensions.width}px; height: ${heightAdjusted}px;" src="${currentImage}">
 				<div>
 				${textOverlayHtml}
 				</div>
@@ -95,13 +93,6 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 			position: relative;
 		}
 
-		.image-container img {
-			/* This is required so the image doesn't take more than one page. */
-			/* We need to check if 5px is a good value even for larger images. */
-			width: calc(100% - 5px); 
-			height: calc(100% - 5px); 
-		  }
-
 		.image-container div {
 			position: absolute;
 			top: 0;
@@ -115,6 +106,7 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 			opacity: 0.01;
 			color: rgba(0, 0, 0, 0.01);
 			font-size: 8px;
+			transform-origin: top left;
 		}
 	</style>
 </head>
