@@ -4,6 +4,7 @@ import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
 import createHtmlWithTranscriptionFromPdf from '@joplin/lib/services/ocr/createHtmlWithTranscriptionFromPdf';
+import getPageSize from '@joplin/lib/services/ocr/getPageSize';
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -16,12 +17,17 @@ import { BrowserWindow } from 'electron';
 const md5 = require('md5');
 const url = require('url');
 
+type PageSizeInInches = {
+	width: number;
+	height: number;
+};
+
 interface ExportNoteOptions {
 	customCss?: string;
 	sourceNoteIds?: string[];
 	sourceFolderIds?: string[];
 	printBackground?: boolean;
-	pageSize?: string;
+	pageSize?: string | PageSizeInInches;
 	landscape?: boolean;
 	includeConflicts?: boolean;
 	plugins?: PluginStates;
@@ -54,6 +60,10 @@ export default class InteropServiceHelper {
 		throw Error(`Type not defined: ${sourceType}`);
 	}
 
+	private static async getPageSize(id: string) {
+		return getPageSize(id);
+	}
+
 	private static async exportTo_(target: string, id: string, sourceType: SourceType, options: ExportNoteOptions = {}) {
 		let win: BrowserWindow|null = null;
 		let htmlFile: string = null;
@@ -70,6 +80,15 @@ export default class InteropServiceHelper {
 			};
 
 			htmlFile = await this.getHtmlFilePath(id, sourceType, exportOptions);
+			const pageSize = await this.getPageSize(id);
+			if (pageSize?.detectedSize === 'custom') {
+				options.pageSize = {
+					width: pageSize.width,
+					height: pageSize.height,
+				};
+			} else {
+				options.pageSize = pageSize.detectedSize;
+			}
 
 			const windowOptions = {
 				show: false,

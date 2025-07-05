@@ -1333,6 +1333,7 @@ packages/lib/services/ocr/OcrService.test.js
 packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/createHtmlWithTranscriptionFromPdf.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
+packages/lib/services/ocr/getPageSize.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js
