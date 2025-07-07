@@ -27,7 +27,7 @@ const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDim
 
 	return {
 		left,
-		top,
+		top: top - (top * 0.005),
 		fontSize,
 		scale,
 	};
