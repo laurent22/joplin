@@ -1,3 +1,4 @@
+import { htmlentities } from '@joplin/utils/html';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim, { ImageDimensions } from '../../shim';
@@ -43,7 +44,7 @@ const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: I
 			top: ${top.toFixed(2)}px;
 			transform: scale(${scale.x}, ${scale.y}); 
 			">
-		${word.t}</span>`;
+		${htmlentities(word.t)}</span>`;
 	}).join('\n');
 };
 
