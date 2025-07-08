@@ -566,6 +566,10 @@ const shim = {
 	imageDimensions: (_imagePath: string): Promise<ImageDimensions> => {
 		throw new Error('Not Implemented');
 	},
+
+	pdfInInches: (_filePath: string): Promise<ImageDimensions> => {
+		throw new Error('Not Implemented');
+	},
 };
 
 export default shim;

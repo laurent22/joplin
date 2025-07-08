@@ -5,6 +5,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { msleep } from '@joplin/utils/time';
+import getPageSize from '@joplin/lib/services/ocr/getPageSize';
 
 let isPrinting = false;
 
@@ -19,6 +20,11 @@ interface PrintOptions {
 	id: string;
 	sourceType: SourceType;
 }
+
+const determinePageSize = async (id: string, sourceType: SourceType) => {
+	if (sourceType === 'pdf') return getPageSize(id);
+	return Setting.value('export.pdfPageSize');
+};
 
 export type PrintCallback = (target: string, options: PrintOptions)=> Promise<void>;
 
@@ -49,9 +55,11 @@ const usePrintToCallback = (props: Props): PrintCallback => {
 
 		if (target === 'pdf') {
 			try {
+				const pageSize = await determinePageSize(options.id, options.sourceType);
+
 				const pdfData = await InteropServiceHelper.exportToPdf(options.id, options.sourceType, {
 					printBackground: true,
-					pageSize: Setting.value('export.pdfPageSize'),
+					pageSize,
 					landscape: Setting.value('export.pdfPageOrientation') === 'landscape',
 					customCss: props.customCss,
 					plugins: props.plugins,
@@ -63,7 +71,7 @@ const usePrintToCallback = (props: Props): PrintCallback => {
 			}
 		} else if (target === 'printer') {
 			try {
-				await InteropServiceHelper.printNote(options.id, options.sourceType, {
+				await InteropServiceHelper.printNote(options.id, {
 					printBackground: true,
 					customCss: props.customCss,
 				});

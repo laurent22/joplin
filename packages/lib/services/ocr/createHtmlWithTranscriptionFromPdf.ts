@@ -72,7 +72,9 @@ const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine
 		`;
 };
 
-const wrapOnBaseHtml = (pagesHtml: string) => {
+type PdfSizeInInches ={ width: number; height: number };
+
+const wrapOnBaseHtml = (pagesHtml: string, pdfSizeInInches: PdfSizeInInches) => {
 	return `
 <!DOCTYPE html>
 <html lang="en">
@@ -82,6 +84,7 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 	<style>
 		@page {
 			margin: 0;
+			size: ${pdfSizeInInches.width.toFixed(2)}in ${pdfSizeInInches.height.toFixed(2)}in;
 		}
 
 		body {
@@ -100,6 +103,7 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 			left: 0;
 			width: 100%;
 			height: 100%; 
+			overflow: hidden;
 		}
 
 		.image-container div span {
@@ -118,6 +122,20 @@ const wrapOnBaseHtml = (pagesHtml: string) => {
 </body>
 </html>
 `;
+};
+
+const htmlOverlayGenerator = async (imageFilePaths: string[], lines: RecognizeResultLine[][], pdfSizeInInches: PdfSizeInInches, extractDir: string) => {
+	let htmlContent = '';
+	for (let page = 0; page < imageFilePaths.length; page++) {
+		const currentImage = imageFilePaths[page];
+		const currentLines = lines[page];
+		htmlContent += await addNewPage(currentImage, currentLines);
+	}
+
+	const htmlFileFromPdf = await shim.fsDriver().findUniqueFilename(`${extractDir}/output.html`);
+	await shim.fsDriver().writeFile(htmlFileFromPdf, wrapOnBaseHtml(htmlContent, pdfSizeInInches), 'utf-8');
+
+	return htmlFileFromPdf;
 };
 
 const createHtmlWithTranscriptionFromPdf = async (resourceId: string) => {
@@ -144,18 +162,9 @@ const createHtmlWithTranscriptionFromPdf = async (resourceId: string) => {
 	if (lines.length !== imageFilePaths.length) {
 		throw new Error(`Mismatch number of transcribed pages and images generated from PDF. Images: ${imageFilePaths.length}. Pages: ${lines.length}`);
 	}
-
-	let htmlContent = '';
-	for (let page = 0; page < imageFilePaths.length; page++) {
-		const currentImage = imageFilePaths[page];
-		const currentLines = lines[page];
-		htmlContent += await addNewPage(currentImage, currentLines);
-	}
-
-	const htmlFileFromPdf = await shim.fsDriver().findUniqueFilename(`${extractDir}/output.html`);
-	await shim.fsDriver().writeFile(htmlFileFromPdf, wrapOnBaseHtml(htmlContent), 'utf-8');
-
-	return htmlFileFromPdf;
+	const pdfSizeInInches = await shim.pdfInInches(imageFilePaths[0]);
+	return htmlOverlayGenerator(imageFilePaths, lines, pdfSizeInInches, extractDir);
 };
 
 export default createHtmlWithTranscriptionFromPdf;
+

@@ -914,6 +914,22 @@ function shimInit(options: ShimInitOptions = null) {
 			height: image.height,
 		};
 	};
+
+	shim.pdfInInches = async (filePath: string) => {
+		const doc = await loadPdf(filePath);
+		const page = await doc.getPage(1);
+
+		const [x1, y1, x2, y2] = page.view;
+
+		const width = ((x2 - x1) / 72) * page.userUnit;
+		const height = ((y2 - y1) / 72) * page.userUnit;
+
+		return {
+			width,
+			height,
+		};
+	};
 }
+
 
 module.exports = { shimInit, setupProxySettings };

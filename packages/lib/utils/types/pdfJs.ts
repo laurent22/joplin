@@ -21,6 +21,8 @@ interface PdfPage {
 	getViewport(options: { scale: number }): Viewport;
 	render(options: RenderOptions): { promise: Promise<void> };
 	getTextContent(): Promise<PdfTextContent>;
+	view: [number, number, number, number]; // x1, y1, x2, y2
+	userUnit: number;
 }
 
 interface PdfDocument {
