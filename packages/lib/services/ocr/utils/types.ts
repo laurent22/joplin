@@ -15,6 +15,7 @@ export interface RecognizeResultWord {
 
 export interface RecognizeResultLine {
 	words: RecognizeResultWord[];
+	page?: number;
 }
 
 export interface RecognizeResult {

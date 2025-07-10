@@ -90,10 +90,12 @@ export default class OcrService {
 
 			return {
 				text: results.map(r => r.text).join('\n'),
-				lines: results.reduce((t, r) => {
-					t.push(r.lines);
-					return t;
-				}, []),
+				lines: results.flatMap((r, index) => r.lines.map(l => {
+					return {
+						...l,
+						page: index,
+					};
+				})),
 			};
 		} else {
 			return this.driver_.recognize(language, resourceFilePath);
