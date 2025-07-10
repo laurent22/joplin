@@ -162,7 +162,7 @@ const createHtmlWithTranscriptionFromPdf = async (resourceId: string) => {
 	if (lines.length !== imageFilePaths.length) {
 		throw new Error(`Mismatch number of transcribed pages and images generated from PDF. Images: ${imageFilePaths.length}. Pages: ${lines.length}`);
 	}
-	const pdfSizeInInches = await shim.pdfInInches(imageFilePaths[0]);
+	const pdfSizeInInches = await shim.pdfInInches(resourceFilePath);
 	return htmlOverlayGenerator(imageFilePaths, lines, pdfSizeInInches, extractDir);
 };
 
