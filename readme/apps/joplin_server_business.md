@@ -2,7 +2,7 @@
 
 <div style="overflow: auto;">
 
-<img src="../../Assets/WebsiteAssets/images/joplin_server_business/main.png" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/main.png" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
 Joplin Server Business is a synchronisation server that you can install on your own infrastructure, so that your data remains private and secure within your business.
 
@@ -18,7 +18,7 @@ Interested? [Contact us for a quote](mailto:jsb-inquiry@joplin.cloud?subject=Jop
 
 <div style="overflow: auto;">
 
-<img src="../../Assets/WebsiteAssets/images/joplin_server_business/self_host.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/self_host.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
 The data is hosted on your own server, giving you full control over it and ensuring it stays within your organisation.
 
@@ -28,7 +28,7 @@ The data is hosted on your own server, giving you full control over it and ensur
 
 <div style="overflow: auto;">
 
-<img src="../../Assets/WebsiteAssets/images/joplin_server_business/share.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/share.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
 Our service allows you to share notes and documents across unlimited devices. Create and modify teams to manage projects and planning.
 
@@ -38,7 +38,7 @@ Our service allows you to share notes and documents across unlimited devices. Cr
 
 <div style="overflow: auto;">
 
-<img src="../../Assets/WebsiteAssets/images/joplin_server_business/publish.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/publish.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
 You can publish a note so that it can be viewed in a browser by your colleagues and customers. The note can be available publicly on the internet or remain within your intranet.
 
@@ -48,7 +48,7 @@ You can publish a note so that it can be viewed in a browser by your colleagues 
 
 <div style="overflow: auto;">
 
-<img src="../../Assets/WebsiteAssets/images/joplin_server_business/teams.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/teams.jpg" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
 Using Joplin Server Business you can create and manage teams of users. Each team can collaborate on notebooks and notes and share information.
 
