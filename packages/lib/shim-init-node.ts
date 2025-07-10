@@ -920,13 +920,14 @@ function shimInit(options: ShimInitOptions = null) {
 		const page = await doc.getPage(1);
 
 		const [x1, y1, x2, y2] = page.view;
+		const changeOrientation = page.rotate % 180 !== 0;
 
 		const width = ((x2 - x1) / 72) * page.userUnit;
 		const height = ((y2 - y1) / 72) * page.userUnit;
 
 		return {
-			width,
-			height,
+			width: changeOrientation ? height : width,
+			height: changeOrientation ? width : height,
 		};
 	};
 }
