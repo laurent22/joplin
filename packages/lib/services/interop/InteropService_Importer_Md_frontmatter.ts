@@ -12,6 +12,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 			const { metadata, tags } = parse(note.body);
 
 			const updatedNote = { ...note, ...metadata };
+			if (!metadata['title']) {
+				updatedNote['title'] = note['title'];
+			}
 
 			const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 
