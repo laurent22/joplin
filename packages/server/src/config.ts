@@ -212,7 +212,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		cookieSecure: env.COOKIES_SECURE,
 		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
-		itemSizeHardLimit: env.ITEM_SIZE_HARD_LIMIT  && env.STORAGE_DRIVER.includes("Type=Filesystem") ? Number(env.ITEM_SIZE_HARD_LIMIT) : 250000000,
+		itemSizeHardLimit: env.ITEM_SIZE_HARD_LIMIT && env.STORAGE_DRIVER.includes('Type=Filesystem') ? Number(env.ITEM_SIZE_HARD_LIMIT) : 250000000,
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
 		saml: samlConfigFromEnv(env),

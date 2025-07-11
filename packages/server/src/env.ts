@@ -165,7 +165,7 @@ const defaultEnvValues: EnvVariables = {
 	// ==================================================
 	// Item size configuration
 	// ==================================================
-	ITEM_SIZE_HARD_LIMIT: 250000000
+	ITEM_SIZE_HARD_LIMIT: 250000000,
 };
 
 export interface EnvVariables {
@@ -266,7 +266,7 @@ export interface EnvVariables {
 
 	LOCAL_AUTH_ENABLED: boolean;
 
-	ITEM_SIZE_HARD_LIMIT : number;
+	ITEM_SIZE_HARD_LIMIT: number;
 }
 
 const parseBoolean = (s: string): boolean => {
