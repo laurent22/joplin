@@ -187,10 +187,13 @@ export const parse = (note: string): ParsedMeta => {
 
 	const md = toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }) ?? {});
 	const metadata: NoteEntity = {
-		title: md['title'] || '',
 		source_url: md['source'] || '',
 		is_todo: ('completed?' in md) ? 1 : 0,
 	};
+
+	if ('title' in md) {
+		metadata['title'] = md.title;
+	}
 
 	if ('id' in md && typeof md['id'] === 'string' && md.id.match(/^[0-9a-zA-Z]{32}$/)) {
 		metadata['id'] = md.id;
