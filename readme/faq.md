@@ -157,6 +157,16 @@ Additionally the Windows Task Manager can be used to verify whether Joplin is st
 
 Notebooks and notes on iOS are not backed up when [backing up to your Mac](https://support.apple.com/guide/mac-help/back-up-and-restore-your-device-mchla3c8ed03/mac).
 
+## How do I uninstall Joplin completely on Linux?
+
+```
+rm -r ~/.joplin
+rm -r ~/.joplin-bin
+rm -r ~/.config/Joplin
+rm -r ~/.config/joplin-desktop
+rm ~/.local/share/applications/appimagekit-joplin.desktop
+```
+
 ## Why is it named Joplin?
 
 The application is named in honour of composer and pianist [Scott Joplin](https://en.wikipedia.org/wiki/Scott_Joplin), whose music I frequently listen to. His name is also easy to remember and type, making it a fitting choice.
