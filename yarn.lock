@@ -9536,7 +9536,7 @@ __metadata:
     node-cron: "npm:3.0.3"
     node-mocks-http: "npm:1.16.2"
     node-os-utils: "npm:1.3.7"
-    nodemailer: "npm:6.10.0"
+    nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.9"
     pg: "npm:8.14.1"
     pm2: "npm:5.4.3"
@@ -37112,10 +37112,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.10.0":
-  version: 6.10.0
-  resolution: "nodemailer@npm:6.10.0"
-  checksum: 10/2e28961c264501e2621860d912e1ab59788825c5aea5ce71041c5b5b52c7470b63e7ab290003d755f647f25048552c6eec256f468292f454d4d6a68c93dd0659
+"nodemailer@npm:6.10.1":
+  version: 6.10.1
+  resolution: "nodemailer@npm:6.10.1"
+  checksum: 10/d9911701641e06143a2deb0bd5deb518310972316c6e6eabc594af24353b0d67867f26cb8d72b0cfa385abef945149ac51ae40a40d2199e1088aef5829e58a3d
   languageName: node
   linkType: hard
 
