@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "28.0.3",
-    "@rollup/plugin-node-resolve": "15.3.1",
+    "@rollup/plugin-node-resolve": "16.0.1",
     "@rollup/plugin-replace": "6.0.2",
     "browserify": "14.5.0",
     "rollup": "4.2.0",

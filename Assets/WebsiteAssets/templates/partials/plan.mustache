@@ -1,24 +1,28 @@
-<div class="col-12 col-lg-4 account-type-{{priceMonthly.accountType}}">
+<div class="col-12 col-lg-4 account-type-{{priceMonthly.accountType}} hosting-type-{{hostingType}}">
 	<div class="price-container {{#featured}}price-container-blue{{/featured}}">
-		<div class="price-row">
-			<div class="plan-type">
-				<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
+			<div class="price-row">
+				<div class="plan-type">
+					<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
+				</div>
+
+				{{#priceMonthly.formattedMonthlyAmount}}
+					<div class="plan-price plan-price-monthly">
+						{{priceMonthly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
+					</div>
+
+					<div class="plan-price plan-price-yearly">
+						{{priceYearly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
+					</div>
+				{{/priceMonthly.formattedMonthlyAmount}}
 			</div>
 
-			<div class="plan-price plan-price-monthly">
-				{{priceMonthly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
+			{{#priceYearly.formattedMonthlyAmount}}
+			<div class="plan-price-yearly-per-year">
+				<div>
+					({{priceYearly.formattedAmount}}<sub class="per-year">&nbsp;<span translate>/year</span></sub>)
+				</div>
 			</div>
-
-			<div class="plan-price plan-price-yearly">
-				{{priceYearly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;<span translate>/month</span>{{#footnote}} (*){{/footnote}}</sub>
-			</div>
-		</div>
-
-		<div class="plan-price-yearly-per-year">
-			<div>
-				({{priceYearly.formattedAmount}}<sub class="per-year">&nbsp;<span translate>/year</span></sub>)
-			</div>
-		</div>
+			{{/priceYearly.formattedMonthlyAmount}}
 
 		{{#featureLabelsOn}}
 			<p><i class="fas fa-check feature feature-on"></i>{{.}}</p>
@@ -29,7 +33,11 @@
 		{{/featureLabelsOff}}
 		
 		<p class="text-center subscribe-wrapper">
-			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton">{{cfaLabel}}</a>
+			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton cfa-button">{{cfaLabel}}</a>
+
+			{{#learnMoreUrl}}
+				<a id="learnMore-{{name}}" href="{{learnMoreUrl}}" class="button-link btn-white learnMoreButton cfa-button">Learn more</a>
+			{{/learnMoreUrl}}
 		</p>
 
 		{{#footnote}}<sub>(*) {{.}}</sub>{{/footnote}}

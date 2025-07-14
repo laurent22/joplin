@@ -419,6 +419,11 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
+		// Since the settings need to be loaded before the store is created, it will never
+		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
+		// initialised. So we manually call dispatchUpdateAll() to force an update.
+		Setting.dispatchUpdateAll();
+
 		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
 
 		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
@@ -460,11 +465,6 @@ class Application extends BaseApplication {
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
-
-			// Since the settings need to be loaded before the store is created, it will never
-			// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
-			// initialised. So we manually call dispatchUpdateAll() to force an update.
-			Setting.dispatchUpdateAll();
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			await refreshFolders((action: any) => this.store().dispatch(action), '');

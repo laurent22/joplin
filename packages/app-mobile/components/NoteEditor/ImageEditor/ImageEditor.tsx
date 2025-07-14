@@ -60,6 +60,7 @@ const useCss = (editorTheme: Theme) => {
 			body, html {
 				padding: 0;
 				margin: 0;
+				overflow: hidden;
 			}
 
 			/* Hide the scrollbar. See scrollbar accessibility concerns

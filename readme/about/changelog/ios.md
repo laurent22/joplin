@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.3.9](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.9) - 2025-07-09T23:17:23Z
+
+- New: Add additional checks when updating sidebar state (#12428 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Biometrics: Fix notebook list can still be accessed when the app is locked (#12691 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.3.8](https://github.com/laurent22/joplin/releases/tag/ios-v13.3.8) - 2025-06-09T17:15:06Z
 
 - Fixed: Fix error shown the first time a user attempts to record (#12328) (#12314 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

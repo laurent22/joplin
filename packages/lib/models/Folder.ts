@@ -357,7 +357,7 @@ export default class Folder extends BaseItem {
 
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
-			if (conflictCount) output.push(this.conflictFolder());
+			if (conflictCount) output.unshift(this.conflictFolder());
 		}
 
 		return output;

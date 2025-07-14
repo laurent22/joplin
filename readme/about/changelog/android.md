@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.3.11](https://github.com/laurent22/joplin/releases/tag/android-v3.3.11) (Pre-release) - 2025-07-09T22:51:55Z
+
+- Fixed: Biometrics: Fix notebook list can still be accessed when the app is locked (#12691 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.3.10](https://github.com/laurent22/joplin/releases/tag/android-v3.3.10) (Pre-release) - 2025-06-10T08:07:25Z
 
 - New: Add additional checks when updating sidebar state (#12428 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

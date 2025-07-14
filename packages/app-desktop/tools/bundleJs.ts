@@ -1,8 +1,11 @@
 import { filename, toForwardSlashes } from '@joplin/utils/path';
 import * as esbuild from 'esbuild';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { dirname, join, relative } from 'path';
+
+const baseDir = dirname(__dirname);
+const baseNodeModules = join(baseDir, 'node_modules');
 
 // Note: Roughly based on js-draw's use of esbuild:
 // https://github.com/personalizedrefrigerator/js-draw/blob/6fe6d6821402a08a8d17f15a8f48d95e5d7b084f/packages/build-tool/src/BundledFile.ts#L64
@@ -28,8 +31,6 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 				name: 'joplin--relative-imports-for-externals',
 				setup: build => {
 					const externalRegex = /^(.*\.node|sqlite3|electron|@electron\/remote\/.*|electron\/.*|@mapbox\/node-pre-gyp|jsdom)$/;
-					const baseDir = dirname(__dirname);
-					const baseNodeModules = join(baseDir, 'node_modules');
 					build.onResolve({ filter: externalRegex }, args => {
 						// Electron packages don't need relative requires
 						if (args.path === 'electron' || args.path.startsWith('electron/')) {
@@ -66,8 +67,6 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 				// Rewrite imports to prefer .js files to .ts. Otherwise, certain files are duplicated in the final bundle
 				name: 'joplin--prefer-js-imports',
 				setup: build => {
-					const baseDir = dirname(__dirname);
-					const baseNodeModules = join(baseDir, 'node_modules');
 					// Rewrite all relative imports
 					build.onResolve({ filter: /^\./ }, args => {
 						try {
@@ -87,6 +86,31 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 								errors: [{ text: `Failed to import: ${error}`, detail: error }],
 							};
 						}
+					});
+				},
+			},
+			{
+				name: 'joplin--smaller-source-map-size',
+				setup: build => {
+					// Exclude dependencies from node_modules. This significantly reduces the size of the
+					// source map, improving startup performance.
+					//
+					// See https://github.com/evanw/esbuild/issues/1685#issuecomment-944916409
+					// and https://github.com/evanw/esbuild/issues/4130
+					const emptyMapData = Buffer.from(
+						JSON.stringify({ version: 3, sources: [null], mappings: 'AAAA' }),
+						'utf-8',
+					).toString('base64');
+					const emptyMapUrl = `data:application/json;base64,${emptyMapData}`;
+
+					build.onLoad({ filter: /node_modules.*js$/ }, args => {
+						return {
+							contents: [
+								readFileSync(args.path, 'utf8'),
+								`//# sourceMappingURL=${emptyMapUrl}`,
+							].join('\n'),
+							loader: 'default',
+						};
 					});
 				},
 			},
