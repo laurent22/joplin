@@ -819,11 +819,11 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			appTypes: [AppType.Cli, AppType.Desktop],
 		},
-		'notes.showIconForNoteLinks': {
+		'notes.showNoteLinkIcon': {
 			value: true,
 			type: SettingItemType.Bool,
-			storage: SettingStorage.Database,
-			section: 'appearance',
+			storage: SettingStorage.File,
+			section: 'note',
 			public: true,
 			label: () => _('Show Joplin icon for internal note links'),
 			appTypes: [AppType.Desktop, AppType.Mobile],
