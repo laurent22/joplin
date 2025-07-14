@@ -10,6 +10,12 @@ const pdfExtractDir = async () => {
 	return p;
 };
 
+const getRealSizeOfTextContent = (imageDimensions: ImageDimensions, textContent: string, fontSize: number) => {
+	const canvas = new OffscreenCanvas(imageDimensions.width, imageDimensions.height);
+	const ctx = canvas.getContext('2d');
+	ctx.font = `${fontSize}px Arial`;
+	return ctx.measureText(textContent);
+};
 
 const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDimensions: ImageDimensions, text: string) => {
 	const left = boundingBox[0];
@@ -17,10 +23,8 @@ const calculateWordPosition = (boundingBox: RecognizeResultBoundingBox, imageDim
 	const fontSize = boundingBox[3] - top;
 	const width = boundingBox[1] - boundingBox[0];
 
-	const canvas = new OffscreenCanvas(imageDimensions.width, imageDimensions.height);
-	const ctx = canvas.getContext('2d');
-	ctx.font = `${fontSize}px Arial`;
-	const fontMeasures = ctx.measureText(text);
+	const fontMeasures = getRealSizeOfTextContent(imageDimensions, text, fontSize) ;
+
 	const scale = {
 		x: width / fontMeasures.width,
 		y: fontSize / (fontMeasures.fontBoundingBoxAscent + fontMeasures.fontBoundingBoxDescent),
