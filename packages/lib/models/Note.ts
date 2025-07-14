@@ -19,7 +19,6 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
-import Revision from './Revision';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -875,6 +874,7 @@ export default class Note extends BaseItem {
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
 		const toTrash = options && !!options.toTrash;
+		const shouldDeleteRevisions = options && !!options.shouldDeleteRevisions;
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -918,7 +918,10 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
-				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
+				if (shouldDeleteRevisions) {
+					const Revision = this.getClass('Revision');
+					await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
+				}
 			}
 
 			for (let i = 0; i < processIds.length; i++) {
