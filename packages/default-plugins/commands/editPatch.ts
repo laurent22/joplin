@@ -1,7 +1,7 @@
 import { execCommand } from '@joplin/utils';
-import waitForCliInput from '../utils/waitForCliInput';
 import { copy } from 'fs-extra';
 import { join } from 'path';
+import { waitForCliInput } from '@joplin/utils/cli';
 import buildDefaultPlugins from '../buildDefaultPlugins';
 import getPathToPatchFileFor from '../utils/getPathToPatchFileFor';
 

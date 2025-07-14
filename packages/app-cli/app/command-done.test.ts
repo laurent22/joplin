@@ -13,7 +13,7 @@ describe('command-done', () => {
 	});
 
 	it('should make a note as "done"', async () => {
-		const note = await Note.save({ title: 'hello', is_todo: 1, todo_completed: 0 });
+		const note = await Note.save({ title: 'hello', is_todo: 1, todo_completed: 0, parent_id: '' });
 
 		const command = setupCommandForTesting(Command);
 

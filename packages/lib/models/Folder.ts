@@ -7,7 +7,7 @@ import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
-import { isRootSharedFolder } from '../services/share/reducer';
+import { isRootSharedFolder, StateShare } from '../services/share/reducer';
 import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
@@ -357,7 +357,7 @@ export default class Folder extends BaseItem {
 
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
-			if (conflictCount) output.push(this.conflictFolder());
+			if (conflictCount) output.unshift(this.conflictFolder());
 		}
 
 		return output;
@@ -417,18 +417,74 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll(sql, [folderId]);
 	}
 
-	public static async rootSharedFolders(): Promise<FolderEntity[]> {
-		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\'');
+	public static async rootSharedFolders(activeShares: StateShare[]): Promise<FolderEntity[]> {
+		return this.removeDuplicateRootFolders(await this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\''), activeShares);
 	}
 
 	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE master_key_id = ?', [keyId]);
 	}
 
-	public static async updateFolderShareIds(): Promise<void> {
+	// We need this function for this situation:
+	//
+	// - Folder is shared
+	// - Subfolder is created in the shared folder
+	// - Subfolder is moved to the root
+	//
+	// In that situation the subfolder will have "parent_id" = "" and so will be considered a "root
+	// shared folder". However it is not - a "root shared folder" is one that has been explicitly
+	// shared by the user.
+	//
+	// So we have this function to check for root folders that have the same "shared_id" - it
+	// indicates that one of them was a child of the other. We remove the formerly children folders.
+	private static removeDuplicateRootFolders(rootFolders: FolderEntity[], activeShares: StateShare[]) {
+		const folderIdsToRemove: string[] = [];
+
+		for (let i = 0; i < rootFolders.length - 1; i++) {
+			const f1 = rootFolders[i];
+			for (let j = i + 1; j < rootFolders.length; j++) {
+				const f2 = rootFolders[j];
+
+				if (f1.share_id === f2.share_id) {
+					logger.info('Found two root folders with the same share_id:', f1, f2);
+					const share = activeShares.find(s => s.id === f1.share_id);
+					if (!share) {
+						logger.warn('Could not find matching share object');
+						continue;
+					}
+
+					if (share.folder_id === f1.id) {
+						folderIdsToRemove.push(f2.id);
+					} else if (share.folder_id === f2.id) {
+						folderIdsToRemove.push(f1.id);
+					} else {
+						logger.warn('Could not find folder associated with share:', share);
+					}
+				}
+			}
+		}
+
+		if (folderIdsToRemove.length) {
+			logger.info('Removing folders from the list of root folders:', folderIdsToRemove);
+
+			const newRootFolders: FolderEntity[] = [];
+
+			for (const f of rootFolders) {
+				if (!folderIdsToRemove.includes(f.id)) {
+					newRootFolders.push(f);
+				}
+			}
+
+			return newRootFolders;
+		}
+
+		return rootFolders;
+	}
+
+	public static async updateFolderShareIds(activeShares: StateShare[]): Promise<void> {
 		// Get all the sub-folders of the shared folders, and set the share_id
 		// property.
-		const rootFolders = await this.rootSharedFolders();
+		const rootFolders = await this.rootSharedFolders(activeShares);
 
 		let sharedFolderIds: string[] = [];
 
@@ -652,8 +708,8 @@ export default class Folder extends BaseItem {
 		throw new Error('Failed to update resource share IDs');
 	}
 
-	public static async updateAllShareIds(resourceService: ResourceService) {
-		await this.updateFolderShareIds();
+	public static async updateAllShareIds(resourceService: ResourceService, activeShares: StateShare[]) {
+		await this.updateFolderShareIds(activeShares);
 		await this.updateNoteShareIds();
 		await this.updateResourceShareIds(resourceService);
 	}

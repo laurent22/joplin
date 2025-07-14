@@ -1301,3 +1301,8 @@ footer .bottom-links-row p {
 :lang(zh-cn) #plans-section .faq {
 	display: none;
 }
+
+
+.cfa-button {
+	margin-top: 10px;
+}

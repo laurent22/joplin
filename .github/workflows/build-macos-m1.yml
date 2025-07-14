@@ -13,7 +13,7 @@ jobs:
         with:
           # We need to pin the version to 18.15, because 18.16+ fails with this error:
           # https://github.com/facebook/react-native/issues/36440
-          node-version: '18.15.0'
+          node-version: '18.20.8'
           cache: 'yarn'
 
       - name: Install Yarn
@@ -30,7 +30,7 @@ jobs:
       # See github-action-main.yml for explanation
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: Set Publish Flag
         run: |

@@ -914,8 +914,14 @@ export default class ItemModel extends BaseModel<Item> {
 			const share = await this.models().share().byItemId(item.id);
 			if (!share) throw new Error(`Cannot find share associated with item ${item.id}`);
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
-			if (!userShare) return;
-			await this.models().shareUser().delete(userShare.id);
+
+			if (userShare) {
+				// Leave the share
+				await this.models().shareUser().delete(userShare.id);
+			} else if (share.owner_id === userId) {
+				// Delete the share
+				await this.models().share().delete(share.id);
+			}
 		} else {
 			await this.delete(item.id);
 		}

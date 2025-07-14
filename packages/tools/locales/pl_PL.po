@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: X3NO <X3NO@disroot.org>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
@@ -15,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:593
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -954,7 +956,7 @@ msgstr "Konfiguracja"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:98
 msgid "Change shortcut for \"%s\""
-msgstr ""
+msgstr "Zmień skrót na “%s”"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:106
 msgid "Characters"
@@ -1036,7 +1038,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:227
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr ""
+msgstr "Kliknij “start” aby dołączyć nagranie lub nową notatkę głosową."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1095,7 +1097,7 @@ msgstr "Zamknij okno"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr ""
+msgstr "Zamykanie sesji…"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:39
 msgid "Cmd-click to open"
@@ -2684,11 +2686,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
-msgstr ""
+msgstr "Do przodu"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:165
 msgid "Go back"
-msgstr ""
+msgstr "Wstecz"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
@@ -2698,7 +2700,7 @@ msgstr "Przejdź do profilu Joplin Cloud"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:12
 msgid "Go to line"
-msgstr ""
+msgstr "Przejdź do linii"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1096
 msgid "Go to source URL"
@@ -3016,7 +3018,7 @@ msgstr "Wstaw akapit"
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:22
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:21
 msgid "Info"
-msgstr ""
+msgstr "Informacje"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:223
 msgid "Information"
@@ -3086,7 +3088,7 @@ msgstr "Nieprawidłowa komenda: \"%s\""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
-msgstr ""
+msgstr "Błędny format. np: 48.8581372, 2.2926735"
 
 #: packages/lib/models/Setting.ts:665
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -3628,7 +3630,7 @@ msgstr "Zamknij rozwijane menu"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:74
 msgid "Move left"
-msgstr ""
+msgstr "Przesuń w lewo"
 
 #: packages/app-cli/app/command-rmbook.ts:38
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3647,7 +3649,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
-msgstr ""
+msgstr "Przesuń w prawo"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
@@ -3663,7 +3665,7 @@ msgstr "Przenieś do notatnika..."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:72
 msgid "Move up"
-msgstr ""
+msgstr "Do góry"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
@@ -4031,6 +4033,7 @@ msgstr "Lista numerowana"
 #: packages/lib/models/settings/builtInMetadata.ts:547
 msgid "OCR: Clear cache and re-download language data files"
 msgstr ""
+"OCR: Wyczyść pamięć podręczną i pobierz ponownie pliki danych językowych"
 
 #: packages/lib/models/settings/builtInMetadata.ts:528
 #, fuzzy
@@ -4072,7 +4075,7 @@ msgstr "Na %s: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:27
 msgid "on line"
-msgstr ""
+msgstr "w linii"
 
 #: packages/app-desktop/gui/MainScreen.tsx:548
 msgid "One of your master keys use an obsolete encryption method."
@@ -4127,7 +4130,7 @@ msgstr "Edytuj w edytorze zewnętrznym"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
 msgid "Open in new window"
-msgstr ""
+msgstr "Otwórz w nowym oknie"
 
 #: packages/app-desktop/bridge.ts:466
 #, fuzzy
@@ -4145,7 +4148,7 @@ msgstr "Otwórz przeglądarkę plików PDF"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Otwórz główną instancję aplikacji"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4153,7 +4156,7 @@ msgstr "Otwórz katalog profili"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Otwórz drugą instancję aplikacji"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:164
 #, fuzzy
@@ -4226,11 +4229,11 @@ msgstr "Wielkość strony do eksportu PDF"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Panel \"%s\" jest widoczny"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Panel %s is hidden jest ukryty"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4359,7 +4362,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:332
 msgid "Please provide the recipient email"
-msgstr ""
+msgstr "Podaj adres e-mail odbiorcy"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4626,7 +4629,7 @@ msgstr "Wyjdź"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:190
 msgid "Re-download model"
-msgstr ""
+msgstr "Pobierz ponownie model"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -4681,7 +4684,7 @@ msgstr "Polecane wtyczki"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Nagraj dźwięk"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:73
 #, fuzzy
@@ -4783,11 +4786,11 @@ msgstr "Zamień: "
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:25
 msgid "replaced $ matches"
-msgstr ""
+msgstr "Zmieniono $ dopasowań"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:26
 msgid "replaced match on line $"
-msgstr ""
+msgstr "zmieniono dopasowanie w linii $"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
@@ -6986,6 +6989,9 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Używasz wersji Joplin opartej na architekturze Intel na komputerze z "
+"procesorem Apple Silicon. Pobierz wersję Apple Silicon aplikacji, aby uzyskać lepszą "
+"wydajność."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."

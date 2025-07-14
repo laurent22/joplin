@@ -9,6 +9,7 @@ export enum PlanName {
 	Basic = 'basic',
 	Pro = 'pro',
 	Teams = 'teams',
+	JoplinServerBusiness = 'joplinServerBusiness',
 }
 
 interface PlanFeature {
@@ -17,6 +18,7 @@ interface PlanFeature {
 	basic: boolean;
 	pro: boolean;
 	teams: boolean;
+	joplinServerBusiness?: boolean;
 	basicInfo?: string;
 	proInfo?: string;
 	teamsInfo?: string;
@@ -25,11 +27,16 @@ interface PlanFeature {
 	teamsInfoShort?: string;
 }
 
+enum PlanHostingType {
+	Managed = 'managed',
+	Self = 'self',
+}
+
 export interface Plan {
 	name: string;
 	title: string;
-	priceMonthly: StripePublicConfigPrice;
-	priceYearly: StripePublicConfigPrice;
+	priceMonthly?: StripePublicConfigPrice;
+	priceYearly?: StripePublicConfigPrice;
 	featured: boolean;
 	iconName: string;
 	featuresOn: FeatureId[];
@@ -39,6 +46,8 @@ export interface Plan {
 	cfaLabel: string;
 	cfaUrl: string;
 	footnote: string;
+	learnMoreUrl?: string;
+	hostingType: PlanHostingType;
 }
 
 export enum PricePeriod {
@@ -155,26 +164,29 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: true,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		sync: {
 			title: _('Sync as many devices as you want'),
 			basic: true,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
-		clipper: {
-			title: _('Web Clipper'),
-			description: _('The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.', 'https://joplinapp.org/help/apps/clipper'),
-			basic: true,
-			pro: true,
-			teams: true,
-		},
+		// clipper: {
+		// 	title: _('Web Clipper'),
+		// 	description: _('The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.', 'https://joplinapp.org/help/apps/clipper'),
+		// 	basic: false,
+		// 	pro: false,
+		// 	teams: false,
+		// },
 		collaborate: {
 			title: _('Collaborate on a notebook with others'),
 			description: _('This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature "%s".', shareNotebookTitle),
 			basic: true,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		share: {
 			title: shareNotebookTitle,
@@ -182,6 +194,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: false,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		emailToNote: {
 			title: _('Email to Note'),
@@ -189,6 +202,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: false,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		customBanner: {
 			title: _('Customise the note publishing banner'),
@@ -196,6 +210,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: false,
 			pro: true,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		multiUsers: {
 			title: _('Manage multiple users'),
@@ -203,6 +218,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: false,
 			pro: false,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		consolidatedBilling: {
 			title: _('Consolidated billing'),
@@ -217,12 +233,28 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			basic: false,
 			pro: false,
 			teams: true,
+			joplinServerBusiness: true,
 		},
 		prioritySupport: {
 			title: _('Priority support'),
 			basic: false,
 			pro: false,
 			teams: true,
+			joplinServerBusiness: true,
+		},
+		selfHosted: {
+			title: _('Self-hosted'),
+			basic: false,
+			pro: false,
+			teams: false,
+			joplinServerBusiness: true,
+		},
+		sourceCodeAvailable: {
+			title: _('Source code available'),
+			basic: false,
+			pro: false,
+			teams: false,
+			joplinServerBusiness: true,
 		},
 	};
 };
@@ -303,6 +335,11 @@ export const createFeatureTableMd = () => {
 			name: 'teams',
 			label: 'Teams',
 		},
+		{
+			name: 'joplinServerBusiness',
+			label: 'Joplin Server Business',
+			labelUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
+		},
 	];
 
 	const rows: MarkdownTableRow[] = [];
@@ -332,6 +369,7 @@ export const createFeatureTableMd = () => {
 			basic: getCellInfo(PlanName.Basic, feature),
 			pro: getCellInfo(PlanName.Pro, feature),
 			teams: getCellInfo(PlanName.Teams, feature),
+			joplinServerBusiness: getCellInfo(PlanName.JoplinServerBusiness, feature),
 		};
 
 		rows.push(row);
@@ -362,6 +400,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: '',
+			hostingType: PlanHostingType.Managed,
 		},
 
 		pro: {
@@ -384,6 +423,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: '',
+			hostingType: PlanHostingType.Managed,
 		},
 
 		teams: {
@@ -406,6 +446,23 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: _('Per user. Minimum of 2 users.'),
+			hostingType: PlanHostingType.Managed,
+		},
+
+		joplinServerBusiness: {
+			name: 'joplinServerBusiness',
+			title: _('Joplin Server Business'),
+			featured: false,
+			iconName: 'business-icon',
+			featuresOn: getFeatureIdsByPlan(PlanName.JoplinServerBusiness, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.JoplinServerBusiness, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, false),
+			cfaLabel: _('Get a quote'),
+			cfaUrl: 'mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry',
+			footnote: '',
+			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
+			hostingType: PlanHostingType.Self,
 		},
 	};
 }

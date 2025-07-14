@@ -26,8 +26,7 @@ class Command extends BaseCommand {
 		const pattern = args['notebook'];
 		const force = args.options && args.options.force === true;
 
-		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
-		if (!folder) throw new Error(_('Cannot find "%s".', pattern));
+		const folder = await app().loadItemOrFail(BaseModel.TYPE_FOLDER, pattern);
 
 		const permanent = args.options?.permanent === true || !!folder.deleted_time;
 		const ellipsizedFolderTitle = substrWithEllipsis(folder.title, 0, 32);

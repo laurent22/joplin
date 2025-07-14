@@ -657,11 +657,18 @@ class Setting extends BaseModel {
 		value = this.formatValue(key, value);
 		value = this.filterValue(key, value);
 
+		const md = this.settingMetadata(key);
+		const enforceLimits = (value: SettingValueType<T>) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+			if ('minimum' in md && value < md.minimum) value = md.minimum as any;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+			if ('maximum' in md && value > md.maximum) value = md.maximum as any;
+			return value;
+		};
+
 		for (let i = 0; i < this.cache_.length; i++) {
 			const c = this.cache_[i];
 			if (c.key === key) {
-				const md = this.settingMetadata(key);
-
 				if (md.isEnum === true) {
 					if (!this.isAllowedEnumOption(key, value)) {
 						throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
@@ -675,12 +682,7 @@ class Setting extends BaseModel {
 				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
 				// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-				if ('minimum' in md && value < md.minimum) value = md.minimum as any;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-				if ('maximum' in md && value > md.maximum) value = md.maximum as any;
-
-				c.value = value;
+				c.value = enforceLimits(value);
 
 				this.dispatch({
 					type: 'SETTING_UPDATE_ONE',
@@ -693,6 +695,8 @@ class Setting extends BaseModel {
 				return;
 			}
 		}
+
+		value = enforceLimits(value);
 
 		this.cache_.push({
 			key: key,
