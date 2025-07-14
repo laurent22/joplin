@@ -34,7 +34,6 @@ const createHtmlWithTranscriptionFromPdf = async (resourceId: string) => {
 			'id',
 			'mime',
 			'file_extension',
-			'encryption_applied',
 			'ocr_details',
 		],
 	});
