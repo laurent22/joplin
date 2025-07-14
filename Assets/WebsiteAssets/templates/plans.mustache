@@ -1,14 +1,60 @@
 <div id="plans-section" class="env-{{env}}">
+	<style>
+		.toggle-container {
+			display: flex;
+			border: 2px solid black;
+			border-radius: 100px;
+			overflow: hidden;
+			cursor: pointer;
+			margin-top: 20px;
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.toggle-option {
+			flex: 1;
+			padding: 10px 20px;
+			text-align: center;
+			transition: background 0.3s, color 0.3s;
+			user-select: none;
+			white-space: nowrap;
+		}
+
+		.active {
+			background: black;
+			color: white;
+		}
+
+		.inactive {
+			background: white;
+			color: black;
+		}
+
+		@media (max-width: 480px) {
+			.toggle-container {
+				flex-direction: column;
+				width: 100%;
+				border-radius: 10px;
+			}
+		}
+	</style>
+
 	<div class="container">
 		<div class="row">
 			<div class="col-12 title-box">
 				<h1 translate class="text-center">
-					Joplin Cloud <span class="frame-bg frame-bg-yellow">plans</span>
+					Our synchronisation and sharing <span class="frame-bg frame-bg-yellow">solutions</span>
 				</h1>
 				<p translate class="text-center sub-title">
-					<a href="https://joplincloud.com">Joplin Cloud</a> allows you to synchronise your notes across devices. It also lets you publish notes, and collaborate on notebooks with your friends, family or colleagues.
+					Synchronise and share your notes with our range of plans.
 				</p>
 			</div>
+		</div>
+
+		<div class="toggle-container" id="toggle">
+			<div class="toggle-option active toggle-button-managed">Managed hosting</div>
+			<div class="toggle-option inactive toggle-button-self">Self-hosting</div>
 		</div>
 
 		<noscript>
@@ -17,7 +63,29 @@
 			</div>
 		</noscript>
 
-		<div style="display: flex; justify-content: center; margin-top: 1.2em">	
+		<div class="row hosting-type-managed">
+			<div class="col-12 title-box">
+				<h1 translate class="text-center">
+					Joplin Cloud
+				</h1>
+				<p translate class="text-center sub-title">
+					<a href="https://joplincloud.com">Joplin Cloud</a> allows you to synchronise your notes across devices. It also lets you publish notes, and collaborate on notebooks with your friends, family or colleagues.
+				</p>
+			</div>
+		</div>
+
+		<div class="row hosting-type-self">
+			<div class="col-12 title-box">
+				<h1 translate class="text-center">
+					Joplin Server Business
+				</h1>
+				<p translate class="text-center sub-title">
+					Joplin Server Business is a synchronisation server that you can install on your own infrastructure, so that your data remains private and secure within your business.
+				</p>
+			</div>
+		</div>
+
+		<div style="display: flex; justify-content: center; margin-top: 1.2em" class="hosting-type-managed">	
 			<div class="form-check form-check-inline">
 				<input id="pay-monthly-radio" class="form-check-input" type="radio" name="pay-radio" checked value="monthly">
 				<label translate style="font-weight: bold" class="form-check-label" for="pay-monthly-radio">
@@ -46,7 +114,11 @@
 				{{> plan}}
 			{{/plans.teams}}
 
-			<p translate class="joplin-cloud-login-info">Already have a Joplin Cloud account? <a href="https://joplincloud.com">Login now</a></p>
+			{{#plans.joplinServerBusiness}}
+				{{> plan}}
+			{{/plans.joplinServerBusiness}}
+
+			<p translate class="joplin-cloud-login-info hosting-type-managed">Already have a Joplin Cloud account? <a href="https://joplincloud.com">Login now</a></p>
 		</div>
 
 		<div class="row">
@@ -147,5 +219,31 @@
 				$('.feature-description-' + featureId).toggle(200);
 			});
 		});
+	</script>
+
+
+	<script>
+		const setHostingType = (type) => {
+			const other = type === 'managed' ? 'self' : 'managed';
+			$('.toggle-button-' + type).addClass('active');
+			$('.toggle-button-' + type).removeClass('inactive');
+			$('.toggle-button-' + other).addClass('inactive');
+			$('.toggle-button-' + other).removeClass('active');
+
+			$('.hosting-type-' + type).show();
+			$('.hosting-type-' + other).hide();
+		}
+
+		$('.toggle-button-managed').click((event) => {
+			event.preventDefault();
+			setHostingType('managed');			
+		});
+
+		$('.toggle-button-self').click((event) => {
+			event.preventDefault();
+			setHostingType('self');
+		});
+
+		setHostingType('managed');
 	</script>
 </div>

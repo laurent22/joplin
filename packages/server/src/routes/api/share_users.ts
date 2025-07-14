@@ -46,6 +46,8 @@ router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 			id: su.id,
 			status: su.status,
 			master_key: su.master_key,
+			can_read: 1, // In Joplin Server, all shares are always readable and writable
+			can_write: 1,
 			share: {
 				id: share.id,
 				folder_id: share.folder_id,

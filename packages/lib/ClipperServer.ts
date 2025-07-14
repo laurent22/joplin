@@ -98,7 +98,7 @@ export default class ClipperServer {
 		});
 	}
 
-	public async findAvailablePort() {
+	public async findAvailablePort(): Promise<number> {
 		const tcpPortUsed = require('tcp-port-used');
 
 		let state = null;

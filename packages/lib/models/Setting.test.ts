@@ -456,4 +456,18 @@ describe('models/Setting', () => {
 			await Setting.saveAll();
 		}
 	});
+
+	test('should enforce min and max values for when the setting is already in the cache and when it is not', async () => {
+		await Setting.reset();
+		Setting.setValue('revisionService.ttlDays', 0);
+		expect(Setting.value('revisionService.ttlDays')).toBe(1);
+		Setting.setValue('revisionService.ttlDays', 100000);
+		expect(Setting.value('revisionService.ttlDays')).toBe(99999);
+
+		await Setting.reset();
+		Setting.setValue('revisionService.ttlDays', 100000);
+		expect(Setting.value('revisionService.ttlDays')).toBe(99999);
+		Setting.setValue('revisionService.ttlDays', 0);
+		expect(Setting.value('revisionService.ttlDays')).toBe(1);
+	});
 });

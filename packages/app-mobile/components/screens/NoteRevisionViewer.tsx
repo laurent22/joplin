@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { AppState } from '../../utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Revision from '@joplin/lib/models/Revision';
@@ -102,6 +102,30 @@ const useStyles = (themeId: number) => {
 			root: {
 				...theme.rootStyle,
 			},
+			titleContainer: {
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				borderTopColor: theme.dividerColor,
+				borderTopWidth: 1,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
+			},
+			titleViewContainer: {
+				flex: 0,
+				flexDirection: 'row',
+				flexBasis: 'auto',
+			},
+			titleText: {
+				flex: 1,
+				marginTop: 0,
+				paddingLeft: 0,
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				fontWeight: 'bold',
+				fontSize: theme.fontSize,
+				paddingTop: 10,
+				paddingBottom: 10,
+			},
 		});
 	}, [themeId]);
 };
@@ -188,6 +212,16 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		>{restoreButtonTitle}</PrimaryButton>
 	);
 
+	const titleComponent = (
+		<SafeAreaView style={styles.titleContainer}>
+			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+				<View style={styles.titleViewContainer}>
+					<Text style={styles.titleText}>{note?.title ?? ''}</Text>
+				</View>
+			</ScrollView>
+		</SafeAreaView>
+	);
+
 	return <View style={styles.root}>
 		<ScreenHeader menuOptions={menuOptions} title={_('Note history')} />
 		<View style={styles.controls}>
@@ -212,6 +246,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 				onPress={onHelpPress}
 			/>
 		</View>
+		{note ? titleComponent : ''}
 		<NoteBodyViewer
 			style={styles.noteViewer}
 			noteBody={note?.body ?? _('No revision selected')}

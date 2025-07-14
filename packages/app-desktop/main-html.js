@@ -10,6 +10,7 @@ window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
 	onCommitFiberUnmount: function() {},
 };
 
+require('./utils/sourceMapSetup');
 const app = require('./app').default;
 const Folder = require('@joplin/lib/models/Folder').default;
 const Resource = require('@joplin/lib/models/Resource').default;
@@ -39,32 +40,6 @@ window.React = React;
 
 
 const main = async () => {
-	if (bridge().env() === 'dev') {
-		const newConsole = function(oldConsole) {
-			const output = {};
-			const fnNames = ['assert', 'clear', 'context', 'count', 'countReset', 'debug', 'dir', 'dirxml', 'error', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'memory', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'trace', 'warn'];
-			for (const fnName of fnNames) {
-				if (fnName === 'warn') {
-					output.warn = function(...text) {
-						const s = [...text].join('');
-						// React spams the console with walls of warnings even outside of strict mode, and even after having renamed
-						// unsafe methods to UNSAFE_xxxx, so we need to hack the console to remove them...
-						if (s.indexOf('Warning: componentWillReceiveProps has been renamed, and is not recommended for use') === 0) return;
-						if (s.indexOf('Warning: componentWillUpdate has been renamed, and is not recommended for use.') === 0) return;
-						oldConsole.warn(...text);
-					};
-				} else {
-					output[fnName] = function(...text) {
-						return oldConsole[fnName](...text);
-					};
-				}
-			}
-			return output;
-		}(window.console);
-
-		window.console = newConsole;
-	}
-
 	// eslint-disable-next-line no-console
 	console.info(`Environment: ${bridge().env()}`);
 

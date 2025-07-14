@@ -22,7 +22,7 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const Revision = require('@joplin/lib/models/Revision').default;
 const Logger = require('@joplin/utils/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
+const shimInitCli = require('./utils/shimInitCli').default;
 const shim = require('@joplin/lib/shim').default;
 const { _ } = require('@joplin/lib/locale');
 const FileApiDriverLocal = require('@joplin/lib/file-api-driver-local').default;
@@ -73,7 +73,7 @@ function appVersion() {
 	return p.version;
 }
 
-shimInit({ sharp, keytar, appVersion, nodeSqlite });
+shimInitCli({ sharp, keytar, appVersion, nodeSqlite });
 
 const logger = new Logger();
 Logger.initializeGlobalLogger(logger);

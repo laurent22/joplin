@@ -96,11 +96,6 @@
 			"githubUser": "route4me"
 		},
 		{
-			"url": "https://casinoreviews.net",
-			"title": "Casino Reviews",
-			"imageName": "CasinoReviews.png"
-		},
-		{
 			"url": "https://topagency.webflow.io",
 			"title": "WebDesignAgency",
 			"imageName": "WebDesignAgency.png",
@@ -125,13 +120,6 @@
 			"alt": "casino without making any upfront cost"
 		},
 		{
-			"url": "https://www.reddit.com/r/tiktokRise/",
-			"title": "Tiktok Rise",
-			"imageName": "TiktokRise.jpg",
-			"alt": "Tiktok Rise",
-			"githubUser": "knickman"
-		},
-		{
 			"url": "https://essaywriter.pro",
 			"title": "write my essay services by EssayWriter",
 			"imageName": "EssayWriterPro.png",
@@ -154,6 +142,26 @@
 			"title": "high-quality paper writing service PaperWriter",
 			"imageName": "PaperWriter.png",
 			"alt": "high-quality paper writing service PaperWriter"
+		},
+		{
+			"url": "https://homeworkguy.org/someone-to-take-my-online-class",
+			"title": "someone to take my online class",
+			"imageName": "HomeworkGuy.png",
+			"alt": "someone to take my online class",
+			"githubUser": "Nftsworld007"
+		},
+		{
+			"url": "https://www.bestetf.net/",
+			"title": "BestETF",
+			"imageName": "BestEtf.png",
+			"alt": "BestETF",
+			"githubUser": "traspire"
+		},
+		{
+			"url": "https://freespinny.io/free-spins-no-deposit/",
+			"title": "Freespinny.io Free Spins Bonus site",
+			"imageName": "Freespinny.png",
+			"alt": "Freespinny.io Free Spins Bonus site"
 		}
 	],
 	"orgsOld": [
@@ -195,6 +203,13 @@
 			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
 			"imageName": "Edubirdie.png",
 			"alt": "EduBirdie"
+		},
+		{
+			"url": "https://www.reddit.com/r/tiktokRise/",
+			"title": "Tiktok Rise",
+			"imageName": "TiktokRise.jpg",
+			"alt": "Tiktok Rise",
+			"githubUser": "knickman"
 		}
 	]
 }

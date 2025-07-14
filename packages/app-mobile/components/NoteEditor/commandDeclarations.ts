@@ -108,6 +108,21 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'material chevron-double-up',
 	},
 	{
+		name: `editor.${EditorCommandType.DeleteLine}`,
+		label: () => _('Delete line'),
+		iconName: 'material close',
+	},
+	{
+		name: `editor.${EditorCommandType.DuplicateLine}`,
+		label: () => _('Duplicate line'),
+		iconName: 'material content-duplicate',
+	},
+	{
+		name: `editor.${EditorCommandType.SortSelectedLines}`,
+		label: () => _('Sort selected lines'),
+		iconName: 'material sort-alphabetical-ascending',
+	},
+	{
 		name: EditorCommandType.ToggleSearch,
 		label: () => _('Search'),
 		iconName: 'material magnify',
