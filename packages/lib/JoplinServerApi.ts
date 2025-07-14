@@ -8,11 +8,41 @@ import personalizedUserContentBaseUrl from './services/joplinServer/personalized
 import { getHttpStatusMessage } from './net-utils';
 import { getApplicationInformation } from './services/joplinCloudUtils';
 const { stringify } = require('query-string');
-import { ExecOptions, ExecOptionsResponseFormat, ExecOptionsTarget, Options, ServerApiInterface, Session } from './types';
 
 const logger = Logger.create('JoplinServerApi');
 
-export default class JoplinServerApi implements ServerApiInterface {
+interface Session {
+	id: string;
+	user_id: string;
+}
+
+interface Options {
+	baseUrl(): string;
+	userContentBaseUrl(): string;
+	username(): string;
+	password(): string;
+	session(): Session | null;
+	env?: Env;
+}
+
+enum ExecOptionsResponseFormat {
+	Json = 'json',
+	Text = 'text',
+}
+
+enum ExecOptionsTarget {
+	String = 'string',
+	File = 'file',
+}
+
+interface ExecOptions {
+	responseFormat?: ExecOptionsResponseFormat;
+	target?: ExecOptionsTarget;
+	path?: string;
+	source?: string;
+}
+
+export default class JoplinServerApi {
 
 	private options_: Options;
 	private session_: Session;
