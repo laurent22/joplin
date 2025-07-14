@@ -1,5 +1,5 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
-import { _ } from '@joplin/lib/locale';
+import { _, toIso639Alpha3 } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
 import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
@@ -16,6 +16,7 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import shim from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import CommandService from '@joplin/lib/services/CommandService';
+import OcrService from '@joplin/lib/services/ocr/OcrService';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -172,10 +173,44 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 					return;
 				}
 
-				if (!resource.resource.ocr_details) {
-					bridge().showInfoMessageBox(_('This PDF is being transcribed. This might take some seconds or minutes, depending on the size of the document.'));
-					await Resource.resetFetchErrorStatus(resource.resource.id);
+				if (resource.resource.ocr_details) {
+					bridge().showInfoMessageBox(_('The PDF is being recreated, soon you will be prompted to save the file.'));
+					await CommandService.instance().execute('overlayPdfWithTranscription', options.resourceId);
 					return;
+				}
+
+				if (resource.resource.ocr_text) {
+
+					while (true) {
+						const buttonIndex = await bridge().showMessageBox(_('This PDF already has text content associated with it. By continuing we will update the information associated with the PDF.\n\nThe original PDF won\'t be modified.'), {
+							buttons: [
+								_('View current OCR text'),
+								_('Reprocess file'),
+								_('Cancel'),
+							],
+						});
+
+						if (buttonIndex === 0) {
+							const tempFilePath = `${Setting.value('tempDir')}/${resource.resource.id}_ocr.txt`;
+							await shim.fsDriver().writeFile(tempFilePath, resource.resource.ocr_text, 'utf8');
+							await openFileWithExternalEditor(tempFilePath, bridge());
+						}
+						if (buttonIndex === 1) break;
+						if (buttonIndex === 2) return;
+
+					}
+				}
+
+				bridge().showInfoMessageBox(_('The transcription is starting, when the process is finished you will be prompted to save the new PDF file'));
+
+				const ocrServiceInstance = await OcrService.instance();
+				const language = toIso639Alpha3(Setting.value('locale'));
+
+				try {
+					const result = await ocrServiceInstance.recognize(language, resource.resource, { shouldUsePdfOptimization: false });
+					await Resource.storeOcrResult(resource.resource.id, result);
+				} catch (error) {
+					await Resource.storeOcrError(resource.resource.id, error);
 				}
 
 				await CommandService.instance().execute('overlayPdfWithTranscription', options.resourceId);

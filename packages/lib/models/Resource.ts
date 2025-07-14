@@ -19,12 +19,13 @@ import { LoadOptions } from './utils/types';
 import { SaveOptions } from './utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { htmlentities } from '@joplin/utils/html';
-import { RecognizeResultLine } from '../services/ocr/utils/types';
+import { RecognizeResult, RecognizeResultLine } from '../services/ocr/utils/types';
 import eventManager, { EventName } from '../eventManager';
 import { unique } from '../array';
 import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
+import filterOcrText from '../services/ocr/utils/filterOcrText';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
 	const s = {
@@ -645,4 +646,25 @@ export default class Resource extends BaseItem {
 		return super.load(id, options);
 	}
 
+	public static async storeOcrResult(id: string, result: RecognizeResult) {
+		return Resource.save({
+			id,
+			ocr_status: ResourceOcrStatus.Done,
+			ocr_text: filterOcrText(result.text),
+			ocr_details: Resource.serializeOcrDetails(result.lines),
+			ocr_error: '',
+		});
+	}
+
+	public static async storeOcrError(id: string, error: Error) {
+		const errorMessage = typeof error === 'string' ? error : error?.message;
+
+		return Resource.save({
+			id,
+			ocr_status: ResourceOcrStatus.Error,
+			ocr_text: '',
+			ocr_details: '',
+			ocr_error: errorMessage || 'Unknown error',
+		});
+	}
 }

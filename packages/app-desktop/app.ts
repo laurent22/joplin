@@ -54,12 +54,12 @@ import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
-import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
+import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -342,29 +342,10 @@ class Application extends BaseApplication {
 			}
 		}
 
-		if (Setting.value('ocr.enabled')) {
+		const buildDir = bridge().buildDir();
+		const ocrService = await OcrService.instance(buildDir);
 
-			if (!this.ocrService_) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const Tesseract = (window as any).Tesseract;
-
-				const driver = new OcrDriverTesseract(
-					{ createWorker: Tesseract.createWorker },
-					{
-						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
-						corePath: `${bridge().buildDir()}/tesseract.js-core`,
-						languageDataPath: Setting.value('ocr.languageDataPath') || null,
-					},
-				);
-
-				this.ocrService_ = new OcrService(driver);
-			}
-
-			void this.ocrService_.runInBackground();
-		} else {
-			if (!this.ocrService_) return;
-			void this.ocrService_.stopRunInBackground();
-		}
+		this.ocrService_ = ocrService;
 
 		const handleResourceChange = () => {
 			void this.ocrService_.maintenance();

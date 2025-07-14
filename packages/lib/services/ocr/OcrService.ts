@@ -2,14 +2,14 @@ import { toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
 import { RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
-import filterOcrText from './utils/filterOcrText';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
+import OcrDriverTesseract from './drivers/OcrDriverTesseract';
 
 const logger = Logger.create('OcrService');
 
@@ -28,7 +28,13 @@ const resourceInfo = (resource: ResourceEntity) => {
 	return `${resource.id} (type ${resource.mime})`;
 };
 
+type RecognizeOptions = {
+	shouldUsePdfOptimization: boolean;
+};
+
 export default class OcrService {
+
+	public static instance_: OcrService;
 
 	private driver_: OcrDriverBase;
 	private isRunningInBackground_ = false;
@@ -45,6 +51,39 @@ export default class OcrService {
 		this.recognizeQueue_.keepTaskResults = false;
 	}
 
+	public static async instance(buildDir?: string) {
+		if (Setting.value('ocr.enabled')) {
+
+			if (!this.instance_) {
+
+				if (!buildDir) {
+					throw new Error('OcrService instance haven\'t been created yet and it is missing its buildDir');
+				}
+
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				const Tesseract = (window as any).Tesseract;
+
+				const driver = new OcrDriverTesseract(
+					{ createWorker: Tesseract.createWorker },
+					{
+						workerPath: `${buildDir}/tesseract.js/worker.min.js`,
+						corePath: `${buildDir}/tesseract.js-core`,
+						languageDataPath: Setting.value('ocr.languageDataPath') || null,
+					},
+				);
+
+				this.instance_ = new OcrService(driver);
+			}
+
+			void this.instance_.runInBackground();
+		} else {
+			if (!this.instance_) return this.instance_;
+			void this.instance_.stopRunInBackground();
+		}
+
+		return this.instance_;
+	}
+
 	private async pdfExtractDir(): Promise<string> {
 		if (this.pdfExtractDir_ !== null) return this.pdfExtractDir_;
 		const p = `${Setting.value('tempDir')}/ocr_pdf_extract`;
@@ -57,21 +96,29 @@ export default class OcrService {
 		return this.runInBackground;
 	}
 
-	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
+	public async recognize(language: string, resource: ResourceEntity, options?: RecognizeOptions): Promise<RecognizeResult> {
 		if (resource.encryption_applied) throw new Error(`Cannot OCR encrypted resource: ${resource.id}`);
 
 		const resourceFilePath = Resource.fullPath(resource);
 
-		if (resource.mime === 'application/pdf') {
-			// OCR can be slow for large PDFs.
-			// Skip it if the PDF already includes text.
-			const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
-			const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+		options = {
+			shouldUsePdfOptimization: true,
+			...options,
+		};
 
-			if (pagesWithText.length > 0) {
-				return {
-					text: pageTexts.join('\n'),
-				};
+		if (resource.mime === 'application/pdf') {
+
+			if (options.shouldUsePdfOptimization) {
+				// OCR can be slow for large PDFs.
+				// Skip it if the PDF already includes text.
+				const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
+				const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+
+				if (pagesWithText.length > 0) {
+					return {
+						text: pageTexts.join('\n'),
+					};
+				}
 			}
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
@@ -121,10 +168,6 @@ export default class OcrService {
 			return async () => {
 				logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
 
-				const toSave: ResourceEntity = {
-					id: resource.id,
-				};
-
 				try {
 					const fetchStatus = await Resource.localState(resource.id);
 
@@ -139,20 +182,12 @@ export default class OcrService {
 					}
 
 					const result = await this.recognize(language, resource);
-					toSave.ocr_status = ResourceOcrStatus.Done;
-					toSave.ocr_text = filterOcrText(result.text);
-					toSave.ocr_details = Resource.serializeOcrDetails(result.lines);
-					toSave.ocr_error = '';
+					await Resource.storeOcrResult(resource.id, result);
 				} catch (error) {
-					const errorMessage = typeof error === 'string' ? error : error?.message;
 					logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
-					toSave.ocr_status = ResourceOcrStatus.Error;
-					toSave.ocr_text = '';
-					toSave.ocr_details = '';
-					toSave.ocr_error = errorMessage || 'Unknown error';
+					await Resource.storeOcrError(resource.id, error);
 				}
 
-				await Resource.save(toSave);
 			};
 		};
 
