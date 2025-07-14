@@ -11,11 +11,6 @@ const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
 
-interface Session {
-	id: string;
-	user_id: string;
-}
-
 interface Options {
 	baseUrl(): string;
 	userContentBaseUrl(): string;
@@ -35,11 +30,16 @@ enum ExecOptionsTarget {
 	File = 'file',
 }
 
-interface ExecOptions {
+export interface ExecOptions {
 	responseFormat?: ExecOptionsResponseFormat;
 	target?: ExecOptionsTarget;
 	path?: string;
 	source?: string;
+}
+
+export interface Session {
+	id: string;
+	user_id: string;
 }
 
 export default class JoplinServerApi {
