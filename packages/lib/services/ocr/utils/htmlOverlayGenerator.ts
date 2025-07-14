@@ -53,22 +53,22 @@ const generateTextOverlay = (allWords: RecognizeResultWord[], imageDimensions: I
 	}).join('\n');
 };
 
-const addNewPage = async (currentImage: string, currentLine: RecognizeResultLine[]) => {
-	if (currentLine.length === 0) {
+const addNewPage = async (pageImage: string, lines: RecognizeResultLine[]) => {
+	if (lines.length === 0) {
 		return `<div class="image-container">
-				<img src="${currentImage}" class="image">
+				<img src="${pageImage}" class="image">
 			</div>`;
 	}
 
-	const imageDimensions = await shim.imageDimensions(currentImage);
+	const imageDimensions = await shim.imageDimensions(pageImage);
 
-	const allWords = currentLine.flatMap(l => l.words);
+	const allWords = lines.flatMap(l => l.words);
 	const textOverlayHtml = generateTextOverlay(allWords, imageDimensions);
 
 	const heightAdjusted = slightlyDecreaseSize(imageDimensions.height);
 
 	return `<div class="image-container">
-				<img style="width: ${imageDimensions.width}px; height: ${heightAdjusted}px;" src="${currentImage}">
+				<img style="width: ${imageDimensions.width}px; height: ${heightAdjusted}px;" src="${pageImage}">
 				<div>
 				${textOverlayHtml}
 				</div>
@@ -128,12 +128,12 @@ const wrapOnBaseHtml = (pagesHtml: string, pdfSizeInInches: PdfSizeInInches) => 
 };
 
 
-const htmlOverlayGenerator = async (imageFilePaths: string[], lines: RecognizeResultLine[][], pdfSizeInInches: PdfSizeInInches, extractDir: string) => {
+const htmlOverlayGenerator = async (imageFilePaths: string[], pages: RecognizeResultLine[][], pdfSizeInInches: PdfSizeInInches, extractDir: string) => {
 	let htmlContent = '';
-	for (let page = 0; page < imageFilePaths.length; page++) {
-		const currentImage = imageFilePaths[page];
-		const currentLines = lines[page];
-		htmlContent += await addNewPage(currentImage, currentLines);
+	for (let pageNum = 0; pageNum < imageFilePaths.length; pageNum++) {
+		const pageImage = imageFilePaths[pageNum];
+		const lines = pages[pageNum];
+		htmlContent += await addNewPage(pageImage, lines);
 	}
 
 	const htmlFileFromPdf = await shim.fsDriver().findUniqueFilename(`${extractDir}/output.html`);
