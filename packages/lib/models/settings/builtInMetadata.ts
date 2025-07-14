@@ -825,7 +825,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: true,
-			label: () => _('Show Joplin icon for internal note links'),
+			label: () => _('Show Joplin icon for note links'),
 			appTypes: [AppType.Desktop, AppType.Mobile],
 		},
 		'folders.sortOrder.field': {
