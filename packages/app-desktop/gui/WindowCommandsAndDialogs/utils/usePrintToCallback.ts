@@ -5,7 +5,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { msleep } from '@joplin/utils/time';
-import getPageSize from '@joplin/lib/services/ocr/getPageSize';
+import getPageSize from '@joplin/lib/services/ocr/utils/getPageSize';
 
 let isPrinting = false;
 

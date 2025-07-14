@@ -1,5 +1,5 @@
-import Resource from '../../models/Resource';
-import shim from '../../shim';
+import Resource from '../../../models/Resource';
+import shim from '../../../shim';
 
 async function getPageSize(id: string) {
 	const resource = await Resource.load(id, {
