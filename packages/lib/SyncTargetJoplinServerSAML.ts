@@ -1,8 +1,7 @@
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import { _ } from './locale.js';
-import JoplinServerApi from './JoplinServerApi';
-import { Session } from './types';
+import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
 import Logger from '@joplin/utils/Logger';
