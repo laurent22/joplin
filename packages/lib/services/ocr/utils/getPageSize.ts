@@ -7,18 +7,12 @@ async function getPageSize(id: string) {
 			'id',
 			'mime',
 			'file_extension',
-			'encryption_applied',
-			'ocr_details',
 		],
 	});
 
-	if (!resource.ocr_details) {
-		throw new Error('Should have been transcribed already, send file to OCR Queue');
-	}
-
 	const resourceFilePath = Resource.fullPath(resource);
-
 	const result = await shim.pdfInInches(resourceFilePath);
+
 	return {
 		width: result.width,
 		height: result.height,
