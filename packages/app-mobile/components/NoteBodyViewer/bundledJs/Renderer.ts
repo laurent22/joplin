@@ -40,7 +40,7 @@ export interface RendererSettings {
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 	readAssetBlob: (assetPath: string)=> Promise<Blob>;
 
-	showIconForNoteLinks: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 export interface MarkupRecord {
@@ -144,7 +144,7 @@ export default class Renderer {
 			},
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
 
-			showIconForNoteLinks: settings.showIconForNoteLinks,
+			showNoteLinkIcon: settings.showNoteLinkIcon,
 		};
 
 		this.markupToHtml.clearCache(markup.language);

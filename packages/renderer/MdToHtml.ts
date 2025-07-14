@@ -206,7 +206,7 @@ export interface RuleOptions {
 
 	platformName?: string;
 
-	showIconForNoteLinks?: boolean;
+	showNoteLinkIcon?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {

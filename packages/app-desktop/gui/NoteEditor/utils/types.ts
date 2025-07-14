@@ -67,7 +67,7 @@ export interface NoteEditorProps {
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 	startupPluginsLoaded: boolean;
-	showIconForNoteLinks: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -139,7 +139,7 @@ export interface NoteBodyEditorProps {
 	noteId: string;
 	useCustomPdfViewer: boolean;
 	watchedNoteFiles: string[];
-	showIconForNoteLinks: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {

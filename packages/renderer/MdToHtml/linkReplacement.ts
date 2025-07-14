@@ -16,7 +16,7 @@ export interface Options {
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
-	showIconForNoteLinks?: boolean;
+	showNoteLinkIcon?: boolean;
 }
 
 export interface LinkReplacementResult {
@@ -36,7 +36,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	options.plainResourceRendering ??= false;
 	options.postMessageSyntax ??= 'postMessage';
 	options.enableLongPress ??= false;
-	options.showIconForNoteLinks ??= true;
+	options.showNoteLinkIcon ??= true;
 
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 	const isResourceUrl = options.resources && !!resourceHrefInfo;
@@ -80,7 +80,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			if (mime) {
 				iconType = getClassNameForMimeType(mime);
 			} else {
-				iconType = options.showIconForNoteLinks ? 'fa-joplin' : '';
+				iconType = options.showNoteLinkIcon ? 'fa-joplin' : '';
 			}
 
 

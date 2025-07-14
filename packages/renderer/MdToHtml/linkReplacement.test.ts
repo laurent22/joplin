@@ -86,7 +86,7 @@ describe('linkReplacement', () => {
 		const linkHtml = linkReplacement(`:/${resourceId}`, {
 			ResourceModel: defaultResourceModel,
 			resources: {},
-			showIconForNoteLinks: true,
+			showNoteLinkIcon: true,
 		}).html;
 
 		expect(linkHtml).toContain('<span class="resource-icon fa-joplin"></span>');
@@ -98,7 +98,7 @@ describe('linkReplacement', () => {
 		const linkHtml = linkReplacement(`:/${resourceId}`, {
 			ResourceModel: defaultResourceModel,
 			resources: {},
-			showIconForNoteLinks: false,
+			showNoteLinkIcon: false,
 		}).html;
 
 		expect(linkHtml).not.toContain('<span class="resource-icon fa-joplin"></span>');
