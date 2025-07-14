@@ -67,7 +67,7 @@ export default class OcrService {
 		const resourceFilePath = Resource.fullPath(resource);
 
 		const driver = this.drivers_.find(d => d.driverId === resource.ocr_driver_id);
-		if (!driver) throw new Error(`No driver found for ocrJobType: ${resource.ocr_driver_id}`);
+		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
 
 		if (resource.mime === 'application/pdf') {
 			// OCR can be slow for large PDFs.
