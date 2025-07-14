@@ -29,7 +29,7 @@ const resourceInfo = (resource: ResourceEntity) => {
 
 export default class OcrService {
 
-	private drivers: OcrDriverBase[];
+	private drivers_: OcrDriverBase[];
 	private isRunningInBackground_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer_: any = null;
@@ -39,7 +39,7 @@ export default class OcrService {
 	private htrQueue_: TaskQueue = null;
 
 	public constructor(drivers: OcrDriverBase[]) {
-		this.drivers = drivers;
+		this.drivers_ = drivers;
 		this.ocrQueue_ = new TaskQueue('printed', logger);
 		this.ocrQueue_.setConcurrency(5);
 		this.ocrQueue_.keepTaskResults = false;
@@ -66,7 +66,7 @@ export default class OcrService {
 
 		const resourceFilePath = Resource.fullPath(resource);
 
-		const driver = this.drivers.find(d => d.driverId === resource.ocr_driver_id);
+		const driver = this.drivers_.find(d => d.driverId === resource.ocr_driver_id);
 		if (!driver) throw new Error(`No driver found for ocrJobType: ${resource.ocr_driver_id}`);
 
 		if (resource.mime === 'application/pdf') {
@@ -108,7 +108,7 @@ export default class OcrService {
 	}
 
 	public async dispose() {
-		for (const d of this.drivers) {
+		for (const d of this.drivers_) {
 			await d.dispose();
 		}
 	}
