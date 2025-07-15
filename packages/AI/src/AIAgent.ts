@@ -61,7 +61,7 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 
 	// 関連ドキュメントの内容を結合
 	const context = relevantDocs
-		.map((doc, index) => `[ドキュメント${index + 1}] ${doc.pageContent}`)
+		.map((doc, _index) => `${JSON.stringify(doc)}`)
 		.join('\n\n');
 
 	// システムプロンプトとユーザーメッセージを作成
@@ -71,7 +71,7 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 回答時のフォーマットはmarkdownでお願いします。
 回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
 その際、noteIdはjoplinスキームとしてリンクしてください。
-例えば、根拠: [{source}](joplin://{noteId}) (noteId: 12345)のように表示してください。
+例えば、根拠: [{source}](joplin://{noteId})のように表示してください。
 
 コンテキスト情報:
 ${context}`;
