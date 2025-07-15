@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB per notitie of bijlage"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -107,6 +110,9 @@
 	"(None)": [
 		"(Geen)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wuziwuk: %s)"
 	],
@@ -127,6 +133,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kan of \"toggle\" of \"clear\" zijn. Gebruik \"toggle\" om de to-do te om te schakelen tussen voltooid en onvoltooid (Als het doel een gewone notitie is, zal ze geconverteerd worden naar een to-do). Gebruik \"clear\" om terug te wisselen naar een standaard notitie."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A new update (%s) is available": [
 		"Een nieuwe update (%s) is beschikbaar"
@@ -241,6 +250,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Alle potentiële poorten zijn in gebruik - meld het problem op %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Laat toe mobiele plugins te debuggen. Zie %s voor details."
@@ -608,6 +620,9 @@
 	"Command palette...": [
 		"Commandopalet..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"Compact"
 	],
@@ -661,6 +676,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"Verbinding maken met Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Geconsolideerde facturatie"
@@ -1042,6 +1060,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Bewaar het wachtwoord zorgvuldig. Om beveiligingsredenen is dit de *enige* manier om je data te ontsleutelen! Gelieve je wachtwoord hieronder in te geven om encryptie in te schakelen."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Donate, website": [
 		"Doneren, website"
 	],
@@ -1333,6 +1354,9 @@
 	"Error opening note in editor: %s": [
 		"Fout bij het openen van de notitie in de editor: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fout. Gelieve te verifiëren of URL, gebruikersnaam, wachtwoord, etc. correct zijn en of het synchronisatiedoel bereikbaar is. De gemelde fout was:"
 	],
@@ -1411,6 +1435,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatale fout:"
 	],
@@ -1462,6 +1489,9 @@
 	"Focus title": [
 		"Titel focussen"
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
 	"Follow link": [
 		"Volg link"
 	],
@@ -1511,6 +1541,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Geo-locatie, spellingscontrole, editor werkbalk, afmetingen afbeelding aanpassen"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Download nu:"
 	],
@@ -1519,6 +1552,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Haalt een configuratie waarde op of stelt een waarde in. Als [value] niet opgegeven is, zal de waarde van [name] getoond worden. Als noch de [name] noch [waarde] opgegeven zijn, zal de huidige configuratie opgelijst worden."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		"ga"
@@ -1822,6 +1858,9 @@
 	],
 	"Joplin Server URL": [
 		"Joplin Server URL"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper laat toe webpagina's en schermafbeeldingen van je browser op te slaan in Joplin."
@@ -2316,6 +2355,9 @@
 	"OCR: Language data URL or path": [
 		"OCR: Taalgegevens-URL of -pad"
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2502,6 +2544,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Gelieve te wachten tot alle bijlagen gedownload en ontsleuteld zijn. Je kan ook overschakelen naar %s om de notitie te bewerken."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Even geduld..."
 	],
@@ -2540,6 +2585,9 @@
 	],
 	"Possible values: %s.": [
 		"Mogelijke waarden: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Voorkeuren"
@@ -2645,6 +2693,9 @@
 	],
 	"Publish notes to the internet": [
 		"Notities publiceren op het Internet"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"QR Code": [
 		"QR-Code"
@@ -2952,6 +3003,9 @@
 	"Selects a notebook": [
 		"Selecteert een notitieboek"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Foutopsportingsrapport verzenden"
 	],
@@ -3008,6 +3062,9 @@
 	],
 	"Shares": [
 		"Delen"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Notitieboek delen..."
@@ -3354,17 +3411,11 @@
 	"Text editor command": [
 		"Teksteditorcommando"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"De [Web Clipper](%s) is een browserextensie die je toelaat webpagina's en schermafbeeldingen van je browser op te slaan in Joplin."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het actieve profiel kan niet verwijderd worden. Schakel over naar een ander profiel en probeer opieuw."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"De app gaat nu sluiten. Gelieve ze te herstarten om het proces te voltooien."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"De applicatie is niet correct afgesloten. Wil je starten in veilige modus?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"De applicatie werd geautoriseerd - Je kan deze tab nu sluiten."
@@ -3420,6 +3471,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"De sleutels met deze ID's worden gebruikt om sommige van je items te versleutelen, maar de toepassing heeft daar momenteel geen toegang toe. Het is waarschijnlijk dat ze uiteindelijk via synchronisatie zullen worden opgehaald."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"De hoofdsleutel is met succes geüpgraded!"
@@ -3755,6 +3809,9 @@
 	"Unshare": [
 		"Stoppen met delen"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Dit notitieboek niet meer delen? De ontvangers zullen geen toegang meer hebben tot de inhoud."
 	],
@@ -3976,6 +4033,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Je bent ingelogd op Joplin Cloud, je mag dit scherm nu sluiten."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""

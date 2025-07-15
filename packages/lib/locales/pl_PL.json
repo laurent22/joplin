@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB na notatkę lub załącznik"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -104,6 +107,9 @@
 	"(None)": [
 		"(Brak)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -124,6 +130,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> może zarówno być \"toggle\" lub \"clear\". Użyj \"toggle\" aby przełączyć wskazane zadanie pomiędzy stanem ukończonym a nieukończonym (Jeżeli celem jest regularna notatka, zostanie ona przekonwertowana na zadanie.) Użyj \"clear\" aby przekonwertować zadanie z powrotem do regularnej notatki."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -217,6 +226,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Wszystkie możliwe porty są w użyciu - proszę zgłosić błąd na %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Umożliwia debugowanie wtyczek mobilnych. Zobacz %s, aby uzyskać szczegóły."
@@ -459,7 +471,7 @@
 		"Zmień język"
 	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Zmień skrót na “%s”"
 	],
 	"Characters": [
 		"Znaki"
@@ -501,7 +513,7 @@
 		"Naciśnij \"%s\" aby przywrócić notatkę. Zostanie ona skopiowana do notatnika o nazwie \"%s\". Obecna wersja notatki nie zostanie nadpisana lub zmodyfikowana."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Kliknij “start” aby dołączyć nagranie lub nową notatkę głosową."
 	],
 	"Click to add tags...": [
 		"Kliknij aby dodać tagi..."
@@ -525,7 +537,7 @@
 		"Zamknij okno"
 	],
 	"Closing session...": [
-		""
+		"Zamykanie sesji…"
 	],
 	"Cmd-click to open": [
 		"Cmd-click aby otworzyć"
@@ -565,6 +577,9 @@
 	],
 	"Command palette...": [
 		"Paleta komend..."
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
 	],
 	"Compact": [
 		"Kompaktowy"
@@ -610,6 +625,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Konflikty (załączniki)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Skonsolidowane rozliczenia"
@@ -955,6 +973,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nie zgub hasła, ponieważ ze względów bezpieczeństwa będzie to *jedyny* sposób na odszyfrowanie twoich danych. Aby włączyć szyfrowanie, wpisz poniżej spoje hasło."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Donate, website": [
 		"Wesprzyj, strona internetowa"
 	],
@@ -1291,6 +1312,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Błąd krytyczny:"
 	],
@@ -1335,6 +1359,9 @@
 	],
 	"Focus title": [
 		"Przejdź do tytułu"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1386,6 +1413,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Geolokalizacja, sprawdzanie pisowni, pasek narzędzi edytora, zmiana rozmiaru obrazu"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Pobierz teraz:"
 	],
@@ -1395,14 +1425,17 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Pobiera lub ustawia wartość pliku konfiguracyjnego. Jeżeli [wartość] nie jest podana, zostanie wyświetlona wartość [nazwa]. Jeżeli zarówno [nazwa], jak i [wartość] nie zostanie podana, wyświetlona zostanie lista z obecną konfiguracją."
 	],
-	"go": [
+	"Glossary:": [
 		""
+	],
+	"go": [
+		"Do przodu"
 	],
 	"Go back": [
-		""
+		"Wstecz"
 	],
 	"Go to line": [
-		""
+		"Przejdź do linii"
 	],
 	"Go to source URL": [
 		"Idź do adresu źródłowego odnośnika"
@@ -1552,7 +1585,7 @@
 		"Wstaw akapit"
 	],
 	"Info": [
-		""
+		"Informacje"
 	],
 	"Information": [
 		"Informacja"
@@ -1594,7 +1627,7 @@
 		"Nieprawidłowa komenda: \"%s\""
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"Błędny format. np: 48.8581372, 2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Nieznana wartość opcji: \"%s\". Możliwa wartość opcji: %s."
@@ -1649,6 +1682,9 @@
 	],
 	"Joplin Server URL": [
 		"URL serwera Joplin"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper umożliwia zapisywanie stron internetowych i zrzutów ekranu z Twojej przeglądarki do Joplin."
@@ -1875,10 +1911,10 @@
 		"Większość wtyczek posiada kod źródłowy dostępny do wglądu na stronie internetowej danej wtyczki."
 	],
 	"Move left": [
-		""
+		"Przesuń w lewo"
 	],
 	"Move right": [
-		""
+		"Przesuń w prawo"
 	],
 	"Move to notebook": [
 		"Przenieś do notatnika"
@@ -1890,7 +1926,7 @@
 		"Przenieś do notatnika:"
 	],
 	"Move up": [
-		""
+		"Do góry"
 	],
 	"Moves the given <item> to [notebook]": [
 		"Przenosi podany <item> do [notebook]"
@@ -2088,6 +2124,9 @@
 		"Lista numerowana"
 	],
 	"OCR: Clear cache and re-download language data files": [
+		"OCR: Wyczyść pamięć podręczną i pobierz ponownie pliki danych językowych"
+	],
+	"Ok": [
 		""
 	],
 	"OK": [
@@ -2100,7 +2139,7 @@
 		"Na %s: %s"
 	],
 	"on line": [
-		""
+		"w linii"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Jeden z twoich master kluczy ma przestarzałą metodę szyfrowanie."
@@ -2127,19 +2166,19 @@
 		"Otwórz %s"
 	],
 	"Open in new window": [
-		""
+		"Otwórz w nowym oknie"
 	],
 	"Open PDF viewer": [
 		"Otwórz przeglądarkę plików PDF"
 	],
 	"Open primary app instance...": [
-		""
+		"Otwórz główną instancję aplikacji"
 	],
 	"Open profile directory": [
 		"Otwórz katalog profili"
 	],
 	"Open secondary app instance...": [
-		""
+		"Otwórz drugą instancję aplikacji"
 	],
 	"Open Sync Wizard...": [
 		"Otwórz Menedżera Synchronizacji..."
@@ -2172,10 +2211,10 @@
 		"Wielkość strony do eksportu PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Panel \"%s\" jest widoczny"
 	],
 	"Panel %s is hidden": [
-		""
+		"Panel %s is hidden jest ukryty"
 	],
 	"Password": [
 		"Hasło"
@@ -2220,7 +2259,7 @@
 		"Proszę otworzyć następujący odnośnik w swojej przeglądarce, aby uwierzytelnić aplikację. Aplikacja utworzy katalog w lokalizacji \"Apps/Joplin\" i będzie jedynie odczytywać i zapisywać pliki w tej lokalizacji. Nie będzie ona miała dostępu do plików spoza tej lokalizacji, jak i innych danych osobowych. Dane nie zostaną udostępnione jakiejkolwiek firmie/organizacji."
 	],
 	"Please provide the recipient email": [
-		""
+		"Podaj adres e-mail odbiorcy"
 	],
 	"Please record your voice...": [
 		"Proszę nagrywać swój głos..."
@@ -2242,6 +2281,9 @@
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Poczekaj na pobranie I odszyfrowanie wszystkich załączników. Możesz też przenieść się do %s żeby edytować notatkę."
+	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
 	],
 	"Please wait...": [
 		"Proszę czekać..."
@@ -2269,6 +2311,9 @@
 	],
 	"Possible values: %s.": [
 		"Możliwe wartośći: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Preferencje"
@@ -2369,11 +2414,14 @@
 	"Publish notes to the internet": [
 		"Udostępnij notatkę do internetu"
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"Quit": [
 		"Wyjdź"
 	],
 	"Re-download model": [
-		""
+		"Pobierz ponownie model"
 	],
 	"Re-encrypt data": [
 		"Ponownie zaszyfruj dane"
@@ -2403,7 +2451,7 @@
 		"Odbiorcy:"
 	],
 	"Record audio": [
-		""
+		"Nagraj dźwięk"
 	],
 	"Redo": [
 		"Przywróć"
@@ -2454,10 +2502,10 @@
 		"Zamień: "
 	],
 	"replaced $ matches": [
-		""
+		"Zmieniono $ dopasowań"
 	],
 	"replaced match on line $": [
-		""
+		"zmieniono dopasowanie w linii $"
 	],
 	"Report an issue": [
 		"Zgłoś problem"
@@ -2615,6 +2663,9 @@
 	"Select parent notebook": [
 		"Wybierz notatnik nadrzędny"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Wyślij raport o błędzie"
 	],
@@ -2662,6 +2713,9 @@
 	],
 	"Share permissions": [
 		"Udostępnianie uprawnień"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Udostępnianie notatnika..."
@@ -2990,9 +3044,6 @@
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Aplikacja zostanie teraz zamknięta. Uruchom ją ponownie, aby ukończyć proces."
 	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Aplikacja nie została zamknięta prawidłowo. Czy chciałbyś włączyć tryb bezpieczny?"
-	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Aplikacja została uwierzytelniona - możesz zamknąć kartę przeglądarki."
 	],
@@ -3043,6 +3094,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Klucze główne z tymi ID zostaną użyte do szyfrowania niektórych obiektów, jednakże aplikacja aktualnie nie ma do nich dostępu. Prawdopodobnie zostaną pobrane przy synchronizacji."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"Klucz główny został pomyślnie zaktualizowany!"
@@ -3353,6 +3407,9 @@
 	"Unshare": [
 		"Usuń udostępnienie"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Usunąć udostępnienie tego notatnika? Odbiorcy nie będą mieli dłużej dostępu do jego zawartości."
 	],
@@ -3554,8 +3611,14 @@
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Jesteś zalogowany do Joplin Cloud. Możesz teraz opuścić ten ekran."
 	],
-	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+	"You are now logged into your account.": [
 		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		"Używasz wersji Joplin opartej na architekturze Intel na komputerze z procesorem Apple Silicon. Pobierz wersję Apple Silicon aplikacji, aby uzyskać lepszą wydajność."
 	],
 	"You currently have no notebooks.": [
 		"Brak aktywnych notatników."

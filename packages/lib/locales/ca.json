@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB per nota o adjunt"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -101,6 +104,9 @@
 	"(None)": [
 		"(cap)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -121,6 +127,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar els llistats de tasques entre l'estat de finalitzat i no finalitzat (si l'objectiu és una nota normal, es convertirà a un llistat de tasques pendents). Useu «clear» per a convertir un llistat de tasques pendents a una nota normal."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -214,6 +223,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Tots els ports potencials estan en ús - si us plau, informeu del problema a %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -557,6 +569,9 @@
 	"Command palette...": [
 		"Paleta d'ordres..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"Finalitzat"
 	],
@@ -598,6 +613,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Conflictes (adjunts)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -939,6 +957,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra contrasenya."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -1206,6 +1227,9 @@
 	"Error opening note in editor: %s": [
 		"S'ha produït un error en l'obrir la nota amb l'editor: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Error. Comproveu que l’URL, el nom d’usuari, la contrasenya, etc. siguin correctes i que el servei a sincronitzar sigui accessible. L'error reportat ha estat:"
 	],
@@ -1278,6 +1302,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Error fatal:"
 	],
@@ -1322,6 +1349,9 @@
 	],
 	"Focus title": [
 		"Vés al títol"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1372,6 +1402,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Obteniu-lo ara:"
 	],
@@ -1380,6 +1413,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obté o estableix un valor de configuració. Si no s'indica [valor], mostrarà el valor de [nom]. Si no s'indica ni [nom] ni [valor], es mostrarà un llistat amb la configuració actual."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1641,6 +1677,9 @@
 	],
 	"Joplin Server URL": [
 		"URL del servidor Joplin"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"El porta-retalls de webs del Joplin us permet desar pàgines web i captures de pantalla del navegador web al Joplin."
@@ -2075,6 +2114,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"D'acord"
 	],
@@ -2231,6 +2273,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Espereu que tots els adjunts hagin estat descarregats i desxifrats. També podeu canviar a %s per a editar la nota."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Espereu..."
 	],
@@ -2257,6 +2302,9 @@
 	],
 	"Possible values: %s.": [
 		"Valors possibles: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Preferències"
@@ -2359,6 +2407,9 @@
 	],
 	"Publish notes to the internet": [
 		"Publica les notes a internet"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"Quit": [
 		"Surt"
@@ -2597,6 +2648,9 @@
 	"Select parent notebook": [
 		"Selecciona el bloc de notes pare"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"El servidor ja està corrent en el port %d"
 	],
@@ -2637,6 +2691,9 @@
 		"Comparteix el quadern de notes..."
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2957,9 +3014,6 @@
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar el procés."
 	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"L'aplicació no s'ha tancat correctament. Voleu iniciar en mode segur?"
-	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"L'aplicació ha estat autoritzada - podeu tancar aquesta pestanya del navegador."
 	],
@@ -3010,6 +3064,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Les claus amb aquests ID s'utilitzen per a xifrar alguns elements. Tot i això, l'aplicació no hi té accés. És probable que es baixen en algun moment via sincronització."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"La clau mestra s'ha actualitzat amb èxit!"
@@ -3308,6 +3365,9 @@
 	"Unshare": [
 		"Deixa de compartir"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Voleu deixar de compartir aquest bloc de notes? Els destinataris ja no tindran accés al seu contingut."
 	],
@@ -3431,6 +3491,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -3507,6 +3570,12 @@
 		"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d pixels abans d'adjuntar-la?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
