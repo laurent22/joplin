@@ -4,12 +4,97 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { getDisplayParentId, getTrashFolderId } from '@joplin/lib/services/trash';
+import {
+	getDisplayParentId,
+	getTrashFolderId,
+} from '@joplin/lib/services/trash';
 const ListWidget = require('tkwidgets/ListWidget.js');
 
-export default class FolderListWidget extends ListWidget {
+// Service for managing folder collapse states
+class FolderCollapseService {
+	private static instance_: FolderCollapseService;
+	private collapsedFolders_: Set<string> = new Set();
 
+	public static instance(): FolderCollapseService {
+		if (!this.instance_) {
+			this.instance_ = new FolderCollapseService();
+			this.instance_.loadFromSettings();
+		}
+		return this.instance_;
+	}
+
+	public isCollapsed(folderId: string): boolean {
+		return this.collapsedFolders_.has(folderId);
+	}
+
+	public setCollapsed(folderId: string, collapsed: boolean) {
+		if (collapsed) {
+			this.collapsedFolders_.add(folderId);
+		} else {
+			this.collapsedFolders_.delete(folderId);
+		}
+		this.saveToSettings();
+	}
+
+	public toggleCollapsed(folderId: string): boolean {
+		const newState = !this.isCollapsed(folderId);
+		this.setCollapsed(folderId, newState);
+		return newState;
+	}
+
+	public expandToFolder(folderId: string, folders: FolderEntity[]) {
+		// Find all parent folders and expand them
+		const parentsToExpand: string[] = [];
+		let currentId = folderId;
+
+		while (currentId) {
+			const folder = BaseModel.byId(folders, currentId);
+			if (!folder) break;
+
+			const parentId = getDisplayParentId(
+				folder,
+				folders.find((f) => f.id === folder.parent_id),
+			);
+			if (parentId) {
+				parentsToExpand.unshift(parentId);
+				currentId = parentId;
+			} else {
+				break;
+			}
+		}
+
+		// Expand all parent folders
+		for (const parentId of parentsToExpand) {
+			this.setCollapsed(parentId, false);
+		}
+	}
+
+	private loadFromSettings() {
+		try {
+			const stored = Setting.value('cli.folderCollapseState');
+			if (stored && typeof stored === 'string') {
+				const folderIds = JSON.parse(stored);
+				this.collapsedFolders_ = new Set(folderIds);
+			}
+		} catch (error) {
+			// If there's an error loading, start with empty state
+			this.collapsedFolders_ = new Set();
+		}
+	}
+
+	private saveToSettings() {
+		try {
+			const folderIds = Array.from(this.collapsedFolders_);
+			Setting.setValue('cli.folderCollapseState', JSON.stringify(folderIds));
+		} catch (error) {
+			// Silently ignore save errors
+		}
+	}
+}
+
+export default class FolderListWidget extends ListWidget {
 	private folders_: FolderEntity[] = [];
+	private collapseService_: FolderCollapseService;
 
 	public constructor() {
 		super();
@@ -24,6 +109,7 @@ export default class FolderListWidget extends ListWidget {
 		this.updateItems_ = false;
 		this.trimItemTitle = false;
 		this.showIds = false;
+		this.collapseService_ = FolderCollapseService.instance();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.itemRenderer = (item: any) => {
@@ -31,14 +117,28 @@ export default class FolderListWidget extends ListWidget {
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(' '.repeat(this.folderDepth(this.folders, item.id)));
+				const depth = this.folderDepth(this.folders, item.id);
+				output.push(' '.repeat(depth));
+
+				// Add collapse/expand indicator
+				const hasChildren = this.folderHasChildren_(this.folders, item.id);
+				if (hasChildren) {
+					const isCollapsed = this.collapseService_.isCollapsed(item.id);
+					output.push(isCollapsed ? '[+] ' : '[-] ');
+				} else {
+					output.push('  '); // Space for alignment
+				}
 
 				if (this.showIds) {
 					output.push(Folder.shortId(item.id));
 				}
 				output.push(Folder.displayTitle(item));
 
-				if (Setting.value('showNoteCounts') && !item.deleted_time && item.id !== getTrashFolderId()) {
+				if (
+					Setting.value('showNoteCounts') &&
+          !item.deleted_time &&
+          item.id !== getTrashFolderId()
+				) {
 					let noteCount = item.note_count;
 					if (this.folderHasChildren_(this.folders, item.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
@@ -65,7 +165,10 @@ export default class FolderListWidget extends ListWidget {
 		let output = 0;
 		while (true) {
 			const folder = BaseModel.byId(folders, folderId);
-			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			const folderParentId = getDisplayParentId(
+				folder,
+				folders.find((f) => f.id === folder.parent_id),
+			);
 			if (!folder || !folderParentId) return output;
 			output++;
 			folderId = folderParentId;
@@ -153,7 +256,10 @@ export default class FolderListWidget extends ListWidget {
 	public folderHasChildren_(folders: FolderEntity[], folderId: string) {
 		for (let i = 0; i < folders.length; i++) {
 			const folder = folders[i];
-			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			const folderParentId = getDisplayParentId(
+				folder,
+				folders.find((f) => f.id === folder.parent_id),
+			);
 			if (folderParentId === folderId) return true;
 		}
 		return false;
@@ -161,7 +267,12 @@ export default class FolderListWidget extends ListWidget {
 
 	public render() {
 		if (this.updateItems_) {
-			this.logger().debug('Rebuilding items...', this.notesParentType, this.selectedJoplinItemId, this.selectedSearchId);
+			this.logger().debug(
+				'Rebuilding items...',
+				this.notesParentType,
+				this.selectedJoplinItemId,
+				this.selectedSearchId,
+			);
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
@@ -170,12 +281,20 @@ export default class FolderListWidget extends ListWidget {
 			const orderFolders = (parentId: string) => {
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
-					const originalParent = this.folders_.find(f => f.id === f.parent_id);
+					const originalParent = this.folders_.find(
+						(f) => f.id === f.parent_id,
+					);
 
 					const folderParentId = getDisplayParentId(f, originalParent); // f.parent_id ? f.parent_id : '';
 					if (folderParentId === parentId) {
 						newItems.push(f);
-						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
+						// Only recurse into children if the folder is not collapsed
+						if (
+							this.folderHasChildren_(this.folders, f.id) &&
+              !this.collapseService_.isCollapsed(f.id)
+						) {
+							orderFolders(f.id);
+						}
 					}
 				}
 			};
@@ -220,5 +339,51 @@ export default class FolderListWidget extends ListWidget {
 		if (itemId === null) itemId = this.selectedJoplinItemId;
 		const index = this.itemIndexByKey('id', itemId);
 		this.currentIndex = index >= 0 ? index : 0;
+	}
+
+	public toggleFolderCollapse() {
+		const item = this.currentItem;
+		if (
+			item &&
+      item.type_ === Folder.modelType() &&
+      this.folderHasChildren_(this.folders, item.id)
+		) {
+			this.collapseService_.toggleCollapsed(item.id);
+			this.updateItems_ = true;
+			this.invalidate();
+			return true;
+		}
+		return false;
+	}
+
+	// Getter for external access to collapse service
+	public get collapseService() {
+		return this.collapseService_;
+	}
+
+	public expandToFolder(folderId: string) {
+		this.collapseService_.expandToFolder(folderId, this.folders);
+		this.updateItems_ = true;
+		this.invalidate();
+	}
+
+	public collapseAll() {
+		for (const folder of this.folders) {
+			if (this.folderHasChildren_(this.folders, folder.id)) {
+				this.collapseService_.setCollapsed(folder.id, true);
+			}
+		}
+		this.updateItems_ = true;
+		this.invalidate();
+	}
+
+	public expandAll() {
+		for (const folder of this.folders) {
+			if (this.folderHasChildren_(this.folders, folder.id)) {
+				this.collapseService_.setCollapsed(folder.id, false);
+			}
+		}
+		this.updateItems_ = true;
+		this.invalidate();
 	}
 }
