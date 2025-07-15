@@ -71,7 +71,8 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 回答時のフォーマットはmarkdownでお願いします。
 回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
 その際、noteIdはjoplinスキームとしてリンクしてください。
-例えば、根拠: [{source}](joplin://{noteId})のように表示してください。
+加えて、根拠となるの文書内に "(fragment_id: {fragment_id})"という形で存在していたらそのfragment_idもセットしてください。
+例えば、根拠: [{source}](joplin://{noteId}#{fragment_id})のように表示してください。
 
 コンテキスト情報:
 ${context}`;
