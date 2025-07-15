@@ -615,9 +615,7 @@ class Dialog extends React.PureComponent<Props, State> {
 									>
 										{msg.loading && <div id="loading-animation" />}
 										{msg.text}
-										<a href="joplin://37102acc6bda44e3a524941e1dd2921a">test_link</a>
 									</div>
-
 								))}
 								<div ref={this.chatMessagesEndRef} />
 							</div>
