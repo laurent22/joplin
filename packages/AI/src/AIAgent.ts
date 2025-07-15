@@ -64,20 +64,42 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 		.map((doc, _index) => `${JSON.stringify(doc)}`)
 		.join('\n\n');
 
-	// システムプロンプトとユーザーメッセージを作成
-	const systemPrompt = `あなたは親切で正確なアシスタントです。
-提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
-コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
-回答時のフォーマットはmarkdownでお願いします。
-回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
-その際、noteIdはjoplinスキームとしてリンクしてください。
-例えば、根拠: [{source}](joplin://{noteId})のように表示してください。
 
+	const systemPromptEvidence = `あなたは親切で正確なアシスタントです。
+提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
+ただし、回答自体は生成せず、回答根拠となるfilePathだけを回答してください。
+回答根拠が見当たらない場合は、空文字を返してください。
 コンテキスト情報:
 ${context}`;
 
+
+
 	const messages = [
-		new SystemMessage(systemPrompt),
+		new SystemMessage(systemPromptEvidence),
+		...historyMessages,
+		new HumanMessage(question),
+	];
+
+	const evidencePath = await model.invoke(messages);
+	console.log(`evidence path: ${evidencePath.content}`);
+	const fileContent = evidencePath.content ? fs.readFileSync(evidencePath.content.toString(), 'utf-8') : '';
+
+	// システムプロンプトとユーザーメッセージを作成
+	const systemPromptAnswer = `あなたは親切で正確なアシスタントです。
+	提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
+	コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
+	回答時のフォーマットはmarkdownでお願いします。
+	回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
+	その際、noteIdはjoplinスキームとしてリンクしてください。
+	加えて回答の根拠となった箇所を含むhtmlタグのidを抽出しfragmentジャンプをできるようにしてください。
+	例えば、根拠: [{source}](joplin://{noteId}#{id})のように表示してください。
+	
+
+	コンテキスト情報:
+	${fileContent}`;
+
+	const messagesAnswer = [
+		new SystemMessage(systemPromptAnswer),
 		...historyMessages,
 		new HumanMessage(question),
 	];
@@ -85,7 +107,7 @@ ${context}`;
 	replyFunc('回答を生成中...', replyId, true);
 	// LLMに質問して回答を生成
 	let response = '';
-	const stream = await model.stream(messages);
+	const stream = await model.stream(messagesAnswer);
 	for await (const chunk of stream) {
 		const content = typeof chunk.content === 'string' ? chunk.content : '';
 		response += content;
