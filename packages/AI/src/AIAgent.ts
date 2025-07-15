@@ -99,7 +99,7 @@ ${context}`;
 			}
 		});
 	});
-	fileContent = $.html();
+	fileContent = $.root().text();
 
 
 	// システムプロンプトとユーザーメッセージを作成
