@@ -114,6 +114,13 @@ export default class NoteListUtils {
 				),
 			);
 
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					menuUtils.commandToStatefulMenuItem('convertHtmlToMarkdown', noteIds) as any,
+				),
+			);
+
 			menu.append(new MenuItem({ type: 'separator' }));
 
 			menu.append(
