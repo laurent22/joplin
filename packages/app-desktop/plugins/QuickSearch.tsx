@@ -89,6 +89,37 @@ class Dialog extends React.PureComponent<Props, State> {
 	private chatMessagesEndRef: React.RefObject<HTMLDivElement>;
 	private autoScrollMode: boolean = true;
 
+	private chatMessagesOnClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+		const target = e.target as HTMLElement;
+		if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('joplin://')) {
+			e.preventDefault();
+			const href = target.getAttribute('href');
+			try {
+				const resourceUrlInfo = urlUtils.parseResourceUrl(href);
+				const itemId = resourceUrlInfo.itemId;
+				const item = await BaseItem.loadItemById(itemId);
+				if (!item) throw new Error(`No item with ID ${itemId}`);
+				if (item.type_ === BaseModel.TYPE_NOTE) {
+					this.props.dispatch({
+						type: 'FOLDER_AND_NOTE_SELECT',
+						folderId: item.parent_id,
+						noteId: item.id,
+						hash: resourceUrlInfo.hash,
+					});
+					this.props.dispatch({
+						pluginName: PLUGIN_NAME,
+						type: 'PLUGINLEGACY_DIALOG_SET',
+						open: false,
+					});
+				} else {
+				// リソースの場合は何もしない or 必要なら添付ファイル処理
+				}
+			} catch (err) {
+				alert(`ノート遷移に失敗しました: ${err.message}`);
+			}
+		}
+	};
+
 	private constructor(props: Props) {
 		super(props);
 
@@ -574,37 +605,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										this.changeAutoscrollMode(true);
 									}
 								}}
-								onClick={async (e) => {
-									const target = e.target as HTMLElement;
-									if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('joplin://')) {
-										e.preventDefault();
-										const href = target.getAttribute('href');
-										try {
-											// importで取得済み
-											const resourceUrlInfo = urlUtils.parseResourceUrl(href);
-											const itemId = resourceUrlInfo.itemId;
-											const item = await BaseItem.loadItemById(itemId);
-											if (!item) throw new Error(`No item with ID ${itemId}`);
-											if (item.type_ === BaseModel.TYPE_NOTE) {
-												this.props.dispatch({
-													type: 'FOLDER_AND_NOTE_SELECT',
-													folderId: item.parent_id,
-													noteId: item.id,
-													hash: resourceUrlInfo.hash,
-												});
-												this.props.dispatch({
-													pluginName: PLUGIN_NAME,
-													type: 'PLUGINLEGACY_DIALOG_SET',
-													open: false,
-												});
-											} else {
-												// リソースの場合は何もしない or 必要なら添付ファイル処理
-											}
-										} catch (err) {
-											alert(`ノート遷移に失敗しました: ${err.message}`);
-										}
-									}
-								}}
+								onClick={this.chatMessagesOnClick}
 							>
 								{this.state.chatMessages.map((msg, idx) => (
 									<div
