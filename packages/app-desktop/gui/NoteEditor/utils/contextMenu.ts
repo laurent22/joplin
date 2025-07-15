@@ -171,7 +171,8 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
-		}, revealInFolder: {
+		},
+		revealInFolder: {
 			label: _('Reveal file in folder'),
 			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath } = await resourceInfo(options);
