@@ -614,7 +614,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										className={msg.isUser ? 'chat-bubble' : 'chat-bubble-reply'}
 									>
 										{msg.loading && <div id="loading-animation" />}
-										{msg.isUser ? msg.text : <ReactMarkdown>{msg.text}</ReactMarkdown>}
+										{msg.isUser ? msg.text : <ReactMarkdown transformLinkUri={null}>{msg.text}</ReactMarkdown>}
 									</div>
 								))}
 								<div ref={this.chatMessagesEndRef} />
