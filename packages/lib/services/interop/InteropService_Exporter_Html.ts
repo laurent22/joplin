@@ -172,6 +172,15 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			} else {
 				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title, null, true)}.html`;
 				noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
+				if (this.skipJoplinSchmeConversion) {
+					const noteId = item.id;
+					// ファイル名にnoteIdを付与
+					const ext = PATH.extname(noteFilePath);
+					const base = noteFilePath.slice(0, -ext.length);
+					const noteIdFilePath = `${base}_${noteId}${ext}`;
+					// ファイル名を変更
+					noteFilePath = noteIdFilePath;
+				}
 			}
 
 			const bodyMd = await this.processNoteResources_(item);

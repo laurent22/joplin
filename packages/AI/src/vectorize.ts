@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
@@ -45,6 +46,20 @@ const divideDocument = (allDocs: Document<{
 	return result;
 };
 
+const extractFragmentIdandSetIt = ($: cheerio.Root) => {
+	// h1, h2, h3要素を検索し、idがあればinnerTextの末尾に (fragment_id: xxxx) を追加
+	['h1', 'h2', 'h3'].forEach(tag => {
+		$(tag).each((_, elem) => {
+			const id = $(elem).attr('id');
+			if (id) {
+				const text = $(elem).text();
+				$(elem).text(`${text} (fragment_id:${id})`);
+			}
+		});
+	});
+	return $;
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: string) => {
 	const documentPath = srcFolderPath;
@@ -85,12 +100,25 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 	// 各HTMLファイルを処理し、テキストを抽出・分割してDocument化
 
 	for (const filePath of files) {
-		const file = path.basename(filePath);
+		// xxxx/yyyy_{noteId}.html 形式から noteId と yyyy.html を抽出
+		const match = filePath.match(/(.+)[\\/](.+)_([a-f0-9]{32})\.html$/);
+		let noteId = '';
+		let file = '';
+		let title = '';
+		if (match) {
+			noteId = match[3];
+			file = `${match[2]}.html`;
+			title = match[2];
+		} else {
+			file = path.basename(filePath);
+		}
 
 		try {
 			const htmlContent = fs.readFileSync(filePath, 'utf-8');
+
 			// CheerioでHTMLを解析してテキストを抽出
-			const $ = cheerio.load(htmlContent);
+			let $ = cheerio.load(htmlContent);
+			$ = extractFragmentIdandSetIt($);
 			$('script, style').remove();
 			const textContent = $('body').text() || $.root().text();
 
@@ -99,11 +127,14 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 
 			// チャンクごとにDocumentを作成
 			for (const chunk of splitTexts) {
+				const titledChunk = JSON.stringify({ title, content: chunk });
+				const source = title || file;
 				const doc = new Document({
-					pageContent: chunk,
+					pageContent: titledChunk,
 					metadata: {
-						source: file,
+						source: source,
 						filePath: filePath,
+						noteId: noteId,
 					},
 				});
 				allDocuments.push(doc);

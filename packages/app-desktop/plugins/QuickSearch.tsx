@@ -4,13 +4,17 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
 import { AIHistory, ragSendMessage } from '../../AI/dist/AIAgent';
 
+
+import BaseItem from '@joplin/lib/models/BaseItem';
+
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
 import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
-
+const urlUtils = require('@joplin/lib/urlUtils');
+import ReactMarkdown from 'react-markdown';
 
 const PLUGIN_NAME = 'quickSearch';
 
@@ -84,6 +88,37 @@ class Dialog extends React.PureComponent<Props, State> {
 
 	private chatMessagesEndRef: React.RefObject<HTMLDivElement>;
 	private autoScrollMode: boolean = true;
+
+	private chatMessagesOnClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+		const target = e.target as HTMLElement;
+		if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('joplin://')) {
+			e.preventDefault();
+			const href = target.getAttribute('href');
+			try {
+				const resourceUrlInfo = urlUtils.parseResourceUrl(href);
+				const itemId = resourceUrlInfo.itemId;
+				const item = await BaseItem.loadItemById(itemId);
+				if (!item) throw new Error(`No item with ID ${itemId}`);
+				if (item.type_ === BaseModel.TYPE_NOTE) {
+					this.props.dispatch({
+						type: 'FOLDER_AND_NOTE_SELECT',
+						folderId: item.parent_id,
+						noteId: item.id,
+						hash: resourceUrlInfo.hash,
+					});
+					this.props.dispatch({
+						pluginName: PLUGIN_NAME,
+						type: 'PLUGINLEGACY_DIALOG_SET',
+						open: false,
+					});
+				} else {
+				// リソースの場合は何もしない or 必要なら添付ファイル処理
+				}
+			} catch (err) {
+				alert(`ノート遷移に失敗しました: ${err.message}`);
+			}
+		}
+	};
 
 	private constructor(props: Props) {
 		super(props);
@@ -556,17 +591,22 @@ class Dialog extends React.PureComponent<Props, State> {
 						{helpComp}
 						{/* --- Chat UI --- */}
 						<div style={chatContainerStyle} >
-							<div style={chatMessagesStyle} id="scroller" onScroll={e => {
-								const target = e.currentTarget;
-								// スクロールが一番下から20px以上離れていたら手動スクロールとみなす
-								const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 20;
-								if (!isAtBottom) {
-									this.changeAutoscrollMode(false);
-								} else {
-									// それ以外は自動スクロールする
-									this.changeAutoscrollMode(true);
-								}
-							}}>
+							<div
+								style={chatMessagesStyle}
+								id="scroller"
+								onScroll={e => {
+									const target = e.currentTarget;
+									// スクロールが一番下から20px以上離れていたら手動スクロールとみなす
+									const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 20;
+									if (!isAtBottom) {
+										this.changeAutoscrollMode(false);
+									} else {
+										// それ以外は自動スクロールする
+										this.changeAutoscrollMode(true);
+									}
+								}}
+								onClick={this.chatMessagesOnClick}
+							>
 								{this.state.chatMessages.map((msg, idx) => (
 									<div
 										key={idx}
@@ -574,7 +614,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										className={msg.isUser ? 'chat-bubble' : 'chat-bubble-reply'}
 									>
 										{msg.loading && <div id="loading-animation" />}
-										{msg.text}
+										{msg.isUser ? msg.text : <ReactMarkdown transformLinkUri={null}>{msg.text}</ReactMarkdown>}
 									</div>
 								))}
 								<div ref={this.chatMessagesEndRef} />
