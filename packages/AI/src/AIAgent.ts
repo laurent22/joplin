@@ -2,7 +2,6 @@ import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
 import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import * as fs from 'fs';
-import * as cheerio from 'cheerio';
 export interface AIHistory {
 	id: string;
 	text: string; isUser: boolean;
@@ -62,13 +61,13 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 
 	// 関連ドキュメントの内容を結合
 	const context = relevantDocs
-		.map((doc, _index) => `${JSON.stringify({ documentId: _index, document: doc })}`)
+		.map((doc, _index) => `${JSON.stringify(doc)}`)
 		.join('\n\n');
 
 
 	const systemPromptEvidence = `あなたは親切で正確なアシスタントです。
 提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
-ただし、回答自体は生成せず、回答根拠となるdocumentIdだけを回答してください。
+ただし、回答自体は生成せず、回答根拠となるfilePathだけを回答してください。
 回答根拠が見当たらない場合は、空文字を返してください。
 コンテキスト情報:
 ${context}`;
@@ -82,23 +81,8 @@ ${context}`;
 	];
 
 	const evidencePath = await model.invoke(messages);
-	console.log(`evidence documentId: ${evidencePath.content}`);
-
-
-	const contentPath = evidencePath.content ? relevantDocs[Number(evidencePath.content)].metadata.filePath : '';
-	let fileContent = contentPath ? fs.readFileSync(contentPath, 'utf-8') : '';
-	const $ = cheerio.load(fileContent);
-
-	// h1要素を検索し、idがあればinnerTextの末尾に (fragment_id: xxxx) を追加
-	$('h1').each((_, elem) => {
-		const id = $(elem).attr('id');
-		if (id) {
-			const text = $(elem).text();
-			$(elem).text(`${text} (fragment_id: ${id})`);
-		}
-	});
-	fileContent = $.html();
-
+	console.log(`evidence path: ${evidencePath.content}`);
+	const fileContent = evidencePath.content ? fs.readFileSync(evidencePath.content.toString(), 'utf-8') : '';
 
 	// システムプロンプトとユーザーメッセージを作成
 	const systemPromptAnswer = `あなたは親切で正確なアシスタントです。
