@@ -4,12 +4,16 @@ import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
 import { AIHistory, ragSendMessage } from '../../AI/dist/AIAgent';
 
+
+import BaseItem from '@joplin/lib/models/BaseItem';
+
 const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
 import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
+const urlUtils = require('@joplin/lib/urlUtils');
 
 
 const PLUGIN_NAME = 'quickSearch';
@@ -576,9 +580,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										e.preventDefault();
 										const href = target.getAttribute('href');
 										try {
-											const urlUtils = require('@joplin/lib/urlUtils');
-											const BaseItem = require('@joplin/lib/models/BaseItem').default;
-											const BaseModel = require('@joplin/lib/BaseModel').default;
+											// importで取得済み
 											const resourceUrlInfo = urlUtils.parseResourceUrl(href);
 											const itemId = resourceUrlInfo.itemId;
 											const item = await BaseItem.loadItemById(itemId);
