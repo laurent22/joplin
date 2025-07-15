@@ -68,6 +68,10 @@ export const ragSendMessage = async (question: string, dbPath: string, replyId: 
 	const systemPrompt = `あなたは親切で正確なアシスタントです。
 提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
 コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
+回答時のフォーマットはmarkdownでお願いします。
+回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
+その際、noteIdはjoplinスキームとしてリンクしてください。
+例えば、根拠: [{source}](joplin://{noteId}) (noteId: 12345)のように表示してください。
 
 コンテキスト情報:
 ${context}`;
