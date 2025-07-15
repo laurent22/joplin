@@ -592,6 +592,11 @@ class Dialog extends React.PureComponent<Props, State> {
 													noteId: item.id,
 													hash: resourceUrlInfo.hash,
 												});
+												this.props.dispatch({
+													pluginName: PLUGIN_NAME,
+													type: 'PLUGINLEGACY_DIALOG_SET',
+													open: false,
+												});
 											} else {
 												// リソースの場合は何もしない or 必要なら添付ファイル処理
 											}
