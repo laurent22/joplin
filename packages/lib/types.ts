@@ -24,4 +24,3 @@ export type FetchBlobOptions = {
 	headers?: Record<string, string>;
 	downloadController?: DownloadController;
 };
-
