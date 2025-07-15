@@ -85,10 +85,22 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 	// 各HTMLファイルを処理し、テキストを抽出・分割してDocument化
 
 	for (const filePath of files) {
-		const file = path.basename(filePath);
+		// xxxx/yyyy_{noteId}.html 形式から noteId と yyyy.html を抽出
+		const match = filePath.match(/(.+)[\\/](.+)_([a-f0-9]{32})\.html$/);
+		let noteId = '';
+		let file = '';
+		let title = '';
+		if (match) {
+			noteId = match[3];
+			file = `${match[2]}.html`;
+			title = match[2];
+		} else {
+			file = path.basename(filePath);
+		}
 
 		try {
 			const htmlContent = fs.readFileSync(filePath, 'utf-8');
+
 			// CheerioでHTMLを解析してテキストを抽出
 			const $ = cheerio.load(htmlContent);
 			$('script, style').remove();
@@ -99,11 +111,13 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 
 			// チャンクごとにDocumentを作成
 			for (const chunk of splitTexts) {
+				const titledChunk = JSON.stringify({ title, content: chunk });
 				const doc = new Document({
-					pageContent: chunk,
+					pageContent: titledChunk,
 					metadata: {
 						source: file,
 						filePath: filePath,
+						noteId: noteId,
 					},
 				});
 				allDocuments.push(doc);
