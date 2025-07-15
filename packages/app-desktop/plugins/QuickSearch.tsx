@@ -14,7 +14,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
 const urlUtils = require('@joplin/lib/urlUtils');
-
+import ReactMarkdown from 'react-markdown';
 
 const PLUGIN_NAME = 'quickSearch';
 
@@ -614,7 +614,7 @@ class Dialog extends React.PureComponent<Props, State> {
 										className={msg.isUser ? 'chat-bubble' : 'chat-bubble-reply'}
 									>
 										{msg.loading && <div id="loading-animation" />}
-										{msg.text}
+										{msg.isUser ? msg.text : <ReactMarkdown>{msg.text}</ReactMarkdown>}
 									</div>
 								))}
 								<div ref={this.chatMessagesEndRef} />
