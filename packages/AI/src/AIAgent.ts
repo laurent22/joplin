@@ -89,15 +89,13 @@ ${context}`;
 	let fileContent = contentPath ? fs.readFileSync(contentPath, 'utf-8') : '';
 	const $ = cheerio.load(fileContent);
 
-	// h1, h2, h3要素を検索し、idがあればinnerTextの末尾に (fragment_id: xxxx) を追加
-	['h1', 'h2', 'h3'].forEach(tag => {
-		$(tag).each((_, elem) => {
-			const id = $(elem).attr('id');
-			if (id) {
-				const text = $(elem).text();
-				$(elem).text(`${text} (fragment_id: ${id})`);
-			}
-		});
+	// h1要素を検索し、idがあればinnerTextの末尾に (fragment_id: xxxx) を追加
+	$('h1').each((_, elem) => {
+		const id = $(elem).attr('id');
+		if (id) {
+			const text = $(elem).text();
+			$(elem).text(`${text} (fragment_id: ${id})`);
+		}
 	});
 	fileContent = $.html();
 
