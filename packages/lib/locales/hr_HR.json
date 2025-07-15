@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB za bilješku ili privitak"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -101,6 +104,9 @@
 	"(None)": [
 		"(Ništa)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -121,6 +127,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"Naredba za zadatak <todo-command> može biti „toggle” ili „clear”. Koristi „toggle” za prebacivanje zadanog zadatka između završenog i nezavršenog stanja (ako je cilj uobičajena bilješka, pretvorit će se u zadatak). Koristi „clear” za pretvaranje zadatka u uobičajenu bilješku."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -214,6 +223,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Svi mogući priključci se koriste – prijavi problem na %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -554,6 +566,9 @@
 	"Command palette...": [
 		"Paleta naredbi …"
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"Završeno"
 	],
@@ -595,6 +610,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Konflikti (privici)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Konsolidirana naplata"
@@ -934,6 +952,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju lozinku."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Done": [
 		"Gotovo"
 	],
@@ -1198,6 +1219,9 @@
 	"Error opening note in editor: %s": [
 		"Greška prilikom otvaranja bilješke u uređivaču: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Greška. Provjeri točnost URL-a, korisničko imena, lozinke itd. kao i dostupnost cilja sinkronizacije. Prijavljena greška bila je:"
 	],
@@ -1264,6 +1288,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatalna greška:"
 	],
@@ -1308,6 +1335,9 @@
 	],
 	"Focus title": [
 		"Fokusiraj naslov"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1359,6 +1389,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Nabavi sada:"
 	],
@@ -1367,6 +1400,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Nabavlja ili postavlja vrijednost konfiguracije. Ako vrijednost [value] nije zadana, prikazat će vrijednost imena [name]. Ako ime [name] niti vrijednost [value] nisu zadani, ispisat će trenutačnu konfiguraciju."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1622,6 +1658,9 @@
 	],
 	"Joplin Server URL": [
 		"Joplin poslužitelj URL"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper omogućuje spremanje web-stranica i slika ekrana iz tvog preglednika u Joplin."
@@ -2057,6 +2096,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"U redu"
 	],
@@ -2210,6 +2252,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Pričekaj da se svi privici preuzmu i dešifriraju. Za uređivanje bilješke možeš prijeći i na %s."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Pričekaj …"
 	],
@@ -2236,6 +2281,9 @@
 	],
 	"Possible values: %s.": [
 		"Moguće vrijednosti: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Postavke"
@@ -2335,6 +2383,9 @@
 	],
 	"Publish notes to the internet": [
 		"Objavi blješke na internetu"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"Quit": [
 		"Zatvori program"
@@ -2576,6 +2627,9 @@
 	"Select parent notebook": [
 		"Obriši nadređenu bilježnicu"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"Poslužitelj je već pokrenut na priključku %d"
 	],
@@ -2616,6 +2670,9 @@
 		"Dijeli bilježnicu …"
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2936,9 +2993,6 @@
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Program će se sada zatvoriti. Za završavanje postupka ponovo pokreni program."
 	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Program se nije pravilno zatvorio. Želiš li početi u sigurnom načinu rada?"
-	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Program je autoriziran – sada možeš zatvoriti karticu preglednika."
 	],
@@ -2989,6 +3043,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Ključevi s ovim ID-ovima koriste se za šifriranje nekih tvojih elemenata, ali program im trenutačno ne može pristupiti. Vjerojatno će se na kraju preuzeti putem sinkronizacije."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"Glavni ključ je uspješno nadograđen!"
@@ -3278,6 +3335,9 @@
 	"Unshare": [
 		"Prestani dijeliti"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju bilježnice."
 	],
@@ -3477,6 +3537,12 @@
 		"Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d piksela prije prilaganja slike?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

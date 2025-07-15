@@ -39,6 +39,9 @@
 		"%d poznámky budú natrvalo vymazané. Pokračovať?",
 		"%d poznámok bude natrvalo vymazaných. Pokračovať?"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -140,6 +143,9 @@
 	"(None)": [
 		"(Žiadny)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -160,6 +166,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> môže byť buď „toggle“ alebo „clear“. Príkazom „toggle“ prepnete danú úlohu medzi dokončeným a nedokončeným stavom (ak je cieľom bežná poznámka, bude prevedená na úlohu). Použite „clear“ (vyčistiť), ak chcete úlohu previesť späť na bežnú poznámku."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A new update (%s) is available": [
 		"Nová aktualizácia (%s) je k dispozícii"
@@ -274,6 +283,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Všetky potenciálne porty sa používajú - nahláste problém na %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Umožňuje ladenie mobilných doplnkov. Podrobnosti nájdete v časti %s."
@@ -659,6 +671,9 @@
 	"Command palette...": [
 		"Paleta príkazov..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"Kompaktné"
 	],
@@ -712,6 +727,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"Pripojte sa k Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Konsolidovaná fakturácia"
@@ -1101,6 +1119,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nestraťte heslo, pretože z bezpečnostných dôvodov je to *jediný* spôsob, ako dešifrovať údaje! Ak chcete zapnúť šifrovanie, zadajte heslo nižšie."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Donate, website": [
 		"Darujte, webová stránka"
 	],
@@ -1398,6 +1419,9 @@
 	"Error opening note in editor: %s": [
 		"Chyba pri otváraní poznámky v editore: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:"
 	],
@@ -1482,6 +1506,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		"Poistka proti zlyhaniu: Synchronizácia bola prerušená, aby sa zabránilo strate údajov, pretože cieľ synchronizácie je prázdny alebo poškodený. Ak chcete zrušiť toto správanie, vypnite v nastaveniach synchronizácie funkciu poistky proti zlyhaniu."
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Závažná chyba:"
 	],
@@ -1533,6 +1560,9 @@
 	"Focus title": [
 		"Prejsť na názov"
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
 	"Follow link": [
 		"Nasledovať odkaz"
 	],
@@ -1583,6 +1613,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Geografická poloha, kontrola pravopisu, panel s nástrojmi editora, zmena veľkosti obrázka"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Získať teraz:"
 	],
@@ -1591,6 +1624,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Získa alebo nastaví konfiguračnú hodnotu. Ak nie je zadaná hodnota [value], zobrazí sa hodnota [name]. Ak nie je zadaný ani [name], ani [value], vypíše aktuálnu konfiguráciu."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		"prejsť"
@@ -1897,6 +1933,9 @@
 	],
 	"Joplin Server URL": [
 		"URL servera Joplin"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper umožňuje ukladanie webových stránok a snímok obrazovky z vášho prehliadača do aplikácie Joplin."
@@ -2418,6 +2457,9 @@
 	"OCR: Language data URL or path": [
 		"OCR: URL k údajom jazyka alebo cesta"
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2465,6 +2507,9 @@
 	],
 	"Open it": [
 		"Otvoriť s"
+	],
+	"Open log": [
+		"Otvoriť záznam"
 	],
 	"Open PDF viewer": [
 		"Otvoriť prehliadač PDF"
@@ -2618,6 +2663,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Počkajte prosím na stiahnutie a dešifrovanie všetkých príloh. Môžete tiež prepnúť na %s pre úpravu poznámky."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Čakajte prosím..."
 	],
@@ -2656,6 +2704,9 @@
 	],
 	"Possible values: %s.": [
 		"Možné hodnoty: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Nastavenia"
@@ -2761,6 +2812,9 @@
 	],
 	"Publish notes to the internet": [
 		"Zverejniť poznámky na internete"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"QR Code": [
 		"QR kód"
@@ -3074,6 +3128,9 @@
 	"Selects a notebook": [
 		"Vyberie zápisník"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Odoslať hlásenie o chybe"
 	],
@@ -3130,6 +3187,9 @@
 	],
 	"Shares": [
 		"Zdieľania"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Zdieľanie poznámky..."
@@ -3190,6 +3250,9 @@
 	],
 	"Sidebar": [
 		"Bočný panel"
+	],
+	"Sign up to Joplin Cloud": [
+		"Zaregistrujte sa do Joplin Cloud"
 	],
 	"Size": [
 		"Veľkosť"
@@ -3482,17 +3545,11 @@
 	"Text editor command": [
 		"Príkaz textového editora"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"[Web Clipper](%s) je rozšírenie prehliadača, ktoré vám umožňuje ukladať webové stránky a snímky obrazovky z vášho prehliadača."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktívny profil nie je možné odstrániť. Prepnite na iný profil a skúste to znova."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Aplikácia sa teraz zatvorí. Na dokončenie procesu ju znovu spustite."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Aplikácia sa správne neukončila. Chcete ju spustiť v núdzovom režime?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Aplikácia bola autorizovaná - teraz môžete zavrieť túto kartu prehliadača."
@@ -3549,6 +3606,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Kľúče s týmito identifikátormi sa používajú na šifrovanie niektorých vašich položiek, avšak aplikácia k nim v súčasnosti nemá prístup. Je pravdepodobné, že sa nakoniec stiahnu prostredníctvom synchronizácie."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"Hlavný kľúč bol úspešne aktualizovaný!"
@@ -3906,6 +3966,9 @@
 	"Unshare": [
 		"Zrušiť zdieľanie"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Zrušiť zdieľanie tohto zápisníka? Príjemcovia už nebudú mať prístup k jeho obsahu."
 	],
@@ -4130,6 +4193,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Ste prihlásený do Joplin Cloud, teraz môžete opustiť túto obrazovku."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Používate Intel verziu Joplinu na procesore Apple Silicon. Pre lepší výkon si stiahnite verziu Apple Silicon."

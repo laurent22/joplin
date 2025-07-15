@@ -39,6 +39,9 @@
 		"%d notițe vor fi șterse permanent. Continui?",
 		"%d de notițe vor fi șterse permanent. Continui?"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -140,6 +143,9 @@
 	"(None)": [
 		"(Nimic)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -160,6 +166,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> poate fi \"toggle\" sau \"clear\". Folosește „toggle” pentru a comuta între starea finalizată și cea nefinalizată (dacă ținta este o notiță obișnuită, aceasta va fi transformată în listă de făcut). Folosește „clear” pentru a converti lista de făcut înapoi la o notiță obișnuită."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A new update (%s) is available": [
 		"O nouă actualizare (%s) este disponibilă"
@@ -273,7 +282,10 @@
 		"Toate notițele"
 	],
 	"All potential ports are in use - please report the issue at %s": [
-		"Toate porturile potențiale sunt în uz - te rog să raportați problema la %s"
+		"Toate porturile potențiale sunt în uz - te rog să raportezi problema la %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Permite depanarea plugin-urilor mobile. Vezi %s pentru mai multe detalii."
@@ -291,13 +303,13 @@
 		"Mereu"
 	],
 	"Always ask": [
-		"Întreabă mereu"
+		"Întreabă"
 	],
 	"Always open %s files without asking.": [
 		"Deschide mereu fișierele %s fără să mai întrebi."
 	],
 	"Always resize": [
-		"Redimensionează mereu"
+		"Mereu"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Caiet ambiguu „%s”. Te rog să utilizezi ID-ul caietului în loc - tastează „ti” pentru a vedea ID-ul scurt al caietului sau utilizează $b pentru caietul selectat curent"
@@ -318,7 +330,7 @@
 		"Nivel API Android: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		"Orice e-mail trimis la această adresă va fi convertit într-o notă și va fi adăugat la colecția dumneavoastră. Nota va fi salvată în carnețelul Inbox"
+		"Orice e-mail trimis la această adresă va fi convertit într-o notiță și va fi adăugat la colecția ta. Notița va fi salvată în caietul Inbox"
 	],
 	"Appearance": [
 		"Aspect"
@@ -525,7 +537,7 @@
 		"Modifică aspectul aplicației"
 	],
 	"Change language": [
-		"Schimbă limba"
+		"Alte limbi"
 	],
 	"Change ratio": [
 		"Schimbă raport"
@@ -659,6 +671,9 @@
 	"Command palette...": [
 		"Paleta de comenzi…"
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"Compact"
 	],
@@ -712,6 +727,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"Conectare la Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Facturare consolidată"
@@ -808,7 +826,7 @@
 		"Nu s-a putut verifica starea de partajare a acestui caiet - se anulează. Te rog să încerci din nou când ești conectat la internet."
 	],
 	"Could not verify your identity: %s": [
-		"Nu s-a putut verifica identitatea dumneavoastră: %s"
+		"Nu ți-am putut verifica identitatea: %s"
 	],
 	"Create": [
 		"Create"
@@ -937,10 +955,10 @@
 		"Se decriptează elementele: %d/%d"
 	],
 	"Default": [
-		"Modul implicit"
+		"Mod implicit"
 	],
 	"Default: %s": [
-		"Modul implicit: %s"
+		"Mod implicit: %s"
 	],
 	"Delete": [
 		"Șterge"
@@ -1100,6 +1118,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nu pierde parola, deoarece din motive de securitate, aceasta este *unica* modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să introduci parola mai jos."
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
 	],
 	"Donate, website": [
 		"Donează, website"
@@ -1398,6 +1419,9 @@
 	"Error opening note in editor: %s": [
 		"Eroare deschidere notiță în editor: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Eroare. Te rog să verifici dacă adresa URL, numele de utilizator, parola etc. sunt corecte și că destinația de sincronizare este accesibilă. Eroarea raportată a fost:"
 	],
@@ -1482,6 +1506,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		"Fail-safe: Sincronizarea a fost întreruptă pentru a preveni pierderea de date, deoarece destinația sincronizării este goală sau eronată. Pentru a anula acest comportament, dezactivează mecanismul de fail-safe din setările de sincronizare."
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Eroare fatală:"
 	],
@@ -1528,10 +1555,13 @@
 		"Focalizează pe"
 	],
 	"Focus body": [
-		"Focalizare pe corp"
+		"Focalizează pe corp"
 	],
 	"Focus title": [
-		"Focalizare pe titlu"
+		"Focalizează pe titlu"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		"Urmează legătura"
@@ -1583,6 +1613,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Geolocație, verificare ortografică, bara de instrumente a editorului, redimensionare imagine"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Obține acum:"
 	],
@@ -1591,6 +1624,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obține sau setează o valoare de configurare. Dacă [valoare] nu este furnizată, va afișa valoarea [nume]. Dacă nu este furnizat nici [nume], nici [valoare], va afișa configurația curentă."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		"mergi"
@@ -1746,7 +1782,7 @@
 		"Pentru a utiliza sincronizarea, te rog actualizează aplicația la versiunea %s sau mai nouă"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
-		"Pentru a utiliza sincronizarea sistemului de fișiere este necesară permisiunea dumneavoastră de a scrie pe un spațiu de stocare extern."
+		"Pentru a utiliza sincronizarea cu sistemul de fișiere, este necesară permisiunea de a scrie în spațiul de stocare extern."
 	],
 	"In order to use the web clipper, you need to do the following:": [
 		"Pentru a utiliza web clipper, trebuie să faci următoarele:"
@@ -1898,8 +1934,11 @@
 	"Joplin Server URL": [
 		"URL server Joplin"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
-		"Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran din browser-ul dumnevoastră în Joplin."
+		"Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran din navigatorul tău web în Joplin."
 	],
 	"Joplin website": [
 		"Website Joplin"
@@ -2191,7 +2230,7 @@
 		"N"
 	],
 	"Never resize": [
-		"Nu redimensiona niciodată"
+		"Niciodată"
 	],
 	"New attachment": [
 		"Atașament nou"
@@ -2418,6 +2457,9 @@
 	"OCR: Language data URL or path": [
 		"OCR: URL sau cale date lingvistice"
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2465,6 +2507,9 @@
 	],
 	"Open it": [
 		"Deschide-l"
+	],
+	"Open log": [
+		"Deschide jurnal"
 	],
 	"Open PDF viewer": [
 		"Deschide vizualizator PDF"
@@ -2518,7 +2563,7 @@
 		"Formatul sursei: %s"
 	],
 	"Page orientation for PDF export": [
-		"Page orientation for PDF export"
+		"Orientarea paginii pentru export PDF"
 	],
 	"Page size for PDF export": [
 		"Dimensiunea paginii pentru exportul PDF"
@@ -2618,6 +2663,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Te rog să aștepți descărcarea și decriptarea tuturor atașamentelor. De asemenea, poți comuta la %s pentru a edita notița."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Te rog să aștepți..."
 	],
@@ -2656,6 +2704,9 @@
 	],
 	"Possible values: %s.": [
 		"Valori posibile: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Preferințe"
@@ -2733,7 +2784,7 @@
 		"Numele profilului:"
 	],
 	"Profile Version: %s": [
-		"Versiunea profil: %s"
+		"Versiune profil: %s"
 	],
 	"Profiles": [
 		"Profiluri"
@@ -2761,6 +2812,9 @@
 	],
 	"Publish notes to the internet": [
 		"Publică notițele pe internet"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"QR Code": [
 		"Cod QR"
@@ -3074,6 +3128,9 @@
 	"Selects a notebook": [
 		"Selectează un caiet"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Trimite un raport de eroare"
 	],
@@ -3130,6 +3187,9 @@
 	],
 	"Shares": [
 		"Partajări"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Se partajează caietul..."
@@ -3485,17 +3545,11 @@
 	"Text editor command": [
 		"Comandă editor de text"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"[Web Clipper](%s) este o extensie pentru navigatorul web care îți permite să salvezi pagini web și capturi de ecran direct din acesta."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profilul activ nu poate fi șters. Comută la un alt profil și încearcă din nou."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Aplicația se va închide acum. Te rog să o lansezi din nou pentru a finaliza procesul."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Aplicația nu s-a închis corect. Dorești să o pornești în modul sigur?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Aplicația a fost autorizată - acum poți închide această fereastră browserului."
@@ -3542,7 +3596,7 @@
 		"Următoarele atașamente sunt urmărite pentru modificări:"
 	],
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
-		"Următoarele chei utilizează un algoritm de criptare depășit și se recomandă actualizarea lor. Cheia actualizată va fi în continuare capabilă să decripteze și să cripteze datele dumneavoastră ca de obicei."
+		"Următoarele chei utilizează un algoritm de criptare depășit și se recomandă actualizarea lor. Cheia actualizată va fi în continuare capabilă să decripteze și să cripteze datele tale ca de obicei."
 	],
 	"The following plugins may not support the current markdown editor:": [
 		"Următoarele plugin-uri ar putea să nu fie suportate de editorul curent Markdown:"
@@ -3552,6 +3606,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Cheile cu aceste ID-uri sunt folosite pentru a cripta unele dintre elementele dvs., însă aplicația nu are în prezent acces la ele. Este probabil ca acestea să fie descărcate în cele din urmă prin sincronizare."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"Cheia master a fost actualizată cu succes!"
@@ -3604,7 +3661,7 @@
 		"Acceptarea caietelor partajate criptate din clientul web nu este suportată . Te rog comută la aplicația Desktop sau mobilă înainte de a accepta caietul partajat.\n\nEroare: „%s”"
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
-		"Web Clipper are nevoie de autorizația dumneavoastră pentru a vă accesa datele."
+		"Web Clipper are nevoie de aprobarea ta pentru a-ți accesa datele."
 	],
 	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		"Serviciul web clipper nu poate fi activat în această instanță de Joplin."
@@ -3667,7 +3724,7 @@
 		"Acest desen poate avea modificări nesalvate."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
-		"Acesta este un instrument avansat pentru a afișa atașamentele care sunt legate de notele dumnevoastră. Te rog să fii atent la ștergerea uneia dintre ele, deoarece acestea nu pot fi restaurate ulterior."
+		"Acesta este un instrument avansat de listare al atașamentelor care sunt legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
 	],
 	"This note could not be deleted: %s": [
 		"Această notiță nu a putut fi ștearsă: %s",
@@ -3766,7 +3823,7 @@
 		"Pentru a schimba profilul, aplicația se va închide și va trebui să o reporniți."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
-		"Pentru a funcționa corect, aplicația are nevoie de următoarele permisiuni. Te rog să le  în setările telefonului dumneavoastră, în Aplicații > Joplin > Permisiuni"
+		"Pentru a funcționa corect, aplicația are nevoie de următoarele permisiuni. Te rog să le activezi din setările telefonului tău în Aplicații > Joplin > Permisiuni"
 	],
 	"to-do": [
 		"de făcut"
@@ -3908,6 +3965,9 @@
 	],
 	"Unshare": [
 		"Unsoare"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la conținutul acestuia."
@@ -4133,6 +4193,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Ești autentificat la Joplin Cloud, poți acum să părăsești acest ecran."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Rulezi versiunea Intel a Joplin pe un procesor cu siliciu Apple. Descarcă versiunea pentru procesoare Apple pentru o performanță mai mare."
