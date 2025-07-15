@@ -147,6 +147,11 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 					return;
 				}
 
+				if (!Setting.value('ocr.enableRemoteHandwrittenTranscription')) {
+					await shim.showMessageBox(_('This feature is disabled by default, you need to manually enable it by turning on the option to \'Enable handwritten transcription (Remote OCR)\'.'), { type: MessageBoxType.Error });
+					return;
+				}
+
 				const { resource } = await resourceInfo(options);
 
 				if (!['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'].includes(resource.mime)) {

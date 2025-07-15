@@ -556,6 +556,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'ocr.enableRemoteHandwrittenTranscription': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable handwritten transcription (Remote OCR)'),
+			description: () => _('When enabled, it will be possible to transcribe the images through the Joplin Server or Cloud service. Files can be processed by the \'Recognize handwritten image\' option.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'ocr.languageDataPath': {
 			value: '',
 			type: SettingItemType.String,
