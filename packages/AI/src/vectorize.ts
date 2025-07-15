@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
@@ -112,10 +113,11 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 			// チャンクごとにDocumentを作成
 			for (const chunk of splitTexts) {
 				const titledChunk = JSON.stringify({ title, content: chunk });
+				const source = title || file;
 				const doc = new Document({
 					pageContent: titledChunk,
 					metadata: {
-						source: file,
+						source: source,
 						filePath: filePath,
 						noteId: noteId,
 					},
