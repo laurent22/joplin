@@ -9037,7 +9037,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@react-native-clipboard/clipboard": "npm:1.16.2"
     "@react-native-community/cli": "npm:16.0.3"
-    "@react-native-community/cli-platform-android": "npm:16.0.2"
+    "@react-native-community/cli-platform-android": "npm:16.0.3"
     "@react-native-community/cli-platform-ios": "npm:16.0.3"
     "@react-native-community/datetimepicker": "npm:8.3.0"
     "@react-native-community/geolocation": "npm:3.4.0"
@@ -11733,18 +11733,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-config-android@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@react-native-community/cli-config-android@npm:16.0.2"
-  dependencies:
-    "@react-native-community/cli-tools": "npm:16.0.2"
-    chalk: "npm:^4.1.2"
-    fast-glob: "npm:^3.3.2"
-    fast-xml-parser: "npm:^4.4.1"
-  checksum: 10/527d379706e791ce4363151a55ccf62645867bfa9cd33fbeeb70c3036a2fb814cec76493be1e7709437e73300e9944c4d030d17f282a2ad43318b61f4a0a6e74
-  languageName: node
-  linkType: hard
-
 "@react-native-community/cli-config-android@npm:16.0.3":
   version: 16.0.3
   resolution: "@react-native-community/cli-config-android@npm:16.0.3"
@@ -11875,19 +11863,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-android@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@react-native-community/cli-platform-android@npm:16.0.2"
-  dependencies:
-    "@react-native-community/cli-config-android": "npm:16.0.2"
-    "@react-native-community/cli-tools": "npm:16.0.2"
-    chalk: "npm:^4.1.2"
-    execa: "npm:^5.0.0"
-    logkitty: "npm:^0.7.1"
-  checksum: 10/195dd53844dc6073513614505282b54ca54ffabbcf8fd97c3744f4189c3d786c26884725755bd8d4bafe71dcc3bac8db5f9f7e9e26203e514f2d298c661f97fd
-  languageName: node
-  linkType: hard
-
 "@react-native-community/cli-platform-android@npm:16.0.3":
   version: 16.0.3
   resolution: "@react-native-community/cli-platform-android@npm:16.0.3"
@@ -12000,25 +11975,6 @@ __metadata:
     serve-static: "npm:^1.13.1"
     ws: "npm:^7.5.1"
   checksum: 10/d17ebceaf329ba8d3873ce93b2c0f498bd67c02e74ade81dba97946fb675f1a41e4b7dae7bf297222df8e26078c40e99602b120f44ebd04a936dcdc5e2acb253
-  languageName: node
-  linkType: hard
-
-"@react-native-community/cli-tools@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@react-native-community/cli-tools@npm:16.0.2"
-  dependencies:
-    appdirsjs: "npm:^1.2.4"
-    chalk: "npm:^4.1.2"
-    execa: "npm:^5.0.0"
-    find-up: "npm:^5.0.0"
-    mime: "npm:^2.4.1"
-    open: "npm:^6.2.0"
-    ora: "npm:^5.4.1"
-    prompts: "npm:^2.4.2"
-    semver: "npm:^7.5.2"
-    shell-quote: "npm:^1.7.3"
-    sudo-prompt: "npm:^9.0.0"
-  checksum: 10/541fc59889f4f6ac202b1e2ccd055ecc92893de72ac8f4cd86c3457b4ef087e676d2044aff02ebb960db43747377f648e803efa9e8c4f7a58c531c042b34061c
   languageName: node
   linkType: hard
 
