@@ -7,7 +7,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 
 export const declaration: CommandDeclaration = {
 	name: 'convertHtmlToMarkdown',
-	label: () => _('Convert HTML to Markdown'),
+	label: () => _('Convert HTML Note to Markdown'),
 };
 
 export const runtime = (): CommandRuntime => {
@@ -24,7 +24,7 @@ export const runtime = (): CommandRuntime => {
 
 				if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) continue;
 
-				const newBody = await htmlToMdParser.parse(`<div>${note.body}</div>`, {
+				const markdownBody = await htmlToMdParser.parse(`<div>${note.body}</div>`, {
 					baseUrl: '',
 					anchorNames: [],
 					convertEmbeddedPdfsToLinks: true,
@@ -32,7 +32,7 @@ export const runtime = (): CommandRuntime => {
 				await Note.save({
 					...note,
 					id: undefined,
-					body: newBody,
+					body: markdownBody,
 					markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 					user_updated_time: new Date().getTime(),
 				});
