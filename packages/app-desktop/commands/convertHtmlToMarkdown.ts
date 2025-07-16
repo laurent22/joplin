@@ -1,4 +1,3 @@
-
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
