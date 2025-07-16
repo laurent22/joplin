@@ -21,8 +21,8 @@ export default (props: Props) => {
 		const notification = popupManager.createPopup(() => (
 			<div className='update-notification'>
 				{_n(
-					'The selected note was converted to Markdown and the original was sent to the Trash',
-					'The selected notes were converted to Markdown and the originals were sent to the Trash',
+					'The note has been converted to Markdown and the original note has been moved to the trash',
+					'The notes have been converted to Markdown and the original notes have been moved to the trash',
 					props.noteIds.length,
 				)}
 			</div>
