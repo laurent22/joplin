@@ -19,6 +19,8 @@ export const runtime = (): CommandRuntime => {
 
 			const htmlToMdParser = new HtmlToMd();
 
+			const convertedNoteIds = [];
+
 			for (const noteId of noteIds) {
 				const note = await Note.load(noteId);
 
@@ -37,7 +39,15 @@ export const runtime = (): CommandRuntime => {
 					user_updated_time: new Date().getTime(),
 				});
 				await Note.delete(note.id, { toTrash: true });
+
+				convertedNoteIds.push(note.id);
 			}
+
+			context.dispatch({
+				type: 'NOTE_IDS_CONVERTED',
+				value: convertedNoteIds,
+			});
+
 		},
 		enabledCondition: 'someNotesSelected && !noteIsReadOnly',
 	};

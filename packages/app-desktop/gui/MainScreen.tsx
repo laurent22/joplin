@@ -38,6 +38,7 @@ import restart from '../services/restart';
 import { connect } from 'react-redux';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './NoteListHeader/utils/validateColumns';
+import ConversionNotification from './ConversionNotification/ConversionNotification';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
 import NoteEditor from './NoteEditor/NoteEditor';
@@ -84,6 +85,7 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
+	noteIdsConverted: string[];
 }
 
 interface ShareFolderDialogOptions {
@@ -797,6 +799,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={style}>
+				<ConversionNotification
+					noteIds={this.props.noteIdsConverted}
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					dispatch={this.props.dispatch as any}
+				/>
 				<TrashNotification
 					lastDeletion={this.props.lastDeletion}
 					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}
@@ -853,6 +860,7 @@ const mapStateToProps = (state: AppState) => {
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && process.arch !== 'arm64',
+		noteIdsConverted: state.noteIdsConverted,
 	};
 };
 
