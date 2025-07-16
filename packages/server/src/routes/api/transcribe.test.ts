@@ -1,6 +1,7 @@
+import { readFile } from 'fs-extra';
 import { ApiError } from '../../utils/errors';
 import { getApi, postApi } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, testAssetDir, checkThrowAsync, expectThrow } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, testAssetDir, checkThrowAsync, expectThrow, makeTempFileWithContent } from '../../utils/testing/testUtils';
 
 export type TranscribeJob = {
 	jobId: number;
@@ -50,10 +51,11 @@ describe('api_transcribe', () => {
 					status: 200,
 				})) as jest.Mock,
 		);
-
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
 		const response = await postApi<TranscribeJob>(session.id, 'transcribe', {},
 			{
-				filePath: `${testAssetDir}/htr_example.png`,
+				filePath: tempFilePath,
 			},
 		);
 
@@ -73,9 +75,11 @@ describe('api_transcribe', () => {
 				})) as jest.Mock,
 		);
 
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
 		const postResponse = await postApi<TranscribeJob>(session.id, 'transcribe', {},
 			{
-				filePath: `${testAssetDir}/htr_example.png`,
+				filePath: tempFilePath,
 			},
 		);
 
@@ -112,10 +116,12 @@ describe('api_transcribe', () => {
 				})) as jest.Mock,
 		);
 
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
 		const error = await checkThrowAsync(() =>
 			postApi<TranscribeJob>(session.id, 'transcribe', {},
 				{
-					filePath: `${testAssetDir}/htr_example.png`,
+					filePath: tempFilePath,
 				},
 			));
 
@@ -133,10 +139,12 @@ describe('api_transcribe', () => {
 				})) as jest.Mock,
 		);
 
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
 		const error = await checkThrowAsync(() =>
 			postApi<TranscribeJob>(session.id, 'transcribe', {},
 				{
-					filePath: `${testAssetDir}/htr_example.png`,
+					filePath: tempFilePath,
 				},
 			));
 
@@ -153,10 +161,12 @@ describe('api_transcribe', () => {
 				})) as jest.Mock,
 		);
 
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
 		const error = await expectThrow(() =>
 			postApi<TranscribeJob>(session.id, 'transcribe', {},
 				{
-					filePath: `${testAssetDir}/htr_example.png`,
+					filePath: tempFilePath,
 				},
 			));
 

@@ -7,6 +7,7 @@ import { AppContext, RouteType } from '../../utils/types';
 import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
 import config from '../../config';
+import { safeRemove } from '../../utils/fileUtils';
 
 const logger = Logger.create('api/transcribe');
 
@@ -88,6 +89,8 @@ router.post('api/transcribe', async (_path: SubPath, ctx: AppContext) => {
 			throw new ErrorServiceUnavailable('Transcribe Server not available right now.', error);
 		}
 		throw error;
+	} finally {
+		await safeRemove(request.files.file.filepath);
 	}
 });
 
