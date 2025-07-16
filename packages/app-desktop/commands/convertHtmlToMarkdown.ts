@@ -21,6 +21,10 @@ export const runtime = (): CommandRuntime => {
 
 			for (const noteId of noteIds) {
 				const note = await Note.load(noteId);
+
+				// ignore notes that are already Markdown
+				if (note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) continue;
+
 				const newBody = await htmlToMdParser.parse(`<div>${note.body}</div>`, {
 					baseUrl: '',
 					anchorNames: [],
