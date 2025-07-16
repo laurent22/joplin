@@ -35,6 +35,7 @@ export const runtime = (): CommandRuntime => {
 					id: undefined,
 					body: newBody,
 					markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
+					user_updated_time: new Date().getTime(),
 				});
 				await Note.delete(note.id, { toTrash: true });
 			}
