@@ -9038,7 +9038,7 @@ __metadata:
     "@react-native-clipboard/clipboard": "npm:1.16.2"
     "@react-native-community/cli": "npm:16.0.2"
     "@react-native-community/cli-platform-android": "npm:16.0.2"
-    "@react-native-community/cli-platform-ios": "npm:16.0.2"
+    "@react-native-community/cli-platform-ios": "npm:16.0.3"
     "@react-native-community/datetimepicker": "npm:8.3.0"
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
@@ -11757,6 +11757,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-config-apple@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@react-native-community/cli-config-apple@npm:16.0.3"
+  dependencies:
+    "@react-native-community/cli-tools": "npm:16.0.3"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    fast-glob: "npm:^3.3.2"
+  checksum: 10/d887348caf44ee8ca54a47cdae2a534e6e76e186cd5ac31e75af5dd459e34526a8b8f8ca6137049fe2bc4c5839ec2951c6b82f66546b58e0caea6ed8a6fbb2b6
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-config@npm:16.0.2":
   version: 16.0.2
   resolution: "@react-native-community/cli-config@npm:16.0.2"
@@ -11904,12 +11916,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-platform-apple@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@react-native-community/cli-platform-apple@npm:16.0.3"
+  dependencies:
+    "@react-native-community/cli-config-apple": "npm:16.0.3"
+    "@react-native-community/cli-tools": "npm:16.0.3"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    fast-xml-parser: "npm:^4.4.1"
+  checksum: 10/d07b8c0bee2114be2e5ae8a8c938f9b14ca50d83ee2a62249e07b40064722cd625e5b43900a263707ddc8373fa53c88703083f4e05840b336fe44b421f4b8a79
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-platform-ios@npm:16.0.2":
   version: 16.0.2
   resolution: "@react-native-community/cli-platform-ios@npm:16.0.2"
   dependencies:
     "@react-native-community/cli-platform-apple": "npm:16.0.2"
   checksum: 10/c8daf9295045d889834f0d75aad7164e3cdd4dd1414f55f0ef2500d487001901a8e15c6e59614fce89fa5fa561bf5b807b7bf53c8f6a1c4d9144d350f16fd124
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-platform-ios@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@react-native-community/cli-platform-ios@npm:16.0.3"
+  dependencies:
+    "@react-native-community/cli-platform-apple": "npm:16.0.3"
+  checksum: 10/944e848e5b44e78d5c30f21007ae37f31e4355014d714fa9ee0612bf4404c84665f0d09b40c9e96880b03e0c14dfe509289e622ffac360e0006e57aa6f33b7d3
   languageName: node
   linkType: hard
 
@@ -11994,6 +12028,25 @@ __metadata:
     shell-quote: "npm:^1.7.3"
     sudo-prompt: "npm:^9.0.0"
   checksum: 10/541fc59889f4f6ac202b1e2ccd055ecc92893de72ac8f4cd86c3457b4ef087e676d2044aff02ebb960db43747377f648e803efa9e8c4f7a58c531c042b34061c
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-tools@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@react-native-community/cli-tools@npm:16.0.3"
+  dependencies:
+    "@vscode/sudo-prompt": "npm:^9.0.0"
+    appdirsjs: "npm:^1.2.4"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    find-up: "npm:^5.0.0"
+    mime: "npm:^2.4.1"
+    open: "npm:^6.2.0"
+    ora: "npm:^5.4.1"
+    prompts: "npm:^2.4.2"
+    semver: "npm:^7.5.2"
+    shell-quote: "npm:^1.7.3"
+  checksum: 10/e78817b5f4a2db8128296c5c5e6dfc4067de121f122e9621515eab6a237cb64d95944c7faeaba4c222685b3d27f0ae2691d97447888b4f473a8da83bcffa730b
   languageName: node
   linkType: hard
 
@@ -15324,6 +15377,13 @@ __metadata:
   peerDependencies:
     "@urql/core": ^5.0.0
   checksum: 10/f29ef3382334cb32f63a657dff230c91e5f6373de71fa486d8416a166a8c1e54761e7ffe90248b26814511e2bd72db81b0c382540dafb2deb7fb4d90b7f268a3
+  languageName: node
+  linkType: hard
+
+"@vscode/sudo-prompt@npm:^9.0.0":
+  version: 9.3.1
+  resolution: "@vscode/sudo-prompt@npm:9.3.1"
+  checksum: 10/233edb992ae5dda69b9c63101f85a7996ff7034cb9b0ea976f3ab06483511a35162a650d8e081ded5f07aa9b2f2bac93e45420d956cf1b1d8a76ac385d4a9581
   languageName: node
   linkType: hard
 
