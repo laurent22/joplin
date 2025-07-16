@@ -906,6 +906,7 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
+						menuItemDic.convertHtmlToMarkdown,
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
