@@ -16,7 +16,7 @@ export default (props: Props) => {
 	useEffect(() => {
 		if (props.noteIds.length === 0) return;
 
-		props.dispatch({ type: 'ITEMS_CONVERTED', value: [] });
+		props.dispatch({ type: 'NOTE_IDS_CONVERTED', value: [] });
 
 		const notification = popupManager.createPopup(() => (
 			<div className='update-notification'>
