@@ -311,19 +311,4 @@ export default class FolderListWidget extends ListWidget {
 		this.updateItems_ = true;
 		this.invalidate();
 	}
-
-	public collapseAll() {
-		const foldersWithChildren = this.folders
-			.filter(folder => this.folderHasChildren_(this.folders, folder.id))
-			.map(folder => folder.id);
-		Setting.setValue('cli.folderCollapseState', foldersWithChildren);
-		this.updateItems_ = true;
-		this.invalidate();
-	}
-
-	public expandAll() {
-		Setting.setValue('cli.folderCollapseState', []);
-		this.updateItems_ = true;
-		this.invalidate();
-	}
 }
