@@ -1661,8 +1661,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'cli.folderCollapseState': {
-			value: '[]',
-			type: SettingItemType.String,
+			value: [] as string[],
+			type: SettingItemType.Array,
 			public: false,
 			appTypes: [AppType.Cli],
 			storage: SettingStorage.File,
