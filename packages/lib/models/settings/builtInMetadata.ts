@@ -1660,14 +1660,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
-		'cli.folderCollapseState': {
-			value: '[]',
-			type: SettingItemType.String,
-			public: false,
-			appTypes: [AppType.Cli],
-			storage: SettingStorage.File,
-			isGlobal: true,
-		},
 
 		'syncInfoCache': {
 			value: '',

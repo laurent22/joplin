@@ -10,91 +10,9 @@ import {
 } from '@joplin/lib/services/trash';
 const ListWidget = require('tkwidgets/ListWidget.js');
 
-// Service for managing folder collapse states
-class FolderCollapseService {
-	private static instance_: FolderCollapseService;
-	private collapsedFolders_: Set<string> = new Set();
-
-	public static instance(): FolderCollapseService {
-		if (!this.instance_) {
-			this.instance_ = new FolderCollapseService();
-			this.instance_.loadFromSettings();
-		}
-		return this.instance_;
-	}
-
-	public isCollapsed(folderId: string): boolean {
-		return this.collapsedFolders_.has(folderId);
-	}
-
-	public setCollapsed(folderId: string, collapsed: boolean) {
-		if (collapsed) {
-			this.collapsedFolders_.add(folderId);
-		} else {
-			this.collapsedFolders_.delete(folderId);
-		}
-		this.saveToSettings();
-	}
-
-	public toggleCollapsed(folderId: string): boolean {
-		const newState = !this.isCollapsed(folderId);
-		this.setCollapsed(folderId, newState);
-		return newState;
-	}
-
-	public expandToFolder(folderId: string, folders: FolderEntity[]) {
-		// Find all parent folders and expand them
-		const parentsToExpand: string[] = [];
-		let currentId = folderId;
-
-		while (currentId) {
-			const folder = BaseModel.byId(folders, currentId);
-			if (!folder) break;
-
-			const parentId = getDisplayParentId(
-				folder,
-				folders.find((f) => f.id === folder.parent_id),
-			);
-			if (parentId) {
-				parentsToExpand.unshift(parentId);
-				currentId = parentId;
-			} else {
-				break;
-			}
-		}
-
-		// Expand all parent folders
-		for (const parentId of parentsToExpand) {
-			this.setCollapsed(parentId, false);
-		}
-	}
-
-	private loadFromSettings() {
-		try {
-			const stored = Setting.value('cli.folderCollapseState');
-			if (stored && typeof stored === 'string') {
-				const folderIds = JSON.parse(stored);
-				this.collapsedFolders_ = new Set(folderIds);
-			}
-		} catch (error) {
-			// If there's an error loading, start with empty state
-			this.collapsedFolders_ = new Set();
-		}
-	}
-
-	private saveToSettings() {
-		try {
-			const folderIds = Array.from(this.collapsedFolders_);
-			Setting.setValue('cli.folderCollapseState', JSON.stringify(folderIds));
-		} catch (error) {
-			// Silently ignore save errors
-		}
-	}
-}
 
 export default class FolderListWidget extends ListWidget {
 	private folders_: FolderEntity[] = [];
-	private collapseService_: FolderCollapseService;
 
 	public constructor() {
 		super();
@@ -109,7 +27,6 @@ export default class FolderListWidget extends ListWidget {
 		this.updateItems_ = false;
 		this.trimItemTitle = false;
 		this.showIds = false;
-		this.collapseService_ = FolderCollapseService.instance();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.itemRenderer = (item: any) => {
@@ -123,7 +40,8 @@ export default class FolderListWidget extends ListWidget {
 				// Add collapse/expand indicator
 				const hasChildren = this.folderHasChildren_(this.folders, item.id);
 				if (hasChildren) {
-					const isCollapsed = this.collapseService_.isCollapsed(item.id);
+					const collapsedFolders = Setting.value('collapsedFolderIds');
+					const isCollapsed = collapsedFolders.includes(item.id);
 					output.push(isCollapsed ? '[+] ' : '[-] ');
 				} else {
 					output.push('  '); // Space for alignment
@@ -289,11 +207,11 @@ export default class FolderListWidget extends ListWidget {
 					if (folderParentId === parentId) {
 						newItems.push(f);
 						// Only recurse into children if the folder is not collapsed
-						if (
-							this.folderHasChildren_(this.folders, f.id) &&
-              !this.collapseService_.isCollapsed(f.id)
-						) {
-							orderFolders(f.id);
+						if (this.folderHasChildren_(this.folders, f.id)) {
+							const collapsedFolders = Setting.value('collapsedFolderIds');
+							if (!collapsedFolders.includes(f.id)) {
+								orderFolders(f.id);
+							}
 						}
 					}
 				}
@@ -348,7 +266,14 @@ export default class FolderListWidget extends ListWidget {
       item.type_ === Folder.modelType() &&
       this.folderHasChildren_(this.folders, item.id)
 		) {
-			this.collapseService_.toggleCollapsed(item.id);
+			const collapsedFolders = Setting.value('collapsedFolderIds');
+			const isCollapsed = collapsedFolders.includes(item.id);
+			if (isCollapsed) {
+				const newCollapsed = collapsedFolders.filter((id: string) => id !== item.id);
+				Setting.setValue('collapsedFolderIds', newCollapsed);
+			} else {
+				Setting.setValue('collapsedFolderIds', [...collapsedFolders, item.id]);
+			}
 			this.updateItems_ = true;
 			this.invalidate();
 			return true;
@@ -356,33 +281,33 @@ export default class FolderListWidget extends ListWidget {
 		return false;
 	}
 
-	// Getter for external access to collapse service
-	public get collapseService() {
-		return this.collapseService_;
-	}
 
 	public expandToFolder(folderId: string) {
-		this.collapseService_.expandToFolder(folderId, this.folders);
-		this.updateItems_ = true;
-		this.invalidate();
-	}
+		// Find all parent folders and expand them
+		const parentsToExpand: string[] = [];
+		let currentId = folderId;
 
-	public collapseAll() {
-		for (const folder of this.folders) {
-			if (this.folderHasChildren_(this.folders, folder.id)) {
-				this.collapseService_.setCollapsed(folder.id, true);
+		while (currentId) {
+			const folder = BaseModel.byId(this.folders, currentId);
+			if (!folder) break;
+
+			const parentId = getDisplayParentId(
+				folder,
+				this.folders.find((f) => f.id === folder.parent_id),
+			);
+			if (parentId) {
+				parentsToExpand.unshift(parentId);
+				currentId = parentId;
+			} else {
+				break;
 			}
 		}
-		this.updateItems_ = true;
-		this.invalidate();
-	}
 
-	public expandAll() {
-		for (const folder of this.folders) {
-			if (this.folderHasChildren_(this.folders, folder.id)) {
-				this.collapseService_.setCollapsed(folder.id, false);
-			}
-		}
+		// Expand all parent folders
+		const collapsedFolders = Setting.value('collapsedFolderIds');
+		const newCollapsed = collapsedFolders.filter((id: string) => !parentsToExpand.includes(id));
+		Setting.setValue('collapsedFolderIds', newCollapsed);
+
 		this.updateItems_ = true;
 		this.invalidate();
 	}
