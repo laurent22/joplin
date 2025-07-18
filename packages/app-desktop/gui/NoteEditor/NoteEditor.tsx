@@ -488,6 +488,11 @@ function NoteEditorContent(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, []);
 
+	const onBannerConvertItToMarkdown = useCallback(async (_event: React.MouseEvent<HTMLParagraphElement>) => {
+		if (!props.selectedNoteIds || props.selectedNoteIds.length === 0) return;
+		await CommandService.instance().execute('convertHtmlNote', props.selectedNoteIds[0]);
+	}, [props.selectedNoteIds]);
+
 	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 		const resourceId = event.currentTarget.getAttribute('data-resource-id');
@@ -632,9 +637,24 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const theme = themeStyle(props.themeId);
 
+	function renderConvertHtmlToMarkdown(): React.ReactNode {
+		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
+		if (note.markup_language !== MarkupLanguage.Html) return null;
+
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p onClick={onBannerConvertItToMarkdown}
+					style={styles.resourceWatchBannerLine}>
+					{_('This note is in HTML format and may be be difficult to edit. Convert it to Markdown to edit it more easily')}
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				{renderConvertHtmlToMarkdown()}
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
 				<NoteTitleBar

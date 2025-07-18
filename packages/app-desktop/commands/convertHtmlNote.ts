@@ -6,7 +6,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
 
 export const declaration: CommandDeclaration = {
-	name: 'convertHtmlNoteToMarkdown',
+	name: 'convertHtmlNote',
 	label: () => _('Convert it to Markdown'),
 };
 
@@ -20,7 +20,7 @@ export const runtime = (): CommandRuntime => {
 
 			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
 
-			await Note.save({
+			const newNote = await Note.save({
 				...note,
 				id: undefined,
 				body: markdownBody,
@@ -32,6 +32,11 @@ export const runtime = (): CommandRuntime => {
 			context.dispatch({
 				type: 'NOTE_IDS_CONVERTED',
 				value: [note.id],
+			});
+
+			context.dispatch({
+				type: 'NOTE_SELECT',
+				id: newNote.id,
 			});
 
 		},
