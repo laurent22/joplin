@@ -233,7 +233,7 @@ msgstr "%s nem lehet kisebb, mint %s"
 
 #: packages/app-cli/app/command-share.ts:201
 msgid "%s from %s"
-msgstr "%s ebből: %s"
+msgstr "%s innen: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
@@ -366,7 +366,7 @@ msgstr "Elfogadott meghívások"
 
 #: packages/app-cli/app/command-share.ts:178
 msgid "Accepted: Notebook %s from %s"
-msgstr "Elfogadva: Jegyzetfüzet: %s ebből: %s"
+msgstr "Elfogadva: Jegyzetfüzet: %s innen: %s"
 
 #: packages/app-cli/app/command-share.ts:228
 msgid "Accepting share..."
@@ -2202,7 +2202,7 @@ msgstr "Engedélyezi a biometrikus hitelesítést?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1037
 msgid "Enable deflist syntax"
-msgstr "Definícióslista-szintaxis engedélyezése"
+msgstr "Definíciólista-szintaxis engedélyezése"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:226
 #: packages/app-mobile/components/screens/encryption-config.tsx:317
@@ -4479,7 +4479,7 @@ msgstr "Adja meg a(z) %s importálási formátumát"
 
 #: packages/lib/services/interop/InteropService_Importer_Md.ts:38
 msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Adja meg a jegyzetfüzetet, ahová importálni kívánja a jegyzeteket."
+msgstr "Adja meg azt a jegyzetfüzetet, ahová importálni akarja a jegyzeteket."
 
 #: packages/lib/services/plugins/PluginService.ts:527
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
@@ -6179,7 +6179,7 @@ msgid ""
 "The WebDAV implementation of %s is incompatible with Joplin, and as such is "
 "no longer supported. Please use a different sync method."
 msgstr ""
-"A WebDAV %s implementációja nem kompatibilis a Joplinnal, és mint ilyen, már "
+"A WebDAV %s megvalósítása nem kompatibilis a Joplinnal, és mint ilyen, már "
 "nem támogatott. Használjon más szinkronizálási módszert."
 
 #: packages/lib/models/settings/builtInMetadata.ts:596
@@ -6267,7 +6267,7 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
-"Ez lehetővé teszi egy másik felhasználó számára, hogy megosszon Önnel egy "
+"Ez lehetővé teszi egy másik felhasználónak, hogy megosszon Önnel egy "
 "jegyzetfüzetet, és mindketten együtt dolgozhassanak rajta. Nem teszi azonban "
 "lehetővé, hogy Ön osszon meg egy jegyzetfüzetet valaki mással, kivéve, ha Ön "
 "rendelkezik a(z) „%s” funkcióval."
@@ -6364,8 +6364,8 @@ msgid ""
 "to a particular port."
 msgstr ""
 "Ez a szolgáltatás lehetővé teszi, hogy a böngészőbővítmény kommunikáljon a "
-"Joplinnal. Engedélyezéskor a tűzfal megkérheti, hogy engedélyezze a Joplin "
-"számára egy adott port figyelését."
+"Joplinnal. Engedélyezéskor a tűzfal megkérheti, hogy engedélyezze a "
+"Joplinnak egy adott port figyelését."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
@@ -7003,7 +7003,7 @@ msgstr "Várakozás a hitelesítésre…"
 
 #: packages/app-cli/app/command-share.ts:174
 msgid "Waiting: Notebook %s from %s"
-msgstr "Várakozás: Jegyzetfüzet: %s ebből: %s"
+msgstr "Várakozás: Jegyzetfüzet: %s innen: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
