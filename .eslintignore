@@ -155,7 +155,7 @@ packages/app-desktop/app.reducer.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
-packages/app-desktop/commands/convertHtmlToMarkdown.js
+packages/app-desktop/commands/convertHtmlNoteToMarkdown.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyToClipboard.js
 packages/app-desktop/commands/editProfileConfig.js
@@ -1082,6 +1082,8 @@ packages/lib/array.js
 packages/lib/callbackUrlUtils.test.js
 packages/lib/callbackUrlUtils.js
 packages/lib/clipperUtils.js
+packages/lib/commands/convertHtmlToMarkdown.test.js
+packages/lib/commands/convertHtmlToMarkdown.js
 packages/lib/commands/deleteNote.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js

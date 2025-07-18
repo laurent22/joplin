@@ -1,12 +1,12 @@
-import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import { stateUtils } from '@joplin/lib/reducer';
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { MarkupToHtml } from '@joplin/renderer';
+import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
 
 export const declaration: CommandDeclaration = {
-	name: 'convertHtmlToMarkdown',
+	name: 'convertHtmlNoteToMarkdown',
 	label: () => _('Convert it to Markdown'),
 };
 
@@ -16,15 +16,10 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: any, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
-			const htmlToMdParser = new HtmlToMd();
-
 			const note = await Note.load(noteId);
 
-			const markdownBody = await htmlToMdParser.parse(`<div>${note.body}</div>`, {
-				baseUrl: '',
-				anchorNames: [],
-				convertEmbeddedPdfsToLinks: true,
-			});
+			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
+
 			await Note.save({
 				...note,
 				id: undefined,
