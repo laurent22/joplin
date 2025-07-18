@@ -40,7 +40,7 @@ export default class FolderListWidget extends ListWidget {
 				// Add collapse/expand indicator
 				const hasChildren = this.folderHasChildren_(this.folders, item.id);
 				if (hasChildren) {
-					const collapsedFolders = Setting.value('cli.folderCollapseState');
+					const collapsedFolders = Setting.value('collapsedFolderIds');
 					const isCollapsed = collapsedFolders.includes(item.id);
 					output.push(isCollapsed ? '[+] ' : '[-] ');
 				} else {
@@ -208,7 +208,7 @@ export default class FolderListWidget extends ListWidget {
 						newItems.push(f);
 						// Only recurse into children if the folder is not collapsed
 						if (this.folderHasChildren_(this.folders, f.id)) {
-							const collapsedFolders = Setting.value('cli.folderCollapseState');
+							const collapsedFolders = Setting.value('collapsedFolderIds');
 							if (!collapsedFolders.includes(f.id)) {
 								orderFolders(f.id);
 							}
@@ -266,13 +266,13 @@ export default class FolderListWidget extends ListWidget {
       item.type_ === Folder.modelType() &&
       this.folderHasChildren_(this.folders, item.id)
 		) {
-			const collapsedFolders = Setting.value('cli.folderCollapseState');
+			const collapsedFolders = Setting.value('collapsedFolderIds');
 			const isCollapsed = collapsedFolders.includes(item.id);
 			if (isCollapsed) {
 				const newCollapsed = collapsedFolders.filter((id: string) => id !== item.id);
-				Setting.setValue('cli.folderCollapseState', newCollapsed);
+				Setting.setValue('collapsedFolderIds', newCollapsed);
 			} else {
-				Setting.setValue('cli.folderCollapseState', [...collapsedFolders, item.id]);
+				Setting.setValue('collapsedFolderIds', [...collapsedFolders, item.id]);
 			}
 			this.updateItems_ = true;
 			this.invalidate();
@@ -304,9 +304,9 @@ export default class FolderListWidget extends ListWidget {
 		}
 
 		// Expand all parent folders
-		const collapsedFolders = Setting.value('cli.folderCollapseState');
+		const collapsedFolders = Setting.value('collapsedFolderIds');
 		const newCollapsed = collapsedFolders.filter((id: string) => !parentsToExpand.includes(id));
-		Setting.setValue('cli.folderCollapseState', newCollapsed);
+		Setting.setValue('collapsedFolderIds', newCollapsed);
 
 		this.updateItems_ = true;
 		this.invalidate();
