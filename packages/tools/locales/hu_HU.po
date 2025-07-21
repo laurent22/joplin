@@ -1416,7 +1416,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Nem sikerült kapcsolódni a Joplin-kiszolgálóhoz. Ellenőrizze a "
+"Nem sikerült kapcsolódni a Joplin kiszolgálóhoz. Ellenőrizze a "
 "szinkronizálási beállításokat. A teljes hiba a következő volt:\n"
 "\n"
 "%s"
@@ -1472,7 +1472,7 @@ msgstr "Létrehozás"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "Új jegyzetfüzet létrehozása egy szülőjegyzetfüzet alatt."
+msgstr "Új jegyzetfüzet létrehozása egy szülő jegyzetfüzet alatt."
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
@@ -2768,7 +2768,7 @@ msgstr "Vissza"
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:44
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:59
 msgid "Go to Joplin Cloud profile"
-msgstr "Ugrás a Joplin Cloud-profilra"
+msgstr "Ugrás a Joplin Cloud profilra"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:12
 msgid "Go to line"
@@ -3263,12 +3263,12 @@ msgstr "A Joplin már fut."
 
 #: packages/lib/services/plugins/PluginService.ts:531
 msgid "Joplin Mobile"
-msgstr "Joplin-mobilalkalmazás"
+msgstr "Joplin mobilalkalmazás"
 
 #: packages/lib/SyncTargetJoplinServer.ts:62
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
 msgid "Joplin Server"
-msgstr "Joplin-kiszolgáló"
+msgstr "Joplin kiszolgáló"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3276,7 +3276,7 @@ msgstr "Üzleti Joplin kiszolgáló"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
-msgstr "Joplin-kiszolgáló e-mail-címe"
+msgstr "Joplin kiszolgáló e-mail-címe"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
@@ -3285,12 +3285,12 @@ msgstr "Bejelentkezés a Joplin kiszolgálóba"
 
 #: packages/lib/models/settings/builtInMetadata.ts:354
 msgid "Joplin Server password"
-msgstr "Joplin-kiszolgáló jelszava"
+msgstr "Joplin kiszolgáló jelszava"
 
 #: packages/lib/models/settings/builtInMetadata.ts:323
 #: packages/lib/models/settings/builtInMetadata.ts:366
 msgid "Joplin Server URL"
-msgstr "Joplin-kiszolgáló webcíme"
+msgstr "Joplin kiszolgáló webcíme"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
@@ -3315,8 +3315,8 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 "A Joplin saját szinkronizálási szolgáltatása. Emellett hozzáférést biztosít "
-"Joplin-specifikus funkciókhoz, például jegyzetek közzétételéhez vagy "
-"jegyzetfüzetek megosztott használatához másokkal."
+"a Joplin speciális funkcióihoz, például jegyzetek közzétételéhez vagy a "
+"jegyzetfüzetek megosztása másokkal a közös használathoz."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1589
 msgid "Keep note history for"
@@ -3566,7 +3566,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"Végpontok közötti titkosítás-beállítások kezelése (E2EE). A parancsok a "
+"Végpontok közötti titkosításbeállítások kezelése (E2EE). A parancsok a "
 "következők: `enable` (engedélyezés), `disable` (letiltás), `decrypt` "
 "(visszafejtés), `status` (állapot), `decrypt-file` (fájl visszafejtése) és "
 "`target-status` (cél állapota)."
@@ -3590,7 +3590,7 @@ msgstr "Markdown előtétadatokkal (Front Matter)"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:379
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:367
 msgid "Markdown editor"
-msgstr "Markdown-szerkesztő"
+msgstr "Markdown szerkesztő"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3682,7 +3682,7 @@ msgstr "Hiányzó szükséges jelzőérték: %s"
 
 #: packages/app-mobile/components/side-menu-content.tsx:663
 msgid "Mobile data - auto-sync disabled"
-msgstr "Mobiladatok és automatikus szinkronizálás letiltva"
+msgstr "Mobiladat-forgalom - automatikus szinkronizálás letiltva"
 
 #: packages/app-desktop/gui/MainScreen.tsx:555
 msgid "More info"
@@ -3862,15 +3862,15 @@ msgstr "Nextcloud"
 
 #: packages/lib/models/settings/builtInMetadata.ts:186
 msgid "Nextcloud password"
-msgstr "Nextcloud-jelszó"
+msgstr "Nextcloud jelszó"
 
 #: packages/lib/models/settings/builtInMetadata.ts:174
 msgid "Nextcloud username"
-msgstr "Nextcloud-felhasználónév"
+msgstr "Nextcloud felhasználónév"
 
 #: packages/lib/models/settings/builtInMetadata.ts:161
 msgid "Nextcloud WebDAV URL"
-msgstr "Nextcloud WebDAV-webcím"
+msgstr "Nextcloud WebDAV webcím"
 
 #: packages/lib/models/settings/builtInMetadata.ts:41
 msgid "no"
@@ -4018,7 +4018,7 @@ msgstr "Jegyzet elmentve."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
 msgid "Note history"
-msgstr "Jegyzet előzményei"
+msgstr "Jegyzetelőzmények"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
@@ -4028,7 +4028,7 @@ msgstr "Jegyzetelőzmények"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
 msgid "Note history has been deleted."
-msgstr "A jegyzet előzményei törölve lettek."
+msgstr "A jegyzetelőzmények törölve lettek."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4272,7 +4272,7 @@ msgstr "Forrás megnyitása"
 
 #: packages/lib/models/settings/builtInMetadata.ts:94
 msgid "Open Sync Wizard..."
-msgstr "Szinkronizáló-segéd megnyitása…"
+msgstr "Szinkronizálási segéd megnyitása…"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:86
 msgid "Open..."
@@ -4496,7 +4496,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr "Várjon, amíg betöltjük a szervezet bejelentkezési oldalát…"
+msgstr "Várjon, amíg a szervezet bejelentkezési oldala betöltődik…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4561,7 +4561,7 @@ msgstr "Lehetséges értékek: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr "JSON kimenet előnyben részesítése."
+msgstr "JSON-kimenet előnyben részesítése."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4591,7 +4591,7 @@ msgstr ""
 #: packages/app-cli/app/app-gui.js:758
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
-"Nyomja meg a Ctrl+D billentyű-kombinációt, vagy írja be az „exit” parancsot "
+"Nyomja meg a Ctrl+D billentyűkombinációt, vagy írja be az „exit” parancsot "
 "az alkalmazás bezárásához"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:70
@@ -4603,8 +4603,8 @@ msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
-"Nyomja meg a billentyűparancsot, majd nyomja meg az ENTER-t. Vagy nyomja meg "
-"a BACKSPACE-t a billentyűparancs törléséhez."
+"Nyomja meg a billentyűparancsot, majd nyomja meg az entert, vagy nyomja meg "
+"a backspace-t a billentyűparancs törléséhez."
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:40
 msgid "Press to set the decryption password."
@@ -4741,7 +4741,7 @@ msgstr "Modell újraletöltése"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
-msgstr "Adat újratitkosítása"
+msgstr "Adatok újratitkosítása"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:354
 msgid "Re-encryption"
@@ -5209,7 +5209,7 @@ msgstr "Fájl kijelölése…"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
-msgstr "Szülő-jegyzetfüzet kijelölése"
+msgstr "Szülő jegyzetfüzet kijelölése"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -5616,7 +5616,7 @@ msgstr "Állapot: Elindítva a(z) %d porton"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
-msgstr "1. lépés: Engedélyezze a Web Clipper-szolgáltatást"
+msgstr "1. lépés: Engedélyezze a Web Clipper szolgáltatást"
 
 #: packages/app-cli/app/command-sync.ts:83
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:46
@@ -6006,7 +6006,7 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:83
 msgid "The following plugins may not support the current markdown editor:"
 msgstr ""
-"A következő bővítmények nem feltétlenül támogatják a jelenlegi markdown-"
+"A következő bővítmények nem feltétlenül támogatják a jelenlegi Markdown "
 "szerkesztőt:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:257
@@ -6033,7 +6033,7 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
-"Úgy tűnik, hogy a régi Markdown-szerkesztő egy bővítménnyel való "
+"Úgy tűnik, hogy a régi Markdown szerkesztő egy bővítménnyel való "
 "inkompatibilitás miatt összeomlott. Javasoljuk az új szerkesztő használatát."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
@@ -6160,19 +6160,19 @@ msgstr ""
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
-"A Web Clipper-szolgáltatás nem engedélyezhető a Joplin ezen példányában."
+"A Web Clipper szolgáltatás nem engedélyezhető a Joplin ezen példányában."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"A Web Clipper-szolgáltatás engedélyezve van, és automatikus indításra van "
+"A Web Clipper szolgáltatás engedélyezve van, és automatikus indításra van "
 "állítva."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
-msgstr "A Web Clipper-szolgáltatás nincs engedélyezve."
+msgstr "A Web Clipper szolgáltatás nincs engedélyezve."
 
 #: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
@@ -6252,7 +6252,7 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Ezek a bővítmények további funkciókkal bővítik a Markdown-renderelőt. Vegye "
+"Ezek a bővítmények további funkciókkal bővítik a Markdown renderelőt. Vegye "
 "figyelembe, hogy bár ezek a funkciók hasznosak lehetnek, nem szabványos "
 "Markdownok, és így a legtöbbjük csak Joplinban fog működni. Ezen kívül "
 "néhányuk *nem kompatibilis* a WYSIWYG szerkesztővel. Ha megnyit egy olyan "
@@ -6420,7 +6420,7 @@ msgstr "Cím"
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Ahhoz, hogy a Joplin szinkronizálhasson a Dropboxszal, kövesse az alábbi "
+"Ahhoz, hogy a Joplin szinkronizálódhasson a Dropboxszal, kövesse az alábbi "
 "lépéseket:"
 
 #: packages/app-cli/app/command-sync.ts:111
@@ -6552,9 +6552,7 @@ msgstr "Menüsáv be/ki"
 
 #: packages/lib/models/Setting.ts:1225
 msgid "Toggle note history, keep notes for"
-msgstr ""
-"Jegyzetelőzmények be-/kikapcsolása, jegyzetelőzmények megőrzése egy adott "
-"napig"
+msgstr "Jegyzetelőzmények be/ki, jegyzetelőzmények megőrzése egy adott napig"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
@@ -6882,7 +6880,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1450
 msgid "Use the legacy Markdown editor"
-msgstr "Régi markdown-szerkesztő használata"
+msgstr "Régi Markdown szerkesztő használata"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:570
 msgid ""
@@ -6905,7 +6903,7 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
-"A markdown-szerkesztő legtöbb szövegéhez használatos. Ha nem található, "
+"A Markdown szerkesztő legtöbb szövegéhez használható. Ha nem található, "
 "akkor egy általános, arányos (változó szélességű) betűtípus lesz használva."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1187
@@ -7026,7 +7024,7 @@ msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
-"A Joplin-közösség megbízható tagjai által fejlesztett bővítményeket "
+"A Joplin közösség megbízható tagjai által fejlesztett bővítményeket "
 "„ajánlottként” jelöljük."
 
 #: packages/lib/models/Setting.ts:1191
@@ -7039,15 +7037,15 @@ msgstr "WebDAV"
 
 #: packages/lib/models/settings/builtInMetadata.ts:224
 msgid "WebDAV password"
-msgstr "WebDAV-jelszó"
+msgstr "WebDAV jelszó"
 
 #: packages/lib/models/settings/builtInMetadata.ts:199
 msgid "WebDAV URL"
-msgstr "WebDAV-webcím"
+msgstr "WebDAV webcím"
 
 #: packages/lib/models/settings/builtInMetadata.ts:212
 msgid "WebDAV username"
-msgstr "WebDAV-felhasználónév"
+msgstr "WebDAV felhasználónév"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
 #: packages/app-desktop/gui/MenuBar.tsx:942
@@ -7056,11 +7054,11 @@ msgstr "Weboldal és dokumentáció"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
 msgid "WebView package: %s"
-msgstr "WebView-csomag: %s"
+msgstr "WebView csomag: %s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 msgid "WebView version: %s"
-msgstr "WebView-verzió: %s"
+msgstr "WebView verziója: %s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
@@ -7158,15 +7156,16 @@ msgstr "Most már be van jelentkezve a fiókjába."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr "Ön most a Markdown-szerkesztő legújabb verzióját használja."
+msgstr "Ön most a Markdown szerkesztő legújabb verzióját használja."
 
 #: packages/app-desktop/gui/MainScreen.tsx:585
 msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
-"A Joplin Intel-verzióját futtatja Apple Silicon processzoron. Töltse le az "
-"Apple Silicon változatot a jobb teljesítmény érdekében."
+"A Joplin egy Intel processzorokra optimalizált verzióját futtatja Apple "
+"Silicon processzoron. Töltse le az Apple Silicon processzorokra optimalizált "
+"változatot a jobb teljesítmény érdekében."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
