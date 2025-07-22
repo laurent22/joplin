@@ -6,7 +6,7 @@ import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
 import filterOcrText from '../utils/filterOcrText';
 import Resource from '../../../models/Resource';
-import { ResourceOcrJobType, ResourceOcrStatus } from '../../database/types';
+import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
 
 const logger = Logger.create('OcrDriverTesseract');
 
@@ -59,7 +59,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 	}
 
 	public get driverId() {
-		return ResourceOcrJobType.Ocr;
+		return ResourceOcrDriverId.Ocr;
 	}
 
 	public static async clearLanguageDataCache() {

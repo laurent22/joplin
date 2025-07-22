@@ -1,4 +1,4 @@
-import { ResourceOcrJobType } from '../database/types';
+import { ResourceOcrDriverId } from '../database/types';
 import { RecognizeResult } from './utils/types';
 
 export default class OcrDriverBase {
@@ -10,7 +10,7 @@ export default class OcrDriverBase {
 	public async dispose(): Promise<void> {}
 
 	public get driverId() {
-		return ResourceOcrJobType.Ocr;
+		return ResourceOcrDriverId.Ocr;
 	}
 
 }

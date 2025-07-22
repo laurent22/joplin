@@ -76,7 +76,7 @@ interface DatabaseTables {
 	[key: string]: DatabaseTable;
 }
 
-export enum ResourceOcrJobType {
+export enum ResourceOcrDriverId {
 	Ocr = 1,
 	Htr = 2,
 }

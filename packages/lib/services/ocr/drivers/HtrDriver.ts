@@ -1,7 +1,7 @@
 import { emptyRecognizeResult, RecognizeResult } from '../utils/types';
 import OcrDriverBase from '../OcrDriverBase';
 import Logger from '@joplin/utils/Logger';
-import { ResourceOcrJobType, ResourceOcrStatus } from '../../database/types';
+import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
 import KvStore from '../../KvStore';
 import shim from '../../../shim';
 import { msleep } from '@joplin/utils/time';
@@ -14,23 +14,23 @@ type CreateJobResult = { jobId: string };
 
 export default class HtrDriver extends OcrDriverBase {
 
-	private timeBetweenRequests_ = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
-	private JobIdKey_ = 'HtrDriver::JobId::';
+	private retryIntervals_ = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
+	private jobIdKeyPrefix_ = 'HtrDriver::JobId::';
 	private disposed_ = false;
 
 	public constructor(interval?: number[]) {
 		super();
-		this.timeBetweenRequests_ = interval ?? this.timeBetweenRequests_;
+		this.retryIntervals_ = interval ?? this.retryIntervals_;
 	}
 
 	public get driverId() {
-		return ResourceOcrJobType.Htr;
+		return ResourceOcrDriverId.Htr;
 	}
 
 	public async recognize(_language: string, filePath: string, resourceId: string): Promise<RecognizeResult> {
 		logger.info(`${resourceId}: Starting to recognize resource from ${filePath}`);
 
-		const key = `${this.JobIdKey_}${resourceId}`;
+		const key = `${this.jobIdKeyPrefix_}${resourceId}`;
 		let jobId = await KvStore.instance().value<string>(key);
 
 		try {
@@ -115,10 +115,10 @@ export default class HtrDriver extends OcrDriverBase {
 	}
 
 	private getInterval(index: number) {
-		if (index >= this.timeBetweenRequests_.length) {
-			return this.timeBetweenRequests_[this.timeBetweenRequests_.length - 1];
+		if (index >= this.retryIntervals_.length) {
+			return this.retryIntervals_[this.retryIntervals_.length - 1];
 		}
-		return this.timeBetweenRequests_[index];
+		return this.retryIntervals_[index];
 	}
 
 	private async api() {

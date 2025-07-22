@@ -2,7 +2,7 @@ import { toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrJobType, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
 import { emptyRecognizeResult, RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
@@ -181,14 +181,14 @@ export default class OcrService {
 
 				if (!resources.length) break;
 
-				const ocrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrJobType.Ocr);
+				const ocrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.Ocr);
 
 				for (const resource of ocrResources) {
 					inProcessResourceIds.push(resource.id);
 					await this.ocrQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
 				}
 
-				const htrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrJobType.Htr);
+				const htrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.Htr);
 
 				for (const resource of htrResources) {
 					inProcessResourceIds.push(resource.id);
