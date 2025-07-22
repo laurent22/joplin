@@ -24,16 +24,15 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Càmera: per a poder fer fotografies i adjuntar-les a les notes."
+msgstr "- Camera: per permetre fer una foto i adjuntar-la a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:614
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- Geolocalització: per a poder ajuntar la informació de geolocalització a les notes."
+msgstr "- Ubicació: per permetre adjuntar informació de geolocalització a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
 msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
-msgstr ""
-"- Emmagatzematge: per a adjuntar fitxers a les notes i per a activar la sincronització amb el sistema de fitxers."
+msgstr "- Emmagatzematge: per permetre adjuntar fitxers a notes i permetre la sincronització del sistema de fitxers."
 
 #: packages/lib/services/KeymapService.ts:331 packages/lib/services/KeymapService.ts:337
 msgid "\"%s\" is missing the required \"%s\" property."
@@ -260,9 +259,9 @@ msgid ""
 "notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all "
 "the tags (use -l for long option)."
 msgstr ""
-"<tag-command> pot ser «add», «remove», «list» o «notetags» per a assignar o suprimir l'[tag] de la [note], o per a "
-"llistar les notes associades amb l'[tag]. L'ordre «tag list» es pot usar per a llistar totes les etiquetes (useu -l "
-"per l'opció llarga)."
+"<tag-command> pot ser \"add\", \"remove\", \"list\" o \"notetags\" per assignar o eliminar [tag] de [note], per "
+"llistar notes associades amb [tag], o per llistar etiquetes associades amb [note]. L'ordre `tag list`). es pot "
+"utilitzar per a llistar totes les etiquetes (utilitzeu -l per a l'opció llarga)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""

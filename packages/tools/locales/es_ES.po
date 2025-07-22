@@ -18,7 +18,7 @@ msgstr ""
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
-"Language-Team: Spanish <lucas.vieites@gmail.com>\n"
+"Language-Team: Spanish <contacto@ericdq.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,12 +29,12 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Cámara: Permite tomar fotografías y adjuntarlas a una nota."
+msgstr "- Cámara: permite tomar una foto y adjuntarla a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:614
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Localización: Permite adjuntar información de geolocalización a una nota."
+"- Ubicación: Permite adjuntar información de geolocalización a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
 msgid ""
@@ -291,11 +291,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> Puede ser \"agregar\", \"eliminar\", \"lista\" o \"etiquetas "
-"de nota\" para asignar o eliminar [tag] de [note], para enumerar notas "
-"asociadas con [tag] o para enumerar etiquetas asociadas con [note]. El "
-"comando 'lista de etiquetas' se puede usar para enumerar todas las etiquetas "
-"(use -l para la opción larga)."
+"<tag-command> Puede ser \"\"add\", \"remove\", \"list\", o \"notetags\" para "
+"asignar o eliminar [tag] de [note], para enumerar notas asociadas con [tag] "
+"o para enumerar etiquetas asociadas con [note]. El comando `tag list` se "
+"puede usar para enumerar todas las etiquetas (use -l para la opción larga)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
