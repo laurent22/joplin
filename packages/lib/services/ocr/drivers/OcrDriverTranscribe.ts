@@ -24,7 +24,7 @@ export default class OcrDriverTranscribe extends OcrDriverBase {
 	}
 
 	public get driverId() {
-		return ResourceOcrDriverId.Htr;
+		return ResourceOcrDriverId.HandwrittenText;
 	}
 
 	public async recognize(_language: string, filePath: string, resourceId: string): Promise<RecognizeResult> {

@@ -10,7 +10,7 @@ export default class OcrDriverBase {
 	public async dispose(): Promise<void> {}
 
 	public get driverId() {
-		return ResourceOcrDriverId.Ocr;
+		return ResourceOcrDriverId.PrintedText;
 	}
 
 }

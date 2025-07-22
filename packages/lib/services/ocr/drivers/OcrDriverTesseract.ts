@@ -59,7 +59,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 	}
 
 	public get driverId() {
-		return ResourceOcrDriverId.Ocr;
+		return ResourceOcrDriverId.PrintedText;
 	}
 
 	public static async clearLanguageDataCache() {
