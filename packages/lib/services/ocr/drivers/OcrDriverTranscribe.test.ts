@@ -1,7 +1,7 @@
 import Setting from '../../../models/Setting';
 import { createNoteAndResource, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import { ResourceOcrStatus } from '../../database/types';
-import HtrDriver from './HtrDriver';
+import OcrDriverTranscribe from './OcrDriverTranscribe';
 import { reg } from '../../../registry';
 
 type JobGenerated = { jobId: string };
@@ -22,7 +22,7 @@ interface MockApi {
 	)=> Promise<Response>>;
 }
 
-describe('HtrDriver', () => {
+describe('OcrDriverTranscribe', () => {
 	let mockApi: MockApi;
 
 	beforeEach(async () => {
@@ -43,7 +43,7 @@ describe('HtrDriver', () => {
 
 	it('should return an error if synchronization target is not set', async () => {
 		const { resource } = await createNoteAndResource();
-		const htr = new HtrDriver();
+		const htr = new OcrDriverTranscribe();
 		const response = await htr.recognize('', 'mock-path', resource.id);
 
 		expect(response.ocr_status).toBe(ResourceOcrStatus.Error);
@@ -56,7 +56,7 @@ describe('HtrDriver', () => {
 		mockApi.exec.mockResolvedValue(Promise.resolve({ state: 'pending', jobId: 'not-a-real-job-id' }));
 		mockApi.exec.mockResolvedValue(Promise.resolve({ state: 'completed', jobId: 'not-a-real-job-id', output: { result: 'this is the final transcription' } }));
 
-		const htr = new HtrDriver([1]);
+		const htr = new OcrDriverTranscribe([1]);
 		Setting.setValue('sync.target', 9);
 
 		const response = await htr.recognize('', resource.filename, resource.id);
@@ -71,7 +71,7 @@ describe('HtrDriver', () => {
 		mockApi.exec.mockResolvedValue(Promise.resolve({ jobId: 'not-a-real-job-id' }));
 		mockApi.exec.mockResolvedValue(Promise.resolve({ state: 'failed', jobId: 'not-a-real-job-id', output: { stack: '', message: 'Something went wrong' } }));
 
-		const htr = new HtrDriver([1]);
+		const htr = new OcrDriverTranscribe([1]);
 		Setting.setValue('sync.target', 9);
 
 		const response = await htr.recognize('', resource.filename, resource.id);
@@ -87,7 +87,7 @@ describe('HtrDriver', () => {
 		mockApi.exec.mockResolvedValue(Promise.resolve({ jobId }));
 		mockApi.exec.mockImplementationOnce(() => { throw new Error('Network request failed'); });
 
-		const htr = new HtrDriver([1]);
+		const htr = new OcrDriverTranscribe([1]);
 		Setting.setValue('sync.target', 9);
 
 		const response = await htr.recognize('', resource.filename, resource.id);
@@ -97,7 +97,7 @@ describe('HtrDriver', () => {
 
 		// Simulating closing/opening application
 		mockApi.exec.mockResolvedValue({ jobId, state: 'completed', output: { result: 'result' } });
-		const htr2 = new HtrDriver([1]);
+		const htr2 = new OcrDriverTranscribe([1]);
 
 		const response2 = await htr2.recognize('', resource.filename, resource.id);
 		expect(response2.ocr_status).toBe(ResourceOcrStatus.Done);

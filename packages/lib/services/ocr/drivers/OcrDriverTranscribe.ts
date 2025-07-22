@@ -8,14 +8,14 @@ import { msleep } from '@joplin/utils/time';
 import Resource from '../../../models/Resource';
 import { reg } from '../../../registry';
 
-const logger = Logger.create('HtrDriver');
+const logger = Logger.create('OcrDriverTranscribe');
 
 type CreateJobResult = { jobId: string };
 
-export default class HtrDriver extends OcrDriverBase {
+export default class OcrDriverTranscribe extends OcrDriverBase {
 
 	private retryIntervals_ = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
-	private jobIdKeyPrefix_ = 'HtrDriver::JobId::';
+	private jobIdKeyPrefix_ = 'OcrDriverTranscribe::JobId::';
 	private disposed_ = false;
 
 	public constructor(interval?: number[]) {
@@ -110,7 +110,7 @@ export default class HtrDriver extends OcrDriverBase {
 
 		return {
 			ocr_status: ResourceOcrStatus.Error,
-			ocr_error: 'HtrDriver was stopped while waiting for a transcription',
+			ocr_error: 'OcrDriverTranscribe was stopped while waiting for a transcription',
 		};
 	}
 

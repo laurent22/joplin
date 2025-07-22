@@ -55,7 +55,7 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
-import HtrDriver from '@joplin/lib/services/ocr/drivers/HtrDriver';
+import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
@@ -360,7 +360,7 @@ class Application extends BaseApplication {
 					},
 				));
 
-				drivers.push(new HtrDriver());
+				drivers.push(new OcrDriverTranscribe());
 
 				this.ocrService_ = new OcrService(drivers);
 			}
