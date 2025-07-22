@@ -1,7 +1,7 @@
 import { EditorState, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { EditorSettings, OnEventCallback } from '../../types';
-import getSearchState from './getSearchState';
+import getSearchState from '../utils/getSearchState';
 import { EditorEventType } from '../../events';
 import { search, searchPanelOpen, setSearchQuery } from '@codemirror/search';
 

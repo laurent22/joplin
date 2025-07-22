@@ -1,4 +1,4 @@
-import allLanguages from '../markdown/codeBlockLanguages/allLanguages';
+import allLanguages from '../utils/markdown/codeBlockLanguages/allLanguages';
 
 // Ensure languages we use are loaded. Without this, tests may randomly fail (LanguageDescriptions
 // are loaded asynchronously, in the background).

@@ -11,8 +11,8 @@ import intersectsSyntaxNode from '../utils/isInSyntaxNode';
 import toggleRegionFormatGlobally from '../utils/formatting/toggleRegionFormatGlobally';
 import { RegionSpec } from '../utils/formatting/RegionSpec';
 import toggleInlineFormatGlobally from '../utils/formatting/toggleInlineFormatGlobally';
-import stripBlockquote from './utils/stripBlockquote';
-import renumberSelectedLists from './utils/renumberSelectedLists';
+import stripBlockquote from '../utils/markdown/stripBlockquote';
+import renumberSelectedLists from '../utils/markdown/renumberSelectedLists';
 import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
 
 
@@ -213,12 +213,28 @@ export const toggleList = (listType: ListType): Command => {
 			return ListAction.SwitchFormatting;
 		};
 
+		const areAllLinesBlankInRange = (fromLine: Line, toLine: Line) => {
+			for (let lineNumber = fromLine.number; lineNumber <= toLine.number; lineNumber++) {
+				const line = state.doc.line(lineNumber);
+
+				// Consider lines within block quotes with no other content to be blank (this
+				// command should behave similarly regardless of whether in or out of a block
+				// quote).
+				if (stripBlockquote(line).trim() !== '') {
+					return false;
+				}
+			}
+
+			return true;
+		};
+
 		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
 			const lineRange = getNextLineRange(sel);
 			if (!lineRange) return { range: sel };
 			const { fromLine, toLine } = lineRange;
 			const baselineIndent = getBaselineIndent(fromLine, toLine);
 			const action = getAction(fromLine, toLine);
+			const allLinesBlank = areAllLinesBlankInRange(fromLine, toLine);
 
 			// Outermost list item number
 			let outerCounter = 1;
@@ -230,8 +246,18 @@ export const toggleList = (listType: ListType): Command => {
 			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum++) {
 				const line = doc.line(lineNum);
 				const origLineContent = stripBlockquote(line);
-				if (origLineContent.trim() === '') {
-					continue; // skip blank lines
+				const currentLineBlank = origLineContent.trim() === '';
+
+				// To support changing the formatting of non-tight lists, skip blank lines within
+				// larger content. This allows changing the list format without adding a potentially
+				// large number of empty list items.
+				//
+				// However, if all lines are blank (e.g. if the cursor at the beginning of an empty)
+				// document, we're not changing the formatting of an existing list. In this case,
+				// skipping blank lines would cause the command to do nothing.
+				// See https://github.com/laurent22/joplin/pull/12745.
+				if (currentLineBlank && !allLinesBlank) {
+					continue;
 				}
 
 				// Content excluding the block quote start

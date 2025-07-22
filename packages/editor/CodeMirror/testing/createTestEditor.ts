@@ -3,10 +3,10 @@ import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { indentUnit, syntaxTree } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import MarkdownMathExtension from '../markdown/MarkdownMathExtension';
 import forceFullParse from './forceFullParse';
 import loadLanguages from './loadLanguages';
-import MarkdownHighlightExtension from '../markdown/MarkdownHighlightExtension';
+import markdownMathExtension from '../extensions/markdownMathExtension';
+import markdownHighlightExtension from '../extensions/markdownHighlightExtension';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
@@ -26,7 +26,7 @@ const createTestEditor = async (
 		selection: EditorSelection.create(initialSelection),
 		extensions: [
 			markdown({
-				extensions: [MarkdownMathExtension, MarkdownHighlightExtension, GithubFlavoredMarkdownExt],
+				extensions: [markdownMathExtension, markdownHighlightExtension, GithubFlavoredMarkdownExt],
 				addKeymap: addMarkdownKeymap,
 			}),
 			indentUnit.of('\t'),

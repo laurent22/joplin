@@ -1,9 +1,7 @@
 import { EditorSelection, EditorState } from '@codemirror/state';
-import {
-	increaseIndent, toggleList,
-} from './markdownCommands';
+import { increaseIndent, toggleList } from '../editorCommands/markdownCommands';
 import { ListType } from '../../types';
-import createTestEditor from '../testUtil/createTestEditor';
+import createTestEditor from '../testing/createTestEditor';
 
 describe('markdownCommands.toggleList', () => {
 
@@ -68,7 +66,7 @@ describe('markdownCommands.toggleList', () => {
 		const checklistEndText = ['- [ ] a', '- [ ] test'].join('\n');
 
 		const input = `${checklistStartText}\n\n${checklistEndText}`;
-		const expected = `${checklistStartText}\n\n${checklistEndText}`; // no change
+		const expected = `${checklistStartText}\n- [ ] \n${checklistEndText}`; // new item
 
 		const editor = await createTestEditor(
 			input,
@@ -465,5 +463,24 @@ A block quote:
 		toggleList(ListType.CheckList)(editor);
 
 		expect(editor.state.doc.toString()).toBe(expectedDocText);
+	});
+
+	it.each([
+		[ListType.CheckList, '', '- [ ] '],
+		[ListType.OrderedList, '', '1. '],
+		[ListType.UnorderedList, '', '- '],
+		[ListType.UnorderedList, '> ', '> - '],
+		[ListType.UnorderedList, '# Test\n\n', '# Test\n\n- '],
+	])('should add lists when activated on an empty line or empty block quote (list type: %d, initial doc: %j)', async (
+		listType, originalDocument, expected,
+	) => {
+		const editor = await createTestEditor(
+			originalDocument,
+			EditorSelection.cursor(originalDocument.length),
+			[],
+		);
+
+		toggleList(listType)(editor);
+		expect(editor.state.doc.toString()).toBe(expected);
 	});
 });

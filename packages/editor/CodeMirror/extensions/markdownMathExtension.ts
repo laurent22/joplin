@@ -10,6 +10,7 @@ import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@le
 import {
 	MarkdownConfig, InlineContext,
 	BlockContext, Line, LeafBlock,
+	MarkdownExtension,
 } from '@lezer/markdown';
 
 // The existing stexMath parser is used to parse the text between the $s
@@ -50,7 +51,7 @@ const wrappedTeXParser = (nodeTag: string): ParseWrapper => {
 };
 
 // Markdown extension for recognizing inline code
-const InlineMathConfig: MarkdownConfig = {
+const inlineMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
 			name: inlineMathTagName,
@@ -120,7 +121,7 @@ const InlineMathConfig: MarkdownConfig = {
 };
 
 // Extension for recognising block code
-const BlockMathConfig: MarkdownConfig = {
+const blockMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
 			name: blockMathTagName,
@@ -206,9 +207,9 @@ const BlockMathConfig: MarkdownConfig = {
 };
 
 // Markdown configuration for block and inline math support.
-const MarkdownMathExtension: MarkdownConfig[] = [
-	InlineMathConfig,
-	BlockMathConfig,
+const markdownMathExtension: MarkdownExtension = [
+	inlineMathConfig,
+	blockMathConfig,
 ];
 
-export default MarkdownMathExtension;
+export default markdownMathExtension;

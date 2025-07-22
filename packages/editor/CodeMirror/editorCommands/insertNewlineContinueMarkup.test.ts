@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
-import createTestEditor from '../testUtil/createTestEditor';
-import pressReleaseKey from '../testUtil/pressReleaseKey';
+import createTestEditor from '../testing/createTestEditor';
+import pressReleaseKey from '../testing/pressReleaseKey';
 import { keymap } from '@codemirror/view';
 import insertNewlineContinueMarkup from './insertNewlineContinueMarkup';
 

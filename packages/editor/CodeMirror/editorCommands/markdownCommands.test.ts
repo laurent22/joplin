@@ -3,9 +3,9 @@ import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
-} from './markdownCommands';
-import createTestEditor from '../testUtil/createTestEditor';
-import { blockMathTagName } from './MarkdownMathExtension';
+} from '../editorCommands/markdownCommands';
+import createTestEditor from '../testing/createTestEditor';
+import { blockMathTagName } from '../extensions/markdownMathExtension';
 
 describe('markdownCommands', () => {
 

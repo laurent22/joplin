@@ -1,8 +1,8 @@
 import { EditorSelection } from '@codemirror/state';
-import createTestEditor from '../testUtil/createTestEditor';
+import createTestEditor from '../testing/createTestEditor';
 import overwriteModeExtension, { overwriteModeEnabled, toggleOverwrite } from './overwriteModeExtension';
-import typeText from '../testUtil/typeText';
-import pressReleaseKey from '../testUtil/pressReleaseKey';
+import typeText from '../testing/typeText';
+import pressReleaseKey from '../testing/pressReleaseKey';
 
 const createEditor = async (initialText: string, defaultEnabled = false) => {
 	const editor = await createTestEditor(initialText, EditorSelection.cursor(0), [], [

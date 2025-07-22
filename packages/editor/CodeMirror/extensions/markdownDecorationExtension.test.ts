@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
-import createTestEditor from '../testUtil/createTestEditor';
-import decoratorExtension from './decoratorExtension';
+import createTestEditor from '../testing/createTestEditor';
+import decoratorExtension from './markdownDecorationExtension';
 
 jest.retryTimes(2);
 

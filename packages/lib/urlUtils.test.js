@@ -14,6 +14,7 @@ describe('urlUtils', () => {
 		expect(urlUtils.prependBaseUrl('//somewhereelse.com/testing.html', 'http://example.com/something')).toBe('http://somewhereelse.com/testing.html');
 		expect(urlUtils.prependBaseUrl('', 'http://example.com/something')).toBe('http://example.com/something');
 		expect(urlUtils.prependBaseUrl('testing.html', '')).toBe('testing.html');
+		expect(urlUtils.prependBaseUrl('/testing.html', '')).toBe('/testing.html');
 
 		// It shouldn't prepend anything for these:
 		expect(urlUtils.prependBaseUrl('mailto:emailme@example.com', 'http://example.com')).toBe('mailto:emailme@example.com');
@@ -91,4 +92,22 @@ describe('urlUtils', () => {
 		}
 	}));
 
+	it('urlProtocol should detect file protocol URLs', () => {
+		expect(urlUtils.urlProtocol('file:/test')).toBe('file:');
+		expect(urlUtils.urlProtocol('file://test')).toBe('file:');
+		expect(urlUtils.urlProtocol('file:///test')).toBe('file:');
+		expect(urlUtils.urlProtocol('file://C:\\Users\\test`')).toBe('file:');
+	});
+
+	it('urlProtocol should return null for non-empty URLs with no protocol', () => {
+		expect(urlUtils.urlProtocol('invalid!protocol:/test')).toBe(null);
+		expect(urlUtils.urlProtocol('!protocol:/test')).toBe(null);
+		expect(urlUtils.urlProtocol('.protocol:/test')).toBe(null);
+	});
+
+	it('urlProtocol should support protocols with uppercase characters, hyphens, and +s', () => {
+		expect(urlUtils.urlProtocol('ValidProtocol:/test')).toBe('validprotocol:');
+		expect(urlUtils.urlProtocol('valid-protocol:/test')).toBe('valid-protocol:');
+		expect(urlUtils.urlProtocol('valid+protocol:/test')).toBe('valid+protocol:');
+	});
 });

@@ -5,10 +5,10 @@
 import createEditor from './createEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
-import loadLanguages from './testUtil/loadLanguages';
+import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
-import createEditorSettings from './testUtil/createEditorSettings';
+import createEditorSettings from './testing/createEditorSettings';
 
 
 describe('createEditor', () => {

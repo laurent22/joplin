@@ -1,8 +1,8 @@
 import { EditorSelection, EditorState } from '@codemirror/state';
-import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './MarkdownMathExtension';
+import { blockMathTagName, inlineMathContentTagName, inlineMathTagName } from './markdownMathExtension';
 
-import createTestEditor from '../testUtil/createTestEditor';
-import findNodesWithName from '../testUtil/findNodesWithName';
+import createTestEditor from '../testing/createTestEditor';
+import findNodesWithName from '../testing/findNodesWithName';
 
 // Creates an EditorState with math and markdown extensions
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {

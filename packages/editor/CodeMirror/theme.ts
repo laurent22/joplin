@@ -8,7 +8,7 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './markdown/MarkdownMathExtension';
+import { inlineMathTag, mathTag } from './extensions/markdownMathExtension';
 import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
@@ -188,8 +188,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
-		// Apply maximum width styles to individual lines.
-		'& .cm-line': theme.contentMaxWidth ? {
+		'&.cm-editor .cm-content': theme.contentMaxWidth ? {
 			maxWidth: theme.contentMaxWidth,
 
 			// Center

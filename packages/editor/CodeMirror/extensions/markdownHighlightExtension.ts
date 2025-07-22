@@ -1,5 +1,5 @@
 import { tags, Tag } from '@lezer/highlight';
-import { MarkdownConfig, InlineContext } from '@lezer/markdown';
+import { MarkdownConfig, InlineContext, MarkdownExtension } from '@lezer/markdown';
 
 const equalsSignCharcode = 61;
 
@@ -16,7 +16,7 @@ const isSpaceOrEmpty = (text: string) => text.match(/^\s*$/);
 // Markdown extension for recognizing highlighting. This is similar to the upstream
 // extension for strikethrough:
 // https://github.com/lezer-parser/markdown/blob/d6f0aa095722329a0188b9c7afe207dab4835e55/src/extension.ts#L10
-const HighlightConfig: MarkdownConfig = {
+const highlightConfig: MarkdownConfig = {
 	defineNodes: [
 		{
 			name: highlightTagName,
@@ -59,7 +59,7 @@ const HighlightConfig: MarkdownConfig = {
 	}],
 };
 
-const MarkdownHighlightExtension: MarkdownConfig[] = [
-	HighlightConfig,
+const markdownHighlightExtension: MarkdownExtension = [
+	highlightConfig,
 ];
-export default MarkdownHighlightExtension;
+export default markdownHighlightExtension;
