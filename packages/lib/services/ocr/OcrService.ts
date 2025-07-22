@@ -35,18 +35,18 @@ export default class OcrService {
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
 	private isProcessingResources_ = false;
-	private ocrQueue_: TaskQueue = null;
-	private htrQueue_: TaskQueue = null;
+	private printedTextQueue_: TaskQueue = null;
+	private handwrittenTextQueue_: TaskQueue = null;
 
 	public constructor(drivers: OcrDriverBase[]) {
 		this.drivers_ = drivers;
-		this.ocrQueue_ = new TaskQueue('printed', logger);
-		this.ocrQueue_.setConcurrency(5);
-		this.ocrQueue_.keepTaskResults = false;
+		this.printedTextQueue_ = new TaskQueue('printed', logger);
+		this.printedTextQueue_.setConcurrency(5);
+		this.printedTextQueue_.keepTaskResults = false;
 
-		this.htrQueue_ = new TaskQueue('handwritten', logger);
-		this.htrQueue_.setConcurrency(1);
-		this.htrQueue_.keepTaskResults = false;
+		this.handwrittenTextQueue_ = new TaskQueue('handwritten', logger);
+		this.handwrittenTextQueue_.setConcurrency(1);
+		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
 	private async pdfExtractDir(): Promise<string> {
@@ -185,19 +185,19 @@ export default class OcrService {
 
 				for (const resource of ocrResources) {
 					inProcessResourceIds.push(resource.id);
-					await this.ocrQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+					await this.printedTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
 				}
 
 				const htrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.HandwrittenText);
 
 				for (const resource of htrResources) {
 					inProcessResourceIds.push(resource.id);
-					await this.htrQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+					await this.handwrittenTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
 				}
 			}
 
-			await this.ocrQueue_.waitForAll();
-			await this.htrQueue_.waitForAll();
+			await this.printedTextQueue_.waitForAll();
+			await this.handwrittenTextQueue_.waitForAll();
 
 			if (totalProcessed) {
 				eventManager.emit(EventName.OcrServiceResourcesProcessed);
@@ -236,8 +236,8 @@ export default class OcrService {
 		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
 		this.maintenanceTimer_ = null;
 		this.isRunningInBackground_ = false;
-		await this.ocrQueue_.stop();
-		await this.htrQueue_.stop();
+		await this.printedTextQueue_.stop();
+		await this.handwrittenTextQueue_.stop();
 	}
 
 }
