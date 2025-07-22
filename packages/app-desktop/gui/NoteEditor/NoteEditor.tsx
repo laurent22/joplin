@@ -466,6 +466,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
+		showConvertHtmlToMarkdownMessage: props.showConvertHtmlToMarkdownMessage,
 	};
 
 	let editor = null;
@@ -488,10 +489,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 		setShowRevisions(false);
 	}, []);
 
-	const onBannerConvertItToMarkdown = useCallback(async (_event: React.MouseEvent<HTMLParagraphElement>) => {
+	const onBannerConvertItToMarkdown = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
 		if (!props.selectedNoteIds || props.selectedNoteIds.length === 0) return;
 		await CommandService.instance().execute('convertHtmlNote', props.selectedNoteIds[0]);
 	}, [props.selectedNoteIds]);
+
+	const onHideBannerConvertItToMarkdown = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		Setting.setValue('editor.showConvertHtmlToMarkdownMessage', false);
+	};
 
 	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
@@ -638,14 +645,19 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const theme = themeStyle(props.themeId);
 
 	function renderConvertHtmlToMarkdown(): React.ReactNode {
+		if (!props.showConvertHtmlToMarkdownMessage) return null;
+
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
 		if (note.markup_language !== MarkupLanguage.Html) return null;
 
 		return (
 			<div style={styles.resourceWatchBanner}>
-				<p onClick={onBannerConvertItToMarkdown}
-					style={styles.resourceWatchBannerLine}>
-					{_('This note is in HTML format and may be be difficult to edit. Convert it to Markdown to edit it more easily')}
+				<p style={styles.resourceWatchBannerLine}>
+					{_('This note is in HTML format and may be be difficult to edit. Convert it to Markdown to edit it more easily.')}
+					{ ' ' }
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onBannerConvertItToMarkdown}>{`${_('Convert it')}`}</a>
+					{' / '}
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onHideBannerConvertItToMarkdown}>{_('Don\'t show this message again')}</a>
 				</p>
 			</div>
 		);
@@ -742,6 +754,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
+		showConvertHtmlToMarkdownMessage: state.settings['editor.showConvertHtmlToMarkdownMessage'],
 	};
 };
 

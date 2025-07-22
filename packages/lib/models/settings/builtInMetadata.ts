@@ -711,6 +711,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
+		'editor.showConvertHtmlToMarkdownMessage': {
+			value: true,
+			advanced: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop],
+			label: () => _('Show message about converting note to Markdown'),
+			description: () => _('Enables a message above the editor to convert HTML note to Markdown. Disabling this will will only hide the message, the command will still be available on Note menu.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 		'editor.pastePreserveColors': {
 			value: false,
 			type: SettingItemType.Bool,
