@@ -63,7 +63,7 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
-import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
+import OcrDriverPrintedText from '../services/ocr/drivers/OcrDriverPrintedText';
 import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
@@ -1112,7 +1112,7 @@ const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
 };
 
 export const newOcrService = () => {
-	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
+	const driver = new OcrDriverPrintedText({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
 	return new OcrService([driver]);
 };
 

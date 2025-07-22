@@ -54,7 +54,7 @@ import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
-import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import OcrDriverPrintedText from '@joplin/lib/services/ocr/drivers/OcrDriverPrintedText';
 import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
@@ -338,7 +338,7 @@ class Application extends BaseApplication {
 		if (Setting.value('ocr.clearLanguageDataCache')) {
 			Setting.setValue('ocr.clearLanguageDataCache', false);
 			try {
-				await OcrDriverTesseract.clearLanguageDataCache();
+				await OcrDriverPrintedText.clearLanguageDataCache();
 			} catch (error) {
 				this.logger().warn('OCR: Failed to clear language data cache.', error);
 			}
@@ -351,7 +351,7 @@ class Application extends BaseApplication {
 				const Tesseract = (window as any).Tesseract;
 
 				const drivers: OcrDriverBase[] = [];
-				drivers.push(new OcrDriverTesseract(
+				drivers.push(new OcrDriverPrintedText(
 					{ createWorker: Tesseract.createWorker },
 					{
 						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
