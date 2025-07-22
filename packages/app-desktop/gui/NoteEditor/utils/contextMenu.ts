@@ -147,8 +147,8 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 					return;
 				}
 
-				if (!Setting.value('ocr.enableRemoteHandwrittenTranscription')) {
-					await shim.showMessageBox(_('This feature is disabled by default, you need to manually enable it by turning on the option to \'Enable handwritten transcription (Remote OCR)\'.'), { type: MessageBoxType.Error });
+				if (!Setting.value('ocr.handwrittenTextDriverEnabled')) {
+					await shim.showMessageBox(_('This feature is disabled by default, you need to manually enable it by turning on the option to \'Enable handwritten transcription\'.'), { type: MessageBoxType.Error });
 					return;
 				}
 
