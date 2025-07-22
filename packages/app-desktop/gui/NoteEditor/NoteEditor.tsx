@@ -654,7 +654,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			<div style={styles.resourceWatchBanner}>
 				<p style={styles.resourceWatchBannerLine}>
 					{_('This note is in HTML format and may be be difficult to edit. Convert it to Markdown to edit it more easily.')}
-					{ ' ' }
+					&nbsp;
 					<a href="#" style={styles.resourceWatchBannerAction} onClick={onBannerConvertItToMarkdown}>{`${_('Convert it')}`}</a>
 					{' / '}
 					<a href="#" style={styles.resourceWatchBannerAction} onClick={onHideBannerConvertItToMarkdown}>{_('Don\'t show this message again')}</a>
