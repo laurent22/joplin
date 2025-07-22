@@ -16,7 +16,7 @@ export default class HtrDriver extends OcrDriverBase {
 
 	private timeBetweenRequests = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
 	private JobIdKey = 'HtrDriver::JobId::';
-	private shouldStopRequesting = false;
+	private disposed_ = false;
 
 	public constructor(interval?: number[]) {
 		super();
@@ -81,7 +81,7 @@ export default class HtrDriver extends OcrDriverBase {
 		logger.info(`${resourceId}: Checking if job is finished...`);
 		let i = 0;
 		while (true) {
-			if (this.shouldStopRequesting) break;
+			if (this.disposed_) break;
 
 			const api = await this.api();
 
@@ -125,7 +125,7 @@ export default class HtrDriver extends OcrDriverBase {
 	}
 
 	public dispose() {
-		this.shouldStopRequesting = true;
+		this.disposed_ = true;
 		return Promise.resolve();
 	}
 
