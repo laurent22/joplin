@@ -121,7 +121,7 @@
     "jetifier": "2.0.0",
     "js-draw": "1.30.0",
     "jsdom": "25.0.1",
-    "nodemon": "3.1.9",
+    "nodemon": "3.1.10",
     "punycode": "2.3.1",
     "react-dom": "19.0.0",
     "react-native-web": "0.20.0",
