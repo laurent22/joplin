@@ -8,7 +8,7 @@ const MenuItem = bridge().MenuItem;
 import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { NoteEntity, ResourceEntity, ResourceOcrJobType, ResourceOcrStatus } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import Setting from '@joplin/lib/models/Setting';
@@ -162,7 +162,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await Resource.save({
 					id: resource.id,
 					ocr_status: ResourceOcrStatus.Todo,
-					ocr_driver_id: ResourceOcrJobType.Htr,
+					ocr_driver_id: ResourceOcrDriverId.HandwrittenText,
 					ocr_details: '',
 					ocr_error: '',
 					ocr_text: '',
