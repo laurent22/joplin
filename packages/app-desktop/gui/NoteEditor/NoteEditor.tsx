@@ -648,6 +648,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		if (!props.showConvertHtmlToMarkdownMessage) return null;
 
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
+		if (!note) return null;
 		if (note.markup_language !== MarkupLanguage.Html) return null;
 
 		return (
