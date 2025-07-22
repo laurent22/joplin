@@ -87,6 +87,8 @@ export default class HtrDriver extends OcrDriverBase {
 
 			const response = await api.exec('GET', `api/transcribe/${jobId}`);
 
+			if (this.disposed_) break;
+
 			if (response.state === 'completed') {
 				logger.info(`${resourceId}: Finished.`);
 				return {
