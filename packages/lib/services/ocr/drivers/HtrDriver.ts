@@ -14,13 +14,13 @@ type CreateJobResult = { jobId: string };
 
 export default class HtrDriver extends OcrDriverBase {
 
-	private timeBetweenRequests = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
-	private JobIdKey = 'HtrDriver::JobId::';
+	private timeBetweenRequests_ = [10 * 1000, 15 * 1000, 30 * 1000, 60 * 1000];
+	private JobIdKey_ = 'HtrDriver::JobId::';
 	private disposed_ = false;
 
 	public constructor(interval?: number[]) {
 		super();
-		this.timeBetweenRequests = interval ?? this.timeBetweenRequests;
+		this.timeBetweenRequests_ = interval ?? this.timeBetweenRequests_;
 	}
 
 	public get driverId() {
@@ -30,7 +30,7 @@ export default class HtrDriver extends OcrDriverBase {
 	public async recognize(_language: string, filePath: string, resourceId: string): Promise<RecognizeResult> {
 		logger.info(`${resourceId}: Starting to recognize resource from ${filePath}`);
 
-		const key = `${this.JobIdKey}${resourceId}`;
+		const key = `${this.JobIdKey_}${resourceId}`;
 		let jobId = await KvStore.instance().value<string>(key);
 
 		try {
@@ -115,10 +115,10 @@ export default class HtrDriver extends OcrDriverBase {
 	}
 
 	private getInterval(index: number) {
-		if (index >= this.timeBetweenRequests.length) {
-			return this.timeBetweenRequests[this.timeBetweenRequests.length - 1];
+		if (index >= this.timeBetweenRequests_.length) {
+			return this.timeBetweenRequests_[this.timeBetweenRequests_.length - 1];
 		}
-		return this.timeBetweenRequests[index];
+		return this.timeBetweenRequests_[index];
 	}
 
 	private async api() {
