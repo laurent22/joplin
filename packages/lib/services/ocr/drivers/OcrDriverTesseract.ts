@@ -8,7 +8,7 @@ import filterOcrText from '../utils/filterOcrText';
 import Resource from '../../../models/Resource';
 import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
 
-const logger = Logger.create('OcrDriverPrintedText');
+const logger = Logger.create('OcrDriverTesseract');
 
 interface Tesseract {
 	createWorker: typeof createWorker;
@@ -42,7 +42,7 @@ interface Options {
 	languageDataPath: string|null;
 }
 
-export default class OcrDriverPrintedText extends OcrDriverBase {
+export default class OcrDriverTesseract extends OcrDriverBase {
 
 	private tesseract_: Tesseract = null;
 	private workerPath_: string;
