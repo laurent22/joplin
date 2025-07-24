@@ -173,7 +173,7 @@ export interface State extends WindowState {
 	editorNoteReloadTimeRequest: number;
 
 	allowSelectionInOtherFolders: boolean;
-	noteIdsConverted: string[];
+	noteIdConverted: string;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -244,7 +244,7 @@ export const defaultState: State = {
 	mustAuthenticate: false,
 	allowSelectionInOtherFolders: false,
 	editorNoteReloadTimeRequest: 0,
-	noteIdsConverted: [],
+	noteIdConverted: '',
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1075,8 +1075,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'NOTE_IDS_CONVERTED':
-			draft.noteIdsConverted = action.value;
+		case 'NOTE_ID_CONVERTED':
+			draft.noteIdConverted = action.value;
 			break;
 
 		case 'ITEMS_TRASHED':
