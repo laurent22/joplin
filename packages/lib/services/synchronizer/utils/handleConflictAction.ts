@@ -6,6 +6,9 @@ import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
 import time from '../../../time';
 import { SyncAction, conflictActions } from './types';
+import Setting from '../../../models/Setting';
+import JoplinError from '../../../JoplinError';
+import { _ } from '../../../locale';
 
 const logger = Logger.create('handleConflictAction');
 
@@ -29,6 +32,10 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 		} else {
+			if (ItemClass.name === 'Folder' && Setting.value('sync.wipeOutFailSafe')) {
+				throw new JoplinError(_('Fail-safe: Sync was interrupted because the notebook [%s] and all its notes and sub-notebooks are about to be deleted. To override this behaviour disable the fail-safe in the sync settings.', local.title), 'failSafe');
+			}
+
 			await ItemClass.delete(local.id, {
 				changeSource: ItemChange.SOURCE_SYNC,
 				sourceDescription: 'sync: handleConflictAction: non-note conflict',
