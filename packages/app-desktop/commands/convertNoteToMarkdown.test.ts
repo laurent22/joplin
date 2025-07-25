@@ -1,4 +1,4 @@
-import * as convertHtmlNote from './convertHtmlNote';
+import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { AppState, createAppDefaultState } from '../app.reducer';
 import Note from '@joplin/lib/models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -6,7 +6,7 @@ import { setupDatabase } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
-describe('convertHtmlNote', () => {
+describe('convertNoteToMarkdown', () => {
 	let state: AppState = undefined;
 
 	beforeEach(async () => {
@@ -19,7 +19,7 @@ describe('convertHtmlNote', () => {
 		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlNote.runtime().execute({ state, dispatch: () => {} });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: () => {} });
 
 		const refreshedNote = await Note.load(htmlNote.id);
 
@@ -48,7 +48,7 @@ describe('convertHtmlNote', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlNote.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
 
 		expect(dispatchFn).toHaveBeenCalledTimes(2);
 		expect(noteConvertedToMarkdownId).not.toBe('');
@@ -84,7 +84,7 @@ describe('convertHtmlNote', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlNote.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
 
 		expect(dispatchFn).toHaveBeenCalledTimes(2);
 

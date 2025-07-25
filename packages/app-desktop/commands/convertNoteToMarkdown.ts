@@ -6,7 +6,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
 
 export const declaration: CommandDeclaration = {
-	name: 'convertHtmlNote',
+	name: 'convertNoteToMarkdown',
 	label: () => _('Convert it to Markdown'),
 };
 

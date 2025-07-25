@@ -492,7 +492,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const onBannerConvertItToMarkdown = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 		if (!props.selectedNoteIds || props.selectedNoteIds.length === 0) return;
-		await CommandService.instance().execute('convertHtmlNote', props.selectedNoteIds[0]);
+		await CommandService.instance().execute('convertNoteToMarkdown', props.selectedNoteIds[0]);
 	}, [props.selectedNoteIds]);
 
 	const onHideBannerConvertItToMarkdown = async (event: React.MouseEvent<HTMLAnchorElement>) => {

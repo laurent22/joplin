@@ -155,8 +155,8 @@ packages/app-desktop/app.reducer.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
-packages/app-desktop/commands/convertHtmlNote.test.js
-packages/app-desktop/commands/convertHtmlNote.js
+packages/app-desktop/commands/convertNoteToMarkdown.test.js
+packages/app-desktop/commands/convertNoteToMarkdown.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyToClipboard.js
 packages/app-desktop/commands/editProfileConfig.js

@@ -1,5 +1,5 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
-import * as convertHtmlNote from './convertHtmlNote';
+import * as convertNoteToMarkdown from './convertNoteToMarkdown';
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
 import * as editProfileConfig from './editProfileConfig';
@@ -25,7 +25,7 @@ import * as toggleSafeMode from './toggleSafeMode';
 import * as toggleTabMovesFocus from './toggleTabMovesFocus';
 
 const index: any[] = [
-	convertHtmlNote,
+	convertNoteToMarkdown,
 	copyDevCommand,
 	copyToClipboard,
 	editProfileConfig,
