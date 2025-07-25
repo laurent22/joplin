@@ -11,8 +11,8 @@ describe('FileStorage', () => {
 		const name = await fs.store('./test_file.png');
 
 		const destination = join('images', name);
-		const fileStillExists = await exists(destination);
-		expect(fileStillExists).toBe(true);
+		const destinationStillExists = await exists(destination);
+		expect(destinationStillExists).toBe(true);
 
 		await remove(destination);
 	});
@@ -24,8 +24,8 @@ describe('FileStorage', () => {
 		const fs = new FileStorage();
 		const name = await fs.store('./test_file.png');
 
-		const fileStillExists = await exists('./test_file.png');
-		expect(fileStillExists).toBe(false);
+		const originalStillExists = await exists('./test_file.png');
+		expect(originalStillExists).toBe(false);
 
 		await remove(join('images', name));
 	});
