@@ -116,7 +116,6 @@ const useStyles = (theme: Theme) => {
 				backgroundColor: theme.backgroundColor3,
 			},
 			input: {
-				flexBasis: 0,
 				flexGrow: 1,
 				height: buttonSize,
 				backgroundColor: theme.backgroundColor4,
@@ -194,13 +193,13 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 
 	const themeId = props.editorSettings.themeId;
-	const clearButton = (
+	const closeButton = (
 		<ActionButton
 			themeId={themeId}
 			styles={styles}
-			iconName="close-circle"
-			onPress={() => updateSearchState({ searchText: '' })}
-			title={_('Clear')}
+			iconName="close"
+			onPress={control.hideSearch}
+			title={_('Close')}
 		/>
 	);
 
@@ -336,7 +335,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 
 	const simpleLayout = (
 		<View style={{ flexDirection: 'row' }}>
-			{ clearButton }
+			{ closeButton }
 			{ searchTextInput }
 			{ showDetailsButton }
 			{ toPrevButton }
@@ -347,7 +346,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const advancedLayout = (
 		<View style={{ flexDirection: 'column', alignItems: 'center' }}>
 			<View style={{ flexDirection: 'row' }}>
-				{ clearButton }
+				{ closeButton }
 				{ labeledSearchInput }
 				{ hideDetailsButton }
 				{ toPrevButton }
