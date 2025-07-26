@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -4694,7 +4694,7 @@ msgstr "Publicera anteckningar"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
-msgstr "Publisera anteckning..."
+msgstr "Publicera anteckning..."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:159
 msgid "Publish Notes"
@@ -6679,16 +6679,16 @@ msgstr "Oordnad lista"
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
 #, fuzzy
 msgid "Unpublish"
-msgstr "Sluta publisera anteckningen"
+msgstr "Avpublicera anteckningen"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
 #, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Sluta publisera anteckningen"
+msgstr "Avpublicera anteckningen"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
-msgstr "Sluta publisera anteckningen"
+msgstr "Avpublicera anteckningen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
 msgid "Unshare"
