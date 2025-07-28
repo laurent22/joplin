@@ -74,6 +74,7 @@ msgstr "(Du kan inaktivera denna prompt i alternativen)"
 #: packages/app-cli/app/command-share.ts:31
 msgid "[None]"
 msgstr "[Ingen]"
+msgstr "[Ingen]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -171,6 +172,7 @@ msgstr[1] "%d anteckningar kommer att raderas permanent. Fortsätta?"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
+msgstr "%d foto(n) tagna"
 msgstr "%d foto(n) tagna"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
@@ -1168,9 +1170,9 @@ msgstr "Kommande larm"
 #: packages/lib/models/settings/builtInMetadata.ts:1482
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Kommaseparerad lista över sökvägar till kataloger för att läsa certifikaten "
 "från eller sökvägen till enskilda cert-filer. Till exempel: /my/cert_dir,/"
@@ -2723,7 +2725,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr "Få en offert"
+msgstr "Begär en offert"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -3721,7 +3723,7 @@ msgstr "Flytta åt höger"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
-msgstr "Flytta till anteckningsboken"
+msgstr "Flytta till anteckningsbok"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:67
 msgid "Move to notebook:"
