@@ -18,7 +18,7 @@ msgstr ""
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
-"Language-Team: Spanish <lucas.vieites@gmail.com>\n"
+"Language-Team: Spanish <contacto@ericdq.com>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,12 +29,12 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Cámara: Permite tomar fotografías y adjuntarlas a una nota."
+msgstr "- Cámara: permite tomar una foto y adjuntarla a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:614
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Localización: Permite adjuntar información de geolocalización a una nota."
+"- Ubicación: Permite adjuntar información de geolocalización a una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
 msgid ""
@@ -81,7 +81,7 @@ msgstr "(Puede desactivar este aviso en las opciones)"
 
 #: packages/app-cli/app/command-share.ts:31
 msgid "[None]"
-msgstr "[Ninguno]"
+msgstr "[none]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -291,11 +291,10 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<etiqueta-comando> puede ser «add», «remove», «list», o «notetags» para "
-"asignar o eliminar [etiqueta] de [nota], o para listar las notas asociadas "
-"con [etiqueta], o para listar las etiquetas asociadas con [nota]. El comando "
-"`tag list` puede ser usado para listar todas las etiquetas (use -l para la "
-"opción larga)."
+"<tag-command> Puede ser \"\"add\", \"remove\", \"list\", o \"notetags\" para "
+"asignar o eliminar [tag] de [note], para enumerar notas asociadas con [tag] "
+"o para enumerar etiquetas asociadas con [note]. El comando `tag list` se "
+"puede usar para enumerar todas las etiquetas (use -l para la opción larga)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -304,7 +303,7 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<tarea-comando> puede ser «toggle» o «clear». Usa «toggle» para cambiar la "
+"<todo-command> puede ser «toggle» o «clear». Usa «toggle» para cambiar la "
 "tarea dada entre estado completado y sin completar. (Si el objetivo es una "
 "nota regular se convertirá en una tarea). Usa «clear» para convertir la "
 "tarea a una nota normal."
@@ -1782,7 +1781,7 @@ msgstr "Elimina una libreta sin pedir confirmación."
 
 #: packages/app-cli/app/command-rmnote.ts:14
 msgid "Deletes the notes matching <note-pattern>."
-msgstr "Elimina las notas que coincidan con <nota-patrón>."
+msgstr "Elimina las notas que coincidan con <note-pattern>."
 
 #: packages/app-cli/app/command-rmnote.ts:19
 msgid "Deletes the notes without asking for confirmation."
@@ -2060,7 +2059,7 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Duplica las notas que coincidan con <nota> a [libreta]. Si no se especifica "
+"Duplica las notas que coincidan con <note> a [notebook]. Si no se especifica "
 "una libreta la nota se duplica en la libreta actual."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
@@ -2198,15 +2197,15 @@ msgstr "Activar sintaxis ++insert++"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1032
 msgid "Enable ==mark== syntax"
-msgstr "Habilitar ==marca== sintaxis"
+msgstr "Activar==marca== sintaxis"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1035
 msgid "Enable ~sub~ syntax"
-msgstr "Habilitar la sintaxis ~sub~"
+msgstr "Activar la sintaxis ~sub~"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1038
 msgid "Enable abbreviation syntax"
-msgstr "Habilitar sintaxis de abreviaturas"
+msgstr "Activar sintaxis de abreviaturas"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1029
 msgid "Enable audio player"
@@ -2223,11 +2222,11 @@ msgstr "Habilitar la sintaxis de la lista de definiciones"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:226
 #: packages/app-mobile/components/screens/encryption-config.tsx:317
 msgid "Enable encryption"
-msgstr "Habilitar cifrado"
+msgstr "Activar cifrado"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1052
 msgid "Enable file:// URLs for images and videos"
-msgstr "Habilitar URL de file:// para imágenes y videos"
+msgstr "Activar URL de file:// para imágenes y videos"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1033
 msgid "Enable footnotes"
@@ -2243,7 +2242,7 @@ msgstr "Activar Linkify"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1039
 msgid "Enable markdown emoji"
-msgstr "Activar sintaxis de emojis markdown"
+msgstr "Activar emoji markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1025
 msgid "Enable math expressions"
@@ -2259,11 +2258,11 @@ msgstr "Activar extensión de tablas multimarkdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1577
 msgid "Enable note history"
-msgstr "Habilitar historial de notas"
+msgstr "Activar el historial de notas"
 
 #: packages/lib/models/settings/builtInMetadata.ts:553
 msgid "Enable optical character recognition (OCR)"
-msgstr "Habilitar el reconocimiento óptico de caracteres (OCR)"
+msgstr "Activar el reconocimiento óptico de caracteres (OCR)"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Enable or disable plugins"
@@ -2276,7 +2275,7 @@ msgstr "Activar visor de PDF"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:979
 msgid "Enable plugin support"
-msgstr "Habilitar la compatibilidad con complementos"
+msgstr "Activar soporte de complementos"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1021
 msgid "Enable soft breaks"
@@ -2284,11 +2283,11 @@ msgstr "Activar saltos de línea"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1406
 msgid "Enable spell checking in Markdown editor"
-msgstr "Habilitar la revisión ortográfica en el editor de Markdown"
+msgstr "Activar la revisión ortográfica en el editor de Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:863
 msgid "Enable spellcheck in the text editor"
-msgstr "Habilitar el corrector ortográfico en el editor de texto"
+msgstr "Activar el corrector ortográfico en el editor de texto"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1034
 msgid "Enable table of contents extension"
@@ -2296,11 +2295,11 @@ msgstr "Activar extensión de tabla de contenidos"
 
 #: packages/lib/models/settings/builtInMetadata.ts:874
 msgid "Enable the Markdown toolbar"
-msgstr "Habilitar la barra de herramientas Markdown"
+msgstr "Activar la barra de herramientas Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1022
 msgid "Enable typographer support"
-msgstr "Activar el soporte de tipógrafo"
+msgstr "Activar la compatibilidad con tipógrafos"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1030
 msgid "Enable video player"
@@ -2332,7 +2331,7 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
-"Habilita el reemplazo de patrones de Markdown en el Editor de texto "
+"Activa el reemplazo de patrones de Markdown en el Editor de texto "
 "enriquecido. Por ejemplo, cuando está habilitado, al escribir **negrita** se "
 "crea texto en negrita."
 
@@ -2762,9 +2761,9 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Obtiene o establece un valor de configuración. Si no se proporciona [valor], "
-"se mostrará el valor de [nombre]. Si no se proporcionan [nombre] ni [valor], "
-"se mostrará la configuración actual."
+"Obtiene o establece un valor de configuración. Si no se proporciona [value], "
+"se mostrará el valor de [name]. Si no se proporcionan [name] ni [value], se "
+"mostrará la configuración actual."
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
@@ -3286,7 +3285,7 @@ msgstr "Servidor de Joplin"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
-msgstr "Negocio de servidores Joplin"
+msgstr "Servidor Joplin para empresas"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
@@ -3719,8 +3718,8 @@ msgstr ""
 #: packages/app-mobile/components/ScreenHeader/index.tsx:567
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
-msgstr[0] "¿Desea mover %d notas a libreta «%s»?"
-msgstr[1] "¿Desea mover %d notas a libreta «%s»?"
+msgstr[0] "¿Mover %d nota a la libreta \"%s\"?"
+msgstr[1] "¿Mover %d nota a la libreta \"%s\"?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -3766,7 +3765,7 @@ msgstr "Mover hacia arriba"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
-msgstr "Mueve la nota <nota> a [libreta]"
+msgstr "Mueve el <item> dado a [notebook]"
 
 #: packages/app-cli/app/cli-utils.js:177
 #: packages/app-cli/app/setupCommand.ts:23
@@ -3946,7 +3945,7 @@ msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 "No hay editor de texto definido. Por favor configure uno usando `config "
-"editor <editor-ruta>`"
+"editor <editor-path>`"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:63
 msgid "No updates available"
@@ -4865,7 +4864,7 @@ msgstr "Renombrar etiqueta:"
 
 #: packages/app-cli/app/command-ren.ts:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Renombra el <elemento> dado (nota o libreta) a <nombre>."
+msgstr "Renombra el <item> dado (nota o libreta) a <name>."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
@@ -4982,7 +4981,7 @@ msgstr "Restaurar libreta"
 
 #: packages/app-cli/app/command-restore.ts:12
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Restaure los elementos que coincidan <pattern> desde la papelera."
+msgstr "Restaure los elementos que coincidan con <pattern> desde la papelera."
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
@@ -5178,7 +5177,7 @@ msgstr "Buscar..."
 
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr "Busca el <patrón> dado en todas las notas."
+msgstr "Busca el <patern> dado en todas las notas."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:39
 msgid "See changelog"
@@ -5273,7 +5272,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Asigna la propiedad <nombre> de la <nota> dada al [valor] dado. Propiedades "
+"Asigna la propiedad <name> de la <note> dada al [value] dada. Propiedades "
 "posibles son:\n"
 "\n"
 "%s"
@@ -5331,8 +5330,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
-"Comparte o deja de compartir la [libreta] especificado con [usuario]. "
-"Requiere Joplin Cloud o Joplin Server."
+"Comparte o deja de compartir la [notebook] especificado con [user]. Requiere "
+"Joplin Cloud o Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5517,7 +5516,7 @@ msgstr "Ordenar líneas seleccionadas"
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Ordena los elementos por <campo> (ej. title, updated_time, created_time)."
+"Ordena los elementos por <field> (ej. title, updated_time, created_time)."
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:9
 msgid "Source"
@@ -5742,7 +5741,7 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Cambia a [libreta] - todas las demás operaciones se realizarán en esta "
+"Cambia a [notebook] - todas las demás operaciones se realizarán en esta "
 "libreta."
 
 #: packages/lib/utils/joplinCloud/index.ts:170
@@ -6220,7 +6219,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ha habido un [conflicto](%s) en el adjunto siguiente:.\n"
+"Ha habido un [conflict](%s) en el adjunto siguiente:.\n"
 "\n"
 "%s"
 
@@ -6625,7 +6624,7 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Escriba `help [comando]` para obtener más información sobre el comando o "
+"Escriba `help [command]` para obtener más información sobre el comando o "
 "escriba `help all` para obtener toda la información acerca del uso del "
 "programa."
 

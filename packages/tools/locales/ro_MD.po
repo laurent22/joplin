@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
 "Language: ro_MD\n"
@@ -48,7 +50,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:76
 msgid "(In plugin: %s)"
-msgstr "(În plugin-ul: %s)"
+msgstr "(în plugin-ul: %s)"
 
 #: packages/app-mobile/components/side-menu-content.tsx:265
 msgid "(level %d)"
@@ -56,11 +58,11 @@ msgstr "(nivel %d)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
-msgstr "(Nimic)"
+msgstr "(nimic)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(doar citire)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -73,9 +75,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Poți dezactiva această solicitare în opțiuni)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "Niciuna"
+msgstr "[niciuna]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -178,7 +179,7 @@ msgstr[2] "%d de notițe vor fi șterse permanent. Continui?"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d poze făcute"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -237,9 +238,8 @@ msgid "%s cannot be less than %s"
 msgstr "%s nu poate fi mai mic decît %s"
 
 #: packages/app-cli/app/command-share.ts:201
-#, fuzzy
 msgid "%s from %s"
-msgstr "Elimină %s din partajare"
+msgstr "%s din %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
@@ -315,6 +315,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"O listă de cuvinte separate de virgule. Poate fi folosită pentru cuvinte mai "
+"puțin comune, pentru a ajuta transcrierea prin dictare să le scrie corect."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -369,14 +371,12 @@ msgid "Accepted invitations"
 msgstr "Invitații acceptate"
 
 #: packages/app-cli/app/command-share.ts:178
-#, fuzzy
 msgid "Accepted: Notebook %s from %s"
-msgstr "Caiet: %s (%s)"
+msgstr "Acceptat: Caiet: %s de la %s"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Accepting share..."
-msgstr "Se creează un raport..."
+msgstr "Se acceptă partajarea..."
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -503,7 +503,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-share.ts:190
 msgid "All shared folders:"
-msgstr ""
+msgstr "Toate dosarele partajate:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -603,13 +603,12 @@ msgstr ""
 "Acest lucru nu poate fi anulat."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
 msgstr ""
-"Ești sigur că dorești să restaurezi aspectul implicit al barelor de unelte?\n"
-"Acest lucru nu poate fi anulat."
+"Ești sigur că dorești să ștergi tot istoricul pentru această notă? Acest "
+"lucru nu poate fi anulat."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
@@ -1176,9 +1175,9 @@ msgstr "Alarmele următoare"
 #: packages/lib/models/settings/builtInMetadata.ts:1482
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Listă separată de virgule de căi de acces la dosare din care se încarcă "
 "certificatele sau calea de acces la fișierele de certificate individuale. De "
@@ -1206,6 +1205,7 @@ msgstr "Paleta de comenzi…"
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Comenzi: `add`, `remove`, `list`, `delete`, `accept`, `leave` și `reject`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1293,7 +1293,7 @@ msgstr "Conectare la Joplin Cloud"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:476
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Conectează-te folosind contul tău organizațional"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1685,9 +1685,8 @@ msgstr "Șterge token-urile expirate"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
-#, fuzzy
 msgid "Delete history"
-msgstr "Activează istoricul notițelor"
+msgstr "Șterge istoricul"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -1928,9 +1927,8 @@ msgid "Do not ask for confirmation."
 msgstr "Nu cere confirmarea."
 
 #: packages/app-cli/app/command-share.ts:66
-#, fuzzy
 msgid "Do not ask for user confirmation."
-msgstr "Nu cere confirmarea."
+msgstr "Nu cere confirmarea utilizatorului."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
@@ -1947,6 +1945,8 @@ msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Nu permite destinatarii partajării să scrie în caietul comun. Valid doar "
+"pentru subcomanda `add`."
 
 #: packages/lib/models/Setting.ts:1229
 msgid "Donate, website"
@@ -2389,14 +2389,12 @@ msgid "Enter password"
 msgstr "Întrodu parola"
 
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:73
-#, fuzzy
 msgid "Enter the code"
-msgstr "Întrodu codul aici"
+msgstr "Întrodu codul"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:43
-#, fuzzy
 msgid "Enter the code:"
-msgstr "Întrodu codul aici"
+msgstr "Întrodu codul:"
 
 #: packages/app-mobile/components/NoteItem.tsx:129
 msgid "Entering selection mode"
@@ -2423,7 +2421,7 @@ msgstr "Eroare deschidere notiță în editor: %s"
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:53
 msgid "Error starting camera: %s"
-msgstr ""
+msgstr "Eroare la pornirea camerei: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
@@ -2568,7 +2566,7 @@ msgstr ""
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr ""
+msgstr "A eșuat conectarea la contul tău. Te rog încearcă din nou."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2652,7 +2650,7 @@ msgstr "Focalizează pe titlu"
 
 #: packages/app-cli/app/command-share.ts:139
 msgid "Folder \"%s\" is shared with:"
-msgstr ""
+msgstr "Dosarul „%s” este partajat cu:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
@@ -2736,7 +2734,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Obține un estimat"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -2759,7 +2757,7 @@ msgstr ""
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
-msgstr ""
+msgstr "Glosar:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
@@ -3065,9 +3063,8 @@ msgid "In: %s"
 msgstr "În: %s"
 
 #: packages/app-cli/app/command-share.ts:169
-#, fuzzy
 msgid "Incoming shares:"
-msgstr "Alarmele următoare"
+msgstr "Partajări sosite:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3277,9 +3274,8 @@ msgid "Joplin Server"
 msgstr "Server Joplin"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
-#, fuzzy
 msgid "Joplin Server Business"
-msgstr "Server Joplin"
+msgstr "Server Joplin Business"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
@@ -3287,9 +3283,8 @@ msgstr "Email Joplin Server"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
-#, fuzzy
 msgid "Joplin Server Login"
-msgstr "URL server Joplin"
+msgstr "Login server Joplin"
 
 #: packages/lib/models/settings/builtInMetadata.ts:354
 msgid "Joplin Server password"
@@ -3302,7 +3297,7 @@ msgstr "URL server Joplin"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
-msgstr ""
+msgstr "Autentificare SSO Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
@@ -3439,12 +3434,11 @@ msgid "Link"
 msgstr "Legătură"
 
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:21
-#, fuzzy
 msgid "Link created!"
 msgid_plural "Links created!"
-msgstr[0] "Text legătură"
-msgstr[1] "Text legătură"
-msgstr[2] "Text legătură"
+msgstr[0] "Legătură creată!"
+msgstr[1] "Legături create!"
+msgstr[2] "Legături create!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link description"
@@ -3466,9 +3460,8 @@ msgid "Link to note..."
 msgstr "Leagă la notița..."
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:158
-#, fuzzy
 msgid "Links"
-msgstr "Legătură"
+msgstr "Legături"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3509,9 +3502,8 @@ msgstr "Jurnal"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:39
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:69
-#, fuzzy
 msgid "Log in with your web browser"
-msgstr "Autentifică-te cu Dropbox"
+msgstr "Autentifică-te cu navigatorul tău web"
 
 #: packages/app-desktop/gui/MainScreen.tsx:592
 msgid "Login to Joplin Cloud."
@@ -3858,9 +3850,8 @@ msgid "next"
 msgstr "următoarea"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:141
-#, fuzzy
 msgid "Next"
-msgstr "Nextcloud"
+msgstr "Urnătorul"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:272
 msgid "Next match"
@@ -3928,9 +3919,8 @@ msgid "No results"
 msgstr "Fără rezultate"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
-msgstr "Nicio filă selectată"
+msgstr "Nicio revizie selectată"
 
 #: packages/app-cli/app/app.ts:238
 msgid "No such command: %s"
@@ -4027,9 +4017,8 @@ msgid "Note has been saved."
 msgstr "Notița a fost salvată."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
-msgstr "Istoric notițe"
+msgstr "Istoric notiță"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
@@ -4038,9 +4027,8 @@ msgid "Note History"
 msgstr "Istoric notițe"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
-msgstr "Notița a fost salvată."
+msgstr "Istoricul notiței a fost șters."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4153,7 +4141,7 @@ msgstr "OCR: URL sau cale date lingvistice"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: packages/app-desktop/bridge.ts:365 packages/app-desktop/bridge.ts:378
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:408
@@ -4511,6 +4499,8 @@ msgstr ""
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
 msgstr ""
+"Te rog așteaptă cît timp se încarcă pagina de autentificare a organizației "
+"tale..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4574,7 +4564,7 @@ msgstr "Valori posibile: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "Prefer date de ieșire JSON."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4629,9 +4619,8 @@ msgid "Previous match"
 msgstr "Potrivirea anterioară"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1131
-#, fuzzy
 msgid "Previous versions"
-msgstr "Versiunile anterioare ale acestei notițe"
+msgstr "Versiuni anterioare"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:423
@@ -4715,9 +4704,8 @@ msgid "Public-private key pair:"
 msgstr "Pereche de chei publice-private:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
-msgstr "Publică notițele"
+msgstr "Publică notița"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4734,7 +4722,7 @@ msgstr "Publică notițele pe internet"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1149
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Publică/Retrage"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4835,9 +4823,8 @@ msgid "Reject"
 msgstr "Respinge"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Rejecting share..."
-msgstr "Se creează un raport..."
+msgstr "Se respinge partajarea..."
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:107
 msgid "Remove"
@@ -4856,9 +4843,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "Elimini această căutare din panoul lateral?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
-msgstr "Elimină %s din partajare"
+msgstr "S-a eliminat %s din partajare."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -5034,9 +5020,8 @@ msgid "Reverses the sorting order."
 msgstr "Inversează ordinea sortării."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
-msgstr "Revizie: %s (%s)"
+msgstr "Revizie:"
 
 #: packages/lib/versionInfo.ts:65
 msgid "Revision: %s (%s)"
@@ -5205,9 +5190,8 @@ msgid "Select"
 msgstr "Selectează"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
-msgstr "Alege un emoji…"
+msgstr "Alege o revizie…"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:366
@@ -5236,7 +5220,7 @@ msgstr "Selectează un caiet"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Auto-găzduit"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5343,6 +5327,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Partajează sau anulează partajarea pentru [caietul] specificat cu "
+"[utilizatorul]. Necesită Joplin Cloud sau server Joplin."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5533,9 +5519,8 @@ msgid "Source"
 msgstr "Sursă"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
-msgstr "Nu există actualizări"
+msgstr "Cod sursă disponibil"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Source format: %s"
@@ -5740,9 +5725,8 @@ msgid "Switch to the legacy editor"
 msgstr "Comută la editorul învechit"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
-#, fuzzy
 msgid "Switch to the new editor"
-msgstr "Comută la editorul învechit"
+msgstr "Comută la noul editor"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
@@ -6054,6 +6038,8 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"Se pare că editorul markdown învechit a crăpat din cauza unei "
+"incompatibilități cu un plugin. Îți recomandăm să folosești noul editor."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6456,12 +6442,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
 msgstr ""
-"Pentru a permite Joplin să se sincronizeze cu Dropbox, te rog urmează pașii "
-"de mai jos:"
+"Pentru a permite Joplin să se sincronizeze cu contul tău, te rog urmează "
+"pașii de mai jos:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -6733,14 +6718,12 @@ msgid "Unordered list"
 msgstr "Listă neordonată"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Notă de retragere a publicării"
+msgstr "Retrage publicarea"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Notă de retragere a publicării"
+msgstr "Retrage publicarea pentru „%s”"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6755,6 +6738,8 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Retragi partajarea pentru caietul „%s”? Acest lucru va face ca alți "
+"utilizatori să piardă accesul la caiet."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -6987,9 +6972,8 @@ msgid "Viewer"
 msgstr "Vizualizator"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1198
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
-msgstr "Familie font editor"
+msgstr "Familie font vizualizator și editor text îmbogățit"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1120
 msgid "Viewer font size"
@@ -7008,9 +6992,8 @@ msgid "Voice typing language files (URL)"
 msgstr "Fișiere de limbă de tastare vocală (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1838
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "Tastarea vocală…"
+msgstr "Transcriere vocală: Glosar"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1287
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
@@ -7026,9 +7009,8 @@ msgid "Waiting for authorisation..."
 msgstr "Se așteaptă autorizarea..."
 
 #: packages/app-cli/app/command-share.ts:174
-#, fuzzy
 msgid "Waiting: Notebook %s from %s"
-msgstr "Caiet: %s (%s)"
+msgstr "Se așteaptă: Caiet %s de la %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7100,8 +7082,8 @@ msgid ""
 msgstr ""
 "Bine ai venit în Joplin!\n"
 "\n"
-"Tastează `:help shortcuts` pentru afișarea listei de scurtături sau doar `:"
-"help` pentru informații despre utilizare.\n"
+"Tastează `:help shortcuts` pentru afișarea listei de scurtături sau doar "
+"`:help` pentru informații despre utilizare.\n"
 "\n"
 "De exemplu, pentru a crea un caiet de notițe apasă `mb`; pentru a crea o "
 "notiță apasă `mn`."
@@ -7178,11 +7160,11 @@ msgstr "Ești autentificat la Joplin Cloud, poți acum să părăsești acest ec
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Ești acum autentificat în cont."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Folosești acum cea mai nouă versiune de editor markdown."
 
 #: packages/app-desktop/gui/MainScreen.tsx:585
 msgid ""
