@@ -2,7 +2,6 @@ import { join } from 'path';
 import { move, readdir, remove } from 'fs-extra';
 import { randomBytes } from 'crypto';
 import { ContentStorage } from '../types';
-import { Day } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('FileStorage');
@@ -29,14 +28,14 @@ export default class FileStorage implements ContentStorage {
 			if (this.isMaintenanceRunning) return;
 
 			this.isMaintenanceRunning = true;
-			const olderThan = new Date(new Date().getTime() - Day * retentionDuration);
+			const olderThan = new Date(new Date().getTime() - retentionDuration);
 			logger.info(`Deleting files older than: ${olderThan}`);
 			await this.removeOldFiles(olderThan);
 			this.isMaintenanceRunning = false;
 		}, maintenanceInterval);
 	}
 
-	private async removeOldFiles(olderThan: Date) {
+	public async removeOldFiles(olderThan: Date) {
 		const files = await readdir('images/');
 		const filesToBeDeleted = files
 			.map(f => {

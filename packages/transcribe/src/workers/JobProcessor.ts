@@ -61,7 +61,7 @@ export default class JobProcessor {
 			const e = error as Error;
 			if (this.currentJob) {
 				await this.queue.fail(this.currentJob.id, e);
-				if (!this.queue.shouldBeRetried(this.currentJob)) {
+				if (this.queue.hasJobFailedTooManyTimes(this.currentJob)) {
 					await this.contentStorage.remove(this.currentJob.data.filePath);
 				}
 			}

@@ -47,7 +47,7 @@ export interface BaseQueue {
 	complete(jobId: string, data: Result): Promise<void>;
 	getJobById(id: string): Promise<JobWithResult>;
 	stop(): Promise<void>;
-	shouldBeRetried(job: JobWithData): boolean;
+	hasJobFailedTooManyTimes(job: JobWithData): boolean;
 }
 
 export interface ContentStorage {

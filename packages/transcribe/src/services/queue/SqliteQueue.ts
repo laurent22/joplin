@@ -200,8 +200,8 @@ export default class SqliteQueue implements BaseQueue {
 		}
 	}
 
-	public shouldBeRetried(job: JobWithData): boolean {
-		return job.retryCount <= this.options.retryCount;
+	public hasJobFailedTooManyTimes(job: JobWithData): boolean {
+		return job.retryCount >= this.options.retryCount;
 	}
 
 	public async stop() {

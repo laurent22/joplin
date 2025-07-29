@@ -79,8 +79,8 @@ export default class PgBossQueue implements BaseQueue {
 		return result as JobWithResult;
 	}
 
-	public shouldBeRetried(job: JobWithData): boolean {
-		return job.retryCount > this.options.retryCount;
+	public hasJobFailedTooManyTimes(job: JobWithData): boolean {
+		return job.retryCount >= this.options.retryCount;
 	}
 
 	public async stop() {
