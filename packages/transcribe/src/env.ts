@@ -1,10 +1,11 @@
+import { Day, Minute, Second } from '@joplin/utils/time';
 
 export const defaultEnvValues: EnvVariables = {
 	SERVER_PORT: 4567,
 	API_KEY: '',
-	QUEUE_TTL: 900000,
+	QUEUE_TTL: 15 * Minute,
 	QUEUE_RETRY_COUNT: 2,
-	QUEUE_MAINTENANCE_INTERVAL: 60000,
+	QUEUE_MAINTENANCE_INTERVAL: 60 * Second,
 	HTR_CLI_DOCKER_IMAGE: 'joplin/htr-cli:0.0.2',
 	HTR_CLI_IMAGES_FOLDER: '/home/js/joplin/packages/transcribe/images',
 	QUEUE_DRIVER: 'pg', // 'sqlite'
@@ -12,6 +13,8 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
+	FILE_STORAGE_MAINTENANCE_INTERVAL: 30 * Second,
+	FILE_STORAGE_RETENTION_DURATION: 7 * Day,
 };
 
 export interface EnvVariables {
@@ -27,6 +30,8 @@ export interface EnvVariables {
 	QUEUE_DATABASE_NAME: string;
 	QUEUE_DATABASE_USER: string;
 	QUEUE_DATABASE_PORT: number;
+	FILE_STORAGE_MAINTENANCE_INTERVAL: number;
+	FILE_STORAGE_RETENTION_DURATION: number;
 }
 
 export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariables {

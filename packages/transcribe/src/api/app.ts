@@ -29,6 +29,7 @@ const init = async () => {
 	const queue = await createQueue(envVariables, true);
 
 	const fileStorage = new FileStorage();
+	fileStorage.initMaintenance(envVariables.FILE_STORAGE_RETENTION_DURATION, envVariables.FILE_STORAGE_MAINTENANCE_INTERVAL);
 
 	app.context.queue = queue;
 	app.context.storage = fileStorage;
