@@ -35,7 +35,7 @@ const init = async () => {
 
 	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE, envVariables.HTR_CLI_IMAGES_FOLDER);
 
-	const jobProcessor = new JobProcessor(queue, htrCli);
+	const jobProcessor = new JobProcessor(queue, htrCli, fileStorage);
 
 	logger.info('Starting worker');
 	await jobProcessor.init();

@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { move } from 'fs-extra';
+import { move, remove } from 'fs-extra';
 import { randomBytes } from 'crypto';
 import { ContentStorage } from '../types';
 
@@ -10,4 +10,9 @@ export default class FileStorage implements ContentStorage {
 		await move(filepath, join('images', randomName));
 		return randomName;
 	}
+
+	public async remove(filepath: string) {
+		await remove(filepath);
+	}
+
 }
