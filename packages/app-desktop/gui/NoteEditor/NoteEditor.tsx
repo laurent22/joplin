@@ -466,7 +466,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
-		showConvertHtmlToMarkdownMessage: props.showConvertHtmlToMarkdownMessage,
+		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 	};
 
 	let editor = null;
@@ -497,7 +497,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const onHideBannerConvertItToMarkdown = async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
-		Setting.setValue('editor.showConvertHtmlToMarkdownMessage', false);
+		Setting.setValue('editor.enableHtmlToMarkdownBanner', false);
 	};
 
 	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -645,7 +645,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const theme = themeStyle(props.themeId);
 
 	function renderConvertHtmlToMarkdown(): React.ReactNode {
-		if (!props.showConvertHtmlToMarkdownMessage) return null;
+		if (!props.enableHtmlToMarkdownBanner) return null;
 
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
 		if (!note) return null;
@@ -755,7 +755,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
-		showConvertHtmlToMarkdownMessage: state.settings['editor.showConvertHtmlToMarkdownMessage'],
+		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
 	};
 };
 

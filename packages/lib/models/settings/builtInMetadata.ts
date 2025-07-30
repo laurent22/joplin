@@ -711,14 +711,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
-		'editor.showConvertHtmlToMarkdownMessage': {
+		'editor.enableHtmlToMarkdownBanner': {
 			value: true,
 			advanced: true,
 			type: SettingItemType.Bool,
 			public: true,
 			section: 'note',
 			appTypes: [AppType.Desktop],
-			label: () => _('Show message about converting note to Markdown'),
+			label: () => _('Enable HTML-to-Markdown conversion banner'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
