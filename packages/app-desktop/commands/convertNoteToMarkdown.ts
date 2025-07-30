@@ -22,13 +22,11 @@ export const runtime = (): CommandRuntime => {
 
 			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
 
-			const newNote = await Note.save({
-				...note,
-				id: undefined,
-				body: markdownBody,
-				markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
-				user_updated_time: new Date().getTime(),
-			});
+			const newNote = await Note.duplicate(note.id);
+
+			newNote.body = markdownBody;
+			newNote.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+
 			await Note.delete(note.id, { toTrash: true });
 
 			context.dispatch({

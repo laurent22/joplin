@@ -2,7 +2,7 @@ import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { AppState, createAppDefaultState } from '../app.reducer';
 import Note from '@joplin/lib/models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabase } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import Folder from '@joplin/lib/models/Folder';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
@@ -11,7 +11,8 @@ describe('convertNoteToMarkdown', () => {
 
 	beforeEach(async () => {
 		state = createAppDefaultState({});
-		await setupDatabase(1);
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
 	});
 
 	it('should set the original note to be trashed', async () => {
