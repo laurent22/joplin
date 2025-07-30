@@ -24,6 +24,7 @@ export default class FileStorage implements ContentStorage {
 	}
 
 	public initMaintenance(retentionDuration: number, maintenanceInterval: number) {
+		logger.info('Maintenance started.');
 		setInterval(async () => {
 			if (this.isMaintenanceRunning) return;
 
