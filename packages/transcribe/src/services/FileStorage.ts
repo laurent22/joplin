@@ -37,7 +37,7 @@ export default class FileStorage implements ContentStorage {
 	}
 
 	public async removeOldFiles(olderThan: Date) {
-		const files = await readdir('images/');
+		const files = await readdir('images');
 		const filesToBeDeleted = files
 			.map(f => {
 				const datetimePart = parseInt(f.split('_')[0], 10);
