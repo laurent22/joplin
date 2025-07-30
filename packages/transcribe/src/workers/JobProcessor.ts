@@ -15,8 +15,8 @@ export default class JobProcessor {
 	public constructor(queue: BaseQueue, workHandler: WorkHandler, contentStorage: ContentStorage, checkInterval?: number) {
 		this.queue = queue;
 		this.workHandler = workHandler;
-		this.checkInteval = checkInterval ?? 5000;
 		this.contentStorage = contentStorage;
+		this.checkInteval = checkInterval ?? 5000;
 		logger.info('Created JobProcessor');
 	}
 
