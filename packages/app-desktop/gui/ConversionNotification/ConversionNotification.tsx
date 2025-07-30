@@ -16,7 +16,7 @@ export default (props: Props) => {
 	useEffect(() => {
 		if (!props.noteId || props.noteId === '') return;
 
-		props.dispatch({ type: 'NOTE_ID_CONVERTED', value: '' });
+		props.dispatch({ type: 'NOTE_HTML_TO_MARKDOWN_DONE', value: '' });
 
 		const notification = popupManager.createPopup(() => (
 			<div className='update-notification'>

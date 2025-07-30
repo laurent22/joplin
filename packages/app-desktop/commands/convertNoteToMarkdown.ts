@@ -30,7 +30,7 @@ export const runtime = (): CommandRuntime => {
 			await Note.delete(note.id, { toTrash: true });
 
 			context.dispatch({
-				type: 'NOTE_ID_CONVERTED',
+				type: 'NOTE_HTML_TO_MARKDOWN_DONE',
 				value: note.id,
 			});
 

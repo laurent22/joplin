@@ -90,7 +90,7 @@ describe('convertNoteToMarkdown', () => {
 		expect(dispatchFn).toHaveBeenCalledTimes(2);
 
 		expect(originalHtmlNoteId).toBe(htmlNote.id);
-		expect(actionType).toBe('NOTE_ID_CONVERTED');
+		expect(actionType).toBe('NOTE_HTML_TO_MARKDOWN_DONE');
 	});
 
 });
