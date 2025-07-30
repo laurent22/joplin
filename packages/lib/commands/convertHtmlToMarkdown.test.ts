@@ -1,4 +1,3 @@
-import { setupDatabase, switchClient } from '../testing/test-utils';
 import { runtime } from './convertHtmlToMarkdown';
 import { CommandContext } from '../services/CommandService';
 import { defaultState } from '../reducer';
@@ -13,11 +12,6 @@ const makeContext = (): CommandContext => {
 };
 
 describe('convertHtmlToMarkdown', () => {
-
-	beforeEach(async () => {
-		await setupDatabase(0);
-		await switchClient(0);
-	});
 
 	it.each([
 		['<b>test</b>', '**test**'],
