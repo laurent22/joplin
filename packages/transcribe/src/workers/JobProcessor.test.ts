@@ -42,7 +42,7 @@ describe('JobProcessor', () => {
 		await copy(join('images', 'htr_sample.png'), join('images', 'htr_sample_copy.png'));
 		const jobId = await queue.send({ filePath: 'htr_sample_copy.png' });
 
-		for (let i = 0; i < 60; i++) {
+		for (let i = 0; i < 36; i++) {
 			await msleep(10 * Second);
 			const response = await queue.getJobById(jobId);
 
@@ -66,7 +66,7 @@ describe('JobProcessor', () => {
 		const jobId1 = await queue.send({ filePath: 'non-existing-file' });
 		const jobId2 = await queue.send({ filePath: 'htr_sample_copy_2.png' });
 
-		for (let i = 0; i < 60; i++) {
+		for (let i = 0; i < 36; i++) {
 			await msleep(10 * Second);
 			const response1 = await queue.getJobById(jobId1);
 			if (response1.state === 'active') continue;
@@ -91,7 +91,7 @@ describe('JobProcessor', () => {
 
 		const jobId = await queue.send({ filePath: 'htr_sample_copy_3.png' });
 
-		for (let i = 0; i < 60; i++) {
+		for (let i = 0; i < 36; i++) {
 			await msleep(10 * Second);
 			const response = await queue.getJobById(jobId);
 
@@ -118,7 +118,7 @@ describe('JobProcessor', () => {
 		// file doesn't exist to force a fail, but the call to remove the file should still exist
 		const jobId = await queue.send({ filePath: 'non_existing_file.png' });
 
-		for (let i = 0; i < 60; i++) {
+		for (let i = 0; i < 36; i++) {
 			await msleep(10 * Second);
 			const response = await queue.getJobById(jobId);
 
