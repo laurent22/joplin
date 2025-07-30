@@ -7,7 +7,7 @@ import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHt
 
 export const declaration: CommandDeclaration = {
 	name: 'convertNoteToMarkdown',
-	label: () => _('Convert it to Markdown'),
+	label: () => _('Convert note to Markdown'),
 };
 
 export const runtime = (): CommandRuntime => {
@@ -17,6 +17,8 @@ export const runtime = (): CommandRuntime => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
 			const note = await Note.load(noteId);
+
+			if (note === null) return;
 
 			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
 
