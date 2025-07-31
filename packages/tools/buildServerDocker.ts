@@ -87,6 +87,8 @@ async function main() {
 	const argv = parseArgv();
 	if (!argv.tagName) console.info('No `--tag-name` was specified. A latest git tag will be used instead.');
 
+	console.info('Raw arguments:', argv);
+
 	const dryRun = argv.dryRun;
 	const addLatestTag = argv.addLatestTag;
 	const dockerFile = argv.dockerFile;
@@ -131,6 +133,7 @@ async function main() {
 	process.chdir(rootDir);
 	console.info(`Running from: ${process.cwd()}`);
 
+	console.info('dockerFile:', dockerFile);
 	console.info('repository:', repository);
 	console.info('tagName:', tagName);
 	console.info('platform:', platform);
