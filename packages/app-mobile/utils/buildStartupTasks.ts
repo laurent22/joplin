@@ -286,10 +286,10 @@ const buildStartupTasks = (
 				logger.info('First start on web: Set resource download mode to auto and disabled location tracking.');
 			}
 
-			Setting.skipDefaultMigrations();
+			Setting.skipMigrations();
 			Setting.setValue('firstStart', false);
 		} else {
-			Setting.applyDefaultMigrations();
+			await Setting.applyMigrations();
 		}
 
 		if (Setting.value('env') === Env.Dev) {

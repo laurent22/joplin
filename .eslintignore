@@ -1344,6 +1344,7 @@ packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
+packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1412,6 +1413,8 @@ packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.test.js
 packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
+packages/lib/services/ocr/drivers/OcrDriverTranscribe.test.js
+packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js

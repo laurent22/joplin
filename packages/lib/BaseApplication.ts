@@ -809,7 +809,7 @@ export default class BaseApplication {
 				const locale = shim.detectAndSetLocale(Setting);
 				reg.logger().info(`First start: detected locale as ${locale}`);
 			}
-			Setting.skipDefaultMigrations();
+			Setting.skipMigrations();
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', false);
@@ -819,8 +819,7 @@ export default class BaseApplication {
 
 			Setting.setValue('firstStart', false);
 		} else {
-			Setting.applyDefaultMigrations();
-			Setting.applyUserSettingMigration();
+			await Setting.applyMigrations();
 		}
 
 		setLocale(Setting.value('locale'));
