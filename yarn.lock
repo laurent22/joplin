@@ -8956,7 +8956,7 @@ __metadata:
     "@types/mustache": "npm:4.2.5"
     "@types/node": "npm:18.19.87"
     "@types/react": "npm:18.3.20"
-    "@types/react-dom": "npm:18.3.6"
+    "@types/react-dom": "npm:18.3.7"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     "@types/tesseract.js": "npm:2.0.0"
@@ -9055,7 +9055,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:18.19.87"
-    "@types/react": "npm:19.0.14"
+    "@types/react": "npm:19.1.0"
     "@types/react-redux": "npm:7.1.33"
     "@types/serviceworker": "npm:0.0.132"
     "@types/tar-stream": "npm:3.1.3"
@@ -9089,8 +9089,8 @@ __metadata:
     path-browserify: "npm:1.0.1"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
-    react: "npm:19.0.0"
-    react-dom: "npm:19.0.0"
+    react: "npm:19.1.0"
+    react-dom: "npm:19.1.0"
     react-native: "npm:0.79.2"
     react-native-device-info: "npm:14.0.4"
     react-native-dropdownalert: "npm:5.1.0"
@@ -9118,8 +9118,8 @@ __metadata:
     react-native-webview: "npm:13.13.5"
     react-native-zip-archive: "npm:7.0.1"
     react-redux: "npm:8.1.3"
-    react-refresh: "npm:0.16.0"
-    react-test-renderer: "npm:19.0.0"
+    react-refresh: "npm:0.17.0"
+    react-test-renderer: "npm:19.1.0"
     redux: "npm:4.2.1"
     rn-fetch-blob: "npm:0.12.0"
     sharp: "npm:0.33.5"
@@ -9399,7 +9399,7 @@ __metadata:
     "@types/jest": "npm:29.5.12"
     "@types/pdfjs-dist": "npm:2.10.378"
     "@types/react": "npm:18.3.20"
-    "@types/react-dom": "npm:18.3.6"
+    "@types/react-dom": "npm:18.3.7"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
     babel-jest: "npm:29.7.0"
@@ -14530,12 +14530,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.3.6":
-  version: 18.3.6
-  resolution: "@types/react-dom@npm:18.3.6"
+"@types/react-dom@npm:18.3.7":
+  version: 18.3.7
+  resolution: "@types/react-dom@npm:18.3.7"
   peerDependencies:
     "@types/react": ^18.0.0
-  checksum: 10/ae179355401c64423d39946eda22c5f7f74c94ce61c21505024d4d82c33853ec40bc9b370f75e4a7750b0524aba4d95a43fcc328d8d14684dc2abb41ba529de8
+  checksum: 10/317569219366d487a3103ba1e5e47154e95a002915fdcf73a44162c48fe49c3a57fcf7f57fc6979e70d447112681e6b13c6c3c1df289db8b544df4aab2d318f3
   languageName: node
   linkType: hard
 
@@ -14622,12 +14622,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:19.0.14":
-  version: 19.0.14
-  resolution: "@types/react@npm:19.0.14"
+"@types/react@npm:19.1.0":
+  version: 19.1.0
+  resolution: "@types/react@npm:19.1.0"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10/caf4572aae4f7efd049138bc4917f465a8e00abb362fcf6e6f82c9ed88fc42555109f0a3be7a738ed5efbdd51b0f0a4256f7d5141545f29fb7dc31b8e872aa4b
+  checksum: 10/bfa3bb7e2efe929bdf41bf36461f2598611a29647852b8b7ecde510e83f797caf7f290388d13e2b71055df10587b3c41fc4345c1d9cbc38b4e897b03ad11c02f
   languageName: node
   linkType: hard
 
@@ -41828,14 +41828,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.0.0":
-  version: 19.0.0
-  resolution: "react-dom@npm:19.0.0"
+"react-dom@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react-dom@npm:19.1.0"
   dependencies:
-    scheduler: "npm:^0.25.0"
+    scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.0.0
-  checksum: 10/aa64a2f1991042f516260e8b0eca0ae777b6c8f1aa2b5ae096e80bbb6ac9b005aef2bca697969841d34f7e1819556263476bdfea36c35092e8d9aefde3de2d9a
+    react: ^19.1.0
+  checksum: 10/c5b58605862c7b0bb044416b01c73647bb8e89717fb5d7a2c279b11815fb7b49b619fe685c404e59f55eb52c66831236cc565c25ee1c2d042739f4a2cc538aa2
   languageName: node
   linkType: hard
 
@@ -41921,10 +41921,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.0.0":
-  version: 19.1.0
-  resolution: "react-is@npm:19.1.0"
-  checksum: 10/4aceca94492032a19411138bf68c6ca7dce4abee7ae6c7f23db9291d2dff14d6a643717b176ef9a151e8cdf6a2b71fdbc59fd998328e086a6f752512304a252b
+"react-is@npm:^19.1.0":
+  version: 19.1.1
+  resolution: "react-is@npm:19.1.1"
+  checksum: 10/44e0937da1f0da1d5dbd4f01972870768ef207f8a49717f4491f5022454f34c956cb66be560aee5286387169853b0283a81e1f419b51dc62654c8710dc98065a
   languageName: node
   linkType: hard
 
@@ -42504,10 +42504,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-refresh@npm:0.16.0":
-  version: 0.16.0
-  resolution: "react-refresh@npm:0.16.0"
-  checksum: 10/725019d21cede4cea57c20b85fa3a7fe5b0969c99d62ac37dc7b2d3505ea9a33f14f003034ed214d41bacf74c48ab174464c236e5815dff31e23f519c21d8752
+"react-refresh@npm:0.17.0":
+  version: 0.17.0
+  resolution: "react-refresh@npm:0.17.0"
+  checksum: 10/5e94f07d43bb1cfdc9b0c6e0c8c73e754005489950dcff1edb53aa8451d1d69a47b740b195c7c80fb4eb511c56a3585dc55eddd83f0097fb5e015116a1460467
   languageName: node
   linkType: hard
 
@@ -42625,15 +42625,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.0.0":
-  version: 19.0.0
-  resolution: "react-test-renderer@npm:19.0.0"
+"react-test-renderer@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react-test-renderer@npm:19.1.0"
   dependencies:
-    react-is: "npm:^19.0.0"
-    scheduler: "npm:^0.25.0"
+    react-is: "npm:^19.1.0"
+    scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.0.0
-  checksum: 10/b95a90331e1dedeff2bbdcdc57b9cd1cd8d7cd620f9b29a4efd31a961c8e5b660fe55129ffc72f2bbf0c21fec34e6a498b9f07b6c65c22bf10ae87b68e124f91
+    react: ^19.1.0
+  checksum: 10/73ae0ea779bacd0ff084dd3644b763a4431d68adf9c6acffdaa3d0810aab5322f24c95c60259c23b77f38b5f36d9d614ffaa46d91a33840536f2d4b7188dcc89
   languageName: node
   linkType: hard
 
@@ -42699,10 +42699,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.0.0":
-  version: 19.0.0
-  resolution: "react@npm:19.0.0"
-  checksum: 10/2490969c503f644703c88990d20e4011fa6119ddeca451e9de48f6d7ab058d670d2852a5fcd3aa3cd90a923ab2815d532637bd4a814add402ae5c0d4f129ee71
+"react@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react@npm:19.1.0"
+  checksum: 10/d0180689826fd9de87e839c365f6f361c561daea397d61d724687cae88f432a307d1c0f53a0ee95ddbe3352c10dac41d7ff1ad85530fb24951b27a39e5398db4
   languageName: node
   linkType: hard
 
@@ -44599,7 +44599,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0, scheduler@npm:^0.25.0":
+"scheduler@npm:0.25.0":
   version: 0.25.0
   resolution: "scheduler@npm:0.25.0"
   checksum: 10/e661e38503ab29a153429a99203fefa764f28b35c079719eb5efdd2c1c1086522f6653d8ffce388209682c23891a6d1d32fa6badf53c35fb5b9cd0c55ace42de
@@ -44631,6 +44631,13 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10/e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.26.0":
+  version: 0.26.0
+  resolution: "scheduler@npm:0.26.0"
+  checksum: 10/1ecf2e5d7de1a7a132796834afe14a2d589ba7e437615bd8c06f3e0786a3ac3434655e67aac8755d9b14e05754c177e49c064261de2673aaa3c926bc98caa002
   languageName: node
   linkType: hard
 
