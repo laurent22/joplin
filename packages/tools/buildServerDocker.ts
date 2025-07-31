@@ -10,12 +10,19 @@ interface Argv {
 	platform?: string;
 	source?: string;
 	addLatestTag?: boolean;
+	dockerFile?: string;
 }
 
 function parseArgv(): Argv {
 	return require('yargs')
 		.scriptName('yarn buildServerDocker')
 		.usage('$0 --repository OWNER/IMAGE [args]')
+		.option('r', {
+			alias: 'dockerFile',
+			describe: 'Dockerfile - either Dockerfile.server or Dockerfile.transcribe',
+			demandOption: true,
+			type: 'string',
+		})
 		.option('r', {
 			alias: 'repository',
 			describe: 'Target image repository. Usually in format `OWNER/NAME`',
@@ -82,6 +89,7 @@ async function main() {
 
 	const dryRun = argv.dryRun;
 	const addLatestTag = argv.addLatestTag;
+	const dockerFile = argv.dockerFile;
 	const pushImages = argv.pushImages;
 	const repository = argv.repository;
 	const tagName = argv.tagName || `server-${await execCommand('git describe --tags --match v*', { showStdout: false })}`;
@@ -138,7 +146,7 @@ async function main() {
 	if (pushImages) {
 		cliArgs.push('--push');
 	}
-	cliArgs.push('-f Dockerfile.server');
+	cliArgs.push(`-f ${dockerFile}`);
 	cliArgs.push('.');
 
 	const dockerCommand = `docker buildx build ${cliArgs.join(' ')}`;

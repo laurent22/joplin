@@ -303,7 +303,7 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
-	yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+	yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	
