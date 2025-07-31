@@ -1,20 +1,24 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import BackButtonService from '../../services/BackButtonService';
 
 type OnBackPress = ()=>(void|boolean);
 
 const useBackHandler = (onBackPress: OnBackPress|null) => {
+	const onBackPressRef = useRef(onBackPress);
+	onBackPressRef.current = onBackPress ?? (() => {});
+	const hasHandler = !!onBackPress;
+
 	useEffect(() => {
-		if (!onBackPress) return () => {};
+		if (!hasHandler) return () => {};
 
 		const handler = () => {
-			return !!(onBackPress() ?? true);
+			return !!(onBackPressRef.current() ?? true);
 		};
 		BackButtonService.addHandler(handler);
 		return () => {
 			BackButtonService.removeHandler(handler);
 		};
-	}, [onBackPress]);
+	}, [hasHandler]);
 };
 
 export default useBackHandler;

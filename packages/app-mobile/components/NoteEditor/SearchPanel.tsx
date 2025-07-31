@@ -136,6 +136,13 @@ const useStyles = (theme: Theme) => {
 				justifyContent: 'center',
 				marginLeft: 10,
 			},
+			panelContainer: {
+				// Workaround for the editor disappearing when dismissing search on Android.
+				// See https://github.com/laurent22/joplin/issues/12781
+				//
+				// It may be possible to remove this line after upgrading to React Native's New Architecture.
+				borderColor: 'transparent',
+			},
 		});
 	}, [theme]);
 };
@@ -192,7 +199,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	}, [state.dialogVisible, control]);
 
 
-	const themeId = props.editorSettings.themeId;
+	const themeId = props.editorSettings.themeData.themeId;
 	const closeButton = (
 		<ActionButton
 			themeId={themeId}
@@ -366,7 +373,9 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		return null;
 	}
 
-	return showingAdvanced ? advancedLayout : simpleLayout;
+	return <View style={styles.panelContainer}>
+		{showingAdvanced ? advancedLayout : simpleLayout}
+	</View>;
 };
 
 export default SearchPanel;

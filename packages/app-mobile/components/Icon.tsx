@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { TextStyle, Text } from 'react-native';
+import { TextStyle, Text, StyleProp } from 'react-native';
 
 const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
 const AntIcon = require('react-native-vector-icons/AntDesign').default;
@@ -9,7 +9,7 @@ const Ionicon = require('react-native-vector-icons/Ionicons').default;
 
 interface Props {
 	name: string;
-	style: TextStyle;
+	style: StyleProp<TextStyle>;
 
 	// If `null` is given, the content must be labeled elsewhere.
 	accessibilityLabel: string|null;

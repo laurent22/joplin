@@ -67,8 +67,10 @@ import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 import NavService from './services/NavService';
 import getAppName from './getAppName';
+import PerformanceLogger from './PerformanceLogger';
 
 const appLogger: LoggerWrapper = Logger.create('App');
+const perfLogger = PerformanceLogger.create('BaseApplication');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
@@ -673,6 +675,7 @@ export default class BaseApplication {
 			...options,
 		};
 
+		const startTask = perfLogger.taskStart('start');
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -747,6 +750,8 @@ export default class BaseApplication {
 			}
 			globalLogger.setLevel(initArgs.logLevel);
 		}
+
+		PerformanceLogger.setLogger(globalLogger);
 
 		reg.setLogger(Logger.create('') as Logger);
 		// reg.dispatch = () => {};
@@ -890,6 +895,7 @@ export default class BaseApplication {
 
 		await MigrationService.instance().run();
 
+		startTask.onEnd();
 		return argv;
 	}
 }

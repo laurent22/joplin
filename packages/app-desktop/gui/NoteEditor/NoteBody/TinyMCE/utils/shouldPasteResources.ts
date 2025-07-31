@@ -18,11 +18,12 @@ const logger = Logger.create('shouldPasteResources');
 // instead the clipboard resources, which will contain the actual image.
 //
 // We have a lot of log statements so that if someone reports a bug we can ask
-// them to check the console and give us the messages they have.
+// them to check the console and give us the messages they have. However, to avoid
+// including sensitive information in the logs, users will need to check the console,
+// not the log file.
 export default (pastedText: string, pastedHtml: string, resourceMds: string[]) => {
-	logger.info('Pasted text:', pastedText);
-	logger.info('Pasted HTML:', pastedHtml);
-	logger.info('Resources:', resourceMds);
+	const debugInformation = JSON.stringify({ pastedText, pastedHtml, resourceMds }, undefined, '\t');
+	logger.debug('Input data:', debugInformation);
 
 	if (pastedText) {
 		logger.info('Not pasting resources only because the clipboard contains plain text');

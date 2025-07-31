@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"MB %d لكل ملاحظة او مرفق"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
 	],
@@ -98,6 +101,9 @@
 	"(None)": [
 		"(لاشيء)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -118,6 +124,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"يمكن أن يكون <todo-command> (أمر قائمة المهام) \"toggle\" (تبديل) أو \"clear\" (مسح) فقط. استخدم \"toggle\" لتبديل حال قائمة المهام المعطاة بين مكتملة و غير مكتملة (إذا كانت الملاحظة المقصودة عادية فسيتم تحويلها إلى قائمة مهام). استخدم \"clear\" لتحويل قائمة المهام ثانيةً إلى ملاحظة عادية."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -211,6 +220,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"كافة المنافذ المحتملة قيد الاستخدام - الرجاء الإبلاغ عن المشكلة على %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -548,6 +560,9 @@
 	"Command palette...": [
 		"لوحة الأوامر..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"مكتملة"
 	],
@@ -589,6 +604,9 @@
 	],
 	"Conflicts (attachments)": [
 		"التعارضات (المرفقات)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -928,6 +946,9 @@
 	"Do not ask for confirmation.": [
 		"لا تطلب التأكيد."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Done": [
 		"تم"
 	],
@@ -1192,6 +1213,9 @@
 	"Error opening note in editor: %s": [
 		"حدث خطأ أثناء فتح الملاحظة: %s في المحرر"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"خطأ. فضلاً تحقق من صحة عنوان URL ، اسم المستخدم ، كلمة المرور وغيرها وأن جهة المزامنة المستهدفة يمكن الوصول إليها. كان الخطأ المبلّغ عنه:"
 	],
@@ -1252,6 +1276,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"خطأ فادح:"
 	],
@@ -1296,6 +1323,9 @@
 	],
 	"Focus title": [
 		"التركيز على العنوان"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1350,6 +1380,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"احصل عليها الآن:"
 	],
@@ -1358,6 +1391,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"يستخرج قيمة إعداد أو يضبطها. إذا لم يجر التزويد بـ [value] (قيمة) فسيعرض التطبيق قيمة [name] (اسم). إذا لم يجر التزويد بـ [name] ولا [value] فسيسرد التطبيق الإعداد الحالي."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1598,6 +1634,9 @@
 	],
 	"Joplin Server URL": [
 		"عنوان URL لخادم Joplin"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"تتيح Joplin Web clipper حفظ صفحات الويب ولقطات الشاشة من مستعرضك إلى Joplin."
@@ -2009,6 +2048,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"موافق"
 	],
@@ -2162,6 +2204,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"يرجى الانتظار حتى يتم تنزيل جميع المرفقات وفك تشفيرها. يمكنك أيضًا التبديل إلى %s لتحرير الملاحظة."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"الرجاء الإنتظار..."
 	],
@@ -2188,6 +2233,9 @@
 	],
 	"Possible values: %s.": [
 		"القيم الممكنة : %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"التفضيلات"
@@ -2278,6 +2326,9 @@
 	],
 	"Publish notes to the internet": [
 		"أنشر الملاحظات على الإنترنت"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"Quit": [
 		"إغلاق"
@@ -2477,6 +2528,9 @@
 	"Select all": [
 		"اختيار الكل"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"الخادم قيد التشغيل بالفعل على المنفذ %d"
 	],
@@ -2514,6 +2568,9 @@
 		"مشاركة الملاحظة..."
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2810,9 +2867,6 @@
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"سيتم إغلاق التطبيق الآن. يرجى إعادة تشغيله لإكمال العملية."
 	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		""
-	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"تم التصريح للتطبيق - يمكنك الآن إغلاق تبويب المستعرض هذا."
 	],
@@ -2856,6 +2910,9 @@
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -3116,6 +3173,9 @@
 	"Unshare": [
 		"إلغاء المشاركة"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"إلغاء مشاركة هذا الدفتر ؟ لن يتمكن المستلمون من الوصول إلى محتوياته بعد الآن."
 	],
@@ -3233,6 +3293,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -3306,6 +3369,12 @@
 		"أنت على وشك إرفاق صورة كبيرة (%dx%d بكسل). هل ترغب في تغيّير حجمة إلى %d بكسل قبل إرفاقه؟"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

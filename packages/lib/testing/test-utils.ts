@@ -70,6 +70,7 @@ import { reg } from '../registry';
 import { Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
+import { MarkupLanguage } from '@joplin/renderer';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -443,15 +444,17 @@ function pluginDir(id: number = null) {
 
 export interface CreateNoteAndResourceOptions {
 	path?: string;
+	markupLanguage?: MarkupLanguage;
 }
 
 const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
 	options = {
 		path: `${supportDir}/photo.jpg`,
+		markupLanguage: MarkupLanguage.Markdown,
 		...options,
 	};
 
-	let note = await Note.save({});
+	let note = await Note.save({ markup_language: options.markupLanguage });
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
 	const resource: ResourceEntity = await Resource.load(resourceIds[0]);

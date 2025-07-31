@@ -3,7 +3,7 @@
 import CommandService from '@joplin/lib/services/CommandService';
 import useEditorCommandHandler from './useEditorCommandHandler';
 import commandDeclarations from '../commandDeclarations';
-import createTestEditorControl from '@joplin/editor/CodeMirror/testUtil/createEditorControl';
+import createTestEditorControl from '@joplin/editor/CodeMirror/testing/createEditorControl';
 import { renderHook } from '../../../utils/testing/testingLibrary';
 import { defaultState } from '@joplin/lib/reducer';
 

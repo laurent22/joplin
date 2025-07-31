@@ -24,20 +24,32 @@ export interface DialogControl {
 	info(message: string): Promise<void>;
 	error(message: string): Promise<void>;
 	prompt(title: string, message: string, buttons?: PromptButtonSpec[], options?: PromptOptions): void;
+	promptForText(message: string): Promise<string>;
 	showMenu<IdType>(title: string, choices: MenuChoice<IdType>[]): Promise<IdType>;
 }
 
 export enum DialogType {
-	Prompt,
+	ButtonPrompt,
 	Menu,
+	TextInput,
 }
 
-export interface PromptDialogData {
-	type: DialogType;
+export interface ButtonDialogData {
+	type: DialogType.ButtonPrompt|DialogType.Menu;
 	key: string;
 	title: string;
 	message: string;
 	buttons: PromptButtonSpec[];
 	onDismiss: (()=> void)|null;
 }
+
+export interface TextInputDialogData {
+	type: DialogType.TextInput;
+	key: string;
+	message: string;
+	onSubmit: (text: string)=> void;
+	onDismiss: ()=> void;
+}
+
+export type DialogData = ButtonDialogData | TextInputDialogData;
 

@@ -1,6 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
-import FingerprintScanner from 'react-native-fingerprint-scanner';
+import { AuthenticationType, hasHardwareAsync, supportedAuthenticationTypesAsync } from 'expo-local-authentication';
 const logger = Logger.create('sensorInfo');
 
 export interface SensorInfo {
@@ -42,14 +42,30 @@ export default async (): Promise<SensorInfo> => {
 		// `isSensorAvailable()` is pretty much useless. Instead we ask for
 		// fingerprint when the user turns on the feature and at that point we
 		// know if the device supports biometrics or not.
-		const result = await FingerprintScanner.isSensorAvailable();
-		logger.info('isSensorAvailable result', result);
-		supportedSensors = result;
+		//
+		// 2025-07-10: isSensorAvailable has been replaced with hasHardwareAsync,
+		// which may be more reliable. However, hasHardwareAsync may return false
+		// if the user has locked the app with a PIN (rather than biometrics). Test
+		// carefully when changing this behavior:
+		const hasSensor = await hasHardwareAsync();
+		supportedSensors = (await supportedAuthenticationTypesAsync()).map(sensor => {
+			if (sensor === AuthenticationType.FINGERPRINT) {
+				return 'Touch ID';
+			} else if (sensor === AuthenticationType.FACIAL_RECOGNITION) {
+				return 'Face ID';
+			} else if (sensor === AuthenticationType.IRIS) {
+				return 'Iris';
+			} else {
+				return 'Other';
+			}
+		}).join(',');
 
-		if (result) {
-			if (result !== Setting.value('security.biometricsSupportedSensors')) {
+		logger.info('isSensorAvailable result', hasSensor, supportedSensors);
+
+		if (hasSensor) {
+			if (supportedSensors !== Setting.value('security.biometricsSupportedSensors')) {
 				hasChanged = true;
-				Setting.setValue('security.biometricsSupportedSensors', result);
+				Setting.setValue('security.biometricsSupportedSensors', supportedSensors);
 			}
 		}
 	} catch (error) {

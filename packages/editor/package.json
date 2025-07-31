@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@joplin/lib": "~3.4",
+    "@joplin/utils": "~3.4",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.12",
     "@types/react": "18.3.20",
@@ -41,6 +42,22 @@
     "@lezer/common": "1.2.3",
     "@lezer/highlight": "1.2.1",
     "@lezer/markdown": "1.3.2",
-    "@replit/codemirror-vim": "6.2.1"
+    "@replit/codemirror-vim": "6.2.1",
+    "dompurify": "3.2.6",
+    "orderedmap": "2.1.1",
+    "prosemirror-commands": "1.7.1",
+    "prosemirror-dropcursor": "1.8.2",
+    "prosemirror-example-setup": "1.2.3",
+    "prosemirror-gapcursor": "1.3.2",
+    "prosemirror-history": "1.4.1",
+    "prosemirror-inputrules": "1.5.0",
+    "prosemirror-keymap": "1.2.3",
+    "prosemirror-model": "1.25.2",
+    "prosemirror-schema-list": "1.5.1",
+    "prosemirror-search": "1.1.0",
+    "prosemirror-state": "1.4.3",
+    "prosemirror-tables": "1.7.1",
+    "prosemirror-transform": "1.10.4",
+    "prosemirror-view": "1.40.0"
   }
 }

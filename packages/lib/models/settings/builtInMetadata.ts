@@ -81,7 +81,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: false,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1848,6 +1848,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Voice typing: Glossary'),
 			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
 			show: (settings) => showVoiceTypingSettings() && settings['voiceTyping.preferredProvider'].startsWith('whisper'),
+			section: 'note',
+		},
+
+		'scanner.titleTemplate': {
+			value: 'Scan: {date} ({count})',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Mobile],
+			label: () => _('Document scanner: Title template'),
+			description: () => _('Default title to use for documents created by the scanner.'),
 			section: 'note',
 		},
 

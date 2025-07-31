@@ -8,6 +8,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from './Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
+import lightTheme from '@joplin/lib/themes/light';
 
 interface Props {
 	themeId: number;
@@ -115,6 +116,15 @@ export default class PromptDialog extends React.Component<Props, any> {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+		};
+
+		// The button to change the date/time cannot be customized easily so we need to use the
+		// light theme for that particular component.
+		this.styles_.dateTimeInput = {
+			...this.styles_.input,
+			color: lightTheme.color,
+			backgroundColor: lightTheme.backgroundColor,
+			borderColor: lightTheme.dividerColor,
 		};
 
 		this.styles_.select = {
@@ -256,7 +266,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 				onChange={onChange}
 				type="datetime-local"
 				className='datetime-picker'
-				style={styles.input}
+				style={styles.dateTimeInput}
 			/>;
 		} else if (this.props.inputType === 'tags') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

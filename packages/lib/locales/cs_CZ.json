@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB na poznámku nebo přílohu"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -101,6 +104,9 @@
 	"(None)": [
 		"(Žádné)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -121,6 +127,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> může být buď \"toggle\" (přepnout) nebo \"clear\" (odstranit). Použijte \"toggle\" pro přepnutí daného úkolu na dokončený resp. nedokončený (pokud je cílem normální poznámka, bude konvertována na úkol). Použijte \"clear\" pro konverzi úkolu na normální poznámku."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -214,6 +223,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Všechny dostupné porty jsou používané - nahlaste prosím tento problém na %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -551,6 +563,9 @@
 	"Command palette...": [
 		"Příkazová paleta..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"Dokončeno"
 	],
@@ -592,6 +607,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Konflikty (přílohy)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Consolidated billing"
@@ -916,6 +934,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Heslo neztrácejte, protože z bezpečnostních důvodů je to *jediný* způsob, jak data dešifrovat! Chcete-li povolit šifrování, zadejte níže heslo."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Done": [
 		"Hotovo"
 	],
@@ -1174,6 +1195,9 @@
 	"Error opening note in editor: %s": [
 		"Chyba při otevírání poznámky v editoru: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Chyba. Zkontrolujte, zda jsou adresa URL, uživatelské jméno, heslo, atd. správné a zda je cíl synchronizace dostupný. Zjištěná chyba byla:"
 	],
@@ -1234,6 +1258,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatální chyba:"
 	],
@@ -1278,6 +1305,9 @@
 	],
 	"Focus title": [
 		"Kurzor v názvu"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1329,6 +1359,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Získat hned:"
 	],
@@ -1337,6 +1370,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Získá nebo nastaví konfigurační hodnotu. Pokud není [hodnota] specifikována, zobrazí hodnotu položky [jméno]. Pokud není specifikována [hodnota] ani [jméno], je zobrazena současná konfigurace."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1592,6 +1628,9 @@
 	],
 	"Joplin Server URL": [
 		"URL Joplin serveru"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper umožňuje ukládat webové stránky a screenshoty z vašeho prohlížeče do Joplin."
@@ -2024,6 +2063,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2177,6 +2219,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Počkejte prosím na stažení a dešifrování všech příloh. Můžete také přepnout na %s a poznámku upravit."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Počkejte prosím..."
 	],
@@ -2203,6 +2248,9 @@
 	],
 	"Possible values: %s.": [
 		"Možné hodnoty: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Nastavení"
@@ -2302,6 +2350,9 @@
 	],
 	"Publish notes to the internet": [
 		"Zveřejnění poznámek na internetu"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"Quit": [
 		"Ukončit"
@@ -2540,6 +2591,9 @@
 	"Select file...": [
 		"Vybrat soubor..."
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"Server je již spuštěný na portu %d"
 	],
@@ -2580,6 +2634,9 @@
 		"Sdílet zápisník..."
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2900,9 +2957,6 @@
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Aplikace se nyní vypne. Pro dokončení procesu ji znovu spusťte."
 	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Aplikace se správně neuzavřela. Chcete ji spustit v nouzovém režimu?"
-	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Aplikace byla autorizována, tento tab můžete zavřít."
 	],
@@ -2953,6 +3007,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Klíče s těmito ID se používají k šifrování některých položek, ale aplikace k nim v současné době nemá přístup. Je pravděpodobné, že budou nakonec staženy prostřednictvím synchronizace."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"Hlavní klíč byl úspěšně upgradován!"
@@ -3236,6 +3293,9 @@
 	"Unshare": [
 		"Přestat sdílet"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Opravdu chcete přestat sdílet tento zápisník? Příjemci už pak nebudou mít přístup k jeho obsahu."
 	],
@@ -3359,6 +3419,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -3432,6 +3495,12 @@
 		"Chystáte se připojit velký obrázek (%dx%d pixelů). Chcete jej před připojením zmenšit na %d pixelů?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

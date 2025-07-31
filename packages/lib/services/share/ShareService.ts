@@ -14,8 +14,10 @@ import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
+import PerformanceLogger from '../../PerformanceLogger';
 
 const logger = Logger.create('ShareService');
+const perfLogger = PerformanceLogger.create('ShareService');
 
 export interface ApiShare {
 	id: string;
@@ -514,6 +516,7 @@ export default class ShareService {
 	}
 
 	public async maintenance() {
+		const task = perfLogger.taskStart('maintenance');
 		if (this.enabled) {
 			let hasError = false;
 
@@ -537,6 +540,7 @@ export default class ShareService {
 			// so we can run the clean up function.
 			if (!hasError) await this.updateNoLongerSharedItems();
 		}
+		task.onEnd();
 	}
 
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
-import CameraViewMultiPage, { OnComplete } from './CameraViewMultiPage';
+import CameraViewMultiPage from './CameraViewMultiPage';
 import { CameraResult, OnInsertBarcode } from './types';
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
@@ -8,24 +8,29 @@ import TestProviderStack from '../testing/TestProviderStack';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { startCamera, takePhoto } from './utils/testing';
+import { useState } from 'react';
 
 interface WrapperProps {
+	onComplete?: (finalPhotos: CameraResult[])=> void;
 	onCancel?: ()=> void;
 	onInsertBarcode?: OnInsertBarcode;
-	onComplete?: OnComplete;
 }
 
 let store: Store<AppState>;
 const WrappedCamera: React.FC<WrapperProps> = ({
-	onCancel = jest.fn(),
 	onComplete = jest.fn(),
 	onInsertBarcode = jest.fn(),
+	onCancel = jest.fn(),
 }) => {
+	const [photos, setPhotos] = useState<CameraResult[]>([]);
+
 	return <TestProviderStack store={store}>
 		<CameraViewMultiPage
 			themeId={Setting.THEME_LIGHT}
+			photos={photos}
+			onSetPhotos={setPhotos}
 			onCancel={onCancel}
-			onComplete={onComplete}
+			onComplete={() => onComplete(photos)}
 			onInsertBarcode={onInsertBarcode}
 		/>
 	</TestProviderStack>;

@@ -7,8 +7,10 @@ import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
 import EncryptionService from './e2ee/EncryptionService';
+import PerformanceLogger from '../PerformanceLogger';
 
 const EventEmitter = require('events');
+const perfLogger = PerformanceLogger.create('DecryptionWorker');
 
 interface DecryptionResult {
 	skippedItemCount?: number;
@@ -325,11 +327,13 @@ export default class DecryptionWorker {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = {}) {
 		this.startCalls_.push(true);
+		const startTask = perfLogger.taskStart('start');
 		let output = null;
 		try {
 			output = await this.start_(options);
 		} finally {
 			this.startCalls_.pop();
+			startTask.onEnd();
 		}
 		return output;
 	}
