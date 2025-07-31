@@ -47,7 +47,8 @@ services:
             - POSTGRES_PORT=${POSTGRES_PORT}
             - POSTGRES_HOST=db
             - TRANSCRIBE_API_KEY=${TRANSCRIBE_API_KEY}
-            - TRANSCRIBE_BASE_URL=transcribe
+            - TRANSCRIBE_BASE_URL=http://transcribe:4567
+            - TRANSCRIBE_ENABLED=${TRANSCRIBE_ENABLED}
     transcribe-db:
         image: postgres:16
         volumes:
