@@ -146,7 +146,7 @@ async function main() {
 	if (pushImages) {
 		cliArgs.push('--push');
 	}
-	cliArgs.push(`-f ${dockerFile}`);
+	cliArgs.push(`--file ${dockerFile}`);
 	cliArgs.push('.');
 
 	const dockerCommand = `docker buildx build ${cliArgs.join(' ')}`;
