@@ -345,8 +345,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					return {
 						id: result.commandName,
 						title: result.title,
-						parent_id: null,
-						fields: [],
+						parent_id: null as string,
+						fields: [] as string[],
 						type: BaseModel.TYPE_COMMAND,
 					};
 				});
