@@ -8,8 +8,8 @@ import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
-import { extname, normalize } from 'path';
+import { pathExists, pathExistsSync, writeFileSync, ensureDirSync } from 'fs-extra';
+import { extname, normalize, join } from 'path';
 import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
@@ -67,6 +67,30 @@ export class Bridge {
 		this.logFilePath_ = v;
 	}
 
+	private getCrashDumpDirectory(): string {
+		try {
+			const platformName = shim.platformName();
+			switch (platformName) {
+			case 'win32':
+				// Windows: Use %LOCALAPPDATA%\CrashDumps
+				return join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'CrashDumps');
+			case 'darwin':
+				// macOS: Use ~/Library/Logs/DiagnosticReports
+				return join(homedir(), 'Library', 'Logs', 'DiagnosticReports');
+			case 'linux':
+				// Linux: Use XDG_STATE_HOME (for logs) or fallback to ~/.local/state
+				return join(process.env.XDG_STATE_HOME || join(homedir(), '.local', 'state'), 'joplin');
+			default:
+				// For unknown platforms, default to the home directory
+				return homedir();
+			}
+		} catch (error) {
+			// If we can't get the platform name, fallback to the home directory
+			return homedir();
+		}
+
+	}
+
 	private sentryInit() {
 		const getLogLines = () => {
 			try {
@@ -109,7 +133,10 @@ export class Bridge {
 						log: logAttachment ? logAttachment.data.trim().split('\n') : [],
 					};
 
-					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
+					const crashDumpDir = this.getCrashDumpDirectory();
+					ensureDirSync(crashDumpDir);
+					const crashDumpPath = join(crashDumpDir, `joplin_crash_dump_${date}.json`);
+					writeFileSync(crashDumpPath, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
 				} catch (error) {
 					// Ignore the error since we can't handle it here
 				}
