@@ -350,6 +350,7 @@ By default, the folder will be moved **to the trash**. To permanently delete it,
 | ocr_details | text  |       |
 | ocr_status | int   |       |
 | ocr_error | text  |       |
+| ocr_driver_id | int   |       |
 
 ### GET /resources
 

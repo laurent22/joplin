@@ -8,7 +8,7 @@ import { forceParsing } from '@codemirror/language';
 import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
-import createEditorSettings from './testing/createEditorSettings';
+import createEditorSettings from '../testing/createEditorSettings';
 
 
 describe('createEditor', () => {

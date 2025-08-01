@@ -187,3 +187,11 @@ fuzzer
 Freespinny
 BestEtf
 Etf
+prosemirror
+gapcursor
+dropcursor
+dompurify
+orderedmap
+labelledby
+isTextblock
+deflt

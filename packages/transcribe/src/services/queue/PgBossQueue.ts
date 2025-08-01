@@ -33,6 +33,7 @@ export default class PgBossQueue implements BaseQueue {
 			user: this.options.database.user,
 			password: this.options.database.password,
 			port: this.options.database.port,
+			host: this.options.database.host,
 		});
 	}
 

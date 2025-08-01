@@ -15,9 +15,30 @@ import mockCommandRuntimes from '../EditorToolbar/testing/mockCommandRuntimes';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import { EditorType } from './types';
 
 let store: Store<AppState>;
 let registeredRuntime: RegisteredRuntime;
+
+const defaultEditorProps = {
+	themeId: Setting.THEME_ARITIM_DARK,
+	markupLanguage: MarkupLanguage.Markdown,
+	initialText: 'Testing...',
+	globalSearch: '',
+	noteId: '',
+	noteHash: '',
+	style: {},
+	toolbarEnabled: true,
+	readOnly: false,
+	onChange: ()=>{},
+	onSelectionChange: ()=>{},
+	onUndoRedoDepthChange: ()=>{},
+	onAttach: async ()=>{},
+	noteResources: {},
+	plugins: {},
+	mode: EditorType.Markdown,
+};
 
 describe('NoteEditor', () => {
 	beforeAll(() => {
@@ -45,19 +66,8 @@ describe('NoteEditor', () => {
 		const wrappedNoteEditor = render(
 			<TestProviderStack store={store}>
 				<NoteEditor
-					themeId={Setting.THEME_ARITIM_DARK}
-					initialText='Testing...'
-					globalSearch=''
-					noteId=''
-					noteHash=''
-					style={{}}
-					toolbarEnabled={true}
-					readOnly={false}
-					onChange={()=>{}}
-					onSelectionChange={()=>{}}
-					onUndoRedoDepthChange={()=>{}}
-					onAttach={async ()=>{}}
-					plugins={{}}
+					ref={undefined}
+					{...defaultEditorProps}
 				/>
 			</TestProviderStack>,
 		);
@@ -96,6 +106,29 @@ describe('NoteEditor', () => {
 				}
 			});
 		}
+
+		wrappedNoteEditor.unmount();
+	});
+
+	it('should show a warning banner the first time the Rich Text Editor is used', () => {
+		const wrappedNoteEditor = render(
+			<TestProviderStack store={store}>
+				<NoteEditor
+					ref={undefined}
+					{...defaultEditorProps}
+					mode={EditorType.RichText}
+				/>
+			</TestProviderStack>,
+		);
+
+		const warningBannerQuery = /This Rich Text editor has a number of limitations.*/;
+		const warning = screen.getByText(warningBannerQuery);
+		expect(warning).toBeVisible();
+
+		// Pressing dismiss should dismiss the warning
+		const dismissButton = screen.getByHintText('Hides warning');
+		fireEvent.press(dismissButton);
+		expect(screen.queryByText(warningBannerQuery)).toBeNull();
 
 		wrappedNoteEditor.unmount();
 	});

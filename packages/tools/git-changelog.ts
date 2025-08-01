@@ -22,6 +22,7 @@ enum Platform {
 	Desktop = 'desktop',
 	Clipper = 'clipper',
 	Server = 'server',
+	Transcribe = 'transcribe',
 	Cloud = 'cloud',
 	Cli = 'cli',
 	PluginGenerator = 'plugin-generator',
@@ -104,6 +105,7 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('clipper') === 0) return Platform.Clipper;
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
 	if (tagName.indexOf('server') === 0) return Platform.Server;
+	if (tagName.indexOf('transcribe') === 0) return Platform.Transcribe;
 	if (tagName.indexOf('cloud') === 0) return Platform.Cloud;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
 	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
@@ -128,6 +130,7 @@ export const filesApplyToPlatform = (files: string[], platform: string): boolean
 		if (file.startsWith('packages/react-native-') && isMobile) return true;
 		if (file.startsWith('packages/renderer') && isMainApp) return true;
 		if (file.startsWith('packages/server') && platform === 'server') return true;
+		if (file.startsWith('packages/transcribe') && platform === 'transcribe') return true;
 		if (file.startsWith('packages/tools') && isMainApp) return true;
 		if (file.startsWith('packages/turndown') && isMainApp) return true;
 	}
@@ -264,6 +267,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
+		if (platform === 'transcribe' && prefix.indexOf('transcribe') >= 0) addIt = true;
 		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server') >= 0)) addIt = true;
 
 		if (isRenovate && filesApplyToPlatform(log.files, platform)) {
@@ -318,7 +322,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 	const isPlatformPrefix = (prefixString: string) => {
 		const prefix = prefixString.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'cloud'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'transcribe', 'cloud'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};

@@ -15,6 +15,7 @@ In order to provide certain features, Joplin may need to connect to third-party 
 | Voice typing | If you use the voice typing feature on Android, the application will download the language files from https://github.com/joplin/voice-typing-models/ or https://alphacephei.com/vosk/models. | Disabled | Yes
 | OCR | If you have enabled optical character recognition on desktop, the application will download the language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. | Disabled | Yes 
 | Crash reports | If you have enabled crash auto-upload, the application will upload the report to Sentry when a crash happens. When Sentry is initialised it will also connect to `sentry.io`. | Disabled | Yes
+| Handwriting recognition | This option allows the user to send images to Joplin Server/Cloud to be transcribed, only images selected with the 'Recognize handwritten image' are affected. | Enabled | Yes
 
 <sup>(1) https://github.com/laurent22/joplin/issues/5705</sup><br/>
 <sup>(2) If the spellchecker is disabled, [it will not download the dictionary](https://discourse.joplinapp.org/t/new-version-of-joplin-contacting-google-servers-on-startup/23000/40?u=laurent).</sup>

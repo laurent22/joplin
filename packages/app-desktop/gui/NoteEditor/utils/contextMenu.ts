@@ -8,14 +8,15 @@ const MenuItem = bridge().MenuItem;
 import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
-import { NoteEntity, ResourceEntity, ResourceOcrStatus } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import { TinyMceEditorEvents } from '../NoteBody/TinyMCE/utils/types';
 import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
 import Setting from '@joplin/lib/models/Setting';
 import ItemChange from '@joplin/lib/models/ItemChange';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import CommandService from '@joplin/lib/services/CommandService';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const fs = require('fs-extra');
 const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
@@ -136,6 +137,40 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await saveFileData(png, filename);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
+		},
+		recognizeHandwrittenImage: {
+			label: _('Recognize handwritten image'),
+			onAction: async (options: ContextMenuOptions) => {
+				const syncTargetId = Setting.value('sync.target');
+				if (!SyncTargetRegistry.isJoplinServerOrCloud(syncTargetId)) {
+					await shim.showMessageBox(_('This feature is only available on Joplin Cloud and Joplin Server.'), { type: MessageBoxType.Error });
+					return;
+				}
+
+				if (!Setting.value('ocr.handwrittenTextDriverEnabled')) {
+					await shim.showMessageBox(_('This feature is disabled by default, you need to manually enable it by turning on the option to \'Enable handwritten transcription\'.'), { type: MessageBoxType.Error });
+					return;
+				}
+
+				const { resource } = await resourceInfo(options);
+
+				if (!['image/png', 'image/jpg', 'image/jpeg', 'image/bmp'].includes(resource.mime)) {
+					await shim.showMessageBox(_('This image type is not supported by the recognition system.'), { type: MessageBoxType.Error });
+					return;
+				}
+
+				await Resource.save({
+					id: resource.id,
+					ocr_status: ResourceOcrStatus.Todo,
+					ocr_driver_id: ResourceOcrDriverId.HandwrittenText,
+					ocr_details: '',
+					ocr_error: '',
+					ocr_text: '',
+				});
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
 		},
 		revealInFolder: {
 			label: _('Reveal file in folder'),
