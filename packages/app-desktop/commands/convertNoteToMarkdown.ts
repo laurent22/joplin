@@ -28,6 +28,8 @@ export const runtime = (): CommandRuntime => {
 				newNote.body = markdownBody;
 				newNote.markup_language = MarkupLanguage.Markdown;
 
+				await Note.save(newNote);
+
 				await Note.delete(note.id, { toTrash: true });
 
 				context.dispatch({
