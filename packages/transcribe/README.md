@@ -15,6 +15,19 @@ docker run --env-file .env-transcribe -p 4567:4567 \
      transcribe
 ```
 
+## Running with docker compose
+
+For running with docker compose the minimal required configuration is available on `.env-sample` and `docker-compose.server.yml`.
+
+One important note is that the folder `HTR_CLI_IMAGES_FOLDER` is the location where the images will be store while they are in the queue.
+
+To use the docker compose you can run:
+`docker compose -f docker-compose.server.yml --profile full up`
+
+If want to run only Joplin Server and its database run: 
+`docker compose -f docker-compose.server.yml --profile server up`
+
+
 # Setup for development
 
 ## Testing
