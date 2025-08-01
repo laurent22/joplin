@@ -18,7 +18,7 @@ export const runtime = (): CommandRuntime => {
 
 			const note = await Note.load(noteId);
 
-			if (note === null) return;
+			if (!note) return;
 
 			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
 
