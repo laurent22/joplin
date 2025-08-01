@@ -2,7 +2,7 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import { stateUtils } from '@joplin/lib/reducer';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import { MarkupToHtml } from '@joplin/renderer';
+import { MarkupLanguage } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
 import bridge from '../services/bridge';
 
@@ -26,7 +26,7 @@ export const runtime = (): CommandRuntime => {
 				const newNote = await Note.duplicate(note.id);
 
 				newNote.body = markdownBody;
-				newNote.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+				newNote.markup_language = MarkupLanguage.Markdown;
 
 				await Note.delete(note.id, { toTrash: true });
 
