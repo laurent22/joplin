@@ -4,6 +4,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { MarkupToHtml } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
+import bridge from '../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'convertNoteToMarkdown',
@@ -20,24 +21,29 @@ export const runtime = (): CommandRuntime => {
 
 			if (!note) return;
 
-			const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
+			try {
+				const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
 
-			const newNote = await Note.duplicate(note.id);
+				const newNote = await Note.duplicate(note.id);
 
-			newNote.body = markdownBody;
-			newNote.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+				newNote.body = markdownBody;
+				newNote.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-			await Note.delete(note.id, { toTrash: true });
+				await Note.delete(note.id, { toTrash: true });
 
-			context.dispatch({
-				type: 'NOTE_HTML_TO_MARKDOWN_DONE',
-				value: note.id,
-			});
+				context.dispatch({
+					type: 'NOTE_HTML_TO_MARKDOWN_DONE',
+					value: note.id,
+				});
 
-			context.dispatch({
-				type: 'NOTE_SELECT',
-				id: newNote.id,
-			});
+				context.dispatch({
+					type: 'NOTE_SELECT',
+					id: newNote.id,
+				});
+			} catch (error) {
+				bridge().showErrorMessageBox(_('Could not convert note to Markdown: %s', error.message));
+			}
+
 
 		},
 		enabledCondition: 'oneNoteSelected && noteIsHtml && !noteIsReadOnly',
