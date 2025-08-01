@@ -17,11 +17,18 @@
 
 version: '3'
 
+networks:
+    app-network:
+    transcribe-network:
+    shared-network:
+
 services:
     db:
         image: postgres:16
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
+        networks:
+            - app-network
         ports:
             - "5432:5432"
         restart: unless-stopped
@@ -36,6 +43,9 @@ services:
             - transcribe
         ports:
             - "22300:22300"
+        networks:
+            - app-network
+            - shared-network
         restart: unless-stopped
         environment:
             - APP_PORT=22300
@@ -53,6 +63,8 @@ services:
         image: postgres:16
         volumes:
             - ./data/transcribe-postgres:/var/lib/postgresql/data
+        networks:
+            - transcribe-network
         ports:
             - "5431:5432"
         restart: unless-stopped
@@ -70,6 +82,9 @@ services:
             - transcribe-db
         ports:
             - "4567:4567"
+        networks:
+            - transcribe-network
+            - shared-network
         restart: unless-stopped
         environment:
             - APP_PORT=4567
