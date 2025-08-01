@@ -82,7 +82,7 @@ services:
             - POSTGRES_DB=${QUEUE_DATABASE_NAME}
         command: -p ${QUEUE_DATABASE_PORT}
     transcribe:
-        image: transcribe
+        image: joplin/transcribe:latest
         profiles:
             - full
         volumes:
