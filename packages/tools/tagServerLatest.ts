@@ -13,6 +13,7 @@ async function main() {
 	// docker manifest annotate joplin/server:latest joplin/server:amd64-3.3.13 --arch amd64
 	// docker manifest push joplin/server:latest
 
+	await execCommand('docker manifest rm joplin/server:latest');
 	await execCommand(`docker manifest create ${imageName}:latest ${imageName}:arm64-${version} ${imageName}:amd64-${version}`);
 	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:arm64-${version} --arch arm64`);
 	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:amd64-${version} --arch amd64`);

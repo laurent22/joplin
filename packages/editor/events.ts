@@ -8,6 +8,7 @@ export enum EditorEventType {
 	SelectionFormattingChange,
 	UpdateSearchDialog,
 	EditLink,
+	FollowLink,
 	Scroll,
 }
 
@@ -56,10 +57,14 @@ export interface RequestEditLinkEvent {
 	kind: EditorEventType.EditLink;
 }
 
+export interface FollowLinkEvent {
+	kind: EditorEventType.FollowLink;
+	link: string;
+}
 
 export type EditorEvent =
 		ChangeEvent|UndoRedoDepthChangeEvent|SelectionRangeChangeEvent|
 			EditorScrolledEvent|
 			SelectionFormattingChangeEvent|UpdateSearchDialogEvent|
-			RequestEditLinkEvent;
+			RequestEditLinkEvent|FollowLinkEvent;
 

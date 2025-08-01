@@ -17,7 +17,6 @@ jobs:
         uses: ./.github/workflows/shared/setup-build-environment
 
       - name: Install Docker Engine
-        # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y apt-transport-https
@@ -36,7 +35,7 @@ jobs:
       # a pull request it will fail because the PR doesn't have access to
       # secrets
       - uses: docker/login-action@v3
-        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/transcribe-v'))
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -141,7 +140,7 @@ jobs:
           echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
           yarn install
-          yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0 if it works.

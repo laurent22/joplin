@@ -1,12 +1,12 @@
 PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EXAV (15.1.4):
+  - EXAV (15.1.7):
     - ExpoModulesCore
     - ReactCommon/turbomodule/core
-  - EXConstants (17.1.6):
+  - EXConstants (17.1.7):
     - ExpoModulesCore
-  - Expo (53.0.9):
+  - Expo (53.0.19):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -33,17 +33,19 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoAsset (11.1.5):
+  - ExpoAsset (11.1.7):
     - ExpoModulesCore
-  - ExpoCamera (16.1.6):
+  - ExpoCamera (16.1.10):
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
-  - ExpoFileSystem (18.1.10):
+  - ExpoFileSystem (18.1.11):
     - ExpoModulesCore
-  - ExpoFont (13.3.1):
+  - ExpoFont (13.3.2):
     - ExpoModulesCore
-  - ExpoModulesCore (2.3.13):
+  - ExpoLocalAuthentication (16.0.5):
+    - ExpoModulesCore
+  - ExpoModulesCore (2.4.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1430,9 +1432,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-fingerprint-scanner (6.0.0):
-    - React
-  - react-native-geolocation (3.3.0):
+  - react-native-geolocation (3.4.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1458,7 +1458,7 @@ PODS:
     - Yoga
   - react-native-get-random-values (1.11.0):
     - React-Core
-  - react-native-image-picker (7.1.1):
+  - react-native-image-picker (7.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1486,7 +1486,7 @@ PODS:
     - React-Core
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-quick-crypto (0.7.12):
+  - react-native-quick-crypto (0.7.13):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1870,13 +1870,13 @@ PODS:
     - React-utils (= 0.79.2)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCClipboard (1.14.3):
+  - RNCClipboard (1.16.2):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
   - RNDateTimePicker (8.3.0):
     - React-Core
-  - RNDeviceInfo (10.14.0):
+  - RNDeviceInfo (14.0.4):
     - React-Core
   - RNExitApp (2.0.0):
     - React-Core
@@ -1884,15 +1884,37 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNLocalize (3.2.1):
+  - RNLocalize (3.4.1):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (10.2.1):
+  - RNShare (12.0.9):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
-  - RNVectorIcons (10.1.0):
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNVectorIcons (10.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1934,6 +1956,7 @@ DEPENDENCIES:
   - ExpoCamera (from `../node_modules/expo-camera/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
+  - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1977,7 +2000,6 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - "react-native-alarm-notification (from `../node_modules/@joplin/react-native-alarm-notification`)"
   - "react-native-document-picker (from `../node_modules/@react-native-documents/picker`)"
-  - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -2061,6 +2083,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
     :path: "../node_modules/expo-font/ios"
+  ExpoLocalAuthentication:
+    :path: "../node_modules/expo-local-authentication/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
   fast_float:
@@ -2144,8 +2168,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@joplin/react-native-alarm-notification"
   react-native-document-picker:
     :path: "../node_modules/@react-native-documents/picker"
-  react-native-fingerprint-scanner:
-    :path: "../node_modules/react-native-fingerprint-scanner"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-get-random-values:
@@ -2263,19 +2285,20 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
-  EXAV: 6ef85347ee2dba74841f79f8ce3f65a69268bfba
-  EXConstants: 9f310f44bfedba09087042756802040e464323c0
-  Expo: 0b5c6afd3f78a88a0f539369d5098a57afff58a7
-  ExpoAsset: 3bc9adb7dbbf27ae82c18ca97eb988a3ae7e73b1
-  ExpoCamera: 316809537daad6a5bd2c04b98e0589304beb5551
-  ExpoFileSystem: c36eb8155eb2381c83dda7dc210e3eec332368b6
-  ExpoFont: abbb91a911eb961652c2b0a22eef801860425ed6
-  ExpoModulesCore: 202223696d7cb0c605a01dce4739956f3059db7e
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  EXAV: ae28256069c4cdde93d185c007d8f68d92902c2e
+  EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
+  Expo: 4b1c6de7c441e1caa1918671ae0aa34d51f019a5
+  ExpoAsset: ef06e880126c375f580d4923fdd1cdf4ee6ee7d6
+  ExpoCamera: 7edf99216d92e40b991d4e7ed69eba9527c94cda
+  ExpoFileSystem: 7f92f7be2f5c5ed40a7c9efc8fa30821181d9d63
+  ExpoFont: cf508bc2e6b70871e05386d71cab927c8524cc8e
+  ExpoLocalAuthentication: c35f18692dcb35775a1be0f37b2131096951a6bd
+  ExpoModulesCore: e2c98670a94932b744f5bc4e394520e1c63b5462
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
@@ -2313,13 +2336,12 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
   react-native-alarm-notification: fd7c73a3dc15ce2d5bd9b28dfaa5aa2e25850c7b
   react-native-document-picker: 3491100f1048571593b284b74b93ce99b14e20a2
-  react-native-fingerprint-scanner: 91bf6825709dd7bd3abc4588a4772eb097a2b2d8
-  react-native-geolocation: 4636238083f80179c3475e43e0324a7c2a8499ad
+  react-native-geolocation: ec15ffebc53790314885eb9e5f2132132fbc2600
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
-  react-native-image-picker: f93cd040b48aab8c46b504a848bc994d706d52b0
+  react-native-image-picker: 99fbcec11cf4679170a7cfba4e4d9f598297448c
   react-native-image-resizer: 24c5d06fae2176dc0caed4b6396e02befb44064a
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-quick-crypto: b8e25bc5d0c241f631f4ddae9cd06107edfc26e8
+  react-native-quick-crypto: 988d8d57cd720dbe218272b60775a8e0210d0b80
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-saf-x: 24ebe9aa153f82ec6726de459ae77508d68d5599
   react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
@@ -2358,18 +2380,18 @@ SPEC CHECKSUMS:
   ReactCodegen: c63eda03ba1d94353fb97b031fc84f75a0d125ba
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
-  RNCClipboard: 7c3e3b5f71d84ef61690ad377b6c50cf27864ff5
+  RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
   RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
   RNDateTimePicker: 29264364ea7b8cc0fb355b3843cf276a4ff78966
-  RNDeviceInfo: 98bb51ba1519cd3f19f14e7236b5bb1c312c780f
+  RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNLocalize: e7378161f0b6a6365407eb2377aab46cc38047d8
+  RNLocalize: 15463c4d79c7da45230064b4adcf5e9bb984667e
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: 694e19d7f74ac4c04de3a8af0649e9ccc03bd8b1
-  RNVectorIcons: 59d3cf9496d9358698a7eb14d2fc7038c686764f
+  RNShare: ef61d9be34bf9881d515851d0710a023cdc4f0f4
+  RNVectorIcons: d53917643fddb261b22bd6d889776f336893622b
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5

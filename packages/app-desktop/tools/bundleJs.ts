@@ -120,8 +120,8 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 
 const bundleJs = async (writeStats: boolean) => {
 	const entryPoints = [
-		{ fileName: 'main.js', renderer: false },
-		{ fileName: 'main-html.js', renderer: true },
+		{ fileName: 'main.ts', renderer: false },
+		{ fileName: 'main-html.ts', renderer: true },
 	];
 	for (const { fileName, renderer } of entryPoints) {
 		const compiler = await makeBuildContext(fileName, renderer, writeStats);

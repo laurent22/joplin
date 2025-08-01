@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import {
-	forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState,
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
 } from 'react';
 import { Props, WebViewControl } from './types';
 
 import { View, ViewStyle } from 'react-native';
 import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
 import Logger from '@joplin/utils/Logger';
+import useCss from './utils/useCss';
 
 const logger = Logger.create('ExtendedWebView');
 
@@ -20,24 +21,26 @@ const wrapperStyle: ViewStyle = { height: '100%', width: '100%', flex: 1 };
 const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const iframeRef = useRef<HTMLIFrameElement|null>(null);
 
+	const injectJs = useCallback((js: string) => {
+		if (!iframeRef.current) {
+			logger.warn(`WebView(${props.webviewInstanceId}): Tried to inject JavaScript after the iframe has unloaded.`);
+			return;
+		}
+
+		// react-native-webview doesn't seem to show a warning in the case where JavaScript
+		// is injected before the first page loads.
+		if (!iframeRef.current.contentWindow) {
+			return;
+		}
+
+		iframeRef.current.contentWindow.postMessage({
+			injectJs: js,
+		}, '*');
+	}, [props.webviewInstanceId]);
+
 	useImperativeHandle(ref, (): WebViewControl => {
 		return {
-			injectJS(js: string) {
-				if (!iframeRef.current) {
-					logger.warn(`WebView(${props.webviewInstanceId}): Tried to inject JavaScript after the iframe has unloaded.`);
-					return;
-				}
-
-				// react-native-webview doesn't seem to show a warning in the case where JavaScript
-				// is injected before the first page loads.
-				if (!iframeRef.current.contentWindow) {
-					return;
-				}
-
-				iframeRef.current.contentWindow.postMessage({
-					injectJs: js,
-				}, '*');
-			},
+			injectJS: injectJs,
 			postMessage(message: unknown) {
 				if (!iframeRef.current || !iframeRef.current.contentWindow) {
 					logger.warn(`WebView(${props.webviewInstanceId}): Tried to post a message to an unloaded iframe.`);
@@ -49,7 +52,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				}, '*');
 			},
 		};
-	}, [props.webviewInstanceId]);
+	}, [props.webviewInstanceId, injectJs]);
 
 	const [containerElement, setContainerElement] = useState<HTMLDivElement>();
 	const containerRef = useRef(containerElement);
@@ -62,9 +65,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const onLoadStartRef = useRef(props.onLoadStart);
 	onLoadStartRef.current = props.onLoadStart;
 
+	const { injectedJs: cssInjectedJs } = useCss(
+		iframeRef.current ? injectJs : null,
+		props.css,
+	);
+	const injectedJavaScript = props.injectedJavaScript + cssInjectedJs;
+
 	// Don't re-load when injected JS changes. This should match the behavior of the native webview.
-	const injectedJavaScriptRef = useRef(props.injectedJavaScript);
-	injectedJavaScriptRef.current = props.injectedJavaScript;
+	const injectedJavaScriptRef = useRef(injectedJavaScript);
+	injectedJavaScriptRef.current = injectedJavaScript;
 
 	useEffect(() => {
 		const headHtml = `

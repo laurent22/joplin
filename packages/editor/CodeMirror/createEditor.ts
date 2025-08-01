@@ -21,21 +21,21 @@ import {
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
-} from './markdown/markdownCommands';
-import decoratorExtension from './markdown/decoratorExtension';
-import computeSelectionFormatting from './markdown/computeSelectionFormatting';
+} from './editorCommands/markdownCommands';
+import decoratorExtension from './extensions/markdownDecorationExtension';
+import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
-import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
-import searchExtension from './utils/searchExtension';
+import biDirectionalTextExtension from './extensions/biDirectionalTextExtension';
+import searchExtension from './extensions/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
-import overwriteModeExtension from './utils/overwriteModeExtension';
+import overwriteModeExtension from './extensions/overwriteModeExtension';
 import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
-import selectedNoteIdExtension, { setNoteIdEffect } from './utils/selectedNoteIdExtension';
+import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant

@@ -1,5 +1,44 @@
 # Joplin Android Changelog
 
+## [android-v3.4.2](https://github.com/laurent22/joplin/releases/tag/android-v3.4.2) (Pre-release) - 2025-07-25T08:30:30Z
+
+- Improved: Updated packages react-native-paper (v5.13.5)
+- Fixed: Fix title bar is partially hidden by the screen header (#12785 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.4.1](https://github.com/laurent22/joplin/releases/tag/android-v3.4.1) (Pre-release) - 2025-07-24T10:57:44Z
+
+- New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))
+- New: Add delete line, duplicate line and sort selected lines buttons to editor toolbar (#12555 by [@mrjo118](https://github.com/mrjo118))
+- New: Add missing title to the revision viewer for mobile (#12611 by [@mrjo118](https://github.com/mrjo118))
+- New: Add note revision viewer (#12305 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add support for scanning multi-page documents (#12635 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Voice typing: Add setting to allow specifying a glossary (#12370 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Auto-fill the editor search input with the global search (#12291 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add information about failing tests of OneNote importer inside test names  (#12159) (#12157 by [@pedr](https://github.com/pedr))
+- Improved: Adjust list toggle behavior for consistency with other apps (#12360) (#11845 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow recording to continue while the app is in the background (#12330 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Change revisions to be presented in reverse order in the dropdown (#12406 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Default to a larger voice typing model (#12352 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Extend the maximum note history expiry days to 99999 (#12374 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Implement tag screen redesign (#12551 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Increase space available for revisions dropdown (#12379 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Joplin Cloud/Server: Support publishing notes (#12350 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move the conflicts folder to the top of the notebook list to improve visibility (#12688) (#12594 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Set new encryption methods as default (#12229 by Self Not Found)
+- Improved: Switch library used for biometrics (#12682 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update js-draw to v1.30.0 (#12322 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.2), @babel/plugin-transform-export-namespace-from (v7.25.9), @react-native-clipboard/clipboard (v1.16.2), @react-native-community/cli (v16.0.3), @react-native-community/cli-platform-android (v16.0.3), @react-native-community/cli-platform-ios (v16.0.3), @react-native-community/geolocation (v3.4.0), @rollup/plugin-commonjs (v28.0.3), @rollup/plugin-node-resolve (v16.0.1), @rollup/plugin-replace (v6.0.2), crypto-browserify (v3.12.1), dayjs (v1.11.13), domutils (v3.2.2), form-data (v4.0.2), glob (v11.0.2), highlight.js (v11.11.1), jsdom (v25), katex (v0.16.22), license-checker-rseidelsohn (v4.4.2), mermaid (v11.6.0), nanoid (v3.3.9), node (v18.20.7), react, react-native-device-info (v14.0.4), react-native-image-picker (v7.2.3), react-native-localize (v3.4.1), react-native-modal-datetime-picker (v18), react-native-quick-crypto (v0.7.13), react-native-share (v12.0.9), react-native-vector-icons (v10.2.0), react-native-zip-archive (v7), sass (v1.86.3), sharp (v0.33.5), standard (v17.1.2), style-to-js (v1.1.16), tesseract.js (v5.1.1), uuid (v11.1.0), webpack-dev-server (v5.2.1)
+- Improved: Upgrade to React Native 0.77 (#12179 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to React Native 0.79 (#12337 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Improve silence detection (#12404 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Voice typing: Update whisper.cpp to v1.7.5 (#12353 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Add ability to delete all history for individual notes (#12381) (#12097 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix adding lists to blank lines using toolbar buttons (#12745) (#12744 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix camera screen (#12624 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix cursor jumps to the beginning of inputs on tap (#12499) (#12484 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix voice typing fails to start on certain devices (#12351 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Moving sub-notebook of shared notebook should unshare it (#12647) (#12089)
+
 ## [android-v3.3.11](https://github.com/laurent22/joplin/releases/tag/android-v3.3.11) (Pre-release) - 2025-07-09T22:51:55Z
 
 - Fixed: Biometrics: Fix notebook list can still be accessed when the app is locked (#12691 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

@@ -67,8 +67,10 @@ import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 import NavService from './services/NavService';
 import getAppName from './getAppName';
+import PerformanceLogger from './PerformanceLogger';
 
 const appLogger: LoggerWrapper = Logger.create('App');
+const perfLogger = PerformanceLogger.create();
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
@@ -673,6 +675,7 @@ export default class BaseApplication {
 			...options,
 		};
 
+		const startTask = perfLogger.taskStart('BaseApplication/start');
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -748,6 +751,8 @@ export default class BaseApplication {
 			globalLogger.setLevel(initArgs.logLevel);
 		}
 
+		PerformanceLogger.setLogger(globalLogger);
+
 		reg.setLogger(Logger.create('') as Logger);
 		// reg.dispatch = () => {};
 
@@ -804,7 +809,7 @@ export default class BaseApplication {
 				const locale = shim.detectAndSetLocale(Setting);
 				reg.logger().info(`First start: detected locale as ${locale}`);
 			}
-			Setting.skipDefaultMigrations();
+			Setting.skipMigrations();
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', false);
@@ -814,8 +819,7 @@ export default class BaseApplication {
 
 			Setting.setValue('firstStart', false);
 		} else {
-			Setting.applyDefaultMigrations();
-			Setting.applyUserSettingMigration();
+			await Setting.applyMigrations();
 		}
 
 		setLocale(Setting.value('locale'));
@@ -890,6 +894,7 @@ export default class BaseApplication {
 
 		await MigrationService.instance().run();
 
+		startTask.onEnd();
 		return argv;
 	}
 }

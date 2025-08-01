@@ -34,6 +34,9 @@
 		"%d note sera définitivement supprimée. Continuer ?",
 		"%d notes seront définitivement supprimées. Continuer ?"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -134,6 +137,9 @@
 	"(None)": [
 		"(Aucun)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg : %s)"
 	],
@@ -154,6 +160,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> peut être \"toggle\" ou \"clear\". Utilisez \"toggle\" pour basculer la tâche entre le statut terminé et non terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez \"clear\" pour convertir la tâche en note."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A new update (%s) is available": [
 		"Une nouvelle mise à jour (%s) est disponible"
@@ -268,6 +277,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème sur %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Permet le débogage des plugins mobiles. Voir %s pour plus de détails."
@@ -653,6 +665,9 @@
 	"Command palette...": [
 		"Palette de commandes…"
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"Simplifié"
 	],
@@ -706,6 +721,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"Se connecter à Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Facturation consolidée"
@@ -1093,6 +1111,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Ne perdez pas le mot de passe car, pour des raisons de sécurité, ce sera la *seule* façon de déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Donate, website": [
 		"Donations, site web"
 	],
@@ -1390,6 +1411,9 @@
 	"Error opening note in editor: %s": [
 		"Erreur lors de l'ouverture de la note dans l'éditeur de texte : %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Erreur. Veuillez vérifier que l'URL, le nom, le mot de passe, etc. sont corrects et que la destination est accessible. L'erreur reportée est :"
 	],
@@ -1474,6 +1498,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		"Sécurité intégrée : la synchronisation a été interrompue pour éviter toute perte de données, car la cible de synchronisation est vide ou endommagée. Pour contourner ce problème, désactivez la sécurité intégrée dans les paramètres de synchronisation."
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Erreur fatale :"
 	],
@@ -1525,6 +1552,9 @@
 	"Focus title": [
 		"Curseur sur le titre"
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
 	"Follow link": [
 		"Suivre le lien"
 	],
@@ -1574,6 +1604,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Géolocalisation, vérification orthographique, barre d'outils, taille des images"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"L'obtenir maintenant :"
 	],
@@ -1582,6 +1615,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas fournie, la valeur de [nom] sera affichée. Si ni le [nom] ni la [valeur] ne sont fournis, la configuration complète sera affichée."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		"aller"
@@ -1888,6 +1924,9 @@
 	],
 	"Joplin Server URL": [
 		"Serveur Joplin : URL"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Le Web Clipper permet d'enregistrer des pages web et des captures d'écran depuis votre navigateur vers Joplin."
@@ -2407,6 +2446,9 @@
 	"OCR: Language data URL or path": [
 		"OCR : URL ou chemin d'accès aux données linguistiques"
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"OK"
 	],
@@ -2606,6 +2648,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Veuillez patienter jusqu'à ce que tous les fichiers joints soient téléchargés et déchiffrés. Vous pouvez également éditer la note maintenant en passant au mode %s."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Veuillez patienter…"
 	],
@@ -2644,6 +2689,9 @@
 	],
 	"Possible values: %s.": [
 		"Valeurs possibles : %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Préférences"
@@ -2749,6 +2797,9 @@
 	],
 	"Publish notes to the internet": [
 		"Publier les notes sur Internet"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"QR Code": [
 		"Code QR"
@@ -3062,6 +3113,9 @@
 	"Selects a notebook": [
 		"Sélectionne un carnet"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Envoyer rapport de débogage"
 	],
@@ -3118,6 +3172,9 @@
 	],
 	"Shares": [
 		"Partages"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Partage du carnet…"
@@ -3470,17 +3527,11 @@
 	"Text editor command": [
 		"Commande de l'éditeur de texte"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"Le [Web Clipper](%s) est une extension qui vous permet d'enregistrer des pages web et des captures d'écran depuis votre navigateur."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Le profil actif ne peut pas être supprimé. Changez de profil et réessayez."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"L'application va maintenant se fermer. Veuillez la relancer pour terminer l'opération."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"L'application ne s'est pas fermée correctement. Voulez-vous démarrer en mode sans échec ?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet."
@@ -3536,6 +3587,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Les clefs avec ces identifiants sont utilisées pour chiffrer certains de vos objets, cependant le logiciel n'y a pour l'instant pas accès. Il est probable qu'elle vont être prochainement disponible via la synchronisation."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"La clef maître a été mise à niveau avec succès !"
@@ -3889,6 +3943,9 @@
 	"Unshare": [
 		"Annuler le partage"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Annuler le partage ? Les destinataires n'auront plus accès au carnet."
 	],
@@ -4113,6 +4170,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Vous êtes connecté à Joplin Cloud, vous pouvez quitter cet écran maintenant."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Vous utilisez la version Intel de Joplin sur un processeur Apple Silicon. Téléchargez la version Apple Silicon pour de meilleures performances."

@@ -204,4 +204,10 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 			todo_completed: 0,
 		});
 	});
+
+	it('should use the filename in cases where the frontmatter has no title', async () => {
+		const note = await importTestFile('filename-title.md');
+
+		expect(note.title).toBe('filename-title');
+	});
 });

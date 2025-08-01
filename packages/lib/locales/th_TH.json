@@ -14,6 +14,9 @@
 	"%d note matches this pattern. Delete it?": [
 		""
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		""
 	],
@@ -89,6 +92,9 @@
 	"(None)": [
 		""
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		""
 	],
@@ -108,6 +114,12 @@
 		""
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		""
+	],
+	"[None]": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
 	"A3": [
@@ -191,6 +203,9 @@
 	"All potential ports are in use - please report the issue at %s": [
 		""
 	],
+	"All shared folders:": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
@@ -225,6 +240,9 @@
 		"ใช้"
 	],
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
 		""
 	],
 	"Are you sure you want to renew the authorisation token?": [
@@ -446,6 +464,9 @@
 	"Command palette...": [
 		""
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		""
 	],
@@ -481,6 +502,9 @@
 	],
 	"Conflicts": [
 		"ขัดแย้ง"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -713,6 +737,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		""
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -923,6 +950,9 @@
 	"Error opening note in editor: %s": [
 		""
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		""
 	],
@@ -968,6 +998,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"ผิดพลาดร้ายแรง:"
 	],
@@ -999,6 +1032,9 @@
 		"กำลังซ่อมดัชนีค้นหา..."
 	],
 	"Focus": [
+		""
+	],
+	"Folder \"%s\" is shared with:": [
 		""
 	],
 	"Follow link": [
@@ -1040,6 +1076,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1047,6 +1086,9 @@
 		""
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		""
+	],
+	"Glossary:": [
 		""
 	],
 	"go": [
@@ -1178,6 +1220,9 @@
 	"In: %s": [
 		"ใน: %s"
 	],
+	"Incoming shares:": [
+		""
+	],
 	"Incompatible": [
 		""
 	],
@@ -1260,6 +1305,9 @@
 		""
 	],
 	"Joplin Server URL": [
+		""
+	],
+	"Joplin SSO Authentication": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -1580,6 +1628,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"ตกลง"
 	],
@@ -1706,6 +1757,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"โปรดรอสักครู่..."
 	],
@@ -1729,6 +1783,9 @@
 	],
 	"Possible values: %s.": [
 		"ค่าที่เป็นไปได้: %s"
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"การตั้งค่า"
@@ -1815,6 +1872,9 @@
 		""
 	],
 	"Publish notes to the internet": [
+		""
+	],
+	"Publish/unpublish": [
 		""
 	],
 	"Quit": [
@@ -2012,6 +2072,9 @@
 	"Selection deleted": [
 		""
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d"
 	],
@@ -2043,6 +2106,9 @@
 		""
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Show all": [
@@ -2288,16 +2354,10 @@
 	"Text editor command": [
 		""
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		""
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		""
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
 		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
@@ -2352,6 +2412,9 @@
 		""
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2576,6 +2639,9 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		""
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		""
 	],
@@ -2666,6 +2732,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -2730,6 +2799,12 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

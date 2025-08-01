@@ -16,23 +16,11 @@ import useBarcodeScanner from './utils/useBarcodeScanner';
 import ScannedBarcodes from './ScannedBarcodes';
 import { CameraRef } from './Camera/types';
 import Camera from './Camera/index';
-import { CameraResult, OnInsertBarcode } from './types';
+import { CameraViewProps } from './types';
 import Logger from '@joplin/utils/Logger';
 import useBackHandler from '../../utils/hooks/useBackHandler';
 
 const logger = Logger.create('CameraView');
-
-interface Props {
-	themeId: number;
-	style: ViewStyle;
-	cameraType: CameraDirection;
-	cameraRatio: string;
-	onPhoto: (data: CameraResult)=> void;
-	// If null, cancelling should be handled by the parent
-	// component
-	onCancel: (()=> void)|null;
-	onInsertBarcode: OnInsertBarcode;
-}
 
 interface UseStyleProps {
 	themeId: number;
@@ -104,7 +92,7 @@ const useAvailableRatios = (): string[] => {
 };
 
 
-const CameraViewComponent: React.FC<Props> = props => {
+const CameraViewComponent: React.FC<CameraViewProps> = props => {
 	const styles = useStyles(props);
 	const cameraRef = useRef<CameraRef|null>(null);
 	const [cameraReady, setCameraReady] = useState(false);

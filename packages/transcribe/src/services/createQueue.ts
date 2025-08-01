@@ -15,6 +15,7 @@ const createQueue = async (envVariables: EnvVariables, isPrimary: boolean) => {
 				user: envVariables.QUEUE_DATABASE_USER,
 				password: envVariables.QUEUE_DATABASE_PASSWORD,
 				port: envVariables.QUEUE_DATABASE_PORT,
+				host: envVariables.QUEUE_DATABASE_HOST,
 			},
 			ttl: envVariables.QUEUE_TTL,
 			maintenanceInterval: envVariables.QUEUE_MAINTENANCE_INTERVAL,

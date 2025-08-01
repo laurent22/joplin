@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -107,6 +110,9 @@
 	"(None)": [
 		"(هیچ کدام)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(چیزی که بدست خواهی آورد: %s)"
 	],
@@ -127,6 +133,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای تغییر وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت معمولی باشد، تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت معمولی استفاده نمایید."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -232,6 +241,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"تمام پورت‌های بالقوه در حال استفاده هستند- لطفا این مشکل را در %s گزارش نمایید"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"اجازه اشکال زدایی به افزونه های موبایل را می دهد. برای جزئیات بیشتر به %s مراجعه کنید."
@@ -587,6 +599,9 @@
 	"Command palette...": [
 		"پالت فرمان ..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"فشرده"
 	],
@@ -634,6 +649,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"اتصال به سرویس ابری joplin"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"صورتحساب تلفیقی"
@@ -990,6 +1008,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
 	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
 	"Donate, website": [
 		"کمک مالی، وبسایت"
 	],
@@ -1269,6 +1290,9 @@
 	"Error opening note in editor: %s": [
 		"خطای بازکردن یادداشت در ویرایشگر: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:"
 	],
@@ -1344,6 +1368,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"خطای مهلک:"
 	],
@@ -1391,6 +1418,9 @@
 	],
 	"Focus title": [
 		"عنوان تمرکز"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1441,6 +1471,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"موقعیت جغرافیایی، بررسی املایی، نوار ابزار ویرایشگر، تغییر اندازه تصویر"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"هم‌اکنون دریافت نمایید:"
 	],
@@ -1449,6 +1482,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1737,6 +1773,9 @@
 	],
 	"Joplin Server URL": [
 		"آدرس سرور joplin"
+	],
+	"Joplin SSO Authentication": [
+		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin ذخیره کنید."
@@ -2201,6 +2240,9 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
+	"Ok": [
+		""
+	],
 	"OK": [
 		"باشه"
 	],
@@ -2375,6 +2417,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش یادداشت بروید."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"لطفاً صبور باشید..."
 	],
@@ -2413,6 +2458,9 @@
 	],
 	"Possible values: %s.": [
 		"مقادیر احتمالی: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"تنظیمات"
@@ -2512,6 +2560,9 @@
 	],
 	"Publish notes to the internet": [
 		"اشتراک‌گذاری یادداشت‌ها در اینترنت"
+	],
+	"Publish/unpublish": [
+		""
 	],
 	"Quit": [
 		"خروج"
@@ -2789,6 +2840,9 @@
 	"Select parent notebook": [
 		"انتخاب دفترچه والد"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"ارسال گزارش خطا"
 	],
@@ -2842,6 +2896,9 @@
 	],
 	"Shares": [
 		"اشتراک‌ها"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"در حال اشتراک‌گذاری دفترچه..."
@@ -3170,17 +3227,11 @@
 	"Text editor command": [
 		"دستور ویرایشگر متن"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"[Web Clipper](%s) یک افزونه مرورگر است که به شما امکان می دهد صفحات وب و اسکرین شات ها را از مرورگر خود ذخیره کنید."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"برنامه به درستی بسته نشد. آیا می خواهید در حالت ایمن شروع به کار کنید؟"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"برنامه احراز هویت شده است - اکنون می توانید این برگه مرورگر را ببندید."
@@ -3236,6 +3287,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"کلید اصلی با موفقیت ارتقا یافت!"
@@ -3565,6 +3619,9 @@
 	"Unshare": [
 		"لغو اشتراک‌گذاری"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"اشتراک‌گذاری این دفترچه لغو شود؟ گیرندگان دیگر به محتوای آن دسترسی نخواهند داشت."
 	],
@@ -3777,6 +3834,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"شما به سرویس ابری Joplin وارد شده اید، اکنون می توانید این صفحه را ترک کنید."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""

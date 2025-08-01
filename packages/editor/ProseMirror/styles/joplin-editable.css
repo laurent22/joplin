@@ -1,0 +1,4 @@
+
+.joplin-editable.-selected {
+	outline: 4px solid var(--joplin-text-selection-color);
+}

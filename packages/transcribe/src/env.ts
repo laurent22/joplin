@@ -12,6 +12,7 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
+	QUEUE_DATABASE_HOST: 'localhost',
 };
 
 export interface EnvVariables {
@@ -27,6 +28,7 @@ export interface EnvVariables {
 	QUEUE_DATABASE_NAME: string;
 	QUEUE_DATABASE_USER: string;
 	QUEUE_DATABASE_PORT: number;
+	QUEUE_DATABASE_HOST: string;
 }
 
 export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariables {
