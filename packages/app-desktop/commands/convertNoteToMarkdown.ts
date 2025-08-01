@@ -1,7 +1,7 @@
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import { stateUtils } from '@joplin/lib/reducer';
-import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { MarkupToHtml } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from '@joplin/lib/commands/convertHtmlToMarkdown';
 import bridge from '../services/bridge';
@@ -13,8 +13,7 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		execute: async (context: any, noteId: string = null) => {
+		execute: async (context: CommandContext, noteId: string = null) => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 
 			const note = await Note.load(noteId);
