@@ -148,16 +148,16 @@ const buildStartupTasks = (
 	let singleInstanceLock: Promise<void>;
 
 
-	addTask('prepare single instance lock', async () => {
+	addTask('buildStartupTasks/prepare single instance lock', async () => {
 		// The single instance lock involves waiting for messages -- start checking
 		// the lock as early as possible.
 		singleInstanceLock = lockToSingleInstance();
 	});
 
-	addTask('shimInit', async () => {
+	addTask('buildStartupTasks/shimInit', async () => {
 		shimInit();
 	});
-	addTask('initProfile', async () => {
+	addTask('buildStartupTasks/initProfile', async () => {
 		const profile = await initProfile(getProfilesRootDir());
 		isSubProfile = profile.isSubProfile;
 		currentProfile = getCurrentProfile(profile.profileConfig);
@@ -167,7 +167,7 @@ const buildStartupTasks = (
 			value: profile.profileConfig,
 		});
 	});
-	addTask('set constants', async () => {
+	addTask('buildStartupTasks/set constants', async () => {
 		Setting.setConstant('env', __DEV__ ? Env.Dev : Env.Prod);
 		Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 		Setting.setConstant('appType', AppType.Mobile);
@@ -179,15 +179,15 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
 	});
-	addTask('make resource directory', async () => {
+	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
 	});
-	addTask('singleInstanceLock', async () => {
+	addTask('buildStartupTasks/singleInstanceLock', async () => {
 		// Do as much setup as possible before checking the lock -- the lock intentionally waits for
 		// messages from other clients for several hundred ms.
 		await singleInstanceLock;
 	});
-	addTask('set up logger', async () => {
+	addTask('buildStartupTasks/set up logger', async () => {
 		logDatabase = new Database(new DatabaseDriverReactNative());
 		await logDatabase.open({ name: 'log.sqlite' });
 		await logDatabase.exec(Logger.databaseCreateTableSql());
@@ -207,7 +207,7 @@ const buildStartupTasks = (
 		BaseService.logger_ = mainLogger;
 		PerformanceLogger.setLogger(mainLogger);
 	});
-	addTask('set up database', async () => {
+	addTask('buildStartupTasks/set up database', async () => {
 		reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
 		reg.setDispatch(dispatch);
 
@@ -229,7 +229,7 @@ const buildStartupTasks = (
 		db.setLogger(dbLogger);
 		reg.setDb(db);
 	});
-	addTask('initialize item classes', async () => {
+	addTask('buildStartupTasks/initialize item classes', async () => {
 		// reg.dispatch = dispatch;
 		BaseModel.dispatch = dispatch;
 		BaseSyncTarget.dispatch = dispatch;
@@ -250,11 +250,11 @@ const buildStartupTasks = (
 		Resource.fsDriver_ = shim.fsDriver();
 		FileApiDriverLocal.fsDriver_ = shim.fsDriver();
 	});
-	addTask('initializeAlarmService', async () => {
+	addTask('buildStartupTasks/initializeAlarmService', async () => {
 		AlarmService.setLogger(reg.logger());
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
-	addTask('openDatabase', async () => {
+	addTask('buildStartupTasks/openDatabase', async () => {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
@@ -263,7 +263,7 @@ const buildStartupTasks = (
 			// await db.clearForTesting();
 		}
 	});
-	addTask('setUpSettings', async () => {
+	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
 		await migrateMasterPassword();
 
@@ -331,14 +331,14 @@ const buildStartupTasks = (
 			}
 		}
 	});
-	addTask('import plugin assets', async () => {
+	addTask('buildStartupTasks/import plugin assets', async () => {
 		await PluginAssetsLoader.instance().importAssets();
 	});
-	addTask('set up command & keymap services', async () => {
+	addTask('buildStartupTasks/set up command & keymap services', async () => {
 		initializeCommandService(store);
 		KeymapService.instance().initialize();
 	});
-	addTask('set up E2EE', async () => {
+	addTask('buildStartupTasks/set up E2EE', async () => {
 		setRSA(RSA);
 
 		EncryptionService.fsDriver_ = shim.fsDriver();
@@ -353,10 +353,10 @@ const buildStartupTasks = (
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 	});
-	addTask('set up sharing', async () => {
+	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
 	});
-	addTask('load folders', async () => {
+	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
 		dispatch({
@@ -364,7 +364,7 @@ const buildStartupTasks = (
 			ids: Setting.value('collapsedFolderIds'),
 		});
 	});
-	addTask('load tags', async () => {
+	addTask('buildStartupTasks/load tags', async () => {
 		const tags = await Tag.allWithNotes();
 
 		dispatch({
@@ -372,8 +372,8 @@ const buildStartupTasks = (
 			items: tags,
 		});
 	});
-	addTask('clear shared files cache', clearSharedFilesCache);
-	addTask('go: initial route', async () => {
+	addTask('buildStartupTasks/clear shared files cache', clearSharedFilesCache);
+	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
 		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
@@ -390,15 +390,15 @@ const buildStartupTasks = (
 			});
 		}
 	});
-	addTask('set up search', async () => {
+	addTask('buildStartupTasks/set up search', async () => {
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
 	});
-	addTask('run migrations', async () => {
+	addTask('buildStartupTasks/run migrations', async () => {
 		await MigrationService.instance().run();
 	});
-	addTask('set up background tasks', async () => {
+	addTask('buildStartupTasks/set up background tasks', async () => {
 		initializeUserFetcher();
 		PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
@@ -433,10 +433,10 @@ const buildStartupTasks = (
 			void DecryptionWorker.instance().scheduleStart();
 		});
 	});
-	addTask('set up welcome utils', async () => {
+	addTask('buildStartupTasks/set up welcome utils', async () => {
 		await WelcomeUtils.install(Setting.value('locale'), dispatch);
 	});
-	addTask('set up plugin service', async () => {
+	addTask('buildStartupTasks/set up plugin service', async () => {
 		// Even if there are no plugins, we need to initialize the PluginService so that
 		// plugin search can work.
 		const platformImplementation = PlatformImplementation.instance();
@@ -452,7 +452,7 @@ const buildStartupTasks = (
 		const updatedSettings = pluginService.clearUpdateState(pluginSettings);
 		Setting.setValue('plugins.states', updatedSettings);
 	});
-	addTask('run startup tests', async () => {
+	addTask('buildStartupTasks/run startup tests', async () => {
 		// ----------------------------------------------------------------------------
 		// On desktop and CLI we run various tests to check that node-rsa is working
 		// as expected. On mobile however we cannot run test units directly on

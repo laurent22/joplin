@@ -70,7 +70,7 @@ import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 
 const appLogger: LoggerWrapper = Logger.create('App');
-const perfLogger = PerformanceLogger.create('BaseApplication');
+const perfLogger = PerformanceLogger.create();
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
@@ -675,7 +675,7 @@ export default class BaseApplication {
 			...options,
 		};
 
-		const startTask = perfLogger.taskStart('start');
+		const startTask = perfLogger.taskStart('BaseApplication/start');
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;

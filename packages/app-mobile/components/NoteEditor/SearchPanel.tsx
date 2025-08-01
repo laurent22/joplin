@@ -116,6 +116,7 @@ const useStyles = (theme: Theme) => {
 				backgroundColor: theme.backgroundColor3,
 			},
 			input: {
+				flexBasis: 0,
 				flexGrow: 1,
 				height: buttonSize,
 				backgroundColor: theme.backgroundColor4,
@@ -178,6 +179,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 				returnKeyType='search'
 				blurOnSubmit={false}
 				onSubmitEditing={control.findNext}
+				selectTextOnFocus={true}
 			/>
 		);
 	};

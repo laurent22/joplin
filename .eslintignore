@@ -1765,6 +1765,7 @@ packages/tools/release-electron.js
 packages/tools/release-ios.js
 packages/tools/release-plugin-repo-cli.js
 packages/tools/release-server.js
+packages/tools/release-transcribe.js
 packages/tools/saveClaConsentRecords.js
 packages/tools/setupNewRelease.js
 packages/tools/spellcheck.js

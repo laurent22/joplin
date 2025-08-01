@@ -10,7 +10,7 @@ import EncryptionService from './e2ee/EncryptionService';
 import PerformanceLogger from '../PerformanceLogger';
 
 const EventEmitter = require('events');
-const perfLogger = PerformanceLogger.create('DecryptionWorker');
+const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {
 	skippedItemCount?: number;
@@ -327,7 +327,7 @@ export default class DecryptionWorker {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = {}) {
 		this.startCalls_.push(true);
-		const startTask = perfLogger.taskStart('start');
+		const startTask = perfLogger.taskStart('DecryptionWorker/start');
 		let output = null;
 		try {
 			output = await this.start_(options);

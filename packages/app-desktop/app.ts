@@ -64,7 +64,7 @@ import initializeCommandService from './utils/initializeCommandService';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 
-const perfLogger = PerformanceLogger.create('app-desktop/app');
+const perfLogger = PerformanceLogger.create();
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -427,7 +427,7 @@ class Application extends BaseApplication {
 			tasks.push({ label, task });
 		};
 
-		addTask('set up extra debug logging', () => {
+		addTask('app/set up extra debug logging', () => {
 			reg.logger().info('app.start: doing regular boot');
 			const dir: string = Setting.value('profileDir');
 
@@ -442,27 +442,27 @@ class Application extends BaseApplication {
 			}
 		});
 
-		addTask('set up registry', () => {
+		addTask('app/set up registry', () => {
 			reg.setDispatch(this.dispatch.bind(this));
 			reg.setShowErrorMessageBoxHandler((message: string) => { bridge().showErrorMessageBox(message); });
 		});
 
-		addTask('set up auto updater', () => {
+		addTask('app/set up auto updater', () => {
 			this.setupAutoUpdaterService();
 		});
 
-		addTask('set up AlarmService', () => {
+		addTask('app/set up AlarmService', () => {
 			AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 			AlarmService.setLogger(reg.logger());
 		});
 
 		if (Setting.value('flagOpenDevTools')) {
-			addTask('openDevTools', () => {
+			addTask('app/openDevTools', () => {
 				bridge().openDevTools();
 			});
 		}
 
-		addTask('set up custom protocol handler', async () => {
+		addTask('app/set up custom protocol handler', async () => {
 			this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
 			this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
@@ -475,7 +475,7 @@ class Application extends BaseApplication {
 		// handler, and, as such, it may make sense to also limit permissions of
 		// allowed pages with a Content Security Policy.
 
-		addTask('initialize PluginManager, redux, CommandService, and KeymapService', async () => {
+		addTask('app/initialize PluginManager, redux, CommandService, and KeymapService', async () => {
 			PluginManager.instance().dispatch_ = this.dispatch.bind(this);
 			PluginManager.instance().setLogger(reg.logger());
 			PluginManager.instance().register(pluginClasses);
@@ -496,11 +496,11 @@ class Application extends BaseApplication {
 			}
 		});
 
-		addTask('initialize PerFolderSortOrderService', () => {
+		addTask('app/initialize PerFolderSortOrderService', () => {
 			PerFolderSortOrderService.initialize();
 		});
 
-		addTask('dispatch initial settings', () => {
+		addTask('app/dispatch initial settings', () => {
 			// Since the settings need to be loaded before the store is
 			// created, it will never receive the SETTING_UPDATE_ALL even,
 			// which mean state.settings will not be initialised. So we
@@ -508,7 +508,7 @@ class Application extends BaseApplication {
 			Setting.dispatchUpdateAll();
 		});
 
-		addTask('update folders and tags', async () => {
+		addTask('app/update folders and tags', async () => {
 			await refreshFolders((action) => this.dispatch(action), '');
 
 			const tags = await Tag.allWithNotes();
@@ -518,7 +518,7 @@ class Application extends BaseApplication {
 			});
 		});
 
-		addTask('set up custom CSS', async () => {
+		addTask('app/set up custom CSS', async () => {
 			await this.setupCustomCss();
 		});
 
@@ -529,7 +529,7 @@ class Application extends BaseApplication {
 		// 	items: masterKeys,
 		// });
 
-		addTask('send initial selection to redux', async () => {
+		addTask('app/send initial selection to redux', async () => {
 			const getNotesParent = async () => {
 				let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
 				if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
@@ -570,14 +570,14 @@ class Application extends BaseApplication {
 			});
 		});
 
-		addTask('initializeUserFetcher', async () => {
+		addTask('app/initializeUserFetcher', async () => {
 			initializeUserFetcher();
 			shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 		});
 
-		addTask('updateTray', () => this.updateTray());
+		addTask('app/updateTray', () => this.updateTray());
 
-		addTask('set main window state', () => {
+		addTask('app/set main window state', () => {
 			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 				bridge().mainWindow().hide();
 			} else {
@@ -585,7 +585,7 @@ class Application extends BaseApplication {
 			}
 		});
 
-		addTask('start maintenance tasks', () => {
+		addTask('app/start maintenance tasks', () => {
 			// Always disable on Mac for now - and disable too for the few apps that may have the flag enabled.
 			// At present, it only seems to work on Windows.
 			if (shim.isMac()) {
@@ -634,7 +634,7 @@ class Application extends BaseApplication {
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 
-		addTask('set up ClipperServer', () => {
+		addTask('app/set up ClipperServer', () => {
 			const clipperLogger = new Logger();
 			clipperLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-clipper.txt` });
 			clipperLogger.addTarget(TargetType.Console);
@@ -649,7 +649,7 @@ class Application extends BaseApplication {
 			}
 		});
 
-		addTask('set up external edit watchers', () => {
+		addTask('app/set up external edit watchers', () => {
 			ExternalEditWatcher.instance().setLogger(reg.logger());
 			ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
@@ -671,7 +671,7 @@ class Application extends BaseApplication {
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		if (Setting.value('env') === 'dev') {
-			addTask('add debug variables', () => {
+			addTask('app/add debug variables', () => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(window as any).joplin = {
 					revisionService: RevisionService.instance(),
@@ -688,7 +688,7 @@ class Application extends BaseApplication {
 			});
 		}
 
-		addTask('listen for main process events', () => {
+		addTask('app/listen for main process events', () => {
 			bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 			bridge().setOnAllowedExtensionsChangeListener((newExtensions) => {
 				Setting.setValue('linking.extraAllowedExtensions', newExtensions);
@@ -706,17 +706,17 @@ class Application extends BaseApplication {
 			});
 		});
 
-		addTask('initPluginService', () => this.initPluginService());
+		addTask('app/initPluginService', () => this.initPluginService());
 
-		addTask('setupContextMenu', () => {
+		addTask('app/setupContextMenu', () => {
 			this.setupContextMenu();
 		});
 
-		addTask('set up SpellCheckerService', async () => {
+		addTask('app/set up SpellCheckerService', async () => {
 			await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 		});
 
-		addTask('listen for resource events', () => {
+		addTask('app/listen for resource events', () => {
 			eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
 				await ResourceService.instance().indexNoteResources();
 			});
@@ -726,14 +726,14 @@ class Application extends BaseApplication {
 			});
 		});
 
-		addTask('setupOcrService', () => this.setupOcrService());
+		addTask('app/setupOcrService', () => this.setupOcrService());
 
 		return tasks;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
-		const startupTask = perfLogger.taskStart('start');
+		const startupTask = perfLogger.taskStart('app/start');
 
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.

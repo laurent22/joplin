@@ -14,7 +14,7 @@ import { ItemChangeEntity } from './database/types';
 import PerformanceLogger from '../PerformanceLogger';
 const { sprintf } = require('sprintf-js');
 
-const perfLogger = PerformanceLogger.create('ResourceService');
+const perfLogger = PerformanceLogger.create();
 
 export default class ResourceService extends BaseService {
 
@@ -37,7 +37,7 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = true;
-		const task = perfLogger.taskStart('indexNoteResources');
+		const task = perfLogger.taskStart('ResourceService/indexNoteResources');
 
 		try {
 			await ItemChange.waitForAllSaved();
@@ -128,7 +128,7 @@ export default class ResourceService extends BaseService {
 
 	public async deleteOrphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000;
-		const task = perfLogger.taskStart('deleteOrphanResources');
+		const task = perfLogger.taskStart('ResourceService/deleteOrphanResources');
 
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);

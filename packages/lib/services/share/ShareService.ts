@@ -17,7 +17,7 @@ import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } fr
 import PerformanceLogger from '../../PerformanceLogger';
 
 const logger = Logger.create('ShareService');
-const perfLogger = PerformanceLogger.create('ShareService');
+const perfLogger = PerformanceLogger.create();
 
 export interface ApiShare {
 	id: string;
@@ -516,7 +516,7 @@ export default class ShareService {
 	}
 
 	public async maintenance() {
-		const task = perfLogger.taskStart('maintenance');
+		const task = perfLogger.taskStart('ShareService/maintenance');
 		if (this.enabled) {
 			let hasError = false;
 
