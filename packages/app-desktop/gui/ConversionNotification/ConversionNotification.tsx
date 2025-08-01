@@ -19,9 +19,7 @@ export default (props: Props) => {
 		props.dispatch({ type: 'NOTE_HTML_TO_MARKDOWN_DONE', value: '' });
 
 		const notification = popupManager.createPopup(() => (
-			<div className='update-notification'>
-				{_('The note has been converted to Markdown and the original note has been moved to the trash')}
-			</div>
+			<div>{_('The note has been converted to Markdown and the original note has been moved to the trash')}</div>
 		), { type: NotificationType.Success });
 		notification.scheduleDismiss();
 	}, [props.dispatch, popupManager, props.noteId]);
