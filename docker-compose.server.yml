@@ -105,4 +105,5 @@ services:
             - QUEUE_DATABASE_PORT=${QUEUE_DATABASE_PORT}
             - QUEUE_DATABASE_HOST=transcribe-db
             - API_KEY=${TRANSCRIBE_API_KEY}
+            - HTR_CLI_IMAGES_FOLDER=${HTR_CLI_IMAGES_FOLDER}
 
