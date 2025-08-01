@@ -45,6 +45,7 @@ import NoteEditor from './NoteEditor/NoteEditor';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { Dispatch } from 'redux';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -801,8 +802,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			<div style={style}>
 				<ConversionNotification
 					noteId={this.props.noteHtmlToMarkdownDone}
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					dispatch={this.props.dispatch as any}
+					dispatch={this.props.dispatch as Dispatch}
 				/>
 				<TrashNotification
 					lastDeletion={this.props.lastDeletion}
