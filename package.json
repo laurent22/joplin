@@ -51,6 +51,7 @@
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releasePluginRepoCli": "node packages/tools/release-plugin-repo-cli.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "releaseTranscribe": "node packages/tools/release-transcribe.js",
     "saveClaConsentRecords": "node packages/tools/saveClaConsentRecords.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "spellcheck": "node packages/tools/spellcheck.js",

@@ -846,7 +846,8 @@ packages/app-mobile/contentScripts/rendererBundle/useWebViewSetup.js
 packages/app-mobile/contentScripts/rendererBundle/utils/useContentScripts.js
 packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.test.js
 packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.js
-packages/app-mobile/contentScripts/richTextEditorBundle/contentScript.js
+packages/app-mobile/contentScripts/richTextEditorBundle/contentScript/convertHtmlToMarkdown.js
+packages/app-mobile/contentScripts/richTextEditorBundle/contentScript/index.js
 packages/app-mobile/contentScripts/richTextEditorBundle/types.js
 packages/app-mobile/contentScripts/richTextEditorBundle/useWebViewSetup.js
 packages/app-mobile/contentScripts/types.js
@@ -1316,6 +1317,7 @@ packages/lib/services/database/migrations/44.js
 packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
+packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
@@ -1384,6 +1386,8 @@ packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.test.js
 packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
+packages/lib/services/ocr/drivers/OcrDriverTranscribe.test.js
+packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js
@@ -1734,6 +1738,7 @@ packages/tools/release-electron.js
 packages/tools/release-ios.js
 packages/tools/release-plugin-repo-cli.js
 packages/tools/release-server.js
+packages/tools/release-transcribe.js
 packages/tools/saveClaConsentRecords.js
 packages/tools/setupNewRelease.js
 packages/tools/spellcheck.js

@@ -12,7 +12,7 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "generatePluginTypes": "rm -rf ./plugin_types && yarn tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
-    "test": "node --security-revert=CVE-2023-46809 ./node_modules/.bin/jest --verbose=false",
+    "test": "jest",
     "test-ci": "yarn test"
   },
   "devDependencies": {

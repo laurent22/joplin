@@ -7,9 +7,13 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../.."
 
+TRANSCRIBE_TAG_PREFIX=transcribe
+TRANSCRIBE_REPOSITORY=joplin/transcribe
+
 IS_PULL_REQUEST=0
 IS_DESKTOP_RELEASE=0
 IS_SERVER_RELEASE=0
+IS_TRANSCRIBE_RELEASE=0
 IS_LINUX=0
 IS_MACOS=0
 
@@ -21,6 +25,10 @@ fi
 
 if [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	IS_SERVER_RELEASE=1
+fi
+
+if [[ $GIT_TAG_NAME = $TRANSCRIBE_TAG_PREFIX-* ]]; then
+	IS_TRANSCRIBE_RELEASE=1
 fi
 
 if [[ $GIT_TAG_NAME = v* ]]; then
@@ -80,12 +88,14 @@ echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 echo "BUILD_SEQUENCIAL=$BUILD_SEQUENCIAL"
 echo "SERVER_REPOSITORY=$SERVER_REPOSITORY"
 echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
+echo "TRANSCRIBE_TAG_PREFIX=$TRANSCRIBE_TAG_PREFIX"
 echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
 echo "IS_DESKTOP_RELEASE=$IS_DESKTOP_RELEASE"
 echo "IS_SERVER_RELEASE=$IS_SERVER_RELEASE"
+echo "IS_TRANSCRIBE_RELEASE=$IS_TRANSCRIBE_RELEASE"
 echo "RUN_TESTS=$RUN_TESTS"
 echo "IS_LINUX=$IS_LINUX"
 echo "IS_MACOS=$IS_MACOS"
@@ -301,9 +311,13 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 		USE_HARD_LINKS=false yarn dist
 	fi	
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
-	echo "Step: Building Docker Image..."
+	echo "Step: Building Joplin Server Docker Image..."
 	cd "$ROOT_DIR"
-	yarn buildServerDocker --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+	yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
+elif [[ $IS_LINUX = 1 ]] && [ "$IS_TRANSCRIBE_RELEASE" == "1" ]; then
+	echo "Step: Building Joplin Transcribe Docker Image..."
+	cd "$ROOT_DIR"
+	yarn buildServerDocker --docker-file Dockerfile.transcribe --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $TRANSCRIBE_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
 	

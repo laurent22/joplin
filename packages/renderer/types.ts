@@ -1,5 +1,10 @@
-import { MarkupLanguage } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+
+export enum MarkupLanguage {
+	Markdown = 1,
+	Html = 2,
+	Any = 3,
+}
 
 export type ItemIdToUrlHandler = (resourceId: string, urlParameters?: string)=> string;
 

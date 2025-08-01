@@ -12,6 +12,10 @@ async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }
 
+const loadDefaultProfileSettings = async () => {
+	return JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+};
+
 const switchToSubProfileSettings = async () => {
 	await Setting.reset();
 	const rootProfileDir = Setting.value('profileDir');
@@ -274,7 +278,7 @@ describe('models/Setting', () => {
 
 		expect(Setting.value('sync.target')).toBe(0);
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
-		Setting.applyDefaultMigrations();
+		await Setting.applyMigrations();
 		expect(Setting.value('sync.target')).toBe(7); // Changed
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
@@ -283,7 +287,7 @@ describe('models/Setting', () => {
 		await Setting.reset();
 
 		Setting.setValue('sync.target', 9);
-		Setting.applyDefaultMigrations();
+		await Setting.applyMigrations();
 		expect(Setting.value('sync.target')).toBe(9); // Not changed
 	}));
 
@@ -292,8 +296,8 @@ describe('models/Setting', () => {
 
 		expect(Setting.value('sync.target')).toBe(0);
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
-		Setting.skipDefaultMigrations();
-		Setting.applyDefaultMigrations();
+		Setting.skipMigrations();
+		await Setting.applyMigrations();
 		expect(Setting.value('sync.target')).toBe(0); // Not changed
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0); // Not changed
 	}));
@@ -304,7 +308,7 @@ describe('models/Setting', () => {
 		Setting.setValue('lastSettingDefaultMigration', 0);
 		expect(Setting.value('sync.target')).toBe(0);
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
-		Setting.applyDefaultMigrations();
+		await Setting.applyMigrations();
 		expect(Setting.value('sync.target')).toBe(0); // Not changed
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
@@ -313,7 +317,7 @@ describe('models/Setting', () => {
 		await Setting.reset();
 
 		Setting.setValue('spellChecker.language', 'fr-FR');
-		Setting.applyUserSettingMigration();
+		await Setting.applyMigrations();
 		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR']);
 	}));
 
@@ -322,7 +326,7 @@ describe('models/Setting', () => {
 
 		Setting.setValue('spellChecker.languages', ['fr-FR', 'en-US']);
 		Setting.setValue('spellChecker.language', 'fr-FR');
-		Setting.applyUserSettingMigration();
+		await Setting.applyMigrations();
 		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR', 'en-US']);
 	}));
 
@@ -330,9 +334,56 @@ describe('models/Setting', () => {
 		await Setting.reset();
 
 		expect(Setting.isSet('spellChecker.language')).toBe(false);
-		Setting.applyUserSettingMigration();
+		await Setting.applyMigrations();
 		expect(Setting.isSet('spellChecker.languages')).toBe(false);
 	}));
+
+	it('should migrate global to local settings', (async () => {
+		await Setting.reset();
+
+		// Set an initial value -- should store in the global settings
+		const initialLayout = { key: 'test' };
+		Setting.setValue('ui.layout', initialLayout);
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		// The migrations should fetch the previous initial layout from the global settings
+		expect(Setting.value('ui.layout')).toEqual({});
+		await Setting.applyMigrations();
+		expect(Setting.value('ui.layout')).toEqual(initialLayout);
+
+		Setting.setValue('ui.layout', { key: 'test 2' });
+		await Setting.saveAll();
+
+		// Should not overwrite parent settings
+		const globalSettings = await loadDefaultProfileSettings();
+		expect(globalSettings['ui.layout']).toEqual(initialLayout);
+	}));
+
+	it('migrated settings should still be local even if global->local migrations are skipped', async () => {
+		await Setting.reset();
+		const defaultSettingValue = Setting.value('notes.listRendererId');
+
+		// Set an initial value -- should store in the global settings
+		Setting.setValue('notes.listRendererId', 'global-setting-value');
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+		expect(Setting.value('notes.listRendererId')).toBe(defaultSettingValue);
+
+		// .applyMigrations should not apply skipped migrations
+		Setting.skipMigrations();
+		await Setting.applyMigrations();
+		expect(Setting.value('notes.listRendererId')).toBe(defaultSettingValue);
+
+		// The setting should be local -- the parent setting should not be overwritten
+		Setting.setValue('notes.listRendererId', 'some-other-value');
+		await Setting.saveAll();
+
+		const globalSettings = await loadDefaultProfileSettings();
+		expect(globalSettings['notes.listRendererId']).toBe('global-setting-value');
+	});
 
 	it('should load sub-profile settings', async () => {
 		await Setting.reset();
@@ -388,7 +439,7 @@ describe('models/Setting', () => {
 
 		// Double-check that actual file content is correct
 
-		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		const globalSettings = await loadDefaultProfileSettings();
 		const localSettings = JSON.parse(await readFile(`${Setting.value('profileDir')}/settings-1.json`, 'utf8'));
 
 		expect(globalSettings).toEqual({
@@ -418,7 +469,7 @@ describe('models/Setting', () => {
 		Setting.setValue('sync.target', 2); // Local setting (Sub-profile)
 		await Setting.saveAll();
 
-		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		const globalSettings = await loadDefaultProfileSettings();
 		expect(globalSettings['sync.target']).toBe(9);
 	});
 

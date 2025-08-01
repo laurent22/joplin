@@ -6,8 +6,8 @@ describe('PerformanceLogger', () => {
 	});
 
 	test('should buffer log messages created before a logger is attached', () => {
-		const logger = PerformanceLogger.create('test');
-		logger.mark('Test');
+		const logger = PerformanceLogger.create();
+		logger.mark('test/Test');
 
 		const log: string[] = [];
 		PerformanceLogger.setLogger({
@@ -19,7 +19,7 @@ describe('PerformanceLogger', () => {
 		expect(log[0]).toMatch(/^info: Performance: test\/Test: Mark at/);
 
 		// Should continue using the set logger
-		const task = logger.taskStart('Test task');
+		const task = logger.taskStart('test/Test task');
 		expect(log).toHaveLength(2);
 		task.onEnd();
 		expect(log).toHaveLength(3);

@@ -39,7 +39,7 @@ require('@sentry/electron/renderer');
 // Allows components to use React as a global
 window.React = React;
 
-const perfLogger = PerformanceLogger.create('main-html');
+const perfLogger = PerformanceLogger.create();
 
 
 const main = async () => {

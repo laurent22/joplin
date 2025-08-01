@@ -1,12 +1,12 @@
-import '../utils/polyfills';
+import '../../utils/polyfills';
 import { createEditor } from '@joplin/editor/ProseMirror';
-import { EditorProcessApi, EditorProps, MainProcessApi } from './types';
-import WebViewToRNMessenger from '../../utils/ipc/WebViewToRNMessenger';
-import { MarkupLanguage } from '@joplin/renderer';
+import { EditorProcessApi, EditorProps, MainProcessApi } from '../types';
+import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
+import { MarkupLanguage } from '@joplin/renderer/types';
 import '@joplin/editor/ProseMirror/styles';
-import HtmlToMd from '@joplin/lib/HtmlToMd';
-import readFileToBase64 from '../utils/readFileToBase64';
+import readFileToBase64 from '../../utils/readFileToBase64';
 import { EditorLanguageType } from '@joplin/editor/types';
+import convertHtmlToMarkdown from './convertHtmlToMarkdown';
 
 const postprocessHtml = (html: HTMLElement) => {
 	// Fix resource URLs
@@ -45,11 +45,10 @@ const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 };
 
 
-const htmlToMd = new HtmlToMd();
 const htmlToMarkdown = (html: HTMLElement): string => {
 	html = postprocessHtml(html);
 
-	return htmlToMd.parse(html, { preserveColorStyles: true });
+	return convertHtmlToMarkdown(html);
 };
 
 export const initialize = async ({
@@ -127,5 +126,5 @@ export const initialize = async ({
 	return editor;
 };
 
-export { default as setUpLogger } from '../utils/setUpLogger';
+export { default as setUpLogger } from '../../utils/setUpLogger';
 

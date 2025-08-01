@@ -3,15 +3,9 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
-import { FsDriver, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
+import { FsDriver, MarkupLanguage, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 import defaultResourceModel from './defaultResourceModel';
 const MarkdownIt = require('markdown-it');
-
-export enum MarkupLanguage {
-	Markdown = 1,
-	Html = 2,
-	Any = 3,
-}
 
 export interface PluginOptions {
 	[id: string]: { enabled: boolean };

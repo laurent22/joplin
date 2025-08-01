@@ -87,15 +87,13 @@ export default class PerformanceLogger {
 	}
 
 	private lastLogTime_ = 0;
-	public static create(prefix: string) {
-		return new PerformanceLogger(prefix);
+	public static create() {
+		return new PerformanceLogger();
 	}
 
-	private constructor(private readonly prefix_: string) { }
+	private constructor() { }
 
 	public mark(name: string) {
-		name = `${this.prefix_}/${name}`;
-
 		// If available, make it possible to inspect the performance mark from the F12
 		// developer tools.
 		if (hasPerformanceMarkApi) {
@@ -118,8 +116,6 @@ export default class PerformanceLogger {
 	}
 
 	public taskStart(name: string) {
-		name = `${this.prefix_}/${name}`;
-
 		if (typeof performance.mark === 'function') {
 			performance.mark(`${name}-start`);
 		}
