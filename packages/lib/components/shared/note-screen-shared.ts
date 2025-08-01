@@ -361,8 +361,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 
 shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {
 	const newNote = Note.toggleIsTodo(comp.state.note);
-	const newState = { note: newNote };
-	comp.setState(newState);
+	comp.state.note = newNote;
 };
 
 function toggleCheckboxLine(ipcMessage: string, noteBody: string) {
