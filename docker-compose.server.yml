@@ -25,6 +25,9 @@ networks:
 services:
     db:
         image: postgres:16
+        profiles:
+            - full
+            - server
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
         networks:
@@ -38,6 +41,9 @@ services:
             - POSTGRES_DB=${POSTGRES_DATABASE}
     app:
         image: joplin/server:latest
+        profiles:
+            - full
+            - server
         depends_on:
             - db
             - transcribe
@@ -61,6 +67,8 @@ services:
             - TRANSCRIBE_ENABLED=${TRANSCRIBE_ENABLED}
     transcribe-db:
         image: postgres:16
+        profiles:
+            - full
         volumes:
             - ./data/transcribe-postgres:/var/lib/postgresql/data
         networks:
@@ -75,6 +83,8 @@ services:
         command: -p ${QUEUE_DATABASE_PORT}
     transcribe:
         image: transcribe
+        profiles:
+            - full
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - ${HTR_CLI_IMAGES_FOLDER}:/app/packages/transcribe/images
