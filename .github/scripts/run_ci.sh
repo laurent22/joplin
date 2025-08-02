@@ -49,15 +49,17 @@ DOCKER_IMAGE_PLATFORM="linux/amd64"
 # a release
 RUN_TESTS=0
 
-if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ]; then
+if [ "$IS_SERVER_RELEASE" = 0 ] && [ "$IS_DESKTOP_RELEASE" = 0 ] && [ "$IS_TRANSCRIBE_RELEASE" = 0 ]; then
 	RUN_TESTS=1
 fi
 
-if [ "$RUNNER_ARCH" == "ARM64" ] && [ "$IS_SERVER_RELEASE" == "0" ]; then
-	# We exit now because nothing works properly with the ARM64 architecture.
-	# We only proceed  if building the server image.
-	echo "Running on ARM64 and not trying to build server image - early exit"
-	exit 0
+if [ "$RUNNER_ARCH" == "ARM64" ]; then
+	if [ "$IS_SERVER_RELEASE" == "0" ] && [ "$IS_TRANSCRIBE_RELEASE" == "0" ]; then
+		# We exit now because nothing works properly with the ARM64 architecture.
+		# We only proceed  if building the server image.
+		echo "Running on ARM64 and not trying to build server image - early exit"
+		exit 0
+	fi
 fi
 
 if [ "$RUNNER_ARCH" == "ARM64" ]; then

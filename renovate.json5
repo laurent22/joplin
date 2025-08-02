@@ -240,7 +240,7 @@
 				"@types/react-*",
 			],
 			"groupName": null,
-		}
+		},
 
 		{
 			"matchUpdateTypes": ["patch"],

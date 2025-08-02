@@ -17,11 +17,21 @@
 
 version: '3'
 
+networks:
+    app-network:
+    transcribe-network:
+    shared-network:
+
 services:
     db:
         image: postgres:16
+        profiles:
+            - full
+            - server
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
+        networks:
+            - app-network
         ports:
             - "5432:5432"
         restart: unless-stopped
@@ -31,10 +41,17 @@ services:
             - POSTGRES_DB=${POSTGRES_DATABASE}
     app:
         image: joplin/server:latest
+        profiles:
+            - full
+            - server
         depends_on:
             - db
+            - transcribe
         ports:
             - "22300:22300"
+        networks:
+            - app-network
+            - shared-network
         restart: unless-stopped
         environment:
             - APP_PORT=22300
@@ -45,3 +62,48 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PORT=${POSTGRES_PORT}
             - POSTGRES_HOST=db
+            - TRANSCRIBE_API_KEY=${TRANSCRIBE_API_KEY}
+            - TRANSCRIBE_BASE_URL=http://transcribe:4567
+            - TRANSCRIBE_ENABLED=${TRANSCRIBE_ENABLED}
+    transcribe-db:
+        image: postgres:16
+        profiles:
+            - full
+        volumes:
+            - ./data/transcribe-postgres:/var/lib/postgresql/data
+        networks:
+            - transcribe-network
+        ports:
+            - "${QUEUE_DATABASE_PORT}:5432"
+        restart: unless-stopped
+        environment:
+            - POSTGRES_PASSWORD=${QUEUE_DATABASE_PASSWORD}
+            - POSTGRES_USER=${QUEUE_DATABASE_USER}
+            - POSTGRES_DB=${QUEUE_DATABASE_NAME}
+        command: -p ${QUEUE_DATABASE_PORT}
+    transcribe:
+        image: joplin/transcribe:latest
+        profiles:
+            - full
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ${HTR_CLI_IMAGES_FOLDER}:/app/packages/transcribe/images
+        depends_on:
+            - transcribe-db
+        ports:
+            - "4567:4567"
+        networks:
+            - transcribe-network
+            - shared-network
+        restart: unless-stopped
+        environment:
+            - APP_PORT=4567
+            - DB_CLIENT=pg
+            - QUEUE_DATABASE_NAME=${QUEUE_DATABASE_NAME}
+            - QUEUE_DATABASE_USER=${QUEUE_DATABASE_USER}
+            - QUEUE_DATABASE_PASSWORD=${QUEUE_DATABASE_PASSWORD}
+            - QUEUE_DATABASE_PORT=${QUEUE_DATABASE_PORT}
+            - QUEUE_DATABASE_HOST=transcribe-db
+            - API_KEY=${TRANSCRIBE_API_KEY}
+            - HTR_CLI_IMAGES_FOLDER=${HTR_CLI_IMAGES_FOLDER}
+

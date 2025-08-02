@@ -193,6 +193,7 @@ export default class DecryptionWorker {
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
+		const decryptItemsTask = perfLogger.taskStart('DecryptionWorker/decryptItems');
 		try {
 			const notLoadedMasterKeyDispatches = [];
 
@@ -292,6 +293,8 @@ export default class DecryptionWorker {
 			this.state_ = 'idle';
 			this.dispatchReport({ state: 'idle' });
 			throw error;
+		} finally {
+			decryptItemsTask.onEnd();
 		}
 
 		// 2019-05-12: Temporary to set the file size of the resources
