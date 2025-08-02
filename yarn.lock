@@ -9650,7 +9650,7 @@ __metadata:
     knex: "npm:3.1.0"
     koa: "npm:2.16.1"
     koa-body: "npm:6.0.1"
-    pg-boss: "npm:10.1.6"
+    pg-boss: "npm:10.2.0"
     sqlite3: "npm:5.1.6"
     typescript: "npm:5.8.2"
   languageName: unknown
@@ -39473,14 +39473,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:10.1.6":
-  version: 10.1.6
-  resolution: "pg-boss@npm:10.1.6"
+"pg-boss@npm:10.2.0":
+  version: 10.2.0
+  resolution: "pg-boss@npm:10.2.0"
   dependencies:
     cron-parser: "npm:^4.9.0"
-    pg: "npm:^8.13.0"
+    pg: "npm:^8.14.1"
     serialize-error: "npm:^8.1.0"
-  checksum: 10/0237e320cf30a9a9e7d3ab4d00013ec2aca77d68828920ff8f5b4c4f5fd1ca982ab4b84a391f0048c98b18b6b64e18f402110842fde4afad2ee79b6de95cdd9a
+  checksum: 10/51d822f8dad1015f5183eab8fd26862001b6c65b4fd85ff11f335d6bf3aafc34854bfaa29a8b0fbb980a30a2c597e972274db116b01aa3f72e797976a7df1c17
   languageName: node
   linkType: hard
 
@@ -39491,10 +39491,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-cloudflare@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "pg-cloudflare@npm:1.2.5"
-  checksum: 10/13181a5d8243758bc6651426368097c89a2ff226d2ed8119f2777b15eea5e22953b5605b3d4861e68cd2109e1b08d3eea143e495bcefccaf7a0c8f70b69a0b51
+"pg-cloudflare@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "pg-cloudflare@npm:1.2.7"
+  checksum: 10/3d171407cbce36436c461200666ba6bd884bfe98016972760a797cec850199b8024a40055d80322c5fc02909e1533a144e9b108a99f7d7e21d0c42612f9821fb
   languageName: node
   linkType: hard
 
@@ -39512,10 +39512,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.7.0, pg-connection-string@npm:^2.9.0":
+"pg-connection-string@npm:^2.7.0":
   version: 2.9.0
   resolution: "pg-connection-string@npm:2.9.0"
   checksum: 10/cc65eab17400fadefc30f9214fb4707bb31c6b236f9e888c63af9fdf57f38eacbcdd439cce4a3c189ed4f5911819bf7369796e8b27dba73abb27f57e6da6178f
+  languageName: node
+  linkType: hard
+
+"pg-connection-string@npm:^2.9.1":
+  version: 2.9.1
+  resolution: "pg-connection-string@npm:2.9.1"
+  checksum: 10/40e9e9cd752121e72bff18d83e6c7ecda9056426815a84294de018569a319293c924704c8b7f0604fdc588835c7927647dea4f3c87a014e715bcbb17d794e9f0
   languageName: node
   linkType: hard
 
@@ -39526,16 +39533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.10.0":
-  version: 3.10.0
-  resolution: "pg-pool@npm:3.10.0"
-  peerDependencies:
-    pg: ">=8.0"
-  checksum: 10/c85c6f3cc1e7041ca332e30a54f0e4f8c14886394c3407a3ac9d641df209626a2bec7a2f4651e18c37c36d1aa0677f31fec927251d56d462010a4908ac5a8bca
-  languageName: node
-  linkType: hard
-
-"pg-pool@npm:^3.8.0":
+"pg-pool@npm:^3.10.1, pg-pool@npm:^3.8.0":
   version: 3.10.1
   resolution: "pg-pool@npm:3.10.1"
   peerDependencies:
@@ -39544,14 +39542,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "pg-protocol@npm:1.10.0"
-  checksum: 10/975184d9f67dd2325afc8b5e79008c39bbdf6baf43db1158a90a9c624c86d0ca51cff68031759e196739d2e04b90a6a4749b42206ab7b9aca03a25243a7c2094
-  languageName: node
-  linkType: hard
-
-"pg-protocol@npm:^1.8.0":
+"pg-protocol@npm:^1.10.3, pg-protocol@npm:^1.8.0":
   version: 1.10.3
   resolution: "pg-protocol@npm:1.10.3"
   checksum: 10/31da85319084c03f403efee7accce9786964df82a7feb60e6bd77b71f1e622c74a2a644a2bc434389d0ab92e5abdeedea69ebdb53b1897d9f01d2a1f51a8a2fe
@@ -39593,14 +39584,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.13.0":
-  version: 8.16.0
-  resolution: "pg@npm:8.16.0"
+"pg@npm:^8.14.1":
+  version: 8.16.3
+  resolution: "pg@npm:8.16.3"
   dependencies:
-    pg-cloudflare: "npm:^1.2.5"
-    pg-connection-string: "npm:^2.9.0"
-    pg-pool: "npm:^3.10.0"
-    pg-protocol: "npm:^1.10.0"
+    pg-cloudflare: "npm:^1.2.7"
+    pg-connection-string: "npm:^2.9.1"
+    pg-pool: "npm:^3.10.1"
+    pg-protocol: "npm:^1.10.3"
     pg-types: "npm:2.2.0"
     pgpass: "npm:1.0.5"
   peerDependencies:
@@ -39611,7 +39602,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/706ba6bbc79c397ae32ab144db2cc4e962a2dbad759ba539be0269731298efca8e0dbcd4de4ad14fb6e8b54c830b82f5da7d94ae4c32d853dea7e541b3a05f60
+  checksum: 10/6a2885a3f581d6c6dddddf5a4bb2790ee84f402ed7d73ece8b6bc102c58c17e4c5f17894c241633aa2f1d4fedd8f2401a80a9a02ef18bb57d05cbbfd8a53ca4d
   languageName: node
   linkType: hard
 
