@@ -146,7 +146,7 @@
     "@sentry/electron": "4.24.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
-    "@types/mustache": "4.2.5",
+    "@types/mustache": "4.2.6",
     "@types/node": "18.19.87",
     "@types/react": "18.3.20",
     "@types/react-dom": "18.3.7",

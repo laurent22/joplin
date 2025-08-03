@@ -8960,7 +8960,7 @@ __metadata:
     "@sentry/electron": "npm:4.24.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
-    "@types/mustache": "npm:4.2.5"
+    "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.87"
     "@types/react": "npm:18.3.20"
     "@types/react-dom": "npm:18.3.7"
@@ -9317,7 +9317,7 @@ __metadata:
     "@types/js-yaml": "npm:4.0.9"
     "@types/jsdom": "npm:21.1.7"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/mustache": "npm:4.2.5"
+    "@types/mustache": "npm:4.2.6"
     "@types/nanoid": "npm:3.0.0"
     "@types/node": "npm:18.19.87"
     "@types/node-rsa": "npm:1.1.4"
@@ -9540,7 +9540,7 @@ __metadata:
     "@types/jsdom": "npm:21.1.7"
     "@types/koa": "npm:2.15.0"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/mustache": "npm:4.2.5"
+    "@types/mustache": "npm:4.2.6"
     "@types/node-os-utils": "npm:1.3.4"
     "@types/nodemailer": "npm:6.4.17"
     "@types/uuid": "npm:10.0.0"
@@ -9600,7 +9600,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/js-yaml": "npm:4.0.9"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/mustache": "npm:4.2.5"
+    "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.87"
     "@types/node-fetch": "npm:2.6.12"
     "@types/yargs": "npm:17.0.33"
@@ -14382,10 +14382,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mustache@npm:4.2.5":
-  version: 4.2.5
-  resolution: "@types/mustache@npm:4.2.5"
-  checksum: 10/29581027fe420120ae0591e28d44209d0e01adf5175910d03401327777ee9c649a1508e2aa63147c782c7e53fcea4b69b5f9a2fbedcadc5500561d1161ae5ded
+"@types/mustache@npm:4.2.6":
+  version: 4.2.6
+  resolution: "@types/mustache@npm:4.2.6"
+  checksum: 10/56a9b979a9984d4f8b370ccdf04b54ae07f055b9e7326a526cf86b2fac73b04576cc71c83edaceaaf80038817520cbe2405f73623200a8ce03dcdd1e578e5016
   languageName: node
   linkType: hard
 
