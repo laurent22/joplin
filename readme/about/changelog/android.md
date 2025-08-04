@@ -1,5 +1,16 @@
 # Joplin Android Changelog
 
+## [android-v3.4.3](https://github.com/laurent22/joplin/releases/tag/android-v3.4.3) (Pre-release) - 2025-08-04T17:38:13Z
+
+- New: Add a Rich Text Editor (#12748 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Performance: Improve Rich Text Editor startup performance (#12819 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-documents/picker (v10.1.3), babel-plugin-react-native-web (v0.20.0), jsdom (v26), react-refresh (v0.17.0), sharp (v0.34.0)
+- Fixed: Fix editor becomes blank after dismissing search (#12818) (#12781 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix on screen keyboard covers the markdown toolbar and contents on Android 15+ (#12838) (#12821 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix save button is invisible in release builds (#12826) (#12782 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve usability of inline search in notes (#12791) (#12783 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Markdown editor: Make list indentation size equivalent to four spaces (#12794) (#12573 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.4.2](https://github.com/laurent22/joplin/releases/tag/android-v3.4.2) (Pre-release) - 2025-07-25T08:30:30Z
 
 - Improved: Updated packages react-native-paper (v5.13.5)

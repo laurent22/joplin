@@ -309,7 +309,7 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
-"Szavak vesszővel elválasztott listája. Használható a nem gyakori szavak "
+"Szavak vesszővel elválasztott listája. Használható a nem túl gyakori szavak "
 "esetében, hogy segítse a hangalapú gépelést a helyesírásban."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
@@ -1074,7 +1074,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
-msgstr "Kattintson a címke hozzáadáshoz…"
+msgstr "Kattintson ide a címke hozzáadáshoz…"
 
 #: packages/lib/versionInfo.ts:89
 msgid "Client ID: %s"
@@ -5369,7 +5369,7 @@ msgstr "Csak monospace betűcsaládok megjelenítése."
 
 #: packages/lib/models/settings/builtInMetadata.ts:652
 msgid "Show note counts"
-msgstr "Jegyzet számának megjelenítése"
+msgstr "Jegyzetek darabszámának megjelenítése"
 
 #: packages/app-mobile/components/side-menu-content.tsx:258
 msgid "Show notebook options"
@@ -5477,7 +5477,7 @@ msgstr "Néhány elemet nem sikerült szinkronizálni."
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
-"Néhány elemet nem sikerült szinkronizálni. Kattintson a további "
+"Néhány elemet nem sikerült szinkronizálni. Kattintson ide a további "
 "információkért."
 
 #: packages/lib/models/settings/settingValidations.ts:24
@@ -5890,7 +5890,7 @@ msgstr "Szöveges dokumentum"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1351
 msgid "Text editor command"
-msgstr "Szövegszerkesztő parancs"
+msgstr "Szövegszerkesztő-parancs"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
