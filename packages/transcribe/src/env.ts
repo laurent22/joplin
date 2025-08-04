@@ -1,4 +1,4 @@
-import { Day, Minute, Second } from '@joplin/utils/time';
+import { Day, Hour, Minute, Second } from '@joplin/utils/time';
 
 export const defaultEnvValues: EnvVariables = {
 	SERVER_PORT: 4567,
@@ -13,7 +13,7 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
-	FILE_STORAGE_MAINTENANCE_INTERVAL: 1 * Minute,
+	FILE_STORAGE_MAINTENANCE_INTERVAL: 1 * Hour,
 	FILE_STORAGE_TTL: 7 * Day,
 	QUEUE_DATABASE_HOST: 'localhost',
 };
