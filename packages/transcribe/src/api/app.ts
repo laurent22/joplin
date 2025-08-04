@@ -39,7 +39,7 @@ const init = async (logger: LoggerWrapper) => {
 
 	logger.info('Starting worker');
 	await jobProcessor.init();
-	logger.info('Finished startup');
+	logger.info('Server started successfully');
 };
 
 const checkServerConfigurations = (envVariables: EnvVariables) => {
