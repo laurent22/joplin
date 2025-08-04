@@ -115,9 +115,17 @@ export default class PerformanceLogger {
 		}
 	}
 
+	private startCounter_ = 0;
 	public taskStart(name: string) {
+		// To prevent incorrect output in the browser's visual performance graph, the IDs
+		// passed to "performance.mark" need to be unique (or at least no other task with
+		// the same ID should be running at the same time). Add a counter to the task name
+		// to handle the case where two tasks with the otherwise same name run at the same
+		// time:
+		const uniqueTaskId = `${name}-${(this.startCounter_++)}`;
+
 		if (typeof performance.mark === 'function') {
-			performance.mark(`${name}-start`);
+			performance.mark(`${uniqueTaskId}-start`);
 		}
 
 		const startTime = performance.now();
@@ -128,8 +136,8 @@ export default class PerformanceLogger {
 			const now = performance.now();
 			this.lastLogTime_ = now;
 			if (hasPerformanceMarkApi) {
-				performance.mark(`${name}-end`);
-				performance.measure(name, `${name}-start`, `${name}-end`);
+				performance.mark(`${uniqueTaskId}-end`);
+				performance.measure(name, `${uniqueTaskId}-start`, `${uniqueTaskId}-end`);
 			}
 
 			const duration = now - startTime;

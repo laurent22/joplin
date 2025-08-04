@@ -76,10 +76,6 @@ Securely synchronise your data across multiple devices - including iOS, Android,
 
 Customise the app with plugins, custom themes and multiple text editors (Rich Text or Markdown). Or create your own company-specific workflow by developing scripts and plugins using the Extension API.
 
-### Open source code
-
-Our desktop and mobile applications, as well as the end-to-end technology, are fully open source, ensuring transparency and increased security.
-
 ### Multimedia notes (PDF, images, etc.)
 
 Keep all your resources in one place. Save and share images, PDFs, videos, audio files and math expressions.
@@ -93,3 +89,28 @@ Keep all your resources in one place. Save and share images, PDFs, videos, audio
 To find out more about Joplin Server Business and how it can be integrated to your organisation, feel free to contact us. Our experts can prepare a demo for you. We can provide a quote to accommodate your company’s needs.
 
 [Contact us for a quote!](mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry)
+
+## Technical specifications
+
+### Software requirements
+
+* **Operating System:** Linux (Ubuntu 20.04 LTS recommended) or any OS supporting Docker
+* **Docker Engine:** Version 20.10 or later
+* **Docker Compose:** Version 1.29 or later (required if using PostgreSQL or multi-container setup)
+* **Database:**
+  * SQLite (for testing/dev only)
+  * PostgreSQL 12+ (recommended for production)
+* **Reverse Proxy (optional):** Apache 2.4+ or Nginx 1.18+ (for public HTTPS access)
+
+### Hardware requirements
+
+* **CPU:** 2 cores, 4 threads (Intel Xeon Platinum 8259CL @ 2.50 GHz)
+* **RAM:** Minimum 4 GB, recommended 8 GB
+* **Storage:**
+  * Minimum 50 GB SSD (faster storage preferred for database and content)
+  * Additional storage if using filesystem or S3 for note content
+* **Network:** Reliable 1 Gbps Ethernet connection for syncing clients
+
+These specs ensure stable operation of Joplin Server under moderate load with multiple concurrent users. Higher specs may be required for large-scale deployments.
+
+For a detailed technical documentation, please [see the setup instructions](https://github.com/laurent22/joplin/tree/dev/packages/server).

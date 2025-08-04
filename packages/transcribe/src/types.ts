@@ -115,6 +115,7 @@ export type QueueConfiguration = {
 		user?: string;
 		password?: string;
 		port?: number;
+		host?: string;
 	};
 	ttl: number;
 	retryCount: number;
