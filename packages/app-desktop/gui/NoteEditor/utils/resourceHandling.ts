@@ -43,7 +43,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 		if (!filePaths || !filePaths.length) return null;
 	}
 
-	for (let i = 0; i < filePaths.length; i++) {
+	for (let i = filePaths.length - 1; i >= 0; i--) {
 		const filePath = filePaths[i];
 		try {
 			logger.info(`Attaching ${filePath}`);
@@ -51,7 +51,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 				createFileURL: options.createFileURL,
 				resizeLargeImages: Setting.value('imageResizing'),
 				markupLanguage: options.markupLanguage,
-				resourceSuffix: i > 0 ? ' ' : '',
+				resourceSuffix: i >= 0 && i < filePaths.length - 1 ? ' ' : '',
 			});
 
 			if (!newBody) {
