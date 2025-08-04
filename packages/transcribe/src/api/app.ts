@@ -43,6 +43,7 @@ const init = async () => {
 
 const checkServerConfigurations = (envVariables: EnvVariables) => {
 	if (!envVariables.API_KEY) throw Error('API_KEY environment variable not set.');
+	if (!envVariables.HTR_CLI_IMAGES_FOLDER) throw Error('HTR_CLI_IMAGES_FOLDER environment variable not set. This should point to a folder where images will be stored.');
 };
 
 const main = async () => {

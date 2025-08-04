@@ -6,7 +6,7 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_RETRY_COUNT: 2,
 	QUEUE_MAINTENANCE_INTERVAL: 60000,
 	HTR_CLI_DOCKER_IMAGE: 'joplin/htr-cli:0.0.2',
-	HTR_CLI_IMAGES_FOLDER: '/home/js/joplin/packages/transcribe/images',
+	HTR_CLI_IMAGES_FOLDER: '',
 	QUEUE_DRIVER: 'pg', // 'sqlite'
 	QUEUE_DATABASE_PASSWORD: '',
 	QUEUE_DATABASE_NAME: '',
