@@ -1043,9 +1043,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	};
 
 	private toggleIsTodo_onPress() {
-		shared.toggleIsTodo_onPress(this);
+		const newNote = shared.toggleIsTodo_onPress(this);
 
-		this.scheduleSave(this.state);
+		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
 	private async share_onPress() {
