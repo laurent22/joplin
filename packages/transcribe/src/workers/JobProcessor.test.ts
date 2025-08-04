@@ -33,7 +33,7 @@ describe('JobProcessor', () => {
 
 	skipIfCI('should execute work on job in the queue', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', 'images'), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', 'images'), 1000);
 		await tw.init();
 
 		const jobId = await queue.send({ filePath: 'htr_sample.png' });
@@ -55,7 +55,7 @@ describe('JobProcessor', () => {
 
 	skipIfCI('should execute work on job in the queue even if one fails', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', 'images'), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', 'images'), 1000);
 		await tw.init();
 
 		const jobId1 = await queue.send({ filePath: 'non-existing-file' });
