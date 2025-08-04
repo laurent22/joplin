@@ -38,3 +38,90 @@ As the queue driver, we have the option of using SQLite or PostgreSQL, `QUEUE_DR
 ## Starting the server
 
 From `packages/transcribe`, run `npm run start`
+
+# Endpoints
+
+The `Authorization` header value should be set to the same secret set on `API_KEY`, used for starting the transcribe server.
+
+### POST `/transcribe`
+
+#### Request Body:
+- **Content-Type**: `multipart/form-data`
+- **Field**: `file` (required) – The file to be processed
+
+#### Example Request:
+```
+POST /upload
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="example.jpg"
+Content-Type: image/jpeg
+
+<binary file content>
+
+--boundary--
+```
+#### Response:
+
+The successful response will include a `jobId` identifier that can later be used to retrieve the result. E.g.:
+
+```json
+{
+	"jobId": "bcd2e633-eb10-44cb-a280-bf723238c12e"
+}
+```
+
+#### Requesting with cURL:
+
+```
+curl --request POST \
+  --url http://localhost:4567/transcribe \
+  --header 'Authorization: api-key' \
+  --header 'Content-Type: multipart/form-data' \
+  --form file=@/home/js/Pictures/2025-07-24_17-42_1.png
+```
+
+
+### GET `/transcribe/{:jobId}`
+
+
+#### Request:
+
+Requires a `jobId` as the identifier.
+
+
+#### Example Responses:
+
+```json
+{
+	"id": "57ebd2e2-b496-40ab-9008-5f861bcb7858",
+	"state": "created"
+}
+```
+
+```json
+{
+	"id": "07f09553-f5e9-467e-b98d-406778e61969",
+	"state": "active"
+}
+```
+
+```json
+{
+	"id": "57ebd2e2-b496-40ab-9008-5f861bcb7858",
+	"completedOn": "2025-06-11T18:20:22.000Z",
+	"output": {
+		"result": "markdown\r\n# Main title\r\n\r\nSome text here. This should take more than one line.\r\n\r\n## Sub title\r\n\r\n- One kind\r\n  - of list\r\n    - sub-item\r\n\r\n## Conclusion\r\n\r\nLet's finish here."
+     },
+	"state": "completed"
+}
+```
+
+#### Requesting with cURL:
+
+```
+curl --request GET \
+  --url http://localhost:4567/transcribe/57ebd2e2-b496-40ab-9008-5f861bcb7858 \
+  --header 'Authorization: api-key'
+```
