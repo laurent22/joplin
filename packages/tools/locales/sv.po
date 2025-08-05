@@ -74,7 +74,6 @@ msgstr "(Du kan inaktivera denna prompt i alternativen)"
 #: packages/app-cli/app/command-share.ts:31
 msgid "[None]"
 msgstr "[Ingen]"
-msgstr "[Ingen]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
