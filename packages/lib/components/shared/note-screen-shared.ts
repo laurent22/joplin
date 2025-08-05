@@ -349,7 +349,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 				await comp.attachFile({
 					uri: resource.uri,
 					type: resource.mimeType,
-					name: resource.name,
+					fileName: resource.name,
 				}, null);
 			}
 		}
