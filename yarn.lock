@@ -9038,6 +9038,7 @@ __metadata:
     "@types/react": "npm:18.3.20"
     "@types/react-dom": "npm:18.3.7"
     "@types/react-redux": "npm:7.1.33"
+    "@types/semver": "npm:^7.7.0"
     "@types/styled-components": "npm:5.1.32"
     "@types/tesseract.js": "npm:2.0.0"
     async-mutex: "npm:0.5.0"
@@ -14765,6 +14766,13 @@ __metadata:
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
   checksum: 10/b6b4dcfeae6deba2e06a70941860fb1435730576d3689225a421280b7742318d1548b3d22c1f66ab68e414f346a9542f29240bc955b6332c5b11e561077583bc
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "@types/semver@npm:7.7.0"
+  checksum: 10/ee4514c6c852b1c38f951239db02f9edeea39f5310fad9396a00b51efa2a2d96b3dfca1ae84c88181ea5b7157c57d32d7ef94edacee36fbf975546396b85ba5b
   languageName: node
   linkType: hard
 
