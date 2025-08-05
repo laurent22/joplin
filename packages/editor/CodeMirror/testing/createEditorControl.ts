@@ -1,6 +1,6 @@
 import Setting from '@joplin/lib/models/Setting';
 import createEditor from '../createEditor';
-import createEditorSettings from './createEditorSettings';
+import createEditorSettings from '../../testing/createEditorSettings';
 
 const createEditorControl = (initialText: string) => {
 	const editorSettings = createEditorSettings(Setting.THEME_LIGHT);

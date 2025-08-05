@@ -3,14 +3,12 @@ import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { AllHtmlEntities } from 'html-entities';
-import { FsDriver, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
+import { FsDriver, MarkupLanguage, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult } from './types';
 import defaultResourceModel from './defaultResourceModel';
 const MarkdownIt = require('markdown-it');
 
-export enum MarkupLanguage {
-	Markdown = 1,
-	Html = 2,
-	Any = 3,
+export interface PluginOptions {
+	[id: string]: { enabled: boolean };
 }
 
 export interface Options {
@@ -20,8 +18,7 @@ export interface Options {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	extraRendererRules?: any[];
 	resourceBaseUrl?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginOptions?: any; // Not sure if needed
+	pluginOptions?: PluginOptions; // Not sure if needed
 	tempDir?: string; // Not sure if needed
 	fsDriver?: FsDriver; // Not sure if needed
 }

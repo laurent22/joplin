@@ -23,7 +23,6 @@ RUN corepack enable
 
 WORKDIR /app
 
-COPY .yarn/plugins ./.yarn/plugins
 COPY .yarn/releases ./.yarn/releases
 COPY .yarn/patches ./.yarn/patches
 COPY package.json .

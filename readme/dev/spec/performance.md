@@ -19,6 +19,14 @@ The `PerformanceLogger` class has a few methods that can help debug performance 
 - `.track(name, task)`: Logs information about how long it takes the async `task` to complete.
 - `.taskStart(name)`: Marks the start of a task with some `name`.
 
+### Naming conventions
+
+The `name` provided to `.mark`, `.track`, and `.taskStart` should have the form `filename/marker name`. For example, in `root.tsx`, a performance task might be named `root/application setup`.
+
+These names should be unique inline string literals so that they can be quickly found with a global search.
+
+### Finding performance markers
+
 Performance marks can be found by searching for `Performance:` in Joplin's logs. Be aware that more information is logged in development mode (or with debug logging enabled) than in release mode. In particular:
 - **.mark**: Performance `.mark`s are logged with level `info`.
 - **.taskStart**: The start of tasks logged with `.track` or `.taskStart` are logged with `debug`.
@@ -28,21 +36,22 @@ On desktop and web (in Chrome), `PerformanceLogger` tasks and marks are added to
 
 **Note**: To allow profiling startup code that runs before the main `Logger` is initialized, `PerformanceLogger` buffers log output until `PerformanceLogger.setLogger` is called (usually done during the application startup process). At this point, all buffered messages are logged. 
 
-**Example**:
+### Example
+
 ```ts
-const perfLogger = PerformanceLogger.create('VerySlowThing');
+const perfLogger = PerformanceLogger.create();
 
 class VerySlowThing {
 	public doSomethingSlow() {
 		// It's possible to mark the start and end of tasks with .taskStart and .onEnd:
-		const task = perfLogger.taskStart('doSomethingSlow');
+		const task = perfLogger.taskStart('VerySlowThing/doSomethingSlow');
 
 		// This will take some time to complete:
 		for (let i = 0; i < 10_000_000; i++) {
 			i -= Math.random() * 1.9;
 
 			if (i >= 100_000) {
-				perfLogger.mark('Counter has reached 100_000');
+				perfLogger.mark('VerySlowThing/Counter has reached 100_000');
 			}
 		}
 
@@ -51,7 +60,7 @@ class VerySlowThing {
 
 	public async doSomethingElse() {
 		// .track wraps an async callback.
-		await perfLogger.track('doSomethingElse', async () => {
+		await perfLogger.track('VerySlowThing/doSomethingElse', async () => {
 			await someBackgroundTask();
 
 			// Even if the callback throws an Error, .track

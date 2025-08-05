@@ -6,7 +6,8 @@ import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, ResourceInfos } from './types';
 import hljs from './highlight';
-import * as MarkdownIt from 'markdown-it';
+// Use a require() to support bundling on mobile:
+import MarkdownIt = require('markdown-it');
 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -520,7 +521,7 @@ export default class MdToHtml implements MarkupRenderer {
 			},
 		};
 
-		const markdownIt: MarkdownIt = new MarkdownIt({
+		const markdownIt = new MarkdownIt({
 			breaks: !this.pluginEnabled('softbreaks'),
 			typographer: this.pluginEnabled('typographer'),
 			linkify: this.pluginEnabled('linkify'),

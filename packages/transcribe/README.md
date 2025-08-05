@@ -1,10 +1,10 @@
 # Installing
 
-## Configure Docker for transcribe
+## Configure Docker for Transcribe
 
 1. Copy `.env-transcribe-sample` to the location of your Docker configuration files.
 2. Rename the file `.env-transcribe-sample` to `.env-transcribe`.
-3. `HTR_CLI_IMAGES_FOLDER` should be a fullpath to the folder that is going to store the images
+3. `HTR_CLI_IMAGES_FOLDER` should be a full path to the folder that is going to store the images. It is an external folder, outside of the Docker container.
 4. Run the following command to test starting the server using the default configuration:
 
 ```shell
@@ -14,6 +14,16 @@ docker run --env-file .env-transcribe -p 4567:4567 \
      -v ./packages/transcribe/images:/app/packages/transcribe/images \
      transcribe
 ```
+
+## Using `docker compose`
+
+For running with docker compose the minimal required configuration is available on `.env-sample` and `docker-compose.server.yml`.
+
+1. Run `cp .env-sample .env`
+2. Modify the options that make sense to you in the new `.env` file
+3. Run `docker compose -f docker-compose.server.yml --profile full up --detached`
+
+For further customization look at `.env-sample-transcribe`
 
 # Setup for development
 

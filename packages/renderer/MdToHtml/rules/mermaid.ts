@@ -71,7 +71,7 @@ export default {
 
 			ruleOptions.context.pluginWasUsed.mermaid = true;
 
-			const contentHtml = markdownIt.utils.escapeHtml(token.content);
+			const contentHtml = markdownIt.utils.escapeHtml((token.content as string).trimEnd());
 
 			const cssClasses = ['mermaid'];
 			if (ruleOptions.theme.appearance === 'dark') {

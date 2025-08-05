@@ -2,12 +2,11 @@ import { toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
-import { RecognizeResult } from './utils/types';
+import { emptyRecognizeResult, RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
-import filterOcrText from './utils/filterOcrText';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
 
@@ -30,19 +29,24 @@ const resourceInfo = (resource: ResourceEntity) => {
 
 export default class OcrService {
 
-	private driver_: OcrDriverBase;
+	private drivers_: OcrDriverBase[];
 	private isRunningInBackground_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
 	private isProcessingResources_ = false;
-	private recognizeQueue_: TaskQueue = null;
+	private printedTextQueue_: TaskQueue = null;
+	private handwrittenTextQueue_: TaskQueue = null;
 
-	public constructor(driver: OcrDriverBase) {
-		this.driver_ = driver;
-		this.recognizeQueue_ = new TaskQueue('recognize', logger);
-		this.recognizeQueue_.setConcurrency(5);
-		this.recognizeQueue_.keepTaskResults = false;
+	public constructor(drivers: OcrDriverBase[]) {
+		this.drivers_ = drivers;
+		this.printedTextQueue_ = new TaskQueue('printed', logger);
+		this.printedTextQueue_.setConcurrency(5);
+		this.printedTextQueue_.keepTaskResults = false;
+
+		this.handwrittenTextQueue_ = new TaskQueue('handwritten', logger);
+		this.handwrittenTextQueue_.setConcurrency(1);
+		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
 	private async pdfExtractDir(): Promise<string> {
@@ -62,6 +66,9 @@ export default class OcrService {
 
 		const resourceFilePath = Resource.fullPath(resource);
 
+		const driver = this.drivers_.find(d => d.driverId === resource.ocr_driver_id);
+		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
+
 		if (resource.mime === 'application/pdf') {
 			// OCR can be slow for large PDFs.
 			// Skip it if the PDF already includes text.
@@ -70,7 +77,9 @@ export default class OcrService {
 
 			if (pagesWithText.length > 0) {
 				return {
-					text: pageTexts.join('\n'),
+					...emptyRecognizeResult(),
+					ocr_status: ResourceOcrStatus.Done,
+					ocr_text: pageTexts.join('\n'),
 				};
 			}
 
@@ -80,7 +89,7 @@ export default class OcrService {
 			let pageIndex = 0;
 			for (const imageFilePath of imageFilePaths) {
 				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
-				results.push(await this.driver_.recognize(language, imageFilePath));
+				results.push(await driver.recognize(language, imageFilePath, resource.id));
 				pageIndex++;
 			}
 
@@ -89,15 +98,19 @@ export default class OcrService {
 			}
 
 			return {
-				text: results.map(r => r.text).join('\n'),
+				...emptyRecognizeResult(),
+				ocr_status: ResourceOcrStatus.Done,
+				ocr_text: results.map(r => r.ocr_text).join('\n'),
 			};
 		} else {
-			return this.driver_.recognize(language, resourceFilePath);
+			return driver.recognize(language, resourceFilePath, resource.id);
 		}
 	}
 
 	public async dispose() {
-		await this.driver_.dispose();
+		for (const d of this.drivers_) {
+			await d.dispose();
+		}
 	}
 
 	public async processResources() {
@@ -115,7 +128,7 @@ export default class OcrService {
 			return async () => {
 				logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
 
-				const toSave: ResourceEntity = {
+				let toSave: ResourceEntity = {
 					id: resource.id,
 				};
 
@@ -132,11 +145,11 @@ export default class OcrService {
 						return;
 					}
 
-					const result = await this.recognize(language, resource);
-					toSave.ocr_status = ResourceOcrStatus.Done;
-					toSave.ocr_text = filterOcrText(result.text);
-					toSave.ocr_details = Resource.serializeOcrDetails(result.lines);
-					toSave.ocr_error = '';
+					const recognizeResult = await this.recognize(language, resource);
+					toSave = {
+						...toSave,
+						...recognizeResult,
+					};
 				} catch (error) {
 					const errorMessage = typeof error === 'string' ? error : error?.message;
 					logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
@@ -162,18 +175,29 @@ export default class OcrService {
 						'mime',
 						'file_extension',
 						'encryption_applied',
+						'ocr_driver_id',
 					],
 				});
 
 				if (!resources.length) break;
 
-				for (const resource of resources) {
+				const ocrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.PrintedText);
+
+				for (const resource of ocrResources) {
 					inProcessResourceIds.push(resource.id);
-					await this.recognizeQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+					await this.printedTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+				}
+
+				const htrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.HandwrittenText);
+
+				for (const resource of htrResources) {
+					inProcessResourceIds.push(resource.id);
+					await this.handwrittenTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
 				}
 			}
 
-			await this.recognizeQueue_.waitForAll();
+			await this.printedTextQueue_.waitForAll();
+			await this.handwrittenTextQueue_.waitForAll();
 
 			if (totalProcessed) {
 				eventManager.emit(EventName.OcrServiceResourcesProcessed);
@@ -212,7 +236,8 @@ export default class OcrService {
 		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
 		this.maintenanceTimer_ = null;
 		this.isRunningInBackground_ = false;
-		await this.recognizeQueue_.stop();
+		await this.printedTextQueue_.stop();
+		await this.handwrittenTextQueue_.stop();
 	}
 
 }

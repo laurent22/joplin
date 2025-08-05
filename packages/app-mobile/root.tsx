@@ -110,7 +110,7 @@ import buildStartupTasks from './utils/buildStartupTasks';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const logger = Logger.create('root');
-const perfLogger = PerformanceLogger.create('root');
+const perfLogger = PerformanceLogger.create();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let storeDispatch: any = function(_action: any) {};
@@ -420,6 +420,10 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'KEYBOARD_VISIBLE_CHANGE':
 			newState = { ...state, keyboardVisible: action.visible };
 			break;
+
+		case 'NOTE_EDITOR_VISIBLE_CHANGE':
+			newState = { ...state, noteEditorVisible: action.visible };
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -593,7 +597,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			}
 
 			try {
-				await perfLogger.track('initialize', () => initialize(this.props.dispatch));
+				await perfLogger.track('root/initialize', () => initialize(this.props.dispatch));
 			} catch (error) {
 				alert(`Something went wrong while starting the application: ${error}`);
 				this.props.dispatch({
@@ -669,11 +673,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		);
 		onSystemColorSchemeChange(Appearance.getColorScheme());
 
-		this.quickActionShortcutListener_ = await perfLogger.track('setupQuickActions',
+		this.quickActionShortcutListener_ = await perfLogger.track('root/setupQuickActions',
 			() => setupQuickActions(this.props.dispatch),
 		);
 
-		await perfLogger.track('setupNotifications',
+		await perfLogger.track('root/setupNotifications',
 			() => setupNotifications(this.props.dispatch),
 		);
 

@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Liffindra Angga Zaaldian <findrakecil@icloud.com>\n"
+"Last-Translator: Liffindra Angga Zaaldian <lzaaldian@gmail.com>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
+"PO-Revision-Date: 2025-07-29 12:47+0700\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -57,7 +58,7 @@ msgstr "(Tidak ada)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(Hanya baca)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -70,9 +71,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Anda dapat mematikan peringatan ini di pengaturan)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "Tidak ada"
+msgstr "[Tidak ada]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -165,7 +165,7 @@ msgstr[0] "%d catatan akan dihapus selamanya. Lanjutkan?"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d foto diambil"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -224,9 +224,8 @@ msgid "%s cannot be less than %s"
 msgstr "%s tidak boleh kurang dari %s"
 
 #: packages/app-cli/app/command-share.ts:201
-#, fuzzy
 msgid "%s from %s"
-msgstr "Hapus \"%s\" dari berbagi"
+msgstr "%s dari %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
@@ -300,6 +299,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"Daftar kata yang dipisah dengan koma. Dapat digunakan untuk kata-kata yang "
+"tidak umum, untuk membantu pengetikan suara mengejanya dengan benar."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -354,14 +355,12 @@ msgid "Accepted invitations"
 msgstr "Undangan yang diterima"
 
 #: packages/app-cli/app/command-share.ts:178
-#, fuzzy
 msgid "Accepted: Notebook %s from %s"
-msgstr "Buku catatan: %s (%s)"
+msgstr "Diterima: Buku catatan: %s dari %s"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Accepting share..."
-msgstr "Pembagian yang diterima"
+msgstr "Menerima benda yang dibagikan..."
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -487,7 +486,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-share.ts:190
 msgid "All shared folders:"
-msgstr ""
+msgstr "Semua folder yang dibagikan:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -589,12 +588,11 @@ msgstr ""
 "Perubahan ini tidak dapat dikembalikan."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
 msgstr ""
-"Anda yakin bahwa Anda ingin memulihkan tata letak bilah alat bawaan?\n"
+"Anda yakin bahwa Anda ingin menghapus semua riwayat untuk catatan ini? "
 "Perubahan ini tidak dapat dikembalikan."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
@@ -1194,6 +1192,7 @@ msgstr "Palet perintah..."
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Perintah: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1281,7 +1280,7 @@ msgstr "Sambungkan ke Joplin Cloud"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:476
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Sambungkan menggunakan akun organisasi Anda"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1669,9 +1668,8 @@ msgstr "Hapus token kadaluarsa"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
-#, fuzzy
 msgid "Delete history"
-msgstr "Nyalakan riwayat catatan"
+msgstr "Hapus riwayat"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -1911,7 +1909,6 @@ msgid "Do not ask for confirmation."
 msgstr "Jangan minta persetujuan."
 
 #: packages/app-cli/app/command-share.ts:66
-#, fuzzy
 msgid "Do not ask for user confirmation."
 msgstr "Jangan minta persetujuan."
 
@@ -1930,6 +1927,8 @@ msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Jangan izinkan penerima untuk membuat perubahan pada buku catatan yang "
+"dibagikan. Hanya berlaku untuk perintah `add`."
 
 #: packages/lib/models/Setting.ts:1229
 msgid "Donate, website"
@@ -2374,14 +2373,12 @@ msgid "Enter password"
 msgstr "Masukkan kata sandi"
 
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:73
-#, fuzzy
 msgid "Enter the code"
-msgstr "Masukkan kode disini"
+msgstr "Masukkan kode"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:43
-#, fuzzy
 msgid "Enter the code:"
-msgstr "Masukkan kode disini"
+msgstr "Masukkan kode:"
 
 #: packages/app-mobile/components/NoteItem.tsx:129
 msgid "Entering selection mode"
@@ -2408,7 +2405,7 @@ msgstr "Galat saat membuka catatan di penyunting: %s"
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:53
 msgid "Error starting camera: %s"
-msgstr ""
+msgstr "Galat memulai kamera: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
@@ -2552,7 +2549,7 @@ msgstr ""
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr ""
+msgstr "Gagal menyambungkan ke akun Anda. Silakan coba lagi."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2636,7 +2633,7 @@ msgstr "Fokus pada judul"
 
 #: packages/app-cli/app/command-share.ts:139
 msgid "Folder \"%s\" is shared with:"
-msgstr ""
+msgstr "Folder \"%s\" dibagikan dengan:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
@@ -2719,7 +2716,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Dapatkan penawaran"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -2742,7 +2739,7 @@ msgstr ""
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
-msgstr ""
+msgstr "Glosarium:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
@@ -3045,9 +3042,8 @@ msgid "In: %s"
 msgstr "Di: %s"
 
 #: packages/app-cli/app/command-share.ts:169
-#, fuzzy
 msgid "Incoming shares:"
-msgstr "Pembagian yang akan datang"
+msgstr "Pembagian yang akan diterima:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3205,7 +3201,7 @@ msgstr "Joplin Cloud"
 #: packages/app-desktop/gui/Root.tsx:163
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:148
 msgid "Joplin Cloud Login"
-msgstr "Masuk Joplin Cloud"
+msgstr "Login Joplin Cloud"
 
 #: packages/lib/services/plugins/PluginService.ts:533
 msgid "Joplin Desktop"
@@ -3257,9 +3253,8 @@ msgid "Joplin Server"
 msgstr "Server Joplin"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
-#, fuzzy
 msgid "Joplin Server Business"
-msgstr "Nama pengguna Server Joplin"
+msgstr "Bisnis Joplin Server"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
@@ -3267,9 +3262,8 @@ msgstr "Surel Joplin Server"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
-#, fuzzy
 msgid "Joplin Server Login"
-msgstr "URL Server Joplin"
+msgstr "Login Joplin Server"
 
 #: packages/lib/models/settings/builtInMetadata.ts:354
 msgid "Joplin Server password"
@@ -3278,11 +3272,11 @@ msgstr "Kata sandi Joplin Server"
 #: packages/lib/models/settings/builtInMetadata.ts:323
 #: packages/lib/models/settings/builtInMetadata.ts:366
 msgid "Joplin Server URL"
-msgstr "URL Server Joplin"
+msgstr "URL Joplin Server"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
-msgstr ""
+msgstr "Otentikasi SSO Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
@@ -3290,7 +3284,7 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"Web Clipper Joplin membolehkan untuk menyimpan halaman web dan tangkapan "
+"Web Clipper Joplin memungkinkan untuk menyimpan halaman web dan tangkapan "
 "layar dari peramban web Anda ke Joplin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:623
@@ -3418,10 +3412,9 @@ msgid "Link"
 msgstr "Tautan"
 
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:21
-#, fuzzy
 msgid "Link created!"
 msgid_plural "Links created!"
-msgstr[0] "Teks tautan"
+msgstr[0] "Tautan dibuat!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link description"
@@ -3441,7 +3434,6 @@ msgid "Link to note..."
 msgstr "Tautkan ke buku catatan..."
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:158
-#, fuzzy
 msgid "Links"
 msgstr "Tautan"
 
@@ -3485,9 +3477,8 @@ msgstr "Log"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:39
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:69
-#, fuzzy
 msgid "Log in with your web browser"
-msgstr "Masuk dengan Dropbox"
+msgstr "Masuk dengan peramban web Anda"
 
 #: packages/app-desktop/gui/MainScreen.tsx:592
 msgid "Login to Joplin Cloud."
@@ -3833,9 +3824,8 @@ msgid "next"
 msgstr "selanjutnya"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:141
-#, fuzzy
 msgid "Next"
-msgstr "Nextcloud"
+msgstr "Selanjutnya"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:272
 msgid "Next match"
@@ -3882,7 +3872,7 @@ msgstr "Belum ada buku catatan yang ditentukan."
 
 #: packages/app-cli/app/app.ts:105
 msgid "No notebook selected."
-msgstr "Tidak ada buku catatan yang terpilih."
+msgstr "Tidak ada buku catatan yang dipilih."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:15
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -3903,9 +3893,8 @@ msgid "No results"
 msgstr "Tidak ada hasil"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
-msgstr "Tidak ada tab yang terpilih"
+msgstr "Tidak ada perubahan yang dipilih"
 
 #: packages/app-cli/app/app.ts:238
 msgid "No such command: %s"
@@ -3917,7 +3906,7 @@ msgstr "Tidak ada saran"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:119
 msgid "No tab selected"
-msgstr "Tidak ada tab yang terpilih"
+msgstr "Tidak ada tab yang dipilih"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4004,9 +3993,8 @@ msgid "Note has been saved."
 msgstr "Catatan telah disimpan."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
-msgstr "Riwayat Catatan"
+msgstr "Riwayat catatan"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
@@ -4015,9 +4003,8 @@ msgid "Note History"
 msgstr "Riwayat Catatan"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
-msgstr "Catatan telah disimpan."
+msgstr "Riwayat catatan telah dihapus."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4132,7 +4119,7 @@ msgstr "OCR: Jalur atau URL data bahasa"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: packages/app-desktop/bridge.ts:365 packages/app-desktop/bridge.ts:378
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:408
@@ -4487,7 +4474,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr ""
+msgstr "Silakan tunggu sementara kami memuat halaman masuk organisasi Anda..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4552,7 +4539,7 @@ msgstr "Nilai yang mungkin: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "Utamakan keluaran JSON."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4607,9 +4594,8 @@ msgid "Previous match"
 msgstr "Kecocokan sebelumnya"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1131
-#, fuzzy
 msgid "Previous versions"
-msgstr "Versi sebelumnya dari catatan ini"
+msgstr "Versi sebelumnya"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:423
@@ -4693,9 +4679,8 @@ msgid "Public-private key pair:"
 msgstr "Pasangan kunci publik-privat:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
-msgstr "Terbitkan Catatan"
+msgstr "Terbitkan catatan"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4712,7 +4697,7 @@ msgstr "Terbitkan catatan ke internet"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1149
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Terbitkan/Batal terbitkan"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4813,9 +4798,8 @@ msgid "Reject"
 msgstr "Tolak"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Rejecting share..."
-msgstr "Membuat laporan..."
+msgstr "Menolak pembagian..."
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:107
 msgid "Remove"
@@ -4834,9 +4818,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "Hapus pencarian ini dari bilah samping?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
-msgstr "Hapus \"%s\" dari berbagi"
+msgstr "Telah menghapus %s dari berbagi."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -5013,9 +4996,8 @@ msgid "Reverses the sorting order."
 msgstr "Membalikkan urutan."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
-msgstr "Revisi: %s (%s)"
+msgstr "Perubahan:"
 
 #: packages/lib/versionInfo.ts:65
 msgid "Revision: %s (%s)"
@@ -5185,9 +5167,8 @@ msgid "Select"
 msgstr "Pilih"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
-msgstr "Pilih emoji..."
+msgstr "Pilih perubahan..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:366
@@ -5216,7 +5197,7 @@ msgstr "Pilih buku catatan"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Hosting sendiri"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5323,6 +5304,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Bagikan atau batal bagikan [notebook] berikut dengan [user]. Memerlukan "
+"Joplin Cloud atau Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5514,9 +5497,8 @@ msgid "Source"
 msgstr "Sumber"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
-msgstr "Tidak ada pembaruan tersedia"
+msgstr "Kode sumber tersedia"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Source format: %s"
@@ -5720,9 +5702,8 @@ msgid "Switch to the legacy editor"
 msgstr "Beralih ke penyunting lama"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
-#, fuzzy
 msgid "Switch to the new editor"
-msgstr "Beralih ke penyunting lama"
+msgstr "Beralih ke penyunting baru"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
@@ -6024,6 +6005,9 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"Penyunting Markdown yang telah usang sepertinya telah bertabrakan yang "
+"disebabkan oleh ketidakcocokan dengan sebuah pengaya. Kami sarankan untuk "
+"menggunakan penyunting yang baru."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6411,12 +6395,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
 msgstr ""
-"Untuk mengizinkan Joplin menyelaraskan dengan Dropbox, silakan ikuti langkah-"
-"langkah berikut:"
+"Untuk mengizinkan Joplin menyelaraskan dengan akun Anda, silakan ikuti "
+"langkah-langkah berikut:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -6687,14 +6670,12 @@ msgid "Unordered list"
 msgstr "Daftar tidak berurutan"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Batalkan penerbitan catatan"
+msgstr "Batal terbitkan"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Batalkan penerbitan catatan"
+msgstr "Batal terbitkan \"%s\""
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6709,6 +6690,8 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Batal bagikan buku catatan \"%\"? Ini dapat menyebabkan pengguna lain "
+"kehilangan akses ke buku catatan."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -6939,9 +6922,8 @@ msgid "Viewer"
 msgstr "Penampil"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1198
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
-msgstr "Keluarga font pada penyunting"
+msgstr "Keluarga font pada penampil dan Penyunting Teks Kaya"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1120
 msgid "Viewer font size"
@@ -6960,9 +6942,8 @@ msgid "Voice typing language files (URL)"
 msgstr "Berkas bahasa pengetikan suara (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1838
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "Pengetikan suara…"
+msgstr "Pengetikan suara: Glosarium"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1287
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
@@ -6978,9 +6959,8 @@ msgid "Waiting for authorisation..."
 msgstr "Sedang menunggu otorisasi…"
 
 #: packages/app-cli/app/command-share.ts:174
-#, fuzzy
 msgid "Waiting: Notebook %s from %s"
-msgstr "Buku catatan: %s (%s)"
+msgstr "Menunggu: Buku catatan: %s dari %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7130,11 +7110,11 @@ msgstr "Anda telah masuk ke Joplin Cloud, Anda dapat meninggalkan layar ini."
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Anda sekarang telah masuk ke akun Anda."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Anda sekarang menggunakan versi terbaru dari penyunting Markdown."
 
 #: packages/app-desktop/gui/MainScreen.tsx:585
 msgid ""

@@ -229,6 +229,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		};
 	}
 
+	public onResourceDownloaded(_id: string) {
+		// Unused
+	}
+
 	public setContentScripts(plugins: ContentScriptData[]) {
 		return this._pluginControl.setPlugins(plugins);
 	}

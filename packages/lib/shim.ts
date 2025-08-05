@@ -421,6 +421,7 @@ const shim = {
 	},
 
 	injectedJs: (_name: string) => '',
+	injectedCss: (_name: string) => '',
 
 	isTestingEnv: () => {
 		return isTestingEnv_;

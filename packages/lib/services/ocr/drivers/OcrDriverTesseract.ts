@@ -4,6 +4,9 @@ import OcrDriverBase from '../OcrDriverBase';
 import { Minute } from '@joplin/utils/time';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
+import filterOcrText from '../utils/filterOcrText';
+import Resource from '../../../models/Resource';
+import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
 
 const logger = Logger.create('OcrDriverTesseract');
 
@@ -53,6 +56,10 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		this.workerPath_ = workerPath;
 		this.corePath_ = corePath;
 		this.languageDataPath_ = languageDataPath;
+	}
+
+	public get driverId() {
+		return ResourceOcrDriverId.PrintedText;
 	}
 
 	public static async clearLanguageDataCache() {
@@ -224,8 +231,10 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 				// Note that Tesseract provides a `.text` property too, but it's the
 				// concatenation of all lines, even those with a low confidence
 				// score, so we recreate it here based on the good lines.
-				text: goodParagraphs.map(p => p.text).join('\n'),
-				lines: goodLines,
+				ocr_text: filterOcrText(goodParagraphs.map(p => p.text).join('\n')),
+				ocr_details: Resource.serializeOcrDetails(goodLines),
+				ocr_status: ResourceOcrStatus.Done,
+				ocr_error: '',
 			});
 		});
 	}

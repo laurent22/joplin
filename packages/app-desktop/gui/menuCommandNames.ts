@@ -79,5 +79,6 @@ export default function() {
 		'switchProfile3',
 		'pasteAsText',
 		'showNoteProperties',
+		'toggleEditors',
 	];
 }
