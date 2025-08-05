@@ -172,7 +172,6 @@ msgstr[1] "%d anteckningar kommer att raderas permanent. Fortsätta?"
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
 msgstr "%d foto(n) tagna"
-msgstr "%d foto(n) tagna"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
