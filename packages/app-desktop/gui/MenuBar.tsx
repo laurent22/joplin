@@ -803,6 +803,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
+						menuItemDic.toggleEditors,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,

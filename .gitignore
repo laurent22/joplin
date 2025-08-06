@@ -715,6 +715,7 @@ packages/app-mobile/components/getResponsiveValue.js
 packages/app-mobile/components/global-style.js
 packages/app-mobile/components/plugins/PluginNotification.js
 packages/app-mobile/components/plugins/PluginRunner.js
+packages/app-mobile/components/plugins/PluginRunnerWebView.test.js
 packages/app-mobile/components/plugins/PluginRunnerWebView.js
 packages/app-mobile/components/plugins/backgroundPage/initializeDialogWebView.js
 packages/app-mobile/components/plugins/backgroundPage/initializePluginBackgroundIframe.js
@@ -1562,6 +1563,7 @@ packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
+packages/lib/testing/plugins/createTestPlugin.js
 packages/lib/testing/share/makeMockShareInvitation.js
 packages/lib/testing/share/mockShareService.js
 packages/lib/testing/syncTargetUtils.js

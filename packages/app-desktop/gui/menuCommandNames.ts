@@ -80,5 +80,6 @@ export default function() {
 		'pasteAsText',
 		'showNoteProperties',
 		'convertNoteToMarkdown',
+		'toggleEditors',
 	];
 }

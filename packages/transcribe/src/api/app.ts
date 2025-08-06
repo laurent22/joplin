@@ -1,6 +1,6 @@
 require('dotenv').config();
 import * as Koa from 'koa';
-import Logger from '@joplin/utils/Logger';
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import koaBody from 'koa-body';
 import initiateLogger from '../services/initiateLogger';
 import createQueue from '../services/createQueue';
@@ -10,12 +10,11 @@ import env, { EnvVariables } from '../env';
 import HtrCli from '../core/HtrCli';
 import JobProcessor from '../workers/JobProcessor';
 
-initiateLogger();
-const logger = Logger.create('api/app');
 
-const init = async () => {
+const init = async (logger: LoggerWrapper) => {
 	const envVariables = env();
 
+	logger.info('Checking configurations');
 	await checkServerConfigurations(envVariables);
 
 	const app = new Koa();
@@ -26,6 +25,7 @@ const init = async () => {
 
 	await router(app, envVariables.API_KEY);
 
+	logger.info('Creating queue');
 	const queue = await createQueue(envVariables, true);
 
 	const fileStorage = new FileStorage();
@@ -39,19 +39,22 @@ const init = async () => {
 
 	logger.info('Starting worker');
 	await jobProcessor.init();
+	logger.info('Server started successfully');
 };
 
 const checkServerConfigurations = (envVariables: EnvVariables) => {
 	if (!envVariables.API_KEY) throw Error('API_KEY environment variable not set.');
+	if (!envVariables.HTR_CLI_IMAGES_FOLDER) throw Error('HTR_CLI_IMAGES_FOLDER environment variable not set. This should point to a folder where images will be stored.');
 };
 
 const main = async () => {
+	initiateLogger();
+	const logger = Logger.create('api/app');
 	logger.info('Starting...');
-	await init();
+	await init(logger);
 };
 
 main().catch(error => {
 	console.error(error);
-	logger.error(error);
 	process.exit(1);
 });

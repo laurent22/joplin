@@ -49,22 +49,32 @@ const useWebViewSetup = ({
 
 	const injectedJavaScript = useMemo(() => `
 		if (!window.cm) {
-			${shim.injectedJs('markdownEditorBundle')};
-			markdownEditorBundle.setUpLogger();
+			const parentClassName = ${JSON.stringify(editorOptions.parentElementClassName)};
+			const foundParent = document.getElementsByClassName(parentClassName).length > 0;
 
-			window.cm = markdownEditorBundle.initializeEditor(
-				${JSON.stringify(editorOptions)}
-			);
+			// On Android, injectedJavaScript can be run multiple times, including once before the
+			// document has loaded. To avoid logging an error each time the editor starts, don't throw
+			// if the parent element can't be found:
+			if (foundParent) {
+				${shim.injectedJs('markdownEditorBundle')};
+				markdownEditorBundle.setUpLogger();
 
-			${jumpToHashJs}
-			// Set the initial selection after jumping to the header -- the initial selection,
-			// if specified, should take precedence.
-			${setInitialSelectionJs}
-			${setInitialSearchJs}
+				window.cm = markdownEditorBundle.initializeEditor(
+					${JSON.stringify(editorOptions)}
+				);
 
-			window.onresize = () => {
-				cm.execCommand('scrollSelectionIntoView');
-			};
+				${jumpToHashJs}
+				// Set the initial selection after jumping to the header -- the initial selection,
+				// if specified, should take precedence.
+				${setInitialSelectionJs}
+				${setInitialSearchJs}
+
+				window.onresize = () => {
+					cm.execCommand('scrollSelectionIntoView');
+				};
+			} else {
+				console.log('No parent element found with class name ', parentClassName);
+			}
 		}
 	`, [jumpToHashJs, setInitialSearchJs, setInitialSelectionJs, editorOptions]);
 

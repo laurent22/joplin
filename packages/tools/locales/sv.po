@@ -59,7 +59,7 @@ msgstr "(Ingen)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(skrivskyddad)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -72,9 +72,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Du kan inaktivera denna prompt i alternativen)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "Ingen"
+msgstr "[Ingen]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -172,7 +171,7 @@ msgstr[1] "%d anteckningar kommer att raderas permanent. Fortsätta?"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d foto(n) tagna"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -1046,7 +1045,7 @@ msgstr "Rensa"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:169
 msgid "Clear alarm"
-msgstr "Ta bort alarm"
+msgstr "Ta bort larm"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
@@ -1169,9 +1168,9 @@ msgstr "Kommande larm"
 #: packages/lib/models/settings/builtInMetadata.ts:1482
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Kommaseparerad lista över sökvägar till kataloger för att läsa certifikaten "
 "från eller sökvägen till enskilda cert-filer. Till exempel: /my/cert_dir,/"
@@ -1864,7 +1863,7 @@ msgstr "Avfärda"
 
 #: packages/app-cli/app/command-geoloc.ts:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Visar en geolokaliserings-webbadress för anteckningen."
+msgstr "Visar en geolokaliserings-URL för anteckningen."
 
 #: packages/app-cli/app/command-ls.ts:28
 msgid "Displays only the first top <num> notes."
@@ -1877,9 +1876,9 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Visar endast objekt av den specifika typen/typerna. Kan vara `n` för "
-"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra (t."
-"ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar "
-"och att-göra."
+"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra "
+"(t.ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa "
+"anteckningar och att-göra."
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -2180,7 +2179,7 @@ msgstr "Aktivera ++ insert ++ syntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1032
 msgid "Enable ==mark== syntax"
-msgstr "Aktivera ==mark==-syntax"
+msgstr "Aktivera ==mark== syntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1035
 msgid "Enable ~sub~ syntax"
@@ -2306,8 +2305,8 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
-"Aktiverar fortsättning av Markdown-lista, automatisk stängning av HTML-"
-"taggar och andra automatiska slutföranden av uppmärkning."
+"Aktiverar Markdown-listfortsättning, automatisk stängning av HTML-taggar och "
+"andra märkspråksautokompletteringar."
 
 #: packages/lib/models/settings/builtInMetadata.ts:731
 msgid ""
@@ -2719,12 +2718,12 @@ msgstr[1] "Skapar länkar..."
 #: packages/lib/models/Setting.ts:1224
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
-"Geolokalisering, stavningskontroll, redigeringsverktygsfält, "
-"bildstorleksändring"
+"Geolokalisering, stavningskontroll, verktygsfält för redigerare, ändra "
+"storlek på bild"
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Begär en offert"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -3310,11 +3309,11 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1589
 msgid "Keep note history for"
-msgstr "Spara anteckningshistorik i"
+msgstr "Behåll anteckningshistorik under"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1865
 msgid "Keep notes in the trash for"
-msgstr "Förvara anteckningar i papperskorgen för"
+msgstr "Behåll anteckningar i papperskorgen under"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1388
 msgid "Keyboard Mode"
@@ -3588,7 +3587,7 @@ msgstr "Markerar en att-göra som inte fullständig."
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
-msgstr "Markering"
+msgstr "Märkspråk"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:135
 msgid "Master Key %s"
@@ -3722,7 +3721,7 @@ msgstr "Flytta åt höger"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
-msgstr "Flytta till anteckningsboken"
+msgstr "Flytta till anteckningsbok"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:67
 msgid "Move to notebook:"
@@ -5062,7 +5061,7 @@ msgstr "Spara"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:166
 msgid "Save alarm"
-msgstr "Spara alarm"
+msgstr "Spara larm"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:115
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:122
@@ -5087,7 +5086,7 @@ msgstr "Spara ändringar?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:842
 msgid "Save geo-location with notes"
-msgstr "Spara geolokalisering med anteckningar"
+msgstr "Spara geografisk plats med anteckningar"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5196,7 +5195,7 @@ msgstr "Väljer en anteckningsbok"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Drifta på egen hand"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5219,11 +5218,11 @@ msgstr "Servern körs på port %d"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1265
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
-msgstr "Ställ in alarm"
+msgstr "Ställ in larm"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:30
 msgid "Set alarm:"
-msgstr "Ställ in alarm:"
+msgstr "Ställ in larm:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1204
 msgid ""
@@ -5609,7 +5608,7 @@ msgstr "Steg 2: Installera tillägget"
 
 #: packages/app-desktop/commands/toggleExternalEditing.ts:29
 msgid "Stop"
-msgstr "Sluta"
+msgstr "Stoppa"
 
 #: packages/app-desktop/commands/stopExternalEditing.ts:8
 msgid "Stop external editing"
@@ -5805,7 +5804,7 @@ msgstr "Tabbindrag"
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:750
 msgid "Tab moves focus"
-msgstr "Fliken flyttar fokus"
+msgstr "Tabb flyttar fokus"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1358
 msgid "Tabloid"
@@ -6286,7 +6285,7 @@ msgstr[1] "Dessa anteckningar kunde inte flyttas: %s"
 
 #: packages/lib/models/Note.ts:130
 msgid "This note does not have geolocation information."
-msgstr "Denna anteckning har inte geolokaliseringsinformation."
+msgstr "Denna anteckning saknar geolokaliseringsinformation."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:237
 msgid "This note has been modified:"
@@ -6511,7 +6510,7 @@ msgstr "Växla menyfältet"
 
 #: packages/lib/models/Setting.ts:1225
 msgid "Toggle note history, keep notes for"
-msgstr "Växla anteckningshistorik, behåll anteckningar för"
+msgstr "Växla anteckningshistorik, behåll anteckningar under"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
@@ -6571,7 +6570,7 @@ msgstr "Försök igen"
 #: packages/lib/utils/joplinCloud/index.ts:423
 #: packages/lib/utils/joplinCloud/index.ts:446
 msgid "Try it now"
-msgstr "Testa det nu"
+msgstr "Prova det nu"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""
