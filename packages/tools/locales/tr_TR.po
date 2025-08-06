@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -56,7 +58,7 @@ msgstr "(Hiçbiri)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(Salt-okunur)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -69,9 +71,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Ayarlardan bu istemi kapatabilirsiniz)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "Hiçbiri"
+msgstr "[None]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1063
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -164,12 +165,12 @@ msgstr[1] "Bu desene uyan %d not var. Silinsin mi?"
 #: packages/app-cli/app/command-rmnote.ts:40
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
-msgstr[0] "%s notl kalıcı olarak silecek. Devam edilsin mi?"
+msgstr[0] "%s notu kalıcı olarak silecek. Devam edilsin mi?"
 msgstr[1] "%s not kalıcı olarak silecek. Devam edilsin mi?"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d fotoğraf çekildi"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -228,9 +229,8 @@ msgid "%s cannot be less than %s"
 msgstr "%s %s değerinden daha düşük olamaz"
 
 #: packages/app-cli/app/command-share.ts:201
-#, fuzzy
 msgid "%s from %s"
-msgstr "Paylaşımdan “%s” etiketini kaldır"
+msgstr "%s , şundan: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
@@ -305,6 +305,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"Virgülle ayrılmış bir kelime listesi. Sesli yazımın nadir kelimeleri doğru "
+"şekilde hecelemesine yardımcı olmak için kullanılabilir."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -359,14 +361,12 @@ msgid "Accepted invitations"
 msgstr "Kabul edilen davetiyeler"
 
 #: packages/app-cli/app/command-share.ts:178
-#, fuzzy
 msgid "Accepted: Notebook %s from %s"
-msgstr "Not defteri: %s (%s)"
+msgstr "%s not defteri %s tarafından kabul edildi"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Accepting share..."
-msgstr "Rapor oluşturuluyor..."
+msgstr "Paylaşım kabul ediliyor"
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -492,7 +492,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-share.ts:190
 msgid "All shared folders:"
-msgstr ""
+msgstr "Tüm paylaşılan klasörler"
 
 #: packages/lib/models/settings/builtInMetadata.ts:968
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -593,13 +593,12 @@ msgstr ""
 "Bu işlem geri alınamaz."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
 msgstr ""
-"Standart araç çubuğu görünümüne geri dönmek istediğinizden emin misiniz?\n"
-"Bu işlem geri alınamaz."
+"Bu notun tüm geçmişini silmek istediğinizden emin misiniz? Bu işlem geri "
+"alınamaz."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
@@ -1163,9 +1162,9 @@ msgstr "Yaklaşan alarmlar"
 #: packages/lib/models/settings/builtInMetadata.ts:1482
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Sertifikaları yüklemek için dizinlere veya bireysel sertifika dosyalarına "
 "giden yolların virgülle ayrılmış listesi. Örneğin: /my/cert_dir, /other/"
@@ -1193,6 +1192,8 @@ msgstr "Komut paleti…"
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Komutlar: `ekle`, `kaldır`, `listele`, `sil`, `kabul et`, `terket` ve "
+"`reddet`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1280,7 +1281,7 @@ msgstr "Joplin Cloud'a bağlan"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:476
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Kuruluş hesabınızı kullanarak bağlanın"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1670,9 +1671,8 @@ msgstr "Süresi geçmiş jetonları sil"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
-#, fuzzy
 msgid "Delete history"
-msgstr "Not tarihçesini etkinleştir"
+msgstr "Geçmişi sil"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:112
@@ -1910,9 +1910,8 @@ msgid "Do not ask for confirmation."
 msgstr "Onay için sorma."
 
 #: packages/app-cli/app/command-share.ts:66
-#, fuzzy
 msgid "Do not ask for user confirmation."
-msgstr "Onay için sorma."
+msgstr "Kullanıcı doğrulaması sorma."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
@@ -1929,6 +1928,8 @@ msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Paylaşım alıcısının paylaşılan not defterine yazmasına izin verme. Yalnızca "
+"`ekle` alt komutu için geçerlidir."
 
 #: packages/lib/models/Setting.ts:1229
 msgid "Donate, website"
@@ -2373,14 +2374,12 @@ msgid "Enter password"
 msgstr "Parolayı girin"
 
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:73
-#, fuzzy
 msgid "Enter the code"
-msgstr "Kodu buraya girin"
+msgstr "Kodu girin"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:43
-#, fuzzy
 msgid "Enter the code:"
-msgstr "Kodu buraya girin"
+msgstr "Kodu girin:"
 
 #: packages/app-mobile/components/NoteItem.tsx:129
 msgid "Entering selection mode"
@@ -2406,9 +2405,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Editörde not açılırken hata oluştu: %s"
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:53
-#, fuzzy
 msgid "Error starting camera: %s"
-msgstr "%s dosyasına tuş haritası kaydedilemedi"
+msgstr "%s kamerası başlatılamadı"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
@@ -2552,7 +2550,7 @@ msgstr ""
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr ""
+msgstr "Hesabınıza bağlanılamadı. Lütfen tekrar deneyin."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2636,7 +2634,7 @@ msgstr "Başlığa odaklan"
 
 #: packages/app-cli/app/command-share.ts:139
 msgid "Folder \"%s\" is shared with:"
-msgstr ""
+msgstr "“%s” klasörü şunlarla paylaşılıyor:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
@@ -2721,7 +2719,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Teklif Al"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -2744,7 +2742,7 @@ msgstr ""
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
-msgstr ""
+msgstr "Sözlük:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
@@ -3050,9 +3048,8 @@ msgid "In: %s"
 msgstr "İçinde: %s"
 
 #: packages/app-cli/app/command-share.ts:169
-#, fuzzy
 msgid "Incoming shares:"
-msgstr "Yaklaşan alarmlar"
+msgstr "Gelen paylaşımlar:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3262,9 +3259,8 @@ msgid "Joplin Server"
 msgstr "Joplin Sunucusu"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
-#, fuzzy
 msgid "Joplin Server Business"
-msgstr "Joplin Sunucusu kullanıcı adı"
+msgstr "Joplin Sunucusu Business"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
@@ -3272,9 +3268,8 @@ msgstr "Joplin Sunucusu e-posta adresi"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
-#, fuzzy
 msgid "Joplin Server Login"
-msgstr "Joplin Sunucusu URL"
+msgstr "Joplin Sunucusu Giriş"
 
 #: packages/lib/models/settings/builtInMetadata.ts:354
 msgid "Joplin Server password"
@@ -3287,7 +3282,7 @@ msgstr "Joplin Sunucusu URL"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
-msgstr ""
+msgstr "Joplin SSO Kimlik Doğrulaması"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
@@ -3423,11 +3418,10 @@ msgid "Link"
 msgstr "Bağlantı"
 
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:21
-#, fuzzy
 msgid "Link created!"
 msgid_plural "Links created!"
-msgstr[0] "Bağlantı metni"
-msgstr[1] "Bağlantı metni"
+msgstr[0] "Bağlantı oluşturuldu!"
+msgstr[1] "Bağlantlar oluşturuldu!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link description"
@@ -3448,9 +3442,8 @@ msgid "Link to note..."
 msgstr "Nota link…"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:158
-#, fuzzy
 msgid "Links"
-msgstr "Bağlantı"
+msgstr "Bağlantılar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3491,9 +3484,8 @@ msgstr "Log"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:39
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:69
-#, fuzzy
 msgid "Log in with your web browser"
-msgstr "Dropbox ile giriş yap"
+msgstr "Web tarayıcın ile giriş yap"
 
 #: packages/app-desktop/gui/MainScreen.tsx:592
 msgid "Login to Joplin Cloud."
@@ -3661,7 +3653,7 @@ msgstr "Eksik Ana Anahtar"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
 msgid "Missing permission to record audio."
-msgstr "Ses kaydetmek için kamera izni eksik"
+msgstr "Ses kaydetmek için izin eksik"
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3839,9 +3831,8 @@ msgid "next"
 msgstr "sıradaki"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:141
-#, fuzzy
 msgid "Next"
-msgstr "Nextcloud"
+msgstr "Sıradaki"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:272
 msgid "Next match"
@@ -3907,9 +3898,8 @@ msgid "No results"
 msgstr "Sonuç yok"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
-msgstr "Seçili sekme yok"
+msgstr "Hiç sürüm seçilmemiş"
 
 #: packages/app-cli/app/app.ts:238
 msgid "No such command: %s"
@@ -4006,7 +3996,6 @@ msgid "Note has been saved."
 msgstr "Not kaydedildi."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
 msgstr "Not Geçmişi"
 
@@ -4017,9 +4006,8 @@ msgid "Note History"
 msgstr "Not Geçmişi"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
-msgstr "Not kaydedildi."
+msgstr "Not geçmişi silindi."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4130,7 +4118,7 @@ msgstr "OCR: Dil verisi URL ya da yolu"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 msgid "Ok"
-msgstr ""
+msgstr "Tamam"
 
 #: packages/app-desktop/bridge.ts:365 packages/app-desktop/bridge.ts:378
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:408
@@ -4484,7 +4472,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr ""
+msgstr "Lütfen kuruluşunuzun oturum açma sayfasını yüklememizi bekleyin..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4549,7 +4537,7 @@ msgstr "Olası değerler: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "JSON çıktıyı tercih et."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4605,9 +4593,8 @@ msgid "Previous match"
 msgstr "Önceki eşleşme"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1131
-#, fuzzy
 msgid "Previous versions"
-msgstr "Bu notun önceki sürümleri"
+msgstr "Önceki sürümler"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:423
@@ -4691,9 +4678,8 @@ msgid "Public-private key pair:"
 msgstr "Açık - gizli anahtar çifti:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
-msgstr "Notları Yayımla"
+msgstr "Notu Yayımla"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4710,7 +4696,7 @@ msgstr "Notları İnternet’e yayımla"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1149
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Yayımla/yayından kaldır"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4811,9 +4797,8 @@ msgid "Reject"
 msgstr "Reddet"
 
 #: packages/app-cli/app/command-share.ts:228
-#, fuzzy
 msgid "Rejecting share..."
-msgstr "Rapor oluşturuluyor..."
+msgstr "Paylaşım reddediliyor…"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:107
 msgid "Remove"
@@ -4832,9 +4817,8 @@ msgid "Remove this search from the sidebar?"
 msgstr "Bu aramayı kenar çubuğundan kaldır?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
-msgstr "Paylaşımdan “%s” etiketini kaldır"
+msgstr "“%s” paylaşımdan kaldırıldı."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -5009,9 +4993,8 @@ msgid "Reverses the sorting order."
 msgstr "Sıralama düzenini tersine çevirir."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
-msgstr "Sürüm: %s (%s)"
+msgstr "Sürüm:"
 
 #: packages/lib/versionInfo.ts:65
 msgid "Revision: %s (%s)"
@@ -5182,9 +5165,8 @@ msgid "Select"
 msgstr "Seç"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
-msgstr "Emoji seç..."
+msgstr "Sürüm seç..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:366
@@ -5213,7 +5195,7 @@ msgstr "Not defterini seçer"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Kendi barındırılan (self-hosted)"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5320,6 +5302,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Belirtilen [notebook] not defterini [user] kullancısı ile paylaşır veya "
+"paylaşımını kaldırır. Joplin Cloud veya Joplin Server gerektirir."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5508,9 +5492,8 @@ msgid "Source"
 msgstr "Kaynak"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
-msgstr "Güncelleme bulunamadı"
+msgstr "Kaynak kodu mevcut"
 
 #: packages/app-cli/app/command-import.ts:27
 msgid "Source format: %s"
@@ -5713,9 +5696,8 @@ msgid "Switch to the legacy editor"
 msgstr "Eski tip düzenleyiciye geç"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
-#, fuzzy
 msgid "Switch to the new editor"
-msgstr "Eski tip düzenleyiciye geç"
+msgstr "Yeni tip düzenleyiciye geç"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
@@ -6018,6 +6000,8 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"Eski Markdown düzenleyici bir eklentiyle uyumsuzluk nedeniyle çökmüş gibi "
+"görünüyor. Yeni düzenleyiciyi kullanmanızı öneririz."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6412,12 +6396,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
 msgstr ""
-"Joplin'in Dropbox ile senkronize edilmesine izin vermek için lütfen "
-"aşağıdaki adımları izleyin:"
+"Joplin'in hesabınızla senkronize olmasına izin vermek için lütfen şu "
+"adımları izleyin:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -6688,14 +6671,12 @@ msgid "Unordered list"
 msgstr "Dizilmemiş liste"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Notu paylaşmayı bırak"
+msgstr "Notu yayımlamayı kaldır"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Notu paylaşmayı bırak"
+msgstr "“%s” yayımdan kaldır"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6710,6 +6691,8 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"\"%s\" not defterinin paylaşımı kaldırılsın mı? Bu, diğer kullanıcıların "
+"deftere erişimini kaybetmesine neden olabilir."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -6940,9 +6923,8 @@ msgid "Viewer"
 msgstr "Görünteleyici"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1198
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
-msgstr "Editör yazı tipi"
+msgstr "Görüntüleyici ve Zengin Metin Düzenleyici yazı tipi ailesi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1120
 msgid "Viewer font size"
@@ -6961,9 +6943,8 @@ msgid "Voice typing language files (URL)"
 msgstr "Sesle yazım dil dosyaları (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1838
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "Sesle yazılıyor..."
+msgstr "Sesli yazma: Sözlük"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1287
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
@@ -6979,9 +6960,8 @@ msgid "Waiting for authorisation..."
 msgstr "Yetkilendirme için bekleniyor..."
 
 #: packages/app-cli/app/command-share.ts:174
-#, fuzzy
 msgid "Waiting: Notebook %s from %s"
-msgstr "Not defteri: %s (%s)"
+msgstr "Not defteri %s , %s tarafından bekleniyor"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7129,11 +7109,11 @@ msgstr "Joplin Cloud'a giriş yaptınız, şimdi ekranı kapatabilirsiniz."
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Artık hesabınıza giriş yaptınız."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Artık Markdown düzenleyicisinin en son sürümünü kullanıyorsunuz."
 
 #: packages/app-desktop/gui/MainScreen.tsx:585
 msgid ""
