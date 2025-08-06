@@ -9742,7 +9742,7 @@ __metadata:
     jsdom: "npm:26.0.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.1"
-    ldapts: "npm:7.3.3"
+    ldapts: "npm:7.4.0"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -17496,7 +17496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1@npm:^0.2.4, asn1@npm:~0.2.3, asn1@npm:~0.2.6":
+"asn1@npm:0.2.6, asn1@npm:^0.2.4, asn1@npm:~0.2.3":
   version: 0.2.6
   resolution: "asn1@npm:0.2.6"
   dependencies:
@@ -22919,16 +22919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^3.1.0, debug@npm:^3.2.6, debug@npm:^3.2.7":
-  version: 3.2.7
-  resolution: "debug@npm:3.2.7"
-  dependencies:
-    ms: "npm:^2.1.1"
-  checksum: 10/d86fd7be2b85462297ea16f1934dc219335e802f629ca9a69b63ed8ed041dda492389bb2ee039217c02e5b54792b1c51aa96ae954cf28634d363a2360c7a1639
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.3.5":
+"debug@npm:4.4.0, debug@npm:^4.3.5":
   version: 4.4.0
   resolution: "debug@npm:4.4.0"
   dependencies:
@@ -22940,7 +22931,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.4.0, debug@npm:~4.4.0":
+"debug@npm:^3.1.0, debug@npm:^3.2.6, debug@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "debug@npm:3.2.7"
+  dependencies:
+    ms: "npm:^2.1.1"
+  checksum: 10/d86fd7be2b85462297ea16f1934dc219335e802f629ca9a69b63ed8ed041dda492389bb2ee039217c02e5b54792b1c51aa96ae954cf28634d363a2360c7a1639
+  languageName: node
+  linkType: hard
+
+"debug@npm:^4.4.0":
   version: 4.4.1
   resolution: "debug@npm:4.4.1"
   dependencies:
@@ -34025,17 +34025,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:7.3.3":
-  version: 7.3.3
-  resolution: "ldapts@npm:7.3.3"
+"ldapts@npm:7.4.0":
+  version: 7.4.0
+  resolution: "ldapts@npm:7.4.0"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
-    asn1: "npm:~0.2.6"
-    debug: "npm:~4.4.0"
-    strict-event-emitter-types: "npm:~2.0.0"
-    uuid: "npm:~11.1.0"
-    whatwg-url: "npm:~14.2.0"
-  checksum: 10/d2be413f5fc1ec76c8418862d607f14b0f00952d2492882de35a4f89d6869ae0f989995e8d8848ccb04dfb71b5b8f7c8a2802c8d9cd23e287ce966e65eceae75
+    asn1: "npm:0.2.6"
+    debug: "npm:4.4.0"
+    strict-event-emitter-types: "npm:2.0.0"
+    uuid: "npm:11.1.0"
+    whatwg-url: "npm:14.2.0"
+  checksum: 10/d36416a4a912f75df02ee1a3c75095396008c79fae5e437f104d94c32ff5601382a4bdf9c1301707fab4a425baf70e23f0898f7363c03319289f33ec917184ff
   languageName: node
   linkType: hard
 
@@ -46752,7 +46752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strict-event-emitter-types@npm:~2.0.0":
+"strict-event-emitter-types@npm:2.0.0":
   version: 2.0.0
   resolution: "strict-event-emitter-types@npm:2.0.0"
   checksum: 10/d7b28708bf09648302e8ea5a6c4999d7e3186a06f68568a6196a71e315bf4ef44f78011db11576b0b4ed45df4a8f0baf0d64232d2a6eaf21fa92c7ec4085f481
@@ -50584,7 +50584,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:11.1.0, uuid@npm:^11.1.0, uuid@npm:~11.1.0":
+"uuid@npm:11.1.0, uuid@npm:^11.1.0":
   version: 11.1.0
   resolution: "uuid@npm:11.1.0"
   bin:
@@ -51571,6 +51571,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"whatwg-url@npm:14.2.0, whatwg-url@npm:^14.1.0":
+  version: 14.2.0
+  resolution: "whatwg-url@npm:14.2.0"
+  dependencies:
+    tr46: "npm:^5.1.0"
+    webidl-conversions: "npm:^7.0.0"
+  checksum: 10/f0a95b0601c64f417c471536a2d828b4c16fe37c13662483a32f02f183ed0f441616609b0663fb791e524e8cd56d9a86dd7366b1fc5356048ccb09b576495e7c
+  languageName: node
+  linkType: hard
+
 "whatwg-url@npm:^11.0.0":
   version: 11.0.0
   resolution: "whatwg-url@npm:11.0.0"
@@ -51588,16 +51598,6 @@ __metadata:
     tr46: "npm:^5.0.0"
     webidl-conversions: "npm:^7.0.0"
   checksum: 10/67ea7a359a90663b28c816d76379b4be62d13446e9a4c0ae0b5ae0294b1c22577750fcdceb40827bb35a61777b7093056953c856604a28b37d6a209ba59ad062
-  languageName: node
-  linkType: hard
-
-"whatwg-url@npm:^14.1.0, whatwg-url@npm:~14.2.0":
-  version: 14.2.0
-  resolution: "whatwg-url@npm:14.2.0"
-  dependencies:
-    tr46: "npm:^5.1.0"
-    webidl-conversions: "npm:^7.0.0"
-  checksum: 10/f0a95b0601c64f417c471536a2d828b4c16fe37c13662483a32f02f183ed0f441616609b0663fb791e524e8cd56d9a86dd7366b1fc5356048ccb09b576495e7c
   languageName: node
   linkType: hard
 
