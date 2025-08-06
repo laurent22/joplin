@@ -767,6 +767,30 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				text_patterns_lookup: (ctx: TextPatternContext) => textPatternsLookupRef.current(ctx),
 
 				setup: (editor: Editor) => {
+					editor.on('mousedown', (event) => {
+						const li = event.target;
+						const childList = li.querySelector('ul,ol');
+						if (!childList) return;
+						let textNode = null;
+						for (const node of li.childNodes) {
+							if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+								textNode = node;
+								break;
+							}
+						}
+						if (!textNode) { return; }
+
+						textNode = event.target.firstChild;
+						if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+							const range = document.createRange();
+							range.setStart(textNode, textNode.nodeValue.length);
+							range.collapse(false);
+							editor.selection.setRng(range);
+						}
+
+						event.preventDefault();
+					}, true);
+
 					editor.addCommand('joplinMath', async () => {
 						const katex = editor.selection.getContent();
 						const md = `$${katex}$`;
