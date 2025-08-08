@@ -9830,7 +9830,7 @@ __metadata:
     "@types/jest-expect-message": "npm:1.1.0"
     "@types/koa": "npm:2.15.0"
     "@types/uuid": "npm:10.0.0"
-    dotenv: "npm:16.4.7"
+    dotenv: "npm:16.5.0"
     file-type: "npm:16.5.4"
     fs-extra: "npm:11.2.0"
     gulp: "npm:4.0.2"
@@ -24083,10 +24083,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.4.7":
-  version: 16.4.7
-  resolution: "dotenv@npm:16.4.7"
-  checksum: 10/f13bfe97db88f0df4ec505eeffb8925ec51f2d56a3d0b6d916964d8b4af494e6fb1633ba5d09089b552e77ab2a25de58d70259b2c5ed45ec148221835fc99a0c
+"dotenv@npm:16.5.0":
+  version: 16.5.0
+  resolution: "dotenv@npm:16.5.0"
+  checksum: 10/e68a16834f1a41cc2dfb01563bc150668ad675e6cd09191211467b5c0806b6ecd6ec438e021aa8e01cd0e72d2b70ef4302bec7cc0fe15b6955f85230b62dc8a9
   languageName: node
   linkType: hard
 
