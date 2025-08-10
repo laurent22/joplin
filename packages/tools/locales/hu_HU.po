@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: summoner <summoner@vivaldi.net>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
@@ -430,9 +432,8 @@ msgid "Add recipient:"
 msgstr "Címzett hozzáadása:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Új címkék:"
+msgstr "Címkék hozzáadása:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -447,18 +448,16 @@ msgid "Add to note"
 msgstr "Hozzáadás jegyzethez"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Új hozzáadása"
+msgstr "Új hozzáadva: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "A(z) %s címke hozzáadása a jegyzethez"
+msgstr "Hozzáadott címke: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Címke hozzáadása"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -639,7 +638,7 @@ msgstr "Aritim sötét"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Kapcsolódó címkék:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -749,11 +748,11 @@ msgstr "Frissítések automatikus ellenőrzése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1932
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "Automatikusan törölje a kuka tartalmát bizonyos napok elteltével"
+msgstr "Kuka tartalmának automatikusan törlése bizonyos napok elteltével"
 
 #: packages/lib/models/settings/builtInMetadata.ts:629
 msgid "Automatically switch theme to match system theme"
-msgstr "Automatikusan váltson olyan témára, ami egyezik a rendszer témájával"
+msgstr "Automatikus átváltás a rendszer témájával egyező témára"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
@@ -1164,9 +1163,8 @@ msgid "Code View"
 msgstr "Kódnézet"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Kód"
+msgstr "Kód:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1339,14 +1337,12 @@ msgid "Control character"
 msgstr "Vezérlőkarakter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Átalakítás jegyzetté"
+msgstr "Átalakítás"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Átalakítás tennivalóra"
+msgstr "Jegyzet átalakítása Markdown formátumba"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1395,7 +1391,7 @@ msgstr "Hivatkozás másolása a weboldalra"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
 #: packages/app-mobile/components/screens/Note/Note.tsx:1341
 msgid "Copy Markdown link"
-msgstr "Markdown-hivatkozás másolása"
+msgstr "Markdown hivatkozás másolása"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:201
 msgid "Copy path to clipboard"
@@ -1452,9 +1448,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Nem sikerült kapcsolódni a bővítménytárolóhoz."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Nem sikerült exportálni a jegyzeteket: %s"
+msgstr "Nem sikerült a jegyzetet átalakítani Markdown formátumba: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1509,9 +1504,8 @@ msgid "Create a notebook"
 msgstr "Jegyzetfüzet létrehozása"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Új jegyzetfüzet létrehozása."
+msgstr "Új jegyzetfüzet létrehozása"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1519,9 +1513,8 @@ msgid "Create new profile..."
 msgstr "Új profil létrehozása…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Jegyzetfüzet létrehozása"
+msgstr "Jegyzet létrehozása"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1591,14 +1584,12 @@ msgid "Creating new to-do..."
 msgstr "Új teendő létrehozása…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Új jegyzet létrehozása…"
+msgstr "A(z) „%s” nevű jegyzet létrehozása…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Új jegyzet létrehozása…"
+msgstr "Jegyzet létrehozása."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1701,6 +1692,8 @@ msgstr "Alapértelmezett"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"A dokumentumbeolvasó által létrehozott dokumentumokhoz használt "
+"alapértelmezett cím."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1990,7 +1983,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Dokumentumbeolvasó: Címsablon"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -2002,7 +1995,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Ne jelenjen meg többé ez az üzenet"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2128,14 +2121,12 @@ msgid "Edit"
 msgstr "Szerkesztés"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Szerkesztés Markdownként"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Formázott szöveg"
+msgstr "Szerkesztés formázott szövegként"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2295,14 +2286,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Forgatókönyv-szintaxis engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Titkosítás engedélyezése"
+msgstr "Kézzel írt átírás engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Markdown-eszköztár engedélyezése"
+msgstr "HTML-Markdown átalakítási kísérőoldal engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2310,7 +2299,7 @@ msgstr "Linkify engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1079
 msgid "Enable markdown emoji"
-msgstr "Markdown-emodzsi engedélyezése"
+msgstr "Markdown emodzsi engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1065
 msgid "Enable math expressions"
@@ -2318,11 +2307,11 @@ msgstr "Matematikai képletek engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1067
 msgid "Enable Mermaid diagrams support"
-msgstr "Mermaid-diagram támogatásának engedélyezése"
+msgstr "Mermaid diagram támogatásának engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1081
 msgid "Enable multimarkdown table extension"
-msgstr "Multimarkdown-táblázatkiegészítő engedélyezése"
+msgstr "Multimarkdown táblázatkiegészítő engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1645
 msgid "Enable note history"
@@ -2351,7 +2340,7 @@ msgstr "Lágy törések engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1453
 msgid "Enable spell checking in Markdown editor"
-msgstr "Helyesírás-ellenőrzés engedélyezése a Markdown-szerkesztőben"
+msgstr "Helyesírás-ellenőrzés engedélyezése a Markdown szerkesztőben"
 
 #: packages/lib/models/settings/builtInMetadata.ts:903
 msgid "Enable spellcheck in the text editor"
@@ -2363,7 +2352,7 @@ msgstr "Tartalomjegyzék-kiegészítő engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:914
 msgid "Enable the Markdown toolbar"
-msgstr "Markdown-eszköztár engedélyezése"
+msgstr "Markdown eszköztár engedélyezése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1062
 msgid "Enable typographer support"
@@ -2390,7 +2379,7 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
-"Engedélyezi a Markdown-lista folytatását, az automatikus HTML-címkék "
+"Engedélyezi a Markdown lista folytatását, az automatikus HTML-címkék "
 "bezárását és egyéb automatikus jelölőkiegészítéseket."
 
 #: packages/lib/models/settings/builtInMetadata.ts:762
@@ -2398,7 +2387,7 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
-"Engedélyezi a Markdown-minták cseréjét a formázott szöveges szerkesztőben. "
+"Engedélyezi a Markdown minták cseréjét a formázott szöveges szerkesztőben. "
 "Ha például engedélyezve van, a **félkövér** beírása félkövér szöveget hoz "
 "létre."
 
@@ -2919,9 +2908,8 @@ msgid "Hide password"
 msgstr "Jelszó elrejtése"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Figyelmeztetés"
+msgstr "Figyelmeztetések elrejtése"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2973,6 +2961,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Ha egy képmelléklet a saját sorában található, és utána egy üres sor "
+"következik, akkor a Markdown forrása alatt jelenik meg."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3675,13 +3665,12 @@ msgid "Markdown editor"
 msgstr "Markdown szerkesztő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown szerkesztő"
+msgstr "Markdown szerkesztő: képek renderelése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown szerkesztő: Markup renderelés a szerkesztőben"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3905,9 +3894,8 @@ msgstr ""
 "Új „%s” nevű jegyzetfüzet jön létre, és a(z) „%s” fájl ebbe lesz importálva"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Jegyzetfüzet címe:"
+msgstr "Új jegyzetfüzet címe"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4024,9 +4012,8 @@ msgid "No tab selected"
 msgstr "Nincs lap kijelölve"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Új címkék:"
+msgstr "Nincsenek címkék"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4146,9 +4133,8 @@ msgid "Note list style"
 msgstr "Jegyzetlista stílusa"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Jegyzetmegjelenítő"
+msgstr "Jegyzet előnézete"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4242,9 +4228,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: Nyelvi adatok webcíme vagy elérési útja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Keresés az összes jegyzetben"
+msgstr "OCR: Keresés a kivonatolt tartalomban"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4512,7 +4497,7 @@ msgstr "Engedély szükséges"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Kép: %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4859,7 +4844,6 @@ msgid "Re-upload local data to sync target"
 msgstr "Helyi adatok újrafeltöltése a szinkronizálási célra"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
 msgstr "Tudjon meg többet"
 
@@ -4872,9 +4856,9 @@ msgid "Read time: %s min"
 msgstr "Olvasási idő: %s perc"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "A(z) „%s” parancs csak GUI módban érhető el"
+msgstr ""
+"A parancsok általános bemenetről történő olvasása csak CLI-módban érhető el."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4893,9 +4877,8 @@ msgid "Recipients:"
 msgstr "Címzettek:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Nagy méretű képek átméretezése:"
+msgstr "Kézzel írt kép felismerése"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4949,9 +4932,8 @@ msgid "Remove"
 msgstr "Eltávolítás"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Eltávolítás"
+msgstr "%s eltávolítása"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4970,9 +4952,8 @@ msgid "Removed %s from share."
 msgstr "A(z) %s eltávolítva a megosztásból."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Címke átnevezése:"
+msgstr "Címke eltávolítva: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4994,6 +4975,7 @@ msgstr "A megadott <item> (jegyzet vagy jegyzetfüzet) átnevezése <name> névr
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr ""
+"Rendereli a Markupot az összes olyan sorban, amely nem tartalmazza a kurzort."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5241,12 +5223,11 @@ msgstr "Módosítások mentése?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:882
 msgid "Save geo-location with notes"
-msgstr "A földrajzi helyszín mentése a jegyzetekhez"
+msgstr "Földrajzi helyszín mentése a jegyzetekhez"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Egy jegyzetfüzet kijelölése"
+msgstr "Jegyzetfüzet beolvasása"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5295,9 +5276,8 @@ msgid "Search shown"
 msgstr "Keresés a láthatók között"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Keresési eredmény"
+msgstr "Címkék keresése"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5346,18 +5326,16 @@ msgid "Select file..."
 msgstr "Fájl kijelölése…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Egy jegyzetfüzet kijelölése"
+msgstr "Jegyzetfüzet kiválasztása"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Szülő jegyzetfüzet kijelölése"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Létrehozva: %s"
+msgstr "Kiválasztva: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6192,14 +6170,16 @@ msgstr ""
 #: packages/lib/services/RevisionService.ts:274
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr ""
-"A(z) „%s” jegyzetet sikeresen vissza lettek állítva a(z) „%s” jegyzetfüzetbe."
+"A(z) „%s” nevű jegyzet sikeresen vissza lett állítva a(z) „%s” nevű "
+"jegyzetfüzetbe."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "A jegyzetfüzet és annak tartalma sikeresen át lett helyezve a kukába."
+msgstr ""
+"A jegyzet Markdown formátumba lett konvertálva, és az eredeti jegyzet át "
+"lett helyezve a kukába"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6440,14 +6420,18 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Ez a funkció alapértelmezetten ki van kapcsolva, kézzel kell engedélyezni a "
+"„Kézzel írt átírás engedélyezése” beállítás bekapcsolásával."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
+"Ez a funkció csak a Joplin Cloud és a Joplin Server szolgáltatásokban érhető "
+"el."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Ezt a képtípust nem támogatja a képfelismerő rendszer."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6502,6 +6486,8 @@ msgstr "Ennek a jegyzetnek nincsenek előzményei"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Ez a jegyzet HTML-formátumban van. Alakítsa át Markdown formátumba, hogy "
+"könnyebben szerkeszthesse."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6607,6 +6593,8 @@ msgstr "A folytatáshoz adja meg az alábbiakban a mesterjelszót."
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
+"Új címke létrehozásához írja be a címke nevét, majd nyomja meg az enter "
+"billentyűt."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6990,9 +6978,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Fejlessze a szinkronizálási célt a legfrissebb verzióra."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Kép készítése"
+msgstr "Kép feltöltése"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
