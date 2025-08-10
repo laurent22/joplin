@@ -1660,7 +1660,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
-
 		'syncInfoCache': {
 			value: '',
 			type: SettingItemType.String,

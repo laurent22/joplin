@@ -52,11 +52,7 @@ export default class FolderListWidget extends ListWidget {
 				}
 				output.push(Folder.displayTitle(item));
 
-				if (
-					Setting.value('showNoteCounts') &&
-          !item.deleted_time &&
-          item.id !== getTrashFolderId()
-				) {
+				if (Setting.value('showNoteCounts') && !item.deleted_time && item.id !== getTrashFolderId()) {
 					let noteCount = item.note_count;
 					if (this.folderHasChildren_(this.folders, item.id)) {
 						for (let i = 0; i < this.folders.length; i++) {
@@ -261,11 +257,7 @@ export default class FolderListWidget extends ListWidget {
 
 	public toggleFolderCollapse() {
 		const item = this.currentItem;
-		if (
-			item &&
-      item.type_ === Folder.modelType() &&
-      this.folderHasChildren_(this.folders, item.id)
-		) {
+		if (item && item.type_ === Folder.modelType() && this.folderHasChildren_(this.folders, item.id)) {
 			const collapsedFolders = Setting.value('collapsedFolderIds');
 			const isCollapsed = collapsedFolders.includes(item.id);
 			if (isCollapsed) {
