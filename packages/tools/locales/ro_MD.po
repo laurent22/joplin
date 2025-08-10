@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
 "Language: ro_MD\n"
@@ -437,9 +439,8 @@ msgid "Add recipient:"
 msgstr "Adaugă destinatar:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Etichete noi:"
+msgstr "Adaugă etichete:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -454,18 +455,16 @@ msgid "Add to note"
 msgstr "Adaugă la notiță"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Adaugă un nou"
+msgstr "Adaugă nou: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "Adaugă eticheta %s la notița"
+msgstr "Etichetă adăugată: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Adaugă etichete"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -647,7 +646,7 @@ msgstr "Aritim întunecat"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Etichete asociate:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -1166,9 +1165,8 @@ msgid "Code View"
 msgstr "Vizualizare code"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Cod"
+msgstr "Cod:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1342,14 +1340,12 @@ msgid "Control character"
 msgstr "Caracter de control"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Convertește în notiță"
+msgstr "Convertește-o"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Conversie în todo"
+msgstr "Convertește notița în Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1456,9 +1452,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Nu s-a putut conecta la repozitoriul de plugin-uri."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Nu s-au putut exporta notițele: %s"
+msgstr "Nu s-a putut converti notița în Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1513,9 +1508,8 @@ msgid "Create a notebook"
 msgstr "Creează un caiet"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Creează un nou caiet."
+msgstr "Creează un nou caiet"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1523,9 +1517,8 @@ msgid "Create new profile..."
 msgstr "Creează un nou profil…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Creează un caiet"
+msgstr "Creează o notiță"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1595,14 +1588,12 @@ msgid "Creating new to-do..."
 msgstr "Se creează o nouă listă de făcut…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Se creează o nouă notiță…"
+msgstr "Se creează notița „%s”..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Se creează o nouă notiță…"
+msgstr "Se creează notița."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1704,7 +1695,7 @@ msgstr "Mod implicit"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
-msgstr ""
+msgstr "Titlul implicit de folosit pentru documentele create de la scanner."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1996,7 +1987,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Scanner documente: Șablon titlu"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -2008,7 +1999,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Nu mai afișa acest mesaj"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2133,14 +2124,12 @@ msgid "Edit"
 msgstr "Editează"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Editează ca Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Text îmbogățit"
+msgstr "Editează ca text îmbogățit"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2300,14 +2289,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Activează suportul pentru sintaxa Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Activează criptarea"
+msgstr "Activează transcrierea scrisului de mînă"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Activează bara de instrumente Markdown"
+msgstr "Activează banner-ul de conversie HTML-la-Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2921,9 +2908,8 @@ msgid "Hide password"
 msgstr "Ascunde parola"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Atenție"
+msgstr "Ascunde atenționarea"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2975,6 +2961,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Dacă un atașament imagine este pe linia proprie și urmat de o linie goală, "
+"va fi redat imediat sub sursa lui Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3677,13 +3665,12 @@ msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Editor Markdown"
+msgstr "Editor Markdown: Redă imaginile"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Editor Markdown: Redă markup în editor"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3906,9 +3893,8 @@ msgid ""
 msgstr "Un nou caiet „%s” va fi creat și fișierul „%s” va fi importat în el"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Titlul agendei:"
+msgstr "Titlu caiet nou"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4026,9 +4012,8 @@ msgid "No tab selected"
 msgstr "Nicio filă selectată"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Etichete noi:"
+msgstr "Fără etichete"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4146,9 +4131,8 @@ msgid "Note list style"
 msgstr "Stilul listei de notițe"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Vizualizator notiță"
+msgstr "Previzualizare notiță"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4240,9 +4224,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL sau cale date lingvistice"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Caută în toate notițele"
+msgstr "OCR: Caută în conținutul extras"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4511,7 +4494,7 @@ msgstr "Permisiune necesară"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Fotografia %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4859,9 +4842,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Reîncărcarea datelor locale către destinația de sincronizare"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Află mai multe"
+msgstr "Citește mai multe"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4872,9 +4854,10 @@ msgid "Read time: %s min"
 msgstr "Durata lecturii: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Comanda „%s” este disponibilă doar în modul GUI"
+msgstr ""
+"Citirea comenzilor de la intrarea standard este disponibilă doar în modul "
+"CLI."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4893,9 +4876,8 @@ msgid "Recipients:"
 msgstr "Destinatari:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Redimensionează imaginile mari:"
+msgstr "Recunoaște imagine cu text scris de mînă"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4949,9 +4931,8 @@ msgid "Remove"
 msgstr "Șterge"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Șterge"
+msgstr "Șterge %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4970,9 +4951,8 @@ msgid "Removed %s from share."
 msgstr "S-a eliminat %s din partajare."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Redenumește eticheta:"
+msgstr "Etichetă ștearsă: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4993,7 +4973,7 @@ msgstr "Redenumește <item> dat (notiță sau caiet) în <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Redă markup pe toate liniile care nu includ cursorul."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5243,9 +5223,8 @@ msgid "Save geo-location with notes"
 msgstr "Salvează geo-locația în notițe"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Selectează un caiet"
+msgstr "Scanează un caiet"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5294,9 +5273,8 @@ msgid "Search shown"
 msgstr "Căutare afișată"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Rezultate căutare"
+msgstr "Caută etichete"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5345,18 +5323,16 @@ msgid "Select file..."
 msgstr "Alege o imagine…"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Selectează un caiet"
+msgstr "Selectează caiet"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Selectează caietul părinte"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Creat: %s"
+msgstr "Selectat: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6198,11 +6174,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Notița „%s” a fost restaurată cu succes în caietul „%s”."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Caietul și conținutul său au fost mutate cu succes în coșul de gunoi."
+msgstr ""
+"Notița a fost convertită în Markdown și notița originală a fost mutată în "
+"coșul de gunoi"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6441,14 +6418,17 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Această funcție este implicit dezactivată. Trebuie să o activezi manual prin "
+"opțiunea „Activează transcrierea scrisului de mînă”."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
+"Această funcție este disponibilă doar pe cloud-ul Joplin și server-ul Joplin."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Acest tip de imagine nu este suportat de sistemul de recunoaștere."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6506,6 +6486,8 @@ msgstr "Această notă nu are istoric"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Această notiță este în format HTML. Convertește-o în Markdown pentru a o "
+"putea edita mai ușor."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6614,6 +6596,7 @@ msgstr "Pentru a continua, te rog să întroduci parola principală mai jos."
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
+"Pentru a crea o etichetă nouă, tastează numele acesteia și apasă enter."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6999,9 +6982,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Actualizează destinația de sincronizare la cea mai recentă versiune."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Fotografiază"
+msgstr "Încarcă fotografie"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
