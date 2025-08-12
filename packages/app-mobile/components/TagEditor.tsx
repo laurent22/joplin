@@ -188,7 +188,7 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	</View>;
 };
 
-const normalizeTag = (tagText: string) => tagText.trim().toLowerCase();
+const normalizeTag = (tagText: string) => tagText.trim();
 
 const TagEditor: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.headerStyle);
@@ -196,7 +196,7 @@ const TagEditor: React.FC<Props> = props => {
 	const comboBoxItems = useMemo(() => {
 		return props.allTags
 			// Exclude tags already associated with the note
-			.filter(tag => !props.tags.includes(tag.title))
+			.filter(tag => !props.tags.some(o => o.toLowerCase() === tag.title?.toLowerCase()))
 			.map((tag): Option => {
 				const title = tag.title ?? 'Untitled';
 				return {
@@ -220,7 +220,8 @@ const TagEditor: React.FC<Props> = props => {
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
-		const previousTagIndex = props.tags.indexOf(title);
+		const lowercaseTitle = title?.toLowerCase();
+		const previousTagIndex = props.tags.findIndex(item => item.toLowerCase() === lowercaseTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
 		setAutofocusTag(targetTag);
 
@@ -228,7 +229,7 @@ const TagEditor: React.FC<Props> = props => {
 		// prevent focus from occasionally jumping away from the tag box.
 		await msleep(100);
 		AccessibilityInfo.announceForAccessibility(_('Removed tag: %s', title));
-		props.onTagsChange(props.tags.filter(tag => tag !== title));
+		props.onTagsChange(props.tags.filter(tag => tag.toLowerCase() !== lowercaseTitle));
 	}, [props.tags, props.onTagsChange]);
 
 	const onComboBoxSelect = useCallback((item: { title: string }) => {
@@ -238,13 +239,13 @@ const TagEditor: React.FC<Props> = props => {
 
 	const allTagsSet = useMemo(() => {
 		return new Set([
-			...props.allTags.map(tag => tag.title),
-			...props.tags,
+			...props.allTags.map(tag => tag.title?.toLowerCase()),
+			...props.tags.map(tag => tag.toLowerCase()),
 		]);
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSet.has(normalizeTag(tag));
+		return !allTagsSet.has(normalizeTag(tag).toLowerCase());
 	}, [allTagsSet]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;

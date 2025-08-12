@@ -64,21 +64,24 @@ const useSearchResults = ({
 	search, setSearch, options, onAddItem, canAddItem,
 }: UseSearchResultsOptions) => {
 	const results = useMemo(() => {
+		const lowerSearch = search?.toLowerCase();
 		return options
-			.filter(option => option.title.startsWith(search))
+			.filter(option => option.title.toLowerCase().startsWith(lowerSearch))
 			.sort((a, b) => {
-				if (a.title === b.title) return 0;
+				const lowerTitleA = a.title.toLowerCase();
+				const lowerTitleB = b.title.toLowerCase();
+				if (lowerTitleA === lowerTitleB) return 0;
 				// Full matches should go first
-				if (a.title === search) return -1;
-				if (b.title === search) return 1;
-				return naturalCompare(a.title, b.title);
+				if (lowerTitleA === lowerSearch) return -1;
+				if (lowerTitleB === lowerSearch) return 1;
+				return naturalCompare(lowerTitleA, lowerTitleB);
 			});
 	}, [search, options]);
 
 	const canAdd = (
 		!!onAddItem
 		&& search.trim()
-		&& results[0]?.title !== search
+		&& results[0]?.title.toLowerCase() !== search?.toLowerCase()
 		&& canAddItem(search)
 	);
 
