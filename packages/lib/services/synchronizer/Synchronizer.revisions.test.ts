@@ -230,4 +230,71 @@ describe('Synchronizer.revisions', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should sync both deleted and merged revisions to remote, when revision deletion retains some revisions locally', async () => {
+		// - C1 creates note 1
+		// - C1 modifies note 1 over a period of time - 2 revisions are created
+		// - C1 sync
+		// - C2 sync
+		// - C2 receives note 1 with the revisions
+		// - C2 deletes the oldest of the 2 revisions, leaving 1 merged revision
+		// - C2 sync
+		// - C1 sync
+		// - C1 receives 1 merged revision and the older one is deleted
+		//
+		// When at least one, but not all revisions are deleted for a note, the new oldest revision must be a merge of all
+		// previous revisions which were deleted. So in addition to verifying that old revision deletions are synced so that
+		// other clients will delete those revisions, we also need to verify that a merged revision is synced and is then updated
+		// when another client receives it
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		jest.useFakeTimers({ advanceTimers: true });
+
+		const note = await Note.save({ title: 'note' });
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV0' });
+		jest.advanceTimersByTime(200);
+
+		await revisionService().collectRevisions(); // REV0
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		const interimTime = Date.now();
+		jest.advanceTimersByTime(200);
+
+		await Note.save({ id: note.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		// Should sync the revisions
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		const revisions = await getNoteRevisions();
+		expect(revisions).toHaveLength(2);
+		expect(revisions[0].title_diff).toBe('[{"diffs":[[1,"note REV0"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisions[1].title_diff).toBe('[{"diffs":[[0," REV"],[-1,"0"],[1,"1"]],"start1":4,"start2":4,"length1":5,"length2":5}]');
+
+		await revisionService().deleteOldRevisions(Date.now() - interimTime);
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		await synchronizerStart();
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		// After switching back to the original client, syncing should locally delete
+		// the remotely deleted revisions and update the merged revision.
+		await switchClient(1);
+		expect(await getNoteRevisions()).toHaveLength(2);
+		await synchronizerStart();
+
+		const revisionsAfterSync = await getNoteRevisions();
+		expect(revisionsAfterSync).toHaveLength(1);
+		expect(revisionsAfterSync[0].title_diff).toBe('[{"diffs":[[1,"note REV1"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisionsAfterSync[0].updated_time).toBeGreaterThan(revisions[0].updated_time);
+
+		jest.useRealTimers();
+	});
 });

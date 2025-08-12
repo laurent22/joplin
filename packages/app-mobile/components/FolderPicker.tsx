@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { FunctionComponent, ReactElement } from 'react';
+import { FunctionComponent, ReactElement, useCallback, useContext } from 'react';
 import { _ } from '@joplin/lib/locale';
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
 import { themeStyle } from './global-style';
 import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
+import { View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { DialogContext } from './DialogManager';
 
 interface FolderPickerProps {
 	disabled?: boolean;
@@ -16,6 +19,7 @@ interface FolderPickerProps {
 	darkText?: boolean;
 	themeId?: number;
 	coverableChildrenRight?: ReactElement|ReactElement[];
+	onNewFolder?: (title: string)=> void;
 }
 
 
@@ -28,6 +32,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	placeholder,
 	darkText,
 	coverableChildrenRight,
+	onNewFolder,
 	themeId,
 }) => {
 	const theme = themeStyle(themeId);
@@ -61,7 +66,15 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 		return output;
 	};
 
-	return (
+	const dialogs = useContext(DialogContext);
+	const onNewFolderPress = useCallback(async () => {
+		const title = await dialogs.promptForText(_('New notebook title'));
+		if (title !== null) {
+			onNewFolder(title);
+		}
+	}, [dialogs, onNewFolder]);
+
+	const dropdown = (
 		<Dropdown
 			items={titlePickerItems(!!mustSelect)}
 			accessibilityHint={_('Selects a notebook')}
@@ -88,6 +101,19 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 			}}
 		/>
 	);
+
+	if (onNewFolder) {
+		return <View style={{ flexDirection: 'column', flex: 1 }}>
+			{dropdown}
+			<Button
+				style={{ alignSelf: 'flex-end' }}
+				icon='plus'
+				onPress={onNewFolderPress}
+			>{_('Create new notebook')}</Button>
+		</View>;
+	} else {
+		return dropdown;
+	}
 };
 
 export default FolderPicker;

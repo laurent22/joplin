@@ -8,7 +8,7 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './markdown/MarkdownMathExtension';
+import { inlineMathTag, mathTag } from './extensions/markdownMathExtension';
 import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
@@ -107,13 +107,6 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 			marginRight: `${theme.marginRight}px`,
 		},
 
-		'& .cm-listItem': {
-			// Needs to be !important because the tab-size is directly set on the element style
-			// attribute by CodeMirror. And the `EditorState.tabSize` function only accepts a
-			// number, while we need a "em" value to make it match the viewer tab size.
-			tabSize: `${theme.listTabSize} !important`,
-		},
-
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 
 		// The desktop app sets the font for these elements to a specific font.
@@ -188,8 +181,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-tableHeader, & .cm-tableRow, & .cm-tableDelimiter': monospaceStyle,
 		'& .cm-taskMarker': monospaceStyle,
 
-		// Apply maximum width styles to individual lines.
-		'& .cm-line': theme.contentMaxWidth ? {
+		'&.cm-editor .cm-content': theme.contentMaxWidth ? {
 			maxWidth: theme.contentMaxWidth,
 
 			// Center

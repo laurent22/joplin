@@ -55,17 +55,24 @@ import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetche
 import { parseNotesParent } from '@joplin/lib/reducer';
 import OcrService from '@joplin/lib/services/ocr/OcrService';
 import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesseract';
+import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
+import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
+import PerformanceLogger from '@joplin/lib/PerformanceLogger';
+
+const perfLogger = PerformanceLogger.create();
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
 ];
 
 const appDefaultState = createAppDefaultState(resourceEditWatcherDefaultState);
+
+type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
@@ -348,16 +355,19 @@ class Application extends BaseApplication {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				const Tesseract = (window as any).Tesseract;
 
-				const driver = new OcrDriverTesseract(
+				const drivers: OcrDriverBase[] = [];
+				drivers.push(new OcrDriverTesseract(
 					{ createWorker: Tesseract.createWorker },
 					{
 						workerPath: `${bridge().buildDir()}/tesseract.js/worker.min.js`,
 						corePath: `${bridge().buildDir()}/tesseract.js-core`,
 						languageDataPath: Setting.value('ocr.languageDataPath') || null,
 					},
-				);
+				));
 
-				this.ocrService_ = new OcrService(driver);
+				drivers.push(new OcrDriverTranscribe());
+
+				this.ocrService_ = new OcrService(drivers);
 			}
 
 			void this.ocrService_.runInBackground();
@@ -411,56 +421,53 @@ class Application extends BaseApplication {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
-		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
-		// insert an extra argument so that they can be processed in a consistent way everywhere.
-		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
+	private buildStartupTasks_() {
+		const tasks: StartupTask[] = [];
+		const addTask = (label: string, task: StartupTask['task']) => {
+			tasks.push({ label, task });
+		};
 
-		argv = await super.start(argv, startOptions);
+		addTask('app/set up extra debug logging', () => {
+			reg.logger().info('app.start: doing regular boot');
+			const dir: string = Setting.value('profileDir');
 
-		await this.setupIntegrationTestUtils();
+			syncDebugLog.enabled = false;
 
-		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
+			if (dir.endsWith('dev-desktop-2')) {
+				syncDebugLog.addTarget(TargetType.File, {
+					path: `${homedir()}/synclog.txt`,
+				});
+				syncDebugLog.enabled = true;
+				syncDebugLog.info(`Profile dir: ${dir}`);
+			}
+		});
 
-		await this.applySettingsSideEffects();
+		addTask('app/set up registry', () => {
+			reg.setDispatch(this.dispatch.bind(this));
+			reg.setShowErrorMessageBoxHandler((message: string) => { bridge().showErrorMessageBox(message); });
+		});
 
-		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
-			reg.logger().info('app.start: doing upgradeSyncTarget action');
-			bridge().mainWindow().show();
-			return { action: 'upgradeSyncTarget' };
-		}
+		addTask('app/set up auto updater', () => {
+			this.setupAutoUpdaterService();
+		});
 
-		reg.logger().info('app.start: doing regular boot');
-
-		const dir: string = Setting.value('profileDir');
-
-		syncDebugLog.enabled = false;
-
-		if (dir.endsWith('dev-desktop-2')) {
-			syncDebugLog.addTarget(TargetType.File, {
-				path: `${homedir()}/synclog.txt`,
-			});
-			syncDebugLog.enabled = true;
-			syncDebugLog.info(`Profile dir: ${dir}`);
-		}
-
-		this.setupAutoUpdaterService();
-
-		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
-		AlarmService.setLogger(reg.logger());
-
-		reg.setDispatch(this.dispatch.bind(this));
-		reg.setShowErrorMessageBoxHandler((message: string) => { bridge().showErrorMessageBox(message); });
+		addTask('app/set up AlarmService', () => {
+			AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
+			AlarmService.setLogger(reg.logger());
+		});
 
 		if (Setting.value('flagOpenDevTools')) {
-			bridge().openDevTools();
+			addTask('app/openDevTools', () => {
+				bridge().openDevTools();
+			});
 		}
 
-		this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
-		this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
-		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
-		this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));
+		addTask('app/set up custom protocol handler', async () => {
+			this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
+			this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
+			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
+			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));
+		});
 		// this.protocolHandler_.allowReadAccessTo(Setting.value('tempDir'));
 		// For now, this doesn't seem necessary:
 		//  this.protocolHandler_.allowReadAccessTo(Setting.value('profileDir'));
@@ -468,44 +475,52 @@ class Application extends BaseApplication {
 		// handler, and, as such, it may make sense to also limit permissions of
 		// allowed pages with a Content Security Policy.
 
-		PluginManager.instance().dispatch_ = this.dispatch.bind(this);
-		PluginManager.instance().setLogger(reg.logger());
-		PluginManager.instance().register(pluginClasses);
+		addTask('app/initialize PluginManager, redux, CommandService, and KeymapService', async () => {
+			PluginManager.instance().dispatch_ = this.dispatch.bind(this);
+			PluginManager.instance().setLogger(reg.logger());
+			PluginManager.instance().register(pluginClasses);
 
-		this.initRedux();
+			this.initRedux();
 
-		PerFolderSortOrderService.initialize();
+			initializeCommandService(this.store(), Setting.value('env') === 'dev');
 
-		initializeCommandService(this.store(), Setting.value('env') === 'dev');
+			const keymapService = KeymapService.instance();
+			// We only add the commands that appear in the menu because only
+			// those can have a shortcut associated with them.
+			keymapService.initialize(menuCommandNames());
 
-		const keymapService = KeymapService.instance();
-		// We only add the commands that appear in the menu because only
-		// those can have a shortcut associated with them.
-		keymapService.initialize(menuCommandNames());
-
-		try {
-			await keymapService.loadCustomKeymap(`${dir}/keymap-desktop.json`);
-		} catch (error) {
-			reg.logger().error(error);
-		}
-
-		// Since the settings need to be loaded before the store is
-		// created, it will never receive the SETTING_UPDATE_ALL even,
-		// which mean state.settings will not be initialised. So we
-		// manually call dispatchUpdateAll() to force an update.
-		Setting.dispatchUpdateAll();
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await refreshFolders((action: any) => this.dispatch(action), '');
-
-		const tags = await Tag.allWithNotes();
-
-		this.dispatch({
-			type: 'TAG_UPDATE_ALL',
-			items: tags,
+			try {
+				await keymapService.loadCustomKeymap(`${Setting.value('profileDir')}/keymap-desktop.json`);
+			} catch (error) {
+				reg.logger().error(error);
+			}
 		});
 
-		await this.setupCustomCss();
+		addTask('app/initialize PerFolderSortOrderService', () => {
+			PerFolderSortOrderService.initialize();
+		});
+
+		addTask('app/dispatch initial settings', () => {
+			// Since the settings need to be loaded before the store is
+			// created, it will never receive the SETTING_UPDATE_ALL even,
+			// which mean state.settings will not be initialised. So we
+			// manually call dispatchUpdateAll() to force an update.
+			Setting.dispatchUpdateAll();
+		});
+
+		addTask('app/update folders and tags', async () => {
+			await refreshFolders((action) => this.dispatch(action), '');
+
+			const tags = await Tag.allWithNotes();
+			this.dispatch({
+				type: 'TAG_UPDATE_ALL',
+				items: tags,
+			});
+		});
+
+		addTask('app/set up custom CSS', async () => {
+			await this.setupCustomCss();
+		});
 
 		// const masterKeys = await MasterKey.all();
 
@@ -514,188 +529,237 @@ class Application extends BaseApplication {
 		// 	items: masterKeys,
 		// });
 
-		const getNotesParent = async () => {
-			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
-			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
-				notesParent = {
-					type: 'Folder',
-					selectedItemId: Setting.value('activeFolderId'),
-				};
+		addTask('app/send initial selection to redux', async () => {
+			const getNotesParent = async () => {
+				let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+				if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+					notesParent = {
+						type: 'Folder',
+						selectedItemId: Setting.value('activeFolderId'),
+					};
+				}
+				return notesParent;
+			};
+
+			const notesParent = await getNotesParent();
+			if (notesParent.type === 'SmartFilter') {
+				this.store().dispatch({
+					type: 'SMART_FILTER_SELECT',
+					id: notesParent.selectedItemId,
+				});
+			} else if (notesParent.type === 'Tag') {
+				this.store().dispatch({
+					type: 'TAG_SELECT',
+					id: notesParent.selectedItemId,
+				});
+			} else {
+				this.store().dispatch({
+					type: 'FOLDER_SELECT',
+					id: notesParent.selectedItemId,
+				});
 			}
-			return notesParent;
-		};
 
-		const notesParent = await getNotesParent();
+			this.store().dispatch({
+				type: 'FOLDER_SET_COLLAPSED_ALL',
+				ids: Setting.value('collapsedFolderIds'),
+			});
 
-		if (notesParent.type === 'SmartFilter') {
 			this.store().dispatch({
-				type: 'SMART_FILTER_SELECT',
-				id: notesParent.selectedItemId,
+				type: 'NOTE_DEVTOOLS_SET',
+				value: Setting.value('flagOpenDevTools'),
 			});
-		} else if (notesParent.type === 'Tag') {
-			this.store().dispatch({
-				type: 'TAG_SELECT',
-				id: notesParent.selectedItemId,
-			});
-		} else {
-			this.store().dispatch({
-				type: 'FOLDER_SELECT',
-				id: notesParent.selectedItemId,
-			});
-		}
-
-		this.store().dispatch({
-			type: 'FOLDER_SET_COLLAPSED_ALL',
-			ids: Setting.value('collapsedFolderIds'),
 		});
 
-		this.store().dispatch({
-			type: 'NOTE_DEVTOOLS_SET',
-			value: Setting.value('flagOpenDevTools'),
+		addTask('app/initializeUserFetcher', async () => {
+			initializeUserFetcher();
+			shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 		});
 
-		// Always disable on Mac for now - and disable too for the few apps that may have the flag enabled.
-		// At present, it only seems to work on Windows.
-		if (shim.isMac()) {
-			Setting.setValue('featureFlag.autoUpdaterServiceEnabled', false);
-		}
+		addTask('app/updateTray', () => this.updateTray());
 
-		// Note: Auto-update is a misnomer in the code.
-		// The code below only checks, if a new version is available.
-		// We only allow Windows and macOS users to automatically check for updates
-		if (!Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-			if (shim.isWindows() || shim.isMac()) {
-				const runAutoUpdateCheck = () => {
-					if (Setting.value('autoUpdateEnabled')) {
-						void checkForUpdates(true, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-					}
-				};
-
-				// Initial check on startup
-				shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
-				// Then every x hours
-				shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+		addTask('app/set main window state', () => {
+			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
+				bridge().mainWindow().hide();
+			} else {
+				bridge().mainWindow().show();
 			}
-		}
+		});
 
-		initializeUserFetcher();
-		shim.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
+		addTask('app/start maintenance tasks', () => {
+			// Always disable on Mac for now - and disable too for the few apps that may have the flag enabled.
+			// At present, it only seems to work on Windows.
+			if (shim.isMac()) {
+				Setting.setValue('featureFlag.autoUpdaterServiceEnabled', false);
+			}
 
-		this.updateTray();
+			// Note: Auto-update is a misnomer in the code.
+			// The code below only checks, if a new version is available.
+			// We only allow Windows and macOS users to automatically check for updates
+			if (!Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+				if (shim.isWindows() || shim.isMac()) {
+					const runAutoUpdateCheck = () => {
+						if (Setting.value('autoUpdateEnabled')) {
+							void checkForUpdates(true, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+						}
+					};
 
-		shim.setTimeout(() => {
-			void AlarmService.garbageCollect();
-		}, 1000 * 60 * 60);
+					// Initial check on startup
+					shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
+					// Then every x hours
+					shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
+				}
+			}
 
-		if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
-			bridge().mainWindow().hide();
-		} else {
-			bridge().mainWindow().show();
-		}
+			shim.setTimeout(() => {
+				void AlarmService.garbageCollect();
+			}, 1000 * 60 * 60);
+			void ShareService.instance().maintenance();
 
-		void ShareService.instance().maintenance();
+			ResourceService.runInBackground();
 
-		ResourceService.runInBackground();
-
-		if (Setting.value('env') === 'dev') {
-			void AlarmService.updateAllNotifications();
-		} else {
-			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-			void reg.scheduleSync(1000).then(() => {
-				// Wait for the first sync before updating the notifications, since synchronisation
-				// might change the notifications.
+			if (Setting.value('env') === 'dev') {
 				void AlarmService.updateAllNotifications();
+			} else {
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+				void reg.scheduleSync(1000).then(() => {
+					// Wait for the first sync before updating the notifications, since synchronisation
+					// might change the notifications.
+					void AlarmService.updateAllNotifications();
 
-				void DecryptionWorker.instance().scheduleStart();
-			});
-		}
+					void DecryptionWorker.instance().scheduleStart();
+				});
+			}
 
-		const clipperLogger = new Logger();
-		clipperLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-clipper.txt` });
-		clipperLogger.addTarget(TargetType.Console);
-
-		ClipperServer.instance().initialize(actionApi);
-		ClipperServer.instance().setEnabled(!Setting.value('altInstanceId'));
-		ClipperServer.instance().setLogger(clipperLogger);
-		ClipperServer.instance().setDispatch(this.store().dispatch);
-
-		if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
-			void ClipperServer.instance().start();
-		}
-
-		ExternalEditWatcher.instance().setLogger(reg.logger());
-		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
-
-		ResourceEditWatcher.instance().initialize(
-			reg.logger(),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(action: any) => { this.store().dispatch(action); },
-			(path: string) => bridge().openItem(path),
-			() => this.store().getState().windowId,
-		);
-
-		// Forwards the local event to the global event manager, so that it can
-		// be picked up by the plugin manager.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
-			eventManager.emit(EventName.ResourceChange, event);
+			RevisionService.instance().runInBackground();
+			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 
-		RevisionService.instance().runInBackground();
+		addTask('app/set up ClipperServer', () => {
+			const clipperLogger = new Logger();
+			clipperLogger.addTarget(TargetType.File, { path: `${Setting.value('profileDir')}/log-clipper.txt` });
+			clipperLogger.addTarget(TargetType.Console);
+
+			ClipperServer.instance().initialize(actionApi);
+			ClipperServer.instance().setEnabled(!Setting.value('altInstanceId'));
+			ClipperServer.instance().setLogger(clipperLogger);
+			ClipperServer.instance().setDispatch(this.store().dispatch);
+
+			if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
+				void ClipperServer.instance().start();
+			}
+		});
+
+		addTask('app/set up external edit watchers', () => {
+			ExternalEditWatcher.instance().setLogger(reg.logger());
+			ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
+
+			ResourceEditWatcher.instance().initialize(
+				reg.logger(),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				(action: any) => { this.store().dispatch(action); },
+				(path: string) => bridge().openItem(path),
+				() => this.store().getState().windowId,
+			);
+
+			// Forwards the local event to the global event manager, so that it can
+			// be picked up by the plugin manager.
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+				eventManager.emit(EventName.ResourceChange, event);
+			});
+		});
 
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		if (Setting.value('env') === 'dev') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(window as any).joplin = {
-				revisionService: RevisionService.instance(),
-				migrationService: MigrationService.instance(),
-				decryptionWorker: DecryptionWorker.instance(),
-				commandService: CommandService.instance(),
-				pluginService: PluginService.instance(),
-				bridge: bridge(),
-				debug: new DebugService(reg.db()),
-				resourceService: ResourceService.instance(),
-				searchEngine: SearchEngine.instance(),
-				ocrService: () => this.ocrService_,
-			};
+			addTask('app/add debug variables', () => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				(window as any).joplin = {
+					revisionService: RevisionService.instance(),
+					migrationService: MigrationService.instance(),
+					decryptionWorker: DecryptionWorker.instance(),
+					commandService: CommandService.instance(),
+					pluginService: PluginService.instance(),
+					bridge: bridge(),
+					debug: new DebugService(reg.db()),
+					resourceService: ResourceService.instance(),
+					searchEngine: SearchEngine.instance(),
+					ocrService: () => this.ocrService_,
+				};
+			});
 		}
 
-		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
-		bridge().setOnAllowedExtensionsChangeListener((newExtensions) => {
-			Setting.setValue('linking.extraAllowedExtensions', newExtensions);
+		addTask('app/listen for main process events', () => {
+			bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
+			bridge().setOnAllowedExtensionsChangeListener((newExtensions) => {
+				Setting.setValue('linking.extraAllowedExtensions', newExtensions);
+			});
+
+			ipcRenderer.on('window-focused', (_event, newWindowId) => {
+				const currentWindowId = this.store().getState().windowId;
+				if (newWindowId !== currentWindowId) {
+					this.dispatch({
+						type: 'WINDOW_FOCUS',
+						windowId: newWindowId,
+						lastWindowId: currentWindowId,
+					});
+				}
+			});
 		});
 
-		ipcRenderer.on('window-focused', (_event, newWindowId) => {
-			const currentWindowId = this.store().getState().windowId;
-			if (newWindowId !== currentWindowId) {
-				this.dispatch({
-					type: 'WINDOW_FOCUS',
-					windowId: newWindowId,
-					lastWindowId: currentWindowId,
-				});
-			}
+		addTask('app/initPluginService', () => this.initPluginService());
+
+		addTask('app/setupContextMenu', () => {
+			this.setupContextMenu();
 		});
 
-		await this.initPluginService();
-
-		this.setupContextMenu();
-
-		await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
-
-		this.startRotatingLogMaintenance(Setting.value('profileDir'));
-
-		await this.setupOcrService();
-
-		eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
-			await ResourceService.instance().indexNoteResources();
+		addTask('app/set up SpellCheckerService', async () => {
+			await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 		});
 
-		eventManager.on(EventName.NoteResourceIndexed, async () => {
-			SearchEngine.instance().scheduleSyncTables();
+		addTask('app/listen for resource events', () => {
+			eventManager.on(EventName.OcrServiceResourcesProcessed, async () => {
+				await ResourceService.instance().indexNoteResources();
+			});
+
+			eventManager.on(EventName.NoteResourceIndexed, async () => {
+				SearchEngine.instance().scheduleSyncTables();
+			});
 		});
 
-		// Used by tests
-		ipcRenderer.send('startup-finished');
+		addTask('app/setupOcrService', () => this.setupOcrService());
+
+		return tasks;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
+		const startupTask = perfLogger.taskStart('app/start');
+
+		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
+		// insert an extra argument so that they can be processed in a consistent way everywhere.
+		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
+
+
+		argv = await super.start(argv, startOptions);
+
+		await this.setupIntegrationTestUtils();
+
+		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
+		await this.applySettingsSideEffects();
+
+		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
+			reg.logger().info('app.start: doing upgradeSyncTarget action');
+			bridge().mainWindow().show();
+			startupTask.onEnd();
+
+			return { action: 'upgradeSyncTarget' };
+		}
+
+		const startupTasks = this.buildStartupTasks_();
+		for (const task of startupTasks) {
+			await perfLogger.track(task.label, async () => task.task());
+		}
+
 
 		// setTimeout(() => {
 		// 	void populateDatabase(reg.db(), {
@@ -749,6 +813,10 @@ class Application extends BaseApplication {
 
 		// await runIntegrationTests();
 
+		// Used by tests
+		ipcRenderer.send('startup-finished');
+
+		startupTask.onEnd();
 		return null;
 	}
 

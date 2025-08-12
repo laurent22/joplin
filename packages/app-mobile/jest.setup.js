@@ -3,7 +3,7 @@
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const injectedJs = require('./utils/injectedJs.js').default;
+const injectedJs = require('./utils/shim-init-react/injectedJs.js').default;
 const { mkdir, rm } = require('fs-extra');
 const path = require('path');
 const sharp = require('sharp');
@@ -30,7 +30,13 @@ shim.injectedJs = (name) => {
 	if (!(name in injectedJs)) {
 		throw new Error(`Cannot find injected JS with ID ${name}`);
 	}
-	return injectedJs[name];
+	return injectedJs[name].js;
+};
+shim.injectedCss = (name) => {
+	if (!(name in injectedJs)) {
+		throw new Error(`Cannot find injected CSS with ID ${name}`);
+	}
+	return injectedJs[name].css;
 };
 shim.fsDriver().getAppDirectoryPath = () => {
 	// On mobile, the rootProfileDirectory and the app directory

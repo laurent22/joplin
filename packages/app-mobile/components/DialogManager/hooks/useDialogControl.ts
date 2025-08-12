@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Alert, Platform } from 'react-native';
-import { DialogControl, DialogType, MenuChoice, PromptButtonSpec, PromptDialogData, PromptOptions } from '../types';
+import { DialogControl, DialogType, MenuChoice, PromptButtonSpec, DialogData, PromptOptions } from '../types';
 import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef } from 'react';
 
-type SetPromptDialogs = React.Dispatch<React.SetStateAction<PromptDialogData[]>>;
+type SetPromptDialogs = React.Dispatch<React.SetStateAction<DialogData[]>>;
 
 const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 	const nextDialogIdRef = useRef(0);
 
 	const dialogControl: DialogControl = useMemo(() => {
-		const onDismiss = (dialog: PromptDialogData) => {
+		const onDismiss = (dialog: DialogData) => {
 			setPromptDialogs(dialogs => dialogs.filter(d => d !== dialog));
 		};
 
@@ -39,8 +39,8 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 					Alert.alert(title, message, buttons, options);
 				} else {
 					const cancelable = options?.cancelable ?? true;
-					const dialog: PromptDialogData = {
-						type: DialogType.Prompt,
+					const dialog: DialogData = {
+						type: DialogType.ButtonPrompt,
 						key: `dialog-${nextDialogIdRef.current++}`,
 						title,
 						message,
@@ -69,7 +69,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 				return new Promise<T>((resolve) => {
 					const dismiss = () => onDismiss(dialog);
 
-					const dialog: PromptDialogData = {
+					const dialog: DialogData = {
 						type: DialogType.Menu,
 						key: `menu-dialog-${nextDialogIdRef.current++}`,
 						title: '',
@@ -82,6 +82,33 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 							},
 						})),
 						onDismiss: dismiss,
+					};
+					setPromptDialogs(dialogs => {
+						return [
+							...dialogs,
+							dialog,
+						];
+					});
+				});
+			},
+			promptForText: (message: string) => {
+				return new Promise<string|null>((resolve) => {
+					const dismiss = () => {
+						onDismiss(dialog);
+					};
+
+					const dialog: DialogData = {
+						type: DialogType.TextInput,
+						key: `prompt-dialog-${nextDialogIdRef.current++}`,
+						message,
+						onSubmit: (text) => {
+							resolve(text);
+							dismiss();
+						},
+						onDismiss: () => {
+							resolve(null);
+							dismiss();
+						},
 					};
 					setPromptDialogs(dialogs => {
 						return [

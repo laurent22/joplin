@@ -6,12 +6,13 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_RETRY_COUNT: 2,
 	QUEUE_MAINTENANCE_INTERVAL: 60000,
 	HTR_CLI_DOCKER_IMAGE: 'joplin/htr-cli:0.0.2',
-	HTR_CLI_IMAGES_FOLDER: '/home/js/joplin/packages/transcribe/images',
+	HTR_CLI_IMAGES_FOLDER: '',
 	QUEUE_DRIVER: 'pg', // 'sqlite'
 	QUEUE_DATABASE_PASSWORD: '',
 	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
+	QUEUE_DATABASE_HOST: 'localhost',
 };
 
 export interface EnvVariables {
@@ -27,6 +28,7 @@ export interface EnvVariables {
 	QUEUE_DATABASE_NAME: string;
 	QUEUE_DATABASE_USER: string;
 	QUEUE_DATABASE_PORT: number;
+	QUEUE_DATABASE_HOST: string;
 }
 
 export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariables {

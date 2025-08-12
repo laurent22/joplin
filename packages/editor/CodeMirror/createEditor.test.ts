@@ -5,10 +5,10 @@
 import createEditor from './createEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
-import loadLanguages from './testUtil/loadLanguages';
+import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
-import createEditorSettings from './testUtil/createEditorSettings';
+import createEditorSettings from '../testing/createEditorSettings';
 
 
 describe('createEditor', () => {
@@ -40,7 +40,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src => Promise.resolve(src),
 		});
 
 		// Force the generation of the syntax tree now.
@@ -69,7 +71,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
@@ -138,7 +142,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
 		const getContentScriptJs = jest.fn(async () => {
@@ -188,7 +194,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: () => {},
 			onLogMessage: () => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 		const editorState = editor.editor.state;
 		const idFacet = editor.joplinExtensions.noteIdFacet;

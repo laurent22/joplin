@@ -10,6 +10,8 @@ const stateToWhenClauseContext = (state: AppState, options: WhenClauseContextOpt
 	return {
 		...libStateToWhenClauseContext(state, options),
 		keyboardVisible: state.keyboardVisible,
+		markdownEditorVisible: state.noteEditorVisible && state.settings['editor.codeView'],
+		richTextEditorVisible: state.noteEditorVisible && !state.settings['editor.codeView'],
 	};
 };
 

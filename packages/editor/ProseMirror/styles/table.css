@@ -1,0 +1,4 @@
+
+table .selectedCell {
+	outline: 2px solid var(--joplin-text-selection-color);
+}

@@ -46,8 +46,8 @@ const getNoteViewerDom = async () => {
 	return await getWebViewDomById('NoteBodyViewer');
 };
 
-const getNoteEditorControl = async () => {
-	const noteEditor = await getWebViewWindowById('NoteEditor');
+const getMarkdownEditorControl = async () => {
+	const noteEditor = await getWebViewWindowById('MarkdownEditor');
 	const getEditorControl = () => {
 		if ('cm' in noteEditor.window && noteEditor.window.cm) {
 			return noteEditor.window.cm as CodeMirrorControl;
@@ -213,7 +213,7 @@ describe('screens/Note', () => {
 
 		const noteScreen = render(<WrappedNoteScreen />);
 		await openEditor();
-		const editor = await getNoteEditorControl();
+		const editor = await getMarkdownEditorControl();
 		await act(async () => {
 			editor.select(defaultBody.length, defaultBody.length);
 			editor.insertText(' Testing!!!');

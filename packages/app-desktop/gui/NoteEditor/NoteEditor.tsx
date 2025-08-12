@@ -56,6 +56,7 @@ import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
+import getResourceBaseUrl from './utils/getResourceBaseUrl';
 
 const debounce = require('debounce');
 
@@ -169,7 +170,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml(props.plugins, {
-			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
+			resourceBaseUrl: getResourceBaseUrl(),
 			customCss: props.customCss,
 		});
 
@@ -466,6 +467,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
+		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 	};
 
 	let editor = null;
@@ -487,6 +489,17 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const noteRevisionViewer_onBack = useCallback(() => {
 		setShowRevisions(false);
 	}, []);
+
+	const onBannerConvertItToMarkdown = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		if (!props.selectedNoteIds || props.selectedNoteIds.length === 0) return;
+		await CommandService.instance().execute('convertNoteToMarkdown', props.selectedNoteIds[0]);
+	}, [props.selectedNoteIds]);
+
+	const onHideBannerConvertItToMarkdown = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		Setting.setValue('editor.enableHtmlToMarkdownBanner', false);
+	};
 
 	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
@@ -632,9 +645,30 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const theme = themeStyle(props.themeId);
 
+	function renderConvertHtmlToMarkdown(): React.ReactNode {
+		if (!props.enableHtmlToMarkdownBanner) return null;
+
+		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
+		if (!note) return null;
+		if (note.markup_language !== MarkupLanguage.Html) return null;
+
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>
+					{_('This note is in HTML format. Convert it to Markdown to edit it more easily.')}
+					&nbsp;
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onBannerConvertItToMarkdown}>{`${_('Convert it')}`}</a>
+					{' / '}
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onHideBannerConvertItToMarkdown}>{_('Don\'t show this message again')}</a>
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				{renderConvertHtmlToMarkdown()}
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
 				<NoteTitleBar
@@ -722,6 +756,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
+		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
 	};
 };
 

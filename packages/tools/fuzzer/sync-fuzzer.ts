@@ -3,7 +3,6 @@ import { join } from 'path';
 import { exists, mkdir, remove } from 'fs-extra';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import Logger, { TargetType } from '@joplin/utils/Logger';
-import { waitForCliInput } from '@joplin/utils/cli';
 import Server from './Server';
 import { CleanupTask, FuzzContext } from './types';
 import ClientPool from './ClientPool';
@@ -13,6 +12,8 @@ import SeededRandom from './utils/SeededRandom';
 import { env } from 'process';
 import yargs = require('yargs');
 import { strict as assert } from 'assert';
+import openDebugSession from './utils/openDebugSession';
+import { Second } from '@joplin/utils/time';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -237,7 +238,7 @@ const main = async (options: Options) => {
 		process.exit(1);
 	});
 
-	let clientHelpText;
+	let clientPool: ClientPool|null = null;
 
 	try {
 		const joplinServerUrl = 'http://localhost:22300/';
@@ -263,12 +264,12 @@ const main = async (options: Options) => {
 			execApi: server.execApi.bind(server),
 			randInt: (a, b) => random.nextInRange(a, b),
 		};
-		const clientPool = await ClientPool.create(
+		clientPool = await ClientPool.create(
 			fuzzContext,
 			options.clientCount,
 			task => { cleanupTasks.push(task); },
 		);
-		clientHelpText = clientPool.helpText();
+		await clientPool.syncAll();
 
 		const maxSteps = options.maximumSteps;
 		for (let stepIndex = 1; maxSteps <= 0 || stepIndex <= maxSteps; stepIndex++) {
@@ -293,7 +294,8 @@ const main = async (options: Options) => {
 			await retryWithCount(async () => {
 				await clientPool.checkState();
 			}, {
-				count: 3,
+				count: 4,
+				delayOnFailure: count => count * Second * 2,
 				onFail: async () => {
 					logger.info('.checkState failed. Syncing all clients...');
 					await clientPool.syncAll();
@@ -302,11 +304,10 @@ const main = async (options: Options) => {
 		}
 	} catch (error) {
 		logger.error('ERROR', error);
-		if (clientHelpText) {
-			logger.info('Client information:\n', clientHelpText);
+		if (clientPool) {
+			logger.info('Client information:\n', clientPool.helpText());
+			await openDebugSession(clientPool);
 		}
-		logger.info('An error occurred. Pausing before continuing cleanup.');
-		await waitForCliInput();
 		process.exitCode = 1;
 	} finally {
 		await cleanUp();
