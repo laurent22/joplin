@@ -173,6 +173,21 @@ describe('RichTextEditor', () => {
 		});
 	});
 
+	it('should save repeated spaces using nonbreaking spaces', async () => {
+		let body = 'Test';
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, '  test');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('Test \u00A0test');
+		});
+	});
+
 	it('should render clickable checkboxes', async () => {
 		let body = '- [ ] Test\n- [x] Another test';
 		render(<WrappedEditor

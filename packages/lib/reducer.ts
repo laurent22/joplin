@@ -173,6 +173,7 @@ export interface State extends WindowState {
 	editorNoteReloadTimeRequest: number;
 
 	allowSelectionInOtherFolders: boolean;
+	noteHtmlToMarkdownDone: string;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -243,6 +244,7 @@ export const defaultState: State = {
 	mustAuthenticate: false,
 	allowSelectionInOtherFolders: false,
 	editorNoteReloadTimeRequest: 0,
+	noteHtmlToMarkdownDone: '',
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1071,6 +1073,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
 			}
+			break;
+
+		case 'NOTE_HTML_TO_MARKDOWN_DONE':
+			draft.noteHtmlToMarkdownDone = action.value;
 			break;
 
 		case 'ITEMS_TRASHED':

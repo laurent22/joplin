@@ -23,6 +23,7 @@ export interface RenderSettings {
 	initialScroll: number;
 	// If [null], plugin assets are not added to the document
 	pluginAssetContainerSelector: string|null;
+	removeUnusedPluginAssets: boolean;
 
 	splitted?: boolean; // Move CSS into a separate output
 	mapsToLine?: boolean; // Sourcemaps
@@ -156,6 +157,7 @@ export default class Renderer {
 					inlineAssets: this.setupOptions_.useTransferredFiles,
 					readAssetBlob: settings.readAssetBlob,
 					container: document.querySelector(settings.pluginAssetContainerSelector),
+					removeUnusedPluginAssets: settings.removeUnusedPluginAssets,
 				});
 
 				// Some plugins require this event to be dispatched just after being added.

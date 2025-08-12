@@ -340,6 +340,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				props.setShowLocalSearch(event.searchState.dialogVisible);
 			}
 			lastSearchState.current = event.searchState;
+		} else if (event.kind === EditorEventType.FollowLink) {
+			void CommandService.instance().execute('openItem', event.link);
 		}
 	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
 
@@ -362,6 +364,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			readOnly: props.disabled,
 			markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
 			katexEnabled: Setting.value('markdown.plugin.katex'),
+			inlineRenderingEnabled: Setting.value('editor.inlineRendering'),
+			imageRenderingEnabled: Setting.value('editor.imageRendering'),
 			themeData: {
 				...styles.globalTheme,
 				marginLeft: 0,
@@ -410,6 +414,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					onSelectPastBeginning={onSelectPastBeginning}
 					externalSearch={props.searchMarkers}
 					useLocalSearch={props.useLocalSearch}
+					onLocalize={_}
 				/>
 			</div>
 		);

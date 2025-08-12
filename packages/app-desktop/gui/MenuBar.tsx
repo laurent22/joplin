@@ -803,6 +803,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
+						menuItemDic.toggleEditors,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
@@ -906,6 +907,7 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
+						menuItemDic.convertNoteToMarkdown,
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,

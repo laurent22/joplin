@@ -206,14 +206,17 @@
 	"Add recipient:": [
 		"افزودن دریافت کننده:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"افزودن عنوان"
 	],
 	"Add to dictionary": [
 		"افزودن به لغت‌نامه"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"مدیر"
@@ -307,6 +310,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -861,6 +867,9 @@
 	"Default": [
 		"پیش‌فرض"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"پیش‌فرض: %s"
 	],
@@ -1008,7 +1017,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1079,6 +1094,9 @@
 	],
 	"Edit": [
 		"ویرایش"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"ویرایش لینک"
@@ -1392,9 +1410,6 @@
 	"Filter": [
 		"فیلتر"
 	],
-	"Filter tags": [
-		"فیلتر برچسب‌ها"
-	],
 	"Find: ": [
 		"یافت‌شده: "
 	],
@@ -1572,6 +1587,9 @@
 	],
 	"Idle": [
 		"بیکار"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"اگر قبلاً احراز هویت شده‌اید، لطفاً منتظر بمانید تا برنامه با سرویس ابری Joplin همگام شود."
@@ -1940,6 +1958,9 @@
 	"Markdown + Front Matter": [
 		"نشانه گذاری + موضوع روبه‌رو"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"یک فهرست کار را به عنوان انجام شده علامت می‌زند."
 	],
@@ -2062,9 +2083,6 @@
 	],
 	"New sub-notebook": [
 		"دفترچه فرزند جدید"
-	],
-	"New tags:": [
-		"برچسب جدید:"
 	],
 	"New to-do": [
 		"فهرست کار جدید"
@@ -2240,9 +2258,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"باشه"
 	],
@@ -2374,6 +2389,9 @@
 	],
 	"Permission needed": [
 		"مجوز استفاده مورد نیاز است"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
@@ -2638,6 +2656,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"تمدید توکن"
@@ -3197,9 +3218,6 @@
 	"Tabloid": [
 		"چکیده"
 	],
-	"tag1, tag2, ...": [
-		"برچسب 1، برچسب 2، ..."
-	],
 	"Tagged: %d.": [
 		"برچسب گذاری شده: %d."
 	],
@@ -3400,6 +3418,15 @@
 	"This drawing may have unsaved changes.": [
 		"این طراحی ممکن است دارای تغییرات ذخیره نشده باشد."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده شده‌اند. لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
 	],
@@ -3426,6 +3453,9 @@
 	],
 	"This note has no history": [
 		"این یادداشت هیچ تاریخچه ای ندارد"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"این افزونه %s را پشتیبانی نمی کند."
@@ -3468,6 +3498,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"برای ادامه، لطفاً گذرواژه اصلی خود را در زیر وارد نمایید."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید."
@@ -3573,9 +3606,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام برچسب یا @ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» تایپ نمایید."
-	],
-	"Type new tags or select from list": [
-		"برچسب‌های جدید را تایپ کنید یا از لیست انتخاب کنید"
 	],
 	"Type: %s.": [
 		"نوع: %s."

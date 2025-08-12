@@ -594,6 +594,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Clear cache and re-download language data files'),
 		},
 
+		'ocr.searchInExtractedContent': {
+			value: true,
+			type: SettingItemType.Bool,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+			label: () => _('OCR: Search in extracted content'),
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,
@@ -718,6 +728,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Autocomplete Markdown and HTML'),
 			description: () => _('Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+		'editor.enableHtmlToMarkdownBanner': {
+			value: true,
+			advanced: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable HTML-to-Markdown conversion banner'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1432,6 +1453,27 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Enable spell checking in Markdown editor'),
 			storage: SettingStorage.File,
 			isGlobal: true,
+		},
+
+		'editor.inlineRendering': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Render markup in editor'),
+			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
+			section: 'note',
+			storage: SettingStorage.File,
+		},
+		'editor.imageRendering': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Render images'),
+			description: () => _('If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.'),
+			section: 'note',
+			storage: SettingStorage.File,
 		},
 
 		'imageeditor.jsdrawToolbar': {

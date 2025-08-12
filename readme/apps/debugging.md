@@ -17,7 +17,7 @@ Make sure you disable debugging once you've finished. Leaving it enabled can cau
 
 ### Crash reports
 
-When the application crashes, a report is created in your [home directory](https://github.com/laurent22/joplin/blob/dev/readme/apps/home_directory.md) under the name `joplin_crash_dump_<DATE_TIME>.json`. If you experience a crash please share this log with the team by posting it to the [forum](https://discourse.joplinapp.org/), [GitHub](https://github.com/laurent22/joplin/issues) or [by email](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/AdresseSupport.png). You may also enable crash report auto-upload in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) in the "Application" section.
+When the application crashes, a report is created in your [crash report directory](https://github.com/laurent22/joplin/blob/dev/readme/apps/home_directory.md) under the name `joplin_crash_dump_<DATE_TIME>.json`. If you experience a crash please share this log with the team by posting it to the [forum](https://discourse.joplinapp.org/), [GitHub](https://github.com/laurent22/joplin/issues) or [by email](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/AdresseSupport.png). You may also enable crash report auto-upload in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) in the "Application" section.
 
 ### Safe mode
 

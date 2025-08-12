@@ -206,14 +206,17 @@
 	"Add recipient:": [
 		"新增共享對象："
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"新增標題"
 	],
 	"Add to dictionary": [
 		"添加到字典"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"管理員"
@@ -307,6 +310,9 @@
 	],
 	"Aritim Dark": [
 		"暗黑 (Aritim)"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -860,6 +866,9 @@
 	"Default": [
 		"預設"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"預設：%s"
 	],
@@ -1007,7 +1016,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"不要遺失此密碼，為了安全起見，這將是 *唯一* 解密資料的方法！若要啟用加密，請在下方輸入您的密碼。"
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1078,6 +1093,9 @@
 	],
 	"Edit": [
 		"編輯"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"編輯連結"
@@ -1391,9 +1409,6 @@
 	"Filter": [
 		"篩選"
 	],
-	"Filter tags": [
-		"篩選標籤"
-	],
 	"Find: ": [
 		"尋找："
 	],
@@ -1570,6 +1585,9 @@
 	],
 	"Idle": [
 		"閒置"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"如果您已經授權，請等待應用程式同步到Joplin Cloud。"
@@ -1940,6 +1958,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"標記待辦事項為完成。"
 	],
@@ -2062,9 +2083,6 @@
 	],
 	"New sub-notebook": [
 		"新增子記事本"
-	],
-	"New tags:": [
-		"新增標籤："
 	],
 	"New to-do": [
 		"新增待辦事項"
@@ -2240,9 +2258,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"確定"
 	],
@@ -2374,6 +2389,9 @@
 	],
 	"Permission needed": [
 		"需要權限"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"請點擊「%s」繼續，或在下方的「%s」列表中設定密碼。"
@@ -2638,6 +2656,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"將特定的 <item> (記事或記事本) 重新命名為 <name>。"
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"換一組 token"
@@ -3197,9 +3218,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"標籤 1、標籤 2、..."
-	],
 	"Tagged: %d.": [
 		"已標籤：%d。"
 	],
@@ -3398,6 +3416,15 @@
 	"This drawing may have unsaved changes.": [
 		"該繪圖可能有未儲存的變更。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"此為顯示記事相關附件的進階工具，刪除後將無法復原，請謹慎使用。"
 	],
@@ -3421,6 +3448,9 @@
 	],
 	"This note has no history": [
 		"此記事沒有歷史紀錄"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"延伸模組不支援 %s。"
@@ -3463,6 +3493,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"若要繼續，請在下方輸入你的主密碼。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"要刪除標籤，請清除相關記事的這個標籤。"
@@ -3568,9 +3601,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"輸入記事標題、部分記事內容、# 後輸入標籤名稱、@ 後輸入筆記本名稱等方式，可前往相應搜尋結果。或者可輸入 : 以搜尋其他指令。"
-	],
-	"Type new tags or select from list": [
-		"輸入新標籤，或在清單中選擇"
 	],
 	"Type: %s.": [
 		"類型：%s。"

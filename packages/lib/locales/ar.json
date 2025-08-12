@@ -188,14 +188,17 @@
 	"Add recipient:": [
 		"أضِف المستلم:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"أضف العنوان"
 	],
 	"Add to dictionary": [
 		"أضف إلى القاموس"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"المشرف"
@@ -280,6 +283,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -805,6 +811,9 @@
 	"Default": [
 		"تلقائي"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"التلقائية: %s"
 	],
@@ -946,7 +955,13 @@
 	"Do not ask for confirmation.": [
 		"لا تطلب التأكيد."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -1011,6 +1026,9 @@
 	],
 	"Edit": [
 		"تحرير"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"تحرير الرابط"
@@ -1297,9 +1315,6 @@
 	"File system": [
 		"نظام الملفات"
 	],
-	"Filter tags": [
-		"تصفية العلامات"
-	],
 	"Find: ": [
 		"بحث:"
 	],
@@ -1463,6 +1478,9 @@
 	],
 	"Idle": [
 		"خامل"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1781,6 +1799,9 @@
 	"Markdown + Front Matter": [
 		""
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"يعلّم قائمة مهام أنها تمت."
 	],
@@ -1882,9 +1903,6 @@
 	],
 	"New sub-notebook": [
 		"دفتر ملاحظات فرعي جديد"
-	],
-	"New tags:": [
-		"وسوم جديدة:"
 	],
 	"New to-do": [
 		"قائمة جديدة للمهام"
@@ -2048,9 +2066,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"موافق"
 	],
@@ -2164,6 +2179,9 @@
 	],
 	"Permission needed": [
 		"مطلوب الإذن"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
@@ -2395,6 +2413,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"يعيد تسمية <item> (عنصر) معطى (ملاحظة أو دفتر ملاحظات) ليصبح <name> (اسم)."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"تجديد الرمز المميز"
@@ -2837,9 +2858,6 @@
 	"Tabloid": [
 		"صحيفة شعبية"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"تم وسمها: %d."
 	],
@@ -3005,6 +3023,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"هذه أداة متقدمة لإظهار المرفقات المرتبطة بملاحظاتك. يرجى توخّي الحذر عند حذف أحدها حيث لا يمكن استعادتها بعد ذلك."
 	],
@@ -3019,6 +3046,9 @@
 	],
 	"This note has no history": [
 		"هذه المذكرة ليس لها تاريخ"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3052,6 +3082,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"لتحذف الوسم، أزل الوسم عن الملاحظات التي وسمت به."
@@ -3133,9 +3166,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"اكتب عنوان ملاحظة أو جزء من محتواه للانتقال إليه. أو اكتب # متبوعاً بإسم وسم، أو @ متبوعاً باسم دفتر ملاحظات. أو اكتب : للبحث عن الأوامر."
-	],
-	"Type new tags or select from list": [
-		"أكتب وسوماً جديدة أو اخترها من القائمة"
 	],
 	"Type: %s.": [
 		"النوع: %s."

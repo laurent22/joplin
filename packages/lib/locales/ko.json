@@ -194,14 +194,17 @@
 	"Add recipient:": [
 		"받는 사람 추가:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"제목 추가"
 	],
 	"Add to dictionary": [
 		"사전에 추가"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"관리자"
@@ -292,6 +295,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -836,6 +842,9 @@
 	"Default": [
 		"기본값"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"기본값:  %s"
 	],
@@ -983,7 +992,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"비밀번호는 데이터를 복호화할 수 있는 *유일한* 수단이므로 절대로 비밀번호를 잃어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1051,6 +1066,9 @@
 	],
 	"Edit": [
 		"편집"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"링크 편집"
@@ -1355,9 +1373,6 @@
 	"Filter": [
 		"필터"
 	],
-	"Filter tags": [
-		"태그 필터"
-	],
 	"Find: ": [
 		"찾기: "
 	],
@@ -1531,6 +1546,9 @@
 	],
 	"Idle": [
 		"대기"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요Joplin Cloud."
@@ -1862,6 +1880,9 @@
 	"Markdown + Front Matter": [
 		"마크다운 + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"목록 항목을 완료로 표시합니다."
 	],
@@ -1981,9 +2002,6 @@
 	],
 	"New sub-notebook": [
 		"새 하위 노트북"
-	],
-	"New tags:": [
-		"새 태그:"
 	],
 	"New to-do": [
 		"새 목록"
@@ -2153,9 +2171,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"확인"
 	],
@@ -2275,6 +2290,9 @@
 	],
 	"Permission needed": [
 		"권한 요구"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"계속하려면 \"%s\"(을)를 클릭하거나 아래 \"%s\" 목록에서 비밀번호를 설정하세요."
@@ -2527,6 +2545,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"해당 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니다."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"인증 토큰 새로 고침"
@@ -3071,9 +3092,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"태그1, 태그2, ..."
-	],
 	"Tagged: %d.": [
 		"태그됨: %d."
 	],
@@ -3269,6 +3287,15 @@
 	"This drawing may have unsaved changes.": [
 		"이 그림에는 저장되지 않은 변경사항이 있을 수 있습니다."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
 	],
@@ -3292,6 +3319,9 @@
 	],
 	"This note has no history": [
 		"이 노트의 변경 내역이 없습니다"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3334,6 +3364,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"계속하려면 아래에 마스터 비밀번호를 입력해주세요."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -3436,9 +3469,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 입력하여 명령을 검색하세요."
-	],
-	"Type new tags or select from list": [
-		"새 태그를 입력하거나 목록에서 선택하세요"
 	],
 	"Type: %s.": [
 		"형태: %s."

@@ -31,11 +31,11 @@
 		"Bu desene uyan %d not var. Silinsin mi?"
 	],
 	"%d note will be permanently deleted. Continue?": [
-		"%s notl kalıcı olarak silecek. Devam edilsin mi?",
+		"%s notu kalıcı olarak silecek. Devam edilsin mi?",
 		"%s not kalıcı olarak silecek. Devam edilsin mi?"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d fotoğraf çekildi"
 	],
 	"%s": [
 		"%s"
@@ -75,6 +75,9 @@
 	],
 	"%s cannot be less than %s": [
 		"%s %s değerinden daha düşük olamaz"
+	],
+	"%s from %s": [
+		"%s , şundan: %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk senkronizasyon zaman alabilir."
@@ -138,7 +141,7 @@
 		"(Hiçbiri)"
 	],
 	"(Read-only)": [
-		""
+		"(Salt-okunur)"
 	],
 	"(wysiwyg: %s)": [
 		"(ne görürsen onu alırsın: %s)"
@@ -161,8 +164,11 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> “toggle” veya “clear” olabilir. “toggle” kullanarak yapılacak listesinin tamamlanma değerini değiştirebilirsiniz. (Eğer hedef öğe not ise yapılacaklar listesine dönüştürülür). “clear” kullanarak yapılacaklar listesini normal nota dönüştürebilirsiniz."
 	],
+	"[None]": [
+		"[None]"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Virgülle ayrılmış bir kelime listesi. Sesli yazımın nadir kelimeleri doğru şekilde hecelemesine yardımcı olmak için kullanılabilir."
 	],
 	"A new update (%s) is available": [
 		"Yeni bir güncelleme (%s) mevcut"
@@ -196,6 +202,12 @@
 	],
 	"Accepted invitations": [
 		"Kabul edilen davetiyeler"
+	],
+	"Accepted: Notebook %s from %s": [
+		"%s not defteri %s tarafından kabul edildi"
+	],
+	"Accepting share...": [
+		"Paylaşım kabul ediliyor"
 	],
 	"Access denied: Please check your username and password": [
 		"Erişim reddedildi: Lütfen kullanıcı adınızı ve parolanızı kontrol edin"
@@ -236,9 +248,6 @@
 	"Add recipient:": [
 		"Alıcı ekle:"
 	],
-	"Add tag %s to note": [
-		"Nota %s etiketini ekle"
-	],
 	"Add title": [
 		"Başlık ekle"
 	],
@@ -247,6 +256,9 @@
 	],
 	"Add to note": [
 		"Nota ekle"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Yönetici"
@@ -279,7 +291,7 @@
 		"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 	],
 	"All shared folders:": [
-		""
+		"Tüm paylaşılan klasörler"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Mobil eklentilerde hata ayıklamayı etkinleştir. Detaylar için %s ."
@@ -338,6 +350,9 @@
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
 		"Standart araç çubuğu görünümüne geri dönmek istediğinizden emin misiniz?\nBu işlem geri alınamaz."
 	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Bu notun tüm geçmişini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Kimlik doğrulama jetonunu yenilemek istediğinizden emin misiniz?"
 	],
@@ -349,6 +364,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Joplin Web şimdilik sadece aynı anda bir tane sekmede açık durabilir. Lütfen Joplin'in açık diğer sekmelerini kapatın."
@@ -666,7 +684,7 @@
 		"Komut paleti…"
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Komutlar: `ekle`, `kaldır`, `listele`, `sil`, `kabul et`, `terket` ve `reddet`."
 	],
 	"Compact": [
 		"Kompakt"
@@ -723,7 +741,7 @@
 		"Joplin Cloud'a bağlan"
 	],
 	"Connect using your organisation account": [
-		""
+		"Kuruluş hesabınızı kullanarak bağlanın"
 	],
 	"Consolidated billing": [
 		"Birleştirilmiş faturalandırma"
@@ -949,6 +967,9 @@
 	"Default": [
 		"Varsayılan"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Varsayılan: %s"
 	],
@@ -963,6 +984,9 @@
 	],
 	"Delete expired tokens": [
 		"Süresi geçmiş jetonları sil"
+	],
+	"Delete history": [
+		"Geçmişi sil"
 	],
 	"Delete line": [
 		"Satırı sil"
@@ -1108,10 +1132,19 @@
 	"Do not ask for confirmation.": [
 		"Onay için sorma."
 	],
+	"Do not ask for user confirmation.": [
+		"Kullanıcı doğrulaması sorma."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"Paylaşım alıcısının paylaşılan not defterine yazmasına izin verme. Yalnızca `ekle` alt komutu için geçerlidir."
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1399,6 +1432,12 @@
 	"Enter password": [
 		"Parolayı girin"
 	],
+	"Enter the code": [
+		"Kodu girin"
+	],
+	"Enter the code:": [
+		"Kodu girin:"
+	],
 	"Entering selection mode": [
 		"Seçim modu açılıyor"
 	],
@@ -1410,6 +1449,9 @@
 	],
 	"Error opening note in editor: %s": [
 		"Editörde not açılırken hata oluştu: %s"
+	],
+	"Error starting camera: %s": [
+		"%s kamerası başlatılamadı"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Hata. Lütfen URL, kullanıcı adı, şifre vb .'nin doğru olduğunu ve senkronizasyon hedefinin erişilebilir olduğunu kontrol edin. Raporlanan hata:"
@@ -1496,7 +1538,7 @@
 		"Tedbir Modu: Veri kaybını önlemek için senkronizasyon durduruldu, çünkü senkronizasyon hedefi boş veya hasarlı. Bu davranışı geçersiz kılmak için senkronizasyon ayarlarından Tedbir Modu'nu devre dışı bırakın."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"Hesabınıza bağlanılamadı. Lütfen tekrar deneyin."
 	],
 	"Fatal error:": [
 		"Büyük hata:"
@@ -1518,9 +1560,6 @@
 	],
 	"Filter": [
 		"Filtrele"
-	],
-	"Filter tags": [
-		"Etikerleri filtrele"
 	],
 	"Find": [
 		"Ara"
@@ -1550,7 +1589,7 @@
 		"Başlığa odaklan"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"“%s” klasörü şunlarla paylaşılıyor:"
 	],
 	"Follow link": [
 		"Link'i takip et"
@@ -1602,7 +1641,7 @@
 		"Yerel konum, dil doğrulaması, düzenleyici araç çubuğu, resim yeniden boyutlandır"
 	],
 	"Get a quote": [
-		""
+		"Teklif Al"
 	],
 	"Get it now:": [
 		"Hemen al:"
@@ -1614,7 +1653,7 @@
 		"Ayar değeri alınır veya ayarlanır. Eğer [değer] sağlanmamışsa, [isim] kısmı gözükecektir. Eğer [isim] ve [değer] bilgilerinin ikisi de mevcut değilse, mevcut olan yapılandırmayı listeleyecek."
 	],
 	"Glossary:": [
-		""
+		"Sözlük:"
 	],
 	"go": [
 		"git"
@@ -1706,6 +1745,9 @@
 	"Idle": [
 		"Boşta"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Eğer hali hazırda giriş yaptıysanız, lütfen uygulamanın Joplin Cloud ile senkronizasyonu için kısa bir süre bekleyin."
 	],
@@ -1780,6 +1822,9 @@
 	],
 	"In: %s": [
 		"İçinde: %s"
+	],
+	"Incoming shares:": [
+		"Gelen paylaşımlar:"
 	],
 	"Incompatible": [
 		"Uyumsuz"
@@ -1913,8 +1958,14 @@
 	"Joplin Server": [
 		"Joplin Sunucusu"
 	],
+	"Joplin Server Business": [
+		"Joplin Sunucusu Business"
+	],
 	"Joplin Server email": [
 		"Joplin Sunucusu e-posta adresi"
+	],
+	"Joplin Server Login": [
+		"Joplin Sunucusu Giriş"
 	],
 	"Joplin Server password": [
 		"Joplin Sunucusu ğarola"
@@ -1923,7 +1974,7 @@
 		"Joplin Sunucusu URL"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Joplin SSO Kimlik Doğrulaması"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran görüntülerini Joplin'e kaydetmenizi sağlar."
@@ -2012,6 +2063,10 @@
 	"Link": [
 		"Bağlantı"
 	],
+	"Link created!": [
+		"Bağlantı oluşturuldu!",
+		"Bağlantlar oluşturuldu!"
+	],
 	"Link description": [
 		"Link açıklaması"
 	],
@@ -2024,6 +2079,9 @@
 	],
 	"Link to note...": [
 		"Nota link…"
+	],
+	"Links": [
+		"Bağlantılar"
 	],
 	"List item": [
 		"Öğeyi listele"
@@ -2042,6 +2100,9 @@
 	],
 	"Log": [
 		"Log"
+	],
+	"Log in with your web browser": [
+		"Web tarayıcın ile giriş yap"
 	],
 	"Login to Joplin Cloud.": [
 		"Joplin Cloud'a giriş yap."
@@ -2100,6 +2161,9 @@
 	"Markdown editor": [
 		"Markdown düzenleyici"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Yapılacakları yapıldı olarak işaretler."
 	],
@@ -2155,7 +2219,7 @@
 		"Eksik Ana Anahtar"
 	],
 	"Missing permission to record audio.": [
-		"Ses kaydetmek için kamera izni eksik"
+		"Ses kaydetmek için izin eksik"
 	],
 	"Missing required argument: %s": [
 		"Gerekli parametre eksik gözüküyor: %s"
@@ -2251,9 +2315,6 @@
 	"New sub-notebook": [
 		"Yeni alt not defteri"
 	],
-	"New tags:": [
-		"Yeni etiketler:"
-	],
 	"New to-do": [
 		"Yeni yapılacak"
 	],
@@ -2262,6 +2323,9 @@
 	],
 	"next": [
 		"sıradaki"
+	],
+	"Next": [
+		"Sıradaki"
 	],
 	"Next match": [
 		"Sonraki eşleşen"
@@ -2307,6 +2371,9 @@
 	],
 	"No results": [
 		"Sonuç yok"
+	],
+	"No revision selected": [
+		"Hiç sürüm seçilmemiş"
 	],
 	"No such command: %s": [
 		"Böyle bir komut yok: %s"
@@ -2371,8 +2438,14 @@
 	"Note has been saved.": [
 		"Not kaydedildi."
 	],
+	"Note history": [
+		"Not Geçmişi"
+	],
 	"Note History": [
 		"Not Geçmişi"
+	],
+	"Note history has been deleted.": [
+		"Not geçmişi silindi."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Bu not yapılacaklar listesi değildir: “%s”"
@@ -2442,9 +2515,6 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: Dil verisi URL ya da yolu"
-	],
-	"Ok": [
-		""
 	],
 	"OK": [
 		"OK"
@@ -2606,6 +2676,9 @@
 	"Permission needed": [
 		"İzin gerekmekte"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Devam etmek için lütfen \"%s\" butonuna basın, ya da aşağıdaki \"%s\" listesinden parola belirleyin."
 	],
@@ -2649,7 +2722,7 @@
 		"Tüm ek dosyaların indirilip şifrelerinin çözülmesi için lütfen bekleyin. Ayrıca %s ile notu düzenleyebilirsiniz."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Lütfen kuruluşunuzun oturum açma sayfasını yüklememizi bekleyin..."
 	],
 	"Please wait...": [
 		"Lütfen bekleyin..."
@@ -2691,7 +2764,7 @@
 		"Olası değerler: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"JSON çıktıyı tercih et."
 	],
 	"Preferences": [
 		"Tercihler"
@@ -2728,6 +2801,9 @@
 	],
 	"Previous match": [
 		"Önceki eşleşme"
+	],
+	"Previous versions": [
+		"Önceki sürümler"
 	],
 	"Previous versions of this note": [
 		"Bu notun önceki sürümleri"
@@ -2789,6 +2865,9 @@
 	"Public-private key pair:": [
 		"Açık - gizli anahtar çifti:"
 	],
+	"Publish Note": [
+		"Notu Yayımla"
+	],
 	"Publish note...": [
 		"Notu yayımla…"
 	],
@@ -2799,7 +2878,7 @@
 		"Notları İnternet’e yayımla"
 	],
 	"Publish/unpublish": [
-		""
+		"Yayımla/yayından kaldır"
 	],
 	"QR Code": [
 		"Kare Kod"
@@ -2867,6 +2946,9 @@
 	"Reject": [
 		"Reddet"
 	],
+	"Rejecting share...": [
+		"Paylaşım reddediliyor…"
+	],
 	"Remove": [
 		"Sil"
 	],
@@ -2879,6 +2961,9 @@
 	"Remove this search from the sidebar?": [
 		"Bu aramayı kenar çubuğundan kaldır?"
 	],
+	"Removed %s from share.": [
+		"“%s” paylaşımdan kaldırıldı."
+	],
 	"Rename": [
 		"Yeniden adlandır"
 	],
@@ -2890,6 +2975,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"<item> öğesini <name> ile yeniden adlandırır (not veya not defteri)."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Jetonu yenile"
@@ -2993,6 +3081,9 @@
 	"Reverses the sorting order.": [
 		"Sıralama düzenini tersine çevirir."
 	],
+	"Revision:": [
+		"Sürüm:"
+	],
 	"Revision: %s (%s)": [
 		"Sürüm: %s (%s)"
 	],
@@ -3095,6 +3186,9 @@
 	"Select": [
 		"Seç"
 	],
+	"Select a revision...": [
+		"Sürüm seç..."
+	],
 	"Select all": [
 		"Tümünü seç"
 	],
@@ -3114,7 +3208,7 @@
 		"Not defterini seçer"
 	],
 	"Self-hosted": [
-		""
+		"Kendi barındırılan (self-hosted)"
 	],
 	"Send bug report": [
 		"Hata raporu gönder"
@@ -3174,7 +3268,7 @@
 		"Paylaşım"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Belirtilen [notebook] not defterini [user] kullancısı ile paylaşır veya paylaşımını kaldırır. Joplin Cloud veya Joplin Server gerektirir."
 	],
 	"Sharing notebook...": [
 		"Not paylaşılıyor..."
@@ -3298,6 +3392,9 @@
 	],
 	"Source": [
 		"Kaynak"
+	],
+	"Source code available": [
+		"Kaynak kodu mevcut"
 	],
 	"Source format: %s": [
 		"Kaynak biçimi: %s"
@@ -3425,6 +3522,9 @@
 	"Switch to the legacy editor": [
 		"Eski tip düzenleyiciye geç"
 	],
+	"Switch to the new editor": [
+		"Yeni tip düzenleyiciye geç"
+	],
 	"Switch to to-do type": [
 		"Yapılacaklar tipine dönüştür"
 	],
@@ -3499,9 +3599,6 @@
 	],
 	"Tabloid": [
 		"Tablo"
-	],
-	"tag1, tag2, ...": [
-		"etiket1, etiket2, ..."
 	],
 	"Tagged: %d.": [
 		"Etiket: %d."
@@ -3592,7 +3689,7 @@
 		"Bu kimlikleri olan anahtarlar öğelerinizden bazılarını şifrelemek için kullanılır, ancak uygulama şu anda bunlara erişemez. Büyük olasılıkla senkronizasyon yoluyla indirilmeleri sağlanacaktır."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Eski Markdown düzenleyici bir eklentiyle uyumsuzluk nedeniyle çökmüş gibi görünüyor. Yeni düzenleyiciyi kullanmanızı öneririz."
 	],
 	"The master key has been upgraded successfully!": [
 		"Ana anahtar başarıyla güncellendi!"
@@ -3706,6 +3803,15 @@
 	"This drawing may have unsaved changes.": [
 		"Çizimde kaydedilmemiş değişiklikler olabilir."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse sonrasında geri döndürülemez."
 	],
@@ -3732,6 +3838,9 @@
 	],
 	"This note has no history": [
 		"Bu notun hiç değişiklik geçmişi yok"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Bu eklenti %s desteklemiyor."
@@ -3772,8 +3881,14 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"Joplin'in Joplin Cloud ile senkronize edilmesine izin vermek için lütfen bu linkli kullanarak giriş yapın:"
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Joplin'in hesabınızla senkronize olmasına izin vermek için lütfen şu adımları izleyin:"
+	],
 	"To continue, please enter your master password below.": [
 		"Devam etmek için lütfen aşağıya ana parolanızı girin."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Bir etiketi silmek için ilişkilendirilmiş notların etiketini kaldırın."
@@ -3898,9 +4013,6 @@
 	"Type a note title to search for it.": [
 		"Aramak için bir not başlığı yazın."
 	],
-	"Type new tags or select from list": [
-		"Yeni etiketler yazın veya listeden seçin"
-	],
 	"Type: %s.": [
 		"Tip: %s."
 	],
@@ -3940,6 +4052,12 @@
 	"Unordered list": [
 		"Dizilmemiş liste"
 	],
+	"Unpublish": [
+		"Notu yayımlamayı kaldır"
+	],
+	"Unpublish \"%s\"": [
+		"“%s” yayımdan kaldır"
+	],
 	"Unpublish note": [
 		"Notu paylaşmayı bırak"
 	],
@@ -3947,7 +4065,7 @@
 		"Paylaşmayı bırak"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"\"%s\" not defterinin paylaşımı kaldırılsın mı? Bu, diğer kullanıcıların deftere erişimini kaybetmesine neden olabilir."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Not paylaşımı kaldırılsın mı? Alıcı artık not içeriğine erişemeyecek."
@@ -4072,6 +4190,9 @@
 	"Viewer": [
 		"Görünteleyici"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"Görüntüleyici ve Zengin Metin Düzenleyici yazı tipi ailesi"
+	],
 	"Viewer font size": [
 		"Görüntüleyici yazı boyutu"
 	],
@@ -4087,11 +4208,17 @@
 	"Voice typing...": [
 		"Sesle yazılıyor..."
 	],
+	"Voice typing: Glossary": [
+		"Sesli yazma: Sözlük"
+	],
 	"Vosk": [
 		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Yetkilendirme için bekleniyor..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Not defteri %s , %s tarafından bekleniyor"
 	],
 	"Warning": [
 		"Uyarı"
@@ -4175,10 +4302,10 @@
 		"Joplin Cloud'a giriş yaptınız, şimdi ekranı kapatabilirsiniz."
 	],
 	"You are now logged into your account.": [
-		""
+		"Artık hesabınıza giriş yaptınız."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Artık Markdown düzenleyicisinin en son sürümünü kullanıyorsunuz."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Joplin'in Intel sürümünü Apple Silicon işlemcide çalıştırıyorsunuz. Daha iyi performans için Apple Silicon sürümünü indirin."

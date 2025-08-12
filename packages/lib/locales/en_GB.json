@@ -248,7 +248,7 @@
 	"Add recipient:": [
 		""
 	],
-	"Add tag %s to note": [
+	"Add tags:": [
 		""
 	],
 	"Add title": [
@@ -258,6 +258,15 @@
 		""
 	],
 	"Add to note": [
+		""
+	],
+	"Added new: %s": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -363,6 +372,9 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
 		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
@@ -650,6 +662,9 @@
 	"Code View": [
 		""
 	],
+	"Code:": [
+		""
+	],
 	"Collaborate on a notebook with others": [
 		""
 	],
@@ -759,6 +774,12 @@
 	"Control character": [
 		""
 	],
+	"Convert it": [
+		""
+	],
+	"Convert note to Markdown": [
+		""
+	],
 	"Convert to note": [
 		""
 	],
@@ -814,6 +835,9 @@
 	"Could not connect to plugin repository.": [
 		""
 	],
+	"Could not convert note to Markdown: %s": [
+		""
+	],
 	"Could not export notes: %s": [
 		""
 	],
@@ -844,7 +868,13 @@
 	"Create a notebook": [
 		""
 	],
+	"Create new notebook": [
+		""
+	],
 	"Create new profile...": [
+		""
+	],
+	"Create note": [
 		""
 	],
 	"Create notebook": [
@@ -893,6 +923,12 @@
 		""
 	],
 	"Creating new to-do...": [
+		""
+	],
+	"Creating note \"%s\"...": [
+		""
+	],
+	"Creating note.": [
 		""
 	],
 	"Creating report...": [
@@ -962,6 +998,9 @@
 		""
 	],
 	"Default": [
+		""
+	],
+	"Default title to use for documents created by the scanner.": [
 		""
 	],
 	"Default: %s": [
@@ -1132,7 +1171,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		""
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1208,6 +1253,12 @@
 		""
 	],
 	"Edit": [
+		""
+	],
+	"Edit as Markdown": [
+		""
+	],
+	"Edit as Rich Text": [
 		""
 	],
 	"Edit link": [
@@ -1310,6 +1361,12 @@
 		""
 	],
 	"Enable Fountain syntax support": [
+		""
+	],
+	"Enable handwritten transcription": [
+		""
+	],
+	"Enable HTML-to-Markdown conversion banner": [
 		""
 	],
 	"Enable Linkify": [
@@ -1549,9 +1606,6 @@
 	"Filter": [
 		""
 	],
-	"Filter tags": [
-		""
-	],
 	"Find": [
 		""
 	],
@@ -1706,6 +1760,9 @@
 	"Hide password": [
 		""
 	],
+	"Hides warning": [
+		""
+	],
 	"Highlight": [
 		""
 	],
@@ -1734,6 +1791,9 @@
 		""
 	],
 	"Idle": [
+		""
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
@@ -2149,6 +2209,12 @@
 	"Markdown editor": [
 		""
 	],
+	"Markdown editor: Render images": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		""
 	],
@@ -2291,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		""
 	],
+	"New notebook title": [
+		""
+	],
 	"New photo": [
 		""
 	],
@@ -2298,9 +2367,6 @@
 		""
 	],
 	"New sub-notebook": [
-		""
-	],
-	"New tags:": [
 		""
 	],
 	"New to-do": [
@@ -2370,6 +2436,9 @@
 		""
 	],
 	"No tab selected": [
+		""
+	],
+	"No tags": [
 		""
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
@@ -2447,6 +2516,9 @@
 	"Note list style": [
 		""
 	],
+	"Note preview": [
+		""
+	],
 	"Note properties": [
 		""
 	],
@@ -2504,7 +2576,7 @@
 	"OCR: Language data URL or path": [
 		""
 	],
-	"Ok": [
+	"OCR: Search in extracted content": [
 		""
 	],
 	"OK": [
@@ -2665,6 +2737,9 @@
 		""
 	],
 	"Permission needed": [
+		""
+	],
+	"Photo %d": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -2889,10 +2964,16 @@
 	"Re-upload local data to sync target": [
 		""
 	],
+	"Read more": [
+		""
+	],
 	"Read more about it": [
 		""
 	],
 	"Read time: %s min": [
+		""
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
 		""
 	],
 	"Recipient has accepted the invitation": [
@@ -2905,6 +2986,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recognize handwritten image": [
 		""
 	],
 	"Recommended": [
@@ -2940,6 +3024,9 @@
 	"Remove": [
 		""
 	],
+	"Remove %s": [
+		""
+	],
 	"Remove %s from share": [
 		""
 	],
@@ -2952,6 +3039,9 @@
 	"Removed %s from share.": [
 		""
 	],
+	"Removed tag: %s": [
+		""
+	],
 	"Rename": [
 		""
 	],
@@ -2962,6 +3052,9 @@
 		""
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
+		""
+	],
+	"Renders markup on all lines that don't include the cursor.": [
 		""
 	],
 	"Renew token": [
@@ -3123,6 +3216,9 @@
 	"Save geo-location with notes": [
 		""
 	],
+	"Scan notebook": [
+		""
+	],
 	"Scanned code": [
 		""
 	],
@@ -3151,6 +3247,9 @@
 		""
 	],
 	"Search shown": [
+		""
+	],
+	"Search tags": [
 		""
 	],
 	"Search...": [
@@ -3183,7 +3282,13 @@
 	"Select file...": [
 		""
 	],
+	"Select notebook": [
+		""
+	],
 	"Select parent notebook": [
+		""
+	],
+	"Selected: %s": [
 		""
 	],
 	"Selection deleted": [
@@ -3585,9 +3690,6 @@
 	"Tabloid": [
 		""
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		""
 	],
@@ -3686,6 +3788,9 @@
 		""
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -3791,6 +3896,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		""
 	],
@@ -3816,6 +3930,9 @@
 		""
 	],
 	"This note has no history": [
+		""
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
@@ -3861,6 +3978,9 @@
 		""
 	],
 	"To continue, please enter your master password below.": [
+		""
+	],
+	"To create a new tag, type the name and press enter.": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -3986,9 +4106,6 @@
 	"Type a note title to search for it.": [
 		""
 	],
-	"Type new tags or select from list": [
-		""
-	],
 	"Type: %s.": [
 		""
 	],
@@ -4101,6 +4218,9 @@
 		""
 	],
 	"Upgrade the sync target to the latest version.": [
+		""
+	],
+	"Upload photo": [
 		""
 	],
 	"URL": [

@@ -4,6 +4,8 @@ import { Decoration, DecorationSet } from 'prosemirror-view';
 import schema from '../schema';
 import changedDescendants from '../vendor/changedDescendants';
 
+const nonbreakingSpace = '\u00A0';
+
 // Creates a custom serializer that can preserve empty paragraphs.
 // See https://discuss.prosemirror.net/t/how-to-preserve-br-tags-in-empty-paragraphs/2051/8.
 const createSerializer = () => {
@@ -21,10 +23,10 @@ const createSerializer = () => {
 			return result;
 		},
 
-		// Prevent empty paragraphs from being removed by padding them with &nbsp;s:
+		// Prevent empty paragraphs from being removed by padding them with nonbreaking spaces:
 		paragraph: (node) => {
 			if (node.content.size === 0) {
-				return ['p', '&nbsp;'];
+				return ['p', nonbreakingSpace];
 			} else {
 				return ['p', 0];
 			}
@@ -39,7 +41,8 @@ const createSerializer = () => {
 			}
 
 			// Replace repeated spaces with a space followed by a nonbreaking space:
-			return node.text.replace(/ {2}/g, ' &nbsp;');
+			// Use \u00A0 as the nonbreaking space character, since &nbsp; will be escaped.
+			return node.text.replace(/ {2}/g, ` ${nonbreakingSpace}`);
 		},
 
 		// However, &nbsp;s don't render as nonbreaking spaces in code blocks.
@@ -76,7 +79,8 @@ const originalMarkupPlugin = (htmlToMarkup: (html: Node)=> string) => {
 			});
 
 			if (matchingDecorations.length === 0) {
-				const markup = htmlToMarkup(proseMirrorSerializer.serializeNode(node));
+				const serialized = proseMirrorSerializer.serializeNode(node);
+				const markup = htmlToMarkup(serialized);
 				decorations = decorations.add(doc, [makeDecoration(position, node, markup)]);
 			}
 

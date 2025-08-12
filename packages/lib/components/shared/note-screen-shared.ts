@@ -76,7 +76,7 @@ interface Shared {
 	attachedResources?: (noteBody: string)=> Promise<any>;
 	isModified?: (comp: BaseNoteScreenComponent)=> boolean;
 	initState?: (comp: BaseNoteScreenComponent)=> Promise<void>;
-	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> void;
+	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> NoteEntity;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
 	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> string;
@@ -349,7 +349,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 				await comp.attachFile({
 					uri: resource.uri,
 					type: resource.mimeType,
-					name: resource.name,
+					fileName: resource.name,
 				}, null);
 			}
 		}
@@ -360,9 +360,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 };
 
 shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {
-	const newNote = Note.toggleIsTodo(comp.state.note);
-	const newState = { note: newNote };
-	comp.setState(newState);
+	return Note.toggleIsTodo(comp.state.note);
 };
 
 function toggleCheckboxLine(ipcMessage: string, noteBody: string) {

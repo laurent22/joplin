@@ -63,7 +63,7 @@ const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 				/>
 				<PromptButton
 					buttonSpec={{
-						text: _('Okay'),
+						text: _('OK'),
 						onPress: () => dialog.onSubmit(text),
 					}}
 					themeId={themeId}

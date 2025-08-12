@@ -916,11 +916,11 @@ export default class ItemModel extends BaseModel<Item> {
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
 
 			if (userShare) {
-				// Leave the share
+				// Leave the share, but keep the notebook for the owner
 				await this.models().shareUser().delete(userShare.id);
 			} else if (share.owner_id === userId) {
-				// Delete the share
-				await this.models().share().delete(share.id);
+				// Delete the share for everyone
+				await this.delete(item.id);
 			}
 		} else {
 			await this.delete(item.id);

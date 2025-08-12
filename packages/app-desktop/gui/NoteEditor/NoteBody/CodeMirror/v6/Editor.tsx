@@ -15,6 +15,10 @@ import useEditorSearch from '../utils/useEditorSearchExtension';
 import CommandService from '@joplin/lib/services/CommandService';
 import { SearchMarkers } from '../../../utils/useSearchMarkers';
 import localisation from './utils/localisation';
+import Resource from '@joplin/lib/models/Resource';
+import { parseResourceUrl } from '@joplin/lib/urlUtils';
+import { resourceFilename } from '@joplin/lib/models/utils/resourceUtils';
+import getResourceBaseUrl from '../../../utils/getResourceBaseUrl';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -104,7 +108,15 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			onLogMessage: message => onLogMessageRef.current(message),
 		};
 
-		const editor = createEditor(editorContainerRef.current, editorProps);
+		const editor = createEditor(editorContainerRef.current, {
+			...editorProps,
+			resolveImageSrc: async src => {
+				const url = parseResourceUrl(src);
+				if (!url.itemId) return null;
+				const item = await Resource.load(url.itemId);
+				return `${getResourceBaseUrl()}/${resourceFilename(item)}`;
+			},
+		});
 		editor.addStyles({
 			'.cm-scroller': { overflow: 'auto' },
 			'&.CodeMirror': {

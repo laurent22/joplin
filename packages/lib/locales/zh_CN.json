@@ -230,9 +230,6 @@
 	"Add recipient:": [
 		"添加受邀人："
 	],
-	"Add tag %s to note": [
-		"将标签 %s 添加到笔记"
-	],
 	"Add title": [
 		"添加标题"
 	],
@@ -241,6 +238,9 @@
 	],
 	"Add to note": [
 		"添加到笔记"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"管理员"
@@ -343,6 +343,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim 暗色"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"目前，Joplin Web 一次只能在一个标签页中打开。请关闭 Joplin 的其他实例。"
@@ -941,6 +944,9 @@
 	"Default": [
 		"默认"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"默认值：%s"
 	],
@@ -1103,7 +1109,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"请妥善保管密码，因为出于安全考虑，这将是解密数据的 *唯一* 方式！要启用加密功能，请在下面输入密码。"
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1514,9 +1526,6 @@
 	"Filter": [
 		"筛选"
 	],
-	"Filter tags": [
-		"筛选标签"
-	],
 	"Find": [
 		"查找"
 	],
@@ -1699,6 +1708,9 @@
 	],
 	"Idle": [
 		"空闲"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"如果您已授权，请等待应用程序同步到 Joplin 云。"
@@ -2093,6 +2105,9 @@
 	"Markdown editor": [
 		"Markdown 编辑器"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"标记待办为完成。"
 	],
@@ -2242,9 +2257,6 @@
 	],
 	"New sub-notebook": [
 		"新建子笔记本"
-	],
-	"New tags:": [
-		"新建标签："
 	],
 	"New to-do": [
 		"新建待办"
@@ -2435,9 +2447,6 @@
 	"OCR: Language data URL or path": [
 		"OCR：语言数据 URL 或路径"
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"确认"
 	],
@@ -2596,6 +2605,9 @@
 	],
 	"Permission needed": [
 		"需要权限"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"请单击 “%s” 继续，或在下面的 “%s” 列表中设置密码。"
@@ -2881,6 +2893,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"重命名选定的 <item> （笔记或笔记本）到 <name>。"
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"更新令牌"
@@ -3491,9 +3506,6 @@
 	"Tabloid": [
 		"文摘（Tabloid）"
 	],
-	"tag1, tag2, ...": [
-		"标签1, 标签2, ……"
-	],
 	"Tagged: %d.": [
 		"已加标签：%d 条。"
 	],
@@ -3695,6 +3707,15 @@
 	"This drawing may have unsaved changes.": [
 		"本次绘图可能有未保存的更改。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"这是用于展示已链接到笔记的附件的高级工具。需要小心，删除后无法恢复。"
 	],
@@ -3718,6 +3739,9 @@
 	],
 	"This note has no history": [
 		"该笔记没有历史记录"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"该插件不支持 %s。"
@@ -3760,6 +3784,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"若要继续，请在下面输入您的主密码。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"移除相关笔记的标签后才可删除此标签。"
@@ -3883,9 +3910,6 @@
 	],
 	"Type a note title to search for it.": [
 		"键入一个笔记标题以搜索它。"
-	],
-	"Type new tags or select from list": [
-		"键入新的标签或从列表中选择"
 	],
 	"Type: %s.": [
 		"类型：%s。"

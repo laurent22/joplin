@@ -191,14 +191,17 @@
 	"Add recipient:": [
 		"受信者を追加:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"題名を追加"
 	],
 	"Add to dictionary": [
 		"辞書に追加"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"管理者"
@@ -292,6 +295,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -827,6 +833,9 @@
 	"Default": [
 		"標準"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"既定値: %s"
 	],
@@ -968,7 +977,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"パスワードはなくさないようにしてください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1039,6 +1054,9 @@
 	],
 	"Edit": [
 		"編集"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1334,9 +1352,6 @@
 	"File system": [
 		"ファイルシステム"
 	],
-	"Filter tags": [
-		"フィルタータグ"
-	],
 	"Find: ": [
 		"検索文字列: "
 	],
@@ -1510,6 +1525,9 @@
 	],
 	"Idle": [
 		"待機中"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1847,6 +1865,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"ToDoを完了としてマークします。"
 	],
@@ -1963,9 +1984,6 @@
 	],
 	"New sub-notebook": [
 		"新しいサブノートブック"
-	],
-	"New tags:": [
-		"新しいタグ:"
 	],
 	"New to-do": [
 		"新しいToDo"
@@ -2135,9 +2153,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2254,6 +2269,9 @@
 	],
 	"Permission needed": [
 		"許可が必要"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"\"%s\"をクリックして続行するか、以下の\"%s\"リストでパスワードを設定してください。"
@@ -2509,6 +2527,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"トークンを更新する"
@@ -3029,9 +3050,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"タグ1, タグ2, ..."
-	],
 	"Tagged: %d.": [
 		"タグ付き: %d."
 	],
@@ -3209,6 +3227,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可するときにだけ使用します。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"ここではノートに添付されているファイルの一覧を見ることができます。添付ファイルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 	],
@@ -3232,6 +3259,9 @@
 	],
 	"This note has no history": [
 		"このノートに履歴はありません"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3271,6 +3301,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"続行するには、マスターパスワードを入力してください。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"タグを削除するには、関連するノートからタグを外してください。"
@@ -3376,9 +3409,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに移動できます。あるいは「:」でコマンドを検索して実行できます。"
-	],
-	"Type new tags or select from list": [
-		"新しいタグを入力するか、リストから選択してください"
 	],
 	"Type: %s.": [
 		"種類: %s."
