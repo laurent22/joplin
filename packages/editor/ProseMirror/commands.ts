@@ -99,7 +99,10 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 		if (canReplaceSelectionWith(state.selection, nodeType)) {
 			void (async () => {
 				const separator = block ? '$$' : '$';
-				const rendered = await renderer.renderMarkupToHtml(`${separator}${selectedText}${separator}`);
+				const rendered = await renderer.renderMarkupToHtml(`${separator}${selectedText}${separator}`, {
+					forceMarkdown: true,
+					isFullPageRender: false,
+				});
 
 				if (view) {
 					view.pasteHTML(rendered.html);

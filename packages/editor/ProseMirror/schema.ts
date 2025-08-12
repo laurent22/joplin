@@ -1,5 +1,5 @@
 import { AttributeSpec, DOMOutputSpec, MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
-import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin';
+import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin/joplinEditablePlugin';
 import { tableNodes } from 'prosemirror-tables';
 import { nodeSpecs as listNodes } from './plugins/listPlugin';
 import { nodeSpecs as resourcePlaceholderNodes } from './plugins/resourcePlaceholderPlugin';

@@ -170,13 +170,16 @@
 	"Add recipient:": [
 		""
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Dodaj naziv"
 	],
 	"Add to dictionary": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -262,6 +265,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim tamna"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -644,6 +650,9 @@
 	"Decrypting items: %d/%d": [
 		"Dešifrujem stavke: %d/%d"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Prekonfigurisano: %s"
 	],
@@ -749,7 +758,13 @@
 	"Do not ask for confirmation.": [
 		"Ne pitaj za potvrdu."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -799,6 +814,9 @@
 	],
 	"Edit": [
 		"Uredi"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Uredi bilješku."
@@ -1169,6 +1187,9 @@
 	"Idle": [
 		"Na čekanju"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1421,6 +1442,9 @@
 	"Markdown + Front Matter": [
 		""
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Označava da je zadatak obavljen."
 	],
@@ -1504,9 +1528,6 @@
 	],
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Kreirat će se nova bilježnica \"%s\" i u nju će biti unesena datoteka \"%s\""
-	],
-	"New tags:": [
-		"Nove oznake:"
 	],
 	"New to-do": [
 		"Novi zadatak"
@@ -1637,9 +1658,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"Uredu"
 	],
@@ -1722,6 +1740,9 @@
 		"PDF datoteka"
 	],
 	"Per user. Minimum of 2 users.": [
+		""
+	],
+	"Photo %d": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -1901,6 +1922,9 @@
 	"Recipients:": [
 		""
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Recommended": [
 		""
 	],
@@ -1939,6 +1963,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Mijenja naziv <item> (bilješka ili bilježnica) u <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Preuzmi token"
@@ -2351,9 +2378,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"Označeno: %d."
 	],
@@ -2521,6 +2545,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ovo je napredna alatka za prikazivanje priloga koji se nalaze u Vašim bilješkama. Molimo budite oprezni prilikom brisanja priloga, jer se oni više neće moći rekonstruisati."
 	],
@@ -2535,6 +2568,9 @@
 	],
 	"This note has no history": [
 		"Bilješka nema ranijih verzija"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2568,6 +2604,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Slijedite ove korake da dopustite Joplinu sinhronizovanje sa Dropboxom:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Da izbrišete oznaku, prvo je uklonite iz bilješki kojima je dodijeljena."
@@ -2631,9 +2670,6 @@
 	],
 	"Type `joplin help` for usage information.": [
 		"Kucajte `joplin help` za informacije o korištenju."
-	],
-	"Type new tags or select from list": [
-		"Unesite nove oznake ili odaberite iz popisa"
 	],
 	"Type: %s.": [
 		"Vrsta: %s."

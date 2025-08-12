@@ -191,14 +191,17 @@
 	"Add recipient:": [
 		"Dodaj primaoca:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Dodaj naslov"
 	],
 	"Add to dictionary": [
 		"Dodaj u rječnik"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Administrator"
@@ -283,6 +286,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim tamna"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -808,6 +814,9 @@
 	"Default": [
 		"Standardno"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Standardno: %s"
 	],
@@ -952,7 +961,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju lozinku."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -1017,6 +1032,9 @@
 	],
 	"Edit": [
 		"Uredi"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"Uredi poveznicu"
@@ -1309,9 +1327,6 @@
 	"File system": [
 		"Datotečni sustav"
 	],
-	"Filter tags": [
-		"Filtriraj oznake"
-	],
 	"Find: ": [
 		"Pronađi: "
 	],
@@ -1487,6 +1502,9 @@
 	],
 	"Idle": [
 		"Bez aktivnosti"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1811,6 +1829,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Označava zadatak završenim."
 	],
@@ -1927,9 +1948,6 @@
 	],
 	"New sub-notebook": [
 		"Nova podbilježnica"
-	],
-	"New tags:": [
-		"Nove oznake:"
 	],
 	"New to-do": [
 		"Novi zadatak"
@@ -2096,9 +2114,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"U redu"
 	],
@@ -2212,6 +2227,9 @@
 	],
 	"Permission needed": [
 		"Potrebna je dozvola"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Nastavi pritiskom na „%s” ili postavi lozinke u donjem popisu „%s”."
@@ -2420,6 +2438,9 @@
 	"Recipients:": [
 		"Primaoci:"
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Record audio": [
 		""
 	],
@@ -2455,6 +2476,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Preimenuje zadani element <item> (bilješka ili bilježnica) u ime <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Obnovi ključ"
@@ -2960,9 +2984,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"oznaka1, oznaka2, …"
-	],
 	"Tagged: %d.": [
 		"Označeno: %d."
 	],
@@ -3137,6 +3158,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Ovaj ključ za autorizaciju potreban je samo za dozvoljavanje drugim programima da pristupe Joplinu."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ovo je napredni alat za prikaz privitaka koji su povezani s tvojim bilješkama. Pazi što brišeš, jer se nakon brisanja ne mogu obnoviti."
 	],
@@ -3166,6 +3196,9 @@
 	],
 	"This note has no history": [
 		"Ova bilješka nema povijest"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3205,6 +3238,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Za nastavljanje, dolje upiši glavnu lozinku."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Za brisanje oznake, ukloni oznaku s povezanih bilježaka."
@@ -3301,9 +3337,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Prijeđi na bilješku upisom naslova bilješke ili dijela sadržaja bilješke. Alternativno koristi znak „#” s imenom oznake ili „@” s imenom bilježnice. Traži naredbe pomoću „:”."
-	],
-	"Type new tags or select from list": [
-		"Upiši nove oznake ili odaberi iz popisa"
 	],
 	"Type: %s.": [
 		"Vrsta: %s."

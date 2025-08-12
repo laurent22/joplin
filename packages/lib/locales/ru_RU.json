@@ -209,9 +209,6 @@
 	"Add recipient:": [
 		"Добавить получателя:"
 	],
-	"Add tag %s to note": [
-		"Добавить тег %s к заметке"
-	],
 	"Add title": [
 		"Добавить заголовок"
 	],
@@ -220,6 +217,9 @@
 	],
 	"Add to note": [
 		"Добавить к заметке"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Администратор"
@@ -319,6 +319,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim тёмная"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"В настоящее время Joplin Web может быть одновременно открыт только в одной вкладке. Пожалуйста, закройте другую вкладку Joplin."
@@ -900,6 +903,9 @@
 	"Default": [
 		"По умолчанию: %s"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"По умолчанию: %s"
 	],
@@ -1059,7 +1065,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Не теряйте пароль, так как в целях безопасности это будет *единственный* способ расшифровать данные! Чтобы включить шифрование введите свой пароль ниже."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1458,9 +1470,6 @@
 	"Filter": [
 		"Фильтр"
 	],
-	"Filter tags": [
-		"Фильтр тегов"
-	],
 	"Find": [
 		"Поиск"
 	],
@@ -1645,6 +1654,9 @@
 	],
 	"Idle": [
 		"Простой"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Если вы уже авторизовались, пожалуйста, подождите, пока приложение синхронизируется с Joplin Cloud."
@@ -2035,6 +2047,9 @@
 	"Markdown editor": [
 		"Редактор Markdown"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Отмечает задачу как выполненную."
 	],
@@ -2169,9 +2184,6 @@
 	],
 	"New sub-notebook": [
 		"Новый вложенный блокнот"
-	],
-	"New tags:": [
-		"Новые метки:"
 	],
 	"New to-do": [
 		"Новая задача"
@@ -2356,9 +2368,6 @@
 	"OCR: Language data URL or path": [
 		"OCR: URL-адрес или путь к языковым данным"
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2502,6 +2511,9 @@
 	],
 	"Permission needed": [
 		"Необходимы разрешения"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Пожалуйста, нажмите на \"%s\", чтобы продолжить, или задайте пароли в списке \"%s\" ниже."
@@ -2781,6 +2793,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Переименовывает элемент <item> (заметку или блокнот) в <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Обновить токен"
@@ -3382,9 +3397,6 @@
 	"Tabloid": [
 		"Таблоид"
 	],
-	"tag1, tag2, ...": [
-		"тег1, тег2, ..."
-	],
 	"Tagged: %d.": [
 		"Тегировано: %d."
 	],
@@ -3587,6 +3599,15 @@
 	"This drawing may have unsaved changes.": [
 		"Этот рисунок может содержать несохраненные изменения."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Это продвинутый инструмент для отображения вложений, прикреплённых к вашим заметкам. Удаляйте вложения с осторожностью - они не могут быть восстановлены."
 	],
@@ -3616,6 +3637,9 @@
 	],
 	"This note has no history": [
 		"Эта заметка не имеет предыдущих версий"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Этот плагин не поддерживает %s."
@@ -3658,6 +3682,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Для продолжения введите свой мастер-пароль ниже."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Для удаления метки открепите ее от всех связанных с ней заметок."
@@ -3766,9 +3793,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Введите название заметки, чтобы перейти к ней, либо введите #имя_метки или @имя_блокнота, либо введите : для поиска команд."
-	],
-	"Type new tags or select from list": [
-		"Введите новые метки или выберите из списка"
 	],
 	"Type: %s.": [
 		"Тип: %s."

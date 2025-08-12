@@ -191,14 +191,17 @@
 	"Add recipient:": [
 		"Lisää vastaanottaja:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Lisää otsikko"
 	],
 	"Add to dictionary": [
 		"Lisää sanakirjaan"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Ylläpitäjä"
@@ -283,6 +286,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -795,6 +801,9 @@
 	"Default": [
 		"Oletus"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Oletus: %s"
 	],
@@ -933,7 +942,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Älä kadota salasanaa, sillä tämä on turvallisuussyistä *ainoa* tapa purkaa tietojen salaus! Voit ottaa salauksen käyttöön kirjoittamalla salasanasi alle."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -995,6 +1010,9 @@
 	],
 	"Edit": [
 		"Muokkaa"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"Muokkaa linkkiä"
@@ -1278,9 +1296,6 @@
 	"File system": [
 		"Tiedostojärjestelmä"
 	],
-	"Filter tags": [
-		"Suodata tunnisteet"
-	],
 	"Find: ": [
 		"Etsi: "
 	],
@@ -1452,6 +1467,9 @@
 	],
 	"Idle": [
 		"Käyttämättömänä"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1775,6 +1793,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Merkitsee tehtävän valmiiksi."
 	],
@@ -1891,9 +1912,6 @@
 	],
 	"New sub-notebook": [
 		"Uusi alimuistikirja"
-	],
-	"New tags:": [
-		"Uudet tunnisteet:"
 	],
 	"New to-do": [
 		"Uusi tehtävä"
@@ -2060,9 +2078,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2176,6 +2191,9 @@
 	],
 	"Permission needed": [
 		"Tarvittava lupa"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Jatka napsauttamalla \"%s\" tai aseta salasana oheiseen \"%s\" luetteloon."
@@ -2419,6 +2437,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Nimeää annetun <item> (muistiinpano tai muistikirja) nimeksi <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Uusi tunnus"
@@ -2918,9 +2939,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"tunniste1, tunniste2, ..."
-	],
 	"Tagged: %d.": [
 		"Merkityt: %d."
 	],
@@ -3095,6 +3113,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Tätä valtuutustunnusta tarvitaan vain, jotta kolmannen osapuolen sovellukset voivat käyttää Joplinia."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Tämä on kehittynyt työkalu muistiinpanoihin linkitettyjen liitteiden näyttämiseen. Ole varovainen, kun poistat yhden niistä, koska niitä ei voi palauttaa jälkeenpäin."
 	],
@@ -3109,6 +3136,9 @@
 	],
 	"This note has no history": [
 		"Tällä muistiinpanolla ei ole historiaa"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3148,6 +3178,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Jatka kirjoittamalla pääsalasanasi alle."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Tunnisteen poistaminen, poista merkinnät muistiinpanoista."
@@ -3244,9 +3277,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Kirjoita muistiinpanon otsikko, jos haluat siirtyä siihen. Voit myös kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
-	],
-	"Type new tags or select from list": [
-		"Kirjoita uudet tunnisteet tai valitse luettelosta"
 	],
 	"Type: %s.": [
 		"Tyyppi: %s."

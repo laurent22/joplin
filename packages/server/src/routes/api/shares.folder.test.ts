@@ -502,6 +502,55 @@ describe('shares.folder', () => {
 		// Test deleting the share, but not the root folder
 	});
 
+	test.each([
+		{
+			label: 'not delete a shared root folder when deleted by the recipient',
+			deleteFromOwner: false,
+		},
+		{
+			label: 'delete a shared root folder when deleted by the owner',
+			deleteFromOwner: true,
+		},
+	])('should $label', async ({ deleteFromOwner }) => {
+		const { user: owner, session: session1 } = await createUserAndSession(1);
+		const { user: recipient, session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '0000000TEST0FOLDER01000000000000', {
+			'0000000TEST0FOLDER01000000000000': { },
+		});
+
+		const folderItem = await models().item().loadByJopId(owner.id, '0000000TEST0FOLDER01000000000000');
+
+		const itemIdsForUser = async (userId: string) => {
+			return (await models().item().children(userId)).items.map(item => item.id);
+		};
+
+		if (deleteFromOwner) {
+			await models().item().deleteForUser(owner.id, folderItem);
+
+			// Deleting from the owner should delete the folder for both clients
+			expect(await itemIdsForUser(owner.id)).toHaveLength(0);
+			expect(await itemIdsForUser(recipient.id)).toHaveLength(0);
+
+			// Share should be removed
+			expect(await models().share().all()).toHaveLength(0);
+		} else {
+			// Delete from the recipient account
+			await models().item().deleteForUser(recipient.id, folderItem);
+
+			// Deleting from the recipient should delete the folder for just the recipient
+			expect(await itemIdsForUser(owner.id)).toContain(folderItem.id);
+			expect(await itemIdsForUser(recipient.id)).toHaveLength(0);
+
+			// The share should still exist since the owner hasn't cancelled the
+			// share.
+			expect(await models().share().all()).toHaveLength(1);
+		}
+
+		// The notebook should no longer be shared with anyone.
+		expect(await models().shareUser().all()).toHaveLength(0);
+	});
+
 	test('should unshare when the share object is deleted', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);

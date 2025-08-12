@@ -191,14 +191,17 @@
 	"Add recipient:": [
 		"Přidat příjemce:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Přidejte nadpis"
 	],
 	"Add to dictionary": [
 		"Přidat do slovníku"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Admin"
@@ -283,6 +286,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -796,6 +802,9 @@
 	"Default": [
 		"Výchozí"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Výchozí: %s"
 	],
@@ -934,7 +943,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Heslo neztrácejte, protože z bezpečnostních důvodů je to *jediný* způsob, jak data dešifrovat! Chcete-li povolit šifrování, zadejte níže heslo."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -996,6 +1011,9 @@
 	],
 	"Edit": [
 		"Upravit"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"Upravit odkaz"
@@ -1279,9 +1297,6 @@
 	"File system": [
 		"Souborový systém"
 	],
-	"Filter tags": [
-		"Filtrovat štítky"
-	],
 	"Find: ": [
 		"Najít: "
 	],
@@ -1454,6 +1469,9 @@
 	],
 	"Idle": [
 		"Nečinný"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1778,6 +1796,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Označí úkol jako hotový."
 	],
@@ -1894,9 +1915,6 @@
 	],
 	"New sub-notebook": [
 		"Nový pod-zápisník"
-	],
-	"New tags:": [
-		"Nové štítky:"
 	],
 	"New to-do": [
 		"Nový úkol"
@@ -2063,9 +2081,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2179,6 +2194,9 @@
 	],
 	"Permission needed": [
 		"Vyžadováno oprávnění"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Pro pokračování klikněte na \"%s\" nebo nastavte hesla v seznamu \"%s\" níže."
@@ -2387,6 +2405,9 @@
 	"Recipients:": [
 		"Příjemci:"
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Record audio": [
 		""
 	],
@@ -2422,6 +2443,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Přejmenuje <položku> (poznámku či zápisník) na <jméno>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Obnovit token"
@@ -2924,9 +2948,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"štítek1, štítek2, ..."
-	],
 	"Tagged: %d.": [
 		"Označeno pomocí štítků: %d."
 	],
@@ -3101,6 +3122,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Tento autorizační token je potřeba pouze pro povolení komunikace Joplin s aplikacemi třetích stran."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Toto je pokročilý nástroj pro zobrazení příloh, které jsou připojeny k vašim poznámkám. Při odstraňování přílohy buďte opatrní, protože odstraněnou přílohu nelze obnovit."
 	],
@@ -3115,6 +3145,9 @@
 	],
 	"This note has no history": [
 		"Tato poznámka nemá historii"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3154,6 +3187,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Chcete-li pokračovat, zadejte níže své hlavní heslo."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Před smazáním štítku ho odeberte od přiřazených poznámek."
@@ -3250,9 +3286,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Zadejte název poznámky, na kterou chcete přeskočit, nebo část jejího obsahu. Nebo zadejte # následovaný názvem štítku, @ následovaný názvem poznámky, nebo : pro vyhledávání příkazů."
-	],
-	"Type new tags or select from list": [
-		"Zadejte nové štítky, nebo vyberte existující ze seznamu"
 	],
 	"Type: %s.": [
 		"Typ: %s."

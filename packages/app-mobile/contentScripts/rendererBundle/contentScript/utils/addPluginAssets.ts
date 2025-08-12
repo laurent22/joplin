@@ -39,6 +39,7 @@ const rewriteInternalAssetLinks = async (asset: RenderResultPluginAsset, content
 
 interface Options {
 	inlineAssets: boolean;
+	removeUnusedPluginAssets: boolean;
 	container: HTMLElement;
 	readAssetBlob?(path: string): Promise<Blob>;
 }
@@ -137,16 +138,22 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 	// light to dark theme, and then back to light theme - in that case
 	// the viewer would remain dark because it would use the dark
 	// stylesheet that would still be in the DOM.
-	for (const [assetId, asset] of Object.entries(pluginAssetsAdded_)) {
-		if (!processedAssetIds.includes(assetId)) {
-			try {
-				asset.element.remove();
-			} catch (error) {
-				// We don't throw an exception but we log it since
-				// it shouldn't happen
-				console.warn('Tried to remove an asset but got an error', error);
+	//
+	// In some cases, however, we only want to rerender part of the document.
+	// In this case, old plugin assets may have been from the last full-page
+	// render and should not be removed.
+	if (options.removeUnusedPluginAssets) {
+		for (const [assetId, asset] of Object.entries(pluginAssetsAdded_)) {
+			if (!processedAssetIds.includes(assetId)) {
+				try {
+					asset.element.remove();
+				} catch (error) {
+					// We don't throw an exception but we log it since
+					// it shouldn't happen
+					console.warn('Tried to remove an asset but got an error', error);
+				}
+				pluginAssetsAdded_[assetId] = null;
 			}
-			pluginAssetsAdded_[assetId] = null;
 		}
 	}
 };

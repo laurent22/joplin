@@ -1,8 +1,10 @@
-import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep, createNoteAndResource } from '../../testing/test-utils';
 import SearchEngine from './SearchEngine';
 import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
+import Resource from '../../models/Resource';
+import { ResourceOcrStatus } from '../database/types';
 
 let engine: SearchEngine = null;
 
@@ -582,5 +584,33 @@ describe('services/SearchEngine', () => {
 	// 	expect((await engine.search(n2.id))[0].id).toBe(n2.id);
 	// 	expect(await engine.search(f1.id)).toEqual([]);
 	// }));
+
+	it.each(
+		[
+			['find',		'enabled',	true,	1],
+			['not find',	'disabled',	false, 	0],
+		],
+	)('should %s resources if searching in OCR content is %s',
+		async (_testName: string, _testName2: string, isSearchEnabled: boolean, resourcesFound: number) => {
+			const { resource } = await createNoteAndResource();
+			await Resource.save({
+				id: resource.id,
+				ocr_status: ResourceOcrStatus.Done,
+				ocr_text: 'héllô, hôw äre yoù ?',
+			});
+
+			await engine.syncTables();
+
+			const normalized = await db().selectAll('select * from items_fts');
+			expect(normalized[0].body).toBe('hello, how are you ?');
+
+			Setting.setValue('ocr.searchInExtractedContent', isSearchEnabled);
+
+			const rows = await engine.search('hello', {
+				searchType: SearchEngine.SEARCH_TYPE_FTS,
+				includeOrphanedResources: true,
+			});
+			expect(rows.length).toBe(resourcesFound);
+		});
 
 });

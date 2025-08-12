@@ -84,6 +84,7 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		initialText: props.initialText,
 		noteId: props.noteId,
 		settings: props.editorSettings,
+		globalSearch: props.globalSearch,
 		webviewRef,
 		themeId: props.themeId,
 		pluginStates: props.plugins,

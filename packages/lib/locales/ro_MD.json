@@ -40,7 +40,7 @@
 		"%d de notițe vor fi șterse permanent. Continui?"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d poze făcute"
 	],
 	"%s": [
 		"%s"
@@ -80,6 +80,9 @@
 	],
 	"%s cannot be less than %s": [
 		"%s nu poate fi mai mic decît %s"
+	],
+	"%s from %s": [
+		"%s din %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s nu este optimizat pentru sincronizarea multor fișiere mici, așa că sincronizarea inițială va fi lentă."
@@ -135,16 +138,16 @@
 		"(%s)"
 	],
 	"(In plugin: %s)": [
-		"(În plugin-ul: %s)"
+		"(în plugin-ul: %s)"
 	],
 	"(level %d)": [
 		"(nivel %d)"
 	],
 	"(None)": [
-		"(Nimic)"
+		"(nimic)"
 	],
 	"(Read-only)": [
-		""
+		"(doar citire)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
@@ -167,8 +170,11 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> poate fi \"toggle\" sau \"clear\". Folosește „toggle” pentru a comuta între starea finalizată și cea nefinalizată (dacă ținta este o notiță obișnuită, aceasta va fi transformată în listă de făcut). Folosește „clear” pentru a converti lista de făcut înapoi la o notiță obișnuită."
 	],
+	"[None]": [
+		"[niciuna]"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"O listă de cuvinte separate de virgule. Poate fi folosită pentru cuvinte mai puțin comune, pentru a ajuta transcrierea prin dictare să le scrie corect."
 	],
 	"A new update (%s) is available": [
 		"O nouă actualizare (%s) este disponibilă"
@@ -202,6 +208,12 @@
 	],
 	"Accepted invitations": [
 		"Invitații acceptate"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Acceptat: Caiet: %s de la %s"
+	],
+	"Accepting share...": [
+		"Se acceptă partajarea..."
 	],
 	"Access denied: Please check your username and password": [
 		"Acces refuzat: Te rog să îți verifici numele de utilizator și parola"
@@ -242,9 +254,6 @@
 	"Add recipient:": [
 		"Adaugă destinatar:"
 	],
-	"Add tag %s to note": [
-		"Adaugă eticheta %s la notița"
-	],
 	"Add title": [
 		"Adaugă titlu"
 	],
@@ -253,6 +262,9 @@
 	],
 	"Add to note": [
 		"Adaugă la notiță"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Admin"
@@ -285,7 +297,7 @@
 		"Toate porturile potențiale sînt în uz - te rog să raportezi problema la %s"
 	],
 	"All shared folders:": [
-		""
+		"Toate dosarele partajate:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Permite depanarea plugin-urilor mobile. Vezi %s pentru mai multe detalii."
@@ -344,6 +356,9 @@
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
 		"Ești sigur că dorești să restaurezi aspectul implicit al barelor de unelte?\nAcest lucru nu poate fi anulat."
 	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Ești sigur că dorești să ștergi tot istoricul pentru această notă? Acest lucru nu poate fi anulat."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Ești sigur că dorești să reînnoiești jetonul de autorizare?"
 	],
@@ -355,6 +370,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim întunecat"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"La momentul actual, Joplin Web poate fi deschis într-o singură filă deodată. Te rog închide orice alte instanțe de Joplin."
@@ -672,7 +690,7 @@
 		"Paleta de comenzi…"
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Comenzi: `add`, `remove`, `list`, `delete`, `accept`, `leave` și `reject`."
 	],
 	"Compact": [
 		"Compact"
@@ -729,7 +747,7 @@
 		"Conectare la Joplin Cloud"
 	],
 	"Connect using your organisation account": [
-		""
+		"Conectează-te folosind contul tău organizațional"
 	],
 	"Consolidated billing": [
 		"Facturare consolidată"
@@ -957,6 +975,9 @@
 	"Default": [
 		"Mod implicit"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Mod implicit: %s"
 	],
@@ -971,6 +992,9 @@
 	],
 	"Delete expired tokens": [
 		"Șterge token-urile expirate"
+	],
+	"Delete history": [
+		"Șterge istoricul"
 	],
 	"Delete line": [
 		"Șterge linia"
@@ -1116,10 +1140,19 @@
 	"Do not ask for confirmation.": [
 		"Nu cere confirmarea."
 	],
+	"Do not ask for user confirmation.": [
+		"Nu cere confirmarea utilizatorului."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nu pierde parola, deoarece din motive de securitate, aceasta este *unica* modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să întroduci parola mai jos."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"Nu permite destinatarii partajării să scrie în caietul comun. Valid doar pentru subcomanda `add`."
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1407,6 +1440,12 @@
 	"Enter password": [
 		"Întrodu parola"
 	],
+	"Enter the code": [
+		"Întrodu codul"
+	],
+	"Enter the code:": [
+		"Întrodu codul:"
+	],
 	"Entering selection mode": [
 		"Se intră în modul de selecție"
 	],
@@ -1420,7 +1459,7 @@
 		"Eroare deschidere notiță în editor: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"Eroare la pornirea camerei: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Eroare. Te rog să verifici dacă adresa URL, numele de utilizator, parola etc. sînt corecte și că destinația de sincronizare este accesibilă. Eroarea raportată a fost:"
@@ -1507,7 +1546,7 @@
 		"Fail-safe: Sincronizarea a fost întreruptă pentru a preveni pierderea de date, deoarece destinația sincronizării este goală sau eronată. Pentru a anula acest comportament, dezactivează mecanismul de fail-safe din setările de sincronizare."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"A eșuat conectarea la contul tău. Te rog încearcă din nou."
 	],
 	"Fatal error:": [
 		"Eroare fatală:"
@@ -1529,9 +1568,6 @@
 	],
 	"Filter": [
 		"Filtrează"
-	],
-	"Filter tags": [
-		"Filtrează etichetele"
 	],
 	"Find": [
 		"Găsește"
@@ -1561,7 +1597,7 @@
 		"Focalizează pe titlu"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"Dosarul „%s” este partajat cu:"
 	],
 	"Follow link": [
 		"Urmează legătura"
@@ -1614,7 +1650,7 @@
 		"Geolocație, verificare ortografică, bara de instrumente a editorului, redimensionare imagine"
 	],
 	"Get a quote": [
-		""
+		"Obține un estimat"
 	],
 	"Get it now:": [
 		"Obține acum:"
@@ -1626,7 +1662,7 @@
 		"Obține sau setează o valoare de configurare. Dacă [valoare] nu este furnizată, va afișa valoarea [nume]. Dacă nu este furnizat nici [nume], nici [valoare], va afișa configurația curentă."
 	],
 	"Glossary:": [
-		""
+		"Glosar:"
 	],
 	"go": [
 		"mergi"
@@ -1718,6 +1754,9 @@
 	"Idle": [
 		"Inactiv"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Dacă ai autorizat deja, te rog așteaptă ca aplicația să se sincronizeze cu Joplin Cloud."
 	],
@@ -1792,6 +1831,9 @@
 	],
 	"In: %s": [
 		"În: %s"
+	],
+	"Incoming shares:": [
+		"Partajări sosite:"
 	],
 	"Incompatible": [
 		"Incompatibil"
@@ -1925,8 +1967,14 @@
 	"Joplin Server": [
 		"Server Joplin"
 	],
+	"Joplin Server Business": [
+		"Server Joplin Business"
+	],
 	"Joplin Server email": [
 		"Email Joplin Server"
+	],
+	"Joplin Server Login": [
+		"Login server Joplin"
 	],
 	"Joplin Server password": [
 		"Parolă Joplin Server"
@@ -1935,7 +1983,7 @@
 		"URL server Joplin"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Autentificare SSO Joplin"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran din navigatorul tău web în Joplin."
@@ -2024,6 +2072,11 @@
 	"Link": [
 		"Legătură"
 	],
+	"Link created!": [
+		"Legătură creată!",
+		"Legături create!",
+		"Legături create!"
+	],
 	"Link description": [
 		"Descriere legătură"
 	],
@@ -2037,6 +2090,9 @@
 	],
 	"Link to note...": [
 		"Leagă la notița..."
+	],
+	"Links": [
+		"Legături"
 	],
 	"List item": [
 		"Element listă"
@@ -2055,6 +2111,9 @@
 	],
 	"Log": [
 		"Jurnal"
+	],
+	"Log in with your web browser": [
+		"Autentifică-te cu navigatorul tău web"
 	],
 	"Login to Joplin Cloud.": [
 		"Autentificare în Joplin Cloud."
@@ -2112,6 +2171,9 @@
 	],
 	"Markdown editor": [
 		"Editor Markdown"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"Marchează o sarcină ca fiind terminată."
@@ -2265,9 +2327,6 @@
 	"New sub-notebook": [
 		"Sub-caiet nou"
 	],
-	"New tags:": [
-		"Etichete noi:"
-	],
 	"New to-do": [
 		"Listă de făcut nouă"
 	],
@@ -2276,6 +2335,9 @@
 	],
 	"next": [
 		"următoarea"
+	],
+	"Next": [
+		"Urnătorul"
 	],
 	"Next match": [
 		"Următoarea potrivire"
@@ -2321,6 +2383,9 @@
 	],
 	"No results": [
 		"Fără rezultate"
+	],
+	"No revision selected": [
+		"Nicio revizie selectată"
 	],
 	"No such command: %s": [
 		"Nu există o asemenea comandă: %s"
@@ -2385,8 +2450,14 @@
 	"Note has been saved.": [
 		"Notița a fost salvată."
 	],
+	"Note history": [
+		"Istoric notiță"
+	],
 	"Note History": [
 		"Istoric notițe"
+	],
+	"Note history has been deleted.": [
+		"Istoricul notiței a fost șters."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Notița nu este o sarcină: „%s”"
@@ -2456,9 +2527,6 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL sau cale date lingvistice"
-	],
-	"Ok": [
-		""
 	],
 	"OK": [
 		"OK"
@@ -2621,6 +2689,9 @@
 	"Permission needed": [
 		"Permisiune necesară"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Te rog să faci clic pe „%s” pentru a continua sau să setezi parolele în lista „%s” de mai jos."
 	],
@@ -2664,7 +2735,7 @@
 		"Te rog să aștepți descărcarea și decriptarea tuturor atașamentelor. De asemenea, poți comuta la %s pentru a edita notița."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Te rog așteaptă cît timp se încarcă pagina de autentificare a organizației tale..."
 	],
 	"Please wait...": [
 		"Te rog să aștepți..."
@@ -2706,7 +2777,7 @@
 		"Valori posibile: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"Prefer date de ieșire JSON."
 	],
 	"Preferences": [
 		"Preferințe"
@@ -2743,6 +2814,9 @@
 	],
 	"Previous match": [
 		"Potrivirea anterioară"
+	],
+	"Previous versions": [
+		"Versiuni anterioare"
 	],
 	"Previous versions of this note": [
 		"Versiunile anterioare ale acestei notițe"
@@ -2804,6 +2878,9 @@
 	"Public-private key pair:": [
 		"Pereche de chei publice-private:"
 	],
+	"Publish Note": [
+		"Publică notița"
+	],
 	"Publish note...": [
 		"Publică notița…"
 	],
@@ -2814,7 +2891,7 @@
 		"Publică notițele pe internet"
 	],
 	"Publish/unpublish": [
-		""
+		"Publică/Retrage"
 	],
 	"QR Code": [
 		"Cod QR"
@@ -2882,6 +2959,9 @@
 	"Reject": [
 		"Respinge"
 	],
+	"Rejecting share...": [
+		"Se respinge partajarea..."
+	],
 	"Remove": [
 		"Șterge"
 	],
@@ -2894,6 +2974,9 @@
 	"Remove this search from the sidebar?": [
 		"Elimini această căutare din panoul lateral?"
 	],
+	"Removed %s from share.": [
+		"S-a eliminat %s din partajare."
+	],
 	"Rename": [
 		"Redenumește"
 	],
@@ -2905,6 +2988,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Redenumește <item> dat (notiță sau caiet) în <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Reînnoiește jetonul"
@@ -3008,6 +3094,9 @@
 	"Reverses the sorting order.": [
 		"Inversează ordinea sortării."
 	],
+	"Revision:": [
+		"Revizie:"
+	],
 	"Revision: %s (%s)": [
 		"Revizie: %s (%s)"
 	],
@@ -3110,6 +3199,9 @@
 	"Select": [
 		"Selectează"
 	],
+	"Select a revision...": [
+		"Alege o revizie…"
+	],
 	"Select all": [
 		"Selectează tot"
 	],
@@ -3129,7 +3221,7 @@
 		"Selectează un caiet"
 	],
 	"Self-hosted": [
-		""
+		"Auto-găzduit"
 	],
 	"Send bug report": [
 		"Trimite un raport de eroare"
@@ -3189,7 +3281,7 @@
 		"Partajări"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Partajează sau anulează partajarea pentru [caietul] specificat cu [utilizatorul]. Necesită Joplin Cloud sau server Joplin."
 	],
 	"Sharing notebook...": [
 		"Se partajează caietul..."
@@ -3313,6 +3405,9 @@
 	],
 	"Source": [
 		"Sursă"
+	],
+	"Source code available": [
+		"Cod sursă disponibil"
 	],
 	"Source format: %s": [
 		"Formatul sursei: %s"
@@ -3440,6 +3535,9 @@
 	"Switch to the legacy editor": [
 		"Comută la editorul învechit"
 	],
+	"Switch to the new editor": [
+		"Comută la noul editor"
+	],
 	"Switch to to-do type": [
 		"Comută la tipul „de făcut”"
 	],
@@ -3514,9 +3612,6 @@
 	],
 	"Tabloid": [
 		"Tabloid"
-	],
-	"tag1, tag2, ...": [
-		"eticheta1, eticheta2, …"
 	],
 	"Tagged: %d.": [
 		"Etichetate: %d."
@@ -3608,7 +3703,7 @@
 		"Cheile cu aceste ID-uri sînt folosite pentru a cripta unele dintre elementele dvs., însă aplicația nu are în prezent acces la ele. Este probabil ca acestea să fie descărcate în cele din urmă prin sincronizare."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Se pare că editorul markdown învechit a crăpat din cauza unei incompatibilități cu un plugin. Îți recomandăm să folosești noul editor."
 	],
 	"The master key has been upgraded successfully!": [
 		"Cheia master a fost actualizată cu succes!"
@@ -3723,6 +3818,15 @@
 	"This drawing may have unsaved changes.": [
 		"Acest desen poate avea modificări nesalvate."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Acesta este un instrument avansat de listare al atașamentelor care sînt legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
 	],
@@ -3752,6 +3856,9 @@
 	],
 	"This note has no history": [
 		"Această notă nu are istoric"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Acest plugin nu suportă %s."
@@ -3792,8 +3899,14 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"Pentru a permite Joplin să se sincronizeze cu Joplin Cloud, te rog autentifică-te folosind acest URL:"
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Pentru a permite Joplin să se sincronizeze cu contul tău, te rog urmează pașii de mai jos:"
+	],
 	"To continue, please enter your master password below.": [
 		"Pentru a continua, te rog să întroduci parola principală mai jos."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Pentru a șterge o eticheta, elimină eticheta respectivă din cadrul notițelor aferente."
@@ -3918,9 +4031,6 @@
 	"Type a note title to search for it.": [
 		"Tastează un titlu de notiță pentru a-l căuta."
 	],
-	"Type new tags or select from list": [
-		"Tastează etichete noi sau selectează din listă"
-	],
 	"Type: %s.": [
 		"Tip: %s."
 	],
@@ -3960,6 +4070,12 @@
 	"Unordered list": [
 		"Listă neordonată"
 	],
+	"Unpublish": [
+		"Retrage publicarea"
+	],
+	"Unpublish \"%s\"": [
+		"Retrage publicarea pentru „%s”"
+	],
 	"Unpublish note": [
 		"Notă de retragere a publicării"
 	],
@@ -3967,7 +4083,7 @@
 		"Unsoare"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Retragi partajarea pentru caietul „%s”? Acest lucru va face ca alți utilizatori să piardă accesul la caiet."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la conținutul acestuia."
@@ -4092,6 +4208,9 @@
 	"Viewer": [
 		"Vizualizator"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"Familie font vizualizator și editor text îmbogățit"
+	],
 	"Viewer font size": [
 		"Mărime font vizualizator"
 	],
@@ -4107,11 +4226,17 @@
 	"Voice typing...": [
 		"Tastarea vocală…"
 	],
+	"Voice typing: Glossary": [
+		"Transcriere vocală: Glosar"
+	],
 	"Vosk": [
 		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Se așteaptă autorizarea..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Se așteaptă: Caiet %s de la %s"
 	],
 	"Warning": [
 		"Atenție"
@@ -4195,10 +4320,10 @@
 		"Ești autentificat la Joplin Cloud, poți acum să părăsești acest ecran."
 	],
 	"You are now logged into your account.": [
-		""
+		"Ești acum autentificat în cont."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Folosești acum cea mai nouă versiune de editor markdown."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Rulezi versiunea Intel a Joplin pe un procesor cu siliciu Apple. Descarcă versiunea pentru procesoare Apple pentru o performanță mai mare."

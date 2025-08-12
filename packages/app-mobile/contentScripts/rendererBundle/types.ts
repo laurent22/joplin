@@ -54,8 +54,13 @@ export interface RenderOptions {
 	highlightedKeywords: string[];
 	resources: ResourceInfos;
 	themeOverrides: Record<string, string|number>;
+
 	// If null, plugin assets will not be added to the document.
 	pluginAssetContainerSelector: string|null;
+	// When true, plugin assets are removed from the container when not used by the render result.
+	// This should be true for full-page renders.
+	removeUnusedPluginAssets: boolean;
+
 	noteHash: string;
 	initialScroll: number;
 
