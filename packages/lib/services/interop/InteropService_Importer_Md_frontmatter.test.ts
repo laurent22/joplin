@@ -52,7 +52,7 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(tags.length).toBe(3);
 
 		const tagTitles = tags.map(tag => tag.title);
-		expect(tagTitles).toContain('joplin');
+		expect(tagTitles).toContain('Joplin');
 		expect(tagTitles).toContain('nOte');
 		expect(tagTitles).toContain('pencil');
 	});
