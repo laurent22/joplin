@@ -7,7 +7,7 @@ import {
 	toggleBolded, toggleCode,
 	toggleHeaderLevel, toggleItalicized,
 	toggleList, toggleMath,
-} from '../markdown/markdownCommands';
+} from './markdownCommands';
 import duplicateLine from './duplicateLine';
 import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext, searchPanelOpen } from '@codemirror/search';

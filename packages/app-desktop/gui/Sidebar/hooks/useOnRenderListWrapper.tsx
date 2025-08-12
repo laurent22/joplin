@@ -27,7 +27,7 @@ const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
 	const icon = props.allFoldersCollapsed ? 'far fa-caret-square-right' : 'far fa-caret-square-down';
 	const label = props.allFoldersCollapsed ? _('Expand all notebooks') : _('Collapse all notebooks');
 
-	return <button onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className='sidebar-header-button -collapseall'>
+	return <button onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className='sidebar-header-button -collapseall' title={label}>
 		<i
 			aria-label={label}
 			role='img'
@@ -39,9 +39,11 @@ const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
 const NewFolderButton = () => {
 	// To allow it to be accessed by accessibility tools, the new folder button
 	// is not included in the portion of the list with role='tree'.
-	return <button onClick={onAddFolderButtonClick} className='sidebar-header-button -newfolder'>
+	const label = _('New notebook');
+
+	return <button onClick={onAddFolderButtonClick} className='sidebar-header-button -newfolder' title={label}>
 		<i
-			aria-label={_('New notebook')}
+			aria-label={label}
 			role='img'
 			className='fas fa-plus'
 		/>

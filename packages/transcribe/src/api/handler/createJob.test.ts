@@ -3,6 +3,9 @@ import initiateLogger from '../../services/initiateLogger';
 import { BaseQueue, JobData } from '../../types';
 import createJob from './createJob';
 import { cleanUpDb, initDb } from '../../testUtils';
+import FileStorage from '../../services/FileStorage';
+import { copyFile, exists, remove } from 'fs-extra';
+import { join } from 'path';
 
 describe('createJob', () => {
 	let queue: BaseQueue;
@@ -17,6 +20,10 @@ describe('createJob', () => {
 	});
 
 	afterEach(async () => {
+		const job = await queue.fetch();
+		if (job) {
+			await remove(join('images', job.data.filePath));
+		}
 		await queue.stop();
 		await cleanUpDb('./createJob.test.sqlite3');
 	});
@@ -53,5 +60,21 @@ describe('createJob', () => {
 
 		const job = await queue.fetch();
 		expect(job).toBeNull();
+	});
+
+	it('should delete the original file after storing', async () => {
+		await copyFile('./images/htr_sample.png', './test_file.png');
+
+		const fs = new FileStorage();
+		const requirements = {
+			filepath: './test_file.png',
+			storeImage: fs.store,
+			sendToQueue: (data: JobData) => queue.send(data),
+		};
+
+		await createJob(requirements);
+
+		const originalFile = await exists('./test_file.png');
+		expect(originalFile).toBe(false);
 	});
 });

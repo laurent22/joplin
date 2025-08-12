@@ -1,3 +1,9 @@
+// This script generates a permanent archive of Contributor Licence Agreement (CLA) signatures for
+// the Joplin project. It reads a list of signed contributors, retrieves the associated pull request
+// and its comments from GitHub, and saves them as JSON files. This ensures a verifiable record is
+// preserved even if the original pull request or comments are later deleted. It validates that each
+// CLA comment was made by the correct contributor.
+
 import { getRootDir } from '@joplin/utils';
 import { githubOauthToken } from './tool-utils';
 import { mkdirp, pathExists } from 'fs-extra';
@@ -78,6 +84,8 @@ const validateComments = (comments: IssueComment[], expectedClaAuthorId: number)
 };
 
 const main = async () => {
+	console.info('To generate an accurate record, remember to merge the cla_signatures branch into dev first.');
+
 	const consentRecordsDir = `${await getRootDir()}/readme/cla/consent_records`;
 	await mkdirp(consentRecordsDir);
 

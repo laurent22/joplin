@@ -54,7 +54,7 @@ export default class JobProcessor {
 		try {
 			await this.checkForJobs();
 		} catch (error) {
-			logger.error(`Error while processing job: ${this.currentJob}`, error);
+			logger.error(`Error while processing job: ${this.currentJob?.id}`, error);
 			const e = error as Error;
 			if (this.currentJob) {
 				await this.queue.fail(this.currentJob.id, e);

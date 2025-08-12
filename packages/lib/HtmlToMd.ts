@@ -16,7 +16,7 @@ export interface ParseOptions {
 
 export default class HtmlToMd {
 
-	public parse(html: string, options: ParseOptions = {}) {
+	public parse(html: string|HTMLElement, options: ParseOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const turndownOpts: any = {
 			headingStyle: 'atx',

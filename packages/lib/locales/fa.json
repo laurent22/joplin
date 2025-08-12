@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d مگابایت به ازای هر یادداشت یا فایل پیوست"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -107,6 +110,9 @@
 	"(None)": [
 		"(هیچ کدام)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(چیزی که بدست خواهی آورد: %s)"
 	],
@@ -127,6 +133,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> می‌تواند \"تغییر وضعیت\" یا \"پاکسازی\" باشد. از \"تغییر وضعیت\" برای تغییر وضعیت کارها بین حالت تکمیل شده و ناتمام استفاده نمایید. (اگر هدف یک یادداشت معمولی باشد، تبدیل به یک کار می‌شود). از \"پاکسازی\" برای تبدیل یک کار به یک یادداشت معمولی استفاده نمایید."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -197,14 +206,17 @@
 	"Add recipient:": [
 		"افزودن دریافت کننده:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"افزودن عنوان"
 	],
 	"Add to dictionary": [
 		"افزودن به لغت‌نامه"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"مدیر"
@@ -232,6 +244,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"تمام پورت‌های بالقوه در حال استفاده هستند- لطفا این مشکل را در %s گزارش نمایید"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"اجازه اشکال زدایی به افزونه های موبایل را می دهد. برای جزئیات بیشتر به %s مراجعه کنید."
@@ -295,6 +310,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -587,6 +605,9 @@
 	"Command palette...": [
 		"پالت فرمان ..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"فشرده"
 	],
@@ -634,6 +655,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"اتصال به سرویس ابری joplin"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"صورتحساب تلفیقی"
@@ -843,6 +867,9 @@
 	"Default": [
 		"پیش‌فرض"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"پیش‌فرض: %s"
 	],
@@ -990,6 +1017,15 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"گذرواژه را از دست ندهید زیرا، برای اهداف امنیتی، این *تنها* راه برای رمزگشایی داده ها خواهد بود! برای فعال نمودن رمزنگاری، لطفا گذرواژه خود را در زیر وارد نمایید."
 	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Donate, website": [
 		"کمک مالی، وبسایت"
 	],
@@ -1058,6 +1094,9 @@
 	],
 	"Edit": [
 		"ویرایش"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"ویرایش لینک"
@@ -1269,6 +1308,9 @@
 	"Error opening note in editor: %s": [
 		"خطای بازکردن یادداشت در ویرایشگر: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"خطا. لطفا بررسی کنید که آدرس اینترنتی، نام‌کاربری، گذرواژه و غیره صحیح هستند و هدف همگام‌سازی قابل دسترس است. خطای گزارش شده:"
 	],
@@ -1344,6 +1386,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"خطای مهلک:"
 	],
@@ -1364,9 +1409,6 @@
 	],
 	"Filter": [
 		"فیلتر"
-	],
-	"Filter tags": [
-		"فیلتر برچسب‌ها"
 	],
 	"Find: ": [
 		"یافت‌شده: "
@@ -1391,6 +1433,9 @@
 	],
 	"Focus title": [
 		"عنوان تمرکز"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1441,6 +1486,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"موقعیت جغرافیایی، بررسی املایی، نوار ابزار ویرایشگر، تغییر اندازه تصویر"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"هم‌اکنون دریافت نمایید:"
 	],
@@ -1449,6 +1497,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"یک مقدار تنظیمات را دریافت یا قرار می‌دهد. اگر [value] (مقدار) داده نشود، مقدار [name] (اسم) نمایش داده خواهد شد. اگر نه [name] (اسم) و نه [value] (مقدار) داده نشده باشند، تنظیمات فعلی لیست می‌شود."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1536,6 +1587,9 @@
 	],
 	"Idle": [
 		"بیکار"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"اگر قبلاً احراز هویت شده‌اید، لطفاً منتظر بمانید تا برنامه با سرویس ابری Joplin همگام شود."
@@ -1738,6 +1792,9 @@
 	"Joplin Server URL": [
 		"آدرس سرور joplin"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper اجازه می دهد تا صفحات وب و اسکرین‌شات ها را از مرورگر خود در joplin ذخیره کنید."
 	],
@@ -1901,6 +1958,9 @@
 	"Markdown + Front Matter": [
 		"نشانه گذاری + موضوع روبه‌رو"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"یک فهرست کار را به عنوان انجام شده علامت می‌زند."
 	],
@@ -2023,9 +2083,6 @@
 	],
 	"New sub-notebook": [
 		"دفترچه فرزند جدید"
-	],
-	"New tags:": [
-		"برچسب جدید:"
 	],
 	"New to-do": [
 		"فهرست کار جدید"
@@ -2333,6 +2390,9 @@
 	"Permission needed": [
 		"مجوز استفاده مورد نیاز است"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"لطفاً برای ادامه روی «%s» کلیک کنید یا گذرواژه‌ها را در لیست «%s» زیر تنظیم نمایید."
 	],
@@ -2375,6 +2435,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"لطفا صبر کنید تا همه پیوست‌ها دانلود و رمزگشایی شوند. شما همچنین می‌توانید به %s برای ویرایش یادداشت بروید."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"لطفاً صبور باشید..."
 	],
@@ -2413,6 +2476,9 @@
 	],
 	"Possible values: %s.": [
 		"مقادیر احتمالی: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"تنظیمات"
@@ -2513,6 +2579,9 @@
 	"Publish notes to the internet": [
 		"اشتراک‌گذاری یادداشت‌ها در اینترنت"
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"Quit": [
 		"خروج"
 	],
@@ -2587,6 +2656,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"تغییر نام مورد <item> (یادداشت یا دفترچه) به <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"تمدید توکن"
@@ -2789,6 +2861,9 @@
 	"Select parent notebook": [
 		"انتخاب دفترچه والد"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"ارسال گزارش خطا"
 	],
@@ -2842,6 +2917,9 @@
 	],
 	"Shares": [
 		"اشتراک‌ها"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"در حال اشتراک‌گذاری دفترچه..."
@@ -3140,9 +3218,6 @@
 	"Tabloid": [
 		"چکیده"
 	],
-	"tag1, tag2, ...": [
-		"برچسب 1، برچسب 2، ..."
-	],
 	"Tagged: %d.": [
 		"برچسب گذاری شده: %d."
 	],
@@ -3170,17 +3245,11 @@
 	"Text editor command": [
 		"دستور ویرایشگر متن"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"[Web Clipper](%s) یک افزونه مرورگر است که به شما امکان می دهد صفحات وب و اسکرین شات ها را از مرورگر خود ذخیره کنید."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"حساب‌کاربری فعال را نمی توان حذف کرد. به حساب‌کاربری دیگری بروید و دوباره امتحان کنید."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"برنامه اکنون در حال بسته شدن است. لطفاً برای تکمیل مراحل آن را مجدداً راه اندازی کنید."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"برنامه به درستی بسته نشد. آیا می خواهید در حالت ایمن شروع به کار کنید؟"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"برنامه احراز هویت شده است - اکنون می توانید این برگه مرورگر را ببندید."
@@ -3236,6 +3305,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"کلیدهای دارای این شناسه‌ها برای رمزگذاری برخی از آیتم‌های شما استفاده می‌شوند، اما برنامه در حال حاضر به آنها دسترسی ندارد. این احتمال وجود دارد که آنها در نهایت از طریق همگام سازی دانلود شوند."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"کلید اصلی با موفقیت ارتقا یافت!"
@@ -3346,6 +3418,15 @@
 	"This drawing may have unsaved changes.": [
 		"این طراحی ممکن است دارای تغییرات ذخیره نشده باشد."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"این یک ابزار پیشرفته برای نشان دادن پیوست‌هایی است که به یادداشت‌های شما پیوند داده شده‌اند. لطفاً هنگام حذف یکی از آنها مراقب باشید زیرا پس از آن قابل بازیابی نیستند."
 	],
@@ -3372,6 +3453,9 @@
 	],
 	"This note has no history": [
 		"این یادداشت هیچ تاریخچه ای ندارد"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"این افزونه %s را پشتیبانی نمی کند."
@@ -3414,6 +3498,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"برای ادامه، لطفاً گذرواژه اصلی خود را در زیر وارد نمایید."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"برای حذف یک برچسب، این برچسب را از یادداشت های مرتبط پاک کنید."
@@ -3520,9 +3607,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"عنوان یادداشت یا بخشی از محتوای آن را تایپ کنید تا به آن بروید. یا # به دنبال نام برچسب یا @ و به دنبال آن نام دفترچه را تایپ کنید. یا برای جستجوی دستورات، دستور «:» تایپ نمایید."
 	],
-	"Type new tags or select from list": [
-		"برچسب‌های جدید را تایپ کنید یا از لیست انتخاب کنید"
-	],
 	"Type: %s.": [
 		"نوع: %s."
 	],
@@ -3564,6 +3648,9 @@
 	],
 	"Unshare": [
 		"لغو اشتراک‌گذاری"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"اشتراک‌گذاری این دفترچه لغو شود؟ گیرندگان دیگر به محتوای آن دسترسی نخواهند داشت."
@@ -3777,6 +3864,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"شما به سرویس ابری Joplin وارد شده اید، اکنون می توانید این صفحه را ترک کنید."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""

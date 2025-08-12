@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { Ref, useMemo } from 'react';
 import { themeStyle } from './global-style';
 import { TextInput, TextInputProps, StyleSheet } from 'react-native';
 
 interface Props extends TextInputProps {
+	ref?: Ref<TextInput>;
 	themeId: number;
 }
 

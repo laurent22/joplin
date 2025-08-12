@@ -8,7 +8,7 @@ import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
 import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme } from 'electron';
 import bridge from './bridge';
-const url = require('url');
+import * as url from 'url';
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
