@@ -1,7 +1,6 @@
-import { copyFile, exists, remove } from 'fs-extra';
+import { readdir, copyFile, exists, remove } from 'fs-extra';
 import { join } from 'path';
 import FileStorage from './FileStorage';
-import * as fsExtra from 'fs-extra';
 import initiateLogger from './initiateLogger';
 import Logger from '@joplin/utils/Logger';
 
@@ -44,17 +43,20 @@ describe('FileStorage', () => {
 			`${new Date('2025-03-02 17:44').getTime()}_should_delete`,
 			`${new Date('2025-03-04 17:44').getTime()}_not_deleted`,
 		];
-		jest.spyOn(fsExtra, 'readdir').mockImplementation(
-			() => Promise.resolve(mockedFilenames),
-		);
-		const mockedRemove = jest.fn();
-		jest.spyOn(fsExtra, 'remove').mockImplementation(mockedRemove);
+		const mockedFiles = mockedFilenames.map(name => join('images', name));
+		for (const file of mockedFiles) {
+			await copyFile('./images/htr_sample.png', file);
+		}
 
 		const fs = new FileStorage();
 		await fs.removeOldFiles(new Date('2025-03-03 12:00'));
-		expect(mockedRemove).toHaveBeenCalledTimes(2);
-		expect(mockedRemove).toHaveBeenCalledWith(join('images', mockedFilenames[0]));
-		expect(mockedRemove).toHaveBeenCalledWith(join('images', mockedFilenames[1]));
+		const files = await readdir('images');
+		expect(files.length).toBe(2);
+		expect(files.includes(mockedFilenames[2])).toBe(true);
+
+		for (const file of mockedFiles) {
+			await remove(file);
+		}
 	});
 });
 
