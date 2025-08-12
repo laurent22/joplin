@@ -874,7 +874,6 @@ export default class Note extends BaseItem {
 		const changeSource = options && options.changeSource ? options.changeSource : null;
 		const changeType = options && options.toTrash ? ItemChange.TYPE_UPDATE : ItemChange.TYPE_DELETE;
 		const toTrash = options && !!options.toTrash;
-		const shouldDeleteRevisions = options && options.shouldDeleteRevisions !== undefined ? options.shouldDeleteRevisions : true;
 
 		while (ids.length) {
 			const processIds = ids.splice(0, 50);
@@ -918,10 +917,8 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
-				if (shouldDeleteRevisions) {
-					const Revision = this.getClass('Revision');
-					await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
-				}
+				const Revision = this.getClass('Revision');
+				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

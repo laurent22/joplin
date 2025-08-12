@@ -53,8 +53,6 @@ export interface DeleteOptions {
 	// parent. By default the item will be moved at the root of the trash. Note
 	// that caller must ensure that this parent ID is a deleted folder.
 	toTrashParentId?: string;
-
-	shouldDeleteRevisions?: boolean;
 }
 
 class BaseModel {
