@@ -185,14 +185,17 @@
 	"Add recipient:": [
 		"Dodaj prejemnika:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Dodaj naslov"
 	],
 	"Add to dictionary": [
 		"Dodaj v slovar"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		""
@@ -274,6 +277,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim temno"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -752,6 +758,9 @@
 	"Default": [
 		"Privzeto"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Privzeto: %s"
 	],
@@ -872,7 +881,13 @@
 	"Do not ask for confirmation.": [
 		"Ne sprašuj za potrditev."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -931,6 +946,9 @@
 	],
 	"Edit": [
 		"Uredi"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Uredi beležko."
@@ -1349,6 +1367,9 @@
 	"Idle": [
 		"V mirovanju"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1640,6 +1661,9 @@
 	"Markdown + Front Matter": [
 		""
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Označi seznam opravil kot končan."
 	],
@@ -1741,9 +1765,6 @@
 	],
 	"New sub-notebook": [
 		"Novi pod-zvezek"
-	],
-	"New tags:": [
-		"Nove oznake:"
 	],
 	"New to-do": [
 		"Novi seznam opravil"
@@ -1898,9 +1919,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"Vredu"
 	],
@@ -2008,6 +2026,9 @@
 	],
 	"Permission needed": [
 		"Dovoljenje potrebno"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
@@ -2207,6 +2228,9 @@
 	"Recipients:": [
 		"Prejemniki:"
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Record audio": [
 		""
 	],
@@ -2239,6 +2263,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Preimenuje dano <item> (beležko ali zvezek) v <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Obnovi žeton"
@@ -2684,9 +2711,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"Označeno: %d."
 	],
@@ -2852,6 +2876,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"To je napredno orodje za prikaz priponk, ki so povezane z vašimi beležkami. Prosim bodite previdni pri brisanju teh, saj ne morejo biti obnovljene kasneje."
 	],
@@ -2866,6 +2899,9 @@
 	],
 	"This note has no history": [
 		"Ta beležka nima nobene zgodovine"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2899,6 +2935,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Da omogočite Joplinu sinhronizacijo z Dropbox, prosimo sledite tem korakom spodaj:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Za izbris dane oznake, odznačite beležke s to oznako."
@@ -2980,9 +3019,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Vnesite naslov beležke ali samo del vsebine, da se premaknete do nje. Vnesite # in nato ime oznake, ali @ in nato ime zvezka. Ali vesite : da poiščite po ukazih."
-	],
-	"Type new tags or select from list": [
-		"Vnesi nove oznake ali izberi iz seznama"
 	],
 	"Type: %s.": [
 		"Vrsta: %s."

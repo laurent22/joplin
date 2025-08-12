@@ -395,17 +395,18 @@ export default class BaseApplication {
 			// - All the calls below are cheap or do nothing if there's nothing
 			//   to do.
 			'syncInfoCache': async () => {
+				appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+				await loadMasterKeysFromSettings(EncryptionService.instance());
+				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+				this.dispatch({
+					type: 'MASTERKEY_REMOVE_NOT_LOADED',
+					ids: loadedMasterKeyIds,
+				});
+
 				if (this.hasGui()) {
-					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
-
-					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
-					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
-
-					this.dispatch({
-						type: 'MASTERKEY_REMOVE_NOT_LOADED',
-						ids: loadedMasterKeyIds,
-					});
 
 					// Schedule a sync operation so that items that need to be encrypted
 					// are sent to sync target.

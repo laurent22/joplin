@@ -13,6 +13,7 @@ const createEditorSettings = (themeId: number) => {
 		ignoreModifiers: false,
 		autocompleteMarkup: true,
 		tabMovesFocus: false,
+		inlineRenderingEnabled: true,
 
 		keymap: EditorKeymap.Default,
 		language: EditorLanguageType.Markdown,
@@ -20,6 +21,7 @@ const createEditorSettings = (themeId: number) => {
 
 		indentWithTabs: true,
 		editorLabel: 'Markdown editor',
+		imageRenderingEnabled: false,
 	};
 
 	return editorSettings;

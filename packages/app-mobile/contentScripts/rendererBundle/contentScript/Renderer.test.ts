@@ -12,6 +12,7 @@ const defaultRendererSettings: RenderSettings = {
 	noteHash: '',
 	initialScroll: 0,
 	readAssetBlob: async (_path: string) => new Blob(),
+	removeUnusedPluginAssets: true,
 
 	createEditPopupSyntax: '',
 	destroyEditPopupSyntax: '',

@@ -1,20 +1,38 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
 import { ActionableClient, FolderMetadata, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, UserData } from './types';
 import { join } from 'path';
-import { mkdir } from 'fs-extra';
+import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
 import { strict as assert } from 'assert';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import ActionTracker from './ActionTracker';
 import Logger from '@joplin/utils/Logger';
-import execa = require('execa');
 import { cliDirectory } from './constants';
 import { commandToString } from '@joplin/utils';
 import { quotePath } from '@joplin/utils/path';
 import getNumberProperty from './utils/getNumberProperty';
 import retryWithCount from './utils/retryWithCount';
+import { msleep, Second } from '@joplin/utils/time';
+import shim from '@joplin/lib/shim';
+import { spawn } from 'child_process';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { createInterface } from 'readline/promises';
+import Stream = require('stream');
 
 const logger = Logger.create('Client');
+
+type OnCloseListener = ()=> void;
+
+type ChildProcessWrapper = {
+	stdout: Stream.Readable;
+	stderr: Stream.Readable;
+	writeStdin: (data: Buffer|string)=> void;
+	close: ()=> void;
+};
+
+// Should match the prompt used by the CLI "batch" command.
+const cliProcessPromptString = 'command> ';
+
 
 
 class Client implements ActionableClient {
@@ -61,8 +79,9 @@ class Client implements ActionableClient {
 				profileDirectory,
 				apiPort,
 				apiToken,
-				closeAccount,
 			);
+
+			client.onClose(closeAccount);
 
 			// Joplin Server sync
 			await client.execCliCommand_('config', 'sync.target', '9');
@@ -76,16 +95,7 @@ class Client implements ActionableClient {
 			await client.execCliCommand_('e2ee', 'enable', '--password', e2eePassword);
 			logger.info('Created and configured client');
 
-			// Run asynchronously -- the API server command doesn't exit until the server
-			// is closed.
-			void (async () => {
-				try {
-					await client.execCliCommand_('server', 'start');
-				} catch (error) {
-					logger.info('API server exited');
-					logger.debug('API server exit status', error);
-				}
-			})();
+			await client.startClipperServer_();
 
 			await client.sync();
 			return client;
@@ -95,25 +105,112 @@ class Client implements ActionableClient {
 		}
 	}
 
+	private onCloseListeners_: OnCloseListener[] = [];
+
+	private childProcess_: ChildProcessWrapper;
+	private childProcessQueue_ = new AsyncActionQueue();
+	private bufferedChildProcessStdout_: string[] = [];
+	private bufferedChildProcessStderr_: string[] = [];
+	private onChildProcessOutput_: ()=> void = ()=>{};
+
+	private transcript_: string[] = [];
+
 	private constructor(
 		private readonly tracker_: ActionableClient,
 		userData: UserData,
 		private readonly profileDirectory: string,
 		private readonly apiPort_: number,
 		private readonly apiToken_: string,
-		private readonly cleanUp_: ()=> Promise<void>,
 	) {
 		this.email = userData.email;
+
+		// Don't skip child process-related tasks.
+		this.childProcessQueue_.setCanSkipTaskHandler(() => false);
+
+		const initializeChildProcess = () => {
+			const rawChildProcess = spawn('yarn', [
+				...this.cliCommandArguments,
+				'batch',
+				'--continue-on-failure',
+				'-',
+			], {
+				cwd: cliDirectory,
+			});
+			rawChildProcess.stdout.on('data', (chunk: Buffer) => {
+				const chunkString = chunk.toString('utf-8');
+				this.transcript_.push(chunkString);
+
+				this.bufferedChildProcessStdout_.push(chunkString);
+				this.onChildProcessOutput_();
+			});
+			rawChildProcess.stderr.on('data', (chunk: Buffer) => {
+				const chunkString = chunk.toString('utf-8');
+				logger.warn('Child process', this.label, 'stderr:', chunkString);
+
+				this.transcript_.push(chunkString);
+				this.bufferedChildProcessStderr_.push(chunkString);
+				this.onChildProcessOutput_();
+			});
+
+			this.childProcess_ = {
+				writeStdin: (data: Buffer|string) => {
+					this.transcript_.push(data.toString());
+					rawChildProcess.stdin.write(data);
+				},
+				stderr: rawChildProcess.stderr,
+				stdout: rawChildProcess.stdout,
+				close: () => {
+					rawChildProcess.stdin.destroy();
+					rawChildProcess.kill();
+				},
+			};
+		};
+		initializeChildProcess();
 	}
 
+	private async startClipperServer_() {
+		await this.execCliCommand_('server', '--quiet', '--exit-early', 'start');
+
+		// Wait for the server to start
+		await retryWithCount(async () => {
+			await this.execApiCommand_('GET', '/ping');
+		}, {
+			count: 3,
+			onFail: async () => {
+				await msleep(1000);
+			},
+		});
+	}
+
+	private closed_ = false;
 	public async close() {
-		await this.execCliCommand_('server', 'stop');
-		await this.cleanUp_();
+		assert.ok(!this.closed_, 'should not be closed');
+
+		// Before removing the profile directory, verify that the profile directory is in the
+		// expected location:
+		const profileDirectory = this.profileDirectory;
+		assert.ok(profileDirectory, 'profile directory for client should be contained within the main temporary profiles directory (should be safe to delete)');
+		await remove(profileDirectory);
+
+		for (const listener of this.onCloseListeners_) {
+			listener();
+		}
+
+		this.childProcess_.close();
+		this.closed_ = true;
+	}
+
+	public onClose(listener: OnCloseListener) {
+		this.onCloseListeners_.push(listener);
+	}
+
+	public get label() {
+		return this.email;
 	}
 
 	private get cliCommandArguments() {
 		return [
-			'start-no-build',
+			'start',
 			'--profile', this.profileDirectory,
 			'--env', 'dev',
 		];
@@ -121,47 +218,121 @@ class Client implements ActionableClient {
 
 	public getHelpText() {
 		return [
-			`Client ${this.email}:`,
+			`Client ${this.label}:`,
 			`\tCommand: cd ${quotePath(cliDirectory)} && ${commandToString('yarn', this.cliCommandArguments)}`,
 		].join('\n');
 	}
 
+	public getTranscript() {
+		const lines = this.transcript_.join('').split('\n');
+		return (
+			lines
+				// indent, for readability
+				.map(line => `  ${line}`)
+				// Since the server could still be running if the user posts the log, don't including
+				// web clipper tokens in the output:
+				.map(line => line.replace(/token=[a-z0-9A-Z_]+/g, 'token=*****'))
+				// Don't include the sync password in the output
+				.map(line => line.replace(/(config "(sync.9.password|api.token)") ".*"/, '$1 "****"'))
+				.join('\n')
+		);
+	}
+
+	// Connects the child process to the main terminal interface.
+	// Useful for debugging.
+	public async startCliDebugSession() {
+		this.childProcessQueue_.push(async () => {
+			this.onChildProcessOutput_ = () => {
+				process.stdout.write(this.bufferedChildProcessStdout_.join('\n'));
+				process.stderr.write(this.bufferedChildProcessStderr_.join('\n'));
+				this.bufferedChildProcessStdout_ = [];
+				this.bufferedChildProcessStderr_ = [];
+			};
+			this.bufferedChildProcessStdout_ = [];
+			this.bufferedChildProcessStderr_ = [];
+			process.stdout.write('CLI debug session. Enter a blank line or "exit" to exit.\n');
+			process.stdout.write('To review a transcript of all interactions with this client,\n');
+			process.stdout.write('enter "[transcript]".\n\n');
+			process.stdout.write(cliProcessPromptString);
+
+			const isExitRequest = (input: string) => {
+				return input === 'exit' || input === '';
+			};
+
+			// Per https://github.com/nodejs/node/issues/32291, we can't pipe process.stdin
+			// to childProcess_.stdin without causing issues. Forward using readline instead:
+			const readline = createInterface({ input: process.stdin, output: process.stdout });
+			let lastInput = '';
+			do {
+				lastInput = await readline.question('');
+				if (lastInput === '[transcript]') {
+					process.stdout.write(`\n\n# Transcript\n\n${this.getTranscript()}\n\n# End transcript\n\n`);
+				} else if (!isExitRequest(lastInput)) {
+					this.childProcess_.writeStdin(`${lastInput}\n`);
+				}
+			} while (!isExitRequest(lastInput));
+
+			this.onChildProcessOutput_ = () => {};
+			readline.close();
+		});
+		await this.childProcessQueue_.processAllNow();
+	}
+
 	private async execCliCommand_(commandName: string, ...args: string[]) {
 		assert.match(commandName, /^[a-z]/, 'Command name must start with a lowercase letter.');
-		const commandResult = await execa('yarn', [
-			...this.cliCommandArguments,
-			commandName,
-			...args,
-		], {
-			cwd: cliDirectory,
-			// Connects /dev/null to stdin
-			stdin: 'ignore',
+		let commandStdout = '';
+		let commandStderr = '';
+		this.childProcessQueue_.push(() => {
+			return new Promise<void>(resolve => {
+				this.onChildProcessOutput_ = () => {
+					const lines = this.bufferedChildProcessStdout_.join('\n').split('\n');
+					const promptIndex = lines.lastIndexOf(cliProcessPromptString);
+
+					if (promptIndex >= 0) {
+						commandStdout = lines.slice(0, promptIndex).join('\n');
+						commandStderr = this.bufferedChildProcessStderr_.join('\n');
+
+						resolve();
+					} else {
+						logger.debug('waiting...');
+					}
+				};
+				this.bufferedChildProcessStdout_ = [];
+				this.bufferedChildProcessStderr_ = [];
+				const command = `${[commandName, ...args.map(arg => JSON.stringify(arg))].join(' ')}\n`;
+				logger.debug('exec', command);
+				this.childProcess_.writeStdin(command);
+			});
 		});
-		logger.debug('Ran command: ', commandResult.command, commandResult.exitCode);
-		logger.debug('     Output: ', commandResult.stdout);
-		return commandResult;
+		await this.childProcessQueue_.processAllNow();
+		return {
+			stdout: commandStdout,
+			stderr: commandStderr,
+		};
 	}
 
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: 'GET', route: string): Promise<Json>;
+	private async execApiCommand_(method: 'GET', route: string): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json): Promise<Json>;
+	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: HttpMethod, route: string, data: Json|null = null): Promise<Json> {
+	private async execApiCommand_(method: HttpMethod, route: string, data: Json|null = null): Promise<string> {
 		route = route.replace(/^[/]/, '');
 		const url = new URL(`http://localhost:${this.apiPort_}/${route}`);
 		url.searchParams.append('token', this.apiToken_);
 
-		const response = await fetch(url, {
+		this.transcript_.push(`\n[[${method} ${url}; body: ${JSON.stringify(data)}]]\n`);
+
+		const response = await shim.fetch(url.toString(), {
 			method,
-			body: data ? JSON.stringify(data) : undefined,
+			...(data ? { body: JSON.stringify(data) } : undefined),
 		});
 
 		if (!response.ok) {
 			throw new Error(`Request to ${route} failed with error: ${await response.text()}`);
 		}
 
-		return await response.json();
+		return await response.text();
 	}
 
 	private async execPagedApiCommand_<Result>(
@@ -177,9 +348,9 @@ class Client implements ActionableClient {
 		for (let page = 1; hasMore; page++) {
 			searchParams.set('page', String(page));
 			searchParams.set('limit', '10');
-			const response = await this.execApiCommand_(
+			const response = JSON.parse(await this.execApiCommand_(
 				method, `${route}?${searchParams}`,
-			);
+			));
 			if (
 				typeof response !== 'object'
 				|| !('has_more' in response)
@@ -199,38 +370,37 @@ class Client implements ActionableClient {
 	}
 
 	private async decrypt_() {
-		// E2EE decryption can occasionally fail with "Master key is not loaded:".
-		// Allow e2ee decryption to be retried:
+		const result = await this.execCliCommand_('e2ee', 'decrypt', '--force');
+		if (!result.stdout.includes('Completed decryption.')) {
+			throw new Error(`Decryption did not complete: ${result.stdout}`);
+		}
+	}
+
+	public async sync() {
+		logger.info('Sync', this.label);
+		await this.tracker_.sync();
+
 		await retryWithCount(async () => {
-			const result = await this.execCliCommand_('e2ee', 'decrypt', '--force');
-			if (!result.stdout.includes('Completed decryption.')) {
-				throw new Error(`Decryption did not complete: ${result.stdout}`);
+			const result = await this.execCliCommand_('sync');
+			if (result.stdout.match(/Last error:/i)) {
+				throw new Error(`Sync failed: ${result.stdout}`);
 			}
+
+			await this.decrypt_();
 		}, {
-			count: 3,
-			onFail: async (error)=>{
-				logger.warn('E2EE decryption failed:', error);
-				logger.info('Syncing before retry...');
-				await this.execCliCommand_('sync');
+			count: 4,
+			// Certain sync failures self-resolve after a background task is allowed to
+			// run. Delay:
+			delayOnFailure: retry => retry * Second * 2,
+			onFail: async (error) => {
+				logger.debug('Sync error: ', error);
+				logger.info('Sync failed. Retrying...');
 			},
 		});
 	}
 
-	public async sync() {
-		logger.info('Sync', this.email);
-
-		await this.tracker_.sync();
-
-		const result = await this.execCliCommand_('sync');
-		if (result.stdout.match(/Last error:/i)) {
-			throw new Error(`Sync failed: ${result.stdout}`);
-		}
-
-		await this.decrypt_();
-	}
-
 	public async createFolder(folder: FolderMetadata) {
-		logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.email}`);
+		logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.label}`);
 		await this.tracker_.createFolder(folder);
 
 		await this.execApiCommand_('POST', '/folders', {
@@ -241,15 +411,27 @@ class Client implements ActionableClient {
 	}
 
 	private async assertNoteMatchesState_(expected: NoteData) {
-		assert.equal(
-			(await this.execCliCommand_('cat', expected.id)).stdout,
-			`${expected.title}\n\n${expected.body}`,
-			'note should exist',
-		);
+		await retryWithCount(async () => {
+			const noteContent = (await this.execCliCommand_('cat', expected.id)).stdout;
+			assert.equal(
+				// Compare without trailing newlines for consistency, the output from "cat"
+				// can sometimes have an extra newline (due to the CLI prompt)
+				noteContent.trimEnd(),
+				`${expected.title}\n\n${expected.body.trimEnd()}`,
+				'note should exist',
+			);
+		}, {
+			count: 3,
+			onFail: async () => {
+				// Send an event to the server and wait for it to be processed -- it's possible that the server
+				// hasn't finished processing the API event for creating the note:
+				await this.execApiCommand_('GET', '/ping');
+			},
+		});
 	}
 
 	public async createNote(note: NoteData) {
-		logger.info('Create note', note.id, 'in', `${note.parentId}/${this.email}`);
+		logger.info('Create note', note.id, 'in', `${note.parentId}/${this.label}`);
 		await this.tracker_.createNote(note);
 
 		await this.execApiCommand_('POST', '/notes', {
@@ -262,7 +444,7 @@ class Client implements ActionableClient {
 	}
 
 	public async updateNote(note: NoteData) {
-		logger.info('Update note', note.id, 'in', `${note.parentId}/${this.email}`);
+		logger.info('Update note', note.id, 'in', `${note.parentId}/${this.label}`);
 		await this.tracker_.updateNote(note);
 		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
 			title: note.title,
@@ -273,7 +455,7 @@ class Client implements ActionableClient {
 	}
 
 	public async deleteFolder(id: string) {
-		logger.info('Delete folder', id, 'in', this.email);
+		logger.info('Delete folder', id, 'in', this.label);
 		await this.tracker_.deleteFolder(id);
 
 		await this.execCliCommand_('rmbook', '--permanent', '--force', id);
@@ -282,8 +464,9 @@ class Client implements ActionableClient {
 	public async shareFolder(id: string, shareWith: Client) {
 		await this.tracker_.shareFolder(id, shareWith);
 
-		logger.info('Share', id, 'with', shareWith.email);
+		logger.info('Share', id, 'with', shareWith.label);
 		await this.execCliCommand_('share', 'add', id, shareWith.email);
+
 		await this.sync();
 		await shareWith.sync();
 
@@ -307,6 +490,7 @@ class Client implements ActionableClient {
 		], 'there should be a single incoming share from the expected user');
 
 		await shareWith.execCliCommand_('share', 'accept', id);
+		await shareWith.sync();
 	}
 
 	public async moveItem(itemId: ItemId, newParentId: ItemId) {
@@ -329,7 +513,7 @@ class Client implements ActionableClient {
 			item => ({
 				id: getStringProperty(item, 'id'),
 				parentId: getNumberProperty(item, 'is_conflict') === 1 ? (
-					`[conflicts for ${getStringProperty(item, 'conflict_original_id')} in ${this.email}]`
+					`[conflicts for ${getStringProperty(item, 'conflict_original_id')} in ${this.label}]`
 				) : getStringProperty(item, 'parent_id'),
 				title: getStringProperty(item, 'title'),
 				body: getStringProperty(item, 'body'),
@@ -366,8 +550,8 @@ class Client implements ActionableClient {
 		return this.tracker_.randomNote();
 	}
 
-	public async checkState(_allClients: Client[]) {
-		logger.info('Check state', this.email);
+	public async checkState() {
+		logger.info('Check state', this.label);
 
 		type ItemSlice = { id: string };
 		const compare = (a: ItemSlice, b: ItemSlice) => {

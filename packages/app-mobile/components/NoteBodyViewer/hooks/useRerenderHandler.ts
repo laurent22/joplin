@@ -132,6 +132,7 @@ const useRerenderHandler = (props: Props) => {
 			highlightedKeywords: props.highlightedKeywords,
 			resources: props.noteResources,
 			pluginAssetContainerSelector: '#joplin-container-pluginAssetsContainer',
+			removeUnusedPluginAssets: true,
 
 			// If the hash changed, we don't set initial scroll -- we want to scroll to the hash
 			// instead.

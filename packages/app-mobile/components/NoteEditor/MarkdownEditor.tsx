@@ -121,6 +121,7 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 			initialText: props.initialText,
 			initialNoteId: props.noteId,
 			settings: props.editorSettings,
+			onLocalize: _,
 		},
 		webviewRef,
 	});

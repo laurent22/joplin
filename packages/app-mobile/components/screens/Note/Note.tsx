@@ -923,7 +923,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		resource = await Resource.save(resource, { isNew: true });
 
-		const resourceTag = Resource.markupTag(resource);
+		const resourceTag = Resource.markupTag(resource, this.state.note.markup_language);
 		const newNote = await this.insertText(resourceTag, { newLine: true });
 
 		void this.refreshResource(resource, newNote.body);
@@ -1043,9 +1043,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	};
 
 	private toggleIsTodo_onPress() {
-		shared.toggleIsTodo_onPress(this);
+		const newNote = shared.toggleIsTodo_onPress(this);
 
-		this.scheduleSave(this.state);
+		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
 	private async share_onPress() {

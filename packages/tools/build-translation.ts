@@ -38,11 +38,15 @@ async function createPotFile(potFilePath: string) {
 	const excludedDirs = [
 		'./.git/*',
 		'./.github/*',
+		'./**/*.bundle.js',
+		'./**/*.min.js',
 		'./**/node_modules/*',
 		'./Assets/*',
 		'./Assets/TinyMCE/*',
 		'./docs/*',
 		'./node_modules/*',
+		'./packages/renderer/MdToHtml/rules/katex_mhchem.js',
+		'./packages/renderer/MdToHtml/rules/mermaid_render.js',
 		'./packages/app-cli/build/*',
 		'./packages/app-cli/locales-build/*',
 		'./packages/app-cli/locales/*',
@@ -70,8 +74,11 @@ async function createPotFile(potFilePath: string) {
 		'./packages/renderer/assets/*',
 		'./packages/server/dist/*',
 		'./packages/tools/*',
+		'./packages/transcribe/dist/*',
 		'./packages/turndown-plugin-gfm/*',
 		'./packages/turndown/*',
+		'./packages/utils/dist/*',
+		'./packages/doc-builder/*',
 		'./patches/*',
 		'./readme/*',
 	];
@@ -116,7 +123,7 @@ async function createPotFile(potFilePath: string) {
 
 	files.sort();
 
-	// console.info(files.join('\n'));
+	// console.info(files.filter(f => f.endsWith('.js')).join('\n'));
 	// process.exit(0);
 
 	// Note: we previously used the xgettext utility, but it only partially

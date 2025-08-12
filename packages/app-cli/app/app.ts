@@ -9,7 +9,6 @@ import Tag from '@joplin/lib/models/Tag';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry.js';
 import { dirname, fileExtension } from '@joplin/lib/path-utils';
-import { splitCommandString } from '@joplin/utils';
 import { _ } from '@joplin/lib/locale';
 import { pathExists, readFile, readdirSync } from 'fs-extra';
 import RevisionService from '@joplin/lib/services/RevisionService';
@@ -19,7 +18,6 @@ import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import initializeCommandService from './utils/initializeCommandService';
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
-const { splitCommandBatch } = require('@joplin/lib/string-utils');
 
 class Application extends BaseApplication {
 
@@ -381,22 +379,6 @@ class Application extends BaseApplication {
 		return output;
 	}
 
-	public async commandList(argv: string[]) {
-		if (argv.length && argv[0] === 'batch') {
-			const commands = [];
-			const commandLines = splitCommandBatch(await readFile(argv[1], 'utf-8'));
-
-			for (const commandLine of commandLines) {
-				if (!commandLine.trim()) continue;
-				const splitted = splitCommandString(commandLine.trim());
-				commands.push(splitted);
-			}
-			return commands;
-		} else {
-			return [argv];
-		}
-	}
-
 	// We need this special case here because by the time the `version` command
 	// runs, the keychain has already been setup.
 	public checkIfKeychainEnabled(argv: string[]) {
@@ -433,15 +415,10 @@ class Application extends BaseApplication {
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
-			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
-
 			await this.applySettingsSideEffects();
-
+			await this.refreshCurrentFolder();
 			try {
-				const commands = await this.commandList(argv);
-				for (const command of commands) {
-					await this.execCommand(command);
-				}
+				await this.execCommand(argv);
 			} catch (error) {
 				if (this.showStackTraces_) {
 					console.error(error);

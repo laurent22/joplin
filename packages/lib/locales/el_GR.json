@@ -206,14 +206,17 @@
 	"Add recipient:": [
 		"Προσθήκη παραλήπτη:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Προσθήκη τίτλου"
 	],
 	"Add to dictionary": [
 		"Προσθήκη στο λεξικό"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Διαχειριστής"
@@ -307,6 +310,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -861,6 +867,9 @@
 	"Default": [
 		"Προεπιλογή"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Προεπιλογή: %s"
 	],
@@ -1008,7 +1017,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Μην χάσετε τον κωδικό πρόσβασης, καθώς, για λόγους ασφαλείας, αυτός θα είναι ο *μόνος* τρόπος αποκρυπτογράφησης των δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, εισαγάγετε τον κωδικό πρόσβασής σας παρακάτω."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1079,6 +1094,9 @@
 	],
 	"Edit": [
 		"Επεξεργασία"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"Επεξεργασία συνδέσμου"
@@ -1392,9 +1410,6 @@
 	"Filter": [
 		"Φίλτρο"
 	],
-	"Filter tags": [
-		"Φίλτρο ετικετών"
-	],
 	"Find: ": [
 		"Εύρεση: "
 	],
@@ -1572,6 +1587,9 @@
 	],
 	"Idle": [
 		"Αδρανής"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Αν έχετε ήδη εξουσιοδοτήσει την εφαρμογή, παρακαλώ περιμένετε για τον συγχρονισμό με το Joplin Cloud."
@@ -1943,6 +1961,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Επισημαίνει μία υπόμνηση ως ολοκληρωμένη."
 	],
@@ -2065,9 +2086,6 @@
 	],
 	"New sub-notebook": [
 		"Νέο υπο-σημειωματάριο"
-	],
-	"New tags:": [
-		"Νέες ετικέτες:"
 	],
 	"New to-do": [
 		"Νέα υπόμνηση"
@@ -2243,9 +2261,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"Εντάξει"
 	],
@@ -2377,6 +2392,9 @@
 	],
 	"Permission needed": [
 		"Απαιτείται άδεια"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Κάντε κλικ στο \"%s\" για να συνεχίσετε ή ορίστε τους κωδικούς πρόσβασης στην παρακάτω λίστα \"%s\"."
@@ -2641,6 +2659,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Μετονομάζει το καθορισμένο <item> (σημείωση ή σημειωματάριο) στο <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Ανανέωση token"
@@ -3194,9 +3215,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"tag1, tag2, ..."
-	],
 	"Tagged: %d.": [
 		"Με ετικέτα: %d."
 	],
@@ -3397,6 +3415,15 @@
 	"This drawing may have unsaved changes.": [
 		"Ίσως υπάρχουν μη αποθηκευμένες αλλαγές στο συγκεκριμένο σχέδιο."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Πρόκειται για ένα προηγμένο εργαλείο που προβάλλει τα συνημμένα που συνδέονται με τις σημειώσεις σας. Να είστε προσεκτικοί κατά τη διαγραφή ενός από αυτά, καθώς δεν είναι δυνατή η επαναφορά τους."
 	],
@@ -3423,6 +3450,9 @@
 	],
 	"This note has no history": [
 		"Αυτή η σημείωση δεν έχει ιστορικό"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Αυτό το πρόσθετο δεν υποστηρίζει %s."
@@ -3465,6 +3495,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Για να συνεχίσετε, παρακαλώ πληκτρολογήστε τον κύριο κωδικό πρόσβασης."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Για να διαγράψετε μία ετικέτα, αφαιρέστε την από τις σχετικές σημειώσεις."
@@ -3570,9 +3603,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Πληκτρολογήστε έναν τίτλο σημείωσης ή μέρος του περιεχομένου του για να μεταβείτε σε αυτόν. Ή πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας ή @ ακολουθούμενο από ένα σημειωματάριο. Ή πληκτρολογίστε : για να ψάξετε για εντολές."
-	],
-	"Type new tags or select from list": [
-		"Πληκτρολογήστε καινούρια ετικέτα ή επιλέξτε από την λίστα"
 	],
 	"Type: %s.": [
 		"Τύπος: %s."

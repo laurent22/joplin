@@ -1,5 +1,17 @@
 # Joplin Desktop Changelog
 
+## [v3.4.5](https://github.com/laurent22/joplin/releases/tag/v3.4.5) (Pre-release) - 2025-08-10T12:49:30Z
+
+- Improved: Add an option to enable or disable search in OCR text ([#12578](https://github.com/laurent22/joplin/issues/12578)) ([#12224](https://github.com/laurent22/joplin/issues/12224) by [@pedr](https://github.com/pedr))
+- Improved: Add option to transform HTML notes into Markdown ([#12730](https://github.com/laurent22/joplin/issues/12730)) ([#2059](https://github.com/laurent22/joplin/issues/2059) by [@pedr](https://github.com/pedr))
+- Improved: Add shortcut to toggle between editors ([#12869](https://github.com/laurent22/joplin/issues/12869)) ([#12087](https://github.com/laurent22/joplin/issues/12087) by [@pedr](https://github.com/pedr))
+- Improved: Move several features from Extra Markdown Editor Settings into the main app ([#12747](https://github.com/laurent22/joplin/issues/12747) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages sharp (v0.34.1)
+- Fixed: Ensure merges to revisions during cleaning are synced to the target ([#12444](https://github.com/laurent22/joplin/issues/12444)) ([#12104](https://github.com/laurent22/joplin/issues/12104) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix switching to the Markdown editor after pasting links ([#12241](https://github.com/laurent22/joplin/issues/12241)) ([#12235](https://github.com/laurent22/joplin/issues/12235) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Put crash dump files at the platform-compliant locations ([#12839](https://github.com/laurent22/joplin/issues/12839)) ([#11871](https://github.com/laurent22/joplin/issues/11871) by [@w568w](https://github.com/w568w))
+- Fixed: Selected emoji for new notebooks display too large until Joplin is restarted ([#12888](https://github.com/laurent22/joplin/issues/12888)) ([#12358](https://github.com/laurent22/joplin/issues/12358) by [@suchithms19](https://github.com/suchithms19))
+
 ## [v3.4.3](https://github.com/laurent22/joplin/releases/tag/v3.4.3) (Pre-release) - 2025-07-25T19:49:44Z
 
 - Improved: Updated packages glob (v11.0.2), mermaid (v11.6.0)

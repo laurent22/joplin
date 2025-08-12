@@ -165,6 +165,10 @@
 		"v3.4.2": true,
 		"android-v3.4.1": true,
 		"v3.4.3": true,
-		"android-v3.4.2": true
+		"android-v3.4.2": true,
+		"android-v3.4.3": true,
+		"android-v3.4.4": true,
+		"ios-v13.4.1": true,
+		"v3.4.5": true
 	}
 }

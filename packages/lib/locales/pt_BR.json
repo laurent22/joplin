@@ -236,9 +236,6 @@
 	"Add recipient:": [
 		"Adicionar destinatário:"
 	],
-	"Add tag %s to note": [
-		"Adicionar tag %s para a nota"
-	],
 	"Add title": [
 		"Adicionar título"
 	],
@@ -247,6 +244,9 @@
 	],
 	"Add to note": [
 		"Adicionar à nota"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Admin"
@@ -349,6 +349,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Escuro"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Atualmente, Joplin Web só consegue abrir uma aba por vez. Por favor, feche a outra instância do Joplin."
@@ -949,6 +952,9 @@
 	"Default": [
 		"Padrão"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Padrão: %s"
 	],
@@ -1111,7 +1117,13 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Não perca a senha já que, por segurança, esse será o *único* modo de descriptografar os dados! Para habilitar a criptografia, por favor entre a senha abaixo."
 	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1522,9 +1534,6 @@
 	"Filter": [
 		"Filtrar"
 	],
-	"Filter tags": [
-		"Filtrar tags"
-	],
 	"Find": [
 		"Localizar"
 	],
@@ -1708,6 +1717,9 @@
 	],
 	"Idle": [
 		"Inativo"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Se você já autorizou, por favor aguarde pela sincronia do aplicativo com a Joplin Cloud."
@@ -2103,6 +2115,9 @@
 	"Markdown editor": [
 		"Editor Markdown"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Marca uma tarefa como feita."
 	],
@@ -2253,9 +2268,6 @@
 	],
 	"New sub-notebook": [
 		"Novo sub-caderno"
-	],
-	"New tags:": [
-		"Novas tags:"
 	],
 	"New to-do": [
 		"Nova tarefa"
@@ -2446,9 +2458,6 @@
 	"OCR: Language data URL or path": [
 		"OCR: URL ou caminho para o arquivo de dados do idioma"
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2608,6 +2617,9 @@
 	],
 	"Permission needed": [
 		"Permissão necessária"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Por favor, pressione \"%s\" para prosseguir ou defina as senhas na lista \"%s\" abaixo."
@@ -2893,6 +2905,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Renomeia o <item> dado (nota ou caderno) para <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Renovar token"
@@ -3503,9 +3518,6 @@
 	"Tabloid": [
 		"Tabloide"
 	],
-	"tag1, tag2, ...": [
-		"tag1, tag2, ..."
-	],
 	"Tagged: %d.": [
 		"Tag adicionada: %d."
 	],
@@ -3709,6 +3721,15 @@
 	"This drawing may have unsaved changes.": [
 		"Essa figura pode ter alterações não salvas."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Esta é uma ferramenta avançada para exibir os anexos vinculados à sua nota. Por favor tenha cuidado ao apagá-los pois não poderão ser recuperados depois."
 	],
@@ -3735,6 +3756,9 @@
 	],
 	"This note has no history": [
 		"Esta nota não tem histórico"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Este plugin não suporta %s."
@@ -3777,6 +3801,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Para continuar, por favor entre com sua senha mestre abaixo."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Para eliminar uma tag, remova a tag das notas associadas a ela."
@@ -3900,9 +3927,6 @@
 	],
 	"Type a note title to search for it.": [
 		"Digite o título de uma nota para pesquisar por ela."
-	],
-	"Type new tags or select from list": [
-		"Digite novas tags ou selecione da lista"
 	],
 	"Type: %s.": [
 		"Tipo: %s."
