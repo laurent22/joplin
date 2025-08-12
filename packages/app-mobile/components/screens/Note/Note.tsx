@@ -112,6 +112,7 @@ interface Props extends BaseProps {
 	pluginHtmlContents: PluginHtmlContents;
 	editorNoteReloadTimeRequest: number;
 	canPublish: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 interface ComponentProps extends Props {
@@ -1669,6 +1670,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						noteResources={this.state.noteResources}
 						readOnly={this.state.readOnly}
 						plugins={this.props.plugins}
+						showNoteLinkIcon={this.props.showNoteLinkIcon}
 						style={{
 							...editorStyle,
 
@@ -1825,6 +1827,7 @@ const NoteScreen = connect((state: AppState) => {
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 
 		editorType: state.settings['editor.codeView'] ? EditorType.Markdown : EditorType.RichText,
 

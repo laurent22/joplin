@@ -34,6 +34,8 @@ export interface RenderSettings {
 	pluginSettings: Record<string, unknown>;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 	readAssetBlob: (assetPath: string)=> Promise<Blob>;
+
+	showNoteLinkIcon: boolean;
 }
 
 export interface RendererOutput {
@@ -135,6 +137,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			showNoteLinkIcon: settings.showNoteLinkIcon,
 		};
 
 		const pluginSettingsCacheKey = JSON.stringify(settings.pluginSettings);

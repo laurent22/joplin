@@ -89,6 +89,7 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		themeId: props.themeId,
 		pluginStates: props.plugins,
 		noteResources: props.noteResources,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 		onPostMessage: onPostMessage,
 		onAttachFile: props.onAttach,
 	});

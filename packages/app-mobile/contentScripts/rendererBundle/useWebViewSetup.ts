@@ -220,6 +220,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
+				showNoteLinkIcon: options.showNoteLinkIcon,
 			};
 
 			await transferResources(options.resources);

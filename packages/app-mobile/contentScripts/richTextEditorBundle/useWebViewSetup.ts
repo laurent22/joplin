@@ -30,6 +30,8 @@ interface Props {
 	onPostMessage: (message: string)=> void;
 	onEditorEvent: (event: EditorEvent)=> void;
 	webviewRef: RefObject<WebViewControl>;
+
+	showNoteLinkIcon: boolean;
 }
 
 type UseMessengerProps = Props & { renderer: SetUpResult<RendererControl> };
@@ -52,6 +54,7 @@ const useMessenger = (props: UseMessengerProps) => {
 		initialScroll: 0,
 		pluginAssetContainerSelector: null,
 		removeUnusedPluginAssets: true,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	};
 
 	return useMemo(() => {

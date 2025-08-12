@@ -65,6 +65,7 @@ export interface EditorProps {
 	editorSettings: EditorSettings;
 	globalSearch: string;
 	plugins: PluginStates;
+	showNoteLinkIcon: boolean;
 
 	onAttach: OnAttachCallback;
 	onEditorEvent: (event: EditorEvent)=> void;

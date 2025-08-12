@@ -53,6 +53,7 @@ interface Props {
 	readOnly: boolean;
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
+	showNoteLinkIcon: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
@@ -406,6 +407,7 @@ function NoteEditor(props: Props) {
 					noteResources={props.noteResources}
 					plugins={props.plugins}
 					onAttach={onAttach}
+					showNoteLinkIcon={props.showNoteLinkIcon}
 				/>
 			</View>
 

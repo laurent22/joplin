@@ -38,6 +38,7 @@ const defaultEditorProps = {
 	noteResources: {},
 	plugins: {},
 	mode: EditorType.Markdown,
+	showNoteLinkIcon: true,
 };
 
 describe('NoteEditor', () => {

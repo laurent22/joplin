@@ -16,6 +16,7 @@ const defaultWrapperProps: EditorProps = {
 	initialSelection: { start: 0, end: 0 },
 	globalSearch: '',
 	plugins: {},
+	showNoteLinkIcon: true,
 	onAttach: () => Promise.resolve(),
 	onEditorEvent: () => {},
 };
