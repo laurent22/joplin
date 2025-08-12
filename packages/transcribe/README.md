@@ -41,28 +41,15 @@ From `packages/transcribe`, run `npm run start`
 
 # Endpoints
 
-The `Authorization` header value should be set to the same secret set on `API_KEY`, used for starting the transcribe server.
+The `Authorization` header value should be set to the same secret set on `API_KEY`, used for starting Transcribe.
 
-### POST `/transcribe`
+## POST `/transcribe`
 
-#### Request Body:
+### Request Body:
 - **Content-Type**: `multipart/form-data`
 - **Field**: `file` (required) – The file to be processed
 
-#### Example Request:
-```
-POST /upload
-Content-Type: multipart/form-data
-
---boundary
-Content-Disposition: form-data; name="file"; filename="example.jpg"
-Content-Type: image/jpeg
-
-<binary file content>
-
---boundary--
-```
-#### Response:
+### Response:
 
 The successful response will include a `jobId` identifier that can later be used to retrieve the result. E.g.:
 
@@ -72,7 +59,7 @@ The successful response will include a `jobId` identifier that can later be used
 }
 ```
 
-#### Requesting with cURL:
+### Requesting with cURL:
 
 ```
 curl --request POST \
@@ -83,15 +70,15 @@ curl --request POST \
 ```
 
 
-### GET `/transcribe/{:jobId}`
+## GET `/transcribe/{:jobId}`
 
 
-#### Request:
+### Request:
 
 Requires a `jobId` as the identifier.
 
 
-#### Example Responses:
+### Example Responses:
 
 ```json
 {
@@ -118,7 +105,7 @@ Requires a `jobId` as the identifier.
 }
 ```
 
-#### Requesting with cURL:
+### Requesting with cURL:
 
 ```
 curl --request GET \
