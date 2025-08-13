@@ -211,6 +211,9 @@ async function main() {
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
+			// For SAML callbacks, skip CORS checks
+			if (ctx.path === '/api/saml') return '*';
+
 			const origin = ctx.request.header.origin;
 
 			if (acceptOrigin(origin)) {
