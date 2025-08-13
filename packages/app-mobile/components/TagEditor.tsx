@@ -10,6 +10,7 @@ import { TagEntity } from '@joplin/lib/services/database/types';
 import { Divider } from 'react-native-paper';
 import focusView from '../utils/focusView';
 import { msleep } from '@joplin/utils/time';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 export enum TagEditorMode {
 	Large,
@@ -144,23 +145,30 @@ interface TagsBoxProps {
 }
 
 const TagsBox: React.FC<TagsBoxProps> = props => {
+	const collatorLocale = getCollatorLocale();
+	const collator = getCollator(collatorLocale);
+
 	const onRemoveTag = useCallback((tag: string) => {
 		props.onRemoveTag(tag);
 	}, [props.onRemoveTag]);
 
 	const renderContent = () => {
 		if (props.tags.length) {
-			return props.tags.map(tag => (
-				<TagCard
-					key={`tag-${tag}`}
-					title={tag}
-					styles={props.styles}
-					themeId={props.themeId}
-					onRemove={onRemoveTag}
-					autofocus={props.autofocusTag === tag}
-					onAutoFocusComplete={props.onAutoFocusComplete}
-				/>
-			));
+			return props.tags
+				.sort((a, b) => {
+					return collator.compare(a, b);
+				})
+				.map(tag => (
+					<TagCard
+						key={`tag-${tag}`}
+						title={tag}
+						styles={props.styles}
+						themeId={props.themeId}
+						onRemove={onRemoveTag}
+						autofocus={props.autofocusTag === tag}
+						onAutoFocusComplete={props.onAutoFocusComplete}
+					/>
+				));
 		} else {
 			return <Text
 				style={props.styles.noTagsLabel}

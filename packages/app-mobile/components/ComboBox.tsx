@@ -11,7 +11,7 @@ import SearchInput from './SearchInput';
 import focusView from '../utils/focusView';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import NestableFlatList, { NestableFlatListControl } from './NestableFlatList';
-const naturalCompare = require('string-natural-compare');
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 
 export interface Option {
@@ -63,20 +63,20 @@ interface UseSearchResultsOptions {
 const useSearchResults = ({
 	search, setSearch, options, onAddItem, canAddItem,
 }: UseSearchResultsOptions) => {
+	const collatorLocale = getCollatorLocale();
+	const collator = getCollator(collatorLocale);
 	const results = useMemo(() => {
 		const lowerSearch = search?.toLowerCase();
 		return options
 			.filter(option => option.title.toLowerCase().startsWith(lowerSearch))
 			.sort((a, b) => {
-				const lowerTitleA = a.title.toLowerCase();
-				const lowerTitleB = b.title.toLowerCase();
-				if (lowerTitleA === lowerTitleB) return 0;
+				if (a.title === b.title) return 0;
 				// Full matches should go first
-				if (lowerTitleA === lowerSearch) return -1;
-				if (lowerTitleB === lowerSearch) return 1;
-				return naturalCompare(lowerTitleA, lowerTitleB);
+				if (a.title.toLowerCase() === lowerSearch) return -1;
+				if (b.title.toLowerCase() === lowerSearch) return 1;
+				return collator.compare(a.title, b.title);
 			});
-	}, [search, options]);
+	}, [search, options, collator]);
 
 	const canAdd = (
 		!!onAddItem
