@@ -146,7 +146,9 @@ interface TagsBoxProps {
 
 const TagsBox: React.FC<TagsBoxProps> = props => {
 	const collatorLocale = getCollatorLocale();
-	const collator = getCollator(collatorLocale);
+	const collator = useMemo(() => {
+		return getCollator(collatorLocale);
+	}, [collatorLocale]);
 
 	const onRemoveTag = useCallback((tag: string) => {
 		props.onRemoveTag(tag);

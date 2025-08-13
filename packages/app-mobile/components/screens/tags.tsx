@@ -48,7 +48,9 @@ const TagsScreenComponent: React.FC<Props> = props => {
 	const [tags, setTags] = useState<TagEntity[]>([]);
 	const styles = useStyles(props.themeId);
 	const collatorLocale = getCollatorLocale();
-	const collator = getCollator(collatorLocale);
+	const collator = useMemo(() => {
+		return getCollator(collatorLocale);
+	}, [collatorLocale]);
 
 	type TagItemPressEvent = { id: string };
 

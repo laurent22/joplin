@@ -64,8 +64,8 @@ const useSearchResults = ({
 	search, setSearch, options, onAddItem, canAddItem,
 }: UseSearchResultsOptions) => {
 	const collatorLocale = getCollatorLocale();
-	const collator = getCollator(collatorLocale);
 	const results = useMemo(() => {
+		const collator = getCollator(collatorLocale);
 		const lowerSearch = search?.toLowerCase();
 		return options
 			.filter(option => option.title.toLowerCase().startsWith(lowerSearch))
@@ -76,7 +76,7 @@ const useSearchResults = ({
 				if (b.title.toLowerCase() === lowerSearch) return 1;
 				return collator.compare(a.title, b.title);
 			});
-	}, [search, options, collator]);
+	}, [search, options, collatorLocale]);
 
 	const canAdd = (
 		!!onAddItem
