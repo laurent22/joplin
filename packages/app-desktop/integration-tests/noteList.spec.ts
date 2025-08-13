@@ -95,7 +95,7 @@ test.describe('noteList', () => {
 		await expect(notification).toBeVisible();
 
 		// Should be possible to un-delete
-		const undeleteButton = notification.getByRole('button', { name: 'Revert' }); //Intead of cancel > change to Revert
+		const undeleteButton = notification.getByRole('button', { name: 'Revert' }); //Cancel to Revert (Rever changes is better)
 		await undeleteButton.click();
 
 		await expect(testNoteItem).toBeVisible();
