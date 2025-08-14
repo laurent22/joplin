@@ -6852,3 +6852,552 @@ msgstr "Uvećaj prikaz"
 #: packages/app-desktop/gui/MenuBar.tsx:876
 msgid "Zoom Out"
 msgstr "Umanji prikaz"
+
+#~ msgid "%d hours"
+#~ msgstr "%d h"
+
+#, fuzzy
+#~ msgid "This will permanently delete the note \"%s\". Continue?"
+#~ msgstr "Izbrisati bilješku „%s”?"
+
+#, fuzzy
+#~ msgid "Close menu"
+#~ msgstr "Zatvori"
+
+#, fuzzy
+#~ msgid "Download updated model"
+#~ msgstr "Preuzeto"
+
+#, fuzzy
+#~ msgid "Edit in..."
+#~ msgstr "Uredi poveznicu"
+
+#, fuzzy
+#~ msgid "Take picture"
+#~ msgstr "Snimi sliku"
+
+#~ msgid ""
+#~ "Biometric unlock is not setup on the device. Please set it up in order to "
+#~ "unlock Joplin. If the device is on lockout, consider switching it off and "
+#~ "on to reset biometrics scanning."
+#~ msgstr ""
+#~ "Biometrijsko otključavanje nije postavljeno na uređaju. Postavi ga za "
+#~ "otključavanje Joplina. Ako je uređaj zaključan, pokušaj ga isključiti i "
+#~ "ponovo uključiti za postavljanje biometrijskog skeniranja."
+
+#, fuzzy
+#~ msgid "Collapse %s"
+#~ msgstr "Sklopi"
+
+#~ msgid "Find and replace"
+#~ msgstr "Pronađi i zamijeni"
+
+#~ msgid "Formatting"
+#~ msgstr "Formatiranje"
+
+#~ msgid "Headers"
+#~ msgstr "Zaglavlja"
+
+#~ msgid "Hide more actions"
+#~ msgstr "Sakrij daljnje radnje"
+
+#~ msgid "KaTeX"
+#~ msgstr "KaTeX"
+
+#~ msgid "Links with protocol \"%s\" are not supported"
+#~ msgstr "Poveznice s protokolom „%s” se ne podržavaju"
+
+#~ msgid "Lists"
+#~ msgstr "Popisi"
+
+#~ msgid "No item with ID %s"
+#~ msgstr "Nema elementa s ID oznakom %s"
+
+#~ msgid "Permission to use camera"
+#~ msgstr "Dozvola za korištenje kamere"
+
+#~ msgid "Show more actions"
+#~ msgstr "Prikaži više radnji"
+
+#~ msgid ""
+#~ "The Joplin mobile app does not currently support this type of link: %s"
+#~ msgstr ""
+#~ "Joplin program za mobilne uređaje trenutačno ne podržava ovu vrstu "
+#~ "poveznice: %s"
+
+#~ msgid "This attachment is not downloaded or not decrypted yet."
+#~ msgstr "Ovaj privitak još nije preuzet ili dešifriran."
+
+#~ msgid "Your permission to use your camera is required."
+#~ msgstr "Za korištenje kamere potrebna je tvoja dozvola."
+
+#, fuzzy
+#~ msgid "From a plugin"
+#~ msgstr "Pregledaj sve dodatke"
+
+#, fuzzy
+#~ msgid "Browse and install community plugins."
+#~ msgstr "Pregledaj sve dodatke"
+
+#, fuzzy
+#~ msgid "Install new plugins"
+#~ msgstr "Pregledaj sve dodatke"
+
+#, fuzzy
+#~ msgid "Installed plugins"
+#~ msgstr "Instalirano"
+
+#, fuzzy
+#~ msgid "Search plugins"
+#~ msgstr "Traži dodatke …"
+
+#, fuzzy
+#~ msgid "You currently have %d plugin installed."
+#~ msgid_plural "You currently have %d plugins installed."
+#~ msgstr[0] "Trenutačno nemaš bilježnica."
+#~ msgstr[1] "Trenutačno nemaš bilježnica."
+#~ msgstr[2] "Trenutačno nemaš bilježnica."
+
+#, fuzzy
+#~ msgid "Incoming shares"
+#~ msgstr "Nadolazeća upozorenja"
+
+#, fuzzy
+#~ msgid "Leave share"
+#~ msgstr "Spremi promjene"
+
+#, fuzzy
+#~ msgid "Loading plugin repository..."
+#~ msgstr "Neuspjelo povezivanje s repozitorijem dodataka."
+
+#, fuzzy
+#~ msgid "No description"
+#~ msgstr "Opis poveznice"
+
+#~ msgid "Folders"
+#~ msgstr "Mape"
+
+#~ msgid "Database v%s"
+#~ msgstr "Baza podataka v%s"
+
+#~ msgid ""
+#~ "There is currently no notebook. Create one by clicking on \"New "
+#~ "notebook\"."
+#~ msgstr ""
+#~ "Trenutačno nema bilježnice. Stvori novu pritiskom na „Nova bilježnica”."
+
+#~ msgid "Unable to export or share data. Reason: %s"
+#~ msgstr "Nije moguće izvesti ili dijeliti podatke. Razlog: %s"
+
+#~ msgid ""
+#~ "Warnings:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Upozorenja:\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid ""
+#~ "To allow Joplin to synchronise with Joplin Cloud, open this URL in your "
+#~ "browser to authorise the application:"
+#~ msgstr ""
+#~ "Prvi korak: Autoriziraj program otvaranjem ovog URL-a u pregledniku:"
+
+#~ msgid "Delete note?"
+#~ msgstr "Izbrisati bilješku?"
+
+#~ msgid "Joplin Cloud email"
+#~ msgstr "Joplin Cloud email"
+
+#~ msgid "Joplin Cloud password"
+#~ msgstr "Joplin Cloud lozinka"
+
+#~ msgid "Login"
+#~ msgstr "Prijava"
+
+#~ msgid "Login below."
+#~ msgstr "Prijavi se ispod."
+
+#~ msgid "Or create an account."
+#~ msgstr "Ili stvori novi račun."
+
+#~ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
+#~ msgstr ""
+#~ "Hvala! Tvoj Joplin Cloud račun je sada postavljen i spreman za korištenje."
+
+#~ msgid "Logs"
+#~ msgstr "Dnevnici"
+
+#, fuzzy
+#~ msgid "%s: Missing password"
+#~ msgstr "Glavna lozinka"
+
+#~ msgid "Share and collaborate on a notebook"
+#~ msgstr "Dijeli bilježnicu i surađuj u bilježnici"
+
+#~ msgid "Sharing access control"
+#~ msgstr "Dijeljenje kontrole pristupa"
+
+#~ msgid "Encrypted notebooks cannot be renamed"
+#~ msgstr "Šifrirane bilježnice se ne mogu preimenovati"
+
+#, fuzzy
+#~ msgid "Changes have been saved"
+#~ msgstr "Bilješka je spremljena."
+
+#, fuzzy
+#~ msgid "Create KaTeX region"
+#~ msgstr "Stvori korisnika"
+
+#, fuzzy
+#~ msgid "Create link"
+#~ msgstr "Stvori"
+
+#, fuzzy
+#~ msgid "Create task list"
+#~ msgstr "Stvori bilježnicu"
+
+#, fuzzy
+#~ msgid "Navigate to the previous view"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#, fuzzy
+#~ msgid "Remove KaTeX region"
+#~ msgstr "Stvori korisnika"
+
+#, fuzzy
+#~ msgid "Unitalic"
+#~ msgstr "Kurziv"
+
+#, fuzzy
+#~ msgid "Bold text"
+#~ msgstr "Podebljano"
+
+#, fuzzy
+#~ msgid "Edit Link"
+#~ msgstr "Uredi bilježnicu"
+
+#~ msgid "Insert Date Time"
+#~ msgstr "Umetni datum/vrijeme"
+
+#, fuzzy
+#~ msgid "Italicize"
+#~ msgstr "Kurziv"
+
+#, fuzzy
+#~ msgid "Save as SVG"
+#~ msgstr "Spremi kao …"
+
+#~ msgid "Please click on \"%s\" to proceed"
+#~ msgstr "Za nastavljanje pritisni „%s”"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "Automatski aktualiziraj program"
+
+#~ msgid "Notebook title:"
+#~ msgstr "Naslov bilježnice:"
+
+#~ msgid "AWS S3"
+#~ msgstr "AWS S3"
+
+#~ msgid "Master keys that need upgrading"
+#~ msgstr "Glavni ključevi koji se moraju nadograditi"
+
+#~ msgid ""
+#~ "The following master keys use an out-dated encryption algorithm and it is "
+#~ "recommended to upgrade them. The upgraded master key will still be able "
+#~ "to decrypt and encrypt your data as usual."
+#~ msgstr ""
+#~ "Sljedeći glavni ključevi koriste zastarjeli algoritam šifriranja i "
+#~ "preporučujemo da ih nadogradiš. Nadograđen glavni ključ i dalje će moći "
+#~ "dešifrirati i šifrirati tvoje podatke."
+
+#~ msgid ""
+#~ "Enabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent encrypted to the sync target. Do not lose the "
+#~ "password as, for security purposes, this will be the *only* way to "
+#~ "decrypt the data! To enable encryption, please enter your password below."
+#~ msgstr ""
+#~ "Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici "
+#~ "ponovo sinkronizirati i poslati šifrirano u cilj sinkronizacije. Nemoj "
+#~ "izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za "
+#~ "dešifriranje podataka! Za aktiviranje šifriranja dolje upiši lozinku."
+
+#~ msgid "Master Keys"
+#~ msgstr "Glavni ključevi"
+
+#~ msgid "Password OK"
+#~ msgstr "Lozinka je u redu"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Napomena: Za šifriranje će se koristiti samo jedan glavni ključ (onaj "
+#~ "koji je označen kao „aktivan”). Za dešifriranje se može koristiti bilo "
+#~ "koji ključ, ovisno o izvornom načinu šifriranja bilježaka ili bilježnica."
+
+#~ msgid "Encryption is:"
+#~ msgstr "Šifriranje je:"
+
+#, javascript-format
+#~ msgid "Encryption will be enabled using the master key created on %s"
+#~ msgstr "Šifriranje će se aktivirati pomoću glavnog ključa stvorenog %s"
+
+#, javascript-format
+#~ msgid "%s %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "Insert template"
+#~ msgstr "Umetni predložak"
+
+#~ msgid "Template file:"
+#~ msgstr "Datoteka predloška:"
+
+#~ msgid "Create note from template"
+#~ msgstr "Stvori bilješku iz predloška"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "Stvori zadatak iz predloška"
+
+#~ msgid "Open template directory"
+#~ msgstr "Otvori mapu predložaka"
+
+#~ msgid "Refresh templates"
+#~ msgstr "Aktualiziraj predloške"
+
+#~ msgid "Templates"
+#~ msgstr "Predlošci"
+
+#~ msgid "Share Notes"
+#~ msgstr "Dijeli bilješke"
+
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Joplin poslužitelj mapa"
+
+#~ msgid "Joplin Server username"
+#~ msgstr "Joplin poslužitelj korisničko ime"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "istaknuti tekst"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Označavanje"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Napomene uz izdanje"
+
+#~ msgid ""
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
+#~ msgstr ""
+#~ "Ako je polje fonta netočno ili prazno, postavit će se opći font fiksne "
+#~ "širine."
+
+#~ msgid ""
+#~ "This should be a *monospace* font or some elements will render "
+#~ "incorrectly. If the font is incorrect or empty, it will default to a "
+#~ "generic monospace font."
+#~ msgstr ""
+#~ "Ovo bi trebao biti font *fiksne širine*, jer će se inače neki elementi "
+#~ "prikazati pogrešno. Ako je polje fonta netočno ili prazno, postavit će se "
+#~ "opći font fiksne širine."
+
+#, fuzzy
+#~ msgid "Checking..."
+#~ msgstr "Prekidam..."
+
+#, fuzzy
+#~ msgid "Check Status"
+#~ msgstr "Status"
+
+#~ msgid "OneDrive Dev (For testing only)"
+#~ msgstr "OneDrive Dev (Samo za testiranje)"
+
+#, fuzzy
+#~ msgid "Notebook properties"
+#~ msgstr "Naslov bilježnice:"
+
+#, fuzzy
+#~ msgid "Click to stop external editing"
+#~ msgstr "Bilješka je promijenjena:"
+
+#, fuzzy
+#~ msgid "Content Properties"
+#~ msgstr "Naslov bilježnice:"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Prvo stvori bilježnicu."
+
+#, fuzzy
+#~ msgid "Usage"
+#~ msgstr "Korištenje: %s"
+
+#~ msgid "Confirm"
+#~ msgstr "Potvrdi"
+
+#~ msgid "Attach any file"
+#~ msgstr "Priloži datoteku"
+
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Nepoznata razina logiranja: %s"
+
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "Nepoznat ID razine: %s"
+
+#, fuzzy
+#~ msgid "Synchronize"
+#~ msgstr "Sinkroniziraj"
+
+#, fuzzy
+#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+#~ msgstr "Makni ovu oznaku iz svih bilješki?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not synchronise with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "Ne mogu sinkronizirati OneDrive.\n"
+#~ "\n"
+#~ "Ova greška se često javlja pri korištenju usluge OneDrive for Business "
+#~ "koja nije podržana.\n"
+#~ "\n"
+#~ "Molimo da koristite obični OneDrive korisnički račun."
+
+#, fuzzy
+#~ msgid "Cannot move tag to this location."
+#~ msgstr "Ne mogu premjestiti bilješku u bilježnicu %s"
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Dodaj ili makni oznake"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Resursi: %d."
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Sinkronizacija je već u toku. Stanje: %s"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Nedostaje obavezni argument: %s"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Status sinkronizacije"
+
+#, fuzzy
+#~ msgid "General Options"
+#~ msgstr "Opcije"
+
+#, fuzzy
+#~ msgid "Clipper Options"
+#~ msgstr "Opcije"
+
+#~ msgid "Show metadata"
+#~ msgstr "Prikaži metapodatke"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Klikni (+) gumb za dodavanje nove bilješke ili bilježnice ili odaberi "
+#~ "postojeću bilježnicu iz izbornika."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr "Trenutno nemaš nijednu bilježnicu. Stvori novu klikom na (+) gumb."
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Odvoji oznake zarezom."
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "Putanja do direktorija za sinkronizaciju u slučaju kad je sinkronizacija "
+#~ "sa datotečnim sustavom omogućena. Vidi `sync.target`."
+
+#, fuzzy
+#~ msgid "State: %s."
+#~ msgstr "Stanje: \"%s\"."
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Bilježnica s ovim naslovom već postoji: \"%s\""
+
+#~ msgid "Imports an Evernote notebook file (.enex file)."
+#~ msgstr "Uvozi Evernote bilježnicu (.enex datoteku)."
+
+#~ msgid ""
+#~ "File \"%s\" will be imported into existing notebook \"%s\". Continue?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" će biti uvezena u postojeću bilježnicu \"%s\". Nastavi?"
+
+#~ msgid ""
+#~ "New notebook \"%s\" will be created and file \"%s\" will be imported into "
+#~ "it. Continue?"
+#~ msgstr ""
+#~ "Nova bilježnica \"%s\" će biti stvorena i datoteka \"%s\" će biti uvezena "
+#~ "u nju. Nastavi?"
+
+#~ msgid "Import Evernote notes"
+#~ msgstr "Uvezi Evernote bilješke"
+
+#~ msgid "Give focus to next pane"
+#~ msgstr "Fokusiraj sljedeće okno"
+
+#~ msgid "Give focus to previous pane"
+#~ msgstr "Fokusiraj prethodno okno"
+
+#~ msgid "Exit command line mode"
+#~ msgstr "Napusti naredbeni redak"
+
+#~ msgid "Cancel the current command."
+#~ msgstr "Prekini trenutnu naredbu."
+
+#~ msgid "Set a to-do as completed / not completed"
+#~ msgstr "Postavi zadatak kao završen/nezavršen"
+
+#, fuzzy
+#~ msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+#~ msgstr "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
+
+#, fuzzy
+#~ msgid "[t]oggle note [m]etadata."
+#~ msgstr "[t]oggle note [m]etadata."
+
+#, fuzzy
+#~ msgid "[M]ake a new [n]ote"
+#~ msgstr "[M]ake a new [n]ote"
+
+#, fuzzy
+#~ msgid "[M]ake a new [t]odo"
+#~ msgstr "[M]ake a new [t]odo"
+
+#, fuzzy
+#~ msgid "[M]ake a new note[b]ook"
+#~ msgstr "[M]ake a new note[b]ook"
+
+#, fuzzy
+#~ msgid "Copy ([Y]ank) the [n]ote to a notebook."
+#~ msgstr "Copy ([Y]ank) the [n]ote to a notebook."
+
+#~ msgid ""
+#~ "The target to synchronise to. If synchronising with the file system, set "
+#~ "`sync.2.path` to specify the target directory."
+#~ msgstr ""
+#~ "Meta sinkronizacije. U slučaju sinkroniziranja s vlastitim datotečnim "
+#~ "sustavom, postavi `sync.2.path` na ciljani direktorij."
+
+#~ msgid "To-do title:"
+#~ msgstr "Naslov zadatka:"
+
+#~ msgid "\"%s\": \"%s\""
+#~ msgstr "\"%s\": \"%s\""
