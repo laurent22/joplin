@@ -1,5 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import { JobData } from '../../types';
+import resizeImage from '../utils/resizeImage';
 
 const logger = Logger.create('createJob');
 
@@ -10,7 +11,9 @@ type CreateJobContext = {
 };
 
 const createJob = async (context: CreateJobContext) => {
-	const filePath = await context.storeImage(context.filepath);
+	const resizedFilePath = await resizeImage(context.filepath);
+
+	const filePath = await context.storeImage(resizedFilePath);
 
 	const jobId = await context.sendToQueue({ filePath });
 

@@ -29,11 +29,12 @@ describe('createJob', () => {
 	});
 
 	it('should be able to store a image and retrieve a job', async () => {
+		await copyFile('./images/htr_sample.png', './test_file.png');
+
 		const requirements = {
-			filepath: 'filepath',
+			filepath: './test_file.png',
 			storeImage: () => Promise.resolve('file-id'),
 			sendToQueue: (data: JobData) => queue.send(data),
-
 		};
 		const result = await createJob(requirements);
 		const job = await queue.fetch();
@@ -49,11 +50,12 @@ describe('createJob', () => {
 	});
 
 	it('should fail if is not possible to store image', async () => {
+		await copyFile('./images/htr_sample.png', './test_file.png');
+
 		const requirements = {
-			filepath: 'filepath',
+			filepath: './test_file.png',
 			storeImage: () => { throw new Error('Something went wrong'); },
 			sendToQueue: (data: JobData) => queue.send(data),
-
 		};
 
 		expect(async () => createJob(requirements)).rejects.toThrow();

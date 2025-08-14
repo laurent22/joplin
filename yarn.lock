@@ -9840,6 +9840,7 @@ __metadata:
     koa: "npm:2.16.1"
     koa-body: "npm:6.0.1"
     pg-boss: "npm:10.2.0"
+    sharp: "npm:0.34.1"
     sqlite3: "npm:5.1.6"
     typescript: "npm:5.8.2"
   languageName: unknown
