@@ -1,8 +1,10 @@
 import { remove } from 'fs-extra';
+import env from '../../env';
 const sharp = require('sharp');
 
 const resizeImage = async (filePath: string) => {
-	const maxSize = 400;
+	const envVariables = env();
+	const maxDimension = envVariables.RESIZE_IMAGE_MAX_DIMENSION;
 
 	const metadata = await sharp(filePath).metadata();
 
@@ -12,14 +14,14 @@ const resizeImage = async (filePath: string) => {
 
 	const highestDimension = Math.max(metadata.width, metadata.height);
 
-	if (highestDimension <= maxSize) {
+	if (highestDimension <= maxDimension) {
 		return filePath;
 	}
 
 	const resizedFilePath = `${filePath}-resized.${metadata.format}`;
 
 	await sharp(filePath)
-		.resize(maxSize, maxSize, { fit: 'inside', withoutEnlargement: true })
+		.resize(maxDimension, maxDimension, { fit: 'inside', withoutEnlargement: true })
 		.toFile(resizedFilePath);
 
 	await remove(filePath);
