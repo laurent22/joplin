@@ -1,4 +1,4 @@
-import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
+import { extractExecutablePath, fileExtension, filename, isUncPath, normalize, quotePath, toFileProtocolPath, unquotePath } from './path';
 
 describe('path', () => {
 	it('should quote and unquote paths', (async () => {
@@ -73,4 +73,53 @@ describe('path', () => {
 	])('should correctly detect UNC paths', (path, os, expected) => {
 		expect(isUncPath(path, os)).toBe(expected);
 	});
+
+	test.each([
+		['./file1', ''],
+		['/home/folder/.file1', ''],
+		['file.txt', 'txt'],
+		['file.txt.svg', 'svg'],
+		['file..svg', 'svg'],
+		['/.asdf/file.svg', 'svg'],
+		['file1.', ''],
+		['file1', ''],
+		['file.tar.gz', 'gz'],
+	])('should extract file extension %s', (input, expected) => {
+		expect(fileExtension(input)).toBe(expected);
+	});
+
+	test.each([
+		['/home/folder/./file1', '/home/folder/file1'],
+		['/home/folder/././file1', '/home/folder/file1'],
+		['/home/folder/file 1', '/home/folder/file 1'],
+		['/home/folder/../file1', '/home/file1'],
+		['./file1', 'file1'],
+		['/home/./folder/./file1', '/home/folder/file1'],
+	])('should extract filename with base path %s', (input, expected) => {
+		expect(filename(input, true)).toBe(expected);
+	});
+
+	test.each([
+		['/home/folder/./file1', 'file1'],
+		['/home/folder/././file1', 'file1'],
+		['/home/folder/file 1', 'file 1'],
+		['/home/folder/../file1', 'file1'],
+		['./file1', 'file1'],
+		['/home/./folder/./file1', 'file1'],
+	])('should extract filename %s', (input, expected) => {
+		expect(filename(input)).toBe(expected);
+	});
+
+	test.each([
+		['/home/folder/./file1', '/home/folder/file1'],
+		['/home/folder/././file1', '/home/folder/file1'],
+		['/home/./folder/./file1', '/home/folder/file1'],
+		['/home/folder/file 1', '/home/folder/file 1'],
+		['/home/folder/../file1', '/home/file1'],
+		['/home/folder/../..', '/'],
+		['./file1', 'file1'],
+	])('should normalize path %s', (input, expected) => {
+		expect(normalize(input)).toBe(expected);
+	});
+
 });

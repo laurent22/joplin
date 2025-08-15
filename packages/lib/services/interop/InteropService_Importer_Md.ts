@@ -127,7 +127,8 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				const linkPosix = toForwardSlashes(link);
 				const trimmedLink = this.trimAnchorLink(linkPosix);
 				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
-				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
+				const extension = fileExtension(trimmedLink);
+				const pathWithExtension = extension ? `${attachmentPath}.${extension}` : attachmentPath;
 				const stat = await shim.fsDriver().stat(pathWithExtension);
 				const isDir = stat ? stat.isDirectory() : false;
 				if (stat && !isDir) {
