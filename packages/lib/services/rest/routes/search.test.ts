@@ -17,6 +17,7 @@ describe('routes/search', () => {
 	it('should be able to get all notes with pagination', async () => {
 		const api = new Api();
 		const promises = [];
+		// Using 101 because the default limit is 100 returned results on mobile
 		for (let i = 0; i < 101; i++) {
 			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
 		}
@@ -38,6 +39,7 @@ describe('routes/search', () => {
 	it('should allow to set limit to pagination without affecting the search query', async () => {
 		const api = new Api();
 		const promises = [];
+		// Using 101 because the default limit is 100 returned results on mobile
 		for (let i = 0; i < 101; i++) {
 			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
 		}
