@@ -18,6 +18,8 @@ interface Props {
 	ftsEnabled: number;
 }
 
+const limit = 100;
+
 const useResults = (props: Props) => {
 	const [notes, setNotes] = useState<NoteEntity[]>([]);
 	const [isProcessing, setIsProcessing] = useState(false);
@@ -30,7 +32,7 @@ const useResults = (props: Props) => {
 		try {
 			if (query) {
 				if (ftsEnabled) {
-					const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
+					const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true, limit });
 					notes = r.notes;
 				} else {
 					const p = query.split(' ');

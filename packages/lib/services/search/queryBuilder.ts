@@ -444,7 +444,16 @@ const getConnective = (terms: Term[], relation: Relation): string => {
 	return (!notebookTerm && (relation === 'OR')) ? 'ROWID=-1' : '1'; // ROWID=-1 acts as 0 (something always false)
 };
 
-export default function queryBuilder(terms: Term[], useFts: boolean) {
+type QueryBuilderOptions = {
+	limit?: number;
+};
+
+export default function queryBuilder(terms: Term[], useFts: boolean, options: QueryBuilderOptions) {
+	options = {
+		limit: undefined,
+		...options,
+	};
+
 	const queryParts: string[] = [];
 	const params: string[] = [];
 	const withs: string[] = [];
@@ -486,6 +495,11 @@ export default function queryBuilder(terms: Term[], useFts: boolean) {
 	locationFilter(terms, queryParts, params, relation, useFts);
 
 	sourceUrlFilter(terms, queryParts, params, relation, useFts);
+
+	if (options.limit) {
+		queryParts.push('LIMIT ?');
+		params.push(options.limit.toString());
+	}
 
 	let query;
 	if (withs.length > 0) {
