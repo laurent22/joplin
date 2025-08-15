@@ -106,4 +106,22 @@ describe('SearchEngineUtils', () => {
 			}
 		}
 	}));
+
+	it('should be able to limit how many results are returned', (async () => {
+		const note1 = await Note.save({ title: 'abcd' });
+		const note2 = await Note.save({ title: 'abcd' });
+		const note3 = await Note.save({ title: 'abcd' });
+		await searchEngine.syncTables();
+
+		const rows = (await SearchEngineUtils.notesForQuery('abcd', true, null, searchEngine)).notes;
+
+		expect(rows.length).toBe(3);
+		expect(rows.map(r=>r.id)).toContain(note1.id);
+		expect(rows.map(r=>r.id)).toContain(note2.id);
+		expect(rows.map(r=>r.id)).toContain(note3.id);
+
+		const options = { limit: 2 };
+		const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;
+		expect(rows2.length).toBe(options.limit);
+	}));
 });
