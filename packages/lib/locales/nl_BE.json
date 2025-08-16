@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"%d MB per notitie of bijlage"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -107,6 +110,9 @@
 	"(None)": [
 		"(Geen)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wuziwuk: %s)"
 	],
@@ -127,6 +133,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kan of \"toggle\" of \"clear\" zijn. Gebruik \"toggle\" om de to-do te om te schakelen tussen voltooid en onvoltooid (Als het doel een gewone notitie is, zal ze geconverteerd worden naar een to-do). Gebruik \"clear\" om terug te wisselen naar een standaard notitie."
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A new update (%s) is available": [
 		"Een nieuwe update (%s) is beschikbaar"
@@ -200,9 +209,6 @@
 	"Add recipient:": [
 		"Ontvanger toevoegen:"
 	],
-	"Add tag %s to note": [
-		"Label %s toevoegen aan notitie"
-	],
 	"Add title": [
 		"Titel toevoegen"
 	],
@@ -211,6 +217,9 @@
 	],
 	"Add to note": [
 		"Toevoegen aan notitie"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Admin"
@@ -241,6 +250,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Alle potentiële poorten zijn in gebruik - meld het problem op %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Laat toe mobiele plugins te debuggen. Zie %s voor details."
@@ -307,6 +319,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Donker"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Momenteel kan Joplin Web slechts in één tab tegelijk open zijn. Gelieve de andere instantie van Joplin te sluiten."
@@ -608,6 +623,9 @@
 	"Command palette...": [
 		"Commandopalet..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"Compact"
 	],
@@ -661,6 +679,9 @@
 	],
 	"Connect to Joplin Cloud": [
 		"Verbinding maken met Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Geconsolideerde facturatie"
@@ -883,6 +904,9 @@
 	"Default": [
 		"Standaard"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Standaard: %s"
 	],
@@ -1041,6 +1065,15 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Bewaar het wachtwoord zorgvuldig. Om beveiligingsredenen is dit de *enige* manier om je data te ontsleutelen! Gelieve je wachtwoord hieronder in te geven om encryptie in te schakelen."
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
 	],
 	"Donate, website": [
 		"Doneren, website"
@@ -1333,6 +1366,9 @@
 	"Error opening note in editor: %s": [
 		"Fout bij het openen van de notitie in de editor: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fout. Gelieve te verifiëren of URL, gebruikersnaam, wachtwoord, etc. correct zijn en of het synchronisatiedoel bereikbaar is. De gemelde fout was:"
 	],
@@ -1411,6 +1447,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Fatale fout:"
 	],
@@ -1431,9 +1470,6 @@
 	],
 	"Filter": [
 		"Filter"
-	],
-	"Filter tags": [
-		"Filter labels"
 	],
 	"Find": [
 		"Vinden"
@@ -1461,6 +1497,9 @@
 	],
 	"Focus title": [
 		"Titel focussen"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		"Volg link"
@@ -1511,6 +1550,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"Geo-locatie, spellingscontrole, editor werkbalk, afmetingen afbeelding aanpassen"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Download nu:"
 	],
@@ -1519,6 +1561,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Haalt een configuratie waarde op of stelt een waarde in. Als [value] niet opgegeven is, zal de waarde van [name] getoond worden. Als noch de [name] noch [waarde] opgegeven zijn, zal de huidige configuratie opgelijst worden."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		"ga"
@@ -1609,6 +1654,9 @@
 	],
 	"Idle": [
 		"Inactief"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Als je al geautoriseerd hebt, gelieve te wachten terwijl de toepassing synchroniseert met Joplin Cloud."
@@ -1823,6 +1871,9 @@
 	"Joplin Server URL": [
 		"Joplin Server URL"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper laat toe webpagina's en schermafbeeldingen van je browser op te slaan in Joplin."
 	],
@@ -1995,6 +2046,9 @@
 	"Markdown editor": [
 		"Markdown editor"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Markeert een taak als voltooid."
 	],
@@ -2129,9 +2183,6 @@
 	],
 	"New sub-notebook": [
 		"Nieuw sub-notitieboek"
-	],
-	"New tags:": [
-		"Nieuwe labels:"
 	],
 	"New to-do": [
 		"Nieuwe taak"
@@ -2460,6 +2511,9 @@
 	"Permission needed": [
 		"Toestemming vereist"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Klik op \"%s\" om door te gaan, of zet de wachtwoorden in de \"%s\" lijst hieronder."
 	],
@@ -2502,6 +2556,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Gelieve te wachten tot alle bijlagen gedownload en ontsleuteld zijn. Je kan ook overschakelen naar %s om de notitie te bewerken."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Even geduld..."
 	],
@@ -2540,6 +2597,9 @@
 	],
 	"Possible values: %s.": [
 		"Mogelijke waarden: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Voorkeuren"
@@ -2646,6 +2706,9 @@
 	"Publish notes to the internet": [
 		"Notities publiceren op het Internet"
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"QR Code": [
 		"QR-Code"
 	],
@@ -2729,6 +2792,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Hernoemt het gegeven <item> (notitie of notitieboek) naar <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Token vernieuwen"
@@ -2952,6 +3018,9 @@
 	"Selects a notebook": [
 		"Selecteert een notitieboek"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"Foutopsportingsrapport verzenden"
 	],
@@ -3008,6 +3077,9 @@
 	],
 	"Shares": [
 		"Delen"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"Notitieboek delen..."
@@ -3324,9 +3396,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"label1, label2, ..."
-	],
 	"Tagged: %d.": [
 		"Gelabeld: %d."
 	],
@@ -3354,17 +3423,11 @@
 	"Text editor command": [
 		"Teksteditorcommando"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"De [Web Clipper](%s) is een browserextensie die je toelaat webpagina's en schermafbeeldingen van je browser op te slaan in Joplin."
-	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het actieve profiel kan niet verwijderd worden. Schakel over naar een ander profiel en probeer opieuw."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"De app gaat nu sluiten. Gelieve ze te herstarten om het proces te voltooien."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"De applicatie is niet correct afgesloten. Wil je starten in veilige modus?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"De applicatie werd geautoriseerd - Je kan deze tab nu sluiten."
@@ -3420,6 +3483,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"De sleutels met deze ID's worden gebruikt om sommige van je items te versleutelen, maar de toepassing heeft daar momenteel geen toegang toe. Het is waarschijnlijk dat ze uiteindelijk via synchronisatie zullen worden opgehaald."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"De hoofdsleutel is met succes geüpgraded!"
@@ -3530,6 +3596,15 @@
 	"This drawing may have unsaved changes.": [
 		"Deze tekening heft mogelijk niet-opgelagen wijzigingen."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dit is een geavanceerd hulpmiddel om de bijlagen te tonen die aan je notities zijn gekoppeld. Wees voorzichtig als je er een verwijdert, want ze kunnen nadien niet meer worden hersteld."
 	],
@@ -3556,6 +3631,9 @@
 	],
 	"This note has no history": [
 		"Deze notitie heeft geen historiek"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Deze plugin ondersteunt %s niet."
@@ -3598,6 +3676,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Geef je hoofdwachtwoord hieronder in om verder te gaan."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Om een label te verwijderen, verwijder het eerst van elke notitie waaraan het is toegevoegd."
@@ -3707,9 +3788,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Typ de titel van een notitie of een deel van de inhoud om er naartoe te springen. Of typ # gevolgd door de naam van een label, of @ gevolgd door de naam van een notitieboek. Of typ : om naar commando's te zoeken."
 	],
-	"Type new tags or select from list": [
-		"Typ nieuwe labels of selecteer uit lijst"
-	],
 	"Type: %s.": [
 		"Type: %s."
 	],
@@ -3754,6 +3832,9 @@
 	],
 	"Unshare": [
 		"Stoppen met delen"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Dit notitieboek niet meer delen? De ontvangers zullen geen toegang meer hebben tot de inhoud."
@@ -3976,6 +4057,12 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Je bent ingelogd op Joplin Cloud, je mag dit scherm nu sluiten."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""

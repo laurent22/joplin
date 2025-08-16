@@ -1,7 +1,8 @@
 import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
-import * as MarkdownIt from 'markdown-it';
+import type * as MarkdownItType from 'markdown-it';
+const MarkdownIt = require('markdown-it');
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -16,6 +17,7 @@ export enum MarkdownTableJustify {
 export interface MarkdownTableHeader {
 	name: string;
 	label: string;
+	labelUrl?: string;
 	filter?: (content: string)=> string;
 	disableEscape?: boolean;
 	disableHtmlEscape?: boolean;
@@ -78,7 +80,7 @@ const markdownUtils = {
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractFileUrls(md: string, onlyType: string = null): string[] {
-		const markdownIt = new MarkdownIt();
+		const markdownIt: MarkdownItType = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
@@ -159,7 +161,11 @@ const markdownUtils = {
 		const lineMd = [];
 		for (let i = 0; i < headers.length; i++) {
 			const h = headers[i];
-			headersMd.push(stringPadding(h.label, minCellWidth, ' ', stringPadding.RIGHT));
+			let label = h.label;
+			if (h.labelUrl) {
+				label = `[${h.label}](${h.labelUrl})`;
+			}
+			headersMd.push(stringPadding(label, minCellWidth, ' ', stringPadding.RIGHT));
 
 			const justify = h.justify ? h.justify : MarkdownTableJustify.Left;
 

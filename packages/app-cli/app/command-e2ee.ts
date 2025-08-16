@@ -26,6 +26,7 @@ class Command extends BaseCommand {
 			['-v, --verbose', 'More verbose output for the `target-status` command'],
 			['-o, --output <directory>', 'Output directory'],
 			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
+			['-f, --force', 'Do not ask for input on failure'],
 		];
 	}
 
@@ -67,7 +68,7 @@ class Command extends BaseCommand {
 					this.stdout(line.join('\n'));
 					break;
 				} catch (error) {
-					if (error.code === 'masterKeyNotLoaded') {
+					if (error.code === 'masterKeyNotLoaded' && !args.options.force) {
 						const ok = await askForMasterKey(error);
 						if (!ok) return;
 						continue;

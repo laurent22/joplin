@@ -40,6 +40,12 @@
 # ./runForTesting.sh 1 createTeams,createData,resetTeam,sync && ./runForTesting.sh 2 resetTeam,sync && ./runForTesting.sh 1
 
 # ----------------------------------------------------------------------------------
+# User 1 shares a folder with user 2
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh 1 createUsers,createData,reset,shareWithUser2,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
+
+# ----------------------------------------------------------------------------------
 # Testing the CLI app with commands:
 # ----------------------------------------------------------------------------------
 
@@ -126,6 +132,10 @@ do
 		echo 'mkbook --parent "shared" "sub"' >> "$CMD_FILE"
 		echo 'use "sub"' >> "$CMD_FILE"
 		echo 'mknote "note 3"' >> "$CMD_FILE"
+	
+	elif [[ $CMD == "shareWithUser2" ]]; then
+	
+		echo 'share add "shared" user2@example.com' >> "$CMD_FILE"
 	
 	elif [[ $CMD == "reset" ]]; then
 	

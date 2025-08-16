@@ -1,6 +1,6 @@
 
-import MarkupToHtml, { MarkupLanguage } from '@joplin/renderer/MarkupToHtml';
-import { RenderResult } from '@joplin/renderer/types';
+import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
+import { RenderResult, MarkupLanguage } from '@joplin/renderer/types';
 
 describe('MarkupToHtml', () => {
 

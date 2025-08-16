@@ -4,7 +4,8 @@ import { AppState } from '../../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import BannerContent from './BannerContent';
 import { _ } from '@joplin/lib/locale';
-import bridge from '../../../services/bridge';
+import onRichTextReadMoreLinkClick from '@joplin/lib/components/shared/NoteEditor/WarningBanner/onRichTextReadMoreLinkClick';
+import onRichTextDismissLinkClick from '@joplin/lib/components/shared/NoteEditor/WarningBanner/onRichTextDismissLinkClick';
 import { useMemo } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -15,14 +16,6 @@ interface Props {
 	pluginCompatibilityBannerDismissedFor: string[];
 	plugins: PluginStates;
 }
-
-const onRichTextDismissLinkClick = () => {
-	Setting.setValue('richTextBannerDismissed', true);
-};
-
-const onRichTextReadMoreLinkClick = () => {
-	void bridge().openExternal('https://joplinapp.org/help/apps/rich_text_editor');
-};
 
 const onSwitchToLegacyEditor = () => {
 	Setting.setValue('editor.legacyMarkdown', true);

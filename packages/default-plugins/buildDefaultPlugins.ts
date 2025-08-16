@@ -8,9 +8,9 @@ import { chdir, cwd } from 'process';
 import { execCommand } from '@joplin/utils';
 import { glob } from 'glob';
 import readRepositoryJson from './utils/readRepositoryJson';
-import waitForCliInput from './utils/waitForCliInput';
 import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
 import getCurrentCommitHash from './utils/getCurrentCommitHash';
+import { waitForCliInput } from '@joplin/utils/cli';
 
 interface Options {
 	beforeInstall: (buildDir: string, pluginName: string)=> Promise<void>;

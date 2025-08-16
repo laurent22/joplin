@@ -11,6 +11,9 @@
 	"%d MB": [
 		""
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
 	],
@@ -95,6 +98,9 @@
 	"(None)": [
 		""
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -115,6 +121,12 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> có thể là \"toggle\" hoặc là \"clear\". Sử dụng \"toggle\" để lưu chuyển giữa các to-do đã hoàn thành và chưa hoàn thành (nếu mục tiêu là một note bình thường, note sẽ được chuyển đổi thành to-do). Sử dụng \"clear\" dể chuyển đổi to-do trở lại một note bình thường."
+	],
+	"[None]": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -173,14 +185,17 @@
 	"Add recipient:": [
 		"Thêm người nhận:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Điền tiêu đề"
 	],
 	"Add to dictionary": [
 		"Thêm vào từ điển"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		""
@@ -205,6 +220,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Tất cả các cổng tiềm năng đang được sử dụng - vui lòng báo cáo sự cố tại% s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -259,6 +277,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -518,6 +539,9 @@
 	"Command palette": [
 		"Mẫu lệnh"
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"Hoàn thành"
 	],
@@ -556,6 +580,9 @@
 	],
 	"Conflicts": [
 		"Xung đột"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -710,6 +737,9 @@
 	"Default": [
 		"Mặc định"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Mặc định: %s"
 	],
@@ -827,6 +857,15 @@
 	"Do not ask for confirmation.": [
 		"Không cần xác nhận."
 	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -883,6 +922,9 @@
 	],
 	"Edit": [
 		"Chỉnh sửa"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Sửa ghi chú."
@@ -1061,6 +1103,9 @@
 	"Error opening note in editor: %s": [
 		"Lỗi khi mở note trong trình chỉnh sửa: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Lỗi. Vui lòng kiểm tra URL, tên sử dụng, mật khẩu, v.v... đã đúng và điểm đồng bộ hóa có thể truy cập được. Lỗi là:"
 	],
@@ -1127,6 +1172,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Lỗi nghiêm trọng:"
 	],
@@ -1165,6 +1213,9 @@
 	],
 	"Focus title": [
 		"Đặt dấu trỏ tại tiêu đề"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1208,6 +1259,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Đặt mua ngay bây giờ:"
 	],
@@ -1216,6 +1270,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Lấy hoặc cài đặt cấu hình. Nếu [cấu hình] không được cung cấp, cấu hình của [tên] sẽ được hiển thị. Nếu cả [tên] và [cấu hình] đều không được cung cấp, danh cách các cấu hình hiện tại sẽ được hiển thị."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1294,6 +1351,9 @@
 	],
 	"Idle": [
 		"Không hoạt động"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1466,6 +1526,9 @@
 	"Joplin Server URL": [
 		"Joplin Server URL"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper cho phép lưu lại các trang web và screenshots trên trình duyệt web tới Joplin."
 	],
@@ -1577,6 +1640,9 @@
 	"Markdown + Front Matter": [
 		""
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Đánh dấu một to-do đã hoàn thành."
 	],
@@ -1672,9 +1738,6 @@
 	],
 	"New sub-notebook": [
 		"Số ghi chú con mới"
-	],
-	"New tags:": [
-		"Tags mới:"
 	],
 	"New to-do": [
 		"To-do mới"
@@ -1940,6 +2003,9 @@
 	"Permission needed": [
 		"Cần được cấp quyền"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -1979,6 +2045,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Vui lòng chờ cho tất cả tệp đính kèm được tải về và giải mã. Bạn cũng có thể chuyển qua %s để chỉnh sửa ghi chú."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"Vui lòng chờ..."
 	],
@@ -2005,6 +2074,9 @@
 	],
 	"Possible values: %s.": [
 		"Những giá trị có thể sử dụng là: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Tuỳ chỉnh"
@@ -2096,6 +2168,9 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"Quit": [
 		"Thoát"
 	],
@@ -2129,6 +2204,9 @@
 	"Recipients:": [
 		"Người nhận:"
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Record audio": [
 		""
 	],
@@ -2161,6 +2239,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Đổi tên <item> (note hoặc notebook) được lựa chọn thành <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Làm mới mã"
@@ -2294,6 +2375,9 @@
 	"Select all": [
 		"Chọn tất cả"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"Server đang hoạt động trên port %d"
 	],
@@ -2334,6 +2418,9 @@
 		"Chia sẻ sổ ghi chú…"
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2600,9 +2687,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"Đã gắn: %d."
 	],
@@ -2629,9 +2713,6 @@
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Ứng dụng này đang chuẩn bị đóng. Xin hãy mở lại ứng dụng để hoàn tất quá trình."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Ứng dụng đã được ủy quyền - bây giờ bạn có thể đóng tab của trình duyệt."
@@ -2676,6 +2757,9 @@
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2768,6 +2852,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Đây là một công cụ nâng cao để hiển thị các tệp đính kèm được liên kết đến ghi chú của bạn. Hãy cẩn thận khi xoá một trong số chúng vì hành động này không thể khôi phục sau khi thực hiện."
 	],
@@ -2782,6 +2875,9 @@
 	],
 	"This note has no history": [
 		"Note này không có lịch sử"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2815,6 +2911,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Để cho phép Joplin đồng bộ với Dropbox, vui lòng làm theo những bước dưới đây:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Để xóa nhãn, hãy gỡ nhãn khỏi các ghi chú đã được gắn."
@@ -2897,9 +2996,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Nhập một tiêu đề hoặc một phần của tiêu đề để nhảy tới nó. Bạn cũng có thể gõ #tên-nhãn, hoặc @tên-sổ-ghi-chú. Hoặc gõ : để tìm dòng lệnh."
 	],
-	"Type new tags or select from list": [
-		"Điền tags mới hoặc chọn từ danh mục"
-	],
 	"Type: %s.": [
 		"Dạng: %s."
 	],
@@ -2935,6 +3031,9 @@
 	],
 	"Unshare": [
 		"Ngưng chia sẻ"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Ngưng chia sẻ sổ ghi chú này? Người nhận sẽ không còn quyền truy cập vào nội dung của ghi chú nữa."
@@ -3047,6 +3146,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -3123,6 +3225,12 @@
 		"Bạn sắp đính kèm một hình ảnh lớn (%dx%d pixel). Bạn có muốn giảm kích cỡ xuống %d pixel trước khi đính kèm nó?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

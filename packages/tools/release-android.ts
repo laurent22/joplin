@@ -124,7 +124,13 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 
 	console.info(`Building APK file v${suffix}...`);
 
-	const buildDirName = `build-${name}`;
+	// Normally we should build in the `build-main` folder but it seems Expo has a hard-coded path
+	// to `build` and fail with this error:
+	//
+	// A problem occurred evaluating project ':app'
+	// > /Users/laurent/src/joplin-new/packages/app-mobile/android/build-main/generated/autolinking/autolinking.json
+	// > (No such file or directory)
+	const buildDirName = name === 'main' ? 'build' : `build-${name}`;
 	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
 	await remove(buildDirBasePath);
 

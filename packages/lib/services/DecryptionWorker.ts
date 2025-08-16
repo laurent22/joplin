@@ -7,8 +7,10 @@ import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
 import EncryptionService from './e2ee/EncryptionService';
+import PerformanceLogger from '../PerformanceLogger';
 
 const EventEmitter = require('events');
+const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {
 	skippedItemCount?: number;
@@ -191,6 +193,7 @@ export default class DecryptionWorker {
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
 		this.dispatchReport({ state: 'started' });
 
+		const decryptItemsTask = perfLogger.taskStart('DecryptionWorker/decryptItems');
 		try {
 			const notLoadedMasterKeyDispatches = [];
 
@@ -290,6 +293,8 @@ export default class DecryptionWorker {
 			this.state_ = 'idle';
 			this.dispatchReport({ state: 'idle' });
 			throw error;
+		} finally {
+			decryptItemsTask.onEnd();
 		}
 
 		// 2019-05-12: Temporary to set the file size of the resources
@@ -325,11 +330,13 @@ export default class DecryptionWorker {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = {}) {
 		this.startCalls_.push(true);
+		const startTask = perfLogger.taskStart('DecryptionWorker/start');
 		let output = null;
 		try {
 			output = await this.start_(options);
 		} finally {
 			this.startCalls_.pop();
+			startTask.onEnd();
 		}
 		return output;
 	}

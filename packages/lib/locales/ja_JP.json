@@ -14,6 +14,9 @@
 	"%d MB per note or attachment": [
 		"ノート/添付ファイルあたり %d MB"
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s": [
 		"%s"
 	],
@@ -101,6 +104,9 @@
 	"(None)": [
 		"(なし)"
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(WYSIWYG対応: %s)"
 	],
@@ -121,6 +127,9 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定すると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノートであれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換できます。"
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"A3"
@@ -182,14 +191,17 @@
 	"Add recipient:": [
 		"受信者を追加:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"題名を追加"
 	],
 	"Add to dictionary": [
 		"辞書に追加"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"管理者"
@@ -217,6 +229,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"使用候補のポートはすべて利用中です - 問題を %s に報告してください"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -280,6 +295,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -563,6 +581,9 @@
 	"Command palette...": [
 		"コマンドパレット..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
 		"コンパクト"
 	],
@@ -607,6 +628,9 @@
 	],
 	"Conflicts (attachments)": [
 		"衝突 (添付ファイル)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"一括請求"
@@ -809,6 +833,9 @@
 	"Default": [
 		"標準"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"既定値: %s"
 	],
@@ -950,6 +977,15 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"パスワードはなくさないようにしてください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Donate, website": [
 		"寄付、Webサイト"
 	],
@@ -1018,6 +1054,9 @@
 	],
 	"Edit": [
 		"編集"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1292,6 +1331,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"致命的なエラー:"
 	],
@@ -1309,9 +1351,6 @@
 	],
 	"File system": [
 		"ファイルシステム"
-	],
-	"Filter tags": [
-		"フィルタータグ"
 	],
 	"Find: ": [
 		"検索文字列: "
@@ -1336,6 +1375,9 @@
 	],
 	"Focus title": [
 		"題名にフォーカス"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1385,6 +1427,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"位置情報、スペルチェック、エディタツールバー、画像リサイズ"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"今すぐ取得:"
 	],
@@ -1393,6 +1438,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"設定を行います。[value]がない場合は、[name]で示された設定項目の値を表示します。両方とも指定されていない場合は、現在の設定のリストを表示します。"
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1477,6 +1525,9 @@
 	],
 	"Idle": [
 		"待機中"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1658,6 +1709,9 @@
 	"Joplin Server URL": [
 		"Joplin Server URL"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保存します。"
 	],
@@ -1811,6 +1865,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"ToDoを完了としてマークします。"
 	],
@@ -1927,9 +1984,6 @@
 	],
 	"New sub-notebook": [
 		"新しいサブノートブック"
-	],
-	"New tags:": [
-		"新しいタグ:"
 	],
 	"New to-do": [
 		"新しいToDo"
@@ -2216,6 +2270,9 @@
 	"Permission needed": [
 		"許可が必要"
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"\"%s\"をクリックして続行するか、以下の\"%s\"リストでパスワードを設定してください。"
 	],
@@ -2258,6 +2315,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り替えてノートを編集することはできます。"
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Please wait...": [
 		"お待ちください..."
 	],
@@ -2287,6 +2347,9 @@
 	],
 	"Possible values: %s.": [
 		"取り得る値: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"環境設定"
@@ -2387,6 +2450,9 @@
 	"Publish notes to the internet": [
 		"ノートをインターネットに公開する"
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"Quit": [
 		"終了"
 	],
@@ -2461,6 +2527,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"トークンを更新する"
@@ -2639,6 +2708,9 @@
 	"Select parent notebook": [
 		"親ノートブックを選択"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Send bug report": [
 		"デバッグレポートの送信"
 	],
@@ -2686,6 +2758,9 @@
 	],
 	"Shares": [
 		"共有"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"ノートブックを共有中..."
@@ -2975,9 +3050,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"タグ1, タグ2, ..."
-	],
 	"Tagged: %d.": [
 		"タグ付き: %d."
 	],
@@ -3007,9 +3079,6 @@
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"まもなくアプリケーションは終了します。もう一度起動して処理を完了させてください。"
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"アプリケーションが正しく閉じませんでした。セーフモードで開始しますか？"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"アプリケーションは認証されました - ブラウザを閉じてもかまいません。"
@@ -3061,6 +3130,9 @@
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"これらのIDを持つキーはアイテムを暗号化するのに使われていますが、現在このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテムはまだ同期（ダウンロード）されていないものと考えられます。"
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"マスターキーのアップグレードに成功しました!"
@@ -3155,6 +3227,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可するときにだけ使用します。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"ここではノートに添付されているファイルの一覧を見ることができます。添付ファイルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 	],
@@ -3178,6 +3259,9 @@
 	],
 	"This note has no history": [
 		"このノートに履歴はありません"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3217,6 +3301,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"続行するには、マスターパスワードを入力してください。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"タグを削除するには、関連するノートからタグを外してください。"
@@ -3323,9 +3410,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに移動できます。あるいは「:」でコマンドを検索して実行できます。"
 	],
-	"Type new tags or select from list": [
-		"新しいタグを入力するか、リストから選択してください"
-	],
 	"Type: %s.": [
 		"種類: %s."
 	],
@@ -3361,6 +3445,9 @@
 	],
 	"Unshare": [
 		"共有を解除"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにアクセスできなくなります。"
@@ -3564,6 +3651,12 @@
 		"大きな画像を添付しようとしています (%dx%d ピクセル)。長辺を %d ピクセルに縮小してから添付しますか？"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [

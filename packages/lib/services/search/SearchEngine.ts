@@ -17,6 +17,9 @@ import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacte
 import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
+import PerformanceLogger from '../../PerformanceLogger';
+
+const perfLogger = PerformanceLogger.create();
 
 enum SearchType {
 	Auto = 'auto',
@@ -189,6 +192,8 @@ export default class SearchEngine {
 	private async syncTables_() {
 		if (this.isIndexing_) return;
 
+		const syncTask = perfLogger.taskStart('SearchEngine/syncTables');
+
 		this.isIndexing_ = true;
 
 		this.logger().info('SearchEngine: Updating FTS table...');
@@ -330,6 +335,7 @@ export default class SearchEngine {
 		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
 
 		this.isIndexing_ = false;
+		syncTask.onEnd();
 	}
 
 	public async syncTables() {
@@ -809,7 +815,7 @@ export default class SearchEngine {
 					};
 				});
 
-				if (!queryHasFilters) {
+				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
 					let itemRows: ProcessResultsRow[] = [];

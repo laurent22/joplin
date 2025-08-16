@@ -15,6 +15,7 @@ pluginManagement {
     "../android/expo-gradle-plugin"
   ).absolutePath
   includeBuild(expoPluginsPath)
+  includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 
 plugins {

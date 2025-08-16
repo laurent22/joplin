@@ -1,7 +1,7 @@
 import { ViewPlugin } from '@codemirror/view';
-import createEditorControl from './testUtil/createEditorControl';
+import createEditorControl from './testing/createEditorControl';
 import { EditorCommandType } from '../types';
-import pressReleaseKey from './testUtil/pressReleaseKey';
+import pressReleaseKey from './testing/pressReleaseKey';
 import { EditorSelection, EditorState } from '@codemirror/state';
 
 describe('CodeMirrorControl', () => {

@@ -8,7 +8,7 @@ import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
 import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme } from 'electron';
 import bridge from './bridge';
-const url = require('url');
+import * as url from 'url';
 const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
@@ -343,6 +343,14 @@ export default class ElectronAppWrapper {
 			}, 1000);
 		}
 
+		const sendWindowFocused = (focusedWebContents: WebContents) => {
+			const joplinId = this.windowIdFromWebContents(focusedWebContents);
+
+			if (joplinId !== null) {
+				this.win_.webContents.send('window-focused', joplinId);
+			}
+		};
+
 		const addWindowEventHandlers = (webContents: WebContents) => {
 			// will-frame-navigate is fired by clicking on a link within the BrowserWindow.
 			webContents.on('will-frame-navigate', event => {
@@ -376,13 +384,10 @@ export default class ElectronAppWrapper {
 				addWindowEventHandlers(event.webContents);
 			});
 
-			webContents.on('focus', () => {
-				const joplinId = this.windowIdFromWebContents(webContents);
-
-				if (joplinId !== null) {
-					this.win_.webContents.send('window-focused', joplinId);
-				}
-			});
+			const onFocus = () => {
+				sendWindowFocused(webContents);
+			};
+			webContents.on('focus', onFocus);
 		};
 		addWindowEventHandlers(this.win_.webContents);
 
@@ -454,6 +459,10 @@ export default class ElectronAppWrapper {
 					this.win_.close();
 				}
 			});
+
+			if (window.isFocused()) {
+				sendWindowFocused(window.webContents);
+			}
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

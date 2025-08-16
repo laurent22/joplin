@@ -1,7 +1,11 @@
+import { ResourceOcrStatus } from '../../database/types';
+
 export const emptyRecognizeResult = (): RecognizeResult => {
 	return {
-		text: '',
-		lines: [],
+		ocr_status: ResourceOcrStatus.Todo,
+		ocr_text: '',
+		ocr_details: '',
+		ocr_error: '',
 	};
 };
 
@@ -18,6 +22,8 @@ export interface RecognizeResultLine {
 }
 
 export interface RecognizeResult {
-	text: string;
-	lines?: RecognizeResultLine[]; // We do not store detailed data for PDFs
+	ocr_status: ResourceOcrStatus;
+	ocr_text: string;
+	ocr_details: string;
+	ocr_error: string;
 }

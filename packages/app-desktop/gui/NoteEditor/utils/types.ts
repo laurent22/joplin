@@ -67,6 +67,7 @@ export interface NoteEditorProps {
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 	startupPluginsLoaded: boolean;
+	enableHtmlToMarkdownBanner: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -138,6 +139,7 @@ export interface NoteBodyEditorProps {
 	noteId: string;
 	useCustomPdfViewer: boolean;
 	watchedNoteFiles: string[];
+	enableHtmlToMarkdownBanner: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {
