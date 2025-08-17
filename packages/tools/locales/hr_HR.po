@@ -4365,10 +4365,6 @@ msgstr "Otvori u vanjskom uređivaču"
 msgid "Open in new window"
 msgstr "Otvori u novom prozoru"
 
-#: packages/app-desktop/bridge.ts:466
-msgid "Open it"
-msgstr "Otvori"
-
 #: packages/app-desktop/bridge.ts:486
 #, fuzzy
 msgid "Open it"
