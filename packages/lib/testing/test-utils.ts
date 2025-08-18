@@ -71,6 +71,7 @@ import { Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
+import SearchEngine from '../services/search/SearchEngine';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -293,6 +294,7 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 	ResourceFetcher.instance_ = resourceFetchers_[id];
 	DecryptionWorker.instance_ = decryptionWorker(id);
+	SearchEngine.instance().setDb(databases_[id]);
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);

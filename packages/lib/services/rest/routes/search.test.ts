@@ -1,11 +1,9 @@
 import Note from '../../../models/Note';
 import Api, { RequestMethod } from '../Api';
-import { switchClient, db, setupDatabase } from '../../../testing/test-utils';
+import { switchClient, setupDatabase } from '../../../testing/test-utils';
 import SearchEngine from '../../search/SearchEngine';
 import ItemChange from '../../../models/ItemChange';
 import { NoteEntity } from '../../database/types';
-
-let searchEngineInstance: SearchEngine = null;
 
 describe('routes/search', () => {
 
@@ -21,10 +19,9 @@ describe('routes/search', () => {
 		for (let i = 0; i < 101; i++) {
 			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
 		}
+
 		await Promise.all(promises);
-		searchEngineInstance = SearchEngine.instance();
-		searchEngineInstance.setDb(db());
-		await searchEngineInstance.syncTables();
+		await SearchEngine.instance().syncTables();
 		await ItemChange.waitForAllSaved();
 
 		const result = await api.route(RequestMethod.GET, 'search', { query: 'abcd', limit: 100 });
@@ -44,9 +41,7 @@ describe('routes/search', () => {
 			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
 		}
 		await Promise.all(promises);
-		searchEngineInstance = SearchEngine.instance();
-		searchEngineInstance.setDb(db());
-		await searchEngineInstance.syncTables();
+		await SearchEngine.instance().syncTables();
 		await ItemChange.waitForAllSaved();
 
 		const result = [];
