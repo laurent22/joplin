@@ -1,6 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import PgBoss = require('pg-boss');
-import { BaseQueue, JobData, JobWithResult, QueueConfiguration } from '../../types';
+import { BaseQueue, JobData, JobWithData, JobWithResult, QueueConfiguration } from '../../types';
 import { ErrorBadRequest } from '../../errors';
 import { Day, Minute, Second } from '@joplin/utils/time';
 
@@ -58,7 +58,7 @@ export default class PgBossQueue implements BaseQueue {
 	}
 
 	public async fetch() {
-		const jobs = await this.boss.fetch<JobData>(this.queue, { batchSize: 1 });
+		const jobs = await this.boss.fetch<JobData>(this.queue, { batchSize: 1, includeMetadata: true });
 		if (jobs.length === 0) return null;
 		return jobs[0];
 	}
@@ -78,6 +78,10 @@ export default class PgBossQueue implements BaseQueue {
 		}
 
 		return result as JobWithResult;
+	}
+
+	public hasJobFailedTooManyTimes(job: JobWithData): boolean {
+		return job.retryCount >= this.options.retryCount;
 	}
 
 	public async stop() {

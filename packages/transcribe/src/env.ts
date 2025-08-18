@@ -1,10 +1,11 @@
+import { Day, Hour, Minute, Second } from '@joplin/utils/time';
 
 export const defaultEnvValues: EnvVariables = {
 	SERVER_PORT: 4567,
 	API_KEY: '',
-	QUEUE_TTL: 900000,
+	QUEUE_TTL: 15 * Minute,
 	QUEUE_RETRY_COUNT: 2,
-	QUEUE_MAINTENANCE_INTERVAL: 60000,
+	QUEUE_MAINTENANCE_INTERVAL: 60 * Second,
 	HTR_CLI_DOCKER_IMAGE: 'joplin/htr-cli:0.0.2',
 	HTR_CLI_IMAGES_FOLDER: '',
 	QUEUE_DRIVER: 'pg', // 'sqlite'
@@ -12,6 +13,8 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
+	FILE_STORAGE_MAINTENANCE_INTERVAL: 1 * Hour,
+	FILE_STORAGE_TTL: 7 * Day,
 	QUEUE_DATABASE_HOST: 'localhost',
 };
 
@@ -28,6 +31,8 @@ export interface EnvVariables {
 	QUEUE_DATABASE_NAME: string;
 	QUEUE_DATABASE_USER: string;
 	QUEUE_DATABASE_PORT: number;
+	FILE_STORAGE_MAINTENANCE_INTERVAL: number;
+	FILE_STORAGE_TTL: number;
 	QUEUE_DATABASE_HOST: string;
 }
 

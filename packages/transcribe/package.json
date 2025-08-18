@@ -8,6 +8,7 @@
     "start": "node dist/src/api/app.js",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest --verbose=false",
+    "test-all": "TRANSCRIBE_RUN_ALL=1 jest --verbose=false",
     "test-ci": "yarn test",
     "clean": "gulp clean",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"

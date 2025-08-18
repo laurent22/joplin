@@ -4,11 +4,14 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { getDisplayParentId, getTrashFolderId } from '@joplin/lib/services/trash';
+import {
+	getDisplayParentId,
+	getTrashFolderId,
+} from '@joplin/lib/services/trash';
 const ListWidget = require('tkwidgets/ListWidget.js');
 
-export default class FolderListWidget extends ListWidget {
 
+export default class FolderListWidget extends ListWidget {
 	private folders_: FolderEntity[] = [];
 
 	public constructor() {
@@ -31,7 +34,18 @@ export default class FolderListWidget extends ListWidget {
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(' '.repeat(this.folderDepth(this.folders, item.id)));
+				const depth = this.folderDepth(this.folders, item.id);
+				output.push(' '.repeat(depth));
+
+				// Add collapse/expand indicator
+				const hasChildren = this.folderHasChildren_(this.folders, item.id);
+				if (hasChildren) {
+					const collapsedFolders = Setting.value('collapsedFolderIds');
+					const isCollapsed = collapsedFolders.includes(item.id);
+					output.push(isCollapsed ? '[+] ' : '[-] ');
+				} else {
+					output.push('  '); // Space for alignment
+				}
 
 				if (this.showIds) {
 					output.push(Folder.shortId(item.id));
@@ -65,7 +79,10 @@ export default class FolderListWidget extends ListWidget {
 		let output = 0;
 		while (true) {
 			const folder = BaseModel.byId(folders, folderId);
-			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			const folderParentId = getDisplayParentId(
+				folder,
+				folders.find((f) => f.id === folder.parent_id),
+			);
 			if (!folder || !folderParentId) return output;
 			output++;
 			folderId = folderParentId;
@@ -153,7 +170,10 @@ export default class FolderListWidget extends ListWidget {
 	public folderHasChildren_(folders: FolderEntity[], folderId: string) {
 		for (let i = 0; i < folders.length; i++) {
 			const folder = folders[i];
-			const folderParentId = getDisplayParentId(folder, folders.find(f => f.id === folder.parent_id));
+			const folderParentId = getDisplayParentId(
+				folder,
+				folders.find((f) => f.id === folder.parent_id),
+			);
 			if (folderParentId === folderId) return true;
 		}
 		return false;
@@ -161,7 +181,12 @@ export default class FolderListWidget extends ListWidget {
 
 	public render() {
 		if (this.updateItems_) {
-			this.logger().debug('Rebuilding items...', this.notesParentType, this.selectedJoplinItemId, this.selectedSearchId);
+			this.logger().debug(
+				'Rebuilding items...',
+				this.notesParentType,
+				this.selectedJoplinItemId,
+				this.selectedSearchId,
+			);
 			const wasSelectedItemId = this.selectedJoplinItemId;
 			const previousParentType = this.notesParentType;
 
@@ -170,12 +195,20 @@ export default class FolderListWidget extends ListWidget {
 			const orderFolders = (parentId: string) => {
 				for (let i = 0; i < this.folders.length; i++) {
 					const f = this.folders[i];
-					const originalParent = this.folders_.find(f => f.id === f.parent_id);
+					const originalParent = this.folders_.find(
+						(f) => f.id === f.parent_id,
+					);
 
 					const folderParentId = getDisplayParentId(f, originalParent); // f.parent_id ? f.parent_id : '';
 					if (folderParentId === parentId) {
 						newItems.push(f);
-						if (this.folderHasChildren_(this.folders, f.id)) orderFolders(f.id);
+						// Only recurse into children if the folder is not collapsed
+						if (this.folderHasChildren_(this.folders, f.id)) {
+							const collapsedFolders = Setting.value('collapsedFolderIds');
+							if (!collapsedFolders.includes(f.id)) {
+								orderFolders(f.id);
+							}
+						}
 					}
 				}
 			};
@@ -220,5 +253,54 @@ export default class FolderListWidget extends ListWidget {
 		if (itemId === null) itemId = this.selectedJoplinItemId;
 		const index = this.itemIndexByKey('id', itemId);
 		this.currentIndex = index >= 0 ? index : 0;
+	}
+
+	public toggleFolderCollapse() {
+		const item = this.currentItem;
+		if (item && item.type_ === Folder.modelType() && this.folderHasChildren_(this.folders, item.id)) {
+			const collapsedFolders = Setting.value('collapsedFolderIds');
+			const isCollapsed = collapsedFolders.includes(item.id);
+			if (isCollapsed) {
+				const newCollapsed = collapsedFolders.filter((id: string) => id !== item.id);
+				Setting.setValue('collapsedFolderIds', newCollapsed);
+			} else {
+				Setting.setValue('collapsedFolderIds', [...collapsedFolders, item.id]);
+			}
+			this.updateItems_ = true;
+			this.invalidate();
+			return true;
+		}
+		return false;
+	}
+
+
+	public expandToFolder(folderId: string) {
+		// Find all parent folders and expand them
+		const parentsToExpand: string[] = [];
+		let currentId = folderId;
+
+		while (currentId) {
+			const folder = BaseModel.byId(this.folders, currentId);
+			if (!folder) break;
+
+			const parentId = getDisplayParentId(
+				folder,
+				this.folders.find((f) => f.id === folder.parent_id),
+			);
+			if (parentId) {
+				parentsToExpand.unshift(parentId);
+				currentId = parentId;
+			} else {
+				break;
+			}
+		}
+
+		// Expand all parent folders
+		const collapsedFolders = Setting.value('collapsedFolderIds');
+		const newCollapsed = collapsedFolders.filter((id: string) => !parentsToExpand.includes(id));
+		Setting.setValue('collapsedFolderIds', newCollapsed);
+
+		this.updateItems_ = true;
+		this.invalidate();
 	}
 }
