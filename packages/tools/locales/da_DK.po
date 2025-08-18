@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: ERYpTION\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -425,9 +427,8 @@ msgid "Add recipient:"
 msgstr "Tilføj modtager:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Nye etiketter:"
+msgstr "Tilføj etiketter:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -442,18 +443,16 @@ msgid "Add to note"
 msgstr "Tilføj til note"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Tilføj ny"
+msgstr "Tilføjet ny: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "Tilføj etiketten %s til note"
+msgstr "Tilføjet etikette: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Tilføjer etikette"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -633,7 +632,7 @@ msgstr "Aritim Mørk"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Tilknyttede etiketter:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -1150,9 +1149,8 @@ msgid "Code View"
 msgstr "Kodevisning"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Kode"
+msgstr "Kode:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1326,14 +1324,12 @@ msgid "Control character"
 msgstr "Kontroltegn"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Konverter til note"
+msgstr "Konverter den"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Konverter til opgave"
+msgstr "Konverter note til Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1440,9 +1436,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Kunne ikke forbinde til plugin-lager."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Kunne ikke eksportere noterne: %s"
+msgstr "Kunne ikke konvertere note til Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1497,9 +1492,8 @@ msgid "Create a notebook"
 msgstr "Opret en notesbog"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Opretter en ny notesbog."
+msgstr "Opretter ny notesbog"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1507,9 +1501,8 @@ msgid "Create new profile..."
 msgstr "Opret ny profil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Opret notesbog"
+msgstr "Opret note"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1579,14 +1572,12 @@ msgid "Creating new to-do..."
 msgstr "Opretter nye gøremål..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Opretter ny note..."
+msgstr "Opretter note \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Opretter ny note..."
+msgstr "Opretter ny note."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1688,7 +1679,7 @@ msgstr "Standard"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
-msgstr ""
+msgstr "Standardtitel til brug for dokumenter, der er oprettet af scanneren."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1977,7 +1968,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Dokumentscanner: Skabelon til titel"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -1989,7 +1980,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Vis ikke denne besked igen"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2114,14 +2105,12 @@ msgid "Edit"
 msgstr "Redigér"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Rediger som Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Rich Text"
+msgstr "Rediger som Rich Text"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2281,14 +2270,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Slå understøttelse af Fountain syntaks til"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Aktivér kryptering"
+msgstr "Aktivér håndskrevet transskription"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Aktivér Markdown-værktøjslinjen"
+msgstr "Aktivér banner for HTML-til-Markdown-konvertering"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2899,9 +2886,8 @@ msgid "Hide password"
 msgstr "Skjul adgangskode"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Advarsel"
+msgstr "Skjuler advarsel"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2953,6 +2939,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Hvis en billedvedhæftning står på sin egen linje og efterfølges af en tom "
+"linje, vil den blive gengivet lige under Markdown-kilden."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3646,13 +3634,12 @@ msgid "Markdown editor"
 msgstr "Markdown-editor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown-editor"
+msgstr "Markdown-editor: Gengiv billeder"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown-editor: Lav markup i editoren"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3872,9 +3859,8 @@ msgid ""
 msgstr "Ny notesbog \"%s\" bliver oprettet og filen \"%s\" importeres til den"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Notesbogstitel:"
+msgstr "Ny notesbogstitel"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -3990,9 +3976,8 @@ msgid "No tab selected"
 msgstr "Ingen fane valgt"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Nye etiketter:"
+msgstr "Ingen etiketter"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4112,9 +4097,8 @@ msgid "Note list style"
 msgstr "Notatliste-stil"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Notefremviser"
+msgstr "Note-forhåndsvisning"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4206,9 +4190,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL eller sti til sprogdata"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Søg i alle noterne"
+msgstr "OCR: Søg i udtrukket indhold"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4475,7 +4458,7 @@ msgstr "Tilladelse nødvendig"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Foto %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4816,9 +4799,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Upload lokal data igen til synkroniseringsmål"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Få mere at vide"
+msgstr "Læs mere"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4829,9 +4811,8 @@ msgid "Read time: %s min"
 msgstr "Læsetid: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Kommando \"%s\" er kun til rådighed i GUI tilstand"
+msgstr "Det er kun muligt at læse kommandoer fra standardinput i CLI-tilstand."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4850,9 +4831,8 @@ msgid "Recipients:"
 msgstr "Modtagere:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Ændr størrelsen på store billeder:"
+msgstr "Genkend håndskrevet billede"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4906,9 +4886,8 @@ msgid "Remove"
 msgstr "Fjern"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Fjern"
+msgstr "Fjern %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4927,9 +4906,8 @@ msgid "Removed %s from share."
 msgstr "Fjern %s fra deling."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Omdøb etikette:"
+msgstr "Fjernet etikette: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4950,7 +4928,7 @@ msgstr "Omdøber det aktuelle <item> (note eller notesbog) til <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Laver markup på alle linjer, der ikke omfatter markøren."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5198,9 +5176,8 @@ msgid "Save geo-location with notes"
 msgstr "Gem geo-lokation i noter"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Vælger en notesbog"
+msgstr "Scan notesbog"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5249,9 +5226,8 @@ msgid "Search shown"
 msgstr "Søg viste"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Søgeresultater"
+msgstr "Søg etiketter"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5300,18 +5276,16 @@ msgid "Select file..."
 msgstr "Vælg fil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Vælger en notesbog"
+msgstr "Vælg notesbog"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Vælg overordnet notesbog"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Oprettet: %s"
+msgstr "Valgte: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6133,11 +6107,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Notesbogen og dens indhold blev flyttet til papirkurven."
+msgstr ""
+"Noten er blevet konverteret til Markdown, og den oprindelige note er blevet "
+"flyttet til papirkurven."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6367,14 +6342,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Denne funktion er som standard deaktiveret, og du skal aktivere den manuelt "
+"ved at slå indstillingen 'Aktiver håndskreven transskription' til."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Denne funktion er kun tilgængelig på Joplin Cloud og Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Denne billedtype understøttes ikke af genkendelsessystemet."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6429,6 +6406,8 @@ msgstr "Denne note har ingen historie"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Denne note er i HTML-format. Konverter den til Markdown for at gøre det "
+"lettere at redigere den."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6535,6 +6514,7 @@ msgstr "Indtast din hovedadgangskode nedenfor for at fortsætte."
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
+"For at oprette en ny etikette skal du skrive navnet og trykke på enter."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6915,9 +6895,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Opgrader synkmålet til den seneste version."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Tag et foto"
+msgstr "Upload foto"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109

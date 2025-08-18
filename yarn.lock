@@ -43,10 +43,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adobe/css-tools@npm:4.4.2":
-  version: 4.4.2
-  resolution: "@adobe/css-tools@npm:4.4.2"
-  checksum: 10/893d97ba524d92d5fdcee517a47fa7a144ca89dfcc559f5e1c3a9894599bf64c4ee5fc811fb11de0ab84da6778f4b69ea6aede73813534aeb5dfbc412d0788db
+"@adobe/css-tools@npm:4.4.3":
+  version: 4.4.3
+  resolution: "@adobe/css-tools@npm:4.4.3"
+  checksum: 10/701379c514b7a43ca6681705a93cd57ad79565cfef9591122e9499897550cf324a5e5bb1bc51df0e7433cf0e91b962c90f18ac459dcc98b2431daa04aa63cb20
   languageName: node
   linkType: hard
 
@@ -9138,12 +9138,12 @@ __metadata:
     "@joplin/renderer": "npm:~3.4"
     "@joplin/tools": "npm:~3.4"
     "@joplin/utils": "npm:~3.4"
-    "@playwright/test": "npm:1.51.1"
+    "@playwright/test": "npm:1.52.0"
     "@sentry/electron": "npm:4.24.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@types/react": "npm:18.3.21"
     "@types/react-dom": "npm:18.3.7"
     "@types/react-redux": "npm:7.1.33"
@@ -9243,10 +9243,10 @@ __metadata:
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.134"
+    "@types/serviceworker": "npm:0.0.135"
     "@types/tar-stream": "npm:3.1.3"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -9422,7 +9422,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
     coveralls: "npm:3.1.1"
@@ -9452,7 +9452,7 @@ __metadata:
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
     typescript: "npm:5.8.2"
@@ -9463,7 +9463,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
+    "@adobe/css-tools": "npm:4.4.3"
     "@joplin/fork-htmlparser2": "npm:^4.1.58"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
@@ -9479,7 +9479,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
+    "@adobe/css-tools": "npm:4.4.3"
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
     "@joplin/fork-htmlparser2": "npm:^4.1.58"
@@ -9501,7 +9501,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/nanoid": "npm:3.0.0"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:18.3.21"
     "@types/uuid": "npm:10.0.0"
@@ -9617,7 +9617,7 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     fs-extra: "npm:11.2.0"
     gh-release-assets: "npm:2.0.1"
     jest: "npm:29.7.0"
@@ -9672,7 +9672,7 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.2.0"
     highlight.js: "npm:11.11.1"
@@ -9783,7 +9783,7 @@ __metadata:
     "@types/js-yaml": "npm:4.0.9"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@types/node-fetch": "npm:2.6.12"
     "@types/yargs": "npm:17.0.33"
     compare-versions: "npm:6.1.1"
@@ -9861,7 +9861,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
+    "@adobe/css-tools": "npm:4.4.3"
     "@rollup/plugin-commonjs": "npm:28.0.3"
     "@rollup/plugin-node-resolve": "npm:16.0.1"
     "@rollup/plugin-replace": "npm:6.0.2"
@@ -11781,14 +11781,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.51.1":
-  version: 1.51.1
-  resolution: "@playwright/test@npm:1.51.1"
+"@playwright/test@npm:1.52.0":
+  version: 1.52.0
+  resolution: "@playwright/test@npm:1.52.0"
   dependencies:
-    playwright: "npm:1.51.1"
+    playwright: "npm:1.52.0"
   bin:
     playwright: cli.js
-  checksum: 10/ffb0c964d54f593897f05a2587d8e1e4f5f0e8c28f5f6260c1182ff938eb375d96c57594dd2f223ec45452a6af40695fd22f222930610c32f345e28ccf53141d
+  checksum: 10/e18a4eb626c7bc6cba212ff2e197cf9ae2e4da1c91bfdf08a744d62e27222751173e4b220fa27da72286a89a3b4dea7c09daf384d23708f284b64f98e9a63a88
   languageName: node
   linkType: hard
 
@@ -14622,12 +14622,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.100":
-  version: 18.19.100
-  resolution: "@types/node@npm:18.19.100"
+"@types/node@npm:18.19.101":
+  version: 18.19.101
+  resolution: "@types/node@npm:18.19.101"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/85939f4610aa526dc2a07eceeaeb12d8c56a4b817e76d921f8a6b4bc285892f70dcdf102587dad6e8b0c6d9b7109c2da5a1666b9553c1015c9f7348952e03e35
+  checksum: 10/fc56ee1895afe249e2a2b6712df65477345f1ccd0d1f9a13cb0c4079a2513fdf14e1dcbc4180de746caae14fcd5d03840959a29b4779b1155fd787648af319c5
   languageName: node
   linkType: hard
 
@@ -14958,10 +14958,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.134":
-  version: 0.0.134
-  resolution: "@types/serviceworker@npm:0.0.134"
-  checksum: 10/46804986ea60df883221710b7a03983601415947693f26a3348af63f48b2b2c2b69493ab9bf07f3d6def9983e22cb14abe019383db627973db5dc8b6beae7a8e
+"@types/serviceworker@npm:0.0.135":
+  version: 0.0.135
+  resolution: "@types/serviceworker@npm:0.0.135"
+  checksum: 10/9521fc125f3af5f017e6881d33ad46c038eac28977d3bd33a7c6c7068d4156430863c1e116cf6faa8a9f0c470c1f47771724ae26437c365978b5582065d94d55
   languageName: node
   linkType: hard
 
@@ -33019,7 +33019,7 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.101"
     "@types/proper-lockfile": "npm:^4.1.2"
     aws-sdk: "npm:2.1340.0"
     chalk: "npm:4.1.2"
@@ -40097,27 +40097,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.51.1":
-  version: 1.51.1
-  resolution: "playwright-core@npm:1.51.1"
+"playwright-core@npm:1.52.0":
+  version: 1.52.0
+  resolution: "playwright-core@npm:1.52.0"
   bin:
     playwright-core: cli.js
-  checksum: 10/954ce25782bbf0780c170caa56e7a0ab2e625dad42c628f9ee684974398b93885e58b88afb8b18dd2c96a7a82c6dde474d4fa7a4f6dff32111a562506c187cc3
+  checksum: 10/42e13f5f98dc25ebc95525fb338a215b9097b2ba39d41e99972a190bf75d79979f163f5bc07b1ca06847ee07acb2c9b487d070fab67e9cd55e33310fc05aca3c
   languageName: node
   linkType: hard
 
-"playwright@npm:1.51.1":
-  version: 1.51.1
-  resolution: "playwright@npm:1.51.1"
+"playwright@npm:1.52.0":
+  version: 1.52.0
+  resolution: "playwright@npm:1.52.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.51.1"
+    playwright-core: "npm:1.52.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/cc7d3e204b9fd70a7208ef1d189981135a04de533eff4a6772a6c8be1604a1eaaa3bac9129eb5d814384d4f727fb8011832676a5105b1b260917c48c421f7f9b
+  checksum: 10/214175446089000c2ac997b925063b95f7d86d129c5d7c74caa5ddcb05bcad598dfd569d2133a10dc82d288bf67e7858877dcd099274b0b928b9c63db7d6ecec
   languageName: node
   linkType: hard
 

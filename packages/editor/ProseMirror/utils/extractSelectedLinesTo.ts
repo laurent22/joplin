@@ -33,7 +33,8 @@ const extractSelectedLinesTo = (extractTo: ExtractToOptions, transaction: Transa
 
 	const firstParagraphFrom = firstParagraphPos;
 	const lastParagraph = transaction.doc.nodeAt(lastParagraphPos);
-	const lastParagraphTo = lastParagraphPos + lastParagraph.nodeSize;
+	// -1: Exclude the end token
+	const lastParagraphTo = lastParagraphPos + lastParagraph.nodeSize - 1;
 
 	// Find the previous and next <br/>s (or the start/end of the paragraph)
 	let fromBreakPosition = firstParagraphFrom;

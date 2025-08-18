@@ -56,10 +56,13 @@ class ActionTracker {
 
 	public track(client: { email: string }) {
 		const clientId = client.email;
-		this.tree_.set(clientId, {
-			childIds: [],
-			sharedFolderIds: [],
-		});
+		// If the client's remote account already exists, continue using it:
+		if (!this.tree_.has(clientId)) {
+			this.tree_.set(clientId, {
+				childIds: [],
+				sharedFolderIds: [],
+			});
+		}
 
 		const getChildIds = (itemId: ItemId) => {
 			const item = this.idToItem_.get(itemId);
