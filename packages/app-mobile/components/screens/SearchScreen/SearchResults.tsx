@@ -24,7 +24,7 @@ interface Props {
 	ftsEnabled: number;
 }
 
-const limit = 100;
+export const limit = 100;
 
 const useStyles = (themeId: number) => {
 	return useMemo(() => {
