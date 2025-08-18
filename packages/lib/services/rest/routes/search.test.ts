@@ -2,8 +2,17 @@ import Note from '../../../models/Note';
 import Api, { RequestMethod } from '../Api';
 import { switchClient, setupDatabase } from '../../../testing/test-utils';
 import SearchEngine from '../../search/SearchEngine';
-import ItemChange from '../../../models/ItemChange';
 import { NoteEntity } from '../../database/types';
+
+const create101Notes = async () => {
+	const promises = [];
+	// Using 101 because the default limit is 100 returned results on mobile
+	for (let i = 0; i < 101; i++) {
+		promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
+	}
+	await Promise.all(promises);
+	await SearchEngine.instance().syncTables();
+};
 
 describe('routes/search', () => {
 
@@ -14,15 +23,7 @@ describe('routes/search', () => {
 
 	it('should be able to get all notes with pagination', async () => {
 		const api = new Api();
-		const promises = [];
-		// Using 101 because the default limit is 100 returned results on mobile
-		for (let i = 0; i < 101; i++) {
-			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
-		}
-
-		await Promise.all(promises);
-		await SearchEngine.instance().syncTables();
-		await ItemChange.waitForAllSaved();
+		await create101Notes();
 
 		const result = await api.route(RequestMethod.GET, 'search', { query: 'abcd', limit: 100 });
 		const result2 = await api.route(RequestMethod.GET, 'search', { query: 'abcd', limit: 100, page: 2 });
@@ -35,14 +36,7 @@ describe('routes/search', () => {
 
 	it('should allow to set limit to pagination without affecting the search query', async () => {
 		const api = new Api();
-		const promises = [];
-		// Using 101 because the default limit is 100 returned results on mobile
-		for (let i = 0; i < 101; i++) {
-			promises.push(Note.save({ title: `abcd ${i}`, body: 'body' }));
-		}
-		await Promise.all(promises);
-		await SearchEngine.instance().syncTables();
-		await ItemChange.waitForAllSaved();
+		await create101Notes();
 
 		const result = [];
 		let page = 1;
