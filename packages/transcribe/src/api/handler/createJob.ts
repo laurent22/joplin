@@ -8,10 +8,11 @@ type CreateJobContext = {
 	storeImage: (filePath: string)=> Promise<string>;
 	sendToQueue: (data: JobData)=> Promise<string | null>;
 	filepath: string;
+	imageMaxDimension: number;
 };
 
 const createJob = async (context: CreateJobContext) => {
-	const resizedFilePath = await resizeImage(context.filepath);
+	const resizedFilePath = await resizeImage(context.filepath, context.imageMaxDimension);
 
 	const filePath = await context.storeImage(resizedFilePath);
 

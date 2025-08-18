@@ -1,3 +1,4 @@
+import env from '../../env';
 import { ErrorBadRequest } from '../../errors';
 import { AppContext, JobData } from '../../types';
 import isFileAValidImage, { supportedImageFormat } from './isFileAValidImage';
@@ -24,6 +25,7 @@ export const parseCreateJobRequest = async (ctx: AppContext) => {
 		storeImage: (file: string) => ctx.storage.store(file),
 		sendToQueue: (data: JobData) => ctx.queue.send(data),
 		filepath: file.filepath,
+		imageMaxDimension: env().IMAGE_MAX_DIMENSION,
 	};
 };
 
