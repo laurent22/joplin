@@ -45,6 +45,8 @@ The `Authorization` header value should be set to the same secret set on `API_KE
 
 ## POST `/transcribe`
 
+Endpoint for creating the transcription job. It is going to store the image on disk after resizing it and assign it to a job record in the database to be eventually processed.
+
 ### Request Body:
 - **Content-Type**: `multipart/form-data`
 - **Field**: `file` (required) – The file to be processed
@@ -72,6 +74,7 @@ curl --request POST \
 
 ## GET `/transcribe/{:jobId}`
 
+Endpoint to get the result of the job that was created via the `POST /transcribe` endpoint.
 
 ### Request:
 
