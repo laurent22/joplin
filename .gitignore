@@ -1077,6 +1077,7 @@ packages/editor/ProseMirror/types.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js
 packages/editor/ProseMirror/utils/canReplaceSelectionWith.js
 packages/editor/ProseMirror/utils/computeSelectionFormatting.js
+packages/editor/ProseMirror/utils/dom/createButton.js
 packages/editor/ProseMirror/utils/dom/createTextArea.js
 packages/editor/ProseMirror/utils/dom/createTextNode.js
 packages/editor/ProseMirror/utils/dom/createUniqueId.js

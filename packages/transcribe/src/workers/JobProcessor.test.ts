@@ -36,7 +36,7 @@ describe('JobProcessor', () => {
 
 	skipByDefault('should execute work on job in the queue', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', join(process.cwd(), 'images')), new FileStorage(), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', join(process.cwd(), 'images')), new FileStorage(), 1000);
 		await tw.init();
 
 		await copy(join('images', 'htr_sample.png'), join('images', 'htr_sample_copy.png'));
@@ -59,7 +59,7 @@ describe('JobProcessor', () => {
 
 	skipByDefault('should execute work on job in the queue even if one fails', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', join(process.cwd(), 'images')), new FileStorage(), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', join(process.cwd(), 'images')), new FileStorage(), 1000);
 		await tw.init();
 		await copy(join('images', 'htr_sample.png'), join('images', 'htr_sample_copy_2.png'));
 
@@ -84,7 +84,7 @@ describe('JobProcessor', () => {
 
 	skipByDefault('should remove file sent to queue if job is completed', async () => {
 		jest.useRealTimers();
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', join(process.cwd(), 'images')), new FileStorage(), 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', join(process.cwd(), 'images')), new FileStorage(), 1000);
 		await tw.init();
 		const imagePath = join('images', 'htr_sample_copy_3.png');
 		await copy(join('images', 'htr_sample.png'), imagePath);
@@ -112,7 +112,7 @@ describe('JobProcessor', () => {
 		const fileStorage = new FileStorage();
 		const mockedFileStorageRemove = jest.fn();
 		fileStorage.remove = mockedFileStorageRemove;
-		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:0.0.2', join(process.cwd(), 'images')), fileStorage, 1000);
+		const tw = new JobProcessor(queue, new HtrCli('joplin/htr-cli:latest', join(process.cwd(), 'images')), fileStorage, 1000);
 		await tw.init();
 
 		// file doesn't exist to force a fail, but the call to remove the file should still exist

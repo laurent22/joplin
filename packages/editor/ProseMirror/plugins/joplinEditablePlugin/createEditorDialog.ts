@@ -13,14 +13,16 @@ interface Options {
 	doneLabel: string|Promise<string>;
 	block: SourceBlockData;
 	onSave: (newContent: SourceBlockData)=> void;
+	onDismiss: ()=> void;
 }
 
-const createEditorDialog = ({ editorLabel, doneLabel, block, onSave }: Options) => {
+const createEditorDialog = ({ editorLabel, doneLabel, block, onSave, onDismiss }: Options) => {
 	const dialog = document.createElement('dialog');
 	dialog.classList.add('editor-dialog', '-visible');
 	document.body.appendChild(dialog);
 
 	dialog.onclose = () => {
+		onDismiss();
 		dialog.remove();
 	};
 

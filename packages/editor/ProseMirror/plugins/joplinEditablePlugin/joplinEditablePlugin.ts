@@ -5,8 +5,8 @@ import sanitizeHtml from '../../utils/sanitizeHtml';
 import createEditorDialog from './createEditorDialog';
 import { getEditorApi } from '../joplinEditorApiPlugin';
 import { msleep } from '@joplin/utils/time';
-import createTextNode from '../../utils/dom/createTextNode';
 import postProcessRenderedHtml from './postProcessRenderedHtml';
+import createButton from '../../utils/dom/createButton';
 import makeLinksClickableInElement from '../../utils/makeLinksClickableInElement';
 
 // See the fold example for more information about
@@ -117,6 +117,7 @@ export const nodeSpecs = {
 type GetPosition = ()=> number;
 
 class EditableSourceBlockView implements NodeView {
+	private editDialogVisible_ = false;
 	public readonly dom: HTMLElement;
 	public constructor(private node: Node, inline: boolean, private view: EditorView, private getPosition: GetPosition) {
 		if ((node.attrs.contentHtml ?? undefined) === undefined) {
@@ -134,6 +135,10 @@ class EditableSourceBlockView implements NodeView {
 	}
 
 	private showEditDialog_() {
+		if (this.editDialogVisible_) {
+			return;
+		}
+
 		const { localize: _ } = getEditorApi(this.view.state);
 
 		let saveCounter = 0;
@@ -177,6 +182,9 @@ class EditableSourceBlockView implements NodeView {
 					),
 				);
 			},
+			onDismiss: () => {
+				this.editDialogVisible_ = false;
+			},
 		});
 	}
 
@@ -187,16 +195,10 @@ class EditableSourceBlockView implements NodeView {
 
 		const attrs = this.node.attrs as JoplinEditableAttributes;
 		const addEditButton = () => {
-			const editButton = document.createElement('button');
-			editButton.classList.add('edit');
-
 			const { localize: _ } = getEditorApi(this.view.state);
 
-			editButton.appendChild(createTextNode(_('Edit')));
-			editButton.onclick = (event) => {
-				this.showEditDialog_();
-				event.preventDefault();
-			};
+			const editButton = createButton(_('Edit'), () => this.showEditDialog_());
+			editButton.classList.add('edit');
 
 			if (!attrs.readOnly) {
 				this.dom.appendChild(editButton);
