@@ -35,6 +35,7 @@ describe('createJob', () => {
 			filepath: './test_file.png',
 			storeImage: () => Promise.resolve('file-id'),
 			sendToQueue: (data: JobData) => queue.send(data),
+			imageMaxDimension: 400,
 		};
 		const result = await createJob(requirements);
 		const job = await queue.fetch();
@@ -56,6 +57,7 @@ describe('createJob', () => {
 			filepath: './test_file.png',
 			storeImage: () => { throw new Error('Something went wrong'); },
 			sendToQueue: (data: JobData) => queue.send(data),
+			imageMaxDimension: 400,
 		};
 
 		expect(async () => createJob(requirements)).rejects.toThrow();
@@ -72,6 +74,7 @@ describe('createJob', () => {
 			filepath: './test_file.png',
 			storeImage: fs.store,
 			sendToQueue: (data: JobData) => queue.send(data),
+			imageMaxDimension: 400,
 		};
 
 		await createJob(requirements);
