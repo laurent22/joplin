@@ -66,12 +66,12 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-	subgraph ClientSide
-		Client((Client))
+	subgraph Client
+		ClientNode((Joplin))
 	end
 
-	subgraph Joplin
-		JS[[Joplin Server API]]
+	subgraph JoplinServer
+		JS[[REST API]]
 	end
 
 	subgraph Transcribe
@@ -83,7 +83,7 @@ flowchart LR
 		Engine[[LlamaCPP + LLM]]
 	end
 
-	Client -- "POST /transcribe" --> JS
+	ClientNode -- "POST /transcribe" --> JS
 	JS -- "POST /transcribe?secret=***" --> API
 	API -- "Persist job (created)" --> DB
 	API -- "Save image" --> Store
@@ -95,11 +95,11 @@ flowchart LR
 	Worker -- "Update status/result" --> DB
 	Worker -- "Delete image" --> Store
 
-	Client -- "POST /transcribe/:job_id" --> JS
+	ClientNode -- "POST /transcribe/:job_id" --> JS
 	JS -- "POST /transcribe/:job_id?secret=***" --> API
 	API -- "Read status/result" --> DB
 	API -- "Status/result" --> JS
-	JS -- "Status/result (text)" --> Client
+	JS -- "Status/result (text)" --> ClientNode
 ```
 
 ### Job status lifecycle

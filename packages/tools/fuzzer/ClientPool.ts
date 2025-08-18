@@ -45,6 +45,17 @@ export default class ClientPool {
 		];
 	}
 
+	public async newWithSameAccount(sourceClient: Client) {
+		const client = await sourceClient.createClientOnSameAccount();
+		this.listenForClientClose_(client);
+		this.clients_ = [...this.clients_, client];
+		return client;
+	}
+
+	public othersWithSameAccount(client: Client) {
+		return this.clients_.filter(other => other !== client && other.hasSameAccount(client));
+	}
+
 	public async checkState() {
 		for (const client of this.clients_) {
 			await client.checkState();

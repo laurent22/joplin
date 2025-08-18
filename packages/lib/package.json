@@ -25,7 +25,7 @@
     "@types/jsdom": "21.1.7",
     "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.100",
+    "@types/node": "18.19.101",
     "@types/node-rsa": "1.1.4",
     "@types/react": "18.3.21",
     "@types/uuid": "10.0.0",
@@ -41,7 +41,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.4.2",
+    "@adobe/css-tools": "4.4.3",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
     "@joplin/fork-htmlparser2": "^4.1.58",

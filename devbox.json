@@ -16,7 +16,7 @@
       "version":   "",
       "platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "python": "3.13.2",
+    "python": "3.13.3",
     "bat":    "latest",
     "electron": {
       "version":            "latest",
