@@ -174,4 +174,30 @@ describe('api_transcribe', () => {
 		expect(error.message.startsWith('POST /api/transcribe {"status":500,"body":{"error":"Something went wrong"')).toBe(true);
 	});
 
+	test.each([
+		['non-json', 'Something went wrong'],
+		['json', JSON.stringify({ error: 'Something went wrong' })],
+	])('should be able to handle %s error responses', async (_type: string, result: string) => {
+		const { session } = await createUserAndSession(1);
+		jest.spyOn(global, 'fetch').mockImplementation(
+			jest.fn(() => Promise.resolve(
+				{
+					text: () => Promise.resolve(result),
+					status: 500,
+				})) as jest.Mock,
+		);
+
+		const fileContent = await readFile(`${testAssetDir}/htr_example.png`);
+		const tempFilePath = await makeTempFileWithContent(fileContent);
+		const error = await expectThrow(() =>
+			postApi<TranscribeJob>(session.id, 'transcribe', {},
+				{
+					filePath: tempFilePath,
+				},
+			));
+
+		const body = JSON.parse(error.message.split('POST /api/transcribe ')[1]);
+		expect(error.httpCode).toBe(502);
+		expect(body.body.error).toBe('Something went wrong');
+	});
 });
