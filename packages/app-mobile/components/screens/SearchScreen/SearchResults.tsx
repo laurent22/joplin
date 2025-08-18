@@ -156,7 +156,7 @@ const SearchResults: React.FC<Props> = props => {
 				data={notes}
 				keyExtractor={(item) => item.id}
 				renderItem={event => {
-					if (event.index === 0 && notes.length !== limit) {
+					if (event.index === 0 && notes.length === limit) {
 						return <LimitMessage themeId={props.themeId} />;
 					}
 					return <NoteItem note={event.item} />;
