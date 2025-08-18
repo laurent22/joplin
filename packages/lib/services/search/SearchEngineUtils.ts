@@ -12,7 +12,6 @@ export default class SearchEngineUtils {
 	public static async notesForQuery(query: string, applyUserSettings: boolean, options: NotesForQueryOptions = null, searchEngine: SearchEngine = null) {
 		options = {
 			appendWildCards: false,
-			limit: undefined,
 			...options,
 		};
 

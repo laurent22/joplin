@@ -450,7 +450,6 @@ type QueryBuilderOptions = {
 
 export default function queryBuilder(terms: Term[], useFts: boolean, options: QueryBuilderOptions) {
 	options = {
-		limit: undefined,
 		...options,
 	};
 

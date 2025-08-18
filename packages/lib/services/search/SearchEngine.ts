@@ -769,7 +769,6 @@ export default class SearchEngine {
 			searchType: SearchEngine.SEARCH_TYPE_AUTO,
 			appendWildCards: false,
 			includeOrphanedResources: false,
-			limit: undefined,
 			...options,
 		};
 
