@@ -1191,7 +1191,7 @@ export default class Synchronizer {
 		if (errorToThrow) throw errorToThrow;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
-		// that the user will close the app when there are un-synced changed, because they think the sync has completed
+		// that the user will close or minimise the app when there are un-synced changes, because they think the sync has completed
 		const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 		options.context = outputContext;
 
