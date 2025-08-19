@@ -1174,8 +1174,10 @@ export default class Synchronizer {
 
 		await this.logSyncSummary(this.progressReport_);
 
+		const hasErrors = Synchronizer.reportHasErrors(this.progressReport_);
+
 		eventManager.emit(EventName.SyncComplete, {
-			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
+			withErrors: hasErrors,
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1190,7 +1192,7 @@ export default class Synchronizer {
 
 		if (errorToThrow) throw errorToThrow;
 
-		if (!shim.isTestingEnv()) {
+		if (!shim.isTestingEnv() && !hasErrors) {
 			// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 			// that the user will close or minimise the app when there are un-synced changes, because they think the sync has completed
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
