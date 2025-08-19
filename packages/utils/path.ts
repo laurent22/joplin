@@ -38,6 +38,8 @@ export function filename(path: string, includeDir = false) {
 	const normalized = normalize(path);
 	const output = includeDir ? normalized : basename(normalized);
 
+	if (output === '') return output;
+
 	const extension = fileExtension(output);
 	if (extension === '') return output;
 
