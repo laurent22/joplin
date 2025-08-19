@@ -13,7 +13,7 @@ export function basename(path: string) {
 	return s[s.length - 1];
 }
 
-export function normalize(path: string) {
+export const normalize = (path: string) => {
 	const parts = path.split('/');
 	const normalized = [];
 
@@ -30,7 +30,7 @@ export function normalize(path: string) {
 
 	const result = normalized.join('/');
 	return path.startsWith('/') ? `/${result}` : result;
-}
+};
 
 export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
