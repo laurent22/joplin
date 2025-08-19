@@ -1197,6 +1197,7 @@ export default class Synchronizer {
 			options.context = outputContext;
 
 			if (result.items.length > 0) {
+				logger.info('There are more outgoing changes to sync, trigger the sync again');
 				return await this.start(options);
 			}
 		}
