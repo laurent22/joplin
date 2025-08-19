@@ -1153,7 +1153,9 @@ export default class Synchronizer {
 
 		this.syncTargetIsLocked_ = false;
 
-		if (this.cancelling()) {
+		const cancelling = this.cancelling();
+
+		if (cancelling) {
 			logger.info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
 		}
@@ -1192,7 +1194,7 @@ export default class Synchronizer {
 
 		if (errorToThrow) throw errorToThrow;
 
-		if (!shim.isTestingEnv() && !hasErrors) {
+		if (!shim.isTestingEnv() && !hasErrors && !cancelling) {
 			// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 			// that the user will close or minimise the app when there are un-synced changes, because they think the sync has completed
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
