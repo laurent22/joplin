@@ -13,22 +13,7 @@
 			"name": "chr15m"
 		},
 		{
-			"name": "maxtruxa"
-		},
-		{
 			"name": "marcdw1289"
-		},
-		{
-			"name": "taskcruncher"
-		},
-		{
-			"name": "sif"
-		},
-		{
-			"name": "Hegghammer"
-		},
-		{
-			"name": "Galliver7"
 		},
 		{
 			"name": "andypiper"
@@ -46,12 +31,6 @@
 			"title": "Serei Network",
 			"imageName": "SeireiNetwork.png",
 			"githubUser": "konishi-t"
-		},
-		{
-			"url": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-github&mtm_medium=banner",
-			"urlWebsite": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-webseite&mtm_medium=banner",
-			"title": "Hosting.de",
-			"imageName": "HostingDe.png"
 		},
 		{
 			"url": "https://citricsheep.com",
@@ -102,28 +81,10 @@
 			"alt": "topagency"
 		},
 		{
-			"url": "https://realgambling.ca/",
-			"title": "RealGambling.ca",
-			"imageName": "RealGambling.png",
-			"alt": "RealGambling.ca"
-		},
-		{
-			"url": "https://essaypro.com/",
-			"title": "write an essay online with EssayPro",
-			"imageName": "EssayPro.png",
-			"alt": "write an essay online with EssayPro"
-		},
-		{
 			"url": "https://www.slotozilla.com/nz/no-deposit-bonus",
 			"title": "casino without making any upfront cost",
 			"imageName": "Slotozilla.png",
 			"alt": "casino without making any upfront cost"
-		},
-		{
-			"url": "https://essaywriter.pro",
-			"title": "write my essay services by EssayWriter",
-			"imageName": "EssayWriterPro.png",
-			"alt": "write my essay services by EssayWriter"
 		},
 		{
 			"url": "https://essayservice.com",
@@ -144,13 +105,6 @@
 			"alt": "high-quality paper writing service PaperWriter"
 		},
 		{
-			"url": "https://homeworkguy.org/someone-to-take-my-online-class",
-			"title": "someone to take my online class",
-			"imageName": "HomeworkGuy.png",
-			"alt": "someone to take my online class",
-			"githubUser": "Nftsworld007"
-		},
-		{
 			"url": "https://www.bestetf.net/",
 			"title": "BestETF",
 			"imageName": "BestEtf.png",
@@ -162,54 +116,6 @@
 			"title": "Freespinny.io Free Spins Bonus site",
 			"imageName": "Freespinny.png",
 			"alt": "Freespinny.io Free Spins Bonus site"
-		}
-	],
-	"orgsOld": [
-		{
-			"url": "https://usrigging.com/",
-			"title": "U.S. Ringing Supply",
-			"imageName": "RingingSupply.svg"
-		},
-		{
-			"url": "https://residence-greece.com/",
-			"title": "Greece Golden Visa",
-			"imageName": "ResidenceGreece.jpg"
-		},
-		{
-			"url": "https://tranio.com/spain/",
-			"title": "Property for sale in Spain",
-			"imageName": "TranioOverseasProperty.jpg"
-		},
-		{
-			"url": "https://grundstueckspreise.info/",
-			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png",
-			"githubUser": "PeterSchumacher22"
-		},
-		{
-			"url": "https://www.famegear.com",
-			"title": "Famegear",
-			"imageName": "Famegear.png",
-			"githubUser": "rankmediateknologi"
-		},
-		{
-			"url": "https://buyyoutubviews.com",
-			"title": "BYTV",
-			"imageName": "BYTV.png",
-			"githubUser": "bytv1"
-		},
-		{
-			"url": "https://ca.edubirdie.com/",
-			"title": "Achieve academic success with Edubirdie — your trusted partner for expert writing assistance and resources!",
-			"imageName": "Edubirdie.png",
-			"alt": "EduBirdie"
-		},
-		{
-			"url": "https://www.reddit.com/r/tiktokRise/",
-			"title": "Tiktok Rise",
-			"imageName": "TiktokRise.jpg",
-			"alt": "Tiktok Rise",
-			"githubUser": "knickman"
 		}
 	]
 }

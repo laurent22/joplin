@@ -2,19 +2,21 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Liffindra Angga Zaaldian <lzaaldian@gmail.com>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: Liffindra Angga Zaaldian <lzaaldian@gmail.com>\n"
-"Language-Team: \n"
-"Language: id_ID\n"
+"Language-Team: Indonesian\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Gtranslator 48.0\n"
+"PO-Revision-Date: 2025-08-17 00:11+0700\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -421,9 +423,8 @@ msgid "Add recipient:"
 msgstr "Tambah penerima:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Label baru:"
+msgstr "Tambah label:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -438,18 +439,16 @@ msgid "Add to note"
 msgstr "Tambahkan ke catatan"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Tambah baru"
+msgstr "Baru ditambahkan: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "Tambah label %s ke catatan"
+msgstr "Ditambahkan ke label: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Menambahkan label"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -633,7 +632,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Label terkait:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -1154,9 +1153,8 @@ msgid "Code View"
 msgstr "Tampilan Kode"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Kode"
+msgstr "Kode:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1328,14 +1326,12 @@ msgid "Control character"
 msgstr "Karakter kendali"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Ubah ke catatan"
+msgstr "Ubah"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Ubah ke tugas"
+msgstr "Ubah catatan ke Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1440,9 +1436,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Tidak dapat terhubung ke repositori plugin."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Tidak dapat mengekspor catatan: %s"
+msgstr "Tidak dapat mengubah catatan ke Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1497,9 +1492,8 @@ msgid "Create a notebook"
 msgstr "Buat buku catatan"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Membuat buku catatan baru."
+msgstr "Buat buku catatan baru"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1507,9 +1501,8 @@ msgid "Create new profile..."
 msgstr "Buat profil baru..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Buat buku catatan"
+msgstr "Buat catatan"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1579,14 +1572,12 @@ msgid "Creating new to-do..."
 msgstr "Membuat tugas baru..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Membuat catatan baru..."
+msgstr "Membuat catatan \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Membuat catatan baru..."
+msgstr "Membuat catatan."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1688,7 +1679,7 @@ msgstr "Bawaan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
-msgstr ""
+msgstr "Judul bawaan untuk digunakan pada dokumen yang dibuat oleh pemindai."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1979,7 +1970,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Pemindai dokumen: Templat judul"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -1991,7 +1982,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Jangan tampilkan pesan ini lagi"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2117,14 +2108,12 @@ msgid "Edit"
 msgstr "Sunting"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Sunting sebagai Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Teks Kaya"
+msgstr "Sunting sebagai Teks Kaya"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2284,14 +2273,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Nyalakan dukungan sintaksis Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Nyalakan enkripsi"
+msgstr "Nyalakan transkripsi tulisan tangan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Nyalakan bilah alat Markdown"
+msgstr "Nyalakan spanduk penukaran HTML-ke-Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2904,9 +2891,8 @@ msgid "Hide password"
 msgstr "Sembunyikan kata sandi"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Peringatan"
+msgstr "Sembunyikan peringatan"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2958,6 +2944,9 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Jika sebuah lampiran foto berada pada barisnya sendiri dan diikuti oleh "
+"sebuah baris kosong, lampiran tersebut akan ditampilkan tepat di bawah "
+"sumber Markdownnya."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3652,13 +3641,12 @@ msgid "Markdown editor"
 msgstr "Penyunting Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Penyunting Markdown"
+msgstr "Penyunting Markdown: Tampilkan gambar"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Penyunting Markdown: Tampilkan markup pada penyunting"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3881,9 +3869,8 @@ msgstr ""
 "dalamnya"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Judul buku catatan:"
+msgstr "Judul buku catatan baru"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4001,9 +3988,8 @@ msgid "No tab selected"
 msgstr "Tidak ada tab yang dipilih"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Label baru:"
+msgstr "Tidak ada label"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4123,9 +4109,8 @@ msgid "Note list style"
 msgstr "Gaya daftar catatan"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Yang melihat catatan"
+msgstr "Pratinjau catatan"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4219,9 +4204,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: Jalur atau URL data bahasa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Cari di semua catatan"
+msgstr "OCR: Cari di isi yang diambil"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4488,7 +4472,7 @@ msgstr "Perlu izin"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Foto %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4835,9 +4819,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Unggah ulang data lokal ke sasaran penyelerasan"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Pelajari lebih lanjut"
+msgstr "Baca selebihnya"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4848,9 +4831,8 @@ msgid "Read time: %s min"
 msgstr "Waktu baca: %s menit"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Perintah \"%s\" hanya tersedia dalam mode GUI"
+msgstr "Membaca perintah dari masukan standar hanya tersedia pada mode CLI."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4869,9 +4851,8 @@ msgid "Recipients:"
 msgstr "Penerima:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Ubah ukuran gambar besar:"
+msgstr "Kenali gambar dari tulisan tangan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4925,9 +4906,8 @@ msgid "Remove"
 msgstr "Hapus"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Hapus"
+msgstr "Hapus %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4946,9 +4926,8 @@ msgid "Removed %s from share."
 msgstr "Telah menghapus %s dari berbagi."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Ganti nama label:"
+msgstr "Label terhapus: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4971,7 +4950,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Tampilkan markup pada semua baris yang tidak menyertakan penunjuk."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5221,9 +5200,8 @@ msgid "Save geo-location with notes"
 msgstr "Simpan geolokasi dengan catatan"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Pilih buku catatan"
+msgstr "Pindai buku catatan"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5269,12 +5247,11 @@ msgstr "Hasil pencarian"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
 msgid "Search shown"
-msgstr "Pencarian menampilkan"
+msgstr "Pencarian ditampilkan"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Hasil pencarian"
+msgstr "Label pencarian"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5323,7 +5300,6 @@ msgid "Select file..."
 msgstr "Pilih berkas..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
 msgstr "Pilih buku catatan"
 
@@ -5332,9 +5308,8 @@ msgid "Select parent notebook"
 msgstr "Pilih buku catatan induk"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Dibuat: %s"
+msgstr "Dipilih: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6167,11 +6142,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Buku catatan dan isinya telah berhasil dipindahkan ke tempat sampah."
+msgstr ""
+"Catatan telah diubah ke Markdown dan catatan asli telah dipindahkan ke tong "
+"sampah"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6404,14 +6380,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Fitur ini dimatikan secara bawaan, Anda perlu menyalakannya secara manual "
+"dengan menyalakan pilihan untuk 'Menyalakan transkripsi tulisan tangan'."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Fitur ini hanya tersedia pada Joplin Cloud dan Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Jenis gambar ini tidak didukung oleh sistem pengenalan."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6463,6 +6441,8 @@ msgstr "Catatan ini tidak memiliki riwayat"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Catatan ini berada dalam format HTML. Ubah catatan ke Markdown untuk "
+"menyuntingnya dengan lebih mudah."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6567,7 +6547,7 @@ msgstr "Untuk melanjutkan, silakan masukkan kata sandi utama di bawah."
 
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Untuk membuat sebuah label, ketik nama dan tekan enter."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6952,9 +6932,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Tingkatkan sasaran penyelarasan ke versi terakhir."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Ambil foto"
+msgstr "Unggah foto"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109

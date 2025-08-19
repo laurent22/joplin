@@ -369,4 +369,26 @@ describe('RichTextEditor', () => {
 			expect(body.trim()).toBe('Test:\n\n$$\n3^2 + 4^2 = \\sqrt{625}\n$$\n\nTest. testing');
 		});
 	});
+
+	it('should preserve table of contents blocks on edit', async () => {
+		let body = '# Heading\n\n# Heading 2\n\n[toc]\n\nTest.';
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		// Should render the [toc] as a joplin-editable
+		const renderedTableOfContents = await findElement<HTMLElement>('div.joplin-editable');
+		expect(renderedTableOfContents).toBeTruthy();
+		// Should have a link for each heading
+		expect(renderedTableOfContents.querySelectorAll('a[href]')).toHaveLength(2);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('# Heading\n\n# Heading 2\n\n[toc]\n\nTest. testing');
+		});
+	});
 });

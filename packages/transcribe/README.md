@@ -29,7 +29,13 @@ For further customization look at `.env-sample-transcribe`
 
 ## Testing
 
-The integration tests that require the full model to run **don't run on the CI**. It is necessary to be extra careful when changing the model or the prompt because of that. The specific test that has been disabled is at `workers/JobProcessor.test.ts`
+The integration tests that require the full model to run **don't run by default, including on CI**. It is necessary to be extra careful when changing the model or the prompt because of that. The specific test that has been disabled is at `workers/JobProcessor.test.ts`
+
+To run all tests, use the command:
+
+```
+yarn test-all
+```
 
 ## Setup up the database
 

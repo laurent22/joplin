@@ -343,6 +343,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					style={styles.input}
 					id={uniqueId(key)}
 					name={uniqueId(key)}
+					autoFocus
 				/>;
 
 				editCompHandler = () => {
@@ -363,6 +364,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 							id={uniqueId(key)}
 							name={uniqueId(key)}
 							aria-invalid={!this.state.isValid.location}
+							autoFocus
 						/>
 						{
 							this.state.isValid.location ? null
@@ -387,6 +389,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 						style={styles.input}
 						id={uniqueId(key)}
 						name={uniqueId(key)}
+						autoFocus
 					/>
 				);
 			}

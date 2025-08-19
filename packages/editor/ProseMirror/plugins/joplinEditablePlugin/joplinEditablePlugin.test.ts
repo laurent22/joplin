@@ -99,4 +99,22 @@ describe('joplinEditablePlugin', () => {
 		// Should render the updated content
 		expect(renderedEditable.querySelector('.test-content').innerHTML).toBe('Mocked!');
 	});
+
+	test('should make #hash links clickable', () => {
+		const editor = createEditor(`
+			<div class="joplin-editable">
+				<a href="#test-heading-1">Test</a>
+				<a href="#test-heading-2">Test</a>
+			</div>
+			<h1>Test heading 1</h1>
+			<h1>Test heading 2</h1>
+		`);
+		const hashLinks = editor.dom.querySelectorAll<HTMLAnchorElement>('a[href^="#test"]');
+
+		hashLinks[0].click();
+		expect(editor.state.selection.$from.parent.textContent).toBe('Test heading 1');
+
+		hashLinks[1].click();
+		expect(editor.state.selection.$from.parent.textContent).toBe('Test heading 2');
+	});
 });

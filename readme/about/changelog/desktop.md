@@ -12,6 +12,14 @@
 - Fixed: Put crash dump files at the platform-compliant locations ([#12839](https://github.com/laurent22/joplin/issues/12839)) ([#11871](https://github.com/laurent22/joplin/issues/11871) by [@w568w](https://github.com/w568w))
 - Fixed: Selected emoji for new notebooks display too large until Joplin is restarted ([#12888](https://github.com/laurent22/joplin/issues/12888)) ([#12358](https://github.com/laurent22/joplin/issues/12358) by [@suchithms19](https://github.com/suchithms19))
 
+## [v3.4.4](https://github.com/laurent22/joplin/releases/tag/v3.4.4) (Pre-release) - 2025-08-13T16:46:39Z
+
+- New: Add transcribe functionality ([#12670](https://github.com/laurent22/joplin/issues/12670) by [@pedr](https://github.com/pedr))
+- Improved: Make more settings per-profile (application layout, note list style, and note list order) ([#12825](https://github.com/laurent22/joplin/issues/12825)) ([#12714](https://github.com/laurent22/joplin/issues/12714) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages jsdom (v26), sharp (v0.34.0), types
+- Fixed: Add tooltips to sidebar buttons ([#12798](https://github.com/laurent22/joplin/issues/12798)) ([#12233](https://github.com/laurent22/joplin/issues/12233) by [@suchithms19](https://github.com/suchithms19))
+- Fixed: Date/Time dialog button not visible in dark mode ([#12816](https://github.com/laurent22/joplin/issues/12816))
+
 ## [v3.4.3](https://github.com/laurent22/joplin/releases/tag/v3.4.3) (Pre-release) - 2025-07-25T19:49:44Z
 
 - Improved: Updated packages glob (v11.0.2), mermaid (v11.6.0)

@@ -1,5 +1,15 @@
 # Joplin Server Changelog
 
+## [server-v3.4.2](https://github.com/laurent22/joplin/releases/tag/server-v3.4.2) - 2025-08-18T16:51:55Z
+
+- New: Add transcribe functionality (#12670 by [@pedr](https://github.com/pedr))
+- Improved: Trying to fix a request parsing error that can potentially crash the server (#12860)
+- Improved: Updated packages @adobe/css-tools (v4.4.3), bulma (v1.0.4), glob (v11.0.2), jsdom (v26.1.0), ldapts (v7.4.0), mermaid (v11.6.0), sharp (v0.34.1)
+- Fixed: Fix notebooks remain shared after being permanently deleted by the share owner (#12583 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed broken "Delete expired authentication codes" task (#12737)
+- Fixed: Fixed incorrectly named database migration that prevents new migrations from being applied (91b0ea6)
+- Fixed: Skip CORS check for SAML callback (#12948 by [@yuudi](https://github.com/yuudi))
+
 ## [server-v3.4.1](https://github.com/laurent22/joplin/releases/tag/server-v3.4.1) - 2025-07-17T09:28:41Z
 
 - New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))

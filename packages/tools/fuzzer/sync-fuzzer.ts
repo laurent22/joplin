@@ -150,7 +150,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			});
 			if (!target) return false;
 
-			const other = clientPool.randomClient(c => c !== client);
+			const other = clientPool.randomClient(c => !c.hasSameAccount(client));
 			await client.shareFolder(target.id, other);
 			return true;
 		},
@@ -189,6 +189,63 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			if (!newParent) return false;
 
 			await client.moveItem(target.id, newParent.id);
+			return true;
+		},
+		newClientOnSameAccount: async () => {
+			const welcomeNoteCount = context.randInt(0, 30);
+			logger.info(`Syncing a new client on the same account ${welcomeNoteCount > 0 ? `(with ${welcomeNoteCount} initial notes)` : ''}`);
+			const createClientInitialNotes = async (client: Client) => {
+				if (welcomeNoteCount === 0) return;
+
+				// Create a new folder. Usually, new clients have a default set of
+				// welcome notes when first syncing.
+				const testNotesFolderId = uuid.create();
+				await client.createFolder({
+					id: testNotesFolderId,
+					title: 'Test -- from secondary client',
+					parentId: '',
+				});
+
+				for (let i = 0; i < welcomeNoteCount; i++) {
+					await client.createNote({
+						parentId: testNotesFolderId,
+						id: uuid.create(),
+						title: `Test note ${i}/${welcomeNoteCount}`,
+						body: `Test note (in account ${client.email}), created ${Date.now()}.`,
+					});
+				}
+			};
+
+			await client.sync();
+
+			const other = await clientPool.newWithSameAccount(client);
+			await createClientInitialNotes(other);
+
+			// Sometimes, a delay is needed between client creation
+			// and initial sync. Retry the initial sync and the checkState
+			// on failure:
+			await retryWithCount(async () => {
+				await other.sync();
+				await other.checkState();
+			}, {
+				delayOnFailure: (count) => Second * count,
+				count: 3,
+				onFail: async (error) => {
+					logger.warn('other.sync/other.checkState failed with', error, 'retrying...');
+				},
+			});
+
+			await client.sync();
+			return true;
+		},
+		removeClientsOnSameAccount: async () => {
+			const others = clientPool.othersWithSameAccount(client);
+			if (others.length === 0) return false;
+
+			for (const otherClient of others) {
+				assert.notEqual(otherClient, client);
+				await otherClient.close();
+			}
 			return true;
 		},
 	};
