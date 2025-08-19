@@ -387,7 +387,7 @@ export default class Synchronizer {
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = null) {
+	public async start(options: any = null): Promise<any> {
 		if (!options) options = {};
 
 		if (this.state() !== 'idle') {
@@ -1190,6 +1190,11 @@ export default class Synchronizer {
 
 		if (errorToThrow) throw errorToThrow;
 
-		return outputContext;
+		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
+		// that the user will close the app when there are un-synced changed, because they think the sync has completed
+		const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+		options.context = outputContext;
+
+		return (result.items.length > 0) ? await this.start(options) : outputContext;
 	}
 }
