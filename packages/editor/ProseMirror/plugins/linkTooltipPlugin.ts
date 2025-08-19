@@ -62,7 +62,7 @@ class LinkTooltip {
 			this.tooltipContent_.onclick = () => {
 				const href = linkMark.attrs.href;
 				if (href.startsWith('#')) {
-					const command = jumpToHash(href.substring(1), schema.nodes.heading);
+					const command = jumpToHash(href.substring(1));
 					command(view.state, view.dispatch, view);
 				} else {
 					this.onEditorEvent_({
