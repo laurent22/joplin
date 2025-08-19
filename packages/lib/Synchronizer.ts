@@ -1153,12 +1153,12 @@ export default class Synchronizer {
 
 		this.syncTargetIsLocked_ = false;
 
-		let cancelling = false;
+		let cancelledBeforeClearedState = false;
 
 		if (this.cancelling()) {
 			logger.info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
-			cancelling = true;
+			cancelledBeforeClearedState = true;
 		}
 
 		// After syncing, we run the share service maintenance, which is going
@@ -1197,7 +1197,7 @@ export default class Synchronizer {
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 		// that the user will close or minimise the app when there are un-synced changes, because they think the sync has completed
-		if (!shim.isTestingEnv() && !hasErrors && !cancelling && !this.cancelling()) {
+		if (!shim.isTestingEnv() && !hasErrors && !cancelledBeforeClearedState && !this.cancelling()) {
 			// This logic must be bypassed by automated tests, because errors are only added to the progressReport when shim.isTestingEnv() is false, which means
 			// the hasErrors check wont work correctly in automated tests
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
