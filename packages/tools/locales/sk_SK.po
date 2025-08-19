@@ -5,7 +5,9 @@
 # Jozef Gaal <preklady@mayday.sk>, 2024,2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.3.13\n"
+"Project-Id-Version: Joplin v3.4.5\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
@@ -431,9 +433,8 @@ msgid "Add recipient:"
 msgstr "Pridať príjemcu:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Nové značky:"
+msgstr "Pridať štítky:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -448,18 +449,16 @@ msgid "Add to note"
 msgstr "Pridať k poznámke"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Pridať novú"
+msgstr "Pridaný nový: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "Pridať štítok %s k poznámke"
+msgstr "Pridaný štítok: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Pridá štítok"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -637,7 +636,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Priradené štítky:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -1155,9 +1154,8 @@ msgid "Code View"
 msgstr "Zobraziť kód"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Kód"
+msgstr "Kód:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1332,14 +1330,12 @@ msgid "Control character"
 msgstr "Kontrolný znak"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Premeniť na poznámku"
+msgstr "Previesť ju"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Premeniť na úlohu"
+msgstr "Previesť poznámku na Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1446,9 +1442,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Nepodarilo sa pripojiť k úložisku doplnkov."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Nepodarilo sa exportovať poznámky: %s"
+msgstr "Poznámku sa nepodarilo previesť do formátu Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1503,9 +1498,8 @@ msgid "Create a notebook"
 msgstr "Vytvoriť zápisník"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Vytvorí nový zápisník."
+msgstr "Vytvoriť nový zápisník"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1513,9 +1507,8 @@ msgid "Create new profile..."
 msgstr "Vytvoriť nový profil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Vytvoriť zápisník"
+msgstr "Vytvoriť poznámku"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1585,14 +1578,12 @@ msgid "Creating new to-do..."
 msgstr "Vytvára sa nová úloha..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Vytvára sa nová poznámka..."
+msgstr "Vytvára sa poznámka \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Vytvára sa nová poznámka..."
+msgstr "Vytvára sa poznámka."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1694,7 +1685,7 @@ msgstr "Predvolené"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
-msgstr ""
+msgstr "Predvolený názov, ktorý sa používa pre dokumenty vytvorené skenerom."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1983,7 +1974,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Skener dokumentov: Šablóna názvu"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -1995,7 +1986,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Túto správu už nezobrazovať"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2120,14 +2111,12 @@ msgid "Edit"
 msgstr "Upraviť"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Upraviť ako Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Rozšírený text"
+msgstr "Upraviť ako Rozšírený text"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2287,14 +2276,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Povoliť podporu syntaxe Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Povoliť šifrovanie"
+msgstr "Povoliť prepis rukopisu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Povoliť panel nástrojov Markdown"
+msgstr "Povoliť panel pre konverziu HTML na Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2906,9 +2893,8 @@ msgid "Hide password"
 msgstr "Skryť heslo"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Upozornenie"
+msgstr "Skryje upozornenie"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2960,6 +2946,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Ak je príloha obrázku na samostatnom riadku a za ňou nasleduje prázdny "
+"riadok, bude zobrazená tesne pod zdrojom Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3657,13 +3645,12 @@ msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Editor Markdown"
+msgstr "Editor Markdown: Vykresliť obrázky"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown editor: Vykresliť značky v editore"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3885,9 +3872,8 @@ msgid ""
 msgstr "Vytvorí sa nový zápisník \"%s\" a importuje sa doň súbor \"%s\""
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Zadajte názov zápisníka"
+msgstr "Nový názov zápisníka"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4003,9 +3989,8 @@ msgid "No tab selected"
 msgstr "Nie je vybratá žiadna karta"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Nové značky:"
+msgstr "Žiadne štítky"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4123,9 +4108,8 @@ msgid "Note list style"
 msgstr "Štýl zoznamu poznámok"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Prehliadač poznámok"
+msgstr "Náhľad poznámky"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4217,9 +4201,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL k údajom jazyka alebo cesta"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Hľadať vo všetkých poznámkach"
+msgstr "OCR: Vyhľadať v extrahovanom obsahu"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4488,7 +4471,7 @@ msgstr "Vyžaduje sa povolenie"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Fotka %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4832,9 +4815,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Opätovné odoslanie lokálnych údajov do cieľa synchronizácie"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Viac informácií"
+msgstr "Prečítajte si viac"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4845,9 +4827,9 @@ msgid "Read time: %s min"
 msgstr "Čas čítania: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Príkaz \"%s\" je dostupný len v režime GUI"
+msgstr ""
+"Čítanie príkazov zo štandardného vstupu je k dispozícii iba v režime CLI."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4866,9 +4848,8 @@ msgid "Recipients:"
 msgstr "Príjemcovia:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Zmeniť veľkosť veľkých obrázkov:"
+msgstr "Rozpoznať obrázok rukopisu"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4922,9 +4903,8 @@ msgid "Remove"
 msgstr "Odstrániť"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Odstrániť"
+msgstr "Odstrániť %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4943,9 +4923,8 @@ msgid "Removed %s from share."
 msgstr "Odstránené %s zo zdieľania."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Premenovať štítok:"
+msgstr "Odstránené štítky: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4966,7 +4945,7 @@ msgstr "Premenuje danú <item> (poznámku alebo zápisník) na <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Vykreslí značky na všetkých riadkoch, ktoré neobsahujú kurzor."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5217,9 +5196,8 @@ msgid "Save geo-location with notes"
 msgstr "Uložiť geografickú polohu s poznámkami"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Vyberie zápisník"
+msgstr "Skenovať zápisník"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5268,9 +5246,8 @@ msgid "Search shown"
 msgstr "Zobrazené vyhľadávanie"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Výsledky vyhľadávania"
+msgstr "Hľadať štítky"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5319,18 +5296,16 @@ msgid "Select file..."
 msgstr "Vybrať súbor..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Vyberie zápisník"
+msgstr "Vybrať zápisník"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Vybrať nadradený zápisník"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Vytvorené: %s"
+msgstr "Vybraný: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6161,11 +6136,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Poznámka \"%s\" bola úspešne obnovená do zápisníka \"%s\"."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Zápisník a jeho obsah boli úspešne presunuté do koša."
+msgstr ""
+"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola "
+"presunutá do koša"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6229,7 +6205,9 @@ msgstr ""
 
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:46
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr "The sync target needs to be upgraded. Press this banner to proceed."
+msgstr ""
+"Cieľ synchronizácie je potrebné aktualizovať. Stlačte tento panel, ak chcete "
+"pokračovať."
 
 #: packages/app-desktop/gui/MainScreen.tsx:533
 msgid "The synchronisation password is missing."
@@ -6400,14 +6378,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Táto funkcia je štandardne vypnutá, musíte ju manuálne zapnúť aktivovaním "
+"možnosti „Zapnúť prepis rukopisu“."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Táto funkcia je k dispozícii iba v Joplin Cloud a Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Tento typ obrázku nie je podporovaný systémom rozpoznávania."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6465,6 +6445,8 @@ msgstr "Táto poznámka nemá históriu"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Táto poznámka je vo formáte HTML. Prekonvertujte ju do formátu Markdown, aby "
+"ste ju mohli ľahšie upravovať."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6570,6 +6552,7 @@ msgstr "Ak chcete pokračovať, nižšie zadajte svoje hlavné heslo."
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
+"Ak chcete vytvoriť nový štítok, zadajte jeho názov a stlačte kláves Enter."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6953,9 +6936,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Aktualizujte cieľ synchronizácie na najnovšiu verziu."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Odfotiť"
+msgstr "Nahrať fotografiu"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
@@ -7355,55 +7337,11 @@ msgstr "Priblížiť"
 msgid "Zoom Out"
 msgstr "Oddialiť"
 
-#~ msgid "Ok"
-#~ msgstr "Ok"
-
-#, fuzzy
-#~ msgid "default"
-#~ msgstr "Predvolené"
-
-#, fuzzy
-#~ msgid "export"
-#~ msgstr "Exportovať"
-
-#, fuzzy
-#~ msgid "function"
-#~ msgstr "Akcia"
-
-#, fuzzy
-#~ msgid "import"
-#~ msgstr "Importovať"
-
-#, fuzzy
-#~ msgid "keyword a"
-#~ msgstr "podľa slova"
-
-#, fuzzy
-#~ msgid "keyword b"
-#~ msgstr "podľa slova"
-
-#, fuzzy
-#~ msgid "keyword c"
-#~ msgstr "podľa slova"
-
-#, fuzzy
-#~ msgid "keyword d"
-#~ msgstr "podľa slova"
-
-#, fuzzy
-#~ msgid "new"
-#~ msgstr "Nové"
-
-#, fuzzy
-#~ msgid "notes"
-#~ msgstr "pozn"
-
-#, fuzzy
-#~ msgid "operator"
-#~ msgstr "urýchľovač"
-
 #~ msgid "Filter tags"
 #~ msgstr "Filtrovať štítky"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
 
 #~ msgid "tag1, tag2, ..."
 #~ msgstr "štítok1, štítok2, ..."
@@ -7488,6 +7426,9 @@ msgstr "Oddialiť"
 
 #~ msgid "Lists"
 #~ msgstr "Zoznamy"
+
+#~ msgid "New"
+#~ msgstr "Nové"
 
 #~ msgid "No item with ID %s"
 #~ msgstr "Žiadna položka s ID %s"

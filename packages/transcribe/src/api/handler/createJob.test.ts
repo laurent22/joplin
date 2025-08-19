@@ -45,6 +45,7 @@ describe('createJob', () => {
 				filePath: 'file-id',
 			},
 			id: result.jobId,
+			retryCount: 0,
 		});
 	});
 

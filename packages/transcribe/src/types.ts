@@ -47,10 +47,12 @@ export interface BaseQueue {
 	complete(jobId: string, data: Result): Promise<void>;
 	getJobById(id: string): Promise<JobWithResult>;
 	stop(): Promise<void>;
+	hasJobFailedTooManyTimes(job: JobWithData): boolean;
 }
 
 export interface ContentStorage {
 	store(filepath: string): Promise<string>;
+	remove(filepath: string): Promise<void>;
 }
 
 export type AppDefinedContext = {
@@ -62,6 +64,7 @@ export type AppContext = Context & AppDefinedContext;
 
 export type JobWithData = {
 	id: string;
+	retryCount: number;
 	data: JobData;
 };
 
