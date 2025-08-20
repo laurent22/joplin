@@ -1201,9 +1201,7 @@ export default class Synchronizer {
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
-		if (!shim.isTestingEnv() && !hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-			// This logic must be bypassed by automated tests, because errors are only added to the progressReport when shim.isTestingEnv() is false, which means
-			// the hasErrors check wont work correctly in automated tests
+		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 			options.context = outputContext;
 
