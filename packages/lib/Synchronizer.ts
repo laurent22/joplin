@@ -602,17 +602,23 @@ export default class Synchronizer {
 
 						// Safety check to avoid infinite loops.
 						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
-						//   progress. In that case continue looping as we don't want the sync to stop when there are still un-synced outgoing changes.
-						//   Once the user has stopped typing, it can then break out of the loop and continue the rest of the process.
+						//   progress. When force_sync is not true, this is because the user is typing while the sync is running, so we should continue
+						//   looping, as we don't want the sync to stop when there are still un-synced outgoing changes, otherwise this creates a race condition
+						//   on mobile, where additional changes made during upload are not synced and don't trigger another sync, whereas a change made immediately
+						//   after the sync has finished will trigger another sync. Once the user has stopped typing, it can then break out of the loop and continue
+						//   the rest of the process.
 						// - It can also happen if the item is directly modified in the sync target, and set with an update_time in the future. In that case,
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) {
+							const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['force_sync'] });
 							if (local.updated_time > time.unixMs()) {
 								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Remote item has an updated_time in the future', path), 'processingPathTwice');
+							} else if (syncItem.force_sync) {
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Item was marked for sync using force_sync', path), 'processingPathTwice');
 							} else {
-								logger.info(sprintf('Processing a path that has already been done: %s. sync_time was not updated', path));
+								logger.info(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path));
 							}
 						}
 
