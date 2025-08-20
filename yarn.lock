@@ -9294,7 +9294,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
-    react-native-image-picker: "npm:7.2.3"
+    react-native-image-picker: "npm:8.0.0"
     react-native-localize: "npm:3.4.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.13.5"
@@ -42248,13 +42248,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:7.2.3":
-  version: 7.2.3
-  resolution: "react-native-image-picker@npm:7.2.3"
+"react-native-image-picker@npm:8.0.0":
+  version: 8.0.0
+  resolution: "react-native-image-picker@npm:8.0.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/62c6cc3c88edb29f2b17b4cdaa098b32efd23a5faf4380171c2ccfb1706c732a50553f2ce447e1df1ea48197dde3af42dd67584c60e2c4577ee1b7769152475d
+  checksum: 10/4975e0d15f8bb8159b7594f67cf88f1492aab194e56fead4380e13754b945cf49e9c6d2535d30be3e858115682a39419236315f7367698ec291845f0704d7498
   languageName: node
   linkType: hard
 
