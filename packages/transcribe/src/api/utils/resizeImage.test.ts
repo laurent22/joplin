@@ -1,8 +1,9 @@
 import { copy, exists, remove } from 'fs-extra';
 import resizeImage from './resizeImage';
-const sharp = require('sharp');
+import * as sharp from 'sharp';
 
 describe('resizeImage', () => {
+
 
 	it('should resize the image to the max dimension specified', async () => {
 		const fullFilePath = `${process.cwd()}/test-cases/sample.jpeg`;
@@ -26,6 +27,12 @@ describe('resizeImage', () => {
 
 		const resizedImageFilePath = await resizeImage(copiedFilePath, 400);
 		const metadata = await sharp(resizedImageFilePath).metadata();
+
+		if (originalMetadata.width === undefined || originalMetadata.height === undefined ||
+			metadata.width === undefined || metadata.height === undefined) {
+			expect('Image is missing metadata information').toBe(false);
+			return;
+		}
 
 		expect(originalMetadata.width / originalMetadata.height).toBeCloseTo(metadata.width / metadata.height);
 

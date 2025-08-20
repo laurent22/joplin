@@ -1,11 +1,11 @@
 import { remove } from 'fs-extra';
-const sharp = require('sharp');
+import * as sharp from 'sharp';
 
 const resizeImage = async (filePath: string, imageMaxDimension: number) => {
 
 	const metadata = await sharp(filePath).metadata();
 
-	if (!metadata) {
+	if (!metadata || metadata.width === undefined || metadata.height === undefined) {
 		return filePath;
 	}
 
