@@ -1134,6 +1134,14 @@ export default class Synchronizer {
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
 				}
+
+				if (error.code === 'processingPathTwice') {
+					// This is an exceptional scenario where we still want to trigger the sync again at the end of the sync process if there are still un-synced outgoing changes.
+					// The place which raises the error mentions the possibility of an infinite loop if we don't raise the error, but this is to avoid blocking the sync by
+					// continually re-uploading the same note as it is being modified, instead of moving on to other changes. It is ok to continually trigger NEW syncs, if the
+					// note is being continually modified
+					hasCaughtError = false;
+				}
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				logger.error(error);
