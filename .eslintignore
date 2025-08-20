@@ -698,7 +698,6 @@ packages/app-mobile/components/NoteEditor/RichTextEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/WarningBanner.js
 packages/app-mobile/components/NoteEditor/commandDeclarations.js
-packages/app-mobile/components/NoteEditor/hooks/useCodeMirrorPlugins.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/testing/createTestEditorProps.js
@@ -868,6 +867,7 @@ packages/app-mobile/contentScripts/imageEditorBundle/utils/useEditorMessenger.js
 packages/app-mobile/contentScripts/markdownEditorBundle/contentScript.js
 packages/app-mobile/contentScripts/markdownEditorBundle/types.js
 packages/app-mobile/contentScripts/markdownEditorBundle/useWebViewSetup.js
+packages/app-mobile/contentScripts/markdownEditorBundle/utils/useCodeMirrorPlugins.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/index.js
@@ -1004,6 +1004,8 @@ packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
 packages/editor/CodeMirror/extensions/keyUpHandlerExtension.js
 packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
@@ -1074,9 +1076,11 @@ packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/defaultLanguage.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/lookUpLanguage.js
+packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
+packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/ProseMirror/commands.test.js
 packages/editor/ProseMirror/commands.js

@@ -145,6 +145,7 @@ class EditableSourceBlockView implements NodeView {
 		createEditorDialog({
 			doneLabel: _('Done'),
 			editorLabel: _('Code:'),
+			editorApi: getEditorApi(this.view.state),
 			block: {
 				content: this.node.attrs.source,
 				start: this.node.attrs.openCharacters,

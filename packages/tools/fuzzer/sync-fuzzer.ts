@@ -143,15 +143,35 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		shareFolder: async () => {
+			const other = clientPool.randomClient(c => !c.hasSameAccount(client));
+			if (!other) return false;
+
 			const target = await client.randomFolder({
-				filter: candidate => (
-					!candidate.parentId && !candidate.isShareRoot
-				),
+				filter: candidate => {
+					const isToplevel = !candidate.parentId;
+					const ownedByCurrent = candidate.ownedByEmail === client.email;
+					const alreadyShared = candidate.sharedWith.includes(other.email);
+					return isToplevel && ownedByCurrent && !alreadyShared;
+				},
 			});
 			if (!target) return false;
 
-			const other = clientPool.randomClient(c => !c.hasSameAccount(client));
 			await client.shareFolder(target.id, other);
+			return true;
+		},
+		unshareFolder: async () => {
+			const target = await client.randomFolder({
+				filter: candidate => {
+					return candidate.sharedWith.length > 0 && candidate.ownedByEmail === client.email;
+				},
+			});
+			if (!target) return false;
+
+			const recipientIndex = context.randInt(0, target.sharedWith.length);
+			const recipientEmail = target.sharedWith[recipientIndex];
+			const recipient = clientPool.clientsByEmail(recipientEmail)[0];
+			assert.ok(recipient, `invalid state -- recipient ${recipientEmail} should exist`);
+			await client.removeFromShare(target.id, recipient);
 			return true;
 		},
 		deleteFolder: async () => {
@@ -174,7 +194,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		moveFolderTo: async () => {
 			const target = await client.randomFolder({
 				// Don't move shared folders (should not be allowed by the GUI in the main apps).
-				filter: item => !item.isShareRoot,
+				filter: item => item.sharedWith.length === 0,
 			});
 			if (!target) return false;
 

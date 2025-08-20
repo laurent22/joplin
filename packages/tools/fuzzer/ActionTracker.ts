@@ -1,11 +1,9 @@
 import { strict as assert } from 'assert';
-import { ActionableClient, FolderData, FolderMetadata, FuzzContext, ItemId, NoteData, TreeItem, isFolder } from './types';
+import { ActionableClient, FolderData, FolderMetadata, FuzzContext, ItemId, NoteData, TreeItem, assertIsFolder, isFolder } from './types';
 import type Client from './Client';
 
 interface ClientData {
 	childIds: ItemId[];
-	// Shared folders belonging to the client
-	sharedFolderIds: ItemId[];
 }
 
 class ActionTracker {
@@ -33,6 +31,17 @@ class ActionTracker {
 					checkItem(childId);
 				}
 
+				// Shared folders
+				assert.ok(item.ownedByEmail, 'all folders should have a "shareOwner" property (even if not shared)');
+				assert.ok(!item.sharedWith.includes(item.ownedByEmail), 'the share owner should not be in an item\'s sharedWith list');
+				if (item.sharedWith.length > 0) {
+					assert.equal(item.parentId, '', 'only toplevel folders should be shared');
+				}
+				for (const sharedWith of item.sharedWith) {
+					assert.ok(this.tree_.has(sharedWith), 'all sharee users should exist');
+				}
+
+				// Uniqueness
 				assert.equal(
 					item.childIds.length,
 					[...new Set(item.childIds)].length,
@@ -60,7 +69,6 @@ class ActionTracker {
 		if (!this.tree_.has(clientId)) {
 			this.tree_.set(clientId, {
 				childIds: [],
-				sharedFolderIds: [],
 			});
 		}
 
@@ -116,7 +124,8 @@ class ActionTracker {
 				return true;
 			};
 
-			const isOwnedByThis = this.tree_.get(clientId).sharedFolderIds.includes(itemId);
+			const item = this.idToItem_.get(itemId);
+			const isOwnedByThis = isFolder(item) && item.ownedByEmail === clientId;
 
 			if (isOwnedByThis) { // Unshare
 				let removed = false;
@@ -124,12 +133,6 @@ class ActionTracker {
 					const result = removeForClient(id);
 					removed ||= result;
 				}
-
-				const clientData = this.tree_.get(clientId);
-				this.tree_.set(clientId, {
-					...clientData,
-					sharedFolderIds: clientData.sharedFolderIds.filter(id => id !== itemId),
-				});
 
 				// At this point, the item shouldn't be a child of any clients:
 				assert.ok(hasBeenCompletelyRemoved(), 'item should be removed from all clients');
@@ -254,7 +257,8 @@ class ActionTracker {
 					...data,
 					parentId: data.parentId ?? '',
 					childIds: getChildIds(data.id),
-					isShareRoot: false,
+					sharedWith: [],
+					ownedByEmail: clientId,
 				});
 				addChild(data.parentId, data.id);
 
@@ -274,19 +278,16 @@ class ActionTracker {
 				return Promise.resolve();
 			},
 			shareFolder: (id: ItemId, shareWith: Client) => {
-				const shareWithChildIds = this.tree_.get(shareWith.email).childIds;
-				if (shareWithChildIds.includes(id)) {
-					throw new Error(`Folder ${id} already shared with ${shareWith.email}`);
-				}
-				assert.ok(this.idToItem_.has(id), 'should exist');
+				const itemToShare = this.idToItem_.get(id);
+				assertIsFolder(itemToShare);
 
-				const sharerClient = this.tree_.get(clientId);
-				if (!sharerClient.sharedFolderIds.includes(id)) {
-					this.tree_.set(clientId, {
-						...sharerClient,
-						sharedFolderIds: [...sharerClient.sharedFolderIds, id],
-					});
-				}
+				const alreadyShared = itemToShare.sharedWith.includes(shareWith.email);
+				assert.ok(!alreadyShared, `Folder ${id} should not yet be shared with ${shareWith.email}`);
+
+				const shareWithChildIds = this.tree_.get(shareWith.email).childIds;
+				assert.ok(
+					!shareWithChildIds.includes(id), `Share recipient (${shareWith.email}) should not have a folder with ID ${id} before receiving the share.`,
+				);
 
 				this.tree_.set(shareWith.email, {
 					...this.tree_.get(shareWith.email),
@@ -294,8 +295,28 @@ class ActionTracker {
 				});
 
 				this.idToItem_.set(id, {
-					...this.idToItem_.get(id),
-					isShareRoot: true,
+					...itemToShare,
+					sharedWith: [...itemToShare.sharedWith, shareWith.email],
+				});
+
+				this.checkRep_();
+				return Promise.resolve();
+			},
+			removeFromShare: (id: ItemId, shareWith: Client) => {
+				const targetItem = this.idToItem_.get(id);
+				assertIsFolder(targetItem);
+
+				assert.ok(targetItem.sharedWith.includes(shareWith.email), `Folder ${id} should be shared with ${shareWith.label}`);
+
+				const otherSubTree = this.tree_.get(shareWith.email);
+				this.tree_.set(shareWith.email, {
+					...otherSubTree,
+					childIds: otherSubTree.childIds.filter(childId => childId !== id),
+				});
+
+				this.idToItem_.set(id, {
+					...targetItem,
+					sharedWith: targetItem.sharedWith.filter(shareeEmail => shareeEmail !== shareWith.email),
 				});
 
 				this.checkRep_();
@@ -313,7 +334,7 @@ class ActionTracker {
 				}
 
 				if (isFolder(item)) {
-					assert.equal(item.isShareRoot, false, 'cannot move toplevel shared folders without first unsharing');
+					assert.deepEqual(item.sharedWith, [], 'cannot move toplevel shared folders without first unsharing');
 				}
 
 				removeChild(item.parentId, itemId);
