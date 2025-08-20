@@ -602,12 +602,19 @@ export default class Synchronizer {
 
 						// Safety check to avoid infinite loops.
 						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
-						//   progress. In that case exit anyway to be sure we aren't in a loop and the item will be re-synced next time.
+						//   progress. In that case continue looping as we don't want the sync to stop when there are still un-synced outgoing changes.
+						//   Once the user has stopped typing, it can then break out of the loop and continue the rest of the process.
 						// - It can also happen if the item is directly modified in the sync target, and set with an update_time in the future. In that case,
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
+						if (donePaths.indexOf(path) >= 0) {
+							if (local.updated_time > time.unixMs()) {
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Remote item has an updated_time in the future', path), 'processingPathTwice');
+							} else {
+								logger.info(sprintf('Processing a path that has already been done: %s. sync_time was not updated', path));
+							}
+						}
 
 						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', path);
 						let action: SyncAction = null;
@@ -1134,14 +1141,6 @@ export default class Synchronizer {
 					if (!shim.isTestingEnv()) this.progressReport_.errors.push(error.message);
 					this.logLastRequests();
 				}
-
-				if (error.code === 'processingPathTwice') {
-					// This is an exceptional scenario where we still want to trigger the sync again at the end of the sync process if there are still un-synced outgoing changes.
-					// The place which raises the error mentions the possibility of an infinite loop if we don't raise the error, but this is to avoid blocking the sync by
-					// continually re-uploading the same note as it is being modified, instead of moving on to other changes. It is ok to continually trigger NEW syncs, if the
-					// note is being continually modified
-					hasCaughtError = false;
-				}
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				logger.error(error);
@@ -1207,7 +1206,7 @@ export default class Synchronizer {
 		if (errorToThrow) throw errorToThrow;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
-		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed
+		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
