@@ -466,6 +466,7 @@ export default class Synchronizer {
 
 		let errorToThrow = null;
 		let syncLock = null;
+		let hasCaughtError = false;
 
 		try {
 			await this.api().initialize();
@@ -1111,6 +1112,8 @@ export default class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
+			hasCaughtError = true;
+
 			if (error.code === ErrorCode.MustUpgradeApp) {
 				this.dispatch({
 					type: 'MUST_UPGRADE_APP',
@@ -1196,8 +1199,9 @@ export default class Synchronizer {
 		if (errorToThrow) throw errorToThrow;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
-		// that the user will close or minimise the app when there are un-synced changes, because they think the sync has completed
-		if (!shim.isTestingEnv() && !hasErrors && !cancelledBeforeClearedState && !this.cancelling()) {
+		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed
+		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
+		if (!shim.isTestingEnv() && !hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
 			// This logic must be bypassed by automated tests, because errors are only added to the progressReport when shim.isTestingEnv() is false, which means
 			// the hasErrors check wont work correctly in automated tests
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
