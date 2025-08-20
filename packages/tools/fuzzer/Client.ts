@@ -513,33 +513,53 @@ class Client implements ActionableClient {
 	public async shareFolder(id: string, shareWith: Client) {
 		await this.tracker_.shareFolder(id, shareWith);
 
-		logger.info('Share', id, 'with', shareWith.label);
-		await this.execCliCommand_('share', 'add', id, shareWith.email);
+		const getPendingInvitations = async (target: Client) => {
+			const shareWithIncoming = JSON.parse((await target.execCliCommand_('share', 'list', '--json')).stdout);
+			return shareWithIncoming.invitations.filter((invitation: unknown) => {
+				if (typeof invitation !== 'object' || !('accepted' in invitation)) {
+					throw new Error('Invalid invitation format');
+				}
+				return !invitation.accepted;
+			});
+		};
 
-		await this.sync();
-		await shareWith.sync();
+		await retryWithCount(async () => {
+			logger.info('Share', id, 'with', shareWith.label);
+			await this.execCliCommand_('share', 'add', id, shareWith.email);
 
-		const shareWithIncoming = JSON.parse((await shareWith.execCliCommand_('share', 'list', '--json')).stdout);
-		const pendingInvitations = shareWithIncoming.invitations.filter((invitation: unknown) => {
-			if (typeof invitation !== 'object' || !('accepted' in invitation)) {
-				throw new Error('Invalid invitation format');
-			}
-			return !invitation.accepted;
-		});
-		assert.deepEqual(pendingInvitations, [
-			{
-				accepted: false,
-				waiting: true,
-				rejected: false,
-				folderId: id,
-				fromUser: {
-					email: this.email,
+			await this.sync();
+			await shareWith.sync();
+
+			const pendingInvitations = await getPendingInvitations(shareWith);
+			assert.deepEqual(pendingInvitations, [
+				{
+					accepted: false,
+					waiting: true,
+					rejected: false,
+					folderId: id,
+					fromUser: {
+						email: this.email,
+					},
 				},
+			], 'there should be a single incoming share from the expected user');
+		}, {
+			count: 2,
+			delayOnFailure: count => count * Second,
+			onFail: (error)=>{
+				logger.warn('Share failed:', error);
 			},
-		], 'there should be a single incoming share from the expected user');
+		});
 
 		await shareWith.execCliCommand_('share', 'accept', id);
 		await shareWith.sync();
+	}
+
+	public async removeFromShare(id: string, other: Client) {
+		await this.tracker_.removeFromShare(id, other);
+
+		logger.info('Remove', other.label, 'from share', id);
+		await this.execCliCommand_('share', 'remove', id, other.email);
+		await other.sync();
 	}
 
 	public async moveItem(itemId: ItemId, newParentId: ItemId) {

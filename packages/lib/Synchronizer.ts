@@ -597,7 +597,7 @@ export default class Synchronizer {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
-						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
+						const ItemClass = BaseItem.itemClass(local);
 						const path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.

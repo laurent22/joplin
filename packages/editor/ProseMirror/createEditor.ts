@@ -1,3 +1,4 @@
+import { focus } from '@joplin/lib/utils/focusHandler';
 import { ContentScriptData, EditorCommandType, EditorControl, EditorProps, EditorSettings, SearchState, UpdateBodyOptions, UserEventSource } from '../types';
 import { EditorState, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
@@ -21,17 +22,23 @@ import listPlugin from './plugins/listPlugin';
 import searchExtension from './plugins/searchPlugin';
 import joplinEditorApiPlugin, { setEditorApi } from './plugins/joplinEditorApiPlugin';
 import linkTooltipPlugin from './plugins/linkTooltipPlugin';
-import { RendererControl } from './types';
+import { OnCreateCodeEditor as OnCreateCodeEditor, RendererControl } from './types';
 import resourcePlaceholderPlugin, { onResourceDownloaded } from './plugins/resourcePlaceholderPlugin';
 import getFileFromPasteEvent from '../utils/getFileFromPasteEvent';
 import { RenderResult } from '../../renderer/types';
 import detailsPlugin from './plugins/detailsPlugin';
 
+interface ProseMirrorControl extends EditorControl {
+	getSettings(): EditorSettings;
+}
+
+
 const createEditor = async (
 	parentElement: HTMLElement,
 	props: EditorProps,
 	renderer: RendererControl,
-): Promise<EditorControl> => {
+	createCodeEditor: OnCreateCodeEditor,
+): Promise<ProseMirrorControl> => {
 	const renderNodeToMarkup = (node: Node|DocumentFragment) => {
 		return renderer.renderHtmlToMarkup(node);
 	};
@@ -91,6 +98,7 @@ const createEditor = async (
 			setEditorApi(state.tr, {
 				onEvent: props.onEvent,
 				renderer,
+				createCodeEditor: createCodeEditor,
 				localize: async (input: string) => {
 					if (cachedLocalizations.has(input)) {
 						return cachedLocalizations.get(input);
@@ -159,7 +167,7 @@ const createEditor = async (
 		},
 	});
 
-	const editorControl: EditorControl = {
+	const editorControl: ProseMirrorControl = {
 		supportsCommand: (name: EditorCommandType | string) => {
 			return name in commands && !!commands[name as keyof typeof commands];
 		},
@@ -193,6 +201,9 @@ const createEditor = async (
 		},
 		updateBody: async (newBody: string, _updateBodyOptions?: UpdateBodyOptions) => {
 			view.updateState(await createInitialState(newBody));
+		},
+		getSettings: () => {
+			return settings;
 		},
 		updateSettings: async (newSettings: EditorSettings) => {
 			const oldSettings = settings;
@@ -273,6 +284,11 @@ const createEditor = async (
 			const resourceSrc = renderedImage?.src;
 			onResourceDownloaded(view, resourceId, resourceSrc);
 		},
+		remove: () => {
+			view.dom.remove();
+			props.onEvent({ kind: EditorEventType.Remove });
+		},
+		focus: () => focus('createEditor', view),
 	};
 	return editorControl;
 };
