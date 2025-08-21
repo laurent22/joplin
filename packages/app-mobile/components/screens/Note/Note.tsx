@@ -713,7 +713,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private title_changeText(text: string) {
-		shared.noteComponent_change(this, 'title', text);
+		const newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
 
