@@ -1,5 +1,13 @@
 # Joplin Desktop Changelog
 
+## [v3.4.6](https://github.com/laurent22/joplin/releases/tag/v3.4.6) - 2025-08-20T20:30:35Z
+
+- Improved: Markdown editor: Toggle checkboxes on ctrl-click ([#12927](https://github.com/laurent22/joplin/issues/12927) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.3), @playwright/test (v1.52.0), jsdom (v26.1.0), sass (v1.87.0), sharp (v0.34.2)
+- Improved: Upgrade to Electron v37.3.0 ([#12951](https://github.com/laurent22/joplin/issues/12951) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Clicking Edit URL button in Note properties does not focus in url field ([#12970](https://github.com/laurent22/joplin/issues/12970)) ([#12315](https://github.com/laurent22/joplin/issues/12315) by [@pedr](https://github.com/pedr))
+- Fixed: Shared folders: Fix moving shared subfolder to toplevel briefly marks it as a toplevel share ([#12964](https://github.com/laurent22/joplin/issues/12964) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.4.5](https://github.com/laurent22/joplin/releases/tag/v3.4.5) (Pre-release) - 2025-08-10T12:49:30Z
 
 - Improved: Add an option to enable or disable search in OCR text ([#12578](https://github.com/laurent22/joplin/issues/12578)) ([#12224](https://github.com/laurent22/joplin/issues/12224) by [@pedr](https://github.com/pedr))

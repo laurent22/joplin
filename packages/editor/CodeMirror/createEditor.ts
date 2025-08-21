@@ -39,6 +39,7 @@ import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedN
 import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
 import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
+import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -255,6 +256,7 @@ const createEditor = (
 				ctrlClickLinksExtension(link => {
 					props.onEvent({ kind: EditorEventType.FollowLink, link });
 				}),
+				ctrlClickCheckboxExtension(),
 
 				highlightSpecialChars(),
 				indentOnInput(),
@@ -351,6 +353,9 @@ const createEditor = (
 		onLogMessage: props.onLogMessage,
 		onRemove: () => {
 			editor.destroy();
+			props.onEvent({
+				kind: EditorEventType.Remove,
+			});
 		},
 	});
 

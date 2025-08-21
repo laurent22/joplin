@@ -4,14 +4,12 @@ import createUniqueId from './createUniqueId';
 
 interface Options {
 	label: LocalizationResult;
-	spellCheck: boolean;
 	initialContent: string;
 	onChange: (newContent: string)=> void;
 }
 
-const createTextArea = ({ label, initialContent, spellCheck, onChange }: Options) => {
+const createTextArea = ({ label, initialContent, onChange }: Options) => {
 	const textArea = document.createElement('textarea');
-	textArea.spellcheck = spellCheck;
 	textArea.oninput = () => {
 		onChange(textArea.value);
 	};

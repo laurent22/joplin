@@ -38,6 +38,10 @@ export default class ClientPool {
 		});
 	}
 
+	public clientsByEmail(email: string) {
+		return this.clients.filter(client => client.email === email);
+	}
+
 	public randomClient(filter: ClientFilter = ()=>true) {
 		const clients = this.clients_.filter(filter);
 		return clients[

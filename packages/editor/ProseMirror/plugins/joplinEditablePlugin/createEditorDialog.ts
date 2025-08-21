@@ -1,6 +1,7 @@
 import { focus } from '@joplin/lib/utils/focusHandler';
 import createTextNode from '../../utils/dom/createTextNode';
-import createTextArea from '../../utils/dom/createTextArea';
+import { EditorApi } from '../joplinEditorApiPlugin';
+import { EditorLanguageType } from '../../../types';
 
 interface SourceBlockData {
 	start: string;
@@ -12,11 +13,12 @@ interface Options {
 	editorLabel: string|Promise<string>;
 	doneLabel: string|Promise<string>;
 	block: SourceBlockData;
+	editorApi: EditorApi;
 	onSave: (newContent: SourceBlockData)=> void;
 	onDismiss: ()=> void;
 }
 
-const createEditorDialog = ({ editorLabel, doneLabel, block, onSave, onDismiss }: Options) => {
+const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: Options) => {
 	const dialog = document.createElement('dialog');
 	dialog.classList.add('editor-dialog', '-visible');
 	document.body.appendChild(dialog);
@@ -24,21 +26,27 @@ const createEditorDialog = ({ editorLabel, doneLabel, block, onSave, onDismiss }
 	dialog.onclose = () => {
 		onDismiss();
 		dialog.remove();
+		editor.remove();
 	};
 
-	const { textArea, label: textAreaLabel } = createTextArea({
-		label: editorLabel,
-		initialContent: block.content,
-		onChange: (newContent) => {
+	const editor = editorApi.createCodeEditor(
+		dialog,
+		EditorLanguageType.Markdown,
+		(newContent) => {
 			block = {
 				...block,
+				start: '',
+				end: '',
 				content: newContent,
 			};
 			onSave(block);
 		},
-		spellCheck: false,
-	});
-
+	);
+	editor.updateBody([
+		block.start,
+		block.content,
+		block.end,
+	].join(''));
 
 	const submitButton = document.createElement('button');
 	submitButton.appendChild(createTextNode(doneLabel));
@@ -47,14 +55,12 @@ const createEditorDialog = ({ editorLabel, doneLabel, block, onSave, onDismiss }
 		if (dialog.close) {
 			dialog.close();
 		} else {
-			// .remove the dialog in browsers with limited support for
-			// HTMLDialogElement (and in JSDOM).
-			dialog.remove();
+			// Handle the case where the dialog element is not supported by the
+			// browser/testing environment.
+			dialog.onclose(new Event('close'));
 		}
 	};
 
-	dialog.appendChild(textAreaLabel);
-	dialog.appendChild(textArea);
 	dialog.appendChild(submitButton);
 
 
@@ -63,7 +69,7 @@ const createEditorDialog = ({ editorLabel, doneLabel, block, onSave, onDismiss }
 		dialog.showModal();
 	} else {
 		dialog.classList.add('-fake-modal');
-		focus('createEditorDialog/legacy', textArea);
+		focus('createEditorDialog/legacy', editor);
 	}
 
 	return {};

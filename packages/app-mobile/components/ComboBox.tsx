@@ -540,6 +540,7 @@ const ComboBox: React.FC<Props> = ({
 	};
 	const activeId = `${baseId}-${selectedIndex}`;
 	const searchResults = <NestableFlatList
+		keyboardShouldPersistTaps="handled"
 		ref={listRef}
 		data={results}
 		{...searchResultProps}

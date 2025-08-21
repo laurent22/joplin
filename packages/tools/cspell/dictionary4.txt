@@ -197,3 +197,6 @@ labelledby
 isTextblock
 deflt
 LOCALAPPDATA
+Daman
+vikasmanimc
+traspire
