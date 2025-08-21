@@ -530,7 +530,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		styles.icon = {
+		styles.titleToggleIcon = {
 			color: theme.colorFaded,
 			fontSize: 30,
 			height: 48,
@@ -1746,7 +1746,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					iconName={(!this.state.multiline && 'material menu-down') || (this.state.multiline && 'material menu-up')}
 					onPress={() => this.setState({ multiline: !this.state.multiline })}
 					description={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
-					iconStyle={this.styles().icon}
+					iconStyle={this.styles().titleToggleIcon}
 					themeId={this.props.themeId}
 				/>
 			</View>

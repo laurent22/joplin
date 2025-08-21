@@ -222,6 +222,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 				icon={(!multiline && 'menu-down') || (multiline && 'menu-up')}
 				accessibilityLabel={(!multiline && _('Expand title')) || (multiline && _('Collapse title'))}
 				onPress={() => void setMultiline(!multiline)}
+				size={30}
 			/>
 		</View>
 	);
