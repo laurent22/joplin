@@ -73,6 +73,7 @@ import { defaultWindowId } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
+import IconButton from '../../IconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -148,6 +149,7 @@ interface State {
 	};
 
 	showSpeechToTextDialog: boolean;
+	multiline: boolean;
 }
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
@@ -219,6 +221,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			},
 
 			showSpeechToTextDialog: false,
+			multiline: false,
 		};
 
 		this.titleTextFieldRef = React.createRef();
@@ -508,7 +511,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 		};
@@ -526,6 +528,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		};
+
+		styles.icon = {
+			color: theme.colorFaded,
+			fontSize: 30,
+			height: 48,
+			width: 48,
+			verticalAlign: 'middle',
+			textAlign: 'center',
+			alignContent: 'center',
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -1726,6 +1738,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
 					editable={!this.state.readOnly}
+					multiline={this.state.multiline}
+					submitBehavior = "blurAndSubmit"
+				/>
+				<IconButton
+					iconName={(!this.state.multiline && 'material menu-down') || (this.state.multiline && 'material menu-up')}
+					onPress={() => this.setState({ multiline: !this.state.multiline })}
+					description={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+					iconStyle={this.styles().icon}
+					themeId={this.props.themeId}
 				/>
 			</View>
 		);
