@@ -14,6 +14,7 @@ import yargs = require('yargs');
 import { strict as assert } from 'assert';
 import openDebugSession from './utils/openDebugSession';
 import { Second } from '@joplin/utils/time';
+import { packagesDir } from './constants';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -42,7 +43,7 @@ const createProfilesDirectory = async () => {
 
 const doRandomAction = async (context: FuzzContext, client: Client, clientPool: ClientPool) => {
 	const selectOrCreateParentFolder = async () => {
-		let parentId = (await client.randomFolder({}))?.id;
+		let parentId = (await client.randomFolder({ includeReadOnly: false }))?.id;
 
 		// Create a toplevel folder to serve as this
 		// folder's parent if none exist yet
@@ -58,8 +59,9 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		return parentId;
 	};
 
-	const selectOrCreateNote = async () => {
-		let note = await client.randomNote();
+	const selectOrCreateWriteableNote = async () => {
+		const options = { includeReadOnly: false };
+		let note = await client.randomNote(options);
 
 		if (!note) {
 			await client.createNote({
@@ -69,7 +71,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 				body: 'Body',
 			});
 
-			note = await client.randomNote();
+			note = await client.randomNote(options);
 			assert.ok(note, 'should have selected a random note');
 		}
 
@@ -111,7 +113,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		renameNote: async () => {
-			const note = await selectOrCreateNote();
+			const note = await selectOrCreateWriteableNote();
 
 			await client.updateNote({
 				...note,
@@ -121,7 +123,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		updateNoteBody: async () => {
-			const note = await selectOrCreateNote();
+			const note = await selectOrCreateWriteableNote();
 
 			await client.updateNote({
 				...note,
@@ -131,10 +133,10 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		moveNote: async () => {
-			const note = await client.randomNote();
-			if (!note) return false;
+			const note = await selectOrCreateWriteableNote();
 			const targetParent = await client.randomFolder({
 				filter: folder => folder.id !== note.parentId,
+				includeReadOnly: false,
 			});
 			if (!targetParent) return false;
 
@@ -150,32 +152,35 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 				filter: candidate => {
 					const isToplevel = !candidate.parentId;
 					const ownedByCurrent = candidate.ownedByEmail === client.email;
-					const alreadyShared = candidate.sharedWith.includes(other.email);
+					const alreadyShared = isToplevel && candidate.isSharedWith(other.email);
 					return isToplevel && ownedByCurrent && !alreadyShared;
 				},
+				includeReadOnly: true,
 			});
 			if (!target) return false;
 
-			await client.shareFolder(target.id, other);
+			const readOnly = context.randInt(0, 2) === 1 && context.isJoplinCloud;
+			await client.shareFolder(target.id, other, { readOnly });
 			return true;
 		},
 		unshareFolder: async () => {
 			const target = await client.randomFolder({
 				filter: candidate => {
-					return candidate.sharedWith.length > 0 && candidate.ownedByEmail === client.email;
+					return candidate.isRootSharedItem && candidate.ownedByEmail === client.email;
 				},
+				includeReadOnly: true,
 			});
 			if (!target) return false;
 
-			const recipientIndex = context.randInt(0, target.sharedWith.length);
-			const recipientEmail = target.sharedWith[recipientIndex];
+			const recipientIndex = context.randInt(0, target.shareRecipients.length);
+			const recipientEmail = target.shareRecipients[recipientIndex];
 			const recipient = clientPool.clientsByEmail(recipientEmail)[0];
 			assert.ok(recipient, `invalid state -- recipient ${recipientEmail} should exist`);
 			await client.removeFromShare(target.id, recipient);
 			return true;
 		},
 		deleteFolder: async () => {
-			const target = await client.randomFolder({});
+			const target = await client.randomFolder({ includeReadOnly: false });
 			if (!target) return false;
 
 			await client.deleteFolder(target.id);
@@ -185,6 +190,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			const target = await client.randomFolder({
 				// Don't choose items that are already toplevel
 				filter: item => !!item.parentId,
+				includeReadOnly: false,
 			});
 			if (!target) return false;
 
@@ -194,7 +200,8 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		moveFolderTo: async () => {
 			const target = await client.randomFolder({
 				// Don't move shared folders (should not be allowed by the GUI in the main apps).
-				filter: item => item.sharedWith.length === 0,
+				filter: item => !item.isRootSharedItem,
+				includeReadOnly: false,
 			});
 			if (!target) return false;
 
@@ -205,6 +212,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 					// Avoid making the folder a child of itself
 					return !targetDescendants.has(item.id);
 				},
+				includeReadOnly: false,
 			});
 			if (!newParent) return false;
 
@@ -288,6 +296,9 @@ interface Options {
 	maximumSteps: number;
 	maximumStepsBetweenSyncs: number;
 	clientCount: number;
+
+	serverPath: string;
+	isJoplinCloud: boolean;
 }
 
 const main = async (options: Options) => {
@@ -319,7 +330,7 @@ const main = async (options: Options) => {
 
 	try {
 		const joplinServerUrl = 'http://localhost:22300/';
-		const server = new Server(joplinServerUrl, {
+		const server = new Server(options.serverPath, joplinServerUrl, {
 			email: 'admin@localhost',
 			password: env['FUZZER_SERVER_ADMIN_PASSWORD'] ?? 'admin',
 		});
@@ -335,8 +346,13 @@ const main = async (options: Options) => {
 		logger.info('Starting with seed', options.seed);
 		const random = new SeededRandom(options.seed);
 
+		if (options.isJoplinCloud) {
+			logger.info('Sync target: Joplin Cloud');
+		}
+
 		const fuzzContext: FuzzContext = {
 			serverUrl: joplinServerUrl,
+			isJoplinCloud: options.isJoplinCloud,
 			baseDir: profilesDirectory.path,
 			execApi: server.execApi.bind(server),
 			randInt: (a, b) => random.nextInRange(a, b),
@@ -425,13 +441,24 @@ void yargs
 					default: 3,
 					defaultDescription: 'Number of client apps to create.',
 				},
+				'joplin-cloud': {
+					type: 'string',
+					default: '',
+					defaultDescription: [
+						'A path: If provided, this should be an absolute path to a Joplin Cloud repository. ',
+						'This also enables testing for some Joplin Cloud-specific features (e.g. read-only shares).',
+					].join(''),
+				},
 			});
 		},
 		async (argv) => {
+			const serverPath = argv.joplinCloud ? argv.joplinCloud : join(packagesDir, 'server');
 			await main({
 				seed: argv.seed,
 				maximumSteps: argv.steps,
 				clientCount: argv.clients,
+				serverPath: serverPath,
+				isJoplinCloud: !!argv.joplinCloud,
 				maximumStepsBetweenSyncs: argv['steps-between-syncs'],
 			});
 		},
