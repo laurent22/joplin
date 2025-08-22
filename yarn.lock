@@ -9163,7 +9163,7 @@ __metadata:
     compare-versions: "npm:6.1.1"
     countable: "npm:3.0.1"
     debounce: "npm:1.2.1"
-    electron: "npm:37.3.0"
+    electron: "npm:35.7.5"
     electron-builder: "npm:24.13.3"
     electron-updater: "npm:6.6.2"
     electron-window-state: "npm:5.0.3"
@@ -9294,7 +9294,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
-    react-native-image-picker: "npm:7.2.3"
+    react-native-image-picker: "npm:8.0.0"
     react-native-localize: "npm:3.4.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.13.5"
@@ -24348,16 +24348,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:37.3.0":
-  version: 37.3.0
-  resolution: "electron@npm:37.3.0"
+"electron@npm:35.7.5":
+  version: 35.7.5
+  resolution: "electron@npm:35.7.5"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^22.7.7"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10/bc0983454dfa01bcf94f5badf38052af8f2df3cc73bcc2db6e9ad309fb87ad77e80ecd09ddcdf44207c64326f156f3f98df428d3c3f54ee56d6d4bedfed7b37b
+  checksum: 10/f3757f0b6f21ddd5ebf8b83becdaa3e47dc13473e5375e6e6aee638d7029e73d08d6a4170b37ad8c594057da139e7cdf4c8b82b70c2c1ad0306abdcc274c5fee
   languageName: node
   linkType: hard
 
@@ -42248,13 +42248,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:7.2.3":
-  version: 7.2.3
-  resolution: "react-native-image-picker@npm:7.2.3"
+"react-native-image-picker@npm:8.0.0":
+  version: 8.0.0
+  resolution: "react-native-image-picker@npm:8.0.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/62c6cc3c88edb29f2b17b4cdaa098b32efd23a5faf4380171c2ccfb1706c732a50553f2ce447e1df1ea48197dde3af42dd67584c60e2c4577ee1b7769152475d
+  checksum: 10/4975e0d15f8bb8159b7594f67cf88f1492aab194e56fead4380e13754b945cf49e9c6d2535d30be3e858115682a39419236315f7367698ec291845f0704d7498
   languageName: node
   linkType: hard
 
