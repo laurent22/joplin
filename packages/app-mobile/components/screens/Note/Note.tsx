@@ -1252,6 +1252,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const output: MenuOptionType[] = [];
 
+		output.push({
+			title: _('Return to notes'),
+			onPress: async () => {
+				await NavService.go('Notes', { folderId: this.state.folder.id, clearHistory: true });
+			},
+		});
+
 		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
 
