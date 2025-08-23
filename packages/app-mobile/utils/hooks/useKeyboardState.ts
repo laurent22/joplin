@@ -5,13 +5,16 @@ const useKeyboardState = () => {
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
 	const [hasSoftwareKeyboard, setHasSoftwareKeyboard] = useState(false);
 	const [isFloatingKeyboard, setIsFloatingKeyboard] = useState(false);
+	const [height, setHeight] = useState<number>(0);
 	useEffect(() => {
-		const showListener = Keyboard.addListener('keyboardDidShow', () => {
+		const showListener = Keyboard.addListener('keyboardDidShow', (evt) => {
 			setKeyboardVisible(true);
 			setHasSoftwareKeyboard(true);
+			setHeight(evt.endCoordinates.height);
 		});
 		const hideListener = Keyboard.addListener('keyboardDidHide', () => {
 			setKeyboardVisible(false);
+			setHeight(0);
 		});
 		const floatingListener = Keyboard.addListener('keyboardWillChangeFrame', (evt) => {
 			const windowWidth = Dimensions.get('window').width;
@@ -28,8 +31,8 @@ const useKeyboardState = () => {
 	});
 
 	return useMemo(() => {
-		return { keyboardVisible, hasSoftwareKeyboard, isFloatingKeyboard };
-	}, [keyboardVisible, hasSoftwareKeyboard, isFloatingKeyboard]);
+		return { keyboardVisible, hasSoftwareKeyboard, isFloatingKeyboard, height };
+	}, [keyboardVisible, hasSoftwareKeyboard, isFloatingKeyboard, height]);
 };
 
 export default useKeyboardState;

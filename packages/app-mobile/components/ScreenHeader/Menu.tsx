@@ -7,6 +7,7 @@ import AccessibleView from '../accessibility/AccessibleView';
 import debounce from '../../utils/debounce';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { ModalState } from '../accessibility/FocusControl/types';
+import useKeyboardState from '../../utils/hooks/useKeyboardState';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -30,6 +31,7 @@ interface Props {
 
 const useStyles = (themeId: number) => {
 	const { height: windowHeight } = useWindowDimensions();
+	const { height: keyboardHeight, keyboardVisible, isFloatingKeyboard } = useKeyboardState();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
@@ -45,6 +47,10 @@ const useStyles = (themeId: number) => {
 			backgroundColor: theme.backgroundColor,
 			fontSize: theme.fontSize,
 		};
+
+		const maxMenuHeight = windowHeight - 50; // When the keyboard is hidden or floating, we need to make space for the navigation bar
+		const viewportHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : maxMenuHeight;
+		const menuHeight = keyboardVisible && !isFloatingKeyboard ? viewportHeight : maxMenuHeight;
 
 		return StyleSheet.create({
 			divider: {
@@ -66,13 +72,13 @@ const useStyles = (themeId: number) => {
 				opacity: 0.5,
 			},
 			menuContentScroller: {
-				maxHeight: windowHeight - 50,
+				maxHeight: menuHeight,
 			},
 			contextMenuButton: {
 				padding: 0,
 			},
 		});
-	}, [themeId, windowHeight]);
+	}, [themeId, windowHeight, keyboardHeight, keyboardVisible, isFloatingKeyboard]);
 };
 
 const MenuComponent: React.FC<Props> = props => {
