@@ -171,6 +171,7 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	return <View style={props.styles.tagBoxRoot}>
 		<Text style={props.styles.header} role='heading'>{_('Associated tags:')}</Text>
 		<ScrollView
+			keyboardShouldPersistTaps="handled"
 			style={props.styles.tagBoxScrollView}
 			// On web, specifying aria-live here announces changes to the associated tags.
 			// However, on Android (and possibly iOS), this breaks focus behavior:

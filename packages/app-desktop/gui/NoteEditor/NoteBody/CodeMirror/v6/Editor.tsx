@@ -114,6 +114,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 				const url = parseResourceUrl(src);
 				if (!url.itemId) return null;
 				const item = await Resource.load(url.itemId);
+				if (!item) return null;
 				return `${getResourceBaseUrl()}/${resourceFilename(item)}`;
 			},
 		});

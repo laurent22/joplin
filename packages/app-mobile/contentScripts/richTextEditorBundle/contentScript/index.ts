@@ -7,6 +7,8 @@ import '@joplin/editor/ProseMirror/styles';
 import readFileToBase64 from '../../utils/readFileToBase64';
 import { EditorLanguageType } from '@joplin/editor/types';
 import convertHtmlToMarkdown from './convertHtmlToMarkdown';
+import { ExportedWebViewGlobals as MarkdownEditorWebViewGlobals } from '../../markdownEditorBundle/types';
+import { EditorEventType } from '@joplin/editor/events';
 
 const postprocessHtml = (html: HTMLElement) => {
 	// Fix resource URLs
@@ -35,13 +37,16 @@ const htmlToMarkdown = (html: HTMLElement): string => {
 	return convertHtmlToMarkdown(html);
 };
 
-export const initialize = async ({
-	settings,
-	initialText,
-	initialNoteId,
-	parentElementClassName,
-	initialSearch,
-}: EditorProps) => {
+export const initialize = async (
+	{
+		settings,
+		initialText,
+		initialNoteId,
+		parentElementClassName,
+		initialSearch,
+	}: EditorProps,
+	markdownEditorApi: MarkdownEditorWebViewGlobals,
+) => {
 	const messenger = new WebViewToRNMessenger<EditorProcessApi, MainProcessApi>('rich-text-editor', null);
 	const parentElement = document.getElementsByClassName(parentElementClassName)[0];
 	if (!parentElement) throw new Error('Parent element not found');
@@ -109,6 +114,18 @@ export const initialize = async ({
 				return postprocessHtml(html).outerHTML;
 			}
 		},
+	}, (parent, language, onChange) => {
+		return markdownEditorApi.createEditorWithParent({
+			initialText: '',
+			initialNoteId: '',
+			parentElementOrClassName: parent,
+			settings: { ...editor.getSettings(), language },
+			onEvent: (event) => {
+				if (event.kind === EditorEventType.Change) {
+					onChange(event.value);
+				}
+			},
+		});
 	});
 	editor.setSearchState(initialSearch);
 

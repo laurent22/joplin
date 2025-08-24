@@ -232,6 +232,10 @@ const useEditorControl = (
 			onResourceDownloaded: (id: string) => {
 				editorRef.current.onResourceDownloaded(id);
 			},
+
+			remove: () => {
+				editorRef.current.remove();
+			},
 		};
 
 		return control;
@@ -300,6 +304,7 @@ function NoteEditor(props: Props) {
 				editorControl.searchControl.hideSearch();
 			}
 			break;
+		case EditorEventType.Remove:
 		case EditorEventType.Scroll:
 			// Not handled
 			break;

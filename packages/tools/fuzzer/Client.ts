@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FolderMetadata, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions } from './types';
+import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ShareOptions } from './types';
 import { join } from 'path';
 import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
@@ -128,10 +128,11 @@ class Client implements ActionableClient {
 		account.onClientConnected();
 
 		// Joplin Server sync
-		await client.execCliCommand_('config', 'sync.target', '9');
-		await client.execCliCommand_('config', 'sync.9.path', context.serverUrl);
-		await client.execCliCommand_('config', 'sync.9.username', account.email);
-		await client.execCliCommand_('config', 'sync.9.password', account.password);
+		const targetId = context.isJoplinCloud ? '10' : '9';
+		await client.execCliCommand_('config', 'sync.target', targetId);
+		await client.execCliCommand_('config', `sync.${targetId}.path`, context.serverUrl);
+		await client.execCliCommand_('config', `sync.${targetId}.username`, account.email);
+		await client.execCliCommand_('config', `sync.${targetId}.password`, account.password);
 		await client.execCliCommand_('config', 'api.token', apiData.token);
 		await client.execCliCommand_('config', 'api.port', String(apiData.port));
 
@@ -448,7 +449,7 @@ class Client implements ActionableClient {
 		});
 	}
 
-	public async createFolder(folder: FolderMetadata) {
+	public async createFolder(folder: FolderData) {
 		logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.label}`);
 		await this.tracker_.createFolder(folder);
 
@@ -510,36 +511,60 @@ class Client implements ActionableClient {
 		await this.execCliCommand_('rmbook', '--permanent', '--force', id);
 	}
 
-	public async shareFolder(id: string, shareWith: Client) {
-		await this.tracker_.shareFolder(id, shareWith);
+	public async shareFolder(id: string, shareWith: Client, options: ShareOptions) {
+		await this.tracker_.shareFolder(id, shareWith, options);
 
-		logger.info('Share', id, 'with', shareWith.label);
-		await this.execCliCommand_('share', 'add', id, shareWith.email);
+		const getPendingInvitations = async (target: Client) => {
+			const shareWithIncoming = JSON.parse((await target.execCliCommand_('share', 'list', '--json')).stdout);
+			return shareWithIncoming.invitations.filter((invitation: unknown) => {
+				if (typeof invitation !== 'object' || !('accepted' in invitation)) {
+					throw new Error('Invalid invitation format');
+				}
+				return !invitation.accepted;
+			});
+		};
 
-		await this.sync();
-		await shareWith.sync();
+		await retryWithCount(async () => {
+			logger.info('Share', id, 'with', shareWith.label, options.readOnly ? '(read-only)' : '');
+			const readOnlyArgs = options.readOnly ? ['--read-only'] : [];
+			await this.execCliCommand_(
+				'share', 'add', ...readOnlyArgs, id, shareWith.email,
+			);
 
-		const shareWithIncoming = JSON.parse((await shareWith.execCliCommand_('share', 'list', '--json')).stdout);
-		const pendingInvitations = shareWithIncoming.invitations.filter((invitation: unknown) => {
-			if (typeof invitation !== 'object' || !('accepted' in invitation)) {
-				throw new Error('Invalid invitation format');
-			}
-			return !invitation.accepted;
-		});
-		assert.deepEqual(pendingInvitations, [
-			{
-				accepted: false,
-				waiting: true,
-				rejected: false,
-				folderId: id,
-				fromUser: {
-					email: this.email,
+			await this.sync();
+			await shareWith.sync();
+
+			const pendingInvitations = await getPendingInvitations(shareWith);
+			assert.deepEqual(pendingInvitations, [
+				{
+					accepted: false,
+					waiting: true,
+					rejected: false,
+					canWrite: !options.readOnly,
+					folderId: id,
+					fromUser: {
+						email: this.email,
+					},
 				},
+			], 'there should be a single incoming share from the expected user');
+		}, {
+			count: 2,
+			delayOnFailure: count => count * Second,
+			onFail: (error)=>{
+				logger.warn('Share failed:', error);
 			},
-		], 'there should be a single incoming share from the expected user');
+		});
 
 		await shareWith.execCliCommand_('share', 'accept', id);
 		await shareWith.sync();
+	}
+
+	public async removeFromShare(id: string, other: Client) {
+		await this.tracker_.removeFromShare(id, other);
+
+		logger.info('Remove', other.label, 'from share', id);
+		await this.execCliCommand_('share', 'remove', id, other.email);
+		await other.sync();
 	}
 
 	public async moveItem(itemId: ItemId, newParentId: ItemId) {
@@ -551,7 +576,7 @@ class Client implements ActionableClient {
 
 	public async listNotes() {
 		const params = {
-			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id',
+			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id,share_id',
 			include_deleted: '1',
 			include_conflicts: '1',
 		};
@@ -566,13 +591,14 @@ class Client implements ActionableClient {
 				) : getStringProperty(item, 'parent_id'),
 				title: getStringProperty(item, 'title'),
 				body: getStringProperty(item, 'body'),
+				isShared: getStringProperty(item, 'share_id') !== '',
 			}),
 		);
 	}
 
 	public async listFolders() {
 		const params = {
-			fields: 'id,parent_id,title',
+			fields: 'id,parent_id,title,share_id',
 			include_deleted: '1',
 		};
 		return await this.execPagedApiCommand_(
@@ -583,6 +609,7 @@ class Client implements ActionableClient {
 				id: getStringProperty(item, 'id'),
 				parentId: getStringProperty(item, 'parent_id'),
 				title: getStringProperty(item, 'title'),
+				isShared: getStringProperty(item, 'share_id') !== '',
 			}),
 		);
 	}
@@ -595,8 +622,8 @@ class Client implements ActionableClient {
 		return this.tracker_.allFolderDescendants(parentId);
 	}
 
-	public async randomNote() {
-		return this.tracker_.randomNote();
+	public async randomNote(options: RandomNoteOptions) {
+		return this.tracker_.randomNote(options);
 	}
 
 	public async checkState() {

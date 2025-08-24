@@ -102,6 +102,40 @@ describe('models/Folder.sharing', () => {
 		expect(folder5.share_id).toBe('');
 	}));
 
+	it('should clear the share ID of a folder immediately when moved out of a shared folder', async () => {
+		let folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'folder 2',
+						children: [
+							{
+								title: 'folder 3',
+								children: [],
+							},
+						],
+					},
+				],
+			},
+		]);
+
+		await Folder.save({ id: folder1.id, share_id: 'test123456' });
+		await Folder.updateAllShareIds(resourceService(), []);
+
+		folder1 = await Folder.loadByTitle('folder 1');
+		const folder2 = await Folder.loadByTitle('folder 2');
+
+		expect(folder1.share_id).toBe('test123456');
+		expect(folder2.share_id).toBe('test123456');
+
+		await Folder.moveToFolder(folder2.id, '');
+		// Should have updated the share_id of folder 2 during "moveToFolder":
+		expect(await Folder.loadByTitle('folder 2')).toMatchObject({
+			share_id: '',
+		});
+	});
+
 	it('should update the share ID when a folder is moved in or out of shared folder', (async () => {
 		let folder1 = await createFolderTree('', [
 			{

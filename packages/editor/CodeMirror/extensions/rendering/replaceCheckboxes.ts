@@ -1,30 +1,10 @@
 import { Decoration, EditorView, WidgetType } from '@codemirror/view';
 import { SyntaxNodeRef } from '@lezer/common';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
+import toggleCheckboxAt from '../../utils/markdown/toggleCheckboxAt';
 
 const checkboxClassName = 'cm-ext-checkbox-toggle';
 
-const toggleCheckbox = (view: EditorView, linePos: number) => {
-	if (linePos >= view.state.doc.length) {
-		// Position out of range
-		return false;
-	}
-
-	const line = view.state.doc.lineAt(linePos);
-	const checkboxMarkup = line.text.match(/\[(x|\s)\]/);
-	if (!checkboxMarkup) {
-		// Couldn't find the checkbox
-		return false;
-	}
-
-	const isChecked = checkboxMarkup[0] === '[x]';
-	const checkboxPos = checkboxMarkup.index! + line.from;
-
-	view.dispatch({
-		changes: [{ from: checkboxPos, to: checkboxPos + 3, insert: isChecked ? '[ ]' : '[x]' }],
-	});
-	return true;
-};
 
 class CheckboxWidget extends WidgetType {
 	public constructor(private checked: boolean, private depth: number, private label: string) {
@@ -58,7 +38,7 @@ class CheckboxWidget extends WidgetType {
 		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
-			toggleCheckbox(view, view.posAtDOM(container));
+			toggleCheckboxAt(view.posAtDOM(container))(view);
 		};
 
 		this.applyContainerClasses(container);
