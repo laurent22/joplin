@@ -48,9 +48,9 @@ const useStyles = (themeId: number) => {
 			fontSize: theme.fontSize,
 		};
 
-		const maxMenuHeight = windowHeight - 50; // When the keyboard is hidden or floating, we need to make space for the navigation bar
-		const viewportHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : maxMenuHeight;
-		const menuHeight = keyboardVisible && !isFloatingKeyboard ? viewportHeight : maxMenuHeight;
+		const menuHeightCap = windowHeight - 50; // When the keyboard is hidden or floating, we need to make space for the navigation bar
+		const viewportOrCappedHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : menuHeightCap;
+		const keyboardAwareMaxMenuHeight = keyboardVisible && !isFloatingKeyboard ? viewportOrCappedHeight : menuHeightCap;
 
 		return StyleSheet.create({
 			divider: {
@@ -72,7 +72,7 @@ const useStyles = (themeId: number) => {
 				opacity: 0.5,
 			},
 			menuContentScroller: {
-				maxHeight: menuHeight,
+				maxHeight: keyboardAwareMaxMenuHeight,
 			},
 			contextMenuButton: {
 				padding: 0,
