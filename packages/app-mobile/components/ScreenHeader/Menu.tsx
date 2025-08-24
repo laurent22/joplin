@@ -31,7 +31,7 @@ interface Props {
 
 const useStyles = (themeId: number) => {
 	const { height: windowHeight } = useWindowDimensions();
-	const { height: keyboardHeight, keyboardVisible, isFloatingKeyboard } = useKeyboardState();
+	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
@@ -48,9 +48,8 @@ const useStyles = (themeId: number) => {
 			fontSize: theme.fontSize,
 		};
 
-		const menuHeightCap = windowHeight - 50; // When the keyboard is hidden or floating, we need to make space for the navigation bar
-		const viewportOrCappedHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : menuHeightCap;
-		const keyboardAwareMaxMenuHeight = keyboardVisible && !isFloatingKeyboard ? viewportOrCappedHeight : menuHeightCap;
+		// When the keyboard is hidden or floating, we need to make space for the navigation bar
+		const maxMenuHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : windowHeight - 50;
 
 		return StyleSheet.create({
 			divider: {
@@ -72,13 +71,13 @@ const useStyles = (themeId: number) => {
 				opacity: 0.5,
 			},
 			menuContentScroller: {
-				maxHeight: keyboardAwareMaxMenuHeight,
+				maxHeight: maxMenuHeight,
 			},
 			contextMenuButton: {
 				padding: 0,
 			},
 		});
-	}, [themeId, windowHeight, keyboardHeight, keyboardVisible, isFloatingKeyboard]);
+	}, [themeId, windowHeight, keyboardHeight]);
 };
 
 const MenuComponent: React.FC<Props> = props => {
