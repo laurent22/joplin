@@ -15,6 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: Spanish <contacto@ericdq.com>\n"
 "Language: es_ES\n"
@@ -437,9 +439,8 @@ msgid "Add recipient:"
 msgstr "Agregar destinatario:"
 
 #: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
 msgid "Add tags:"
-msgstr "Nuevas etiquetas:"
+msgstr "Añadir etiquetas:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -454,18 +455,16 @@ msgid "Add to note"
 msgstr "Añadir a la nota"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Añadir nuevo"
+msgstr "Añadido nuevo: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
 msgid "Added tag: %s"
-msgstr "Añadir etiqueta %s a la nota"
+msgstr "Etiqueta añadida: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:205
 msgid "Adds tag"
-msgstr ""
+msgstr "Añade etiqueta"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -650,7 +649,7 @@ msgstr "Aritim Oscuro"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Etiquetas asociadas:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -1175,9 +1174,8 @@ msgid "Code View"
 msgstr "Vista de código"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
 msgid "Code:"
-msgstr "Código"
+msgstr "Código:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1353,14 +1351,12 @@ msgid "Control character"
 msgstr "Carácter de control"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Convertir en nota"
+msgstr "Conviértelo"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Convertir a tarea"
+msgstr "Convertir nota a Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1466,9 +1462,8 @@ msgid "Could not connect to plugin repository."
 msgstr "No se ha podido conectar con el repositorio de plugins."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "No se pudo exportar las notas: %s"
+msgstr "No se pudo convertir la nota a Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1523,9 +1518,8 @@ msgid "Create a notebook"
 msgstr "Crea una libreta"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Crea una nueva libreta."
+msgstr "Crea una nueva libreta"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1533,9 +1527,8 @@ msgid "Create new profile..."
 msgstr "Crear nuevo perfil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Crea libreta"
+msgstr "Crear nota"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1605,14 +1598,12 @@ msgid "Creating new to-do..."
 msgstr "Creando nueva tarea..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Creando una nueva nota..."
+msgstr "Creando nota \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Creando una nueva nota..."
+msgstr "Creando nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1715,6 +1706,8 @@ msgstr "Por defecto"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"Título predeterminado que se utilizará para los documentos creados por el "
+"escáner."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -2006,7 +1999,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Escáner de documentos: Plantilla de título"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -2018,7 +2011,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "No volver a mostrar este mensaje"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2143,14 +2136,12 @@ msgid "Edit"
 msgstr "Editar"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Editar como Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Texto enriquecido"
+msgstr "Editar como texto enriquecido"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2310,14 +2301,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Activar el soporte de sintaxis de Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Activar cifrado"
+msgstr "Habilitar la transcripción manuscrita"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Activar la barra de herramientas Markdown"
+msgstr "Habilitar banner de conversión de HTML a Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2932,9 +2921,8 @@ msgid "Hide password"
 msgstr "Ocultar la contraseña"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Advertencia"
+msgstr "Oculta la advertencia"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2986,6 +2974,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Si un archivo adjunto de imagen está en su propia línea y seguido de una "
+"línea en blanco, se renderizará justo debajo de su fuente Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3686,13 +3676,12 @@ msgid "Markdown editor"
 msgstr "Editor de Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Editor de Markdown"
+msgstr "Editor de Markdown: Renderizar imágenes"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Editor de Markdown: Renderizar marcado en el editor"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3914,9 +3903,8 @@ msgid ""
 msgstr "Se creará la libreta nueva «%s» y se importará en ella el archivo «%s»"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Título de libreta:"
+msgstr "Nuevo título de libreta"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4032,9 +4020,8 @@ msgid "No tab selected"
 msgstr "Ninguna pestaña seleccionada"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Nuevas etiquetas:"
+msgstr "Sin etiquetas"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4152,9 +4139,8 @@ msgid "Note list style"
 msgstr "Estilo de lista de nota"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Visor de nota"
+msgstr "Vista previa de la nota"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
@@ -4246,9 +4232,8 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL o ruta de datos de idioma"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Buscar en todas las notas"
+msgstr "OCR: Búsqueda en contenido extraído"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4516,7 +4501,7 @@ msgstr "Se necesita permiso"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Foto %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4862,9 +4847,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Volver a cargar datos locales al objetivo de sincronización"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Saber más"
+msgstr "Leer más"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4875,9 +4859,10 @@ msgid "Read time: %s min"
 msgstr "Tiempo de lectura: %s minutos"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "El comando «%s» solamente está disponible en modo GUI"
+msgstr ""
+"La lectura de comandos desde la entrada estándar solo está disponible en "
+"modo CLI."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4896,9 +4881,8 @@ msgid "Recipients:"
 msgstr "Destinatarios:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Cambiar el tamaño de las imágenes grandes:"
+msgstr "Reconocer imagen manuscrita"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4952,9 +4936,8 @@ msgid "Remove"
 msgstr "Eliminar"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Eliminar"
+msgstr "Eliminar %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4973,9 +4956,8 @@ msgid "Removed %s from share."
 msgstr "Eliminado %s del recurso compartido."
 
 #: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
 msgid "Removed tag: %s"
-msgstr "Renombrar etiqueta:"
+msgstr "Etiqueta eliminada: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4996,7 +4978,7 @@ msgstr "Renombra el <item> dado (nota o libreta) a <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Renderiza el marcado en todas las líneas que no incluyen el cursor."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5246,9 +5228,8 @@ msgid "Save geo-location with notes"
 msgstr "Guardar geolocalización en las notas"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Selecciona una libreta"
+msgstr "Escanear libreta"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5297,9 +5278,8 @@ msgid "Search shown"
 msgstr "Se muestra la búsqueda"
 
 #: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
 msgid "Search tags"
-msgstr "Resultados de la búsqueda"
+msgstr "Buscar etiquetas"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:56
 msgid "Search:"
@@ -5348,18 +5328,16 @@ msgid "Select file..."
 msgstr "Seleccionar archivo..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Selecciona una libreta"
+msgstr "Seleccionar libreta"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Seleccionar libreta principal"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Creado: %s"
+msgstr "Seleccionado: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -6202,11 +6180,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "La nota «%s» se ha restaurado exitosamente a la libreta «%s»."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "La libreta y su contenido se han movido correctamente a la papelera."
+msgstr ""
+"La nota se ha convertido a Markdown y la nota original se ha movido a la "
+"papelera"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6444,14 +6423,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Esta función está deshabilitada de forma predeterminada, debe habilitarla "
+"manualmente activando la opción 'Habilitar transcripción manuscrita'."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Esta función solo está disponible en Joplin Cloud y Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Este tipo de imagen no es compatible con el sistema de reconocimiento."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6506,6 +6487,8 @@ msgstr "Esta nota no tiene historial"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Esta nota está en formato HTML. Conviértela a Markdown para editarla más "
+"fácilmente."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6612,7 +6595,7 @@ msgstr ""
 
 #: packages/app-mobile/components/ComboBox.tsx:568
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Para crear una nueva etiqueta, escriba el nombre y pulsa Intro."
 
 #: packages/app-cli/app/app-gui.js:458
 msgid "To delete a tag, untag the associated notes."
@@ -6996,9 +6979,8 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Actualice el destino de sincronización a la versión más reciente."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Tomar foto"
+msgstr "Subir foto"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
