@@ -30,6 +30,41 @@ const userConfig = { extraScripts: [], ...(fs.pathExistsSync(userConfigPath) ? r
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
 const allPossibleScreenshotsType = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+// Function definitions need to be before they are used
+function validateCategories(categories) {
+	if (!categories) return null;
+	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
+	categories.forEach(category => {
+		if (!allPossibleCategories.map(category => { return category.name; }).includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid categories are: \n${allPossibleCategories.map(category => { return category.name; })}\n`);
+	});
+}
+
+function validateScreenshots(screenshots) {
+	if (!screenshots) return null;
+	screenshots.forEach(screenshot => {
+		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
+
+		const screenshotType = screenshot.src.split('.').pop();
+		if (!allPossibleScreenshotsType.includes(screenshotType)) throw new Error(`${screenshotType} is not a valid screenshot type. Valid types are: \n${allPossibleScreenshotsType}\n`);
+
+		const screenshotPath = path.resolve(srcDir, screenshot.src);
+		// Max file size is 1MB
+		const fileMaxSize = 1024;
+		const fileSize = fs.statSync(screenshotPath).size / 1024;
+		if (fileSize > fileMaxSize) throw new Error(`Max screenshot file size is ${fileMaxSize}KB. ${screenshotPath} is ${fileSize}KB`);
+	});
+}
+
+function readManifest(manifestPath) {
+	const content = fs.readFileSync(manifestPath, 'utf8');
+	const output = JSON.parse(content);
+	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
+	validateCategories(output.categories);
+	validateScreenshots(output.screenshots);
+	return output;
+}
+
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
@@ -82,42 +117,9 @@ function currentGitInfo() {
 	}
 }
 
-function validateCategories(categories) {
-	if (!categories) return null;
-	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
-	categories.forEach(category => {
-		if (!allPossibleCategories.map(category => { return category.name; }).includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid categories are: \n${allPossibleCategories.map(category => { return category.name; })}\n`);
-	});
-}
-
-function validateScreenshots(screenshots) {
-	if (!screenshots) return null;
-	screenshots.forEach(screenshot => {
-		if (!screenshot.src) throw new Error('You must specify a src for each screenshot');
-
-		const screenshotType = screenshot.src.split('.').pop();
-		if (!allPossibleScreenshotsType.includes(screenshotType)) throw new Error(`${screenshotType} is not a valid screenshot type. Valid types are: \n${allPossibleScreenshotsType}\n`);
-
-		const screenshotPath = path.resolve(srcDir, screenshot.src);
-		// Max file size is 1MB
-		const fileMaxSize = 1024;
-		const fileSize = fs.statSync(screenshotPath).size / 1024;
-		if (fileSize > fileMaxSize) throw new Error(`Max screenshot file size is ${fileMaxSize}KB. ${screenshotPath} is ${fileSize}KB`);
-	});
-}
-
-function readManifest(manifestPath) {
-	const content = fs.readFileSync(manifestPath, 'utf8');
-	const output = JSON.parse(content);
-	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
-	validateCategories(output.categories);
-	validateScreenshots(output.screenshots);
-	return output;
-}
-
 function createPluginArchive(sourceDir, destPath) {
 	const distFiles = glob.sync(`${sourceDir}/**/*`, { nodir: true })
-		.map(f => f.substr(sourceDir.length + 1));
+		.map(f => f.substring(sourceDir.length + 1));
 
 	if (!distFiles.length) throw new Error('Plugin archive was not created because the "dist" directory is empty');
 	fs.removeSync(destPath);
@@ -174,7 +176,9 @@ const baseConfig = {
 	},
 };
 
-const pluginConfig = { ...baseConfig, entry: './src/index.ts',
+const pluginConfig = { 
+	...baseConfig, 
+	entry: './src/index.ts',
 	resolve: {
 		alias: {
 			api: path.resolve(__dirname, 'api'),
@@ -206,15 +210,19 @@ const pluginConfig = { ...baseConfig, entry: './src/index.ts',
 				},
 			],
 		}),
-	] };
+	],
+};
 
-const extraScriptConfig = { ...baseConfig, resolve: {
-	alias: {
-		api: path.resolve(__dirname, 'api'),
+const extraScriptConfig = { 
+	...baseConfig, 
+	resolve: {
+		alias: {
+			api: path.resolve(__dirname, 'api'),
+		},
+		fallback: moduleFallback,
+		extensions: ['.js', '.tsx', '.ts', '.json'],
 	},
-	fallback: moduleFallback,
-	extensions: ['.js', '.tsx', '.ts', '.json'],
-} };
+};
 
 const createArchiveConfig = {
 	stats: 'errors-only',
@@ -262,8 +270,11 @@ function buildExtraScriptConfigs(userConfig) {
 
 	for (const scriptName of userConfig.extraScripts) {
 		const scriptPaths = resolveExtraScriptPath(scriptName);
-		output.push({ ...extraScriptConfig, entry: scriptPaths.entry,
-			output: scriptPaths.output });
+		output.push({ 
+			...extraScriptConfig, 
+			entry: scriptPaths.entry,
+			output: scriptPaths.output,
+		});
 	}
 
 	return output;
