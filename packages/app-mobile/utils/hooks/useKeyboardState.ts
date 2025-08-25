@@ -21,6 +21,7 @@ const useKeyboardState = () => {
 			// If the keyboard isn't as wide as the window, the floating keyboard is disabled.
 			// See https://github.com/facebook/react-native/issues/29473#issuecomment-696658937
 			setIsFloatingKeyboard(evt.endCoordinates.width < windowWidth);
+			setKeyboardHeight(evt.endCoordinates.height);
 		});
 
 		return (() => {
