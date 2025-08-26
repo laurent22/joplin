@@ -508,6 +508,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		const stat = newContext.statsCache[i];
 
 		if (stat.isDir) continue;
+		if (stat.path.split('.').pop().toLower() !== 'md') continue; // info.json does not need to be processed, so can be ignored
 
 		if (stat.updated_time < context.timestamp) {
 			updateReport.older++;
@@ -518,7 +519,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 			// resolved by making a change to the outdated note and triggering the sync. This will create a conflict containing the local note contents, and replace
 			// the main note with the latest contents from the remote version
 			const itemId = BaseItem.pathToId(stat.path);
-			if (Setting.value('sync.ignoreTimestampOnFetchNewItem') && itemId !== 'info' && !itemIds.includes(itemId)) {
+			if (Setting.value('sync.ignoreTimestampOnFetchNewItem') && !itemIds.includes(itemId)) {
 				logger.info(`BasicDelta: Item with id [${itemId}] exists on remote but not locally, and has an updated_time earlier than the context timestamp`);
 			} else {
 				continue;
