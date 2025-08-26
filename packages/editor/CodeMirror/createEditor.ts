@@ -1,6 +1,6 @@
 import { Compartment, EditorState, Prec } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
-import { openSearchPanel, closeSearchPanel, searchPanelOpen } from '@codemirror/search';
+import { openSearchPanel, closeSearchPanel, searchPanelOpen, findNext, setSearchQuery } from '@codemirror/search';
 
 import { classHighlighter } from '@lezer/highlight';
 
@@ -258,6 +258,13 @@ const createEditor = (
 
 				highlightSpecialChars(),
 				indentOnInput(),
+
+				EditorView.updateListener.of((update) => {
+					const found = update.transactions.find(tr => tr.effects.find(e => e.is(setSearchQuery)));
+					if (found) {
+						findNext(update.view);
+					}
+				}),
 
 				EditorView.domEventHandlers({
 					scroll: (_event, view) => {
