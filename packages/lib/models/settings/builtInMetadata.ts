@@ -1617,6 +1617,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Proxy timeout (seconds)'),
 			storage: SettingStorage.File,
 		},
+		'sync.ignoreTimestampOnFetchNewItem': {
+			value: false,
+			type: SettingItemType.Bool,
+			advanced: true,
+			public: true,
+			section: 'sync',
+			label: () => _('Ignore timestamp when fetching new items'),
+			description: () => _('Enable this when using Joplin in combination with an external sync service, to prevent missed incoming changes for new items, which can happen if the external service is syncing at the same time as Joplin. When enabled, any non-Joplin data files on the sync target will be fetched on every sync until manually removed.'),
+			storage: SettingStorage.File,
+		},
 		'sync.wipeOutFailSafe': {
 			value: true,
 			type: SettingItemType.Bool,

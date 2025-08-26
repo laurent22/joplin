@@ -7,6 +7,7 @@ const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
+import Setting from './models/Setting';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -510,7 +511,18 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 
 		if (stat.updated_time < context.timestamp) {
 			updateReport.older++;
-			continue;
+
+			// Do not continue in the case where new notes are added upstream, but the updated_time on the file is less than the context timestamp, due to being synced
+			// with an external tool such as Syncthing while Joplin is part way through a sync, when using file system sync or WebDAV pointing to a local server. This
+			// will not address the same scenario with concurrent Joplin + external sync for updates to an existing note, but in that case, a missing update can be
+			// resolved by making a change to the outdated note and triggering the sync. This will create a conflict containing the local note contents, and replace
+			// the main note with the latest contents from the remote version
+			const itemId = BaseItem.pathToId(stat.path);
+			if (Setting.value('sync.ignoreTimestampOnFetchNewItem') && itemId !== 'info' && !itemIds.includes(itemId)) {
+				logger.info(`BasicDelta: Item with id [${itemId}] exists on remote but not locally, and has an updated_time earlier than the context timestamp`);
+			} else {
+				continue;
+			}
 		}
 
 		// Special case for items that exactly match the timestamp
