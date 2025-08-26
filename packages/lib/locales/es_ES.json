@@ -248,6 +248,9 @@
 	"Add recipient:": [
 		"Agregar destinatario:"
 	],
+	"Add tags:": [
+		"Añadir etiquetas:"
+	],
 	"Add title": [
 		"Añadir título"
 	],
@@ -257,8 +260,14 @@
 	"Add to note": [
 		"Añadir a la nota"
 	],
+	"Added new: %s": [
+		"Añadido nuevo: %s"
+	],
+	"Added tag: %s": [
+		"Etiqueta añadida: %s"
+	],
 	"Adds tag": [
-		""
+		"Añade etiqueta"
 	],
 	"Admin": [
 		"Administrador"
@@ -366,7 +375,7 @@
 		"Aritim Oscuro"
 	],
 	"Associated tags:": [
-		""
+		"Etiquetas asociadas:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"En la actualidad, Joplin Web solo se puede abrir en una pestaña a la vez. Por favor, cierre la otra instancia de Joplin."
@@ -653,6 +662,9 @@
 	"Code View": [
 		"Vista de código"
 	],
+	"Code:": [
+		"Código:"
+	],
 	"Collaborate on a notebook with others": [
 		"Colaborar en una libreta con otros usuarios"
 	],
@@ -762,6 +774,12 @@
 	"Control character": [
 		"Carácter de control"
 	],
+	"Convert it": [
+		"Conviértelo"
+	],
+	"Convert note to Markdown": [
+		"Convertir nota a Markdown"
+	],
 	"Convert to note": [
 		"Convertir en nota"
 	],
@@ -817,6 +835,9 @@
 	"Could not connect to plugin repository.": [
 		"No se ha podido conectar con el repositorio de plugins."
 	],
+	"Could not convert note to Markdown: %s": [
+		"No se pudo convertir la nota a Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"No se pudo exportar las notas: %s"
 	],
@@ -847,8 +868,14 @@
 	"Create a notebook": [
 		"Crea una libreta"
 	],
+	"Create new notebook": [
+		"Crea una nueva libreta"
+	],
 	"Create new profile...": [
 		"Crear nuevo perfil..."
+	],
+	"Create note": [
+		"Crear nota"
 	],
 	"Create notebook": [
 		"Crea libreta"
@@ -897,6 +924,12 @@
 	],
 	"Creating new to-do...": [
 		"Creando nueva tarea..."
+	],
+	"Creating note \"%s\"...": [
+		"Creando nota \"%s\"..."
+	],
+	"Creating note.": [
+		"Creando nota."
 	],
 	"Creating report...": [
 		"Creando un informe..."
@@ -968,7 +1001,7 @@
 		"Por defecto"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Título predeterminado que se utilizará para los documentos creados por el escáner."
 	],
 	"Default: %s": [
 		"Por defecto: %s"
@@ -1139,13 +1172,13 @@
 		"¡No pierda la contraseña ya que, por motivos de seguridad, esta será la *única* forma de descifrar los datos! Para habilitar el cifrado, ingrese su contraseña a continuación."
 	],
 	"Document scanner: Title template": [
-		""
+		"Escáner de documentos: Plantilla de título"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"No permita que el destinatario del recurso compartido escriba en la libreta  compartido. Válido solo para el subcomando `add`."
 	],
 	"Don't show this message again": [
-		""
+		"No volver a mostrar este mensaje"
 	],
 	"Donate, website": [
 		"Donar, sitio web"
@@ -1221,6 +1254,12 @@
 	],
 	"Edit": [
 		"Editar"
+	],
+	"Edit as Markdown": [
+		"Editar como Markdown"
+	],
+	"Edit as Rich Text": [
+		"Editar como texto enriquecido"
 	],
 	"Edit link": [
 		"Editar enlace"
@@ -1323,6 +1362,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Activar el soporte de sintaxis de Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Habilitar la transcripción manuscrita"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Habilitar banner de conversión de HTML a Markdown"
 	],
 	"Enable Linkify": [
 		"Activar Linkify"
@@ -1715,6 +1760,9 @@
 	"Hide password": [
 		"Ocultar la contraseña"
 	],
+	"Hides warning": [
+		"Oculta la advertencia"
+	],
 	"Highlight": [
 		"Resaltado"
 	],
@@ -1746,7 +1794,7 @@
 		"Inactivo"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Si un archivo adjunto de imagen está en su propia línea y seguido de una línea en blanco, se renderizará justo debajo de su fuente Markdown."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Si ya lo ha autorizado, espere a que la aplicación se sincronice con Joplin Cloud."
@@ -2161,8 +2209,11 @@
 	"Markdown editor": [
 		"Editor de Markdown"
 	],
+	"Markdown editor: Render images": [
+		"Editor de Markdown: Renderizar imágenes"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Editor de Markdown: Renderizar marcado en el editor"
 	],
 	"Marks a to-do as done.": [
 		"Marca una tarea como hecha."
@@ -2306,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Se creará la libreta nueva «%s» y se importará en ella el archivo «%s»"
 	],
+	"New notebook title": [
+		"Nuevo título de libreta"
+	],
 	"New photo": [
 		"Nueva foto"
 	],
@@ -2384,6 +2438,9 @@
 	"No tab selected": [
 		"Ninguna pestaña seleccionada"
 	],
+	"No tags": [
+		"Sin etiquetas"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"No hay editor de texto definido. Por favor configure uno usando `config editor <editor-path>`"
 	],
@@ -2459,6 +2516,9 @@
 	"Note list style": [
 		"Estilo de lista de nota"
 	],
+	"Note preview": [
+		"Vista previa de la nota"
+	],
 	"Note properties": [
 		"Propiedades de la nota"
 	],
@@ -2515,6 +2575,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL o ruta de datos de idioma"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Búsqueda en contenido extraído"
 	],
 	"OK": [
 		"OK"
@@ -2677,7 +2740,7 @@
 		"Se necesita permiso"
 	],
 	"Photo %d": [
-		""
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Haga click en \"%s\" para proceder, o indique las contraseñas en la lista \"%s\" debajo."
@@ -2901,11 +2964,17 @@
 	"Re-upload local data to sync target": [
 		"Volver a cargar datos locales al objetivo de sincronización"
 	],
+	"Read more": [
+		"Leer más"
+	],
 	"Read more about it": [
 		"Leer más al respecto"
 	],
 	"Read time: %s min": [
 		"Tiempo de lectura: %s minutos"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"La lectura de comandos desde la entrada estándar solo está disponible en modo CLI."
 	],
 	"Recipient has accepted the invitation": [
 		"El destinatario ha aceptado la invitación"
@@ -2918,6 +2987,9 @@
 	],
 	"Recipients:": [
 		"Destinatarios:"
+	],
+	"Recognize handwritten image": [
+		"Reconocer imagen manuscrita"
 	],
 	"Recommended": [
 		"Recomendado"
@@ -2952,6 +3024,9 @@
 	"Remove": [
 		"Eliminar"
 	],
+	"Remove %s": [
+		"Eliminar %s"
+	],
 	"Remove %s from share": [
 		"Eliminar %s del recurso compartido"
 	],
@@ -2963,6 +3038,9 @@
 	],
 	"Removed %s from share.": [
 		"Eliminado %s del recurso compartido."
+	],
+	"Removed tag: %s": [
+		"Etiqueta eliminada: %s"
 	],
 	"Rename": [
 		"Renombrar"
@@ -2977,7 +3055,7 @@
 		"Renombra el <item> dado (nota o libreta) a <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Renderiza el marcado en todas las líneas que no incluyen el cursor."
 	],
 	"Renew token": [
 		"Renovar token"
@@ -3138,6 +3216,9 @@
 	"Save geo-location with notes": [
 		"Guardar geolocalización en las notas"
 	],
+	"Scan notebook": [
+		"Escanear libreta"
+	],
 	"Scanned code": [
 		"Código escaneado"
 	],
@@ -3167,6 +3248,9 @@
 	],
 	"Search shown": [
 		"Se muestra la búsqueda"
+	],
+	"Search tags": [
+		"Buscar etiquetas"
 	],
 	"Search...": [
 		"Buscar..."
@@ -3198,8 +3282,14 @@
 	"Select file...": [
 		"Seleccionar archivo..."
 	],
+	"Select notebook": [
+		"Seleccionar libreta"
+	],
 	"Select parent notebook": [
 		"Seleccionar libreta principal"
+	],
+	"Selected: %s": [
+		"Seleccionado: %s"
 	],
 	"Selection deleted": [
 		"Selección eliminada"
@@ -3700,6 +3790,9 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La nota «%s» se ha restaurado exitosamente a la libreta «%s»."
 	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"La nota se ha convertido a Markdown y la nota original se ha movido a la papelera"
+	],
 	"The note was successfully moved to the trash.": [
 		"La nota se movió con éxito a la papelera.",
 		"Las notas se movieron con éxito a la papelera."
@@ -3804,13 +3897,13 @@
 		"Es posible que este dibujo tenga cambios no guardados."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Esta función está deshabilitada de forma predeterminada, debe habilitarla manualmente activando la opción 'Habilitar transcripción manuscrita'."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Esta función solo está disponible en Joplin Cloud y Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Este tipo de imagen no es compatible con el sistema de reconocimiento."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Esta es una herramienta avanzada para mostrar los adjuntos vinculados a sus notas. Por favor, tenga cuidado al eliminar alguno de ellos, ya que no pueden ser recuperados después."
@@ -3840,7 +3933,7 @@
 		"Esta nota no tiene historial"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Esta nota está en formato HTML. Conviértela a Markdown para editarla más fácilmente."
 	],
 	"This plugin doesn't support %s.": [
 		"Este plugin no es compatible con %s."
@@ -3888,7 +3981,7 @@
 		"Para continuar, por favor, introduzca su contraseña maestra a continuación."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Para crear una nueva etiqueta, escriba el nombre y pulsa Intro."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Para eliminar una etiqueta, desmarque las notas asociadas."
@@ -4126,6 +4219,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Actualice el destino de sincronización a la versión más reciente."
+	],
+	"Upload photo": [
+		"Subir foto"
 	],
 	"URL": [
 		"URL"

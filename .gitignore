@@ -912,6 +912,7 @@ packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useBackHandler.js
+packages/app-mobile/utils/hooks/useIsScreenReaderEnabled.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
@@ -979,6 +980,7 @@ packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
+packages/editor/CodeMirror/extensions/highlightActiveLineExtension.js
 packages/editor/CodeMirror/extensions/keyUpHandlerExtension.js
 packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
@@ -1090,6 +1092,8 @@ packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
 packages/editor/ProseMirror/utils/forEachHeading.js
 packages/editor/ProseMirror/utils/jumpToHash.js
 packages/editor/ProseMirror/utils/makeLinksClickableInElement.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.test.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.test.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.js
 packages/editor/ProseMirror/utils/sanitizeHtml.js

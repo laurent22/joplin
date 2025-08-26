@@ -1456,7 +1456,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'editor.inlineRendering': {
-			value: true,
+			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
@@ -1466,7 +1466,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 		'editor.imageRendering': {
-			value: true,
+			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
@@ -1474,6 +1474,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => _('If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.'),
 			section: 'note',
 			storage: SettingStorage.File,
+		},
+		'editor.highlightActiveLine': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Highlight active line'),
+			storage: SettingStorage.File,
+			isGlobal: true,
 		},
 
 		'imageeditor.jsdrawToolbar': {
