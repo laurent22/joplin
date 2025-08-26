@@ -8,6 +8,7 @@ import debounce from '../../utils/debounce';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { ModalState } from '../accessibility/FocusControl/types';
 import useKeyboardState from '../../utils/hooks/useKeyboardState';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -30,7 +31,8 @@ interface Props {
 }
 
 const useStyles = (themeId: number) => {
-	const { height: windowHeight } = useWindowDimensions();
+	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+	const safeAreaInsets = useSafeAreaInsets();
 	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
 
 	return useMemo(() => {
@@ -48,8 +50,9 @@ const useStyles = (themeId: number) => {
 			fontSize: theme.fontSize,
 		};
 
-		// When the keyboard is hidden or floating, we need to make space for the navigation bar
-		const maxMenuHeight = keyboardHeight > 0 ? windowHeight - keyboardHeight : windowHeight - 50;
+		const isLandscape = windowWidth > windowHeight;
+		const extraPadding = isLandscape ? 0 : 50;
+		const maxMenuHeight = windowHeight - keyboardHeight - safeAreaInsets.top - safeAreaInsets.bottom - extraPadding;
 
 		return StyleSheet.create({
 			divider: {
@@ -77,7 +80,7 @@ const useStyles = (themeId: number) => {
 				padding: 0,
 			},
 		});
-	}, [themeId, windowHeight, keyboardHeight]);
+	}, [themeId, windowWidth, windowHeight, safeAreaInsets, keyboardHeight]);
 };
 
 const MenuComponent: React.FC<Props> = props => {
