@@ -207,7 +207,7 @@
 		"%s not defteri %s tarafından kabul edildi"
 	],
 	"Accepting share...": [
-		"Paylaşım kabul ediliyor"
+		"Paylaşım kabul ediliyor..."
 	],
 	"Access denied: Please check your username and password": [
 		"Erişim reddedildi: Lütfen kullanıcı adınızı ve parolanızı kontrol edin"
@@ -248,6 +248,9 @@
 	"Add recipient:": [
 		"Alıcı ekle:"
 	],
+	"Add tags:": [
+		"Etiket ekle:"
+	],
 	"Add title": [
 		"Başlık ekle"
 	],
@@ -257,8 +260,14 @@
 	"Add to note": [
 		"Nota ekle"
 	],
+	"Added new: %s": [
+		"Yeni bir %s eklendi"
+	],
+	"Added tag: %s": [
+		"Etiket eklendi: %s"
+	],
 	"Adds tag": [
-		""
+		"Etiket ekler"
 	],
 	"Admin": [
 		"Yönetici"
@@ -291,7 +300,7 @@
 		"Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 	],
 	"All shared folders:": [
-		"Tüm paylaşılan klasörler"
+		"Tüm paylaşılan klasörler:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Mobil eklentilerde hata ayıklamayı etkinleştir. Detaylar için %s ."
@@ -366,7 +375,7 @@
 		"Aritim Dark"
 	],
 	"Associated tags:": [
-		""
+		"Ekli etiketler"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Joplin Web şimdilik sadece aynı anda bir tane sekmede açık durabilir. Lütfen Joplin'in açık diğer sekmelerini kapatın."
@@ -653,6 +662,9 @@
 	"Code View": [
 		"Kod Görünümü"
 	],
+	"Code:": [
+		"Kod:"
+	],
 	"Collaborate on a notebook with others": [
 		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 	],
@@ -762,6 +774,12 @@
 	"Control character": [
 		"Kontrol karakteri"
 	],
+	"Convert it": [
+		"Dönüştür"
+	],
+	"Convert note to Markdown": [
+		"Notu Markdown'a dönüştür"
+	],
 	"Convert to note": [
 		"Nota çevir"
 	],
@@ -817,6 +835,9 @@
 	"Could not connect to plugin repository.": [
 		"Eklenti sunucusuna bağlanılamadı."
 	],
+	"Could not convert note to Markdown: %s": [
+		"Not Markdown'a dönüştürülemedi: %s"
+	],
 	"Could not export notes: %s": [
 		"Notlar dışarı aktarılamadı: %s"
 	],
@@ -847,8 +868,14 @@
 	"Create a notebook": [
 		"Yeni bir not defteri oluşturur"
 	],
+	"Create new notebook": [
+		"Yeni bir not defteri oluştur"
+	],
 	"Create new profile...": [
 		"Yeni bir profil oluşturur..."
+	],
+	"Create note": [
+		"Not oluştur"
 	],
 	"Create notebook": [
 		"Not defteri oluştur"
@@ -897,6 +924,12 @@
 	],
 	"Creating new to-do...": [
 		"Yeni yapılacaklar listesi oluşturuluyor..."
+	],
+	"Creating note \"%s\"...": [
+		"Not \"%s\" oluşturuluyor..."
+	],
+	"Creating note.": [
+		"Not oluşturuluyor."
 	],
 	"Creating report...": [
 		"Rapor oluşturuluyor..."
@@ -968,7 +1001,7 @@
 		"Varsayılan"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Tarayıcı tarafından oluşturulan belgeler için kullanılacak varsayılan başlık."
 	],
 	"Default: %s": [
 		"Varsayılan: %s"
@@ -1139,13 +1172,13 @@
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
 	],
 	"Document scanner: Title template": [
-		""
+		"Belge tarayıcı: Başlık şablonu"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Paylaşım alıcısının paylaşılan not defterine yazmasına izin verme. Yalnızca `ekle` alt komutu için geçerlidir."
 	],
 	"Don't show this message again": [
-		""
+		"Bu mesajı bir daha görüntüleme"
 	],
 	"Donate, website": [
 		"Bağış yap, web sitesi"
@@ -1221,6 +1254,12 @@
 	],
 	"Edit": [
 		"Düzenle"
+	],
+	"Edit as Markdown": [
+		"Markdown olarak düzenle"
+	],
+	"Edit as Rich Text": [
+		"Zengin metin biçimiyle düzenle"
 	],
 	"Edit link": [
 		"Link'i düzenle"
@@ -1323,6 +1362,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Fountain söz dizimi desteğini etkinleştir"
+	],
+	"Enable handwritten transcription": [
+		"El yazısı transkripsiyonunu etkinleştir"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"HTML'den Markdown'a dönüştürme araç çubuğu başlığını etkinleştir"
 	],
 	"Enable Linkify": [
 		"Linkify’ı aktifleştir"
@@ -1715,6 +1760,9 @@
 	"Hide password": [
 		"Parolayo gizle"
 	],
+	"Hides warning": [
+		"Uyarıları gizler"
+	],
 	"Highlight": [
 		"Vurgula"
 	],
@@ -1746,7 +1794,7 @@
 		"Boşta"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Bir resim eki kendi satırındaysa ve ardından boş bir satır geliyorsa, Markdown kaynağının hemen altında görüntülenecektir."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Eğer hali hazırda giriş yaptıysanız, lütfen uygulamanın Joplin Cloud ile senkronizasyonu için kısa bir süre bekleyin."
@@ -2161,8 +2209,11 @@
 	"Markdown editor": [
 		"Markdown düzenleyici"
 	],
+	"Markdown editor: Render images": [
+		"Markdown düzenleyici: Resimleri görüntüle"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown düzenleyici: Biçimlendirmeyi düzenleyicide görüntüle"
 	],
 	"Marks a to-do as done.": [
 		"Yapılacakları yapıldı olarak işaretler."
@@ -2219,7 +2270,7 @@
 		"Eksik Ana Anahtar"
 	],
 	"Missing permission to record audio.": [
-		"Ses kaydetmek için izin eksik"
+		"Ses kaydetmek için izin eksik."
 	],
 	"Missing required argument: %s": [
 		"Gerekli parametre eksik gözüküyor: %s"
@@ -2306,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Yeni not defteri \"%s\" oluşturulacak ve \"%s\" dosyası onun içine aktarılacak"
 	],
+	"New notebook title": [
+		"Yeni not defteri başlığı:"
+	],
 	"New photo": [
 		"Yeni fotoğraf"
 	],
@@ -2384,6 +2438,9 @@
 	"No tab selected": [
 		"Seçili sekme yok"
 	],
+	"No tags": [
+		"Etiket bulunamadı"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Hiçbir metin editörü tanımlanmadı. Lütfen `config editor <editor-path>` komutunu kullanarak editörü ayarlayınız"
 	],
@@ -2459,6 +2516,9 @@
 	"Note list style": [
 		"Not listeleme biçimi"
 	],
+	"Note preview": [
+		"Not önizleme"
+	],
 	"Note properties": [
 		"Not özellikleri"
 	],
@@ -2515,6 +2575,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: Dil verisi URL ya da yolu"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Ayıklanmış içerikte ara"
 	],
 	"OK": [
 		"OK"
@@ -2677,7 +2740,7 @@
 		"İzin gerekmekte"
 	],
 	"Photo %d": [
-		""
+		"Resim %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Devam etmek için lütfen \"%s\" butonuna basın, ya da aşağıdaki \"%s\" listesinden parola belirleyin."
@@ -2901,11 +2964,17 @@
 	"Re-upload local data to sync target": [
 		"Yerel veriyi senkronizasyon sunucusuna yeniden yükle"
 	],
+	"Read more": [
+		"Daha fazla oku"
+	],
 	"Read more about it": [
 		"Hakkında daha fazlasını oku"
 	],
 	"Read time: %s min": [
 		"Okuma süresü: %s dk"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Standart girdiden komut okuma yalnızca CLI modunda mevcuttur."
 	],
 	"Recipient has accepted the invitation": [
 		"Alıcı davetiyeyi Kabul etti"
@@ -2918,6 +2987,9 @@
 	],
 	"Recipients:": [
 		"Alıcılar:"
+	],
+	"Recognize handwritten image": [
+		"El yazısı olan resimleri algıla"
 	],
 	"Recommended": [
 		"Önerilen"
@@ -2952,6 +3024,9 @@
 	"Remove": [
 		"Sil"
 	],
+	"Remove %s": [
+		"%s kaldır"
+	],
 	"Remove %s from share": [
 		"Paylaşımdan “%s” etiketini kaldır"
 	],
@@ -2963,6 +3038,9 @@
 	],
 	"Removed %s from share.": [
 		"“%s” paylaşımdan kaldırıldı."
+	],
+	"Removed tag: %s": [
+		"Etiket kaldırıldı: %s"
 	],
 	"Rename": [
 		"Yeniden adlandır"
@@ -2977,7 +3055,7 @@
 		"<item> öğesini <name> ile yeniden adlandırır (not veya not defteri)."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"İmlecin olmadığı tüm satırlarda biçimlendirme yapar."
 	],
 	"Renew token": [
 		"Jetonu yenile"
@@ -3004,7 +3082,7 @@
 		"$ eşleştirme değiştirildi"
 	],
 	"replaced match on line $": [
-		"Satır $ üzerindeki eşleştirme değiştirildi"
+		"satır $ üzerindeki eşleştirme değiştirildi"
 	],
 	"Report an issue": [
 		"Hata bildir"
@@ -3138,6 +3216,9 @@
 	"Save geo-location with notes": [
 		"Coğrafi konumu notlarla kaydedin"
 	],
+	"Scan notebook": [
+		"Not defterini tara"
+	],
 	"Scanned code": [
 		"Taranmış kod"
 	],
@@ -3167,6 +3248,9 @@
 	],
 	"Search shown": [
 		"Görünür öğeler içerisinde arama"
+	],
+	"Search tags": [
+		"Etiketlerde ara"
 	],
 	"Search...": [
 		"Ara..."
@@ -3198,8 +3282,14 @@
 	"Select file...": [
 		"Dosya seç..."
 	],
+	"Select notebook": [
+		"Not defterini seç"
+	],
 	"Select parent notebook": [
 		"Ana not defterini seç"
+	],
+	"Selected: %s": [
+		"Seçili: %s"
 	],
 	"Selection deleted": [
 		"Seçim silindi"
@@ -3700,6 +3790,9 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı."
+	],
 	"The note was successfully moved to the trash.": [
 		"Not başarıyla çöp kutusuna taşındı.",
 		"Notlar başarıyla çöp kutusuna taşındı."
@@ -3804,13 +3897,13 @@
 		"Çizimde kaydedilmemiş değişiklikler olabilir."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Bu özellik varsayılan olarak devre dışıdır, 'El yazısı transkripsiyonunu etkinleştir' seçeneğini açarak manuel olarak etkinleştirmeniz gerekir."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Bu özellik yalnızca Joplin Cloud ve Joplin Server'da kullanılabilir."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Bu resim türü tanıma sistemi tarafından desteklenmiyor."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Bu gelişmiş araç notlarınıza iliştirdiğiniz ek dosyaları görmenizi sağlar. Lütfen bu aracı kullanırken dikkatli olun, çünkü bu dosyalar silinirse sonrasında geri döndürülemez."
@@ -3840,7 +3933,7 @@
 		"Bu notun hiç değişiklik geçmişi yok"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Bu not HTML formatında. Daha kolay düzenlemek için Markdown'a dönüştürün."
 	],
 	"This plugin doesn't support %s.": [
 		"Bu eklenti %s desteklemiyor."
@@ -3888,7 +3981,7 @@
 		"Devam etmek için lütfen aşağıya ana parolanızı girin."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Yeni bir etiket oluşturmak için adını yazın ve enter'a basın."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Bir etiketi silmek için ilişkilendirilmiş notların etiketini kaldırın."
@@ -4126,6 +4219,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Senkronizasyon hedefini en son sürüme yükseltin."
+	],
+	"Upload photo": [
+		"Fotoğraf yükle"
 	],
 	"URL": [
 		"URL"

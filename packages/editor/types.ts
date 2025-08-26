@@ -185,6 +185,7 @@ export interface EditorSettings {
 	inlineRenderingEnabled: boolean;
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
+	highlightActiveLine: boolean;
 
 	indentWithTabs: boolean;
 

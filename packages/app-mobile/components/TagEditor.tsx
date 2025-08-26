@@ -51,7 +51,7 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 			},
 			tagBoxRoot: {
 				flexDirection: 'column',
-				flexGrow: 1,
+				flexGrow: 0.5,
 				flexShrink: 1,
 			},
 			tagBoxScrollView: {
