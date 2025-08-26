@@ -16,6 +16,7 @@ import { Prec } from '@codemirror/state';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
 import renderingExtension from './extensions/rendering/renderingExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
+import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
@@ -90,6 +91,10 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 		extensions.push(renderingExtension(context, {
 			renderImages: settings.imageRenderingEnabled,
 		}));
+	}
+
+	if (settings.highlightActiveLine) {
+		extensions.push(highlightActiveLineExtension());
 	}
 
 	return extensions;

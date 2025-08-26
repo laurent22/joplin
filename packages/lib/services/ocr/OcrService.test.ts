@@ -271,4 +271,23 @@ describe('OcrService', () => {
 		await service.dispose();
 	});
 
+	it('should skip resources with an invalid ocr_driver_id', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		await Resource.save({
+			...resource,
+			ocr_driver_id: -123456, // An invalid ID
+		});
+
+		const service = newOcrService();
+
+		// Should not loop forever
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('');
+
+		await service.dispose();
+	});
+
 });

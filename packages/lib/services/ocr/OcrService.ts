@@ -119,7 +119,6 @@ export default class OcrService {
 		this.isProcessingResources_ = true;
 
 		const totalResourcesToProcess = await Resource.needOcrCount(supportedMimeTypes);
-		const inProcessResourceIds: string[] = [];
 		const skippedResourceIds: string[] = [];
 
 		logger.info(`Found ${totalResourcesToProcess} resources to process...`);
@@ -165,11 +164,14 @@ export default class OcrService {
 
 		try {
 			const language = toIso639Alpha3(Setting.value('locale'));
+			const processedResourceIds: string[] = [];
 
-			let totalProcessed = 0;
+			// Queue all resources for processing
+			let lastProcessedCount = -1;
+			while (processedResourceIds.length > lastProcessedCount) {
+				lastProcessedCount = processedResourceIds.length;
 
-			while (true) {
-				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds.concat(inProcessResourceIds), 100, {
+				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds.concat(processedResourceIds), 100, {
 					fields: [
 						'id',
 						'mime',
@@ -179,26 +181,32 @@ export default class OcrService {
 					],
 				});
 
-				if (!resources.length) break;
+				for (const resource of resources) {
+					const makeCurrentQueueAction = () => makeQueueAction(processedResourceIds.length, language, resource);
 
-				const ocrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.PrintedText);
+					let processed = true;
+					if (resource.ocr_driver_id === ResourceOcrDriverId.PrintedText) {
+						await this.printedTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
+					} else if (resource.ocr_driver_id === ResourceOcrDriverId.HandwrittenText) {
+						await this.handwrittenTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
+					} else {
+						logger.info('Skipped processing', resource.id, 'with OCR: Unsupported ocr_driver_id', resource.ocr_driver_id);
+						processed = false;
+					}
 
-				for (const resource of ocrResources) {
-					inProcessResourceIds.push(resource.id);
-					await this.printedTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
-				}
-
-				const htrResources = resources.filter(r => r.ocr_driver_id === ResourceOcrDriverId.HandwrittenText);
-
-				for (const resource of htrResources) {
-					inProcessResourceIds.push(resource.id);
-					await this.handwrittenTextQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+					if (processed) {
+						processedResourceIds.push(resource.id);
+					} else {
+						skippedResourceIds.push(resource.id);
+					}
 				}
 			}
 
+			// Wait for processing to finish
 			await this.printedTextQueue_.waitForAll();
 			await this.handwrittenTextQueue_.waitForAll();
 
+			const totalProcessed = processedResourceIds.length;
 			if (totalProcessed) {
 				eventManager.emit(EventName.OcrServiceResourcesProcessed);
 			}

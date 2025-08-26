@@ -11,6 +11,7 @@ import SearchInput from './SearchInput';
 import focusView from '../utils/focusView';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import NestableFlatList, { NestableFlatListControl } from './NestableFlatList';
+import useKeyboardState from '../utils/hooks/useKeyboardState';
 const naturalCompare = require('string-natural-compare');
 
 
@@ -151,7 +152,12 @@ const useSelectedIndex = (search: string, searchResults: Option[]) => {
 };
 
 const useStyles = (themeId: number, showSearchResults: boolean) => {
-	const { fontScale } = useWindowDimensions();
+	const { fontScale, height: screenHeight } = useWindowDimensions();
+	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
+
+	// Allow the search results size to decrease when the keyboard is visible.
+	const searchResultsHeight = Math.max(128, Math.min(200, (screenHeight - keyboardHeight) / 3));
+
 	const menuItemHeight = 40 * fontScale;
 	const theme = themeStyle(themeId);
 
@@ -187,7 +193,7 @@ const useStyles = (themeId: number, showSearchResults: boolean) => {
 				minHeight: 32,
 			},
 			searchResults: {
-				height: 200,
+				height: searchResultsHeight,
 				flexGrow: 1,
 				flexShrink: 1,
 				...(showSearchResults ? {} : {
@@ -220,7 +226,7 @@ const useStyles = (themeId: number, showSearchResults: boolean) => {
 				backgroundColor: theme.selectedColor,
 			},
 		});
-	}, [theme, menuItemHeight, showSearchResults]);
+	}, [theme, menuItemHeight, searchResultsHeight, showSearchResults]);
 
 	return { menuItemHeight, styles };
 };

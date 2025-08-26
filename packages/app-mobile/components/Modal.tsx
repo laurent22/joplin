@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { GestureResponderEvent, KeyboardAvoidingView, Modal, ModalProps, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -8,7 +8,7 @@ import { ModalState } from './accessibility/FocusControl/types';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { _ } from '@joplin/lib/locale';
 
-interface ModalElementProps extends ModalProps {
+export interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;
 	containerStyle?: ViewStyle;
 	backgroundColor?: string;
@@ -38,6 +38,9 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				// background from being visible, the background color is applied to the ScrollView container
 				// instead:
 				backgroundColor: hasScrollView ? null : backgroundColor,
+			},
+			keyboardAvoidingView: {
+				flex: 1,
 			},
 			modalScrollView: {
 				backgroundColor,
@@ -159,11 +162,13 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				{...modalProps}
 			>
 				{scrollOverflow ? (
-					<ScrollView
-						{...extraScrollViewProps}
-						style={[styles.modalScrollView, extraScrollViewProps.style]}
-						contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
-					>{contentAndBackdrop}</ScrollView>
+					<KeyboardAvoidingView behavior='padding' style={styles.keyboardAvoidingView}>
+						<ScrollView
+							{...extraScrollViewProps}
+							style={[styles.modalScrollView, extraScrollViewProps.style]}
+							contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
+						>{contentAndBackdrop}</ScrollView>
+					</KeyboardAvoidingView>
 				) : contentAndBackdrop}
 			</Modal>
 		</FocusControl.ModalWrapper>

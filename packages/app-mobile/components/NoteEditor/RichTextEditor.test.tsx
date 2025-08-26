@@ -288,6 +288,26 @@ describe('RichTextEditor', () => {
 		});
 	});
 
+	it('should avoid rendering URLs with unknown protocols', async () => {
+		let body = '[link](unknown://test)';
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const renderedLink = await findElement<HTMLAnchorElement>('a[href][data-original-href]');
+		expect(renderedLink.getAttribute('href')).toBe('#');
+		expect(renderedLink.getAttribute('data-original-href')).toBe('unknown://test');
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('[link](unknown://test) testing');
+		});
+	});
+
 	it.each([
 		MarkupLanguage.Markdown, MarkupLanguage.Html,
 	])('should preserve image attachments on edit (case %#)', async (markupLanguage) => {
@@ -383,6 +403,22 @@ describe('RichTextEditor', () => {
 		const editor = await findElement('dialog .cm-editor');
 		expect(editor).toBeTruthy();
 		expect(editor.textContent).toContain('3^2 + 4^2 = 5^2');
+	});
+
+	it('should save lists as single-spaced', async () => {
+		let body = 'Test:\n\n- this\n- is\n- a\n- test.';
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' Testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('Test:\n\n- this\n- is\n- a\n- test. Testing');
+		});
 	});
 
 	it('should preserve table of contents blocks on edit', async () => {

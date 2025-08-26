@@ -18,6 +18,13 @@ const postprocessHtml = (html: HTMLElement) => {
 		resource.src = `:/${resourceId}`;
 	}
 
+	// Restore HREFs
+	const links = html.querySelectorAll<HTMLAnchorElement>('a[href="#"][data-original-href]');
+	for (const link of links) {
+		link.href = link.getAttribute('data-original-href');
+		link.removeAttribute('data-original-href');
+	}
+
 	return html;
 };
 
@@ -32,8 +39,6 @@ const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 
 
 const htmlToMarkdown = (html: HTMLElement): string => {
-	html = postprocessHtml(html);
-
 	return convertHtmlToMarkdown(html);
 };
 
@@ -91,27 +96,11 @@ export const initialize = async (
 				removeUnusedPluginAssets: options.isFullPageRender,
 			});
 		},
-		renderHtmlToMarkup: (node) => {
-			// By default, if `src` is specified on an image, the browser will try to load the image, even if it isn't added
-			// to the DOM. (A similar problem is described here: https://stackoverflow.com/q/62019538).
-			// Since :/resourceId isn't a valid image URI, this results in a large number of warnings. As a workaround,
-			// move the element to a temporary document before processing:
-			const dom = document.implementation.createHTMLDocument();
-			node = dom.importNode(node, true);
-
-			let html: HTMLElement;
-			if ((node instanceof HTMLElement)) {
-				html = node;
-			} else {
-				const container = document.createElement('div');
-				container.appendChild(html);
-				html = container;
-			}
-
+		renderHtmlToMarkup: (html) => {
 			if (settings.language === EditorLanguageType.Markdown) {
 				return htmlToMarkdown(wrapHtmlForMarkdownConversion(html));
 			} else {
-				return postprocessHtml(html).outerHTML;
+				return html.outerHTML;
 			}
 		},
 	}, (parent, language, onChange) => {

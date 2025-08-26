@@ -26,6 +26,7 @@ import { OnCreateCodeEditor as OnCreateCodeEditor, RendererControl } from './typ
 import resourcePlaceholderPlugin, { onResourceDownloaded } from './plugins/resourcePlaceholderPlugin';
 import getFileFromPasteEvent from '../utils/getFileFromPasteEvent';
 import { RenderResult } from '../../renderer/types';
+import postprocessEditorOutput from './utils/postprocessEditorOutput';
 import detailsPlugin from './plugins/detailsPlugin';
 
 interface ProseMirrorControl extends EditorControl {
@@ -40,7 +41,9 @@ const createEditor = async (
 	createCodeEditor: OnCreateCodeEditor,
 ): Promise<ProseMirrorControl> => {
 	const renderNodeToMarkup = (node: Node|DocumentFragment) => {
-		return renderer.renderHtmlToMarkup(node);
+		return renderer.renderHtmlToMarkup(
+			postprocessEditorOutput(node),
+		);
 	};
 
 	const proseMirrorParser = ProseMirrorDomParser.fromSchema(schema);
