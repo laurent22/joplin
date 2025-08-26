@@ -508,7 +508,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		const stat = newContext.statsCache[i];
 
 		if (stat.isDir) continue;
-		if (stat.path.split('.').pop().toLower() !== 'md') continue; // info.json does not need to be processed, so can be ignored
+		if (!BaseItem.isSystemPath(stat.path)) continue;
 
 		if (stat.updated_time < context.timestamp) {
 			updateReport.older++;
