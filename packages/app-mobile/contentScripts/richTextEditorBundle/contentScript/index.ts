@@ -10,24 +10,6 @@ import convertHtmlToMarkdown from './convertHtmlToMarkdown';
 import { ExportedWebViewGlobals as MarkdownEditorWebViewGlobals } from '../../markdownEditorBundle/types';
 import { EditorEventType } from '@joplin/editor/events';
 
-const postprocessHtml = (html: HTMLElement) => {
-	// Fix resource URLs
-	const resources = html.querySelectorAll<HTMLImageElement>('img[data-resource-id]');
-	for (const resource of resources) {
-		const resourceId = resource.getAttribute('data-resource-id');
-		resource.src = `:/${resourceId}`;
-	}
-
-	// Restore HREFs
-	const links = html.querySelectorAll<HTMLAnchorElement>('a[href="#"][data-original-href]');
-	for (const link of links) {
-		link.href = link.getAttribute('data-original-href');
-		link.removeAttribute('data-original-href');
-	}
-
-	return html;
-};
-
 const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 	// Add a container element -- when converting to HTML, Turndown
 	// sometimes doesn't process the toplevel element in the same way

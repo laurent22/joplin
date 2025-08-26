@@ -22,6 +22,16 @@ const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	}
 };
 
+
+const restoreOriginalLinks = (container: HTMLElement) => {
+	// Restore HREFs
+	const links = container.querySelectorAll<HTMLAnchorElement>('a[href="#"][data-original-href]');
+	for (const link of links) {
+		link.href = link.getAttribute('data-original-href');
+		link.removeAttribute('data-original-href');
+	}
+};
+
 const postprocessEditorOutput = (node: Node|DocumentFragment) => {
 	// By default, if `src` is specified on an image, the browser will try to load the image, even if it isn't added
 	// to the DOM. (A similar problem is described here: https://stackoverflow.com/q/62019538).
@@ -40,6 +50,7 @@ const postprocessEditorOutput = (node: Node|DocumentFragment) => {
 	}
 
 	fixResourceUrls(html);
+	restoreOriginalLinks(html);
 	removeListItemWrapperParagraphs(html);
 
 	return html;
