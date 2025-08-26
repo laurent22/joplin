@@ -7,7 +7,6 @@ const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
-import Setting from './models/Setting';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -519,7 +518,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 			// resolved by making a change to the outdated note and triggering the sync. This will create a conflict containing the local note contents, and replace
 			// the main note with the latest contents from the remote version
 			const itemId = BaseItem.pathToId(stat.path);
-			if (Setting.value('sync.ignoreTimestampOnFetchNewItem') && !itemIds.includes(itemId)) {
+			if (!itemIds.includes(itemId)) {
 				logger.info(`BasicDelta: Item with id [${itemId}] exists on remote but not locally, and has an updated_time earlier than the context timestamp`);
 			} else {
 				continue;
