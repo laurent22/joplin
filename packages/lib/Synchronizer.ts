@@ -974,7 +974,7 @@ export default class Synchronizer {
 										} else if (Setting.value('sync.detectBasedOnAnyTimestampChanges') && content && content.updated_time === local.updated_time) {
 											// When initially enabling detectBasedOnAnyTimestampChanges, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state
-											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, content.updated_time);
+											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
 										}
 									}
 								}
