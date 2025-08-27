@@ -884,7 +884,7 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
 				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
 			},
 		];
