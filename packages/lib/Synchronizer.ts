@@ -804,6 +804,15 @@ export default class Synchronizer {
 								// on it (instead it uses a more reliable `context` object) and the itemsThatNeedSync loop
 								// above also doesn't use it because it fetches the whole remote object and read the
 								// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
+								// 2025-08-27: remote.updated_time can now be utilised by the basic delta when using a sync target
+								// where the 'server' is actually the same device that is running the client eg. file system sync.
+								// This is required to correctly detect updated objects where an external sync service is being
+								// used in combination with Joplin, as there are essentially multiple sources of truth, rather
+								// than just one. So we can't rely on the server always containing the latest remote changes
+								// during synchronization, as new changes can be later added which have a timestamp in the past.
+								// In this scenario, we don't know the exact timestamp to specify for remoteItemUpdatedTime upon
+								// uploading. So we can leave it unspecified and then on the next run of the delta step, it will
+								// get set there
 
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 							}
@@ -862,6 +871,11 @@ export default class Synchronizer {
 						// drivers with a delta functionality it's a noop.
 						allItemIdsHandler: async () => {
 							return BaseItem.syncedItemIds(syncTargetId);
+						},
+
+						// This is only used by the basic delta
+						allItemMetadataHandler: async () => {
+							return BaseItem.remoteItemMetadata(syncTargetId);
 						},
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
@@ -996,7 +1010,7 @@ export default class Synchronizer {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs(), undefined, undefined, undefined, remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
