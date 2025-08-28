@@ -1,12 +1,13 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
-import BaseItem from './models/BaseItem';
+import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import time from './time';
 
 const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
+import Setting from './models/Setting';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -102,6 +103,7 @@ async function tryAndRepeat(fn: Function, count: number) {
 
 export interface DeltaOptions {
 	allItemIdsHandler(): Promise<string[]>;
+	allItemMetadataHandler(): Promise<Map<string, RemoteItemMetadata>>;
 	logger?: LoggerWrapper;
 	wipeOutFailSafe: boolean;
 }
@@ -453,7 +455,8 @@ function basicDeltaContextFromOptions_(options: any) {
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOptions) {
 	const outputLimit = 50;
-	const itemIds = await options.allItemIdsHandler();
+	const itemIds: string[] = await options.allItemIdsHandler();
+
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
 	const logger = options && options.logger ? options.logger : new Logger();
@@ -494,6 +497,12 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		equal: 0,
 	};
 
+	let remoteItemMetadata: Map<string, RemoteItemMetadata>;
+
+	if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+		remoteItemMetadata = await options.allItemMetadataHandler();
+	}
+
 	// Find out which files have been changed since the last time. Note that we keep
 	// both the timestamp of the most recent change, *and* the items that exactly match
 	// this timestamp. This to handle cases where an item is modified while this delta
@@ -509,43 +518,70 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		if (stat.isDir) continue;
 		if (!BaseItem.isSystemPath(stat.path)) continue;
 
-		if (stat.updated_time < context.timestamp) {
-			updateReport.older++;
+		let lastRemoteItemUpdatedTime = 0;
+		const itemId = BaseItem.pathToId(stat.path);
 
-			// Do not continue in the case where new notes are added upstream, but the updated_time on the file is less than the context timestamp, due to being synced
-			// with an external tool such as Syncthing while Joplin is part way through a sync, when using file system sync or WebDAV pointing to a local server. This
-			// will not address the same scenario with concurrent Joplin + external sync for updates to an existing note, but in that case, a missing update can be
-			// resolved by making a change to the outdated note and triggering the sync. This will create a conflict containing the local note contents, and replace
-			// the main note with the latest contents from the remote version
-			const itemId = BaseItem.pathToId(stat.path);
-			if (!itemIds.includes(itemId)) {
-				logger.info(`BasicDelta: Item with id [${itemId}] exists on remote but not locally, and has an updated_time earlier than the context timestamp`);
+		if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+			const metadata = remoteItemMetadata.get(itemId);
+
+			if (metadata) {
+				// Check if update is needed
+				lastRemoteItemUpdatedTime = metadata.updated_time;
+
+				if (stat.updated_time === lastRemoteItemUpdatedTime) {
+					// Item has already been synced and is up to date
+					updateReport.equal++;
+					continue;
+				}
+
+				if (stat.updated_time < lastRemoteItemUpdatedTime) {
+					updateReport.older++;
+				}
+
+				if (stat.updated_time > lastRemoteItemUpdatedTime) {
+					updateReport.newer++;
+				}
 			} else {
+				// Item needs to be created locally
+				updateReport.newer++;
+			}
+
+			output.push(stat);
+		} else {
+			if (stat.updated_time < context.timestamp) {
+				updateReport.older++;
 				continue;
 			}
-		}
 
-		// Special case for items that exactly match the timestamp
-		if (stat.updated_time === context.timestamp) {
-			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
-				updateReport.equal++;
-				continue;
+			// Special case for items that exactly match the timestamp
+			if (stat.updated_time === context.timestamp) {
+				if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
+					updateReport.equal++;
+					continue;
+				}
 			}
-		}
 
-		if (stat.updated_time > newContext.timestamp) {
-			newContext.timestamp = stat.updated_time;
-			newContext.filesAtTimestamp = [];
-			updateReport.newer++;
-		}
+			if (stat.updated_time > newContext.timestamp) {
+				newContext.timestamp = stat.updated_time;
+				newContext.filesAtTimestamp = [];
+				updateReport.newer++;
+			}
 
-		newContext.filesAtTimestamp.push(stat.path);
-		output.push(stat);
+			newContext.filesAtTimestamp.push(stat.path);
+			output.push(stat);
+		}
 
 		if (output.length >= outputLimit) break;
 	}
 
-	logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
+	if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+		// context.timestamp and filesAtTimestamp are not required when syncing based on any timestamp changes, but should be updated for backwards compatibility
+		newContext.timestamp = time.unixMs();
+		newContext.filesAtTimestamp = [];
+		logger.info(`BasicDelta (with syncBasedOnTimestampChanges): Report: ${JSON.stringify(updateReport)}`);
+	} else {
+		logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
+	}
 
 	if (!newContext.deletedItemsProcessed) {
 		// Find out which items have been deleted on the sync target by comparing the items

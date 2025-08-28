@@ -26,7 +26,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		if (remoteExists) {
 			local = remoteContent;
 
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs(), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 		} else {
 			await ItemClass.delete(local.id, {
@@ -80,7 +80,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (remoteExists) {
 			local = remoteContent;
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs(), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
