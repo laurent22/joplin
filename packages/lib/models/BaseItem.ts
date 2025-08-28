@@ -871,7 +871,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null, remoteItemUpdatedTime = 0) {
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
@@ -892,7 +892,7 @@ export default class BaseItem extends BaseModel {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, undefined, undefined, undefined, remoteItemUpdatedTime);
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
@@ -900,7 +900,7 @@ export default class BaseItem extends BaseModel {
 	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation, remoteItemUpdatedTime);
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 
