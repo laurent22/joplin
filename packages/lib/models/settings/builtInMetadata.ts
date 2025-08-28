@@ -1631,7 +1631,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			section: 'sync',
 			label: () => _('Detect changes based on any timestamp change'),
-			description: () => _('Warning: When this is first enabled, it will result in a rescan of all your notes which may take a long time. Enable this if using an external sync tool in combination with Joplin. Enabling this setting will make the sync detect incoming changes based on both timestamp increases and decreases. This will prevent changes not being synced sometimes, which can happen if an external service is syncing to the sync target directory at the same time as Joplin.'),
+			description: () => _('Warning: When this is first enabled, it will result in a rescan of all your notes which may take a long time. Enable this if using an external sync tool in combination with Joplin. Enabling this setting will make the sync detect incoming changes based on both timestamp increases and decreases. This will prevent changes not being synced sometimes (providing the sync target uses a file system which allows a high precision for modified timestamps), which can happen if an external service is syncing to the sync target directory at the same time as Joplin.'),
 			storage: SettingStorage.File,
 		},
 		'sync.wipeOutFailSafe': {
