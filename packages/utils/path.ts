@@ -13,51 +13,22 @@ export function basename(path: string) {
 	return s[s.length - 1];
 }
 
-export const normalize = (path: string) => {
-	const parts = path.split('/');
-	const normalized = [];
-
-	for (const part of parts) {
-		if (part === '' || part === '.') {
-			continue;
-		}
-		if (part === '..') {
-			normalized.pop();
-		} else {
-			normalized.push(part);
-		}
-	}
-
-	const result = normalized.join('/');
-	return path.startsWith('/') ? `/${result}` : result;
-};
-
 export function filename(path: string, includeDir = false) {
 	if (!path) throw new Error('Path is empty');
+	const output = includeDir ? path : basename(path);
+	if (output.indexOf('.') < 0) return output;
 
-	const normalized = normalize(path);
-	const output = includeDir ? normalized : basename(normalized);
-
-	if (output === '') return output;
-
-	const extension = fileExtension(output);
-	if (extension === '') return output;
-
-	const filepath = output.substring(0, output.length - extension.length - 1);
-	return filepath;
+	const splitted = output.split('.');
+	splitted.pop();
+	return splitted.join('.');
 }
 
 export function fileExtension(path: string) {
 	if (!path) throw new Error('Path is empty');
 
-	const filename = path.split('/').pop() || '';
-	const lastDot = filename.lastIndexOf('.');
-
-	if (lastDot === -1) return ''; // No dot found in filename
-	if (lastDot === 0) return ''; // e.g. .gitignore
-	if (lastDot === filename.length - 1) return ''; // e.g. file.
-
-	return filename.slice(lastDot + 1);
+	const output = path.split('.');
+	if (output.length <= 1) return '';
+	return output[output.length - 1];
 }
 
 export function isHidden(path: string) {

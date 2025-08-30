@@ -7,7 +7,6 @@ import Note from '../../models/Note';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
-import { normalize } from '@joplin/utils/path';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
@@ -107,7 +106,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 			}
 
 			// Strip the absolute path to export dir and keep only the relative paths
-			const destDir = normalize(this.destDir_);
+			const destDir = this.destDir_;
 			Object.keys(context.notePaths).map((id) => {
 				context.notePaths[id] = context.notePaths[id].substr(destDir.length + 1);
 			});

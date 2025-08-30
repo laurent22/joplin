@@ -12,7 +12,6 @@ import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
 import { readdir } from 'fs/promises';
 import { ExportModuleOutputFormat } from './types.js';
-import { normalize } from '@joplin/utils/path';
 
 describe('interop/InteropService_Exporter_Md', () => {
 
@@ -119,8 +118,8 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(!exporter.context() && !(exporter.context().destResourcePaths || Object.keys(exporter.context().destResourcePaths).length)).toBe(false);
 
 		expect(Object.keys(exporter.context().destResourcePaths).length).toBe(2);
-		expect(exporter.context().destResourcePaths[resource1.id]).toBe(`${normalize(exportDir())}/_resources/photo.jpg`);
-		expect(exporter.context().destResourcePaths[resource2.id]).toBe(`${normalize(exportDir())}/_resources/photo-1.jpg`);
+		expect(exporter.context().destResourcePaths[resource1.id]).toBe(`${exportDir()}/_resources/photo.jpg`);
+		expect(exporter.context().destResourcePaths[resource2.id]).toBe(`${exportDir()}/_resources/photo-1.jpg`);
 	}));
 
 	it('should handle duplicate note names', (async () => {
