@@ -95,7 +95,7 @@ test.describe('noteList', () => {
 		await expect(notification).toBeVisible();
 
 		// Should be possible to un-delete
-		const undeleteButton = notification.getByRole('button', { name: 'Cancel' });
+		const undeleteButton = notification.getByRole('button', { name: /Revert|Cancel/i });
 		await undeleteButton.click();
 
 		await expect(testNoteItem).toBeVisible();
