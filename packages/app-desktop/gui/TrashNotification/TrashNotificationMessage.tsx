@@ -20,7 +20,7 @@ const TrashNotificationMessage: React.FC<Props> = props => {
 		<button
 			className="link-button"
 			onClick={onCancel}
-		>{cancelling ? _('Cancelling...') : _('Cancel')}</button>
+		>{cancelling ? _('Reverting...') : _('Revert')}</button>
 	</>;
 };
 
