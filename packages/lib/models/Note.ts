@@ -10,7 +10,6 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
-import * as cheerio from 'cheerio';
 const { pregQuote } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
@@ -640,12 +639,11 @@ export default class Note extends BaseItem {
 	}
 
 	static checkSaveBody(body: string) {
-		const resourceDir = Setting.value('resourceDir');
-		const $ = cheerio.load(body);
-		const anchors = [...$(`a[href^="file://${resourceDir}"]`).toArray(), ...$(`a[href^="${resourceDir}"]`).toArray()];
-		const imgs = [...$(`[src^="file://${resourceDir}"]`).toArray(), ...$(`[src^="${resourceDir}"]`).toArray()];
-		if (anchors.length > 0 || imgs.length > 0) {
-			console.log(`found not translated img or anchor`);
+		// TypeScriptで同様のgrepをするには、body内に特定の文字列が含まれているかチェックします。
+		if (body.includes('<img src="/Users')) {
+			console.warn('body contains <img src="/Users');
+		} else if (body.includes('<img src="file:///Users')) {
+			console.warn('body contains <img src="file:///Users');
 		}
 	}
 
