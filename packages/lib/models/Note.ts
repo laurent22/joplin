@@ -10,6 +10,7 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
+import * as cheerio from 'cheerio';
 const { pregQuote } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
@@ -638,7 +639,20 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
+	static checkSaveBody(body: string) {
+		const resourceDir = Setting.value('resourceDir');
+		const $ = cheerio.load(body);
+		const anchors = [...$(`a[href^="file://${resourceDir}"]`).toArray(), ...$(`a[href^="${resourceDir}"]`).toArray()];
+		const imgs = [...$(`[src^="file://${resourceDir}"]`).toArray(), ...$(`[src^="${resourceDir}"]`).toArray()];
+		if (anchors.length > 0 || imgs.length > 0) {
+			console.log(`found not translated img or anchor`);
+		}
+	}
+
 	static async save(o: NoteEntity, options: any = null) {
+		const body = o.body;
+		Note.checkSaveBody(body);
+
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
