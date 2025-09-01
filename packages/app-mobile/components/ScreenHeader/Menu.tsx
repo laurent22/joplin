@@ -31,7 +31,7 @@ interface Props {
 }
 
 const useStyles = (themeId: number) => {
-	const { height: windowHeight } = useWindowDimensions();
+	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaInsets = useSafeAreaInsets();
 	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
 
@@ -50,7 +50,9 @@ const useStyles = (themeId: number) => {
 			fontSize: theme.fontSize,
 		};
 
-		const maxMenuHeight = windowHeight - keyboardHeight - safeAreaInsets.top - safeAreaInsets.bottom - 25;
+		const isLandscape = windowWidth > windowHeight;
+		const extraPadding = isLandscape ? 25 : 50;
+		const maxMenuHeight = windowHeight - keyboardHeight - safeAreaInsets.top - safeAreaInsets.bottom - extraPadding;
 
 		return StyleSheet.create({
 			divider: {
@@ -78,7 +80,7 @@ const useStyles = (themeId: number) => {
 				padding: 0,
 			},
 		});
-	}, [themeId, windowHeight, safeAreaInsets, keyboardHeight]);
+	}, [themeId, windowWidth, windowHeight, safeAreaInsets, keyboardHeight]);
 };
 
 const MenuComponent: React.FC<Props> = props => {
