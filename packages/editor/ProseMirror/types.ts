@@ -7,7 +7,7 @@ interface MarkupToHtmlOptions {
 }
 
 export type MarkupToHtml = (markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
-export type HtmlToMarkup = (html: Node|DocumentFragment)=> string;
+export type HtmlToMarkup = (html: HTMLElement)=> string;
 
 export interface RendererControl {
 	renderMarkupToHtml: MarkupToHtml;

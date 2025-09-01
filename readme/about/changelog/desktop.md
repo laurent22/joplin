@@ -1,5 +1,18 @@
 # Joplin Desktop Changelog
 
+## [v3.4.10](https://github.com/laurent22/joplin/releases/tag/v3.4.10) - 2025-09-01T12:25:22Z
+
+- Improved: Clarify handwritten text transcription setting ([#13073](https://github.com/laurent22/joplin/issues/13073) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add a "highlight active line" setting ([#12967](https://github.com/laurent22/joplin/issues/12967) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Auto-disable plugin settings when conflicting built-in settings are enabled ([#13055](https://github.com/laurent22/joplin/issues/13055)) ([#13048](https://github.com/laurent22/joplin/issues/13048) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Disable in-editor Markdown rendering by default (can be re-enabled in settings &gt; note) ([#13022](https://github.com/laurent22/joplin/issues/13022) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix notifications ([#13007](https://github.com/laurent22/joplin/issues/13007)) ([#12991](https://github.com/laurent22/joplin/issues/12991) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Fix image rendering is disabled unless markup rendering is also enabled ([#13056](https://github.com/laurent22/joplin/issues/13056) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OCR: Fix infinite loop ([#13025](https://github.com/laurent22/joplin/issues/13025)) ([#13024](https://github.com/laurent22/joplin/issues/13024) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OCR: Fix processing resources with an invalid `ocr_driver_id` ([#13051](https://github.com/laurent22/joplin/issues/13051)) ([#13043](https://github.com/laurent22/joplin/issues/13043) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Clarified that handwritten transcription may not always work ([0024722](https://github.com/laurent22/joplin/commit/0024722))
+- Fixed: Legacy editor: Fix plugin support ([#13066](https://github.com/laurent22/joplin/issues/13066)) ([#12855](https://github.com/laurent22/joplin/issues/12855) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.4.7](https://github.com/laurent22/joplin/releases/tag/v3.4.7) (Pre-release) - 2025-08-23T10:49:54Z
 
 - Improved: Downgrade to Electron 35.7.5 ([#13013](https://github.com/laurent22/joplin/issues/13013) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

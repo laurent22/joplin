@@ -67,6 +67,11 @@ import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/erlang/erlang';
 import 'codemirror/mode/sql/sql';
 
+interface ExtendedWindow {
+	CodeMirror?: unknown;
+}
+declare const window: ExtendedWindow;
+
 
 export interface EditorProps {
 	value: string;
@@ -99,6 +104,14 @@ function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const editorParent = useRef(null);
 	const lastEditTime = useRef(NaN);
+
+	useEffect(() => {
+		window.CodeMirror = CodeMirror;
+
+		return () => {
+			window.CodeMirror = undefined;
+		};
+	}, []);
 
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab

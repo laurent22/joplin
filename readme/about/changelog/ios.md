@@ -1,5 +1,29 @@
 # Joplin iOS Changelog
 
+## [ios-v13.4.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.2) - 2025-08-27T06:32:12Z
+
+- New: Add a "highlight active line" setting (#12967 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Rich Text Editor: Add basic support for collapsible &lt;details&gt; blocks (#12946 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Auto-disable plugin settings when conflicting built-in settings are enabled (#13055) (#13048 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Disable in-editor Markdown rendering by default (can be re-enabled in settings &gt; note) (#13022 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve tag screen usability to allow add or remove tag with a single press, when the keyboard is open (#12954 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown editor: Toggle checkboxes on ctrl-click (#12927 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove the "beta" warning from the plugin settings screen (#13063 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Avoid rendering links with unknown protocols (#12943 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Enable syntax highlighting and auto-indent in the code block editor (#12909 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Support rendering subscript, superscript, and highlighted formatting (#12944 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Support rendering table of contents blocks (#12949 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (9f649c9 by Helmut K. C. Tessarek)
+- Improved: Updated packages @adobe/css-tools (v4.4.3), jsdom (v26.1.0), react-native-image-picker (v8), react-native-safe-area-context (v5.4.1), sass (v1.87.0), sharp (v0.34.2)
+- Fixed: Allow the tag dialog to scroll when little screen space is available (#13028) (#12953 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix additional space added around app content in landscape mode (#13030) (#13027 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unshare action requires two syncs to be reflected locally (#12999) (#12648 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Fix image rendering is disabled unless markup rendering is also enabled (#13056 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix adding headings moves the cursor to the next line (#12934 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix additional blank lines added around list items on save (#12935 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix the "edit" button for code blocks  (#12924 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Shared folders: Fix moving shared subfolder to top-level briefly marks it as a top-level share (#12964 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.4.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.1) - 2025-08-10T09:41:43Z
 
 - New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))

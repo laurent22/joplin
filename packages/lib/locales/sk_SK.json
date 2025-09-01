@@ -254,6 +254,9 @@
 	"Add recipient:": [
 		"Pridať príjemcu:"
 	],
+	"Add tags:": [
+		"Pridať štítky:"
+	],
 	"Add title": [
 		"Pridať názov"
 	],
@@ -263,8 +266,14 @@
 	"Add to note": [
 		"Pridať k poznámke"
 	],
+	"Added new: %s": [
+		"Pridaný nový: %s"
+	],
+	"Added tag: %s": [
+		"Pridaný štítok: %s"
+	],
 	"Adds tag": [
-		""
+		"Pridá štítok"
 	],
 	"Admin": [
 		"Správca"
@@ -372,7 +381,7 @@
 		"Aritim Dark"
 	],
 	"Associated tags:": [
-		""
+		"Priradené štítky:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"V súčasnosti je možné otvoriť Joplin Web iba na jednej karte. Druhú inštanciu Joplinu prosím zatvorte."
@@ -659,6 +668,9 @@
 	"Code View": [
 		"Zobraziť kód"
 	],
+	"Code:": [
+		"Kód:"
+	],
 	"Collaborate on a notebook with others": [
 		"Spolupracujte na zápisníku s ostatnými"
 	],
@@ -769,6 +781,12 @@
 	"Control character": [
 		"Kontrolný znak"
 	],
+	"Convert it": [
+		"Previesť ju"
+	],
+	"Convert note to Markdown": [
+		"Previesť poznámku na Markdown"
+	],
 	"Convert to note": [
 		"Premeniť na poznámku"
 	],
@@ -825,6 +843,9 @@
 	"Could not connect to plugin repository.": [
 		"Nepodarilo sa pripojiť k úložisku doplnkov."
 	],
+	"Could not convert note to Markdown: %s": [
+		"Poznámku sa nepodarilo previesť do formátu Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Nepodarilo sa exportovať poznámky: %s"
 	],
@@ -855,8 +876,14 @@
 	"Create a notebook": [
 		"Vytvoriť zápisník"
 	],
+	"Create new notebook": [
+		"Vytvoriť nový zápisník"
+	],
 	"Create new profile...": [
 		"Vytvoriť nový profil..."
+	],
+	"Create note": [
+		"Vytvoriť poznámku"
 	],
 	"Create notebook": [
 		"Vytvoriť zápisník"
@@ -905,6 +932,12 @@
 	],
 	"Creating new to-do...": [
 		"Vytvára sa nová úloha..."
+	],
+	"Creating note \"%s\"...": [
+		"Vytvára sa poznámka \"%s\"..."
+	],
+	"Creating note.": [
+		"Vytvára sa poznámka."
 	],
 	"Creating report...": [
 		"Vytváranie správy..."
@@ -976,7 +1009,7 @@
 		"Predvolené"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Predvolený názov, ktorý sa používa pre dokumenty vytvorené skenerom."
 	],
 	"Default: %s": [
 		"Predvolené: %s"
@@ -1147,13 +1180,13 @@
 		"Nestraťte heslo, pretože z bezpečnostných dôvodov je to *jediný* spôsob, ako dešifrovať údaje! Ak chcete zapnúť šifrovanie, zadajte heslo nižšie."
 	],
 	"Document scanner: Title template": [
-		""
+		"Skener dokumentov: Šablóna názvu"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Nepovoľte príjemcovi zdieľania zapisovať do zdieľaného zápisníka. Platí len pre príkaz `add`."
 	],
 	"Don't show this message again": [
-		""
+		"Túto správu už nezobrazovať"
 	],
 	"Donate, website": [
 		"Darujte, webová stránka"
@@ -1229,6 +1262,12 @@
 	],
 	"Edit": [
 		"Upraviť"
+	],
+	"Edit as Markdown": [
+		"Upraviť ako Markdown"
+	],
+	"Edit as Rich Text": [
+		"Upraviť ako Rozšírený text"
 	],
 	"Edit link": [
 		"Upraviť odkaz"
@@ -1331,6 +1370,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Povoliť podporu syntaxe Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Povoliť prepis rukopisu"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Povoliť panel pre konverziu HTML na Markdown"
 	],
 	"Enable Linkify": [
 		"Povoliť Linkify"
@@ -1724,6 +1769,9 @@
 	"Hide password": [
 		"Skryť heslo"
 	],
+	"Hides warning": [
+		"Skryje upozornenie"
+	],
 	"Highlight": [
 		"Zvýrazniť"
 	],
@@ -1755,7 +1803,7 @@
 		"Nečinné"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Ak je príloha obrázku na samostatnom riadku a za ňou nasleduje prázdny riadok, bude zobrazená tesne pod zdrojom Markdown."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Ak ste už overili, počkajte, kým sa aplikácia zosynchronizuje s Joplin Cloud."
@@ -2172,8 +2220,11 @@
 	"Markdown editor": [
 		"Editor Markdown"
 	],
+	"Markdown editor: Render images": [
+		"Editor Markdown: Vykresliť obrázky"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown editor: Vykresliť značky v editore"
 	],
 	"Marks a to-do as done.": [
 		"Označí úlohu ako hotovú."
@@ -2318,6 +2369,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Vytvorí sa nový zápisník \"%s\" a importuje sa doň súbor \"%s\""
 	],
+	"New notebook title": [
+		"Nový názov zápisníka"
+	],
 	"New photo": [
 		"Nová fotka"
 	],
@@ -2396,6 +2450,9 @@
 	"No tab selected": [
 		"Nie je vybratá žiadna karta"
 	],
+	"No tags": [
+		"Žiadne štítky"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nie je definovaný žiadny textový editor. Nastavte ho pomocou príkazu `config editor <cesta k editoru>`"
 	],
@@ -2471,6 +2528,9 @@
 	"Note list style": [
 		"Štýl zoznamu poznámok"
 	],
+	"Note preview": [
+		"Náhľad poznámky"
+	],
 	"Note properties": [
 		"Vlastnosti poznámky"
 	],
@@ -2527,6 +2587,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL k údajom jazyka alebo cesta"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Vyhľadať v extrahovanom obsahu"
 	],
 	"OK": [
 		"OK"
@@ -2690,7 +2753,7 @@
 		"Vyžaduje sa povolenie"
 	],
 	"Photo %d": [
-		""
+		"Fotka %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Pokračujte kliknutím na \"%s\" alebo nastavte heslá v zozname \"%s\" nižšie."
@@ -2914,11 +2977,17 @@
 	"Re-upload local data to sync target": [
 		"Opätovné odoslanie lokálnych údajov do cieľa synchronizácie"
 	],
+	"Read more": [
+		"Prečítajte si viac"
+	],
 	"Read more about it": [
 		"Prečítajte si o tom viac"
 	],
 	"Read time: %s min": [
 		"Čas čítania: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Čítanie príkazov zo štandardného vstupu je k dispozícii iba v režime CLI."
 	],
 	"Recipient has accepted the invitation": [
 		"Príjemca prijal pozvanie"
@@ -2931,6 +3000,9 @@
 	],
 	"Recipients:": [
 		"Príjemcovia:"
+	],
+	"Recognize handwritten image": [
+		"Rozpoznať obrázok rukopisu"
 	],
 	"Recommended": [
 		"Odporúčané"
@@ -2965,6 +3037,9 @@
 	"Remove": [
 		"Odstrániť"
 	],
+	"Remove %s": [
+		"Odstrániť %s"
+	],
 	"Remove %s from share": [
 		"Odstrániť %s zo zdieľania"
 	],
@@ -2976,6 +3051,9 @@
 	],
 	"Removed %s from share.": [
 		"Odstránené %s zo zdieľania."
+	],
+	"Removed tag: %s": [
+		"Odstránené štítky: %s"
 	],
 	"Rename": [
 		"Premenovať"
@@ -2990,7 +3068,7 @@
 		"Premenuje danú <item> (poznámku alebo zápisník) na <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Vykreslí značky na všetkých riadkoch, ktoré neobsahujú kurzor."
 	],
 	"Renew token": [
 		"Obnoviť token"
@@ -3151,6 +3229,9 @@
 	"Save geo-location with notes": [
 		"Uložiť geografickú polohu s poznámkami"
 	],
+	"Scan notebook": [
+		"Skenovať zápisník"
+	],
 	"Scanned code": [
 		"Naskenovaný kód"
 	],
@@ -3180,6 +3261,9 @@
 	],
 	"Search shown": [
 		"Zobrazené vyhľadávanie"
+	],
+	"Search tags": [
+		"Hľadať štítky"
 	],
 	"Search...": [
 		"Hľadať..."
@@ -3211,8 +3295,14 @@
 	"Select file...": [
 		"Vybrať súbor..."
 	],
+	"Select notebook": [
+		"Vybrať zápisník"
+	],
 	"Select parent notebook": [
 		"Vybrať nadradený zápisník"
+	],
+	"Selected: %s": [
+		"Vybraný: %s"
 	],
 	"Selection deleted": [
 		"Výber odstránený"
@@ -3714,6 +3804,9 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Poznámka \"%s\" bola úspešne obnovená do zápisníka \"%s\"."
 	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola presunutá do koša"
+	],
 	"The note was successfully moved to the trash.": [
 		"Poznámka bola úspešne presunutá do koša.",
 		"Poznámky boli úspešne presunuté do koša.",
@@ -3741,7 +3834,7 @@
 		"Pred synchronizáciou aplikácie Joplin je potrebné aktualizovať cieľ synchronizácie. Dokončenie operácie môže trvať niekoľko minút a aplikáciu je potrebné reštartovať. Ak chcete pokračovať, kliknite na odkaz."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
-		"The sync target needs to be upgraded. Press this banner to proceed."
+		"Cieľ synchronizácie je potrebné aktualizovať. Stlačte tento panel, ak chcete pokračovať."
 	],
 	"The synchronisation password is missing.": [
 		"Chýba synchronizačné heslo."
@@ -3819,13 +3912,13 @@
 		"Tento náčrt môže mať neuložené zmeny."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Táto funkcia je štandardne vypnutá, musíte ju manuálne zapnúť aktivovaním možnosti „Zapnúť prepis rukopisu“."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Táto funkcia je k dispozícii iba v Joplin Cloud a Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Tento typ obrázku nie je podporovaný systémom rozpoznávania."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Toto je pokročilý nástroj na zobrazenie príloh, ktoré sú prepojené s vašimi poznámkami.Pri odstraňovaní niektorej z nich buďte opatrní, pretože ich potom nemožno obnoviť."
@@ -3858,7 +3951,7 @@
 		"Táto poznámka nemá históriu"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Táto poznámka je vo formáte HTML. Prekonvertujte ju do formátu Markdown, aby ste ju mohli ľahšie upravovať."
 	],
 	"This plugin doesn't support %s.": [
 		"Tento doplnok nepodporuje %s."
@@ -3906,7 +3999,7 @@
 		"Ak chcete pokračovať, nižšie zadajte svoje hlavné heslo."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Ak chcete vytvoriť nový štítok, zadajte jeho názov a stlačte kláves Enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Ak chcete odstrániť štítok, zrušte označenie súvisiacich poznámok."
@@ -4144,6 +4237,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Aktualizujte cieľ synchronizácie na najnovšiu verziu."
+	],
+	"Upload photo": [
+		"Nahrať fotografiu"
 	],
 	"URL": [
 		"URL adresa"

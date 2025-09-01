@@ -251,8 +251,6 @@ export default class PromptDialog extends React.Component<Props, any> {
 				} else {
 					onClose(true);
 				}
-			} else if (event.key === 'Escape') {
-				onClose(false);
 			}
 		};
 
@@ -309,7 +307,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 
 		return (
-			<Dialog className='prompt-dialog' contentStyle={styles.dialog}>
+			<Dialog className='prompt-dialog' contentStyle={styles.dialog} onCancel={() => onClose(false, 'cancel')}>
 				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}

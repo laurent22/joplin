@@ -7,11 +7,17 @@ import libStateToWhenClauseContext, { WhenClauseContextOptions } from '@joplin/l
 import { AppState } from '../../utils/types';
 
 const stateToWhenClauseContext = (state: AppState, options: WhenClauseContextOptions = null) => {
+	const markdownEditorVisible = state.noteEditorVisible && state.settings['editor.codeView'];
+	const richTextEditorVisible = state.noteEditorVisible && !state.settings['editor.codeView'];
 	return {
 		...libStateToWhenClauseContext(state, options),
 		keyboardVisible: state.keyboardVisible,
-		markdownEditorVisible: state.noteEditorVisible && state.settings['editor.codeView'],
-		richTextEditorVisible: state.noteEditorVisible && !state.settings['editor.codeView'],
+
+		// Provide both markdownEditorPaneVisible and markdownEditorVisible for compatibility
+		// with the desktop app.
+		markdownEditorPaneVisible: markdownEditorVisible,
+		markdownEditorVisible: markdownEditorVisible,
+		richTextEditorVisible: richTextEditorVisible,
 	};
 };
 

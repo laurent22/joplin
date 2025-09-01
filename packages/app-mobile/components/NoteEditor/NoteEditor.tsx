@@ -7,7 +7,7 @@ import { WebViewControl } from '../ExtendedWebView/types';
 import * as React from 'react';
 import { Ref, RefObject, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
-import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, Platform, View, ViewStyle } from 'react-native';
 import { editorFont } from '../global-style';
 
 import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
@@ -32,6 +32,7 @@ import { dirname } from '@joplin/utils/path';
 import { toFileExtension } from '@joplin/lib/mime-utils';
 import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
+import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -242,9 +243,18 @@ const useEditorControl = (
 	}, [webviewRef, editorRef, setLinkDialogVisible, setSearchState]);
 };
 
+const useHighlightActiveLine = () => {
+	const screenReaderEnabled = useIsScreenReaderEnabled();
+	// Guess whether highlighting the active line can be enabled without triggering
+	// https://github.com/codemirror/dev/issues/1559.
+	const canHighlight = Platform.OS !== 'ios' || !screenReaderEnabled;
+	return canHighlight && Setting.value('editor.highlightActiveLine');
+};
+
 function NoteEditor(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
+	const highlightActiveLine = useHighlightActiveLine();
 	const editorSettings: EditorSettings = useMemo(() => ({
 		themeData: editorTheme(props.themeId),
 		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
@@ -255,6 +265,7 @@ function NoteEditor(props: Props) {
 		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 		useExternalSearch: true,
 		readOnly: props.readOnly,
+		highlightActiveLine,
 
 		keymap: EditorKeymap.Default,
 
@@ -267,7 +278,7 @@ function NoteEditor(props: Props) {
 		indentWithTabs: true,
 
 		editorLabel: _('Markdown editor'),
-	}), [props.themeId, props.readOnly, props.markupLanguage]);
+	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine]);
 
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);

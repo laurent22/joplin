@@ -521,4 +521,25 @@ describe('models/Setting', () => {
 		Setting.setValue('revisionService.ttlDays', 0);
 		expect(Setting.value('revisionService.ttlDays')).toBe(1);
 	});
+
+	test('should adjust settings to avoid conflicts', async () => {
+		const testSettingId = 'plugin-plugin.calebjohn.rich-markdown.inlineImages';
+		await Setting.registerSetting(testSettingId, {
+			public: true,
+			value: false,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+		});
+
+		Setting.setValue('editor.imageRendering', true);
+
+		// Setting one conflicting setting should update the other
+		Setting.setValue(testSettingId, true);
+		expect(Setting.value('editor.imageRendering')).toBe(false);
+		expect(Setting.value(testSettingId)).toBe(true);
+
+		Setting.setValue('editor.imageRendering', true);
+		expect(Setting.value('editor.imageRendering')).toBe(true);
+		expect(Setting.value(testSettingId)).toBe(false);
+	});
 });
