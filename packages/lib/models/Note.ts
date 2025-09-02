@@ -640,10 +640,10 @@ export default class Note extends BaseItem {
 
 	static checkSaveBody(body: string) {
 		// TypeScriptで同様のgrepをするには、body内に特定の文字列が含まれているかチェックします。
-		if (body.includes('<img src="/Users')) {
+		if (body?.includes('<img src="/Users')) {
 			console.warn('body contains <img src="/Users');
-		} else if (body.includes('<img src="file:///Users')) {
-			console.warn('body contains <img src="file:///Users');
+		} else if (body?.includes('<img src="file:///Users')) {
+			console?.warn('body contains <img src="file:///Users');
 		}
 	}
 
