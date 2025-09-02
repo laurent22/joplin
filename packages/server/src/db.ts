@@ -287,7 +287,22 @@ export const sqliteSyncSlave = async (master: DbConnection, slave: DbConnection)
 	await reconnectDb(slave);
 };
 
+// This can be used to fix migration names, once the migration has already been deployed.
+// Incorrectly named migrations may end up being applied in the wrong order.
+const fixMigrationNames = async (db: DbConnection) => {
+	try {
+		await db('knex_migrations')
+			.update({ name: '20250404091200_user_auth_code.js' })
+			.where('name', '=', '202504040912000_user_auth_code.js');
+	} catch (error) {
+		if (isNoSuchTableError(error)) return;
+		throw error;
+	}
+};
+
 export async function migrateLatest(db: DbConnection, disableTransactions = false) {
+	await fixMigrationNames(db);
+
 	await db.migrate.latest({
 		directory: migrationDir,
 		disableTransactions,
@@ -295,6 +310,8 @@ export async function migrateLatest(db: DbConnection, disableTransactions = fals
 }
 
 export async function migrateUp(db: DbConnection, disableTransactions = false) {
+	await fixMigrationNames(db);
+
 	await db.migrate.up({
 		directory: migrationDir,
 		disableTransactions,
@@ -302,6 +319,8 @@ export async function migrateUp(db: DbConnection, disableTransactions = false) {
 }
 
 export async function migrateDown(db: DbConnection, disableTransactions = false) {
+	await fixMigrationNames(db);
+
 	await db.migrate.down({
 		directory: migrationDir,
 		disableTransactions,
@@ -309,10 +328,14 @@ export async function migrateDown(db: DbConnection, disableTransactions = false)
 }
 
 export async function migrateUnlock(db: DbConnection) {
+	await fixMigrationNames(db);
+
 	await db.migrate.forceFreeMigrationsLock();
 }
 
 export async function migrateList(db: DbConnection, asString = true) {
+	await fixMigrationNames(db);
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const migrations: any = await db.migrate.list({
 		directory: migrationDir,

@@ -343,6 +343,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					style={styles.input}
 					id={uniqueId(key)}
 					name={uniqueId(key)}
+					autoFocus
 				/>;
 
 				editCompHandler = () => {
@@ -363,6 +364,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 							id={uniqueId(key)}
 							name={uniqueId(key)}
 							aria-invalid={!this.state.isValid.location}
+							autoFocus
 						/>
 						{
 							this.state.isValid.location ? null
@@ -387,6 +389,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 						style={styles.input}
 						id={uniqueId(key)}
 						name={uniqueId(key)}
+						autoFocus
 					/>
 				);
 			}
@@ -411,7 +414,14 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					const ll = this.latLongFromLocation(value);
 					url = Note.geoLocationUrlFromLatLong(ll.latitude, ll.longitude);
 				}
-				const urlStyle: React.CSSProperties = { ...theme.urlStyle, maxWidth: '180px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' };
+				const urlStyle: React.CSSProperties = {
+					...theme.urlStyle,
+					maxWidth: '180px',
+					overflow: 'hidden',
+					whiteSpace: 'nowrap',
+					textOverflow: 'ellipsis',
+					display: 'inline-block',
+				};
 				controlComp = (
 					<a href="#" onClick={() => bridge().openExternal(url)} style={urlStyle}>
 						{displayedValue}

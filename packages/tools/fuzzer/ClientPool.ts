@@ -25,30 +25,59 @@ export default class ClientPool {
 	}
 	public constructor(
 		private readonly context_: FuzzContext,
-		public readonly clients: Client[],
-	) { }
+		private clients_: Client[],
+	) {
+		for (const client of clients_) {
+			this.listenForClientClose_(client);
+		}
+	}
+
+	private listenForClientClose_(client: Client) {
+		client.onClose(() => {
+			this.clients_ = this.clients_.filter(other => other !== client);
+		});
+	}
+
+	public clientsByEmail(email: string) {
+		return this.clients.filter(client => client.email === email);
+	}
 
 	public randomClient(filter: ClientFilter = ()=>true) {
-		const clients = this.clients.filter(filter);
+		const clients = this.clients_.filter(filter);
 		return clients[
 			this.context_.randInt(0, clients.length)
 		];
 	}
 
+	public async newWithSameAccount(sourceClient: Client) {
+		const client = await sourceClient.createClientOnSameAccount();
+		this.listenForClientClose_(client);
+		this.clients_ = [...this.clients_, client];
+		return client;
+	}
+
+	public othersWithSameAccount(client: Client) {
+		return this.clients_.filter(other => other !== client && other.hasSameAccount(client));
+	}
+
 	public async checkState() {
-		for (const client of this.clients) {
-			await client.checkState(this.clients);
+		for (const client of this.clients_) {
+			await client.checkState();
 		}
 	}
 
 	public async syncAll() {
-		for (const client of this.clients) {
+		for (const client of this.clients_) {
 			await client.sync();
 		}
 	}
 
+	public get clients() {
+		return [...this.clients_];
+	}
+
 	public helpText() {
-		return this.clients.map(client => client.getHelpText()).join('\n\n');
+		return this.clients_.map(client => client.getHelpText()).join('\n\n');
 	}
 }
 

@@ -445,6 +445,16 @@ export default class Synchronizer {
 			logger.error('Error indexing resources:', error);
 		}
 
+		// Before syncing, we run the share service maintenance, which is going
+		// to fetch share invitations and clear share_ids for unshared items, if any.
+		if (this.shareService_) {
+			try {
+				await this.shareService_.maintenance();
+			} catch (error) {
+				logger.error('Could not run share service maintenance:', error);
+			}
+		}
+
 		// Before synchronising make sure all share_id properties are set
 		// correctly so as to share/unshare the right items.
 		try {
@@ -596,7 +606,7 @@ export default class Synchronizer {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
-						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
+						const ItemClass = BaseItem.itemClass(local);
 						const path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.
@@ -1156,16 +1166,6 @@ export default class Synchronizer {
 		if (this.cancelling()) {
 			logger.info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
-		}
-
-		// After syncing, we run the share service maintenance, which is going
-		// to fetch share invitations, if any.
-		if (this.shareService_) {
-			try {
-				await this.shareService_.maintenance();
-			} catch (error) {
-				logger.error('Could not run share service maintenance:', error);
-			}
 		}
 
 		this.progressReport_.completedTime = time.unixMs();

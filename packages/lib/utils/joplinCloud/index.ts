@@ -338,7 +338,7 @@ export const createFeatureTableMd = () => {
 		{
 			name: 'joplinServerBusiness',
 			label: 'Joplin Server Business',
-			labelUrl: 'https://joplinapp.org/help/joplin_server_business',
+			labelUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
 		},
 	];
 
@@ -461,7 +461,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			cfaLabel: _('Get a quote'),
 			cfaUrl: 'mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry',
 			footnote: '',
-			learnMoreUrl: 'https://joplinapp.org/help/joplin_server_business',
+			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
 			hostingType: PlanHostingType.Self,
 		},
 	};

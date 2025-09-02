@@ -6,6 +6,7 @@ import { _ } from '@joplin/lib/locale';
 import { useCallback, useState } from 'react';
 import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
 import { LinkButton } from '../buttons';
+import NavService from '@joplin/lib/services/NavService';
 
 interface Props {
 	wrapperStyle: ViewStyle;
@@ -51,6 +52,7 @@ const WebBetaButton: React.FC<Props> = props => {
 				<Text>{'At present, the web client is in beta. In the future, it may change significantly, or be removed.'}</Text>
 				<View style={feedbackContainerStyles}>
 					<LinkButton onPress={onLeaveFeedback}>{'Give feedback'}</LinkButton>
+					<LinkButton onPress={() => NavService.go('DocumentScanner')}>{'Test work-in-progress feature: Document scanner'}</LinkButton>
 				</View>
 			</DismissibleDialog>
 		</>

@@ -11,6 +11,7 @@ const makeMockDialogControl = (onPrompt: OnPrompt): DialogControl => {
 		prompt: jest.fn((_title, _message, buttons, options) => {
 			onPrompt(buttons, options.onDismiss);
 		}),
+		promptForText: jest.fn(),
 		showMenu: jest.fn(),
 	};
 };

@@ -30,7 +30,7 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 				// in the final bundle.
 				name: 'joplin--relative-imports-for-externals',
 				setup: build => {
-					const externalRegex = /^(.*\.node|sqlite3|electron|@electron\/remote\/.*|electron\/.*|@mapbox\/node-pre-gyp|jsdom)$/;
+					const externalRegex = /^(.*\.node|sqlite3|node-fetch|electron|@electron\/remote\/.*|electron\/.*|@mapbox\/node-pre-gyp|jsdom)$/;
 					build.onResolve({ filter: externalRegex }, args => {
 						// Electron packages don't need relative requires
 						if (args.path === 'electron' || args.path.startsWith('electron/')) {
@@ -120,8 +120,8 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, computeFileSize
 
 const bundleJs = async (writeStats: boolean) => {
 	const entryPoints = [
-		{ fileName: 'main.js', renderer: false },
-		{ fileName: 'main-html.js', renderer: true },
+		{ fileName: 'main.ts', renderer: false },
+		{ fileName: 'main-html.ts', renderer: true },
 	];
 	for (const { fileName, renderer } of entryPoints) {
 		const compiler = await makeBuildContext(fileName, renderer, writeStats);

@@ -21,21 +21,25 @@ import {
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
-} from './markdown/markdownCommands';
-import decoratorExtension from './markdown/decoratorExtension';
-import computeSelectionFormatting from './markdown/computeSelectionFormatting';
+} from './editorCommands/markdownCommands';
+import decoratorExtension from './extensions/markdownDecorationExtension';
+import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
-import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
-import searchExtension from './utils/searchExtension';
+import biDirectionalTextExtension from './extensions/biDirectionalTextExtension';
+import searchExtension from './extensions/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
-import overwriteModeExtension from './utils/overwriteModeExtension';
+import overwriteModeExtension from './extensions/overwriteModeExtension';
 import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
-import selectedNoteIdExtension, { setNoteIdEffect } from './utils/selectedNoteIdExtension';
+import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedNoteIdExtension';
+import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
+import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
+import { RenderedContentContext } from './extensions/rendering/types';
+import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -47,13 +51,25 @@ import selectedNoteIdExtension, { setNoteIdEffect } from './utils/selectedNoteId
 type ExtendedEditorView = typeof EditorView & { EDIT_CONTEXT: boolean };
 (EditorView as ExtendedEditorView).EDIT_CONTEXT = false;
 
+export type ResolveImageCallback = (imageSrc: string)=> Promise<string>;
+
+interface CodeMirrorProps {
+	resolveImageSrc: ResolveImageCallback;
+}
+
 const createEditor = (
-	parentElement: HTMLElement, props: EditorProps,
+	parentElement: HTMLElement, props: EditorProps&CodeMirrorProps,
 ): CodeMirrorControl => {
 	const initialText = props.initialText;
 	let settings = props.settings;
 
 	props.onLogMessage('Initializing CodeMirror...');
+
+	const context: RenderedContentContext = {
+		resolveImageSrc: (src) => {
+			return props.resolveImageSrc(src);
+		},
+	};
 
 
 	// Handles firing an event when the undo/redo stack changes
@@ -228,7 +244,7 @@ const createEditor = (
 			extensions: [
 				keymapConfig,
 
-				dynamicConfig.of(configFromSettings(props.settings)),
+				dynamicConfig.of(configFromSettings(props.settings, context)),
 				historyCompartment.of(history()),
 				searchExtension(props.onEvent, props.settings),
 
@@ -237,6 +253,10 @@ const createEditor = (
 				EditorState.allowMultipleSelections.of(true),
 				rectangularSelection(),
 				drawSelection(),
+				ctrlClickLinksExtension(link => {
+					props.onEvent({ kind: EditorEventType.FollowLink, link });
+				}),
+				ctrlClickCheckboxExtension(),
 
 				highlightSpecialChars(),
 				indentOnInput(),
@@ -274,6 +294,7 @@ const createEditor = (
 
 				biDirectionalTextExtension,
 				overwriteModeExtension,
+				ctrlKeyStateClassExtension,
 
 				selectedNoteIdExtension,
 
@@ -320,7 +341,7 @@ const createEditor = (
 			settings = newSettings;
 			editor.dispatch({
 				effects: dynamicConfig.reconfigure(
-					configFromSettings(newSettings),
+					configFromSettings(newSettings, context),
 				),
 			});
 		},
@@ -332,6 +353,9 @@ const createEditor = (
 		onLogMessage: props.onLogMessage,
 		onRemove: () => {
 			editor.destroy();
+			props.onEvent({
+				kind: EditorEventType.Remove,
+			});
 		},
 	});
 

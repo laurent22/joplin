@@ -6,9 +6,11 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
+import PerformanceLogger from '../../PerformanceLogger';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
+const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
 
@@ -177,7 +179,7 @@ export default class EncryptionService {
 	public async loadMasterKey(model: MasterKeyEntity, getPassword: string|GetPasswordCallback, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 
-		const loadKey = async () => {
+		const loadKey = () => perfLogger.track('EncryptionService/loadKey', async () => {
 			logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
 			const password = typeof getPassword === 'string' ? getPassword : (await getPassword());
@@ -197,7 +199,7 @@ export default class EncryptionService {
 			}
 
 			this.encryptedMasterKeys_.delete(model.id);
-		};
+		});
 
 		if (!makeActive) {
 			this.encryptedMasterKeys_.set(model.id, {
@@ -337,10 +339,13 @@ export default class EncryptionService {
 	}
 
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
+		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
 			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
+		} finally {
+			task.onEnd();
 		}
 
 		return true;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, Platform } from 'react-native';
 const Icon = require('react-native-vector-icons/Ionicons').default;
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
@@ -64,6 +64,7 @@ interface ScreenHeaderProps {
 	onSaveButtonPress: OnPressCallback;
 	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
+	onDeleteButtonPress?: OnPressCallback;
 
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
@@ -100,11 +101,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
-			container: {
+			outerContainer: {
 				flexDirection: 'column',
+			},
+			innerContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
 				backgroundColor: theme.backgroundColor2,
 				shadowColor: '#000000',
 				elevation: 5,
+			},
+			// A small border above the header: Covers the part of the shadow that would otherwise
+			// be shown above the header on Android.
+			aboveHeader: {
+				backgroundColor: '#323640',
+				paddingBottom: 6,
+				marginTop: -6,
+				zIndex: 2,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -128,7 +141,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				flex: 0,
 				flexDirection: 'row',
 				alignItems: 'center',
-				padding: 10,
+				justifyContent: 'center',
+				minWidth: 40,
+				minHeight: 40,
+
 				borderWidth: 1,
 				borderColor: theme.colorBright2,
 				borderRadius: 4,
@@ -146,8 +162,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				height: 18,
 			},
 			saveButtonIcon: {
-				width: 18,
-				height: 18,
+				...theme.icon,
+				fontSize: 25,
+				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
@@ -296,18 +313,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		) {
 			if (!show) return null;
 
-			const icon = disabled ? <Icon name="checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
-
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
-					disabled={disabled}
-					style={{ padding: 0 }}
 
-					accessibilityLabel={_('Save changes')}
-					accessibilityRole="button">
-					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
-				</TouchableOpacity>
+					themeId={themeId}
+					description={_('Save changes')}
+					disabled={disabled}
+					contentWrapperStyle={disabled ? styles.saveButtonDisabled : styles.saveButton}
+					iconStyle={disabled ? styles.savedButtonIcon : styles.saveButtonIcon}
+
+					iconName={disabled ? 'ionicon checkmark' : 'material content-save'}
+				/>
 			);
 		}
 
@@ -387,6 +404,22 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				/>
 			);
 		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const customDeleteButton = (styles: any, onPress: OnPressCallback) => {
+			return (
+				<IconButton
+					onPress={onPress}
+
+					description={_('Delete')}
+					themeId={themeId}
+					contentWrapperStyle={styles.iconButton}
+
+					iconName='fas trash'
+					iconStyle={styles.topIcon}
+				/>
+			);
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
@@ -610,6 +643,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
 		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
+		const showStandardDeleteButton = !this.props.onDeleteButtonPress && !selectedFolderInTrash && this.props.noteSelectionEnabled;
 
 		let backButtonDisabled = !this.props.historyCanGoBack;
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
@@ -621,7 +655,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
-		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
+		const customDeleteButtonComp = this.props.onDeleteButtonPress ? customDeleteButton(this.styles(), this.props.onDeleteButtonPress) : null;
+		const deleteButtonComp = showStandardDeleteButton ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
@@ -655,8 +690,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 
 		return (
-			<View style={this.styles().container}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View style={this.styles().outerContainer}>
+				<View style={this.styles().aboveHeader}/>
+				<View style={this.styles().innerContainer}>
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}
@@ -673,6 +709,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					{selectAllButtonComp}
 					{searchButtonComp}
 					{deleteButtonComp}
+					{customDeleteButtonComp}
 					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}

@@ -3,7 +3,7 @@ import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, C
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
 import editorCommands from './editorCommands/editorCommands';
 import { Compartment, EditorSelection, Extension, StateEffect } from '@codemirror/state';
-import { updateLink } from './markdown/markdownCommands';
+import { updateLink } from './editorCommands/markdownCommands';
 import { searchPanelOpen, SearchQuery, setSearchQuery } from '@codemirror/search';
 import PluginLoader from './pluginApi/PluginLoader';
 import customEditorCompletion, { editorCompletionSource, enableLanguageDataAutocomplete } from './pluginApi/customEditorCompletion';
@@ -11,7 +11,7 @@ import { CompletionSource } from '@codemirror/autocomplete';
 import { RegionSpec } from './utils/formatting/RegionSpec';
 import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectionFormat';
 import getSearchState from './utils/getSearchState';
-import { noteIdFacet, setNoteIdEffect } from './utils/selectedNoteIdExtension';
+import { noteIdFacet, setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import jumpToHash from './editorCommands/jumpToHash';
 
 interface Callbacks {
@@ -227,6 +227,10 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 				});
 			},
 		};
+	}
+
+	public onResourceDownloaded(_id: string) {
+		// Unused
 	}
 
 	public setContentScripts(plugins: ContentScriptData[]) {

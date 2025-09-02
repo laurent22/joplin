@@ -3,7 +3,6 @@ import { join } from 'path';
 import { exists, mkdir, remove } from 'fs-extra';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import Logger, { TargetType } from '@joplin/utils/Logger';
-import { waitForCliInput } from '@joplin/utils/cli';
 import Server from './Server';
 import { CleanupTask, FuzzContext } from './types';
 import ClientPool from './ClientPool';
@@ -13,6 +12,9 @@ import SeededRandom from './utils/SeededRandom';
 import { env } from 'process';
 import yargs = require('yargs');
 import { strict as assert } from 'assert';
+import openDebugSession from './utils/openDebugSession';
+import { Second } from '@joplin/utils/time';
+import { packagesDir } from './constants';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -41,7 +43,7 @@ const createProfilesDirectory = async () => {
 
 const doRandomAction = async (context: FuzzContext, client: Client, clientPool: ClientPool) => {
 	const selectOrCreateParentFolder = async () => {
-		let parentId = (await client.randomFolder({}))?.id;
+		let parentId = (await client.randomFolder({ includeReadOnly: false }))?.id;
 
 		// Create a toplevel folder to serve as this
 		// folder's parent if none exist yet
@@ -57,8 +59,9 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		return parentId;
 	};
 
-	const selectOrCreateNote = async () => {
-		let note = await client.randomNote();
+	const selectOrCreateWriteableNote = async () => {
+		const options = { includeReadOnly: false };
+		let note = await client.randomNote(options);
 
 		if (!note) {
 			await client.createNote({
@@ -68,7 +71,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 				body: 'Body',
 			});
 
-			note = await client.randomNote();
+			note = await client.randomNote(options);
 			assert.ok(note, 'should have selected a random note');
 		}
 
@@ -110,7 +113,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		renameNote: async () => {
-			const note = await selectOrCreateNote();
+			const note = await selectOrCreateWriteableNote();
 
 			await client.updateNote({
 				...note,
@@ -120,7 +123,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		updateNoteBody: async () => {
-			const note = await selectOrCreateNote();
+			const note = await selectOrCreateWriteableNote();
 
 			await client.updateNote({
 				...note,
@@ -130,10 +133,10 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			return true;
 		},
 		moveNote: async () => {
-			const note = await client.randomNote();
-			if (!note) return false;
+			const note = await selectOrCreateWriteableNote();
 			const targetParent = await client.randomFolder({
 				filter: folder => folder.id !== note.parentId,
+				includeReadOnly: false,
 			});
 			if (!targetParent) return false;
 
@@ -141,20 +144,54 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 
 			return true;
 		},
+		deleteNote: async () => {
+			const target = await client.randomNote({ includeReadOnly: false });
+			if (!target) return false;
+
+			await client.deleteNote(target.id);
+			return true;
+		},
 		shareFolder: async () => {
+			const other = clientPool.randomClient(c => !c.hasSameAccount(client));
+			if (!other) return false;
+
 			const target = await client.randomFolder({
-				filter: candidate => (
-					!candidate.parentId && !candidate.isShareRoot
-				),
+				filter: candidate => {
+					const isToplevel = !candidate.parentId;
+					const ownedByCurrent = candidate.ownedByEmail === client.email;
+					const alreadyShared = isToplevel && candidate.isSharedWith(other.email);
+					return isToplevel && ownedByCurrent && !alreadyShared;
+				},
+				includeReadOnly: true,
 			});
 			if (!target) return false;
 
-			const other = clientPool.randomClient(c => c !== client);
-			await client.shareFolder(target.id, other);
+			const readOnly = context.randInt(0, 2) === 1 && context.isJoplinCloud;
+			await client.shareFolder(target.id, other, { readOnly });
+			return true;
+		},
+		unshareFolder: async () => {
+			const target = await client.randomFolder({
+				filter: candidate => {
+					return candidate.isRootSharedItem && candidate.ownedByEmail === client.email;
+				},
+				includeReadOnly: true,
+			});
+			if (!target) return false;
+
+			const recipientIndex = context.randInt(-1, target.shareRecipients.length);
+			if (recipientIndex === -1) { // Completely remove the share
+				await client.deleteAssociatedShare(target.id);
+			} else {
+				const recipientEmail = target.shareRecipients[recipientIndex];
+				const recipient = clientPool.clientsByEmail(recipientEmail)[0];
+				assert.ok(recipient, `invalid state -- recipient ${recipientEmail} should exist`);
+				await client.removeFromShare(target.id, recipient);
+			}
 			return true;
 		},
 		deleteFolder: async () => {
-			const target = await client.randomFolder({});
+			const target = await client.randomFolder({ includeReadOnly: false });
 			if (!target) return false;
 
 			await client.deleteFolder(target.id);
@@ -164,6 +201,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 			const target = await client.randomFolder({
 				// Don't choose items that are already toplevel
 				filter: item => !!item.parentId,
+				includeReadOnly: false,
 			});
 			if (!target) return false;
 
@@ -173,7 +211,8 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		moveFolderTo: async () => {
 			const target = await client.randomFolder({
 				// Don't move shared folders (should not be allowed by the GUI in the main apps).
-				filter: item => !item.isShareRoot,
+				filter: item => !item.isRootSharedItem,
+				includeReadOnly: false,
 			});
 			if (!target) return false;
 
@@ -184,10 +223,68 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 					// Avoid making the folder a child of itself
 					return !targetDescendants.has(item.id);
 				},
+				includeReadOnly: false,
 			});
 			if (!newParent) return false;
 
 			await client.moveItem(target.id, newParent.id);
+			return true;
+		},
+		newClientOnSameAccount: async () => {
+			const welcomeNoteCount = context.randInt(0, 30);
+			logger.info(`Syncing a new client on the same account ${welcomeNoteCount > 0 ? `(with ${welcomeNoteCount} initial notes)` : ''}`);
+			const createClientInitialNotes = async (client: Client) => {
+				if (welcomeNoteCount === 0) return;
+
+				// Create a new folder. Usually, new clients have a default set of
+				// welcome notes when first syncing.
+				const testNotesFolderId = uuid.create();
+				await client.createFolder({
+					id: testNotesFolderId,
+					title: 'Test -- from secondary client',
+					parentId: '',
+				});
+
+				for (let i = 0; i < welcomeNoteCount; i++) {
+					await client.createNote({
+						parentId: testNotesFolderId,
+						id: uuid.create(),
+						title: `Test note ${i}/${welcomeNoteCount}`,
+						body: `Test note (in account ${client.email}), created ${Date.now()}.`,
+					});
+				}
+			};
+
+			await client.sync();
+
+			const other = await clientPool.newWithSameAccount(client);
+			await createClientInitialNotes(other);
+
+			// Sometimes, a delay is needed between client creation
+			// and initial sync. Retry the initial sync and the checkState
+			// on failure:
+			await retryWithCount(async () => {
+				await other.sync();
+				await other.checkState();
+			}, {
+				delayOnFailure: (count) => Second * count,
+				count: 3,
+				onFail: async (error) => {
+					logger.warn('other.sync/other.checkState failed with', error, 'retrying...');
+				},
+			});
+
+			await client.sync();
+			return true;
+		},
+		removeClientsOnSameAccount: async () => {
+			const others = clientPool.othersWithSameAccount(client);
+			if (others.length === 0) return false;
+
+			for (const otherClient of others) {
+				assert.notEqual(otherClient, client);
+				await otherClient.close();
+			}
 			return true;
 		},
 	};
@@ -210,6 +307,9 @@ interface Options {
 	maximumSteps: number;
 	maximumStepsBetweenSyncs: number;
 	clientCount: number;
+
+	serverPath: string;
+	isJoplinCloud: boolean;
 }
 
 const main = async (options: Options) => {
@@ -237,11 +337,11 @@ const main = async (options: Options) => {
 		process.exit(1);
 	});
 
-	let clientHelpText;
+	let clientPool: ClientPool|null = null;
 
 	try {
 		const joplinServerUrl = 'http://localhost:22300/';
-		const server = new Server(joplinServerUrl, {
+		const server = new Server(options.serverPath, joplinServerUrl, {
 			email: 'admin@localhost',
 			password: env['FUZZER_SERVER_ADMIN_PASSWORD'] ?? 'admin',
 		});
@@ -257,18 +357,23 @@ const main = async (options: Options) => {
 		logger.info('Starting with seed', options.seed);
 		const random = new SeededRandom(options.seed);
 
+		if (options.isJoplinCloud) {
+			logger.info('Sync target: Joplin Cloud');
+		}
+
 		const fuzzContext: FuzzContext = {
 			serverUrl: joplinServerUrl,
+			isJoplinCloud: options.isJoplinCloud,
 			baseDir: profilesDirectory.path,
 			execApi: server.execApi.bind(server),
 			randInt: (a, b) => random.nextInRange(a, b),
 		};
-		const clientPool = await ClientPool.create(
+		clientPool = await ClientPool.create(
 			fuzzContext,
 			options.clientCount,
 			task => { cleanupTasks.push(task); },
 		);
-		clientHelpText = clientPool.helpText();
+		await clientPool.syncAll();
 
 		const maxSteps = options.maximumSteps;
 		for (let stepIndex = 1; maxSteps <= 0 || stepIndex <= maxSteps; stepIndex++) {
@@ -293,7 +398,8 @@ const main = async (options: Options) => {
 			await retryWithCount(async () => {
 				await clientPool.checkState();
 			}, {
-				count: 3,
+				count: 4,
+				delayOnFailure: count => count * Second * 2,
 				onFail: async () => {
 					logger.info('.checkState failed. Syncing all clients...');
 					await clientPool.syncAll();
@@ -302,11 +408,10 @@ const main = async (options: Options) => {
 		}
 	} catch (error) {
 		logger.error('ERROR', error);
-		if (clientHelpText) {
-			logger.info('Client information:\n', clientHelpText);
+		if (clientPool) {
+			logger.info('Client information:\n', clientPool.helpText());
+			await openDebugSession(clientPool);
 		}
-		logger.info('An error occurred. Pausing before continuing cleanup.');
-		await waitForCliInput();
 		process.exitCode = 1;
 	} finally {
 		await cleanUp();
@@ -347,13 +452,24 @@ void yargs
 					default: 3,
 					defaultDescription: 'Number of client apps to create.',
 				},
+				'joplin-cloud': {
+					type: 'string',
+					default: '',
+					defaultDescription: [
+						'A path: If provided, this should be an absolute path to a Joplin Cloud repository. ',
+						'This also enables testing for some Joplin Cloud-specific features (e.g. read-only shares).',
+					].join(''),
+				},
 			});
 		},
 		async (argv) => {
+			const serverPath = argv.joplinCloud ? argv.joplinCloud : join(packagesDir, 'server');
 			await main({
 				seed: argv.seed,
 				maximumSteps: argv.steps,
 				clientCount: argv.clients,
+				serverPath: serverPath,
+				isJoplinCloud: !!argv.joplinCloud,
 				maximumStepsBetweenSyncs: argv['steps-between-syncs'],
 			});
 		},

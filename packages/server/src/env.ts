@@ -166,6 +166,13 @@ const defaultEnvValues: EnvVariables = {
 	// Item size configuration
 	// ==================================================
 	ITEM_SIZE_HARD_LIMIT: 250000000, // Will overwrite the current item size hard limit.  Any item above the current limit of 250000000 will crash the default Postgres driver.  Use this only if you are making use of the Filesystem driver
+	
+	// Transcribe Server
+	// ==================================================
+
+	TRANSCRIBE_ENABLED: false,
+	TRANSCRIBE_API_KEY: '',
+	TRANSCRIBE_BASE_URL: '',
 };
 
 export interface EnvVariables {
@@ -267,6 +274,9 @@ export interface EnvVariables {
 	LOCAL_AUTH_ENABLED: boolean;
 
 	ITEM_SIZE_HARD_LIMIT: number;
+	TRANSCRIBE_ENABLED: boolean;
+	TRANSCRIBE_API_KEY: string;
+	TRANSCRIBE_BASE_URL: string;
 }
 
 const parseBoolean = (s: string): boolean => {
