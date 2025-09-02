@@ -112,9 +112,15 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 	};
 
 	private renderWithInsets(insets: EdgeInsets) {
+		let offsetHeight = 0;
+
+		if (Platform.OS === 'android' && Platform.Version >= 35) {
+			offsetHeight = insets.bottom;
+		}
+
 		const items = this.props.items;
 		const itemHeight = 60;
-		const windowHeight = Dimensions.get('window').height - 50;
+		const windowHeight = Dimensions.get('window').height - 50 - offsetHeight;
 		const windowWidth = Dimensions.get('window').width;
 
 		// Dimensions doesn't return quite the right dimensions so leave an extra gap to make
