@@ -27,6 +27,13 @@ const resourceInfo = (resource: ResourceEntity) => {
 	return `${resource.id} (type ${resource.mime})`;
 };
 
+const getOcrDriverId = (resource: ResourceEntity) => {
+	// Default to PrintedText. When syncing with certain (older?) clients, resources can be assigned an
+	// ocr_driver_id of zero.
+	// https://github.com/laurent22/joplin/issues/13043
+	return resource.ocr_driver_id === 0 ? ResourceOcrDriverId.PrintedText : resource.ocr_driver_id;
+};
+
 export default class OcrService {
 
 	private drivers_: OcrDriverBase[];
@@ -66,7 +73,7 @@ export default class OcrService {
 
 		const resourceFilePath = Resource.fullPath(resource);
 
-		const driver = this.drivers_.find(d => d.driverId === resource.ocr_driver_id);
+		const driver = this.drivers_.find(d => d.driverId === getOcrDriverId(resource));
 		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
 
 		if (resource.mime === 'application/pdf') {
@@ -185,9 +192,9 @@ export default class OcrService {
 					const makeCurrentQueueAction = () => makeQueueAction(processedResourceIds.length, language, resource);
 
 					let processed = true;
-					if (resource.ocr_driver_id === ResourceOcrDriverId.PrintedText) {
+					if (getOcrDriverId(resource) === ResourceOcrDriverId.PrintedText) {
 						await this.printedTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
-					} else if (resource.ocr_driver_id === ResourceOcrDriverId.HandwrittenText) {
+					} else if (getOcrDriverId(resource) === ResourceOcrDriverId.HandwrittenText) {
 						await this.handwrittenTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
 					} else {
 						logger.info('Skipped processing', resource.id, 'with OCR: Unsupported ocr_driver_id', resource.ocr_driver_id);

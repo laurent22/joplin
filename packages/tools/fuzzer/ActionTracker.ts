@@ -1,10 +1,13 @@
 import { strict as assert } from 'assert';
 import { ActionableClient, FolderData, FuzzContext, ItemId, NoteData, ShareOptions, TreeItem, assertIsFolder, isFolder } from './types';
-import type Client from './Client';
 import FolderRecord from './model/FolderRecord';
 
 interface ClientData {
 	childIds: ItemId[];
+}
+
+interface ClientInfo {
+	email: string;
 }
 
 class ActionTracker {
@@ -87,7 +90,7 @@ class ActionTracker {
 		}
 	}
 
-	public track(client: { email: string }) {
+	public track(client: ClientInfo) {
 		const clientId = client.email;
 		// If the client's remote account already exists, continue using it:
 		if (!this.tree_.has(clientId)) {
@@ -271,6 +274,23 @@ class ActionTracker {
 			}
 		};
 
+		const removeFromShare = (id: ItemId, shareWith: ClientInfo) => {
+			const targetItem = this.idToItem_.get(id);
+			assertIsFolder(targetItem);
+
+			assert.ok(targetItem.isSharedWith(shareWith.email), `Folder ${id} should be shared with ${shareWith.email}`);
+
+			const otherSubTree = this.tree_.get(shareWith.email);
+			this.tree_.set(shareWith.email, {
+				...otherSubTree,
+				childIds: otherSubTree.childIds.filter(childId => childId !== id),
+			});
+
+			this.idToItem_.set(id, targetItem.withRemovedFromShare(shareWith.email));
+
+			this.checkRep_();
+		};
+
 		const tracker: ActionableClient = {
 			createNote: (data: NoteData) => {
 				assertWriteable(data.parentId);
@@ -311,6 +331,7 @@ class ActionTracker {
 					childIds: getChildIds(data.id),
 					sharedWith: [],
 					ownedByEmail: clientId,
+					isShared: false,
 				}));
 				addChild(data.parentId, data.id);
 
@@ -330,7 +351,20 @@ class ActionTracker {
 				this.checkRep_();
 				return Promise.resolve();
 			},
-			shareFolder: (id: ItemId, shareWith: Client, options: ShareOptions) => {
+			deleteNote: (id: ItemId) => {
+				this.checkRep_();
+
+				const item = this.idToItem_.get(id);
+				if (!item) throw new Error(`Not found ${id}`);
+				assert.ok(!isFolder(item), 'should be a note');
+				assertWriteable(item);
+
+				removeItemRecursive(id);
+
+				this.checkRep_();
+				return Promise.resolve();
+			},
+			shareFolder: (id: ItemId, shareWith: ClientInfo, options: ShareOptions) => {
 				const itemToShare = this.idToItem_.get(id);
 				assertIsFolder(itemToShare);
 
@@ -354,19 +388,16 @@ class ActionTracker {
 				this.checkRep_();
 				return Promise.resolve();
 			},
-			removeFromShare: (id: ItemId, shareWith: Client) => {
+			removeFromShare: (id, client) => Promise.resolve(removeFromShare(id, client)),
+			deleteAssociatedShare: (id: ItemId) => {
 				const targetItem = this.idToItem_.get(id);
 				assertIsFolder(targetItem);
 
-				assert.ok(targetItem.isSharedWith(shareWith.email), `Folder ${id} should be shared with ${shareWith.label}`);
+				for (const recipient of targetItem.shareRecipients) {
+					removeFromShare(id, { email: recipient });
+				}
 
-				const otherSubTree = this.tree_.get(shareWith.email);
-				this.tree_.set(shareWith.email, {
-					...otherSubTree,
-					childIds: otherSubTree.childIds.filter(childId => childId !== id),
-				});
-
-				this.idToItem_.set(id, targetItem.withUnshared(shareWith.email));
+				this.idToItem_.set(id, targetItem.withUnshared());
 
 				this.checkRep_();
 				return Promise.resolve();
