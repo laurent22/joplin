@@ -36,6 +36,7 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import { revertResourceDirToJoplinScheme } from '../../commands/showBrowser';
 const bridge = require('@electron/remote').require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
@@ -136,10 +137,12 @@ function NoteEditor(props: NoteEditorProps) {
 		if (!formNote.id || !formNote.bodyWillChangeId) return;
 
 		const body = await editorRef.current.content();
+		const resourceDir = `${Setting.value('resourceDir')}`;
+		const revertBody = revertResourceDirToJoplinScheme(body, resourceDir).html();
 
 		scheduleSaveNote({
 			...formNote,
-			body: body,
+			body: revertBody,
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
 		});
