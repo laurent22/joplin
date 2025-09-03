@@ -104,12 +104,6 @@ function NoteEditor(props: NoteEditorProps) {
 		// reg.logger().debug('Scheduling...', formNote);
 
 		const makeAction = (formNote: FormNote) => {
-			const body = formNote.body;
-			if (body?.includes('<img src="/Users')) {
-				console.warn('body contains <img src="/Users');
-			} else if (body?.includes('<img src="file:///Users')) {
-				console?.warn('body contains <img src="file:///Users');
-			}
 			return async function() {
 				const note = await formNoteToNote(formNote);
 				reg.logger().debug('Saving note...', note);

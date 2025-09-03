@@ -638,19 +638,7 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static checkSaveBody(body: string) {
-		// TypeScriptで同様のgrepをするには、body内に特定の文字列が含まれているかチェックします。
-		if (body?.includes('<img src="/Users')) {
-			console.warn('body contains <img src="/Users');
-		} else if (body?.includes('<img src="file:///Users')) {
-			console?.warn('body contains <img src="file:///Users');
-		}
-	}
-
 	static async save(o: NoteEntity, options: any = null) {
-		const body = o.body;
-		Note.checkSaveBody(body);
-
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
