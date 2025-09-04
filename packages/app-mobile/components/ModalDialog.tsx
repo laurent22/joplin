@@ -44,6 +44,9 @@ const useStyles = (themeId: number) => {
 				gap: theme.margin,
 				marginTop: theme.marginTop,
 			},
+			button: {
+				minWidth: 80,
+			},
 			// Ensures that screen-reader-only headings have size (necessary for focusing/reading them).
 			invisibleHeading: {
 				flexGrow: 1,
@@ -76,8 +79,8 @@ const ModalDialog: React.FC<Props> = props => {
 					accessible={true}
 					style={styles.invisibleHeading}
 				/>
-				<Button disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
-				<PrimaryButton disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
+				<Button disabled={!props.buttonBarEnabled} onPress={props.onCancelPress} style={styles.button}>{props.cancelTitle}</Button>
+				<PrimaryButton disabled={!props.buttonBarEnabled} onPress={props.onOkPress} style={styles.button}>{props.okTitle}</PrimaryButton>
 			</View>
 		</Modal>
 	);
