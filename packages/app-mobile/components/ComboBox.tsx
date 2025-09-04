@@ -66,7 +66,7 @@ const useSearchResults = ({
 }: UseSearchResultsOptions) => {
 	const results = useMemo(() => {
 		return options
-			.filter(option => option.title.startsWith(search))
+			.filter(option => option.title.toLowerCase().includes(search))
 			.sort((a, b) => {
 				if (a.title === b.title) return 0;
 				// Full matches should go first
