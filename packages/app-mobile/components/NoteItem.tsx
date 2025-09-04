@@ -37,6 +37,7 @@ const useStyles = (themeId: number) => {
 
 		const listItemPressable: ViewStyle = {
 			flexGrow: 1,
+			flexShrink: 1,
 			alignSelf: 'stretch',
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
@@ -60,7 +61,6 @@ const useStyles = (themeId: number) => {
 		const listItemTextWithCheckbox = { ...listItemText };
 		listItemTextWithCheckbox.marginTop = theme.itemMarginTop - 1;
 		listItemTextWithCheckbox.marginBottom = listItem.paddingBottom;
-		listItemTextWithCheckbox.paddingRight = 40;
 
 		const selectionWrapper: ViewStyle = { };
 
