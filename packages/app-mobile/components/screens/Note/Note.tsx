@@ -1255,7 +1255,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		output.push({
 			title: _('Return to notes'),
 			onPress: async () => {
-				await NavService.go('Notes', { folderId: this.state.folder.id, clearHistory: true });
+				if (this.state.folder?.id) {
+					await NavService.go('Notes', { folderId: this.state.folder.id, clearHistory: true });
+				} else {
+					await NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972', clearHistory: true });
+				}
 			},
 		});
 
