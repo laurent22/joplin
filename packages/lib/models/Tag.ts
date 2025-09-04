@@ -184,9 +184,9 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async setNoteTagsByTitles(noteId: string, tagTitles: string[]) {
-		// We still compare lowercased tag titles here so that special Unicode characters will match regardless of case, but this won't stop the user from renaming
-		// a tag to title which matches another tag, except the case of one or more special unicode characters differ. But this seems a reasonable compromise due to
-		// the lack of native case insensitive text comparison functionality for special unicode characters in sqlite
+		// We still compare lowercased tag titles here, so that special unicode characters will match regardless of case. But this won't stop the user from renaming
+		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
+		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedTitles = [];
 
