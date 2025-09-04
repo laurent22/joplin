@@ -220,6 +220,7 @@ class Application extends BaseApplication {
 		return { ...this.commandMetadata_ };
 	}
 
+
 	public hasGui() {
 		return this.gui() && !this.gui().isDummy();
 	}
@@ -330,6 +331,7 @@ class Application extends BaseApplication {
 			{ keys: ['mb'], type: 'prompt', command: 'mkbook ""', cursorPosition: -2 },
 			{ keys: ['yn'], type: 'prompt', command: 'cp $n ""', cursorPosition: -2 },
 			{ keys: ['dn'], type: 'prompt', command: 'mv $n ""', cursorPosition: -2 },
+			{ keys: ['z'], type: 'function', command: 'toggle_folder_collapse' },
 		];
 
 		// Filter the keymap item by command so that items in keymap.json can override

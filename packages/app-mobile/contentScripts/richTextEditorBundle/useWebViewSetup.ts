@@ -4,6 +4,7 @@ import { SetUpResult } from '../types';
 import { EditorControl, EditorSettings } from '@joplin/editor/types';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import { EditorProcessApi, EditorProps, MainProcessApi } from './types';
+import useMarkdownEditorSetup from '../markdownEditorBundle/useWebViewSetup';
 import useRendererSetup from '../rendererBundle/useWebViewSetup';
 import { EditorEvent } from '@joplin/editor/events';
 import Logger from '@joplin/utils/Logger';
@@ -92,7 +93,10 @@ const useMessenger = (props: UseMessengerProps) => {
 	}, [props.webviewRef]);
 };
 
-type UseSourceProps = Props & { renderer: SetUpResult<RendererControl> };
+type UseSourceProps = Props & {
+	renderer: SetUpResult<RendererControl>;
+	markdownEditor: SetUpResult<unknown>;
+};
 
 const useSource = (props: UseSourceProps) => {
 	const propsRef = useRef(props);
@@ -100,6 +104,8 @@ const useSource = (props: UseSourceProps) => {
 
 	const rendererJs = props.renderer.pageSetup.js;
 	const rendererCss = props.renderer.pageSetup.css;
+	const markdownEditorJs = props.markdownEditor.pageSetup.js;
+	const markdownEditorCss = props.markdownEditor.pageSetup.css;
 
 	return useMemo(() => {
 		const editorOptions: EditorProps = {
@@ -117,6 +123,7 @@ const useSource = (props: UseSourceProps) => {
 			css: `
 				${shim.injectedCss('richTextEditorBundle')}
 				${rendererCss}
+				${markdownEditorCss}
 
 				/* Increase the size of the editor to make it easier to focus the editor. */
 				.prosemirror-editor {
@@ -125,19 +132,23 @@ const useSource = (props: UseSourceProps) => {
 			`,
 			js: `
 				${rendererJs}
+				${markdownEditorJs}
 
 				if (!window.richTextEditorCreated) {
 					window.richTextEditorCreated = true;
 					${shim.injectedJs('richTextEditorBundle')}
 					richTextEditorBundle.setUpLogger();
-					richTextEditorBundle.initialize(${JSON.stringify(editorOptions)}).then(function(editor) {
+					richTextEditorBundle.initialize(
+						${JSON.stringify(editorOptions)},
+						window,
+					).then(function(editor) {
 						/* For testing */
 						window.joplinRichTextEditor_ = editor;
 					});
 				}
 			`,
 		};
-	}, [rendererJs, rendererCss]);
+	}, [rendererJs, rendererCss, markdownEditorCss, markdownEditorJs]);
 };
 
 const useWebViewSetup = (props: Props): SetUpResult<EditorControl> => {
@@ -148,8 +159,23 @@ const useWebViewSetup = (props: Props): SetUpResult<EditorControl> => {
 		pluginStates: props.pluginStates,
 		themeId: props.themeId,
 	});
+	const markdownEditor = useMarkdownEditorSetup({
+		webviewRef: props.webviewRef,
+		onAttachFile: props.onAttachFile,
+		initialSelection: null,
+		noteHash: '',
+		globalSearch: props.globalSearch,
+		editorOptions: {
+			settings: props.settings,
+			initialNoteId: null,
+			parentElementOrClassName: '',
+			initialText: '',
+		},
+		onEditorEvent: (_event)=>{},
+		pluginStates: props.pluginStates,
+	});
 	const messenger = useMessenger({ ...props, renderer });
-	const pageSetup = useSource({ ...props, renderer });
+	const pageSetup = useSource({ ...props, renderer, markdownEditor });
 
 	useEffect(() => {
 		void messenger.remoteApi.editor.updateSettings(props.settings);
@@ -163,14 +189,16 @@ const useWebViewSetup = (props: Props): SetUpResult<EditorControl> => {
 				onLoadEnd: () => {
 					messenger.onWebViewLoaded();
 					renderer.webViewEventHandlers.onLoadEnd();
+					markdownEditor.webViewEventHandlers.onLoadEnd();
 				},
 				onMessage: (event) => {
 					messenger.onWebViewMessage(event);
 					renderer.webViewEventHandlers.onMessage(event);
+					markdownEditor.webViewEventHandlers.onMessage(event);
 				},
 			},
 		};
-	}, [messenger, pageSetup, renderer.webViewEventHandlers]);
+	}, [messenger, pageSetup, renderer.webViewEventHandlers, markdownEditor.webViewEventHandlers]);
 };
 
 export default useWebViewSetup;

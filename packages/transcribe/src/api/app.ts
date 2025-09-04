@@ -29,13 +29,14 @@ const init = async (logger: LoggerWrapper) => {
 	const queue = await createQueue(envVariables, true);
 
 	const fileStorage = new FileStorage();
+	fileStorage.initMaintenance(envVariables.FILE_STORAGE_TTL, envVariables.FILE_STORAGE_MAINTENANCE_INTERVAL);
 
 	app.context.queue = queue;
 	app.context.storage = fileStorage;
 
 	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE, envVariables.HTR_CLI_IMAGES_FOLDER);
 
-	const jobProcessor = new JobProcessor(queue, htrCli);
+	const jobProcessor = new JobProcessor(queue, htrCli, fileStorage);
 
 	logger.info('Starting worker');
 	await jobProcessor.init();

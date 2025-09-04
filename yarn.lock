@@ -43,10 +43,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adobe/css-tools@npm:4.4.2":
-  version: 4.4.2
-  resolution: "@adobe/css-tools@npm:4.4.2"
-  checksum: 10/893d97ba524d92d5fdcee517a47fa7a144ca89dfcc559f5e1c3a9894599bf64c4ee5fc811fb11de0ab84da6778f4b69ea6aede73813534aeb5dfbc412d0788db
+"@adobe/css-tools@npm:4.4.3":
+  version: 4.4.3
+  resolution: "@adobe/css-tools@npm:4.4.3"
+  checksum: 10/701379c514b7a43ca6681705a93cd57ad79565cfef9591122e9499897550cf324a5e5bb1bc51df0e7433cf0e91b962c90f18ac459dcc98b2431daa04aa63cb20
   languageName: node
   linkType: hard
 
@@ -7284,7 +7284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emnapi/runtime@npm:^1.4.0":
+"@emnapi/runtime@npm:^1.4.3":
   version: 1.4.5
   resolution: "@emnapi/runtime@npm:1.4.5"
   dependencies:
@@ -8512,9 +8512,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-darwin-arm64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-darwin-arm64@npm:0.34.1"
+"@img/sharp-darwin-arm64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-darwin-arm64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-darwin-arm64": "npm:1.1.0"
   dependenciesMeta:
@@ -8524,9 +8524,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-darwin-x64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-darwin-x64@npm:0.34.1"
+"@img/sharp-darwin-x64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-darwin-x64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-darwin-x64": "npm:1.1.0"
   dependenciesMeta:
@@ -8599,9 +8599,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linux-arm64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linux-arm64@npm:0.34.1"
+"@img/sharp-linux-arm64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linux-arm64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linux-arm64": "npm:1.1.0"
   dependenciesMeta:
@@ -8611,9 +8611,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linux-arm@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linux-arm@npm:0.34.1"
+"@img/sharp-linux-arm@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linux-arm@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linux-arm": "npm:1.1.0"
   dependenciesMeta:
@@ -8623,9 +8623,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linux-s390x@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linux-s390x@npm:0.34.1"
+"@img/sharp-linux-s390x@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linux-s390x@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linux-s390x": "npm:1.1.0"
   dependenciesMeta:
@@ -8635,9 +8635,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linux-x64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linux-x64@npm:0.34.1"
+"@img/sharp-linux-x64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linux-x64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linux-x64": "npm:1.1.0"
   dependenciesMeta:
@@ -8647,9 +8647,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linuxmusl-arm64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linuxmusl-arm64@npm:0.34.1"
+"@img/sharp-linuxmusl-arm64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linuxmusl-arm64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linuxmusl-arm64": "npm:1.1.0"
   dependenciesMeta:
@@ -8659,9 +8659,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-linuxmusl-x64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-linuxmusl-x64@npm:0.34.1"
+"@img/sharp-linuxmusl-x64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-linuxmusl-x64@npm:0.34.2"
   dependencies:
     "@img/sharp-libvips-linuxmusl-x64": "npm:1.1.0"
   dependenciesMeta:
@@ -8671,25 +8671,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@img/sharp-wasm32@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-wasm32@npm:0.34.1"
+"@img/sharp-wasm32@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-wasm32@npm:0.34.2"
   dependencies:
-    "@emnapi/runtime": "npm:^1.4.0"
+    "@emnapi/runtime": "npm:^1.4.3"
   conditions: cpu=wasm32
   languageName: node
   linkType: hard
 
-"@img/sharp-win32-ia32@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-win32-ia32@npm:0.34.1"
+"@img/sharp-win32-arm64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-win32-arm64@npm:0.34.2"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@img/sharp-win32-ia32@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-win32-ia32@npm:0.34.2"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@img/sharp-win32-x64@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@img/sharp-win32-x64@npm:0.34.1"
+"@img/sharp-win32-x64@npm:0.34.2":
+  version: 0.34.2
+  resolution: "@img/sharp-win32-x64@npm:0.34.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -9138,13 +9145,13 @@ __metadata:
     "@joplin/renderer": "npm:~3.4"
     "@joplin/tools": "npm:~3.4"
     "@joplin/utils": "npm:~3.4"
-    "@playwright/test": "npm:1.51.1"
+    "@playwright/test": "npm:1.52.0"
     "@sentry/electron": "npm:4.24.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.100"
-    "@types/react": "npm:18.3.21"
+    "@types/node": "npm:18.19.103"
+    "@types/react": "npm:18.3.23"
     "@types/react-dom": "npm:18.3.7"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
@@ -9156,7 +9163,7 @@ __metadata:
     compare-versions: "npm:6.1.1"
     countable: "npm:3.0.1"
     debounce: "npm:1.2.1"
-    electron: "npm:35.5.1"
+    electron: "npm:35.7.5"
     electron-builder: "npm:24.13.3"
     electron-updater: "npm:6.6.2"
     electron-window-state: "npm:5.0.3"
@@ -9243,10 +9250,10 @@ __metadata:
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.134"
+    "@types/serviceworker": "npm:0.0.135"
     "@types/tar-stream": "npm:3.1.3"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -9287,7 +9294,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
-    react-native-image-picker: "npm:7.2.3"
+    react-native-image-picker: "npm:8.0.0"
     react-native-localize: "npm:3.4.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.13.5"
@@ -9295,7 +9302,7 @@ __metadata:
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-crypto: "npm:0.7.13"
     react-native-rsa-native: "npm:2.0.5"
-    react-native-safe-area-context: "npm:5.4.0"
+    react-native-safe-area-context: "npm:5.4.1"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.0.11"
     react-native-sqlite-storage: "npm:6.0.1"
@@ -9311,7 +9318,7 @@ __metadata:
     react-test-renderer: "npm:19.0.0"
     redux: "npm:4.2.1"
     rn-fetch-blob: "npm:0.12.0"
-    sharp: "npm:0.34.1"
+    sharp: "npm:0.34.2"
     sqlite3: "npm:5.1.6"
     stream: "npm:0.0.3"
     stream-browserify: "npm:3.0.0"
@@ -9391,7 +9398,7 @@ __metadata:
     "@replit/codemirror-vim": "npm:6.2.1"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
-    "@types/react": "npm:18.3.21"
+    "@types/react": "npm:18.3.23"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     dompurify: "npm:3.2.6"
@@ -9417,12 +9424,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@npm:^4.1.58, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@npm:^4.1.59, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
     coveralls: "npm:3.1.1"
@@ -9438,7 +9445,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@npm:^1.2.62, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@npm:^1.2.63, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -9447,24 +9454,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.1, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.2, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
     typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@npm:~3.4, @joplin/htmlpack@workspace:packages/htmlpack":
+"@joplin/htmlpack@npm:^3.4.1, @joplin/htmlpack@workspace:packages/htmlpack":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
-    "@joplin/fork-htmlparser2": "npm:^4.1.58"
+    "@adobe/css-tools": "npm:4.4.3"
+    "@joplin/fork-htmlparser2": "npm:^4.1.59"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     datauri: "npm:4.1.0"
@@ -9475,22 +9482,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@npm:~3.4, @joplin/lib@workspace:packages/lib":
+"@joplin/lib@npm:^3.4.1, @joplin/lib@npm:~3.4, @joplin/lib@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
+    "@adobe/css-tools": "npm:4.4.3"
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
-    "@joplin/fork-htmlparser2": "npm:^4.1.58"
-    "@joplin/fork-sax": "npm:^1.2.62"
-    "@joplin/fork-uslug": "npm:^2.0.1"
-    "@joplin/htmlpack": "npm:~3.4"
-    "@joplin/onenote-converter": "npm:~3.4"
-    "@joplin/renderer": "npm:~3.4"
-    "@joplin/turndown": "npm:^4.0.80"
-    "@joplin/turndown-plugin-gfm": "npm:^1.0.62"
-    "@joplin/utils": "npm:~3.4"
+    "@joplin/fork-htmlparser2": "npm:^4.1.59"
+    "@joplin/fork-sax": "npm:^1.2.63"
+    "@joplin/fork-uslug": "npm:^2.0.2"
+    "@joplin/htmlpack": "npm:^3.4.1"
+    "@joplin/onenote-converter": "npm:^3.4.1"
+    "@joplin/renderer": "npm:^3.4.1"
+    "@joplin/turndown": "npm:^4.0.81"
+    "@joplin/turndown-plugin-gfm": "npm:^1.0.63"
+    "@joplin/utils": "npm:^3.4.1"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/adm-zip": "npm:0.5.7"
     "@types/fs-extra": "npm:11.0.4"
@@ -9501,9 +9508,9 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/nanoid": "npm:3.0.0"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     "@types/node-rsa": "npm:1.1.4"
-    "@types/react": "npm:18.3.21"
+    "@types/react": "npm:18.3.23"
     "@types/uuid": "npm:10.0.0"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
@@ -9551,7 +9558,7 @@ __metadata:
     relative: "npm:3.0.2"
     reselect: "npm:4.1.8"
     server-destroy: "npm:1.0.1"
-    sharp: "npm:0.34.1"
+    sharp: "npm:0.34.2"
     sprintf-js: "npm:1.1.3"
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
@@ -9568,7 +9575,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@npm:~3.4, @joplin/onenote-converter@workspace:packages/onenote-converter":
+"@joplin/onenote-converter@npm:^3.4.1, @joplin/onenote-converter@npm:~3.4, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
@@ -9587,7 +9594,7 @@ __metadata:
     "@joplin/lib": "npm:~3.4"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
-    "@types/react": "npm:18.3.21"
+    "@types/react": "npm:18.3.23"
     "@types/react-dom": "npm:18.3.7"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
@@ -9612,12 +9619,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": "npm:~3.4"
-    "@joplin/tools": "npm:~3.4"
-    "@joplin/utils": "npm:~3.4"
+    "@joplin/lib": "npm:^3.4.1"
+    "@joplin/tools": "npm:^3.4.1"
+    "@joplin/utils": "npm:^3.4.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     fs-extra: "npm:11.2.0"
     gh-release-assets: "npm:2.0.1"
     jest: "npm:29.7.0"
@@ -9663,16 +9670,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@npm:~3.4, @joplin/renderer@workspace:packages/renderer":
+"@joplin/renderer@npm:^3.4.1, @joplin/renderer@npm:~3.4, @joplin/renderer@workspace:packages/renderer":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.58"
-    "@joplin/fork-uslug": "npm:^2.0.1"
-    "@joplin/utils": "npm:~3.4"
+    "@joplin/fork-htmlparser2": "npm:^4.1.59"
+    "@joplin/fork-uslug": "npm:^2.0.2"
+    "@joplin/utils": "npm:^3.4.1"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.2.0"
     highlight.js: "npm:11.11.1"
@@ -9750,7 +9757,7 @@ __metadata:
     node-os-utils: "npm:1.3.7"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.10"
-    pg: "npm:8.14.1"
+    pg: "npm:8.15.6"
     pm2: "npm:5.4.3"
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
@@ -9768,22 +9775,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@npm:~3.4, @joplin/tools@workspace:packages/tools":
+"@joplin/tools@npm:^3.4.1, @joplin/tools@npm:~3.4, @joplin/tools@workspace:packages/tools":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
     "@docusaurus/plugin-sitemap": "npm:2.4.3"
-    "@joplin/fork-htmlparser2": "npm:^4.1.58"
-    "@joplin/lib": "npm:~3.4"
-    "@joplin/renderer": "npm:~3.4"
-    "@joplin/utils": "npm:~3.4"
+    "@joplin/fork-htmlparser2": "npm:^4.1.59"
+    "@joplin/lib": "npm:^3.4.1"
+    "@joplin/renderer": "npm:^3.4.1"
+    "@joplin/utils": "npm:^3.4.1"
     "@rmp135/sql-ts": "npm:1.18.1"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/js-yaml": "npm:4.0.9"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     "@types/node-fetch": "npm:2.6.12"
     "@types/yargs": "npm:17.0.33"
     compare-versions: "npm:6.1.1"
@@ -9806,8 +9813,8 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.86.3"
-    sharp: "npm:0.34.1"
+    sass: "npm:1.87.0"
+    sharp: "npm:0.34.2"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
     style-to-js: "npm:1.1.16"
@@ -9845,7 +9852,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@npm:^1.0.62, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@npm:^1.0.63, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -9857,11 +9864,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@npm:^4.0.80, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@npm:^4.0.81, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
-    "@adobe/css-tools": "npm:4.4.2"
+    "@adobe/css-tools": "npm:4.4.3"
     "@rollup/plugin-commonjs": "npm:28.0.3"
     "@rollup/plugin-node-resolve": "npm:16.0.1"
     "@rollup/plugin-replace": "npm:6.0.2"
@@ -9874,26 +9881,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@npm:~2.12":
-  version: 2.12.1
-  resolution: "@joplin/utils@npm:2.12.1"
-  dependencies:
-    async-mutex: "npm:0.4.0"
-    execa: "npm:5.1.1"
-    fs-extra: "npm:11.1.1"
-    glob: "npm:10.3.3"
-    moment: "npm:2.29.4"
-    node-fetch: "npm:2.6.7"
-    sprintf-js: "npm:1.1.2"
-  checksum: 10/7ac4e8a82551ca78fe0e23081a05bfd1b38fa7a353fc037224144fa40c4825924ada8a5026c0bb4e5959de6d28173829a7e2e8dcd6e774d09d852a94c158bdbf
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@npm:~3.4, @joplin/utils@workspace:packages/utils":
+"@joplin/utils@npm:^3.4.1, @joplin/utils@npm:~3.4, @joplin/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.58"
+    "@joplin/fork-htmlparser2": "npm:^4.1.59"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
@@ -9914,6 +9906,21 @@ __metadata:
     typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
+
+"@joplin/utils@npm:~2.12":
+  version: 2.12.1
+  resolution: "@joplin/utils@npm:2.12.1"
+  dependencies:
+    async-mutex: "npm:0.4.0"
+    execa: "npm:5.1.1"
+    fs-extra: "npm:11.1.1"
+    glob: "npm:10.3.3"
+    moment: "npm:2.29.4"
+    node-fetch: "npm:2.6.7"
+    sprintf-js: "npm:1.1.2"
+  checksum: 10/7ac4e8a82551ca78fe0e23081a05bfd1b38fa7a353fc037224144fa40c4825924ada8a5026c0bb4e5959de6d28173829a7e2e8dcd6e774d09d852a94c158bdbf
+  languageName: node
+  linkType: hard
 
 "@jridgewell/gen-mapping@npm:^0.3.0":
   version: 0.3.3
@@ -11781,14 +11788,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.51.1":
-  version: 1.51.1
-  resolution: "@playwright/test@npm:1.51.1"
+"@playwright/test@npm:1.52.0":
+  version: 1.52.0
+  resolution: "@playwright/test@npm:1.52.0"
   dependencies:
-    playwright: "npm:1.51.1"
+    playwright: "npm:1.52.0"
   bin:
     playwright: cli.js
-  checksum: 10/ffb0c964d54f593897f05a2587d8e1e4f5f0e8c28f5f6260c1182ff938eb375d96c57594dd2f223ec45452a6af40695fd22f222930610c32f345e28ccf53141d
+  checksum: 10/e18a4eb626c7bc6cba212ff2e197cf9ae2e4da1c91bfdf08a744d62e27222751173e4b220fa27da72286a89a3b4dea7c09daf384d23708f284b64f98e9a63a88
   languageName: node
   linkType: hard
 
@@ -14622,12 +14629,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.100":
-  version: 18.19.100
-  resolution: "@types/node@npm:18.19.100"
+"@types/node@npm:18.19.103":
+  version: 18.19.103
+  resolution: "@types/node@npm:18.19.103"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/85939f4610aa526dc2a07eceeaeb12d8c56a4b817e76d921f8a6b4bc285892f70dcdf102587dad6e8b0c6d9b7109c2da5a1666b9553c1015c9f7348952e03e35
+  checksum: 10/12c9abc9c467fd59771d7f9297797b8361aeb364653cde575e5bfba57d8a42dcbcab1b520807ab774f36d6adc2e90774cf533e1376a749e9e4155855e4df7e48
   languageName: node
   linkType: hard
 
@@ -14808,13 +14815,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.3.21":
-  version: 18.3.21
-  resolution: "@types/react@npm:18.3.21"
+"@types/react@npm:18.3.23":
+  version: 18.3.23
+  resolution: "@types/react@npm:18.3.23"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10/89adc2fe391fd63b620db0aaa10b2be89fad338039415fd748e60c962e47bf2b0f1897cb5226f181eda963f37a1c8ac1bf0b3b29a0e35313bacd0355e5d6c736
+  checksum: 10/4b965dffe34a1f8aac8e2d7e976f113373f38134f9e37239f7e75d7ac6b3c2e1333a8df21febf1fe7749640f8de5708f7668cdfc70bffebda1cc4d3346724fd5
   languageName: node
   linkType: hard
 
@@ -14958,10 +14965,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.134":
-  version: 0.0.134
-  resolution: "@types/serviceworker@npm:0.0.134"
-  checksum: 10/46804986ea60df883221710b7a03983601415947693f26a3348af63f48b2b2c2b69493ab9bf07f3d6def9983e22cb14abe019383db627973db5dc8b6beae7a8e
+"@types/serviceworker@npm:0.0.135":
+  version: 0.0.135
+  resolution: "@types/serviceworker@npm:0.0.135"
+  checksum: 10/9521fc125f3af5f017e6881d33ad46c038eac28977d3bd33a7c6c7068d4156430863c1e116cf6faa8a9f0c470c1f47771724ae26437c365978b5582065d94d55
   languageName: node
   linkType: hard
 
@@ -23501,10 +23508,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detect-libc@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "detect-libc@npm:2.0.3"
-  checksum: 10/b4ea018d623e077bd395f168a9e81db77370dde36a5b01d067f2ad7989924a81d31cb547ff764acb2aa25d50bb7fdde0b0a93bec02212b0cb430621623246d39
+"detect-libc@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "detect-libc@npm:2.0.4"
+  checksum: 10/136e995f8c5ffbc515955b0175d441b967defd3d5f2268e89fa695e9c7170d8bed17993e31a34b04f0fad33d844a3a598e0fd519a8e9be3cad5f67662d96fee0
   languageName: node
   linkType: hard
 
@@ -24341,16 +24348,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:35.5.1":
-  version: 35.5.1
-  resolution: "electron@npm:35.5.1"
+"electron@npm:35.7.5":
+  version: 35.7.5
+  resolution: "electron@npm:35.7.5"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^22.7.7"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10/765752c94c3bea799f62fb0a75049a10452ff97e791a96111f36b97293ffed9240b27dbc083c01f7a2c7172e84b6b394b07c9aaf91d57783958b2adb4e570579
+  checksum: 10/f3757f0b6f21ddd5ebf8b83becdaa3e47dc13473e5375e6e6aee638d7029e73d08d6a4170b37ad8c594057da139e7cdf4c8b82b70c2c1ad0306abdcc274c5fee
   languageName: node
   linkType: hard
 
@@ -33019,7 +33026,7 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.100"
+    "@types/node": "npm:18.19.103"
     "@types/proper-lockfile": "npm:^4.1.2"
     aws-sdk: "npm:2.1340.0"
     chalk: "npm:4.1.2"
@@ -33036,7 +33043,7 @@ __metadata:
     proper-lockfile: "npm:4.1.2"
     redux: "npm:4.2.1"
     server-destroy: "npm:1.0.1"
-    sharp: "npm:0.34.1"
+    sharp: "npm:0.34.2"
     sprintf-js: "npm:1.1.3"
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
@@ -39748,14 +39755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-cloudflare@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "pg-cloudflare@npm:1.1.1"
-  checksum: 10/45ca0c7926967ec9e66a9efc73ca57e3e933671b541bc774631a02ce683e7f658d0a4e881119b3f61486f38e344ae1b008d3a20eb5e21701c5fa8ff8382c5538
-  languageName: node
-  linkType: hard
-
-"pg-cloudflare@npm:^1.2.7":
+"pg-cloudflare@npm:^1.2.5, pg-cloudflare@npm:^1.2.7":
   version: 1.2.7
   resolution: "pg-cloudflare@npm:1.2.7"
   checksum: 10/3d171407cbce36436c461200666ba6bd884bfe98016972760a797cec850199b8024a40055d80322c5fc02909e1533a144e9b108a99f7d7e21d0c42612f9821fb
@@ -39776,14 +39776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.7.0":
-  version: 2.9.0
-  resolution: "pg-connection-string@npm:2.9.0"
-  checksum: 10/cc65eab17400fadefc30f9214fb4707bb31c6b236f9e888c63af9fdf57f38eacbcdd439cce4a3c189ed4f5911819bf7369796e8b27dba73abb27f57e6da6178f
-  languageName: node
-  linkType: hard
-
-"pg-connection-string@npm:^2.9.1":
+"pg-connection-string@npm:^2.8.5, pg-connection-string@npm:^2.9.1":
   version: 2.9.1
   resolution: "pg-connection-string@npm:2.9.1"
   checksum: 10/40e9e9cd752121e72bff18d83e6c7ecda9056426815a84294de018569a319293c924704c8b7f0604fdc588835c7927647dea4f3c87a014e715bcbb17d794e9f0
@@ -39797,7 +39790,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.10.1, pg-pool@npm:^3.8.0":
+"pg-pool@npm:^3.10.1, pg-pool@npm:^3.9.6":
   version: 3.10.1
   resolution: "pg-pool@npm:3.10.1"
   peerDependencies:
@@ -39806,7 +39799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.10.3, pg-protocol@npm:^1.8.0":
+"pg-protocol@npm:^1.10.3, pg-protocol@npm:^1.9.5":
   version: 1.10.3
   resolution: "pg-protocol@npm:1.10.3"
   checksum: 10/31da85319084c03f403efee7accce9786964df82a7feb60e6bd77b71f1e622c74a2a644a2bc434389d0ab92e5abdeedea69ebdb53b1897d9f01d2a1f51a8a2fe
@@ -39826,14 +39819,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.14.1":
-  version: 8.14.1
-  resolution: "pg@npm:8.14.1"
+"pg@npm:8.15.6":
+  version: 8.15.6
+  resolution: "pg@npm:8.15.6"
   dependencies:
-    pg-cloudflare: "npm:^1.1.1"
-    pg-connection-string: "npm:^2.7.0"
-    pg-pool: "npm:^3.8.0"
-    pg-protocol: "npm:^1.8.0"
+    pg-cloudflare: "npm:^1.2.5"
+    pg-connection-string: "npm:^2.8.5"
+    pg-pool: "npm:^3.9.6"
+    pg-protocol: "npm:^1.9.5"
     pg-types: "npm:^2.1.0"
     pgpass: "npm:1.x"
   peerDependencies:
@@ -39844,7 +39837,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/45f2d5719fd74a6a4784c5115c0ff482af92d1e5b101bf423160b6a983e37cc2fad4a7eea2a06f27e6f8bdb8abce23486d2d522c8c52c90f68a2bc897f0553c4
+  checksum: 10/f465bc7cfbaee64f97e3a51be6a9c883d6ff29b0a825d4f8c3e0b24d1530a51c80f0a736d189c8db051cf18e9e60f20ddde4227adea8ca55700ab154c1abe21d
   languageName: node
   linkType: hard
 
@@ -40097,27 +40090,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.51.1":
-  version: 1.51.1
-  resolution: "playwright-core@npm:1.51.1"
+"playwright-core@npm:1.52.0":
+  version: 1.52.0
+  resolution: "playwright-core@npm:1.52.0"
   bin:
     playwright-core: cli.js
-  checksum: 10/954ce25782bbf0780c170caa56e7a0ab2e625dad42c628f9ee684974398b93885e58b88afb8b18dd2c96a7a82c6dde474d4fa7a4f6dff32111a562506c187cc3
+  checksum: 10/42e13f5f98dc25ebc95525fb338a215b9097b2ba39d41e99972a190bf75d79979f163f5bc07b1ca06847ee07acb2c9b487d070fab67e9cd55e33310fc05aca3c
   languageName: node
   linkType: hard
 
-"playwright@npm:1.51.1":
-  version: 1.51.1
-  resolution: "playwright@npm:1.51.1"
+"playwright@npm:1.52.0":
+  version: 1.52.0
+  resolution: "playwright@npm:1.52.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.51.1"
+    playwright-core: "npm:1.52.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/cc7d3e204b9fd70a7208ef1d189981135a04de533eff4a6772a6c8be1604a1eaaa3bac9129eb5d814384d4f727fb8011832676a5105b1b260917c48c421f7f9b
+  checksum: 10/214175446089000c2ac997b925063b95f7d86d129c5d7c74caa5ddcb05bcad598dfd569d2133a10dc82d288bf67e7858877dcd099274b0b928b9c63db7d6ecec
   languageName: node
   linkType: hard
 
@@ -42241,13 +42234,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-picker@npm:7.2.3":
-  version: 7.2.3
-  resolution: "react-native-image-picker@npm:7.2.3"
+"react-native-image-picker@npm:8.0.0":
+  version: 8.0.0
+  resolution: "react-native-image-picker@npm:8.0.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/62c6cc3c88edb29f2b17b4cdaa098b32efd23a5faf4380171c2ccfb1706c732a50553f2ce447e1df1ea48197dde3af42dd67584c60e2c4577ee1b7769152475d
+  checksum: 10/4975e0d15f8bb8159b7594f67cf88f1492aab194e56fead4380e13754b945cf49e9c6d2535d30be3e858115682a39419236315f7367698ec291845f0704d7498
   languageName: node
   linkType: hard
 
@@ -42346,13 +42339,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:5.4.0":
-  version: 5.4.0
-  resolution: "react-native-safe-area-context@npm:5.4.0"
+"react-native-safe-area-context@npm:5.4.1":
+  version: 5.4.1
+  resolution: "react-native-safe-area-context@npm:5.4.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/3b94e0a39398f23f4cbec2e49ebfd58c4e56f1d4157fda613c3bab66924a4e71ed6665a346dd71fd04ebd40e00f606f10d5a973b2616be4bfa0a422b361a425f
+  checksum: 10/1d8de402c4af8ee1bd00dec0c2fdb35b34ba64a62d7e235884c98216a2068f8d89e5bb89f27d2e9cd711ee9b173d9aafde53ebd2b39e64d0a1e83567de95305b
   languageName: node
   linkType: hard
 
@@ -44713,9 +44706,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.86.3":
-  version: 1.86.3
-  resolution: "sass@npm:1.86.3"
+"sass@npm:1.87.0":
+  version: 1.87.0
+  resolution: "sass@npm:1.87.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -44726,7 +44719,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/97c1c06aa6eab34b732fc1ce0c6816c0d63c4b68e1f5927981fdeba6d5b69765c318e455db2111f4ee616ae0b5015cc5c25f05db68ad03a052fd043ec97624c1
+  checksum: 10/43c7d9567baf08619edf46b1419882c5459d456968bb7f220eb92d2cb9c344218dbb93f00c4e76624cfd4f862531d37be731845da6a5b538cf10516746908297
   languageName: node
   linkType: hard
 
@@ -45071,7 +45064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.6.2, semver@npm:^7.6.3, semver@npm:^7.7.1":
+"semver@npm:^7.6.2, semver@npm:^7.6.3, semver@npm:^7.7.1, semver@npm:^7.7.2":
   version: 7.7.2
   resolution: "semver@npm:7.7.2"
   bin:
@@ -45431,12 +45424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.34.1":
-  version: 0.34.1
-  resolution: "sharp@npm:0.34.1"
+"sharp@npm:0.34.2":
+  version: 0.34.2
+  resolution: "sharp@npm:0.34.2"
   dependencies:
-    "@img/sharp-darwin-arm64": "npm:0.34.1"
-    "@img/sharp-darwin-x64": "npm:0.34.1"
+    "@img/sharp-darwin-arm64": "npm:0.34.2"
+    "@img/sharp-darwin-x64": "npm:0.34.2"
     "@img/sharp-libvips-darwin-arm64": "npm:1.1.0"
     "@img/sharp-libvips-darwin-x64": "npm:1.1.0"
     "@img/sharp-libvips-linux-arm": "npm:1.1.0"
@@ -45446,18 +45439,19 @@ __metadata:
     "@img/sharp-libvips-linux-x64": "npm:1.1.0"
     "@img/sharp-libvips-linuxmusl-arm64": "npm:1.1.0"
     "@img/sharp-libvips-linuxmusl-x64": "npm:1.1.0"
-    "@img/sharp-linux-arm": "npm:0.34.1"
-    "@img/sharp-linux-arm64": "npm:0.34.1"
-    "@img/sharp-linux-s390x": "npm:0.34.1"
-    "@img/sharp-linux-x64": "npm:0.34.1"
-    "@img/sharp-linuxmusl-arm64": "npm:0.34.1"
-    "@img/sharp-linuxmusl-x64": "npm:0.34.1"
-    "@img/sharp-wasm32": "npm:0.34.1"
-    "@img/sharp-win32-ia32": "npm:0.34.1"
-    "@img/sharp-win32-x64": "npm:0.34.1"
+    "@img/sharp-linux-arm": "npm:0.34.2"
+    "@img/sharp-linux-arm64": "npm:0.34.2"
+    "@img/sharp-linux-s390x": "npm:0.34.2"
+    "@img/sharp-linux-x64": "npm:0.34.2"
+    "@img/sharp-linuxmusl-arm64": "npm:0.34.2"
+    "@img/sharp-linuxmusl-x64": "npm:0.34.2"
+    "@img/sharp-wasm32": "npm:0.34.2"
+    "@img/sharp-win32-arm64": "npm:0.34.2"
+    "@img/sharp-win32-ia32": "npm:0.34.2"
+    "@img/sharp-win32-x64": "npm:0.34.2"
     color: "npm:^4.2.3"
-    detect-libc: "npm:^2.0.3"
-    semver: "npm:^7.7.1"
+    detect-libc: "npm:^2.0.4"
+    semver: "npm:^7.7.2"
   dependenciesMeta:
     "@img/sharp-darwin-arm64":
       optional: true
@@ -45495,11 +45489,13 @@ __metadata:
       optional: true
     "@img/sharp-wasm32":
       optional: true
+    "@img/sharp-win32-arm64":
+      optional: true
     "@img/sharp-win32-ia32":
       optional: true
     "@img/sharp-win32-x64":
       optional: true
-  checksum: 10/aecb960c0780b56134bfef01b7aeaa4e6650320a8a1f491237b45e900fc670830ee5d0600f30e51878328109db82e376bb526931d07a2e9358510ef30ab5abe8
+  checksum: 10/8c7a6f20d58849a6e33bc69c4525f471d57eb3dea0072331b55ab12bae4b8bd8b99b65264aeaec38e54d52d692db13e3261f6e7bc29430b39b507c409838cbb0
   languageName: node
   linkType: hard
 

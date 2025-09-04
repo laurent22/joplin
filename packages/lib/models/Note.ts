@@ -1,6 +1,7 @@
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import type FolderClass from './Folder';
+import type ResourceClass from './Resource';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
@@ -9,7 +10,6 @@ import markdownUtils from '../markdownUtils';
 import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
-import Resource from './Resource';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
@@ -181,7 +181,7 @@ export default class Note extends BaseItem {
 		// this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
 		const resourceIds = await this.linkedResourceIds(body);
-		const Resource = this.getClass('Resource');
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (let i = 0; i < resourceIds.length; i++) {
 			const id = resourceIds[i];
@@ -216,6 +216,7 @@ export default class Note extends BaseItem {
 			pathsToTry.push(`file://${shim.pathRelativeToCwd(resourceDir)}`);
 			pathsToTry.push(`file:///${shim.pathRelativeToCwd(resourceDir)}`);
 		} else {
+			const Resource = this.getClass<typeof ResourceClass>('Resource');
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
@@ -242,6 +243,7 @@ export default class Note extends BaseItem {
 		pathsToTry = temp;
 
 		// this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -408,7 +410,7 @@ export default class Note extends BaseItem {
 			}
 		}
 
-		const Folder: typeof FolderClass = BaseItem.getClass('Folder');
+		const Folder = BaseItem.getClass<typeof FolderClass>('Folder');
 
 		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
 		const parentInTrash = parentFolder ? !!parentFolder.deleted_time : false;
@@ -615,7 +617,8 @@ export default class Note extends BaseItem {
 	}
 
 	public static async copyToFolder(noteId: string, folderId: string) {
-		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		const Folder = this.getClass<typeof FolderClass>('Folder');
+		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', Folder.conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -627,7 +630,8 @@ export default class Note extends BaseItem {
 	}
 
 	public static async moveToFolder(noteId: string, folderId: string, saveOptions: SaveOptions|null = null) {
-		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		const Folder = this.getClass<typeof FolderClass>('Folder');
+		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not
 		// updated. However updated_time is updated so that the note can be
@@ -702,6 +706,7 @@ export default class Note extends BaseItem {
 	private static async duplicateNoteResources(noteBody: string): Promise<string> {
 		const resourceIds = await this.linkedResourceIds(noteBody);
 		let newBody: string = noteBody;
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (const resourceId of resourceIds) {
 			const newResource = await Resource.duplicateResource(resourceId);

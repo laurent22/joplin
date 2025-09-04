@@ -16,6 +16,8 @@ import { Prec } from '@codemirror/state';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
 import renderingExtension from './extensions/rendering/renderingExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
+import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
+import renderBlockImages from './extensions/rendering/renderBlockImages';
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
@@ -87,9 +89,15 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	}
 
 	if (settings.inlineRenderingEnabled) {
-		extensions.push(renderingExtension(context, {
-			renderImages: settings.imageRenderingEnabled,
-		}));
+		extensions.push(renderingExtension());
+	}
+
+	if (settings.imageRenderingEnabled) {
+		extensions.push(renderBlockImages(context));
+	}
+
+	if (settings.highlightActiveLine) {
+		extensions.push(highlightActiveLineExtension());
 	}
 
 	return extensions;

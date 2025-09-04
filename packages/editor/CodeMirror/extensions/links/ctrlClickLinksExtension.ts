@@ -4,11 +4,9 @@ import modifierKeyCssExtension from '../modifierKeyCssExtension';
 import openLink from './utils/openLink';
 import getUrlAtPosition from './utils/getUrlAtPosition';
 import { syntaxTree } from '@codemirror/language';
-import { Prec } from '@codemirror/state';
-
+import ctrlClickActionExtension from '../ctrlClickActionExtension';
 
 type OnOpenLink = (url: string, view: EditorView)=> void;
-
 
 const ctrlClickLinksExtension = (onOpenExternalLink: OnOpenLink) => {
 	return [
@@ -19,27 +17,16 @@ const ctrlClickLinksExtension = (onOpenExternalLink: OnOpenLink) => {
 				cursor: 'pointer',
 			},
 		}),
-		Prec.high([
-			EditorView.domEventHandlers({
-				mousedown: (event: MouseEvent, view: EditorView) => {
-					if (event.ctrlKey || event.metaKey) {
-						const target = view.posAtCoords(event);
-						const url = getUrlAtPosition(target, syntaxTree(view.state), view.state);
-						const hasMultipleCursors = view.state.selection.ranges.length > 1;
+		ctrlClickActionExtension((view: EditorView, event: MouseEvent) => {
+			const target = view.posAtCoords(event);
+			const url = getUrlAtPosition(target, syntaxTree(view.state), view.state);
 
-						// The default CodeMirror action for ctrl-click is to add another cursor
-						// to the document. If the user already has multiple cursors, assume that
-						// the ctrl-click action is intended to add another.
-						if (url && !hasMultipleCursors) {
-							openLink(url.url, view, onOpenExternalLink);
-							event.preventDefault();
-							return true;
-						}
-					}
-					return false;
-				},
-			}),
-		]),
+			if (url) {
+				openLink(url.url, view, onOpenExternalLink);
+				return true;
+			}
+			return false;
+		}),
 	];
 };
 

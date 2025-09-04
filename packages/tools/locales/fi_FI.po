@@ -7,30 +7,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: mrkaato0\n"
+"Last-Translator: VortexP\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Kamera: sallia kuvan ottamisen ja liittämisen muistiinpanoon."
+msgstr "- Kamera: sallii kuvan ottamisen ja liittämisen muistiinpanoon."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:614
 msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- Sijainti: sallia paikkatietojen liittämisen muistiinpanoon."
+msgstr "- Sijainti: sallii paikkatietojen liittämisen muistiinpanoon."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Tallennustila: sallia tiedostojen liittämisen muistiinpanoihin ja ottaa "
-"tiedostojärjestelmän synkronointi käyttöön."
+"- Tallennustila: sallii tiedostojen liittämisen muistiinpanoihin ja "
+"tiedostojärjestelmän synkronoinnin."
 
 #: packages/lib/services/KeymapService.ts:333
 #: packages/lib/services/KeymapService.ts:339
@@ -47,7 +47,7 @@ msgstr "(Laajennuksessa: %s)"
 
 #: packages/app-mobile/components/side-menu-content.tsx:265
 msgid "(level %d)"
-msgstr ""
+msgstr "(taso %d)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
@@ -55,7 +55,7 @@ msgstr "(Ei mitään)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(Vain luku)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -65,12 +65,11 @@ msgstr "(wysiwyg: %s)"
 #: packages/app-mobile/components/screens/Note/Note.tsx:800
 #: packages/lib/shim-init-node.ts:276
 msgid "(You may disable this prompt in the options)"
-msgstr ""
+msgstr "(Voit poistaa tämän kehotuksen käytöstä asetuksista)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "(Ei mitään)"
+msgstr "[Ei mitään]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1065
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -104,16 +103,14 @@ msgid "&View"
 msgstr "&Näytä"
 
 #: packages/app-desktop/gui/MenuBar.tsx:931
-#, fuzzy
 msgid "&Window"
-msgstr "Sulje ikkuna"
+msgstr "&Ikkuna"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1655
 #: packages/lib/models/settings/builtInMetadata.ts:1945
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d päivää"
+msgstr[0] "%d päivä"
 msgstr[1] "%d päivää"
 
 #: packages/lib/utils/joplinCloud/index.ts:157
@@ -131,11 +128,10 @@ msgstr "%d Gt tallennustila"
 #: packages/lib/models/settings/builtInMetadata.ts:1377
 #: packages/lib/models/settings/builtInMetadata.ts:1378
 #: packages/lib/models/settings/builtInMetadata.ts:1379
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d tunti"
-msgstr[1] "%d tunti"
+msgstr[1] "%d tuntia"
 
 #: packages/lib/utils/joplinCloud/index.ts:145
 #: packages/lib/utils/joplinCloud/index.ts:146
@@ -152,29 +148,26 @@ msgstr "%d Mt muistiinpanoa tai liitettä kohti"
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 #: packages/lib/models/settings/builtInMetadata.ts:1375
 #: packages/lib/models/settings/builtInMetadata.ts:1376
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minuuttia"
+msgstr[0] "%d minuutti"
 msgstr[1] "%d minuuttia"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
+msgstr[0] "%d muistiinpano vastaa tätä mallia. Poistetaanko se?"
 msgstr[1] "%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
-msgstr[0] "Poista valitut muistiinpanot"
-msgstr[1] "Poista valitut muistiinpanot"
+msgstr[0] "%d muistiinpano poistetaan pysyvästi. Jatka?"
+msgstr[1] "%d muistiinpanot poistetaan pysyvästi. Jatka?"
 
 #: packages/app-mobile/components/CameraView/PhotoPreview.tsx:60
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d kuvaa otettu"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -225,32 +218,32 @@ msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
-#, fuzzy
 msgid "%s cannot be greater than %s"
-msgstr "Luo uuden muistiinpanon."
+msgstr "%s ei voi olla suurempi kuin %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr ""
+msgstr "%s ei voi olla pienempi kuin %s"
 
-#: packages/app-cli/app/command-share.ts:201
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
-msgstr "Poistetaanko tunniste \"%s\" kaikista muistiinpanoista?"
+msgstr "%s kohteesta %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
+"%s ei ole optimoitu synkronoimaan monia pieniä tiedostoja, joten ensimmäinen "
+"synkronointi on hidas."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr ""
+msgstr "%s pitää olla kokonaisluku"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
-msgstr ""
+msgstr "%s välilehti avattu"
 
 #: packages/lib/services/ReportService.ts:320
 #: packages/lib/services/ReportService.ts:321
@@ -260,10 +253,9 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
-msgstr[0] "%s: %d muistiinpanoja"
+msgstr[0] "%s: %d muistiinpano"
 msgstr[1] "%s: %d muistiinpanoja"
 
 #: packages/lib/services/ReportService.ts:359
@@ -277,9 +269,8 @@ msgstr "%s: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
-#, fuzzy
 msgid "%s: Missing password."
-msgstr "Pääsalasana"
+msgstr "%s: Puuttuva salasana."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -313,9 +304,8 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
-#, fuzzy
 msgid "A new update (%s) is available"
-msgstr "Päivitä profiili"
+msgstr "Uusi päivitys (%s) on saatavilla"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1403
 msgid "A3"
@@ -332,12 +322,12 @@ msgstr "A5"
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:75
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
 msgid "About"
-msgstr ""
+msgstr "Lisätietoja"
 
 #: packages/app-desktop/gui/MenuBar.tsx:635
 #: packages/app-desktop/gui/MenuBar.tsx:983
 msgid "About Joplin"
-msgstr "Joplinista"
+msgstr "Lisätietoja Joplin:ista"
 
 #: packages/lib/services/KeymapService.ts:339
 #: packages/lib/services/KeymapService.ts:344
@@ -362,19 +352,16 @@ msgid "Accept"
 msgstr "Hyväksy"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:98
-#, fuzzy
 msgid "Accepted invitations"
-msgstr "Vastaanottaja on hyväksynyt kutsun"
+msgstr "Hyväksytyt kutsut"
 
-#: packages/app-cli/app/command-share.ts:178
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
-msgstr "Muistikirja: %s"
+msgstr ""
 
-#: packages/app-cli/app/command-share.ts:228
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
-msgstr "Luodaan raporttia..."
+msgstr ""
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -390,15 +377,13 @@ msgstr "Tili"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
-#, fuzzy
 msgid "Account information"
-msgstr "Lisätietoja"
+msgstr "Tilitiedot"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:35
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:51
-#, fuzzy
 msgid "Account type"
-msgstr "Tili"
+msgstr "Tilin tyyppi"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:113
 msgid "Action"
@@ -437,10 +422,9 @@ msgstr "Lisää tai poista tunnisteita:"
 msgid "Add recipient:"
 msgstr "Lisää vastaanottaja:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
-msgstr "Uudet tunnisteet:"
+msgstr "Lisää tunnisteet:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -451,20 +435,18 @@ msgid "Add to dictionary"
 msgstr "Lisää sanakirjaan"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:99
-#, fuzzy
 msgid "Add to note"
-msgstr "Lisää otsikko"
+msgstr ""
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Lisää uusi"
+msgstr "Lisätty uusi: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
 msgstr ""
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
 msgstr ""
 
@@ -477,23 +459,22 @@ msgstr "Ylläpitäjä"
 msgid "Admin dashboard"
 msgstr "Ylläpitäjän hallintapaneeli"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Lisäasetukset"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:671
-#, fuzzy
 msgid "Advanced settings"
-msgstr "Näytä lisäasetukset"
+msgstr "Lisäasetukset"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:196
 msgid "Advanced tools"
 msgstr "Lisätyökalut"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:18
-#, fuzzy
 msgid "all"
-msgstr "Asenna"
+msgstr "kaikki"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:108
 msgid ""
@@ -517,7 +498,7 @@ msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 "Kaikki mahdolliset portit ovat käytössä - ilmoita ongelmasta osoitteessa %s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr ""
 
@@ -534,27 +515,24 @@ msgid "Also publish linked notes"
 msgstr "Julkaise myös linkitetyt muistiinpanot"
 
 #: packages/lib/versionInfo.ts:93
-#, fuzzy
 msgid "Alternative instance ID: %s"
-msgstr "Asiakkaan tunnus: %s"
+msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:448
 msgid "Always"
 msgstr "Aina"
 
 #: packages/lib/models/settings/builtInMetadata.ts:964
-#, fuzzy
 msgid "Always ask"
-msgstr "Aina"
+msgstr "Kysy aina"
 
 #: packages/app-desktop/bridge.ts:482
 msgid "Always open %s files without asking."
 msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:965
-#, fuzzy
 msgid "Always resize"
-msgstr "Aina"
+msgstr ""
 
 #: packages/app-cli/app/command-mv.ts:37
 msgid ""
@@ -628,6 +606,7 @@ msgstr ""
 "Haluatko varmasti palata oletus ulkoasuun? Nykyinen ulkoasun määritys "
 "menetetään."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Haluatko varmasti uusia valtuutustunnuksen?"
@@ -724,6 +703,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Todennusta ei suoritettu loppuun (todennustunnusta ei saatu)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Valtuutuksen tunnus:"
@@ -768,6 +748,7 @@ msgstr "Vaihda teema automaattisesti vastaamaan järjestelmän teemaa"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -839,9 +820,11 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -895,7 +878,7 @@ msgstr "Ei voi käyttää %s"
 msgid "Cannot change encrypted item"
 msgstr "Salattua kohdetta ei voi muuttaa"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Muistiinpanoa ei voi kopioida \"%s\" muistikirjaan"
 
@@ -912,7 +895,7 @@ msgstr "Luo uuden muistiinpanon."
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -926,7 +909,7 @@ msgstr "Luo uuden muistiinpanon."
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -948,7 +931,7 @@ msgstr "Ei voi ladata \"%s\" moduuli muotoa varten \"%s\" ja ulostulo \"%s\""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Ei voi ladata \"%s\" moduuli muotoa varten \"%s\" ja kohde \"%s\""
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Muistiinpanoa ei voi siirtää\"%s\" muistikirjaan"
 
@@ -1057,11 +1040,13 @@ msgstr "Tarkistetaan... Odota hetki."
 msgid "Choose an option"
 msgstr "Valitse vaihtoehto"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1079,6 +1064,7 @@ msgstr "Tyhjennä hälytys"
 msgid "Clear search"
 msgstr "Tyhjennä hälytys"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1168,7 +1154,7 @@ msgstr "Koodilohko"
 msgid "Code View"
 msgstr "Koodinäkymä"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 #, fuzzy
 msgid "Code:"
 msgstr "Koodi"
@@ -1199,9 +1185,9 @@ msgstr "Tulevat hälytykset"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Pilkuilla erotettu luettelo hakemistoiden poluista, joilta varmenteet "
 "ladataan, tai polku yksittäisiin varmennetiedostoihin. Esimerkiksi: /my/"
@@ -1246,6 +1232,7 @@ msgid "Complete to-do"
 msgstr "Valmis"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Valmis"
@@ -1377,7 +1364,7 @@ msgstr "Muunna muistiinpanoksi"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Kopioi"
 
@@ -1428,6 +1415,7 @@ msgstr[1] "Kopioi jaettavat linkit"
 msgid "Copy to clipboard"
 msgstr "Kopioi polku leikepöydälle"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Kopioi tunnus"
@@ -1513,6 +1501,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Henkilöllisyyttäsi ei voitu vahvistaa"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Luo"
@@ -1549,6 +1538,7 @@ msgid "Create user"
 msgstr "Luo käyttäjä"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Luotu"
@@ -1573,7 +1563,8 @@ msgstr "Luodut etäkohteet: %d."
 msgid "Created: "
 msgstr "Luotu: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Luotu: %d."
@@ -1899,6 +1890,7 @@ msgstr "Lopeta turvallinen tila ja käynnistä uudelleen"
 msgid "Disable synchronisation"
 msgstr "Synkronointi"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Poista käytöstä Web Clipper työkalu"
@@ -1998,7 +1990,7 @@ msgstr "Näyttää versiotiedot"
 msgid "Do it now"
 msgstr "Hae se nyt"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Älä kysy vahvistusta."
 
@@ -2039,7 +2031,7 @@ msgstr "Joplin verkkosivusto"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Valmis"
@@ -2048,6 +2040,7 @@ msgstr "Valmis"
 msgid "Download"
 msgstr "Lataa"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Lataa ja asenna laajennus selaimeesi:"
@@ -2147,7 +2140,7 @@ msgstr "Sinun versiosi: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2155,7 +2148,7 @@ msgstr "Sinun versiosi: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Muokkaa"
 
@@ -2411,6 +2404,7 @@ msgstr "Ota typografiatuki käyttöön"
 msgid "Enable video player"
 msgstr "Ota käyttöön videosoitin"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Ota käyttöön Web Clipper työkalu"
@@ -2444,11 +2438,11 @@ msgstr ""
 "liitteesi synkronoidaan uudelleen ja lähetetään salattuina "
 "synkronointikohteeseen."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Salattu"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Salattuja kohteita ei voi muokata"
 
@@ -2731,6 +2725,7 @@ msgstr "Etsi: "
 msgid "Finishes recording"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox laajennus"
@@ -2805,7 +2800,8 @@ msgstr "Pakota polun tyyli"
 msgid "Forward"
 msgstr "Eteenpäin"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Löytyi: %d."
@@ -2845,6 +2841,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Hae se nyt:"
@@ -2948,6 +2945,7 @@ msgid "Hide Joplin"
 msgstr "Piilota Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Piilota näppäimistö"
 
@@ -2997,6 +2995,7 @@ msgstr "Kuvake"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -3077,7 +3076,7 @@ msgstr ""
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Tuodaan kohteesta \"%s\" as \"%s\" muodossa. Odota..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Muistiinpanojen tuominen..."
 
@@ -3086,7 +3085,7 @@ msgstr "Muistiinpanojen tuominen..."
 msgid "Importing..."
 msgstr "Viedään profiili..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Tuo tiedot Jopliniin."
 
@@ -3166,6 +3165,7 @@ msgstr ""
 "Tiedostojärjestelmän synkronoinnin käyttäminen edellyttää oikeutta "
 "kirjoittaa ulkoiseen tallennustilaan."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Jotta voit käyttää Web Clipperiä, sinun on tehtävä seuraavat toimet:"
@@ -3178,7 +3178,7 @@ msgstr "Käynnissä"
 msgid "In: %s"
 msgstr "Sisään: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 #, fuzzy
 msgid "Incoming shares:"
 msgstr "Tulevat hälytykset"
@@ -3280,7 +3280,7 @@ msgstr "Virheellinen vastaus: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Virheellinen komento: \"%s\""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr ""
 
@@ -3426,6 +3426,7 @@ msgstr "Joplin palvelimen URL-osoite"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3609,6 +3610,7 @@ msgstr "Ladattu"
 msgid "Loading..."
 msgstr "Päivittää..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Sijainti"
@@ -3721,7 +3723,7 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 #, fuzzy
 msgid "Markdown editor"
 msgstr "Markdown"
@@ -3743,6 +3745,7 @@ msgstr "Merkitsee tehtävän valmiiksi."
 msgid "Marks a to-do as non-completed."
 msgstr "Merkitsee tehtävän keskeneräiseksi."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Merkintä"
@@ -3952,25 +3955,23 @@ msgstr "Uusi muistikirja"
 msgid "New Notebook"
 msgstr "Uusi muistikirja"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Uusi muistikirja \"%s\" luodaan ja tiedosto \"%s\" tuodaan siihen"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Muistikirjan otsikko:"
+msgstr "Uusi muistikirjan otsikko:"
 
 #: packages/app-mobile/setupQuickActions.ts:32
-#, fuzzy
 msgid "New photo"
-msgstr "Ota valokuva"
+msgstr "Uusi valokuva"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
-#, fuzzy
 msgid "New profile"
-msgstr "Vaihda profiili"
+msgstr "Uusi profiili"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -3991,12 +3992,11 @@ msgstr "Uusi versio: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:16
 msgid "next"
-msgstr ""
+msgstr "seuraava"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
-#, fuzzy
 msgid "Next"
-msgstr "Nextcloud"
+msgstr "Seuraava"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
@@ -4063,11 +4063,10 @@ msgid "No results"
 msgstr "Ei tuloksia"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
-msgstr "Muistikirjaa ei ole valittu."
+msgstr ""
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Ei tällaista komentoa: %s"
 
@@ -4076,14 +4075,12 @@ msgid "No suggestions"
 msgstr "Ei ehdotuksia"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:119
-#, fuzzy
 msgid "No tab selected"
-msgstr "Muistikirjaa ei ole valittu."
+msgstr ""
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Uudet tunnisteet:"
+msgstr "Ei tunnisteita:"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4093,16 +4090,14 @@ msgstr ""
 "path>`"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:63
-#, fuzzy
 msgid "No updates available"
-msgstr "Päivitä profiili"
+msgstr "Ei päivityksiä saatavilla"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
-#, fuzzy
 msgid "None"
-msgstr "(Ei mitään)"
+msgstr "Ei mitään"
 
 #: packages/lib/models/settings/builtInMetadata.ts:58
 msgid "Nord"
@@ -4114,7 +4109,7 @@ msgstr "Ei todennettu %s. Anna puuttuvat tunnistetiedot."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:165
 msgid "Not checked"
-msgstr ""
+msgstr "Ei tarkistettu"
 
 #: packages/lib/models/Resource.ts:407
 msgid "Not downloaded"
@@ -4161,7 +4156,7 @@ msgstr "Muistiinpanon kappale"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Huomautusta ei ole: \"%s\". Luodaanko se?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Muistiinpano editori"
@@ -4171,19 +4166,18 @@ msgid "Note has been saved."
 msgstr "Huomautus on tallennettu."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
 msgstr "Muistiinpanohistoria"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
 msgstr "Muistiinpanohistoria"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
-msgstr "Huomautus on tallennettu."
+msgstr "Muistiinpanohistoria on tyhjennetty."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4201,16 +4195,15 @@ msgid "Note list growth factor"
 msgstr "Huomautus luettelon kasvutekijä"
 
 #: packages/app-desktop/gui/MenuBar.tsx:812
-#, fuzzy
 msgid "Note list style"
-msgstr "Muistiinpanot"
+msgstr ""
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Muistiinpanon otsikko"
+msgstr ""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Muistiinpanon ominaisuudet"
@@ -4255,9 +4248,8 @@ msgid "Notebook: %s"
 msgstr "Muistikirja: %s"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:81
-#, fuzzy
 msgid "Notebook: %s (%s)"
-msgstr "Muistikirja: %s"
+msgstr "Muistikirja: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:54
 #: packages/app-mobile/components/side-menu-content.tsx:686
@@ -4265,7 +4257,7 @@ msgstr "Muistikirja: %s"
 msgid "Notebooks"
 msgstr "Muistikirjat"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
 
@@ -4312,8 +4304,10 @@ msgstr "Etsi kaikista muistiinpanoista"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4376,9 +4370,8 @@ msgid "OneDrive Login"
 msgstr "OneDrive kirjautuminen"
 
 #: packages/lib/services/interop/InteropService.ts:148
-#, fuzzy
 msgid "OneNote Notebook"
-msgstr "Uusi muistikirja"
+msgstr "OneNote muistikirja"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/print.ts:18
 msgid "Only one note can be printed at a time."
@@ -4393,23 +4386,20 @@ msgid "Open %s"
 msgstr "Avaa %s"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
-#, fuzzy
 msgid "Open in external editor"
-msgstr "Muokkaa ulkoisessa tekstieditorissa"
+msgstr "Avaa ulkoisessa tekstieditorissa"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
 msgid "Open in new window"
-msgstr ""
+msgstr "Avaa uudessa ikkunassa"
 
 #: packages/app-desktop/bridge.ts:486
-#, fuzzy
 msgid "Open it"
-msgstr "Avaa"
+msgstr "Avaa se"
 
 #: packages/app-desktop/bridge.ts:557
-#, fuzzy
 msgid "Open log"
-msgstr "Avaa %s"
+msgstr "Avaa loki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openPdfViewer.ts:7
 msgid "Open PDF viewer"
@@ -4428,14 +4418,12 @@ msgid "Open secondary app instance..."
 msgstr ""
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:149
-#, fuzzy
 msgid "Open settings"
-msgstr "Näytä lisäasetukset"
+msgstr "Avaa lisäasetukset"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
-#, fuzzy
 msgid "Open Source"
-msgstr "Lähde"
+msgstr "avaa lähde"
 
 #: packages/lib/models/settings/builtInMetadata.ts:94
 msgid "Open Sync Wizard..."
@@ -4450,19 +4438,16 @@ msgid "Opening section %s"
 msgstr ""
 
 #: packages/app-mobile/components/Dropdown.tsx:216
-#, fuzzy
 msgid "Opens dropdown"
-msgstr "Sulje pudotusvalikko"
+msgstr "Avaa pudotusvalikko"
 
 #: packages/app-mobile/components/NoteItem.tsx:163
-#, fuzzy
 msgid "Opens note"
-msgstr "Avaa"
+msgstr "Avaa muistio"
 
 #: packages/app-mobile/components/side-menu-content.tsx:273
-#, fuzzy
 msgid "Opens notebook"
-msgstr "Uusi muistikirja"
+msgstr "Avaa muistiinpano"
 
 #: packages/app-cli/app/command-e2ee.ts:42
 #: packages/app-cli/app/command-e2ee.ts:88
@@ -4484,7 +4469,7 @@ msgstr "Järjestetty luettelo"
 msgid "Other applications..."
 msgstr "Muut sovellukset..."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Esitysmuoto: %s"
 
@@ -4498,11 +4483,11 @@ msgstr "PDF viennin sivukoko"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Paneeli %s on näkyvissä"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Paneeli %s on piilotettu"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4544,19 +4529,16 @@ msgid "PDF File"
 msgstr "PDF tiedosto"
 
 #: packages/lib/utils/joplinCloud/index.ts:448
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
-msgstr "Käyttäjää kohti. Vähintään %d käyttäjää."
+msgstr "Käyttäjää kohti. Vähintään 2 käyttäjää."
 
 #: packages/lib/commands/permanentlyDeleteNote.ts:8
-#, fuzzy
 msgid "Permanently delete note"
-msgstr "Poista valitut muistiinpanot"
+msgstr "Poista muistiinpano pysyvästi"
 
-#: packages/lib/models/Note.ts:942
-#, fuzzy
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
-msgstr "Poista muistiinpano \"%s\"?"
+msgstr "Poista muistiinpano \"%s\" pysyvästi?"
 
 #: packages/app-cli/app/command-rmbook.ts:35
 #, fuzzy
@@ -4568,12 +4550,11 @@ msgstr ""
 "Poistetaanko muistikirja? Kaikki tämän muistikirjan muistiinpanot ja "
 "alimuistikirjat poistetaan myös."
 
-#: packages/lib/models/Note.ts:944
-#, fuzzy
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
-msgstr[0] "Poistetaanko nämä %d muistiinpanot?"
-msgstr[1] "Poistetaanko nämä %d muistiinpanot?"
+msgstr[0] "Poista muistiinpano pysyvästi?"
+msgstr[1] "Poista muistiinpanot pysyvästi?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
 #, fuzzy
@@ -4586,7 +4567,7 @@ msgstr "Tarvittava lupa"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Kuva %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4642,7 +4623,7 @@ msgstr ""
 msgid "Please select a notebook first."
 msgstr "Valitse ensin muistikirja."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Valitse ensin poistettava muistiinpano tai muistikirja."
 
@@ -4659,9 +4640,8 @@ msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Määritä muistikirja, johon muistiinpanot tuodaan."
 
 #: packages/lib/services/plugins/PluginService.ts:527
-#, fuzzy
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Päivitä Joplin käyttääksesi tätä laajennusta"
+msgstr "Päivitä Joplin vähintään versioon %s käyttääksesi tätä laajennusta."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
 msgid ""
@@ -4673,7 +4653,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr ""
+msgstr "Odota hetki, kun lataamme organisaatiosi kirjautumissivua..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4681,9 +4661,8 @@ msgid "Please wait..."
 msgstr "Odota..."
 
 #: packages/app-mobile/services/plugins/PlatformImplementation.ts:51
-#, fuzzy
 msgid "Plugin message"
-msgstr "Laajennukset"
+msgstr "Laajennuksen viesti"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:423
 #, fuzzy
@@ -4691,18 +4670,17 @@ msgid "Plugin panels"
 msgstr "Laajennustyökalut"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:111
+#, fuzzy
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Laajennuksien listan lataus epäonnistui"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:29
-#, fuzzy
 msgid "Plugin search"
-msgstr "Laajennukset"
+msgstr "Laajennuksien haku"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
-#, fuzzy
 msgid "Plugin security"
-msgstr "Laajennukset"
+msgstr "Laajennuksien turvallisuus"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:329
 msgid "Plugin tools"
@@ -4738,8 +4716,9 @@ msgid "Possible values: %s."
 msgstr "Mahdolliset arvot: %s."
 
 #: packages/app-cli/app/command-share.ts:67
+#, fuzzy
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "Suosi JSON ulostuloa."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4765,7 +4744,7 @@ msgstr ""
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Paina Ctrl+D tai kirjoita \"exit\" poistuaksesi sovelluksesta"
 
@@ -4786,20 +4765,19 @@ msgid "Press to set the decryption password."
 msgstr "Aseta salauksen purkuun salasana painamalla tätä."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:17
-#, fuzzy
 msgid "previous"
-msgstr "Edellinen vastaavuus"
+msgstr "Edellinen"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Edellinen vastaavuus"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1145
-#, fuzzy
 msgid "Previous versions"
-msgstr "Tämän muistiinpanon aiemmat versiot"
+msgstr "Aiemmat versiot"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Tämän muistiinpanon aiemmat versiot"
 
@@ -4833,12 +4811,11 @@ msgstr "Käsittele käyttäjien poistot"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr ""
+msgstr "Käsittelee"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
-#, fuzzy
 msgid "Processing photo..."
-msgstr "Luodaan raporttia..."
+msgstr "Käsittelee kuvaa..."
 
 #: packages/server/src/routes/admin/users.ts:254
 msgid "Profile"
@@ -4881,9 +4858,8 @@ msgid "Public-private key pair:"
 msgstr "Julkinen ja yksityinen avainpari:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
-msgstr "Julkaise muistiinpanot"
+msgstr "Julkaise muistiinpano"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4900,12 +4876,11 @@ msgstr "Julkaise muistiinpanot Internetissä"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1163
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Julkaise/peruuta julkaisu"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
-#, fuzzy
 msgid "QR Code"
-msgstr "Koodi"
+msgstr "QR-koodi"
 
 #: packages/app-desktop/app.ts:213
 #: packages/app-desktop/ElectronAppWrapper.ts:179
@@ -4916,7 +4891,7 @@ msgstr "Lopeta"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:190
 msgid "Re-download model"
-msgstr ""
+msgstr "Uudelleenlataa malli"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -4927,18 +4902,16 @@ msgid "Re-encryption"
 msgstr "Uudelleen salaus"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:181
-#, fuzzy
 msgid "Re-enter password"
-msgstr "Pääsalasana"
+msgstr "Syötä salasana uudelleen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1330
 msgid "Re-upload local data to sync target"
 msgstr "Lataa paikalliset tiedot uudelleen kohteen synkronointia varten"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Sisennä lisää"
+msgstr "Lue lisää"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4972,31 +4945,27 @@ msgstr "Vastaanottajat:"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 #, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Älä muuta kuvien kokoa"
+msgstr "Tunnista käsinkirjoitettu kuva"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
-#, fuzzy
 msgid "Recommended"
-msgstr "komento"
+msgstr "Suositeltu"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
-#, fuzzy
 msgid "Recommended plugins"
-msgstr "komento"
+msgstr "Suositellut lisäosat"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Tallentaa äänitettä"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
-#, fuzzy
 msgid "Recording"
-msgstr "Otsikko"
+msgstr "Tallentaa"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
-#, fuzzy
 msgid "Recording..."
-msgstr "Päivittää..."
+msgstr "Tallentaa..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:771
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
@@ -5021,24 +4990,21 @@ msgstr "Säännöllinen lauseke"
 msgid "Reject"
 msgstr "Hylkää"
 
-#: packages/app-cli/app/command-share.ts:228
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
-msgstr "Luodaan raporttia..."
+msgstr "Hylätään jako..."
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:107
 msgid "Remove"
 msgstr "Poista"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Poista"
+msgstr "Poista %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
-#, fuzzy
 msgid "Remove %s from share"
-msgstr "Poistetaanko tunniste \"%s\" kaikista muistiinpanoista?"
+msgstr "Poista %s jaosta"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:111
 msgid "Remove tag \"%s\" from all notes?"
@@ -5049,14 +5015,12 @@ msgid "Remove this search from the sidebar?"
 msgstr "Poistetaanko tämä haku sivupalkista?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
-msgstr "Poistetaanko tunniste \"%s\" kaikista muistiinpanoista?"
+msgstr "Poistettu %s jaosta"
 
-#: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
-msgstr "Nimeä tunniste uudelleen:"
+msgstr "Poistettu tunniste: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -5079,14 +5043,14 @@ msgstr "Nimeää annetun <item> (muistiinpano tai muistikirja) nimeksi <name>."
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Uusi tunnus"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:21
-#, fuzzy
 msgid "replace"
-msgstr "Korvaa"
+msgstr "korvaa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
@@ -5094,9 +5058,8 @@ msgid "Replace"
 msgstr "Korvaa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:22
-#, fuzzy
 msgid "replace all"
-msgstr "Korvaa kaikki"
+msgstr "korvaa kaikki"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
@@ -5108,7 +5071,7 @@ msgstr "Korvaa..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
-msgstr "Vaihda: "
+msgstr "korvaa:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:25
 msgid "replaced $ matches"
@@ -5120,25 +5083,24 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
-msgstr ""
+msgstr "Ilmoita ongelmasta"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr ""
+msgstr "Ilmoita lisäosaan liittyvästä ongelmasta"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
+#, fuzzy
 msgid "Report fraudulent plugin"
-msgstr ""
+msgstr "Ilmoita epärehellisestä lisäossta"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
-#, fuzzy
 msgid "Report system"
-msgstr "Tiedostojärjestelmä"
+msgstr "Raporttijärjestelmä"
 
 #: packages/server/src/services/MustacheService.ts:137
-#, fuzzy
 msgid "Reports"
-msgstr "Tiedostojärjestelmä"
+msgstr "Raportit"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:7
 msgid "Reset application layout"
@@ -5150,11 +5112,11 @@ msgid "Reset master password"
 msgstr "Pääsalasanan vaihtaminen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:960
-#, fuzzy
 msgid "Resize large images:"
-msgstr "Älä muuta kuvien kokoa"
+msgstr "Muunna suuret kuvat:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Resursseja: %d."
@@ -5164,9 +5126,8 @@ msgid "Restart and upgrade"
 msgstr "Käynnistä uudelleen ja päivitä"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:186
-#, fuzzy
 msgid "Restart in safe mode"
-msgstr "Käynnistä uudelleen ja päivitä"
+msgstr "Käynnistä uudelleen viansietotilassa"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:427
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:48
@@ -5174,6 +5135,7 @@ msgid "Restart now"
 msgstr "Käynnistä uudelleen nyt"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5184,24 +5146,20 @@ msgid "Restore"
 msgstr "Palauttaa"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:156
-#, fuzzy
 msgid "Restore defaults"
-msgstr "Palautetut muistiinpanot"
+msgstr "Palauta oletusarvot"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.ts:10
-#, fuzzy
 msgid "Restore note"
-msgstr "Palautetut muistiinpanot"
+msgstr "Palauta muistiinpano"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.ts:9
-#, fuzzy
 msgid "Restore notebook"
-msgstr "Luo muistikirja"
+msgstr "Palauta muistikirja"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Poistaa <note-pattern> vastaavat muistiinpanot."
+msgstr "Palauttaa <pattern> vastaavat muistiinpanot roskakorista."
 
 #: packages/lib/services/trash/index.ts:88
 #, fuzzy
@@ -5214,7 +5172,7 @@ msgstr "Palautetut muistiinpanot"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:162
 msgid "Results (%d):"
-msgstr ""
+msgstr "Tulokset (%d):"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
@@ -5243,17 +5201,17 @@ msgid "Reverses the sorting order."
 msgstr "Kääntää lajittelujärjestyksen."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
-msgstr "Versio: %s (%s)"
+msgstr "Versio:"
 
 #: packages/lib/versionInfo.ts:65
 msgid "Revision: %s (%s)"
 msgstr "Versio: %s (%s)"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
+#, fuzzy
 msgid "Rich Text"
-msgstr ""
+msgstr "Rich Text"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:715
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
@@ -5320,7 +5278,7 @@ msgstr "Tallenna nimellä %s"
 msgid "Save as..."
 msgstr "Tallenna nimellä..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5329,26 +5287,24 @@ msgid "Save changes"
 msgstr "Tallenna muutokset"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
-#, fuzzy
 msgid "Save changes?"
-msgstr "Tallenna muutokset"
+msgstr "Tallenna muutokset?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:882
 msgid "Save geo-location with notes"
 msgstr "Tallenna maantieteellinen sijainti muistiinpanojen avulla"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Luo muistikirja"
+msgstr "Skannaa muistikirja"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
-msgstr ""
+msgstr "Skannattu koodi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1260
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Vierityspalkin koko"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:138
@@ -5369,9 +5325,8 @@ msgid "Search for..."
 msgstr "Etsii..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
-#, fuzzy
 msgid "Search hidden"
-msgstr "Etsi"
+msgstr "Haku piilotettu"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.ts:6
 msgid "Search in all the notes"
@@ -5382,26 +5337,24 @@ msgid "Search in current note"
 msgstr "Etsi nykyisestä muistiinpanosta"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:695
-#, fuzzy
 msgid "Search results"
-msgstr "Ei tuloksia"
+msgstr "Hakutulokset"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
-#, fuzzy
 msgid "Search shown"
-msgstr "Etsi"
+msgstr "Haku näytetään"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
-msgstr "Ei tuloksia"
+msgstr "Etsi merkkejä"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Etsi:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5413,9 +5366,8 @@ msgid "Searches for the given <pattern> in all the notes."
 msgstr "Etsii annettua <pattern> kaikista muistiinpanoista."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:39
-#, fuzzy
 msgid "See changelog"
-msgstr "Täysi muutosloki"
+msgstr "Katso muutoslokia"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1349
 msgid "See the pre-release page for more details: %s"
@@ -5427,9 +5379,8 @@ msgid "Select"
 msgstr "Valitse"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
-msgstr "Valitse emoji..."
+msgstr "Valitse versio..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:371
@@ -5445,38 +5396,33 @@ msgid "Select file..."
 msgstr "Valitse tiedosto..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Luo muistikirja"
+msgstr "Valitse muistikirja"
 
 #: packages/app-mobile/components/screens/folder.js:109
-#, fuzzy
 msgid "Select parent notebook"
-msgstr "Luo muistikirja"
+msgstr "Valitse ylempi muistikirja"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Luotu: %s"
+msgstr "Valitut: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
-#, fuzzy
 msgid "Selection deleted"
-msgstr "Poistettu: %d"
+msgstr "Valinta poistettu: %d"
 
 #: packages/app-mobile/components/FolderPicker.tsx:80
-#, fuzzy
 msgid "Selects a notebook"
-msgstr "Luo muistikirja"
+msgstr "Valitsee muistikirja"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
+#, fuzzy
 msgid "Self-hosted"
-msgstr ""
+msgstr "Self-hosted"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#, fuzzy
 msgid "Send bug report"
-msgstr "Vie virheenkorjausraportti"
+msgstr "Lähetä virheenkorjausraportti"
 
 #: packages/app-cli/app/command-server.js:46
 msgid "Server is already running on port %d"
@@ -5528,7 +5474,7 @@ msgstr ""
 
 #: packages/app-mobile/components/EditorToolbar/EditorToolbar.tsx:74
 msgid "Settings"
-msgstr ""
+msgstr "Asetukset"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
@@ -5564,23 +5510,24 @@ msgstr "Muistikirjan jakaminen..."
 
 #: packages/lib/utils/joplinCloud/index.ts:231
 msgid "Share permissions"
-msgstr ""
+msgstr "Jaon oikeudet"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.tsx:57
-#, fuzzy
 msgid "Shared"
-msgstr "Jaa"
+msgstr "Jaetut"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
 #, fuzzy
 msgid "Shares"
-msgstr "Jaa"
+msgstr "Jaot"
 
 #: packages/app-cli/app/command-share.ts:58
 msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Jakaa tai poistaa määritetyn [notebook] jakamisen käyttäjän [user] kanssa. "
+"Vaatii Joplin Cloud:in tai Joplin Server:in."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5615,23 +5562,20 @@ msgid "Show disabled keys"
 msgstr "Näytä käytöstä poistetut avaimet"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:51
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "Editorin monospace fonttiperhe"
+msgstr "Näytä vain monospace-fontit."
 
 #: packages/lib/models/settings/builtInMetadata.ts:672
 msgid "Show note counts"
 msgstr "Näytä muistiinpanojen määrä"
 
 #: packages/app-mobile/components/side-menu-content.tsx:258
-#, fuzzy
 msgid "Show notebook options"
-msgstr "Näytä muistiinpanojen määrä"
+msgstr "Näytä muistiinpanojen asetukset"
 
 #: packages/app-desktop/gui/PasswordInput/PasswordInput.tsx:21
-#, fuzzy
 msgid "Show password"
-msgstr "Aseta salasana"
+msgstr "Näytä salasana"
 
 #: packages/lib/models/settings/builtInMetadata.ts:812
 msgid "Show sort order buttons"
@@ -5652,16 +5596,15 @@ msgstr "Näytä muistiinpanojen määrä"
 
 #: packages/lib/models/settings/builtInMetadata.ts:961
 msgid "Shrink large images before adding them to notes."
-msgstr ""
+msgstr "Pienennä suuria kuvia ennen niiden lisäämistä muistiinpanoihin."
 
 #: packages/app-mobile/components/SideMenu.tsx:258
-#, fuzzy
 msgid "Side menu closed"
-msgstr "Piilota lisää toimintoja"
+msgstr "Sivupalkki suljettu"
 
 #: packages/app-mobile/components/SideMenu.tsx:258
 msgid "Side menu opened"
-msgstr ""
+msgstr "Sivupalkki avattu"
 
 #: packages/app-desktop/gui/MainScreen.tsx:130
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:10
@@ -5672,9 +5615,8 @@ msgid "Sidebar"
 msgstr "Sivupalkki"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
-msgstr "Joplin Cloud"
+msgstr "Rekisteröidy Joplin Cloud:iin"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 msgid "Size"
@@ -5690,14 +5632,15 @@ msgstr ""
 "Ohitetut kohteet: %d (käytä --retry-failed-items niiden salauksen "
 "purkamiseksi uudelleen)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Ohitetaan: %d."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1255
 msgid "Small"
-msgstr ""
+msgstr "Pieni"
 
 #: packages/lib/models/settings/builtInMetadata.ts:57
 msgid "Solarised Dark"
@@ -5710,7 +5653,7 @@ msgstr "Solarised Light"
 #: packages/lib/models/settings/settingValidations.ts:21
 msgid ""
 "Some attachments could not be downloaded. Please try to download them again."
-msgstr ""
+msgstr "Joitain liitteitä ei voitu ladata. Yritä ladata ne uudelleen."
 
 #: packages/lib/models/settings/settingValidations.ts:18
 msgid ""
@@ -5732,18 +5675,17 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
 
 #: packages/lib/models/settings/settingValidations.ts:24
-#, fuzzy
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
-msgstr "Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
+msgstr "Joitakin kohteita ei voitu synkronoida. Yritä synkronoida ne ensin."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Sort \"%s\" in ascending order"
-msgstr ""
+msgstr "Lajittele \"%s\" nousevassa järjestyksessä"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Sort \"%s\" in descending order"
-msgstr ""
+msgstr "Lajittele \"%s\" laskevassa järjestyksessä"
 
 #: packages/lib/models/settings/builtInMetadata.ts:868
 msgid "Sort notebooks by"
@@ -5771,11 +5713,10 @@ msgid "Source"
 msgstr "Lähde"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
-msgstr "Päivitä profiili"
+msgstr "Lähdekoodi on saatavilla"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Lähdemuoto: %s"
 
@@ -5784,8 +5725,9 @@ msgid "Source: "
 msgstr "Lähde: "
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:436
+#, fuzzy
 msgid "Spacer"
-msgstr ""
+msgstr "Väli"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1635
 msgid ""
@@ -5812,7 +5754,7 @@ msgstr "Käynnistys sovellus pienennetään tehtäväpalkkiin"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 msgid "Start recording"
-msgstr ""
+msgstr "Aloita tallennus"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -5853,14 +5795,17 @@ msgstr "Tilastot ..."
 msgid "Status"
 msgstr "Tila"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Tila: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Tila: Aloitettu portissa %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Vaihe 1: Ota Web Clipper työkalu käyttöön"
@@ -5877,6 +5822,7 @@ msgstr "Vaihe 1: Avaa tämä URL osoite selaimessa valtuuttaaksesi sovelluksen:"
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Vaihe 2: Kirjoita Dropboxin tarjoama koodi:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Vaihe 2: Asenna laajennus"
@@ -5911,18 +5857,16 @@ msgid "Subscript"
 msgstr "Alaindeksi"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:16
-#, fuzzy
 msgid "Success"
-msgstr "S3 access key"
+msgstr "Onnistuminen"
 
 #: packages/lib/components/shared/config/config-shared.ts:99
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Suoritettu! Synkronoinnin määritys näyttää olevan oikea."
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:182
-#, fuzzy
 msgid "Suggestions"
-msgstr "Ei ehdotuksia"
+msgstr "Ehdotukset"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
@@ -5949,12 +5893,11 @@ msgstr "Vaihda profiili"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
 msgid "Switch to back-facing camera"
-msgstr ""
+msgstr "Vaihda takakameraan"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
-#, fuzzy
 msgid "Switch to front-facing camera"
-msgstr "Vaihda profiiliin %d"
+msgstr "Vaihda etukameraan"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:83
 msgid "Switch to note type"
@@ -5985,7 +5928,7 @@ msgstr "Vaihda muistiinpanotyyppiin"
 msgid "Switch to to-do type"
 msgstr "Vaihda tehtävätyyppiin"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -6027,9 +5970,8 @@ msgid "Sync your notes"
 msgstr "Synkronoi muistiinpanosi"
 
 #: packages/lib/models/Setting.ts:1291
-#, fuzzy
 msgid "Sync, encryption, proxy"
-msgstr "Ota salaus käyttöön"
+msgstr "Synkronointi, salaus, välityspalvelin"
 
 #: packages/lib/models/Setting.ts:1252
 msgid "Synchronisation"
@@ -6079,19 +6021,22 @@ msgid "Synchronizing..."
 msgstr "Synkronoidaan..."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
+#, fuzzy
 msgid "Tab indents"
-msgstr ""
+msgstr "Tab sisennykset"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:781
+#, fuzzy
 msgid "Tab moves focus"
-msgstr ""
+msgstr "Tab siirtää kohdistusta"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1405
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Merkityt: %d."
@@ -6112,7 +6057,7 @@ msgstr "Ota valokuva"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Tehtävä \"%s\" epäonnistui virheellä: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:98
 msgid "Task list"
@@ -6174,7 +6119,7 @@ msgid ""
 "note."
 msgstr "Liitteitä ei enää katsota, kun vaihdat toiseen muistiinpanoon."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Komento \"%s\" on käytettävissä vain graafisessa tilassa"
 
@@ -6319,7 +6264,8 @@ msgstr "Muistiinpano \"%s\" on palautettu muistikirjaan \"%s\"."
 msgid "The notebook could not be saved: %s"
 msgstr "Muistikirjaa ei voitu tallentaa: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Muistiinpanot on tuotu: %s"
@@ -6363,9 +6309,8 @@ msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "Synkronointikohde on päivitettävä. Jatka painamalla tätä banneria."
 
 #: packages/app-desktop/gui/MainScreen.tsx:533
-#, fuzzy
 msgid "The synchronisation password is missing."
-msgstr "Tarkista synkronointiasetukset"
+msgstr "Synkronoinnin salasana puuttuu."
 
 #: packages/lib/models/Tag.ts:233
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -6393,16 +6338,18 @@ msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper tarvitsee valtuutuksen tietojen käyttöön."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
-"Web Clipper työkalu on käytössä ja asetettu käynnistymään automaattisesti."
+"Web Clipper työkalua ei voida ottaa käyttöön tässä Joplin-instanssissa."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"Web Clipper työkalu on käytössä ja asetettu käynnistymään automaattisesti."
+"Web Clipper työkalu on käytössä ja se on asetettu käynnistymään "
+"automaattisesti."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Web Clipper työkalu ei ole käytössä."
@@ -6420,20 +6367,18 @@ msgid "Theme"
 msgstr "Teema"
 
 #: packages/lib/models/Setting.ts:1290
-#, fuzzy
 msgid "Themes, editor font"
-msgstr "Editorin fontti"
+msgstr "Teemat, editorin fontti"
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) "
-"-painiketta."
+"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) -"
+"painiketta."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
-#, fuzzy
 msgid "There are no notes in the trash folder."
-msgstr "Säilytä muistiinpanohistoria"
+msgstr "Roskakorissa ei ole muistiinpanoja."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:280
 msgid "There are unsaved changes."
@@ -6463,6 +6408,9 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Näiden kohteiden synkronointi epäonnistui, mutta ne on merkitty ohitetuiksi. "
+"Ne eivät aiheuta synkronointivaroitusta, mutta niitä ei silti synkronoida. "
+"Voit poistaa ohituksen napsauttamalla \"yritä uudelleen\"."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -6501,13 +6449,14 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:193
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Tässä liitteessä ei ole OCR-dataa (Tila: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:241
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Tätä liitettä ei ole vielä ladattu tai sitä ei ole vielä purettu"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6517,9 +6466,8 @@ msgstr ""
 "voivat käyttää Joplinia."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "On tallentamattomia muutoksia."
+msgstr "Tässä piirroksessa saattaa olla tallentamattomia muutoksia."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid ""
@@ -6530,10 +6478,13 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
+"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin Server:"
+"issä."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
+#, fuzzy
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Tätä kuvan tyyppiä ei tueta."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6546,25 +6497,22 @@ msgstr ""
 "palauttaa jälkeenpäin."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:244
-#, fuzzy
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Tätä tiedostoa ei voitu avata: %s"
-msgstr[1] "Tätä tiedostoa ei voitu avata: %s"
+msgstr[0] "Tätä tiedostoa ei voitu poistaa: %s"
+msgstr[1] "Näitä tiedostoja ei voitu poistaa: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:231
-#, fuzzy
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Muistikirjaa ei voitu tallentaa: %s"
-msgstr[1] "Muistikirjaa ei voitu tallentaa: %s"
+msgstr[0] "Muistikirjaa ei voitu kopioida: %s"
+msgstr[1] "Muistikirjoja ei voitu kopioida: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:605
-#, fuzzy
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Muistikirjaa ei voitu tallentaa: %s"
-msgstr[1] "Muistikirjaa ei voitu tallentaa: %s"
+msgstr[0] "Muistikirjaa ei voitu siirtää: %s"
+msgstr[1] "Muistikirjoja ei voitu siirtää: %s"
 
 #: packages/lib/models/Note.ts:130
 msgid "This note does not have geolocation information."
@@ -6583,6 +6531,7 @@ msgstr ""
 "Tällä muistiinpanolla ei ole sisältöä. Napsauta \"%s\" vaihtaaksesi editoria "
 "ja muokataksesi muistiinpanoa."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Tällä muistiinpanolla ei ole historiaa"
@@ -6594,7 +6543,7 @@ msgstr ""
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
-msgstr ""
+msgstr "Tämä lisäosa ei tue %s."
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:45
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:38
@@ -6605,6 +6554,7 @@ msgstr ""
 "Tällä Rich Text -editorilla on useita rajoituksia, on suositeltavaa olla "
 "tietoinen niistä ennen sen käyttöä."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6617,7 +6567,7 @@ msgstr ""
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
-msgstr ""
+msgstr "Tässä roskakorin alikansiossa ei ole muistiinpanoja."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1107
 msgid ""
@@ -6636,7 +6586,7 @@ msgstr "Tämä avaa uuden ikkunan. Tallennetaanko nykyiset muutokset?"
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:340
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr ""
+msgstr "Tämä poistaa kaikki roskakorissa olevat kohteet pysyvästi. Jatka?"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
 #: packages/lib/commands/leaveSharedFolder.ts:22
@@ -6673,32 +6623,30 @@ msgstr ""
 #: packages/app-cli/app/command-sync.ts:111
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:86
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"Jos haluat, että Joplin voi synkronoida Dropboxin kanssa, toimi seuraavasti:"
+"Jos haluat, että Joplin voi synkronoida Joplin Cloud:in kanssa, toimi "
+"seuraavasti:"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
-msgstr ""
-"Jos haluat, että Joplin voi synkronoida Dropboxin kanssa, toimi seuraavasti:"
+msgstr "Jos haluat, että Joplin voi synkronoida käyttäjäsi, toimi seuraavasti:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
 msgstr "Jatka kirjoittamalla pääsalasanasi alle."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Luodaksesi uuden tunnisteen, kirjoita sen nimi ja paina Enter."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
-msgstr "Tunnisteen poistaminen, poista merkinnät muistiinpanoista."
+msgstr "Poistaaksesi tunnisteen, poista merkinnät muistiinpanoista."
 
 #: packages/lib/services/ReportService.ts:365
 msgid "To delete: %d"
@@ -6758,9 +6706,8 @@ msgid "to-do"
 msgstr "tehtävä"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:6
-#, fuzzy
 msgid "To-do"
-msgstr "tehtävä"
+msgstr "Tehtävälista"
 
 #: packages/app-mobile/components/NoteItem.tsx:158
 msgid "to-do: %s"
@@ -6769,7 +6716,7 @@ msgstr "tehtävä: %s"
 #: packages/lib/commands/toggleAllFolders.ts:8
 #, fuzzy
 msgid "Toggle all notebooks"
-msgstr "Luo muistikirja"
+msgstr "Näytä/piilota kaikki muistikirjat"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6802,9 +6749,8 @@ msgid "Toggle external editing"
 msgstr "Vaihda ulkoiseen tekstieditoriin"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "Näytä sivupalkki"
+msgstr "Näytä/piilota valikkopalkki"
 
 #: packages/lib/models/Setting.ts:1295
 #, fuzzy
@@ -6836,14 +6782,14 @@ msgstr "Näytä sivupalkki"
 msgid "Toggle sort order field"
 msgstr "Vaihda lajittelujärjestyskenttää"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Tunnus on kopioitu leikepöydälle!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
-msgstr "Työkalut"
+msgstr "Työkalurivi"
 
 #: packages/lib/models/Setting.ts:1264
 msgid "Tools"
@@ -6859,7 +6805,7 @@ msgstr "Yhteensä: %d/%d"
 
 #: packages/lib/services/trash/index.ts:44
 msgid "Trash"
-msgstr ""
+msgstr "Roskakori"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:319
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
@@ -6895,9 +6841,8 @@ msgstr ""
 "muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Kirjoita uudet tunnisteet tai valitse luettelosta"
+msgstr "Kirjoita muistiinpanon otsikko etsiäksesi sitä."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Type: %s."
@@ -6905,15 +6850,16 @@ msgstr "Tyyppi: %s."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1041
 msgid "Unable to edit resource of type %s"
-msgstr ""
+msgstr "Resurssia, jonka tyyppi on %s, ei voida muokata"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr ""
+msgstr "Lokitietojen jakaminen epäonnistui. Syy: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
+#, fuzzy
 msgid "Unchecked"
-msgstr ""
+msgstr "Valitsematon"
 
 #: packages/lib/models/settings/builtInMetadata.ts:689
 msgid "Uncompleted to-dos on top"
@@ -6938,37 +6884,33 @@ msgid "Unknown"
 msgstr "Tuntematon"
 
 #: packages/app-desktop/bridge.ts:478
-#, fuzzy
 msgid "Unknown file type"
-msgstr "Tuntematon merkintä: %s"
+msgstr "Tuntematon tiedoston tyyppi"
 
 #: packages/lib/utils/processStartFlags.ts:209
 msgid "Unknown flag: %s"
 msgstr "Tuntematon merkintä: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Tuntematon kohdetyyppi ladattu - päivitä Joplin uusimpaan versioon"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
-#, fuzzy
 msgid "Unknown platform"
-msgstr "Tuntematon merkintä: %s"
+msgstr "Tuntematon laite"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:93
 msgid "Unordered list"
 msgstr "Järjestämätön luettelo"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Peruuta muistiinpanon julkaisu"
+msgstr "Peruuta julkaisu"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Peruuta muistiinpanon julkaisu"
+msgstr "Peruuta julkaisu \"%s\""
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6978,11 +6920,13 @@ msgstr "Peruuta muistiinpanon julkaisu"
 msgid "Unshare"
 msgstr "Poista jakaminen"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Poistetaanko muistikirjan \"%s\" jakaminen? Tämä voi aiheuttaa sen, että "
+"muut käyttäjät menettävät pääsyn muistikirjaan."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -6996,6 +6940,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Kuvan tiedostotyyppiä ei tueta: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -7009,7 +6954,7 @@ msgid ""
 msgstr "Linkkiä tai viestiä ei tueta: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Nimetön"
@@ -7020,14 +6965,12 @@ msgid "Update"
 msgstr "Päivitä"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:77
-#, fuzzy
 msgid "Update available"
-msgstr "Päivitä profiili"
+msgstr "Päivitys saatavilla"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:53
-#, fuzzy
 msgid "Update later"
-msgstr "päivitetty päivämäärä"
+msgstr "Päivitä myöhemmin"
 
 #: packages/server/src/routes/admin/users.ts:257
 #: packages/server/src/routes/index/users.ts:91
@@ -7041,6 +6984,7 @@ msgstr "Päivitä kokonaismäärät"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -7062,7 +7006,8 @@ msgstr "Päivitetyt etäkohteet: %d."
 msgid "Updated: "
 msgstr "Päivitetty: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Päivitetty: %d."
@@ -7085,10 +7030,10 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Päivitä synkronointikohde uusimpaan versioon."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Ota valokuva"
+msgstr "Lataa valokuva"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7194,7 +7139,7 @@ msgstr "Näytä"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:184
 msgid "View OCR text"
-msgstr ""
+msgstr "Näytä OCR teksti"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1139
 msgid "View on map"
@@ -7211,7 +7156,7 @@ msgstr "Näytä ne nyt"
 #: packages/lib/models/settings/builtInMetadata.ts:682
 #: packages/lib/models/settings/builtInMetadata.ts:684
 msgid "Viewer"
-msgstr "Katselija"
+msgstr "Editori"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1238
 #, fuzzy
@@ -7219,7 +7164,6 @@ msgid "Viewer and Rich Text Editor font family"
 msgstr "Editorin fonttiperhe"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
-#, fuzzy
 msgid "Viewer font size"
 msgstr "Editorin fonttikoko"
 
@@ -7229,34 +7173,34 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
 msgid "Voice recorder"
-msgstr ""
+msgstr "Äänitallennin"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1884
+#, fuzzy
 msgid "Voice typing language files (URL)"
-msgstr ""
+msgstr "Äänikirjoituskielitiedostot (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1912
 msgid "Voice typing: Glossary"
-msgstr ""
+msgstr "Äänikirjoitus: Sanasto"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1302
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
 msgid "Voice typing..."
-msgstr ""
+msgstr "Äänikirjoitus..."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1901
+#, fuzzy
 msgid "Vosk"
-msgstr ""
+msgstr "Vosk"
 
 #: packages/lib/services/joplinCloudUtils.ts:27
-#, fuzzy
 msgid "Waiting for authorisation..."
-msgstr "Myönnä lupa"
+msgstr "Odottaa hyväksyntää..."
 
-#: packages/app-cli/app/command-share.ts:174
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
-msgstr "Muistikirja: %s"
+msgstr "Odottaa: Muistikirjaa %s kohteesta %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7272,12 +7216,15 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
+"Meillä on järjestelmä ongelmallisten lisäosien raportointiin ja poistamiseen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Merkitsemme luotettavien Joplin-yhteisön jäsenten kehittämät lisäosat "
+"\"suositelluiksi\"."
 
 #: packages/lib/models/Setting.ts:1261
 msgid "Web Clipper"
@@ -7306,12 +7253,11 @@ msgstr "Verkkosivusto ja asiakirjat"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
 msgid "WebView package: %s"
-msgstr ""
+msgstr "WebView paketti: %s"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
-#, fuzzy
 msgid "WebView version: %s"
-msgstr "Uusi versio: %s"
+msgstr "WebView versio: %s"
 
 #: packages/app-cli/app/gui/NoteWidget.js:36
 msgid ""
@@ -7329,12 +7275,11 @@ msgstr ""
 
 #: packages/lib/WelcomeUtils.ts:63
 msgid "Welcome!"
-msgstr ""
+msgstr "Tervetuloa!"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:100
-#, fuzzy
 msgid "What are plugins?"
-msgstr "Poista laajennus \"%s\"?"
+msgstr "Mitä laajennukset ovat?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:943
 msgid "When creating a new note:"
@@ -7349,14 +7294,16 @@ msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Kun tämä on käytössä, sovellus skannaa liitteesi ja poimii tekstin niistä. "
+"Näin voit hakea tekstiä näistä liitteistä."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1902
 msgid "Whisper"
-msgstr ""
+msgstr "Kuiskata"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:280
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Ikkuna ei vastaa."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:105
 msgid "Words"
@@ -7394,21 +7341,24 @@ msgstr ""
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
 msgstr ""
+"Olet kirjautunut sisään Joplin Cloud:iin, voit nyt poistua tältä näytöltä."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Olet nyt kirjautunut käyttäjällesi."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Käytät nyt Markdown-editorin uusinta versiota."
 
 #: packages/app-desktop/gui/MainScreen.tsx:588
 msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Käytät Joplinin Intel-versiota Apple Silicon-prosessorilla. Lataa Apple "
+"Silicon-versio paremman suorituskyvyn saavuttamiseksi."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -7445,7 +7395,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:55
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:70
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Sinun käyttäjälläsi ei ole oikeutta tähän ominaisuuteen"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -7458,7 +7408,7 @@ msgstr "Tietosi salataan ja synkronoidaan uudelleen."
 #: packages/app-desktop/gui/MainScreen.tsx:594
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "Sinun Joplin Cloud kirjautumistietosi ovat väärät, kirjaudu sisään."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."

@@ -1,4 +1,4 @@
-import { BaseQueue, JobData, JobStates, jobStateToEnum, QueueConfiguration, Result } from '../../types';
+import { BaseQueue, JobData, JobStates, jobStateToEnum, JobWithData, QueueConfiguration, Result } from '../../types';
 import KnexConstructor, { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
 import { formatMsToUTC, goBackInTime, Minute, msleep, Second } from '@joplin/utils/time';
@@ -101,7 +101,11 @@ export default class SqliteQueue implements BaseQueue {
 			updated_on: this.sqlite.fn.now(),
 		}).table('job').where({ id: job.id });
 
-		return { id: job.id, data: JSON.parse(job.data) };
+		return {
+			id: job.id,
+			retryCount: job.retry_count,
+			data: JSON.parse(job.data),
+		};
 	}
 
 	public async fail(jobId: string, error: Error) {
@@ -194,6 +198,10 @@ export default class SqliteQueue implements BaseQueue {
 			}
 			throw error;
 		}
+	}
+
+	public hasJobFailedTooManyTimes(job: JobWithData): boolean {
+		return job.retryCount >= this.options.retryCount;
 	}
 
 	public async stop() {

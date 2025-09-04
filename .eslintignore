@@ -117,6 +117,8 @@ packages/app-cli/app/command-ls.js
 packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-mkbook.js
 packages/app-cli/app/command-mv.js
+packages/app-cli/app/command-publish.test.js
+packages/app-cli/app/command-publish.js
 packages/app-cli/app/command-ren.js
 packages/app-cli/app/command-restore.js
 packages/app-cli/app/command-rmbook.test.js
@@ -129,6 +131,8 @@ packages/app-cli/app/command-share.test.js
 packages/app-cli/app/command-share.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-testing.js
+packages/app-cli/app/command-unpublish.test.js
+packages/app-cli/app/command-unpublish.js
 packages/app-cli/app/command-use.js
 packages/app-cli/app/command-version.js
 packages/app-cli/app/gui/FolderListWidget.js
@@ -698,7 +702,6 @@ packages/app-mobile/components/NoteEditor/RichTextEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/WarningBanner.js
 packages/app-mobile/components/NoteEditor/commandDeclarations.js
-packages/app-mobile/components/NoteEditor/hooks/useCodeMirrorPlugins.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/testing/createTestEditorProps.js
@@ -810,7 +813,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButto
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/WrappedPluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/mockRepositoryApiConstructor.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginCallbacks.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginItem.js
@@ -868,6 +870,7 @@ packages/app-mobile/contentScripts/imageEditorBundle/utils/useEditorMessenger.js
 packages/app-mobile/contentScripts/markdownEditorBundle/contentScript.js
 packages/app-mobile/contentScripts/markdownEditorBundle/types.js
 packages/app-mobile/contentScripts/markdownEditorBundle/useWebViewSetup.js
+packages/app-mobile/contentScripts/markdownEditorBundle/utils/useCodeMirrorPlugins.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/index.js
@@ -939,6 +942,7 @@ packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useBackHandler.js
+packages/app-mobile/utils/hooks/useIsScreenReaderEnabled.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
@@ -966,6 +970,7 @@ packages/app-mobile/utils/shim-init-react/shimInitShared.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/testing/getWebViewWindowById.js
+packages/app-mobile/utils/testing/mockPluginServiceSetup.js
 packages/app-mobile/utils/testing/setupGlobalStore.js
 packages/app-mobile/utils/testing/testingLibrary.js
 packages/app-mobile/utils/types.js
@@ -1004,6 +1009,9 @@ packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
+packages/editor/CodeMirror/extensions/highlightActiveLineExtension.js
 packages/editor/CodeMirror/extensions/keyUpHandlerExtension.js
 packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
@@ -1074,14 +1082,18 @@ packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/defaultLanguage.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/lookUpLanguage.js
+packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
+packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/ProseMirror/commands.test.js
 packages/editor/ProseMirror/commands.js
 packages/editor/ProseMirror/createEditor.js
 packages/editor/ProseMirror/index.js
+packages/editor/ProseMirror/plugins/detailsPlugin.test.js
+packages/editor/ProseMirror/plugins/detailsPlugin.js
 packages/editor/ProseMirror/plugins/inputRulesPlugin.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/createEditorDialog.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.test.js
@@ -1102,12 +1114,17 @@ packages/editor/ProseMirror/types.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js
 packages/editor/ProseMirror/utils/canReplaceSelectionWith.js
 packages/editor/ProseMirror/utils/computeSelectionFormatting.js
+packages/editor/ProseMirror/utils/dom/createButton.js
 packages/editor/ProseMirror/utils/dom/createTextArea.js
 packages/editor/ProseMirror/utils/dom/createTextNode.js
 packages/editor/ProseMirror/utils/dom/createUniqueId.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.test.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
+packages/editor/ProseMirror/utils/forEachHeading.js
 packages/editor/ProseMirror/utils/jumpToHash.js
+packages/editor/ProseMirror/utils/makeLinksClickableInElement.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.test.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.test.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.js
 packages/editor/ProseMirror/utils/sanitizeHtml.js
@@ -1765,6 +1782,7 @@ packages/tools/fuzzer/Client.js
 packages/tools/fuzzer/ClientPool.js
 packages/tools/fuzzer/Server.js
 packages/tools/fuzzer/constants.js
+packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/sync-fuzzer.js
 packages/tools/fuzzer/types.js
 packages/tools/fuzzer/utils/SeededRandom.js

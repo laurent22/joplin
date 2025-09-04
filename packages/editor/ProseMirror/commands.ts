@@ -202,7 +202,7 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.ReplaceSelection]: null,
 	[EditorCommandType.SetText]: null,
 	[EditorCommandType.JumpToHash]: (state, dispatch, view, [targetHash]) => {
-		return jumpToHash(targetHash, schema.nodes.heading)(state, dispatch, view);
+		return jumpToHash(targetHash)(state, dispatch, view);
 	},
 };
 

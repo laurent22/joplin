@@ -5,7 +5,7 @@ import { baseKeymap, chainCommands, exitCode, liftEmptyBlock, newlineInCode } fr
 import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import commands from '../commands';
 import { EditorCommandType } from '../../types';
-import { Command, EditorState, TextSelection } from 'prosemirror-state';
+import { Command, EditorState, TextSelection, Plugin } from 'prosemirror-state';
 import splitBlockAs from '../vendor/splitBlockAs';
 import canReplaceSelectionWith from '../utils/canReplaceSelectionWith';
 
@@ -60,6 +60,28 @@ const isInEmptyParagraph = (state: EditorState) => {
 		selectionParent.content.size === 0;
 };
 
+// Handle double-hard-break -> paragraph conversion with a Plugin to work around
+// a bug on Android. If convertDoubleHardBreakToNewParagraph is handled with the
+// main keymap logic (with a keymap() extension), then it's possible for the cursor
+// to get stuck in some cases.
+// See https://github.com/laurent22/joplin/issues/12960.
+const replaceDoubleHardBreaksOnEnter = new Plugin({
+	props: {
+		handleDOMEvents: {
+			keydown: (view, event) => {
+				if (event.key === 'Enter') {
+					const commandResult = convertDoubleHardBreakToNewParagraph(view.state, view.dispatch);
+					if (commandResult) {
+						event.preventDefault();
+						return true;
+					}
+				}
+				return false;
+			},
+		},
+	},
+});
+
 const insertHardBreak: Command = (state, dispatch) => {
 	// Avoid adding hard breaks at the beginning of list items
 	if (isInEmptyListItem(state)) return false;
@@ -88,12 +110,12 @@ const keymapExtension = [
 		'Mod-[': liftListItem(itemType),
 		'Mod-]': sinkListItem(itemType),
 	})),
+	replaceDoubleHardBreaksOnEnter,
 	keymap({
 		'Enter': chainCommands(
 			newlineInCode,
 			exitCode,
 			liftEmptyBlock,
-			convertDoubleHardBreakToNewParagraph,
 			insertHardBreak,
 		),
 	}),

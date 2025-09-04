@@ -35,7 +35,7 @@
 		"%d Notizen werden dauerhaft gelöscht. Fortfahren?"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d Foto(s) aufgenommen"
 	],
 	"%s": [
 		"%s"
@@ -47,7 +47,7 @@
 		"%s (%s) konnte nicht hochgeladen werden: %s"
 	],
 	"%s (%s) would like to share a notebook with you.": [
-		"%s (%s) möchte ein Notizbuch mit dir teilen."
+		"%s (%s) möchte ein Notizbuch für dich freigeben."
 	],
 	"%s (%s): %s": [
 		"%s (%s): %s"
@@ -75,6 +75,9 @@
 	],
 	"%s cannot be less than %s": [
 		"%s kann nicht weniger als %s sein"
+	],
+	"%s from %s": [
+		"%s von %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s wurde nicht für die Synchronisation vieler kleiner Dateien optimiert, wodurch die erste Synchronisation lange dauern wird."
@@ -138,7 +141,7 @@
 		"(Kein)"
 	],
 	"(Read-only)": [
-		""
+		"(schreibgeschützt)"
 	],
 	"(wysiwyg: %s)": [
 		"(WYSIWYG: %s)"
@@ -161,8 +164,11 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kann entweder „toggle“ oder „clear“ sein. Benutze „toggle“, um eine Aufgabe auf Abgeschlossen oder Offen zu setzen. (Wenn das Ziel eine normale Notiz ist, wird diese in eine Aufgabe umgewandelt.) Benutze „clear“, um es zurück in eine Notiz zu verwandeln."
 	],
+	"[None]": [
+		"[Nichts]"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Eine kommagetrennte Liste von Wörtern. Kann für ungewöhnliche Wörter verwendet werden, um die korrekte Schreibweise bei der Sprachsteuerung zu unterstützen."
 	],
 	"A new update (%s) is available": [
 		"Ein neues Update (%s) ist verfügbar"
@@ -183,19 +189,25 @@
 		"Über Joplin"
 	],
 	"accelerator": [
-		"Beschleuniger"
+		"Kürzel"
 	],
 	"Accelerator \"%s\" is not valid.": [
-		"Der Beschleuniger „%s“ ist nicht gültig."
+		"Tastaturkürzel „%s“ ist nicht gültig."
 	],
 	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
-		"Der Beschleuniger „%s“ wird für die Befehle „%s“ und „%s“ verwendet. Dies kann zu unerwartetem Verhalten führen."
+		"Tastaturkürzel „%s“ wird für die Befehle „%s“ und „%s“ verwendet. Dies kann zu unerwartetem Verhalten führen."
 	],
 	"Accept": [
 		"Akzeptieren"
 	],
 	"Accepted invitations": [
 		"Einladungen akzeptiert"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Akzeptiert: Notizbuch %s von %s"
+	],
+	"Accepting share...": [
+		"Freigabe akzeptieren..."
 	],
 	"Access denied: Please check your username and password": [
 		"Zugriff verweigert: Bitte überprüfe Benutzername und Passwort"
@@ -236,6 +248,9 @@
 	"Add recipient:": [
 		"Füge Empfänger hinzu:"
 	],
+	"Add tags:": [
+		"Schlagwörter hinzufügen:"
+	],
 	"Add title": [
 		"Titel hinzufügen"
 	],
@@ -245,8 +260,14 @@
 	"Add to note": [
 		"Zur Notiz hinzufügen"
 	],
+	"Added new: %s": [
+		"Neu hinzugefügt: %s"
+	],
+	"Added tag: %s": [
+		"Schlagwort hinzugefügt: %s"
+	],
 	"Adds tag": [
-		""
+		"Fügt Schlagwort hinzu"
 	],
 	"Admin": [
 		"Admin"
@@ -279,7 +300,7 @@
 		"Alle potentiellen Port-Nummern sind in Verwendung - bitte melde dieses Problem auf %s"
 	],
 	"All shared folders:": [
-		""
+		"Alle freigegebenen Ordner:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Ermöglicht das Debuggen von mobilen Erweiterungen. Siehe %s für Details."
@@ -338,6 +359,9 @@
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
 		"Sicher, dass du das Standardlayout der Werkzeugleiste wiederherstellen möchtest?\nDies kann nicht rückgängig gemacht werden."
 	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Sicher, dass du den gesamten Verlauf für diese Notiz löschen möchtest? Dies kann nicht rückgängig gemacht werden."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Bist du sicher, dass du den Autorisierungstoken erneuern möchtest?"
 	],
@@ -351,7 +375,7 @@
 		"Aritim dunkel"
 	],
 	"Associated tags:": [
-		""
+		"Verbundene Schlagwörter:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Zur Zeit kann Joplin Web nur in einem Tab zur selben Zeit geöffnet werden. Bitte schließe die andere Instanz von Joplin."
@@ -381,7 +405,7 @@
 		"Konflikt beim Anhang: „%s“"
 	],
 	"Attachment download behaviour": [
-		"Verhalten für das Herunterladen von Anhängen"
+		"Verhalten beim Herunterladen von Anhängen"
 	],
 	"Attachments": [
 		"Anhänge"
@@ -459,7 +483,7 @@
 		"Kamera"
 	],
 	"Can Share": [
-		"Teilen möglich"
+		"Freigabe möglich"
 	],
 	"Can view": [
 		"Lesen möglich"
@@ -483,7 +507,7 @@
 		"Abbrechen... Bitte warten."
 	],
 	"Cannot access %s": [
-		"Kann nicht auf %s zugreifen"
+		"Kann auf %s nicht zugreifen"
 	],
 	"Cannot change encrypted item": [
 		"Kann verschlüsseltes Element nicht ändern"
@@ -525,7 +549,7 @@
 		"Kann %s „%s“ nicht speichern, da es die zulässige Gesamtgröße (%s) für dieses Konto überschreiten würde"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"Das verschlüsselte Notizbuch kann nicht mit %s geteilt werden, da die Person die Ende-zu-Ende-Verschlüsselung nicht aktiviert hat. Dies ist unter Konfiguration > Verschlüsselung möglich."
+		"Das verschlüsselte Notizbuch kann nicht für %s freigegeben werden, da die Person die Ende-zu-Ende-Verschlüsselung nicht aktiviert hat. Dies kann unter Konfiguration > Verschlüsselung erledigt werden."
 	],
 	"Case sensitive": [
 		"Groß- und Kleinschreibung beachtend"
@@ -534,7 +558,7 @@
 		"Erscheinungsbild der Anwendung ändern"
 	],
 	"Change language": [
-		"Sprache ändern"
+		"Sprache wechseln"
 	],
 	"Change ratio": [
 		"Seitenverhältnis ändern"
@@ -546,7 +570,7 @@
 		"Zeichen"
 	],
 	"Characters excluding spaces": [
-		"Zeichen ohne Leerzeichen"
+		"Zeichen ausgenommen Leerzeichen"
 	],
 	"Check": [
 		"Haken"
@@ -638,6 +662,9 @@
 	"Code View": [
 		"Code-Ansicht"
 	],
+	"Code:": [
+		"Code:"
+	],
 	"Collaborate on a notebook with others": [
 		"Gemeinsam mit anderen an einem Notizbuch arbeiten"
 	],
@@ -669,7 +696,7 @@
 		"Befehlspalette..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Befehle: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 	],
 	"Compact": [
 		"Kompakt"
@@ -726,7 +753,7 @@
 		"Mit Joplin Cloud verbinden"
 	],
 	"Connect using your organisation account": [
-		""
+		"Verbinde dich über dein Organisationskonto"
 	],
 	"Consolidated billing": [
 		"Konsolidierte Rechnung"
@@ -746,6 +773,12 @@
 	],
 	"Control character": [
 		"Steuerzeichen"
+	],
+	"Convert it": [
+		"Umwandeln"
+	],
+	"Convert note to Markdown": [
+		"Notiz in Markdown umwandeln"
 	],
 	"Convert to note": [
 		"In eine Notiz umwandeln"
@@ -781,8 +814,8 @@
 		"Pfad in Zwischenablage kopieren"
 	],
 	"Copy Shareable Link": [
-		"Teilbaren Link kopieren",
-		"Teilbare Links kopieren"
+		"Freigabelink kopieren",
+		"Freigabelinks kopieren"
 	],
 	"Copy to clipboard": [
 		"In Zwischenablage kopieren"
@@ -801,6 +834,9 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Konnte keine Verbindung zum Plugin-Repository herstellen."
+	],
+	"Could not convert note to Markdown: %s": [
+		"Konnte Notiz nicht in Markdown umwandeln: %s"
 	],
 	"Could not export notes: %s": [
 		"Konnte Notizen nicht exportieren: %s"
@@ -832,8 +868,14 @@
 	"Create a notebook": [
 		"Notizbuch erstellen"
 	],
+	"Create new notebook": [
+		"Neues Notizbuch erstellen"
+	],
 	"Create new profile...": [
 		"Neues Profil erstellen..."
+	],
+	"Create note": [
+		"Notiz erstellen"
 	],
 	"Create notebook": [
 		"Notizbuch erstellen"
@@ -882,6 +924,12 @@
 	],
 	"Creating new to-do...": [
 		"Neue Aufgabe erstellen..."
+	],
+	"Creating note \"%s\"...": [
+		"Notiz „%s“ erstellen…"
+	],
+	"Creating note.": [
+		"Notiz erstellen."
 	],
 	"Creating report...": [
 		"Bericht erstellen..."
@@ -953,7 +1001,7 @@
 		"Voreinstellung"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Standardtitel, der für vom Scanner erstellte Dokumente verwendet wird."
 	],
 	"Default: %s": [
 		"Voreinstellung: %s"
@@ -969,6 +1017,9 @@
 	],
 	"Delete expired tokens": [
 		"Lösche abgelaufene Token"
+	],
+	"Delete history": [
+		"Verlauf löschen"
 	],
 	"Delete line": [
 		"Zeile löschen"
@@ -1114,17 +1165,20 @@
 	"Do not ask for confirmation.": [
 		"Nicht nach einer Bestätigung fragen."
 	],
+	"Do not ask for user confirmation.": [
+		"Nicht nach einer Bestätigung durch Benutzer fragen."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Achte darauf, dass du das Passwort nicht verlierst, da dies aus Sicherheitsgründen die *einzige* Möglichkeit ist, deine Daten zu entschlüsseln! Um die Verschlüsselung zu aktivieren, gib bitte unten dein Passwort ein."
 	],
 	"Document scanner: Title template": [
-		""
+		"Dokumentenscanner: Titelvorlage"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		""
+		"Verbietet, dass der Empfänger der Freigabe in das freigegebene Notizbuch schreiben kann. Gilt nur für den Unterbefehl `add`."
 	],
 	"Don't show this message again": [
-		""
+		"Diese Nachricht nicht mehr anzeigen"
 	],
 	"Donate, website": [
 		"Spenden, Webseite"
@@ -1200,6 +1254,12 @@
 	],
 	"Edit": [
 		"Bearbeiten"
+	],
+	"Edit as Markdown": [
+		"Als Markdown bearbeiten"
+	],
+	"Edit as Rich Text": [
+		"Als Rich Text bearbeiten"
 	],
 	"Edit link": [
 		"Link bearbeiten"
@@ -1302,6 +1362,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Fountain-Syntaxunterstützung aktivieren"
+	],
+	"Enable handwritten transcription": [
+		"Handschriftumwandlung aktivieren"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Umwandlungsbanner für HTML zu Markdown aktivieren"
 	],
 	"Enable Linkify": [
 		"Linkify aktivieren"
@@ -1411,6 +1477,12 @@
 	"Enter password": [
 		"Passwort eingeben"
 	],
+	"Enter the code": [
+		"Code eingeben"
+	],
+	"Enter the code:": [
+		"Code eingeben:"
+	],
 	"Entering selection mode": [
 		"Auswahlmodus aufrufen"
 	],
@@ -1422,6 +1494,9 @@
 	],
 	"Error opening note in editor: %s": [
 		"Fehler beim Öffnen der Notiz im Editor: %s"
+	],
+	"Error starting camera: %s": [
+		"Fehler beim Starten der Kamera: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fehler. Bitte überprüfe, ob die URL, der Benutzername, das Passwort usw. korrekt sind und dass das Synchronisationsziel erreichbar ist. Fehlermeldung:"
@@ -1508,7 +1583,7 @@
 		"Ausfallsicherheit: Synchronisation wurde unterbrochen um Datenverlust zu vermeiden, weil das Ziel leer oder beschädigt ist. Um dieses Verhalten außer Kraft zu setzen, deaktiviere die Ausfallsicherheit in den Synchronisationseinstellungen."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"Die Verbindung zu Ihrem Konto konnte nicht hergestellt werden. Bitte versuche es erneut."
 	],
 	"Fatal error:": [
 		"Schwerwiegender Fehler:"
@@ -1559,7 +1634,7 @@
 		"Fokus auf Titel"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"Ordner \"%s\" wird freigegeben für:"
 	],
 	"Follow link": [
 		"Folge Link"
@@ -1611,7 +1686,7 @@
 		"Standortdaten, Rechtschreibprüfung, Editor-Symbolleiste, Anpassung der Bildgröße"
 	],
 	"Get a quote": [
-		""
+		"Angebot einholen"
 	],
 	"Get it now:": [
 		"Jetzt installieren:"
@@ -1623,7 +1698,7 @@
 		"Holt oder legt einen Konfigurationswert fest. Wenn [value] nicht angegeben wird, wird der Wert von [name] angezeigt. Wenn weder [name] noch [value] angegeben wird, wird die aktuelle Konfiguration angezeigt."
 	],
 	"Glossary:": [
-		""
+		"Glossar:"
 	],
 	"go": [
 		"gehe"
@@ -1685,6 +1760,9 @@
 	"Hide password": [
 		"Passwort verstecken"
 	],
+	"Hides warning": [
+		"Warnung verstecken"
+	],
 	"Highlight": [
 		"Hervorheben"
 	],
@@ -1716,7 +1794,7 @@
 		"Wartend"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Wenn ein Bildanhang in einer eigenen Zeile steht und von einer Leerzeile gefolgt wird, wird er direkt unterhalb seiner Markdown-Quelle dargestellt."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Wenn du bereits autorisiert bist, warte bitte bis sich die Anwendung mit Joplin Cloud synchronisiert hat."
@@ -1792,6 +1870,9 @@
 	],
 	"In: %s": [
 		"In: %s"
+	],
+	"Incoming shares:": [
+		"Eingegangene Freigaben:"
 	],
 	"Incompatible": [
 		"Inkompatibel"
@@ -1925,8 +2006,14 @@
 	"Joplin Server": [
 		"Joplin Server"
 	],
+	"Joplin Server Business": [
+		"Joplin Server Business"
+	],
 	"Joplin Server email": [
 		"Joplin Server-Email"
+	],
+	"Joplin Server Login": [
+		"Joplin Server-Anmeldung"
 	],
 	"Joplin Server password": [
 		"Joplin Server-Passwort"
@@ -1935,7 +2022,7 @@
 		"Joplin Server-URL"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Joplin SSO-Authentifizierung"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper ermöglicht das Speichern von Webseiten und Screenshots aus deinem Browser in Joplin."
@@ -2024,6 +2111,10 @@
 	"Link": [
 		"Link"
 	],
+	"Link created!": [
+		"Link erstellt!",
+		"Links erstellt!"
+	],
 	"Link description": [
 		"Link-Beschreibung"
 	],
@@ -2036,6 +2127,9 @@
 	],
 	"Link to note...": [
 		"Link zu Notiz..."
+	],
+	"Links": [
+		"Links"
 	],
 	"List item": [
 		"Listeneintrag"
@@ -2054,6 +2148,9 @@
 	],
 	"Log": [
 		"Protokoll"
+	],
+	"Log in with your web browser": [
+		"Mit deinem Webbrowser anmelden"
 	],
 	"Login to Joplin Cloud.": [
 		"Mit Joplin Cloud verbinden."
@@ -2089,7 +2186,7 @@
 		"Profile verwalten"
 	],
 	"Manage shared notebooks": [
-		"Geteilte Notizbücher verwalten"
+		"Freigegebene Notizbücher verwalten"
 	],
 	"Manage toolbar options": [
 		"Werkzeugeinstellungen verwalten"
@@ -2112,8 +2209,11 @@
 	"Markdown editor": [
 		"Markdown-Editor"
 	],
+	"Markdown editor: Render images": [
+		"Markdown-Editor: Bilder darstellen"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown-Editor: Auszeichnungen im Editor darstellen"
 	],
 	"Marks a to-do as done.": [
 		"Markiert eine Aufgabe als erledigt."
@@ -2257,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Neues Notizbuch „%s“ wird erstellt und die Datei „%s“ wird dort hinein importiert"
 	],
+	"New notebook title": [
+		"Neuer Notizbuch-Titel"
+	],
 	"New photo": [
 		"Neues Foto"
 	],
@@ -2274,6 +2377,9 @@
 	],
 	"next": [
 		"weiter"
+	],
+	"Next": [
+		"Weiter"
 	],
 	"Next match": [
 		"Nächste Übereinstimmung"
@@ -2320,6 +2426,9 @@
 	"No results": [
 		"Keine Ergebnisse"
 	],
+	"No revision selected": [
+		"Keine Revision ausgewählt"
+	],
 	"No such command: %s": [
 		"Befehl nicht gefunden: %s"
 	],
@@ -2328,6 +2437,9 @@
 	],
 	"No tab selected": [
 		"Kein Tab ausgewählt"
+	],
+	"No tags": [
+		"Keine Schlagwörter"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Kein Texteditor festgelegt. Bitte wähle einen mit `config editor <Pfad-Zum-Texteditor>`"
@@ -2383,8 +2495,14 @@
 	"Note has been saved.": [
 		"Die Notiz wurde gespeichert."
 	],
+	"Note history": [
+		"Verlauf der Notiz"
+	],
 	"Note History": [
 		"Notizenverlauf"
+	],
+	"Note history has been deleted.": [
+		"Verlauf der Notiz wurde gelöscht."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Notiz ist keine Aufgabe: „%s“"
@@ -2397,6 +2515,9 @@
 	],
 	"Note list style": [
 		"Stil der Notiz-Liste"
+	],
+	"Note preview": [
+		"Notizvorschau"
 	],
 	"Note properties": [
 		"Notiz-Eigenschaften"
@@ -2414,7 +2535,7 @@
 		"Hinweis: Funktioniert nicht in allen Desktop-Umgebungen."
 	],
 	"Note: When a note is shared, it will no longer be encrypted on the server.": [
-		"Hinweis: Wenn eine Notiz geteilt wird, wird sie auf dem Server nicht länger verschlüsselt sein."
+		"Hinweis: Wenn eine Notiz freigegeben wird, wird sie am Server nicht mehr verschlüsselt sein."
 	],
 	"Notebook": [
 		"Notizbuch"
@@ -2454,6 +2575,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: Sprachdaten-URL oder -Pfad"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Extrahierten Inhalt durchsuchen"
 	],
 	"OK": [
 		"OK"
@@ -2616,7 +2740,7 @@
 		"Berechtigung benötigt"
 	],
 	"Photo %d": [
-		""
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Bitte klicke auf „%s“, um fortzufahren, oder trage die Passwörter in die Liste „%s“ unten ein."
@@ -2661,7 +2785,7 @@
 		"Bitte warte, bis alle Anhänge heruntergeladen und entschlüsselt sind. Du kannst auch auf/zu %s wechseln, um die Notiz zu bearbeiten."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Bitte warte, während die Organisations-Anmeldeseite geladen wird…"
 	],
 	"Please wait...": [
 		"Bitte warten..."
@@ -2703,7 +2827,7 @@
 		"Mögliche Werte: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"JSON-Ausgabe bevorzugen."
 	],
 	"Preferences": [
 		"Einstellungen"
@@ -2740,6 +2864,9 @@
 	],
 	"Previous match": [
 		"Vorherige Übereinstimmung"
+	],
+	"Previous versions": [
+		"Vorherige Versionen"
 	],
 	"Previous versions of this note": [
 		"Vorherige Version dieser Notiz"
@@ -2801,6 +2928,9 @@
 	"Public-private key pair:": [
 		"Öffentlich-Privates Schlüsselpaar:"
 	],
+	"Publish Note": [
+		"Notiz veröffentlichen"
+	],
 	"Publish note...": [
 		"Notiz veröffentlichen..."
 	],
@@ -2811,7 +2941,7 @@
 		"Notizen im Internet veröffentlichen"
 	],
 	"Publish/unpublish": [
-		""
+		"Veröffentlichen / nicht veröffentlichen"
 	],
 	"QR Code": [
 		"QR-Code"
@@ -2834,11 +2964,17 @@
 	"Re-upload local data to sync target": [
 		"Lade lokale Daten erneut auf das Synchronisationsziel hoch"
 	],
+	"Read more": [
+		"Weiterlesen"
+	],
 	"Read more about it": [
 		"Mehr erfahren"
 	],
 	"Read time: %s min": [
 		"Lesezeit: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Das Lesen von Befehlen aus dem Standardinput ist nur im CLI-Modus verfügbar."
 	],
 	"Recipient has accepted the invitation": [
 		"Empfänger hat die Einladung akzeptiert"
@@ -2851,6 +2987,9 @@
 	],
 	"Recipients:": [
 		"Empfänger:"
+	],
+	"Recognize handwritten image": [
+		"Handschrift-Bild erkennen"
 	],
 	"Recommended": [
 		"Empfohlen"
@@ -2879,17 +3018,29 @@
 	"Reject": [
 		"Ablehnen"
 	],
+	"Rejecting share...": [
+		"Freigabe zurückweisen..."
+	],
 	"Remove": [
 		"Entfernen"
 	],
+	"Remove %s": [
+		"%s entfernen"
+	],
 	"Remove %s from share": [
-		"Teilen von %s aufheben"
+		"Freigabe von %s entfernen"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Schlagwort „%s“ von allen Notizen entfernen?"
 	],
 	"Remove this search from the sidebar?": [
 		"Diese Suche von der Seitenleiste entfernen?"
+	],
+	"Removed %s from share.": [
+		"Freigabe von %s entfernt."
+	],
+	"Removed tag: %s": [
+		"Schlagwort entfernt: %s"
 	],
 	"Rename": [
 		"Umbenennen"
@@ -2904,7 +3055,7 @@
 		"Benennt das angegebene <item> (Notiz oder Notizbuch) zu <name> um."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Stellt Auszeichnungen in allen Zeilen dar, die den Cursor nicht enthalten."
 	],
 	"Renew token": [
 		"Token erneuern"
@@ -3008,6 +3159,9 @@
 	"Reverses the sorting order.": [
 		"Kehrt die Sortierreihenfolge um."
 	],
+	"Revision:": [
+		"Revision:"
+	],
 	"Revision: %s (%s)": [
 		"Revision: %s (%s)"
 	],
@@ -3062,6 +3216,9 @@
 	"Save geo-location with notes": [
 		"Geografischen Standort zusammen mit Notizen speichern"
 	],
+	"Scan notebook": [
+		"Notizbuch scannen"
+	],
 	"Scanned code": [
 		"Eingescannter Code"
 	],
@@ -3092,6 +3249,9 @@
 	"Search shown": [
 		"Suche angezeigt"
 	],
+	"Search tags": [
+		"Schlagwörter durchsuchen"
+	],
 	"Search...": [
 		"Suchen..."
 	],
@@ -3110,6 +3270,9 @@
 	"Select": [
 		"Auswählen"
 	],
+	"Select a revision...": [
+		"Revision auswählen..."
+	],
 	"Select all": [
 		"Alles auswählen"
 	],
@@ -3119,8 +3282,14 @@
 	"Select file...": [
 		"Datei auswählen..."
 	],
+	"Select notebook": [
+		"Notizbuch auswählen"
+	],
 	"Select parent notebook": [
 		"Eltern-Notizbuch auswählen"
+	],
+	"Selected: %s": [
+		"Ausgewählt: %s"
 	],
 	"Selection deleted": [
 		"Auswahl gelöscht"
@@ -3129,7 +3298,7 @@
 		"Wählt ein Notizbuch aus"
 	],
 	"Self-hosted": [
-		""
+		"Selbst gehostet"
 	],
 	"Send bug report": [
 		"Fehlerbericht senden"
@@ -3162,7 +3331,7 @@
 		"Einstellungen"
 	],
 	"Share": [
-		"Teilen"
+		"Freigeben"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Teile eine Kopie aller Notizen in einem Dateiformat, welches von Joplin auf einem anderen Computer importiert werden kann."
@@ -3171,25 +3340,25 @@
 		"Teile ein Notizbuch mit anderen"
 	],
 	"Share from %s (%s)": [
-		"Teilen von %s (%s)"
+		"Freigeben von %s (%s)"
 	],
 	"Share Notebook": [
-		"Notizbuch teilen"
+		"Notizbuch freigeben"
 	],
 	"Share notebook...": [
-		"Notizbuch teilen..."
+		"Notizbuch freigeben..."
 	],
 	"Share permissions": [
-		"Teile Berechtigungen"
+		"Berechtigungen freigeben"
 	],
 	"Shared": [
-		"Geteilt"
+		"Freigegeben"
 	],
 	"Shares": [
-		"Geteilt"
+		"Freigaben"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Gibt das angegebene [Notizbuch] für [Benutzer] frei oder hebt diese Freigabe auf. Erfordert Joplin Cloud oder Joplin Server."
 	],
 	"Sharing notebook...": [
 		"Notizbuch teilen..."
@@ -3313,6 +3482,9 @@
 	],
 	"Source": [
 		"Quelle"
+	],
+	"Source code available": [
+		"Quellcode verfügbar"
 	],
 	"Source format: %s": [
 		"Quellformat: %s"
@@ -3439,6 +3611,9 @@
 	],
 	"Switch to the legacy editor": [
 		"Zum alten Editor umschalten"
+	],
+	"Switch to the new editor": [
+		"Zum neuen Editor umschalten"
 	],
 	"Switch to to-do type": [
 		"Zu Aufgaben-Typ wechseln"
@@ -3604,7 +3779,7 @@
 		"Die Schlüssel mit diesen IDs werden zur Verschlüsselung einiger deiner Elemente verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. Es ist wahrscheinlich, dass sie irgendwann über die Synchronisation heruntergeladen werden."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Der alte Markdown-Editor scheint wegen einer Inkompatibilität mit einer Erweiterung abgestürzt zu sein. Wir empfehlen, den neuen Editor zu nutzen."
 	],
 	"The master key has been upgraded successfully!": [
 		"Der Hauptschlüssel wurde erfolgreich aktualisiert!"
@@ -3614,6 +3789,9 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Die Notiz „%s“ wurde erfolgreich im Notizbuch „%s“ wiederhergestellt."
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Die Notiz wurde in Markdown umgewandelt und die Originalnotiz in den Papierkorb verschoben"
 	],
 	"The note was successfully moved to the trash.": [
 		"Die Notiz wurde erfolgreich in den Papierkorb verschoben.",
@@ -3653,7 +3831,7 @@
 		"Das Ziel, mit dem synchronisiert werden soll. Jedes Synchronisationsziel kann zusätzliche Parameter haben, die als `sync.NUM.NAME` (alle unten dokumentiert) bezeichnet werden."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		"Die Webanwendung unterstützt keine verschlüsselten geteilten Nachrichten. Bitte wechsle zur Desktop- oder Mobil-App, bevor du das Teilen akzeptierst.\n\nFehler: \"%s\""
+		"Die Webanwendung unterstützt keine verschlüsselten freigegebenen Nachrichten. Bitte wechsle zur Desktop- oder Mobil-App, bevor du die Freigabe akzeptierst.\n\nFehler: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Der Web Clipper benötigt deine Autorisierung, um auf die Daten zuzugreifen."
@@ -3704,7 +3882,7 @@
 		"Diese Erweiterungen erweitern den Markdown-Renderer um zusätzliche Funktionen. Bitte beachte, dass diese Funktionen zwar nützlich sein können, es sich dabei jedoch nicht um Standard-Markdown handelt und die meisten von ihnen daher nur in Joplin funktionieren. Außerdem sind einige von ihnen *inkompatibel* mit dem WYSIWYG-Editor. Wenn du eine Notiz, die eine dieser Erweiterungen verwendet, in diesem Editor öffnest, verlierst du die Formatierung der Erweiterung. Es wird angegeben, welche Erweiterungen mit dem WYSIWYG-Editor kompatibel und welche nicht."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		"Dadurch können andere Nutzer ein Notizbuch zur gemeinsamen Bearbeitung mit dir teilen. Allerdings kannst du keine Notizbücher mit anderen teilen, wenn du die Funktion „%s“ nicht hast."
+		"Dadurch können andere Nutzer ein Notizbuch zur gemeinsamen Bearbeitung für dich freigeben. Allerdings kannst du keine Notizbücher für andere freigeben, wenn du die Funktion „%s“ nicht hast."
 	],
 	"This attachment does not have OCR data (Status: %s)": [
 		"Dieser Anhang enthält keine OCR-Daten (Status: %s)"
@@ -3719,13 +3897,13 @@
 		"Diese Zeichnung kann ungespeicherte Änderungen enthalten."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Diese Funktion ist per Voreinstellung deaktiviert. Du musst sie manuell aktivieren, indem du die Option ‚Handschriftumwandlung aktivieren‘ einschaltest."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Diese Funktion ist nur verfügbar in Joplin Cloud und Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Dieses Bildformat wird vom Erkennungssystem nicht unterstützt."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dies ist ein Werkzeug für Fortgeschrittene, um die Anhänge anzuzeigen, die mit deinen Notizen verknüpft sind. Bitte sei vorsichtig, wenn du einen davon löschst, da sie danach nicht wiederhergestellt werden können."
@@ -3755,7 +3933,7 @@
 		"Diese Notiz hat keinen Verlauf"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Diese Notiz ist im HTML-Format. Konvertiere sie in Markdown, um sie einfacher bearbeiten zu können."
 	],
 	"This plugin doesn't support %s.": [
 		"Diese Erweiterung unterstützt %s nicht."
@@ -3796,11 +3974,14 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"Um Joplin die Synchronisation mit Joplin Cloud zu ermöglichen, logge dich bitte unter dieser URL ein:"
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Um Joplin die Synchronisation mit deinem Konto zu ermöglichen, befolge bitte diese Schritte:"
+	],
 	"To continue, please enter your master password below.": [
 		"Gib bitte das Master-Passwort unten ein um forzufahren."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Um ein neues Schlagwort zu erstellen, gib den Namen ein und drücke Enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen Notizen."
@@ -3964,17 +4145,23 @@
 	"Unordered list": [
 		"Ungeordnete Liste"
 	],
+	"Unpublish": [
+		"Nicht veröffentlichen"
+	],
+	"Unpublish \"%s\"": [
+		"„%s“ nicht veröffentlichen"
+	],
 	"Unpublish note": [
-		"Veröffentlichung der Notiz aufheben"
+		"Notiz nicht veröffentlichen"
 	],
 	"Unshare": [
-		"Nicht mehr teilen"
+		"Nicht mehr freigeben"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Notizbuch „%s“ nicht mehr freigeben? Dies kann bewirken, dass andere Benutzer den Zugriff auf das Notizbuch verlieren."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
-		"Teilen des Notizbuch beenden? Der Empfänger wird keinen Zugriff mehr auf den Inhalt haben."
+		"Dieses Notizbuch nicht mehr freigeben? Die Empfänger werden keinen Zugriff mehr auf den Inhalt haben."
 	],
 	"Unsupported image type: %s": [
 		"Nicht unterstütztes Fotoformat: %s"
@@ -4032,6 +4219,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Aktualisiere das Synchronisationsziel auf die neueste Version."
+	],
+	"Upload photo": [
+		"Foto hochladen"
 	],
 	"URL": [
 		"URL"
@@ -4096,6 +4286,9 @@
 	"Viewer": [
 		"Betrachter"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"Schriftfamilie für Betrachter und Rich Text-Editor"
+	],
 	"Viewer font size": [
 		"Schriftgröße im Betrachter"
 	],
@@ -4111,11 +4304,17 @@
 	"Voice typing...": [
 		"Spracheingabe..."
 	],
+	"Voice typing: Glossary": [
+		"Spracheingabe: Glossar"
+	],
 	"Vosk": [
 		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Warte auf Autorisierung..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Warten: Notizbuch %s von %s"
 	],
 	"Warning": [
 		"Warnung"
@@ -4199,10 +4398,10 @@
 		"Du bist in Joplin Cloud angemeldet, du kannst jetzt diese Anzeige verlassen."
 	],
 	"You are now logged into your account.": [
-		""
+		"Du bist jetzt in deinem Konto angemeldet."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Du verwendest jetzt die neueste Version des Markdown-Editors."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Du verwendest die Intel-Version von Joplin auf einem Apple Silicon-Prozessor. Lade die für Apple Silicon herunter für bessere Leistung."
@@ -4232,7 +4431,7 @@
 		"Deine Daten werden neu verschlüsselt und erneut synchronisiert."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		"Deine Zugangsdaten für Joplin Cloud sind ungültig, bitte einloggen."
+		"Deine Zugangsdaten für Joplin Cloud sind ungültig, bitte anmelden."
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Dein Passwort ist nötig, um einige deiner Daten zu entschlüsseln."

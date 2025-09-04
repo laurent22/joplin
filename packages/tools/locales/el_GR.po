@@ -237,7 +237,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία νέας σημε
 msgid "%s cannot be less than %s"
 msgstr ""
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 #, fuzzy
 msgid "%s from %s"
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
@@ -371,12 +371,12 @@ msgstr "Αποδοχή"
 msgid "Accepted invitations"
 msgstr "Αποδεκτές προσκλήσεις"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 #, fuzzy
 msgid "Accepted: Notebook %s from %s"
 msgstr "Σημειωματάριο: %s (%s)"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 #, fuzzy
 msgid "Accepting share..."
 msgstr "Δημιουργία αναφοράς..."
@@ -443,7 +443,7 @@ msgstr "Προσθήκη ή διαγραφή ετικετών:"
 msgid "Add recipient:"
 msgstr "Προσθήκη παραλήπτη:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
+#: packages/app-mobile/components/TagEditor.tsx:265
 #, fuzzy
 msgid "Add tags:"
 msgstr "Νέες ετικέτες:"
@@ -466,11 +466,11 @@ msgstr "Προσθήκη τίτλου"
 msgid "Added new: %s"
 msgstr "Προσθήκη νέου"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
 msgstr ""
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
 msgstr ""
 
@@ -483,6 +483,7 @@ msgstr "Διαχειριστής"
 msgid "Admin dashboard"
 msgstr "Πίνακας ελέγχου διαχειριστή"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Επιλογές για προχωρημένους"
@@ -523,7 +524,7 @@ msgstr "Όλες οι σημειώσεις"
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr "Όλες οι πιθανές θύρες χρησιμοποιούνται - αναφέρετε το ζήτημα στο %s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr ""
 
@@ -639,6 +640,7 @@ msgstr ""
 "Είστε σίγουροι ότι θέλετε να επιστρέψετε στην προεπιλεγμένη διάταξη; Η "
 "τρέχουσα διαμόρφωση της διάταξης θα χαθεί."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Είστε βέβαιοι ότι θέλετε να ανανεώσετε το διακριτικό εξουσιοδότησης;"
@@ -737,6 +739,7 @@ msgstr ""
 "Ο έλεγχος ταυτότητας δεν ολοκληρώθηκε (δεν παρελήφθει κανένα authentication "
 "token)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Token εξουσιοδότησης:"
@@ -780,6 +783,7 @@ msgstr "Αυτόματη εναλλαγή θέματος ώστε να ταιρ�
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -851,9 +855,11 @@ msgstr "Μπορεί να προβάλει και να επεξεργαστεί"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -907,7 +913,7 @@ msgstr "Δεν είναι δυνατή η πρόσβαση στο %s"
 msgid "Cannot change encrypted item"
 msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένου στοιχείου"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Δεν είναι δυνατή η αντιγραφή της σημείωσης στο σημειωματάριο \"%s\""
 
@@ -923,7 +929,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία νέας σημε
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -937,7 +943,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία νέας σημε
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -962,7 +968,7 @@ msgstr ""
 "Δεν είναι δυνατή η φόρτωση του module \"%s\" για τη μορφοποίηση σε \"%s\" "
 "και την εξαγωγή σε \"%s\""
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Δεν είναι δυνατή η μετακίνηση της σημείωσης στο σημειωματάριο \"%s\""
 
@@ -1072,11 +1078,13 @@ msgstr "Πραγματοποιείται έλεγχος… Παρακαλώ πε
 msgid "Choose an option"
 msgstr "Διαλέξτε μία επιλογή"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1093,6 +1101,7 @@ msgstr "Διαγραφή ειδοποίησης"
 msgid "Clear search"
 msgstr "Εκκαθάριση αναζήτησης"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1186,7 +1195,7 @@ msgstr "Μπλοκ Κώδικα"
 msgid "Code View"
 msgstr "Προβολή κώδικα"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 #, fuzzy
 msgid "Code:"
 msgstr "Κώδικας"
@@ -1216,9 +1225,9 @@ msgstr "Προσεχείς ειδοποιήσεις"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Λίστα διαδρομών από φακέλους, διαχωρισμένων με κόμμα, για τη φόρτωση των "
 "πιστοποιητικών, ή διαδρομή των μεμονωμένων αρχείων πιστοποιητικών. Για "
@@ -1262,6 +1271,7 @@ msgid "Complete to-do"
 msgstr "Ολοκληρώθηκε"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
@@ -1392,7 +1402,7 @@ msgstr "Μετατροπή της ομιλίας σε κείμενο..."
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Αντιγραφή"
 
@@ -1441,6 +1451,7 @@ msgstr[1] "Αντιγραφή Συνδέσμων Κοινοποίησης"
 msgid "Copy to clipboard"
 msgstr "Αντιγραφή στο πρόχειρο"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Αντιγραφή token"
@@ -1524,6 +1535,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Δεν ήταν δυνατή η επαλήθευση της ταυτότητάς σας: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Δημιουργία"
@@ -1560,6 +1572,7 @@ msgid "Create user"
 msgstr "Δημιουργία χρήστη"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Δημιουργήθηκε"
@@ -1584,7 +1597,8 @@ msgstr "Δημιουργημένα απομακρυσμένα στοιχεία: 
 msgid "Created: "
 msgstr "Δημιουργήθηκε: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Δημιουργήθηκε: %d."
@@ -1911,6 +1925,7 @@ msgstr "Απενεργοποίηση ασφαλούς λειτουργίας κ�
 msgid "Disable synchronisation"
 msgstr "Συγχρονισμός"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Απενεργοποίηση υπηρεσίας Web Clipper"
@@ -1972,9 +1987,9 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Εμφανίζει μόνο τα στοιχεία του συγκεκριμένου τύπου(ων). Μπορεί να είναι `n` "
-"για σημειώσεις, `t` για υπομνήσεις ή `nt` για σημειώσεις και υπομνήσεις "
-"(π.χ. `-tt` θα εμφανίζει μόνο τις υπομνήσεις, ενώ το `-tnt` και σημειώσεις "
-"και υπομνήσεις."
+"για σημειώσεις, `t` για υπομνήσεις ή `nt` για σημειώσεις και υπομνήσεις (π."
+"χ. `-tt` θα εμφανίζει μόνο τις υπομνήσεις, ενώ το `-tnt` και σημειώσεις και "
+"υπομνήσεις."
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -2009,7 +2024,7 @@ msgstr "Εμφανίζει πληροφορίες έκδοσης"
 msgid "Do it now"
 msgstr "Κάνε το τώρα"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Χωρίς να ζητείται επιβεβαίωση."
 
@@ -2049,7 +2064,7 @@ msgstr "Δωρεά, ιστότοπος"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Ολοκληρώθηκε"
@@ -2058,6 +2073,7 @@ msgstr "Ολοκληρώθηκε"
 msgid "Download"
 msgstr "Λήψη"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr ""
@@ -2157,7 +2173,7 @@ msgstr "Η έκδοσή σας: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2165,7 +2181,7 @@ msgstr "Η έκδοσή σας: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Επεξεργασία"
 
@@ -2416,6 +2432,7 @@ msgstr "Ενεργοποίηση υποστήριξης typographer"
 msgid "Enable video player"
 msgstr "Ενεργοποίηση αναπαραγωγής βίντεο"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Ενεργοποίηση υπηρεσίας Web Clipper"
@@ -2449,11 +2466,11 @@ msgstr ""
 "σας πρόκειται να συγχρονιστούν εκ νέου και να σταλούν κρυπτογραφημένα στο "
 "στόχο συγχρονισμού."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
 
@@ -2733,6 +2750,7 @@ msgstr "Εύρεση: "
 msgid "Finishes recording"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Επέκταση Firefox"
@@ -2812,7 +2830,8 @@ msgstr "Επιβολή path style"
 msgid "Forward"
 msgstr "Μπροστά"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Βρέθηκε: %d."
@@ -2854,6 +2873,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Λήψη τώρα:"
@@ -2955,6 +2975,7 @@ msgid "Hide Joplin"
 msgstr "Απόκρυψη Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Απόκρυψη πληκτρολογίου"
 
@@ -3004,6 +3025,7 @@ msgstr "Εικονίδιο"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -3085,7 +3107,7 @@ msgstr "Επιτυχής εισαγωγή!"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Εισαγωγή σημειώσεων..."
 
@@ -3093,7 +3115,7 @@ msgstr "Εισαγωγή σημειώσεων..."
 msgid "Importing..."
 msgstr "Γίνεται εισαγωγή..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Εισάγει δεδομένα στο Joplin."
 
@@ -3179,6 +3201,7 @@ msgstr ""
 "Για να χρησιμοποιήσετε το συγχρονισμό του συστήματος αρχείων απαιτείται η "
 "άδειά σας για εγγραφή στον εξωτερικό χώρο αποθήκευσης."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Για να χρησιμοποιήσετε το web clipper, πρέπει να κάνετε τα εξής:"
@@ -3191,7 +3214,7 @@ msgstr "Σε εξέλιξη"
 msgid "In: %s"
 msgstr "Στο: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 #, fuzzy
 msgid "Incoming shares:"
 msgstr "Προσεχείς ειδοποιήσεις"
@@ -3292,7 +3315,7 @@ msgstr "Μη έγκυρη απάντηση: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Άκυρη εντολή: \"%s\""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr ""
 
@@ -3436,6 +3459,7 @@ msgstr "Joplin Server URL"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3617,6 +3641,7 @@ msgstr "Φορτωμένα"
 msgid "Loading..."
 msgstr "Φόρτωση..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Τοποθεσία"
@@ -3728,7 +3753,7 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 #, fuzzy
 msgid "Markdown editor"
 msgstr "Markdown"
@@ -3750,6 +3775,7 @@ msgstr "Επισημαίνει μία υπόμνηση ως ολοκληρωμέ
 msgid "Marks a to-do as non-completed."
 msgstr "Σήμανση μιας υπόμνησης ως μη ολοκληρωμένη."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Markup"
@@ -3962,6 +3988,7 @@ msgstr "Νέο σημειωματάριο"
 msgid "New Notebook"
 msgstr "Νέο σημειωματάριο"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -4080,7 +4107,7 @@ msgstr "Κανένα αποτέλεσμα"
 msgid "No revision selected"
 msgstr "Δεν έχει επιλεγεί καρτέλα"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Δεν υπάρχει τέτοια εντολή: %s"
 
@@ -4109,8 +4136,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Διατίθεται ενημέρωση"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 #, fuzzy
 msgid "None"
@@ -4175,7 +4202,7 @@ msgstr "Σώμα σημείωσης"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Δεν υπάρχει η σημείωση : \"%s\". Να δημιουργηθεί;"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Συντάκτης σημείωσης"
@@ -4189,6 +4216,7 @@ msgstr "Η σημείωση έχει αποθηκευτεί."
 msgid "Note history"
 msgstr "Ιστορικό Σημείωσης"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4223,7 +4251,8 @@ msgstr "Στυλ λίστας σημειώσεων"
 msgid "Note preview"
 msgstr "Τίτλος σημειωματάριου"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Ιδιότητες σημείωσης"
@@ -4278,7 +4307,7 @@ msgstr "Σημειωματάριο: %s (%s)"
 msgid "Notebooks"
 msgstr "Σημειωματάρια"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Τα σημειωματάρια δεν μπορούν να ονομαστούν  \"%s\", που είναι δεσμευμένος "
@@ -4327,8 +4356,10 @@ msgstr "Αναζήτηση σε όλες τις σημειώσεις"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4498,7 +4529,7 @@ msgstr "Ταξινομημένη λίστα"
 msgid "Other applications..."
 msgstr "Άλλες εφαρμογές..."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Μορφή εξόδου: %s"
 
@@ -4566,7 +4597,7 @@ msgstr "Ανά χρήστη. Τουλάχιστον %d χρήστες."
 msgid "Permanently delete note"
 msgstr "Οριστική διαγραφή σημείωσης"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "Να διαγραφεί οριστικά η σημείωση \"%s\";"
 
@@ -4580,7 +4611,7 @@ msgstr ""
 "\n"
 "Όλες οι σημειώσεις και τα υποσημειωματάρια θα διαγραφούν επίσης."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 #, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
@@ -4657,7 +4688,7 @@ msgstr "Παρακαλώ καταγράψτε τη φωνή σας..."
 msgid "Please select a notebook first."
 msgstr "Παρακαλώ επιλέξτε πρώτα σημειωματάριο."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr ""
 "Παρακαλώ πρώτα επιλέξτε τη σημείωση ή το σημειωματάριο που θέλετε να "
@@ -4781,7 +4812,7 @@ msgstr ""
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr ""
 "Πατήστε Ctrl+D ή πληκτρολογήστε \"exit\" για να βγείτε από την εφαρμογή"
@@ -4816,7 +4847,8 @@ msgstr "Προηγούμενη αντιστοίχιση"
 msgid "Previous versions"
 msgstr "Προηγούμενες εκδόσεις αυτής της σημείωσης"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Προηγούμενες εκδόσεις αυτής της σημείωσης"
 
@@ -5038,7 +5070,7 @@ msgstr "Regular expression"
 msgid "Reject"
 msgstr "Απόρριψη"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 #, fuzzy
 msgid "Rejecting share..."
 msgstr "Δημιουργία αναφοράς..."
@@ -5070,7 +5102,7 @@ msgstr "Κατάργηση αυτής της αναζήτησης από την 
 msgid "Removed %s from share."
 msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
 
-#: packages/app-mobile/components/TagEditor.tsx:230
+#: packages/app-mobile/components/TagEditor.tsx:231
 #, fuzzy
 msgid "Removed tag: %s"
 msgstr "Μετονομασία ετικέτας:"
@@ -5097,6 +5129,7 @@ msgstr ""
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Ανανέωση token"
@@ -5169,7 +5202,8 @@ msgstr "Επαναφορά κύριου κωδικού πρόσβασης"
 msgid "Resize large images:"
 msgstr "Προσαρμογή μεγέθους μεγάλων εικόνων:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Πόροι: %d."
@@ -5188,6 +5222,7 @@ msgid "Restart now"
 msgstr "Επανεκίνηση τώρα"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5331,7 +5366,7 @@ msgstr "Αποθήκευση ως %s"
 msgid "Save as..."
 msgstr "Αποθήκευση ως..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5399,17 +5434,18 @@ msgstr "Κανένα αποτέλεσμα"
 msgid "Search shown"
 msgstr "Αναζήτησή προβεβλημένων"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
+#: packages/app-mobile/components/TagEditor.tsx:273
 #, fuzzy
 msgid "Search tags"
 msgstr "Κανένα αποτέλεσμα"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Αναζήτησή:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5693,7 +5729,8 @@ msgstr ""
 "Στοιχεία που έχουν παραληφθεί: %d (εκτελεστέ --retry-failed-items για "
 "επανάληψη της αποκρυπτογράφησης τους)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Αγνοήθηκαν: %d."
@@ -5783,7 +5820,7 @@ msgstr "Πηγή"
 msgid "Source code available"
 msgstr "Διατίθεται ενημέρωση"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Μορφή προέλευσης: %s"
 
@@ -5862,14 +5899,17 @@ msgstr "Στατιστικά..."
 msgid "Status"
 msgstr "Κατάσταση"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Κατάσταση: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Κατάσταση: Ξεκίνησε στη θύρα %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Βήμα 1: Ενεργοποιήστε την υπηρεσία"
@@ -5888,6 +5928,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Βήμα 2: Εισάγετε τον κωδικό που παρέχεται από το Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Βήμα 2: Εγκαταστήστε την επέκταση"
@@ -5998,7 +6039,7 @@ msgstr "Μετατροπή σε σημείωση"
 msgid "Switch to to-do type"
 msgstr "Μετατροπή σε υπόμνηση"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -6106,7 +6147,8 @@ msgstr ""
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Με ετικέτα: %d."
@@ -6193,7 +6235,7 @@ msgstr ""
 "Τα συνημμένα δεν θα παρακολουθούνται πλέον όταν μεταβαίνετε σε διαφορετική "
 "σημείωση."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 "Η εντολή  \"%s\" είναι διαθέσιμη μόνο σε λειτουργία γραφικού περιβάλλοντος "
@@ -6344,7 +6386,8 @@ msgstr ""
 msgid "The notebook could not be saved: %s"
 msgstr "Αυτό το σημειωματάριο δεν μπορεί να σωθεί: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Οι σημειώσεις έχουν εισαχθεί: %s"
@@ -6433,12 +6476,14 @@ msgstr ""
 "Η υπηρεσία web clipper είναι ενεργοποιημένη και έχει ρυθμιστεί να εκκινείται "
 "αυτόματα."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "Η υπηρεσία web clipper είναι ενεργοποιημένη και έχει ρυθμιστεί να εκκινείται "
 "αυτόματα."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Η υπηρεσία Web Clipper δεν είναι ενεργοποιημένη."
@@ -6552,6 +6597,7 @@ msgstr "Αυτό το συνημμένο δεν διαθέτει δεδομέν�
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6623,6 +6669,7 @@ msgstr ""
 "Αυτή η σημείωση δεν περιέχει περιεχόμενο. Κάντε κλικ στο \"%s\" για να "
 "επεξεργαστείτε τη σημείωση στον editor."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Αυτή η σημείωση δεν έχει ιστορικό"
@@ -6645,6 +6692,7 @@ msgstr ""
 "Αυτός ο επεξεργαστής εμπλουτισμένου κειμένου έχει ορισμένους περιορισμούς "
 "και συνιστάται να τους γνωρίζετε πριν το χρησιμοποιήσετε."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6737,11 +6785,11 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Για να συνεχίσετε, παρακαλώ πληκτρολογήστε τον κύριο κωδικό πρόσβασης."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Για να διαγράψετε μία ετικέτα, αφαιρέστε την από τις σχετικές σημειώσεις."
@@ -6880,6 +6928,7 @@ msgstr "Εναλλαγή πλευρικής μπάρας"
 msgid "Toggle sort order field"
 msgstr "Εναλλαγή του πεδίου ταξινόμησης"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
@@ -6993,7 +7042,7 @@ msgstr "Άγνωστη μορφή αρχείου"
 msgid "Unknown flag: %s"
 msgstr "Άγνωστο flag: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -7027,7 +7076,7 @@ msgstr "Αποδημοσίευση σημείωσης"
 msgid "Unshare"
 msgstr "Κατάργηση κοινής χρήσης"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
@@ -7045,6 +7094,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Μη υποστηριζόμενος τύπος εικόνας: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -7058,7 +7108,7 @@ msgid ""
 msgstr "Μη υποστηριζόμενος σύνδεσμος ή μήνυμα: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Χωρίς τίτλο"
@@ -7089,6 +7139,7 @@ msgstr "Ενημέρωση συνολικών μεγεθών"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -7110,7 +7161,8 @@ msgstr "Ενημερωμένα απομακρυσμένα στοιχεία: %d."
 msgid "Updated: "
 msgstr "Ενημερώθηκε: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Ενημερώθηκε: %d."
@@ -7137,6 +7189,7 @@ msgstr "Αναβαθμίστε το στόχο συγχρονισμού στην
 msgid "Upload photo"
 msgstr "Βγάλτε μια φωτογραφία"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7307,7 +7360,7 @@ msgstr ""
 msgid "Waiting for authorisation..."
 msgstr "Αναμονή εξουσιοδότησης…"
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 #, fuzzy
 msgid "Waiting: Notebook %s from %s"
 msgstr "Σημειωματάριο: %s (%s)"
