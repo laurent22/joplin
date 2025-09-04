@@ -128,6 +128,9 @@ export interface EditorControl {
 
 	// Called when a resource associated with the current note finishes downloading.
 	onResourceDownloaded(id: string): void;
+
+	remove(): void;
+	focus(): void;
 }
 
 export enum EditorLanguageType {
@@ -182,6 +185,7 @@ export interface EditorSettings {
 	inlineRenderingEnabled: boolean;
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
+	highlightActiveLine: boolean;
 
 	indentWithTabs: boolean;
 

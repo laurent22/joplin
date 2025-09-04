@@ -8,8 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Milo Ivir <mail@mivirtype.de>\n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -18,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -59,7 +57,7 @@ msgstr "(Ništa)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(samo-za-čitanje)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -72,9 +70,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Ovaj upit možeš deaktivirati u opcijama)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "(Ništa)"
+msgstr "[Ništa]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1065
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -108,13 +105,11 @@ msgid "&View"
 msgstr "&Prikaz"
 
 #: packages/app-desktop/gui/MenuBar.tsx:931
-#, fuzzy
 msgid "&Window"
 msgstr "Pro&zor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1655
 #: packages/lib/models/settings/builtInMetadata.ts:1945
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d dan"
@@ -136,7 +131,6 @@ msgstr "%d GB memorije"
 #: packages/lib/models/settings/builtInMetadata.ts:1377
 #: packages/lib/models/settings/builtInMetadata.ts:1378
 #: packages/lib/models/settings/builtInMetadata.ts:1379
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d sat"
@@ -153,12 +147,11 @@ msgstr "%d MB"
 #: packages/lib/utils/joplinCloud/index.ts:143
 #: packages/lib/utils/joplinCloud/index.ts:144
 msgid "%d MB per note or attachment"
-msgstr "%d MB za bilješku ili privitak"
+msgstr "%d MB po bilješci ili privitku"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 #: packages/lib/models/settings/builtInMetadata.ts:1375
 #: packages/lib/models/settings/builtInMetadata.ts:1376
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minunta"
@@ -181,7 +174,7 @@ msgstr[2] "%d bilježaka će se trajno izbrisati. Nastaviti?"
 
 #: packages/app-mobile/components/CameraView/PhotoPreview.tsx:60
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "%d slika snimljeno"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -239,18 +232,17 @@ msgstr "%s ne može biti veći od %s"
 msgid "%s cannot be less than %s"
 msgstr "%s ne može biti manji od %s"
 
-#: packages/app-cli/app/command-share.ts:201
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
-msgstr "Ukloniti oznaku „%s” iz svih bilježaka?"
+msgstr "%s od %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:238
 msgid ""
 "%s is not optimised for synchronising many small files so your initial "
 "synchronisation will be slow."
 msgstr ""
-"%s nije optimiziran za sinkronizaciju mnogih malih datoteka, stoga će "
-"početna sinkronizacija biti spora."
+"%s nije optimiran za sinkronizaciju mnogih malih datoteka, stoga će početna "
+"sinkronizacija biti spora."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
@@ -296,7 +288,7 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "Naredba za oznaku <tag-command> može biti „add”, „remove”, „list” ili "
-"„notetags” za dodavanje ili uklanjanje oznake [tag] bilješci [note], za "
+"„notetags” za dodavanje ili uklanjanje oznake [tag] u bilješci [note], za "
 "popis bilježaka povezanih s oznakom [tag] ili za popis oznaka povezanih s "
 "bilješkom [note]. Naredba `tag list` može se koristiti za popis svih oznaka "
 "(koristi -l za dugačku opciju)."
@@ -318,6 +310,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"Popis riječi odvojenih zarezima. Može se koristiti za neobične riječi, kako "
+"bi se glasovnom tipkanju pomoglo da ih ispravno napiše."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -371,15 +365,13 @@ msgstr "Prihvati"
 msgid "Accepted invitations"
 msgstr "Prihvaćene pozivnice"
 
-#: packages/app-cli/app/command-share.ts:178
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
-msgstr "Bilježnica: %s"
+msgstr "Prihvaćeno: Bilježnica %s od %s"
 
-#: packages/app-cli/app/command-share.ts:228
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
-msgstr "Stvaranje izvještaja …"
+msgstr "Prihvaćanje dijeljenja …"
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -440,10 +432,9 @@ msgstr "Dodaj ili ukloni oznake:"
 msgid "Add recipient:"
 msgstr "Dodaj primaoca:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
-msgstr "Nove oznake:"
+msgstr "Dodaj oznake:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -454,22 +445,20 @@ msgid "Add to dictionary"
 msgstr "Dodaj u rječnik"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:99
-#, fuzzy
 msgid "Add to note"
 msgstr "Dodaj bilješci"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Dodaj novu"
+msgstr "Novo dodana: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
-msgstr ""
+msgstr "Dodana oznaka: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "Dodaje oznaku"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -480,12 +469,12 @@ msgstr "Administrator"
 msgid "Admin dashboard"
 msgstr "Pregledna ploča administratora"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Napredne opcije"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:671
-#, fuzzy
 msgid "Advanced settings"
 msgstr "Napredne postavke"
 
@@ -505,7 +494,7 @@ msgstr ""
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr "Sve greške sinkronizacije stavki su označene kao „zanemarene“."
+msgstr "Sve greške sinkronizacije elemenata su označene kao „zanemareno“."
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:73
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:208
@@ -517,9 +506,9 @@ msgstr "Sve bilješke"
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr "Svi mogući priključci se koriste – prijavi problem na %s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
-msgstr ""
+msgstr "Sve dijeljene mape:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1008
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -543,7 +532,6 @@ msgid "Always"
 msgstr "Uvijek"
 
 #: packages/lib/models/settings/builtInMetadata.ts:964
-#, fuzzy
 msgid "Always ask"
 msgstr "Uvijek pitaj"
 
@@ -552,7 +540,6 @@ msgid "Always open %s files without asking."
 msgstr "Uvijek otvori %s datoteke bez pitanja."
 
 #: packages/lib/models/settings/builtInMetadata.ts:965
-#, fuzzy
 msgid "Always resize"
 msgstr "Uvijek promijeni veličinu"
 
@@ -621,14 +608,14 @@ msgstr ""
 "To je nepovratna radnja."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
 msgstr ""
-"Stvarno želiš vratiti standardni raspored? Trenutačna konfiguracija "
-"rasporeda će se izgubiti."
+"Stvarno želiš izbrisati svu povijest za ovu bilješku? Ovo je nepovratna "
+"radnja."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Stvarno želiš obnoviti ključ autorizacije?"
@@ -651,7 +638,7 @@ msgstr "Aritim tamna"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Povezane oznake:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -690,7 +677,6 @@ msgid "attachment"
 msgstr "privitak"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:77
-#, fuzzy
 msgid "Attachment"
 msgstr "Privitak"
 
@@ -727,6 +713,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Autentifikacija nije završena (nije dobiven ključ autentifikacije)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Ključ autorizacije:"
@@ -770,6 +757,7 @@ msgstr "Automatski promijeni temu na temu sustava"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -841,9 +829,11 @@ msgstr "Može pogledati i urediti"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -899,7 +889,7 @@ msgstr "Nije moguće pristupiti %s"
 msgid "Cannot change encrypted item"
 msgstr "Nije moguće promijeniti šifrirani element"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nije moguće kopirati bilješku u bilježnicu „%s”"
 
@@ -915,7 +905,7 @@ msgstr "Nije moguće stvoriti novu bilješku: %s"
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -929,7 +919,7 @@ msgstr "Nije moguće stvoriti novu bilješku: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -951,7 +941,7 @@ msgstr "Nije moguće učitati modul „%s” za format „%s” i rezultat „%s
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Nije moguće učitati modul „%s” za format „%s” i cilj „%s”"
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nije moguće premjestiti bilješku u bilježnicu „%s”"
 
@@ -987,7 +977,7 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
-"Nije moguće dijeliti šifriranu bilježnicu s primateljem %s jer sveobuhvatno "
+"Nije moguće dijeliti šifriranu bilježnicu s primaocem %s jer sveobuhvatno "
 "šifriranje nije aktivirano. To se može riješiti putem Konfiguracija > "
 "Šifriranje."
 
@@ -1020,9 +1010,8 @@ msgid "Characters excluding spaces"
 msgstr "Broj znakova bez razmaka"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:165
-#, fuzzy
 msgid "Check"
-msgstr "Kvačica"
+msgstr "Označi"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
@@ -1058,11 +1047,13 @@ msgstr "Provjeravanje … Pričekaj."
 msgid "Choose an option"
 msgstr "Odaberi jednu opciju"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome web-trgovina"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1076,10 +1067,10 @@ msgstr "Poništi upozorenje"
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
 #: packages/app-mobile/components/SearchInput.tsx:79
-#, fuzzy
 msgid "Clear search"
-msgstr "Poništi pretragu"
+msgstr "Izbriši pretragu"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1170,13 +1161,11 @@ msgstr "Blok koda"
 msgid "Code View"
 msgstr "Prikaz koda"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 msgid "Code:"
 msgstr "Kod:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
-#, fuzzy
 msgid "Collaborate on a notebook with others"
 msgstr "Surađuj s drugima na bilježnici"
 
@@ -1199,9 +1188,9 @@ msgstr "Nadolazeća upozorenja"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Zarezima odvojen popis putanja do mapa iz kojih se učitavaju certifikati ili "
 "putanja do pojedinih datoteka certifikata. Na primjer: /my/cert_dir, /other/"
@@ -1228,6 +1217,8 @@ msgstr "Paleta naredbi …"
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Naredbe: `add` (dodaj), `remove` (ukloni), `list` (popis), `delete` "
+"(izbriši), `accept` (prihvati), `leave` (ostavi) i `reject` (odbaci)."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1242,6 +1233,7 @@ msgid "Complete to-do"
 msgstr "Završi zadatak"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Završeno"
@@ -1308,7 +1300,6 @@ msgstr "Konflikti (privici)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:253
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:474
-#, fuzzy
 msgid "Connect to Joplin Cloud"
 msgstr "Poveži se na Joplin Cloud"
 
@@ -1347,14 +1338,12 @@ msgid "Control character"
 msgstr "Kontrolni znak"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Pretvori u bilješku"
+msgstr "Pretvori"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Pretvori u zadatak"
+msgstr "Pretvori bilješku u Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1372,7 +1361,7 @@ msgstr "Pretvaranje govora u tekst …"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Kopiraj"
 
@@ -1422,12 +1411,12 @@ msgstr[2] "Kopiraj dijeljive poveznice"
 msgid "Copy to clipboard"
 msgstr "Kopiraj u međuspremnik"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Kopiraj ključ"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
-#, fuzzy
 msgid "Copy version info"
 msgstr "Kopiraj podatke verzije"
 
@@ -1462,9 +1451,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Neuspjelo povezivanje s repozitorijem dodataka."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Neuspio izvoz bilježaka: %s"
+msgstr "Neuspjelo pretvaranja bilješke u Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1506,6 +1494,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Neuspjela provjera tvoje identifikacije: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Stvori"
@@ -1519,9 +1508,8 @@ msgid "Create a notebook"
 msgstr "Stvori bilježnicu"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Stvara novu bilježnicu."
+msgstr "Stvori novu bilježnicu"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1529,9 +1517,8 @@ msgid "Create new profile..."
 msgstr "Stvori novi profil …"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Stvori bilježnicu"
+msgstr "Stvori bilješku"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1542,6 +1529,7 @@ msgid "Create user"
 msgstr "Stvori korisnika"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Stvoreno"
@@ -1566,7 +1554,8 @@ msgstr "Stvoreni eksterni elementi: %d."
 msgid "Created: "
 msgstr "Stvoreno: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Stvoreno: %d."
@@ -1577,9 +1566,8 @@ msgid "Created: %s"
 msgstr "Stvoreno: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:70
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
-msgstr "Stvara novu bilješku s prilogom vrste %s"
+msgstr "Stvara novu bilješku s privitkom vrste %s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1602,14 +1590,12 @@ msgid "Creating new to-do..."
 msgstr "Stvaranje novog zadatka …"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Stvara se %s …"
+msgstr "Stvara se bilješka „%s“ …"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Stvara se %s …"
+msgstr "Stvara se bilješka."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1712,6 +1698,7 @@ msgstr "Standardno"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"Standardni naslov koji se koristi za dokumente koji su stvoreni sa skenerom."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1745,9 +1732,8 @@ msgstr "Izbriši istekle ključeve"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
-#, fuzzy
 msgid "Delete history"
-msgstr "Aktiviraj povijest bilježaka"
+msgstr "Izbriši povijest"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:110
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
@@ -1837,7 +1823,6 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "Briše bilješke bez traženja potvrde."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Deletion log"
 msgstr "Dnevnik brisanja"
 
@@ -1884,10 +1869,10 @@ msgid "Disable safe mode and restart"
 msgstr "Deaktiviraj sigurni modus i pokreni program ponovo"
 
 #: packages/app-desktop/gui/MainScreen.tsx:597
-#, fuzzy
 msgid "Disable synchronisation"
 msgstr "Deaktiviraj sinkronizaciju"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Dektiviraj Web Clipper uslugu"
@@ -1984,14 +1969,13 @@ msgstr "Prikazuje podatke verzije"
 msgid "Do it now"
 msgstr "Učini to sada"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Nemoj zatražiti potvrdu."
 
 #: packages/app-cli/app/command-share.ts:66
-#, fuzzy
 msgid "Do not ask for user confirmation."
-msgstr "Nemoj zatražiti potvrdu."
+msgstr "Nemoj zatražiti potvrdu korisnika."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
@@ -2012,10 +1996,12 @@ msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Nemoj dozvoliti primaocu dijeljenja da piše u dijeljenu bilježnicu. Vrijedi "
+"samo za podnaredbu `add`."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Ovu poruku više nemoj prikazati"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2024,7 +2010,7 @@ msgstr "Doniraj, web stranica"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Gotovo"
@@ -2033,12 +2019,12 @@ msgstr "Gotovo"
 msgid "Download"
 msgstr "Preuzmi"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Preuzmi i instaliraj odgovarajuće proširenje za tvoj preglednik:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:589
-#, fuzzy
 msgid "Download it now"
 msgstr "Preuzmi sada"
 
@@ -2060,7 +2046,7 @@ msgstr "Preuzimanje"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:170
 msgid "Downloading %s language files..."
-msgstr "Preuzimanje jezičnih datoteka za %s …"
+msgstr "Preuzimanje %s jezičnih datoteka …"
 
 #: packages/app-cli/app/command-sync.ts:261
 msgid "Downloading resources..."
@@ -2124,13 +2110,12 @@ msgstr ""
 "trenutačnu bilježnicu."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
-#, fuzzy
 msgid "Duration: %s"
 msgstr "Trajanje: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2138,18 +2123,17 @@ msgstr "Trajanje: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Uredi"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Uredi kao Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
 msgid "Edit as Rich Text"
-msgstr ""
+msgstr "Uredi kao formatirani tekst"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2234,7 +2218,6 @@ msgid "Email to Note"
 msgstr "E-mail u bilješku"
 
 #: packages/lib/models/Setting.ts:1292
-#, fuzzy
 msgid "Email To Note, login information"
 msgstr "E-mail u bilješku, podaci prijave"
 
@@ -2310,14 +2293,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Aktiviraj podršku za Fountain sintaksu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Aktiviraj šifriranje"
+msgstr "Aktiviraj rukom pisanu transkripciju"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Aktiviraj alatnu traku za Markdown"
+msgstr "Aktiviraj natpis za pretvaranje HTML-a u Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2348,7 +2329,6 @@ msgid "Enable optical character recognition (OCR)"
 msgstr "Aktiviraj optičko prepoznavanje znakova (OCR)"
 
 #: packages/lib/models/Setting.ts:1298
-#, fuzzy
 msgid "Enable or disable plugins"
 msgstr "Aktiviraj ili deaktiviraj dodatke"
 
@@ -2358,7 +2338,6 @@ msgstr "Aktiviraj preglednik PDF datoteka"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:1019
-#, fuzzy
 msgid "Enable plugin support"
 msgstr "Aktiviraj podršku za dodatke"
 
@@ -2367,7 +2346,6 @@ msgid "Enable soft breaks"
 msgstr "Aktiviraj prijelom redaka"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1453
-#, fuzzy
 msgid "Enable spell checking in Markdown editor"
 msgstr "Aktiviraj provjeru pravopisa u Markdown uređivaču"
 
@@ -2391,6 +2369,7 @@ msgstr "Aktiviraj tipografsku podršku"
 msgid "Enable video player"
 msgstr "Aktiviraj video-player"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Aktiviraj Web Clipper uslugu"
@@ -2427,11 +2406,11 @@ msgstr ""
 "Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo "
 "sinkronizirati i poslati šifrirano u cilj sinkronizacije."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Šifrirano"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Šifrirani elementi se ne mogu promijeniti"
 
@@ -2484,14 +2463,12 @@ msgid "Enter password"
 msgstr "Upiši lozinku"
 
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:73
-#, fuzzy
 msgid "Enter the code"
-msgstr "Ovdje upiši kod"
+msgstr "Upiši kod"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:43
-#, fuzzy
 msgid "Enter the code:"
-msgstr "Ovdje upiši kod"
+msgstr "Upiši kod:"
 
 #: packages/app-mobile/components/NoteItem.tsx:129
 msgid "Entering selection mode"
@@ -2518,7 +2495,7 @@ msgstr "Greška prilikom otvaranja bilješke u uređivaču: %s"
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:53
 msgid "Error starting camera: %s"
-msgstr ""
+msgstr "Greška pri pokretanju kamere: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
@@ -2550,12 +2527,10 @@ msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote datoteka izvoza (kao Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:98
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
 msgstr "Evernote datoteke izvoza (direktorij, kao HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:107
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
 msgstr "Evernote datoteke izvoza (direktorij, kao Markdown)"
 
@@ -2664,7 +2639,7 @@ msgstr ""
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr ""
+msgstr "Povezivanje s tvojim računom nije uspjelo. Pokušaj ponovo."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2709,6 +2684,7 @@ msgstr "Pronađi: "
 msgid "Finishes recording"
 msgstr "Završava snimanje"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox proširenje"
@@ -2743,7 +2719,7 @@ msgstr "Fokusiraj naslov"
 
 #: packages/app-cli/app/command-share.ts:139
 msgid "Folder \"%s\" is shared with:"
-msgstr ""
+msgstr "Mapa „%s“ se dijeli sa:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
@@ -2782,7 +2758,8 @@ msgstr "Prisili stil putanje"
 msgid "Forward"
 msgstr "Naprijed"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Pronađeno: %d."
@@ -2823,8 +2800,9 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Zatraži ponudu"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Nabavi sada:"
@@ -2845,7 +2823,7 @@ msgstr ""
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
-msgstr ""
+msgstr "Glosar:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
@@ -2926,6 +2904,7 @@ msgid "Hide Joplin"
 msgstr "Sakrij Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Sakrij tipkovnicu"
 
@@ -2934,9 +2913,8 @@ msgid "Hide password"
 msgstr "Sakrij lozinku"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Upozorenje"
+msgstr "Skriva upozorenje"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2974,6 +2952,7 @@ msgstr "Ikona"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -2988,6 +2967,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Ako se privitak slike nalazi u zasebnom retku, i nakon nje slijedi prazan "
+"redak, prikazat će se odmah ispod Markdown izvora."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3010,7 +2991,7 @@ msgstr "Zanemari greške TLS certifikata"
 
 #: packages/lib/services/ReportService.ts:236
 msgid "Ignored items that cannot be synchronised"
-msgstr "Zanemarene stavke koje se ne mogu sinkronizirati"
+msgstr "Zanemareni elemenati koje se ne mogu sinkronizirati"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -3024,7 +3005,6 @@ msgid "Import"
 msgstr "Uvezi"
 
 #: packages/lib/models/Setting.ts:1265
-#, fuzzy
 msgid "Import and Export"
 msgstr "Uvoz i izvoz"
 
@@ -3045,7 +3025,6 @@ msgid "Import notes from a JEX (Joplin Export) file."
 msgstr "Uvezi bilješke iz JEX (Joplin Export) datoteke."
 
 #: packages/lib/models/Setting.ts:1297
-#, fuzzy
 msgid "Import or export your data"
 msgstr "Uvezi ili izvezi tvoje podatke"
 
@@ -3057,7 +3036,7 @@ msgstr "Uspješno uvezeno!"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Uvoz iz „%s” kao „%s” format. Pričekaj …"
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Uvoz bilježaka …"
 
@@ -3065,7 +3044,7 @@ msgstr "Uvoz bilježaka …"
 msgid "Importing..."
 msgstr "Uvoz …"
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Uvozi podatake u Joplin."
 
@@ -3145,6 +3124,7 @@ msgstr ""
 "Za korištenje sinkronizacije datotečnog sustava, potrebna je tvoja dozvola "
 "za pisanje u vanjsko spremište."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Za korištenje Web Clippera obavi sljedeće korake:"
@@ -3157,10 +3137,9 @@ msgstr "U tijeku"
 msgid "In: %s"
 msgstr "U: %s"
 
-#: packages/app-cli/app/command-share.ts:169
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
-msgstr "Nadolazeća upozorenja"
+msgstr "Dolazna dijeljenja:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3256,7 +3235,7 @@ msgstr "Neispravan odgovor: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Neispravna naredba: „%s”"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Neispravan format. Npr.: 48.8581372, 2.2926735"
 
@@ -3293,14 +3272,13 @@ msgstr "Elementi koji se ne mogu dešifrirati"
 
 #: packages/lib/services/ReportService.ts:185
 msgid "Items that cannot be synchronised"
-msgstr "Elementi koje se ne mogu sinkronizirati"
+msgstr "Elementi koji se ne mogu sinkronizirati"
 
 #: packages/lib/services/ReportService.ts:294
 msgid "Items with error: %s"
 msgstr "Elementi s greškom: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:951
-#, fuzzy
 msgid "Join us on %s"
 msgstr "Pridruži nam se na %s"
 
@@ -3363,7 +3341,7 @@ msgstr "Joplin je već pokrenut."
 
 #: packages/lib/services/plugins/PluginService.ts:531
 msgid "Joplin Mobile"
-msgstr "Joplin Mobitel"
+msgstr "Joplin Mobile"
 
 #: packages/lib/SyncTargetJoplinServer.ts:62
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
@@ -3371,9 +3349,8 @@ msgid "Joplin Server"
 msgstr "Joplin Server"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
-#, fuzzy
 msgid "Joplin Server Business"
-msgstr "Joplin poslužitelj korisničko ime"
+msgstr "Joplin Server Business"
 
 #: packages/lib/models/settings/builtInMetadata.ts:342
 msgid "Joplin Server email"
@@ -3381,9 +3358,8 @@ msgstr "Joplin Server e-mail"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
-#, fuzzy
 msgid "Joplin Server Login"
-msgstr "Joplin poslužitelj URL"
+msgstr "Joplin Server prijava"
 
 #: packages/lib/models/settings/builtInMetadata.ts:354
 msgid "Joplin Server password"
@@ -3396,8 +3372,9 @@ msgstr "Joplin Server URL"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
-msgstr ""
+msgstr "Joplin SSO autentifikacija"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3424,7 +3401,6 @@ msgid "Keep note history for"
 msgstr "Zadrži povijest bilježaka za"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1949
-#, fuzzy
 msgid "Keep notes in the trash for"
 msgstr "Zadrži bilješke u smeću za"
 
@@ -3450,14 +3426,13 @@ msgstr "Ključevi koji se moraju nadograditi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1412
 msgid "Landscape"
-msgstr "Ležeći"
+msgstr "Polegnuto"
 
 #: packages/lib/models/settings/builtInMetadata.ts:498
 msgid "Language"
 msgstr "Jezik"
 
 #: packages/lib/models/Setting.ts:1289
-#, fuzzy
 msgid "Language, date format"
 msgstr "Jezik, format datuma"
 
@@ -3534,12 +3509,11 @@ msgid "Link"
 msgstr "Poveznica"
 
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:21
-#, fuzzy
 msgid "Link created!"
 msgid_plural "Links created!"
-msgstr[0] "Poveži tekst"
-msgstr[1] "Poveži tekst"
-msgstr[2] "Poveži tekst"
+msgstr[0] "Poveznica je stvorena!"
+msgstr[1] "Poveznice su stvorene!"
+msgstr[2] "Poveznice su stvorene!"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:92
 msgid "Link description"
@@ -3561,9 +3535,8 @@ msgid "Link to note..."
 msgstr "Poveznica na bilješku …"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:158
-#, fuzzy
 msgid "Links"
-msgstr "Poveznica"
+msgstr "Poveznice"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:232
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:234
@@ -3582,6 +3555,7 @@ msgstr "Učitano"
 msgid "Loading..."
 msgstr "Učitavanje …"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Mjesto"
@@ -3604,12 +3578,10 @@ msgstr "Dnevnik"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:39
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:69
-#, fuzzy
 msgid "Log in with your web browser"
 msgstr "Prijavi se s tvojim web preglednikom"
 
 #: packages/app-desktop/gui/MainScreen.tsx:595
-#, fuzzy
 msgid "Login to Joplin Cloud."
 msgstr "Prijavi se na Joplin Cloud."
 
@@ -3656,9 +3628,8 @@ msgid "Manage profiles"
 msgstr "Upravljaj profilima"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:573
-#, fuzzy
 msgid "Manage shared notebooks"
-msgstr "Upravljaj zajedničkim bilježnicama"
+msgstr "Upravljaj dijeljenim bilježnicama"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:165
 msgid "Manage toolbar options"
@@ -3695,19 +3666,17 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
-#, fuzzy
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 msgid "Markdown editor"
 msgstr "Markdown uređivač"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown"
+msgstr "Markdown uređivač: Prikazivanje slika"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown uređivač: Prikaži formatirani tekst u uređivaču"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3717,6 +3686,7 @@ msgstr "Označava zadatak završenim."
 msgid "Marks a to-do as non-completed."
 msgstr "Označava zadatak kao nezavršen."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Označavanje"
@@ -3773,7 +3743,6 @@ msgid "Minimise"
 msgstr "Smanji"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:148
-#, fuzzy
 msgid "Missing camera permission"
 msgstr "Nedostaje dozvola za kameru"
 
@@ -3786,7 +3755,6 @@ msgid "Missing Master Keys"
 msgstr "Nedostaje glavni ključ"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
-#, fuzzy
 msgid "Missing permission to record audio."
 msgstr "Nedostaje dozvola za snimanje zvuka."
 
@@ -3820,7 +3788,6 @@ msgid ""
 msgstr "Izvorni kod većine dodataka je dostupan na web stranici dodatka."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:588
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Premjestiti %d bilješku u bilježnicu „%s”?"
@@ -3924,15 +3891,15 @@ msgstr "Nova bilježnica"
 msgid "New Notebook"
 msgstr "Nova bilježnica"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Stvorit će se nova bilježnica „%s” i u nju će se uvesti datoteka „%s”"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Naslov bilježnice:"
+msgstr "Naslov nove bilježnice"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -3964,9 +3931,8 @@ msgid "next"
 msgstr "slijedeće"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
-#, fuzzy
 msgid "Next"
-msgstr "Nextcloud"
+msgstr "Dalje"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
@@ -4033,11 +3999,10 @@ msgid "No results"
 msgstr "Nema rezultata"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
-msgstr "Nijedna bilježnica nije odabrana."
+msgstr "Nijedna revizija nije odabrana"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Naredba ne postoji: %s"
 
@@ -4050,9 +4015,8 @@ msgid "No tab selected"
 msgstr "Nijedna kartica nije odabrana"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Nove oznake:"
+msgstr "Bez oznaka"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4065,8 +4029,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Nema novih verzija"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr "Ništa"
@@ -4128,7 +4092,7 @@ msgstr "Sadržaj bilješke"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Bilješka ne postoji: „%s”. Želiš li je stvoriti?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Uređivač bilježaka"
@@ -4138,19 +4102,18 @@ msgid "Note has been saved."
 msgstr "Bilješka je spremljena."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
-msgstr "Povijest bilježaka"
+msgstr "Povijest bilješke"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
 msgstr "Povijest bilježaka"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
-msgstr "Bilješka je spremljena."
+msgstr "Povijest bilješke je izbrisana."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
@@ -4168,16 +4131,15 @@ msgid "Note list growth factor"
 msgstr "Faktor povećanja popisa bilježaka"
 
 #: packages/app-desktop/gui/MenuBar.tsx:812
-#, fuzzy
 msgid "Note list style"
 msgstr "Stil popisa bilježaka"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Naslov bilješke"
+msgstr "Pregled bilješke"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Svojstva bilješke"
@@ -4189,7 +4151,6 @@ msgstr "Naslov bilješke"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:244
-#, fuzzy
 msgid "Note viewer"
 msgstr "Preglednik bilježaka"
 
@@ -4231,7 +4192,7 @@ msgstr "Bilježnica: %s (%s)"
 msgid "Notebooks"
 msgstr "Bilježnice"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Naslov „%s” je rezerviran i ne može se koristiti za bilježnice."
 
@@ -4263,22 +4224,22 @@ msgid "OCR: Clear cache and re-download language data files"
 msgstr "OCR: Isprazni predmemoriju i ponovo preuzmi datoteke jezičnih podataka"
 
 #: packages/lib/models/settings/builtInMetadata.ts:575
-#, fuzzy
 msgid "OCR: Language data URL or path"
-msgstr "OCR: URL podataka jezika ili staza"
+msgstr "OCR: URL podataka jezika ili putanja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Traži u svim bilješkama"
+msgstr "OCR: Tra#i u izdvojenom sadržaju"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4341,7 +4302,6 @@ msgid "OneDrive Login"
 msgstr "OneDrive prijava"
 
 #: packages/lib/services/interop/InteropService.ts:148
-#, fuzzy
 msgid "OneNote Notebook"
 msgstr "OneNote bilježnica"
 
@@ -4366,12 +4326,10 @@ msgid "Open in new window"
 msgstr "Otvori u novom prozoru"
 
 #: packages/app-desktop/bridge.ts:486
-#, fuzzy
 msgid "Open it"
 msgstr "Otvori"
 
 #: packages/app-desktop/bridge.ts:557
-#, fuzzy
 msgid "Open log"
 msgstr "Otvori dnevnik"
 
@@ -4392,7 +4350,6 @@ msgid "Open secondary app instance..."
 msgstr "Otvori sekundarnu instancu programa …"
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:149
-#, fuzzy
 msgid "Open settings"
 msgstr "Otvori postavke"
 
@@ -4413,7 +4370,6 @@ msgid "Opening section %s"
 msgstr "Uvodni odjeljak %s"
 
 #: packages/app-mobile/components/Dropdown.tsx:216
-#, fuzzy
 msgid "Opens dropdown"
 msgstr "Otvara padajući izbornik"
 
@@ -4445,7 +4401,7 @@ msgstr "Poredan popis"
 msgid "Other applications..."
 msgstr "Drugi programi …"
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Format rezultata: %s"
 
@@ -4505,7 +4461,6 @@ msgid "PDF File"
 msgstr "PDF datoteka"
 
 #: packages/lib/utils/joplinCloud/index.ts:448
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
 msgstr "Po korisniku. Najmanje 2 korisnika."
 
@@ -4513,23 +4468,22 @@ msgstr "Po korisniku. Najmanje 2 korisnika."
 msgid "Permanently delete note"
 msgstr "Zauvijek izbriši bilješku"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "Zauvijek izbrisati bilješku „%s”?"
 
 #: packages/app-cli/app/command-rmbook.ts:35
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"Zauvijek izbrisati bilježnicu \"%s\"?\n"
+"Zauvijek izbrisati bilježnicu „%s“?\n"
 "\n"
 "Sve bilješke i podbilježnice u ovoj bilježnici će se također zauvijek "
 "izbrisati."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Zauvijek izbrisati ovu bilješku?"
@@ -4546,7 +4500,7 @@ msgstr "Potrebna je dozvola"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Slika %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4572,7 +4526,7 @@ msgid ""
 "all the notes to show up on the recipient's device."
 msgstr ""
 "Imaj na umu, da ako je bilježnica velika, pojavljivanje svih bilježaka na "
-"uređaju primatelja može potrajati nekoliko minuta."
+"uređaju primaoca može potrajati nekoliko minuta."
 
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
@@ -4589,7 +4543,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:344
 msgid "Please provide the recipient email"
-msgstr "Navedi e-mail adresu primatelja"
+msgstr "Navedi e-mail adresu primaoca"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4599,7 +4553,7 @@ msgstr "Snimi svoj glas …"
 msgid "Please select a notebook first."
 msgstr "Najprije odaberi jednu bilježnicu."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Najprije odaberi bilješku ili bilježnicu koju želiš izbrisati."
 
@@ -4629,7 +4583,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr ""
+msgstr "Pričekaj dok učitavamo stranicu za prijavu tvoje organizacije …"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4641,7 +4595,6 @@ msgid "Plugin message"
 msgstr "Poruka dodatka"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:423
-#, fuzzy
 msgid "Plugin panels"
 msgstr "Ploče dodataka"
 
@@ -4659,7 +4612,7 @@ msgstr "Sigurnost dodataka"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:329
 msgid "Plugin tools"
-msgstr "Alati za dodatke"
+msgstr "Alati dodatka"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1007
 msgid "Plugin WebView debugging"
@@ -4682,7 +4635,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1411
 msgid "Portrait"
-msgstr "Uspravni"
+msgstr "Uspravno"
 
 #: packages/app-cli/app/help-utils.js:77
 msgid "Possible keys/values:"
@@ -4694,7 +4647,7 @@ msgstr "Moguće vrijednosti: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "Preferiraj JSON razultat."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4721,7 +4674,7 @@ msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
 "Očuvaj boje prilikom lijepljenja teksta u uređivaču formatiranog teksta"
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Zatvori program pomoću prečaca Ctrl+D ili upiši „exit”"
 
@@ -4750,11 +4703,11 @@ msgid "Previous match"
 msgstr "Prethodno poklapanje"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1145
-#, fuzzy
 msgid "Previous versions"
-msgstr "Prethodne verzije ove bilješke"
+msgstr "Prethodne verzije"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Prethodne verzije ove bilješke"
 
@@ -4835,9 +4788,8 @@ msgid "Public-private key pair:"
 msgstr "Javno-privatan par ključa:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
-msgstr "Objavi bilješke"
+msgstr "Objavi bilješku"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4854,10 +4806,9 @@ msgstr "Objavi blješke na internetu"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1163
 msgid "Publish/unpublish"
-msgstr "Objavi/Povuci objavu"
+msgstr "Objavi/Poništi objavljivanje"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
-#, fuzzy
 msgid "QR Code"
 msgstr "QR kod"
 
@@ -4889,9 +4840,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Ponovo učitaj lokalne podatke u izvor sinronizacije"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Uvuci više"
+msgstr "Čitaj dalje"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4902,9 +4852,10 @@ msgid "Read time: %s min"
 msgstr "Vrijeme čitanja: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Naredba „%s” dostupna je samo u modusu korisničkog grafičkog sučelja"
+msgstr ""
+"Čitanje naredbi iz standardnog unosa moguće je samo u modusu sučelja "
+"naredbenog retka (CLI)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4924,7 +4875,7 @@ msgstr "Primaoci:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
-msgstr ""
+msgstr "Prepoznaj rukom pisane slike"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4939,12 +4890,10 @@ msgid "Record audio"
 msgstr "Snimi zvuk"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
-#, fuzzy
 msgid "Recording"
 msgstr "Snimanje"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
-#, fuzzy
 msgid "Recording..."
 msgstr "Snimanje …"
 
@@ -4971,22 +4920,19 @@ msgstr "Regularni izraz"
 msgid "Reject"
 msgstr "Odbij"
 
-#: packages/app-cli/app/command-share.ts:228
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
-msgstr "Stvaranje izvještaja …"
+msgstr "Odbijanje dijeljenja …"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:107
 msgid "Remove"
 msgstr "Ukloni"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
 msgstr "Ukloni %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
-#, fuzzy
 msgid "Remove %s from share"
 msgstr "Ukloni %s iz dijeljenja"
 
@@ -4999,14 +4945,12 @@ msgid "Remove this search from the sidebar?"
 msgstr "Ukloniti ovu pretragu iz bočne trake?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
-msgstr "Ukloniti oznaku „%s” iz svih bilježaka?"
+msgstr "Ukloni %s iz dijeljenja."
 
-#: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
-msgstr "Preimenuj oznaku:"
+msgstr "Uklonjena oznaka: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -5023,13 +4967,13 @@ msgstr "Preimenuj oznaku:"
 
 #: packages/app-cli/app/command-ren.ts:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr ""
-"Preimenuje zadani element <item> (bilješka ili bilježnica) u ime <name>."
+msgstr "Preimenuje zadani element <item> (bilješka ili bilježnica) u <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Prikazuje formatirani tekst u svim redcima koji ne uključuju kursor."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Obnovi ključ"
@@ -5100,7 +5044,8 @@ msgstr "Obnovi glavnu lozinku"
 msgid "Resize large images:"
 msgstr "Promijeni veličinu velikih slika:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Resursi: %d."
@@ -5110,7 +5055,6 @@ msgid "Restart and upgrade"
 msgstr "Pokreni ponovo i nadogradi"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:186
-#, fuzzy
 msgid "Restart in safe mode"
 msgstr "Pokreni ponovo u sigurnom modusu"
 
@@ -5120,6 +5064,7 @@ msgid "Restart now"
 msgstr "Pokreni ponovo"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5143,11 +5088,11 @@ msgstr "Obnovi bilježnicu"
 
 #: packages/app-cli/app/command-restore.ts:12
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Obnovi stavke iz smeća koje se poklapaju s <uzorak>."
+msgstr "Obnovi elemente iz smeća koje se poklapaju sa <uzorak>."
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
-msgstr "Obnovljene stavke"
+msgstr "Obnovljeni elementi"
 
 #: packages/lib/services/RevisionService.ts:250
 msgid "Restored Notes"
@@ -5184,9 +5129,8 @@ msgid "Reverses the sorting order."
 msgstr "Preokreće redoslijed."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
-msgstr "Revizija: %s (%s)"
+msgstr "Revizija:"
 
 #: packages/lib/versionInfo.ts:65
 msgid "Revision: %s (%s)"
@@ -5239,8 +5183,8 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"Trenutačno je aktivan sigurni modus. Prikaz bilježaka i svi dodaci "
-"privremeno su deaktivirani."
+"Trenutačno je aktivan sigurni modus. Prikaz bilježaka i svi dodaci su "
+"privremeno deaktivirani."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:129
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:93
@@ -5264,7 +5208,7 @@ msgstr "Spremi kao %s"
 msgid "Save as..."
 msgstr "Spremi kao …"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5273,7 +5217,6 @@ msgid "Save changes"
 msgstr "Spremi promjene"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
-#, fuzzy
 msgid "Save changes?"
 msgstr "Spremiti promjene?"
 
@@ -5282,9 +5225,8 @@ msgid "Save geo-location with notes"
 msgstr "Spremi geografske podatke mjesta s bilješkama"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Obriši nadređenu bilježnicu"
+msgstr "Skeniraj bilježnicu"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5313,7 +5255,6 @@ msgid "Search for..."
 msgstr "Traži …"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
-#, fuzzy
 msgid "Search hidden"
 msgstr "Pretraži skrivene"
 
@@ -5330,21 +5271,20 @@ msgid "Search results"
 msgstr "Rezultati pretrage"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
-#, fuzzy
 msgid "Search shown"
 msgstr "Pretraži prikazane"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
-msgstr "Nema rezultata"
+msgstr "Traži oznake"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Traži:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5369,9 +5309,8 @@ msgid "Select"
 msgstr "Odaberi"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
-msgstr "Odaberi emoji …"
+msgstr "Odaberi reviziju …"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:371
@@ -5387,31 +5326,28 @@ msgid "Select file..."
 msgstr "Odaberi datoteku …"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Obriši nadređenu bilježnicu"
+msgstr "Odaberi bilježnicu"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Odaberi nadređenu bilježnicu"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Stvoreno: %s"
+msgstr "Odabrano: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
 msgstr "Odabir izbrisan"
 
 #: packages/app-mobile/components/FolderPicker.tsx:80
-#, fuzzy
 msgid "Selects a notebook"
 msgstr "Odabire bilježnicu"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Vlastiti hosting"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5485,7 +5421,6 @@ msgstr ""
 "računalo."
 
 #: packages/lib/utils/joplinCloud/index.ts:134
-#, fuzzy
 msgid "Share a notebook with others"
 msgstr "Dijeli bilježnicu s drugima"
 
@@ -5519,6 +5454,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Dijeli ili prestaje dijeliti navedenu bilježnicu [notebook] s korisnikom "
+"[user]. Zahtijeva Joplin Cloud ili Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5622,7 +5559,8 @@ msgstr ""
 "Preskočeni elementi: %d (koristi --retry-failed-items za ponovno "
 "dešifriranje)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Preskočeno: %d."
@@ -5664,13 +5602,14 @@ msgstr "Neki se elementi ne mogu sinkronizirati."
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:43
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
-"Neke se stavke ne mogu sinkronizirati. Pritisni za daljnje informacije."
+"Neki se elementi ne mogu sinkronizirati. Pritisni za daljnje informacije."
 
 #: packages/lib/models/settings/settingValidations.ts:24
 msgid ""
 "Some items could not be synchronised. Please try to synchronise them first."
 msgstr ""
-"Neke se stavke nisu mogle sinkronizirati. Pokušaj ih najprije sinkronizirati."
+"Neki se elementi nisu mogli sinkronizirati. Pokušaj ih najprije "
+"sinkronizirati."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Sort \"%s\" in ascending order"
@@ -5706,11 +5645,10 @@ msgid "Source"
 msgstr "Izvor"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
-msgstr "Aktualiziraj profil"
+msgstr "Izvorni kod je dostupan"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Format izvora: %s"
 
@@ -5787,14 +5725,17 @@ msgstr "Statistika …"
 msgid "Status"
 msgstr "Stanje"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Stanje: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Stanje: Započeto na priključku %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Prvi korak: Aktiviraj Clipper uslugu"
@@ -5811,6 +5752,7 @@ msgstr "Prvi korak: Autoriziraj program otvaranjem ovog URL-a u pregledniku:"
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Drugi korak: Upiši Dropboxov kod:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Drugi korak: Instaliraj proširenje"
@@ -5902,20 +5844,18 @@ msgid "Switch to the %s Editor"
 msgstr "Promijeni u %s uređivač"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:71
-#, fuzzy
 msgid "Switch to the legacy editor"
-msgstr "Promijeni u stari uređivač"
+msgstr "Koristi stari uređivač"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
-#, fuzzy
 msgid "Switch to the new editor"
-msgstr "Promijeni u novi uređivač"
+msgstr "Koristi novi uređivač"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:92
 msgid "Switch to to-do type"
 msgstr "Promijeni u zadatak"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -5958,7 +5898,6 @@ msgid "Sync your notes"
 msgstr "Sinkroniziraj svoje bilješke"
 
 #: packages/lib/models/Setting.ts:1291
-#, fuzzy
 msgid "Sync, encryption, proxy"
 msgstr "Sinkronizacija, šifriranje, proxy"
 
@@ -6022,7 +5961,8 @@ msgstr "Tabulator premješta fokus"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Označeno: %d."
@@ -6059,7 +5999,6 @@ msgid "Teams"
 msgstr "Timovi"
 
 #: packages/lib/services/interop/InteropService.ts:140
-#, fuzzy
 msgid "Text document"
 msgstr "Tekstualni dokument"
 
@@ -6104,7 +6043,7 @@ msgid ""
 "note."
 msgstr "Privici se više neće pratiti kad se prebaciš na jednu drugu bilješku."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Naredba „%s” dostupna je samo u modusu korisničkog grafičkog sučelja"
 
@@ -6160,7 +6099,6 @@ msgstr ""
 "1. Za prikaz promjena ponovo pokreni program."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
-#, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Sljedeći privitak odgovara tvojoj pretrazi:"
@@ -6209,6 +6147,8 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"Čini se da je starija verzija Markdown uređivača prestala raditi zbog "
+"nekompatibilnosti s dodatkom. Preporučujemo koristiti novi uređivač."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6229,11 +6169,11 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Bilješka „%s” je uspješno obnovljena u bilježnicu „%s”."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Bilješka „%s” je uspješno obnovljena u bilježnicu „%s”."
+msgstr ""
+"Bilješka je pretvorena u Markdown, a izvorna bilješka je premještena u smeće"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6250,7 +6190,8 @@ msgstr "Bilježnica i njezin sadržaj su uspješno premješteni u smeće."
 msgid "The notebook could not be saved: %s"
 msgstr "Bilježnica se ne može spremiti: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Bilješke su uvezene: %s"
@@ -6265,7 +6206,7 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Primatelj/ica se ne može ukloniti s popisa. Pokušaj ponovo.\n"
+"Primalac se ne može ukloniti s popisa. Pokušaj ponovo.\n"
 "\n"
 "Greška je bila: „% s”"
 
@@ -6301,7 +6242,6 @@ msgstr ""
 "Cilj sinkronizacije se mora nadograditi. Nastavi pritiskom na ovaj naslov."
 
 #: packages/app-desktop/gui/MainScreen.tsx:533
-#, fuzzy
 msgid "The synchronisation password is missing."
 msgstr "Nedostaje lozinka za sinkronizaciju."
 
@@ -6337,11 +6277,13 @@ msgstr "Web Clipper treba tvoju autorizaciju za pristup podacima."
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr "Web Clipper usluga se ne može aktiviranati u ovoj Joplin instanci."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "Web Clipper usluga je aktivirana i postavljena na automatsko pokretanje."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Web Clipper usluga nije aktivirana."
@@ -6359,7 +6301,6 @@ msgid "Theme"
 msgstr "Tema"
 
 #: packages/lib/models/Setting.ts:1290
-#, fuzzy
 msgid "Themes, editor font"
 msgstr "Teme, font uređivača"
 
@@ -6399,9 +6340,10 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
-"Te se stavke nisu uspjele sinkronizirati, ali su označene kao „zanemarene“. "
-"Neće prouzročiti pojavljivanje upozorenja o sinkronizaciji, ali se i dalje "
-"ne sinkroniziraju. Za ukidanje zanemarivanja, klikni „Pokušaj ponovo“."
+"Ovie se elementi nisu uspjeli sinkronizirati, ali su označeni kao "
+"„zanemareno“. Neće prouzročiti pojavljivanje upozorenja o sinkronizaciji, "
+"ali se i dalje ne sinkroniziraju. Za ukidanje zanemarivanja, klikni „Pokušaj "
+"ponovo“."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -6423,7 +6365,7 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Ovi dodaci proširuju mogućnosti Markdown označavanja s dodatnim funkcijama. "
+"Ovi dodaci proširuju mogućnosti Markdown označivanja s dodatnim funkcijama. "
 "Imaj na umu da, iako ove funkcije mogu biti korisne, one nisu dio "
 "standardnog Markdown označavanja i stoga će većina njih raditi samo u "
 "Joplinu. Uz to, neki od njih su *nekompatibilni* s WYSIWYG uređivačem. Ako u "
@@ -6450,6 +6392,7 @@ msgstr "Ovaj privitak nema OCR podatke (Stanje: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Ovaj privitak još nije preuzet ili dešifriran"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6459,7 +6402,6 @@ msgstr ""
 "programima da pristupe Joplinu."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
-#, fuzzy
 msgid "This drawing may have unsaved changes."
 msgstr "Ovaj crtež možda sadrži nespremljene promjene."
 
@@ -6468,14 +6410,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Ova je funkcija standardno deaktivirana. Moraš je ručno aktivirati "
+"uključivanjem opcije „Aktiviraj rukom pisanu transkripciju“."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Ova je funkcija dostupna samo na Joplin Cloudu i Joplin Serveru."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Sustav za prepoznavanje ne podržava ovu vrstu slike."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6524,6 +6468,7 @@ msgstr ""
 "Ova bilješka nema sadržaj. Pritisni „%s” za prebacivanje na uređivač i uredi "
 "bilješku."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Ova bilješka nema povijest"
@@ -6532,6 +6477,8 @@ msgstr "Ova bilješka nema povijest"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Ova je bilješka u HTML formatu. Za jednostavnije uređivanje pretvori je u "
+"Markdown format."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6546,6 +6493,7 @@ msgstr ""
 "Ovaj uređivač formatiranog teksta ima poneka ograničenja i bilo bi dobro "
 "poznati ih prije upotrebe."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6578,7 +6526,7 @@ msgstr ""
 #: packages/app-desktop/commands/emptyTrash.ts:14
 #: packages/app-mobile/components/side-menu-content.tsx:340
 msgid "This will permanently delete all items in the trash. Continue?"
-msgstr "Ovo će zauvijek izbrisati sve stavke u smeću. Nastaviti?"
+msgstr "Ovo će zauvijek izbrisati sve elemente u smeću. Nastaviti?"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
 #: packages/lib/commands/leaveSharedFolder.ts:22
@@ -6621,20 +6569,19 @@ msgstr "Za sinkronizaciju Joplina s Joplin Cloud prijavi se koristeći URL:"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
-msgstr "Za sinkronizaciju Joplina s Dropboxom slijedi sljedeće korake:"
+msgstr "Za sinkronizaciju Joplina s tvojim računom slijedi sljedeće korake:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
 msgstr "Za nastavljanje, dolje upiši glavnu lozinku."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Za stvaranje nove oznake upiši ime i pritisni tipku enter."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr "Za brisanje oznake ukloni oznaku s povezanih bilježaka."
 
@@ -6739,7 +6686,6 @@ msgid "Toggle menu bar"
 msgstr "Uključi/Isključi traku izbornika"
 
 #: packages/lib/models/Setting.ts:1295
-#, fuzzy
 msgid "Toggle note history, keep notes for"
 msgstr "Uključi/Isključi povijest bilježaka, zadrži bilješke za"
 
@@ -6752,7 +6698,6 @@ msgid "Toggle own sort order"
 msgstr "Uključi/Isključi vlastiti redoslijed"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:455
-#, fuzzy
 msgid "Toggle plugin editor"
 msgstr "Uključi/Isključi uređivač dodataka"
 
@@ -6768,6 +6713,7 @@ msgstr "Uključi/Isključi bočnu traku"
 msgid "Toggle sort order field"
 msgstr "Uključi/Isključi polje redoslijeda"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Ključ je kopiran u međuspremnik!"
@@ -6808,8 +6754,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Upiši `help [command]` (zadaj naredbu) za daljnje informacije o naredbi ili "
-"`help all` za sve informacije o korištenju naredbi."
+"Upiši `help [command]` za više informacija o naredbi ili `help all` za sve "
+"informacije o korištenju naredbi."
 
 #: packages/app-cli/app/main.js:105
 msgid "Type `joplin help` for usage information."
@@ -6834,7 +6780,6 @@ msgid "Type: %s."
 msgstr "Vrsta: %s."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1041
-#, fuzzy
 msgid "Unable to edit resource of type %s"
 msgstr "Nije moguće urediti resurs vrste %s"
 
@@ -6871,7 +6816,6 @@ msgid "Unknown"
 msgstr "Nepoznato"
 
 #: packages/app-desktop/bridge.ts:478
-#, fuzzy
 msgid "Unknown file type"
 msgstr "Nepoznata vrsta datoteke"
 
@@ -6879,7 +6823,7 @@ msgstr "Nepoznata vrsta datoteke"
 msgid "Unknown flag: %s"
 msgstr "Nepoznata zastavica: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -6894,14 +6838,12 @@ msgid "Unordered list"
 msgstr "Neporedan popis"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Poništi objavljivanje bilješke"
+msgstr "Poništi objavljivanje"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Poništi objavljivanje bilješke"
+msgstr "Poništi objavljivanje za „%s“"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6911,11 +6853,13 @@ msgstr "Poništi objavljivanje bilješke"
 msgid "Unshare"
 msgstr "Prestani dijeliti"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Prestati dijeliti bilježnicu „%s“? Time će drugi korisnici izgubiti pristup "
+"bilježnici."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -6929,6 +6873,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodržana vrsta slike: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6943,7 +6888,7 @@ msgstr ""
 "Greška: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Bez naslova"
@@ -6973,6 +6918,7 @@ msgstr "Aktualiziraj ukupne veličine"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -6994,7 +6940,8 @@ msgstr "Aktualizirani eksterni elementi: %d."
 msgid "Updated: "
 msgstr "Aktualizirano: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Aktualizirano: %d."
@@ -7017,10 +6964,10 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Nadogradi cilj sinkronizacije na najnoviju verziju."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Snimi sliku"
+msgstr "Prenesi sliku"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7060,10 +7007,10 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen.tsx:797
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr "Promijeni raspored pomoću strelica. Zatvori pomoću tipke „Escape”."
+msgstr ""
+"Promijeni raspored elemenata pomoću strelica. Zatvori pomoću tipke „Escape”."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1518
-#, fuzzy
 msgid "Use the legacy Markdown editor"
 msgstr "Koristi stari Markdown uređivač"
 
@@ -7146,12 +7093,10 @@ msgid "Viewer"
 msgstr "Preglednik"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1238
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
 msgstr "Obitelj fontova preglednika i uređivača formatiranog teksta"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
-#, fuzzy
 msgid "Viewer font size"
 msgstr "Veličina fonta preglednika"
 
@@ -7168,9 +7113,8 @@ msgid "Voice typing language files (URL)"
 msgstr "Jezične datoteke za glasovno tipkanje (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1912
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "Tipkanje glasom …"
+msgstr "Glasovno tipkanje: Glosar"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1302
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
@@ -7183,12 +7127,11 @@ msgstr "Vosk"
 
 #: packages/lib/services/joplinCloudUtils.ts:27
 msgid "Waiting for authorisation..."
-msgstr "Čeka se odobrenje …"
+msgstr "Čeka se autorizacija …"
 
-#: packages/app-cli/app/command-share.ts:174
-#, fuzzy
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
-msgstr "Bilježnica: %s"
+msgstr "Čekanje: Bilježnica %s od %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7335,11 +7278,11 @@ msgstr "Prijavljen/a si na Joplin Cloud, sada možeš napustiti ovaj ekran."
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Sada si prijavljen(a) na svoj račun."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Sada koristiš najnoviju verziju Markdown uređivača."
 
 #: packages/app-desktop/gui/MainScreen.tsx:588
 msgid ""

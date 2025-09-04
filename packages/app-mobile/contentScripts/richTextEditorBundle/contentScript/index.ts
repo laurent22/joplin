@@ -7,17 +7,8 @@ import '@joplin/editor/ProseMirror/styles';
 import readFileToBase64 from '../../utils/readFileToBase64';
 import { EditorLanguageType } from '@joplin/editor/types';
 import convertHtmlToMarkdown from './convertHtmlToMarkdown';
-
-const postprocessHtml = (html: HTMLElement) => {
-	// Fix resource URLs
-	const resources = html.querySelectorAll<HTMLImageElement>('img[data-resource-id]');
-	for (const resource of resources) {
-		const resourceId = resource.getAttribute('data-resource-id');
-		resource.src = `:/${resourceId}`;
-	}
-
-	return html;
-};
+import { ExportedWebViewGlobals as MarkdownEditorWebViewGlobals } from '../../markdownEditorBundle/types';
+import { EditorEventType } from '@joplin/editor/events';
 
 const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 	// Add a container element -- when converting to HTML, Turndown
@@ -30,18 +21,19 @@ const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 
 
 const htmlToMarkdown = (html: HTMLElement): string => {
-	html = postprocessHtml(html);
-
 	return convertHtmlToMarkdown(html);
 };
 
-export const initialize = async ({
-	settings,
-	initialText,
-	initialNoteId,
-	parentElementClassName,
-	initialSearch,
-}: EditorProps) => {
+export const initialize = async (
+	{
+		settings,
+		initialText,
+		initialNoteId,
+		parentElementClassName,
+		initialSearch,
+	}: EditorProps,
+	markdownEditorApi: MarkdownEditorWebViewGlobals,
+) => {
 	const messenger = new WebViewToRNMessenger<EditorProcessApi, MainProcessApi>('rich-text-editor', null);
 	const parentElement = document.getElementsByClassName(parentElementClassName)[0];
 	if (!parentElement) throw new Error('Parent element not found');
@@ -86,29 +78,25 @@ export const initialize = async ({
 				removeUnusedPluginAssets: options.isFullPageRender,
 			});
 		},
-		renderHtmlToMarkup: (node) => {
-			// By default, if `src` is specified on an image, the browser will try to load the image, even if it isn't added
-			// to the DOM. (A similar problem is described here: https://stackoverflow.com/q/62019538).
-			// Since :/resourceId isn't a valid image URI, this results in a large number of warnings. As a workaround,
-			// move the element to a temporary document before processing:
-			const dom = document.implementation.createHTMLDocument();
-			node = dom.importNode(node, true);
-
-			let html: HTMLElement;
-			if ((node instanceof HTMLElement)) {
-				html = node;
-			} else {
-				const container = document.createElement('div');
-				container.appendChild(html);
-				html = container;
-			}
-
+		renderHtmlToMarkup: (html) => {
 			if (settings.language === EditorLanguageType.Markdown) {
 				return htmlToMarkdown(wrapHtmlForMarkdownConversion(html));
 			} else {
-				return postprocessHtml(html).outerHTML;
+				return html.outerHTML;
 			}
 		},
+	}, (parent, language, onChange) => {
+		return markdownEditorApi.createEditorWithParent({
+			initialText: '',
+			initialNoteId: '',
+			parentElementOrClassName: parent,
+			settings: { ...editor.getSettings(), language },
+			onEvent: (event) => {
+				if (event.kind === EditorEventType.Change) {
+					onChange(event.value);
+				}
+			},
+		});
 	});
 	editor.setSearchState(initialSearch);
 

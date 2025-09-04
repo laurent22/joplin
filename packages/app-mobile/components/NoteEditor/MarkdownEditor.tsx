@@ -3,13 +3,11 @@ import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
 
 import * as React from 'react';
-import { useEffect } from 'react';
 import { useMemo, useCallback } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 
 import { EditorProps } from './types';
 import { _ } from '@joplin/lib/locale';
-import useCodeMirrorPlugins from './hooks/useCodeMirrorPlugins';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { OnMessageEvent } from '../ExtendedWebView/types';
@@ -117,16 +115,16 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 		onEditorEvent: props.onEditorEvent,
 		onAttachFile: props.onAttach,
 		editorOptions: {
-			parentElementClassName: 'CodeMirror',
+			parentElementOrClassName: 'CodeMirror',
 			initialText: props.initialText,
 			initialNoteId: props.noteId,
 			settings: props.editorSettings,
-			onLocalize: _,
 		},
 		webviewRef,
+		pluginStates: props.plugins,
 	});
 
-	props.editorRef.current = editorWebViewSetup.api.editor;
+	props.editorRef.current = editorWebViewSetup.api.mainEditor;
 
 	const injectedJavaScript = `
 		window.onerror = (message, source, lineno) => {
@@ -154,11 +152,6 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 	const css = useCss(props.themeId);
 	const html = useHtml();
 
-	const codeMirrorPlugins = useCodeMirrorPlugins(props.plugins);
-	useEffect(() => {
-		void editorWebViewSetup.api.editor.setContentScripts(codeMirrorPlugins);
-	}, [codeMirrorPlugins, editorWebViewSetup]);
-
 	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;
 
@@ -183,7 +176,7 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 			html={html}
 			injectedJavaScript={injectedJavaScript}
 			css={css}
-			hasPluginScripts={codeMirrorPlugins.length > 0}
+			hasPluginScripts={editorWebViewSetup.hasPlugins}
 			onMessage={onMessage}
 			onLoadEnd={editorWebViewSetup.webViewEventHandlers.onLoadEnd}
 			onError={onError}

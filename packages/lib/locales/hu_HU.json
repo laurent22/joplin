@@ -248,6 +248,9 @@
 	"Add recipient:": [
 		"Címzett hozzáadása:"
 	],
+	"Add tags:": [
+		"Címkék hozzáadása:"
+	],
 	"Add title": [
 		"Cím hozzáadása"
 	],
@@ -257,8 +260,14 @@
 	"Add to note": [
 		"Hozzáadás jegyzethez"
 	],
+	"Added new: %s": [
+		"Új hozzáadva: %s"
+	],
+	"Added tag: %s": [
+		"Hozzáadott címke: %s"
+	],
 	"Adds tag": [
-		""
+		"Címke hozzáadása"
 	],
 	"Admin": [
 		"Adminisztrátor"
@@ -366,7 +375,7 @@
 		"Aritim sötét"
 	],
 	"Associated tags:": [
-		""
+		"Kapcsolódó címkék:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Jelenleg a Joplin Web egyszerre csak egy lapban nyitható meg. Zárja be a Joplin másik példányát."
@@ -435,10 +444,10 @@
 		"Frissítések automatikus ellenőrzése"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		"Automatikusan törölje a kuka tartalmát bizonyos napok elteltével"
+		"Kuka tartalmának automatikusan törlése bizonyos napok elteltével"
 	],
 	"Automatically switch theme to match system theme": [
-		"Automatikusan váltson olyan témára, ami egyezik a rendszer témájával"
+		"Automatikus átváltás a rendszer témájával egyező témára"
 	],
 	"Back": [
 		"Vissza"
@@ -653,6 +662,9 @@
 	"Code View": [
 		"Kódnézet"
 	],
+	"Code:": [
+		"Kód:"
+	],
 	"Collaborate on a notebook with others": [
 		"Együttműködés egy jegyzetfüzeten másokkal"
 	],
@@ -762,6 +774,12 @@
 	"Control character": [
 		"Vezérlőkarakter"
 	],
+	"Convert it": [
+		"Átalakítás"
+	],
+	"Convert note to Markdown": [
+		"Jegyzet átalakítása Markdown formátumba"
+	],
 	"Convert to note": [
 		"Átalakítás jegyzetté"
 	],
@@ -790,7 +808,7 @@
 		"Hivatkozás másolása a weboldalra"
 	],
 	"Copy Markdown link": [
-		"Markdown-hivatkozás másolása"
+		"Markdown hivatkozás másolása"
 	],
 	"Copy path to clipboard": [
 		"Útvonal másolása vágólapra"
@@ -816,6 +834,9 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Nem sikerült kapcsolódni a bővítménytárolóhoz."
+	],
+	"Could not convert note to Markdown: %s": [
+		"Nem sikerült a jegyzetet átalakítani Markdown formátumba: %s"
 	],
 	"Could not export notes: %s": [
 		"Nem sikerült exportálni a jegyzeteket: %s"
@@ -847,8 +868,14 @@
 	"Create a notebook": [
 		"Jegyzetfüzet létrehozása"
 	],
+	"Create new notebook": [
+		"Új jegyzetfüzet létrehozása"
+	],
 	"Create new profile...": [
 		"Új profil létrehozása…"
+	],
+	"Create note": [
+		"Jegyzet létrehozása"
 	],
 	"Create notebook": [
 		"Jegyzetfüzet létrehozása"
@@ -897,6 +924,12 @@
 	],
 	"Creating new to-do...": [
 		"Új teendő létrehozása…"
+	],
+	"Creating note \"%s\"...": [
+		"A(z) „%s” nevű jegyzet létrehozása…"
+	],
+	"Creating note.": [
+		"Jegyzet létrehozása."
 	],
 	"Creating report...": [
 		"Jelentés létrehozása…"
@@ -968,7 +1001,7 @@
 		"Alapértelmezett"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"A dokumentumbeolvasó által létrehozott dokumentumokhoz használt alapértelmezett cím."
 	],
 	"Default: %s": [
 		"Alapértelmezett: %s"
@@ -1139,13 +1172,13 @@
 		"Ne veszítse el a jelszót, mert biztonsági okokból ez lesz az *egyetlen* módja az adatok visszafejtésének! A titkosítás engedélyezéséhez adja meg a jelszavát alább."
 	],
 	"Document scanner: Title template": [
-		""
+		"Dokumentumbeolvasó: Címsablon"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Ne engedélyezze, hogy a megosztás címzettje írjon a megosztott jegyzetfüzetbe. Csak az `add` alparancsra érvényes."
 	],
 	"Don't show this message again": [
-		""
+		"Ne jelenjen meg többé ez az üzenet"
 	],
 	"Donate, website": [
 		"Támogatás, weboldal"
@@ -1221,6 +1254,12 @@
 	],
 	"Edit": [
 		"Szerkesztés"
+	],
+	"Edit as Markdown": [
+		"Szerkesztés Markdownként"
+	],
+	"Edit as Rich Text": [
+		"Szerkesztés formázott szövegként"
 	],
 	"Edit link": [
 		"Hivatkozás szerkesztése"
@@ -1324,20 +1363,26 @@
 	"Enable Fountain syntax support": [
 		"Forgatókönyv-szintaxis engedélyezése"
 	],
+	"Enable handwritten transcription": [
+		"Kézzel írt átírás engedélyezése"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"HTML-Markdown átalakítási kísérőoldal engedélyezése"
+	],
 	"Enable Linkify": [
 		"Linkify engedélyezése"
 	],
 	"Enable markdown emoji": [
-		"Markdown-emodzsi engedélyezése"
+		"Markdown emodzsi engedélyezése"
 	],
 	"Enable math expressions": [
 		"Matematikai képletek engedélyezése"
 	],
 	"Enable Mermaid diagrams support": [
-		"Mermaid-diagram támogatásának engedélyezése"
+		"Mermaid diagram támogatásának engedélyezése"
 	],
 	"Enable multimarkdown table extension": [
-		"Multimarkdown-táblázatkiegészítő engedélyezése"
+		"Multimarkdown táblázatkiegészítő engedélyezése"
 	],
 	"Enable note history": [
 		"Jegyzetelőzmények engedélyezése"
@@ -1358,7 +1403,7 @@
 		"Lágy törések engedélyezése"
 	],
 	"Enable spell checking in Markdown editor": [
-		"Helyesírás-ellenőrzés engedélyezése a Markdown-szerkesztőben"
+		"Helyesírás-ellenőrzés engedélyezése a Markdown szerkesztőben"
 	],
 	"Enable spellcheck in the text editor": [
 		"Helyesírás-ellenőrzés engedélyezése a szövegszerkesztőben"
@@ -1367,7 +1412,7 @@
 		"Tartalomjegyzék-kiegészítő engedélyezése"
 	],
 	"Enable the Markdown toolbar": [
-		"Markdown-eszköztár engedélyezése"
+		"Markdown eszköztár engedélyezése"
 	],
 	"Enable typographer support": [
 		"Tipográfiai támogatás engedélyezése"
@@ -1385,10 +1430,10 @@
 		"Engedélyezve"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		"Engedélyezi a Markdown-lista folytatását, az automatikus HTML-címkék bezárását és egyéb automatikus jelölőkiegészítéseket."
+		"Engedélyezi a Markdown lista folytatását, az automatikus HTML-címkék bezárását és egyéb automatikus jelölőkiegészítéseket."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		"Engedélyezi a Markdown-minták cseréjét a formázott szöveges szerkesztőben. Ha például engedélyezve van, a **félkövér** beírása félkövér szöveget hoz létre."
+		"Engedélyezi a Markdown minták cseréjét a formázott szöveges szerkesztőben. Ha például engedélyezve van, a **félkövér** beírása félkövér szöveget hoz létre."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"A titkosítás engedélyezése azt jelenti, hogy *minden* jegyzet és melléklet újra lesz szinkronizálva, és titkosítva lesz elküldve a szinkronizálási célra."
@@ -1715,6 +1760,9 @@
 	"Hide password": [
 		"Jelszó elrejtése"
 	],
+	"Hides warning": [
+		"Figyelmeztetések elrejtése"
+	],
 	"Highlight": [
 		"Kiemelés"
 	],
@@ -1746,7 +1794,7 @@
 		"Tétlen"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Ha egy képmelléklet a saját sorában található, és utána egy üres sor következik, akkor a Markdown forrása alatt jelenik meg."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Ha már engedélyezte, várja meg, amíg az alkalmazás szinkronizálódik a Joplin Clouddal."
@@ -2161,8 +2209,11 @@
 	"Markdown editor": [
 		"Markdown szerkesztő"
 	],
+	"Markdown editor: Render images": [
+		"Markdown szerkesztő: képek renderelése"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown szerkesztő: Markup renderelés a szerkesztőben"
 	],
 	"Marks a to-do as done.": [
 		"Egy teendő elkészültnek jelölése."
@@ -2306,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Új „%s” nevű jegyzetfüzet jön létre, és a(z) „%s” fájl ebbe lesz importálva"
 	],
+	"New notebook title": [
+		"Új jegyzetfüzet címe"
+	],
 	"New photo": [
 		"Új kép"
 	],
@@ -2384,6 +2438,9 @@
 	"No tab selected": [
 		"Nincs lap kijelölve"
 	],
+	"No tags": [
+		"Nincsenek címkék"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nincs szövegszerkesztő megadva. Adjon meg egyet a `config editor <editor-path>` parancs használatával"
 	],
@@ -2459,6 +2516,9 @@
 	"Note list style": [
 		"Jegyzetlista stílusa"
 	],
+	"Note preview": [
+		"Jegyzet előnézete"
+	],
 	"Note properties": [
 		"Jegyzettulajdonságok"
 	],
@@ -2515,6 +2575,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: Nyelvi adatok webcíme vagy elérési útja"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Keresés a kivonatolt tartalomban"
 	],
 	"OK": [
 		"OK"
@@ -2677,7 +2740,7 @@
 		"Engedély szükséges"
 	],
 	"Photo %d": [
-		""
+		"Kép: %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Kattintson a(z) „%s” elemre a folytatáshoz, vagy állítsa be a jelszavakat az alábbi „%s” listában."
@@ -2901,11 +2964,17 @@
 	"Re-upload local data to sync target": [
 		"Helyi adatok újrafeltöltése a szinkronizálási célra"
 	],
+	"Read more": [
+		"Tudjon meg többet"
+	],
 	"Read more about it": [
 		"Olvasson erről többet"
 	],
 	"Read time: %s min": [
 		"Olvasási idő: %s perc"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"A parancsok általános bemenetről történő olvasása csak CLI-módban érhető el."
 	],
 	"Recipient has accepted the invitation": [
 		"A címzett elfogadta a meghívást"
@@ -2918,6 +2987,9 @@
 	],
 	"Recipients:": [
 		"Címzettek:"
+	],
+	"Recognize handwritten image": [
+		"Kézzel írt kép felismerése"
 	],
 	"Recommended": [
 		"Ajánlott"
@@ -2952,6 +3024,9 @@
 	"Remove": [
 		"Eltávolítás"
 	],
+	"Remove %s": [
+		"%s eltávolítása"
+	],
 	"Remove %s from share": [
 		"A(z) %s eltávolítása a megosztásból"
 	],
@@ -2963,6 +3038,9 @@
 	],
 	"Removed %s from share.": [
 		"A(z) %s eltávolítva a megosztásból."
+	],
+	"Removed tag: %s": [
+		"Címke eltávolítva: %s"
 	],
 	"Rename": [
 		"Átnevezés"
@@ -2977,7 +3055,7 @@
 		"A megadott <item> (jegyzet vagy jegyzetfüzet) átnevezése <name> névre."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Rendereli a Markupot az összes olyan sorban, amely nem tartalmazza a kurzort."
 	],
 	"Renew token": [
 		"Token megújítása"
@@ -3136,7 +3214,10 @@
 		"Módosítások mentése?"
 	],
 	"Save geo-location with notes": [
-		"A földrajzi helyszín mentése a jegyzetekhez"
+		"Földrajzi helyszín mentése a jegyzetekhez"
+	],
+	"Scan notebook": [
+		"Jegyzetfüzet beolvasása"
 	],
 	"Scanned code": [
 		"Beolvasott QR-kód"
@@ -3168,6 +3249,9 @@
 	"Search shown": [
 		"Keresés a láthatók között"
 	],
+	"Search tags": [
+		"Címkék keresése"
+	],
 	"Search...": [
 		"Keresés…"
 	],
@@ -3198,8 +3282,14 @@
 	"Select file...": [
 		"Fájl kijelölése…"
 	],
+	"Select notebook": [
+		"Jegyzetfüzet kiválasztása"
+	],
 	"Select parent notebook": [
 		"Szülő jegyzetfüzet kijelölése"
+	],
+	"Selected: %s": [
+		"Kiválasztva: %s"
 	],
 	"Selection deleted": [
 		"Kijelölés törölve"
@@ -3698,7 +3788,10 @@
 		"Az ezekkel az azonosítókkal rendelkező mesterkulcsok néhány elem titkosítására szolgálnak, azonban az alkalmazásnak jelenleg nincs hozzáférése ezekhez. Valószínűleg idővel letöltésre kerülnek egy szinkronizációt követően."
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
-		"A(z) „%s” jegyzetet sikeresen vissza lettek állítva a(z) „%s” jegyzetfüzetbe."
+		"A(z) „%s” nevű jegyzet sikeresen vissza lett állítva a(z) „%s” nevű jegyzetfüzetbe."
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"A jegyzet Markdown formátumba lett konvertálva, és az eredeti jegyzet át lett helyezve a kukába"
 	],
 	"The note was successfully moved to the trash.": [
 		"A jegyzet sikeresen át lett helyezve a kukába.",
@@ -3804,13 +3897,13 @@
 		"Ez a rajz elmentetlen módosításokat tartalmazhat."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Ez a funkció alapértelmezetten ki van kapcsolva, kézzel kell engedélyezni a „Kézzel írt átírás engedélyezése” beállítás bekapcsolásával."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Ez a funkció csak a Joplin Cloud és a Joplin Server szolgáltatásokban érhető el."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Ezt a képtípust nem támogatja a képfelismerő rendszer."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ez egy fejlett eszköz a jegyzetekhez kapcsolódó mellékletek megjelenítésére. Legyen óvatos, amikor törli valamelyiket, mert utólag nem lehet visszaállítani."
@@ -3840,7 +3933,7 @@
 		"Ennek a jegyzetnek nincsenek előzményei"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Ez a jegyzet HTML-formátumban van. Alakítsa át Markdown formátumba, hogy könnyebben szerkeszthesse."
 	],
 	"This plugin doesn't support %s.": [
 		"Ez a bővítmény nem támogatja a következőt: %s."
@@ -3888,7 +3981,7 @@
 		"A folytatáshoz adja meg az alábbiakban a mesterjelszót."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Új címke létrehozásához írja be a címke nevét, majd nyomja meg az enter billentyűt."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Címke törléséhez távolítsa el a kapcsolódó jegyzeteket."
@@ -4126,6 +4219,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Fejlessze a szinkronizálási célt a legfrissebb verzióra."
+	],
+	"Upload photo": [
+		"Kép feltöltése"
 	],
 	"URL": [
 		"Webcím"

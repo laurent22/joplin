@@ -229,7 +229,7 @@ msgstr "Tạo một note mới."
 msgid "%s cannot be less than %s"
 msgstr ""
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 #, fuzzy
 msgid "%s from %s"
 msgstr "Gỡ bỏ tag \"%s\" khỏi tất cả các notes?"
@@ -360,12 +360,12 @@ msgstr "Chấp nhận"
 msgid "Accepted invitations"
 msgstr "Người nhận đã chấp nhận lời mời"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 #, fuzzy
 msgid "Accepted: Notebook %s from %s"
 msgstr "Notebook: %s"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 #, fuzzy
 msgid "Accepting share..."
 msgstr "Tạo báo cáo..."
@@ -432,7 +432,7 @@ msgstr "Gắn hoặc gỡ nhãn:"
 msgid "Add recipient:"
 msgstr "Thêm người nhận:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
+#: packages/app-mobile/components/TagEditor.tsx:265
 #, fuzzy
 msgid "Add tags:"
 msgstr "Tags mới:"
@@ -455,11 +455,11 @@ msgstr "Điền tiêu đề"
 msgid "Added new: %s"
 msgstr "Điền tiêu đề"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
 msgstr ""
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
 msgstr ""
 
@@ -472,6 +472,7 @@ msgstr ""
 msgid "Admin dashboard"
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Chức năng nâng cao"
@@ -510,7 +511,7 @@ msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 "Tất cả các cổng tiềm năng đang được sử dụng - vui lòng báo cáo sự cố tại% s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr ""
 
@@ -613,6 +614,7 @@ msgid ""
 "undone."
 msgstr "Bạn có chắc là muốn làm mới mã uỷ quyền?"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Bạn có chắc là muốn làm mới mã uỷ quyền?"
@@ -708,6 +710,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Quy trình xác nhận chưa hoàn thành (chưa nhận được mã xác nhận)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Mã ủy quyền:"
@@ -753,6 +756,7 @@ msgstr "Tự động đổi giao diện khớp với giao diện hệ thống"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -825,9 +829,11 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -881,7 +887,7 @@ msgstr "Không thể truy cập %s"
 msgid "Cannot change encrypted item"
 msgstr "Không thể thay đổi những mục đã được mã hóa"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Không thể sao chép note tới notebook \"%s\""
 
@@ -898,7 +904,7 @@ msgstr "Tạo một note mới."
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -912,7 +918,7 @@ msgstr "Tạo một note mới."
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -935,7 +941,7 @@ msgstr "Không thể tải mô-đun “%s” cho định dạng “%s” và đ�
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Không thể tải mô-đun “%s” cho định dạng “%s” và mục tiêu “%s”"
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Không thể di chuyển note tới notebook \"%s\""
 
@@ -1041,11 +1047,13 @@ msgstr "Đang kiểm tra… Vui lòng chờ."
 msgid "Choose an option"
 msgstr "Chọn một lựa chọn"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1063,6 +1071,7 @@ msgstr "Bỏ báo động"
 msgid "Clear search"
 msgstr "Bỏ báo động"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1153,7 +1162,7 @@ msgstr "Khối code"
 msgid "Code View"
 msgstr "Xem Code"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 #, fuzzy
 msgid "Code:"
 msgstr "Mã"
@@ -1184,9 +1193,9 @@ msgstr "Báo động sắp gần"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Sử dụng list đường dẫn định dạng phân cách bằng dấu phẩy để tải các "
 "certificates, đường đường dẫn tới các certificates. Ví dụ: /my/cert_dir, /"
@@ -1231,6 +1240,7 @@ msgid "Complete to-do"
 msgstr "Hoàn thành"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Hoàn thành"
@@ -1363,7 +1373,7 @@ msgstr "Chuyển thành note"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Sao chép"
 
@@ -1415,6 +1425,7 @@ msgstr[0] "Sao chép link chia sẻ"
 msgid "Copy to clipboard"
 msgstr "Sao chép đường dẫn"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Sao chép mã"
@@ -1496,6 +1507,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Không thể xuất ghi chú: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 #, fuzzy
 msgid "Create"
@@ -1537,6 +1549,7 @@ msgid "Create user"
 msgstr "Đã tạo lúc: %s"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Đã được tạo"
@@ -1562,7 +1575,8 @@ msgstr "Số mục không được tạo ở trên máy: %d."
 msgid "Created: "
 msgstr "Đã tạo lúc: %s"
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Đã tạo: %d."
@@ -1893,6 +1907,7 @@ msgstr "Tắt chế độ an toàn và khởi động lại"
 msgid "Disable synchronisation"
 msgstr "Đồng bộ hóa"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Vô hiệu hóa dịch vụ Web Clipper"
@@ -1991,7 +2006,7 @@ msgstr "Hiện thị thông tin phiên bản"
 msgid "Do it now"
 msgstr "Thực hiện ngay"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Không cần xác nhận."
 
@@ -2034,7 +2049,7 @@ msgstr "Website của Joplin"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr ""
@@ -2043,6 +2058,7 @@ msgstr ""
 msgid "Download"
 msgstr "Tải xuống"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Tải về và cài đặt tiện ích liên quan tới trình duyệt web của bạn:"
@@ -2142,7 +2158,7 @@ msgstr "Phiên bản hiện tại: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2150,7 +2166,7 @@ msgstr "Phiên bản hiện tại: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
@@ -2409,6 +2425,7 @@ msgstr "Bật hỗ trợ cá nhân làm thuật in máy"
 msgid "Enable video player"
 msgstr "Bật video player"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Bật dịch vụ Web Clipper"
@@ -2443,11 +2460,11 @@ msgstr ""
 "được đồng bộ hóa lại và được đồng bộ với điểm đến trong trạng thái không mã "
 "hóa. Bạn có muốn tiếp tục không?"
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Đã mã hóa"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Các mục đã mã hóa không thể chỉnh sửa"
 
@@ -2732,6 +2749,7 @@ msgstr "Tìm thấy: %d."
 msgid "Finishes recording"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox Extension"
@@ -2806,7 +2824,8 @@ msgstr ""
 msgid "Forward"
 msgstr "Tiến tới"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Tìm thấy: %d."
@@ -2847,6 +2866,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr ""
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Đặt mua ngay bây giờ:"
@@ -2951,6 +2971,7 @@ msgid "Hide Joplin"
 msgstr "Ẩn Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr ""
 
@@ -3000,6 +3021,7 @@ msgstr "Icon"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -3080,7 +3102,7 @@ msgstr ""
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Đang nhập từ \"%s\" dưới định dạng \"%s\". Vui lòng chờ..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Đang import notes..."
 
@@ -3089,7 +3111,7 @@ msgstr "Đang import notes..."
 msgid "Importing..."
 msgstr "Đang xuất hồ sơ..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Nhập dữ liệu vào Joplin."
 
@@ -3170,6 +3192,7 @@ msgstr ""
 "Để sử dụng đồng bộ hóa tệp tin hệ thống, bạn cần cho phép ghi vào hệ thống "
 "lưu trữ bên ngoài."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Để có thể sử dụng web clipper, bạn cần làm theo các bước sau:"
@@ -3182,7 +3205,7 @@ msgstr "Đang hoạt động"
 msgid "In: %s"
 msgstr "Trong: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 #, fuzzy
 msgid "Incoming shares:"
 msgstr "Báo động sắp gần"
@@ -3285,7 +3308,7 @@ msgstr "Câu trả lời không hợp lệ: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Câu lệnh sai: \"%s\""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr ""
 
@@ -3429,6 +3452,7 @@ msgstr "Joplin Server URL"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3613,6 +3637,7 @@ msgstr "Đã tải"
 msgid "Loading..."
 msgstr "Đang cập nhật…"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Vị trí"
@@ -3730,7 +3755,7 @@ msgid "Markdown + Front Matter"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 #, fuzzy
 msgid "Markdown editor"
 msgstr "Markdown"
@@ -3752,6 +3777,7 @@ msgstr "Đánh dấu một to-do đã hoàn thành."
 msgid "Marks a to-do as non-completed."
 msgstr "Đánh dấu to-do chưa hoàn thành."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Đánh dấu"
@@ -3968,6 +3994,7 @@ msgstr "Sổ ghi chú mới"
 msgid "New Notebook"
 msgstr "Notebook mới"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -4086,7 +4113,7 @@ msgstr "Không có kết quả"
 msgid "No revision selected"
 msgstr "Chưa có sổ ghi chú nào được chọn."
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Không có lệnh: %s"
 
@@ -4116,8 +4143,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Export hồ sơ"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr ""
@@ -4181,7 +4208,7 @@ msgstr "Thân ghi chú"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Không có note: \"%s\". Tạo lập nó?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 #, fuzzy
 msgid "Note editor"
@@ -4196,6 +4223,7 @@ msgstr "Ghi chú chưa được lưu."
 msgid "Note history"
 msgstr "Lịch sử của note"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4231,7 +4259,8 @@ msgstr "Danh sách ghi chú"
 msgid "Note preview"
 msgstr "Tiêu đề ghi chú"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Đặc tính của ghi chú"
@@ -4287,7 +4316,7 @@ msgstr "Notebook: %s"
 msgid "Notebooks"
 msgstr "Notebooks"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbook không thể đặt tên \"%s\", tên này đã được dành riêng."
 
@@ -4335,8 +4364,10 @@ msgstr "Tìm kiếm trong tất cả các notes"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4511,7 +4542,7 @@ msgstr "Đã tạo lúc: %s"
 msgid "Other applications..."
 msgstr "Thoát ứng dụng."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Định dạng đầu ra: %s"
 
@@ -4579,7 +4610,7 @@ msgstr ""
 msgid "Permanently delete note"
 msgstr "Xóa những note này?"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 #, fuzzy
 msgid "Permanently delete note \"%s\"?"
 msgstr "Xóa note \"%s\"?"
@@ -4593,7 +4624,7 @@ msgid ""
 msgstr ""
 "Xóa notebook? Tất cả notes và sub-notebooks bên trong notebook này sẽ bị xóa."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 #, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
@@ -4663,7 +4694,7 @@ msgstr ""
 msgid "Please select a notebook first."
 msgstr "Hãy chọn một notebook trước."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Vui lòng chọn ghi chú hoặc sổ ghi chú cần được xóa."
 
@@ -4786,7 +4817,7 @@ msgstr ""
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Vui lòng nhấn Ctrl+D hoặc gõ \"exit\" để thoát khỏi ứng dụng"
 
@@ -4817,7 +4848,8 @@ msgstr ""
 msgid "Previous versions"
 msgstr "Phiên bản trước của note này"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Phiên bản trước của note này"
 
@@ -5043,7 +5075,7 @@ msgstr "Bật hỗ trợ toán học"
 msgid "Reject"
 msgstr "Từ chối"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 #, fuzzy
 msgid "Rejecting share..."
 msgstr "Tạo báo cáo..."
@@ -5075,7 +5107,7 @@ msgstr "Bỏ kết quả tìm kiếm từ thanh bên?"
 msgid "Removed %s from share."
 msgstr "Gỡ bỏ tag \"%s\" khỏi tất cả các notes?"
 
-#: packages/app-mobile/components/TagEditor.tsx:230
+#: packages/app-mobile/components/TagEditor.tsx:231
 #, fuzzy
 msgid "Removed tag: %s"
 msgstr "Đổi tên nhãn:"
@@ -5101,6 +5133,7 @@ msgstr "Đổi tên <item> (note hoặc notebook) được lựa chọn thành <
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr ""
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Làm mới mã"
@@ -5178,7 +5211,8 @@ msgstr "Điền mật khẩu master:"
 msgid "Resize large images:"
 msgstr ""
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Tài nguyên: %d."
@@ -5198,6 +5232,7 @@ msgid "Restart now"
 msgstr "Khởi động lại ngay bây giờ"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5349,7 +5384,7 @@ msgstr "Lưu lại thành..."
 msgid "Save as..."
 msgstr "Lưu lại thành..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5421,17 +5456,18 @@ msgstr "Không có kết quả"
 msgid "Search shown"
 msgstr "Tìm kiếm"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
+#: packages/app-mobile/components/TagEditor.tsx:273
 #, fuzzy
 msgid "Search tags"
 msgstr "Không có kết quả"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Tìm kiếm:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5722,7 +5758,8 @@ msgstr "Bỏ qua phiên bản này"
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr "Bỏ qua các mục: %d (sử dụng —retry-failed-items để thử giải mã lại)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Đã bỏ qua: %d."
@@ -5807,7 +5844,7 @@ msgstr "Nguồn"
 msgid "Source code available"
 msgstr "Export hồ sơ"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Định dạng từ nguồn: %s"
 
@@ -5885,14 +5922,17 @@ msgstr "Số liệu…"
 msgid "Status"
 msgstr "Trạng thái"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Trạng thái: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Trạng thái: bắt đầu trên port %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Bước 1: Bật dịch vụ clipper"
@@ -5910,6 +5950,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Bước 2: Điền mã được cung cấp bởi Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Bước 2: Cài đặt tiện ích mở rộng"
@@ -6020,7 +6061,7 @@ msgstr "Chuyển tới dạng note"
 msgid "Switch to to-do type"
 msgstr "Chuyển tới dạng to-do"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -6127,7 +6168,8 @@ msgstr ""
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Đã gắn: %d."
@@ -6211,7 +6253,7 @@ msgid ""
 msgstr ""
 "Các đính kèm sẽ không được theo dõi nữa khi bạn chuyển qua một ghi chú khác."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Lệnh \"%s\" chỉ có thể sử dụng trong chế độ GUI"
 
@@ -6355,7 +6397,8 @@ msgstr "Note \"%s\" đã được hồi phục tại notebook \"%s\"."
 msgid "The notebook could not be saved: %s"
 msgstr "Không thể lưu lại notebook: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Những notes đã được import: %s"
@@ -6410,8 +6453,8 @@ msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên "
-"`sync.NUM.NAME` (xem bên dưới)."
+"Điểm đến của quá trình đông bộ. Mỗi điểm đến có thể có tham số tên `sync.NUM."
+"NAME` (xem bên dưới)."
 
 #: packages/lib/services/share/invitationRespond.ts:22
 msgid ""
@@ -6430,10 +6473,12 @@ msgstr "Web Clipper cần sự uỷ quyền của bạn để truy cập dữ li
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr "Dịch vụ web clipper đã được bật và tự động khởi động."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Dịch vụ web clipper đã được bật và tự động khởi động."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Dịch vụ web clipper chưa được bật."
@@ -6535,6 +6580,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Tệp đính kèm này chưa được tải xuống hoặc chưa được mã hoá"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6606,6 +6652,7 @@ msgstr ""
 "Ghi chú này không có nội dung. Nhấn vào “%s” để bật trình soạn thảo và chỉnh "
 "sửa ghi chú."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Note này không có lịch sử"
@@ -6628,6 +6675,7 @@ msgstr ""
 "Trình soạn thảo văn bản Rich Text này có nhiều giới hạn, bạn nên cân nhắc "
 "trước khi sử dụng nó."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6719,11 +6767,11 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Điền mật khẩu master:"
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr "Để xóa nhãn, hãy gỡ nhãn khỏi các ghi chú đã được gắn."
 
@@ -6862,6 +6910,7 @@ msgstr "Ẩn/hiện thanh bên"
 msgid "Toggle sort order field"
 msgstr "Bật/tắt chế độ an toàn"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Dữ liệu đã được sao chép!"
@@ -6973,7 +7022,7 @@ msgstr "Không tìm thấy flag này: %s"
 msgid "Unknown flag: %s"
 msgstr "Không tìm thấy flag này: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -7008,7 +7057,7 @@ msgstr "Ngưng công khai ghi chú"
 msgid "Unshare"
 msgstr "Ngưng chia sẻ"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
@@ -7026,6 +7075,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Không hỗ trợ định dạng ảnh này: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -7039,7 +7089,7 @@ msgid ""
 msgstr "Đường dẫn hoặc tin nhắn không được hỗ trợ: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Chưa có tên"
@@ -7073,6 +7123,7 @@ msgstr "Số mục được cập nhật trên máy: %d."
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -7095,7 +7146,8 @@ msgstr "Số mục được cặp nhật không ở trên máy: %d."
 msgid "Updated: "
 msgstr "Đã cập nhật lúc: %s"
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Đã cập nhật: %d."
@@ -7122,6 +7174,7 @@ msgstr "Nâng cấp mục tiêu đồng bộ hóa lên phiên bản mới nhất
 msgid "Upload photo"
 msgstr "Chụp ảnh"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7285,7 +7338,7 @@ msgstr ""
 msgid "Waiting for authorisation..."
 msgstr "Cung cấp uỷ quyền"
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 #, fuzzy
 msgid "Waiting: Notebook %s from %s"
 msgstr "Notebook: %s"

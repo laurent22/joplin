@@ -2,7 +2,9 @@ import CommandService from '../CommandService';
 import { stateUtils } from '../../reducer';
 import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
 import { WhenClauseContext } from './stateToWhenClauseContext';
+import Logger from '@joplin/utils/Logger';
 
+const logger = Logger.create('ToolbarButtonUtils');
 
 export interface ToolbarButtonInfo {
 	type: 'button';
@@ -94,7 +96,11 @@ export default class ToolbarButtonUtils {
 				continue;
 			}
 
-			output.push(this.commandToToolbarButton(commandName, whenClauseContext));
+			try {
+				output.push(this.commandToToolbarButton(commandName, whenClauseContext));
+			} catch (error) {
+				logger.error('Unable to add toolbar button for command', commandName, '. Error: ', error);
+			}
 		}
 
 		return stateUtils.selectArrayShallow({ array: output }, commandNames.join('_'));

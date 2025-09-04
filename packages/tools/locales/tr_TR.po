@@ -226,7 +226,7 @@ msgstr "%s, %s değerinden büyük olamaz"
 msgid "%s cannot be less than %s"
 msgstr "%s %s değerinden daha düşük olamaz"
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
 msgstr "%s , şundan: %s"
 
@@ -358,13 +358,13 @@ msgstr "Kabul Et"
 msgid "Accepted invitations"
 msgstr "Kabul edilen davetiyeler"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
 msgstr "%s not defteri %s tarafından kabul edildi"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
-msgstr "Paylaşım kabul ediliyor"
+msgstr "Paylaşım kabul ediliyor..."
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -426,10 +426,9 @@ msgstr "Etiket ekle veya kaldır:"
 msgid "Add recipient:"
 msgstr "Alıcı ekle:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
-msgstr "Yeni etiketler:"
+msgstr "Etiket ekle:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -444,18 +443,16 @@ msgid "Add to note"
 msgstr "Nota ekle"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Yeni bir şey ekle"
+msgstr "Yeni bir %s eklendi"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
-msgstr "Nota %s etiketini ekle"
+msgstr "Etiket eklendi: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "Etiket ekler"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -466,6 +463,7 @@ msgstr "Yönetici"
 msgid "Admin dashboard"
 msgstr "Yönetici paneli"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Gelişmiş seçenekler"
@@ -504,9 +502,9 @@ msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 "Tüm potensiyel portlar kullanımdadır - lütfen %s hata bildirimi yapınız"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
-msgstr "Tüm paylaşılan klasörler"
+msgstr "Tüm paylaşılan klasörler:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1008
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -615,6 +613,7 @@ msgstr ""
 "Bu notun tüm geçmişini silmek istediğinizden emin misiniz? Bu işlem geri "
 "alınamaz."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Kimlik doğrulama jetonunu yenilemek istediğinizden emin misiniz?"
@@ -637,7 +636,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Ekli etiketler"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -712,6 +711,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Yetkilendirme tamamlanmadı (yetkilendirme anahtarı karşılanmadı)"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Yetkilendirme anahtarı:"
@@ -755,6 +755,7 @@ msgstr "Temayı system temasına göre otomatik olarak değiştir"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -826,9 +827,11 @@ msgstr "Görüntüleyebilir ve düzenleyebilir"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -884,7 +887,7 @@ msgstr "%s erişilemiyor"
 msgid "Cannot change encrypted item"
 msgstr "Şifrelenmiş öğe değiştirilemiyor"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Not, \"%s\" not defterine kopyalanamadı"
 
@@ -900,7 +903,7 @@ msgstr "Yeni bir not oluşturulamadı: %s"
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -914,7 +917,7 @@ msgstr "Yeni bir not oluşturulamadı: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -936,7 +939,7 @@ msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" çıktısı için yüklenemedi
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "\"%s\" modülü \"%s\" formatı ve \"%s\" hedefi için yüklenemedi"
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Not, \"%s\" not defterine taşınamadı"
 
@@ -1040,11 +1043,13 @@ msgstr "Kontrol ediliyor... Lütfen bekleyin."
 msgid "Choose an option"
 msgstr "Bir seçim yap"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Mağazası"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1061,6 +1066,7 @@ msgstr "Alarmı silin"
 msgid "Clear search"
 msgstr "Aramayı temizle"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1152,10 +1158,9 @@ msgstr "Kod Bloğu"
 msgid "Code View"
 msgstr "Kod Görünümü"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 msgid "Code:"
-msgstr "Kod"
+msgstr "Kod:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1180,9 +1185,9 @@ msgstr "Yaklaşan alarmlar"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Sertifikaları yüklemek için dizinlere veya bireysel sertifika dosyalarına "
 "giden yolların virgülle ayrılmış listesi. Örneğin: /my/cert_dir, /other/"
@@ -1226,6 +1231,7 @@ msgid "Complete to-do"
 msgstr "Yapılacaklar listesi'ni (todo) tamamla"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Tamamlandı"
@@ -1329,14 +1335,12 @@ msgid "Control character"
 msgstr "Kontrol karakteri"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Nota çevir"
+msgstr "Dönüştür"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Yapılacak listesi olarak çevir"
+msgstr "Notu Markdown'a dönüştür"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1354,7 +1358,7 @@ msgstr "Ses metne dönüştürülüyor..."
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Kopyala"
 
@@ -1403,6 +1407,7 @@ msgstr[1] "Paylaşılabilir Bağlantıları Kopyala"
 msgid "Copy to clipboard"
 msgstr "Panoya kopyala"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Anahtarı kopyala"
@@ -1442,9 +1447,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Eklenti sunucusuna bağlanılamadı."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Notlar dışarı aktarılamadı: %s"
+msgstr "Not Markdown'a dönüştürülemedi: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1486,6 +1490,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Kimliğiniz doğrulanamadı: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Oluştur"
@@ -1499,9 +1504,8 @@ msgid "Create a notebook"
 msgstr "Yeni bir not defteri oluşturur"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Yeni bir not defteri oluşturur."
+msgstr "Yeni bir not defteri oluştur"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1509,9 +1513,8 @@ msgid "Create new profile..."
 msgstr "Yeni bir profil oluşturur..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Not defteri oluştur"
+msgstr "Not oluştur"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1522,6 +1525,7 @@ msgid "Create user"
 msgstr "Kullanıcı oluştur"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Oluşturuldu"
@@ -1546,7 +1550,8 @@ msgstr "Oluşturulan uzak öğeler: %d."
 msgid "Created: "
 msgstr "Oluşturulma: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Oluşturuldu: %d."
@@ -1581,14 +1586,12 @@ msgid "Creating new to-do..."
 msgstr "Yeni yapılacaklar listesi oluşturuluyor..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Yeni not oluşturuluyor..."
+msgstr "Not \"%s\" oluşturuluyor..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Yeni not oluşturuluyor..."
+msgstr "Not oluşturuluyor."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1691,6 +1694,7 @@ msgstr "Varsayılan"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"Tarayıcı tarafından oluşturulan belgeler için kullanılacak varsayılan başlık."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1862,6 +1866,7 @@ msgstr "Güvenli modu kapatıp yeniden başlat"
 msgid "Disable synchronisation"
 msgstr "Senkronizasyonu kapat"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Web Alıntılama Servisini Kapat"
@@ -1959,7 +1964,7 @@ msgstr "Sürüm bilgisini görüntüler"
 msgid "Do it now"
 msgstr "Hemen yap"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Onay için sorma."
 
@@ -1979,7 +1984,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Belge tarayıcı: Başlık şablonu"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -1991,7 +1996,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Bu mesajı bir daha görüntüleme"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2000,7 +2005,7 @@ msgstr "Bağış yap, web sitesi"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Tamam"
@@ -2009,6 +2014,7 @@ msgstr "Tamam"
 msgid "Download"
 msgstr "İndirme"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Tarayıcınız için uygun uzantıyı indirin ve yükleyin:"
@@ -2103,7 +2109,7 @@ msgstr "Geçen süre: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2111,19 +2117,17 @@ msgstr "Geçen süre: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Düzenle"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Markdown olarak düzenle"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Zengin metin"
+msgstr "Zengin metin biçimiyle düzenle"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2283,14 +2287,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Fountain söz dizimi desteğini etkinleştir"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Şifrelemeyi etkinleştir"
+msgstr "El yazısı transkripsiyonunu etkinleştir"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Markdown araç çubuğunu etkinleştir"
+msgstr "HTML'den Markdown'a dönüştürme araç çubuğu başlığını etkinleştir"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2361,6 +2363,7 @@ msgstr "Dizgi desteğini etkinleştir"
 msgid "Enable video player"
 msgstr "Video oynatıcıyı aktifleştir"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Web Alıntılama Servisini Aç"
@@ -2399,11 +2402,11 @@ msgstr ""
 "yeniden senkronize edileceği ve senkronizasyon hedefine şifrelenmemiş olarak "
 "gönderileceği anlamına gelir."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Şifrelenmiş"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Şifrelenmiş öğeler değiştirilemez"
 
@@ -2677,6 +2680,7 @@ msgstr "Ara: "
 msgid "Finishes recording"
 msgstr "Kaydı tamamlar"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox Eklentisi"
@@ -2755,7 +2759,8 @@ msgstr "Yol biçimini zorla"
 msgid "Forward"
 msgstr "İleri"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Bulundu: %d."
@@ -2797,6 +2802,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Teklif Al"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Hemen al:"
@@ -2899,6 +2905,7 @@ msgid "Hide Joplin"
 msgstr "Joplin'i Gizle"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Klavyeyi gizle"
 
@@ -2907,9 +2914,8 @@ msgid "Hide password"
 msgstr "Parolayo gizle"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Uyarı"
+msgstr "Uyarıları gizler"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2947,6 +2953,7 @@ msgstr "İkon"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -2961,6 +2968,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Bir resim eki kendi satırındaysa ve ardından boş bir satır geliyorsa, "
+"Markdown kaynağının hemen altında görüntülenecektir."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3029,7 +3038,7 @@ msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" kaynağından \"%s\" biçiminde içe aktarılıyor. Lütfen bekleyin..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Notlar içe aktarılıyor..."
 
@@ -3037,7 +3046,7 @@ msgstr "Notlar içe aktarılıyor..."
 msgid "Importing..."
 msgstr "Dışa aktarılıyor..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Joplin'e veri aktarır."
 
@@ -3119,6 +3128,7 @@ msgstr ""
 "Dosya sistemi senkronizasyonu için, hedef depolamada sizin yazma yetkiniz "
 "gereklidir."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Web alıntı aracını kullanmak için aşağıdakileri yapmanız gerekir:"
@@ -3131,7 +3141,7 @@ msgstr "Devam etmekte"
 msgid "In: %s"
 msgstr "İçinde: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
 msgstr "Gelen paylaşımlar:"
 
@@ -3229,7 +3239,7 @@ msgstr "Yanlış cevap: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Geçersiz komut: \"%s\""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Geçersiz biçim. Örn.: 48.8581372, 2.2926735"
 
@@ -3368,6 +3378,7 @@ msgstr "Joplin Sunucusu URL"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO Kimlik Doğrulaması"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3545,6 +3556,7 @@ msgstr "Yüklenme"
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Konum"
@@ -3653,18 +3665,17 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 msgid "Markdown editor"
 msgstr "Markdown düzenleyici"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown düzenleyici"
+msgstr "Markdown düzenleyici: Resimleri görüntüle"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown düzenleyici: Biçimlendirmeyi düzenleyicide görüntüle"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3674,6 +3685,7 @@ msgstr "Yapılacakları yapıldı olarak işaretler."
 msgid "Marks a to-do as non-completed."
 msgstr "Yapılacaklar listesindeki öğeyi tamamlanmamış olarak işaretler."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Düzenleme"
@@ -3743,7 +3755,7 @@ msgstr "Eksik Ana Anahtar"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
 msgid "Missing permission to record audio."
-msgstr "Ses kaydetmek için izin eksik"
+msgstr "Ses kaydetmek için izin eksik."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3879,6 +3891,7 @@ msgstr "Yeni not defteri"
 msgid "New Notebook"
 msgstr "Yeni Not Defteri"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -3887,9 +3900,8 @@ msgstr ""
 "aktarılacak"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Not defteri başlığı:"
+msgstr "Yeni not defteri başlığı:"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -3992,7 +4004,7 @@ msgstr "Sonuç yok"
 msgid "No revision selected"
 msgstr "Hiç sürüm seçilmemiş"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Böyle bir komut yok: %s"
 
@@ -4005,9 +4017,8 @@ msgid "No tab selected"
 msgstr "Seçili sekme yok"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Yeni etiketler:"
+msgstr "Etiket bulunamadı"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4020,8 +4031,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Güncelleme bulunamadı"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr "Hiçbiri"
@@ -4083,7 +4094,7 @@ msgstr "Not gövdesi"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "\"%s\" notu mevcut değil. Oluşturulsun mu?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Not düzenleyici"
@@ -4096,6 +4107,7 @@ msgstr "Not kaydedildi."
 msgid "Note history"
 msgstr "Not Geçmişi"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4125,11 +4137,11 @@ msgid "Note list style"
 msgstr "Not listeleme biçimi"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Not görüntüleyici"
+msgstr "Not önizleme"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Not özellikleri"
@@ -4181,7 +4193,7 @@ msgstr "Not defteri: %s (%s)"
 msgid "Notebooks"
 msgstr "Not defterleri"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Not defterine ayrılmış bir başlık adı olan \"%s\" adı verilemez."
 
@@ -4217,17 +4229,18 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: Dil verisi URL ya da yolu"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Tüm notlarda ara"
+msgstr "OCR: Ayıklanmış içerikte ara"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4390,7 +4403,7 @@ msgstr "Dizilmiş liste"
 msgid "Other applications..."
 msgstr "Diğer uygulamalar..."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Çıktı biçimi: %s"
 
@@ -4457,7 +4470,7 @@ msgstr "Kullanıcı başına. Minimum 2 kullanıcı."
 msgid "Permanently delete note"
 msgstr "Notu kalıcı olarak sil"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "\"%s\" notu kalıcı olarak silinsin mi?"
 
@@ -4472,7 +4485,7 @@ msgstr ""
 "Silinecek not defterindeki tüm notlar ve alt notlar da kalıcı olarak "
 "silinecek."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Bu not kalıcı olarak silinsin mi?"
@@ -4488,7 +4501,7 @@ msgstr "İzin gerekmekte"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Resim %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4544,7 +4557,7 @@ msgstr "Lütfen sesinizi kaydedin..."
 msgid "Please select a notebook first."
 msgstr "Lütfen önce bir not defteri seçin."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Lütfen önce silinecek notu veya not defterini seçin."
 
@@ -4668,7 +4681,7 @@ msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr ""
 "Zengin metin düzenleyicisi'nden zengin metin yapıştırırken renkleri koru"
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Uygulamadan çıkmak için Ctrl + D tuşlarına basın veya \"exit\" yazın"
 
@@ -4700,7 +4713,8 @@ msgstr "Önceki eşleşme"
 msgid "Previous versions"
 msgstr "Önceki sürümler"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Bu notun önceki sürümleri"
 
@@ -4833,9 +4847,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Yerel veriyi senkronizasyon sunucusuna yeniden yükle"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Daha fazla bilgi"
+msgstr "Daha fazla oku"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4846,9 +4859,8 @@ msgid "Read time: %s min"
 msgstr "Okuma süresü: %s dk"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "\"%s\" komutu sadece grafik arayüzünde kullanılabilir"
+msgstr "Standart girdiden komut okuma yalnızca CLI modunda mevcuttur."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4867,9 +4879,8 @@ msgid "Recipients:"
 msgstr "Alıcılar:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Büyük resimleri yeniden boyutlandır:"
+msgstr "El yazısı olan resimleri algıla"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4914,7 +4925,7 @@ msgstr "Düzenli ifade (Regex)"
 msgid "Reject"
 msgstr "Reddet"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
 msgstr "Paylaşım reddediliyor…"
 
@@ -4923,9 +4934,8 @@ msgid "Remove"
 msgstr "Sil"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Sil"
+msgstr "%s kaldır"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4943,10 +4953,9 @@ msgstr "Bu aramayı kenar çubuğundan kaldır?"
 msgid "Removed %s from share."
 msgstr "“%s” paylaşımdan kaldırıldı."
 
-#: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
-msgstr "Etiketi yeniden adlandır:"
+msgstr "Etiket kaldırıldı: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4967,8 +4976,9 @@ msgstr "<item> öğesini <name> ile yeniden adlandırır (not veya not defteri).
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "İmlecin olmadığı tüm satırlarda biçimlendirme yapar."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Jetonu yenile"
@@ -5004,7 +5014,7 @@ msgstr "$ eşleştirme değiştirildi"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:26
 msgid "replaced match on line $"
-msgstr "Satır $ üzerindeki eşleştirme değiştirildi"
+msgstr "satır $ üzerindeki eşleştirme değiştirildi"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
@@ -5039,7 +5049,8 @@ msgstr "Ana parolayı sıfırla"
 msgid "Resize large images:"
 msgstr "Büyük resimleri yeniden boyutlandır:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Kaynaklar: %d."
@@ -5058,6 +5069,7 @@ msgid "Restart now"
 msgstr "Şimdi yeniden başlat"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5201,7 +5213,7 @@ msgstr "\"%s\" olarak farklı kaydet"
 msgid "Save as..."
 msgstr "Farklı kaydet..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5218,9 +5230,8 @@ msgid "Save geo-location with notes"
 msgstr "Coğrafi konumu notlarla kaydedin"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Not defterini seçer"
+msgstr "Not defterini tara"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5268,17 +5279,17 @@ msgstr "Arama sonuçları"
 msgid "Search shown"
 msgstr "Görünür öğeler içerisinde arama"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
-msgstr "Arama sonuçları"
+msgstr "Etiketlerde ara"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Ara:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5320,18 +5331,16 @@ msgid "Select file..."
 msgstr "Dosya seç..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Not defterini seçer"
+msgstr "Not defterini seç"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Ana not defterini seç"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Oluşturulma: %s"
+msgstr "Seçili: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -5555,7 +5564,8 @@ msgstr ""
 "Atlanan öğeler: %d (--retry-failed parametresi ile şifrelemelerini çözmeyi "
 "yeniden deneyebilirsiniz)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Atlandı: %d."
@@ -5642,7 +5652,7 @@ msgstr "Kaynak"
 msgid "Source code available"
 msgstr "Kaynak kodu mevcut"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Kaynak biçimi: %s"
 
@@ -5720,14 +5730,17 @@ msgstr "İstatistikler..."
 msgid "Status"
 msgstr "Durum"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Durum: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Durum: %d portunda başlatıldı"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Adım 1: Alıntılama servisini aktif et"
@@ -5744,6 +5757,7 @@ msgstr "1. Adım: Uygulamayı yetkilendirmek için bu URL'i tarayıcınızda aç
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Adım 2: Dropbox tarafından sağlanan kodu girin:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Adım 2: Uzantıyı yükleyin"
@@ -5846,7 +5860,7 @@ msgstr "Yeni tip düzenleyiciye geç"
 msgid "Switch to to-do type"
 msgstr "Yapılacaklar tipine dönüştür"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -5954,7 +5968,8 @@ msgstr "Tab odak hareket ettirir"
 msgid "Tabloid"
 msgstr "Tablo"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Etiket: %d."
@@ -6035,7 +6050,7 @@ msgid ""
 "note."
 msgstr "Eğer başka bir not'a geçerseniz ek dosyalar artık izlenmeyecek."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "\"%s\" komutu sadece grafik arayüzünde kullanılabilir"
 
@@ -6160,11 +6175,10 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Not defteri ve içerikleri başarıyla çöp kutusuna taşındı."
+msgstr "Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6180,7 +6194,8 @@ msgstr "Not defteri ve içerikleri başarıyla çöp kutusuna taşındı."
 msgid "The notebook could not be saved: %s"
 msgstr "Not defteri kaydedilemedi: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Notlar içe aktarıldı: %s"
@@ -6269,11 +6284,13 @@ msgstr ""
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr "Web alıntılama hizmeti bu Joplin örneğinde etkinleştirilemez."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "Web alıntılama servisi aktif edildi ve otomatik başlatılması için ayarlandı."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Web alıntılama servisi aktif edilmedi."
@@ -6383,6 +6400,7 @@ msgstr "Ek dosyasında OCR verisi bulunamadı (Durum: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Bu ek henüz indirilmedi veya şifresi çözülmedi"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6400,14 +6418,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Bu özellik varsayılan olarak devre dışıdır, 'El yazısı transkripsiyonunu "
+"etkinleştir' seçeneğini açarak manuel olarak etkinleştirmeniz gerekir."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Bu özellik yalnızca Joplin Cloud ve Joplin Server'da kullanılabilir."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Bu resim türü tanıma sistemi tarafından desteklenmiyor."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6454,6 +6474,7 @@ msgstr ""
 "Bu nota içerik girilmemiş. Editöre geçiş yapıp notu düzenlemek için \"%s\" "
 "butonuna tıklayın."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Bu notun hiç değişiklik geçmişi yok"
@@ -6462,6 +6483,7 @@ msgstr "Bu notun hiç değişiklik geçmişi yok"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Bu not HTML formatında. Daha kolay düzenlemek için Markdown'a dönüştürün."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6476,6 +6498,7 @@ msgstr ""
 "Zengin metin editöründe bazı kısıtlamalar mevcuttur, ve de kullanmadan önce "
 "bunun bilincinde olmanızı öneririz."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6565,11 +6588,11 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Devam etmek için lütfen aşağıya ana parolanızı girin."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Yeni bir etiket oluşturmak için adını yazın ve enter'a basın."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr "Bir etiketi silmek için ilişkilendirilmiş notların etiketini kaldırın."
 
@@ -6703,6 +6726,7 @@ msgstr "Kenar çubuğunu aç / kapat"
 msgid "Toggle sort order field"
 msgstr "Sıralama alanine aç / kapat"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Anahtar panoya kopyalandı!"
@@ -6813,7 +6837,7 @@ msgstr "Bilinmeyen dosya tipi"
 msgid "Unknown flag: %s"
 msgstr "Bilinmeyen etiket: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -6844,7 +6868,7 @@ msgstr "Notu paylaşmayı bırak"
 msgid "Unshare"
 msgstr "Paylaşmayı bırak"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
@@ -6862,6 +6886,7 @@ msgstr "Not paylaşımı kaldırılsın mı? Alıcı artık not içeriğine eri�
 msgid "Unsupported image type: %s"
 msgstr "Desteklenmeyen resim türü: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6876,7 +6901,7 @@ msgstr ""
 "Hata: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Başlıksız"
@@ -6906,6 +6931,7 @@ msgstr "Toplam ebatı güncelle"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -6927,7 +6953,8 @@ msgstr "Güncellenen uzak öğeler: %d."
 msgid "Updated: "
 msgstr "Güncelleme: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Güncellenme: %d."
@@ -6950,10 +6977,10 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Senkronizasyon hedefini en son sürüme yükseltin."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Fotoğraf çek"
+msgstr "Fotoğraf yükle"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7118,7 +7145,7 @@ msgstr "Vosk"
 msgid "Waiting for authorisation..."
 msgstr "Yetkilendirme için bekleniyor..."
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
 msgstr "Not defteri %s , %s tarafından bekleniyor"
 

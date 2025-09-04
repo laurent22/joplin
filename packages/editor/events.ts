@@ -10,6 +10,7 @@ export enum EditorEventType {
 	EditLink,
 	FollowLink,
 	Scroll,
+	Remove,
 }
 
 export interface ChangeEvent {
@@ -62,9 +63,13 @@ export interface FollowLinkEvent {
 	link: string;
 }
 
+export interface RemoveEvent {
+	kind: EditorEventType.Remove;
+}
+
 export type EditorEvent =
 		ChangeEvent|UndoRedoDepthChangeEvent|SelectionRangeChangeEvent|
 			EditorScrolledEvent|
 			SelectionFormattingChangeEvent|UpdateSearchDialogEvent|
-			RequestEditLinkEvent|FollowLinkEvent;
+			RequestEditLinkEvent|FollowLinkEvent|RemoveEvent;
 

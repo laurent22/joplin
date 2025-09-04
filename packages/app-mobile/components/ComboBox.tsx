@@ -11,6 +11,7 @@ import SearchInput from './SearchInput';
 import focusView from '../utils/focusView';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import NestableFlatList, { NestableFlatListControl } from './NestableFlatList';
+import useKeyboardState from '../utils/hooks/useKeyboardState';
 const naturalCompare = require('string-natural-compare');
 
 
@@ -151,7 +152,12 @@ const useSelectedIndex = (search: string, searchResults: Option[]) => {
 };
 
 const useStyles = (themeId: number, showSearchResults: boolean) => {
-	const { fontScale } = useWindowDimensions();
+	const { fontScale, height: screenHeight } = useWindowDimensions();
+	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
+
+	// Allow the search results size to decrease when the keyboard is visible.
+	const searchResultsHeight = Math.max(128, Math.min(200, (screenHeight - keyboardHeight) / 3));
+
 	const menuItemHeight = 40 * fontScale;
 	const theme = themeStyle(themeId);
 
@@ -187,7 +193,7 @@ const useStyles = (themeId: number, showSearchResults: boolean) => {
 				minHeight: 32,
 			},
 			searchResults: {
-				height: 200,
+				height: searchResultsHeight,
 				flexGrow: 1,
 				flexShrink: 1,
 				...(showSearchResults ? {} : {
@@ -220,7 +226,7 @@ const useStyles = (themeId: number, showSearchResults: boolean) => {
 				backgroundColor: theme.selectedColor,
 			},
 		});
-	}, [theme, menuItemHeight, showSearchResults]);
+	}, [theme, menuItemHeight, searchResultsHeight, showSearchResults]);
 
 	return { menuItemHeight, styles };
 };
@@ -452,10 +458,11 @@ const useInputEventHandlers = ({
 		} else if (key === 'ArrowUp') {
 			selectedIndexControl.onPreviousResult();
 			event.preventDefault();
-		} else if (key === 'Enter') {
+		} else if (key === 'Enter' && Platform.OS === 'web') {
 			// This case is necessary on web to prevent the
 			// search input from becoming defocused after
-			// pressing "enter".
+			// pressing "enter". Enter key behavior is handled
+			// elsewhere for other platforms.
 			event.preventDefault();
 			onSubmit();
 			setSearch('');
@@ -540,6 +547,7 @@ const ComboBox: React.FC<Props> = ({
 	};
 	const activeId = `${baseId}-${selectedIndex}`;
 	const searchResults = <NestableFlatList
+		keyboardShouldPersistTaps="handled"
 		ref={listRef}
 		data={results}
 		{...searchResultProps}
@@ -577,6 +585,7 @@ const ComboBox: React.FC<Props> = ({
 			onChangeText={setSearch}
 			onKeyPress={onKeyPress}
 			onSubmitEditing={onSubmit}
+			submitBehavior='submit'
 			placeholder={placeholder}
 			aria-activedescendant={showSearchResults ? activeId : undefined}
 			aria-controls={`menuBox-${baseId}`}
