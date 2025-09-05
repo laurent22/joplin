@@ -500,6 +500,40 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
+	private static getMimeTypeByExtension(filepath: string) {
+		const basename = PATH.basename(filepath);
+		const ext = basename.split('.').pop().toLowerCase();
+		const map: Record<string, string> = {
+			'txt': 'text/plain',
+			'html': 'text/html',
+			'json': 'application/json',
+			'csv': 'text/csv',
+			'pdf': 'application/pdf',
+			'zip': 'application/zip',
+			'7z': 'application/x-7z-compressed',
+			'jpg': 'image/jpeg',
+			'jpeg': 'image/jpeg',
+			'png': 'image/png',
+			'gif': 'image/gif',
+		};
+		const result = map[ext] || 'application/octet-stream';
+		return result;
+	}
+
+	private static createBase64File(imgPath: string): string {
+		try {
+			// reomove /xxx/xxx.png?t=yyyy --> /xxx/xxx.png
+			const pathWithoutQuery = imgPath.split('?')[0];
+			const format = this.getMimeTypeByExtension(pathWithoutQuery);
+			const base64File = fs.readFileSync(pathWithoutQuery, { encoding: 'base64' });
+			const result = `data:image/${format};base64, ${base64File}`;
+			return result;
+		} catch (e) {
+			console.log(`cannot read img: ${imgPath}, error: ${e.toString()}`);
+			return '';
+		}
+	}
+
 	convertJoplinSchemeAnchorToRelativePath($: cheerio.Root,
 		dstResourcePath: string,
 		noteFilePath: string): cheerio.Root {
@@ -515,8 +549,14 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			console.log(`imageFileName: ${imageFileName}`);
 			console.log(`noteDir: ${noteDir}`);
 			const relativePath = PATH.relative(noteDir, dstResourcePath);
-			console.log(`relativePath: ${relativePath}`);
-			anchor.attribs.href = `${PATH.join(relativePath, imageFileName)}`;
+			if (this.embededImage) {
+				const fileAbsPath = PATH.join(dstResourcePath, imageFileName);
+				const base64Src = InteropService_Exporter_Html.createBase64File(fileAbsPath);
+				anchor.attribs.href = base64Src;
+			} else {
+				console.log(`relativePath: ${relativePath}`);
+				anchor.attribs.href = `${PATH.join(relativePath, imageFileName)}`;
+			}
 			console.log(`new img.src:  ${anchor.attribs.src}`);
 		}
 		return $;
