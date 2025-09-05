@@ -26,45 +26,10 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 	private static readonly skipDir = 'attachment';
 
 	public async exec(result: ImportExportResult) {
-		const description = (this.metadata().description as string).toLocaleLowerCase();
-		if (description.indexOf('googlesite') >= 0) {
+		if ((this.metadata().description as string).toLocaleLowerCase().indexOf('googlesite') >= 0) {
 			return this.execGoogleSite(result);
-		} else if (description.indexOf('embeddedhtml') >= 0) {
-			return this.execEmbeddedHtml(result);
-
 		}
 		return this.execExportedSite(result);
-	}
-
-
-	private async execEmbeddedHtml(result: ImportExportResult) {
-		let parentFolderId = null;
-		const noteInfos: INoteInfoMap = { pathToId: {}, IdToPath: {} };
-		const sourcePath = rtrimSlashes(this.sourcePath_);
-
-		const filePaths = [];
-
-		if (await shim.fsDriver().isDirectory(sourcePath)) {
-			if (!this.options_.destinationFolder) {
-				parentFolderId = null;
-			} else {
-				parentFolderId = this.options_.destinationFolder.id;
-			}
-
-			await this.importDirectoryForEmbeddedHtml(sourcePath, parentFolderId, noteInfos);
-		} else {
-			if (!this.options_.destinationFolder) throw new Error(_('Please specify the notebook where the notes should be imported to.'));
-			parentFolderId = this.options_.destinationFolder.id;
-			filePaths.push(sourcePath);
-		}
-
-		for (let i = 0; i < filePaths.length; i++) {
-			await this.importFileForEmbeddedHtml(filePaths[i], parentFolderId, noteInfos);
-		}
-
-		// change links for other notes  to joplin://
-		await InteropService_Importer_Html.convertInternalLinks(noteInfos);
-		return result;
 	}
 
 	private async execGoogleSite(result: ImportExportResult) {
@@ -143,7 +108,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return;
 	}
 
-	private static async convertInternalLink(noteId: string, notePath: string, noteInfos: INoteInfoMap): Promise<void> {
+	private static async convertInternalLink(noteId: string, notePath: string, noteInfos:INoteInfoMap): Promise<void> {
 		try {
 			const note = await Note.loadItemById(noteId);
 			const body = note.body;
@@ -211,41 +176,6 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return title ? title : basename(dirPath);
 	}
 
-	async importDirectoryForEmbeddedHtml(dirPath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
-		if (PATH.basename(dirPath) === InteropService_Importer_Html.skipDir || PATH.basename(dirPath) === '_') {
-			console.log(`skipDir: ${dirPath}`);
-			return;
-		}
-		console.info(`Import: ${dirPath}`);
-		const supportedFileExtension = ['html'];
-		const foldername = await this.getFolderTitle(dirPath);
-		const stats = await shim.fsDriver().readDirStats(dirPath);
-		const folderTitle = await Folder.findUniqueItemTitle(foldername);
-
-		let folderId = parentFolderId;
-		// 作成対象ディレクトリ内に子ディレクトが存在する場合のみフォルダを作る
-		if (this.hasDirectory(stats)) {
-			const folderEntity: FolderEntity = { title: folderTitle };
-			if (parentFolderId !== null) {
-				folderEntity.parent_id = parentFolderId;
-			}
-			const folder = await Folder.save(folderEntity);
-			folderId = folder.id;
-		}
-
-
-
-		for (let i = 0; i < stats.length; i++) {
-			const stat = stats[i];
-
-			if (stat.isDirectory()) {
-				await this.importDirectoryForEmbeddedHtml(`${dirPath}/${basename(stat.path)}`, folderId, noteInfos);
-			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
-				await this.importFileForEmbeddedHtml(`${dirPath}/${stat.path}`, folderId, noteInfos);
-			}
-		}
-	}
-
 	async importDirectoryForGoogleSite(dirPath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
 		if (PATH.basename(dirPath) === InteropService_Importer_Html.skipDir || PATH.basename(dirPath) === '_') {
 			console.log(`skipDir: ${dirPath}`);
@@ -293,7 +223,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		const folderTitle = await Folder.findUniqueItemTitle(foldername);
 
 		// 作成対象ディレクトリ内に子ディレクトが存在する場合のみフォルダを作る
-		const folderEntity: FolderEntity = { title: folderTitle };
+		const folderEntity: FolderEntity = { title: folderTitle};
 		if (parentFolderId) {
 			folderEntity.parent_id = parentFolderId;
 		}
@@ -311,31 +241,6 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		}
 	}
 
-	async importFileForEmbeddedHtml(filePath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
-		const stat = await shim.fsDriver().stat(filePath);
-		if (!stat) throw new Error(`Cannot read ${filePath}`);
-		const body = await shim.fsDriver().readFile(filePath);
-		const title = PATH.basename(PATH.dirname(filePath));
-
-		const resourceDir = Setting.value('resourceDir');
-		const updatedBody = await this.modifyEmbeddedHtml(body, filePath, resourceDir);
-		const note = {
-			parent_id: parentFolderId,
-			title: title,
-			body: updatedBody || body,
-			updated_time: stat.mtime.getTime(),
-			created_time: stat.birthtime.getTime(),
-			user_updated_time: stat.mtime.getTime(),
-			user_created_time: stat.birthtime.getTime(),
-			markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
-		};
-
-		const noteObj = await Note.save(note, { autoTimestamp: false });
-		noteInfos.IdToPath[noteObj.id] = filePath;
-		noteInfos.pathToId[filePath] = noteObj.id;
-		console.log(`note: ${filePath} is saved!`);
-		return noteObj;
-	}
 
 	async importFileForGoogleSite(filePath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
 		const stat = await shim.fsDriver().stat(filePath);
@@ -390,23 +295,6 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return noteObj;
 	}
 
-	async modifyEmbeddedHtml(htmlBody: string, filePath: string, resourceDir: string): Promise<string> {
-		let $: cheerio.Root | undefined = undefined;
-		try {
-			$ = cheerio.load(htmlBody);
-		} catch (e) {
-			console.log(`modifyEmbeddedHtml Error: ${e}`);
-		}
-		if ($ === undefined) {
-			return htmlBody;
-		}
-		// Body部分だけを取得
-		$ = this.getHTMLBody($);
-		$ = await this.importEmbededImgVideoAudio($, resourceDir);
-		$ = await this.importRelativePathAnchor($, filePath, resourceDir);
-		return $.html();
-	}
-
 	async modifyGoogleSiteHtml(htmlBody: string, filePath: string, resourceDir: string): Promise<string> {
 		let $: cheerio.Root | undefined = undefined;
 		try {
@@ -423,6 +311,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		$ = await this.importLocalImage($, filePath, resourceDir);
 		$ = await this.importRelativePathAnchor($, filePath, resourceDir);
 		return $.html();
+
 	}
 
 	async modifyExportedSiteHtml(htmlBody: string, filePath: string, resourceDir: string): Promise<string> {
@@ -516,43 +405,6 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return $;
 	}
 
-	async importEmbededImgVideoAudio($: cheerio.Root, resourceDir: string): Promise<cheerio.Root> {
-		const imgs = $('[src^="data:"]');
-		for (let i = 0; i < imgs.length; i++) {
-			const img = imgs[i] as cheerio.TagElement;
-			const src = img.attribs.src;
-			try {
-				// create img data from base64 src data
-				const base64Data = src.split(',')[1];
-				const data = Buffer.from(base64Data, 'base64');
-				const mime = src.split(';')[0].replace('data:', '');
-				const originalFilename = img.attribs.alt;
-				const ext = PATH.extname(originalFilename) ? PATH.extname(originalFilename) : `.${mime.split('/')[1]}`;
-				const hash = crypto.createHash('sha256').update(data).digest('hex');
-				console.log(`sha256 hash: ${hash}`);
-				const filename = `${hash}${ext}`;
-				const newFilePath = PATH.join(resourceDir, filename);
-				console.log(`new filepath: ${newFilePath}`);
-				img.attribs.src = `joplin_resource://${PATH.basename(newFilePath)}`;
-				const options = {
-					createFileURL: false,
-					resizeLargeImages: 'never' };
-				const defaultProps = {
-					id: hash,
-					title: `${originalFilename}`,
-				};
-
-				fs.writeFileSync(newFilePath, data);
-				const resource = await shim.createResourceFromPath(newFilePath, defaultProps, options);
-				console.log(`image resource: ${JSON.stringify(resource, null, ' ')}`);
-
-			} catch (e) {
-				console.log(`importLocalImage error: ${e} in ${src}`);
-			}
-		}
-		return $;
-	}
-
 	async importLocalImage($: cheerio.Root, htmlPath: string, resourceDir: string): Promise<cheerio.Root> {
 		const imgs = $('img');
 		for (let i = 0; i < imgs.length; i++) {
@@ -593,24 +445,13 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return $;
 	}
 
-	getHTMLBody($: cheerio.Root): cheerio.Root {
-		const body = $('body');
-		try {
-			const new$ = cheerio.load(body.html());
-			return new$;
-		} catch (e) {
-			console.log(`error in getHTMLBody: ${e}`);
-			return $;
-		}
-	}
-
 	getGoogleSitePageMainContent($: cheerio.Root): cheerio.Root {
 		const mainContent = $('#sites-canvas-main-content > table > tbody > tr > td > div');
 		try {
 			const new$ = cheerio.load(mainContent.html());
 			return new$;
 		} catch (e) {
-			console.log(`error in getGoogleSitePageMainContent: ${e}`);
+			console.log(`error in getGoogleSitePageMainContent: ${e}`)
 			return $;
 		}
 	}
@@ -654,7 +495,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		}
 		const parsedUrl = URL.parse(imgPath);
 		const protocol = parsedUrl.protocol;
-		if (protocol && protocol.toLowerCase() !== 'file:') {
+		if (protocol && protocol.toLowerCase() !== "file:") {
 			return false;
 		}
 		imgPath = parsedUrl.pathname;

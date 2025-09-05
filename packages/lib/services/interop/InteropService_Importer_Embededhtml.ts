@@ -13,6 +13,7 @@ import * as URL from 'url';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import Setting from '../../models/Setting';
+import * as os from 'os';
 
 const { MarkupToHtml } = require('@joplin/renderer');
 
@@ -468,10 +469,13 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 					title: `${originalFilename}`,
 				};
 
-				fs.writeFileSync(newFilePath, data);
-				const resource = await shim.createResourceFromPath(newFilePath, defaultProps, options);
+				// get tempfolder and save file to tempfolder/originalfilename
+				const tempFolder = os.tmpdir();
+				const tempFile = PATH.join(tempFolder, originalFilename);
+				fs.writeFileSync(tempFile, data);
+				const resource = await shim.createResourceFromPath(tempFile, defaultProps, options);
 				console.log(`image resource: ${JSON.stringify(resource, null, ' ')}`);
-
+				fs.writeFileSync(newFilePath, data);
 			} catch (e) {
 				console.log(`importLocalImage error: ${e} in ${src}`);
 			}
