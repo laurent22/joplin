@@ -173,40 +173,6 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 		}
 	}
 
-	async importDirectoryForGoogleSite(dirPath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
-		if (PATH.basename(dirPath) === InteropService_Importer_Embeddedhtml.skipDir || PATH.basename(dirPath) === '_') {
-			console.log(`skipDir: ${dirPath}`);
-			return;
-		}
-		console.info(`Import: ${dirPath}`);
-		const supportedFileExtension = ['html'];
-		const foldername = await this.getFolderTitle(dirPath);
-		const stats = await shim.fsDriver().readDirStats(dirPath);
-		const folderTitle = await Folder.findUniqueItemTitle(foldername);
-
-		let folderId = parentFolderId;
-		// 作成対象ディレクトリ内に子ディレクトが存在する場合のみフォルダを作る
-		if (this.hasDirectory(stats)) {
-			const folderEntity: FolderEntity = { title: folderTitle };
-			if (parentFolderId !== null) {
-				folderEntity.parent_id = parentFolderId;
-			}
-			const folder = await Folder.save(folderEntity);
-			folderId = folder.id;
-		}
-
-
-
-		for (let i = 0; i < stats.length; i++) {
-			const stat = stats[i];
-
-			if (stat.isDirectory()) {
-				await this.importDirectoryForGoogleSite(`${dirPath}/${basename(stat.path)}`, folderId, noteInfos);
-			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
-				await this.importFileForGoogleSite(`${dirPath}/${stat.path}`, folderId, noteInfos);
-			}
-		}
-	}
 
 
 	async importDirectoryForExportedSite(dirPath: string, parentFolderId: string, noteInfos: INoteInfoMap) {
@@ -476,6 +442,7 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 				const resource = await shim.createResourceFromPath(tempFile, defaultProps, options);
 				console.log(`image resource: ${JSON.stringify(resource, null, ' ')}`);
 				fs.writeFileSync(newFilePath, data);
+				fs.unlinkSync(tempFile);
 			} catch (e) {
 				console.log(`importLocalImage error: ${e} in ${src}`);
 			}
