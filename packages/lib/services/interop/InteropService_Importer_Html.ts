@@ -318,7 +318,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		const title = PATH.basename(PATH.dirname(filePath));
 
 		const resourceDir = Setting.value('resourceDir');
-		const updatedBody = await this.modifyGoogleSiteHtml(body, filePath, resourceDir);
+		const updatedBody = await this.modifyEmbeddedHtml(body, filePath, resourceDir);
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
@@ -400,10 +400,9 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		if ($ === undefined) {
 			return htmlBody;
 		}
-		// Googleサイトのページのメイン部分だけを取得
-		$ = this.getGoogleSitePageMainContent($);
-		$ = this.modifyH2_4ToH1_3($);
-		$ = await this.importLocalImage($, filePath, resourceDir);
+		// Body部分だけを取得
+		$ = this.getHTMLBody($);
+		$ = await this.importEmbededImgVideoAudio($, filePath, resourceDir);
 		$ = await this.importRelativePathAnchor($, filePath, resourceDir);
 		return $.html();
 	}
@@ -512,6 +511,43 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 			} catch (e) {
 				console.log(`import anchor error: ${e}`);
 				console.log(`importing anchor error: ${absolutePath}`);
+			}
+		}
+		return $;
+	}
+
+	async importEmbededImgVideoAudio($: cheerio.Root, htmlPath: string, resourceDir: string): Promise<cheerio.Root> {
+		const imgs = $('[src^="data:"]');
+		for (let i = 0; i < imgs.length; i++) {
+			const img = imgs[i] as cheerio.TagElement;
+			const src = img.attribs.src;
+			try {
+				// create img data from base64 src data
+				const base64Data = src.split(',')[1];
+				const data = Buffer.from(base64Data, 'base64');
+				const mime = src.split(';')[0].replace('data:', '');
+				const originalFilename = img.attribs.alt;
+				const ext = PATH.extname(originalFilename) ? PATH.extname(originalFilename) : `.${mime.split('/')[1]}`;
+				const hash = crypto.createHash('sha256').update(data).digest('hex');
+				console.log(`sha256 hash: ${hash}`);
+				const filename = `${hash}${ext}`;
+				const newFilePath = PATH.join(resourceDir, filename);
+				console.log(`new filepath: ${newFilePath}`);
+				img.attribs.src = `joplin_resource://${PATH.basename(newFilePath)}`;
+				const options = {
+					createFileURL: false,
+					resizeLargeImages: 'never' };
+				const defaultProps = {
+					id: hash,
+					title: `${originalFilename}`,
+				};
+
+				fs.writeFileSync(newFilePath, data);
+				const resource = await shim.createResourceFromPath(newFilePath, defaultProps, options);
+				console.log(`image resource: ${JSON.stringify(resource, null, ' ')}`);
+
+			} catch (e) {
+				console.log(`importLocalImage error: ${e} in ${src}`);
 			}
 		}
 		return $;
