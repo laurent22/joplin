@@ -553,6 +553,8 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				const fileAbsPath = PATH.join(dstResourcePath, imageFileName);
 				const base64Src = InteropService_Exporter_Html.createBase64File(fileAbsPath);
 				anchor.attribs.href = base64Src;
+				anchor.attribs.download = $(anchor).text() ?? 'temp.txt';
+
 			} else {
 				console.log(`relativePath: ${relativePath}`);
 				anchor.attribs.href = `${PATH.join(relativePath, imageFileName)}`;
