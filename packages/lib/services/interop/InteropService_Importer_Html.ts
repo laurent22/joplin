@@ -402,7 +402,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		}
 		// Body部分だけを取得
 		$ = this.getHTMLBody($);
-		$ = await this.importEmbededImgVideoAudio($, filePath, resourceDir);
+		$ = await this.importEmbededImgVideoAudio($, resourceDir);
 		$ = await this.importRelativePathAnchor($, filePath, resourceDir);
 		return $.html();
 	}
@@ -516,7 +516,7 @@ export default class InteropService_Importer_Html extends InteropService_Importe
 		return $;
 	}
 
-	async importEmbededImgVideoAudio($: cheerio.Root, htmlPath: string, resourceDir: string): Promise<cheerio.Root> {
+	async importEmbededImgVideoAudio($: cheerio.Root, resourceDir: string): Promise<cheerio.Root> {
 		const imgs = $('[src^="data:"]');
 		for (let i = 0; i < imgs.length; i++) {
 			const img = imgs[i] as cheerio.TagElement;
