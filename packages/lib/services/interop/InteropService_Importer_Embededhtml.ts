@@ -436,7 +436,10 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 					id: hash,
 					title: `${originalFilename}`,
 				};
-
+				if (fs.existsSync(newFilePath)) {
+					console.log(`same anchor resource is already exist: ${newFilePath}`);
+					continue;
+				}
 				// get tempfolder and save file to tempfolder/originalfilename
 				const tempFolder = os.tmpdir();
 				const tempFile = PATH.join(tempFolder, originalFilename);
@@ -478,6 +481,10 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 					title: `${originalFilename}`,
 				};
 
+				if (fs.existsSync(newFilePath)) {
+					console.log(`same media resource is already exist: ${newFilePath}`);
+					continue;
+				}
 				// get tempfolder and save file to tempfolder/originalfilename
 				const tempFolder = os.tmpdir();
 				const tempFile = PATH.join(tempFolder, originalFilename);
