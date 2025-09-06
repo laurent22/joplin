@@ -297,6 +297,7 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 		$ = this.getHTMLBody($);
 		$ = await this.importEmbededImgVideoAudio($, resourceDir);
 		$ = await this.importRelativePathAnchor($, filePath, resourceDir);
+		$ = await this.importEmbededAnchor($, resourceDir);
 		return $.html();
 	}
 
@@ -404,6 +405,48 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 			} catch (e) {
 				console.log(`import anchor error: ${e}`);
 				console.log(`importing anchor error: ${absolutePath}`);
+			}
+		}
+		return $;
+	}
+
+
+	async importEmbededAnchor($: cheerio.Root, resourceDir: string): Promise<cheerio.Root> {
+		const anchors = $('a[href^="data:"]');
+		for (let i = 0; i < anchors.length; i++) {
+			const anchor = anchors[i] as cheerio.TagElement;
+			const href = anchor.attribs.href;
+			try {
+				// create img data from base64 src data
+				const base64Data = href.split(',')[1];
+				const data = Buffer.from(base64Data, 'base64');
+				const mime = href.split(';')[0].replace('data:', '');
+				const originalFilename = anchor.attribs.download ?? $(anchor).text();
+				const ext = PATH.extname(originalFilename) ? PATH.extname(originalFilename) : `.${mime.split('/')[1]}`;
+				const hash = crypto.createHash('sha256').update(data).digest('hex');
+				console.log(`sha256 hash: ${hash}`);
+				const filename = `${hash}${ext}`;
+				const newFilePath = PATH.join(resourceDir, filename);
+				console.log(`new filepath: ${newFilePath}`);
+				anchor.attribs.href = `joplin_resource://${PATH.basename(newFilePath)}`;
+				const options = {
+					createFileURL: false,
+					resizeLargeImages: 'never' };
+				const defaultProps = {
+					id: hash,
+					title: `${originalFilename}`,
+				};
+
+				// get tempfolder and save file to tempfolder/originalfilename
+				const tempFolder = os.tmpdir();
+				const tempFile = PATH.join(tempFolder, originalFilename);
+				fs.writeFileSync(tempFile, data);
+				const resource = await shim.createResourceFromPath(tempFile, defaultProps, options);
+				console.log(`href resource: ${JSON.stringify(resource, null, ' ')}`);
+				fs.writeFileSync(newFilePath, data);
+				fs.unlinkSync(tempFile);
+			} catch (e) {
+				console.log(`importLocalImage error: ${e} in ${href}`);
 			}
 		}
 		return $;
