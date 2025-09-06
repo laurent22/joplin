@@ -208,7 +208,7 @@ export default class InteropService_Importer_Embeddedhtml extends InteropService
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
 		const body = await shim.fsDriver().readFile(filePath);
-		const title = PATH.basename(PATH.dirname(filePath));
+		const title = PATH.basename(filePath);
 
 		const resourceDir = Setting.value('resourceDir');
 		const updatedBody = await this.modifyEmbeddedHtml(body, filePath, resourceDir);
