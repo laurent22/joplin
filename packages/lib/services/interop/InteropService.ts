@@ -97,6 +97,14 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
+					format: 'embededhtml',
+					fileExtensions: ['html', 'markdown'],
+					sources: [FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('HTML Directory of EmbeddedHTML'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
 					format: 'html',
 					fileExtensions: ['html'],
 					sources: [FileSystemItem.Directory],
