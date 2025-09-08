@@ -5,7 +5,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/
 import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import Note from '@joplin/lib/models/Note';
-import { render, screen, waitFor } from '../../../utils/testing/testingLibrary';
+import { render, screen } from '../../../utils/testing/testingLibrary';
 import SearchResults, { limit } from './SearchResults';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import Folder from '@joplin/lib/models/Folder';
@@ -39,8 +39,7 @@ describe('SearchResult', () => {
 			<SearchResults query='abcd' onHighlightedWordsChange={() => {}} ftsEnabled={1}/>
 		</TestProviderStack>);
 
-		await waitFor(() => {
-			expect(screen.getByText(`Only the first ${limit} results are being shown`)).toBeVisible();
-		});
+		const notShowingEverythingAlert = await screen.findByText(`Only the first ${limit} results are being shown`);
+		expect(notShowingEverythingAlert).toBeVisible();
 	});
 });
