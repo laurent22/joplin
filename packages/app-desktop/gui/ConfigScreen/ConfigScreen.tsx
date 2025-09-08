@@ -271,6 +271,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				{this.renderSectionDescription(section)}
 				<div>{settingComps}</div>
 				{advancedSettingsButton}
+				<label>use ReverseProxy</label> <span><input type="checkbox" /></span>
 				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>
 			</div>
 		);
