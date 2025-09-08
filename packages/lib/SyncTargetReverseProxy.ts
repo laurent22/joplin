@@ -3,14 +3,14 @@ import { _ } from './locale';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import BaseSyncTarget from './BaseSyncTarget';
+import SyncTargetOneDrive from './SyncTargetOneDrive';
 
 const { parameters } = require('./parameters.js');
 const { FileApi } = require('./file-api.js');
 const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
 
-export default class SyncTargetOneDrive extends BaseSyncTarget {
 
-	protected api_: any;
+export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 
 	static id() {
 		return 3;
@@ -109,7 +109,5 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 			BaseSyncTarget.dispatch({ type: 'SYNC_REPORT_UPDATE', report: { errors: [error] } });
 			throw error;
 		}
-
-
 	}
 }
