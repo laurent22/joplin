@@ -9,6 +9,7 @@ export type ShareRecord = {
 interface InitializationOptions extends FolderData {
 	childIds: ItemId[];
 	sharedWith: ShareRecord[];
+	isShared: boolean;
 	// Email of the Joplin Server account that controls the item
 	ownedByEmail: string;
 }
@@ -23,6 +24,10 @@ export default class FolderRecord implements FolderData {
 	public readonly title: string;
 	public readonly ownedByEmail: string;
 	public readonly childIds: ItemId[];
+
+	// Only valid for root folders. Note that a separate isShared_ is needed
+	// because Joplin folders can be 'shared' even if there are no share recipients.
+	private readonly isShared_: boolean;
 	private readonly sharedWith_: ShareRecord[];
 
 	public constructor(options: InitializationOptions) {
@@ -30,6 +35,7 @@ export default class FolderRecord implements FolderData {
 		this.id = options.id;
 		this.title = options.title;
 		this.childIds = options.childIds;
+		this.isShared_ = options.isShared ?? options.sharedWith.length > 0;
 		this.ownedByEmail = options.ownedByEmail;
 		this.sharedWith_ = options.sharedWith;
 
@@ -51,6 +57,7 @@ export default class FolderRecord implements FolderData {
 			parentId: this.parentId,
 			id: this.id,
 			title: this.title,
+			isShared: this.isShared_,
 			ownedByEmail: this.ownedByEmail,
 			childIds: [...this.childIds],
 			sharedWith: [...this.sharedWith_],
@@ -58,7 +65,7 @@ export default class FolderRecord implements FolderData {
 	}
 
 	public get isRootSharedItem() {
-		return this.sharedWith_.length > 0;
+		return this.isShared_;
 	}
 
 	public isSharedWith(email: string) {
@@ -124,6 +131,7 @@ export default class FolderRecord implements FolderData {
 
 		return new FolderRecord({
 			...this.metadata_,
+			isShared: true,
 			sharedWith: [
 				...this.sharedWith_.filter(record => record.email !== recipientEmail),
 				{ email: recipientEmail, readOnly },
@@ -131,7 +139,7 @@ export default class FolderRecord implements FolderData {
 		});
 	}
 
-	public withUnshared(recipientEmail: string) {
+	public withRemovedFromShare(recipientEmail: string) {
 		if (!this.isSharedWith(recipientEmail)) {
 			return this;
 		}
@@ -139,6 +147,18 @@ export default class FolderRecord implements FolderData {
 		return new FolderRecord({
 			...this.metadata_,
 			sharedWith: this.sharedWith_.filter(record => record.email !== recipientEmail),
+		});
+	}
+
+	public withUnshared() {
+		if (!this.isShared_) {
+			return this;
+		}
+
+		return new FolderRecord({
+			...this.metadata_,
+			sharedWith: [],
+			isShared: false,
 		});
 	}
 }

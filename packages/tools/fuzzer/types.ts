@@ -67,7 +67,9 @@ export interface ActionableClient {
 	createFolder(data: FolderData): Promise<void>;
 	shareFolder(id: ItemId, shareWith: Client, options: ShareOptions): Promise<void>;
 	removeFromShare(id: string, shareWith: Client): Promise<void>;
+	deleteAssociatedShare(id: string): Promise<void>;
 	deleteFolder(id: ItemId): Promise<void>;
+	deleteNote(id: ItemId): Promise<void>;
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;

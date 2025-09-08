@@ -7,11 +7,11 @@ class MockPluginRunner extends BasePluginRunner {
 	public override async stop() {}
 }
 
-const pluginServiceSetup = (store: Store) => {
+const mockPluginServiceSetup = (store: Store) => {
 	const runner = new MockPluginRunner();
 	PluginService.instance().initialize(
 		'2.14.0', { joplin: {} }, runner, store,
 	);
 };
 
-export default pluginServiceSetup;
+export default mockPluginServiceSetup;

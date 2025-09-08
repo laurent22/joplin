@@ -66,7 +66,7 @@ const useSearchResults = ({
 }: UseSearchResultsOptions) => {
 	const results = useMemo(() => {
 		return options
-			.filter(option => option.title.startsWith(search))
+			.filter(option => option.title.toLowerCase().includes(search))
 			.sort((a, b) => {
 				if (a.title === b.title) return 0;
 				// Full matches should go first
@@ -254,6 +254,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
 		<View style={[styles.optionContent, selected && styles.optionContentSelected]}>
 			{icon}
 			<Text
+				ellipsizeMode='tail'
+				numberOfLines={1}
 				style={styles.optionLabel}
 			>{text}</Text>
 		</View>
@@ -458,10 +460,11 @@ const useInputEventHandlers = ({
 		} else if (key === 'ArrowUp') {
 			selectedIndexControl.onPreviousResult();
 			event.preventDefault();
-		} else if (key === 'Enter') {
+		} else if (key === 'Enter' && Platform.OS === 'web') {
 			// This case is necessary on web to prevent the
 			// search input from becoming defocused after
-			// pressing "enter".
+			// pressing "enter". Enter key behavior is handled
+			// elsewhere for other platforms.
 			event.preventDefault();
 			onSubmit();
 			setSearch('');
@@ -584,6 +587,7 @@ const ComboBox: React.FC<Props> = ({
 			onChangeText={setSearch}
 			onKeyPress={onKeyPress}
 			onSubmitEditing={onSubmit}
+			submitBehavior='submit'
 			placeholder={placeholder}
 			aria-activedescendant={showSearchResults ? activeId : undefined}
 			aria-controls={`menuBox-${baseId}`}

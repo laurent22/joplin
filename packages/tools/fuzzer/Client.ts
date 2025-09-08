@@ -504,6 +504,13 @@ class Client implements ActionableClient {
 		await this.assertNoteMatchesState_(note);
 	}
 
+	public async deleteNote(id: ItemId) {
+		logger.info('Delete note', id, 'in', this.label);
+		await this.tracker_.deleteNote(id);
+
+		await this.execCliCommand_('rmnote', '--permanent', '--force', id);
+	}
+
 	public async deleteFolder(id: string) {
 		logger.info('Delete folder', id, 'in', this.label);
 		await this.tracker_.deleteFolder(id);
@@ -565,6 +572,12 @@ class Client implements ActionableClient {
 		logger.info('Remove', other.label, 'from share', id);
 		await this.execCliCommand_('share', 'remove', id, other.email);
 		await other.sync();
+	}
+
+	public async deleteAssociatedShare(id: string) {
+		await this.tracker_.deleteAssociatedShare(id);
+		logger.info('Unshare', id, '(from', this.label, ')');
+		await this.execCliCommand_('share', 'delete', '-f', id);
 	}
 
 	public async moveItem(itemId: ItemId, newParentId: ItemId) {

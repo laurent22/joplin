@@ -200,3 +200,5 @@ LOCALAPPDATA
 Daman
 vikasmanimc
 traspire
+Pokies
+Pokiesman

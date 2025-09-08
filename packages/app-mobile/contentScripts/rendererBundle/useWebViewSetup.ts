@@ -185,7 +185,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 			};
 
 			let settingsChanged = false;
-			const settings: RenderSettings = {
+			const getSettings = (): RenderSettings => ({
 				...options,
 				codeTheme: theme.codeThemeCss,
 				// We .stringify the theme to avoid a JSON serialization error involving
@@ -220,12 +220,12 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
-			};
+			});
 
 			await transferResources(options.resources);
 
 			return {
-				settings,
+				getSettings,
 				getSettingsChanged() {
 					return settingsChanged;
 				},
@@ -234,23 +234,23 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 
 		return {
 			rerenderToBody: async (markup, options, cancelEvent) => {
-				const { settings, getSettingsChanged } = await prepareRenderer(options);
+				const { getSettings, getSettingsChanged } = await prepareRenderer(options);
 				if (cancelEvent?.cancelled) return null;
 
-				const output = await renderer.rerenderToBody(markup, settings);
+				const output = await renderer.rerenderToBody(markup, getSettings());
 				if (cancelEvent?.cancelled) return null;
 
 				if (getSettingsChanged()) {
-					return await renderer.rerenderToBody(markup, settings);
+					return await renderer.rerenderToBody(markup, getSettings());
 				}
 				return output;
 			},
 			render: async (markup, options) => {
-				const { settings, getSettingsChanged } = await prepareRenderer(options);
-				const output = await renderer.render(markup, settings);
+				const { getSettings, getSettingsChanged } = await prepareRenderer(options);
+				const output = await renderer.render(markup, getSettings());
 
 				if (getSettingsChanged()) {
-					return await renderer.render(markup, settings);
+					return await renderer.render(markup, getSettings());
 				}
 				return output;
 			},
