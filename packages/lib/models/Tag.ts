@@ -188,7 +188,7 @@ export default class Tag extends BaseItem {
 		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
 		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
 		const previousTags = await this.tagsByNoteId(noteId);
-		const addedTitles = [];
+		const addedTitlesLowercased = [];
 
 		for (let i = 0; i < tagTitles.length; i++) {
 			const title = tagTitles[i].trim();
@@ -196,11 +196,11 @@ export default class Tag extends BaseItem {
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
-			addedTitles.push(title.toLowerCase());
+			addedTitlesLowercased.push(title.toLowerCase());
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
+			if (addedTitlesLowercased.indexOf(previousTags[i].title.toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
