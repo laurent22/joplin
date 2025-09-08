@@ -265,4 +265,19 @@ describe('InteropService_Importer_Md', () => {
 <h1>Second note</h1>
 </body>`);
 	});
+
+	it('should handle importing resources without extension', async () => {
+		await importNoteDirectory(`${supportDir}/test_notes/md/resources_without_extension`);
+		const notes = await Note.all();
+		const resources = await Resource.all();
+
+		expect(notes.length).toBe(1);
+		expect(resources.length).toBe(3);
+		expect(resources[0].title).toBe('file1');
+		expect(resources[0].file_extension).toBe('');
+		expect(resources[1].title).toBe('file2');
+		expect(resources[1].file_extension).toBe('');
+		expect(resources[2].title).toBe('file3.text');
+		expect(resources[2].file_extension).toBe('text');
+	});
 });

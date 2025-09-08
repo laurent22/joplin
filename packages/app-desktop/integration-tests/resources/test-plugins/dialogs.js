@@ -47,5 +47,22 @@ joplin.plugins.register({
 				}));
 			},
 		});
+
+		await joplin.commands.register({
+			name: 'getTestDialogVisibility',
+			label: 'Returns the dialog visibility state',
+			execute: async () => {
+				// panels.visible should also work for dialogs.
+				const visible = await joplin.views.panels.visible(dialogHandle);
+				// For dialogs, isActive should return the visibility.
+				// (Prefer panels.visible for dialogs).
+				const active = await joplin.views.panels.isActive(dialogHandle);
+
+				await joplin.commands.execute('editor.setText', JSON.stringify({
+					visible,
+					active,
+				}));
+			},
+		});
 	},
 });

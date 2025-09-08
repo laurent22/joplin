@@ -8,6 +8,7 @@ import { themeStyle } from './global-style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
+import FeedbackBanner from './FeedbackBanner';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -67,6 +68,7 @@ const AppNavComponent: React.FC<Props> = (props) => {
 			<NotesScreen visible={notesScreenVisible} />
 			{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}
 			{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />}
+			{notesScreenVisible ? <FeedbackBanner/> : null}
 			<View style={{ height: autocompletionBarPadding }} />
 		</KeyboardAvoidingView>
 	);

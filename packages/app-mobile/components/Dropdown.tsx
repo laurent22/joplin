@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList, Platform } from 'react-native';
 import { Component, ReactElement } from 'react';
 import { _ } from '@joplin/lib/locale';
+import { EdgeInsets, SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 type ValueType = string;
 export interface DropdownListItem {
@@ -56,25 +57,43 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		};
 	}
 
-	private updateHeaderCoordinates = () => {
+	private updateHeaderCoordinates = (insets: EdgeInsets) => {
 		if (!this.headerRef) return;
 
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		this.headerRef.measure((_fx, _fy, width, height, px, py) => {
 			const lastLayout = this.state.headerSize;
+			let offsetX = 0;
+			let offsetY = 0;
+
+			// The opening position of the dropdown must be offset to cater for insets, on newer versions of Android which use edge to edge by default
+			// If the dropdown fills the full height of the screen, the offset gets ignored and does not cause anything to be truncated
+			if (Platform.OS === 'android' && Platform.Version >= 35) {
+				const windowHeight = Dimensions.get('window').height;
+				const windowWidth = Dimensions.get('window').width;
+				const isLandscape = windowWidth > windowHeight;
+
+				if (isLandscape) {
+					offsetX = insets.left;
+					offsetY = insets.top;
+				} else {
+					offsetY = insets.top;
+				}
+			}
+
 			if (px !== lastLayout.x || py !== lastLayout.y || width !== lastLayout.width || height !== lastLayout.height) {
 				this.setState({
-					headerSize: { x: px, y: py, width: width, height: height },
+					headerSize: { x: px - offsetX, y: py - offsetY, width: width, height: height },
 				});
 			}
 		});
 	};
 
-	private onOpenList = () => {
+	private onOpenList = (insets: EdgeInsets) => {
 		// On iOS, we need to re-measure just before opening the list. Measurements from just after
 		// onLayout can be inaccurate in some cases (in the past, this had caused the menu to be
 		// drawn far offscreen).
-		this.updateHeaderCoordinates();
+		this.updateHeaderCoordinates(insets);
 		this.setState({ listVisible: true });
 	};
 	private onCloseList = () => {
@@ -92,10 +111,16 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 		}
 	};
 
-	public render() {
+	private renderWithInsets(insets: EdgeInsets) {
+		let offsetHeight = 0;
+
+		if (Platform.OS === 'android' && Platform.Version >= 35) {
+			offsetHeight = insets.bottom;
+		}
+
 		const items = this.props.items;
 		const itemHeight = 60;
-		const windowHeight = Dimensions.get('window').height - 50;
+		const windowHeight = Dimensions.get('window').height - 50 - offsetHeight;
 		const windowWidth = Dimensions.get('window').width;
 
 		// Dimensions doesn't return quite the right dimensions so leave an extra gap to make
@@ -205,13 +230,13 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<View
 					style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}
-					onLayout={this.updateHeaderCoordinates}
+					onLayout={() => this.updateHeaderCoordinates(insets)}
 					ref={ref => { this.headerRef = ref; } }
 				>
 					<TouchableOpacity
 						style={headerWrapperStyle}
 						disabled={this.props.disabled}
-						onPress={this.onOpenList}
+						onPress={() => this.onOpenList(insets)}
 						accessibilityRole='button'
 						accessibilityHint={[this.props.accessibilityHint, _('Opens dropdown')].join(' ')}
 					>
@@ -266,6 +291,14 @@ class Dropdown extends Component<DropdownProps, DropdownState> {
 					{screenReaderCloseMenuButton}
 				</Modal>
 			</View>
+		);
+	}
+
+	public render() {
+		return (
+			<SafeAreaInsetsContext.Consumer>
+				{(insets) => this.renderWithInsets(insets)}
+			</SafeAreaInsetsContext.Consumer>
 		);
 	}
 }

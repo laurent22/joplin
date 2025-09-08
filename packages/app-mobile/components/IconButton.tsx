@@ -87,6 +87,14 @@ const IconButton = (props: ButtonProps) => {
 		props.preventKeyboardDismiss, props.onPress, props.disabled,
 	);
 
+	let icon = <Icon
+		name={props.iconName}
+		style={props.iconStyle}
+		accessibilityLabel={null}
+	/>;
+	// Include browser-provided tooltips on web.
+	icon = Platform.OS === 'web' ? <span title={props.description}>{icon}</span> : icon;
+
 	const button = (
 		<Pressable
 			ref={props.pressableRef}
@@ -115,11 +123,7 @@ const IconButton = (props: ButtonProps) => {
 				opacity: fadeAnim,
 				...props.contentWrapperStyle,
 			}}>
-				<Icon
-					name={props.iconName}
-					style={props.iconStyle}
-					accessibilityLabel={null}
-				/>
+				{icon}
 			</Animated.View>
 		</Pressable>
 	);

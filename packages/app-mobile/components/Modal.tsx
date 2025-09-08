@@ -27,11 +27,23 @@ export interface ModalElementProps extends ModalProps {
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
 	const safeAreaPadding = useSafeAreaPadding();
 	return useMemo(() => {
+		// On Android, the top-level container seems to need to be absolutely positioned
+		// to prevent it from being larger than the screen size:
+		const absoluteFill = {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+		} satisfies ViewStyle;
+
 		return StyleSheet.create({
 			modalBackground: {
 				...safeAreaPadding,
-				flexGrow: 1,
-				flexShrink: 1,
+				...(hasScrollView ? {
+					flexGrow: 1,
+					flexShrink: 1,
+				} : absoluteFill),
 
 				// When hasScrollView, the modal background is wrapped in a ScrollView. In this case, it's
 				// possible to scroll content outside the background into view. To prevent the edge of the
@@ -40,6 +52,7 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				backgroundColor: hasScrollView ? null : backgroundColor,
 			},
 			keyboardAvoidingView: {
+				...absoluteFill,
 				flex: 1,
 			},
 			modalScrollView: {
