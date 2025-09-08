@@ -1,5 +1,13 @@
 # Joplin Android Changelog
 
+## [android-v3.4.6](https://github.com/laurent22/joplin/releases/tag/android-v3.4.6) (Pre-release) - 2025-09-01T12:02:41Z
+
+- Fixed: Fix "edit profile" button is partially off-screen (#13084) (#13015 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix shadow shown above the screen header (#13074 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix certain renderer plugins fail to load (#13078 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix compatibility with certain plugins targetting the desktop app (#13077 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix plugin panel buttons are off-screen on recent versions of Android (#13080 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.4.5](https://github.com/laurent22/joplin/releases/tag/android-v3.4.5) (Pre-release) - 2025-08-27T06:27:53Z
 
 - New: Add a "highlight active line" setting (#12967 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

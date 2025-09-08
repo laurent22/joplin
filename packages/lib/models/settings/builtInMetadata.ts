@@ -30,6 +30,12 @@ export enum ScrollbarSize {
 	Large = 24,
 }
 
+export enum SurveyProgress {
+	NotStarted,
+	Started,
+	Dismissed,
+}
+
 const builtInMetadata = (Setting: typeof SettingType) => {
 	const platform = shim.platformName();
 	const mobilePlatform = shim.mobilePlatform();
@@ -557,13 +563,15 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'ocr.handwrittenTextDriverEnabled': {
-			value: true,
+			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable handwritten transcription'),
+			description: () => 'Allows selecting specific attachments for higher-quality on-server OCR. When enabled, the right-click menu for an attachment includes an option to send an attachment to Joplin Cloud/Server for off-device processing.\n\nExperimental! It may not work at all. Requires Joplin Server or Cloud.',
 			storage: SettingStorage.File,
 			isGlobal: true,
+			advanced: true,
 		},
 
 		'ocr.languageDataPath': {
@@ -1870,6 +1878,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => 'Security: Improve plugin panel, editor, and dialog security',
 			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
 			section: 'note',
+			isGlobal: true,
+		},
+
+		'survey.webClientEval2025.progress': {
+			value: SurveyProgress.NotStarted,
+			type: SettingItemType.Int,
+			public: false,
+			isEnum: true,
+			storage: SettingStorage.File,
+			options: () => ({
+				[SurveyProgress.NotStarted]: 'Not started',
+				[SurveyProgress.Started]: 'Started',
+				[SurveyProgress.Dismissed]: 'Done',
+			}),
+			label: () => 'Show web client evaluation survey',
 			isGlobal: true,
 		},
 
