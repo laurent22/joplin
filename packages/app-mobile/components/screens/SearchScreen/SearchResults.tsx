@@ -22,6 +22,7 @@ interface Props {
 	onHighlightedWordsChange: (highlightedWords: (ComplexTerm | string)[])=> void;
 
 	ftsEnabled: number;
+	initialNumToRender?: number;
 }
 
 export const limit = 100;
@@ -155,9 +156,13 @@ const SearchResults: React.FC<Props> = props => {
 			<FlatList
 				data={notes}
 				keyExtractor={(item) => item.id}
+				initialNumToRender={props.initialNumToRender}
 				renderItem={event => {
 					if (event.index === 0 && notes.length === limit) {
-						return <LimitMessage themeId={props.themeId} />;
+						return <React.Fragment>
+							<LimitMessage themeId={props.themeId} />
+							<NoteItem note={event.item} />
+						</React.Fragment>;
 					}
 					return <NoteItem note={event.item} />;
 				}}
