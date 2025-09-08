@@ -1513,7 +1513,12 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key == key) {
-				return copyIfNeeded(this.cache_[i].value);
+				let value = this.cache_[i].value;
+				if (key === 'sync.target' && this.cache_[i].value === 10) {
+					// if reverseproxy is used, target is changed to onedrive (3)
+					value = 3;
+				}
+				return copyIfNeeded(value);
 			}
 		}
 
