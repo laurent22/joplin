@@ -423,6 +423,18 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
+	private screenHeader_backButtonLongPress = (folderId: string, isViewMode: boolean) => {
+		if (isViewMode) {
+			if (folderId) {
+				void NavService.go('Notes', { folderId: folderId, clearHistory: true });
+			} else {
+				void NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972', clearHistory: true });
+			}
+		} else {
+			void BackButtonService.back();
+		}
+	};
+
 	public undoState(noteBody: string = null) {
 		return {
 			body: noteBody === null ? this.state.note.body : noteBody,
@@ -1252,17 +1264,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const output: MenuOptionType[] = [];
 
-		output.push({
-			title: _('Return to notes'),
-			onPress: async () => {
-				if (this.state.folder?.id) {
-					await NavService.go('Notes', { folderId: this.state.folder.id, clearHistory: true });
-				} else {
-					await NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972', clearHistory: true });
-				}
-			},
-		});
-
 		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
 
@@ -1781,6 +1782,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
+					onBackButtonLongPress={() => this.screenHeader_backButtonLongPress(this.state.folder?.id, this.state.mode === 'view')}
 					title={getDisplayParentTitle(this.state.note, this.state.folder)}
 				/>
 				{titleComp}

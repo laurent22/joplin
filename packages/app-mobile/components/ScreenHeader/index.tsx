@@ -65,6 +65,7 @@ interface ScreenHeaderProps {
 	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
 	onDeleteButtonPress?: OnPressCallback;
+	onBackButtonLongPress?: OnPressCallback;
 
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
@@ -289,10 +290,11 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function backButton(styles: any, onPress: OnPressCallback, onLongPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
+					onLongPress={onLongPress ? onLongPress : onPress}
 					disabled={disabled}
 
 					accessibilityLabel={_('Back')}
@@ -650,7 +652,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const headerItemDisabled = !(this.props.selectedNoteIds.length > 0);
 
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
-		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
+		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), this.props.onBackButtonLongPress, backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
