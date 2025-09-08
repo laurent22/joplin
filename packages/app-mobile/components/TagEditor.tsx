@@ -39,11 +39,13 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 				color: theme.color3,
 				flexDirection: 'row',
 				alignItems: 'center',
+				maxWidth: '100%',
 				gap: 4,
 			},
 			tagText: {
 				color: theme.color3,
 				fontSize: theme.fontSize,
+				flexShrink: 1,
 			},
 			removeTagButton: {
 				color: theme.color3,
@@ -123,7 +125,11 @@ const TagCard: React.FC<TagChipProps> = props => {
 		style={props.styles.tag}
 		role='listitem'
 	>
-		<Text style={props.styles.tagText}>{props.title}</Text>
+		<Text
+			ellipsizeMode='tail'
+			numberOfLines={1}
+			style={props.styles.tagText}
+		>{props.title}</Text>
 		<IconButton
 			pressableRef={removeButtonRef}
 			themeId={props.themeId}

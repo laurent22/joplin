@@ -16,6 +16,7 @@ In order to provide certain features, Joplin may need to connect to third-party 
 | OCR | If optical character recognition is enabled on desktop, the application will download the language files from https://cdn.jsdelivr.net/npm/@tesseract.js-data/. | Enabled | Yes 
 | Crash reports | If you have enabled crash auto-upload, the application will upload the report to Sentry when a crash happens. When Sentry is initialised it will also connect to `sentry.io`. | Disabled | Yes
 | Handwriting recognition | If the 'handwriting recognition' setting is enabled, users can send images to Joplin Server/Cloud to be transcribed. Only images selected with the 'Recognize handwritten image' are affected. | Disabled | Yes
+| Beta feedback | (**Web app only**) If the feedback dialog is used, Joplin contacts `objects.joplinusercontent.com` to submit the response. | Enabled | Yes
 
 <sup>(1) https://github.com/laurent22/joplin/issues/5705</sup><br/>
 <sup>(2) If the spellchecker is disabled, [it will not download the dictionary](https://discourse.joplinapp.org/t/new-version-of-joplin-contacting-google-servers-on-startup/23000/40?u=laurent).</sup>

@@ -69,7 +69,7 @@ const useSearchResults = ({
 		const collator = getCollator(collatorLocale);
 		const lowerSearch = search?.toLowerCase();
 		return options
-			.filter(option => option.title.toLowerCase().startsWith(lowerSearch))
+			.filter(option => option.title.toLowerCase().includes(lowerSearch))
 			.sort((a, b) => {
 				if (a.title === b.title) return 0;
 				// Full matches should go first
@@ -257,6 +257,8 @@ const SearchResult: React.FC<SearchResultProps> = ({
 		<View style={[styles.optionContent, selected && styles.optionContentSelected]}>
 			{icon}
 			<Text
+				ellipsizeMode='tail'
+				numberOfLines={1}
 				style={styles.optionLabel}
 			>{text}</Text>
 		</View>
