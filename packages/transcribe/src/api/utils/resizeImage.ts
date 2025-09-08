@@ -1,29 +1,27 @@
-import { remove } from 'fs-extra';
+import { remove, copy } from 'fs-extra';
 import * as sharp from 'sharp';
 
-const resizeImage = async (filePath: string, imageMaxDimension: number) => {
+const resizeImage = async (inputPath: string, outputPath: string, imageMaxDimension: number) => {
 
-	const metadata = await sharp(filePath).metadata();
+	const metadata = await sharp(inputPath).metadata();
 
 	if (!metadata || metadata.width === undefined || metadata.height === undefined) {
-		return filePath;
+		await copy(inputPath, outputPath);
+		await remove(inputPath);
+		return;
 	}
 
-	const highestDimension = Math.max(metadata.width, metadata.height);
-
-	if (highestDimension <= imageMaxDimension) {
-		return filePath;
+	if (Math.max(metadata?.width, metadata?.height) <= imageMaxDimension) {
+		await copy(inputPath, outputPath);
+		await remove(inputPath);
+		return;
 	}
 
-	const resizedFilePath = `${filePath}-resized.${metadata.format}`;
-
-	await sharp(filePath)
+	await sharp(inputPath)
 		.resize(imageMaxDimension, imageMaxDimension, { fit: 'inside', withoutEnlargement: true })
-		.toFile(resizedFilePath);
+		.toFile(outputPath);
 
-	await remove(filePath);
-
-	return resizedFilePath;
+	await remove(inputPath);
 };
 
 export default resizeImage;

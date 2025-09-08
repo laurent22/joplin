@@ -9,12 +9,15 @@ type CreateJobContext = {
 	sendToQueue: (data: JobData)=> Promise<string | null>;
 	filepath: string;
 	imageMaxDimension: number;
+	randomName: string;
 };
 
 const createJob = async (context: CreateJobContext) => {
-	const resizedFilePath = await resizeImage(context.filepath, context.imageMaxDimension);
+	const imageResizedPath = context.randomName;
 
-	const filePath = await context.storeImage(resizedFilePath);
+	await resizeImage(context.filepath, imageResizedPath, context.imageMaxDimension);
+
+	const filePath = await context.storeImage(imageResizedPath);
 
 	const jobId = await context.sendToQueue({ filePath });
 
