@@ -189,4 +189,26 @@ describe('ShareModel', () => {
 		expect(await models().share().itemCountByShareId(share.id)).toBe(3);
 	});
 
+	test('should be possible to run createSharedFolderUserItems multiple times concurrently', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+				'00000000000000000000000000000003': null,
+			},
+		});
+
+		expect(await models().userItem().byUserId(user3.id)).toHaveLength(0);
+		await Promise.all([
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+		]);
+		expect(await models().userItem().byUserId(user3.id)).toHaveLength(4);
+	});
+
 });

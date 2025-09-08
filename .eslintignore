@@ -676,6 +676,8 @@ packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js
 packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/ExtendedWebView/utils/useCss.js
+packages/app-mobile/components/FeedbackBanner.test.js
+packages/app-mobile/components/FeedbackBanner.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
