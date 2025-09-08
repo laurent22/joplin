@@ -59,12 +59,17 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		return parentId;
 	};
 
+	const defaultNoteProperties = {
+		published: false,
+	};
+
 	const selectOrCreateWriteableNote = async () => {
 		const options = { includeReadOnly: false };
 		let note = await client.randomNote(options);
 
 		if (!note) {
 			await client.createNote({
+				...defaultNoteProperties,
 				parentId: await selectOrCreateParentFolder(),
 				id: uuid.create(),
 				title: 'Test note',
@@ -104,6 +109,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 		newNote: async () => {
 			const parentId = await selectOrCreateParentFolder();
 			await client.createNote({
+				...defaultNoteProperties,
 				parentId: parentId,
 				title: `Test (x${context.randInt(0, 1000)})`,
 				body: 'Testing...',
@@ -247,6 +253,7 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 
 				for (let i = 0; i < welcomeNoteCount; i++) {
 					await client.createNote({
+						...defaultNoteProperties,
 						parentId: testNotesFolderId,
 						id: uuid.create(),
 						title: `Test note ${i}/${welcomeNoteCount}`,
@@ -285,6 +292,22 @@ const doRandomAction = async (context: FuzzContext, client: Client, clientPool: 
 				assert.notEqual(otherClient, client);
 				await otherClient.close();
 			}
+			return true;
+		},
+		publishNote: async () => {
+			const note = await client.randomNote({
+				includeReadOnly: true,
+			});
+			if (!note || note.published) return false;
+
+			await client.publishNote(note.id);
+			return true;
+		},
+		unpublishNote: async () => {
+			const note = await client.randomNote({ includeReadOnly: true });
+			if (!note || !note.published) return false;
+
+			await client.unpublishNote(note.id);
 			return true;
 		},
 	};

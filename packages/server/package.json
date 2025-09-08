@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start-dev": "yarn build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
-    "start-prod": "pm2 kill && pm2 install pm2-logrotate && pm2 set pm2-logrotate:max_size 100MB && pm2 set pm2-logrotate:retain 5 && pm2 set pm2-logrotate:compress true && pm2 start --no-daemon --exp-backoff-restart-delay=1000 dist/app.js",
+    "start-prod": "pm2 kill && pm2 start --no-daemon --exp-backoff-restart-delay=1000 dist/app.js",
     "rebuild": "yarn clean && yarn build && yarn tsc",
     "build": "gulp build",
     "devCreateDb": "node dist/app.js --env dev --create-db",
@@ -48,7 +48,6 @@
     "nodemailer": "6.10.1",
     "nodemon": "3.1.10",
     "pg": "8.15.6",
-    "pm2": "5.4.3",
     "pretty-bytes": "5.6.0",
     "prettycron": "0.10.0",
     "query-string": "7.1.3",

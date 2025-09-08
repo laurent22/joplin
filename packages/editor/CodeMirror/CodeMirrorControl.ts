@@ -13,6 +13,7 @@ import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectio
 import getSearchState from './utils/getSearchState';
 import { noteIdFacet, setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import jumpToHash from './editorCommands/jumpToHash';
+import { resetImageResourceEffect } from './extensions/rendering/renderBlockImages';
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -229,8 +230,12 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		};
 	}
 
-	public onResourceDownloaded(_id: string) {
-		// Unused
+	public onResourceChanged(id: string) {
+		this.editor.dispatch({
+			effects: [
+				resetImageResourceEffect.of({ id }),
+			],
+		});
 	}
 
 	public setContentScripts(plugins: ContentScriptData[]) {

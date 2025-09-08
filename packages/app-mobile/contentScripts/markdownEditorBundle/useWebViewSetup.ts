@@ -130,7 +130,7 @@ const useWebViewSetup = ({
 			async onEditorAdded() {
 				messenger.remoteApi.updatePlugins(codeMirrorPluginsRef.current);
 			},
-			async onResolveImageSrc(src) {
+			async onResolveImageSrc(src, reloadCounter) {
 				const url = parseResourceUrl(src);
 				if (!url.itemId) return null;
 				const item = await Resource.load(url.itemId);
@@ -144,7 +144,8 @@ const useWebViewSetup = ({
 					}
 					return null;
 				} else {
-					return Resource.fullPath(item);
+					const path = Resource.fullPath(item);
+					return reloadCounter ? `${path}?r=${reloadCounter}` : path;
 				}
 			},
 		};

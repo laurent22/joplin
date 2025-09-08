@@ -72,7 +72,12 @@ const makeBlockReplaceExtension = (extensionSpec: ReplacementExtension) => {
 			decorations = decorations.map(transaction.changes);
 			const selectionChanged = !transaction.newSelection.eq(transaction.startState.selection);
 
-			if (transaction.docChanged || selectionChanged) {
+			const wasRerenderRequested = () => {
+				if (!extensionSpec.shouldFullReRender) return false;
+				return extensionSpec.shouldFullReRender(transaction);
+			};
+
+			if (transaction.docChanged || selectionChanged || wasRerenderRequested()) {
 				decorations = updateDecorations(transaction.state, extensionSpec);
 			}
 
