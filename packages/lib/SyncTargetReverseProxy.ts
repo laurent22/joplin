@@ -12,47 +12,47 @@ const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
 
 export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 
-	static id() {
+	public static id() {
 		return 3;
 	}
 
-	constructor(db: any, options: any = null) {
+	public constructor(db: any, options: any = null) {
 		super(db, options);
 		this.api_ = null;
 	}
 
-	static targetName() {
-		return 'onedrive';
+	public static targetName() {
+		return 'reverseproxy';
 	}
 
-	static label() {
-		return _('OneDrive');
+	public static label() {
+		return _('Reverse Proxy');
 	}
 
-	async isAuthenticated() {
+	public async isAuthenticated() {
 		return !!this.api().auth();
 	}
 
-	syncTargetId() {
-		return SyncTargetOneDrive.id();
+	public syncTargetId() {
+		return SyncTargetReverseProxy.id();
 	}
 
-	isTesting() {
+	public isTesting() {
 		const p = parameters();
 		return !!p.oneDriveTest;
 	}
 
-	oneDriveParameters() {
+	public oneDriveParameters() {
 		const p = parameters();
 		if (p.oneDriveTest) return p.oneDriveTest;
 		return p.oneDrive;
 	}
 
-	authRouteName() {
+	public authRouteName() {
 		return 'OneDriveLogin';
 	}
 
-	api() {
+	public api() {
 		if (this.isTesting()) {
 			return this.fileApi_.driver().api();
 		}
@@ -84,7 +84,7 @@ export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 		return this.api_;
 	}
 
-	async initFileApi() {
+	public async initFileApi() {
 		let context = Setting.value(`sync.${this.syncTargetId()}.context`);
 		context = context === '' ? null : JSON.parse(context);
 		let accountProperties = context ? context.accountProperties : null;
@@ -101,7 +101,7 @@ export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 		return fileApi;
 	}
 
-	async initSynchronizer() {
+	public async initSynchronizer() {
 		try {
 			if (!(await this.isAuthenticated())) throw new Error('User is not authentified');
 			return new Synchronizer(this.db(), await this.fileApi(), Setting.value('appType'));
