@@ -64,7 +64,7 @@
     "react-native-paper": "5.13.5",
     "react-native-popup-menu": "0.17.0",
     "react-native-quick-actions": "0.3.13",
-    "react-native-quick-crypto": "0.7.13",
+    "react-native-quick-crypto": "0.7.17",
     "react-native-rsa-native": "2.0.5",
     "react-native-safe-area-context": "5.4.1",
     "react-native-securerandom": "1.0.1",

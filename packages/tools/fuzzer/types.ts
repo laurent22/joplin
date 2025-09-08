@@ -11,6 +11,7 @@ export interface NoteData {
 	id: ItemId;
 	title: string;
 	body: string;
+	published: boolean;
 }
 export interface DetailedNoteData extends NoteData {
 	isShared: boolean;
@@ -73,6 +74,8 @@ export interface ActionableClient {
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;
+	publishNote(id: ItemId): Promise<void>;
+	unpublishNote(id: ItemId): Promise<void>;
 	sync(): Promise<void>;
 
 	listNotes(): Promise<NoteData[]>;

@@ -7,6 +7,8 @@ import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
+import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
+import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 const { toTitleCase } = require('../../string-utils.js');
 
@@ -29,6 +31,11 @@ export enum ScrollbarSize {
 	Medium = 12,
 	Large = 24,
 }
+
+type CachedPpk = EmptyObject|{
+	timestamp: number;
+	ppk: PublicPrivateKeyPair;
+};
 
 export enum SurveyProgress {
 	NotStarted,
@@ -1145,6 +1152,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'encryption.shouldReencrypt': {
 			value: -1, // will be set on app startup
 			type: SettingItemType.Int,
+			public: false,
+		},
+		// Holds the no-longer-published PPK from before a migration. This allows accepting
+		// shares that target the old PPK.
+		'encryption.cachedPpk': {
+			value: {} as CachedPpk,
+			type: SettingItemType.Object,
 			public: false,
 		},
 

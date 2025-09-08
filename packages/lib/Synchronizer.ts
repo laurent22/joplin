@@ -24,7 +24,7 @@ import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from '.
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
-import { generateKeyPair } from './services/e2ee/ppk';
+import { generateKeyPair } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
 import handleConflictAction from './services/synchronizer/utils/handleConflictAction';
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
