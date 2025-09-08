@@ -18,6 +18,7 @@ export default class BaseSyncTarget {
 	public constructor(db: any, options: any = null) {
 		this.db_ = db;
 		this.options_ = options;
+		process.env.JOPLIN_REVERSE_PROXY = undefined;
 	}
 
 	public static supportsConfigCheck() {

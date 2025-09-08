@@ -347,6 +347,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			...options,
 			redirect: 'manual',
 		};
+		console.log(`reverse proxy used: ${process.env.JOPLIN_REVERSE_PROXY ?? 'false'} `);
 		let response = await nodeFetch(url, newOptions);
 		if (response.status >= 300 && response.status < 400) {
 			const redirectUrl = response.headers.get('location');

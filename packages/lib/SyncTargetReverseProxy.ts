@@ -19,6 +19,7 @@ export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 	public constructor(db: any, options: any = null) {
 		super(db, options);
 		this.api_ = null;
+		process.env.JOPLIN_REVERSE_PROXY = 'true';
 	}
 
 	public static targetName() {
@@ -80,7 +81,6 @@ export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 
 			this.api_.setAuth(auth);
 		}
-
 		return this.api_;
 	}
 
