@@ -13,7 +13,7 @@ const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
 export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 
 	public static id() {
-		return 3;
+		return 10;
 	}
 
 	public constructor(db: any, options: any = null) {
@@ -34,7 +34,7 @@ export default class SyncTargetReverseProxy extends SyncTargetOneDrive {
 	}
 
 	public syncTargetId() {
-		return SyncTargetReverseProxy.id();
+		return SyncTargetOneDrive.id();
 	}
 
 	public isTesting() {
