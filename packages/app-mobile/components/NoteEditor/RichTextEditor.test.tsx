@@ -257,7 +257,7 @@ describe('RichTextEditor', () => {
 				ref={editorRef}
 			/>,
 		);
-		editorRef.current.onResourceDownloaded(localResource.id);
+		editorRef.current.onResourceChanged(localResource.id);
 
 		expect(
 			await findElement(`img[data-resource-id=${JSON.stringify(localResource.id)}]`),
@@ -285,6 +285,26 @@ describe('RichTextEditor', () => {
 
 		await waitFor(() => {
 			expect(onLinkClick).toHaveBeenCalledWith(`:/${linkTarget.id}`);
+		});
+	});
+
+	it('should avoid rendering URLs with unknown protocols', async () => {
+		let body = '[link](unknown://test)';
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const renderedLink = await findElement<HTMLAnchorElement>('a[href][data-original-href]');
+		expect(renderedLink.getAttribute('href')).toBe('#');
+		expect(renderedLink.getAttribute('data-original-href')).toBe('unknown://test');
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('[link](unknown://test) testing');
 		});
 	});
 
@@ -370,6 +390,37 @@ describe('RichTextEditor', () => {
 		});
 	});
 
+	it('should be possible show an editor for math blocks', async () => {
+		let body = 'Test:\n\n$$3^2 + 4^2 = 5^2$$';
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const editButton = await findElement<HTMLButtonElement>('button.edit');
+		editButton.click();
+
+		const editor = await findElement('dialog .cm-editor');
+		expect(editor).toBeTruthy();
+		expect(editor.textContent).toContain('3^2 + 4^2 = 5^2');
+	});
+
+	it('should save lists as single-spaced', async () => {
+		let body = 'Test:\n\n- this\n- is\n- a\n- test.';
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' Testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe('Test:\n\n- this\n- is\n- a\n- test. Testing');
+		});
+	});
+
 	it('should preserve table of contents blocks on edit', async () => {
 		let body = '# Heading\n\n# Heading 2\n\n[toc]\n\nTest.';
 
@@ -389,6 +440,34 @@ describe('RichTextEditor', () => {
 
 		await waitFor(async () => {
 			expect(body.trim()).toBe('# Heading\n\n# Heading 2\n\n[toc]\n\nTest. testing');
+		});
+	});
+
+	it.each([
+		'**bold**',
+		'*italic*',
+		'$\\text{math}$',
+		'<span style="color: red;">test</span>',
+		'`code`',
+		'==highlight==ed',
+		'<sup>Super</sup>script',
+		'<sub>Sub</sub>script',
+	])('should preserve inline markup on edit (case %#)', async (initialBody) => {
+		initialBody += 'test'; // Ensure that typing will add new content outside the formatting
+		let body = initialBody;
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		await findElement<HTMLElement>('div.prosemirror-editor');
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			expect(body.trim()).toBe(`${initialBody} testing`);
 		});
 	});
 });

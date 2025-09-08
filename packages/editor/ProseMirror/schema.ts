@@ -3,6 +3,8 @@ import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin
 import { tableNodes } from 'prosemirror-tables';
 import { nodeSpecs as listNodes } from './plugins/listPlugin';
 import { nodeSpecs as resourcePlaceholderNodes } from './plugins/resourcePlaceholderPlugin';
+import { hasProtocol } from '@joplin/utils/url';
+import { isResourceUrl } from '@joplin/lib/models/utils/resourceUtils';
 import { nodeSpecs as detailsNodes } from './plugins/detailsPlugin';
 
 // For reference, see:
@@ -21,6 +23,9 @@ const domOutputSpecs = {
 	listItem: ['li', 0],
 	blockQuote: ['blockquote', 0],
 	hr: ['hr'],
+	sub: ['sub', 0],
+	sup: ['sup', 0],
+	mark: ['mark', 0],
 } satisfies Record<string, DOMOutputSpec>;
 
 type AttributeSpecs = Record<string, AttributeSpec>;
@@ -216,6 +221,18 @@ const marks = {
 		toDOM: () => domOutputSpecs.code,
 		excludes: '_',
 	},
+	sub: {
+		parseDOM: [{ tag: 'sub' }],
+		toDOM: () => domOutputSpecs.sub,
+	},
+	sup: {
+		parseDOM: [{ tag: 'sup' }],
+		toDOM: () => domOutputSpecs.sup,
+	},
+	mark: {
+		parseDOM: [{ tag: 'mark' }],
+		toDOM: () => domOutputSpecs.mark,
+	},
 	color: {
 		inclusive: false,
 		parseDOM: [{
@@ -244,8 +261,15 @@ const marks = {
 			tag: 'a[href]',
 			getAttrs: node => {
 				const resourceId = node.getAttribute('data-resource-id');
-				const href = node.getAttribute('href');
+				let href = node.getAttribute('href');
 				const isResourceLink = resourceId && href === '#';
+				if (isResourceLink) {
+					href = `:/${resourceId}`;
+				}
+
+				if (href === '#' && node.hasAttribute('data-original-href')) {
+					href = node.getAttribute('data-original-href');
+				}
 
 				return {
 					href: isResourceLink ? `:/${resourceId}` : href,
@@ -254,10 +278,29 @@ const marks = {
 				};
 			},
 		}],
-		toDOM: node => [
-			'a',
-			{ href: node.attrs.href, title: node.attrs.title, 'data-resource-id': node.attrs.dataResourceId },
-		],
+		toDOM: node => {
+			const isSafeForRendering = (href: string) => {
+				return hasProtocol(href, ['http', 'https', 'joplin']) || isResourceUrl(href);
+			};
+
+			// Avoid rendering URLs with unknown protocols (avoid rendering or pasting unsafe HREFs).
+			// Note that URL click handling is handled elsewhere and does not use the HTML "href" attribute.
+			// However "href" may be used by the right-click menu on web:
+			const safeHref = isSafeForRendering(node.attrs.href) ? node.attrs.href : '#';
+
+			return [
+				'a',
+				{
+					href: safeHref,
+					...(safeHref !== node.attrs.href ? {
+						'data-original-href': node.attrs.href,
+					} : {}),
+
+					title: node.attrs.title,
+					'data-resource-id': node.attrs.dataResourceId,
+				},
+			];
+		},
 	},
 } satisfies Record<string, MarkSpec>;
 

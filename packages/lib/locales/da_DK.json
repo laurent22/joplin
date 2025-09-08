@@ -248,6 +248,9 @@
 	"Add recipient:": [
 		"Tilføj modtager:"
 	],
+	"Add tags:": [
+		"Tilføj etiketter:"
+	],
 	"Add title": [
 		"Tilføj titel"
 	],
@@ -257,8 +260,14 @@
 	"Add to note": [
 		"Tilføj til note"
 	],
+	"Added new: %s": [
+		"Tilføjet ny: %s"
+	],
+	"Added tag: %s": [
+		"Tilføjet etikette: %s"
+	],
 	"Adds tag": [
-		""
+		"Tilføjer etikette"
 	],
 	"Admin": [
 		"Admin"
@@ -366,7 +375,7 @@
 		"Aritim Mørk"
 	],
 	"Associated tags:": [
-		""
+		"Tilknyttede etiketter:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"På nuværende tidspunkt kan Joplin Web kun være åben i én fane ad gangen. Luk den anden instans af Joplin."
@@ -653,6 +662,9 @@
 	"Code View": [
 		"Kodevisning"
 	],
+	"Code:": [
+		"Kode:"
+	],
 	"Collaborate on a notebook with others": [
 		"Samarbejd med andre om en notesbog"
 	],
@@ -762,6 +774,12 @@
 	"Control character": [
 		"Kontroltegn"
 	],
+	"Convert it": [
+		"Konverter den"
+	],
+	"Convert note to Markdown": [
+		"Konverter note til Markdown"
+	],
 	"Convert to note": [
 		"Konverter til note"
 	],
@@ -817,6 +835,9 @@
 	"Could not connect to plugin repository.": [
 		"Kunne ikke forbinde til plugin-lager."
 	],
+	"Could not convert note to Markdown: %s": [
+		"Kunne ikke konvertere note til Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Kunne ikke eksportere noterne: %s"
 	],
@@ -847,8 +868,14 @@
 	"Create a notebook": [
 		"Opret en notesbog"
 	],
+	"Create new notebook": [
+		"Opretter ny notesbog"
+	],
 	"Create new profile...": [
 		"Opret ny profil..."
+	],
+	"Create note": [
+		"Opret note"
 	],
 	"Create notebook": [
 		"Opret notesbog"
@@ -897,6 +924,12 @@
 	],
 	"Creating new to-do...": [
 		"Opretter nye gøremål..."
+	],
+	"Creating note \"%s\"...": [
+		"Opretter note \"%s\"..."
+	],
+	"Creating note.": [
+		"Opretter ny note."
 	],
 	"Creating report...": [
 		"Opretter rapport..."
@@ -968,7 +1001,7 @@
 		"Standard"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Standardtitel til brug for dokumenter, der er oprettet af scanneren."
 	],
 	"Default: %s": [
 		"Standard: %s"
@@ -1139,13 +1172,13 @@
 		"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed for dekryptering af data! For at aktivere kryptering til, skal du indtaste din adgangskode herunder."
 	],
 	"Document scanner: Title template": [
-		""
+		"Dokumentscanner: Skabelon til titel"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Tillad ikke modtageren af delingen at skrive til den delte notesbog. Gælder kun for underkommandoen `tilføj`."
 	],
 	"Don't show this message again": [
-		""
+		"Vis ikke denne besked igen"
 	],
 	"Donate, website": [
 		"Donér, hjemmeside"
@@ -1221,6 +1254,12 @@
 	],
 	"Edit": [
 		"Redigér"
+	],
+	"Edit as Markdown": [
+		"Rediger som Markdown"
+	],
+	"Edit as Rich Text": [
+		"Rediger som Rich Text"
 	],
 	"Edit link": [
 		"Rediger link"
@@ -1323,6 +1362,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Slå understøttelse af Fountain syntaks til"
+	],
+	"Enable handwritten transcription": [
+		"Aktivér håndskrevet transskription"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Aktivér banner for HTML-til-Markdown-konvertering"
 	],
 	"Enable Linkify": [
 		"Aktivér Linkify"
@@ -1715,6 +1760,9 @@
 	"Hide password": [
 		"Skjul adgangskode"
 	],
+	"Hides warning": [
+		"Skjuler advarsel"
+	],
 	"Highlight": [
 		"Fremhæv"
 	],
@@ -1746,7 +1794,7 @@
 		"Ledig"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Hvis en billedvedhæftning står på sin egen linje og efterfølges af en tom linje, vil den blive gengivet lige under Markdown-kilden."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Hvis du allerede har godkendt, skal du vente på, at applikationen synkroniseres med Joplin Cloud."
@@ -2161,8 +2209,11 @@
 	"Markdown editor": [
 		"Markdown-editor"
 	],
+	"Markdown editor: Render images": [
+		"Markdown-editor: Gengiv billeder"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown-editor: Lav markup i editoren"
 	],
 	"Marks a to-do as done.": [
 		"Markerer en opgave som udført."
@@ -2306,6 +2357,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Ny notesbog \"%s\" bliver oprettet og filen \"%s\" importeres til den"
 	],
+	"New notebook title": [
+		"Ny notesbogstitel"
+	],
 	"New photo": [
 		"Nyt foto"
 	],
@@ -2384,6 +2438,9 @@
 	"No tab selected": [
 		"Ingen fane valgt"
 	],
+	"No tags": [
+		"Ingen etiketter"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Ingen teksteditor er valgt. Vælg en ved at indstille `config editor <editor-path>`"
 	],
@@ -2459,6 +2516,9 @@
 	"Note list style": [
 		"Notatliste-stil"
 	],
+	"Note preview": [
+		"Note-forhåndsvisning"
+	],
 	"Note properties": [
 		"Noteegenskaber"
 	],
@@ -2515,6 +2575,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL eller sti til sprogdata"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Søg i udtrukket indhold"
 	],
 	"OK": [
 		"OK"
@@ -2677,7 +2740,7 @@
 		"Tilladelse nødvendig"
 	],
 	"Photo %d": [
-		""
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Klik på \"%s\" for at fortsætte, eller indstil adgangskoderne på \"%s\"-listen nedenfor."
@@ -2901,11 +2964,17 @@
 	"Re-upload local data to sync target": [
 		"Upload lokal data igen til synkroniseringsmål"
 	],
+	"Read more": [
+		"Læs mere"
+	],
 	"Read more about it": [
 		"Læs mere om det"
 	],
 	"Read time: %s min": [
 		"Læsetid: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Det er kun muligt at læse kommandoer fra standardinput i CLI-tilstand."
 	],
 	"Recipient has accepted the invitation": [
 		"Modtageren har accepteret invitationen"
@@ -2918,6 +2987,9 @@
 	],
 	"Recipients:": [
 		"Modtagere:"
+	],
+	"Recognize handwritten image": [
+		"Genkend håndskrevet billede"
 	],
 	"Recommended": [
 		"Anbefalet"
@@ -2952,6 +3024,9 @@
 	"Remove": [
 		"Fjern"
 	],
+	"Remove %s": [
+		"Fjern %s"
+	],
 	"Remove %s from share": [
 		"Fjern %s fra deling"
 	],
@@ -2963,6 +3038,9 @@
 	],
 	"Removed %s from share.": [
 		"Fjern %s fra deling."
+	],
+	"Removed tag: %s": [
+		"Fjernet etikette: %s"
 	],
 	"Rename": [
 		"Omdøb"
@@ -2977,7 +3055,7 @@
 		"Omdøber det aktuelle <item> (note eller notesbog) til <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Laver markup på alle linjer, der ikke omfatter markøren."
 	],
 	"Renew token": [
 		"Forny token"
@@ -3138,6 +3216,9 @@
 	"Save geo-location with notes": [
 		"Gem geo-lokation i noter"
 	],
+	"Scan notebook": [
+		"Scan notesbog"
+	],
 	"Scanned code": [
 		"Scannet kode"
 	],
@@ -3167,6 +3248,9 @@
 	],
 	"Search shown": [
 		"Søg viste"
+	],
+	"Search tags": [
+		"Søg etiketter"
 	],
 	"Search...": [
 		"Søg..."
@@ -3198,8 +3282,14 @@
 	"Select file...": [
 		"Vælg fil..."
 	],
+	"Select notebook": [
+		"Vælg notesbog"
+	],
 	"Select parent notebook": [
 		"Vælg overordnet notesbog"
+	],
+	"Selected: %s": [
+		"Valgte: %s"
 	],
 	"Selection deleted": [
 		"Valg slettet"
@@ -3700,6 +3790,9 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Noten \"%s\" er blevet gendannet til notesbogen \"%s\"."
 	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Noten er blevet konverteret til Markdown, og den oprindelige note er blevet flyttet til papirkurven."
+	],
 	"The note was successfully moved to the trash.": [
 		"Noten blev flyttet til papirkurven.",
 		"Noter blev flyttet til papirkurven."
@@ -3804,13 +3897,13 @@
 		"Denne tegning kan have ændringer, der ikke er gemt."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Denne funktion er som standard deaktiveret, og du skal aktivere den manuelt ved at slå indstillingen 'Aktiver håndskreven transskription' til."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Denne funktion er kun tilgængelig på Joplin Cloud og Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Denne billedtype understøttes ikke af genkendelsessystemet."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Dette er et avanceret værktøj til at vise de vedhæftninger, som er knyttet til dine noter. Vær forsigtig med at slette dem, da de ikke kan gendannes bagefter."
@@ -3840,7 +3933,7 @@
 		"Denne note har ingen historie"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Denne note er i HTML-format. Konverter den til Markdown for at gøre det lettere at redigere den."
 	],
 	"This plugin doesn't support %s.": [
 		"Dette plugin understøtter ikke %s."
@@ -3888,7 +3981,7 @@
 		"Indtast din hovedadgangskode nedenfor for at fortsætte."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"For at oprette en ny etikette skal du skrive navnet og trykke på enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"For at slette en etikette, fjern etikette fra de tilhørende noter."
@@ -4126,6 +4219,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Opgrader synkmålet til den seneste version."
+	],
+	"Upload photo": [
+		"Upload foto"
 	],
 	"URL": [
 		"URL"

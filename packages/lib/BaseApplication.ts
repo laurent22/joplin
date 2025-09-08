@@ -90,8 +90,7 @@ export default class BaseApplication {
 	private eventEmitter_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleAutoAddResourcesIID_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private database_: any = null;
+	protected database_: JoplinDatabase = null;
 	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_ = false;
