@@ -9232,7 +9232,7 @@ __metadata:
     "@joplin/turndown": "npm:~4.0.80"
     "@joplin/turndown-plugin-gfm": "npm:~1.0.62"
     "@joplin/utils": "npm:~3.4"
-    "@js-draw/material-icons": "npm:1.30.0"
+    "@js-draw/material-icons": "npm:1.30.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.15"
     "@react-native-clipboard/clipboard": "npm:1.16.2"
     "@react-native-community/cli": "npm:16.0.3"
@@ -10065,12 +10065,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@js-draw/material-icons@npm:1.30.0"
+"@js-draw/material-icons@npm:1.30.1":
+  version: 1.30.1
+  resolution: "@js-draw/material-icons@npm:1.30.1"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: 10/d659ca78d546925cc5bee6bd9d8135055cd0b28e8711055e9b46673a969af4dfd18df6e8c412bf0cccb3175b4039866e73276e76472a9fa8cac4e4c9de31d4f9
+  checksum: 10/3e06209c066c2765f70fbc15e222195eea1c5d1ff3d3acf273ced0852c94a76aeec8136c93b4e5fe7dfebbb2ef19a5928fa185a68f0604724cffe19d2df6684d
   languageName: node
   linkType: hard
 
