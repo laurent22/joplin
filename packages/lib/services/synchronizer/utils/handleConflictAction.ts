@@ -33,6 +33,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				changeSource: ItemChange.SOURCE_SYNC,
 				sourceDescription: 'sync: handleConflictAction: non-note conflict',
 				trackDeleted: false,
+				deleteChildren: false,
 			});
 		}
 	} else if (action === SyncAction.NoteConflict) {
