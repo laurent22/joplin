@@ -1143,7 +1143,7 @@ msgstr "Stäng fönster"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr "Avslutningssession..."
+msgstr "Avslutar sessionen..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:40
 msgid "Cmd-click to open"
@@ -1160,7 +1160,7 @@ msgstr "Kod"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:813
 msgid "Code Block"
-msgstr "Kodblockering"
+msgstr "Kodblock"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
 msgid "Code View"
@@ -1262,7 +1262,7 @@ msgstr "Slutfört: %s (%s)"
 
 #: packages/lib/models/Note.ts:66
 msgid "completion date"
-msgstr "färdigställande datum"
+msgstr "slutförande datum"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1340,7 +1340,7 @@ msgstr "Fortsätt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 msgid "Control character"
-msgstr "Kontrollera tecken"
+msgstr "Kontrolltecken"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
 msgid "Convert it"
@@ -2210,20 +2210,20 @@ msgstr "Emacs"
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:140
 msgid "Email"
-msgstr "E-postmeddelande"
+msgstr "E-post"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:47
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:23
 msgid "Email to note"
-msgstr "E-posta för att notera"
+msgstr "E-post till anteckning"
 
 #: packages/lib/utils/joplinCloud/index.ts:200
 msgid "Email to Note"
-msgstr "E-posta för att notera"
+msgstr "E-post till anteckning"
 
 #: packages/lib/models/Setting.ts:1292
 msgid "Email To Note, login information"
-msgstr "E-posta till anteckning, inloggningsinformation"
+msgstr "E-post till anteckning, inloggningsinformation"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
@@ -2367,7 +2367,7 @@ msgstr "Aktivera Markdown-verktygsfältet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1062
 msgid "Enable typographer support"
-msgstr "Aktivera fast radbrytning"
+msgstr "Aktivera typografiskt stöd"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1070
 msgid "Enable video player"
@@ -5334,7 +5334,7 @@ msgstr "Välj fil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
 msgid "Select notebook"
-msgstr "Välj  anteckningsbok"
+msgstr "Välj anteckningsbok"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5461,8 +5461,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
-"Delar eller upphäver delningen av den angivna [notebook] med [user]. Kräver "
-"Joplin Cloud eller Joplin Server."
+"Delar eller slutar dela den angivna [notebook] med [user]. Kräver Joplin "
+"Cloud eller Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5518,7 +5518,7 @@ msgstr "Visa sorteringsordningsknappar"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1105
 msgid "Show tray icon"
-msgstr "Visa fältikon"
+msgstr "Visa systemfältsikon"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:270
 msgid "Show/hide the sidebar"
@@ -5729,7 +5729,7 @@ msgstr "Statistik..."
 #: packages/app-mobile/components/screens/encryption-config.tsx:352
 #: packages/app-mobile/components/screens/status.tsx:246
 msgid "Status"
-msgstr "Tillstånd"
+msgstr "Status"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
@@ -6874,20 +6874,20 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
-"Avaktivera delning av anteckningsbok ”%s”? Detta kan leda till att andra "
-"användare förlorar åtkomst till anteckningsboken."
+"Sluta dela anteckningsbok ”%s”? Detta kan leda till att andra användare "
+"förlorar åtkomst till anteckningsboken."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
-"Vill du inte dela den här anteckningsboken? Mottagarna kommer inte längre "
-"att ha tillgång till dess innehåll."
+"Sluta dela den här anteckningsboken? Mottagarna kommer inte längre att ha "
+"tillgång till dess innehåll."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:900
 msgid "Unsupported image type: %s"
-msgstr "Bildstorlek som inte stöds: %s"
+msgstr "Bildtyp som inte stöds: %s"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
