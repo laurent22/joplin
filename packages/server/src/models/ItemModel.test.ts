@@ -634,4 +634,14 @@ describe('ItemModel', () => {
 		expect(jopItems.map(it => it.title).sort()).toEqual(['Folder 1', 'Note 1', 'Note 2']);
 	});
 
+	test('should allow ignoring no-op deletions', async () => {
+		await createUserAndSession(1);
+
+		await expect((async () => {
+			await models().item().delete('00000000000000000000000000000003', { allowNoOp: false });
+		})()).rejects.toThrow();
+
+		await models().item().delete('00000000000000000000000000000003', { allowNoOp: true });
+	});
+
 });

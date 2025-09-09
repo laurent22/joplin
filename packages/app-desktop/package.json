@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.4.10",
+  "version": "3.4.11",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -131,7 +131,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@axe-core/playwright": "4.10.1",
+    "@axe-core/playwright": "4.10.2",
     "@electron/notarize": "2.5.0",
     "@electron/rebuild": "3.7.2",
     "@fortawesome/fontawesome-free": "5.15.4",
@@ -160,7 +160,7 @@
     "compare-versions": "6.1.1",
     "countable": "3.0.1",
     "debounce": "1.2.1",
-    "electron": "35.7.5",
+    "electron": "37.4.0",
     "electron-builder": "24.13.3",
     "electron-updater": "6.6.2",
     "electron-window-state": "5.0.3",

@@ -4,7 +4,7 @@ import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import { State } from '../../reducer';
-import { PublicPrivateKeyPair } from '../e2ee/ppk';
+import { PublicPrivateKeyPair } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';

@@ -89,8 +89,8 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097779
-		versionName "3.4.6"
+		versionCode 2097780
+		versionName "3.4.7"
         ndk {
             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
@@ -100,6 +100,8 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags '-DCMAKE_BUILD_TYPE=Release'
+                // For 16 KB pages. This should be removable after upgrading to NDK r28
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
             }
         }
     }

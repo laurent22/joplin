@@ -257,7 +257,7 @@ describe('RichTextEditor', () => {
 				ref={editorRef}
 			/>,
 		);
-		editorRef.current.onResourceDownloaded(localResource.id);
+		editorRef.current.onResourceChanged(localResource.id);
 
 		expect(
 			await findElement(`img[data-resource-id=${JSON.stringify(localResource.id)}]`),

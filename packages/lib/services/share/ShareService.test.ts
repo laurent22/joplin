@@ -4,7 +4,7 @@ import ShareService from './ShareService';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
-import { generateKeyPair } from '../e2ee/ppk';
+import { generateKeyPair } from '../e2ee/ppk/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
@@ -271,7 +271,7 @@ describe('ShareService', () => {
 		expect(uploadedEmail).toBe('toto@example.com');
 
 		const content = JSON.parse(uploadedMasterKey.content);
-		expect(content.ppkId).toBe(recipientPpk.id);
+		expect(recipientPpk.id).toBe(content.ppkId);
 	});
 
 	it('should leave folders that are no longer with the user', async () => {
