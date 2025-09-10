@@ -168,12 +168,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			let result: TesseractRecognizeResult = null;
 
 			try {
-				result = await worker.instance.recognize(filePath, {}, {
-					text: false,
-					blocks: true,
-					hocr: false,
-					tsv: false,
-				});
+				result = await worker.instance.recognize(filePath, {}, { text: false, blocks: true });
 			} catch (e) {
 				const error: Error = typeof e === 'string' ? new Error(e) : e;
 				error.message = `Recognition failed on: ${filePath}: ${error.message}`;
@@ -194,37 +189,42 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			const goodParagraphs: GoodParagraph[] = [];
 			let goodLines: RecognizeResultLine[] = [];
 
-			for (const paragraph of result.data.paragraphs) {
-				const lines: RecognizeResultLine[] = [];
+			for (const block of result.data.blocks) {
 
-				for (const line of paragraph.lines) {
-					// If the line confidence is above the threshold we keep the
-					// whole text. The confidence of individual words will vary and
-					// may be below the treshold, but there's a chance they will
-					// still be correct if the line as a whole is well recognised.
-					if (line.confidence < minConfidence) continue;
+				for (const paragraph of block.paragraphs) {
+					const lines: RecognizeResultLine[] = [];
 
-					const goodWords: RecognizeResultWord[] = line.words.map(w => {
-						const output: RecognizeResultWord = {
-							t: w.text,
-							bb: formatTesseractBoundingBox(w.bbox),
-						};
+					for (const line of paragraph.lines) {
+						// If the line confidence is above the threshold we keep the
+						// whole text. The confidence of individual words will vary and
+						// may be below the treshold, but there's a chance they will
+						// still be correct if the line as a whole is well recognised.
+						if (line.confidence < minConfidence) continue;
 
-						if (w.baseline && w.baseline.has_baseline) output.bl = formatTesseractBoundingBox(w.baseline);
+						const baseline = formatTesseractBoundingBox(line.baseline);
 
-						return output;
+						const goodWords: RecognizeResultWord[] = line.words
+							.map(w => {
+								const output: RecognizeResultWord = {
+									t: w.text,
+									bb: formatTesseractBoundingBox(w.bbox),
+									bl: baseline,
+								};
+
+								return output;
+							});
+
+						lines.push({
+							words: goodWords,
+						});
+					}
+
+					goodParagraphs.push({
+						text: lines.map(l => l.words.map(w => w.t).join(' ')).join('\n'),
 					});
 
-					lines.push({
-						words: goodWords,
-					});
+					goodLines = goodLines.concat(lines);
 				}
-
-				goodParagraphs.push({
-					text: lines.map(l => l.words.map(w => w.t).join(' ')).join('\n'),
-				});
-
-				goodLines = goodLines.concat(lines);
 			}
 
 			resolve({
