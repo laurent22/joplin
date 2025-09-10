@@ -120,7 +120,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 		}
 
 		return (
-			<View style={styles.webViewContainer}>
+			<View style={styles.webViewContainer} testID='plugin-tab-content'>
 				<PluginUserWebView
 					key={selectedTabId}
 					themeId={props.themeId}

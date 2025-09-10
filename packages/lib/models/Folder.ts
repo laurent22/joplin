@@ -938,14 +938,27 @@ export default class Folder extends BaseItem {
 	public static async moveToFolder(folderId: string, targetFolderId: string) {
 		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
 
-		// When moving a note to a different folder, the user timestamp is not updated.
-		// However updated_time is updated so that the note can be synced later on.
-
-		const modifiedFolder = {
+		const original = await this.load(folderId);
+		const modifiedFolder: FolderEntity = {
 			id: folderId,
 			parent_id: targetFolderId,
+
+			// When moving a note to a different folder, the user timestamp is not updated.
+			// However updated_time is updated so that the note can be synced later on.
 			updated_time: time.unixMs(),
+			share_id: original.share_id,
 		};
+
+		const wasShared = !!modifiedFolder.share_id;
+		const movedToTopLevel = original.parent_id !== '' && targetFolderId === '';
+		if (wasShared && movedToTopLevel) {
+			// When a shared subfolder is converted to a toplevel folder, clear its share_id
+			// as soon as possible. Without this, modifiedFolder would be incorrectly treated
+			// as a root shared folder by some logic.
+			// Since the folder's children aren't toplevel, they won't be considered root
+			// shared folders and are updated later.
+			modifiedFolder.share_id = '';
+		}
 
 		return Folder.save(modifiedFolder, { autoTimestamp: false });
 	}

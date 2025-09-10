@@ -271,4 +271,40 @@ describe('OcrService', () => {
 		await service.dispose();
 	});
 
+	it('should skip resources with an invalid ocr_driver_id', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		await Resource.save({
+			...resource,
+			ocr_driver_id: -123456, // An invalid ID
+		});
+
+		const service = newOcrService();
+
+		// Should not loop forever
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('');
+
+		await service.dispose();
+	});
+
+	it('should process resources with ocr_driver_id 0 as printed text', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+		await Resource.save({
+			...resource,
+			ocr_driver_id: 0,
+		});
+
+		const service = newOcrService();
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.');
+		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
+		expect(processedResource.ocr_error).toBe('');
+
+		await service.dispose();
+	});
 });

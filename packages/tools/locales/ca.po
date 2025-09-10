@@ -11,6 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: contacto@ericdq.com\n"
 "Language: ca\n"
@@ -230,7 +232,7 @@ msgstr "%s no pot ser més gran que %s"
 msgid "%s cannot be less than %s"
 msgstr "%s no pot ser inferior a %s"
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
 msgstr "%s de %s"
 
@@ -363,11 +365,11 @@ msgstr "Accepta"
 msgid "Accepted invitations"
 msgstr "Invitacions acceptades"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
 msgstr "Acceptat: Llibreta %s de %s"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
 msgstr "Acceptant compartir..."
 
@@ -431,10 +433,9 @@ msgstr "Afegeix o suprimeix etiquetes:"
 msgid "Add recipient:"
 msgstr "Afegeix un destinatari:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
-msgstr "Etiquetes noves:"
+msgstr "Afegir etiquetes:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -449,18 +450,16 @@ msgid "Add to note"
 msgstr "Afegeix a la nota"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Afegeix-ne un"
+msgstr "S'ha afegit una nova: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
-msgstr "Afegeix l'etiqueta %s a la nota"
+msgstr "Etiqueta afegida: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "Afegeix una etiqueta"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -471,6 +470,7 @@ msgstr "Administració"
 msgid "Admin dashboard"
 msgstr "Tauler d'administració"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Opcions avançades"
@@ -511,7 +511,7 @@ msgstr ""
 "Tots els ports potencials estan en ús - si us plau, informeu del problema a "
 "%s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr "Totes les carpetes compartides:"
 
@@ -623,6 +623,7 @@ msgstr ""
 "Estàs segur que vols suprimir tot l'historial d'aquesta nota? Això no es pot "
 "desfer."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Esteu segur que voleu renovar el testimoni d'autorització?"
@@ -645,7 +646,7 @@ msgstr "Aritim fosc"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Etiquetes associades:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -721,6 +722,7 @@ msgid ""
 msgstr ""
 "No s'ha completat l'autenticació (no ha rebut el testimoni d'autenticació)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Testimoni d'autorització:"
@@ -765,6 +767,7 @@ msgstr "Canvia de tema automàticament per a coincidir amb el tema del sistema"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -836,9 +839,11 @@ msgstr "Pot veure i editar"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -894,7 +899,7 @@ msgstr "No es pot accedir a %s"
 msgid "Cannot change encrypted item"
 msgstr "No es pot canviar un element xifrat"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "No es pot copiar la nota a la llibreta «%s»"
 
@@ -910,7 +915,7 @@ msgstr "No pot crear una nova nota: %s"
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -924,7 +929,7 @@ msgstr "No pot crear una nova nota: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -946,7 +951,7 @@ msgstr "No puc carregar el mòdul «%s» per al format «%s» i destí \"%s\""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "No puc carregar el mòdul «%s» per al format «%s» i destí «%s»"
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "No es pot moure la nota a la llibreta «%s»"
 
@@ -1051,11 +1056,13 @@ msgstr "Verificant... Espereu."
 msgid "Choose an option"
 msgstr "Escolliu una opció"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Web store de Chrome"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1072,6 +1079,7 @@ msgstr "Esborra l'alarma"
 msgid "Clear search"
 msgstr "Esborra la cerques"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1162,10 +1170,9 @@ msgstr "Bloc de codi"
 msgid "Code View"
 msgstr "Vista de codi"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 msgid "Code:"
-msgstr "Codi"
+msgstr "Codi:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1236,6 +1243,7 @@ msgid "Complete to-do"
 msgstr "Completa la tasca pendent"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Finalitzat"
@@ -1340,14 +1348,12 @@ msgid "Control character"
 msgstr "Caràcter de control"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Converteix a nota"
+msgstr "Converteix-lo"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Converteix a llistat de tasques pendents"
+msgstr "Converteix la nota a Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1365,7 +1371,7 @@ msgstr "Converteix text a veu..."
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Copia"
 
@@ -1414,6 +1420,7 @@ msgstr[1] "Copia els enllaços compartibles"
 msgid "Copy to clipboard"
 msgstr "Copia al porta-retalls"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Copia testimoni"
@@ -1451,9 +1458,8 @@ msgid "Could not connect to plugin repository."
 msgstr "No s'ha pogut connectar al repositori d'extensions."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "No s'han pogut exportar les notes: %s"
+msgstr "No s'ha pogut convertir la nota a Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1495,6 +1501,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "No s'ha pogut verificar la identitat: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Crea"
@@ -1508,9 +1515,8 @@ msgid "Create a notebook"
 msgstr "Crear una llibreta"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Crea una llibreta nova."
+msgstr "Crea una llibreta nova"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1518,9 +1524,8 @@ msgid "Create new profile..."
 msgstr "Crea un perfil nou..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Crea una llibreta"
+msgstr "Crea una nota"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1531,6 +1536,7 @@ msgid "Create user"
 msgstr "Crea un usuari"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Creació"
@@ -1555,7 +1561,8 @@ msgstr "Elements remots creats: %d."
 msgid "Created: "
 msgstr "Data de creació: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Creades: %d."
@@ -1590,14 +1597,12 @@ msgid "Creating new to-do..."
 msgstr "Creant una tasca nova..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Creant una nota nova..."
+msgstr "S'està creant la nota \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Creant una nota nova..."
+msgstr "S'està creant una nota."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1700,6 +1705,7 @@ msgstr "Per defecte"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"Títol per defecte que s'utilitzarà per als documents creats per l'escàner."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1875,6 +1881,7 @@ msgstr "Desactiva el mode segur i reinicia"
 msgid "Disable synchronisation"
 msgstr "Desactiva la sincronització"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Desactiva el servei del porta-retalls de webs"
@@ -1972,7 +1979,7 @@ msgstr "Mostra la informació de versió"
 msgid "Do it now"
 msgstr "Fes-ho ara"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "No demanis confirmació."
 
@@ -1992,7 +1999,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Escàner de documents: plantilla de títol"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -2004,7 +2011,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "No tornis a mostrar aquest missatge"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2013,7 +2020,7 @@ msgstr "Dona, lloc web"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Fet"
@@ -2022,6 +2029,7 @@ msgstr "Fet"
 msgid "Download"
 msgstr "Baixa"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Descarregueu i instal·leu l'extensió adient per al vostre navegador:"
@@ -2116,7 +2124,7 @@ msgstr "Durada: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2124,19 +2132,17 @@ msgstr "Durada: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Edita"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Edita com a Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Text enriquit"
+msgstr "Edita com a text enriquit"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2296,14 +2302,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Activa el suport de sintaxi de Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Activa el xifratge"
+msgstr "Habilita la transcripció manuscrita"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Activa la barra d'eines Markdown"
+msgstr "Activar el bàner de conversió d'HTML a Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2374,6 +2378,7 @@ msgstr "Activa el suport tipogràfic"
 msgid "Enable video player"
 msgstr "Habilita el reproductor de vídeo"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Activa el servei del porta-retalls de webs"
@@ -2410,11 +2415,11 @@ msgstr ""
 "Habilitar el xifrat significa que totes les notes i adjunts es tornaran a "
 "sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Xifrat"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Els elements xifrats no es poden modificar"
 
@@ -2690,6 +2695,7 @@ msgstr "S'ha trobat: "
 msgid "Finishes recording"
 msgstr "Finalitza la gravació"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Extensió del Firefox"
@@ -2768,7 +2774,8 @@ msgstr "Força l'estil del camí"
 msgid "Forward"
 msgstr "Endavant"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Trobades: %d."
@@ -2810,6 +2817,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Obtenir una cita"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Obteniu-lo ara:"
@@ -2911,6 +2919,7 @@ msgid "Hide Joplin"
 msgstr "Amaga el Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Amaga el teclat"
 
@@ -2919,9 +2928,8 @@ msgid "Hide password"
 msgstr "Amaga la contrasenya"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Avís"
+msgstr "Amaga l'avís"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2959,6 +2967,7 @@ msgstr "Icona"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -2973,6 +2982,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Si un adjunt d'imatge està en la seva pròpia línia i seguit d'una línia en "
+"blanc, es mostrarà just a sota de la seva font Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3040,7 +3051,7 @@ msgstr "S'ha importat correctament!"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està important el format de «%s» a «%s». Espereu..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "S'estan important notes..."
 
@@ -3048,7 +3059,7 @@ msgstr "S'estan important notes..."
 msgid "Importing..."
 msgstr "Important..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Importa les dades al Joplin."
 
@@ -3129,6 +3140,7 @@ msgstr ""
 "Per a utilitzar la sincronització del sistema de fitxers, cal el vostre "
 "permís per a escriure a l'emmagatzematge extern."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Per a poder usar el porta-retalls de webs, cal que feu el següent:"
@@ -3141,7 +3153,7 @@ msgstr "En progrés"
 msgid "In: %s"
 msgstr "A: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
 msgstr "Accions entrants:"
 
@@ -3239,7 +3251,7 @@ msgstr "La resposta no és vàlida: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ordre no vàlida: «%s»"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Format no vàlid. P. ex.: 48.8581372, 2.2926735"
 
@@ -3378,6 +3390,7 @@ msgstr "URL del servidor Joplin"
 msgid "Joplin SSO Authentication"
 msgstr "Autenticació SSO de Joplin"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3556,6 +3569,7 @@ msgstr "S'ha carregat"
 msgid "Loading..."
 msgstr "S'està carregant..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Ubicació"
@@ -3665,18 +3679,17 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Editor Markdown"
+msgstr "Editor Markdown: Renderització d'imatges"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Editor de Markdown: Renderitza el marcatge a l'editor"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3686,6 +3699,7 @@ msgstr "Marca un llistat de tasques pendents com a fet."
 msgid "Marks a to-do as non-completed."
 msgstr "Marca un llistat de tasques pendents com a no finalitzat."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Marcatge"
@@ -3892,15 +3906,15 @@ msgstr "Nova llibreta"
 msgid "New Notebook"
 msgstr "Nova llibreta"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Es crearà una nova llibreta \"%s\" i s'hi importarà el fitxer \"%s\""
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Títol del bloc de notes:"
+msgstr "Nou títol de llibreta"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4003,7 +4017,7 @@ msgstr "No hi ha resultats"
 msgid "No revision selected"
 msgstr "No s'ha seleccionat cap revisió"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "No existeix l'ordre: %s"
 
@@ -4016,9 +4030,8 @@ msgid "No tab selected"
 msgstr "No hi ha cap pestanya seleccionada"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Etiquetes noves:"
+msgstr "Sense etiquetes"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4031,8 +4044,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "No hi ha actualitzacions disponibles"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr "(cap)"
@@ -4094,7 +4107,7 @@ msgstr "Cos de la nota"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "La nota «%s» no existeix. Voleu crear-la?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Editor de la nota"
@@ -4107,6 +4120,7 @@ msgstr "S'ha desat la nota."
 msgid "Note history"
 msgstr "Historial de la nota"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4136,11 +4150,11 @@ msgid "Note list style"
 msgstr "Estil de llista de notes"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Visor de notes"
+msgstr "Vista prèvia de la nota"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Propietats de la nota"
@@ -4192,7 +4206,7 @@ msgstr "Llibreta: %s (%s)"
 msgid "Notebooks"
 msgstr "Llibretes"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les llibretes no es poden anomenar \"%s\", que és un títol reservat."
 
@@ -4229,17 +4243,18 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL o camí de dades de l'idioma"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Cerca a totes les notes"
+msgstr "OCR: Cerca en el contingut extret"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4402,7 +4417,7 @@ msgstr "Llista ordenada"
 msgid "Other applications..."
 msgstr "Altres aplicacions."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Format destí: %s"
 
@@ -4469,7 +4484,7 @@ msgstr "Per usuari. Mínim de 2 usuaris."
 msgid "Permanently delete note"
 msgstr "Esborrar la nota permanentment"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "Esborrar permanentment la nota \"%s\"?"
 
@@ -4483,7 +4498,7 @@ msgstr ""
 "\n"
 "Totes les notes i subllibretes d'aquesta llibreta s'eliminaràn permanentment."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Eliminar permanentment aquesta nota?"
@@ -4499,7 +4514,7 @@ msgstr "Cal permís"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Foto %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4556,7 +4571,7 @@ msgstr "Si us plau, grava la teva veu..."
 msgid "Please select a notebook first."
 msgstr "Si us plau, seleccioneu primer una llibreta."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Seleccioneu primer la nota o la llibreta que voleu eliminar."
 
@@ -4681,7 +4696,7 @@ msgstr "Proveïdor preferit d'escriptura per veu"
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr "Conserva els colors en enganxar text a l'editor de text enriquit"
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Premeu Ctrl+D o escriviu «exit» per a sortir de l'aplicació"
 
@@ -4713,7 +4728,8 @@ msgstr "Coincidència anterior"
 msgid "Previous versions"
 msgstr "Versions anteriors"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Versions prèvies d'aquesta nota"
 
@@ -4846,9 +4862,8 @@ msgid "Re-upload local data to sync target"
 msgstr "Torna a pujar les dades locals per a sincronitzar la destinació"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
-msgstr "Més informació"
+msgstr "Llegeix més"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:40
 msgid "Read more about it"
@@ -4859,9 +4874,10 @@ msgid "Read time: %s min"
 msgstr "Temps de lectura: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "L'ordre «%s» només és disponible en mode IGU"
+msgstr ""
+"La lectura d'ordres des de l'entrada estàndard només està disponible en mode "
+"CLI."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4880,9 +4896,8 @@ msgid "Recipients:"
 msgstr "Destinataris:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Canvia la mida de les imatges grans:"
+msgstr "Reconeix la imatge manuscrita"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4927,7 +4942,7 @@ msgstr "Expressió regular"
 msgid "Reject"
 msgstr "Rebutja"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
 msgstr "Rebutjant la compartició..."
 
@@ -4936,9 +4951,8 @@ msgid "Remove"
 msgstr "Elimina"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Elimina"
+msgstr "Elimina %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4956,10 +4970,9 @@ msgstr "Voleu suprimir aquesta cerca de la barra lateral?"
 msgid "Removed %s from share."
 msgstr "S'ha eliminat %s de la compartició."
 
-#: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
-msgstr "Canvia el nom de l'etiqueta:"
+msgstr "Etiqueta eliminada: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4980,8 +4993,9 @@ msgstr "Canvia el nom de la nota o de la llibreta indicat de <item> a <name>."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Representa el marcatge en totes les línies que no inclouen el cursor."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Renova el testimoni"
@@ -5052,7 +5066,8 @@ msgstr "Torna a definir la contrasenya mestra"
 msgid "Resize large images:"
 msgstr "Canvia la mida de les imatges grans:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Recursos: %d."
@@ -5071,6 +5086,7 @@ msgid "Restart now"
 msgstr "Reinicia ara"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5214,7 +5230,7 @@ msgstr "Desa-ho com a %s"
 msgid "Save as..."
 msgstr "Anomena i desa..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5231,9 +5247,8 @@ msgid "Save geo-location with notes"
 msgstr "Desa la geolocalització a les notes"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Selecciona una llibreta"
+msgstr "Escaneja la llibreta"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5281,17 +5296,17 @@ msgstr "Resultats de la recerca"
 msgid "Search shown"
 msgstr "Cerca mostrada"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
-msgstr "Resultats de la recerca"
+msgstr "Cercar etiquetes"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Cerca:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5333,18 +5348,16 @@ msgid "Select file..."
 msgstr "Selecciona un fitxer..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Selecciona una llibreta"
+msgstr "Selecciona la llibreta"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Selecciona la llibreta principal"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Creació: %s"
+msgstr "Seleccionat: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -5568,7 +5581,8 @@ msgstr ""
 "Elements omesos: %d (utilitza --retry-failed-items per a tornar a intentar "
 "desxifrar-los)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Omeses: %d."
@@ -5655,7 +5669,7 @@ msgstr "Font"
 msgid "Source code available"
 msgstr "Codi font disponible"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Format d'origen: %s"
 
@@ -5733,14 +5747,17 @@ msgstr "Estadístiques..."
 msgid "Status"
 msgstr "Estat"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Estat: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Estat: iniciat al port %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Pas 1: Activeu el servei del porta-retalls de webs"
@@ -5757,6 +5774,7 @@ msgstr "Pas 1: Obriu aquest URL al navegador per a autoritzar l'aplicació:"
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pas 2: Introduïu el codi proporcionat per Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Pas 2: Instal·leu l'extensió"
@@ -5859,7 +5877,7 @@ msgstr "Canvia al nou editor"
 msgid "Switch to to-do type"
 msgstr "Canvia el tipos a tasques pendents"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -5967,7 +5985,8 @@ msgstr "El tab mou el focus"
 msgid "Tabloid"
 msgstr "Tabloide"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Etiquetats: %d."
@@ -6051,7 +6070,7 @@ msgid ""
 "note."
 msgstr "Els adjunts ja no es veuran quan canvieu a una nota diferent."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "L'ordre «%s» només és disponible en mode IGU"
 
@@ -6179,11 +6198,12 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "La llibreta i el seu contingut s'han mogut amb èxit a la paperera."
+msgstr ""
+"La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la "
+"paperera"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6199,7 +6219,8 @@ msgstr "La llibreta i el seu contingut s'han mogut amb èxit a la paperera."
 msgid "The notebook could not be saved: %s"
 msgstr "No s'ha pogut desar la llibreta: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Notes s'han importat: %s"
@@ -6290,11 +6311,13 @@ msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
 "El servei web clipper no es pot habilitar en en aquesta instància de Joplin."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
 "El servei web clipper està habilitat i configurat per a l'inici automàtic."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "El servei web clipper no està habilitat."
@@ -6402,6 +6425,7 @@ msgstr "Aquest adjunt no té dades OCR (estat: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Aquest adjunt no ha estat descarregat o desxifrat encara"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6419,14 +6443,17 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Aquesta funció està desactivada per defecte, cal activar-la manualment "
+"activant l'opció \"Activa la transcripció manuscrita\"."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Aquesta funció només està disponible a Joplin Cloud i Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
 msgstr ""
+"Aquest tipus d'imatge no és compatible amb el sistema de reconeixement."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6473,6 +6500,7 @@ msgstr ""
 "Aquesta nota no té contingut. Feu clic a «%s» per a anar a l'editor i "
 "modificar-la."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Aquesta nota no té historial"
@@ -6481,6 +6509,8 @@ msgstr "Aquesta nota no té historial"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Aquesta nota està en format HTML. Converteix-la a Markdown per editar-la més "
+"fàcilment."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6495,6 +6525,7 @@ msgstr ""
 "Aquest editor de text enriquit té una sèrie de limitacions i es recomana ser "
 "conscient d'elles abans d'utilitzar-lo."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6585,11 +6616,11 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Per a continuar, introduïu la contrasenya mestra."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Per crear una etiqueta nova, escriviu el nom i premeu Retorn."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
@@ -6720,6 +6751,7 @@ msgstr "Mostra o amaga barra lateral"
 msgid "Toggle sort order field"
 msgstr "Canvia el camp d'ordenació"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "El testimoni s'ha copiat al porta-retalls!"
@@ -6830,7 +6862,7 @@ msgstr "Tipus de fitxer desconegut"
 msgid "Unknown flag: %s"
 msgstr "Bandera desconeguda: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -6861,7 +6893,7 @@ msgstr "Deixa de publicar la nota"
 msgid "Unshare"
 msgstr "Deixa de compartir"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
@@ -6881,6 +6913,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tipus d'imatge no admesa: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6893,7 +6926,7 @@ msgid ""
 msgstr "Missatge o enllaç no suportat: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Sense títol"
@@ -6923,6 +6956,7 @@ msgstr "Actualitza les mides totals"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -6944,7 +6978,8 @@ msgstr "Elements remots actualitzats: %d."
 msgid "Updated: "
 msgstr "Última actualització: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Actualitzades: %d."
@@ -6967,10 +7002,10 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Actualitza la destinació de sincronització a la versió més recent."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Fes una foto"
+msgstr "Pujar la foto"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7133,7 +7168,7 @@ msgstr "Vosk"
 msgid "Waiting for authorisation..."
 msgstr "S'està esperant autorització..."
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
 msgstr "Esperant: Llibreta %s de %s"
 

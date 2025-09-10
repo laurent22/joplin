@@ -6,7 +6,7 @@ const logger = Logger.create('retryWithCount');
 interface Options {
 	count: number;
 	delayOnFailure?: (retryCount: number)=> number;
-	onFail: (error: Error)=> Promise<void>;
+	onFail: (error: Error)=> void|Promise<void>;
 }
 
 const retryWithCount = async (task: ()=> Promise<void>, { count, delayOnFailure, onFail }: Options) => {

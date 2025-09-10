@@ -6,6 +6,7 @@ import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';
+import Folder from '@joplin/lib/models/Folder';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -32,14 +33,16 @@ class Command extends BaseCommand {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
-		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
+		let destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
 
-		if (args.notebook && !folder) throw new Error(_('Cannot find "%s".', args.notebook));
+		if (args.notebook && !destinationFolder) throw new Error(_('Cannot find "%s".', args.notebook));
+
+		if (!destinationFolder) destinationFolder = await Folder.defaultFolder();
 
 		const importOptions: ImportOptions = {};
 		importOptions.path = args.path;
 		importOptions.format = args.options.format ? args.options.format : 'auto';
-		importOptions.destinationFolderId = folder ? folder.id : null;
+		importOptions.destinationFolderId = destinationFolder ? destinationFolder.id : null;
 
 		let lastProgress = '';
 

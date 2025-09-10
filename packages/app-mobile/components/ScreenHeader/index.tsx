@@ -101,11 +101,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
-			container: {
+			outerContainer: {
 				flexDirection: 'column',
+			},
+			innerContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
 				backgroundColor: theme.backgroundColor2,
 				shadowColor: '#000000',
 				elevation: 5,
+			},
+			// A small border above the header: Covers the part of the shadow that would otherwise
+			// be shown above the header on Android.
+			aboveHeader: {
+				backgroundColor: theme.backgroundColor2,
+				paddingBottom: 6,
+				marginTop: -6,
+				zIndex: 2,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -678,8 +690,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 
 		return (
-			<View style={this.styles().container}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View style={this.styles().outerContainer}>
+				<View style={this.styles().aboveHeader}/>
+				<View style={this.styles().innerContainer}>
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}

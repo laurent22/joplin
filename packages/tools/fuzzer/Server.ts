@@ -1,6 +1,5 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { HttpMethod, Json, UserData } from './types';
-import { packagesDir } from './constants';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { Env } from '@joplin/lib/models/Setting';
 import execa = require('execa');
@@ -27,16 +26,17 @@ export default class Server {
 	private server_: execa.ExecaChildProcess<string>;
 
 	public constructor(
+		serverBaseDirectory: string,
 		private readonly serverUrl_: string,
 		private readonly adminAuth_: UserData,
 	) {
-		const serverDir = join(packagesDir, 'server');
+		const serverDir = resolve(serverBaseDirectory);
 		const mainEntrypoint = join(serverDir, 'dist', 'app.js');
 		this.server_ = execa.node(mainEntrypoint, [
 			'--env', 'dev',
 		], {
 			env: { JOPLIN_IS_TESTING: '1' },
-			cwd: join(packagesDir, 'server'),
+			cwd: serverDir,
 			stdin: 'ignore', // No stdin
 			// For debugging:
 			// stderr: process.stderr,

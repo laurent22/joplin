@@ -17,6 +17,18 @@ const isHtrSupported = () => {
 	return config().TRANSCRIBE_ENABLED;
 };
 
+const parseResponseSafely = async (response: Response) => {
+	const text = await response.text();
+
+	try {
+		return JSON.parse(text);
+	} catch (parseError) {
+		const truncatedText = text.substring(0, 1000);
+
+		return { error: truncatedText };
+	}
+};
+
 router.get('api/transcribe/:id', async (path: SubPath, _ctx: AppContext) => {
 	if (!isHtrSupported()) {
 		throw new ErrorNotImplemented('HTR feature is not enabled in this server');
@@ -36,8 +48,8 @@ router.get('api/transcribe/:id', async (path: SubPath, _ctx: AppContext) => {
 			const responseJson = await response.json();
 			throw new ErrorBadRequest(responseJson.error);
 		} else if (response.status >= 500) {
-			const responseJson = await response.json();
-			throw new ErrorBadGateway(responseJson.error);
+			const responseParsed = await parseResponseSafely(response);
+			throw new ErrorBadGateway(responseParsed.error);
 		}
 
 		const responseJson = await response.json();
@@ -77,8 +89,8 @@ router.post('api/transcribe', async (_path: SubPath, ctx: AppContext) => {
 			const responseJson = await response.json();
 			throw new ErrorBadRequest(responseJson.error);
 		} else if (response.status >= 500) {
-			const responseJson = await response.json();
-			throw new ErrorBadGateway(responseJson.error);
+			const responseParsed = await parseResponseSafely(response);
+			throw new ErrorBadGateway(responseParsed.error);
 		}
 
 		const responseJson = await response.json();

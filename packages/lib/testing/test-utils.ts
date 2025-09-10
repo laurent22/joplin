@@ -57,10 +57,10 @@ import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import Synchronizer from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
-import { setRSA } from '../services/e2ee/ppk';
+import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
 const { Dirnames } = require('../services/synchronizer/utils/types');
-import RSA from '../services/e2ee/RSA.node';
+import RSA from '../services/e2ee/ppk/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
@@ -1191,6 +1191,30 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		shim.clearInterval = originalClearInterval;
 		jest.useRealTimers();
 	}
+};
+
+// null => Use default
+type MockFetchRequestHandler = (request: Request)=> Response|null;
+
+// Mocks shim.fetch, but may not mock other fetch-related methods
+export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
+	const originalFetch = shim.fetch;
+
+	shim.fetch = (url: string, options) => {
+		const request = new Request(url, options);
+		const mockResponse = requestHandler(request);
+		if (mockResponse) {
+			return Promise.resolve(mockResponse);
+		} else {
+			return originalFetch(url, options);
+		}
+	};
+
+	return {
+		reset: () => {
+			shim.fetch = originalFetch;
+		},
+	};
 };
 
 export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {

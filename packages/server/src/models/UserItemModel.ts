@@ -5,6 +5,7 @@ import { ErrorNotFound } from '../utils/errors';
 import { Knex } from 'knex';
 import { PerformanceTimer } from '../utils/time';
 import Logger from '@joplin/utils/Logger';
+import { isUniqueConstraintError } from '../db';
 
 const logger = Logger.create('UserItemModel');
 
@@ -21,6 +22,12 @@ export interface UserItemDeleteOptions extends DeleteOptions {
 	byUserItemIds?: number[];
 	byShare?: DeleteByShare;
 	recordChanges?: boolean;
+}
+
+interface UserItemSaveOptions extends SaveOptions {
+	// Ignore unique constraint errors if a (user_id, item_id) pair already
+	// exists.
+	ignoreAlreadyExists?: boolean;
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -116,7 +123,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
-	public async add(userId: Uuid, itemId: Uuid, options: SaveOptions = {}): Promise<void> {
+	public async add(userId: Uuid, itemId: Uuid, options: UserItemSaveOptions = {}): Promise<void> {
 		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
 		if (!item) {
 			throw new ErrorNotFound(`No such item: ${itemId}`);
@@ -124,7 +131,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.addMulti(userId, [item], options);
 	}
 
-	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
+	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: UserItemSaveOptions = {}): Promise<void> {
 		const perfTimer = new PerformanceTimer(logger, 'addMulti');
 
 		perfTimer.push('Main');
@@ -132,31 +139,37 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
 		if (!items.length) return;
 
-		await this.withTransaction(async () => {
-			perfTimer.push(`Processing ${items.length} items`);
+		perfTimer.push(`Processing ${items.length} items`);
 
-			for (const item of items) {
-				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+		for (const item of items) {
+			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
 
-				await super.save({
-					user_id: userId,
-					item_id: item.id,
-				}, options);
-
-				if (this.models().item().shouldRecordChange(item.name)) {
-					await this.models().change().save({
-						item_type: ItemType.UserItem,
-						item_id: item.id,
-						item_name: item.name,
-						type: ChangeType.Create,
-						previous_item: '',
+			await this.withTransaction(async () => {
+				try {
+					await super.save({
 						user_id: userId,
-					});
-				}
-			}
+						item_id: item.id,
+					}, options);
 
-			perfTimer.pop();
-		}, 'UserItemModel::addMulti');
+					if (this.models().item().shouldRecordChange(item.name)) {
+						await this.models().change().save({
+							item_type: ItemType.UserItem,
+							item_id: item.id,
+							item_name: item.name,
+							type: ChangeType.Create,
+							previous_item: '',
+							user_id: userId,
+						});
+					}
+				} catch (error) {
+					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
+						throw error;
+					}
+				}
+			}, 'UserItemModel::addMulti');
+		}
+
+		perfTimer.pop();
 
 		perfTimer.pop();
 	}

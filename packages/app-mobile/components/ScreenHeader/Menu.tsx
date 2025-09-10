@@ -7,6 +7,8 @@ import AccessibleView from '../accessibility/AccessibleView';
 import debounce from '../../utils/debounce';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { ModalState } from '../accessibility/FocusControl/types';
+import useKeyboardState from '../../utils/hooks/useKeyboardState';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -29,7 +31,9 @@ interface Props {
 }
 
 const useStyles = (themeId: number) => {
-	const { height: windowHeight } = useWindowDimensions();
+	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+	const safeAreaInsets = useSafeAreaInsets();
+	const { dockedKeyboardHeight: keyboardHeight } = useKeyboardState();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
@@ -45,6 +49,20 @@ const useStyles = (themeId: number) => {
 			backgroundColor: theme.backgroundColor,
 			fontSize: theme.fontSize,
 		};
+
+		const isLandscape = windowWidth > windowHeight;
+		const extraPadding = isLandscape ? 25 : 50;
+
+		// When a docked on-screen keyboard is showing, we want to maximise the height of the menu as much as possible, due to the limited available space.
+		// However, when the on-screen keyboard is hidden or floating in either portrait or landscape orientation, it is less of an issue to have excess in the amount
+		// of padding, to ensure nothing is cut off on all varieties of supported mobile platforms with different input and navigation bar settings. In particular,
+		// on Android it is not possible to distinguish between a floating keyboard and a horizontal input bar which is docked, but the latter requires a larger
+		// reduction in height. For this reason we use a fixed value for insetOrExtraFullscreenPadding when the keyboard height is zero. However, Android versions
+		// earlier than 15 have an IME toolbar in addition to the input toolbar when using an external keyboard, so to cater for this scenario, we can use the fixed
+		// value if the keyboardHeight is <= 25 (as any proper on-screen keyboard would be much taller than this). If the keyboard height is larger than this, we can assume
+		// a docked keyboard is visible, so we only need cater for the insets in addition to the fixed extraPadding required for compatibility across Android versions
+		const insetOrExtraFullscreenPadding = keyboardHeight <= 25 ? 70 : safeAreaInsets.top + safeAreaInsets.bottom;
+		const maxMenuHeight = windowHeight - keyboardHeight - extraPadding - insetOrExtraFullscreenPadding;
 
 		return StyleSheet.create({
 			divider: {
@@ -66,13 +84,13 @@ const useStyles = (themeId: number) => {
 				opacity: 0.5,
 			},
 			menuContentScroller: {
-				maxHeight: windowHeight - 50,
+				maxHeight: maxMenuHeight,
 			},
 			contextMenuButton: {
 				padding: 0,
 			},
 		});
-	}, [themeId, windowHeight]);
+	}, [themeId, windowWidth, windowHeight, safeAreaInsets, keyboardHeight]);
 };
 
 const MenuComponent: React.FC<Props> = props => {

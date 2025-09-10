@@ -16,6 +16,12 @@ class DatabaseDriverNode {
 		});
 	}
 
+	close() {
+		return new Promise(resolve => {
+			this.db_.close(() => resolve());
+		});
+	}
+
 	sqliteErrorToJsError(error, sql = null, params = null) {
 		const msg = [error.toString()];
 		if (sql) msg.push(sql);

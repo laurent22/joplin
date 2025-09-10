@@ -254,6 +254,9 @@
 	"Add recipient:": [
 		"Adaugă destinatar:"
 	],
+	"Add tags:": [
+		"Adaugă etichete:"
+	],
 	"Add title": [
 		"Adaugă titlu"
 	],
@@ -263,8 +266,14 @@
 	"Add to note": [
 		"Adaugă la notiță"
 	],
+	"Added new: %s": [
+		"Adaugă nou: %s"
+	],
+	"Added tag: %s": [
+		"Etichetă adăugată: %s"
+	],
 	"Adds tag": [
-		""
+		"Adaugă etichete"
 	],
 	"Admin": [
 		"Admin"
@@ -372,7 +381,7 @@
 		"Aritim întunecat"
 	],
 	"Associated tags:": [
-		""
+		"Etichete asociate:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"La momentul actual, Joplin Web poate fi deschis într-o singură filă deodată. Te rog închide orice alte instanțe de Joplin."
@@ -659,6 +668,9 @@
 	"Code View": [
 		"Vizualizare code"
 	],
+	"Code:": [
+		"Cod:"
+	],
 	"Collaborate on a notebook with others": [
 		"Colaborează la caiet cu alte persoane"
 	],
@@ -769,6 +781,12 @@
 	"Control character": [
 		"Caracter de control"
 	],
+	"Convert it": [
+		"Convertește-o"
+	],
+	"Convert note to Markdown": [
+		"Convertește notița în Markdown"
+	],
 	"Convert to note": [
 		"Convertește în notiță"
 	],
@@ -825,6 +843,9 @@
 	"Could not connect to plugin repository.": [
 		"Nu s-a putut conecta la repozitoriul de plugin-uri."
 	],
+	"Could not convert note to Markdown: %s": [
+		"Nu s-a putut converti notița în Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Nu s-au putut exporta notițele: %s"
 	],
@@ -855,8 +876,14 @@
 	"Create a notebook": [
 		"Creează un caiet"
 	],
+	"Create new notebook": [
+		"Creează un nou caiet"
+	],
 	"Create new profile...": [
 		"Creează un nou profil…"
+	],
+	"Create note": [
+		"Creează o notiță"
 	],
 	"Create notebook": [
 		"Creează un caiet"
@@ -905,6 +932,12 @@
 	],
 	"Creating new to-do...": [
 		"Se creează o nouă listă de făcut…"
+	],
+	"Creating note \"%s\"...": [
+		"Se creează notița „%s”..."
+	],
+	"Creating note.": [
+		"Se creează notița."
 	],
 	"Creating report...": [
 		"Se creează un raport..."
@@ -976,7 +1009,7 @@
 		"Mod implicit"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Titlul implicit de folosit pentru documentele create de la scanner."
 	],
 	"Default: %s": [
 		"Mod implicit: %s"
@@ -1147,13 +1180,13 @@
 		"Nu pierde parola, deoarece din motive de securitate, aceasta este *unica* modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să întroduci parola mai jos."
 	],
 	"Document scanner: Title template": [
-		""
+		"Scanner documente: Șablon titlu"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"Nu permite destinatarii partajării să scrie în caietul comun. Valid doar pentru subcomanda `add`."
 	],
 	"Don't show this message again": [
-		""
+		"Nu mai afișa acest mesaj"
 	],
 	"Donate, website": [
 		"Donează, website"
@@ -1229,6 +1262,12 @@
 	],
 	"Edit": [
 		"Editează"
+	],
+	"Edit as Markdown": [
+		"Editează ca Markdown"
+	],
+	"Edit as Rich Text": [
+		"Editează ca text îmbogățit"
 	],
 	"Edit link": [
 		"Editează legătura"
@@ -1331,6 +1370,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Activează suportul pentru sintaxa Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Activează transcrierea scrisului de mînă"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Activează banner-ul de conversie HTML-la-Markdown"
 	],
 	"Enable Linkify": [
 		"Activează Linkify"
@@ -1724,6 +1769,9 @@
 	"Hide password": [
 		"Ascunde parola"
 	],
+	"Hides warning": [
+		"Ascunde atenționarea"
+	],
 	"Highlight": [
 		"Evidențiază"
 	],
@@ -1755,7 +1803,7 @@
 		"Inactiv"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Dacă un atașament imagine este pe linia proprie și urmat de o linie goală, va fi redat imediat sub sursa lui Markdown."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Dacă ai autorizat deja, te rog așteaptă ca aplicația să se sincronizeze cu Joplin Cloud."
@@ -2172,8 +2220,11 @@
 	"Markdown editor": [
 		"Editor Markdown"
 	],
+	"Markdown editor: Render images": [
+		"Editor Markdown: Redă imaginile"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Editor Markdown: Redă markup în editor"
 	],
 	"Marks a to-do as done.": [
 		"Marchează o sarcină ca fiind terminată."
@@ -2318,6 +2369,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Un nou caiet „%s” va fi creat și fișierul „%s” va fi importat în el"
 	],
+	"New notebook title": [
+		"Titlu caiet nou"
+	],
 	"New photo": [
 		"Fotografie nouă"
 	],
@@ -2396,6 +2450,9 @@
 	"No tab selected": [
 		"Nicio filă selectată"
 	],
+	"No tags": [
+		"Fără etichete"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nu este definit niciun editor de text. Te rog să definești unul folosind comanda `config editor <editor-path>`"
 	],
@@ -2471,6 +2528,9 @@
 	"Note list style": [
 		"Stilul listei de notițe"
 	],
+	"Note preview": [
+		"Previzualizare notiță"
+	],
 	"Note properties": [
 		"Proprietăți notiță"
 	],
@@ -2527,6 +2587,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL sau cale date lingvistice"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Caută în conținutul extras"
 	],
 	"OK": [
 		"OK"
@@ -2690,7 +2753,7 @@
 		"Permisiune necesară"
 	],
 	"Photo %d": [
-		""
+		"Fotografia %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Te rog să faci clic pe „%s” pentru a continua sau să setezi parolele în lista „%s” de mai jos."
@@ -2914,11 +2977,17 @@
 	"Re-upload local data to sync target": [
 		"Reîncărcarea datelor locale către destinația de sincronizare"
 	],
+	"Read more": [
+		"Citește mai multe"
+	],
 	"Read more about it": [
 		"Citește mai multe despre acestea"
 	],
 	"Read time: %s min": [
 		"Durata lecturii: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Citirea comenzilor de la intrarea standard este disponibilă doar în modul CLI."
 	],
 	"Recipient has accepted the invitation": [
 		"Destinatarul a acceptat invitația"
@@ -2931,6 +3000,9 @@
 	],
 	"Recipients:": [
 		"Destinatari:"
+	],
+	"Recognize handwritten image": [
+		"Recunoaște imagine cu text scris de mînă"
 	],
 	"Recommended": [
 		"Recomandat"
@@ -2965,6 +3037,9 @@
 	"Remove": [
 		"Șterge"
 	],
+	"Remove %s": [
+		"Șterge %s"
+	],
 	"Remove %s from share": [
 		"Elimină %s din partajare"
 	],
@@ -2976,6 +3051,9 @@
 	],
 	"Removed %s from share.": [
 		"S-a eliminat %s din partajare."
+	],
+	"Removed tag: %s": [
+		"Etichetă ștearsă: %s"
 	],
 	"Rename": [
 		"Redenumește"
@@ -2990,7 +3068,7 @@
 		"Redenumește <item> dat (notiță sau caiet) în <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Redă markup pe toate liniile care nu includ cursorul."
 	],
 	"Renew token": [
 		"Reînnoiește jetonul"
@@ -3151,6 +3229,9 @@
 	"Save geo-location with notes": [
 		"Salvează geo-locația în notițe"
 	],
+	"Scan notebook": [
+		"Scanează un caiet"
+	],
 	"Scanned code": [
 		"Cod scanat"
 	],
@@ -3180,6 +3261,9 @@
 	],
 	"Search shown": [
 		"Căutare afișată"
+	],
+	"Search tags": [
+		"Caută etichete"
 	],
 	"Search...": [
 		"Caută..."
@@ -3211,8 +3295,14 @@
 	"Select file...": [
 		"Alege o imagine…"
 	],
+	"Select notebook": [
+		"Selectează caiet"
+	],
 	"Select parent notebook": [
 		"Selectează caietul părinte"
+	],
+	"Selected: %s": [
+		"Selectat: %s"
 	],
 	"Selection deleted": [
 		"Selecția a fost ștearsă"
@@ -3714,6 +3804,9 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Notița „%s” a fost restaurată cu succes în caietul „%s”."
 	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Notița a fost convertită în Markdown și notița originală a fost mutată în coșul de gunoi"
+	],
 	"The note was successfully moved to the trash.": [
 		"Notița a fost mutată cu succes în coșul de gunoi.",
 		"Notițele au fost mutate cu succes în coșul de gunoi.",
@@ -3819,13 +3912,13 @@
 		"Acest desen poate avea modificări nesalvate."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Această funcție este implicit dezactivată. Trebuie să o activezi manual prin opțiunea „Activează transcrierea scrisului de mînă”."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Această funcție este disponibilă doar pe cloud-ul Joplin și server-ul Joplin."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Acest tip de imagine nu este suportat de sistemul de recunoaștere."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Acesta este un instrument avansat de listare al atașamentelor care sînt legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
@@ -3858,7 +3951,7 @@
 		"Această notă nu are istoric"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Această notiță este în format HTML. Convertește-o în Markdown pentru a o putea edita mai ușor."
 	],
 	"This plugin doesn't support %s.": [
 		"Acest plugin nu suportă %s."
@@ -3906,7 +3999,7 @@
 		"Pentru a continua, te rog să întroduci parola principală mai jos."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Pentru a crea o etichetă nouă, tastează numele acesteia și apasă enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Pentru a șterge o eticheta, elimină eticheta respectivă din cadrul notițelor aferente."
@@ -4144,6 +4237,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Actualizează destinația de sincronizare la cea mai recentă versiune."
+	],
+	"Upload photo": [
+		"Încarcă fotografie"
 	],
 	"URL": [
 		"URL"

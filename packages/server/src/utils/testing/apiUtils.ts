@@ -6,6 +6,10 @@ interface ExecRequestOptions {
 	filePath?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	query?: Record<string, any>;
+
+	// Providing a baseAppContext allows skipping some amount of setup logic that can cause issues when
+	// called many times concurrently.
+	baseAppContext?: AppContext;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -70,6 +74,7 @@ export async function execRequestC(sessionId: string, method: string, path: stri
 
 	if (options.filePath) appContextOptions.request.files = { file: { filepath: options.filePath } };
 	if (options.query) appContextOptions.request.query = options.query;
+	if (options.baseAppContext) appContextOptions.baseAppContext = options.baseAppContext;
 
 	const context = await koaAppContext(appContextOptions);
 	await routeHandler(context);

@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Isak Bergdahl\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -227,7 +229,7 @@ msgstr "%s kan inte vara större än %s"
 msgid "%s cannot be less than %s"
 msgstr "%s kan inte vara mindre än %s"
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
 msgstr "%s från %s"
 
@@ -359,11 +361,11 @@ msgstr "Acceptera"
 msgid "Accepted invitations"
 msgstr "Accepterade inbjudningar"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
 msgstr "Godkänd: Anteckningsbok %s från %s"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
 msgstr "Accepterar delning..."
 
@@ -426,10 +428,9 @@ msgstr "Lägg till eller ta bort taggar:"
 msgid "Add recipient:"
 msgstr "Lägg till mottagare:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
-msgstr "Nya taggar:"
+msgstr "Lägg till taggar:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -444,18 +445,16 @@ msgid "Add to note"
 msgstr "Lägg till i anteckning"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
-msgstr "Lägg till ny"
+msgstr "Lagt till nya: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
-msgstr "Lägg till taggen %s till anteckningen"
+msgstr "Lagt till tagg: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "Lägger till tagg"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -466,6 +465,7 @@ msgstr "Administratör"
 msgid "Admin dashboard"
 msgstr "Administratörsinstrumentbräda"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Avancerade alternativ"
@@ -503,7 +503,7 @@ msgstr "Alla anteckningar"
 msgid "All potential ports are in use - please report the issue at %s"
 msgstr "Alla potentiella portar används - rapportera problemet på %s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr "Alla delade mappar:"
 
@@ -614,6 +614,7 @@ msgstr ""
 "Är du säker på att du vill ta bort all historik för denna anteckning? Detta "
 "kan inte ångras."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Är du säker på att du vill förnya auktoriseringstoken?"
@@ -636,7 +637,7 @@ msgstr "Aritim mörkt"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Associerade taggar:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -711,6 +712,7 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Autentisering slutfördes inte (mottog inte en autentiseringstoken)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Auktoriseringstoken:"
@@ -754,6 +756,7 @@ msgstr "Växla automatiskt tema för att matcha systemtema"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -825,9 +828,11 @@ msgstr "Kan visa och redigera"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -883,7 +888,7 @@ msgstr "Det går inte att komma åt %s"
 msgid "Cannot change encrypted item"
 msgstr "Det går inte att ändra krypterat objekt"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Det går inte att kopiera anteckningen till \"%s\" anteckningsbok"
 
@@ -899,7 +904,7 @@ msgstr "Kan inte skapa en ny anteckning: %s"
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -913,7 +918,7 @@ msgstr "Kan inte skapa en ny anteckning: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -938,7 +943,7 @@ msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
 "Det går inte att läsa in \"%s\"-modulen för formatet \"%s\" och målet \"%s\""
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Det går inte att flytta anteckningen till \"%s\" anteckningsbok"
 
@@ -1045,11 +1050,13 @@ msgstr "Kontrollerar... vänta."
 msgid "Choose an option"
 msgstr "Välj ett alternativ"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome-webbutik"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1066,6 +1073,7 @@ msgstr "Ta bort larm"
 msgid "Clear search"
 msgstr "Rensa sökning"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1135,7 +1143,7 @@ msgstr "Stäng fönster"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr "Avslutningssession..."
+msgstr "Avslutar sessionen..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:40
 msgid "Cmd-click to open"
@@ -1152,16 +1160,15 @@ msgstr "Kod"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:813
 msgid "Code Block"
-msgstr "Kodblockering"
+msgstr "Kodblock"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
 msgid "Code View"
 msgstr "Kodvy"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
-#, fuzzy
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 msgid "Code:"
-msgstr "Kod"
+msgstr "Kod:"
 
 #: packages/lib/utils/joplinCloud/index.ts:184
 msgid "Collaborate on a notebook with others"
@@ -1232,6 +1239,7 @@ msgid "Complete to-do"
 msgstr "Slutför att-göra"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Slutförd"
@@ -1254,7 +1262,7 @@ msgstr "Slutfört: %s (%s)"
 
 #: packages/lib/models/Note.ts:66
 msgid "completion date"
-msgstr "färdigställande datum"
+msgstr "slutförande datum"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1332,17 +1340,15 @@ msgstr "Fortsätt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
 msgid "Control character"
-msgstr "Kontrollera tecken"
+msgstr "Kontrolltecken"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
-msgstr "Konvertera till anteckning"
+msgstr "Konvertera den"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Konvertera till att-göra"
+msgstr "Konvertera anteckning till Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1332
 msgid "Convert to note"
@@ -1360,7 +1366,7 @@ msgstr "Konverterar tal till text..."
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Kopiera"
 
@@ -1409,6 +1415,7 @@ msgstr[1] "Kopiera delbara länkar"
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Kopiera token"
@@ -1448,9 +1455,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Det gick inte att ansluta till insticksmodulsförrådet."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Det gick inte att exportera anteckningar: %s"
+msgstr "Kunde inte konvertera anteckning till Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:224
 msgid "Could not export notes: %s"
@@ -1492,6 +1498,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Det gick inte att verifiera din identitet: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Skapa"
@@ -1505,9 +1512,8 @@ msgid "Create a notebook"
 msgstr "Skapar en anteckningsbok"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Skapar en ny anteckningsbok."
+msgstr "Skapar en ny anteckningsbok"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1515,9 +1521,8 @@ msgid "Create new profile..."
 msgstr "Skapa ny profil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
-msgstr "Skapa anteckningsbok"
+msgstr "Skapa anteckning"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1528,6 +1533,7 @@ msgid "Create user"
 msgstr "Skapa användare"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Skapad"
@@ -1552,7 +1558,8 @@ msgstr "Skapade fjärrobjekt: %d."
 msgid "Created: "
 msgstr "Skapad: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Skapad: %d."
@@ -1587,14 +1594,12 @@ msgid "Creating new to-do..."
 msgstr "Skapar ny att-göra..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Skapar ny anteckning..."
+msgstr "Skapar anteckning \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
-msgstr "Skapar ny anteckning..."
+msgstr "Skapar anteckning."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1696,7 +1701,7 @@ msgstr "Standard"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
-msgstr ""
+msgstr "Standardtitel som ska användas för dokument som skapas av skannern."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1870,6 +1875,7 @@ msgstr "Inaktivera säkert läge och starta om"
 msgid "Disable synchronisation"
 msgstr "Inaktivera synkronisering"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Inaktivera Web Clipper-tjänsten"
@@ -1967,7 +1973,7 @@ msgstr "Visar versionsinformation"
 msgid "Do it now"
 msgstr "Gör det nu"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Fråga inte om bekräftelse."
 
@@ -1987,7 +1993,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Dokumentskanner: Titelmall"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
@@ -1999,7 +2005,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Visa inte detta meddelande igen"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2008,7 +2014,7 @@ msgstr "Donera, webbplats"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Klar"
@@ -2017,6 +2023,7 @@ msgstr "Klar"
 msgid "Download"
 msgstr "Hämta"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Hämta och installera det relevanta tillägget för din webbläsare:"
@@ -2112,7 +2119,7 @@ msgstr "Varaktighet: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2120,19 +2127,17 @@ msgstr "Varaktighet: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Redigera"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
-msgstr "Markdown"
+msgstr "Redigera som Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
-msgstr "Avancerad text"
+msgstr "Redigera som Avancerad text"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -2205,20 +2210,20 @@ msgstr "Emacs"
 #: packages/server/src/routes/admin/emails.ts:127
 #: packages/server/src/routes/admin/users.ts:140
 msgid "Email"
-msgstr "E-postmeddelande"
+msgstr "E-post"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:47
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:23
 msgid "Email to note"
-msgstr "E-posta för att notera"
+msgstr "E-post till anteckning"
 
 #: packages/lib/utils/joplinCloud/index.ts:200
 msgid "Email to Note"
-msgstr "E-posta för att notera"
+msgstr "E-post till anteckning"
 
 #: packages/lib/models/Setting.ts:1292
 msgid "Email To Note, login information"
-msgstr "E-posta till anteckning, inloggningsinformation"
+msgstr "E-post till anteckning, inloggningsinformation"
 
 #: packages/server/src/routes/admin/emails.ts:111
 #: packages/server/src/services/MustacheService.ts:133
@@ -2292,14 +2297,12 @@ msgid "Enable Fountain syntax support"
 msgstr "Aktivera stöd för Fountain-syntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Aktivera kryptering"
+msgstr "Aktivera handskriven transkription"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Aktivera Markdown-verktygsfältet"
+msgstr "Aktivera banderoll för HTML till Markdown-konvertering"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1063
 msgid "Enable Linkify"
@@ -2364,12 +2367,13 @@ msgstr "Aktivera Markdown-verktygsfältet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1062
 msgid "Enable typographer support"
-msgstr "Aktivera fast radbrytning"
+msgstr "Aktivera typografiskt stöd"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1070
 msgid "Enable video player"
 msgstr "Aktivera videospelare"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Aktivera Web Clipper-tjänsten"
@@ -2406,11 +2410,11 @@ msgstr ""
 "Aktivera kryptering betyder att *alla* dina anteckningar och bilagor kommer "
 "att synkroniseras på nytt och skickas krypterade till synkroniseringsmålet."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Krypterad"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Krypterade objekt kan inte ändras"
 
@@ -2684,6 +2688,7 @@ msgstr "Hitta: "
 msgid "Finishes recording"
 msgstr "Slutför inspelningen"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Firefox-tillägg"
@@ -2759,7 +2764,8 @@ msgstr "Tvinga sökvägsstil"
 msgid "Forward"
 msgstr "Framåt"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Hittad: %d."
@@ -2801,6 +2807,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Begär en offert"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Hämta det nu:"
@@ -2902,6 +2909,7 @@ msgid "Hide Joplin"
 msgstr "Dölj Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Dölj tangentbord"
 
@@ -2910,9 +2918,8 @@ msgid "Hide password"
 msgstr "Dölj lösenord"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
-msgstr "Varning"
+msgstr "Döljer varning"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
@@ -2950,6 +2957,7 @@ msgstr "Ikon"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -2964,6 +2972,8 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Om en bildbilaga är på en egen rad och följs av en tom rad kommer den att "
+"återges precis under sin Markdown-källa."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3031,7 +3041,7 @@ msgstr "Importen lyckades!"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Importerar anteckningar..."
 
@@ -3039,7 +3049,7 @@ msgstr "Importerar anteckningar..."
 msgid "Importing..."
 msgstr "Importerar..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Importerar data till Joplin."
 
@@ -3120,6 +3130,7 @@ msgstr ""
 "För att kunna använda filsystemssynkronisering krävs ditt tillstånd att "
 "skriva till extern lagring."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "För att kunna använda Web Clipper måste du göra följande:"
@@ -3132,7 +3143,7 @@ msgstr "Pågår"
 msgid "In: %s"
 msgstr "I: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
 msgstr "Inkommande delningar:"
 
@@ -3230,7 +3241,7 @@ msgstr "Ogiltigt svar: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ogiltigt kommando: \"%s\""
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Ogiltigt format. T.ex.: 48.8581372, 2.2926735"
 
@@ -3369,6 +3380,7 @@ msgstr "Joplin-serverwebbadress"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO-autentisering"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3546,6 +3558,7 @@ msgstr "Inläst"
 msgid "Loading..."
 msgstr "Läser in..."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Plats"
@@ -3654,18 +3667,17 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 msgid "Markdown editor"
 msgstr "Markdown-redigerare"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown-redigerare"
+msgstr "Markdown-redigerare: Rendera bilder"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown-redigerare: Rendera märkkod i redigeraren"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3675,6 +3687,7 @@ msgstr "Markerar en att-göra som gjord."
 msgid "Marks a to-do as non-completed."
 msgstr "Markerar en att-göra som inte fullständig."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Märkspråk"
@@ -3880,6 +3893,7 @@ msgstr "Ny anteckningsbok"
 msgid "New Notebook"
 msgstr "Ny anteckningsbok"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -3888,9 +3902,8 @@ msgstr ""
 "importeras till den"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
-msgstr "Ange anteckningsbokens titel"
+msgstr "Ny anteckningsbokstitel"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -3993,7 +4006,7 @@ msgstr "Inga resultat"
 msgid "No revision selected"
 msgstr "Ingen revision vald"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Inget sådant kommando: %s"
 
@@ -4006,9 +4019,8 @@ msgid "No tab selected"
 msgstr "Ingen flik vald"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
-msgstr "Nya taggar:"
+msgstr "Inga taggar"
 
 #: packages/app-cli/app/command-edit.ts:31
 msgid ""
@@ -4021,8 +4033,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Inga uppdateringar tillgängliga"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr "Ingen"
@@ -4084,7 +4096,7 @@ msgstr "Texten"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Anteckning finns inte: \"%s\". Skapa den?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Anteckningsredigerare"
@@ -4097,6 +4109,7 @@ msgstr "Anteckning har sparats."
 msgid "Note history"
 msgstr "Anteckningshistorik"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4126,11 +4139,11 @@ msgid "Note list style"
 msgstr "Anteckningsliststil"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
-msgstr "Anteckningsvisare"
+msgstr "Förhandsvisa anteckning"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Anteckningens egenskaper"
@@ -4183,7 +4196,7 @@ msgstr "Anteckningsbok: %s (%s)"
 msgid "Notebooks"
 msgstr "Anteckningsböcker"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Anteckningsböcker kan inte namnges \"%s\", vilket är en reserverad titel."
@@ -4220,17 +4233,18 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: Språkdata-URL eller -sökväg"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Sök i alla anteckningarna"
+msgstr "OCR: Sök i extraherat innehåll"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4392,7 +4406,7 @@ msgstr "Ordnad lista"
 msgid "Other applications..."
 msgstr "Andra program..."
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Utmatningsformat: %s"
 
@@ -4459,7 +4473,7 @@ msgstr "Per användare. Minst 2 användare."
 msgid "Permanently delete note"
 msgstr "Ta bort anteckning permanent"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "Vill du ta bort anteckningen \"%s\" permanent?"
 
@@ -4474,7 +4488,7 @@ msgstr ""
 "Alla anteckningar och underanteckningsböcker i denna anteckningsbok kommer "
 "att raderas permanent."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Vill du ta bort den här anteckningen permanent?"
@@ -4490,7 +4504,7 @@ msgstr "Tillstånd behövs"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Foto %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4546,7 +4560,7 @@ msgstr "Spela in din röst..."
 msgid "Please select a notebook first."
 msgstr "Välj en anteckningsbok först."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Välj anteckningen eller anteckningsboken som ska tas bort först."
 
@@ -4668,7 +4682,7 @@ msgstr "Föredragen leverantör av röstinmatning"
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr "Bevara färger när du klistrar in text i Avancerad textredigerare"
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Tryck Ctrl+D eller skriv \"exit\" för att avsluta programmet"
 
@@ -4700,7 +4714,8 @@ msgstr "Föregående träff"
 msgid "Previous versions"
 msgstr "Tidigare versioner"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Tidigare versioner av denna anteckning"
 
@@ -4833,7 +4848,6 @@ msgid "Re-upload local data to sync target"
 msgstr "Ladda upp lokala data igen till synkroniseringsmålet"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
 msgstr "Läs mer"
 
@@ -4846,9 +4860,9 @@ msgid "Read time: %s min"
 msgstr "Lästid: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Kommandot \"%s\" är endast tillgängligt i läge för grafiskt gränssnitt"
+msgstr ""
+"Att läsa kommandon från standardinmatning är endast tillgängligt i CLI-läge."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
 msgid "Recipient has accepted the invitation"
@@ -4867,9 +4881,8 @@ msgid "Recipients:"
 msgstr "Mottagare:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
-msgstr "Ändra storlek på stora bilder:"
+msgstr "Känn igen handskrift i bild"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:72
 msgid "Recommended"
@@ -4914,7 +4927,7 @@ msgstr "Reguljärt uttryck"
 msgid "Reject"
 msgstr "Avvisa"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
 msgstr "Avvisar delning..."
 
@@ -4923,9 +4936,8 @@ msgid "Remove"
 msgstr "Ta bort"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
-msgstr "Ta bort"
+msgstr "Ta bort %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
 msgid "Remove %s from share"
@@ -4943,10 +4955,9 @@ msgstr "Ta bort den här sökningen från sidofältet?"
 msgid "Removed %s from share."
 msgstr "Tog bort %s från delningen."
 
-#: packages/app-mobile/components/TagEditor.tsx:230
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
-msgstr "Byt namn på tagg:"
+msgstr "Borttagen tagg: %s"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameFolder.ts:8
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/renameTag.ts:8
@@ -4969,8 +4980,9 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Renderar märkkod på alla rader som inte innehåller markören."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Förnya token"
@@ -5041,7 +5053,8 @@ msgstr "Återställ huvudlösenord"
 msgid "Resize large images:"
 msgstr "Ändra storlek på stora bilder:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Resurser: %d."
@@ -5060,6 +5073,7 @@ msgid "Restart now"
 msgstr "Starta om nu"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5201,7 +5215,7 @@ msgstr "Spara som %s"
 msgid "Save as..."
 msgstr "Spara som..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5218,9 +5232,8 @@ msgid "Save geo-location with notes"
 msgstr "Spara geografisk plats med anteckningar"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
-msgstr "Väljer en anteckningsbok"
+msgstr "Skanna anteckningsbok"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:90
 msgid "Scanned code"
@@ -5268,17 +5281,17 @@ msgstr "Sökresultat"
 msgid "Search shown"
 msgstr "Sökning visas"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
-#, fuzzy
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
-msgstr "Sökresultat"
+msgstr "Sök taggar"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Sök:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5320,18 +5333,16 @@ msgid "Select file..."
 msgstr "Välj fil..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
-msgstr "Väljer en anteckningsbok"
+msgstr "Välj anteckningsbok"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Välj överordnad anteckningsbok"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
-msgstr "Skapad: %s"
+msgstr "Markerad: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:9
 msgid "Selection deleted"
@@ -5450,8 +5461,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
-"Delar eller upphäver delningen av den angivna [notebook] med [user]. Kräver "
-"Joplin Cloud eller Joplin Server."
+"Delar eller slutar dela den angivna [notebook] med [user]. Kräver Joplin "
+"Cloud eller Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5507,7 +5518,7 @@ msgstr "Visa sorteringsordningsknappar"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1105
 msgid "Show tray icon"
-msgstr "Visa fältikon"
+msgstr "Visa systemfältsikon"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:270
 msgid "Show/hide the sidebar"
@@ -5555,7 +5566,8 @@ msgstr ""
 "Överhoppade objekt: %d (använd --retry-failed-items för att försöka "
 "dekryptera dem igen)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Överhoppad: %d."
@@ -5641,7 +5653,7 @@ msgstr "Källa"
 msgid "Source code available"
 msgstr "Källkod tillgänglig"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Källformat: %s"
 
@@ -5717,16 +5729,19 @@ msgstr "Statistik..."
 #: packages/app-mobile/components/screens/encryption-config.tsx:352
 #: packages/app-mobile/components/screens/status.tsx:246
 msgid "Status"
-msgstr "Tillstånd"
+msgstr "Status"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Tillstånd: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Tillstånd: Startad på port %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Steg 1: Aktivera Clipper-tjänsten"
@@ -5745,6 +5760,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Steg 2: Ange koden som tillhandahålls av Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Steg 2: Installera tillägget"
@@ -5847,7 +5863,7 @@ msgstr "Byt till den nya redigeraren"
 msgid "Switch to to-do type"
 msgstr "Byt till att-göra-typ"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -5953,7 +5969,8 @@ msgstr "Tabb flyttar fokus"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Taggad: %d."
@@ -6034,7 +6051,7 @@ msgid ""
 msgstr ""
 "Bilagorna kommer inte längre att visas när du byter till en annan anteckning."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Kommandot \"%s\" är endast tillgängligt i läge för grafiskt gränssnitt"
 
@@ -6162,11 +6179,12 @@ msgstr ""
 "anteckningsboken \"%s\"."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Anteckningsboken och dess innehåll har flyttats till papperskorgen."
+msgstr ""
+"Anteckningen har konverterats till Markdown och den ursprungliga "
+"anteckningen har flyttats till papperskorgen"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6182,7 +6200,8 @@ msgstr "Anteckningsboken och dess innehåll har flyttats till papperskorgen."
 msgid "The notebook could not be saved: %s"
 msgstr "Anteckningsboken kunde inte sparas: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Anteckningarna har importerats: %s"
@@ -6271,10 +6290,12 @@ msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
 "Webbklippningstjänsten kan inte aktiveras i den här instansen av Joplin."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Web Clipper-tjänsten är aktiverad och inställd för automatisk start."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Web clipper-tjänsten är inte aktiverad."
@@ -6384,6 +6405,7 @@ msgstr "Denna bilaga har inga OCR-data (Status: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Denna bilaga är inte hämtad eller inte dekrypterad ännu"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6401,14 +6423,18 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Den här funktionen är inaktiverad som standard, du måste aktivera den "
+"manuellt genom att aktivera alternativet \"Aktivera handskriven "
+"transkription\"."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
+"Denna funktion är endast tillgänglig på Joplin Cloud och Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Denna bildtyp stöds inte av igenkänningssystemet."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6455,6 +6481,7 @@ msgstr ""
 "Den här anteckningen har inget innehåll. Klicka på \"%s\" för att växla "
 "redigeraren och redigera anteckningen."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Denna anteckning har ingen historik"
@@ -6463,6 +6490,8 @@ msgstr "Denna anteckning har ingen historik"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Den här anteckningen är i HTML-format. Konvertera den till Markdown för att "
+"redigera den enklare."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6477,6 +6506,7 @@ msgstr ""
 "Denna Avancerade textredigerare har ett antal begränsningar och det "
 "rekommenderas att vara medveten om dem innan du använder den."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6563,11 +6593,11 @@ msgstr "Följ dessa steg för att låta Joplin synkronisera med ditt konto:"
 msgid "To continue, please enter your master password below."
 msgstr "För att fortsätta, ange ditt huvudlösenord nedan."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "För att skapa en ny tagg, skriv namnet och tryck på Enter."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr "För att ta bort en tagg, ta bort de associerade anteckningarna."
 
@@ -6699,6 +6729,7 @@ msgstr "Växla sidofältet"
 msgid "Toggle sort order field"
 msgstr "Växla sorteringsordningsfält"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Token har kopierats till urklipp!"
@@ -6809,7 +6840,7 @@ msgstr "Okänd filtyp"
 msgid "Unknown flag: %s"
 msgstr "Okänd flagga: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Okänd objekttyp hämtad - uppgradera Joplin till den senaste versionen"
@@ -6838,26 +6869,27 @@ msgstr "Avpublicera anteckningen"
 msgid "Unshare"
 msgstr "Sluta dela"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
-"Avaktivera delning av anteckningsbok ”%s”? Detta kan leda till att andra "
-"användare förlorar åtkomst till anteckningsboken."
+"Sluta dela anteckningsbok ”%s”? Detta kan leda till att andra användare "
+"förlorar åtkomst till anteckningsboken."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
-"Vill du inte dela den här anteckningsboken? Mottagarna kommer inte längre "
-"att ha tillgång till dess innehåll."
+"Sluta dela den här anteckningsboken? Mottagarna kommer inte längre att ha "
+"tillgång till dess innehåll."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:900
 msgid "Unsupported image type: %s"
-msgstr "Bildstorlek som inte stöds: %s"
+msgstr "Bildtyp som inte stöds: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6872,7 +6904,7 @@ msgstr ""
 "Fel: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Utan titel"
@@ -6902,6 +6934,7 @@ msgstr "Uppdatera totala storlekar"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -6923,7 +6956,8 @@ msgstr "Uppdaterade fjärrobjekt: %d."
 msgid "Updated: "
 msgstr "Uppdaterad: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Uppdaterad: %d."
@@ -6946,10 +6980,10 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Uppgradera synkroniseringsmålet till den senaste versionen."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
-msgstr "Ta ett foto"
+msgstr "Ladda upp foto"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7112,7 +7146,7 @@ msgstr "Vosk"
 msgid "Waiting for authorisation..."
 msgstr "Väntar på auktorisation..."
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
 msgstr "Väntar: Anteckningsbok %s från %s"
 

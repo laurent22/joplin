@@ -63,6 +63,8 @@ import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -683,6 +685,11 @@ class Application extends BaseApplication {
 					debug: new DebugService(reg.db()),
 					resourceService: ResourceService.instance(),
 					searchEngine: SearchEngine.instance(),
+					shim,
+					Note,
+					Folder,
+					Resource,
+					Setting,
 					ocrService: () => this.ocrService_,
 				};
 			});

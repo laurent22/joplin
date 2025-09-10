@@ -99,7 +99,7 @@ To find out more about Joplin Server Business and how it can be integrated to yo
 * **Docker Compose:** Version 1.29 or later (required if using PostgreSQL or multi-container setup)
 * **Database:**
   * SQLite (for testing/dev only)
-  * PostgreSQL 12+ (recommended for production)
+  * PostgreSQL 16.8+ (recommended for production)
 * **Reverse Proxy (optional):** Apache 2.4+ or Nginx 1.18+ (for public HTTPS access)
 
 ### Hardware requirements
