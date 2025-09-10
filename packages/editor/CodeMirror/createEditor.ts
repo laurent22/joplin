@@ -261,13 +261,6 @@ const createEditor = (
 				highlightSpecialChars(),
 				indentOnInput(),
 
-				EditorView.updateListener.of((update) => {
-					const found = update.transactions.find(tr => tr.effects.find(e => e.is(setSearchQuery)));
-					if (found) {
-						findNext(update.view);
-					}
-				}),
-
 				EditorView.domEventHandlers({
 					scroll: (_event, view) => {
 						props.onEvent({
@@ -316,6 +309,11 @@ const createEditor = (
 					notifyDocChanged(viewUpdate);
 					notifySelectionChange(viewUpdate);
 					notifySelectionFormattingChange(viewUpdate);
+
+					const found = viewUpdate.transactions.find(tr => tr.effects.find(e => e.is(setSearchQuery)));
+					if (found) {
+						findNext(viewUpdate.view);
+					}
 				}),
 
 				handleLinkEditRequests(() => {
