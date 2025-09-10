@@ -45,7 +45,7 @@ describe('OcrService', () => {
 		const lines = details.map(l => l.words.map(w => w.t).join(' ')).join('\n');
 		expect(lines).toBe(expectedText);
 		expect(details[0].words[0].t).toBe('This');
-		expect(details[0].words[0]).toEqual({ 't': 'This', 'bb': [36, 96, 92, 116], 'bl': [36, 96, 116, 116] });
+		expect(details[0].words[0]).toEqual({ 't': 'This', 'bb': [36, 96, 92, 116], 'bl': [36, 580, 116, 116] });
 
 		// Also check that the resource blob has not been updated
 		expect(processedResource1.blob_updated_time).toBe(resource1.blob_updated_time);
