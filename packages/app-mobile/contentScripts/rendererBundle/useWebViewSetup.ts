@@ -17,6 +17,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { ResourceInfos } from '@joplin/renderer/types';
 import useContentScripts from './utils/useContentScripts';
 import uuid from '@joplin/lib/uuid';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 
 const logger = Logger.create('renderer/useWebViewSetup');
 
@@ -149,6 +150,8 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 		void messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
 	}, [messenger, contentScripts]);
 
+	const onRerenderRequestRef = useRef(()=>{});
+
 	const rendererControl = useMemo((): RendererControl => {
 		const renderer = messenger.remoteApi.renderer;
 
@@ -185,7 +188,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 			};
 
 			let settingsChanged = false;
-			const settings: RenderSettings = {
+			const getSettings = (): RenderSettings => ({
 				...options,
 				codeTheme: theme.codeThemeCss,
 				// We .stringify the theme to avoid a JSON serialization error involving
@@ -201,6 +204,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 					const key = `${pluginId}.${settingKey}`;
 					if (!pluginSettingKeysRef.current.has(key)) {
 						pluginSettingKeysRef.current.add(key);
+						onRerenderRequestRef.current();
 						settingsChanged = true;
 					}
 				},
@@ -220,12 +224,12 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
-			};
+			});
 
 			await transferResources(options.resources);
 
 			return {
-				settings,
+				getSettings,
 				getSettingsChanged() {
 					return settingsChanged;
 				},
@@ -234,23 +238,28 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 
 		return {
 			rerenderToBody: async (markup, options, cancelEvent) => {
-				const { settings, getSettingsChanged } = await prepareRenderer(options);
+				const { getSettings } = await prepareRenderer(options);
 				if (cancelEvent?.cancelled) return null;
 
-				const output = await renderer.rerenderToBody(markup, settings);
-				if (cancelEvent?.cancelled) return null;
+				const render = async () => {
+					if (cancelEvent?.cancelled) return;
 
-				if (getSettingsChanged()) {
-					return await renderer.rerenderToBody(markup, settings);
-				}
-				return output;
+					await renderer.rerenderToBody(markup, getSettings());
+				};
+
+				const queue = new AsyncActionQueue();
+				onRerenderRequestRef.current = async () => {
+					queue.push(render);
+				};
+
+				return await render();
 			},
 			render: async (markup, options) => {
-				const { settings, getSettingsChanged } = await prepareRenderer(options);
-				const output = await renderer.render(markup, settings);
+				const { getSettings, getSettingsChanged } = await prepareRenderer(options);
+				const output = await renderer.render(markup, getSettings());
 
 				if (getSettingsChanged()) {
-					return await renderer.render(markup, settings);
+					return await renderer.render(markup, getSettings());
 				}
 				return output;
 			},

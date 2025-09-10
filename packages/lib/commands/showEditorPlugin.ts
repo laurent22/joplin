@@ -44,7 +44,7 @@ export const runtime = (): CommandRuntime => {
 				throw new Error(`No controller registered for editor view ${editorView.id}`);
 			}
 
-			const previousVisible = editorView.parentWindowId === windowId && controller.isVisible();
+			const previousVisible = editorView.parentWindowId === windowId && controller.visible;
 
 			if (show && previousVisible) {
 				logger.info(`Editor is already visible: ${editorViewId}`);
@@ -68,7 +68,7 @@ export const runtime = (): CommandRuntime => {
 			};
 			Setting.setValue('plugins.shownEditorViewIds', getUpdatedShownViewIds());
 
-			controller.setOpened(show);
+			await controller.setOpen(show);
 		},
 	};
 };

@@ -45,6 +45,41 @@ test.describe('pluginApi', () => {
 		}));
 	});
 
+	test('should report the correct visibility state for dialogs', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Dialog test note');
+
+		const editor = mainScreen.noteEditor;
+		const expectVisible = async (visible: boolean) => {
+			// Check UI visibility
+			if (visible) {
+				await expect(mainScreen.dialog).toBeVisible();
+			} else {
+				await expect(mainScreen.dialog).not.toBeVisible();
+			}
+
+			// Check visibility reported through the plugin API
+			await expect.poll(async () => {
+				await mainScreen.goToAnything.runCommand(app, 'getTestDialogVisibility');
+
+				const editorContent = await editor.contentLocator();
+				return editorContent.textContent();
+			}).toBe(JSON.stringify({
+				visible: visible,
+				active: visible,
+			}));
+		};
+		await expectVisible(false);
+
+		await mainScreen.goToAnything.runCommand(app, 'showTestDialog');
+		await expectVisible(true);
+
+		// Submitting the dialog should include form data in the output
+		await mainScreen.dialog.getByRole('button', { name: 'Okay' }).click();
+		await expectVisible(false);
+	});
+
 	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
 		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
 		const mainScreen = await new MainScreen(mainWindow).setup();
@@ -121,6 +156,31 @@ test.describe('pluginApi', () => {
 		// delay should cause the test to fail if this bug returns:
 		await msleep(Second);
 		await expect(noteEditor.codeMirrorEditor).toHaveText(expectedUpdatedText);
+	});
+
+	test('should support hiding and showing panels', async ({ startAppWithPlugins }) => {
+		const { mainWindow, app } = await startAppWithPlugins(['resources/test-plugins/panels.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note (panels)');
+
+		const panelLocator = await mainScreen.pluginPanelLocator('org.joplinapp.plugins.example.panels');
+
+		const noteEditor = mainScreen.noteEditor;
+		await mainScreen.goToAnything.runCommand(app, 'testShowPanel');
+		await expect(noteEditor.codeMirrorEditor).toHaveText('visible');
+
+		// Panel should be visible
+		await expect(panelLocator).toBeVisible();
+		// The panel should have the expected content
+		const panelContent = panelLocator.contentFrame();
+		await expect(
+			panelContent.getByRole('heading', { name: 'Panel content' }),
+		).toBeAttached();
+
+		await mainScreen.goToAnything.runCommand(app, 'testHidePanel');
+		await expect(noteEditor.codeMirrorEditor).toHaveText('hidden');
+
+		await expect(panelLocator).not.toBeVisible();
 	});
 });
 

@@ -30,6 +30,7 @@ import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 import CommandService from '@joplin/lib/services/CommandService';
 import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -273,6 +274,17 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	]);
 
 	useEffect(() => {
+		const listener = (event: ResourceChangeEvent) => {
+			editorRef.current?.onResourceChanged(event.id);
+		};
+
+		eventManager.on(EventName.ResourceChange, listener);
+		return () => {
+			eventManager.off(EventName.ResourceChange, listener);
+		};
+	}, [props.resourceInfos]);
+
+	useEffect(() => {
 		if (!webviewReady) return;
 
 		let lineCount = 0;
@@ -366,6 +378,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			katexEnabled: Setting.value('markdown.plugin.katex'),
 			inlineRenderingEnabled: Setting.value('editor.inlineRendering'),
 			imageRenderingEnabled: Setting.value('editor.imageRendering'),
+			highlightActiveLine: Setting.value('editor.highlightActiveLine'),
 			themeData: {
 				...styles.globalTheme,
 				marginLeft: 0,

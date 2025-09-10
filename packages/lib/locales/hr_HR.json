@@ -2,20 +2,45 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"„%s” ne sadrži potrebno svojstvo „%s”."
 	],
+	"%d day": [
+		"%d dan",
+		"%d dana",
+		"%d dana"
+	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB memorije"
 	],
+	"%d hour": [
+		"%d sat",
+		"%d sata",
+		"%d sati"
+	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
-		"%d MB za bilješku ili privitak"
+		"%d MB po bilješci ili privitku"
+	],
+	"%d minute": [
+		"%d minunta",
+		"%d minunte",
+		"%d minunta"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"%d bilješka se poklapa s ovim uzorkom. Želiš li je izbrisati?",
+		"%d bilješke se poklapaju s ovim uzorkom. Želiš li ih izbrisati?",
+		"%d bilježaka se poklapaju s ovim uzorkom. Želiš li ih izbrisati?"
+	],
+	"%d note will be permanently deleted. Continue?": [
+		"%d bilješka će se trajno izbrisati. Nastaviti?",
+		"%d bilješke će se trajno izbrisati. Nastaviti?",
+		"%d bilježaka će se trajno izbrisati. Nastaviti?"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d slika snimljeno"
 	],
 	"%s": [
 		"%s"
@@ -50,26 +75,40 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be greater than %s": [
+		"%s ne može biti veći od %s"
+	],
 	"%s cannot be less than %s": [
-		""
+		"%s ne može biti manji od %s"
+	],
+	"%s from %s": [
+		"%s od %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s nije optimiran za sinkronizaciju mnogih malih datoteka, stoga će početna sinkronizacija biti spora."
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s mora biti ispravan cijeli broj"
 	],
 	"%s tab opened": [
-		""
+		"%s kartica otvorena"
 	],
 	"%s: %d": [
 		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d bilješka",
+		"%s: %d bilješke",
+		"%s: %d bilježaka"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Nedostaje lozinka."
 	],
 	"&Edit": [
 		"&Uredi"
@@ -92,6 +131,9 @@
 	"&View": [
 		"&Prikaz"
 	],
+	"&Window": [
+		"Pro&zor"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -99,37 +141,43 @@
 		"(U dodatku: %s)"
 	],
 	"(level %d)": [
-		""
+		"(razina %d)"
 	],
 	"(None)": [
 		"(Ništa)"
 	],
 	"(Read-only)": [
-		""
+		"(samo-za-čitanje)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Ovaj upit možeš deaktivirati u opcijama)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"- Kamera: za dozvoljavanje snimanja slike i prilaganje slike bilješci."
+		"- Kamera: za snimanje slike i prilaganje slike bilješci."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
-		"- Mjesto: dozvoli prilaganje geografskih podataka mjesta bilješci."
+		"- Mjesto: za prilaganje geografskih podataka mjesta bilješci."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Spremište: za dozvoljavanje prilaganja datoteka bilješkama i aktiviranje sinkronizacije datotečnog sustava."
+		"- Spremište: za prilaganje datoteka bilješkama i aktiviranje sinkronizacije datotečnog sustava."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		"Naredba za oznaku <tag-command> može biti „add”, „remove”, „list” ili „notetags” za dodavanje ili uklanjanje oznake [tag] bilješci [note], za popis bilježaka povezanih s oznakom [tag] ili za popis oznaka povezanih s bilješkom [note]. Naredba `tag list` može se koristiti za popis svih oznaka (koristi -l za dugačku opciju)."
+		"Naredba za oznaku <tag-command> može biti „add”, „remove”, „list” ili „notetags” za dodavanje ili uklanjanje oznake [tag] u bilješci [note], za popis bilježaka povezanih s oznakom [tag] ili za popis oznaka povezanih s bilješkom [note]. Naredba `tag list` može se koristiti za popis svih oznaka (koristi -l za dugačku opciju)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"Naredba za zadatak <todo-command> može biti „toggle” ili „clear”. Koristi „toggle” za prebacivanje zadanog zadatka između završenog i nezavršenog stanja (ako je cilj uobičajena bilješka, pretvorit će se u zadatak). Koristi „clear” za pretvaranje zadatka u uobičajenu bilješku."
 	],
+	"[None]": [
+		"[Ništa]"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Popis riječi odvojenih zarezima. Može se koristiti za neobične riječi, kako bi se glasovnom tipkanju pomoglo da ih ispravno napiše."
+	],
+	"A new update (%s) is available": [
+		"Dostupna je nova verzija (%s)"
 	],
 	"A3": [
 		"A3"
@@ -141,7 +189,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Informacije"
 	],
 	"About Joplin": [
 		"O Joplinu"
@@ -158,6 +206,15 @@
 	"Accept": [
 		"Prihvati"
 	],
+	"Accepted invitations": [
+		"Prihvaćene pozivnice"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Prihvaćeno: Bilježnica %s od %s"
+	],
+	"Accepting share...": [
+		"Prihvaćanje dijeljenja …"
+	],
 	"Access denied: Please check your username and password": [
 		"Pristup odbijen: Provjeri svoje korisničko ime i lozinku"
 	],
@@ -166,6 +223,12 @@
 	],
 	"Account": [
 		"Račun"
+	],
+	"Account information": [
+		"Podaci računa"
+	],
+	"Account type": [
+		"Vrsta računa"
 	],
 	"Action": [
 		"Radnja"
@@ -191,17 +254,26 @@
 	"Add recipient:": [
 		"Dodaj primaoca:"
 	],
+	"Add tags:": [
+		"Dodaj oznake:"
+	],
 	"Add title": [
 		"Dodaj naslov"
 	],
 	"Add to dictionary": [
 		"Dodaj u rječnik"
 	],
+	"Add to note": [
+		"Dodaj bilješci"
+	],
+	"Added new: %s": [
+		"Novo dodana: %s"
+	],
 	"Added tag: %s": [
-		""
+		"Dodana oznaka: %s"
 	],
 	"Adds tag": [
-		""
+		"Dodaje oznaku"
 	],
 	"Admin": [
 		"Administrator"
@@ -212,14 +284,20 @@
 	"Advanced options": [
 		"Napredne opcije"
 	],
+	"Advanced settings": [
+		"Napredne postavke"
+	],
 	"Advanced tools": [
 		"Napredni alati"
+	],
+	"all": [
+		"sve"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Svi podaci, uključujući bilješke, bilježnice i oznake će se trajno izbrisati."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"Sve greške sinkronizacije elemenata su označene kao „zanemareno“."
 	],
 	"All notes": [
 		"Sve bilješke"
@@ -228,10 +306,10 @@
 		"Svi mogući priključci se koriste – prijavi problem na %s"
 	],
 	"All shared folders:": [
-		""
+		"Sve dijeljene mape:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
-		""
+		"Dozvoljava otklanjanje grešaka dodataka za mobitel. Detalje pogledaj u %s."
 	],
 	"Also displays unset and hidden config variables.": [
 		"Također prikazuje nepostavljene i skrivene varijable konfiguracije."
@@ -239,11 +317,20 @@
 	"Also publish linked notes": [
 		"Također objavi povezane bilješke"
 	],
+	"Alternative instance ID: %s": [
+		"ID alternativne instance: %s"
+	],
 	"Always": [
 		"Uvijek"
 	],
+	"Always ask": [
+		"Uvijek pitaj"
+	],
 	"Always open %s files without asking.": [
-		""
+		"Uvijek otvori %s datoteke bez pitanja."
+	],
+	"Always resize": [
+		"Uvijek promijeni veličinu"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
 		"Nejednoznačna bilježnica „%s”. Umjesto toga koristi ID bilježnice – pritisni „ti” za prikaz kratkog ID-a bilježnice ili koristi $b za aktualno odabranu bilježnicu"
@@ -252,16 +339,16 @@
 		"Nejednoznačna bilježnica „%s”. Umjesto toga koristi kratki ID bilježnice – pritisni „ti” za prikaz kratkog ID-a bilježnice"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"Pronađen je automatski spremljen crtež. Priložiti kopiju bilješci?"
 	],
 	"An error occurred: %s": [
-		""
+		"Dogodila se greška: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Dostupna je nova verzija. Želiš li je sada preuzeti?"
 	],
 	"Android API level: %d": [
-		""
+		"Razina Android API-ja: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Svaki e-mail poslan na ovu adresu će se pretvoriti u bilješku i dodati u tvoju zbirku. Bilješka će se spremiti u bilježnicu „Dolazna pošta”"
@@ -274,6 +361,12 @@
 	],
 	"Apply": [
 		"Primijeni"
+	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"Stvarno želiš vratiti standardni raspored alatne trake?\nTo je nepovratna radnja."
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Stvarno želiš izbrisati svu povijest za ovu bilješku? Ovo je nepovratna radnja."
 	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Stvarno želiš obnoviti ključ autorizacije?"
@@ -288,10 +381,10 @@
 		"Aritim tamna"
 	],
 	"Associated tags:": [
-		""
+		"Povezane oznake:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
-		""
+		"Trenutačno se Joplin Web može otvoriti samo u jednoj kartici odjednom. Zatvori drugu instancu Joplina."
 	],
 	"Attach": [
 		"Priloži"
@@ -311,11 +404,14 @@
 	"attachment": [
 		"privitak"
 	],
+	"Attachment": [
+		"Privitak"
+	],
 	"Attachment conflict: \"%s\"": [
 		"Konflikt s privitkom: „%s”"
 	],
 	"Attachment download behaviour": [
-		"Preuzimanje privitaka"
+		"Ponašanje pri preuzimanju privitaka"
 	],
 	"Attachments": [
 		"Privici"
@@ -324,13 +420,16 @@
 		"Privici koji se nisu mogli preuzeti"
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
-		"Oprez: Ako promijeniš ovo mjesto, pazi da kopiraš sav svoj sadržaj na to mjesto prije sinkronizacije, jer će se inače ukloniti sve datoteke! Saznaj više na ČPP-stranici: %s"
+		"Oprez: Ako promijeniš ovo mjesto, pazi da kopiraš sav svoj sadržaj na njega prije sinkronizacije, jer će se inače sve datoteke ukloniti! Saznaj više na ČPP stranici: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
 		"Autentifikacija nije završena (nije dobiven ključ autentifikacije)."
 	],
 	"Authorisation token:": [
 		"Ključ autorizacije:"
+	],
+	"Authorise": [
+		"Autoriziraj"
 	],
 	"Auto": [
 		"Automatski"
@@ -339,19 +438,19 @@
 		"Automatski dodaj deaktivirane račune za brisanje"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		""
+		"Automatski formatiraj Markdown u uređivaču formatiranog teksta"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Automatski uskladi zagrade, navodnike itd."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Automatski dovrši Markdown i HTML"
 	],
 	"Automatically check for updates": [
 		"Automatski traži nove verzije"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Automatski izbriši bilješke u smeću nakon određenog broja dana"
 	],
 	"Automatically switch theme to match system theme": [
 		"Automatski promijeni temu na temu sustava"
@@ -363,7 +462,7 @@
 		"Osnovno"
 	],
 	"Beta": [
-		""
+		"Beta"
 	],
 	"Bold": [
 		"Podebljano"
@@ -375,19 +474,19 @@
 		"Pregledaj …"
 	],
 	"Built-in": [
-		""
+		"Ugrađeno"
 	],
 	"Bulleted List": [
 		"Popis s predznakom"
 	],
 	"by %s": [
-		""
+		"od %s"
 	],
 	"by word": [
-		""
+		"po riječi"
 	],
 	"Camera": [
-		""
+		"Kamera"
 	],
 	"Can Share": [
 		"Može dijeliti"
@@ -405,7 +504,7 @@
 		"Prekida se sinkronizacija u pozadini … Pričekaj."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"Prekidanjem će se snimka odbaciti. Ovaj se postupak ne može poništiti. Stvarno želiš nastaviti?"
 	],
 	"Cancelling...": [
 		"Prekida se …"
@@ -417,7 +516,7 @@
 		"Nije moguće pristupiti %s"
 	],
 	"Cannot change encrypted item": [
-		"Nije moguće promijeniti šifriran element"
+		"Nije moguće promijeniti šifrirani element"
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Nije moguće kopirati bilješku u bilježnicu „%s”"
@@ -450,13 +549,13 @@
 		"Nije moguće aktualizirati ključ: nedostaju podaci autentifikacije. Ponovno pokretanje sinkronizacije može ispraviti problem."
 	],
 	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
-		"Nije moguće spremiti %s „%s” jer je veći od dozvoljene granice (%s)"
+		"Nije moguće spremiti %s „%s” jer je veći od dozvoljenog ograničenja (%s)"
 	],
 	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
 		"Nije moguće spremiti %s „%s” jer bi se prekoračila ukupna dozvoljena veličina (%s) za ovaj račun"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"Nije moguće dijeliti šifriranu bilježnicu s primateljem %s, jer obostrano šifriranje nije aktivirano. To se može riješiti putem Konfiguracija > Šifriranje."
+		"Nije moguće dijeliti šifriranu bilježnicu s primaocem %s jer sveobuhvatno šifriranje nije aktivirano. To se može riješiti putem Konfiguracija > Šifriranje."
 	],
 	"Case sensitive": [
 		"Razlikuje velika i mala slova"
@@ -467,8 +566,11 @@
 	"Change language": [
 		"Promijeni jezik"
 	],
+	"Change ratio": [
+		"Promijeni omjer"
+	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Promijeni prečac za „%s“"
 	],
 	"Characters": [
 		"Broj znakova"
@@ -476,8 +578,11 @@
 	"Characters excluding spaces": [
 		"Broj znakova bez razmaka"
 	],
+	"Check": [
+		"Označi"
+	],
 	"Check elements to display in the toolbar": [
-		""
+		"Označi elemente za prikaz u alatnoj traci"
 	],
 	"Check for updates...": [
 		"Traži nove verzije …"
@@ -489,7 +594,10 @@
 		"Označivo polje"
 	],
 	"Checkbox list": [
-		"Označivi popis"
+		"Popis s označivim poljima"
+	],
+	"Checked": [
+		"Označeno"
 	],
 	"Checking... Please wait.": [
 		"Provjeravanje … Pričekaj."
@@ -506,11 +614,14 @@
 	"Clear alarm": [
 		"Poništi upozorenje"
 	],
+	"Clear search": [
+		"Izbriši pretragu"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Za obnavljanje bilješke pritisni „%s”. Kopirat će se u bilježnicu „%s”. Trenutačna verzija bilješke neće se zamijeniti niti promijeniti."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Pritisni „start“ za prilaganje nove glasovne bilješke bilješci."
 	],
 	"Click to add tags...": [
 		"Pritisni za dodavanje oznaka …"
@@ -518,29 +629,35 @@
 	"Client ID: %s": [
 		"ID klijenta: %s"
 	],
+	"close": [
+		"zatvori"
+	],
 	"Close": [
 		"Zatvori"
+	],
+	"Close dialog": [
+		"Zatvori dijalog"
 	],
 	"Close dropdown": [
 		"Zatvori padajući izbornik"
 	],
 	"Close side menu": [
-		""
+		"Zatvori bočni izbornik"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Zatvori program, zatim izbriši svoj profil u „%s“ i ponovo pokreni program. Prije toga najprije izradi sigurnosnu kopiju izvozom svih tvojih bilježaka kao JEX."
 	],
 	"Close Window": [
 		"Zatvori prozor"
 	],
 	"Closing session...": [
-		""
+		"Zatvaranje sesije …"
 	],
 	"Cmd-click to open": [
-		""
+		"Cmd-klik za otvaranje"
 	],
 	"Cmd-click to open: %s": [
-		""
+		"Cmd-klik za otvaranje: %s"
 	],
 	"Code": [
 		"Kȏd"
@@ -551,8 +668,20 @@
 	"Code View": [
 		"Prikaz koda"
 	],
+	"Code:": [
+		"Kod:"
+	],
+	"Collaborate on a notebook with others": [
+		"Surađuj s drugima na bilježnici"
+	],
 	"Collaborate on notebooks with others": [
 		"Surađuj s drugima na bilježnicama"
+	],
+	"Collapse all notebooks": [
+		"Sklopi sve bilježnice"
+	],
+	"Collapsed": [
+		"Skupljeno"
 	],
 	"Coming alarms": [
 		"Nadolazeća upozorenja"
@@ -573,7 +702,16 @@
 		"Paleta naredbi …"
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Naredbe: `add` (dodaj), `remove` (ukloni), `list` (popis), `delete` (izbriši), `accept` (prihvati), `leave` (ostavi) i `reject` (odbaci)."
+	],
+	"Compact": [
+		"Kompaktno"
+	],
+	"Complete": [
+		"Završi"
+	],
+	"Complete to-do": [
+		"Završi zadatak"
 	],
 	"Completed": [
 		"Završeno"
@@ -582,13 +720,13 @@
 		"Dešifriranje je završeno."
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"Završeno s upozorenjima:\n%s"
 	],
 	"Completed: %s (%s)": [
 		"Završeno: %s (%s)"
 	],
 	"completion date": [
-		""
+		"datum završetka"
 	],
 	"Compress old changes": [
 		"Komprimiraj stare promjene"
@@ -597,7 +735,7 @@
 		"Konfiguracija"
 	],
 	"Configures the size of scrollbars used in the app.": [
-		""
+		"Konfigurira veličinu kliznih traka koje se koriste u programu."
 	],
 	"Confirm password cannot be empty": [
 		"Lozinka potvrde ne smije biti prazna"
@@ -617,17 +755,37 @@
 	"Conflicts (attachments)": [
 		"Konflikti (privici)"
 	],
+	"Connect to Joplin Cloud": [
+		"Poveži se na Joplin Cloud"
+	],
 	"Connect using your organisation account": [
-		""
+		"Poveži se s tvojim računom organizacije"
 	],
 	"Consolidated billing": [
 		"Konsolidirana naplata"
 	],
+	"Contains %d note": [
+		"Sadrži %d bilješku",
+		"Sadrži %d bilješke",
+		"Sadrži %d bilježaka"
+	],
 	"Content provided by %s": [
 		"Sadržaj pruža %s"
 	],
+	"Content provided by: %s": [
+		"Sadržaj pruža: %s"
+	],
 	"Continue": [
 		"Nastavi"
+	],
+	"Control character": [
+		"Kontrolni znak"
+	],
+	"Convert it": [
+		"Pretvori"
+	],
+	"Convert note to Markdown": [
+		"Pretvori bilješku u Markdown"
 	],
 	"Convert to note": [
 		"Pretvori u bilješku"
@@ -642,7 +800,7 @@
 		"Kopiraj"
 	],
 	"Copy dev mode command to clipboard": [
-		"Kopiraj programersku naredbu u međuspremnik"
+		"Kopiraj naredbu u modusu razvoja u međuspremnik"
 	],
 	"Copy external link": [
 		"Kopiraj vanjsku poveznicu"
@@ -652,6 +810,9 @@
 	],
 	"Copy Link Address": [
 		"Kopiraj adresu poveznice"
+	],
+	"Copy link to website": [
+		"Kopiraj poveznicu na web stranicu"
 	],
 	"Copy Markdown link": [
 		"Kopiraj Markdown poveznicu"
@@ -670,6 +831,9 @@
 	"Copy token": [
 		"Kopiraj ključ"
 	],
+	"Copy version info": [
+		"Kopiraj podatke verzije"
+	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"Neuspjelo autoriziranje programa:\n\n%s\n\nPokušaj ponovo."
 	],
@@ -678,6 +842,9 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Neuspjelo povezivanje s repozitorijem dodataka."
+	],
+	"Could not convert note to Markdown: %s": [
+		"Neuspjelo pretvaranja bilješke u Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Neuspio izvoz bilježaka: %s"
@@ -709,8 +876,14 @@
 	"Create a notebook": [
 		"Stvori bilježnicu"
 	],
+	"Create new notebook": [
+		"Stvori novu bilježnicu"
+	],
 	"Create new profile...": [
 		"Stvori novi profil …"
+	],
+	"Create note": [
+		"Stvori bilješku"
 	],
 	"Create notebook": [
 		"Stvori bilježnicu"
@@ -742,6 +915,9 @@
 	"Created: %s": [
 		"Stvoreno: %s"
 	],
+	"Creates a new note with an attachment of type %s": [
+		"Stvara novu bilješku s privitkom vrste %s"
+	],
 	"Creates a new note.": [
 		"Stvara novu bilješku."
 	],
@@ -751,14 +927,32 @@
 	"Creates a new to-do.": [
 		"Stvara novi zadatak."
 	],
+	"Creating new note...": [
+		"Stvaranje nove bilješke …"
+	],
+	"Creating new to-do...": [
+		"Stvaranje novog zadatka …"
+	],
+	"Creating note \"%s\"...": [
+		"Stvara se bilješka „%s“ …"
+	],
+	"Creating note.": [
+		"Stvara se bilješka."
+	],
 	"Creating report...": [
 		"Stvaranje izvještaja …"
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl-klik za otvaranje"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl-klik za otvaranje: %s"
+	],
+	"current match": [
+		"trenutačno poklapanje"
+	],
+	"Current password": [
+		"Trenutačna lozinka"
 	],
 	"Current version is up-to-date.": [
 		"Trenutačna verzija je aktualna."
@@ -770,16 +964,16 @@
 		"Prilagođeni redoslijed"
 	],
 	"Custom stylesheet for Joplin-wide app styles": [
-		"Prilagođeni stilovi za Joplinove programske stilove"
+		"Prilagođena definicija stilova za Joplinove stilove"
 	],
 	"Custom stylesheet for rendered Markdown": [
-		"Prilagođeni stilovi za prikazani Markdown"
+		"Prilagođena definicija stilova za prikazani Markdown"
 	],
 	"Custom TLS certificates": [
 		"Prilagođeni TLS certifikati"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Prilagodi natpis za objavljivanje bilježaka"
 	],
 	"Cut": [
 		"Izreži"
@@ -815,7 +1009,7 @@
 		"Standardno"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Standardni naslov koji se koristi za dokumente koji su stvoreni sa skenerom."
 	],
 	"Default: %s": [
 		"Standardno: %s"
@@ -831,6 +1025,9 @@
 	],
 	"Delete expired tokens": [
 		"Izbriši istekle ključeve"
+	],
+	"Delete history": [
+		"Izbriši povijest"
 	],
 	"Delete line": [
 		"Izbriši redak"
@@ -862,6 +1059,9 @@
 	"Delete this profile?": [
 		"Izbrisati ovaj profil?"
 	],
+	"Deleted": [
+		"Izbrisano"
+	],
 	"Deleted local items: %d.": [
 		"Izbrisani lokalni elementi: %d."
 	],
@@ -869,7 +1069,7 @@
 		"Izbrisani eksterni elementi: %d."
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"Zauvijek briše bilješke, preskakajući smeće."
 	],
 	"Deletes the given notebook.": [
 		"Briše zadanu bilježnicu."
@@ -883,17 +1083,23 @@
 	"Deletes the notes without asking for confirmation.": [
 		"Briše bilješke bez traženja potvrde."
 	],
+	"Deletion log": [
+		"Dnevnik brisanja"
+	],
+	"Deselect": [
+		"Poništi odabir"
+	],
 	"Destination format: %s": [
 		"Format odredišta: %s"
 	],
 	"Detailed": [
-		""
+		"Detaljno"
 	],
 	"Dev": [
-		""
+		"Razvoj"
 	],
 	"Device: %s": [
-		""
+		"Uređaj: %s"
 	],
 	"Directory": [
 		"Mapa"
@@ -910,14 +1116,23 @@
 	"Disable safe mode and restart": [
 		"Deaktiviraj sigurni modus i pokreni program ponovo"
 	],
+	"Disable synchronisation": [
+		"Deaktiviraj sinkronizaciju"
+	],
 	"Disable Web Clipper Service": [
 		"Dektiviraj Web Clipper uslugu"
 	],
 	"Disabled": [
 		"Deaktivirano"
 	],
+	"Disabled keys": [
+		"Deaktivirani ključevi"
+	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Deaktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo sinkronizirati i poslati nešifrirano u cilj sinkronizacije. Želiš li nastaviti?"
+	],
+	"Discard": [
+		"Odbaci"
 	],
 	"Discard changes": [
 		"Odbaci promjene"
@@ -932,7 +1147,7 @@
 		"Prikazuje samo određen broj <num> bilježaka."
 	],
 	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
-		"Prikazuje samo elemente određene vrste. Može biti `n` za bilješke,`t` za zadatke ili `nt` za bilješke i zadatke (npr.`-tt` prikazuje samo zadatke, `-ttd` prikazuje bilješke i zadatke."
+		"Prikazuje samo elemente određene vrste. Može biti `n` za bilješke,`t` za zadatke ili `nt` za bilješke i zadatke (npr.`-tt` prikazuje samo zadatke, `-ttd` prikazuje bilješke i zadatke)."
 	],
 	"Displays summary about the notes and notebooks.": [
 		"Prikazuje sažetak o bilješkama i bilježnicama."
@@ -958,17 +1173,23 @@
 	"Do not ask for confirmation.": [
 		"Nemoj zatražiti potvrdu."
 	],
+	"Do not ask for user confirmation.": [
+		"Nemoj zatražiti potvrdu korisnika."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju lozinku."
 	],
 	"Document scanner: Title template": [
-		""
+		"Skener dokumenata: Predložak naslova"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		""
+		"Nemoj dozvoliti primaocu dijeljenja da piše u dijeljenu bilježnicu. Vrijedi samo za podnaredbu `add`."
 	],
 	"Don't show this message again": [
-		""
+		"Ovu poruku više nemoj prikazati"
+	],
+	"Donate, website": [
+		"Doniraj, web stranica"
 	],
 	"Done": [
 		"Gotovo"
@@ -978,6 +1199,9 @@
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Preuzmi i instaliraj odgovarajuće proširenje za tvoj preglednik:"
+	],
+	"Download it now": [
+		"Preuzmi sada"
 	],
 	"Downloaded": [
 		"Preuzeto"
@@ -992,7 +1216,7 @@
 		"Preuzimanje"
 	],
 	"Downloading %s language files...": [
-		"Preuzimanje jezičnih datoteka za %s …"
+		"Preuzimanje %s jezičnih datoteka …"
 	],
 	"Downloading resources...": [
 		"Preuzimanje resursa …"
@@ -1001,10 +1225,10 @@
 		"Drakula"
 	],
 	"Draw picture": [
-		""
+		"Crtaj slike"
 	],
 	"Drawing": [
-		""
+		"Crtanje"
 	],
 	"Drop notes or files here": [
 		"Ispusti bilješke ili dokumente ovdje"
@@ -1016,7 +1240,10 @@
 		"Dropbox prijava"
 	],
 	"Due": [
-		""
+		"Rok"
+	],
+	"due date": [
+		"datum roka"
 	],
 	"Duplicate": [
 		"Dupliciraj"
@@ -1030,11 +1257,17 @@
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		"Duplicira bilješke koje se poklapaju s bilješkom <note> u bilježnicu [notebook]. Ako nijedna bilježnica nije zadana, bilješka se duplicira u trenutačnu bilježnicu."
 	],
+	"Duration: %s": [
+		"Trajanje: %s"
+	],
 	"Edit": [
 		"Uredi"
 	],
+	"Edit as Markdown": [
+		"Uredi kao Markdown"
+	],
 	"Edit as Rich Text": [
-		""
+		"Uredi kao formatirani tekst"
 	],
 	"Edit link": [
 		"Uredi poveznicu"
@@ -1053,6 +1286,9 @@
 	],
 	"Editor": [
 		"Uređivač"
+	],
+	"Editor actions": [
+		"Radnje uređivača"
 	],
 	"Editor font": [
 		"Font uređivača"
@@ -1087,6 +1323,9 @@
 	"Email to Note": [
 		"E-mail u bilješku"
 	],
+	"Email To Note, login information": [
+		"E-mail u bilješku, podaci prijave"
+	],
 	"Emails": [
 		"E-mailovi"
 	],
@@ -1094,7 +1333,7 @@
 		"istaknuti tekst"
 	],
 	"Empty trash": [
-		""
+		"Isprazni smeće"
 	],
 	"Enable": [
 		"Aktiviraj"
@@ -1124,13 +1363,19 @@
 		"Aktiviraj šifriranje"
 	],
 	"Enable file:// URLs for images and videos": [
-		""
+		"Aktiviraj file:// URL-ove za slike i videa"
 	],
 	"Enable footnotes": [
 		"Aktiviraj fusnote"
 	],
 	"Enable Fountain syntax support": [
 		"Aktiviraj podršku za Fountain sintaksu"
+	],
+	"Enable handwritten transcription": [
+		"Aktiviraj rukom pisanu transkripciju"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Aktiviraj natpis za pretvaranje HTML-a u Markdown"
 	],
 	"Enable Linkify": [
 		"Aktiviraj Linkify"
@@ -1151,13 +1396,22 @@
 		"Aktiviraj povijest bilježaka"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Aktiviraj optičko prepoznavanje znakova (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Aktiviraj ili deaktiviraj dodatke"
 	],
 	"Enable PDF viewer": [
-		"Aktiviraj prikazivač PDF datoteka"
+		"Aktiviraj preglednik PDF datoteka"
+	],
+	"Enable plugin support": [
+		"Aktiviraj podršku za dodatke"
 	],
 	"Enable soft breaks": [
 		"Aktiviraj prijelom redaka"
+	],
+	"Enable spell checking in Markdown editor": [
+		"Aktiviraj provjeru pravopisa u Markdown uređivaču"
 	],
 	"Enable spellcheck in the text editor": [
 		"Aktiviraj provjeru pravopisa u uređivaču teksta"
@@ -1184,10 +1438,10 @@
 		"Aktivirano"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		""
+		"Omogućuje nastavljanje Markdown popisa, automatsko zatvaranje HTML oznaka i druga automatska dovršavanja oznaka."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		""
+		"Omogućuje zamjenu Markdown uzorka u uređivaču formatiranog teksta. Na primjer, kada je aktivirano, upisivanjem **bold** stvara podebljani tekst."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo sinkronizirati i poslati šifrirano u cilj sinkronizacije."
@@ -1214,7 +1468,10 @@
 		"Šifriranje:"
 	],
 	"End-to-end encryption": [
-		"Obostrano šifriranje"
+		"Sveobuhvatno šifriranje"
+	],
+	"Ends voice typing": [
+		"Završava glasovno tipkanje"
 	],
 	"Enter code here": [
 		"Ovdje upiši kod"
@@ -1225,8 +1482,17 @@
 	"Enter notebook title": [
 		"Upiši naslov bilježnice"
 	],
+	"Enter password": [
+		"Upiši lozinku"
+	],
+	"Enter the code": [
+		"Upiši kod"
+	],
+	"Enter the code:": [
+		"Upiši kod:"
+	],
 	"Entering selection mode": [
-		""
+		"Ulazak u modus odabira"
 	],
 	"Enum": [
 		"Prebrojavanje"
@@ -1238,7 +1504,7 @@
 		"Greška prilikom otvaranja bilješke u uređivaču: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"Greška pri pokretanju kamere: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Greška. Provjeri točnost URL-a, korisničko imena, lozinke itd. kao i dostupnost cilja sinkronizacije. Prijavljena greška bila je:"
@@ -1255,8 +1521,23 @@
 	"Evernote Export File (as Markdown)": [
 		"Evernote datoteka izvoza (kao Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote datoteke izvoza (direktorij, kao HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote datoteke izvoza (direktorij, kao Markdown)"
+	],
 	"Exits the application.": [
 		"Zatvara program."
+	],
+	"Expand %s": [
+		"Rasklopi %s"
+	],
+	"Expand all notebooks": [
+		"Rasklopi sve bilježnice"
+	],
+	"Expanded": [
+		"Rasklopljeno"
 	],
 	"Export": [
 		"Izvezi"
@@ -1265,13 +1546,16 @@
 		"Izvezi sve"
 	],
 	"Export all notes as JEX": [
-		"Izvezi sve biljepke kao JEX"
+		"Izvezi sve bilješke kao JEX"
 	],
 	"Export debug report": [
 		"Izvezi izvještaj o otklanjanju grešaka"
 	],
 	"Export Debug Report": [
 		"Izvezi izvještaj o otklanjanju grešaka"
+	],
+	"Export deletion log": [
+		"Izvezi dnevnik brisanja"
 	],
 	"Export profile": [
 		"Izvezi profil"
@@ -1304,10 +1588,10 @@
 		"Sigurnosni mehanizam: Ne briši lokalne podatke kad je cilj sinkronizacije prazan (često se radi o krivoj konfiguraciji ili o programskoj grešci)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"Sigurnosni mehanizam: Sinkronizacija je prekinuta kako bi se spriječilo gubljenje podataka jer je cilj sinkronizacije prazan ili oštećen. Za mijenjanje ovog ponašanja, aktiviraj sigurnosni mehanizam u postavkama sinkronizacije."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"Povezivanje s tvojim računom nije uspjelo. Pokušaj ponovo."
 	],
 	"Fatal error:": [
 		"Fatalna greška:"
@@ -1327,11 +1611,17 @@
 	"File system": [
 		"Datotečni sustav"
 	],
+	"Filter": [
+		"Filtar"
+	],
+	"Find": [
+		"Pronađi"
+	],
 	"Find: ": [
 		"Pronađi: "
 	],
 	"Finishes recording": [
-		""
+		"Završava snimanje"
 	],
 	"Firefox Extension": [
 		"Firefox proširenje"
@@ -1352,10 +1642,10 @@
 		"Fokusiraj naslov"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"Mapa „%s“ se dijeli sa:"
 	],
 	"Follow link": [
-		""
+		"Prati poveznicu"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Samo za otklanjanje grešaka: izvezi tvoj profil na vanjsku SD karticu."
@@ -1367,7 +1657,7 @@
 		"Za informacije o prilagođavanju prečaca pogledaj %s"
 	],
 	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
-		"Za daljnje informacije o obostranom šifriranju (E2EE) i savjete o tome kako ga aktivirati, pogledaj dokumentaciju:"
+		"Za daljnje informacije o sveobuhvatnom šifriranju (E2EE) i savjete o tome kako ga aktivirati, pogledaj dokumentaciju:"
 	],
 	"For the list of keyboard shortcuts and config options, type `help keymap`": [
 		"Za popis tipkovnih prečaca i opcija konfiguracije, upiši `help keymap`"
@@ -1402,10 +1692,10 @@
 		"Generiranje poveznica …"
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geografski podaci mjesta, provjera pravopisa, alatna traka uređivača, mijenjanje veličine slike"
 	],
 	"Get a quote": [
-		""
+		"Zatraži ponudu"
 	],
 	"Get it now:": [
 		"Nabavi sada:"
@@ -1417,16 +1707,19 @@
 		"Nabavlja ili postavlja vrijednost konfiguracije. Ako vrijednost [value] nije zadana, prikazat će vrijednost imena [name]. Ako ime [name] niti vrijednost [value] nisu zadani, ispisat će trenutačnu konfiguraciju."
 	],
 	"Glossary:": [
-		""
+		"Glosar:"
 	],
 	"go": [
-		""
+		"idi"
 	],
 	"Go back": [
-		""
+		"Idi natrag"
+	],
+	"Go to Joplin Cloud profile": [
+		"Idi na Joplin Cloud profil"
 	],
 	"Go to line": [
-		""
+		"Idi na redak"
 	],
 	"Go to source URL": [
 		"Idi na URL izvora"
@@ -1438,7 +1731,7 @@
 		"Odobri autorizaciju"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Jesi li autorizirao/la prijavu program u gore navedenom URL-u?"
 	],
 	"Header %d": [
 		"Zaglavlje %d"
@@ -1450,7 +1743,7 @@
 		"Pomoć"
 	],
 	"Here's what we do to make plugins safer:": [
-		""
+		"Evo što radimo kako bismo dodatke učinili sigurnijima:"
 	],
 	"Hermes enabled: %d": [
 		"Hermes aktiviran: %d"
@@ -1473,6 +1766,12 @@
 	"Hide keyboard": [
 		"Sakrij tipkovnicu"
 	],
+	"Hide password": [
+		"Sakrij lozinku"
+	],
+	"Hides warning": [
+		"Skriva upozorenje"
+	],
 	"Highlight": [
 		"Istaknuto"
 	],
@@ -1486,7 +1785,7 @@
 		"HTML mapa"
 	],
 	"HTML document": [
-		""
+		"HTML dokument"
 	],
 	"HTML File": [
 		"HTML datoteka"
@@ -1504,10 +1803,10 @@
 		"Bez aktivnosti"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Ako se privitak slike nalazi u zasebnom retku, i nakon nje slijedi prazan redak, prikazat će se odmah ispod Markdown izvora."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		""
+		"Ako si već autorizirao/la, pričekaj da se program sinkronizira s Joplin Cloud."
 	],
 	"Ignore": [
 		"Zanemari"
@@ -1515,26 +1814,41 @@
 	"Ignore TLS certificate errors": [
 		"Zanemari greške TLS certifikata"
 	],
+	"Ignored items that cannot be synchronised": [
+		"Zanemareni elemenati koje se ne mogu sinkronizirati"
+	],
 	"Images": [
 		"Slike"
 	],
 	"Import": [
 		"Uvezi"
 	],
+	"Import and Export": [
+		"Uvoz i izvoz"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		""
+		"Uvoz nije uspio. Provjeri je li odabrana JEX datoteka.\nDetalji: %s"
 	],
 	"Import from JEX": [
-		""
+		"Uvoz iz JEX datoteke"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"Uvezi bilješke iz JEX (Joplin Export) datoteke."
+	],
+	"Import or export your data": [
+		"Uvezi ili izvezi tvoje podatke"
+	],
+	"Imported successfully!": [
+		"Uspješno uvezeno!"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"Uvoz iz „%s” kao „%s” format. Pričekaj …"
 	],
 	"Importing notes...": [
 		"Uvoz bilježaka …"
+	],
+	"Importing...": [
+		"Uvoz …"
 	],
 	"Imports data into Joplin.": [
 		"Uvozi podatake u Joplin."
@@ -1552,7 +1866,7 @@
 		"Da bi se to obavilo, svi tvoji skupovi podataka moraju se šifrirati i sinkronizirati, stoga pokreni postupak preko noći.\n\nPokreni na sljedeći način:\n\n1. Sinkroniziraj sve tvoje uređaje.\n2. Pritisni „%s”.\n3. Pričekaj da postupak završi. Dok radi, nemoj mijenjati bilješke na drugim uređajima kako bi se izbjegli konflikti.\n4. Kad sinkronizacija završi na ovom uređaju, sinkroniziraj sve ostale uređaje i pričekaj da sinkronizacija tih uređaja završi.\n\nVažno: ovo moraš pokrenuti samo JEDNOM na jednom uređaju."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"Za sinkronizaciju nadogradi program na verziju %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Za korištenje sinkronizacije datotečnog sustava, potrebna je tvoja dozvola za pisanje u vanjsko spremište."
@@ -1566,8 +1880,17 @@
 	"In: %s": [
 		"U: %s"
 	],
+	"Incoming shares:": [
+		"Dolazna dijeljenja:"
+	],
 	"Incompatible": [
-		""
+		"Nekompatibilno"
+	],
+	"Incomplete": [
+		"Nepotpuno"
+	],
+	"Incomplete to-do": [
+		"Nepotpuni zadatak"
 	],
 	"Increase indent level": [
 		"Povećaj razinu uvlake"
@@ -1579,7 +1902,7 @@
 		"Uvuci više"
 	],
 	"Info": [
-		""
+		"Informacije"
 	],
 	"Information": [
 		"Informacije"
@@ -1605,6 +1928,9 @@
 	"Installed": [
 		"Instalirano"
 	],
+	"Installed (%d):": [
+		"Instalirano (%d):"
+	],
 	"Installing...": [
 		"Instaliranje …"
 	],
@@ -1621,13 +1947,16 @@
 		"Neispravna naredba: „%s”"
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"Neispravan format. Npr.: 48.8581372, 2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Neispravna vrijednost opcije: „%s”. Moguće vrijednosti su: %s."
 	],
 	"Invalid password": [
 		"Neispravna lozinka"
+	],
+	"iOS version: %s": [
+		"iOS verzija: %s"
 	],
 	"Italic": [
 		"Kurziv"
@@ -1642,7 +1971,13 @@
 		"Elementi koji se ne mogu dešifrirati"
 	],
 	"Items that cannot be synchronised": [
-		"Elementi koje se ne mogu sinkronizirati"
+		"Elementi koji se ne mogu sinkronizirati"
+	],
+	"Items with error: %s": [
+		"Elementi s greškom: %s"
+	],
+	"Join us on %s": [
+		"Pridruži nam se na %s"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin može sinkronizirati tvoje bilješke koristeći različite davatelje usluga. Odaberi jednog iz donjeg popisa."
@@ -1650,8 +1985,14 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud prijava"
+	],
+	"Joplin Desktop": [
+		"Joplin Desktop"
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"Joplin ne prepoznaje proširenje %s. Otvaranje ove datoteke bi moglo biti opasno. Što želiš uraditi?"
 	],
 	"Joplin Export Directory": [
 		"Joplin mapa izvoza"
@@ -1665,20 +2006,32 @@
 	"Joplin Forum": [
 		"Joplin forum"
 	],
+	"Joplin is already running.": [
+		"Joplin je već pokrenut."
+	],
+	"Joplin Mobile": [
+		"Joplin Mobile"
+	],
 	"Joplin Server": [
-		"Joplin poslužitelj"
+		"Joplin Server"
+	],
+	"Joplin Server Business": [
+		"Joplin Server Business"
 	],
 	"Joplin Server email": [
-		"Joplin poslužitelj email"
+		"Joplin Server e-mail"
+	],
+	"Joplin Server Login": [
+		"Joplin Server prijava"
 	],
 	"Joplin Server password": [
-		"Joplin poslužitelj lozinka"
+		"Joplin Server lozinka"
 	],
 	"Joplin Server URL": [
-		"Joplin poslužitelj URL"
+		"Joplin Server URL"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Joplin SSO autentifikacija"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper omogućuje spremanje web-stranica i slika ekrana iz tvog preglednika u Joplin."
@@ -1690,13 +2043,16 @@
 		"Joplinova vlastita usluga sinkronizacije. Također daje pristup Joplinskim funkcijama kao što su objavljivanje bilježaka ili suradnja na bilježnicama s drugima."
 	],
 	"Keep note history for": [
-		"Čuvaj povijest bilježaka"
+		"Zadrži povijest bilježaka za"
+	],
+	"Keep notes in the trash for": [
+		"Zadrži bilješke u smeću za"
 	],
 	"Keyboard Mode": [
 		"Modus tipkovnice"
 	],
 	"Keyboard Shortcut": [
-		"Tipkovni prečaci"
+		"Tipkovni prečac"
 	],
 	"Keyboard Shortcuts": [
 		"Tipkovni prečaci"
@@ -1708,13 +2064,16 @@
 		"Ključevi koji se moraju nadograditi"
 	],
 	"Landscape": [
-		"Ležeći"
+		"Polegnuto"
 	],
 	"Language": [
 		"Jezik"
 	],
+	"Language, date format": [
+		"Jezik, format datuma"
+	],
 	"Large": [
-		""
+		"Velika"
 	],
 	"Last error: %s": [
 		"Zadnja greška: %s"
@@ -1723,16 +2082,22 @@
 		"Kasnije"
 	],
 	"Latitude": [
-		""
+		"Geografska širina"
 	],
 	"Layout": [
 		"Raspored"
 	],
 	"Layout button sequence": [
-		"Slijed gumbova rasporeda"
+		"Raspored slijeda gumbova"
+	],
+	"Learn more": [
+		"Saznaj više"
 	],
 	"Leave it blank to download the language files from the default website": [
 		"Ostavi prazno za preuzimanje jezičnih datoteka sa standardne web stranice"
+	],
+	"Leave notebook": [
+		"Napusti bilježnicu"
 	],
 	"Leave notebook...": [
 		"Napusti bilježnicu …"
@@ -1747,13 +2112,18 @@
 		"Svijetla"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"Kao i svaki softver koji instaliraš, dodaci mogu potencijalno prouzročiti sigurnosne probleme ili gubitak podataka."
 	],
 	"Lines": [
 		"Broj redaka"
 	],
 	"Link": [
 		"Poveznica"
+	],
+	"Link created!": [
+		"Poveznica je stvorena!",
+		"Poveznice su stvorene!",
+		"Poveznice su stvorene!"
 	],
 	"Link description": [
 		"Opis poveznice"
@@ -1764,7 +2134,13 @@
 		"Poveznice su kopirane u međuspremnik!"
 	],
 	"Link text": [
-		"Poveži tekst"
+		"Tekst poveznice"
+	],
+	"Link to note...": [
+		"Poveznica na bilješku …"
+	],
+	"Links": [
+		"Poveznice"
 	],
 	"List item": [
 		"Element popisa"
@@ -1784,6 +2160,12 @@
 	"Log": [
 		"Dnevnik"
 	],
+	"Log in with your web browser": [
+		"Prijavi se s tvojim web preglednikom"
+	],
+	"Login to Joplin Cloud.": [
+		"Prijavi se na Joplin Cloud."
+	],
 	"Login with Dropbox": [
 		"Prijavi se s Dropbox"
 	],
@@ -1794,10 +2176,10 @@
 		"Odjava"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Dnevnici, profili, stanje sinkronizacije"
 	],
 	"Longitude": [
-		""
+		"Geografska dužina"
 	],
 	"Make a donation": [
 		"Doniraj"
@@ -1814,6 +2196,12 @@
 	"Manage profiles": [
 		"Upravljaj profilima"
 	],
+	"Manage shared notebooks": [
+		"Upravljaj dijeljenim bilježnicama"
+	],
+	"Manage toolbar options": [
+		"Upravljaj opcijama alatne trake"
+	],
 	"Manage your plugins": [
 		"Upravljaj dodacima"
 	],
@@ -1829,8 +2217,14 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor": [
+		"Markdown uređivač"
+	],
+	"Markdown editor: Render images": [
+		"Markdown uređivač: Prikazivanje slika"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown uređivač: Prikaži formatirani tekst u uređivaču"
 	],
 	"Marks a to-do as done.": [
 		"Označava zadatak završenim."
@@ -1851,13 +2245,13 @@
 		"Glavna lozinka:"
 	],
 	"match case": [
-		""
+		"razlikuj velika/mala slova"
 	],
 	"Math": [
-		""
+		"Matematika"
 	],
 	"Max concurrent connections": [
-		"Najviše istovremenih veza"
+		"Maksimalan broj istovremenih veza"
 	],
 	"Max Item Size": [
 		"Maksimalna veličina elementa"
@@ -1869,19 +2263,25 @@
 		"Maksimalna ukupna veličina"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Media player, matematika, dijagrami, sadržaj"
 	],
 	"Medium": [
-		""
+		"Srednja"
 	],
 	"Minimise": [
-		""
+		"Smanji"
+	],
+	"Missing camera permission": [
+		"Nedostaje dozvola za kameru"
 	],
 	"Missing keys": [
 		"Nedostajući ključevi"
 	],
 	"Missing Master Keys": [
 		"Nedostaje glavni ključ"
+	],
+	"Missing permission to record audio.": [
+		"Nedostaje dozvola za snimanje zvuka."
 	],
 	"Missing required argument: %s": [
 		"Nedostaje obavezni argument: %s"
@@ -1902,25 +2302,36 @@
 		"Više elemenata se poklapaju s „%s”. Ograniči pretragu."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
-		""
+		"Izvorni kod većine dodataka je dostupan na web stranici dodatka."
+	],
+	"Move %d note to notebook \"%s\"?": [
+		"Premjestiti %d bilješku u bilježnicu „%s”?",
+		"Premjestiti %d bilješke u bilježnicu „%s”?",
+		"Premjestiti %d bilježaka u bilježnicu „%s”?"
+	],
+	"Move down": [
+		"Pomakni dolje"
 	],
 	"Move left": [
-		""
+		"Pomakni lijevo"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Premjestiti bilježnicu „%s” u smeće?\n\nSve bilješke i podbilježnice u ovoj bilježnici će se također premjestiti u smeće."
 	],
 	"Move right": [
-		""
+		"Pomakni desno"
 	],
 	"Move to notebook": [
 		"Premjesti u bilježnicu"
 	],
 	"Move to notebook...": [
-		"Premjesti u bilježnicu..."
+		"Premjesti u bilježnicu …"
 	],
 	"Move to notebook:": [
 		"Premjesti u bilježnicu:"
 	],
 	"Move up": [
-		""
+		"Pomakni gore"
 	],
 	"Moves the given <item> to [notebook]": [
 		"Premješta zadani element <item> u bilježnicu [notebook]"
@@ -1932,7 +2343,19 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"Nikada ne mijenjaj veličinu"
+	],
+	"New attachment": [
+		"Novi privitak"
+	],
+	"New drawing": [
+		"Novi crtež"
+	],
+	"New invitations": [
+		"Nove pozivnice"
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"Dostupan je novi model\nDostupan je novi model glasovnog tipkanja. Želiš li ga preuzeti?"
 	],
 	"New note": [
 		"Nova bilješka"
@@ -1946,6 +2369,15 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Stvorit će se nova bilježnica „%s” i u nju će se uvesti datoteka „%s”"
 	],
+	"New notebook title": [
+		"Naslov nove bilježnice"
+	],
+	"New photo": [
+		"Nova slika"
+	],
+	"New profile": [
+		"Novi profil"
+	],
 	"New sub-notebook": [
 		"Nova podbilježnica"
 	],
@@ -1956,7 +2388,10 @@
 		"Nova verzija: %s"
 	],
 	"next": [
-		""
+		"slijedeće"
+	],
+	"Next": [
+		"Dalje"
 	],
 	"Next match": [
 		"Sljedeće poklapanje"
@@ -1983,7 +2418,7 @@
 		"Nema aktivne bilježnice."
 	],
 	"No new invitations": [
-		""
+		"Nema novih pozivnica"
 	],
 	"No notebook has been specified.": [
 		"Nijedna bilježnica nije određena."
@@ -1995,7 +2430,7 @@
 		"Ovdje nema bilježaka. Stvori bilješku pritiskom na „Nova bilješka”."
 	],
 	"No plugins are installed.": [
-		""
+		"Nema instaliranih dodataka."
 	],
 	"No resources!": [
 		"Nema resursa!"
@@ -2003,14 +2438,29 @@
 	"No results": [
 		"Nema rezultata"
 	],
+	"No revision selected": [
+		"Nijedna revizija nije odabrana"
+	],
 	"No such command: %s": [
 		"Naredba ne postoji: %s"
 	],
 	"No suggestions": [
 		"Nema prijedloga"
 	],
+	"No tab selected": [
+		"Nijedna kartica nije odabrana"
+	],
+	"No tags": [
+		"Bez oznaka"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Program za uređivanje teksta nije određen. Postavi ga pomoću `config editor <editor-path>` (gdje je editor-path putanja do programa)"
+	],
+	"No updates available": [
+		"Nema novih verzija"
+	],
+	"None": [
+		"Ništa"
 	],
 	"Nord": [
 		"Nord"
@@ -2019,10 +2469,10 @@
 		"Nije autentificirano s %s. Upiši sve nedostajuće podatke za prijavu."
 	],
 	"Not checked": [
-		""
+		"Nije označeno"
 	],
 	"Not downloaded": [
-		"Nepreuzeto"
+		"Nije preuzeto"
 	],
 	"Not generated": [
 		"Nije izrađeno"
@@ -2052,13 +2502,19 @@
 		"Bilješka ne postoji: „%s”. Želiš li je stvoriti?"
 	],
 	"Note editor": [
-		"Uređivač bilješki"
+		"Uređivač bilježaka"
 	],
 	"Note has been saved.": [
 		"Bilješka je spremljena."
 	],
+	"Note history": [
+		"Povijest bilješke"
+	],
 	"Note History": [
 		"Povijest bilježaka"
+	],
+	"Note history has been deleted.": [
+		"Povijest bilješke je izbrisana."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Bilješka nije zadatak: „%s”"
@@ -2069,11 +2525,20 @@
 	"Note list growth factor": [
 		"Faktor povećanja popisa bilježaka"
 	],
+	"Note list style": [
+		"Stil popisa bilježaka"
+	],
+	"Note preview": [
+		"Pregled bilješke"
+	],
 	"Note properties": [
 		"Svojstva bilješke"
 	],
 	"Note title": [
 		"Naslov bilješke"
+	],
+	"Note viewer": [
+		"Preglednik bilježaka"
 	],
 	"Note&book": [
 		"Biljež&nica"
@@ -2093,6 +2558,9 @@
 	"Notebook: %s": [
 		"Bilježnica: %s"
 	],
+	"Notebook: %s (%s)": [
+		"Bilježnica: %s (%s)"
+	],
 	"Notebooks": [
 		"Bilježnice"
 	],
@@ -2108,11 +2576,20 @@
 	"Notes can only be created within a notebook.": [
 		"Bilješke se mogu stvoriti samo unutar bilježnice."
 	],
+	"Notifications": [
+		"Obavijesti"
+	],
 	"Numbered List": [
 		"Numerirani popis"
 	],
 	"OCR: Clear cache and re-download language data files": [
-		""
+		"OCR: Isprazni predmemoriju i ponovo preuzmi datoteke jezičnih podataka"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: URL podataka jezika ili putanja"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Tra#i u izdvojenom sadržaju"
 	],
 	"OK": [
 		"U redu"
@@ -2124,7 +2601,7 @@
 		"Na %s: %s"
 	],
 	"on line": [
-		""
+		"u retku"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Jedan od tvojih glavnih ključeva koristi zastarjelu metodu šifriranja."
@@ -2141,6 +2618,9 @@
 	"OneDrive Login": [
 		"OneDrive prijava"
 	],
+	"OneNote Notebook": [
+		"OneNote bilježnica"
+	],
 	"Only one note can be printed at a time.": [
 		"Ispisati se može samo jedna bilješka najednom."
 	],
@@ -2150,20 +2630,35 @@
 	"Open %s": [
 		"Otvori %s"
 	],
+	"Open in external editor": [
+		"Otvori u vanjskom uređivaču"
+	],
 	"Open in new window": [
-		""
+		"Otvori u novom prozoru"
+	],
+	"Open it": [
+		"Otvori"
+	],
+	"Open log": [
+		"Otvori dnevnik"
 	],
 	"Open PDF viewer": [
-		"Otvori prikazivač PDF datoteka"
+		"Otvori preglednik PDF datoteka"
 	],
 	"Open primary app instance...": [
-		""
+		"Otvori primarnu instancu programa …"
 	],
 	"Open profile directory": [
 		"Otvori mapu profila"
 	],
 	"Open secondary app instance...": [
-		""
+		"Otvori sekundarnu instancu programa …"
+	],
+	"Open settings": [
+		"Otvori postavke"
+	],
+	"Open Source": [
+		"Otvoreni kod"
 	],
 	"Open Sync Wizard...": [
 		"Otvori programčić za sinkronizaciju …"
@@ -2172,7 +2667,16 @@
 		"Otvori …"
 	],
 	"Opening section %s": [
-		""
+		"Uvodni odjeljak %s"
+	],
+	"Opens dropdown": [
+		"Otvara padajući izbornik"
+	],
+	"Opens note": [
+		"Otvara bilješku"
+	],
+	"Opens notebook": [
+		"Otvara bilježnicu"
 	],
 	"Operation cancelled": [
 		"Operacija je prekinuta"
@@ -2196,10 +2700,10 @@
 		"Veličina stranice za izvoz u PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Ploča „%s” je vidljiva"
 	],
 	"Panel %s is hidden": [
-		""
+		"Ploča „%s” je skrivena"
 	],
 	"Password": [
 		"Lozinka"
@@ -2225,11 +2729,31 @@
 	"PDF File": [
 		"PDF datoteka"
 	],
+	"Per user. Minimum of 2 users.": [
+		"Po korisniku. Najmanje 2 korisnika."
+	],
+	"Permanently delete note": [
+		"Zauvijek izbriši bilješku"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Zauvijek izbrisati bilješku „%s”?"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Zauvijek izbrisati bilježnicu „%s“?\n\nSve bilješke i podbilježnice u ovoj bilježnici će se također zauvijek izbrisati."
+	],
+	"Permanently delete this note?": [
+		"Zauvijek izbrisati ovu bilješku?",
+		"Zauvijek izbrisati ove %d bilješke?",
+		"Zauvijek izbrisati ovih %d bilježaka?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"Zauvijek briše bilježnicu, preskakajući smeće."
+	],
 	"Permission needed": [
 		"Potrebna je dozvola"
 	],
 	"Photo %d": [
-		""
+		"Slika %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Nastavi pritiskom na „%s” ili postavi lozinke u donjem popisu „%s”."
@@ -2241,22 +2765,22 @@
 		"Upiši lozinku u donji popis glavnih ključeva prije nadograđivanja ključa."
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
-		"Imaj na umu, da ako je bilježnica velika, pojavljivanje svih bilježaka na uređaju primatelja može potrajati nekoliko minuta."
+		"Imaj na umu, da ako je bilježnica velika, pojavljivanje svih bilježaka na uređaju primaoca može potrajati nekoliko minuta."
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Otvori sljedeći URL u pregledniku za autentificiranje programa. Program će stvoriti mapu u „Aplikacije/Joplin” dozvolama za čitanje i pisanje. Program neće moći pristupiti datotekama izvan ove mape niti bilo kojim drugim osobnim podacima. Nikoji podaci se neće dijeliti s drugima."
 	],
 	"Please provide the recipient email": [
-		""
+		"Navedi e-mail adresu primaoca"
 	],
 	"Please record your voice...": [
 		"Snimi svoj glas …"
 	],
 	"Please select a notebook first.": [
-		"Odaberi bilježnicu."
+		"Najprije odaberi jednu bilježnicu."
 	],
 	"Please select the note or notebook to be deleted first.": [
-		"Najprije odaberi bilješku ili bilježnicu za brisanje."
+		"Najprije odaberi bilješku ili bilježnicu koju želiš izbrisati."
 	],
 	"Please select where the sync status should be exported to": [
 		"Odaberi mjesto za izvoz stanja sinkronizacije"
@@ -2267,32 +2791,47 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Odaberi bilježnicu u koju se bilješke trebaju uvesti."
 	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Za korištenje ovog dodatka, nadogradi Joplin na verziju %s ili noviju."
+	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Pričekaj da se svi privici preuzmu i dešifriraju. Za uređivanje bilješke možeš prijeći i na %s."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Pričekaj dok učitavamo stranicu za prijavu tvoje organizacije …"
 	],
 	"Please wait...": [
 		"Pričekaj …"
 	],
+	"Plugin message": [
+		"Poruka dodatka"
+	],
+	"Plugin panels": [
+		"Ploče dodataka"
+	],
 	"Plugin repository failed to load": [
-		""
+		"Repozitorij dodataka se nije učitao"
+	],
+	"Plugin search": [
+		"Pretraživanje dodataka"
+	],
+	"Plugin security": [
+		"Sigurnost dodataka"
 	],
 	"Plugin tools": [
-		"Dodaci"
+		"Alati dodatka"
 	],
 	"Plugin WebView debugging": [
-		""
+		"Otklanjanje grešaka dodatka WebView"
 	],
 	"Plugins": [
 		"Dodaci"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"Dodaci proširuju Joplin funkcije koje standardno nisu prisutne. Dodaci mogu proširiti Joplinov uređivač, preglednik i još mnogo toga."
 	],
 	"Portrait": [
-		"Uspravni"
+		"Uspravno"
 	],
 	"Possible keys/values:": [
 		"Mogući ključevi/vrijednosti:"
@@ -2301,7 +2840,7 @@
 		"Moguće vrijednosti: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"Preferiraj JSON razultat."
 	],
 	"Preferences": [
 		"Postavke"
@@ -2316,10 +2855,10 @@
 		"Preferirana svijetla tema"
 	],
 	"Preferred voice typing provider": [
-		""
+		"Preferirana usluga glasovnog tipkanja"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"Očuvaj boje prilikom lijepljenja teksta u uređivaču formatiranog teksta"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Zatvori program pomoću prečaca Ctrl+D ili upiši „exit”"
@@ -2333,8 +2872,14 @@
 	"Press to set the decryption password.": [
 		"Pritisni za postavljanje lozinke za dešifriranje."
 	],
+	"previous": [
+		"prethodno"
+	],
 	"Previous match": [
 		"Prethodno poklapanje"
+	],
+	"Previous versions": [
+		"Prethodne verzije"
 	],
 	"Previous versions of this note": [
 		"Prethodne verzije ove bilješke"
@@ -2361,7 +2906,10 @@
 		"Obradi brisanja korisnika"
 	],
 	"Processing": [
-		""
+		"Obrada"
+	],
+	"Processing photo...": [
+		"Obrada slike …"
 	],
 	"Profile": [
 		"Profil"
@@ -2393,6 +2941,9 @@
 	"Public-private key pair:": [
 		"Javno-privatan par ključa:"
 	],
+	"Publish Note": [
+		"Objavi bilješku"
+	],
 	"Publish note...": [
 		"Objavi bilješku …"
 	],
@@ -2403,13 +2954,16 @@
 		"Objavi blješke na internetu"
 	],
 	"Publish/unpublish": [
-		""
+		"Objavi/Poništi objavljivanje"
+	],
+	"QR Code": [
+		"QR kod"
 	],
 	"Quit": [
 		"Zatvori program"
 	],
 	"Re-download model": [
-		""
+		"Ponovo preuzmi model"
 	],
 	"Re-encrypt data": [
 		"Ponovo šifriraj podatke"
@@ -2417,14 +2971,23 @@
 	"Re-encryption": [
 		"Ponovno šifriranje"
 	],
+	"Re-enter password": [
+		"Ponovo upiši lozinku"
+	],
 	"Re-upload local data to sync target": [
 		"Ponovo učitaj lokalne podatke u izvor sinronizacije"
+	],
+	"Read more": [
+		"Čitaj dalje"
 	],
 	"Read more about it": [
 		"Saznaj više"
 	],
 	"Read time: %s min": [
 		"Vrijeme čitanja: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Čitanje naredbi iz standardnog unosa moguće je samo u modusu sučelja naredbenog retka (CLI)"
 	],
 	"Recipient has accepted the invitation": [
 		"Primalac je prihvatio pozivnicu"
@@ -2439,10 +3002,22 @@
 		"Primaoci:"
 	],
 	"Recognize handwritten image": [
-		""
+		"Prepoznaj rukom pisane slike"
+	],
+	"Recommended": [
+		"Preporučeno"
+	],
+	"Recommended plugins": [
+		"Preporučeni dodaci"
 	],
 	"Record audio": [
-		""
+		"Snimi zvuk"
+	],
+	"Recording": [
+		"Snimanje"
+	],
+	"Recording...": [
+		"Snimanje …"
 	],
 	"Redo": [
 		"Ponovi"
@@ -2456,14 +3031,29 @@
 	"Reject": [
 		"Odbij"
 	],
+	"Rejecting share...": [
+		"Odbijanje dijeljenja …"
+	],
 	"Remove": [
 		"Ukloni"
+	],
+	"Remove %s": [
+		"Ukloni %s"
+	],
+	"Remove %s from share": [
+		"Ukloni %s iz dijeljenja"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Ukloniti oznaku „%s” iz svih bilježaka?"
 	],
 	"Remove this search from the sidebar?": [
 		"Ukloniti ovu pretragu iz bočne trake?"
+	],
+	"Removed %s from share.": [
+		"Ukloni %s iz dijeljenja."
+	],
+	"Removed tag: %s": [
+		"Uklonjena oznaka: %s"
 	],
 	"Rename": [
 		"Preimenuj"
@@ -2475,16 +3065,22 @@
 		"Preimenuj oznaku:"
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
-		"Preimenuje zadani element <item> (bilješka ili bilježnica) u ime <name>."
+		"Preimenuje zadani element <item> (bilješka ili bilježnica) u <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Prikazuje formatirani tekst u svim redcima koji ne uključuju kursor."
 	],
 	"Renew token": [
 		"Obnovi ključ"
 	],
+	"replace": [
+		"zamijeni"
+	],
 	"Replace": [
 		"Zamijeni"
+	],
+	"replace all": [
+		"zamijeni sve"
 	],
 	"Replace all": [
 		"Zamijeni sve"
@@ -2496,19 +3092,25 @@
 		"Zamijeni: "
 	],
 	"replaced $ matches": [
-		""
+		"zamijenjena podudaranja: $"
 	],
 	"replaced match on line $": [
-		""
+		"zamijenjeno podudaranje u retku $"
 	],
 	"Report an issue": [
-		""
+		"Prijavi problem"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Prijavi probleme u vezi s dodatkom."
 	],
 	"Report fraudulent plugin": [
-		""
+		"Prijavi lažni dodatak"
+	],
+	"Report system": [
+		"Sustav prijave"
+	],
+	"Reports": [
+		"Izvještaji"
 	],
 	"Reset application layout": [
 		"Obnovi raspored programa"
@@ -2517,7 +3119,7 @@
 		"Obnovi glavnu lozinku"
 	],
 	"Resize large images:": [
-		""
+		"Promijeni veličinu velikih slika:"
 	],
 	"Resources: %d.": [
 		"Resursi: %d."
@@ -2525,17 +3127,35 @@
 	"Restart and upgrade": [
 		"Pokreni ponovo i nadogradi"
 	],
+	"Restart in safe mode": [
+		"Pokreni ponovo u sigurnom modusu"
+	],
 	"Restart now": [
 		"Pokreni ponovo"
 	],
 	"Restore": [
 		"Obnovi"
 	],
+	"Restore defaults": [
+		"Obnovi zadane vrijednosti"
+	],
+	"Restore note": [
+		"Obnovi bilješku"
+	],
+	"Restore notebook": [
+		"Obnovi bilježnicu"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Obnovi elemente iz smeća koje se poklapaju sa <uzorak>."
+	],
+	"Restored items": [
+		"Obnovljeni elementi"
+	],
 	"Restored Notes": [
 		"Obnovljene bilješke"
 	],
 	"Results (%d):": [
-		""
+		"Rezultati (%d):"
 	],
 	"Retry": [
 		"Pokušaj ponovo"
@@ -2552,14 +3172,17 @@
 	"Reverses the sorting order.": [
 		"Preokreće redoslijed."
 	],
+	"Revision:": [
+		"Revizija:"
+	],
 	"Revision: %s (%s)": [
 		"Revizija: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Formatirani tekst"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		""
+		"Uređivač formatiranog teksta. Pritisni tipku Escape, zatim tipku tabulatora za uklanjanje fokusa."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Pokreće naredbe koje se nalaze u tekstualnoj datoteci. Naredbe se moraju zapisti pojedinačno u zasebne retke."
@@ -2583,7 +3206,7 @@
 		"S3 URL"
 	],
 	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
-		"Trenutačno je aktivan sigurni modus. Prikaz bilježaka i svi dodaci privremeno su deaktivirani."
+		"Trenutačno je aktivan sigurni modus. Prikaz bilježaka i svi dodaci su privremeno deaktivirani."
 	],
 	"Save": [
 		"Spremi"
@@ -2600,14 +3223,20 @@
 	"Save changes": [
 		"Spremi promjene"
 	],
+	"Save changes?": [
+		"Spremiti promjene?"
+	],
 	"Save geo-location with notes": [
 		"Spremi geografske podatke mjesta s bilješkama"
 	],
+	"Scan notebook": [
+		"Skeniraj bilježnicu"
+	],
 	"Scanned code": [
-		""
+		"Snimjeni kod"
 	],
 	"Scrollbar size": [
-		""
+		"Veličina klizne trake"
 	],
 	"Search": [
 		"Traži"
@@ -2618,11 +3247,23 @@
 	"Search for...": [
 		"Traži …"
 	],
+	"Search hidden": [
+		"Pretraži skrivene"
+	],
 	"Search in all the notes": [
 		"Traži u svim bilješkama"
 	],
 	"Search in current note": [
 		"Traži u trenutačnoj bilješci"
+	],
+	"Search results": [
+		"Rezultati pretrage"
+	],
+	"Search shown": [
+		"Pretraži prikazane"
+	],
+	"Search tags": [
+		"Traži oznake"
 	],
 	"Search...": [
 		"Traži …"
@@ -2633,14 +3274,20 @@
 	"Searches for the given <pattern> in all the notes.": [
 		"Pretražuje zadani uzorak <pattern> u svim bilješkama."
 	],
+	"See changelog": [
+		"Pogledaj zapisnik promjena"
+	],
 	"See the pre-release page for more details: %s": [
-		"Pregledaj pojedinosti na stranici predizdanja: %s"
+		"Pogledaj detalje na stranici predizdanja: %s"
 	],
 	"Select": [
-		"Označi"
+		"Odaberi"
+	],
+	"Select a revision...": [
+		"Odaberi reviziju …"
 	],
 	"Select all": [
-		"Označi sve"
+		"Odaberi sve"
 	],
 	"Select emoji...": [
 		"Odaberi emoji …"
@@ -2648,11 +3295,26 @@
 	"Select file...": [
 		"Odaberi datoteku …"
 	],
+	"Select notebook": [
+		"Odaberi bilježnicu"
+	],
 	"Select parent notebook": [
-		"Obriši nadređenu bilježnicu"
+		"Odaberi nadređenu bilježnicu"
+	],
+	"Selected: %s": [
+		"Odabrano: %s"
+	],
+	"Selection deleted": [
+		"Odabir izbrisan"
+	],
+	"Selects a notebook": [
+		"Odabire bilježnicu"
 	],
 	"Self-hosted": [
-		""
+		"Vlastiti hosting"
+	],
+	"Send bug report": [
+		"Pošalji izvještaj o grešci"
 	],
 	"Server is already running on port %d": [
 		"Poslužitelj je već pokrenut na priključku %d"
@@ -2679,13 +3341,19 @@
 		"Postavlja svojstvo imena <name> zadane bilješke <note> na zadanu vrijednost [value]. Moguća svojstva su:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Postavke"
 	],
 	"Share": [
 		"Dijeli"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Dijeli kopiju svih bilježaka u formatu datoteke koji Joplin može uvesti na računalo."
+	],
+	"Share a notebook with others": [
+		"Dijeli bilježnicu s drugima"
+	],
+	"Share from %s (%s)": [
+		"Dijeli od %s (%s)"
 	],
 	"Share Notebook": [
 		"Dijeli bilježnicu"
@@ -2694,10 +3362,16 @@
 		"Dijeli bilježnicu …"
 	],
 	"Share permissions": [
-		""
+		"Dozvole za dijeljenje"
+	],
+	"Shared": [
+		"Dijeljenje"
+	],
+	"Shares": [
+		"Dijeljenja"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Dijeli ili prestaje dijeliti navedenu bilježnicu [notebook] s korisnikom [user]. Zahtijeva Joplin Cloud ili Joplin Server."
 	],
 	"Sharing notebook...": [
 		"Dijeljenje bilježnice …"
@@ -2723,8 +3397,17 @@
 	"Show disabled keys": [
 		"Prikaži deaktivirane ključeve"
 	],
+	"Show monospace fonts only.": [
+		"Prikaži samo fontove fiksne širine."
+	],
 	"Show note counts": [
 		"Prikaži broj bilježaka"
+	],
+	"Show notebook options": [
+		"Prikaži opcije bilježnice"
+	],
+	"Show password": [
+		"Prikaži lozinku"
 	],
 	"Show sort order buttons": [
 		"Prikaži gumbe za određivanje redoslijeda"
@@ -2735,14 +3418,23 @@
 	"Show/hide the sidebar": [
 		"Prikaži/Sakrij bočnu traku"
 	],
+	"Shows notes for tag": [
+		"Prikazuje bilješke za oznaku"
+	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Smanji velike slike prije dodavanja u bilješke."
+	],
+	"Side menu closed": [
+		"Bočni izbornik zatvoren"
 	],
 	"Side menu opened": [
-		""
+		"Bočni izbornik otvoren"
 	],
 	"Sidebar": [
 		"Bočna traka"
+	],
+	"Sign up to Joplin Cloud": [
+		"Registriraj se na Joplin Cloud"
 	],
 	"Size": [
 		"Veličina"
@@ -2757,7 +3449,7 @@
 		"Preskočeno: %d."
 	],
 	"Small": [
-		""
+		"Mala"
 	],
 	"Solarised Dark": [
 		"Solarno tamna"
@@ -2766,10 +3458,10 @@
 		"Solarno svijetla"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Neki se privici nisu mogli preuzeti. Pokušaj ih ponovo preuzeti."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Neki se privici moraju preuzeti. Postavi modus preuzimanja privitaka na „uvijek“ i pokušaj ponovo."
 	],
 	"Some items cannot be decrypted.": [
 		"Neki se elementi ne mogu dešifrirati."
@@ -2778,19 +3470,22 @@
 		"Neki se elementi ne mogu sinkronizirati."
 	],
 	"Some items cannot be synchronised. Press for more info.": [
-		"Neki elementi se ne mogu sinkronizirati. Pritisni za daljnje inormacije."
+		"Neki se elementi ne mogu sinkronizirati. Pritisni za daljnje informacije."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Neki se elementi nisu mogli sinkronizirati. Pokušaj ih najprije sinkronizirati."
 	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Razvrstaj „%s“ uzlaznim redoslijedom"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Razvrstaj „%s“ silaznim redoslijedom"
 	],
 	"Sort notebooks by": [
-		"Redoslijed bilježnica"
+		"Razvrstaj bilježnice po"
 	],
 	"Sort notes by": [
-		"Redoslijed bilježaka"
+		"Razvrstaj bilješke po"
 	],
 	"Sort selected lines": [
 		"Razvrstaj odabrane retke"
@@ -2801,6 +3496,9 @@
 	"Source": [
 		"Izvor"
 	],
+	"Source code available": [
+		"Izvorni kod je dostupan"
+	],
 	"Source format: %s": [
 		"Format izvora: %s"
 	],
@@ -2808,7 +3506,7 @@
 		"Izvor: "
 	],
 	"Spacer": [
-		""
+		"Razmak"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Odredi priključak za API poslužitelja. Ako nije postavljeno, koristit će se standardna vrijednost."
@@ -2823,7 +3521,7 @@
 		"Pokreni program u sklopljenom stanju u programskoj traci"
 	],
 	"Start recording": [
-		""
+		"Počni snimati"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Pokreni, prekini ili provjeri API poslužitelj. Za određivanje priključka na kojem se pokreće, postavi konfiguracijsku varijablu api.port. Naredbe su (%s)."
@@ -2859,7 +3557,7 @@
 		"Prvi korak: Autoriziraj program otvaranjem ovog URL-a u pregledniku:"
 	],
 	"Step 2: Enter the code provided by Dropbox:": [
-		"Drugi korak: Upiši Dropboxov kȏd:"
+		"Drugi korak: Upiši Dropboxov kod:"
 	],
 	"Step 2: Install the extension": [
 		"Drugi korak: Instaliraj proširenje"
@@ -2885,8 +3583,14 @@
 	"Subscript": [
 		"Indeks"
 	],
+	"Success": [
+		"Uspjeh"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
-		"Uspjeh! Čini se, da je konfiguracija sinkronizacije ispravna."
+		"Uspjeh! Čini se da je konfiguracija sinkronizacije ispravna."
+	],
+	"Suggestions": [
+		"Prijedlozi"
 	],
 	"Superscript": [
 		"Eksponent"
@@ -2904,13 +3608,25 @@
 		"Promijeni profil"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Promijeni na stražnju kameru"
+	],
+	"Switch to front-facing camera": [
+		"Promijeni na prednju kameru"
 	],
 	"Switch to note type": [
 		"Promijeni u bilješku"
 	],
 	"Switch to profile %d": [
 		"Promijeni u profil %d"
+	],
+	"Switch to the %s Editor": [
+		"Promijeni u %s uređivač"
+	],
+	"Switch to the legacy editor": [
+		"Koristi stari uređivač"
+	],
+	"Switch to the new editor": [
+		"Koristi novi uređivač"
 	],
 	"Switch to to-do type": [
 		"Promijeni u zadatak"
@@ -2941,6 +3657,9 @@
 	],
 	"Sync your notes": [
 		"Sinkroniziraj svoje bilješke"
+	],
+	"Sync, encryption, proxy": [
+		"Sinkronizacija, šifriranje, proxy"
 	],
 	"Synchronisation": [
 		"Sinkronizacija"
@@ -2976,10 +3695,10 @@
 		"Sinkroniziranje …"
 	],
 	"Tab indents": [
-		""
+		"Uvlake tabulatora"
 	],
 	"Tab moves focus": [
-		""
+		"Tabulator premješta fokus"
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -2994,7 +3713,7 @@
 		"Snimi sliku"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"Zadatak „%s“ nije uspio s greškom: %s"
 	],
 	"Task list": [
 		"Popis zadataka"
@@ -3004,6 +3723,9 @@
 	],
 	"Teams": [
 		"Timovi"
+	],
+	"Text document": [
+		"Tekstualni dokument"
 	],
 	"Text editor command": [
 		"Naredba za uređivača teksta"
@@ -3024,7 +3746,7 @@
 		"Program je uspješno autoriziran."
 	],
 	"The application must be restarted for these changes to take effect.": [
-		"Za primjenu promjena, program se mora ponovo pokrenuti."
+		"Za primjenu promjena se program mora ponovo pokrenuti."
 	],
 	"The attachments will no longer be watched when you switch to a different note.": [
 		"Privici se više neće pratiti kad se prebaciš na jednu drugu bilješku."
@@ -3050,6 +3772,11 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"Faktorom se određuje povećanje ili smanjenje elementa, kako bi se smjestio u raspoloživ prostor kontejnera u odnosu na ostale elemente. To znači, da će element s faktorom 2 zauzeti dvostruko više prostora od elementa s faktorom 1. Za prikaz promjena ponovo pokreni program."
 	],
+	"The following attachment matches your search query:": [
+		"Sljedeći privitak odgovara tvojoj pretrazi:",
+		"Sljedeći privici odgovaraju tvojoj pretrazi:",
+		"Sljedeći privici odgovaraju tvojoj pretrazi:"
+	],
 	"The following attachments are being watched for changes:": [
 		"Promjene se prate za sljedeće privitke:"
 	],
@@ -3057,7 +3784,7 @@
 		"Sljedeći glavni ključevi koriste zastarjeli algoritam šifriranja i preporučujemo da ih nadogradiš. Nadograđeni ključ će i nadalje moći dešifrirati i šifrirati tvoje podatke."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"Sljedeći dodaci možda ne podržavaju trenutačni Markdown uređivač:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin tim je provjerio ovaj dodatak i on zadovoljava naše standarde za sigurnost i performansu."
@@ -3066,7 +3793,7 @@
 		"Ključevi s ovim ID-ovima koriste se za šifriranje nekih tvojih elemenata, ali program im trenutačno ne može pristupiti. Vjerojatno će se na kraju preuzeti putem sinkronizacije."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Čini se da je starija verzija Markdown uređivača prestala raditi zbog nekompatibilnosti s dodatkom. Preporučujemo koristiti novi uređivač."
 	],
 	"The master key has been upgraded successfully!": [
 		"Glavni ključ je uspješno nadograđen!"
@@ -3076,6 +3803,17 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Bilješka „%s” je uspješno obnovljena u bilježnicu „%s”."
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Bilješka je pretvorena u Markdown, a izvorna bilješka je premještena u smeće"
+	],
+	"The note was successfully moved to the trash.": [
+		"Bilješka je uspješno premještena u smeće.",
+		"Bilješke su uspješno premještene u smeće.",
+		"Bilješke su uspješno premještene u smeće."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Bilježnica i njezin sadržaj su uspješno premješteni u smeće."
 	],
 	"The notebook could not be saved: %s": [
 		"Bilježnica se ne može spremiti: %s"
@@ -3087,16 +3825,19 @@
 		"Moguće naredbe su:"
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
-		"Primatelj/ica se ne može ukloniti s popisa. Pokušaj ponovo.\n\nGreška je bila: „% s”"
+		"Primalac se ne može ukloniti s popisa. Pokušaj ponovo.\n\nGreška je bila: „% s”"
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"Cilj sinkronizacije se ne može promijeniti iz sljedećeg razloga: %s\n\nAko se problem ne može riješiti, možda ćeš najprije morati izbrisati tvoje podatke, slijedeći ove upute:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
-		"Da bi Joplin mogao sinkronizirati, najprije se mora nadograditi cilj sinkronizacije. Postupak može potrajati nekoliko minuta, a nakon toga se program mora ponovo pokrenuti. Za nastavak pritisni poveznicu."
+		"Da bi Joplin mogao sinkronizirati, najprije se mora nadograditi cilj sinkronizacije. Postupak može potrajati nekoliko minuta, a nakon toga se program mora ponovo pokrenuti. Za nastavljanje pritisni poveznicu."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
-		"Cilj sinkronizacije se mora nadograditi. Za nastavljanje, pritisni ovaj naslov."
+		"Cilj sinkronizacije se mora nadograditi. Nastavi pritiskom na ovaj naslov."
+	],
+	"The synchronisation password is missing.": [
+		"Nedostaje lozinka za sinkronizaciju."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"Oznaka „%s” već postoji. Odaberi jedno drugo ime."
@@ -3105,10 +3846,13 @@
 		"Cilj za sinkronizaciju. Svaki cilj sinkronizacije može imati dodatne parametre koji se zovu `sync.NUM.NAME` (niže dolje dokumentirani)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"Web klijent ne podržava prihvaćanje šifriranih dijeljenih bilježnica. Prebaci se na program za desktop ili mobitel prije prihvaćanja dijeljenja.\n\nGreška: „%s“"
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper treba tvoju autorizaciju za pristup podacima."
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"Web Clipper usluga se ne može aktiviranati u ovoj Joplin instanci."
 	],
 	"The web clipper service is enabled and set to auto-start.": [
 		"Web Clipper usluga je aktivirana i postavljena na automatsko pokretanje."
@@ -3122,8 +3866,14 @@
 	"Theme": [
 		"Tema"
 	],
+	"Themes, editor font": [
+		"Teme, font uređivača"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Trenutačno nema bilježaka. Stvori bilješku pritiskom na gumb (+)."
+	],
+	"There are no notes in the trash folder.": [
+		"U mapi smeća nema bilježaka."
 	],
 	"There are unsaved changes.": [
 		"Postoje nespremljene promjene."
@@ -3138,34 +3888,37 @@
 		"Došlo je do greške prilikom preuzimanja ovog privitka:"
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"Ovie se elementi nisu uspjeli sinkronizirati, ali su označeni kao „zanemareno“. Neće prouzročiti pojavljivanje upozorenja o sinkronizaciji, ali se i dalje ne sinkroniziraju. Za ukidanje zanemarivanja, klikni „Pokušaj ponovo“."
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Ovi će elementi ostati na uređaju, ali se neće prenijeti na cilj sinkronizacije. Za pronalaženje ovih elemenata, traži naslov ili ID (gore prikazan u zagradama)."
 	],
 	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
-		"Ovi dodaci proširuju mogućnosti Markdown označavanja s dodatnim funkcijama. Imaj na umu da, iako ove funkcije mogu biti korisne, one nisu dio standardnog Markdown označavanja i stoga će većina njih raditi samo u Joplinu. Uz to, neki od njih su *nekompatibilni* s WYSIWYG uređivačem. Ako u tom uređivaču otvoriš bilješku koja koristi jedan od ovih dodataka, izgubit ćeš formatiranje dodatka. Kompatibilnost dodataka s WYSIWYG uređivačem je naznačena dolje."
+		"Ovi dodaci proširuju mogućnosti Markdown označivanja s dodatnim funkcijama. Imaj na umu da, iako ove funkcije mogu biti korisne, one nisu dio standardnog Markdown označavanja i stoga će većina njih raditi samo u Joplinu. Uz to, neki od njih su *nekompatibilni* s WYSIWYG uređivačem. Ako u tom uređivaču otvoriš bilješku koja koristi jedan od ovih dodataka, izgubit ćeš formatiranje dodatka. Kompatibilnost dodataka s WYSIWYG uređivačem je naznačena dolje."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Ovo omogućuje drugom korisniku da dijeli bilježnicu s tobom, za međusobnu suradnju. Međutim, ne dozvoljava dijeljenje bilježnice s drugima, ukoliko nemaš funkciju „%s“."
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"Ovaj privitak nema OCR podatke (Stanje: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Ovaj privitak još nije preuzet ili dešifriran"
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
-		"Ovaj ključ za autorizaciju potreban je samo za dozvoljavanje drugim programima da pristupe Joplinu."
+		"Ovaj ključ za autorizaciju je potreban samo za dozvoljavanje drugim programima da pristupe Joplinu."
+	],
+	"This drawing may have unsaved changes.": [
+		"Ovaj crtež možda sadrži nespremljene promjene."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Ova je funkcija standardno deaktivirana. Moraš je ručno aktivirati uključivanjem opcije „Aktiviraj rukom pisanu transkripciju“."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Ova je funkcija dostupna samo na Joplin Cloudu i Joplin Serveru."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Sustav za prepoznavanje ne podržava ovu vrstu slike."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ovo je napredni alat za prikaz privitaka koji su povezani s tvojim bilješkama. Pazi što brišeš, jer se nakon brisanja ne mogu obnoviti."
@@ -3198,10 +3951,10 @@
 		"Ova bilješka nema povijest"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Ova je bilješka u HTML formatu. Za jednostavnije uređivanje pretvori je u Markdown format."
 	],
 	"This plugin doesn't support %s.": [
-		""
+		"Ovaj dodatak ne podržava %s."
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Ovaj uređivač formatiranog teksta ima poneka ograničenja i bilo bi dobro poznati ih prije upotrebe."
@@ -3210,7 +3963,7 @@
 		"Ova usluga omogućuje komunikaciju proširenja preglednika s Joplinom. Kad je aktiviraš, možda ćeš u vatrozidu morati dozvoliti Joplinu pristup određenom priključku."
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"Ova podmapa smeća nema bilježaka."
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Ovo će omogućiti Joplinu da radi u pozadini. Preporučujemo aktivirati ovu postavku. Time se bilješke neprestano sinkroniziraju, što smanjuje broj konflikata."
@@ -3219,7 +3972,7 @@
 		"Ovo će otvoriti novi prozor. Želiš li spremiti tvoje trenutačne promjene?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Ovo će zauvijek izbrisati sve elemente u smeću. Nastaviti?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Ovime će se ukloniti bilježnica iz tvoje zbirke i više nećeš imati pristup sadržaju bilježnice. Želiš li nastaviti?"
@@ -3236,14 +3989,20 @@
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Za sinkronizaciju Joplina s Dropboxom slijedi sljedeće korake:"
 	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Za sinkronizaciju Joplina s Joplin Cloud prijavi se koristeći URL:"
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Za sinkronizaciju Joplina s tvojim računom slijedi sljedeće korake:"
+	],
 	"To continue, please enter your master password below.": [
 		"Za nastavljanje, dolje upiši glavnu lozinku."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Za stvaranje nove oznake upiši ime i pritisni tipku enter."
 	],
 	"To delete a tag, untag the associated notes.": [
-		"Za brisanje oznake, ukloni oznaku s povezanih bilježaka."
+		"Za brisanje oznake ukloni oznaku s povezanih bilježaka."
 	],
 	"To delete: %d": [
 		"Za brisanje: %d"
@@ -3267,7 +4026,7 @@
 		"Za ponovno dešifriranje ovih elemenata, pokreni `e2ee decrypt --retry-failed-items`"
 	],
 	"To switch the profile, the app is going to close and you will need to restart it.": [
-		"Za mijenjanje profila, program će se zatvoriti i morat ćeš ga ponovo pokrenuti."
+		"Za mijenjanje profila će se program zatvoriti i morat ćeš ga ponovo pokrenuti."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Za ispravan rad programa potrebne su sljedeće dozvole. Aktiviraj ih u postavkama mobitela, u Aplikacije > Joplin > Dozvole"
@@ -3275,17 +4034,29 @@
 	"to-do": [
 		"zadatak"
 	],
+	"To-do": [
+		"Zadatak"
+	],
 	"to-do: %s": [
 		"zadatak: %s"
+	],
+	"Toggle all notebooks": [
+		"Uključi/Isključi sve bilježnice"
 	],
 	"Toggle comment": [
 		"Uključi/Isključi komentar"
 	],
 	"Toggle development tools": [
-		"Uključi/isključi alate za programere"
+		"Uključi/isključi alate za razvoj"
 	],
 	"Toggle editor layout": [
 		"Uključi/Isključi raspored uređivača"
+	],
+	"Toggle editor plugin": [
+		"Uključi/Isključi dodatak uređivača"
+	],
+	"Toggle editor tab key navigation": [
+		"Uključi/Isključi navigaciju tipkom tabulatora u uređivaču"
 	],
 	"Toggle editors": [
 		"Uključi/Isključi uređivače"
@@ -3293,11 +4064,20 @@
 	"Toggle external editing": [
 		"Uključi/Isključi vanjsko uređivanje"
 	],
+	"Toggle menu bar": [
+		"Uključi/Isključi traku izbornika"
+	],
+	"Toggle note history, keep notes for": [
+		"Uključi/Isključi povijest bilježaka, zadrži bilješke za"
+	],
 	"Toggle note list": [
 		"Uključi/Isključi popis bilježaka"
 	],
 	"Toggle own sort order": [
 		"Uključi/Isključi vlastiti redoslijed"
+	],
+	"Toggle plugin editor": [
+		"Uključi/Isključi uređivač dodataka"
 	],
 	"Toggle safe mode": [
 		"Uključi/Isključi sigurni modus"
@@ -3311,6 +4091,9 @@
 	"Token has been copied to the clipboard!": [
 		"Ključ je kopiran u međuspremnik!"
 	],
+	"Toolbar": [
+		"Alatna traka"
+	],
 	"Tools": [
 		"Alati"
 	],
@@ -3321,7 +4104,7 @@
 		"Ukupno: %d/%d"
 	],
 	"Trash": [
-		""
+		"Smeće"
 	],
 	"Try again": [
 		"Pokušaj ponovo"
@@ -3330,7 +4113,7 @@
 		"Isprobaj"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
-		"Upiši `help [command]` (zadaj naredbu) za daljnje informacije o naredbi ili `help all` za sve informacije o korištenju naredbi."
+		"Upiši `help [command]` za više informacija o naredbi ili `help all` za sve informacije o korištenju naredbi."
 	],
 	"Type `joplin help` for usage information.": [
 		"Za informacije o korištenju upiši `joplin help`."
@@ -3338,11 +4121,20 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Prijeđi na bilješku upisom naslova bilješke ili dijela sadržaja bilješke. Alternativno koristi znak „#” s imenom oznake ili „@” s imenom bilježnice. Traži naredbe pomoću „:”."
 	],
+	"Type a note title to search for it.": [
+		"Upiši naslov bilješke da bi je tražio/la."
+	],
 	"Type: %s.": [
 		"Vrsta: %s."
 	],
+	"Unable to edit resource of type %s": [
+		"Nije moguće urediti resurs vrste %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Nije moguće izvesti ili dijeliti podatke dnevnika. Razlog: %s"
+	],
 	"Unchecked": [
-		""
+		"Neoznačeno"
 	],
 	"Uncompleted to-dos on top": [
 		"Najprije nezavršeni zadaci"
@@ -3351,7 +4143,13 @@
 		"Poništi"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Deinstaliraj i ponovo instaliraj program. Najprije izradi sigurnosnu kopiju izvozom svih tvojih bilježaka kao JEX iz programa za desktop."
+	],
+	"Unknown": [
+		"Nepoznato"
+	],
+	"Unknown file type": [
+		"Nepoznata vrsta datoteke"
 	],
 	"Unknown flag: %s": [
 		"Nepoznata zastavica: %s"
@@ -3359,8 +4157,17 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Preuzeta je nepoznata vrsta elementa – nadogradi Joplin na najnoviju verziju"
 	],
+	"Unknown platform": [
+		"Nepoznata platforma"
+	],
 	"Unordered list": [
 		"Neporedan popis"
+	],
+	"Unpublish": [
+		"Poništi objavljivanje"
+	],
+	"Unpublish \"%s\"": [
+		"Poništi objavljivanje za „%s“"
 	],
 	"Unpublish note": [
 		"Poništi objavljivanje bilješke"
@@ -3369,7 +4176,7 @@
 		"Prestani dijeliti"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Prestati dijeliti bilježnicu „%s“? Time će drugi korisnici izgubiti pristup bilježnici."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju bilježnice."
@@ -3380,11 +4187,20 @@
 	"Unsupported link or message: %s": [
 		"Nepodržana poveznica ili poruka: %s"
 	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Nepodržana poveznica ili poruka: %s.\nGreška: %s"
+	],
 	"Untitled": [
 		"Bez naslova"
 	],
 	"Update": [
 		"Aktualiziraj"
+	],
+	"Update available": [
+		"Postoji nova verzija"
+	],
+	"Update later": [
+		"Aktualiziraj kasnije"
 	],
 	"Update profile": [
 		"Aktualiziraj profil"
@@ -3422,6 +4238,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Nadogradi cilj sinkronizacije na najnoviju verziju."
 	],
+	"Upload photo": [
+		"Prenesi sliku"
+	],
 	"URL": [
 		"URL"
 	],
@@ -3441,7 +4260,10 @@
 		"Prelistaj popis i tekstna područja (uključujući ovu konzolu) pomoću strelica i tipki za micanje stranice prema gore/dolje."
 	],
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
-		"Promijeni raspored pomoću strelica. Zatvori pomoću tipke „Escape”."
+		"Promijeni raspored elemenata pomoću strelica. Zatvori pomoću tipke „Escape”."
+	],
+	"Use the legacy Markdown editor": [
+		"Koristi stari Markdown uređivač"
 	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		"Koristi ovo za ponovnu izgradnju popisa rezultata pretrage, ako postoji problem s pretragom. Ovisno o broju bilježaka, može potrajati."
@@ -3453,7 +4275,7 @@
 		"Koristi se za većinu teksta u markdown uređivaču. Ako se ne pronađe, koristi se generički font proporcijalne širine."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
-		"Koristi se za tekst fiksne širine (npr. tablice, potvrdni okivi, programski kod). Ako se ne pronađe, koristi se generički font fiksne širine."
+		"Koristi se za tekst fiksne širine (npr. tablice, označiva polja, programski kod). Ako se ne pronađe, koristi se generički font fiksne širine."
 	],
 	"User deletions": [
 		"Brisanja korisnika"
@@ -3471,43 +4293,58 @@
 		"Prikaz"
 	],
 	"View OCR text": [
-		""
+		"Prikaži OCR tekst"
 	],
 	"View on map": [
-		"Pogledaj na karti"
+		"Prikaži na karti"
 	],
 	"View them now": [
-		"Pogledaj ih sada"
+		"Prikaži ih sada"
 	],
 	"Viewer": [
-		"Prikazivač"
+		"Preglednik"
+	],
+	"Viewer and Rich Text Editor font family": [
+		"Obitelj fontova preglednika i uređivača formatiranog teksta"
+	],
+	"Viewer font size": [
+		"Veličina fonta preglednika"
 	],
 	"Vim": [
 		"Vim"
 	],
 	"Voice recorder": [
-		""
+		"Snimač glasa"
 	],
 	"Voice typing language files (URL)": [
-		"Jezične datoteke za tipkanje glasom (URL)"
+		"Jezične datoteke za glasovno tipkanje (URL)"
 	],
 	"Voice typing...": [
-		"Tipkanje glasom …"
+		"Glasovno tipkanje …"
+	],
+	"Voice typing: Glossary": [
+		"Glasovno tipkanje: Glosar"
 	],
 	"Vosk": [
-		""
+		"Vosk"
+	],
+	"Waiting for authorisation...": [
+		"Čeka se autorizacija …"
+	],
+	"Waiting: Notebook %s from %s": [
+		"Čekanje: Bilježnica %s od %s"
 	],
 	"Warning": [
 		"Upozorenje"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
-		"Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
+		"Upozorenje: za brže izvođenje se ne prikazuju svi resursi (ograničenje: %s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"Imamo sustav za prijavljivanje i uklanjanje problematičnih dodataka."
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"Dodatke koje su razvili pouzdani članovi Joplin zajednice označavamo kao „preporučene“."
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3528,13 +4365,19 @@
 		"Web-stranica i dokumentacija"
 	],
 	"WebView package: %s": [
-		""
+		"WebView paket: %s"
+	],
+	"WebView version: %s": [
+		"WebView verzija: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
-		"Dobro došao, dobro došla u Joplin!\n\nUpiši `:help shortcuts` za popis tipkovnih prečaca ili samo`:help` za informacije o korištenju.\n\nNa primjer, za stvaranje bilježnice pritisni `mb`; za stvaranje bilješke pritisni `mn`."
+		"Dobro došao, dobro došla u Joplin!\n\nUpiši `:help shortcuts` za popis tipkovnih prečaca ili `:help` za informacije o korištenju.\n\nNa primjer, za stvaranje bilježnice pritisni `mb`; za stvaranje bilješke pritisni `mn`."
 	],
 	"Welcome!": [
 		"Dobro došao, dobro došla!"
+	],
+	"What are plugins?": [
+		"Što su dodaci?"
 	],
 	"When creating a new note:": [
 		"Prilikom stvaranja nove bilješke:"
@@ -3543,16 +4386,16 @@
 		"Prilikom stvaranja novog zadatka:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Kada je aktivirano, program će pregledati tvoje privitke i iz njih izdvojiti tekst. To omogućuje pretraživanje teksta u tim privicima."
 	],
 	"Whisper": [
-		""
+		"Whisper"
 	],
 	"Window unresponsive.": [
-		""
+		"Prozor ne reagira."
 	],
 	"Words": [
-		"Broj riječi"
+		"Riječi"
 	],
 	"y": [
 		"d"
@@ -3570,16 +4413,16 @@
 		"Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d piksela prije prilaganja slike?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Prijavljen/a si na Joplin Cloud, sada možeš napustiti ovaj ekran."
 	],
 	"You are now logged into your account.": [
-		""
+		"Sada si prijavljen(a) na svoj račun."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Sada koristiš najnoviju verziju Markdown uređivača."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Koristiš Intelovu verziju Joplina na Apple Silicon procesoru. Preuzmi Apple Silicon verziju za bolju performansu."
 	],
 	"You currently have no notebooks.": [
 		"Trenutačno nemaš bilježnica."
@@ -3593,8 +4436,11 @@
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Za ponovno šifriranje tvojih podataka koristi dolje navedeni alat, na primjer kad znaš da su neke tvoje bilješke šifrirane zastarjelom metodom šifriranja."
 	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Neuspjelo povezivanje na Joplin Cloud. Provjeri tvoje podatke prijave i pokušaj ponovo. Greška:"
+	],
 	"Your account doesn't have access to this feature": [
-		""
+		"Tvoj račun nema pristup ovoj funkciji"
 	],
 	"Your choice: ": [
 		"Tvoj izbor: "
@@ -3603,7 +4449,7 @@
 		"Tvoji će se podaci ponovo šifrirati i sinkronizirati."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"Tvoji podaci prijave za Joplin Cloud su neispravni, prijavi se."
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Tvoja lozinka je potrebna za dešifriranje nekih tvojih podataka."

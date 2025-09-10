@@ -117,6 +117,8 @@ packages/app-cli/app/command-ls.js
 packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-mkbook.js
 packages/app-cli/app/command-mv.js
+packages/app-cli/app/command-publish.test.js
+packages/app-cli/app/command-publish.js
 packages/app-cli/app/command-ren.js
 packages/app-cli/app/command-restore.js
 packages/app-cli/app/command-rmbook.test.js
@@ -129,6 +131,8 @@ packages/app-cli/app/command-share.test.js
 packages/app-cli/app/command-share.js
 packages/app-cli/app/command-sync.js
 packages/app-cli/app/command-testing.js
+packages/app-cli/app/command-unpublish.test.js
+packages/app-cli/app/command-unpublish.js
 packages/app-cli/app/command-use.js
 packages/app-cli/app/command-version.js
 packages/app-cli/app/gui/FolderListWidget.js
@@ -672,6 +676,8 @@ packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js
 packages/app-mobile/components/ExtendedWebView/types.js
 packages/app-mobile/components/ExtendedWebView/utils/useCss.js
+packages/app-mobile/components/FeedbackBanner.test.js
+packages/app-mobile/components/FeedbackBanner.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
@@ -698,7 +704,6 @@ packages/app-mobile/components/NoteEditor/RichTextEditor.js
 packages/app-mobile/components/NoteEditor/SearchPanel.js
 packages/app-mobile/components/NoteEditor/WarningBanner.js
 packages/app-mobile/components/NoteEditor/commandDeclarations.js
-packages/app-mobile/components/NoteEditor/hooks/useCodeMirrorPlugins.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.test.js
 packages/app-mobile/components/NoteEditor/hooks/useEditorCommandHandler.js
 packages/app-mobile/components/NoteEditor/testing/createTestEditorProps.js
@@ -810,7 +815,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButto
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/WrappedPluginStates.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/mockRepositoryApiConstructor.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/newRepoApi.js
-packages/app-mobile/components/screens/ConfigScreen/plugins/testUtils/pluginServiceSetup.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/openWebsiteForPlugin.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginCallbacks.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginItem.js
@@ -868,6 +872,7 @@ packages/app-mobile/contentScripts/imageEditorBundle/utils/useEditorMessenger.js
 packages/app-mobile/contentScripts/markdownEditorBundle/contentScript.js
 packages/app-mobile/contentScripts/markdownEditorBundle/types.js
 packages/app-mobile/contentScripts/markdownEditorBundle/useWebViewSetup.js
+packages/app-mobile/contentScripts/markdownEditorBundle/utils/useCodeMirrorPlugins.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/index.js
@@ -897,6 +902,7 @@ packages/app-mobile/services/AlarmServiceDriver.web.js
 packages/app-mobile/services/BackButtonService.js
 packages/app-mobile/services/commands/stateToWhenClauseContext.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
+packages/app-mobile/services/e2ee/RSA.react-native.web.js
 packages/app-mobile/services/e2ee/crypto.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
@@ -918,6 +924,7 @@ packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/appDefaultState.js
+packages/app-mobile/utils/appReducer.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/buildStartupTasks.js
 packages/app-mobile/utils/checkPermissions.js
@@ -939,6 +946,7 @@ packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useBackHandler.js
+packages/app-mobile/utils/hooks/useIsScreenReaderEnabled.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
 packages/app-mobile/utils/hooks/useReduceMotionEnabled.js
@@ -956,6 +964,7 @@ packages/app-mobile/utils/pickDocument.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/crypto-polyfill/index.js
 packages/app-mobile/utils/polyfills/index.js
+packages/app-mobile/utils/polyfills/index.web.js
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/shareFile.js
 packages/app-mobile/utils/shareHandler.js
@@ -966,6 +975,7 @@ packages/app-mobile/utils/shim-init-react/shimInitShared.js
 packages/app-mobile/utils/testing/createMockReduxStore.js
 packages/app-mobile/utils/testing/getWebViewDomById.js
 packages/app-mobile/utils/testing/getWebViewWindowById.js
+packages/app-mobile/utils/testing/mockPluginServiceSetup.js
 packages/app-mobile/utils/testing/setupGlobalStore.js
 packages/app-mobile/utils/testing/testingLibrary.js
 packages/app-mobile/utils/types.js
@@ -1004,6 +1014,9 @@ packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
+packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
+packages/editor/CodeMirror/extensions/highlightActiveLineExtension.js
 packages/editor/CodeMirror/extensions/keyUpHandlerExtension.js
 packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
@@ -1074,9 +1087,11 @@ packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/defaultLanguage.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/lookUpLanguage.js
+packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
+packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/ProseMirror/commands.test.js
 packages/editor/ProseMirror/commands.js
@@ -1113,6 +1128,8 @@ packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
 packages/editor/ProseMirror/utils/forEachHeading.js
 packages/editor/ProseMirror/utils/jumpToHash.js
 packages/editor/ProseMirror/utils/makeLinksClickableInElement.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.test.js
+packages/editor/ProseMirror/utils/postprocessEditorOutput.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.test.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.js
 packages/editor/ProseMirror/utils/sanitizeHtml.js
@@ -1392,14 +1409,19 @@ packages/lib/services/database/types.js
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.js
-packages/lib/services/e2ee/RSA.node.js
 packages/lib/services/e2ee/crypto.test.js
 packages/lib/services/e2ee/crypto.js
 packages/lib/services/e2ee/cryptoShared.js
 packages/lib/services/e2ee/cryptoTestUtils.js
-packages/lib/services/e2ee/ppk.test.js
-packages/lib/services/e2ee/ppk.js
-packages/lib/services/e2ee/ppkTestUtils.js
+packages/lib/services/e2ee/ppk/RSA.node.js
+packages/lib/services/e2ee/ppk/ppk.test.js
+packages/lib/services/e2ee/ppk/ppk.js
+packages/lib/services/e2ee/ppk/ppkTestUtils.js
+packages/lib/services/e2ee/ppk/webCrypto/LongDataWrapper.js
+packages/lib/services/e2ee/ppk/webCrypto/StringToBufferWrapper.js
+packages/lib/services/e2ee/ppk/webCrypto/WebCryptoRsa.js
+packages/lib/services/e2ee/ppk/webCrypto/buildRsaCryptoProvider.test.js
+packages/lib/services/e2ee/ppk/webCrypto/buildRsaCryptoProvider.js
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/utils.test.js
 packages/lib/services/e2ee/utils.js
@@ -1770,6 +1792,7 @@ packages/tools/fuzzer/Client.js
 packages/tools/fuzzer/ClientPool.js
 packages/tools/fuzzer/Server.js
 packages/tools/fuzzer/constants.js
+packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/sync-fuzzer.js
 packages/tools/fuzzer/types.js
 packages/tools/fuzzer/utils/SeededRandom.js

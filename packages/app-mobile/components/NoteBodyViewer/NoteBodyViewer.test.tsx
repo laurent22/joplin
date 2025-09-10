@@ -16,6 +16,12 @@ import { ResourceInfo } from './hooks/useRerenderHandler';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 import TestProviderStack from '../testing/TestProviderStack';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
+import Plugin from '@joplin/lib/services/plugins/Plugin';
+import { Store } from 'redux';
+import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
+import { basename, dirname, join } from 'path';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import mockPluginServiceSetup from '../../utils/testing/mockPluginServiceSetup';
 
 interface WrapperProps {
 	noteBody: string;
@@ -28,7 +34,7 @@ interface WrapperProps {
 const emptyObject = {};
 const emptyArray: string[] = [];
 const noOpFunction = () => {};
-const testStore = createMockReduxStore();
+let testStore: Store;
 const WrappedNoteViewer: React.FC<WrapperProps> = (
 	{
 		noteBody,
@@ -58,10 +64,34 @@ const getNoteViewerDom = async () => {
 	return await getWebViewDomById('NoteBodyViewer');
 };
 
+const loadTestContentScript = async (path: string, pluginId: string) => {
+	const plugin = new Plugin(
+		dirname(path),
+		{
+			manifest_version: 1,
+			id: pluginId,
+			name: 'Test plugin',
+			version: '1',
+			app_min_version: '1',
+		},
+		'',
+		testStore.dispatch,
+		'',
+	);
+	await PluginService.instance().runPlugin(plugin);
+	await plugin.registerContentScript(
+		ContentScriptType.MarkdownItPlugin,
+		`${pluginId}-markdown-it`,
+		basename(path),
+	);
+};
+
 describe('NoteBodyViewer', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
+		testStore = createMockReduxStore();
+		mockPluginServiceSetup(testStore);
 	});
 
 	afterEach(() => {
@@ -83,6 +113,17 @@ describe('NoteBodyViewer', () => {
 		await expectHeaderToBe('Test 2');
 		screen.rerender(<WrappedNoteViewer noteBody='# Test 3'/>);
 		await expectHeaderToBe('Test 3');
+	});
+
+	it('should support basic renderer plugins', async () => {
+		await loadTestContentScript(join(supportDir, 'plugins', 'markdownItTestPlugin.js'), 'test-plugin');
+
+		render(<WrappedNoteViewer noteBody={'```justtesting\ntest\n```\n'}/>);
+
+		const noteViewer = await getNoteViewerDom();
+		await waitFor(async () => {
+			expect(noteViewer.querySelector('div.just-testing')).toBeTruthy();
+		});
 	});
 
 	it.each([
