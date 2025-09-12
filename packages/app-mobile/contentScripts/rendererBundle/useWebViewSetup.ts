@@ -17,6 +17,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { ResourceInfos } from '@joplin/renderer/types';
 import useContentScripts from './utils/useContentScripts';
 import uuid from '@joplin/lib/uuid';
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 
 const logger = Logger.create('renderer/useWebViewSetup');
 
@@ -149,6 +150,8 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 		void messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
 	}, [messenger, contentScripts]);
 
+	const onRerenderRequestRef = useRef(()=>{});
+
 	const rendererControl = useMemo((): RendererControl => {
 		const renderer = messenger.remoteApi.renderer;
 
@@ -201,6 +204,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 					const key = `${pluginId}.${settingKey}`;
 					if (!pluginSettingKeysRef.current.has(key)) {
 						pluginSettingKeysRef.current.add(key);
+						onRerenderRequestRef.current();
 						settingsChanged = true;
 					}
 				},
@@ -234,16 +238,21 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 
 		return {
 			rerenderToBody: async (markup, options, cancelEvent) => {
-				const { getSettings, getSettingsChanged } = await prepareRenderer(options);
+				const { getSettings } = await prepareRenderer(options);
 				if (cancelEvent?.cancelled) return null;
 
-				const output = await renderer.rerenderToBody(markup, getSettings());
-				if (cancelEvent?.cancelled) return null;
+				const render = async () => {
+					if (cancelEvent?.cancelled) return;
 
-				if (getSettingsChanged()) {
-					return await renderer.rerenderToBody(markup, getSettings());
-				}
-				return output;
+					await renderer.rerenderToBody(markup, getSettings());
+				};
+
+				const queue = new AsyncActionQueue();
+				onRerenderRequestRef.current = async () => {
+					queue.push(render);
+				};
+
+				return await render();
 			},
 			render: async (markup, options) => {
 				const { getSettings, getSettingsChanged } = await prepareRenderer(options);

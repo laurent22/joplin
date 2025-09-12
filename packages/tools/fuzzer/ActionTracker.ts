@@ -434,6 +434,35 @@ class ActionTracker {
 				this.checkRep_();
 				return Promise.resolve();
 			},
+			publishNote: (id) => {
+				const oldItem = this.idToItem_.get(id);
+				assert.ok(oldItem, 'should exist');
+				assert.ok(!isFolder(oldItem), 'folders cannot be published');
+				assert.ok(!oldItem.published, 'should not be published');
+
+
+				this.idToItem_.set(id, {
+					...oldItem,
+					published: true,
+				});
+
+				this.checkRep_();
+				return Promise.resolve();
+			},
+			unpublishNote: (id) => {
+				const oldItem = this.idToItem_.get(id);
+				assert.ok(oldItem, 'should exist');
+				assert.ok(!isFolder(oldItem), 'folders cannot be unpublished');
+				assert.ok(oldItem.published, 'should be published');
+
+				this.idToItem_.set(id, {
+					...oldItem,
+					published: false,
+				});
+
+				this.checkRep_();
+				return Promise.resolve();
+			},
 			sync: () => Promise.resolve(),
 			listNotes: () => {
 				const notes = mapItems(item => {

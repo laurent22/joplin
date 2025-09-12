@@ -230,8 +230,8 @@ const useEditorControl = (
 				setSearchState: setSearchStateCallback,
 			},
 
-			onResourceDownloaded: (id: string) => {
-				editorRef.current.onResourceDownloaded(id);
+			onResourceChanged: (id: string) => {
+				editorRef.current.onResourceChanged(id);
 			},
 
 			remove: () => {
@@ -342,10 +342,18 @@ function NoteEditor(props: Props) {
 		const isDownloaded = (resourceInfos: ResourceInfos, resourceId: string) => {
 			return resourceInfos[resourceId]?.localState?.fetch_status === Resource.FETCH_STATUS_DONE;
 		};
+		const isEncrypted = (resourceInfos: ResourceInfos, resourceId: string) => {
+			return resourceInfos[resourceId]?.item?.encryption_blob_encrypted === 1;
+		};
 		for (const key in props.noteResources) {
 			const wasDownloaded = isDownloaded(lastNoteResources.current, key);
-			if (!wasDownloaded && isDownloaded(props.noteResources, key)) {
-				editorControl.onResourceDownloaded(key);
+			const hasDownloaded = !wasDownloaded && isDownloaded(props.noteResources, key);
+
+			const wasEncrypted = isEncrypted(lastNoteResources.current, key);
+			const hasDecrypted = wasEncrypted && !isEncrypted(props.noteResources, key);
+
+			if (hasDownloaded || hasDecrypted) {
+				editorControl.onResourceChanged(key);
 			}
 		}
 	}, [props.noteResources, editorControl]);

@@ -257,7 +257,7 @@ describe('RichTextEditor', () => {
 				ref={editorRef}
 			/>,
 		);
-		editorRef.current.onResourceDownloaded(localResource.id);
+		editorRef.current.onResourceChanged(localResource.id);
 
 		expect(
 			await findElement(`img[data-resource-id=${JSON.stringify(localResource.id)}]`),
@@ -452,6 +452,8 @@ describe('RichTextEditor', () => {
 		'==highlight==ed',
 		'<sup>Super</sup>script',
 		'<sub>Sub</sub>script',
+		'![image](data:image/svg+xml;utf8,test)',
+		'<img src="data:image/svg+xml;utf8,test" width="120">',
 	])('should preserve inline markup on edit (case %#)', async (initialBody) => {
 		initialBody += 'test'; // Ensure that typing will add new content outside the formatting
 		let body = initialBody;

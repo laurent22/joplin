@@ -1,4 +1,4 @@
-import type { EditorState } from '@codemirror/state';
+import type { EditorState, Transaction } from '@codemirror/state';
 import type { Decoration, WidgetType } from '@codemirror/view';
 import type { SyntaxNodeRef } from '@lezer/common';
 
@@ -13,8 +13,11 @@ export interface ReplacementExtension {
 
 	// Disable the decoration when near the cursor. Defaults to true.
 	hideWhenContainsSelection?: boolean;
+
+	// Allows specifying custom logic to refresh all decorations associated with the extension
+	shouldFullReRender?: (transaction: Transaction)=> boolean;
 }
 
 export interface RenderedContentContext {
-	resolveImageSrc(src: string): Promise<string>;
+	resolveImageSrc(src: string, reloadCounter: number): Promise<string>;
 }

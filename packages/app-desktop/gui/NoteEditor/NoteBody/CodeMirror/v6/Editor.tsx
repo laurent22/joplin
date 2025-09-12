@@ -110,12 +110,12 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 
 		const editor = createEditor(editorContainerRef.current, {
 			...editorProps,
-			resolveImageSrc: async src => {
+			resolveImageSrc: async (src, reloadCounter) => {
 				const url = parseResourceUrl(src);
 				if (!url.itemId) return null;
 				const item = await Resource.load(url.itemId);
 				if (!item) return null;
-				return `${getResourceBaseUrl()}/${resourceFilename(item)}`;
+				return `${getResourceBaseUrl()}/${resourceFilename(item)}${reloadCounter ? `?r=${reloadCounter}` : ''}`;
 			},
 		});
 		editor.addStyles({

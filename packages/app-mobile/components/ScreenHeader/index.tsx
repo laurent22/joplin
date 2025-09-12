@@ -114,7 +114,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			// A small border above the header: Covers the part of the shadow that would otherwise
 			// be shown above the header on Android.
 			aboveHeader: {
-				backgroundColor: '#323640',
+				backgroundColor: theme.backgroundColor2,
 				paddingBottom: 6,
 				marginTop: -6,
 				zIndex: 2,
