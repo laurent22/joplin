@@ -236,7 +236,7 @@ const TagEditor: React.FC<Props> = props => {
 
 	const onRemoveTag = useCallback(async (title: string) => {
 		if (!title) return;
-		const lowercaseTitle = title?.toLowerCase();
+		const lowercaseTitle = title.toLowerCase();
 		const previousTagIndex = props.tags.findIndex(item => item.toLowerCase() === lowercaseTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
 		setAutofocusTag(targetTag);
