@@ -82,7 +82,7 @@ const useSearchResults = ({
 	const canAdd = (
 		!!onAddItem
 		&& search.trim()
-		&& results[0]?.title?.toLowerCase() !== search.toLowerCase()
+		&& results[0]?.title !== search
 		&& canAddItem(search)
 	);
 

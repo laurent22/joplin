@@ -205,8 +205,6 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	</View>;
 };
 
-const normalizeTag = (tagText: string) => tagText.trim();
-
 const TagEditor: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.headerStyle);
 
@@ -233,10 +231,11 @@ const TagEditor: React.FC<Props> = props => {
 
 	const onAddTag = useCallback((title: string) => {
 		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', title));
-		props.onTagsChange([...props.tags, normalizeTag(title)]);
+		props.onTagsChange([...props.tags, title.trim()]);
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
+		if (!title) return;
 		const lowercaseTitle = title?.toLowerCase();
 		const previousTagIndex = props.tags.findIndex(item => item.toLowerCase() === lowercaseTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
@@ -254,16 +253,16 @@ const TagEditor: React.FC<Props> = props => {
 		return { willRemove: true };
 	}, [onAddTag]);
 
-	const allTagsSet = useMemo(() => {
+	const allTagsSetNormalized = useMemo(() => {
 		return new Set([
-			...props.allTags.map(tag => tag.title?.toLowerCase()),
-			...props.tags.map(tag => tag.toLowerCase()),
+			...props.allTags.map(tag => tag.title?.trim()?.toLowerCase()),
+			...props.tags.map(tag => tag.trim().toLowerCase()),
 		]);
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSet.has(normalizeTag(tag).toLowerCase());
-	}, [allTagsSet]);
+		return !allTagsSetNormalized.has(tag.trim().toLowerCase());
+	}, [allTagsSetNormalized]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;
 
