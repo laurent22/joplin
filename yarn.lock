@@ -9398,7 +9398,7 @@ __metadata:
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.111"
-    "@types/react": "npm:18.3.22"
+    "@types/react": "npm:18.3.23"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     dompurify: "npm:3.2.6"
@@ -14826,16 +14826,6 @@ __metadata:
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10/37619ee474504f98a5cf78ee2c716f8e88c0e489fa3222df5b90792e942cd3734a07d1501c9f386d2f93557f1faa4356f2e3f24f71ec47013a2f658f917b5c7b
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.3.22":
-  version: 18.3.22
-  resolution: "@types/react@npm:18.3.22"
-  dependencies:
-    "@types/prop-types": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10/580496f2768db339206c215aba4347ca07cf5d87a825311355760c9018bf4e2020810a85e8c525681ab78aa53be1ccc3751c9f4ec9cbc0d1b8217c7aeaa62e32
   languageName: node
   linkType: hard
 
