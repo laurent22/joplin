@@ -199,6 +199,9 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const onHelpPress = useCallback(() => {
 		void dialogs.info(helpMessageText);
 	}, [helpMessageText, dialogs]);
+	const onToggleTitlePress = useCallback(() => {
+		void setMultiline(!multiline);
+	}, [multiline]);
 
 	const styles = useStyles(props.themeId);
 	const dropdownLabelText = _('Revision:');
@@ -221,7 +224,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 			<IconButton
 				icon={(!multiline && 'menu-down') || (multiline && 'menu-up')}
 				accessibilityLabel={(!multiline && _('Expand title')) || (multiline && _('Collapse title'))}
-				onPress={() => void setMultiline(!multiline)}
+				onPress={onToggleTitlePress}
 				size={30}
 			/>
 		</View>
