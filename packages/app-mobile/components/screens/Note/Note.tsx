@@ -73,6 +73,7 @@ import { defaultWindowId } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
+import IconButton from '../../IconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -148,6 +149,7 @@ interface State {
 	};
 
 	showSpeechToTextDialog: boolean;
+	multiline: boolean;
 }
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
@@ -219,6 +221,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			},
 
 			showSpeechToTextDialog: false,
+			multiline: false,
 		};
 
 		this.titleTextFieldRef = React.createRef();
@@ -508,7 +511,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 		};
@@ -526,6 +528,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		};
+
+		styles.titleToggleIcon = {
+			color: theme.colorFaded,
+			fontSize: 30,
+			height: 48,
+			width: 48,
+			verticalAlign: 'middle',
+			textAlign: 'center',
+			alignContent: 'center',
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -701,7 +713,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private title_changeText(text: string) {
-		shared.noteComponent_change(this, 'title', text);
+		const newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
 
@@ -1171,69 +1184,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public onAttach = async (filePath?: string) => {
 		await CommandService.instance().execute('attachFile', filePath);
 	};
-
-	// private vosk_:Vosk;
-
-	// private async getVosk() {
-	// 	if (this.vosk_) return this.vosk_;
-	// 	this.vosk_ = new Vosk();
-	// 	await this.vosk_.loadModel('model-fr-fr');
-	// 	return this.vosk_;
-	// }
-
-	// private async voiceRecording_onPress() {
-	// 	logger.info('Vosk: Getting instance...');
-
-	// 	const vosk = await this.getVosk();
-
-	// 	this.voskResult_ = [];
-
-	// 	const eventHandlers: any[] = [];
-
-	// 	eventHandlers.push(vosk.onResult(e => {
-	// 		logger.info('Vosk: result', e.data);
-	// 		this.voskResult_.push(e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onError(e => {
-	// 		logger.warn('Vosk: error', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onTimeout(e => {
-	// 		logger.warn('Vosk: timeout', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onFinalResult(e => {
-	// 		logger.info('Vosk: final result', e.data);
-	// 	}));
-
-	// 	logger.info('Vosk: Starting recording...');
-
-	// 	void vosk.start();
-
-	// 	const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
-	// 		{ text: 'Stop recording', id: 'stop' },
-	// 		{ text: _('Cancel'), id: 'cancel' },
-	// 	]);
-
-	// 	logger.info('Vosk: Stopping recording...');
-	// 	vosk.stop();
-
-	// 	for (const eventHandler of eventHandlers) {
-	// 		eventHandler.remove();
-	// 	}
-
-	// 	logger.info('Vosk: Recording stopped:', this.voskResult_);
-
-	// 	if (buttonId === 'cancel') return;
-
-	// 	const newNote: NoteEntity = { ...this.state.note };
-	// 	newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
-	// 	this.setState({ note: newNote });
-	// 	this.scheduleSave();
-	// }
-
-
 
 	public menuOptions() {
 		const note = this.state.note;
@@ -1726,6 +1676,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
 					editable={!this.state.readOnly}
+					multiline={this.state.multiline}
+					submitBehavior = "blurAndSubmit"
+				/>
+				<IconButton
+					iconName={(!this.state.multiline && 'material menu-down') || (this.state.multiline && 'material menu-up')}
+					onPress={() => this.setState({ multiline: !this.state.multiline })}
+					description={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+					iconStyle={this.styles().titleToggleIcon}
+					themeId={this.props.themeId}
 				/>
 			</View>
 		);

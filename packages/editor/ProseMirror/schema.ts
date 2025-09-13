@@ -167,6 +167,8 @@ const nodes = addDefaultToplevelAttributes({
 			title: { default: '', validate: 'string' },
 			fromMd: { default: false, validate: 'boolean' },
 			resourceId: { default: null as string|null, validate: 'string|null' },
+			width: { default: '', validate: 'string' },
+			height: { default: '', validate: 'string' },
 		},
 		parseDOM: [
 			{
@@ -174,6 +176,8 @@ const nodes = addDefaultToplevelAttributes({
 				getAttrs: node => ({
 					src: node.getAttribute('src'),
 					alt: node.getAttribute('alt'),
+					width: node.getAttribute('width') ?? '',
+					height: node.getAttribute('height') ?? '',
 					title: node.getAttribute('title'),
 					fromMd: node.hasAttribute('data-from-md'),
 					resourceId: node.getAttribute('data-resource-id') || null,
@@ -181,7 +185,7 @@ const nodes = addDefaultToplevelAttributes({
 			},
 		],
 		toDOM: node => {
-			const { src, alt, title, fromMd, resourceId } = node.attrs;
+			const { src, alt, title, width, height, fromMd, resourceId } = node.attrs;
 			const outputAttrs: Record<string, unknown> = { src, alt, title };
 
 			if (fromMd) {
@@ -189,6 +193,12 @@ const nodes = addDefaultToplevelAttributes({
 			}
 			if (resourceId) {
 				outputAttrs['data-resource-id'] = resourceId;
+			}
+			if (width) {
+				outputAttrs.width = width;
+			}
+			if (height) {
+				outputAttrs.height = height;
 			}
 
 			return [
