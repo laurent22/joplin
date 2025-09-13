@@ -11,20 +11,36 @@ export interface MasterKeyEntity {
 	hasBeenUsed?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export type RSAKeyPair = any; // Depends on implementation
+export type KeyPairAndSize<KeyPair> = { keyPair: KeyPair; keySize: number };
+
+export enum PublicKeyAlgorithm {
+	Unknown = 'unknown',
+	RsaV1 = 'rsa-v1', // 'rsa-pkcs1-v1.5',
+	RsaV2 = 'rsa-v2', // 'rsa-pkcs1-oaep-2048',
+	RsaV3 = 'rsa-v3', // 'rsa-pkcs1-oaep-4096',
+}
+
+export type CiphertextBuffer = Buffer<ArrayBuffer>;
+
+export interface PublicKeyCrypto<
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
+	KeyPair = any, // Depends on implementation
+	InputDataType = string, // Usually hexadecimal data
+> {
+	generateKeyPair(): Promise<KeyPairAndSize<KeyPair>>;
+	loadKeys(publicKey: string, privateKey: string, keySizeBits: number): Promise<KeyPair>;
+	encrypt(plaintextUtf8: InputDataType, rsaKeyPair: KeyPair): Promise<CiphertextBuffer>;
+	decrypt(ciphertext: CiphertextBuffer, rsaKeyPair: KeyPair): Promise<InputDataType>;
+	publicKey(rsaKeyPair: KeyPair): Promise<string>;
+	privateKey(rsaKeyPair: KeyPair): Promise<string>;
+	// Maximum input size, output size may be greater. Use "null" to specify an arbitrary size.
+	maximumPlaintextLengthBytes: number|null;
+}
 
 // This is the interface that each platform must implement. Data is passed as
 // Base64 encoded because that's what both NodeRSA and react-native-rsa support.
 
-export interface RSA {
-	generateKeyPair(keySize: number): Promise<RSAKeyPair>;
-	loadKeys(publicKey: string, privateKey: string, keySizeBits: number): Promise<RSAKeyPair>;
-	encrypt(plaintextUtf8: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns Base64 encoded data
-	decrypt(ciphertextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns UTF-8 encoded string
-	publicKey(rsaKeyPair: RSAKeyPair): string;
-	privateKey(rsaKeyPair: RSAKeyPair): string;
-}
+export type PublicKeyCryptoProvider = Record<PublicKeyAlgorithm, PublicKeyCrypto>;
 
 export interface Crypto {
 	randomBytes(size: number): Promise<CryptoBuffer>;

@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FolderMetadata, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions } from './types';
+import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ShareOptions } from './types';
 import { join } from 'path';
 import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
@@ -128,10 +128,11 @@ class Client implements ActionableClient {
 		account.onClientConnected();
 
 		// Joplin Server sync
-		await client.execCliCommand_('config', 'sync.target', '9');
-		await client.execCliCommand_('config', 'sync.9.path', context.serverUrl);
-		await client.execCliCommand_('config', 'sync.9.username', account.email);
-		await client.execCliCommand_('config', 'sync.9.password', account.password);
+		const targetId = context.isJoplinCloud ? '10' : '9';
+		await client.execCliCommand_('config', 'sync.target', targetId);
+		await client.execCliCommand_('config', `sync.${targetId}.path`, context.serverUrl);
+		await client.execCliCommand_('config', `sync.${targetId}.username`, account.email);
+		await client.execCliCommand_('config', `sync.${targetId}.password`, account.password);
 		await client.execCliCommand_('config', 'api.token', apiData.token);
 		await client.execCliCommand_('config', 'api.port', String(apiData.port));
 
@@ -448,7 +449,7 @@ class Client implements ActionableClient {
 		});
 	}
 
-	public async createFolder(folder: FolderMetadata) {
+	public async createFolder(folder: FolderData) {
 		logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.label}`);
 		await this.tracker_.createFolder(folder);
 
@@ -503,6 +504,13 @@ class Client implements ActionableClient {
 		await this.assertNoteMatchesState_(note);
 	}
 
+	public async deleteNote(id: ItemId) {
+		logger.info('Delete note', id, 'in', this.label);
+		await this.tracker_.deleteNote(id);
+
+		await this.execCliCommand_('rmnote', '--permanent', '--force', id);
+	}
+
 	public async deleteFolder(id: string) {
 		logger.info('Delete folder', id, 'in', this.label);
 		await this.tracker_.deleteFolder(id);
@@ -510,8 +518,8 @@ class Client implements ActionableClient {
 		await this.execCliCommand_('rmbook', '--permanent', '--force', id);
 	}
 
-	public async shareFolder(id: string, shareWith: Client) {
-		await this.tracker_.shareFolder(id, shareWith);
+	public async shareFolder(id: string, shareWith: Client, options: ShareOptions) {
+		await this.tracker_.shareFolder(id, shareWith, options);
 
 		const getPendingInvitations = async (target: Client) => {
 			const shareWithIncoming = JSON.parse((await target.execCliCommand_('share', 'list', '--json')).stdout);
@@ -524,8 +532,11 @@ class Client implements ActionableClient {
 		};
 
 		await retryWithCount(async () => {
-			logger.info('Share', id, 'with', shareWith.label);
-			await this.execCliCommand_('share', 'add', id, shareWith.email);
+			logger.info('Share', id, 'with', shareWith.label, options.readOnly ? '(read-only)' : '');
+			const readOnlyArgs = options.readOnly ? ['--read-only'] : [];
+			await this.execCliCommand_(
+				'share', 'add', ...readOnlyArgs, id, shareWith.email,
+			);
 
 			await this.sync();
 			await shareWith.sync();
@@ -536,6 +547,7 @@ class Client implements ActionableClient {
 					accepted: false,
 					waiting: true,
 					rejected: false,
+					canWrite: !options.readOnly,
 					folderId: id,
 					fromUser: {
 						email: this.email,
@@ -562,6 +574,37 @@ class Client implements ActionableClient {
 		await other.sync();
 	}
 
+	public async deleteAssociatedShare(id: string) {
+		await this.tracker_.deleteAssociatedShare(id);
+		logger.info('Unshare', id, '(from', this.label, ')');
+		await this.execCliCommand_('share', 'delete', '-f', id);
+	}
+
+	public async publishNote(id: ItemId) {
+		await this.tracker_.publishNote(id);
+
+		logger.info('Publish note', id, 'in', this.label);
+		const publishOutput = await this.execCliCommand_('publish', '-f', id);
+		const publishUrl = publishOutput.stdout.match(/http[s]?:\/\/\S+/);
+
+		assert.notEqual(publishUrl, null, 'should log the publication URL');
+
+		logger.info('Testing publication URL: ', publishUrl[0]);
+		const fetchResult = await fetch(publishUrl[0]);
+
+		if (!fetchResult.ok) {
+			logger.warn('Fetch failed', fetchResult.statusText);
+		}
+		assert.equal(fetchResult.status, 200, `should be able to fetch the published note (status: ${fetchResult.statusText}).`);
+	}
+
+	public async unpublishNote(id: ItemId) {
+		await this.tracker_.publishNote(id);
+
+		logger.info('Unpublish note', id, 'in', this.label);
+		await this.execCliCommand_('unpublish', id);
+	}
+
 	public async moveItem(itemId: ItemId, newParentId: ItemId) {
 		logger.info('Move', itemId, 'to', newParentId);
 		await this.tracker_.moveItem(itemId, newParentId);
@@ -571,7 +614,7 @@ class Client implements ActionableClient {
 
 	public async listNotes() {
 		const params = {
-			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id',
+			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id,share_id,is_shared',
 			include_deleted: '1',
 			include_conflicts: '1',
 		};
@@ -586,13 +629,15 @@ class Client implements ActionableClient {
 				) : getStringProperty(item, 'parent_id'),
 				title: getStringProperty(item, 'title'),
 				body: getStringProperty(item, 'body'),
+				isShared: getStringProperty(item, 'share_id') !== '',
+				published: getNumberProperty(item, 'is_shared') === 1,
 			}),
 		);
 	}
 
 	public async listFolders() {
 		const params = {
-			fields: 'id,parent_id,title',
+			fields: 'id,parent_id,title,share_id',
 			include_deleted: '1',
 		};
 		return await this.execPagedApiCommand_(
@@ -603,6 +648,7 @@ class Client implements ActionableClient {
 				id: getStringProperty(item, 'id'),
 				parentId: getStringProperty(item, 'parent_id'),
 				title: getStringProperty(item, 'title'),
+				isShared: getStringProperty(item, 'share_id') !== '',
 			}),
 		);
 	}
@@ -615,8 +661,8 @@ class Client implements ActionableClient {
 		return this.tracker_.allFolderDescendants(parentId);
 	}
 
-	public async randomNote() {
-		return this.tracker_.randomNote();
+	public async randomNote(options: RandomNoteOptions) {
+		return this.tracker_.randomNote(options);
 	}
 
 	public async checkState() {

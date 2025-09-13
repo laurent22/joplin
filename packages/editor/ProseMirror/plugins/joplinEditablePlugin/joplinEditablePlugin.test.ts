@@ -2,7 +2,7 @@ import { htmlentities } from '@joplin/utils/html';
 import { RenderResult } from '../../../../renderer/types';
 import createTestEditor from '../../testing/createTestEditor';
 import joplinEditorApiPlugin, { getEditorApi, setEditorApi } from '../joplinEditorApiPlugin';
-import joplinEditablePlugin from './joplinEditablePlugin';
+import joplinEditablePlugin, { editSourceBlockAt, hideSourceBlockEditor } from './joplinEditablePlugin';
 import { Second } from '@joplin/utils/time';
 
 const createEditor = (html: string) => {
@@ -19,7 +19,7 @@ const findEditButton = (ancestor: Element): HTMLButtonElement => {
 const findEditorDialog = () => {
 	const dialog = document.querySelector('dialog.editor-dialog');
 	if (!dialog) {
-		throw new Error('Could not find an open editor dialog.');
+		return null;
 	}
 
 	const editor = dialog.querySelector('textarea');
@@ -116,5 +116,16 @@ describe('joplinEditablePlugin', () => {
 
 		hashLinks[1].click();
 		expect(editor.state.selection.$from.parent.textContent).toBe('Test heading 2');
+	});
+
+	test('should support toggling the editor dialog externally', () => {
+		const editor = createEditor('<div class="joplin-editable"><pre class="joplin-source">test source</pre>rendered</div>');
+		editSourceBlockAt(0)(editor.state, editor.dispatch, editor);
+
+		const dialog = findEditorDialog();
+		expect(dialog.editor).toBeTruthy();
+
+		hideSourceBlockEditor(editor.state, editor.dispatch, editor);
+		expect(findEditorDialog()).toBeNull();
 	});
 });

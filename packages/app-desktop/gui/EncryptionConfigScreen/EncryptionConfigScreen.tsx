@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
-import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
+import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
 import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
 import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 

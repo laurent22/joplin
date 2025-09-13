@@ -417,8 +417,10 @@ class Application extends BaseApplication {
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
+			const initialFolder = await Folder.load(Setting.value('activeFolderId'));
+			await this.switchCurrentFolder(initialFolder);
 			await this.applySettingsSideEffects();
-			await this.refreshCurrentFolder();
+
 			try {
 				await this.execCommand(argv);
 			} catch (error) {
@@ -432,6 +434,7 @@ class Application extends BaseApplication {
 			}
 
 			await Setting.saveAll();
+			await this.database_.close();
 
 			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095

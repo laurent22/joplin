@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Mihai Vasiliu <mihai.vasiliu.93@gmail.com>\n"
 "Language-Team: \n"
 "Language: ro_MD\n"
@@ -237,7 +235,7 @@ msgstr "%s nu poate fi mai mare decît %s"
 msgid "%s cannot be less than %s"
 msgstr "%s nu poate fi mai mic decît %s"
 
-#: packages/app-cli/app/command-share.ts:201
+#: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
 msgstr "%s din %s"
 
@@ -370,11 +368,11 @@ msgstr "Accept"
 msgid "Accepted invitations"
 msgstr "Invitații acceptate"
 
-#: packages/app-cli/app/command-share.ts:178
+#: packages/app-cli/app/command-share.ts:179
 msgid "Accepted: Notebook %s from %s"
 msgstr "Acceptat: Caiet: %s de la %s"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Accepting share..."
 msgstr "Se acceptă partajarea..."
 
@@ -438,7 +436,7 @@ msgstr "Adaugă sau elimină etichete:"
 msgid "Add recipient:"
 msgstr "Adaugă destinatar:"
 
-#: packages/app-mobile/components/TagEditor.tsx:264
+#: packages/app-mobile/components/TagEditor.tsx:265
 msgid "Add tags:"
 msgstr "Adaugă etichete:"
 
@@ -458,11 +456,11 @@ msgstr "Adaugă la notiță"
 msgid "Added new: %s"
 msgstr "Adaugă nou: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:218
+#: packages/app-mobile/components/TagEditor.tsx:219
 msgid "Added tag: %s"
 msgstr "Etichetă adăugată: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:205
+#: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
 msgstr "Adaugă etichete"
 
@@ -475,6 +473,7 @@ msgstr "Admin"
 msgid "Admin dashboard"
 msgstr "Panou de control administrativ"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Opțiuni avansate"
@@ -514,7 +513,7 @@ msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 "Toate porturile potențiale sînt în uz - te rog să raportezi problema la %s"
 
-#: packages/app-cli/app/command-share.ts:190
+#: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
 msgstr "Toate dosarele partajate:"
 
@@ -624,6 +623,7 @@ msgstr ""
 "Ești sigur că dorești să ștergi tot istoricul pentru această notă? Acest "
 "lucru nu poate fi anulat."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Ești sigur că dorești să reînnoiești jetonul de autorizare?"
@@ -722,6 +722,7 @@ msgid ""
 msgstr ""
 "Autentificarea nu a fost finalizată (nu a primit un token de autentificare)."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Token autorizare:"
@@ -766,6 +767,7 @@ msgstr "Comută automat tema pentru a se potrivi cu tema sistemului"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -837,9 +839,11 @@ msgstr "Se poate vizualiza și edita"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:299
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -895,7 +899,7 @@ msgstr "Nu se poate accesa %s"
 msgid "Cannot change encrypted item"
 msgstr "Nu se poate schimba itemul criptat"
 
-#: packages/lib/models/Note.ts:618
+#: packages/lib/models/Note.ts:621
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nu se poate copia notița în caietul de notițe „%s”"
 
@@ -911,7 +915,7 @@ msgstr "Nu se poate create o notiță nouă: %s"
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:37
+#: packages/app-cli/app/command-import.ts:38
 #: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
 #: packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
@@ -925,7 +929,7 @@ msgstr "Nu se poate create o notiță nouă: %s"
 #: packages/app-cli/app/command-tag.js:81
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:22
+#: packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:300
 #: packages/lib/services/interop/InteropService.ts:319
 msgid "Cannot find \"%s\"."
@@ -947,7 +951,7 @@ msgstr "Nu se poate încărca modulul „%s” pentru formatul „%s” și ieș
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Nu se poate încărca modulul „%s” pentru formatul „%s” și ținta „%s”"
 
-#: packages/lib/models/Note.ts:630
+#: packages/lib/models/Note.ts:634
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe „%s”"
 
@@ -1053,11 +1057,13 @@ msgstr "Se verifică... Te rog să aștepți."
 msgid "Choose an option"
 msgstr "Selectează o opțiune"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
@@ -1074,6 +1080,7 @@ msgstr "Șterge alarma"
 msgid "Clear search"
 msgstr "Șterge căutarea"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1164,7 +1171,7 @@ msgstr "Bloc de cod"
 msgid "Code View"
 msgstr "Vizualizare code"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:83
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
 msgid "Code:"
 msgstr "Cod:"
 
@@ -1191,9 +1198,9 @@ msgstr "Alarmele următoare"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Listă separată de virgule de căi de acces la dosare din care se încarcă "
 "certificatele sau calea de acces la fișierele de certificate individuale. De "
@@ -1236,6 +1243,7 @@ msgid "Complete to-do"
 msgstr "Sarcini de făcut finalizate"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Finalizat"
@@ -1363,7 +1371,7 @@ msgstr "Conversia vorbirii în text…"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:95
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:233
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:449
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:452
 msgid "Copy"
 msgstr "Copiază"
 
@@ -1413,6 +1421,7 @@ msgstr[2] "Copiază legăturile partajabile"
 msgid "Copy to clipboard"
 msgstr "Copiază locația în clipboard"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Copie token"
@@ -1495,6 +1504,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Nu ți-am putut verifica identitatea: %s"
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:285
 msgid "Create"
 msgstr "Create"
@@ -1529,6 +1539,7 @@ msgid "Create user"
 msgstr "Creează un utilizator"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Creat"
@@ -1553,7 +1564,8 @@ msgstr "Elemente la distanță create: %d."
 msgid "Created: "
 msgstr "Creat: "
 
-#: packages/app-cli/app/command-import.ts:51
+#: packages/app-cli/app/command-import.ts:54
+#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Creat: %d."
@@ -1870,6 +1882,7 @@ msgstr "Dezactivează modul de siguranță și repornește"
 msgid "Disable synchronisation"
 msgstr "Dezactivează sincronizarea"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Dezactivează serviciul Web Clipper"
@@ -1967,7 +1980,7 @@ msgstr "Afișează informații despre versiune"
 msgid "Do it now"
 msgstr "Fă-o acum"
 
-#: packages/app-cli/app/command-import.ts:28
+#: packages/app-cli/app/command-import.ts:29
 msgid "Do not ask for confirmation."
 msgstr "Nu cere confirmarea."
 
@@ -2008,7 +2021,7 @@ msgstr "Donează, website"
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:82
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Realizat"
@@ -2017,6 +2030,7 @@ msgstr "Realizat"
 msgid "Download"
 msgstr "Descarcă"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Descarcă și instalează extensia relevantă pentru navigatorul tău web:"
@@ -2111,7 +2125,7 @@ msgstr "Durată: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.ts:101
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts:83
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:442
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:445
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.ts:12
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
@@ -2119,7 +2133,7 @@ msgstr "Durată: %s"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1692
 #: packages/app-mobile/components/side-menu-content.tsx:414
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:135
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
 msgid "Edit"
 msgstr "Editează"
 
@@ -2365,6 +2379,7 @@ msgstr "Activează suportul pentru tipografii"
 msgid "Enable video player"
 msgstr "Activează playerul video"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Activează Web Clipper Service"
@@ -2401,11 +2416,11 @@ msgstr ""
 "Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi "
 "resincronizate și trimise criptate către destinația de sincronizare."
 
-#: packages/lib/models/BaseItem.ts:923
+#: packages/lib/models/BaseItem.ts:921
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: packages/lib/models/BaseItem.ts:985
+#: packages/lib/models/BaseItem.ts:983
 msgid "Encrypted items cannot be modified"
 msgstr "Elementele criptate nu pot fi editate"
 
@@ -2680,6 +2695,7 @@ msgstr "Găsește: "
 msgid "Finishes recording"
 msgstr "Finalizează înregistrarea"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Extensie Firefox"
@@ -2756,7 +2772,8 @@ msgstr "Forțează stil cale"
 msgid "Forward"
 msgstr "Înainte"
 
-#: packages/app-cli/app/command-import.ts:50
+#: packages/app-cli/app/command-import.ts:53
+#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Găsit: %d."
@@ -2799,6 +2816,7 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Obține un estimat"
 
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Obține acum:"
@@ -2900,6 +2918,7 @@ msgid "Hide Joplin"
 msgstr "Ascunde Joplin"
 
 #: packages/app-mobile/components/screens/Note/commands/hideKeyboard.ts:7
+#: packages/app-mobile/components/SearchInput.tsx:63
 msgid "Hide keyboard"
 msgstr "Ascunde tastatura"
 
@@ -2947,6 +2966,7 @@ msgstr "Pictogramă"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -3030,7 +3050,7 @@ msgstr "Importat cu succes!"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către „%s” în format „%s”. Te rog să aștepți..."
 
-#: packages/app-cli/app/command-import.ts:68
+#: packages/app-cli/app/command-import.ts:71
 msgid "Importing notes..."
 msgstr "Se importă notițe..."
 
@@ -3038,7 +3058,7 @@ msgstr "Se importă notițe..."
 msgid "Importing..."
 msgstr "Se importă..."
 
-#: packages/app-cli/app/command-import.ts:16
+#: packages/app-cli/app/command-import.ts:17
 msgid "Imports data into Joplin."
 msgstr "Importă date în Joplin."
 
@@ -3122,6 +3142,7 @@ msgstr ""
 "Pentru a utiliza sincronizarea cu sistemul de fișiere, este necesară "
 "permisiunea de a scrie în spațiul de stocare extern."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Pentru a utiliza web clipper, trebuie să faci următoarele:"
@@ -3134,7 +3155,7 @@ msgstr "În progres"
 msgid "In: %s"
 msgstr "În: %s"
 
-#: packages/app-cli/app/command-share.ts:169
+#: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
 msgstr "Partajări sosite:"
 
@@ -3232,7 +3253,7 @@ msgstr "Răspuns invalid: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Comandă invalidă: „%s”"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:371
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Format invalid. ex.: 48.8581372, 2.2926735"
 
@@ -3371,6 +3392,7 @@ msgstr "URL server Joplin"
 msgid "Joplin SSO Authentication"
 msgstr "Autentificare SSO Joplin"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3551,6 +3573,7 @@ msgstr "Încărcat"
 msgid "Loading..."
 msgstr "Se încarcă…"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Locație"
@@ -3660,7 +3683,7 @@ msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:265
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
 msgid "Markdown editor"
 msgstr "Editor Markdown"
 
@@ -3680,6 +3703,7 @@ msgstr "Marchează o sarcină ca fiind terminată."
 msgid "Marks a to-do as non-completed."
 msgstr "Marchează o sarcină ca fiind neterminată."
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Markup"
@@ -3887,6 +3911,7 @@ msgstr "Caiet nou"
 msgid "New Notebook"
 msgstr "Caiet nou"
 
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -3999,7 +4024,7 @@ msgstr "Fără rezultate"
 msgid "No revision selected"
 msgstr "Nicio revizie selectată"
 
-#: packages/app-cli/app/app.ts:236
+#: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
 msgstr "Nu există o asemenea comandă: %s"
 
@@ -4026,8 +4051,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Nu există actualizări"
 
-#: packages/app-cli/app/command-share.ts:187
-#: packages/app-cli/app/command-share.ts:207
+#: packages/app-cli/app/command-share.ts:188
+#: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
 msgid "None"
 msgstr "Niciuna"
@@ -4089,7 +4114,7 @@ msgstr "Corp notiță"
 msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notița nu există: „%s”. Dorești să o creezi?"
 
-#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:94
+#: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
 msgid "Note editor"
 msgstr "Editor notiță"
@@ -4102,6 +4127,7 @@ msgstr "Notița a fost salvată."
 msgid "Note history"
 msgstr "Istoric notiță"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1259
 msgid "Note History"
@@ -4134,7 +4160,8 @@ msgstr "Stilul listei de notițe"
 msgid "Note preview"
 msgstr "Previzualizare notiță"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:497
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
 msgstr "Proprietăți notiță"
@@ -4187,7 +4214,7 @@ msgstr "Caiet: %s (%s)"
 msgid "Notebooks"
 msgstr "Caiete"
 
-#: packages/lib/models/Folder.ts:992
+#: packages/lib/models/Folder.ts:1005
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Caietele nu pot fi denumite „%s” deoarece este un titlu rezervat."
 
@@ -4232,8 +4259,10 @@ msgstr "OCR: Caută în conținutul extras"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:292
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4396,7 +4425,7 @@ msgstr "Listă ordonată"
 msgid "Other applications..."
 msgstr "Alte aplicații…"
 
-#: packages/app-cli/app/command-import.ts:29
+#: packages/app-cli/app/command-import.ts:30
 msgid "Output format: %s"
 msgstr "Formatul sursei: %s"
 
@@ -4463,7 +4492,7 @@ msgstr "Per utilizator. Minim 2 utilizatori."
 msgid "Permanently delete note"
 msgstr "Șterge notița permanent"
 
-#: packages/lib/models/Note.ts:942
+#: packages/lib/models/Note.ts:947
 msgid "Permanently delete note \"%s\"?"
 msgstr "Șterge notițele „%s”?"
 
@@ -4477,7 +4506,7 @@ msgstr ""
 "\n"
 "Toate notițele și secțiunile din acest caiet vor fi șterse permanent."
 
-#: packages/lib/models/Note.ts:944
+#: packages/lib/models/Note.ts:949
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Ștergi permanent această notiță?"
@@ -4553,7 +4582,7 @@ msgstr "Te rog să îți înregistrezi vocea…"
 msgid "Please select a notebook first."
 msgstr "Te rog să selectezi mai întîi un caiet de notițe."
 
-#: packages/app-cli/app/app-gui.js:468
+#: packages/app-cli/app/app-gui.js:475
 msgid "Please select the note or notebook to be deleted first."
 msgstr "Te rog să selectezi mai întîi notița sau caietul care trebuie șters."
 
@@ -4677,7 +4706,7 @@ msgstr "Furnizorul preferat de transcriere vocală"
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr "Păstrează culorile la lipirea textului în editorul de text îmbogățit"
 
-#: packages/app-cli/app/app-gui.js:758
+#: packages/app-cli/app/app-gui.js:767
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
 msgstr "Apasă Ctrl+D sau tastează „exit” pentru a ieși din aplicație"
 
@@ -4709,7 +4738,8 @@ msgstr "Potrivirea anterioară"
 msgid "Previous versions"
 msgstr "Versiuni anterioare"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:430
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Versiunile anterioare ale acestei notițe"
 
@@ -4922,7 +4952,7 @@ msgstr "Expresie regulată"
 msgid "Reject"
 msgstr "Respinge"
 
-#: packages/app-cli/app/command-share.ts:228
+#: packages/app-cli/app/command-share.ts:229
 msgid "Rejecting share..."
 msgstr "Se respinge partajarea..."
 
@@ -4950,7 +4980,7 @@ msgstr "Elimini această căutare din panoul lateral?"
 msgid "Removed %s from share."
 msgstr "S-a eliminat %s din partajare."
 
-#: packages/app-mobile/components/TagEditor.tsx:230
+#: packages/app-mobile/components/TagEditor.tsx:231
 msgid "Removed tag: %s"
 msgstr "Etichetă ștearsă: %s"
 
@@ -4975,6 +5005,7 @@ msgstr "Redenumește <item> dat (notiță sau caiet) în <name>."
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr "Redă markup pe toate liniile care nu includ cursorul."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Reînnoiește jetonul"
@@ -5045,7 +5076,8 @@ msgstr "Resetare parolei master"
 msgid "Resize large images:"
 msgstr "Redimensionează imaginile mari:"
 
-#: packages/app-cli/app/command-import.ts:54
+#: packages/app-cli/app/command-import.ts:57
+#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Resurse: %d."
@@ -5064,6 +5096,7 @@ msgid "Restart now"
 msgstr "Repornește acum"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:492
 #: packages/app-mobile/components/ScreenHeader/index.tsx:494
@@ -5206,7 +5239,7 @@ msgstr "Salvează ca %s"
 msgid "Save as..."
 msgstr "Salvează ca..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.tsx:352
+#: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
 #: packages/app-mobile/components/ScreenHeader/index.tsx:309
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
@@ -5272,16 +5305,17 @@ msgstr "Rezultate căutare"
 msgid "Search shown"
 msgstr "Căutare afișată"
 
-#: packages/app-mobile/components/TagEditor.tsx:272
+#: packages/app-mobile/components/TagEditor.tsx:273
 msgid "Search tags"
 msgstr "Caută etichete"
 
-#: packages/app-cli/app/gui/FolderListWidget.ts:56
+#: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
 msgstr "Caută:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
@@ -5556,7 +5590,8 @@ msgstr ""
 "Elemente omise: %d (folosește --retry-failed-items pentru a reîncerca "
 "decriptarea acestora)"
 
-#: packages/app-cli/app/command-import.ts:53
+#: packages/app-cli/app/command-import.ts:56
+#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Omise: %d."
@@ -5645,7 +5680,7 @@ msgstr "Sursă"
 msgid "Source code available"
 msgstr "Cod sursă disponibil"
 
-#: packages/app-cli/app/command-import.ts:27
+#: packages/app-cli/app/command-import.ts:28
 msgid "Source format: %s"
 msgstr "Formatul sursei: %s"
 
@@ -5723,14 +5758,17 @@ msgstr "Statistici..."
 msgid "Status"
 msgstr "Stare"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Stare: %s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Stare: Portul %d"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Pasul 1: Activează clipper service"
@@ -5749,6 +5787,7 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pasul 2: Întrodu codul oferit de Dropbox:"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Pasul 2: Instalează extensia"
@@ -5851,7 +5890,7 @@ msgstr "Comută la noul editor"
 msgid "Switch to to-do type"
 msgstr "Comută la tipul „de făcut”"
 
-#: packages/app-cli/app/command-use.ts:12
+#: packages/app-cli/app/command-use.ts:13
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
@@ -5959,7 +5998,8 @@ msgstr "Tasta tab mută focalizarea"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/app-cli/app/command-import.ts:55
+#: packages/app-cli/app/command-import.ts:58
+#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Etichetate: %d."
@@ -6045,7 +6085,7 @@ msgid ""
 msgstr ""
 "Atașamentele nu vor mai fi urmărite atunci cînd treci la o altă notiță."
 
-#: packages/app-cli/app/app.ts:287
+#: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "Comanda „%s” este disponibilă doar în modul GUI"
 
@@ -6196,7 +6236,8 @@ msgstr "Caietul și conținutul său au fost mutate cu succes în coșul de guno
 msgid "The notebook could not be saved: %s"
 msgstr "Caietul de notițe nu a puut fi salvat: %s"
 
-#: packages/app-cli/app/command-import.ts:73
+#: packages/app-cli/app/command-import.ts:76
+#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Notițele au fost importante: %s"
@@ -6287,10 +6328,12 @@ msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
 "Serviciul web clipper nu poate fi activat în această instanță de Joplin."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Serviciul web clipper este activat și setat la pornire automată."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Serviciul web clipper nu este activat."
@@ -6401,6 +6444,7 @@ msgstr "Acest atașament nu are date OCR (Stare: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Acest atașament nu este descărcat sau nu este încă decriptat"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6478,6 +6522,7 @@ msgstr ""
 "Această notiță nu are conținut. Fă clic pe „%s” pentru a comuta editorul și "
 "a edita notița."
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Această notă nu are istoric"
@@ -6502,6 +6547,7 @@ msgstr ""
 "Acest editor de text îmbogățit are o serie de limitări și este recomandat să "
 "le cunoști înainte de a-l utiliza."
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6593,12 +6639,12 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Pentru a continua, te rog să întroduci parola principală mai jos."
 
-#: packages/app-mobile/components/ComboBox.tsx:568
+#: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
 "Pentru a crea o etichetă nouă, tastează numele acesteia și apasă enter."
 
-#: packages/app-cli/app/app-gui.js:458
+#: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
 "Pentru a șterge o eticheta, elimină eticheta respectivă din cadrul notițelor "
@@ -6733,6 +6779,7 @@ msgstr "Comută panou lateral"
 msgid "Toggle sort order field"
 msgstr "Comută cîmpul de ordine de sortare"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Token-ul a fost copiat în clipboard!"
@@ -6843,7 +6890,7 @@ msgstr "Tip de fișier necunoscut"
 msgid "Unknown flag: %s"
 msgstr "Unknown flag: %s"
 
-#: packages/lib/Synchronizer.ts:1135
+#: packages/lib/Synchronizer.ts:1145
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -6874,7 +6921,7 @@ msgstr "Notă de retragere a publicării"
 msgid "Unshare"
 msgstr "Unsoare"
 
-#: packages/app-cli/app/command-share.ts:243
+#: packages/app-cli/app/command-share.ts:244
 msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
@@ -6894,6 +6941,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Tip de imagine neacceptat: %s"
 
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6908,7 +6956,7 @@ msgstr ""
 "Eroare: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:924 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Fără nume"
@@ -6938,6 +6986,7 @@ msgstr "Actualizează dimensiunile totale"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -6959,7 +7008,8 @@ msgstr "Elemente la distanță actualizate: %d."
 msgid "Updated: "
 msgstr "Actualizat: "
 
-#: packages/app-cli/app/command-import.ts:52
+#: packages/app-cli/app/command-import.ts:55
+#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Actualizat: %d."
@@ -6985,6 +7035,7 @@ msgstr "Actualizează destinația de sincronizare la cea mai recentă versiune."
 msgid "Upload photo"
 msgstr "Încarcă fotografie"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7149,7 +7200,7 @@ msgstr "Vosk"
 msgid "Waiting for authorisation..."
 msgstr "Se așteaptă autorizarea..."
 
-#: packages/app-cli/app/command-share.ts:174
+#: packages/app-cli/app/command-share.ts:175
 msgid "Waiting: Notebook %s from %s"
 msgstr "Se așteaptă: Caiet %s de la %s"
 
@@ -7223,8 +7274,8 @@ msgid ""
 msgstr ""
 "Bine ai venit în Joplin!\n"
 "\n"
-"Tastează `:help shortcuts` pentru afișarea listei de scurtături sau doar "
-"`:help` pentru informații despre utilizare.\n"
+"Tastează `:help shortcuts` pentru afișarea listei de scurtături sau doar `:"
+"help` pentru informații despre utilizare.\n"
 "\n"
 "De exemplu, pentru a crea un caiet de notițe apasă `mb`; pentru a crea o "
 "notiță apasă `mn`."

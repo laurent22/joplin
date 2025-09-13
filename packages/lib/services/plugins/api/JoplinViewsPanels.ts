@@ -114,7 +114,7 @@ export default class JoplinViewsPanels {
 	 * Shows the panel
 	 */
 	public async show(handle: ViewHandle, show = true): Promise<void> {
-		await this.controller(handle).show(show);
+		await this.controller(handle).setOpen(show);
 	}
 
 	/**
@@ -136,7 +136,7 @@ export default class JoplinViewsPanels {
 	 * whether the editor plugin view supports editing the current note.
 	 */
 	public async isActive(handle: ViewHandle): Promise<boolean> {
-		return this.controller(handle).isActive();
+		return this.controller(handle).active;
 	}
 
 }

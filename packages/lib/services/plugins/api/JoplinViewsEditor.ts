@@ -90,7 +90,7 @@ export default class JoplinViewsEditors {
 			controller.setEditorTypeId(editorTypeId);
 			this.plugin.addViewController(controller);
 			// Restore the last open/closed state for the editor
-			controller.setOpened(Setting.value('plugins.shownEditorViewIds').includes(editorTypeId));
+			void controller.setOpen(Setting.value('plugins.shownEditorViewIds').includes(editorTypeId));
 
 			return () => {
 				this.plugin.removeViewController(controller);
@@ -271,7 +271,7 @@ export default class JoplinViewsEditors {
 	 * Tells whether the editor is active or not.
 	 */
 	public async isActive(handle: ViewHandle): Promise<boolean> {
-		return this.controller(handle).isActive();
+		return this.controller(handle).active;
 	}
 
 	/**
@@ -280,7 +280,7 @@ export default class JoplinViewsEditors {
 	 * `true`. Otherwise it will return `false`.
 	 */
 	public async isVisible(handle: ViewHandle): Promise<boolean> {
-		return this.controller(handle).isVisible();
+		return this.controller(handle).visible;
 	}
 
 }

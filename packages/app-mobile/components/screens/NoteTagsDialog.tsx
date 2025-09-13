@@ -17,6 +17,13 @@ interface Props {
 	tags: TagEntity[];
 }
 
+const modalPropOverrides = {
+	scrollOverflow: {
+		// Prevent the keyboard from auto-dismissing when tapping outside the search input
+		keyboardShouldPersistTaps: true,
+	},
+};
+
 const NoteTagsDialogComponent: React.FC<Props> = props => {
 	const [noteId, setNoteId] = useState(props.noteId);
 	const [savingTags, setSavingTags] = useState(false);
@@ -57,6 +64,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		buttonBarEnabled={!savingTags}
 		okTitle={_('Apply')}
 		cancelTitle={_('Cancel')}
+		modalProps={modalPropOverrides}
 	>
 		<TagEditor
 			themeId={props.themeId}
@@ -64,6 +72,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 			allTags={props.tags}
 			onTagsChange={setNoteTags}
 			mode={TagEditorMode.Large}
+			searchResultProps={{ nestedScrollEnabled: true }}
 			style={{ flex: 1 }}
 		/>
 	</ModalDialog>;

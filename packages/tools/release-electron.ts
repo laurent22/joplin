@@ -6,8 +6,6 @@ const appDir = `${rootDir}/packages/app-desktop`;
 async function main() {
 	await gitPullTry(false);
 
-	const argv = require('yargs').argv;
-
 	process.chdir(appDir);
 
 	console.info(`Running from: ${process.cwd()}`);
@@ -23,7 +21,7 @@ async function main() {
 	await execCommand('git push');
 	await execCommand('git push --tags');
 
-	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
+	const releaseOptions = { isDraft: true, isPreRelease: true };
 
 	console.info('Release options: ', releaseOptions);
 

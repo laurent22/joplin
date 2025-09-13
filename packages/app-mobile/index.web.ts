@@ -1,3 +1,4 @@
+import './utils/polyfills';
 import { AppRegistry } from 'react-native';
 import Root from './root';
 import Setting from '@joplin/lib/models/Setting';

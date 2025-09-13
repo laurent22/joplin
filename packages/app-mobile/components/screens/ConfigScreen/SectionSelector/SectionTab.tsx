@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import Icon from '../../../Icon';
-import BetaChip from '../../../BetaChip';
 import { TouchableRipple, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
@@ -20,9 +19,6 @@ const SectionTab: React.FC<Props> = ({ styles, onPress, selected, section }) => 
 
 	const styleSheet = styles.styleSheet;
 	const titleStyle = selected ? styleSheet.sidebarSelectedButtonText : styleSheet.sidebarButtonMainText;
-
-	const isBeta = section.name === 'plugins';
-	const betaChip = isBeta ? <BetaChip size={10}/> : null;
 
 	return (
 		<TouchableRipple
@@ -47,8 +43,6 @@ const SectionTab: React.FC<Props> = ({ styles, onPress, selected, section }) => 
 						>
 							{label}
 						</Text>
-
-						{betaChip}
 					</View>
 					<Text
 						style={styleSheet.sidebarButtonDescriptionText}

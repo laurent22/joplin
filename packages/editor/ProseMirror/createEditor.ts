@@ -26,6 +26,7 @@ import { OnCreateCodeEditor as OnCreateCodeEditor, RendererControl } from './typ
 import resourcePlaceholderPlugin, { onResourceDownloaded } from './plugins/resourcePlaceholderPlugin';
 import getFileFromPasteEvent from '../utils/getFileFromPasteEvent';
 import { RenderResult } from '../../renderer/types';
+import postprocessEditorOutput from './utils/postprocessEditorOutput';
 import detailsPlugin from './plugins/detailsPlugin';
 
 interface ProseMirrorControl extends EditorControl {
@@ -40,7 +41,9 @@ const createEditor = async (
 	createCodeEditor: OnCreateCodeEditor,
 ): Promise<ProseMirrorControl> => {
 	const renderNodeToMarkup = (node: Node|DocumentFragment) => {
-		return renderer.renderHtmlToMarkup(node);
+		return renderer.renderHtmlToMarkup(
+			postprocessEditorOutput(node),
+		);
 	};
 
 	const proseMirrorParser = ProseMirrorDomParser.fromSchema(schema);
@@ -268,7 +271,7 @@ const createEditor = async (
 		setContentScripts: (_plugins: ContentScriptData[]) => {
 			throw new Error('setContentScripts not implemented.');
 		},
-		onResourceDownloaded: async (resourceId: string) => {
+		onResourceChanged: async (resourceId: string) => {
 			const rendered = await renderAndPostprocessHtml(`<img src=":/${resourceId}"/>`);
 			const renderedImage = rendered.dom.querySelector('img');
 
@@ -282,6 +285,7 @@ const createEditor = async (
 			}
 
 			const resourceSrc = renderedImage?.src;
+			// TODO: Handle the more general case where the resource changed externally
 			onResourceDownloaded(view, resourceId, resourceSrc);
 		},
 		remove: () => {

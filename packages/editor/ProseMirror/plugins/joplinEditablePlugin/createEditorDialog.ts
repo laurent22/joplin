@@ -48,10 +48,7 @@ const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: 
 		block.end,
 	].join(''));
 
-	const submitButton = document.createElement('button');
-	submitButton.appendChild(createTextNode(doneLabel));
-	submitButton.classList.add('submit');
-	submitButton.onclick = () => {
+	const onClose = () => {
 		if (dialog.close) {
 			dialog.close();
 		} else {
@@ -60,6 +57,11 @@ const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: 
 			dialog.onclose(new Event('close'));
 		}
 	};
+
+	const submitButton = document.createElement('button');
+	submitButton.appendChild(createTextNode(doneLabel));
+	submitButton.classList.add('submit');
+	submitButton.onclick = onClose;
 
 	dialog.appendChild(submitButton);
 
@@ -72,7 +74,9 @@ const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: 
 		focus('createEditorDialog/legacy', editor);
 	}
 
-	return {};
+	return {
+		dismiss: onClose,
+	};
 };
 
 export default createEditorDialog;

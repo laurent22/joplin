@@ -3,6 +3,8 @@ import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin
 import { tableNodes } from 'prosemirror-tables';
 import { nodeSpecs as listNodes } from './plugins/listPlugin';
 import { nodeSpecs as resourcePlaceholderNodes } from './plugins/resourcePlaceholderPlugin';
+import { hasProtocol } from '@joplin/utils/url';
+import { isResourceUrl } from '@joplin/lib/models/utils/resourceUtils';
 import { nodeSpecs as detailsNodes } from './plugins/detailsPlugin';
 
 // For reference, see:
@@ -165,6 +167,8 @@ const nodes = addDefaultToplevelAttributes({
 			title: { default: '', validate: 'string' },
 			fromMd: { default: false, validate: 'boolean' },
 			resourceId: { default: null as string|null, validate: 'string|null' },
+			width: { default: '', validate: 'string' },
+			height: { default: '', validate: 'string' },
 		},
 		parseDOM: [
 			{
@@ -172,6 +176,8 @@ const nodes = addDefaultToplevelAttributes({
 				getAttrs: node => ({
 					src: node.getAttribute('src'),
 					alt: node.getAttribute('alt'),
+					width: node.getAttribute('width') ?? '',
+					height: node.getAttribute('height') ?? '',
 					title: node.getAttribute('title'),
 					fromMd: node.hasAttribute('data-from-md'),
 					resourceId: node.getAttribute('data-resource-id') || null,
@@ -179,7 +185,7 @@ const nodes = addDefaultToplevelAttributes({
 			},
 		],
 		toDOM: node => {
-			const { src, alt, title, fromMd, resourceId } = node.attrs;
+			const { src, alt, title, width, height, fromMd, resourceId } = node.attrs;
 			const outputAttrs: Record<string, unknown> = { src, alt, title };
 
 			if (fromMd) {
@@ -187,6 +193,12 @@ const nodes = addDefaultToplevelAttributes({
 			}
 			if (resourceId) {
 				outputAttrs['data-resource-id'] = resourceId;
+			}
+			if (width) {
+				outputAttrs.width = width;
+			}
+			if (height) {
+				outputAttrs.height = height;
 			}
 
 			return [
@@ -259,8 +271,15 @@ const marks = {
 			tag: 'a[href]',
 			getAttrs: node => {
 				const resourceId = node.getAttribute('data-resource-id');
-				const href = node.getAttribute('href');
+				let href = node.getAttribute('href');
 				const isResourceLink = resourceId && href === '#';
+				if (isResourceLink) {
+					href = `:/${resourceId}`;
+				}
+
+				if (href === '#' && node.hasAttribute('data-original-href')) {
+					href = node.getAttribute('data-original-href');
+				}
 
 				return {
 					href: isResourceLink ? `:/${resourceId}` : href,
@@ -269,10 +288,29 @@ const marks = {
 				};
 			},
 		}],
-		toDOM: node => [
-			'a',
-			{ href: node.attrs.href, title: node.attrs.title, 'data-resource-id': node.attrs.dataResourceId },
-		],
+		toDOM: node => {
+			const isSafeForRendering = (href: string) => {
+				return hasProtocol(href, ['http', 'https', 'joplin']) || isResourceUrl(href);
+			};
+
+			// Avoid rendering URLs with unknown protocols (avoid rendering or pasting unsafe HREFs).
+			// Note that URL click handling is handled elsewhere and does not use the HTML "href" attribute.
+			// However "href" may be used by the right-click menu on web:
+			const safeHref = isSafeForRendering(node.attrs.href) ? node.attrs.href : '#';
+
+			return [
+				'a',
+				{
+					href: safeHref,
+					...(safeHref !== node.attrs.href ? {
+						'data-original-href': node.attrs.href,
+					} : {}),
+
+					title: node.attrs.title,
+					'data-resource-id': node.attrs.dataResourceId,
+				},
+			];
+		},
 	},
 } satisfies Record<string, MarkSpec>;
 

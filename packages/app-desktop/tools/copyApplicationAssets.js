@@ -82,7 +82,7 @@ async function main() {
 	const files = [
 		'@fortawesome/fontawesome-free/css/all.min.css',
 		'@joeattardi/emoji-button/dist/index.js',
-		'codemirror/addon/dialog/dialog.css',
+		'codemirror/addon/',
 		'codemirror/lib/codemirror.css',
 		'mark.js/dist/mark.min.js',
 		'roboto-fontface/css/roboto/roboto-fontface.css',

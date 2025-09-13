@@ -72,4 +72,10 @@ export default class MainScreen {
 		await setFilePickerResponse(electronApp, [path]);
 		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
 	}
+
+	public async pluginPanelLocator(pluginId: string) {
+		return this.page.locator(
+			`iframe[id^=${JSON.stringify(`plugin-view-${pluginId}`)}]`,
+		);
+	}
 }

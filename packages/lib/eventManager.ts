@@ -37,7 +37,7 @@ interface SyncCompleteEvent {
 	withErrors: boolean;
 }
 
-interface ResourceChangeEvent {
+export interface ResourceChangeEvent {
 	id: string;
 }
 

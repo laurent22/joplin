@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v3.4.3](https://github.com/laurent22/joplin/releases/tag/server-v3.4.3) - 2025-09-09T08:47:12Z
+
+- Improved: Remove the need to install pm2-logrotate on startup so that image can work in a closed environment (#13149)
+- Improved: Updated packages pg (v8.15.6), sass (v1.87.0), sharp (v0.34.2)
+- Fixed: Fix unique constraint error when multiple `createSharedFolderUserItems` are run concurrently (#13112 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve handling of concurrent deletion requests for the same item (#13092) (#12984 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Not handling correctly non JSON error responses from Transcribe (#12986) (#12983 by [@pedr](https://github.com/pedr))
+
 ## [server-v3.4.2](https://github.com/laurent22/joplin/releases/tag/server-v3.4.2) - 2025-08-18T16:51:55Z
 
 - New: Add transcribe functionality (#12670 by [@pedr](https://github.com/pedr))
