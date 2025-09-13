@@ -69,6 +69,7 @@ docs/**/*.mustache
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/app.js
 packages/app-cli/app/base-command.js
+packages/app-cli/app/cli-integration-tests.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
@@ -882,8 +883,6 @@ packages/app-mobile/services/profiles/index.js
 packages/app-mobile/services/voiceTyping/VoiceTyping.js
 packages/app-mobile/services/voiceTyping/utils/unzip.android.js
 packages/app-mobile/services/voiceTyping/utils/unzip.js
-packages/app-mobile/services/voiceTyping/vosk.android.js
-packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/services/voiceTyping/whisper.test.js
 packages/app-mobile/services/voiceTyping/whisper.js
 packages/app-mobile/setupQuickActions.js

@@ -922,6 +922,8 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
+				const Revision = this.getClass('Revision');
+				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

@@ -12,7 +12,7 @@ import focusView from '../utils/focusView';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import NestableFlatList, { NestableFlatListControl } from './NestableFlatList';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
-const naturalCompare = require('string-natural-compare');
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 
 export interface Option {
@@ -64,17 +64,20 @@ interface UseSearchResultsOptions {
 const useSearchResults = ({
 	search, setSearch, options, onAddItem, canAddItem,
 }: UseSearchResultsOptions) => {
+	const collatorLocale = getCollatorLocale();
 	const results = useMemo(() => {
+		const collator = getCollator(collatorLocale);
+		const lowerSearch = search?.toLowerCase();
 		return options
-			.filter(option => option.title.toLowerCase().includes(search))
+			.filter(option => option.title.toLowerCase().includes(lowerSearch))
 			.sort((a, b) => {
 				if (a.title === b.title) return 0;
 				// Full matches should go first
-				if (a.title === search) return -1;
-				if (b.title === search) return 1;
-				return naturalCompare(a.title, b.title);
+				if (a.title.toLowerCase() === lowerSearch) return -1;
+				if (b.title.toLowerCase() === lowerSearch) return 1;
+				return collator.compare(a.title, b.title);
 			});
-	}, [search, options]);
+	}, [search, options, collatorLocale]);
 
 	const canAdd = (
 		!!onAddItem
